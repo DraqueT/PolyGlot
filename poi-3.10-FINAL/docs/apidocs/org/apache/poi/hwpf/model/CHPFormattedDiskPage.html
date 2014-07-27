@@ -1,0 +1,444 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>CHPFormattedDiskPage (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="CHPFormattedDiskPage (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/CHPFormattedDiskPage.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/hwpf/model/CHPBinTable.html" title="class in org.apache.poi.hwpf.model"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/hwpf/model/CHPX.html" title="class in org.apache.poi.hwpf.model"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hwpf/model/CHPFormattedDiskPage.html" target="_top">Frames</a></li>
+<li><a href="CHPFormattedDiskPage.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_org.apache.poi.hwpf.model.FormattedDiskPage">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.hwpf.model</div>
+<h2 title="Class CHPFormattedDiskPage" class="title">Class CHPFormattedDiskPage</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html" title="class in org.apache.poi.hwpf.model">org.apache.poi.hwpf.model.FormattedDiskPage</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.poi.hwpf.model.CHPFormattedDiskPage</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre><a href="../../../../../org/apache/poi/util/Internal.html" title="annotation in org.apache.poi.util">@Internal</a>
+public final class <span class="strong">CHPFormattedDiskPage</span>
+extends <a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html" title="class in org.apache.poi.hwpf.model">FormattedDiskPage</a></pre>
+<div class="block">Represents a CHP fkp. The style properties for paragraph and character runs
+ are stored in fkps. There are PAP fkps for paragraph properties and CHP fkps
+ for character run properties. The first part of the fkp for both CHP and PAP
+ fkps consists of an array of 4 byte int offsets that represent a
+ Paragraph's or Character run's text offset in the main stream. The ending
+ offset is the next value in the array. For example, if an fkp has X number of
+ Paragraph's stored in it then there are (x + 1) 4 byte ints in the beginning
+ array. The number X is determined by the last byte in a 512 byte fkp.
+
+ CHP and PAP fkps also store the compressed styles(grpprl) that correspond to
+ the offsets on the front of the fkp. The offset of the grpprls is determined
+ differently for CHP fkps and PAP fkps.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Ryan Ackley</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.apache.poi.hwpf.model.FormattedDiskPage">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.apache.poi.hwpf.model.<a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html" title="class in org.apache.poi.hwpf.model">FormattedDiskPage</a></h3>
+<code><a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html#_crun">_crun</a>, <a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html#_fkp">_fkp</a>, <a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html#_offset">_offset</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#CHPFormattedDiskPage()">CHPFormattedDiskPage</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#CHPFormattedDiskPage(byte[], int, org.apache.poi.hwpf.model.CharIndexTranslator)">CHPFormattedDiskPage</a></strong>(byte[]&nbsp;documentStream,
+                    int&nbsp;offset,
+                    <a href="../../../../../org/apache/poi/hwpf/model/CharIndexTranslator.html" title="interface in org.apache.poi.hwpf.model">CharIndexTranslator</a>&nbsp;translator)</code>
+<div class="block">This constructs a CHPFormattedDiskPage from a raw fkp (512 byte array
+ read from a Word file).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#CHPFormattedDiskPage(byte[], int, int, org.apache.poi.hwpf.model.TextPieceTable)">CHPFormattedDiskPage</a></strong>(byte[]&nbsp;documentStream,
+                    int&nbsp;offset,
+                    int&nbsp;fcMin,
+                    <a href="../../../../../org/apache/poi/hwpf/model/TextPieceTable.html" title="class in org.apache.poi.hwpf.model">TextPieceTable</a>&nbsp;tpt)</code>
+<div class="block"><strong>Deprecated.</strong>&nbsp;
+<div class="block"><i>Use
+             <a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#CHPFormattedDiskPage(byte[], int, org.apache.poi.hwpf.model.CharIndexTranslator)"><code>CHPFormattedDiskPage(byte[], int, CharIndexTranslator)</code></a>
+             instead</i></div>
+</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#fill(java.util.List)">fill</a></strong>(java.util.List&lt;<a href="../../../../../org/apache/poi/hwpf/model/CHPX.html" title="class in org.apache.poi.hwpf.model">CHPX</a>&gt;&nbsp;filler)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/hwpf/model/CHPX.html" title="class in org.apache.poi.hwpf.model">CHPX</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#getCHPX(int)">getCHPX</a></strong>(int&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.util.List&lt;<a href="../../../../../org/apache/poi/hwpf/model/CHPX.html" title="class in org.apache.poi.hwpf.model">CHPX</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#getCHPXs()">getCHPXs</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#getGrpprl(int)">getGrpprl</a></strong>(int&nbsp;index)</code>
+<div class="block">Gets the chpx for the character run at index in this fkp.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.util.ArrayList&lt;<a href="../../../../../org/apache/poi/hwpf/model/CHPX.html" title="class in org.apache.poi.hwpf.model">CHPX</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#getOverflow()">getOverflow</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#toByteArray(org.apache.poi.hwpf.model.CharIndexTranslator)">toByteArray</a></strong>(<a href="../../../../../org/apache/poi/hwpf/model/CharIndexTranslator.html" title="interface in org.apache.poi.hwpf.model">CharIndexTranslator</a>&nbsp;translator)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#toByteArray(org.apache.poi.hwpf.model.CharIndexTranslator, int)">toByteArray</a></strong>(<a href="../../../../../org/apache/poi/hwpf/model/CharIndexTranslator.html" title="interface in org.apache.poi.hwpf.model">CharIndexTranslator</a>&nbsp;translator,
+           int&nbsp;fcMin)</code>
+<div class="block"><strong>Deprecated.</strong>&nbsp;
+<div class="block"><i>Use <a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#toByteArray(org.apache.poi.hwpf.model.CharIndexTranslator)"><code>toByteArray(CharIndexTranslator)</code></a> instead</i></div>
+</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.poi.hwpf.model.FormattedDiskPage">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.apache.poi.hwpf.model.<a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html" title="class in org.apache.poi.hwpf.model">FormattedDiskPage</a></h3>
+<code><a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html#getEnd(int)">getEnd</a>, <a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html#getStart(int)">getStart</a>, <a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html#size()">size</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="CHPFormattedDiskPage()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>CHPFormattedDiskPage</h4>
+<pre>public&nbsp;CHPFormattedDiskPage()</pre>
+</li>
+</ul>
+<a name="CHPFormattedDiskPage(byte[], int, int, org.apache.poi.hwpf.model.TextPieceTable)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>CHPFormattedDiskPage</h4>
+<pre>public&nbsp;CHPFormattedDiskPage(byte[]&nbsp;documentStream,
+                    int&nbsp;offset,
+                    int&nbsp;fcMin,
+                    <a href="../../../../../org/apache/poi/hwpf/model/TextPieceTable.html" title="class in org.apache.poi.hwpf.model">TextPieceTable</a>&nbsp;tpt)</pre>
+<div class="block"><span class="strong">Deprecated.</span>&nbsp;<i>Use
+             <a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#CHPFormattedDiskPage(byte[], int, org.apache.poi.hwpf.model.CharIndexTranslator)"><code>CHPFormattedDiskPage(byte[], int, CharIndexTranslator)</code></a>
+             instead</i></div>
+<div class="block">This constructs a CHPFormattedDiskPage from a raw fkp (512 byte array
+ read from a Word file).</div>
+</li>
+</ul>
+<a name="CHPFormattedDiskPage(byte[], int, org.apache.poi.hwpf.model.CharIndexTranslator)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>CHPFormattedDiskPage</h4>
+<pre>public&nbsp;CHPFormattedDiskPage(byte[]&nbsp;documentStream,
+                    int&nbsp;offset,
+                    <a href="../../../../../org/apache/poi/hwpf/model/CharIndexTranslator.html" title="interface in org.apache.poi.hwpf.model">CharIndexTranslator</a>&nbsp;translator)</pre>
+<div class="block">This constructs a CHPFormattedDiskPage from a raw fkp (512 byte array
+ read from a Word file).</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getCHPX(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCHPX</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/hwpf/model/CHPX.html" title="class in org.apache.poi.hwpf.model">CHPX</a>&nbsp;getCHPX(int&nbsp;index)</pre>
+</li>
+</ul>
+<a name="getCHPXs()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCHPXs</h4>
+<pre>public&nbsp;java.util.List&lt;<a href="../../../../../org/apache/poi/hwpf/model/CHPX.html" title="class in org.apache.poi.hwpf.model">CHPX</a>&gt;&nbsp;getCHPXs()</pre>
+</li>
+</ul>
+<a name="fill(java.util.List)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fill</h4>
+<pre>public&nbsp;void&nbsp;fill(java.util.List&lt;<a href="../../../../../org/apache/poi/hwpf/model/CHPX.html" title="class in org.apache.poi.hwpf.model">CHPX</a>&gt;&nbsp;filler)</pre>
+</li>
+</ul>
+<a name="getOverflow()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOverflow</h4>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../../../../org/apache/poi/hwpf/model/CHPX.html" title="class in org.apache.poi.hwpf.model">CHPX</a>&gt;&nbsp;getOverflow()</pre>
+</li>
+</ul>
+<a name="getGrpprl(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getGrpprl</h4>
+<pre>protected&nbsp;byte[]&nbsp;getGrpprl(int&nbsp;index)</pre>
+<div class="block">Gets the chpx for the character run at index in this fkp.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html#getGrpprl(int)">getGrpprl</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/apache/poi/hwpf/model/FormattedDiskPage.html" title="class in org.apache.poi.hwpf.model">FormattedDiskPage</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - The index of the chpx to get.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a chpx grpprl.</dd></dl>
+</li>
+</ul>
+<a name="toByteArray(org.apache.poi.hwpf.model.CharIndexTranslator, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toByteArray</h4>
+<pre>@Deprecated
+protected&nbsp;byte[]&nbsp;toByteArray(<a href="../../../../../org/apache/poi/hwpf/model/CharIndexTranslator.html" title="interface in org.apache.poi.hwpf.model">CharIndexTranslator</a>&nbsp;translator,
+                            int&nbsp;fcMin)</pre>
+<div class="block"><span class="strong">Deprecated.</span>&nbsp;<i>Use <a href="../../../../../org/apache/poi/hwpf/model/CHPFormattedDiskPage.html#toByteArray(org.apache.poi.hwpf.model.CharIndexTranslator)"><code>toByteArray(CharIndexTranslator)</code></a> instead</i></div>
+</li>
+</ul>
+<a name="toByteArray(org.apache.poi.hwpf.model.CharIndexTranslator)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toByteArray</h4>
+<pre>protected&nbsp;byte[]&nbsp;toByteArray(<a href="../../../../../org/apache/poi/hwpf/model/CharIndexTranslator.html" title="interface in org.apache.poi.hwpf.model">CharIndexTranslator</a>&nbsp;translator)</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/CHPFormattedDiskPage.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/hwpf/model/CHPBinTable.html" title="class in org.apache.poi.hwpf.model"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/hwpf/model/CHPX.html" title="class in org.apache.poi.hwpf.model"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hwpf/model/CHPFormattedDiskPage.html" target="_top">Frames</a></li>
+<li><a href="CHPFormattedDiskPage.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_org.apache.poi.hwpf.model.FormattedDiskPage">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

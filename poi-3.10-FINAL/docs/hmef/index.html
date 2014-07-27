@@ -1,0 +1,430 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>POI-HMEF - Java API To Access Microsoft Transport Neutral Encoding Files (TNEF)</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+</div>
+<div class="menu">
+<span class="menuLabel">HMEF</span>
+<div class="menuItem">
+<span class="menuSelected">Overview</span>
+</div>
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>POI-HMEF - Java API To Access Microsoft Transport Neutral Encoding Files (TNEF)</h1>
+</div>
+<div class="h3">
+    
+
+    
+       
+<a name="Overview"></a>
+<div class="h3">
+<h3>Overview</h3>
+</div>
+         
+
+         
+<p>HMEF is the POI Project's pure Java implementation of Microsoft's
+            TNEF (Transport Neurtral Encoding Format), aka winmail.dat,
+            which is used by Outlook and Exchange in some situations.</p>
+          
+<p>Currently, HMEF provides a read-only api for accessing common
+            message and attachment attributes, including the message body
+            and attachment files. In addition, it's possible to have 
+            read-only access to all of the underlying TNEF and MAPI 
+            attributes of the message and attachments.</p>
+          
+<p>HMEF also provides a command line tool for extracting out
+            the message body and attachment files from a TNEF (winmail.dat)
+            file.</p>
+
+        
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content"> 
+          This code currently lives the 
+          <a href="http://svn.apache.org/viewcvs.cgi/poi/trunk/src/scratchpad/">scratchpad area</a> 
+          of the POI SVN repository. 
+          Ensure that you have the scratchpad jar or the scratchpad 
+          build area in your classpath before experimenting with this code.
+        </div>
+</div>
+        
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content"> 
+          This code is a new POI feature, and the first release that will
+          contain it will be POI 3.8 beta 2. Until then, you will need to
+          build your own jars from a <a href="../subversion.html">svn
+          checkout</a>.
+        </div>
+</div>
+       
+
+       
+<a name="Using+HMEF+to+access+TNEF+%28winmail.dat%29+files"></a>
+<div class="h3">
+<h3>Using HMEF to access TNEF (winmail.dat) files</h3>
+</div>
+         
+
+         
+<a name="Easy+extraction+of+message+body+and+attachment+files"></a>
+<div class="h4">
+<h4>Easy extraction of message body and attachment files</h4>
+</div>
+           
+  
+           
+<p>The class <em>org.apache.poi.hmef.extractor.HMEFContentsExtractor</em>
+             provides both command line and Java extraction. It allows the
+             saving of the message body (an RTF file), and all of the 
+             attachment files, to a single directory as specified.</p>
+
+           
+<p>From the command line, simply call the class specifying the
+             TNEF file to extract, and the directory to place the extracted
+             files into, eg:</p>
+           
+<pre class="code">
+              java -classpath poi-3.8-FINAL.jar:poi-scratchpad-3.8-FINAL.jar org.apache.poi.hmef.extractor.HMEFContentsExtractor winmail.dat /tmp/extracted/
+           </pre>
+
+           
+<p>From Java, there are two method calls on the class, one to
+             extract the message body RTF to a file, and the other to extract
+             all the attachments to a directory. A typical use would be:</p>
+           
+<pre class="code">
+public void extract(String winmailFilename, String directoryName) throws Exception {
+   HMEFContentsExtractor ext = new HMEFContentsExtractor(new File(winmailFilename));
+      
+   File dir = new File(directoryName);
+   File rtf = new File(dir, "message.rtf");
+   if(! dir.exists()) {
+       throw new FileNotFoundException("Output directory " + dir.getName() + " not found");
+   }
+      
+   System.out.println("Extracting...");
+   ext.extractMessageBody(rtf);
+   ext.extractAttachments(dir);
+   System.out.println("Extraction completed");
+}
+           </pre>
+         
+  
+         
+<a name="Attachment+attributes+and+contents"></a>
+<div class="h4">
+<h4>Attachment attributes and contents</h4>
+</div>
+           
+  
+           
+<p>To get at your attachments, simply call the
+             <em>getAttachments()</em> method on a <em>HMEFMessage</em>
+             instance, and you'll receive a list of all the attachments.</p>
+           
+<p>When you have a <em>org.apache.poi.hmef.Attachment</em> object, 
+             there are several helper methods available. These will all
+             return the value of the appropriate underlying attachment
+             attributes, or null if for some reason the attribute isn't
+             present in your file.</p>
+           
+<ul>
+            
+<li>
+<em>getFilename()</em> - returns the name of the attachment
+              file, possibly in 8.3 format</li>
+            
+<li>
+<em>getLongFilename()</em> - returns the full name of the 
+              attachment file</li>
+            
+<li>
+<em>getExtension()</em> - returns the extension of the
+              attachment file, including the "."</li>
+            
+<li>
+<em>getModifiedDate()</em> - returns the date that the 
+              attachment file was last edited on</li>
+            
+<li>
+<em>getContents()</em> - returns a byte array of the contents
+              of the attached file</li>
+            
+<li>
+<em>getRenderedMetaFile()</em> - returns a byte array of 
+              a windows meta file representation of the attached file</li>
+           
+</ul>
+         
+  
+         
+<a name="Message+attributes+and+message+body"></a>
+<div class="h4">
+<h4>Message attributes and message body</h4>
+</div>
+           
+  
+           
+<p>A <em>org.apache.poi.hmef.HMEFMessage</em> instance is created
+             from an <em>InputStream</em> of the underlying TNEF (winmail.dat)
+             file.</p>
+           
+<p>From a <em>HMEFMessage</em>, there are three main methods of
+            interest to call:</p>
+           
+<ul>
+             
+<li>
+<em>getBody()</em> - returns a String containing the RTF
+               contents of the message body. </li>
+             
+<li>
+<em>getSubject()</em> - returns the message subject</li>
+             
+<li>
+<em>getAttachments()</em> - returns the list of 
+               <em>Attachment</em> objects for the message</li>
+           
+</ul>
+         
+  
+         
+<a name="Low+level+attribute+access"></a>
+<div class="h4">
+<h4>Low level attribute access</h4>
+</div>
+           
+  
+           
+<p>Both Messages and Attachments contain two kinds of attributes.
+             These are <em>TNEFAttribute</em> and <em>MAPIAttribute</em>.</p>
+           
+<p>TNEFAttribute is specific to TNEF files in terms of the 
+             available types and properties. In general, Attachments have a
+             few more useful ones of these then Messages.</p>
+           
+<p>MAPIAttributes hold standard MAPI properties and values, and
+             work in a similar way to <a href="../hsmf/">HSMF 
+             (Outlook)</a> does. There are typically many of these on both
+             Messages and Attachments. <em>Note - see limitations</em>
+</p>
+           
+<p>Both <em>HMEFMessage</em> and <em>Attachment</em> supports
+             support two different ways of getting to attributes of interest.
+             Firstly, they support list getters, to return all attributes
+             (either TNEF or MAPI). Secondly, they support specific getters by
+             TNEF or MAPI property.</p>
+           
+<pre class="code">
+HMEFMessage msg = new HMEFMessage(new FileInputStream(file));
+for(TNEFAttribute attr : msg.getMessageAttributes) {
+   System.out.println("TNEF : " + attr);
+}
+for(MAPIAttribute attr : msg.getMessageMAPIAttributes) {
+   System.out.println("MAPI : " + attr);
+}
+System.out.println("Subject is " + msg.getMessageMAPIAttribute(MAPIProperty.CONVERSATION_TOPIC));
+
+for(Attachment attach : msg.getAttachments()) {
+   for(TNEFAttribute attr : attach.getAttributes) {
+      System.out.println("A.TNEF : " + attr);
+   }
+   for(MAPIAttribute attr : attach.getMAPIAttributes) {
+      System.out.println("A.MAPI : " + attr);
+   }
+   System.out.println("Filename is " + attach.getAttribute(TNEFProperty.CID_ATTACHTITLE));
+   System.out.println("Extension is " + attach.getMAPIAttribute(MAPIProperty.ATTACH_EXTENSION));
+}
+           </pre>
+         
+       
+
+       
+<a name="Investigating+a+TNEF+file"></a>
+<div class="h3">
+<h3>Investigating a TNEF file</h3>
+</div>
+         
+
+			
+<p>To get a feel for the contents of a file, and to track down
+			 where data of interest is stored, HMEF comes with
+			 <a href="http://svn.apache.org/repos/asf/poi/trunk/src/scratchpad/src/org/apache/poi/hmef/dev/">HMEFDumper</a>
+			 to print out the contents of the file.</p>
+       
+
+       
+<a name="Limitations"></a>
+<div class="h3">
+<h3>Limitations</h3>
+</div>
+         
+
+          
+<p>HMEF is currently a work-in-progress, and not everything
+            works yet. The current limitations are:</p>
+          
+<ul>
+            
+<li>Non-standard MAPI properties from the range 0x8000 to 0x8fff
+              may not be being quite correctly turned into attributes. 
+              The values show up, but the name and type may not always
+              be correct.</li>
+            
+<li>All testing so far has been performed on a small number of
+              English documents. We think we're correctly turning bytes into
+              Java unicode strings, but we need a few non-English sample
+              files in the test suite to verify this!</li>
+          
+</ul>
+       
+    
+
+<div id="authors" align="right">by&nbsp;Nick Burch</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit">
+<a href="http://validator.w3.org/check/referer"><img width="88" height="31" alt="Valid HTML 4.01!" src="../skin/images/valid-html401.png" class="logoImage"></a><a href="http://jigsaw.w3.org/css-validator/"><img width="88" height="31" alt="Valid CSS!" src="../skin/images/vcss.png" class="logoImage"></a><a href="http://forrest.apache.org/"><img border="0" class="logoImage" alt="Built with Apache Forrest" src="../skin/images/built-with-forrest-button.png" width="88" height="31"></a>
+</div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>User Defined Functions</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+        
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">HSSF+XSSF</span>
+        
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+        
+<div class="menuItem">
+<a href="quick-guide.html">Quick Guide</a>
+</div>
+        
+<div class="menuItem">
+<a href="how-to.html">HOWTO</a>
+</div>
+        
+<div class="menuItem">
+<a href="converting.html">HSSF to SS Converting</a>
+</div>
+        
+<div class="menuItem">
+<a href="formula.html">Formula Support</a>
+</div>
+        
+<div class="menuItem">
+<a href="eval.html">Formula Evaluation</a>
+</div>
+		    
+<div class="menuItem">
+<a href="eval-devguide.html">Eval Dev Guide</a>
+</div>
+        
+<div class="menuItem">
+<a href="examples.html">Examples</a>
+</div>
+        
+<div class="menuItem">
+<a href="use-case.html">Use Case</a>
+</div>
+        
+<div class="menuItem">
+<a href="diagrams.html">Pictorial Docs</a>
+</div>
+        
+<div class="menuItem">
+<a href="limitations.html">Limitations</a>
+</div>
+        
+<div class="menuItem">
+<span class="menuSelected">User Defined Functions</span>
+</div>
+        
+<div class="menuItem">
+<a href="excelant.html">ExcelAnt Tests</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Contributer's Guide</span>
+        
+<div class="menuItem">
+<a href="hacking-hssf.html">Hacking HSSF</a>
+</div>
+        
+<div class="menuItem">
+<a href="record-generator.html">Record Generator</a>
+</div>
+        
+<div class="menuItem">
+<a href="chart.html">Charts</a>
+</div>
+    
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>User Defined Functions</h1>
+</div>
+<div class="h3">
+    
+  
+    
+<a name="How+to+Create+and+Use+User+Defined+Functions"></a>
+<div class="h3">
+<h3>How to Create and Use User Defined Functions</h3>
+</div>
+
+     
+<a name="Description"></a>
+<div class="h4">
+<h4>Description</h4>
+</div>
+            
+<p>This document describes the User Defined Functions within POI.
+            User defined functions allow you to take code that is written in VBA
+            and re-write in Java and use within POI. Consider the following example.</p>
+     
+     
+<a name="An+Example"></a>
+<div class="h4">
+<h4>An Example</h4>
+</div>
+        
+<p>Suppose you are given a spreadsheet that can calculate the principal and interest
+        payments for a mortgage.  The user enters the principal loan amount, the interest rate
+        and the term of the loan.  The Excel spreadsheet does the rest.</p>
+        
+<p>
+            
+<img alt="mortgage calculation spreadsheet" src="../resources/images/simple-xls-with-function.jpg">
+        </p>
+        
+<p>When you actually look at the workbook you discover that rather than having
+        the formula in a cell it has been written as VBA function.  You review the 
+        function and determine that it could be written in Java:</p>
+        
+<p>
+            
+<img alt="VBA code" src="../resources/images/calculatePayment.jpg">
+        </p>
+        
+<p>If we write a small program to try to evaluate this cell, we'll fail.  Consider this source code:</p>
+        
+<pre class="code">
+import java.io.File ;
+import java.io.FileInputStream ;
+import java.io.FileNotFoundException ;
+import java.io.IOException ;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException ;
+import org.apache.poi.ss.formula.functions.FreeRefFunction ;
+import org.apache.poi.ss.formula.udf.AggregatingUDFFinder ;
+import org.apache.poi.ss.formula.udf.DefaultUDFFinder ;
+import org.apache.poi.ss.formula.udf.UDFFinder ;
+import org.apache.poi.ss.usermodel.Cell ;
+import org.apache.poi.ss.usermodel.CellValue ;
+import org.apache.poi.ss.usermodel.Row ;
+import org.apache.poi.ss.usermodel.Sheet ;
+import org.apache.poi.ss.usermodel.Workbook ;
+import org.apache.poi.ss.usermodel.WorkbookFactory ;
+import org.apache.poi.ss.util.CellReference ;
+
+public class Evaluator {
+
+    
+    
+    public static void main( String[] args ) {
+        
+        System.out.println( "fileName: " + args[0] ) ;
+        System.out.println( "cell: " + args[1] ) ;
+        
+        File workbookFile = new File( args[0] ) ;
+        
+        try {
+            FileInputStream fis = new FileInputStream(workbookFile);
+            Workbook workbook = WorkbookFactory.create(fis);
+            
+            FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+            
+            CellReference cr = new CellReference( args[1] ) ;
+            String sheetName = cr.getSheetName() ;
+            Sheet sheet = workbook.getSheet( sheetName ) ;
+            int rowIdx = cr.getRow() ;
+            int colIdx = cr.getCol() ;
+            Row row = sheet.getRow( rowIdx ) ;
+            Cell cell = row.getCell( colIdx ) ;
+            
+            CellValue value = evaluator.evaluate( cell ) ;
+            
+            System.out.println("returns value: " +  value ) ;
+            
+            
+        } catch( FileNotFoundException e ) {
+            e.printStackTrace();
+        } catch( InvalidFormatException e ) {
+            e.printStackTrace();
+        } catch( IOException e ) {
+            e.printStackTrace();
+        }
+    }
+}
+        
+</pre>
+        
+<p>If you run this code, you're likely to get the following error:</p>
+        
+       
+<pre class="code">
+Exception in thread "main" org.apache.poi.ss.formula.eval.NotImplementedException: Error evaluating cell Sheet1!B4
+    at org.apache.poi.ss.formula.WorkbookEvaluator.addExceptionInfo(WorkbookEvaluator.java:321)
+    at org.apache.poi.ss.formula.WorkbookEvaluator.evaluateAny(WorkbookEvaluator.java:288)
+    at org.apache.poi.ss.formula.WorkbookEvaluator.evaluate(WorkbookEvaluator.java:221)
+    at org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator.evaluateFormulaCellValue(HSSFFormulaEvaluator.java:320)
+    at org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator.evaluate(HSSFFormulaEvaluator.java:182)
+    at poi.tests.Evaluator.main(Evaluator.java:61)
+Caused by: org.apache.poi.ss.formula.eval.NotImplementedException: calculatePayment
+    at org.apache.poi.ss.formula.UserDefinedFunction.evaluate(UserDefinedFunction.java:59)
+    at org.apache.poi.ss.formula.OperationEvaluatorFactory.evaluate(OperationEvaluatorFactory.java:129)
+    at org.apache.poi.ss.formula.WorkbookEvaluator.evaluateFormula(WorkbookEvaluator.java:456)
+    at org.apache.poi.ss.formula.WorkbookEvaluator.evaluateAny(WorkbookEvaluator.java:279)
+    ... 4 more
+        
+</pre>
+        
+        
+<p>How would we make it so POI can use this sheet?</p>
+     
+     
+     
+<a name="Defining+Your+Function"></a>
+<div class="h4">
+<h4>Defining Your Function</h4>
+</div>
+        
+<p>To 'convert' this code to Java and make it available to POI you need to implement
+        a FreeRefFunction instance.  FreeRefFunction is an interface in the org.apache.poi.ss.formula.functions 
+        package.  This interface defines one method, evaluate(ValueEval[] args, OperationEvaluationContext ec),
+        which is how you will receive the argument values from POI.</p>
+        
+<p>The evaluate() method as defined above is where you will convert the ValueEval instances to the 
+        proper number types.  The following code snippet shows you how to get your values:</p>
+ 
+      
+<pre class="code">
+public class CalculateMortgage implements FreeRefFunction {
+
+@Override
+public ValueEval evaluate( ValueEval[] args, OperationEvaluationContext ec ) {
+    if (args.length != 3) {  
+        return ErrorEval.VALUE_INVALID;
+    }
+
+    double principal, rate, years,  result;
+    try {
+        ValueEval v1 = OperandResolver.getSingleValue( args[0], 
+                                                       ec.getRowIndex(), 
+                                                       ec.getColumnIndex() ) ;
+        ValueEval v2 = OperandResolver.getSingleValue( args[1], 
+                                                       ec.getRowIndex(), 
+                                                       ec.getColumnIndex() ) ;
+        ValueEval v3 = OperandResolver.getSingleValue( args[2], 
+                                                       ec.getRowIndex(), 
+                                                       ec.getColumnIndex() ) ;
+
+        principal  = OperandResolver.coerceValueToDouble( v1 ) ; 
+        rate  = OperandResolver.coerceValueToDouble( v2 ) ;
+        years = OperandResolver.coerceValueToDouble( v3 ) ;
+     </pre>
+     
+     
+<p>The first thing we do is check the number of arguments being passed since there is no sense
+     in attempting to go further if you are missing critical information.</p>
+     
+<p>Next we declare our variables, in our case we need variables for:</p>
+     
+<ul>
+        
+<li>principal - the amount of the loan</li>
+        
+<li>rate - the interest rate as a decimal</li>
+        
+<li>years - the length of the loan in years</li>
+        
+<li>result - the result of the calculation</li>
+     
+</ul>
+     
+<p>Next, we use the OperandResolver to convert the ValueEval instances to doubles, though not directly.  
+     First we start by getting discreet values.  Using the OperandResolver.getSingleValue() method
+     we retrieve each of the values passed in by the cell in the spreadsheet.  Next, we use the
+     OperandResolver again to convert the ValueEval instances to doubles, in this case.  This
+     class has other methods of coercion for gettings Strings, ints and booleans.  Now that we've 
+     got our primitive values we can move on to calculating the value.</p>
+     
+<p>As shown previously, we have the VBA source.  We need to add code to our class to calculate 
+     	the payment.  To do this you could simply add it to the method we've already created but I've
+     	chosen to add it as its own method.  Add the following method: </p>
+     	
+<pre class="code">
+public double calculateMortgagePayment( double p, double r, double y ) {
+
+    double i = r / 12 ;
+    double n = y * 12 ;
+    
+    double principalAndInterest = 
+         p * (( i * Math.pow((1 + i),n ) ) / ( Math.pow((1 + i),n) - 1))  ;
+    
+    return principalAndInterest ;
+}	
+     	</pre>
+     	
+<p>The biggest change necessary is related to the exponents; Java doesn't have a notation for this
+     		so we had to add calls to Math.pow().  Now we need to add this call to our previous method:</p>
+     	
+<pre class="code">
+     	 result = calculateMortgagePayment( principal, rate, years ) ;	
+     		</pre>
+     	
+<p>Having done that, the last things we need to do are to check to make sure we didn't get a bad result and,
+     		if not, we need to return the value. Add the following code to the class:</p>
+     	
+<pre class="code">
+private void checkValue(double result) throws EvaluationException {
+    if (Double.isNaN(result) || Double.isInfinite(result)) {
+        throw new EvaluationException(ErrorEval.NUM_ERROR);
+    }
+} 
+     		</pre>
+     
+<p>Then add a line of code to our evaluate method to call this new static method, complete our try/catch and return the value:</p>
+     	
+<pre class="code">
+        checkValue(result);
+        
+    } catch (EvaluationException e) {
+        e.printStackTrace() ;
+        return e.getErrorEval();
+    }
+
+    return new NumberEval( result ) ;
+     		</pre>
+     		
+     		
+<p>So the whole class would be as follows:</p>
+     		
+     	
+<pre class="code">
+import org.apache.poi.ss.formula.OperationEvaluationContext ;
+import org.apache.poi.ss.formula.eval.ErrorEval ;
+import org.apache.poi.ss.formula.eval.EvaluationException ;
+import org.apache.poi.ss.formula.eval.NumberEval ;
+import org.apache.poi.ss.formula.eval.OperandResolver ;
+import org.apache.poi.ss.formula.eval.ValueEval ;
+import org.apache.poi.ss.formula.functions.FreeRefFunction ;
+
+/**
+ * A simple function to calculate principal and interest.
+ * 
+ * @author Jon Svede
+ *
+ */
+public class CalculateMortgage implements FreeRefFunction {
+
+    @Override
+    public ValueEval evaluate( ValueEval[] args, OperationEvaluationContext ec ) {
+        if (args.length != 3) {  
+            return ErrorEval.VALUE_INVALID;
+        }
+
+        double principal, rate, years,  result;
+        try {
+            ValueEval v1 = OperandResolver.getSingleValue( args[0], 
+                                                           ec.getRowIndex(), 
+                                                           ec.getColumnIndex() ) ;
+            ValueEval v2 = OperandResolver.getSingleValue( args[1], 
+                                                           ec.getRowIndex(), 
+                                                           ec.getColumnIndex() ) ;
+            ValueEval v3 = OperandResolver.getSingleValue( args[2], 
+                                                           ec.getRowIndex(), 
+                                                           ec.getColumnIndex() ) ;
+
+            principal  = OperandResolver.coerceValueToDouble( v1 ) ; 
+            rate  = OperandResolver.coerceValueToDouble( v2 ) ;
+            years = OperandResolver.coerceValueToDouble( v3 ) ;
+            
+            result = calculateMortgagePayment( principal, rate, years ) ;
+            
+            checkValue(result);
+            
+        } catch (EvaluationException e) {
+            e.printStackTrace() ;
+            return e.getErrorEval();
+        }
+
+        return new NumberEval( result ) ;
+    }
+    
+    public double calculateMortgagePayment( double p, double r, double y ) {
+        double i = r / 12 ;
+        double n = y * 12 ;
+        
+        //M = P [ i(1 + i)n ] / [ (1 + i)n - 1] 
+        double principalAndInterest = 
+             p * (( i * Math.pow((1 + i),n ) ) / ( Math.pow((1 + i),n) - 1))  ;
+        
+        return principalAndInterest ;
+    }
+    
+    /**
+     * Excel does not support infinities and NaNs, rather, it gives a #NUM! error in these cases
+     * 
+     * @throws EvaluationException (#NUM!) if &lt;tt&gt;result&lt;/tt&gt; is &lt;tt&gt;NaN&lt;/&gt; or &lt;tt&gt;Infinity&lt;/tt&gt;
+     */
+     static final void checkValue(double result) throws EvaluationException {
+         if (Double.isNaN(result) || Double.isInfinite(result)) {
+             throw new EvaluationException(ErrorEval.NUM_ERROR);
+         }
+     }
+
+}
+	
+     		</pre>
+     		
+     		
+<p>Great!  Now we need to go back to our original program that failed to evaluate our cell and add code that will allow it run our new Java code.</p>
+
+     
+     
+     
+<a name="Registering+Your+Function"></a>
+<div class="h4">
+<h4>Registering Your Function</h4>
+</div>
+     		
+<p>Now we need to register our function in the Workbook, so that the Formula Evaluator can resolve the name "calculatePayment"
+and map it to the actual implementation (CalculateMortgage). This is done using the UDFFinder object. 
+The UDFFinder manages FreeRefFunctions which are our analogy for the VBA code.  We need to create a UDFFinder. There are
+     			a few things we need to know in order to do this:</p>
+        
+<ul>
+          
+<li>The name of the function in the VBA code (in our case it is calculatePayment)</li>
+          
+<li>The Class name of our FreeRefFunction</li>
+        
+</ul>
+     		
+<p>UDFFinder is actually an interface, so we need to use an actual implementation of this interface.  Therefore we use the org.apache.poi.ss.formula.udf.DefaultUDFFinder class.  If you refer to the Javadocs you'll see that this class expects to get two arrays, one
+     		containing the alias and the other containing an instance of the class that will represent that alias.  In our case our alias will be calculatePayment 
+     		and our class instance will be of the  CalculateMortgage type.  This class needs to be available at compile and runtime.  Be sure to keep these arrays
+     		well organized because you'll run into problems if these arrays are of different sizes or the alias aren't in the same relative position in their respective
+     		arrays.  Add the following code:</p>
+     	  
+<pre class="code">
+String[] functionNames = { "calculatePayment" } ;
+FreeRefFunction[] functionImpls = { new CalculateMortgage() } ; 
+
+UDFFinder udfs = new DefaultUDFFinder( functionNames, functionImpls ) ;
+UDFFinder udfToolpack = new AggregatingUDFFinder( udfs ) ;	
+     	  	</pre>
+     	  
+<p>Now we have our UDFFinder instance and we've created the AggregatingUDFFinder instance.  The last step is to pass this to our Workbook:</p>
+     	  
+     	  
+<pre class="code">
+workbook.addToolPack(udfToolpack);
+     	  	</pre>
+     	  
+<p>So now the whole class will look like this:</p>
+     	  
+<pre class="code"> 
+import java.io.File ;
+import java.io.FileInputStream ;
+import java.io.FileNotFoundException ;
+import java.io.IOException ;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException ;
+import org.apache.poi.ss.formula.functions.FreeRefFunction ;
+import org.apache.poi.ss.formula.udf.AggregatingUDFFinder ;
+import org.apache.poi.ss.formula.udf.DefaultUDFFinder ;
+import org.apache.poi.ss.formula.udf.UDFFinder ;
+import org.apache.poi.ss.usermodel.Cell ;
+import org.apache.poi.ss.usermodel.CellValue ;
+import org.apache.poi.ss.usermodel.Row ;
+import org.apache.poi.ss.usermodel.Sheet ;
+import org.apache.poi.ss.usermodel.Workbook ;
+import org.apache.poi.ss.usermodel.WorkbookFactory ;
+import org.apache.poi.ss.util.CellReference ;
+
+public class Evaluator {
+    
+    public static void main( String[] args ) {
+        
+        System.out.println( "fileName: " + args[0] ) ;
+        System.out.println( "cell: " + args[1] ) ;
+        
+        File workbookFile = new File( args[0] ) ;
+        
+        try {
+            FileInputStream fis = new FileInputStream(workbookFile);
+            Workbook workbook = WorkbookFactory.create(fis);
+            
+            String[] functionNames = { "calculatePayment" } ;
+            FreeRefFunction[] functionImpls = { new CalculateMortgage() } ;
+
+            UDFFinder udfs = new DefaultUDFFinder( functionNames, functionImpls ) ;
+            UDFFinder udfToolpack = new AggregatingUDFFinder( udfs ) ;	
+                      
+            workbook.addToolPack(udfToolpack);
+
+            FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+            
+            CellReference cr = new CellReference( args[1] ) ;
+            String sheetName = cr.getSheetName() ;
+            Sheet sheet = workbook.getSheet( sheetName ) ;
+            int rowIdx = cr.getRow() ;
+            int colIdx = cr.getCol() ;
+            Row row = sheet.getRow( rowIdx ) ;
+            Cell cell = row.getCell( colIdx ) ;
+            
+            CellValue value = evaluator.evaluate( cell ) ;
+            
+            System.out.println("returns value: " +  value ) ;
+            
+            
+        } catch( FileNotFoundException e ) {
+            e.printStackTrace();
+        } catch( InvalidFormatException e ) {
+            e.printStackTrace();
+        } catch( IOException e ) {
+            e.printStackTrace();
+        }
+    }
+}
+     	  	
+     	  </pre>
+     	  
+<p>Now that our evaluator is aware of the UDFFinder which in turn is aware of our FreeRefFunction, we're ready to re-run our example:</p>
+        
+<pre class="code">Evaluator mortgage-calculation.xls Sheet1!B4</pre>
+        
+<p>which prints the following output in the console:</p>
+     	  
+<pre class="code">
+fileName: mortgage-calculation.xls
+cell: Sheet1!B4
+returns value: org.apache.poi.ss.usermodel.CellValue [790.7936267415464]
+        </pre>
+     		
+<p>That is it!  Now you can create Java code and register it, allowing your POI based appliction to run spreadsheets that previously were inaccessible.</p>
+     		
+<p>This example can be found in the <a href="http://svn.apache.org/repos/asf/poi/trunk/src/examples/src/org/apache/poi/ss/examples/formula">src/examples/src/org/apache/poi/ss/examples/formula</a> folder in the source.</p>
+    
+  
+
+
+<div id="authors" align="right">by&nbsp;Jon Svede,&nbsp;Brian Bush</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

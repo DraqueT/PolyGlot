@@ -1,0 +1,406 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>WorkdayCalculator (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="WorkdayCalculator (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/WorkdayCalculator.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../org/apache/poi/ss/formula/atp/DateParser.html" title="class in org.apache.poi.ss.formula.atp"><span class="strong">Prev Class</span></a></li>
+<li>Next Class</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?org/apache/poi/ss/formula/atp/WorkdayCalculator.html" target="_top">Frames</a></li>
+<li><a href="WorkdayCalculator.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.ss.formula.atp</div>
+<h2 title="Class WorkdayCalculator" class="title">Class WorkdayCalculator</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>org.apache.poi.ss.formula.atp.WorkdayCalculator</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public class <span class="strong">WorkdayCalculator</span>
+extends java.lang.Object</pre>
+<div class="block">A calculator for workdays, considering dates as excel representations.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>jfaenomoto@gmail.com</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/apache/poi/ss/formula/atp/WorkdayCalculator.html" title="class in org.apache.poi.ss.formula.atp">WorkdayCalculator</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/atp/WorkdayCalculator.html#instance">instance</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/atp/WorkdayCalculator.html#calculateNonWeekendHolidays(double, double, double[])">calculateNonWeekendHolidays</a></strong>(double&nbsp;start,
+                           double&nbsp;end,
+                           double[]&nbsp;holidays)</code>
+<div class="block">Calculates how many holidays in a list are workdays, considering an interval of dates.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/atp/WorkdayCalculator.html#calculateWorkdays(double, double, double[])">calculateWorkdays</a></strong>(double&nbsp;start,
+                 double&nbsp;end,
+                 double[]&nbsp;holidays)</code>
+<div class="block">Calculate how many workdays are there between a start and an end date, as excel representations, considering a range of holidays.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.util.Date</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/atp/WorkdayCalculator.html#calculateWorkdays(double, int, double[])">calculateWorkdays</a></strong>(double&nbsp;start,
+                 int&nbsp;workdays,
+                 double[]&nbsp;holidays)</code>
+<div class="block">Calculate the workday past x workdays from a starting date, considering a range of holidays.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/atp/WorkdayCalculator.html#isHoliday(double, double[])">isHoliday</a></strong>(double&nbsp;aDate,
+         double[]&nbsp;holidays)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/atp/WorkdayCalculator.html#isInARange(double, double, double)">isInARange</a></strong>(double&nbsp;start,
+          double&nbsp;end,
+          double&nbsp;aDate)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/atp/WorkdayCalculator.html#isNonWorkday(double, double[])">isNonWorkday</a></strong>(double&nbsp;aDate,
+            double[]&nbsp;holidays)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/atp/WorkdayCalculator.html#isWeekend(double)">isWeekend</a></strong>(double&nbsp;aDate)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/atp/WorkdayCalculator.html#pastDaysOfWeek(double, double, int)">pastDaysOfWeek</a></strong>(double&nbsp;start,
+              double&nbsp;end,
+              int&nbsp;dayOfWeek)</code>
+<div class="block">Calculates how many days of week past between a start and an end date.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="instance">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>instance</h4>
+<pre>public static final&nbsp;<a href="../../../../../../org/apache/poi/ss/formula/atp/WorkdayCalculator.html" title="class in org.apache.poi.ss.formula.atp">WorkdayCalculator</a> instance</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="calculateWorkdays(double, double, double[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>calculateWorkdays</h4>
+<pre>public&nbsp;int&nbsp;calculateWorkdays(double&nbsp;start,
+                    double&nbsp;end,
+                    double[]&nbsp;holidays)</pre>
+<div class="block">Calculate how many workdays are there between a start and an end date, as excel representations, considering a range of holidays.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>start</code> - start date.</dd><dd><code>end</code> - end date.</dd><dd><code>holidays</code> - an array of holidays.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>number of workdays between start and end dates, including both dates.</dd></dl>
+</li>
+</ul>
+<a name="calculateWorkdays(double, int, double[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>calculateWorkdays</h4>
+<pre>public&nbsp;java.util.Date&nbsp;calculateWorkdays(double&nbsp;start,
+                               int&nbsp;workdays,
+                               double[]&nbsp;holidays)</pre>
+<div class="block">Calculate the workday past x workdays from a starting date, considering a range of holidays.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>start</code> - start date.</dd><dd><code>workdays</code> - number of workdays to be past from starting date.</dd><dd><code>holidays</code> - an array of holidays.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>date past x workdays.</dd></dl>
+</li>
+</ul>
+<a name="pastDaysOfWeek(double, double, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pastDaysOfWeek</h4>
+<pre>protected&nbsp;int&nbsp;pastDaysOfWeek(double&nbsp;start,
+                 double&nbsp;end,
+                 int&nbsp;dayOfWeek)</pre>
+<div class="block">Calculates how many days of week past between a start and an end date.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>start</code> - start date.</dd><dd><code>end</code> - end date.</dd><dd><code>dayOfWeek</code> - a day of week as represented by <code>Calendar</code> constants.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>how many days of week past in this interval.</dd></dl>
+</li>
+</ul>
+<a name="calculateNonWeekendHolidays(double, double, double[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>calculateNonWeekendHolidays</h4>
+<pre>protected&nbsp;int&nbsp;calculateNonWeekendHolidays(double&nbsp;start,
+                              double&nbsp;end,
+                              double[]&nbsp;holidays)</pre>
+<div class="block">Calculates how many holidays in a list are workdays, considering an interval of dates.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>start</code> - start date.</dd><dd><code>end</code> - end date.</dd><dd><code>holidays</code> - an array of holidays.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>number of holidays that occur in workdays, between start and end dates.</dd></dl>
+</li>
+</ul>
+<a name="isWeekend(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isWeekend</h4>
+<pre>protected&nbsp;boolean&nbsp;isWeekend(double&nbsp;aDate)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>aDate</code> - a given date.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>true</code> if date is weekend, <code>false</code> otherwise.</dd></dl>
+</li>
+</ul>
+<a name="isHoliday(double, double[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isHoliday</h4>
+<pre>protected&nbsp;boolean&nbsp;isHoliday(double&nbsp;aDate,
+                double[]&nbsp;holidays)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>aDate</code> - a given date.</dd><dd><code>holidays</code> - an array of holidays.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>true</code> if date is a holiday, <code>false</code> otherwise.</dd></dl>
+</li>
+</ul>
+<a name="isNonWorkday(double, double[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isNonWorkday</h4>
+<pre>protected&nbsp;int&nbsp;isNonWorkday(double&nbsp;aDate,
+               double[]&nbsp;holidays)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>aDate</code> - a given date.</dd><dd><code>holidays</code> - an array of holidays.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>1</code> is not a workday, <code>0</code> otherwise.</dd></dl>
+</li>
+</ul>
+<a name="isInARange(double, double, double)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isInARange</h4>
+<pre>protected&nbsp;boolean&nbsp;isInARange(double&nbsp;start,
+                 double&nbsp;end,
+                 double&nbsp;aDate)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>start</code> - start date.</dd><dd><code>end</code> - end date.</dd><dd><code>aDate</code> - a date to be analyzed.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>true</code> if aDate is between start and end dates, <code>false</code> otherwise.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/WorkdayCalculator.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../org/apache/poi/ss/formula/atp/DateParser.html" title="class in org.apache.poi.ss.formula.atp"><span class="strong">Prev Class</span></a></li>
+<li>Next Class</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?org/apache/poi/ss/formula/atp/WorkdayCalculator.html" target="_top">Frames</a></li>
+<li><a href="WorkdayCalculator.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

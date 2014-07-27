@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>POI-HWPF - A Quick Guide</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+		
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+	
+</div>
+<div class="menu">
+<span class="menuLabel">HWPF</span>
+		
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+		
+<div class="menuItem">
+<span class="menuSelected">Quick Guide</span>
+</div>
+		
+<div class="menuItem">
+<a href="docoverview.html">HWPF Format</a>
+</div>
+		
+<div class="menuItem">
+<a href="projectplan.html">HWPF Project plan</a>
+</div>
+	
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>POI-HWPF - A Quick Guide</h1>
+</div>
+<div class="h3">
+    
+
+    
+		
+<p>HWPF is still in early development. It is in the <a href="http://svn.apache.org/viewcvs.cgi/poi/trunk/src/scratchpad/">
+		scratchpad section of the SVN.</a> You will need to ensure you
+		either have a recent SVN checkout, or a recent SVN nightly build
+		(including the scratchpad jar!)</p>
+
+        
+<a name="Basic+Text+Extraction"></a>
+<div class="h3">
+<h3>Basic Text Extraction</h3>
+</div>
+        
+<p>For basic text extraction, make use of 
+<span class="codefrag">org.apache.poi.hwpf.extractor.WordExtractor</span>. It accepts an input
+stream or a <span class="codefrag">HWPFDocument</span>. The <span class="codefrag">getText()</span> 
+method can be used to 
+get the text from all the paragraphs, or <span class="codefrag">getParagraphText()</span>
+can be used to fetch the text from each paragraph in turn. The other
+option is <span class="codefrag">getTextFromPieces()</span>, which is very fast, but
+tends to return things that aren't text from the page. YMMV.
+		</p>
+		
+		
+		
+<a name="Specific+Text+Extraction"></a>
+<div class="h3">
+<h3>Specific Text Extraction</h3>
+</div>
+		
+<p>To get specific bits of text, first create a 
+<span class="codefrag">org.apache.poi.hwpf.HWPFDocument</span>. Fetch the range 
+with <span class="codefrag">getRange()</span>, then get paragraphs from that. You
+can then get text and other properties.
+		</p>
+		
+		
+		
+<a name="Headers+and+Footers"></a>
+<div class="h3">
+<h3>Headers and Footers</h3>
+</div>
+		
+<p>To get at the headers and footers of a word document, first create a
+<span class="codefrag">org.apache.poi.hwpf.HWPFDocument</span>. Next, you need to create a
+<span class="codefrag">org.apache.poi.hwpf.usermodel.HeaderStores</span>, passing it your
+HWPFDocument. Finally, the HeaderStores gives you access to the headers and
+footers, including first / even / odd page ones if defined in your
+document. Additionally, HeaderStores provides a method for removing
+any macros in the text, which is helpful as many headers and footers
+do end up with macros in them.</p>
+		
+		
+		
+<a name="Changing+Text"></a>
+<div class="h3">
+<h3>Changing Text</h3>
+</div>
+		
+<p>It is possible to change the text via 
+		<span class="codefrag">insertBefore()</span> and <span class="codefrag">insertAfter()</span>
+		on a <span class="codefrag">Range</span> object (either a <span class="codefrag">Range</span>,
+		<span class="codefrag">Paragraph</span> or <span class="codefrag">CharacterRun</span>).
+		It is also possible to delete a <span class="codefrag">Range</span>.
+		This code will work in many, but not all cases, and patches to
+        improve it are gratefully received!
+		</p>
+		
+
+		
+<a name="Further+Examples"></a>
+<div class="h3">
+<h3>Further Examples</h3>
+</div>
+		
+<p>For now, the best source of additional examples is in the unit 
+		tests. <a href="http://svn.apache.org/viewvc/poi/trunk/src/scratchpad/testcases/org/apache/poi/hwpf/">
+		Browse the HWPF unit tests.</a>
+		
+</p>
+		
+	
+
+<div id="authors" align="right">by&nbsp;Nick Burch</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

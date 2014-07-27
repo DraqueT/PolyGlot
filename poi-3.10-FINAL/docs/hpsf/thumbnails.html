@@ -1,0 +1,416 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>HPSF THUMBNAIL HOW-TO</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+    
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+  
+</div>
+<div class="menu">
+<span class="menuLabel">HPSF</span>
+    
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+    
+<div class="menuItem">
+<a href="how-to.html">How To</a>
+</div>
+    
+<div class="menuItem">
+<span class="menuSelected">Thumbnails</span>
+</div>
+    
+<div class="menuItem">
+<a href="internals.html">Internals</a>
+</div>
+    
+<div class="menuItem">
+<a href="todo.html">To Do</a>
+</div>
+  
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>HPSF THUMBNAIL HOW-TO</h1>
+</div>
+<div class="h3">
+ 
+ 
+  
+<a name="The+VT_CF+Format"></a>
+<div class="h3">
+<h3>The VT_CF Format</h3>
+</div>
+
+   
+<p>Thumbnail information is stored as a VT_CF, or Thumbnail Variant. The
+    Thumbnail Variant is used to store various types of information in a
+    clipboard. The VT_CF can store information in formats for the Macintosh or
+    Windows clipboard.</p>
+
+   
+<p>There are many types of data that can be copied to the clipboard, but the
+    only types of information needed for thumbnail manipulation are the image
+    formats.</p>
+
+   
+<p>The <span class="codefrag">VT_CF</span> structure looks like this:</p>
+
+   
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+    
+<tr class="b">
+     
+<th colspan="1" rowspan="1">Element:</th>
+     <td colspan="1" rowspan="1">Clipboard Size</td>
+     <td colspan="1" rowspan="1">Clipboard Format Tag</td>
+     <td colspan="1" rowspan="1">Clipboard Data</td>
+    
+</tr>
+    
+<tr class="a">
+     
+<th colspan="1" rowspan="1">Size:</th>
+     <td colspan="1" rowspan="1">32 bit unsigned integer (DWord)</td>
+     <td colspan="1" rowspan="1">32 bit signed integer (DWord)</td>
+     <td colspan="1" rowspan="1">variable length (byte array)</td>
+    
+</tr>
+   
+</table>
+
+   
+<p>The Clipboard Size refers to the size (in bytes) of Clipboard Data
+    (variable size) plus the Clipboard Format (four bytes).</p>
+
+   
+<p>Clipboard Format Tag has four possible values:</p>
+
+   
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+    
+<tr class="b">
+     
+<th colspan="1" rowspan="1">Value</th>
+     <th colspan="1" rowspan="1">Identifier</th>
+     <th colspan="1" rowspan="1">Description</th>
+    
+</tr>
+    
+<tr class="a">
+     
+<td colspan="1" rowspan="1"><span class="codefrag">-1L</span></td>
+     <td colspan="1" rowspan="1"><span class="codefrag">CFTAG_WINDOWS</span></td>
+     <td colspan="1" rowspan="1">a built-in Windows&copy; clipboard format value</td>
+    
+</tr>
+    
+<tr class="b">
+     
+<td colspan="1" rowspan="1"><span class="codefrag">-2L</span></td>
+     <td colspan="1" rowspan="1"><span class="codefrag">CFTAG_MACINTOSH</span></td>
+     <td colspan="1" rowspan="1">a Macintosh clipboard format value</td>
+    
+</tr>
+    
+<tr class="a">
+     
+<td colspan="1" rowspan="1"><span class="codefrag">-3L</span></td>
+     <td colspan="1" rowspan="1"><span class="codefrag">CFTAG_FMTID</span></td>
+     <td colspan="1" rowspan="1">a format identifier (FMTID) This is rarely used.</td>
+    
+</tr>
+    
+<tr class="b">
+     
+<td colspan="1" rowspan="1"><span class="codefrag">0L</span></td>
+     <td colspan="1" rowspan="1"><span class="codefrag">CFTAG_NODATA</span></td>
+     <td colspan="1" rowspan="1">No data This is rarely used.</td>
+    
+</tr>
+   
+</table>
+  
+
+
+
+  
+<a name="Windows+Clipboard+Data"></a>
+<div class="h3">
+<h3>Windows Clipboard Data</h3>
+</div>
+
+   
+<p>Windows clipboard data has four image formats for thumbnails:</p>
+
+   
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+    
+<tr class="b">
+     
+<th colspan="1" rowspan="1">Value</th>
+     <th colspan="1" rowspan="1">Identifier</th>
+     <th colspan="1" rowspan="1">Description</th>
+    
+</tr>
+    
+<tr class="a">
+     
+<td colspan="1" rowspan="1">3</td>
+     <td colspan="1" rowspan="1"><span class="codefrag">CF_METAFILEPICT</span></td>
+     <td colspan="1" rowspan="1">Windows metafile format - recommended</td>
+    
+</tr>
+    
+<tr class="b">
+     
+<td colspan="1" rowspan="1">8</td>
+     <td colspan="1" rowspan="1"><span class="codefrag">CF_DIB</span></td>
+     <td colspan="1" rowspan="1">Device Independent Bitmap</td>
+    
+</tr>
+    
+<tr class="a">
+     
+<td colspan="1" rowspan="1">14</td>
+     <td colspan="1" rowspan="1"><span class="codefrag">CF_ENHMETAFILE</span></td>
+     <td colspan="1" rowspan="1">Enhanced Windows metafile format</td>
+    
+</tr>
+    
+<tr class="b">
+     
+<td colspan="1" rowspan="1">2</td>
+     <td colspan="1" rowspan="1"><span class="codefrag">CF_BITMAP</span></td>
+     <td colspan="1" rowspan="1">Bitmap - Obsolete - Use <span class="codefrag">CF_DIB</span> instead</td>
+    
+</tr>
+   
+</table>
+  
+
+  
+<a name="Windows+Metafile+Format"></a>
+<div class="h3">
+<h3>Windows Metafile Format</h3>
+</div>
+
+   
+<p>The most common format for thumbnails on the Windows platform is the
+    Windows metafile format. The Clipboard places and extra header in front of
+    a the standard Windows Metafile Format data.</p>
+
+   
+<p>The Clipboard Data byte array looks like this when an image is stored in
+    Windows' Clipboard WMF format.</p>
+
+   
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+    
+<tr class="b">
+     
+<th colspan="1" rowspan="1">Identifier</th>
+     <td colspan="1" rowspan="1">CF_METAFILEPICT</td>
+     <td colspan="1" rowspan="1">mm</td>
+     <td colspan="1" rowspan="1">width</td>
+     <td colspan="1" rowspan="1">height</td>
+     <td colspan="1" rowspan="1">handle</td>
+     <td colspan="1" rowspan="1">WMF data</td>
+    
+</tr>
+    
+<tr class="a">
+     
+<th colspan="1" rowspan="1">Size</th>
+     <td colspan="1" rowspan="1">32 bit unsigned int</td>
+     <td colspan="1" rowspan="1">16 bit unsigned(?) int</td>
+     <td colspan="1" rowspan="1">16 bit unsigned(?) int</td>
+     <td colspan="1" rowspan="1">16 bit unsigned(?) int</td>
+     <td colspan="1" rowspan="1">16 bit unsigned(?) int</td>
+     <td colspan="1" rowspan="1">byte array - variable length</td>
+    
+</tr>
+    
+<tr class="b">
+     
+<th colspan="1" rowspan="1">Description</th>
+     <td colspan="1" rowspan="1">Clipboard WMF</td>
+     <td colspan="1" rowspan="1">Mapping Mode</td>
+     <td colspan="1" rowspan="1">Image Width</td>
+     <td colspan="1" rowspan="1">Image Height</td>
+     <td colspan="1" rowspan="1">handle to the WMF data array in memory, or 0</td>
+     <td colspan="1" rowspan="1">standard WMF byte stream</td>
+    
+</tr>
+   
+</table>
+  
+
+
+  
+<a name="Device+Independent+Bitmap"></a>
+<div class="h3">
+<h3>Device Independent Bitmap</h3>
+</div>
+   
+<p>
+<strong>FIXME:</strong> Describe the Device Independent Bitmap
+    format!</p>
+  
+
+
+
+  
+<a name="Macintosh+Clipboard+Data"></a>
+<div class="h3">
+<h3>Macintosh Clipboard Data</h3>
+</div>
+   
+<p>
+<strong>FIXME:</strong> Describe the Macintosh clipboard formats!</p>
+  
+
+ 
+
+<div id="authors" align="right">by&nbsp;Drew Varner</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

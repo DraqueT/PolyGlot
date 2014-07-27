@@ -1,0 +1,756 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="skin/print.css" type="text/css">
+<title>Apache POI - Component Overview</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Overview</span>
+        
+<div class="menuItem">
+<a href="index.html">Home</a>
+</div>
+        
+<div class="menuItem">
+<a href="download.html">Download</a>
+</div>
+        
+<div class="menuItem">
+<span class="menuSelected">Components</span>
+</div>
+        
+<div class="menuItem">
+<a href="text-extraction.html">Text Extraction</a>
+</div>
+        
+<div class="menuItem">
+<a href="encryption.html">Encryption support</a>
+</div>
+        
+<div class="menuItem">
+<a href="casestudies.html">Case Studies</a>
+</div>
+        
+<div class="menuItem">
+<a href="legal.html">Legal</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Help</span>
+        
+<div class="menuItem">
+<a href="apidocs/index.html">Javadocs</a>
+</div>
+        
+<div class="menuItem">
+<a href="faq.html">FAQ</a>
+</div>
+        
+<div class="menuItem">
+<a href="mailinglists.html">Mailing Lists</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://issues.apache.org/bugzilla/buglist.cgi?product=POI">Bug Database</a>
+</div>
+        
+<div class="menuItem">
+<a href="changes.html">Changes Log</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Getting Involved</span>
+        
+<div class="menuItem">
+<a href="subversion.html">Subversion Repository</a>
+</div>
+        
+<div class="menuItem">
+<a href="howtobuild.html">How To Build</a>
+</div>
+        
+<div class="menuItem">
+<a href="guidelines.html">Contribution Guidelines</a>
+</div>
+        
+<div class="menuItem">
+<a href="who.html">Who We Are</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Component APIs</span>
+        
+<div class="menuItem">
+<a href="spreadsheet/index.html">Excel (SS=HSSF+XSSF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hwpf/index.html">Word (HWPF+XWPF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="slideshow/index.html">PowerPoint (HSLF+XSLF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="oxml4j/index.html">OpenXML4J (OOXML)</a>
+</div>
+        
+<div class="menuItem">
+<a href="poifs/index.html">OLE2 Filesystem (POIFS)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hpsf/index.html">OLE2 Document Props (HPSF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hsmf/index.html">Outlook (HSMF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hdgf/index.html">Visio (HDGF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hmef/index.html">TNEF (HMEF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hpbf/index.html">Publisher (HPBF)</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Apache Wide</span>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/">Apache Software Foundation</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/licenses/">License</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/security/">Security</a>
+</div>
+    
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Apache POI - Component Overview</h1>
+</div>
+<div class="h3">
+  
+  
+    
+<a name="Apache+POI+Project+Components"></a>
+<div class="h3">
+<h3>Apache POI Project Components</h3>
+</div>
+      
+<a name="POIFS+for+OLE+2+Documents"></a>
+<div class="h4">
+<h4>POIFS for OLE 2 Documents</h4>
+</div>
+        
+<p>
+	  POIFS is the oldest and most stable part of the project.  It is our port of the OLE 2 Compound Document Format to
+          pure Java.  It supports both read and write functionality.  All of our components ultimately rely on it by
+          definition.  Please see <a href="./poifs/index.html">the POIFS project page</a> for more information.
+	</p>
+      
+      
+<a name="HSSF+and+XSSF+for+Excel+Documents"></a>
+<div class="h4">
+<h4>HSSF and XSSF for Excel Documents</h4>
+</div>
+        
+<p>
+	  HSSF is our port of the Microsoft Excel 97(-2007) file format (BIFF8) to pure
+          Java. XSSF is our port of the Microsoft Excel XML (2007+) file format (OOXML) to
+          pure Java. SS is a package that provides common support for both formats with a common API.
+	  They both support read and write capability. Please see
+          <a href="./spreadsheet/index.html">the HSSF+XSSF project page</a> for more
+          information.
+	</p>
+      
+      
+<a name="HWPF+and+XWPF+for+Word+Documents"></a>
+<div class="h4">
+<h4>HWPF and XWPF for Word Documents</h4>
+</div>
+	
+<p>
+	  HWPF is our port of the Microsoft Word 97 (-2003) file format to pure
+	  Java.  It supports read, and limited write capabilities. It also provides
+      simple text extraction support for the older Word 6 and Word 95 formats.
+      Please see <a href="./hwpf/index.html">the HWPF project page for more
+	    information</a>.  This component remains in early stages of
+	  development. It can already read and write simple files.
+	</p>
+	
+<p>
+	  We are also working on the XWPF for the WordprocessingML (2007+) format from the 
+	  OOXML specification. This provides read and write support for simpler
+      files, along with text extraction capabilities.
+	</p>
+      
+      
+<a name="HSLF+and+XSLF+for+PowerPoint+Documents"></a>
+<div class="h4">
+<h4>HSLF and XSLF for PowerPoint Documents</h4>
+</div>
+	
+<p>
+	  HSLF is our port of the Microsoft PowerPoint 97(-2003) file format to pure
+	  Java. It supports read and write capabilities. Please see <a href="./slideshow/index.html">the HSLF project page for more
+	    information</a>.
+	</p>
+	
+<p>
+	  We are also working on the XSLF for the PresentationML (2007+) format from the 
+	  OOXML specification.
+	</p>
+      
+      
+<a name="HPSF+for+OLE+2+Document+Properties"></a>
+<div class="h4">
+<h4>HPSF for OLE 2 Document Properties</h4>
+</div>
+	
+<p>
+	  HPSF is our port of the OLE 2 property set format to pure
+	  Java. Property sets are mostly use to store a document's properties
+	  (title, author, date of last modification etc.), but they can be used
+	  for application-specific purposes as well.
+	</p>
+	
+<p>
+	  HPSF supports both reading and writing of properties.
+	</p>
+	
+<p>
+	  Please see <a href="./hpsf/index.html">the HPSF project
+	    page</a> for more information.
+	</p>
+      
+      
+<a name="HDGF+for+Visio+Documents"></a>
+<div class="h4">
+<h4>HDGF for Visio Documents</h4>
+</div>
+	
+<p>
+	  HDGF is our port of the Microsoft Viso 97(-2003) file format to pure
+	  Java. It currently only supports reading at a very low level, and
+	  simple text extraction. Please see <a href="./hdgf/index.html">the HDGF project page for more
+	    information</a>.
+	</p>
+      
+      
+<a name="HPBF+for+Publisher+Documents"></a>
+<div class="h4">
+<h4>HPBF for Publisher Documents</h4>
+</div>
+	
+<p>
+	  HPBF is our port of the Microsoft Publisher 98(-2007) file format to pure
+	  Java. It currently only supports reading at a low level for around
+	  half of the file parts, and simple text extraction.  Please see <a href="./hpbf/index.html">the HPBF project page for more
+	    information</a>.
+	</p>
+      
+      
+<a name="HMEF+for+TNEF+%28winmail.dat%29+Outlook+Attachments"></a>
+<div class="h4">
+<h4>HMEF for TNEF (winmail.dat) Outlook Attachments</h4>
+</div>
+	
+<p>
+     HMEF is our port of the Microsoft TNEF (Transport Neutral Encoding
+     Format) file format to pure Java. TNEF is sometimes used by Outlook
+     for encoding the message, and will typically come through as
+     winmail.dat. HMEF currently only supports reading at a low level, but
+     we hope to add text and attachment extraction shortly. Please see <a href="./hmef/index.html">the HMEF project page for more
+	    information</a>.
+	</p>
+      
+      
+<a name="HSMF+for+Outlook+Messages"></a>
+<div class="h4">
+<h4>HSMF for Outlook Messages</h4>
+</div>
+	
+<p>
+	  HSMF is our port of the Microsoft Outlook message file format to pure
+	  Java. It currently only some of the textual content of MSG files, and
+      some attachments. Further support and documentation is coming in slowly.
+	  For now, users are advised to consult the unit tests for example use.
+	  Please see <a href="./hsmf/index.html">the HPBF project page for more
+	    information</a>.
+	</p>
+	
+<p>
+	  Microsoft has recently added the Outlook file format to its OSP. More information
+	  is now available making implementation of this API an easier task.
+	</p>
+      
+    
+    
+<a name="What+is+it%3F"></a>
+<div class="h3">
+<h3>What is it?</h3>
+</div>
+      
+<p>The Apache POI project is the master project for developing pure
+        Java ports of file formats based on Microsoft's OLE 2 Compound
+        Document Format.  OLE 2 Compound Document Format is used by
+        Microsoft Office Documents, as well as by programs using MFC
+        property sets to serialize their document objects.
+      </p>
+      
+<p>Apache POI is also the master project for developing pure
+        Java ports of file formats based on Office Open XML (ooxml.) 
+        OOXML is part of an ECMA / ISO standardisation effort. This
+        documentation is quite large, but you can normally find the bit you
+        need without too much effort!
+        <a href="http://www.ecma-international.org/publications/standards/Ecma-376.htm">ECMA-376 standard is here</a>,
+        and is also under the <a href="http://www.microsoft.com/interop/osp">Microsoft OSP</a>.
+      </p>
+    
+    
+<a name="components"></a>
+<div class="h3">
+<h3>Component Map</h3>
+</div>
+      
+<p>
+        The Apache POI distribution consists of support for many document file formats. This support is provided
+	in several Jar files. Not all of the Jars are needed for every format. The following tables
+        show the relationships between POI components, Maven repository tags, and the project's Jar files.
+      </p>
+      
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+        
+<tr class="b">
+          
+<th colspan="1" rowspan="1">Component</th>
+          <th colspan="1" rowspan="1">Application type</th>
+          <th colspan="1" rowspan="1">Maven artifactId</th>
+          <th colspan="1" rowspan="1">Notes</th>
+        
+</tr>
+        
+<tr class="a">
+          
+<td colspan="1" rowspan="1"><a href="./poifs/index.html">POIFS</a></td>
+          <td colspan="1" rowspan="1">OLE2 Filesystem</td>
+          <td colspan="1" rowspan="1"><em>poi</em></td>
+          <td colspan="1" rowspan="1">Required to work with OLE2 / POIFS based files</td>
+        
+</tr>
+        
+<tr class="b">
+          
+<td colspan="1" rowspan="1"><a href="./hpsf/index.html">HPSF</a></td>
+          <td colspan="1" rowspan="1">OLE2 Property Sets</td>
+          <td colspan="1" rowspan="1">poi</td>
+          <td colspan="1" rowspan="1">&nbsp;</td>
+        
+</tr>
+        
+<tr class="a">
+          
+<td colspan="1" rowspan="1"><a href="./spreadsheet/index.html">HSSF</a></td>
+          <td colspan="1" rowspan="1">Excel XLS</td>
+          <td colspan="1" rowspan="1">poi</td>
+          <td colspan="1" rowspan="1">For HSSF only, if common SS is needed see below</td>
+        
+</tr>
+        
+<tr class="b">
+          
+<td colspan="1" rowspan="1"><a href="./slideshow/index.html">HSLF</a></td>
+          <td colspan="1" rowspan="1">PowerPoint PPT</td>
+          <td colspan="1" rowspan="1">poi-scratchpad</td>
+          <td colspan="1" rowspan="1">&nbsp;</td>
+        
+</tr>
+        
+<tr class="a">
+          
+<td colspan="1" rowspan="1"><a href="./hwpf/index.html">HWPF</a></td>
+          <td colspan="1" rowspan="1">Word DOC</td>
+          <td colspan="1" rowspan="1">poi-scratchpad</td>
+          <td colspan="1" rowspan="1">&nbsp;</td>
+        
+</tr>
+        
+<tr class="b">
+          
+<td colspan="1" rowspan="1"><a href="./hdgf/index.html">HDGF</a></td>
+          <td colspan="1" rowspan="1">Visio VSD</td>
+          <td colspan="1" rowspan="1">poi-scratchpad</td>
+          <td colspan="1" rowspan="1">&nbsp;</td>
+        
+</tr>
+        
+<tr class="a">
+          
+<td colspan="1" rowspan="1"><a href="./hpbf/index.html">HPBF</a></td>
+          <td colspan="1" rowspan="1">Publisher PUB</td>
+          <td colspan="1" rowspan="1">poi-scratchpad</td>
+          <td colspan="1" rowspan="1">&nbsp;</td>
+        
+</tr>
+        
+<tr class="b">
+          
+<td colspan="1" rowspan="1"><a href="./hsmf/index.html">HSMF</a></td>
+          <td colspan="1" rowspan="1">Outlook MSG</td>
+          <td colspan="1" rowspan="1">poi-scratchpad</td>
+          <td colspan="1" rowspan="1">&nbsp;</td>
+        
+</tr>
+        
+<tr class="a">
+          
+<td colspan="1" rowspan="1"><a href="./oxml4j/index.html">OpenXML4J</a></td>
+          <td colspan="1" rowspan="1">OOXML</td>
+          <td colspan="1" rowspan="1">poi-ooxml plus one of<br>poi-ooxml-schemas, ooxml-schemas</td>
+          <td colspan="1" rowspan="1">Only one schemas jar is needed, see below for differences</td>
+        
+</tr>
+        
+<tr class="b">
+          
+<td colspan="1" rowspan="1"><a href="./spreadsheet/index.html">XSSF</a></td>
+          <td colspan="1" rowspan="1">Excel XLSX</td>
+          <td colspan="1" rowspan="1">poi-ooxml</td>
+          <td colspan="1" rowspan="1">&nbsp;</td>
+        
+</tr>
+        
+<tr class="a">
+          
+<td colspan="1" rowspan="1"><a href="./slideshow/index.html">XSLF</a></td>
+          <td colspan="1" rowspan="1">PowerPoint PPTX</td>
+          <td colspan="1" rowspan="1">poi-ooxml</td>
+          <td colspan="1" rowspan="1">&nbsp;</td>
+        
+</tr>
+        
+<tr class="b">
+          
+<td colspan="1" rowspan="1"><a href="./hwpf/index.html">XWPF</a></td>
+          <td colspan="1" rowspan="1">Word DOCX</td>
+          <td colspan="1" rowspan="1">poi-ooxml</td>
+          <td colspan="1" rowspan="1">&nbsp;</td>
+        
+</tr>
+        
+<tr class="a">
+          
+<td colspan="1" rowspan="1"><a href="./spreadsheet/index.html">Common SS</a></td>
+          <td colspan="1" rowspan="1">Excel XLS and XLSX</td>
+          <td colspan="1" rowspan="1">poi-ooxml</td>
+          <td colspan="1" rowspan="1">WorkbookFactory and friends all require poi-ooxml, not just core poi</td>
+        
+</tr>
+      
+</table>
+
+      
+<p>
+<br>
+</p>
+
+      
+<p>
+        This table maps artifacts into the jar file name. "version-yyyymmdd" is 
+        the POI version stamp. For the latest stable release it is
+        3.9-20121203
+        . For the latest beta release it is
+        3.10-beta2-20130904
+        .
+      </p>
+      
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+        
+<tr class="b">
+          
+<th colspan="1" rowspan="1">Maven artifactId</th>
+          <th colspan="1" rowspan="1">Prerequisites</th>
+          <th colspan="1" rowspan="1">JAR</th>
+        
+</tr>
+        
+<tr class="a">
+          
+<td colspan="1" rowspan="1">poi</td>
+          <td colspan="1" rowspan="1">commons-logging, commons-codec, log4j</td>
+          <td colspan="1" rowspan="1">poi-version-yyyymmdd.jar</td>
+        
+</tr>
+        
+<tr class="b">
+          
+<td colspan="1" rowspan="1">poi-scratchpad</td>
+          <td colspan="1" rowspan="1">poi</td>
+          <td colspan="1" rowspan="1">poi-scratchpad-version-yyyymmdd.jar</td>
+        
+</tr>
+        
+<tr class="a">
+          
+<td colspan="1" rowspan="1">poi-ooxml</td>
+          <td colspan="1" rowspan="1">poi, poi-ooxml-schemas, dom4j</td>
+          <td colspan="1" rowspan="1">poi-ooxml-version-yyyymmdd.jar</td>
+        
+</tr>
+        
+<tr class="b">
+          
+<td colspan="1" rowspan="1">poi-ooxml-schemas</td>
+          <td colspan="1" rowspan="1">xmlbeans, stax-api-1.0.1</td>
+          <td colspan="1" rowspan="1">poi-ooxml-schemas-version-yyyymmdd.jar</td>
+        
+</tr>
+        
+<tr class="a">
+          
+<td colspan="1" rowspan="1">poi-examples</td>
+          <td colspan="1" rowspan="1">poi, poi-scratchpad, poi-ooxml</td>
+          <td colspan="1" rowspan="1">poi-examples-version-yyyymmdd.jar</td>
+        
+</tr>
+        
+<tr class="b">
+          
+<td colspan="1" rowspan="1">ooxml-schemas</td>
+          <td colspan="1" rowspan="1">xmlbeans, stax-api-1.0.1</td>
+          <td colspan="1" rowspan="1">ooxml-schemas-1.1.jar</td>
+        
+</tr>
+      
+</table>
+
+      
+<p>&nbsp;</p>
+      
+<p>
+        poi-ooxml requires poi-ooxml-schemas. This is a substantially smaller 
+        version of the ooxml-schemas jar (ooxml-schemas-1.1.jar for POI 3.7 or 
+        later, ooxml-scheams-1.0.jar for POI 3.5 and 3.6).
+        The larger ooxml-schemas jar is <a href="faq.html">normally</a> 
+        only required for development
+      </p>
+      
+<p>
+        The OOXML jars require a stax implementation. The "stax-api-1.0.1" jar
+        should normally be used (it is recommended for compatibility with other
+        Apache projects), though any compliant implementation should work fine though.
+      </p>
+    
+    
+<a name="Examples"></a>
+<div class="h3">
+<h3>Examples</h3>
+</div>
+      
+<p>
+	    Small sample programs using the POI API are available in the
+        <em>src/examples</em> directory of the source distribution. Before
+        studying the source code you might want to have a look at the
+        "Examples" section of the <a href="apidocs/overview-summary.html">POI API
+        documentation</a>.
+      </p>
+        
+<a name="POI+Browser"></a>
+<div class="h4">
+<h4>POI Browser</h4>
+</div>
+          
+<p>
+            The POI Browser is a very simple Swing GUI tool that displays the
+            internal structure of a Microsoft Office file and especially the
+            property set streams. Further information and  instructions how to
+            execute it can be found in the <a href="http://svn.apache.org/repos/asf/poi/trunk/src/examples/src/org/apache/poi/poifs/poibrowser/POIBrowser.java">POI
+              source code</a>.
+          </p>
+        
+      
+<p>
+        All of the examples are inclided in POI distributions as a poi-examples artifact.
+      </p>
+    
+    
+<a name="Contributed+Software"></a>
+<div class="h3">
+<h3>Contributed Software</h3>
+</div>
+      
+<p>
+	    Besides the "official" components outlined above there is some further
+	    software distributed with POI. This is called "contributed" software. It
+        is not explicitly recommended or even maintained by the POI team, but
+        it might still be useful to you.
+      </p>
+      
+<p>
+          See <a href="poi-ruby.html">POI Ruby Bindings</a>  and other code in the
+          <a href="http://svn.apache.org/repos/asf/poi/trunk/src/contrib/">poi-contrib module</a>
+      
+</p>
+    
+  
+  
+
+<div id="authors" align="right">by&nbsp;Andrew C. Oliver,&nbsp;Rainer Klute,&nbsp;David Fisher</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

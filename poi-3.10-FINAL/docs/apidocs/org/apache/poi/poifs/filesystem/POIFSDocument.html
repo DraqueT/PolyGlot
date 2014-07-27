@@ -1,0 +1,588 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>POIFSDocument (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="POIFSDocument (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/POIFSDocument.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/poifs/filesystem/Ole10NativeException.html" title="class in org.apache.poi.poifs.filesystem"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocumentPath.html" title="class in org.apache.poi.poifs.filesystem"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/poifs/filesystem/POIFSDocument.html" target="_top">Frames</a></li>
+<li><a href="POIFSDocument.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.poifs.filesystem</div>
+<h2 title="Class POIFSDocument" class="title">Class POIFSDocument</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>org.apache.poi.poifs.filesystem.POIFSDocument</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="../../../../../org/apache/poi/poifs/dev/POIFSViewable.html" title="interface in org.apache.poi.poifs.dev">POIFSViewable</a>, <a href="../../../../../org/apache/poi/poifs/filesystem/BATManaged.html" title="interface in org.apache.poi.poifs.filesystem">BATManaged</a>, <a href="../../../../../org/apache/poi/poifs/storage/BlockWritable.html" title="interface in org.apache.poi.poifs.storage">BlockWritable</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public final class <span class="strong">POIFSDocument</span>
+extends java.lang.Object
+implements <a href="../../../../../org/apache/poi/poifs/filesystem/BATManaged.html" title="interface in org.apache.poi.poifs.filesystem">BATManaged</a>, <a href="../../../../../org/apache/poi/poifs/storage/BlockWritable.html" title="interface in org.apache.poi.poifs.storage">BlockWritable</a>, <a href="../../../../../org/apache/poi/poifs/dev/POIFSViewable.html" title="interface in org.apache.poi.poifs.dev">POIFSViewable</a></pre>
+<div class="block">This class manages a document in the POIFS filesystem.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Marc Johnson (mjohnson at apache dot org)</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#POIFSDocument(java.lang.String, java.io.InputStream)">POIFSDocument</a></strong>(java.lang.String&nbsp;name,
+             java.io.InputStream&nbsp;stream)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#POIFSDocument(java.lang.String, int, org.apache.poi.poifs.common.POIFSBigBlockSize, org.apache.poi.poifs.filesystem.POIFSDocumentPath, org.apache.poi.poifs.filesystem.POIFSWriterListener)">POIFSDocument</a></strong>(java.lang.String&nbsp;name,
+             int&nbsp;size,
+             <a href="../../../../../org/apache/poi/poifs/common/POIFSBigBlockSize.html" title="class in org.apache.poi.poifs.common">POIFSBigBlockSize</a>&nbsp;bigBlockSize,
+             <a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocumentPath.html" title="class in org.apache.poi.poifs.filesystem">POIFSDocumentPath</a>&nbsp;path,
+             <a href="../../../../../org/apache/poi/poifs/filesystem/POIFSWriterListener.html" title="interface in org.apache.poi.poifs.filesystem">POIFSWriterListener</a>&nbsp;writer)</code>
+<div class="block">Constructor</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#POIFSDocument(java.lang.String, int, org.apache.poi.poifs.filesystem.POIFSDocumentPath, org.apache.poi.poifs.filesystem.POIFSWriterListener)">POIFSDocument</a></strong>(java.lang.String&nbsp;name,
+             int&nbsp;size,
+             <a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocumentPath.html" title="class in org.apache.poi.poifs.filesystem">POIFSDocumentPath</a>&nbsp;path,
+             <a href="../../../../../org/apache/poi/poifs/filesystem/POIFSWriterListener.html" title="interface in org.apache.poi.poifs.filesystem">POIFSWriterListener</a>&nbsp;writer)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#POIFSDocument(java.lang.String, org.apache.poi.poifs.storage.ListManagedBlock[], int)">POIFSDocument</a></strong>(java.lang.String&nbsp;name,
+             <a href="../../../../../org/apache/poi/poifs/storage/ListManagedBlock.html" title="interface in org.apache.poi.poifs.storage">ListManagedBlock</a>[]&nbsp;blocks,
+             int&nbsp;length)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#POIFSDocument(java.lang.String, org.apache.poi.poifs.common.POIFSBigBlockSize, java.io.InputStream)">POIFSDocument</a></strong>(java.lang.String&nbsp;name,
+             <a href="../../../../../org/apache/poi/poifs/common/POIFSBigBlockSize.html" title="class in org.apache.poi.poifs.common">POIFSBigBlockSize</a>&nbsp;bigBlockSize,
+             java.io.InputStream&nbsp;stream)</code>
+<div class="block">Constructor</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#POIFSDocument(java.lang.String, org.apache.poi.poifs.common.POIFSBigBlockSize, org.apache.poi.poifs.storage.ListManagedBlock[], int)">POIFSDocument</a></strong>(java.lang.String&nbsp;name,
+             <a href="../../../../../org/apache/poi/poifs/common/POIFSBigBlockSize.html" title="class in org.apache.poi.poifs.common">POIFSBigBlockSize</a>&nbsp;bigBlockSize,
+             <a href="../../../../../org/apache/poi/poifs/storage/ListManagedBlock.html" title="interface in org.apache.poi.poifs.storage">ListManagedBlock</a>[]&nbsp;blocks,
+             int&nbsp;length)</code>
+<div class="block">Constructor from small blocks</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#POIFSDocument(java.lang.String, org.apache.poi.poifs.storage.RawDataBlock[], int)">POIFSDocument</a></strong>(java.lang.String&nbsp;name,
+             <a href="../../../../../org/apache/poi/poifs/storage/RawDataBlock.html" title="class in org.apache.poi.poifs.storage">RawDataBlock</a>[]&nbsp;blocks,
+             int&nbsp;length)</code>
+<div class="block">Constructor from large blocks</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#POIFSDocument(java.lang.String, org.apache.poi.poifs.storage.SmallDocumentBlock[], int)">POIFSDocument</a></strong>(java.lang.String&nbsp;name,
+             <a href="../../../../../org/apache/poi/poifs/storage/SmallDocumentBlock.html" title="class in org.apache.poi.poifs.storage">SmallDocumentBlock</a>[]&nbsp;blocks,
+             int&nbsp;length)</code>
+<div class="block">Constructor from small blocks</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#countBlocks()">countBlocks</a></strong>()</code>
+<div class="block">Return the number of BigBlock's this instance uses</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#getShortDescription()">getShortDescription</a></strong>()</code>
+<div class="block">Provides a short description of the object, to be used when a
+ POIFSViewable object has not provided its contents.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#getSize()">getSize</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/poifs/storage/BlockWritable.html" title="interface in org.apache.poi.poifs.storage">BlockWritable</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#getSmallBlocks()">getSmallBlocks</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.Object[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#getViewableArray()">getViewableArray</a></strong>()</code>
+<div class="block">Get an array of objects, some of which may implement POIFSViewable</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.util.Iterator&lt;java.lang.Object&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#getViewableIterator()">getViewableIterator</a></strong>()</code>
+<div class="block">Get an Iterator of objects, some of which may implement POIFSViewable</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#preferArray()">preferArray</a></strong>()</code>
+<div class="block">Give viewers a hint as to whether to call getViewableArray or
+ getViewableIterator</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#setStartBlock(int)">setStartBlock</a></strong>(int&nbsp;index)</code>
+<div class="block">Set the start block for this instance</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocument.html#writeBlocks(java.io.OutputStream)">writeBlocks</a></strong>(java.io.OutputStream&nbsp;stream)</code>
+<div class="block">Write the storage to an OutputStream</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="POIFSDocument(java.lang.String, org.apache.poi.poifs.storage.RawDataBlock[], int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>POIFSDocument</h4>
+<pre>public&nbsp;POIFSDocument(java.lang.String&nbsp;name,
+             <a href="../../../../../org/apache/poi/poifs/storage/RawDataBlock.html" title="class in org.apache.poi.poifs.storage">RawDataBlock</a>[]&nbsp;blocks,
+             int&nbsp;length)
+              throws java.io.IOException</pre>
+<div class="block">Constructor from large blocks</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - the name of the POIFSDocument</dd><dd><code>blocks</code> - the big blocks making up the POIFSDocument</dd><dd><code>length</code> - the actual length of the POIFSDocument</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd></dl>
+</li>
+</ul>
+<a name="POIFSDocument(java.lang.String, org.apache.poi.poifs.storage.SmallDocumentBlock[], int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>POIFSDocument</h4>
+<pre>public&nbsp;POIFSDocument(java.lang.String&nbsp;name,
+             <a href="../../../../../org/apache/poi/poifs/storage/SmallDocumentBlock.html" title="class in org.apache.poi.poifs.storage">SmallDocumentBlock</a>[]&nbsp;blocks,
+             int&nbsp;length)</pre>
+<div class="block">Constructor from small blocks</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - the name of the POIFSDocument</dd><dd><code>blocks</code> - the small blocks making up the POIFSDocument</dd><dd><code>length</code> - the actual length of the POIFSDocument</dd></dl>
+</li>
+</ul>
+<a name="POIFSDocument(java.lang.String, org.apache.poi.poifs.common.POIFSBigBlockSize, org.apache.poi.poifs.storage.ListManagedBlock[], int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>POIFSDocument</h4>
+<pre>public&nbsp;POIFSDocument(java.lang.String&nbsp;name,
+             <a href="../../../../../org/apache/poi/poifs/common/POIFSBigBlockSize.html" title="class in org.apache.poi.poifs.common">POIFSBigBlockSize</a>&nbsp;bigBlockSize,
+             <a href="../../../../../org/apache/poi/poifs/storage/ListManagedBlock.html" title="interface in org.apache.poi.poifs.storage">ListManagedBlock</a>[]&nbsp;blocks,
+             int&nbsp;length)
+              throws java.io.IOException</pre>
+<div class="block">Constructor from small blocks</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - the name of the POIFSDocument</dd><dd><code>blocks</code> - the small blocks making up the POIFSDocument</dd><dd><code>length</code> - the actual length of the POIFSDocument</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd></dl>
+</li>
+</ul>
+<a name="POIFSDocument(java.lang.String, org.apache.poi.poifs.storage.ListManagedBlock[], int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>POIFSDocument</h4>
+<pre>public&nbsp;POIFSDocument(java.lang.String&nbsp;name,
+             <a href="../../../../../org/apache/poi/poifs/storage/ListManagedBlock.html" title="interface in org.apache.poi.poifs.storage">ListManagedBlock</a>[]&nbsp;blocks,
+             int&nbsp;length)
+              throws java.io.IOException</pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd></dl>
+</li>
+</ul>
+<a name="POIFSDocument(java.lang.String, org.apache.poi.poifs.common.POIFSBigBlockSize, java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>POIFSDocument</h4>
+<pre>public&nbsp;POIFSDocument(java.lang.String&nbsp;name,
+             <a href="../../../../../org/apache/poi/poifs/common/POIFSBigBlockSize.html" title="class in org.apache.poi.poifs.common">POIFSBigBlockSize</a>&nbsp;bigBlockSize,
+             java.io.InputStream&nbsp;stream)
+              throws java.io.IOException</pre>
+<div class="block">Constructor</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - the name of the POIFSDocument</dd><dd><code>stream</code> - the InputStream we read data from</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd></dl>
+</li>
+</ul>
+<a name="POIFSDocument(java.lang.String, java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>POIFSDocument</h4>
+<pre>public&nbsp;POIFSDocument(java.lang.String&nbsp;name,
+             java.io.InputStream&nbsp;stream)
+              throws java.io.IOException</pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd></dl>
+</li>
+</ul>
+<a name="POIFSDocument(java.lang.String, int, org.apache.poi.poifs.common.POIFSBigBlockSize, org.apache.poi.poifs.filesystem.POIFSDocumentPath, org.apache.poi.poifs.filesystem.POIFSWriterListener)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>POIFSDocument</h4>
+<pre>public&nbsp;POIFSDocument(java.lang.String&nbsp;name,
+             int&nbsp;size,
+             <a href="../../../../../org/apache/poi/poifs/common/POIFSBigBlockSize.html" title="class in org.apache.poi.poifs.common">POIFSBigBlockSize</a>&nbsp;bigBlockSize,
+             <a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocumentPath.html" title="class in org.apache.poi.poifs.filesystem">POIFSDocumentPath</a>&nbsp;path,
+             <a href="../../../../../org/apache/poi/poifs/filesystem/POIFSWriterListener.html" title="interface in org.apache.poi.poifs.filesystem">POIFSWriterListener</a>&nbsp;writer)</pre>
+<div class="block">Constructor</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - the name of the POIFSDocument</dd><dd><code>size</code> - the length of the POIFSDocument</dd><dd><code>path</code> - the path of the POIFSDocument</dd><dd><code>writer</code> - the writer who will eventually write the document contents</dd></dl>
+</li>
+</ul>
+<a name="POIFSDocument(java.lang.String, int, org.apache.poi.poifs.filesystem.POIFSDocumentPath, org.apache.poi.poifs.filesystem.POIFSWriterListener)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>POIFSDocument</h4>
+<pre>public&nbsp;POIFSDocument(java.lang.String&nbsp;name,
+             int&nbsp;size,
+             <a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocumentPath.html" title="class in org.apache.poi.poifs.filesystem">POIFSDocumentPath</a>&nbsp;path,
+             <a href="../../../../../org/apache/poi/poifs/filesystem/POIFSWriterListener.html" title="interface in org.apache.poi.poifs.filesystem">POIFSWriterListener</a>&nbsp;writer)</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getSmallBlocks()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSmallBlocks</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/poifs/storage/BlockWritable.html" title="interface in org.apache.poi.poifs.storage">BlockWritable</a>[]&nbsp;getSmallBlocks()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>array of SmallDocumentBlocks; may be empty, cannot be null</dd></dl>
+</li>
+</ul>
+<a name="getSize()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSize</h4>
+<pre>public&nbsp;int&nbsp;getSize()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>size of the document</dd></dl>
+</li>
+</ul>
+<a name="writeBlocks(java.io.OutputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeBlocks</h4>
+<pre>public&nbsp;void&nbsp;writeBlocks(java.io.OutputStream&nbsp;stream)
+                 throws java.io.IOException</pre>
+<div class="block">Write the storage to an OutputStream</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/poifs/storage/BlockWritable.html#writeBlocks(java.io.OutputStream)">writeBlocks</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/poifs/storage/BlockWritable.html" title="interface in org.apache.poi.poifs.storage">BlockWritable</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>stream</code> - the OutputStream to which the stored data should be written</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code> - on problems writing to the specified
+            stream</dd></dl>
+</li>
+</ul>
+<a name="countBlocks()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>countBlocks</h4>
+<pre>public&nbsp;int&nbsp;countBlocks()</pre>
+<div class="block">Return the number of BigBlock's this instance uses</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/poifs/filesystem/BATManaged.html#countBlocks()">countBlocks</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/poifs/filesystem/BATManaged.html" title="interface in org.apache.poi.poifs.filesystem">BATManaged</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>count of BigBlock instances</dd></dl>
+</li>
+</ul>
+<a name="setStartBlock(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setStartBlock</h4>
+<pre>public&nbsp;void&nbsp;setStartBlock(int&nbsp;index)</pre>
+<div class="block">Set the start block for this instance</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/poifs/filesystem/BATManaged.html#setStartBlock(int)">setStartBlock</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/poifs/filesystem/BATManaged.html" title="interface in org.apache.poi.poifs.filesystem">BATManaged</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - index into the array of blocks making up the filesystem</dd></dl>
+</li>
+</ul>
+<a name="getViewableArray()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getViewableArray</h4>
+<pre>public&nbsp;java.lang.Object[]&nbsp;getViewableArray()</pre>
+<div class="block">Get an array of objects, some of which may implement POIFSViewable</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/poifs/dev/POIFSViewable.html#getViewableArray()">getViewableArray</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/poifs/dev/POIFSViewable.html" title="interface in org.apache.poi.poifs.dev">POIFSViewable</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>an array of Object; may not be null, but may be empty</dd></dl>
+</li>
+</ul>
+<a name="getViewableIterator()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getViewableIterator</h4>
+<pre>public&nbsp;java.util.Iterator&lt;java.lang.Object&gt;&nbsp;getViewableIterator()</pre>
+<div class="block">Get an Iterator of objects, some of which may implement POIFSViewable</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/poifs/dev/POIFSViewable.html#getViewableIterator()">getViewableIterator</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/poifs/dev/POIFSViewable.html" title="interface in org.apache.poi.poifs.dev">POIFSViewable</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>an Iterator; may not be null, but may have an empty back end
+                 store</dd></dl>
+</li>
+</ul>
+<a name="preferArray()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>preferArray</h4>
+<pre>public&nbsp;boolean&nbsp;preferArray()</pre>
+<div class="block">Give viewers a hint as to whether to call getViewableArray or
+ getViewableIterator</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/poifs/dev/POIFSViewable.html#preferArray()">preferArray</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/poifs/dev/POIFSViewable.html" title="interface in org.apache.poi.poifs.dev">POIFSViewable</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>true</code> if a viewer should call getViewableArray,
+                 <code>false</code> if a viewer should call getViewableIterator</dd></dl>
+</li>
+</ul>
+<a name="getShortDescription()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getShortDescription</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getShortDescription()</pre>
+<div class="block">Provides a short description of the object, to be used when a
+ POIFSViewable object has not provided its contents.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/poifs/dev/POIFSViewable.html#getShortDescription()">getShortDescription</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/poifs/dev/POIFSViewable.html" title="interface in org.apache.poi.poifs.dev">POIFSViewable</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>short description</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/POIFSDocument.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/poifs/filesystem/Ole10NativeException.html" title="class in org.apache.poi.poifs.filesystem"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/poifs/filesystem/POIFSDocumentPath.html" title="class in org.apache.poi.poifs.filesystem"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/poifs/filesystem/POIFSDocument.html" target="_top">Frames</a></li>
+<li><a href="POIFSDocument.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>Record Generator HOWTO</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+        
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">HSSF+XSSF</span>
+        
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+        
+<div class="menuItem">
+<a href="quick-guide.html">Quick Guide</a>
+</div>
+        
+<div class="menuItem">
+<a href="how-to.html">HOWTO</a>
+</div>
+        
+<div class="menuItem">
+<a href="converting.html">HSSF to SS Converting</a>
+</div>
+        
+<div class="menuItem">
+<a href="formula.html">Formula Support</a>
+</div>
+        
+<div class="menuItem">
+<a href="eval.html">Formula Evaluation</a>
+</div>
+		    
+<div class="menuItem">
+<a href="eval-devguide.html">Eval Dev Guide</a>
+</div>
+        
+<div class="menuItem">
+<a href="examples.html">Examples</a>
+</div>
+        
+<div class="menuItem">
+<a href="use-case.html">Use Case</a>
+</div>
+        
+<div class="menuItem">
+<a href="diagrams.html">Pictorial Docs</a>
+</div>
+        
+<div class="menuItem">
+<a href="limitations.html">Limitations</a>
+</div>
+        
+<div class="menuItem">
+<a href="user-defined-functions.html">User Defined Functions</a>
+</div>
+        
+<div class="menuItem">
+<a href="excelant.html">ExcelAnt Tests</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Contributer's Guide</span>
+        
+<div class="menuItem">
+<a href="hacking-hssf.html">Hacking HSSF</a>
+</div>
+        
+<div class="menuItem">
+<span class="menuSelected">Record Generator</span>
+</div>
+        
+<div class="menuItem">
+<a href="chart.html">Charts</a>
+</div>
+    
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Record Generator HOWTO</h1>
+</div>
+<div class="h3">
+  
+  
+    
+<a name="How+to+Use+the+Record+Generator"></a>
+<div class="h3">
+<h3>How to Use the Record Generator</h3>
+</div>
+
+    
+<a name="History"></a>
+<div class="h4">
+<h4>History</h4>
+</div>
+        
+<p>
+        The record generator was born from frustration with translating
+        the Excel records to Java classes.  Doing this manually is a time
+        consuming process.  It's also very easy to make mistakes.
+        </p>
+        
+<p>
+        A utility was needed to take the defintition of what a
+        record looked like and do all the boring and repetitive work.
+        </p>
+    
+
+    
+<a name="Capabilities"></a>
+<div class="h4">
+<h4>Capabilities</h4>
+</div>
+    
+<p>
+        The record generator takes XML as input and produces the following
+        output:
+    </p>
+    
+<ul>
+        
+<li>A Java file capabile of decoding and encoding the record.</li>
+        
+<li>A test class that provides a fill-in-the-blanks implementation
+            of a test case for ensuring the record operates as
+            designed.</li>
+    
+</ul>
+    
+    
+<a name="Usage"></a>
+<div class="h4">
+<h4>Usage</h4>
+</div>
+        
+<p>
+            The record generator is invoked as an Ant target
+            (generate-records).  It goes through looking for all files in
+            <span class="codefrag">src/records/defintitions</span> ending with _record.xml.
+            It then creates two files; the Java record definition and the
+            Java test case template.
+        </p>
+        
+<p>
+            The records themselves have the following general layout:
+        </p>
+        
+<pre class="code">
+&lt;record id="0x1032" name="Frame" package="org.apache.poi.hssf.record"
+        excel-record-id="FRAME"&gt;
+    &lt;description&gt;The frame record indicates whether there is a border
+                 around the displayed text of a chart.&lt;/description&gt;
+    &lt;author&gt;Glen Stampoultzis (glens at apache.org)&lt;/author&gt;
+    &lt;fields&gt;
+        &lt;field type="int" size="2" name="border type"&gt;
+            &lt;const name="regular" value="0" description="regular rectangle or no border"/&gt;
+            &lt;const name="shadow" value="1" description="rectangle with shadow"/&gt;
+        &lt;/field&gt;
+        &lt;field type="int" size="2" name="options"&gt;
+            &lt;bit number="0" name="auto size"
+               description="excel calculates the size automatically if true"/&gt;
+            &lt;bit number="1" name="auto position"
+               description="excel calculates the position automatically"/&gt;
+        &lt;/field&gt;
+    &lt;/fields&gt;
+&lt;/record&gt;
+        </pre>
+        
+<p>
+            The following table details the allowable types and sizes for
+            the fields.
+        </p>
+        
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+            
+<tr class="b">
+                
+<th colspan="1" rowspan="1">Type</th>
+                <th colspan="1" rowspan="1">Size</th>
+                <th colspan="1" rowspan="1">Java Type</th>
+            
+</tr>
+            
+<tr class="a">
+                
+<td colspan="1" rowspan="1">int</td>
+                <td colspan="1" rowspan="1">1</td>
+                <td colspan="1" rowspan="1">byte</td>
+            
+</tr>
+            
+<tr class="b">
+                
+<td colspan="1" rowspan="1">int</td>
+                <td colspan="1" rowspan="1">2</td>
+                <td colspan="1" rowspan="1">short</td>
+            
+</tr>
+            
+<tr class="a">
+                
+<td colspan="1" rowspan="1">int</td>
+                <td colspan="1" rowspan="1">4</td>
+                <td colspan="1" rowspan="1">int</td>
+            
+</tr>
+            
+<tr class="b">
+                
+<td colspan="1" rowspan="1">int</td>
+                <td colspan="1" rowspan="1">8</td>
+                <td colspan="1" rowspan="1">long</td>
+            
+</tr>
+            
+<tr class="a">
+                
+<td colspan="1" rowspan="1">int</td>
+                <td colspan="1" rowspan="1">varword</td>
+                <td colspan="1" rowspan="1">array of shorts</td>
+            
+</tr>
+            
+<tr class="b">
+                
+<td colspan="1" rowspan="1">bits</td>
+                <td colspan="1" rowspan="1">1</td>
+                <td colspan="1" rowspan="1">A byte comprising of a bits (defined by the bit element)
+                    </td>
+            
+</tr>
+            
+<tr class="a">
+                
+<td colspan="1" rowspan="1">bits</td>
+                <td colspan="1" rowspan="1">2</td>
+                <td colspan="1" rowspan="1">An short comprising of a bits</td>
+            
+</tr>
+            
+<tr class="b">
+                
+<td colspan="1" rowspan="1">bits</td>
+                <td colspan="1" rowspan="1">4</td>
+                <td colspan="1" rowspan="1">A int comprising of a bits</td>
+            
+</tr>
+            
+<tr class="a">
+                
+<td colspan="1" rowspan="1">float</td>
+                <td colspan="1" rowspan="1">8</td>
+                <td colspan="1" rowspan="1">double</td>
+            
+</tr>
+            
+<tr class="b">
+                
+<td colspan="1" rowspan="1">hbstring</td>
+                <td colspan="1" rowspan="1">java expression</td>
+                <td colspan="1" rowspan="1">String</td>
+            
+</tr>
+        
+</table>
+        
+<p>
+            The Java records are regenerated each time the record generator is 
+            run, however the test stubs are only created if the test stub does 
+            not already exist.  What this means is that you may change test 
+            stubs but not the generated records.
+        </p>
+    
+    
+<a name="Custom+Field+Types"></a>
+<div class="h4">
+<h4>Custom Field Types</h4>
+</div>
+        
+<p>
+            Occationally the builtin types are not enough.  More control
+            over the encoding and decoding of the streams is required.  This
+            can be achieved using a custom type.
+        </p>
+        
+<p>
+            A custom type lets you escape to java to define the way in which
+            the field encodes and decodes.  To code a custom type you
+            declare your field like this:
+        </p>
+        
+<pre class="code">
+    &lt;field type="custom:org.apache.poi.hssf.record.LinkedDataFormulaField"
+        size="var" name="formula of link" description="formula"/&gt;
+        </pre>
+        
+<p>
+            Where the class name specified after <span class="codefrag">custom:</span> is a
+            class implementing the interface <span class="codefrag">CustomField</span>.
+        </p>
+        
+<p>
+            You can then implement the encoding yourself.
+        </p>
+    
+    
+<a name="How+it+Works"></a>
+<div class="h4">
+<h4>How it Works</h4>
+</div>
+        
+<p>
+            The record generation works by taking an XML file and styling it 
+            using XLST.  Given that XSLT is a little limited in some ways it was 
+            necessary to add a little Java code to the mix.   
+        </p>
+        
+<p>
+            See record.xsl, record_test.xsl, FieldIterator.java, 
+            RecordUtil.java, RecordGenerator.java
+        </p>
+        
+<p>
+            There is a corresponding "type" generator for HWPF.
+            See the HWPF documentation for details.
+        </p>
+    
+    
+<a name="Limitations"></a>
+<div class="h4">
+<h4>Limitations</h4>
+</div>
+        
+<p>
+            The record generator does not handle all possible record types and
+            goes not intend to perform this function.  When dealing with a
+            non-standard record sometimes the cost-benifit of coding the
+            record by hand will be greater than attempting modify the
+            generator.  The main point of the record generator is to save
+            time, so keep that in mind.
+        </p>
+        
+<p>
+            Currently the the XSL file that generates the record calls out to 
+            Java objects.  The Java code for the record generation is
+            currently quite messy with minimal comments.  
+        </p>
+    
+
+
+
+<div id="authors" align="right">by&nbsp;Glen Stampoultzis,&nbsp;Andrew C. Oliver</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

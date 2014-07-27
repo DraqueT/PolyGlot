@@ -1,0 +1,368 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>Comment (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Comment (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Comment.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/ss/usermodel/Color.html" title="interface in org.apache.poi.ss.usermodel"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/ss/usermodel/ComparisonOperator.html" title="class in org.apache.poi.ss.usermodel"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/ss/usermodel/Comment.html" target="_top">Frames</a></li>
+<li><a href="Comment.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.ss.usermodel</div>
+<h2 title="Interface Comment" class="title">Interface Comment</h2>
+</div>
+<div class="contentContainer">
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Known Implementing Classes:</dt>
+<dd><a href="../../../../../org/apache/poi/hssf/usermodel/HSSFComment.html" title="class in org.apache.poi.hssf.usermodel">HSSFComment</a>, <a href="../../../../../org/apache/poi/xssf/usermodel/XSSFComment.html" title="class in org.apache.poi.xssf.usermodel">XSSFComment</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public interface <span class="strong">Comment</span></pre>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Comment.html#getAuthor()">getAuthor</a></strong>()</code>
+<div class="block">Name of the original comment author</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Comment.html#getColumn()">getColumn</a></strong>()</code>
+<div class="block">Return the column of the cell that contains the comment</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Comment.html#getRow()">getRow</a></strong>()</code>
+<div class="block">Return the row of the cell that contains the comment</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/RichTextString.html" title="interface in org.apache.poi.ss.usermodel">RichTextString</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Comment.html#getString()">getString</a></strong>()</code>
+<div class="block">Fetches the rich text string of the comment</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Comment.html#isVisible()">isVisible</a></strong>()</code>
+<div class="block">Sets whether this comment is visible.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Comment.html#setAuthor(java.lang.String)">setAuthor</a></strong>(java.lang.String&nbsp;author)</code>
+<div class="block">Name of the original comment author</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Comment.html#setColumn(int)">setColumn</a></strong>(int&nbsp;col)</code>
+<div class="block">Set the column of the cell that contains the comment</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Comment.html#setRow(int)">setRow</a></strong>(int&nbsp;row)</code>
+<div class="block">Set the row of the cell that contains the comment</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Comment.html#setString(org.apache.poi.ss.usermodel.RichTextString)">setString</a></strong>(<a href="../../../../../org/apache/poi/ss/usermodel/RichTextString.html" title="interface in org.apache.poi.ss.usermodel">RichTextString</a>&nbsp;string)</code>
+<div class="block">Sets the rich text string used by this comment.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Comment.html#setVisible(boolean)">setVisible</a></strong>(boolean&nbsp;visible)</code>
+<div class="block">Returns whether this comment is visible.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="setVisible(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setVisible</h4>
+<pre>void&nbsp;setVisible(boolean&nbsp;visible)</pre>
+<div class="block">Returns whether this comment is visible.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>visible</code> - <code>true</code> if the comment is visible, <code>false</code> otherwise</dd></dl>
+</li>
+</ul>
+<a name="isVisible()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isVisible</h4>
+<pre>boolean&nbsp;isVisible()</pre>
+<div class="block">Sets whether this comment is visible.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd><code>true</code> if the comment is visible, <code>false</code> otherwise</dd></dl>
+</li>
+</ul>
+<a name="getRow()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRow</h4>
+<pre>int&nbsp;getRow()</pre>
+<div class="block">Return the row of the cell that contains the comment</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the 0-based row of the cell that contains the comment</dd></dl>
+</li>
+</ul>
+<a name="setRow(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRow</h4>
+<pre>void&nbsp;setRow(int&nbsp;row)</pre>
+<div class="block">Set the row of the cell that contains the comment</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>row</code> - the 0-based row of the cell that contains the comment</dd></dl>
+</li>
+</ul>
+<a name="getColumn()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getColumn</h4>
+<pre>int&nbsp;getColumn()</pre>
+<div class="block">Return the column of the cell that contains the comment</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the 0-based column of the cell that contains the comment</dd></dl>
+</li>
+</ul>
+<a name="setColumn(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setColumn</h4>
+<pre>void&nbsp;setColumn(int&nbsp;col)</pre>
+<div class="block">Set the column of the cell that contains the comment</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>col</code> - the 0-based column of the cell that contains the comment</dd></dl>
+</li>
+</ul>
+<a name="getAuthor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAuthor</h4>
+<pre>java.lang.String&nbsp;getAuthor()</pre>
+<div class="block">Name of the original comment author</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the name of the original author of the comment</dd></dl>
+</li>
+</ul>
+<a name="setAuthor(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAuthor</h4>
+<pre>void&nbsp;setAuthor(java.lang.String&nbsp;author)</pre>
+<div class="block">Name of the original comment author</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>author</code> - the name of the original author of the comment</dd></dl>
+</li>
+</ul>
+<a name="getString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getString</h4>
+<pre><a href="../../../../../org/apache/poi/ss/usermodel/RichTextString.html" title="interface in org.apache.poi.ss.usermodel">RichTextString</a>&nbsp;getString()</pre>
+<div class="block">Fetches the rich text string of the comment</div>
+</li>
+</ul>
+<a name="setString(org.apache.poi.ss.usermodel.RichTextString)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setString</h4>
+<pre>void&nbsp;setString(<a href="../../../../../org/apache/poi/ss/usermodel/RichTextString.html" title="interface in org.apache.poi.ss.usermodel">RichTextString</a>&nbsp;string)</pre>
+<div class="block">Sets the rich text string used by this comment.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>string</code> - Sets the rich text string used by this object.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Comment.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/ss/usermodel/Color.html" title="interface in org.apache.poi.ss.usermodel"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/ss/usermodel/ComparisonOperator.html" title="class in org.apache.poi.ss.usermodel"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/ss/usermodel/Comment.html" target="_top">Frames</a></li>
+<li><a href="Comment.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

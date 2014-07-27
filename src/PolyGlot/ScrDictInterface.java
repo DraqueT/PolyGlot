@@ -1,0 +1,3755 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package PolyGlot;
+
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import javax.swing.DefaultListModel;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.text.DefaultEditorKit;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import org.simplericity.macify.eawt.*;
+
+/**
+ *
+ * @author draque
+ */
+public class ScrDictInterface extends JFrame implements ApplicationListener { // implementation of ApplicationListener is part of macify
+    private DictCore core;
+    private Map scrToCoreMap = new HashMap<Integer, Integer>();
+    private Map scrTypeMap = new HashMap<String, Integer>();
+    private Map scrToCoreTypes = new HashMap<Integer, Integer>();
+    private Map scrToCoreGenders = new HashMap<Integer, Integer>();
+    private Map scrGenderMap = new HashMap<String, Integer>();
+    private Map scrToCoreDeclensions = new HashMap<Integer, Integer>();
+    private Map scrDeclensionMap = new HashMap<String, Integer>();
+    private final List<JFrame> childFrames = new ArrayList<JFrame>();
+    private final DefaultListModel dListModel;
+    private final DefaultListModel tListModel;
+    private final DefaultListModel gListModel;
+    private final DefaultListModel declListModel;
+    private DefaultTableModel procTableModel;
+    private String curFileName = "";
+    private boolean curPopulating = false;
+    private final String screenTitle = "PolyGlot BETA";
+    
+    /**
+     * Creates new form scrDictInterface
+     */
+    public ScrDictInterface() {
+        // enable copy/paste on macs
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+            UIManager.put("TextField.focusInputMap", im);
+            im = (InputMap) UIManager.get("TextArea.focusInputMap");
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+            UIManager.put("TextArea.focusInputMap", im);
+            im = (InputMap) UIManager.get("TextPane.focusInputMap");
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+            UIManager.put("TextPane.focusInputMap", im);
+        }
+
+        initComponents();
+
+        // models for controling list objects
+        declListModel = new DefaultListModel();
+        lstDeclensionList.setModel(declListModel);
+        dListModel = new DefaultListModel();
+        lstDict.setModel(dListModel);
+        tListModel = new DefaultListModel();
+        lstTypesList.setModel(tListModel);
+        gListModel = new DefaultListModel();
+        lstGenderList.setModel(gListModel);
+
+        newFile();
+
+        setTitle(screenTitle + " " + core.getVersion());
+
+        setupListeners();
+        setupProcTable();
+        setupAccelerators();
+
+        // activates macify for menu integration...
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            activateMacify();
+        }
+    }
+
+    // MACIFY RELATED CODE ->    
+    private void activateMacify() {
+        Application application = new DefaultApplication();
+        application.addApplicationListener(this);
+        application.addApplicationListener(this);
+        application.addPreferencesMenuItem();
+        application.setEnabledPreferencesMenu(true);
+    }
+
+    @Override
+    public void handleAbout(ApplicationEvent event) {
+        viewAbout();
+        event.setHandled(true);
+    }
+
+    @Override
+    public void handleOpenApplication(ApplicationEvent event) {
+        // Ok, we know our application started
+        // Not much to do about that..
+    }
+
+    @Override
+    public void handleOpenFile(ApplicationEvent event) {
+        //openFileInEditor(new File(event.getFilename()));
+    }
+
+    @Override
+    public void handlePreferences(ApplicationEvent event) {
+        //preferencesAction.actionPerformed(null);
+    }
+
+    @Override
+    public void handlePrintFile(ApplicationEvent event) {
+        InfoBox.info("Printing", "PolyGlot does not currently support printing.", this);
+    }
+
+    @Override
+    public void handleQuit(ApplicationEvent event) {
+        dispose();
+    }
+
+    @Override
+    public void handleReOpenApplication(ApplicationEvent event) {
+        setVisible(true);
+    }
+    // <- MACIFY RELATED CODE
+
+    /**
+     * sets menu accelerators and menu item text to reflect this
+     */
+    private void setupAccelerators() {
+        String OS = System.getProperty("os.name");
+        // TODO: create shortcuts for translation window open
+        if (OS.startsWith("Mac")) {
+            mnuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
+            mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
+            mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
+            mnuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
+        } else {
+            // I'm pretty sure all other OSes just use CTRL+ to do stuff
+            mnuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
+            mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
+            mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
+            mnuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
+        }
+    }
+
+    private void setupProcTable() {
+        procTableModel = new DefaultTableModel();
+        procTableModel.addColumn("Character(s)");
+        procTableModel.addColumn("Pronuncation");
+        tblProcGuide.setModel(procTableModel);
+
+        Font defaultFont = new JLabel().getFont();
+
+        TableColumn column = tblProcGuide.getColumnModel().getColumn(0);
+        column.setCellEditor(new TableColumnEditor(core.getLangFont()));
+        column.setCellRenderer(new TableColumnRenderer(core.getLangFont()));
+
+        column = tblProcGuide.getColumnModel().getColumn(1);
+        column.setCellEditor(new TableColumnEditor(defaultFont));
+        column.setCellRenderer(new TableColumnRenderer(defaultFont));
+
+        // disable tab/arrow selection
+        tblProcGuide.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
+                put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "none");
+        tblProcGuide.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
+                put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK), "none");
+        tblProcGuide.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
+                put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "none");
+        tblProcGuide.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
+                put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.SHIFT_DOWN_MASK), "none");
+        tblProcGuide.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
+                put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "none");
+        tblProcGuide.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
+                put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.SHIFT_DOWN_MASK), "none");
+        tblProcGuide.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
+                put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "none");
+        tblProcGuide.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
+                put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.SHIFT_DOWN_MASK), "none");
+        tblProcGuide.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
+                put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
+        tblProcGuide.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
+                put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.SHIFT_DOWN_MASK), "none");
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ScrDictInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ScrDictInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ScrDictInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ScrDictInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        ScrDictInterface dictInterface = new ScrDictInterface();
+
+        // open file if one is provided via arguments
+        if (args.length > 0) {
+            dictInterface.setFile(args[0]);
+        }
+
+        dictInterface.setVisible(true);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings({"unchecked", "Convert2Lambda"})
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabDict = new javax.swing.JPanel();
+        pnlFilter = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        lblConWordFilter = new javax.swing.JLabel();
+        lblLocalWordFilter = new javax.swing.JLabel();
+        lblTypeFilter = new javax.swing.JLabel();
+        txtConWordFilter = new javax.swing.JTextField();
+        txtLocalWordFilter = new javax.swing.JTextField();
+        cmbTypeFilter = new javax.swing.JComboBox();
+        jPanel2 = new javax.swing.JPanel();
+        lblGenderFilter = new javax.swing.JLabel();
+        lblPronunciationFilter = new javax.swing.JLabel();
+        lblDefFilter = new javax.swing.JLabel();
+        cmbGenderFilter = new javax.swing.JComboBox();
+        txtPronunciationFilter = new javax.swing.JTextField();
+        txtDefFilter = new javax.swing.JTextField();
+        scrlDict = new javax.swing.JScrollPane();
+        lstDict = new javax.swing.JList();
+        btnAdd = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        pnlProperties = new javax.swing.JPanel();
+        txtConWordProp = new javax.swing.JTextField();
+        lblConWordProp = new javax.swing.JLabel();
+        lblLocalWordProp = new javax.swing.JLabel();
+        txtLocalWordProp = new javax.swing.JTextField();
+        lblTypeProp = new javax.swing.JLabel();
+        cmbTypeProp = new javax.swing.JComboBox();
+        lblGenderProp = new javax.swing.JLabel();
+        cmbGenderProp = new javax.swing.JComboBox();
+        lblPrononciationProp = new javax.swing.JLabel();
+        lblPluralProp = new javax.swing.JLabel();
+        txtPronunciationProp = new javax.swing.JTextField();
+        txtPluralProp = new javax.swing.JTextField();
+        lblDefinitionProp = new javax.swing.JLabel();
+        sclDefProp = new javax.swing.JScrollPane();
+        txtDefProp = new javax.swing.JTextArea();
+        btnConwordDeclensions = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        txtWordErrorBox = new javax.swing.JTextPane();
+        chkPronunciationOverrideProp = new javax.swing.JCheckBox();
+        tabType = new javax.swing.JPanel();
+        sclTypesList = new javax.swing.JScrollPane();
+        lstTypesList = new javax.swing.JList();
+        jLabel1 = new javax.swing.JLabel();
+        txtTypeName = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtTypesNotes = new javax.swing.JTextArea();
+        btnAddType = new javax.swing.JButton();
+        btnDeleteType = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        chkTypeGenderMandatory = new javax.swing.JCheckBox();
+        chkTypeProcMandatory = new javax.swing.JCheckBox();
+        chkTypePluralMandatory = new javax.swing.JCheckBox();
+        chkTypeDefinitionMandatory = new javax.swing.JCheckBox();
+        txtTypesErrorBox = new javax.swing.JTextField();
+        tabGender = new javax.swing.JPanel();
+        sclGenderList = new javax.swing.JScrollPane();
+        lstGenderList = new javax.swing.JList();
+        jLabel4 = new javax.swing.JLabel();
+        txtGenderName = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtGenderNotes = new javax.swing.JTextArea();
+        btnAddGender = new javax.swing.JButton();
+        btnDeleteGender = new javax.swing.JButton();
+        txtGendersErrorBox = new javax.swing.JTextField();
+        tabDeclensions = new javax.swing.JPanel();
+        cmbDeclensionTypes = new javax.swing.JComboBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstDeclensionList = new javax.swing.JList();
+        btnDeclensionAdd = new javax.swing.JButton();
+        btnDeclensionDelete = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        txtDeclensionName = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        txtDeclensionNotes = new javax.swing.JTextArea();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        chkDeclensionMandatory = new javax.swing.JCheckBox();
+        tabLangProp = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        txtLangName = new javax.swing.JTextField();
+        txtLangFont = new javax.swing.JTextField();
+        btnChangeFont = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        txtAlphaOrder = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        chkPropTypesMandatory = new javax.swing.JCheckBox();
+        chkPropLocalMandatory = new javax.swing.JCheckBox();
+        chkPropWordUniqueness = new javax.swing.JCheckBox();
+        chkPropLocalUniqueness = new javax.swing.JCheckBox();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        scrlProcGuide = new javax.swing.JScrollPane();
+        tblProcGuide = new javax.swing.JTable();
+        chkAutopopProcs = new javax.swing.JCheckBox();
+        btnUpProc = new javax.swing.JButton();
+        btnDownProc = new javax.swing.JButton();
+        btnAddProcGuide = new javax.swing.JButton();
+        btnDeleteProcGuide = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        mnuFile = new javax.swing.JMenu();
+        mnuSave = new javax.swing.JMenuItem();
+        mnuSaveAs = new javax.swing.JMenuItem();
+        mnuOpen = new javax.swing.JMenuItem();
+        mnuNew = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        mnuExit = new javax.swing.JMenuItem();
+        mnuHelp = new javax.swing.JMenu();
+        mnuPloyHelp = new javax.swing.JMenuItem();
+        mnuAbout = new javax.swing.JMenuItem();
+        mnuTools = new javax.swing.JMenu();
+        mnuImportExcel = new javax.swing.JMenuItem();
+        mnuTranslation = new javax.swing.JMenuItem();
+        mnuLangStats = new javax.swing.JMenuItem();
+
+        jMenuItem1.setText("jMenuItem1");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jTabbedPane1.setToolTipText("Language Statistics");
+        jTabbedPane1.setName("Language Properties"); // NOI18N
+        jTabbedPane1.setSize(new java.awt.Dimension(21, 2147483647));
+        jTabbedPane1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTabbedPane1FocusGained(evt);
+            }
+        });
+
+        pnlFilter.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("<HTML><b>FILTER/SEARCH</b>");
+        jLabel3.setToolTipText("");
+        jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        lblConWordFilter.setText("Con Word");
+
+        lblLocalWordFilter.setText("Local Word");
+
+        lblTypeFilter.setText("Type");
+
+        txtConWordFilter.setToolTipText("filter via Con Word");
+
+        txtLocalWordFilter.setToolTipText("filter via local word");
+
+        cmbTypeFilter.setToolTipText("filter via type");
+        cmbTypeFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTypeFilterActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblConWordFilter)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtConWordFilter))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblLocalWordFilter)
+                            .addComponent(lblTypeFilter))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtLocalWordFilter)
+                            .addComponent(cmbTypeFilter, 0, 144, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblConWordFilter)
+                    .addComponent(txtConWordFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblLocalWordFilter)
+                    .addComponent(txtLocalWordFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTypeFilter)
+                    .addComponent(cmbTypeFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        lblGenderFilter.setText("Gender");
+
+        lblPronunciationFilter.setText("Pronunciation");
+
+        lblDefFilter.setText("Definition");
+        lblDefFilter.setToolTipText("");
+
+        cmbGenderFilter.setToolTipText("filter via word gender");
+        cmbGenderFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbGenderFilterActionPerformed(evt);
+            }
+        });
+
+        txtPronunciationFilter.setToolTipText("filter via pronunciation");
+
+        txtDefFilter.setToolTipText("filter via plural form");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblGenderFilter)
+                        .addGap(49, 49, 49)
+                        .addComponent(cmbGenderFilter, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblPronunciationFilter)
+                            .addComponent(lblDefFilter))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtPronunciationFilter)
+                            .addComponent(txtDefFilter))))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblGenderFilter)
+                    .addComponent(cmbGenderFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPronunciationFilter)
+                    .addComponent(txtPronunciationFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDefFilter)
+                    .addComponent(txtDefFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout pnlFilterLayout = new javax.swing.GroupLayout(pnlFilter);
+        pnlFilter.setLayout(pnlFilterLayout);
+        pnlFilterLayout.setHorizontalGroup(
+            pnlFilterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFilterLayout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jLabel3)
+        );
+        pnlFilterLayout.setVerticalGroup(
+            pnlFilterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFilterLayout.createSequentialGroup()
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlFilterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        lstDict.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstDict.setToolTipText("List of Conlang Words");
+        lstDict.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lstDict.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstDictValueChanged(evt);
+            }
+        });
+        scrlDict.setViewportView(lstDict);
+
+        btnAdd.setText("Add");
+        btnAdd.setToolTipText("Adds new word to dictionary");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setText("Delete");
+        btnDelete.setToolTipText("Deletes selected word from dictionary");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        pnlProperties.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        txtConWordProp.setToolTipText("Con Word value");
+
+        lblConWordProp.setText("Con Word");
+
+        lblLocalWordProp.setText("Local Word");
+
+        txtLocalWordProp.setToolTipText("local word synonym (if any)");
+
+        lblTypeProp.setText("Type");
+
+        cmbTypeProp.setToolTipText("word's type, or part of speech");
+        cmbTypeProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTypePropActionPerformed(evt);
+            }
+        });
+
+        lblGenderProp.setText("Gender");
+
+        cmbGenderProp.setToolTipText("word's gender (if any)");
+        cmbGenderProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbGenderPropActionPerformed(evt);
+            }
+        });
+
+        lblPrononciationProp.setText("Pronunciation");
+
+        lblPluralProp.setText("Plural Form");
+
+        txtPronunciationProp.setToolTipText("word's pronunciation");
+
+        txtPluralProp.setToolTipText("word's plural form (if any)");
+
+        lblDefinitionProp.setText("Definition");
+
+        txtDefProp.setColumns(20);
+        txtDefProp.setLineWrap(true);
+        txtDefProp.setRows(5);
+        txtDefProp.setToolTipText("Extended defition of word and notes");
+        txtDefProp.setWrapStyleWord(true);
+        sclDefProp.setViewportView(txtDefProp);
+
+        btnConwordDeclensions.setText("Conword Declensions");
+        btnConwordDeclensions.setToolTipText("Displays fields for declension forms of current word (if any)");
+        btnConwordDeclensions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConwordDeclensionsActionPerformed(evt);
+            }
+        });
+
+        txtWordErrorBox.setEditable(false);
+        txtWordErrorBox.setForeground(new java.awt.Color(255, 0, 0));
+        txtWordErrorBox.setToolTipText("Displays problems with a word that must be corrected before deselecting it.");
+        txtWordErrorBox.setDisabledTextColor(new java.awt.Color(255, 0, 0));
+        txtWordErrorBox.setEnabled(false);
+        jScrollPane5.setViewportView(txtWordErrorBox);
+
+        chkPronunciationOverrideProp.setToolTipText("Select this to override auto pronunciation generation for this word.");
+        chkPronunciationOverrideProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPronunciationOverridePropActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlPropertiesLayout = new javax.swing.GroupLayout(pnlProperties);
+        pnlProperties.setLayout(pnlPropertiesLayout);
+        pnlPropertiesLayout.setHorizontalGroup(
+            pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDefinitionProp)
+                            .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(lblLocalWordProp, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                                    .addComponent(lblTypeProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblConWordProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtLocalWordProp)
+                                    .addComponent(txtConWordProp)
+                                    .addComponent(cmbTypeProp, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(lblGenderProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblPrononciationProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblPluralProp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtPluralProp)
+                                    .addComponent(cmbGenderProp, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                                        .addComponent(txtPronunciationProp)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(chkPronunciationOverrideProp))))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPropertiesLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnConwordDeclensions, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        pnlPropertiesLayout.setVerticalGroup(
+            pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblConWordProp)
+                    .addComponent(txtConWordProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblLocalWordProp)
+                    .addComponent(txtLocalWordProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTypeProp)
+                    .addComponent(cmbTypeProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblGenderProp)
+                    .addComponent(cmbGenderProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblPrononciationProp)
+                        .addComponent(txtPronunciationProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(chkPronunciationOverrideProp))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPluralProp)
+                    .addComponent(txtPluralProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblDefinitionProp)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sclDefProp)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnConwordDeclensions))
+        );
+
+        javax.swing.GroupLayout tabDictLayout = new javax.swing.GroupLayout(tabDict);
+        tabDict.setLayout(tabDictLayout);
+        tabDictLayout.setHorizontalGroup(
+            tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabDictLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlFilter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(tabDictLayout.createSequentialGroup()
+                        .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scrlDict, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(tabDictLayout.createSequentialGroup()
+                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        tabDictLayout.setVerticalGroup(
+            tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabDictLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabDictLayout.createSequentialGroup()
+                        .addComponent(scrlDict, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAdd)
+                            .addComponent(btnDelete))
+                        .addGap(6, 6, 6))
+                    .addGroup(tabDictLayout.createSequentialGroup()
+                        .addComponent(pnlProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
+        );
+
+        jTabbedPane1.addTab("Lexicon", null, tabDict, "Your bank of words");
+
+        lstTypesList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstTypesList.setToolTipText("List of types for your con lang");
+        lstTypesList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstTypesListValueChanged(evt);
+            }
+        });
+        sclTypesList.setViewportView(lstTypesList);
+
+        jLabel1.setText("Type Name");
+
+        txtTypeName.setToolTipText("type name");
+        txtTypeName.setEnabled(false);
+
+        jLabel2.setText("Notes");
+
+        txtTypesNotes.setColumns(20);
+        txtTypesNotes.setLineWrap(true);
+        txtTypesNotes.setRows(5);
+        txtTypesNotes.setToolTipText("notes for type");
+        txtTypesNotes.setWrapStyleWord(true);
+        txtTypesNotes.setEnabled(false);
+        jScrollPane2.setViewportView(txtTypesNotes);
+
+        btnAddType.setText("Add");
+        btnAddType.setToolTipText("Creates a new type");
+        btnAddType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddTypeActionPerformed(evt);
+            }
+        });
+
+        btnDeleteType.setText("Delete");
+        btnDeleteType.setToolTipText("Deletes selected type");
+        btnDeleteType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteTypeActionPerformed(evt);
+            }
+        });
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        chkTypeGenderMandatory.setText("Gender Mandatory");
+        chkTypeGenderMandatory.setToolTipText("Select to make the  Gender field mandatory for all words of this type.");
+        chkTypeGenderMandatory.setEnabled(false);
+        chkTypeGenderMandatory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkTypeGenderMandatoryActionPerformed(evt);
+            }
+        });
+
+        chkTypeProcMandatory.setText("Pronunciation Mandatory");
+        chkTypeProcMandatory.setToolTipText("Select to make the  Pronunciation field mandatory for all words of this type.");
+        chkTypeProcMandatory.setEnabled(false);
+        chkTypeProcMandatory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkTypeProcMandatoryActionPerformed(evt);
+            }
+        });
+
+        chkTypePluralMandatory.setText("Plural Mandatory");
+        chkTypePluralMandatory.setToolTipText("Select to make the  Plural field mandatory for all words of this type.");
+        chkTypePluralMandatory.setEnabled(false);
+        chkTypePluralMandatory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkTypePluralMandatoryActionPerformed(evt);
+            }
+        });
+
+        chkTypeDefinitionMandatory.setText("Definition Mandatory");
+        chkTypeDefinitionMandatory.setToolTipText("Select to make the  Definition field mandatory for all words of this type.");
+        chkTypeDefinitionMandatory.setEnabled(false);
+        chkTypeDefinitionMandatory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkTypeDefinitionMandatoryActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkTypeGenderMandatory)
+                    .addComponent(chkTypeProcMandatory)
+                    .addComponent(chkTypePluralMandatory)
+                    .addComponent(chkTypeDefinitionMandatory))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(chkTypeGenderMandatory)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkTypeProcMandatory)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkTypePluralMandatory)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkTypeDefinitionMandatory)
+                .addContainerGap())
+        );
+
+        txtTypesErrorBox.setEditable(false);
+        txtTypesErrorBox.setDisabledTextColor(new java.awt.Color(255, 51, 51));
+        txtTypesErrorBox.setEnabled(false);
+
+        javax.swing.GroupLayout tabTypeLayout = new javax.swing.GroupLayout(tabType);
+        tabType.setLayout(tabTypeLayout);
+        tabTypeLayout.setHorizontalGroup(
+            tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabTypeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(sclTypesList, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(tabTypeLayout.createSequentialGroup()
+                        .addComponent(btnAddType)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDeleteType)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                    .addGroup(tabTypeLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTypeName))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(tabTypeLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(txtTypesErrorBox))
+                .addContainerGap())
+        );
+        tabTypeLayout.setVerticalGroup(
+            tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabTypeLayout.createSequentialGroup()
+                .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabTypeLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(txtTypeName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(sclTypesList, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddType)
+                    .addComponent(btnDeleteType)
+                    .addComponent(txtTypesErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        jTabbedPane1.addTab("Types", null, tabType, "Add or edit word types");
+
+        lstGenderList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstGenderList.setToolTipText("list of genders for your conlang");
+        lstGenderList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstGenderListValueChanged(evt);
+            }
+        });
+        sclGenderList.setViewportView(lstGenderList);
+
+        jLabel4.setText("Gender");
+
+        txtGenderName.setToolTipText("gender name");
+        txtGenderName.setEnabled(false);
+
+        jLabel5.setText("Notes");
+
+        txtGenderNotes.setColumns(20);
+        txtGenderNotes.setLineWrap(true);
+        txtGenderNotes.setRows(5);
+        txtGenderNotes.setToolTipText("notes on gender");
+        txtGenderNotes.setWrapStyleWord(true);
+        txtGenderNotes.setEnabled(false);
+        jScrollPane3.setViewportView(txtGenderNotes);
+
+        btnAddGender.setText("Add");
+        btnAddGender.setToolTipText("Add a new gender to conlang");
+        btnAddGender.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddGenderActionPerformed(evt);
+            }
+        });
+
+        btnDeleteGender.setText("Delete");
+        btnDeleteGender.setToolTipText("Remove gender from conlang");
+        btnDeleteGender.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteGenderActionPerformed(evt);
+            }
+        });
+
+        txtGendersErrorBox.setDisabledTextColor(new java.awt.Color(255, 51, 51));
+        txtGendersErrorBox.setEnabled(false);
+
+        javax.swing.GroupLayout tabGenderLayout = new javax.swing.GroupLayout(tabGender);
+        tabGender.setLayout(tabGenderLayout);
+        tabGenderLayout.setHorizontalGroup(
+            tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabGenderLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabGenderLayout.createSequentialGroup()
+                        .addComponent(btnAddGender)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDeleteGender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtGendersErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabGenderLayout.createSequentialGroup()
+                        .addComponent(sclGenderList, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3)
+                            .addGroup(tabGenderLayout.createSequentialGroup()
+                                .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtGenderName)))
+                        .addContainerGap())))
+        );
+        tabGenderLayout.setVerticalGroup(
+            tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabGenderLayout.createSequentialGroup()
+                .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabGenderLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtGenderName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE))
+                    .addComponent(sclGenderList, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddGender)
+                    .addComponent(btnDeleteGender)
+                    .addComponent(txtGendersErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        jTabbedPane1.addTab("Genders", null, tabGender, "Add or edit genders to be assigned to words");
+
+        cmbDeclensionTypes.setToolTipText("the type with which you will add or edit forms of declension");
+        cmbDeclensionTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbDeclensionTypesActionPerformed(evt);
+            }
+        });
+
+        lstDeclensionList.setToolTipText("All forms for words of the related type");
+        lstDeclensionList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstDeclensionListValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(lstDeclensionList);
+
+        btnDeclensionAdd.setText("Add");
+        btnDeclensionAdd.setToolTipText("Add a form to the related type");
+        btnDeclensionAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeclensionAddActionPerformed(evt);
+            }
+        });
+
+        btnDeclensionDelete.setText("Delete");
+        btnDeclensionDelete.setToolTipText("Delete a form from the related type");
+        btnDeclensionDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeclensionDeleteActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText("Declension");
+
+        txtDeclensionName.setToolTipText("The name of the conjugation/declension associated with the related type");
+        txtDeclensionName.setEnabled(false);
+
+        jLabel11.setText("Notes");
+
+        txtDeclensionNotes.setColumns(20);
+        txtDeclensionNotes.setLineWrap(true);
+        txtDeclensionNotes.setRows(5);
+        txtDeclensionNotes.setWrapStyleWord(true);
+        txtDeclensionNotes.setEnabled(false);
+        jScrollPane4.setViewportView(txtDeclensionNotes);
+
+        jLabel12.setText("Related Type");
+
+        jLabel13.setText("Declensions for type");
+        jLabel13.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        chkDeclensionMandatory.setText("Mandatory Conj/Declen");
+        chkDeclensionMandatory.setToolTipText("Form is mandatory for words of related type.");
+        chkDeclensionMandatory.setEnabled(false);
+        chkDeclensionMandatory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkDeclensionMandatoryActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(chkDeclensionMandatory)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(chkDeclensionMandatory)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout tabDeclensionsLayout = new javax.swing.GroupLayout(tabDeclensions);
+        tabDeclensions.setLayout(tabDeclensionsLayout);
+        tabDeclensionsLayout.setHorizontalGroup(
+            tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabDeclensionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(tabDeclensionsLayout.createSequentialGroup()
+                            .addComponent(btnDeclensionAdd)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDeclensionDelete))
+                        .addGroup(tabDeclensionsLayout.createSequentialGroup()
+                            .addComponent(jLabel13)
+                            .addGap(27, 27, 27)))
+                    .addComponent(cmbDeclensionTypes, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(tabDeclensionsLayout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(jLabel12))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4)
+                    .addGroup(tabDeclensionsLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtDeclensionName))
+                    .addGroup(tabDeclensionsLayout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        tabDeclensionsLayout.setVerticalGroup(
+            tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabDeclensionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmbDeclensionTypes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDeclensionAdd)
+                    .addComponent(btnDeclensionDelete)))
+            .addGroup(tabDeclensionsLayout.createSequentialGroup()
+                .addGap(1, 1, 1)
+                .addGroup(tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtDeclensionName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Conj/Declen", null, tabDeclensions, "Edit conjugations or declensions for a type of word");
+
+        jLabel6.setText("Conlang Name");
+
+        jLabel7.setText("Conlang Font");
+
+        txtLangName.setToolTipText("Name of your constructed language");
+
+        txtLangFont.setEditable(false);
+        txtLangFont.setToolTipText("Your conlang's font");
+
+        btnChangeFont.setText("Change Font");
+        btnChangeFont.setToolTipText("Browse for a new conlang font");
+        btnChangeFont.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChangeFontActionPerformed(evt);
+            }
+        });
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        jLabel8.setText("Alphabetical Order");
+
+        txtAlphaOrder.setToolTipText("Blank = standard order");
+
+        jLabel9.setText("Letter order here determines alphabetic listing in your dictionary.");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtAlphaOrder)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9))
+                        .addGap(0, 76, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtAlphaOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        chkPropTypesMandatory.setText("Types Mandatory");
+        chkPropTypesMandatory.setToolTipText("Select to make types a mandatory field for all words.");
+        chkPropTypesMandatory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPropTypesMandatoryActionPerformed(evt);
+            }
+        });
+
+        chkPropLocalMandatory.setText("Local Mandatory");
+        chkPropLocalMandatory.setToolTipText("Select to make local word a mandatory field for all words.");
+        chkPropLocalMandatory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPropLocalMandatoryActionPerformed(evt);
+            }
+        });
+
+        chkPropWordUniqueness.setText("Word Uniqueness");
+        chkPropWordUniqueness.setToolTipText("Enforce uniqueness of words based on Con Word field.");
+        chkPropWordUniqueness.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPropWordUniquenessActionPerformed(evt);
+            }
+        });
+
+        chkPropLocalUniqueness.setText("Local Uniqueness");
+        chkPropLocalUniqueness.setToolTipText("Enforce uniqueness of words based on Local Word field.");
+        chkPropLocalUniqueness.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPropLocalUniquenessActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkPropTypesMandatory)
+                    .addComponent(chkPropLocalMandatory)
+                    .addComponent(chkPropWordUniqueness)
+                    .addComponent(chkPropLocalUniqueness))
+                .addGap(0, 84, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(chkPropTypesMandatory)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkPropLocalMandatory)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkPropWordUniqueness)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkPropLocalUniqueness)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        jLabel14.setText("Character Pronunciation Guide");
+
+        tblProcGuide.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Character", "Pronunciation"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tblProcGuide.setToolTipText("Add characters (or sets of characters) here with their associated pronunciations.");
+        tblProcGuide.setColumnSelectionAllowed(true);
+        tblProcGuide.setRowHeight(30);
+        tblProcGuide.getTableHeader().setReorderingAllowed(false);
+        scrlProcGuide.setViewportView(tblProcGuide);
+        tblProcGuide.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (tblProcGuide.getColumnModel().getColumnCount() > 0) {
+            tblProcGuide.getColumnModel().getColumn(0).setHeaderValue("Character");
+            tblProcGuide.getColumnModel().getColumn(1).setHeaderValue("Pronunciation");
+        }
+
+        chkAutopopProcs.setText("Autopopulate Pronunciations");
+        chkAutopopProcs.setToolTipText("If selected, PolyGlot will attempt to generate pronunciations as you type your words.");
+        chkAutopopProcs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkAutopopProcsActionPerformed(evt);
+            }
+        });
+
+        btnUpProc.setText("↑");
+        btnUpProc.setToolTipText("Move pronunciation up, increasing priority.");
+        btnUpProc.setSize(new java.awt.Dimension(97, 30));
+        btnUpProc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpProcActionPerformed(evt);
+            }
+        });
+
+        btnDownProc.setText("↓");
+        btnDownProc.setToolTipText("Move pronunciation down, lowering priority.");
+        btnDownProc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownProcActionPerformed(evt);
+            }
+        });
+
+        btnAddProcGuide.setText("Add");
+        btnAddProcGuide.setToolTipText("Add a row");
+        btnAddProcGuide.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddProcGuideActionPerformed(evt);
+            }
+        });
+
+        btnDeleteProcGuide.setText("Delete");
+        btnDeleteProcGuide.setToolTipText("Delete a row");
+        btnDeleteProcGuide.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteProcGuideActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkAutopopProcs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(scrlProcGuide, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
+                                        .addComponent(btnAddProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnDeleteProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnUpProc, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                .addComponent(btnDownProc, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())))))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(btnUpProc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
+                        .addComponent(btnDownProc))
+                    .addComponent(scrlProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddProcGuide)
+                    .addComponent(btnDeleteProcGuide))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAutopopProcs))
+        );
+
+        javax.swing.GroupLayout tabLangPropLayout = new javax.swing.GroupLayout(tabLangProp);
+        tabLangProp.setLayout(tabLangPropLayout);
+        tabLangPropLayout.setHorizontalGroup(
+            tabLangPropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabLangPropLayout.createSequentialGroup()
+                .addComponent(btnChangeFont)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(tabLangPropLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabLangPropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(tabLangPropLayout.createSequentialGroup()
+                        .addGroup(tabLangPropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(tabLangPropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtLangName, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                            .addComponent(txtLangFont))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(tabLangPropLayout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        tabLangPropLayout.setVerticalGroup(
+            tabLangPropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabLangPropLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabLangPropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtLangName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(tabLangPropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtLangFont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnChangeFont)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(tabLangPropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Language Properties", null, tabLangProp, "Edit global language properties here");
+
+        mnuFile.setText("File");
+
+        mnuSave.setText("Save");
+        mnuSave.setToolTipText("");
+        mnuSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSaveActionPerformed(evt);
+            }
+        });
+        mnuFile.add(mnuSave);
+
+        mnuSaveAs.setText("Save As");
+        mnuSaveAs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSaveAsActionPerformed(evt);
+            }
+        });
+        mnuFile.add(mnuSaveAs);
+
+        mnuOpen.setText("Open");
+        mnuOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuOpenActionPerformed(evt);
+            }
+        });
+        mnuFile.add(mnuOpen);
+
+        mnuNew.setText("New");
+        mnuNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuNewActionPerformed(evt);
+            }
+        });
+        mnuFile.add(mnuNew);
+        mnuFile.add(jSeparator2);
+
+        mnuExit.setText("Exit");
+        mnuExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExitActionPerformed(evt);
+            }
+        });
+        mnuFile.add(mnuExit);
+
+        jMenuBar1.add(mnuFile);
+
+        mnuHelp.setText("Help");
+
+        mnuPloyHelp.setText("Help");
+        mnuPloyHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuPloyHelpActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(mnuPloyHelp);
+
+        mnuAbout.setText("About");
+        mnuAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAboutActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(mnuAbout);
+
+        jMenuBar1.add(mnuHelp);
+
+        mnuTools.setText("Tools");
+
+        mnuImportExcel.setText("Import Excel");
+        mnuImportExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuImportExcelActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuImportExcel);
+
+        mnuTranslation.setText("Translation Window");
+        mnuTranslation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuTranslationActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuTranslation);
+
+        mnuLangStats.setText("Language Statistics");
+        mnuLangStats.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuLangStatsActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuLangStats);
+
+        jMenuBar1.add(mnuTools);
+
+        setJMenuBar(jMenuBar1);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void mnuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveActionPerformed
+        saveFile();
+    }//GEN-LAST:event_mnuSaveActionPerformed
+
+    private void mnuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenActionPerformed
+        openFile();
+    }//GEN-LAST:event_mnuOpenActionPerformed
+
+    private void mnuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveAsActionPerformed
+        saveFileAs();
+    }//GEN-LAST:event_mnuSaveAsActionPerformed
+
+    private void mnuNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewActionPerformed
+        newFile();
+    }//GEN-LAST:event_mnuNewActionPerformed
+
+    private void mnuImportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportExcelActionPerformed
+        importExcel();
+    }//GEN-LAST:event_mnuImportExcelActionPerformed
+
+    private void lstDictValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstDictValueChanged
+        // to avoid multiple, useless firings
+        if (!evt.getValueIsAdjusting()) {
+            this.popWordProps();
+        }
+    }//GEN-LAST:event_lstDictValueChanged
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        this.newWord();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        this.deleteWord();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnAddTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTypeActionPerformed
+        addType();
+    }//GEN-LAST:event_btnAddTypeActionPerformed
+
+    private void lstTypesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstTypesListValueChanged
+        // to avoid multiple, useless firings
+        if (!evt.getValueIsAdjusting()) {
+            populateTypeProps();
+        }
+    }//GEN-LAST:event_lstTypesListValueChanged
+
+    private void cmbTypePropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypePropActionPerformed
+        saveModWord();
+    }//GEN-LAST:event_cmbTypePropActionPerformed
+
+    private void cmbGenderPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGenderPropActionPerformed
+        saveModWord();
+    }//GEN-LAST:event_cmbGenderPropActionPerformed
+
+    private void cmbTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeFilterActionPerformed
+        filterDict();
+    }//GEN-LAST:event_cmbTypeFilterActionPerformed
+
+    private void cmbGenderFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGenderFilterActionPerformed
+        filterDict();
+    }//GEN-LAST:event_cmbGenderFilterActionPerformed
+
+    private void btnDeleteTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteTypeActionPerformed
+        deleteType();
+    }//GEN-LAST:event_btnDeleteTypeActionPerformed
+
+    private void btnAddGenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddGenderActionPerformed
+        addGender();
+    }//GEN-LAST:event_btnAddGenderActionPerformed
+
+    private void btnDeleteGenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteGenderActionPerformed
+        deleteGender();
+    }//GEN-LAST:event_btnDeleteGenderActionPerformed
+
+    private void lstGenderListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstGenderListValueChanged
+        // to avoid multiple, useless firings
+        if (!evt.getValueIsAdjusting()) {
+            populateGenderProps();
+        }
+    }//GEN-LAST:event_lstGenderListValueChanged
+
+    private void jTabbedPane1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabbedPane1FocusGained
+        populateDict();
+        popWordProps();
+    }//GEN-LAST:event_jTabbedPane1FocusGained
+
+    private void mnuPloyHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPloyHelpActionPerformed
+        this.openHelp();
+    }//GEN-LAST:event_mnuPloyHelpActionPerformed
+
+    private void mnuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutActionPerformed
+        viewAbout();
+    }//GEN-LAST:event_mnuAboutActionPerformed
+
+    private void btnDeclensionAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclensionAddActionPerformed
+        addDeclension();
+    }//GEN-LAST:event_btnDeclensionAddActionPerformed
+
+    private void btnDeclensionDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclensionDeleteActionPerformed
+        deleteDeclension();
+    }//GEN-LAST:event_btnDeclensionDeleteActionPerformed
+
+    private void lstDeclensionListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstDeclensionListValueChanged
+        populateDeclensionProps();
+    }//GEN-LAST:event_lstDeclensionListValueChanged
+
+    private void btnConwordDeclensionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConwordDeclensionsActionPerformed
+        viewDeclensions();
+    }//GEN-LAST:event_btnConwordDeclensionsActionPerformed
+
+    private void btnDeleteProcGuideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteProcGuideActionPerformed
+        deleteProcGuide();
+    }//GEN-LAST:event_btnDeleteProcGuideActionPerformed
+
+    private void btnAddProcGuideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProcGuideActionPerformed
+        addProcGuide();
+    }//GEN-LAST:event_btnAddProcGuideActionPerformed
+
+    private void btnChangeFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeFontActionPerformed
+        // Fonts selected via font dialog automatically exist in the system, and do not need a name
+        setConFont(fontDialog());
+    }//GEN-LAST:event_btnChangeFontActionPerformed
+
+    private void chkAutopopProcsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAutopopProcsActionPerformed
+        core.getPropertiesManager().setProAutoPop(chkAutopopProcs.isSelected());
+    }//GEN-LAST:event_chkAutopopProcsActionPerformed
+
+    private void mnuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExitActionPerformed
+        dispose();
+    }//GEN-LAST:event_mnuExitActionPerformed
+
+    private void cmbDeclensionTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDeclensionTypesActionPerformed
+        populateDeclensionList();
+        populateDeclensionProps();
+    }//GEN-LAST:event_cmbDeclensionTypesActionPerformed
+
+    private void mnuTranslationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTranslationActionPerformed
+        viewTranslationWindow();
+    }//GEN-LAST:event_mnuTranslationActionPerformed
+
+    private void btnUpProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpProcActionPerformed
+        moveProcUp();
+    }//GEN-LAST:event_btnUpProcActionPerformed
+
+    private void btnDownProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownProcActionPerformed
+        moveProcDown();
+    }//GEN-LAST:event_btnDownProcActionPerformed
+
+    private void chkPronunciationOverridePropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPronunciationOverridePropActionPerformed
+        saveModWord();
+    }//GEN-LAST:event_chkPronunciationOverridePropActionPerformed
+
+    private void chkTypeGenderMandatoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkTypeGenderMandatoryActionPerformed
+        saveType();
+    }//GEN-LAST:event_chkTypeGenderMandatoryActionPerformed
+
+    private void chkTypeProcMandatoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkTypeProcMandatoryActionPerformed
+        saveType();
+    }//GEN-LAST:event_chkTypeProcMandatoryActionPerformed
+
+    private void chkTypePluralMandatoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkTypePluralMandatoryActionPerformed
+        saveType();
+    }//GEN-LAST:event_chkTypePluralMandatoryActionPerformed
+
+    private void chkTypeDefinitionMandatoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkTypeDefinitionMandatoryActionPerformed
+        saveType();
+    }//GEN-LAST:event_chkTypeDefinitionMandatoryActionPerformed
+
+    private void chkPropTypesMandatoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPropTypesMandatoryActionPerformed
+        core.getPropertiesManager().setTypesMandatory(chkPropTypesMandatory.isSelected());
+    }//GEN-LAST:event_chkPropTypesMandatoryActionPerformed
+
+    private void chkPropLocalMandatoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPropLocalMandatoryActionPerformed
+        core.getPropertiesManager().setLocalMandatory(chkPropLocalMandatory.isSelected());
+    }//GEN-LAST:event_chkPropLocalMandatoryActionPerformed
+
+    private void chkPropWordUniquenessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPropWordUniquenessActionPerformed
+        core.getPropertiesManager().setWordUniqueness(chkPropWordUniqueness.isSelected());
+    }//GEN-LAST:event_chkPropWordUniquenessActionPerformed
+
+    private void chkPropLocalUniquenessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPropLocalUniquenessActionPerformed
+        core.getPropertiesManager().setLocalUniqueness(chkPropLocalUniqueness.isSelected());
+    }//GEN-LAST:event_chkPropLocalUniquenessActionPerformed
+
+    private void chkDeclensionMandatoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDeclensionMandatoryActionPerformed
+        saveDeclension();
+    }//GEN-LAST:event_chkDeclensionMandatoryActionPerformed
+
+    private void mnuLangStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLangStatsActionPerformed
+        viewStats();
+    }//GEN-LAST:event_mnuLangStatsActionPerformed
+
+    @Override
+    public void dispose() {
+        // if there's a current dictionary loaded, prompt user to save before exiting
+        if (lstDict.getModel().getSize() > 0 && this.isVisible()) {
+            Integer saveFirst = InfoBox.yesNoCancel("Save First?",
+                    "Save current dictionary before exiting?", this);
+
+            if (saveFirst == JOptionPane.YES_OPTION) {
+                saveFile();
+            } else if (saveFirst == JOptionPane.CANCEL_OPTION) {
+                // return to prevent dispose if cancel
+                return;
+            }
+        }
+        
+        killAllChildren();
+        
+        this.setVisible(false);
+        super.dispose();
+    }
+
+    private void addProcGuide() {
+        addProcGuideWithValues("", "");
+    }
+
+    private void addProcGuideWithValues(String base, String proc) {
+        procTableModel.addRow(new Object[]{base, proc});
+
+        // document listener to be fed into editor/renderers for cells...
+        DocumentListener docuListener = new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveProcGuide();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveProcGuide();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveProcGuide();
+            }
+        };
+
+        // set saving properties for first column editor and renderer
+        TableColumnEditor editor = (TableColumnEditor) tblProcGuide.getCellEditor(procTableModel.getRowCount() - 1, 0);
+        TableColumnRenderer renderer = (TableColumnRenderer) tblProcGuide.getCellRenderer(procTableModel.getRowCount() - 1, 0);
+        editor.setDocuListener(docuListener);
+        renderer.setDocuListener(docuListener);
+
+        // set saving properties for second column editor and renderer
+        editor = (TableColumnEditor) tblProcGuide.getCellEditor(procTableModel.getRowCount() - 1, 1);
+        renderer = (TableColumnRenderer) tblProcGuide.getCellRenderer(procTableModel.getRowCount() - 1, 1);
+        editor.setDocuListener(docuListener);
+        renderer.setDocuListener(docuListener);
+    }
+
+    private void deleteProcGuide() {
+        Integer curRow = tblProcGuide.getSelectedRow();
+
+        // return if nothing selected
+        if (curRow == -1) {
+            return;
+        }
+
+        PronunciationNode delNode = new PronunciationNode();
+
+        delNode.setValue(tblProcGuide.getValueAt(curRow, 0).toString());
+        delNode.setPronunciation(tblProcGuide.getValueAt(curRow, 1).toString());
+
+        core.deletePronunciation(delNode);
+        populateProcGuide();
+    }
+
+    private void saveProcGuide() {
+        List<PronunciationNode> newPro = new ArrayList<PronunciationNode>();
+
+        if (curPopulating) {
+            return;
+        }
+
+        boolean localPopulating = curPopulating;
+        curPopulating = true;
+
+        for (int i = 0; i < procTableModel.getRowCount(); i++) {
+            PronunciationNode newNode = new PronunciationNode();
+
+            newNode.setValue(procTableModel.getValueAt(i, 0).toString());
+            newNode.setPronunciation(procTableModel.getValueAt(i, 1).toString());
+
+            newPro.add(newNode);
+        }
+
+        core.setPronunciations(newPro);
+
+        curPopulating = localPopulating;
+    }
+    
+    /**
+     * kills all child windows
+     */
+    private void killAllChildren() {
+        Iterator<JFrame> it = childFrames.iterator();
+        
+        while (it.hasNext()) {
+            JFrame curFrame = it.next();
+            
+            if (curFrame != null) {
+                curFrame.setVisible(false);
+                curFrame.dispose();
+            }
+        }
+    }
+
+    private void populateProcGuide() {
+        Iterator<PronunciationNode> popGuide = core.getPronunciations();
+
+        // wipe current rows, repopulate from core
+        setupProcTable();
+
+        while (popGuide.hasNext()) {
+            PronunciationNode curNode = popGuide.next();
+
+            addProcGuideWithValues(curNode.getValue(), curNode.getPronunciation());
+        }
+
+        tblProcGuide.setModel(procTableModel);
+    }
+
+    private void moveProcUp() {
+        Integer curRow = tblProcGuide.getSelectedRow();
+        PronunciationNode node = new PronunciationNode();
+
+        if (curRow == -1) {
+            return;
+        }
+
+        node.setValue(tblProcGuide.getValueAt(curRow, 0).toString());
+        node.setPronunciation(tblProcGuide.getValueAt(curRow, 1).toString());
+
+        core.moveProcUp(node);
+
+        populateProcGuide();
+
+        if (curRow != 0) {
+            tblProcGuide.setRowSelectionInterval(curRow - 1, curRow - 1);
+        } else {
+            tblProcGuide.setRowSelectionInterval(curRow, curRow);
+        }
+    }
+
+    private void moveProcDown() {
+        Integer curRow = tblProcGuide.getSelectedRow();
+        PronunciationNode node = new PronunciationNode();
+
+        if (curRow == -1) {
+            return;
+        }
+
+        node.setValue(tblProcGuide.getValueAt(curRow, 0).toString());
+        node.setPronunciation(tblProcGuide.getValueAt(curRow, 1).toString());
+
+        core.moveProcDown(node);
+
+        populateProcGuide();
+
+        if (curRow != tblProcGuide.getRowCount() - 1) {
+            tblProcGuide.setRowSelectionInterval(curRow + 1, curRow + 1);
+        } else {
+            tblProcGuide.setRowSelectionInterval(curRow, curRow);
+        }
+    }
+
+    private void generatePronunciation() {
+        // return if currently populating or pronunciation overridden
+        if (curPopulating || chkPronunciationOverrideProp.isSelected()) {
+            return;
+        }
+
+        boolean localPopulating = curPopulating;
+
+        curPopulating = true;
+
+        if (chkAutopopProcs.isSelected()) {
+            String setText = core.getPronunciation(txtConWordProp.getText());
+
+            if (!setText.trim().equals("")) {
+                txtPronunciationProp.setText(setText);
+            }
+        }
+
+        curPopulating = localPopulating;
+
+        // save word to populate core with new pronunciation
+        saveModWord();
+    }
+
+    private void viewDeclensions() {
+        try {
+            ScrDeclensions.run(core, core.getWordById((Integer) scrToCoreMap.get(lstDict.getSelectedIndex())),
+                    (Integer) scrToCoreTypes.get(cmbTypeProp.getSelectedIndex()), core.getLangFont());
+        } catch (Exception ex) {
+            InfoBox.error("Decension Error", "Unable to find word." + ex.getLocalizedMessage(), this);
+        }
+
+        saveModWord();
+    }
+
+    private void viewAbout() {
+        InfoBox.info("ABOUT", "PolyGlot is copyright Draque Thompson 2014. Free to distribute, "
+                + "so long as distribution package is not modified. Please don't sell this or call it your own.", this);
+    }
+
+    private void viewTranslationWindow() {
+        JFrame window = ScrTranslationWindow.run(core, this);
+        childFrames.add(window);
+    }
+    
+    private void viewStats() {
+        ScrLangStats.run(core);
+    }
+
+    private void addDeclension() {
+        if (cmbDeclensionTypes.getSelectedIndex() == -1) {
+            InfoBox.info("Declensions", "You must select a word type to associate a declension construct with.", this);
+            return;
+        }
+
+        if (lstDeclensionList.getModel().getSize() != 0
+                && scrToCoreDeclensions.containsKey((Integer) lstDeclensionList.getSelectedIndex())
+                && (Integer) scrToCoreDeclensions.get((Integer) lstDeclensionList.getSelectedIndex()) == -1) {
+            return;
+        }
+
+        boolean localPopulating = curPopulating;
+
+        curPopulating = true;
+
+        clearDeclensionProps();
+        Integer declIndex = declListModel.getSize();
+        declListModel.add(declIndex, "NEW DECLENSION");
+        lstDeclensionList.setSelectedIndex(declIndex);
+        scrToCoreDeclensions.put(declIndex, -1);
+        curPopulating = localPopulating;
+    }
+
+    private void clearDeclensionProps() {
+        // prevents this from resetting population values
+        boolean localPop = curPopulating;
+
+        curPopulating = true;
+
+        txtDeclensionName.setText("");
+        txtDeclensionNotes.setText("");
+        chkDeclensionMandatory.setSelected(false);
+
+        curPopulating = localPop;
+    }
+
+    private void populateDeclensionProps() {
+        DeclensionNode curDec = new DeclensionNode(-1);
+        Integer decIndex = lstDeclensionList.getSelectedIndex();
+
+        // keep local settings from stomping on higher level population
+        boolean populatingLocal = curPopulating;
+
+        if (decIndex != -1) {
+            txtDeclensionName.setEnabled(true);
+            txtDeclensionNotes.setEnabled(true);
+            chkDeclensionMandatory.setEnabled(true);
+        }
+
+        //avoid recursive population
+        if (curPopulating) {
+            return;
+        }
+
+        curPopulating = true;
+
+        if (decIndex == -1) {
+            txtDeclensionName.setText("");
+            txtDeclensionNotes.setText("");
+            curPopulating = populatingLocal;
+            txtDeclensionName.setEnabled(false);
+            txtDeclensionNotes.setEnabled(false);
+            chkDeclensionMandatory.setEnabled(false);
+            chkDeclensionMandatory.setSelected(false);
+        } else {
+            txtDeclensionName.setEnabled(true);
+            txtDeclensionNotes.setEnabled(true);
+            chkDeclensionMandatory.setEnabled(true);
+            chkDeclensionMandatory.setSelected(true);
+        }
+
+        Integer typeId = (Integer) scrToCoreTypes.get(scrTypeMap.get(cmbDeclensionTypes.getSelectedItem()));
+
+        if (typeId == null || typeId == -1) {
+            curPopulating = populatingLocal;
+            return;
+        }
+
+        Integer decId = (Integer) scrToCoreDeclensions.get(decIndex);
+
+        if (decId != null && decId != -1) {
+            try {
+                curDec = core.getDeclensionTemplate(typeId, decId);
+            } catch (Exception e) {
+                InfoBox.error("Declension Population Error", "Unable to populate declension.\n\n"
+                        + e.getMessage(), this);
+                curPopulating = populatingLocal;
+                return;
+            }
+        }
+
+        if (curDec == null) {
+            txtDeclensionName.setEnabled(true);
+            txtDeclensionNotes.setEnabled(true);
+            curPopulating = populatingLocal;
+            return;
+        }
+
+        // prevent self setting (from user mod)
+        if (!txtDeclensionName.getText().trim().equals(curDec.getValue().trim())) {
+            txtDeclensionName.setText(curDec.getValue());
+        }
+        if (!txtDeclensionNotes.getText().equals(curDec.getNotes())) {
+            txtDeclensionNotes.setText(curDec.getNotes());
+        }
+
+        chkDeclensionMandatory.setSelected(curDec.isMandatory());
+
+        curPopulating = populatingLocal;
+    }
+
+    private void updateDeclensionListName() {
+        Integer decIndex = lstDeclensionList.getSelectedIndex();
+
+        // keep local settings from stomping on higher level population
+        boolean populatingLocal = curPopulating;
+
+        if (decIndex == -1 || curPopulating) {
+            return;
+        }
+
+        curPopulating = true;
+
+        declListModel.remove(decIndex);
+        declListModel.add(decIndex, txtDeclensionName.getText().trim());
+
+        lstDeclensionList.setSelectedIndex(decIndex);
+
+        curPopulating = populatingLocal;
+    }
+
+    private void deleteDeclension() {
+        Integer curIndex = lstDeclensionList.getSelectedIndex();
+        Integer typeId = (Integer) scrToCoreTypes.get(scrTypeMap.get(cmbDeclensionTypes.getSelectedItem()));
+
+        if (curIndex == -1) {
+            return;
+        }
+
+        try {
+            core.deleteDeclensionFromTemplate(typeId, (Integer) scrToCoreDeclensions.get(curIndex));
+        } catch (Exception e) {
+            InfoBox.error("Declension Deletion Error", "Unable to delete Declension: "
+                    + (String) lstDeclensionList.getSelectedValue() + "\n\n" + e.getMessage(), this);
+        }
+
+        if (curIndex > 0) {
+            curIndex--;
+        }
+
+        populateDeclensionList();
+
+        populateDeclensionProps();
+
+        lstDeclensionList.setSelectedIndex(curIndex);
+    }
+
+    private void saveDeclension() {
+        Integer typeId = (Integer) scrToCoreTypes.get(scrTypeMap.get(cmbDeclensionTypes.getSelectedItem()));
+        Integer decIndex = lstDeclensionList.getSelectedIndex();
+
+        if (curPopulating) {
+            return;
+        }
+
+        if (decIndex == -1) {
+            return;
+        }
+
+        curPopulating = true;
+
+        Integer decId = scrToCoreDeclensions.containsKey(decIndex)
+                ? (Integer) scrToCoreDeclensions.get(decIndex) : -1;
+
+        DeclensionNode decl;
+
+        try {
+            // split logic for creating, rather than modifying Declension
+            if (decId == -1) {
+                decl = core.addDeclensionToTemplate(typeId, txtDeclensionName.getText());
+                decl.setValue(txtDeclensionName.getText().trim());
+                decl.setNotes(txtDeclensionNotes.getText().trim());
+                decl.setMandatory(chkDeclensionMandatory.isSelected());
+
+                scrToCoreDeclensions.put(decIndex, decl.getId());
+                scrDeclensionMap.put(decl.getValue(), decIndex);
+            } else {
+                decl = new DeclensionNode(-1);
+
+                decl.setValue(txtDeclensionName.getText().trim());
+                decl.setNotes(txtDeclensionNotes.getText().trim());
+                decl.setMandatory(chkDeclensionMandatory.isSelected());
+
+                core.modifyDeclensionTemplate(typeId, decId, decl);
+            }
+        } catch (Exception e) {
+            InfoBox.error("Declension Creation Error", "Unable to create Declension "
+                    + txtDeclensionName.getText() + "\n\n" + e.getMessage(), this);
+        }
+
+        curPopulating = false;
+    }
+
+    private void populateDeclensionList() {
+        if (cmbDeclensionTypes.getSelectedIndex() == -1) {
+            declListModel.clear();
+            return;
+        }
+
+        // avoid recursive population
+        if (curPopulating) {
+            return;
+        }
+
+        Integer typeId = (Integer) scrToCoreTypes.get(cmbDeclensionTypes.getSelectedIndex());
+        Integer curdecId = (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
+        Integer setIndex = -1;
+
+        curPopulating = true;
+
+        Iterator<DeclensionNode> declIt = core.getDeclensionListTemplate(typeId).iterator();
+        DeclensionNode curdec;
+
+        // relevant objects should be rebuilt
+        scrDeclensionMap = new HashMap<String, Integer>();
+        scrToCoreDeclensions = new HashMap<Integer, Integer>();
+
+        declListModel.clear();
+
+        for (int i = 0; declIt.hasNext(); i++) {
+            curdec = declIt.next();
+
+            scrDeclensionMap.put(curdec.getValue(), i);
+
+            declListModel.add(i, curdec.getValue());
+            scrToCoreDeclensions.put(i, curdec.getId());
+
+            // replaced call to Object type here
+            if (curdecId != null
+                    && curdecId.equals(curdec.getId())) {
+                setIndex = i;
+            }
+        }
+
+        lstDeclensionList.setSelectedIndex(setIndex);
+
+        curPopulating = false;
+    }
+
+    private void importExcel() {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ScrExcelImport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ScrExcelImport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ScrExcelImport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ScrExcelImport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+
+        ScrExcelImport s = new ScrExcelImport(core);
+
+        s.setModal(true);
+        s.setVisible(true);
+
+        populateDict();
+        populateGenders();
+        populateTypes();
+        popWordProps();
+    }
+
+    private void setConFont(Font conFont) {
+        lstDict.setFont(conFont);
+        txtConWordFilter.setFont(conFont);
+        txtConWordProp.setFont(conFont);
+        txtAlphaOrder.setFont(conFont);
+        txtPluralProp.setFont(conFont);
+
+        core.setFontCon(conFont.getName(), conFont.getStyle(), conFont.getSize());
+        txtLangFont.setText(conFont.getFontName());
+
+        // set font for first column of pronunciation grid
+        TableColumn column = tblProcGuide.getColumnModel().getColumn(0);
+        column.setCellEditor(new TableColumnEditor(conFont));
+        column.setCellRenderer(new TableColumnRenderer(conFont));
+    }
+
+    private Font fontDialog() {
+        // TODO: figure out font kerning
+        JFontChooser fontChooser = new JFontChooser();
+        Integer result = fontChooser.showDialog(btnChangeFont);
+        Font font = null;
+
+        if (result == JFontChooser.OK_OPTION) {
+            font = fontChooser.getSelectedFont();
+        }
+
+        return font;
+    }
+
+    private void openHelp() {
+        URI uri;
+        try {
+            String OS = System.getProperty("os.name");
+            if (OS.startsWith("Windows")) {
+                String relLocation = new File(".").getAbsolutePath();
+                relLocation = relLocation.substring(0, relLocation.length() - 1);
+                relLocation = "file:///" + relLocation + "readme.html";
+                relLocation = relLocation.replaceAll(" ", "%20");
+                relLocation = relLocation.replaceAll("\\\\", "/");
+                uri = new URI(relLocation);
+                uri.normalize();
+                java.awt.Desktop.getDesktop().browse(uri);
+            } else if (OS.startsWith("Mac")) {
+                String relLocation = new File(".").getAbsolutePath();
+                relLocation = relLocation.substring(0, relLocation.length() - 1);
+                relLocation = "file://" + relLocation + "readme.html";
+                relLocation = relLocation.replaceAll(" ", "%20");
+                uri = new URI(relLocation);
+                uri.normalize();
+                java.awt.Desktop.getDesktop().browse(uri);
+            } else {
+                InfoBox.info("Help", "I haven't messed with your OS for URI calls yet. Please just open readme.html.", this);
+            }
+        } catch (URISyntaxException e) {
+            InfoBox.info("Missing File", "Unable to open readme.html.", this);
+        } catch (IOException e) {
+            InfoBox.info("Missing File", "Unable to open readme.html.", this);
+        }
+    }
+
+    private void setupListeners() {
+        txtConWordProp.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveModWord();
+                generatePronunciation();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveModWord();
+                generatePronunciation();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveModWord();
+                generatePronunciation();
+            }
+        });
+        txtDefProp.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+        });
+        txtLocalWordProp.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+        });
+        txtPluralProp.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+        });
+        txtPronunciationProp.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveModWord();
+            }
+        });
+        txtAlphaOrder.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setAlphaOrder(txtAlphaOrder.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setAlphaOrder(txtAlphaOrder.getText());
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setAlphaOrder(txtAlphaOrder.getText());
+            }
+        });
+        txtConWordFilter.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filterDict();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filterDict();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filterDict();
+            }
+        });
+        txtDefFilter.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filterDict();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filterDict();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filterDict();
+            }
+        });
+        txtLocalWordFilter.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filterDict();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filterDict();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filterDict();
+            }
+        });
+        txtPronunciationFilter.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filterDict();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filterDict();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filterDict();
+            }
+        });
+        txtTypeName.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                checkTypeLexEnabled();
+                saveType();
+                updateTypeListName();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                checkTypeLexEnabled();
+                saveType();
+                updateTypeListName();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                checkTypeLexEnabled();
+                saveType();
+                updateTypeListName();
+            }
+        });
+        txtTypesNotes.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveType();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveType();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveType();
+            }
+        });
+        txtGenderName.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveGender();
+                updateGenderListName();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveGender();
+                updateGenderListName();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveGender();
+                updateGenderListName();
+            }
+        });
+        txtGenderNotes.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveGender();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveGender();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveGender();
+            }
+        });
+        txtLangName.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setLangName(txtLangName.getText());
+                setTitle(screenTitle + " " + core.getVersion() + ": " + txtLangName.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setLangName(txtLangName.getText());
+                setTitle(screenTitle + " " + core.getVersion() + ": " + txtLangName.getText());
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setLangName(txtLangName.getText());
+                setTitle(screenTitle + " " + core.getVersion() + ": " + txtLangName.getText());
+            }
+        });
+        txtDeclensionName.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                Cursor cursor = txtDeclensionName.getCursor();
+                saveDeclension();
+                updateDeclensionListName();
+                txtDeclensionName.requestFocus();
+                txtDeclensionName.setCursor(cursor);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                Cursor cursor = txtDeclensionName.getCursor();
+                saveDeclension();
+                updateDeclensionListName();
+                txtDeclensionName.requestFocus();
+                txtDeclensionName.setCursor(cursor);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                Cursor cursor = txtDeclensionName.getCursor();
+                saveDeclension();
+                updateDeclensionListName();
+                txtDeclensionName.requestFocus();
+                txtDeclensionName.setCursor(cursor);
+            }
+        });
+        txtDeclensionNotes.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                Cursor cursor = txtDeclensionNotes.getCursor();
+                saveDeclension();
+                txtDeclensionNotes.requestFocus();
+                txtDeclensionNotes.setCursor(cursor);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                Cursor cursor = txtDeclensionNotes.getCursor();
+                saveDeclension();
+                txtDeclensionNotes.requestFocus();
+                txtDeclensionNotes.setCursor(cursor);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                Cursor cursor = txtDeclensionNotes.getCursor();
+                saveDeclension();
+                txtDeclensionNotes.requestFocus();
+                txtDeclensionNotes.setCursor(cursor);
+            }
+        });
+    }
+
+    private void saveFileAs() {
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd", "xml");
+        chooser.setFileFilter(filter);
+        chooser.setApproveButtonText("Save");
+        chooser.setCurrentDirectory(new File("."));
+
+        String fileName;
+
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            fileName = chooser.getSelectedFile().getAbsolutePath();
+        } else {
+            return;
+        }
+
+        // if user has not provided an extension, add one
+        if (!fileName.contains(".")) {
+            fileName += ".pgd";
+        }
+
+        File f = new File(fileName);
+
+        if (f.exists()) {
+            Integer overWrite = InfoBox.yesNoCancel("Overwrite Dialog",
+                    "Overwrite existing file? " + fileName, this);
+
+            if (overWrite == JOptionPane.NO_OPTION) {
+                saveFileAs();
+                return;
+            } else if (overWrite == JOptionPane.CANCEL_OPTION) {
+                return;
+            }
+        }
+
+        try {
+            core.writeFile(fileName);
+            curFileName = fileName;
+        } catch (ParserConfigurationException e) {//  | TransformerException e) {
+            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
+        } catch (TransformerException e) {
+            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
+        }
+    }
+
+    private void newFile() {
+        // if there's a current dictionary loaded, prompt user to save before creating new
+        if (lstDict.getModel().getSize() > 0) {
+            Integer saveFirst = InfoBox.yesNoCancel("Save First?",
+                    "Save current dictionary before creating new dictionary?", this);
+
+            if (saveFirst == JOptionPane.YES_OPTION) {
+                saveFile();
+            } else if (saveFirst == JOptionPane.CANCEL_OPTION) {
+                return;
+            }
+        }
+
+        core = new DictCore();
+        curFileName = "";
+
+        populateDict();
+        popWordProps();
+        populateTypes();
+        populateTypeProps();
+        populateGenders();
+        populateGenderProps();
+        populateProcGuide();
+        popLangProps();
+    }
+
+    private void saveFile() {
+        if (curFileName.equals("")) {
+            saveFileAs();
+            return;
+        }
+
+        try {
+            core.writeFile(curFileName);
+        } catch (ParserConfigurationException e) {
+            InfoBox.error("Save Error", "Unable to save to file: " + curFileName + "\n\n" + e.getMessage(), this);
+        } catch (TransformerException e) {
+            InfoBox.error("Save Error", "Unable to save to file: " + curFileName + "\n\n" + e.getMessage(), this);
+        }
+    }
+
+    private void openFile() {
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd", "xml");
+        chooser.setFileFilter(filter);
+        String fileName;
+        chooser.setCurrentDirectory(new File("."));
+
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            fileName = chooser.getSelectedFile().getAbsolutePath();
+        } else {
+            return;
+        }
+
+        setFile(fileName);
+        setLexiconEnabled(true);
+    }
+
+    private void setFile(String fileName) {
+        core = new DictCore();
+
+        try {
+            core.readFile(fileName);
+            curFileName = fileName;
+        } catch (Exception e) {
+            InfoBox.error("File Read Error", "Could not read file: " + fileName
+                    + "\n\n " + e.getMessage(), this);
+            return;
+        }
+
+        // if conlang font DNE, inform user during load (default OS font will be used)
+        List<String> allFonts = Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+        String fontCon = core.getFontCon();
+        if (!fontCon.equals("") && !allFonts.contains(fontCon)) {
+            InfoBox.info("Font not Found.", "Font " + fontCon
+                    + " not found. Please install font to dislpay conlang correctly or reselect appropriate font.", this);
+        }
+
+        populateDict();
+        populateTypes();
+        populateGenders();
+        popWordProps();
+        popLangProps();
+    }
+
+    private void popLangProps() {
+        txtLangName.setText(core.getPropertiesManager().getLangName());
+        txtAlphaOrder.setText(core.getPropertiesManager().getAlphaPlainText());
+        chkAutopopProcs.setSelected(core.getPropertiesManager().isProAutoPop());
+        chkPropLocalMandatory.setSelected(core.getPropertiesManager().isLocalMandatory());
+        chkPropLocalUniqueness.setSelected(core.getPropertiesManager().isLocalUniqueness());
+        chkPropTypesMandatory.setSelected(core.getPropertiesManager().isTypesMandatory());
+        chkPropWordUniqueness.setSelected(core.getPropertiesManager().isWordUniqueness());
+
+        // only set conlang font if it is not the OS default font
+        Font setFont = core.getLangFont();
+        if (!(new JTextField()).getFont().equals(setFont)) {
+            setConFont(setFont);
+        }
+
+        populateProcGuide();
+    }
+
+    private void addType() {
+        if (lstTypesList.getModel().getSize() != 0
+                && scrToCoreTypes.containsKey((Integer) lstTypesList.getSelectedIndex())
+                && (Integer) scrToCoreTypes.get((Integer) lstTypesList.getSelectedIndex()) == -1) {
+            return;
+        }
+
+        curPopulating = true;
+
+        clearTypeProps();
+        
+
+        Integer typeIndex = tListModel.getSize();
+        tListModel.add(typeIndex, "NEW TYPE");
+        lstTypesList.setSelectedIndex(typeIndex);
+        scrToCoreTypes.put(typeIndex, -1);
+        curPopulating = false;
+        
+        // types always have blank name on creation...
+        setEnabledTypeLexicon(false);
+        txtTypesErrorBox.setText("Types cannot have blank name.");
+    }
+
+    private void clearTypeProps() {
+        curPopulating = true;
+
+        txtTypeName.setText("");
+        txtTypesNotes.setText("");
+
+        txtTypeName.setEnabled(false);
+        txtTypesNotes.setEnabled(false);
+
+        curPopulating = false;
+    }
+
+    private void populateTypeProps() {
+        //avoid recursive population
+        if (curPopulating) {
+            return;
+        }
+
+        curPopulating = true;
+        TypeNode curType = new TypeNode();
+        Integer typeIndex = lstTypesList.getSelectedIndex();
+        Integer typeId = (Integer) scrToCoreTypes.get(typeIndex);
+
+        if (typeId != null && typeId != -1) {
+            try {
+                curType = core.getTypes().getNodeById(typeId);
+            } catch (Exception e) {
+                InfoBox.error("Type Error", "Unable to load word types. Reload dictionary, if possible. \n" + e.getMessage(), this);
+            }
+        }
+
+        // if no type selected, grey out properties, enable otherwise
+        if (typeIndex == -1) {
+            txtTypeName.setEnabled(false);
+            txtTypesNotes.setEnabled(false);
+            chkTypeDefinitionMandatory.setEnabled(false);
+            chkTypeGenderMandatory.setEnabled(false);
+            chkTypePluralMandatory.setEnabled(false);
+            chkTypeProcMandatory.setEnabled(false);
+        } else {
+            txtTypeName.setEnabled(true);
+            txtTypesNotes.setEnabled(true);
+            chkTypeDefinitionMandatory.setEnabled(true);
+            chkTypeGenderMandatory.setEnabled(true);
+            chkTypePluralMandatory.setEnabled(true);
+            chkTypeProcMandatory.setEnabled(true);
+        }
+
+        // prevent self setting (from user mod)
+        if (!txtTypeName.getText().trim().equals(curType.getValue().trim())) {
+            txtTypeName.setText(curType.getValue());
+        }
+        if (!txtTypesNotes.getText().equals(curType.getNotes())) {
+            txtTypesNotes.setText(curType.getNotes());
+        }
+        chkTypeDefinitionMandatory.setSelected(curType.isDefMandatory());
+        chkTypeGenderMandatory.setSelected(curType.isGenderMandatory());
+        chkTypePluralMandatory.setSelected(curType.isPluralMandatory());
+        chkTypeProcMandatory.setSelected(curType.isProcMandatory());
+
+        curPopulating = false;
+    }
+    
+    private void updateTypeListName() {
+        Integer typeIndex = lstTypesList.getSelectedIndex();
+
+        if (typeIndex == -1 || curPopulating) {
+            return;
+        }
+
+        curPopulating = true;
+
+        tListModel.remove(typeIndex);
+        tListModel.add(typeIndex, txtTypeName.getText().trim());
+
+        lstTypesList.setSelectedIndex(typeIndex);
+
+        curPopulating = false;
+    }
+
+    private void deleteType() {
+        Integer curIndex = lstTypesList.getSelectedIndex();
+
+        if (curIndex == -1) {
+            return;
+        }
+
+        // avoid attempt to delete unsaved types
+        if ((Integer) scrToCoreTypes.get(curIndex) != -1) {
+            try {
+                core.getTypes().deleteNodeById((Integer) scrToCoreTypes.get(curIndex));
+            } catch (Exception e) {
+                InfoBox.error("Type Deletion Error", "Unable to delete type: "
+                        + (String) lstTypesList.getSelectedValue() + "\n\n" + e.getMessage(), this);
+            }
+        }
+
+        // clears type block if user deleted illgal type
+        lstTypesList.setEnabled(true);
+        btnAddType.setEnabled(true);
+        txtTypesErrorBox.setText("");
+
+        if (curIndex > 0) {
+            curIndex--;
+        }
+
+        populateTypes();
+
+        lstTypesList.setSelectedIndex(curIndex);
+        populateTypeProps();
+    }
+
+    private void saveType() {
+        Integer typeIndex = lstTypesList.getSelectedIndex();
+
+        if (curPopulating) {
+            return;
+        }
+
+        if (typeIndex == -1) {
+            return;
+        }
+        
+        boolean localPopulating = curPopulating;
+        
+        curPopulating = true;
+
+        Integer typeId = scrToCoreTypes.containsKey(typeIndex)
+                ? (Integer) scrToCoreTypes.get(typeIndex) : -1;
+
+        TypeNode type = new TypeNode();
+
+        type.setValue(txtTypeName.getText().trim());
+        type.setNotes(txtTypesNotes.getText());
+        type.setDefMandatory(chkTypeDefinitionMandatory.isSelected());
+        type.setGenderMandatory(chkTypeGenderMandatory.isSelected());
+        type.setProcMandatory(chkTypeProcMandatory.isSelected());
+        type.setPluralMandatory(chkTypePluralMandatory.isSelected());
+
+        try {
+            // split logic for creating, rather than modifying types
+            if (typeId == -1) {
+                typeId = core.getTypes().addNode(type);
+                scrToCoreTypes.put(typeIndex, typeId);
+                scrTypeMap.put(type.getValue(), typeIndex);
+            } else {
+                core.modifyType(typeId, type);
+            }
+        } catch (Exception e) {
+            InfoBox.error("Type Population Error", "Error populating types. Please reload dictionary. \n\n"
+                    + e.getMessage(), this);
+        }
+
+        curPopulating = localPopulating;
+
+        populateTypes();
+    }
+    
+    /**
+     * Checks/sets whether the type lexicon should be and is enabled
+     */
+    private void checkTypeLexEnabled() {
+        if (curPopulating) {
+            return;
+        }
+
+        // do not allow duplicate types
+        if (core.getTypes().findTypeByName(txtTypeName.getText().trim()) != null) {
+            setEnabledTypeLexicon(false);
+            txtTypesErrorBox.setText("Types must have unique names.");
+        } else if (txtTypeName.getText().trim().equals("")) {
+            setEnabledTypeLexicon(false);
+            txtTypesErrorBox.setText("Types cannot have blank name.");
+        } else {
+            setEnabledTypeLexicon(true);
+            txtTypesErrorBox.setText("");
+        }
+    }
+    
+    private void setEnabledTypeLexicon(boolean enabled) {
+        lstTypesList.setEnabled(enabled);
+        btnAddType.setEnabled(enabled);
+    }
+
+    private void addGender() {
+        if (lstGenderList.getModel().getSize() != 0
+                && scrToCoreGenders.containsKey((Integer) lstGenderList.getSelectedIndex())
+                && (Integer) scrToCoreGenders.get((Integer) lstGenderList.getSelectedIndex()) == -1) {
+            return;
+        }
+
+        curPopulating = true;
+
+        clearGenderProps();
+
+        Integer genderIndex = gListModel.getSize();
+        gListModel.add(genderIndex, "NEW GENDER");
+        lstGenderList.setSelectedIndex(genderIndex);
+        scrToCoreGenders.put(genderIndex, -1);
+        curPopulating = false;
+        
+        // genders are always created with a blank name
+        setEnabledGenderLexicon(false);
+        txtGendersErrorBox.setText("Genders cannot have blank names.");
+    }
+
+    private void clearGenderProps() {
+        curPopulating = true;
+
+        txtGenderName.setText("");
+        txtGenderNotes.setText("");
+
+        curPopulating = false;
+    }
+
+    private void populateGenderProps() {
+        //avoid recursive population
+        if (curPopulating) {
+            return;
+        }
+
+        curPopulating = true;
+        GenderNode curGender = new GenderNode();
+        Integer genderIndex = lstGenderList.getSelectedIndex();
+        Integer genderId = (Integer) scrToCoreGenders.get(genderIndex);
+
+        if (genderIndex == -1) {
+            txtGenderName.setEnabled(false);
+            txtGenderNotes.setEnabled(false);
+        } else {
+            txtGenderName.setEnabled(true);
+            txtGenderNotes.setEnabled(true);
+        }
+
+        if (genderId != null && genderId != -1) {
+            try {
+                curGender = core.getGenders().getNodeById(genderId);
+            } catch (Exception e) {
+                InfoBox.error("Gender Population Error", "Unable to populate genders. Please reload dictionary.\n\n"
+                        + e.getMessage(), this);
+            }
+        }
+
+        // prevent self setting (from user mod)
+        if (!txtGenderName.getText().trim().equals(curGender.getValue().trim())) {
+            txtGenderName.setText(curGender.getValue());
+        }
+        if (!txtGenderNotes.getText().equals(curGender.getNotes())) {
+            txtGenderNotes.setText(curGender.getNotes());
+        }
+
+        curPopulating = false;
+    }
+
+    private void updateGenderListName() {
+        Integer genderIndex = lstGenderList.getSelectedIndex();
+
+        if (genderIndex == -1 || curPopulating) {
+            return;
+        }
+
+        curPopulating = true;
+
+        gListModel.remove(genderIndex);
+        gListModel.add(genderIndex, txtGenderName.getText().trim());
+
+        lstGenderList.setSelectedIndex(genderIndex);
+
+        curPopulating = false;
+    }
+
+    private void deleteGender() {
+        Integer curIndex = lstGenderList.getSelectedIndex();
+
+        if (curIndex == -1) {
+            return;
+        }
+
+        // don't try to delete new genders, just populate to eliminate them.
+        if ((Integer) scrToCoreGenders.get(curIndex) != -1) {
+            try {
+                core.getGenders().deleteNodeById((Integer) scrToCoreGenders.get(curIndex));
+            } catch (Exception e) {
+                InfoBox.error("Gender Deletion Error", "Unable to delete gender: "
+                        + (String) lstGenderList.getSelectedValue() + "\n\n" + e.getMessage(), this);
+            }
+
+            if (curIndex > 0) {
+                curIndex--;
+            }
+        }
+
+        populateGenders();
+        populateGenderProps();
+
+        lstGenderList.setSelectedIndex(curIndex);
+
+        // reenables gender selection/creation in case user deleted illegal gender
+        lstGenderList.setEnabled(true);
+        btnAddGender.setEnabled(true);
+        txtGendersErrorBox.setText("");
+    }
+
+    private void saveGender() {
+        Integer genderIndex = lstGenderList.getSelectedIndex();
+
+        if (curPopulating) {
+            return;
+        }
+
+        if (genderIndex == -1) {
+            return;
+        }
+
+        curPopulating = true;
+
+        Integer genderId = scrToCoreGenders.containsKey(genderIndex)
+                ? (Integer) scrToCoreGenders.get(genderIndex) : -1;
+
+        GenderNode gender = new GenderNode();
+
+        gender.setValue(txtGenderName.getText());
+        gender.setNotes(txtGenderNotes.getText());
+
+        // do not allow duplicate types
+        if (core.getGenders().findGenderByName(txtGenderName.getText().trim()) != null) {
+            setEnabledGenderLexicon(false);
+            txtGendersErrorBox.setText("Genders must have unique names.");
+        } else if (txtGenderName.getText().trim().equals("")) {
+            setEnabledGenderLexicon(false);
+            txtGendersErrorBox.setText("Genders cannot have blank names.");
+        } else {
+            setEnabledGenderLexicon(true);
+            txtGendersErrorBox.setText("");
+        }
+        
+        try {
+            // split logic for creating, rather than modifying Gender
+            if (genderId == -1) {
+                genderId = core.getGenders().addNode(gender);
+                scrToCoreGenders.put(genderIndex, genderId);
+                scrGenderMap.put(gender.getValue(), genderIndex);
+            } else {
+                core.modifyGender(genderId, gender);
+            }
+        } catch (Exception e) {
+            InfoBox.error("Gender Creation Error", "Unable to create gender "
+                    + gender.getValue() + "\n\n" + e.getMessage(), this);
+        }
+
+        curPopulating = false;
+
+        populateGenders();
+    }
+    
+    private void setEnabledGenderLexicon(boolean enabled) {
+        lstGenderList.setEnabled(enabled);
+        btnAddGender.setEnabled(enabled);
+    }
+
+    private void deleteWord() {
+        Integer selectedIndex = lstDict.getSelectedIndex();
+
+        if (selectedIndex == -1) {
+            return;
+        }
+
+        Integer wordId = (Integer) scrToCoreMap.get(selectedIndex);
+
+        // only delete if new word. Otherwise, simply repopulate dictionary.
+        if (wordId != -1) {
+            try {
+                core.deleteWordById(wordId);
+            } catch (Exception e) {
+                InfoBox.error("Word Deletion Error", "Unable to delete word: "
+                        + (String) lstDict.getSelectedValue() + "\n\n" + e.getMessage(), this);
+            }
+        }
+
+        populateDict();
+
+        // select the next lowest word (if it exists)
+        if (lstDict.getModel().getSize() > 1) {
+            lstDict.setSelectedIndex(selectedIndex - 1);
+            popWordProps();
+        } else if (lstDict.getModel().getSize() == 1) {
+            lstDict.setSelectedIndex(0);
+            popWordProps();
+        } else {
+            lstDict.setSelectedIndex(-1);
+            clearProps();
+        }
+
+        // after word deletion, lexicon should always be enabled
+        setLexiconEnabled(true);
+    }
+
+    private void populateDict() {
+        curPopulating = true;
+        Iterator<ConWord> itWords = core.getWordIterator();
+
+        this.populateWordsFromList(itWords);
+        curPopulating = false;
+    }
+
+    private void populateWordsFromList(Iterator<ConWord> _itWords) {
+        ConWord curWord;
+        Integer curId = (Integer) scrToCoreMap.get(lstDict.getSelectedIndex());
+        Integer newIndex = -1;
+
+        lstDict.setVisible(false);
+
+        dListModel.clear();
+
+        scrToCoreMap = new HashMap<Integer, Integer>();
+
+        for (int i = 0; _itWords.hasNext(); i++) {
+            curWord = _itWords.next();
+
+            if (curWord.getId().equals(curId)) {
+                newIndex = i;
+            }
+
+            dListModel.add(i, curWord.getValue());
+
+            scrToCoreMap.put(i, curWord.getId());
+        }
+
+        lstDict.setSelectedIndex(newIndex);
+        lstDict.setVisible(true);
+    }
+
+    private void populateTypes() {
+        // avoid recursive population
+        if (curPopulating) {
+            return;
+        }
+
+        Integer curTypeId = (Integer) scrToCoreTypes.get(lstTypesList.getSelectedIndex());
+        Integer setIndex = -1;
+
+        curPopulating = true;
+        Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
+        TypeNode curType;
+
+        // relevant objects should be rebuilt
+        scrTypeMap = new HashMap<String, Integer>();
+        scrToCoreTypes = new HashMap<Integer, Integer>();
+
+        tListModel.clear();
+
+        cmbTypeProp.removeAllItems();
+        cmbTypeFilter.removeAllItems();
+        cmbDeclensionTypes.removeAllItems();
+        clearDeclensionProps();
+
+        for (int i = 0; typeIt.hasNext(); i++) {
+            curType = typeIt.next();
+
+            cmbTypeProp.insertItemAt(curType.getValue(), i);
+            cmbTypeFilter.insertItemAt(curType.getValue(), i);
+            cmbDeclensionTypes.insertItemAt(curType.getValue(), i);
+
+            scrTypeMap.put(curType.getValue(), i);
+
+            tListModel.add(i, curType.getValue());
+            scrToCoreTypes.put(i, curType.getId());
+
+            // replaced call to Object type here
+            if (curTypeId != null
+                    && curTypeId.equals(curType.getId())) {
+                setIndex = i;
+            }
+        }
+
+        cmbTypeFilter.insertItemAt("", cmbTypeFilter.getModel().getSize());
+
+        lstTypesList.setSelectedIndex(setIndex);
+
+        curPopulating = false;
+
+        // ensures that declensions aren't listed for an empty relation
+        cmbDeclensionTypes.setSelectedIndex(cmbDeclensionTypes.getModel().getSize() == 0 ? -1 : 0);
+        populateDeclensionList();
+    }
+
+    private void populateGenders() {
+        // avoid recursive population
+        if (curPopulating) {
+            return;
+        }
+
+        Integer curGenderId = (Integer) scrToCoreGenders.get(lstGenderList.getSelectedIndex());
+        Integer setIndex = -1;
+
+        curPopulating = true;
+        Iterator<GenderNode> genderIt = core.getGenders().getNodeIterator();
+        GenderNode curGender;
+
+        // relevant objects should be rebuilt
+        scrGenderMap = new HashMap<String, Integer>();
+        scrToCoreGenders = new HashMap<Integer, Integer>();
+
+        gListModel.clear();
+
+        cmbGenderProp.removeAllItems();
+        cmbGenderFilter.removeAllItems();
+
+        for (int i = 0; genderIt.hasNext(); i++) {
+            curGender = genderIt.next();
+
+            cmbGenderProp.insertItemAt(curGender.getValue(), i);
+            cmbGenderFilter.insertItemAt(curGender.getValue(), i);
+
+            scrGenderMap.put(curGender.getValue(), i);
+
+            gListModel.add(i, curGender.getValue());
+            scrToCoreGenders.put(i, curGender.getId());
+
+            // replaced calle to Object type here
+            if (curGenderId != null
+                    && curGenderId.equals(curGender.getId())) {
+                setIndex = i;
+            }
+        }
+
+        cmbGenderFilter.insertItemAt("", cmbGenderFilter.getModel().getSize());
+
+        lstGenderList.setSelectedIndex(setIndex);
+
+        curPopulating = false;
+    }
+
+    private void clearProps() {
+        curPopulating = true;
+        ConWord curWord = new ConWord();
+
+        txtConWordProp.setText(curWord.getValue());
+        txtLocalWordProp.setText(curWord.getLocalWord());
+        txtDefProp.setText(curWord.getDefinition());
+        txtPluralProp.setText(curWord.getPlural());
+        txtPronunciationProp.setText(curWord.getPronunciation());
+        chkPronunciationOverrideProp.setSelected(false);
+        cmbTypeProp.setSelectedIndex(-1);
+        cmbGenderProp.setSelectedIndex(-1);
+
+        txtConWordProp.setEnabled(false);
+        txtLocalWordProp.setEnabled(false);
+        txtDefProp.setEnabled(false);
+        txtPluralProp.setEnabled(false);
+        txtPronunciationProp.setEnabled(false);
+        cmbTypeProp.setEnabled(false);
+        cmbGenderProp.setEnabled(false);
+        chkPronunciationOverrideProp.setEnabled(false);
+
+        curPopulating = false;
+    }
+
+    private void popWordProps() {
+        // if currently populating, abandon recursive process
+        if (curPopulating) {
+            return;
+        }
+
+        Integer curIndex = lstDict.getSelectedIndex();
+        Integer wordId = (Integer) scrToCoreMap.get(curIndex);
+        ConWord curWord = new ConWord();
+
+        if (lstDict.getSelectedIndex() == -1) {
+            clearProps();
+            return;
+        }
+
+        // split to ensure that word may still be modified
+        if (wordId == null || wordId == -1) {
+            clearProps();
+        }
+
+        txtConWordProp.setEnabled(true);
+        txtLocalWordProp.setEnabled(true);
+        txtDefProp.setEnabled(true);
+        txtPluralProp.setEnabled(true);
+        txtPronunciationProp.setEnabled(true);
+        cmbTypeProp.setEnabled(true);
+        cmbGenderProp.setEnabled(true);
+        chkPronunciationOverrideProp.setEnabled(true);
+
+        // split to ensure that word may still be modified
+        if (wordId == null || wordId == -1) {
+            return;
+        }
+
+        try {
+            curWord = core.getWordById(wordId);
+        } catch (Exception e) {
+            InfoBox.error("Property Population Error", "Unable to populate properties of word: "
+                    + (String) lstDict.getSelectedValue() + "\n\n" + e.getMessage(), this);
+        }
+
+        curPopulating = true;
+
+        txtConWordProp.setText(curWord.getValue());
+        txtLocalWordProp.setText(curWord.getLocalWord());
+        txtDefProp.setText(curWord.getDefinition());
+        txtPluralProp.setText(curWord.getPlural());
+        txtPronunciationProp.setText(curWord.getPronunciation());
+        chkPronunciationOverrideProp.setSelected(curWord.isProcOverride());
+
+        if (scrTypeMap.containsKey(curWord.getWordType())) {
+            cmbTypeProp.setSelectedIndex((Integer) scrTypeMap.get(curWord.getWordType()));
+        } else {
+            cmbTypeProp.setSelectedIndex(-1);
+        }
+        // forces combobox display to refresh...
+        cmbTypeProp.setVisible(false);
+        cmbTypeProp.setVisible(true);
+
+        if (scrGenderMap.containsKey(curWord.getGender())) {
+            cmbGenderProp.setSelectedIndex((Integer) scrGenderMap.get(curWord.getGender()));
+
+        } else {
+            cmbGenderProp.setSelectedIndex(-1);
+        }
+
+        // forces combobox display to refresh. This is sloppy, but it works...
+        cmbGenderProp.setVisible(false);
+        cmbGenderProp.setVisible(true);
+        
+        // make sure scroll is set to top for definition
+        txtDefProp.setCaretPosition(0);
+
+        curPopulating = false;
+    }
+
+    private void filterDict() {
+        if (curPopulating) {
+            return;
+        }
+
+        // no filter necessary if all blank
+        if (txtConWordFilter.getText().equals("")
+                && txtDefFilter.getText().equals("")
+                && txtLocalWordFilter.getText().equals("")
+                && txtPronunciationFilter.getText().equals("")
+                && cmbGenderFilter.getSelectedIndex() == -1
+                && cmbTypeFilter.getSelectedIndex() == -1) {
+            populateDict();
+            lstDict.setSelectedIndex(lstDict.getModel().getSize() > 0 ? 0 : -1);
+            return;
+        }
+
+        ConWord filter = new ConWord();
+
+        filter.setValue(txtConWordFilter.getText() != null ? txtConWordFilter.getText().trim() : "");
+        filter.setDefinition(txtDefFilter.getText() != null ? txtDefFilter.getText().trim() : "");
+        filter.setLocalWord(txtLocalWordFilter.getText() != null ? txtLocalWordFilter.getText().trim() : "");
+        filter.setWordType(cmbTypeFilter.getSelectedItem() != null ? (String) cmbTypeFilter.getSelectedItem() : "");
+        filter.setGender(cmbGenderFilter.getSelectedItem() != null ? (String) cmbGenderFilter.getSelectedItem() : "");
+        filter.setPronunciation(txtPronunciationFilter.getText() != null ? txtPronunciationFilter.getText().trim() : "");
+
+        try {
+            populateWordsFromList(core.filteredWordList(filter));
+        } catch (Exception e) {
+            InfoBox.error("Filter Error", "Unable to apply filter.\n\n" + e.getMessage(), this);
+        }
+
+        if (lstDict.getModel().getSize() > 0) {
+            lstDict.setSelectedIndex(0);
+        } else {
+            lstDict.setSelectedIndex(-1);
+        }
+
+        popWordProps();
+    }
+
+    private void newWord() {
+        // Do not create any new words if the current word is new
+        if (lstDict.getModel().getSize() != 0
+                && scrToCoreMap.containsKey((Integer) lstDict.getSelectedIndex())
+                && (Integer) scrToCoreMap.get((Integer) lstDict.getSelectedIndex()) == -1) {
+            return;
+        }
+
+        Integer curIndex = dListModel.getSize();
+
+        dListModel.add(curIndex, "NEW WORD");
+
+        // new words mapped to -1 until inserted into dictionary
+        scrToCoreMap.put(curIndex, -1);
+
+        lstDict.setSelectedIndex(curIndex);
+
+        clearProps();
+
+        txtConWordProp.setEnabled(true);
+        txtLocalWordProp.setEnabled(true);
+        txtDefProp.setEnabled(true);
+        txtPluralProp.setEnabled(true);
+        txtPronunciationProp.setEnabled(true);
+        cmbTypeProp.setEnabled(true);
+        cmbGenderProp.setEnabled(true);
+        chkPronunciationOverrideProp.setEnabled(true);
+
+        // prevents user from navigating away before new word is valid
+        setLexiconEnabled(false);
+        txtWordErrorBox.setText("ConWord value cannot be blank.");
+    }
+
+    private void saveModWord() {
+        // if currently populating, abandon recursive process
+        if (curPopulating) {
+            return;
+        }
+
+        curPopulating = true;
+        ConWord saveWord = new ConWord();
+        Integer scrIndex = lstDict.getSelectedIndex();
+
+        if (scrIndex == -1) {
+            curPopulating = false;
+            return;
+        }
+
+        // populate word object to save
+        Integer wordId = (Integer) scrToCoreMap.get(scrIndex);
+
+        saveWord.setValue(txtConWordProp.getText());
+        saveWord.setLocalWord(txtLocalWordProp.getText());
+        saveWord.setWordType(scrTypeMap.containsKey(cmbTypeProp.getSelectedItem())
+                ? (String) cmbTypeProp.getSelectedItem() : "");
+        saveWord.setDefinition(txtDefProp.getText());
+        saveWord.setPronunciation(txtPronunciationProp.getText());
+        saveWord.setGender(scrGenderMap.containsKey(cmbGenderProp.getSelectedItem())
+                ? (String) cmbGenderProp.getSelectedItem() : "");
+        saveWord.setPlural(txtPluralProp.getText());
+        saveWord.setProcOverride(chkPronunciationOverrideProp.isSelected());
+
+        if (wordId == -1) {
+            try {
+                wordId = core.addWord(saveWord);
+            } catch (Exception e) {
+                InfoBox.error("Word Creation Error", "Unable to create word:"
+                        + saveWord.getValue() + "\n\n" + e.getMessage(), this);
+            }
+        } else {
+            try {
+                core.modifyWord(wordId, saveWord);
+            } catch (Exception e) {
+                InfoBox.error("Word Save Error", "Unable to save word:"
+                        + saveWord.getValue() + "\n\n" + e.getMessage(), this);
+            }
+        }
+
+        dListModel.remove(scrIndex);
+        dListModel.add(scrIndex, saveWord.getValue());
+        setLexPosition(scrIndex);
+
+        // update word map
+        scrToCoreMap.remove(scrIndex);
+        scrToCoreMap.put(scrIndex, wordId);
+
+        curPopulating = false;
+
+        // handle words that are or are not legal by checking core
+        String wordLegal = core.isWordLegal(saveWord);
+        txtWordErrorBox.setText(wordLegal);
+        setLexiconEnabled(wordLegal.equals(""));
+
+        populateDict();
+    }
+
+    private void setLexiconEnabled(boolean isEnabled) {
+        setFilterEnabled(isEnabled);
+        lstDict.setEnabled(isEnabled);
+        btnAdd.setEnabled(isEnabled);
+    }
+
+    private void setFilterEnabled(boolean enabled) {
+        txtConWordFilter.setEnabled(enabled);
+        txtDefFilter.setEnabled(enabled);
+        txtLocalWordFilter.setEnabled(enabled);
+        txtPronunciationFilter.setEnabled(enabled);
+        cmbGenderFilter.setEnabled(enabled);
+        cmbTypeFilter.setEnabled(enabled);
+    }
+    
+    /**
+     * sets index of lexicon list and positions scroller appropriately
+     * @param scrIndex 
+     */
+    private void setLexPosition(Integer scrIndex) {
+        lstDict.setSelectedIndex(scrIndex);
+
+        // This adjusts the position of the scroller to match the current word's position
+        int newScrollHeight = scrIndex * lstDict.getCellBounds(0, 0).height;
+        newScrollHeight = newScrollHeight > scrlDict.getVerticalScrollBar().getMaximum()
+                ? scrlDict.getVerticalScrollBar().getMaximum() : newScrollHeight;
+
+        scrlDict.getVerticalScrollBar().setValue(newScrollHeight);
+    }
+    
+    /**
+     * Selects word in lexicon by ID, pulls ScrDictInterface to the fore,
+     * selects Lexicon tab
+     * @param id the ID of the word to select
+     */
+    public void selectWordById(Integer id) {
+        Integer index = -1;
+        
+        for (Entry<Integer, Integer> entry : (Set<Entry<Integer, Integer>>)scrToCoreMap.entrySet()) {
+            if (entry.getValue().equals(id)) {
+                index = entry.getKey();
+            }
+        }
+        
+        // if no match, inform user, then do nothing.
+        if (index == -1) {
+            InfoBox.error("Word Not Found", "word with ID: " + id.toString() + " not found.", this);
+            return;
+        }
+        
+        setLexPosition(index);
+        jTabbedPane1.setSelectedIndex(0);
+    }
+    
+    /**
+     * Creates new word by a local word, leaving other fields blank
+     * @param newLocal new local word value
+     */
+    public void createNewWordByLocal(String newLocal) {
+        // do not allow blank creation
+        if (newLocal.equals("")) {
+            return;
+        }
+        
+        newWord();
+        txtLocalWordProp.setText(newLocal);
+        this.requestFocus();
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnAddGender;
+    private javax.swing.JButton btnAddProcGuide;
+    private javax.swing.JButton btnAddType;
+    private javax.swing.JButton btnChangeFont;
+    private javax.swing.JButton btnConwordDeclensions;
+    private javax.swing.JButton btnDeclensionAdd;
+    private javax.swing.JButton btnDeclensionDelete;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDeleteGender;
+    private javax.swing.JButton btnDeleteProcGuide;
+    private javax.swing.JButton btnDeleteType;
+    private javax.swing.JButton btnDownProc;
+    private javax.swing.JButton btnUpProc;
+    private javax.swing.JCheckBox chkAutopopProcs;
+    private javax.swing.JCheckBox chkDeclensionMandatory;
+    private javax.swing.JCheckBox chkPronunciationOverrideProp;
+    private javax.swing.JCheckBox chkPropLocalMandatory;
+    private javax.swing.JCheckBox chkPropLocalUniqueness;
+    private javax.swing.JCheckBox chkPropTypesMandatory;
+    private javax.swing.JCheckBox chkPropWordUniqueness;
+    private javax.swing.JCheckBox chkTypeDefinitionMandatory;
+    private javax.swing.JCheckBox chkTypeGenderMandatory;
+    private javax.swing.JCheckBox chkTypePluralMandatory;
+    private javax.swing.JCheckBox chkTypeProcMandatory;
+    private javax.swing.JComboBox cmbDeclensionTypes;
+    private javax.swing.JComboBox cmbGenderFilter;
+    private javax.swing.JComboBox cmbGenderProp;
+    private javax.swing.JComboBox cmbTypeFilter;
+    private javax.swing.JComboBox cmbTypeProp;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lblConWordFilter;
+    private javax.swing.JLabel lblConWordProp;
+    private javax.swing.JLabel lblDefFilter;
+    private javax.swing.JLabel lblDefinitionProp;
+    private javax.swing.JLabel lblGenderFilter;
+    private javax.swing.JLabel lblGenderProp;
+    private javax.swing.JLabel lblLocalWordFilter;
+    private javax.swing.JLabel lblLocalWordProp;
+    private javax.swing.JLabel lblPluralProp;
+    private javax.swing.JLabel lblPrononciationProp;
+    private javax.swing.JLabel lblPronunciationFilter;
+    private javax.swing.JLabel lblTypeFilter;
+    private javax.swing.JLabel lblTypeProp;
+    private javax.swing.JList lstDeclensionList;
+    private javax.swing.JList lstDict;
+    private javax.swing.JList lstGenderList;
+    private javax.swing.JList lstTypesList;
+    private javax.swing.JMenuItem mnuAbout;
+    private javax.swing.JMenuItem mnuExit;
+    private javax.swing.JMenu mnuFile;
+    private javax.swing.JMenu mnuHelp;
+    private javax.swing.JMenuItem mnuImportExcel;
+    private javax.swing.JMenuItem mnuLangStats;
+    private javax.swing.JMenuItem mnuNew;
+    private javax.swing.JMenuItem mnuOpen;
+    private javax.swing.JMenuItem mnuPloyHelp;
+    private javax.swing.JMenuItem mnuSave;
+    private javax.swing.JMenuItem mnuSaveAs;
+    private javax.swing.JMenu mnuTools;
+    private javax.swing.JMenuItem mnuTranslation;
+    private javax.swing.JPanel pnlFilter;
+    private javax.swing.JPanel pnlProperties;
+    private javax.swing.JScrollPane sclDefProp;
+    private javax.swing.JScrollPane sclGenderList;
+    private javax.swing.JScrollPane sclTypesList;
+    private javax.swing.JScrollPane scrlDict;
+    private javax.swing.JScrollPane scrlProcGuide;
+    private javax.swing.JPanel tabDeclensions;
+    private javax.swing.JPanel tabDict;
+    private javax.swing.JPanel tabGender;
+    private javax.swing.JPanel tabLangProp;
+    private javax.swing.JPanel tabType;
+    private javax.swing.JTable tblProcGuide;
+    private javax.swing.JTextField txtAlphaOrder;
+    private javax.swing.JTextField txtConWordFilter;
+    private javax.swing.JTextField txtConWordProp;
+    private javax.swing.JTextField txtDeclensionName;
+    private javax.swing.JTextArea txtDeclensionNotes;
+    private javax.swing.JTextField txtDefFilter;
+    private javax.swing.JTextArea txtDefProp;
+    private javax.swing.JTextField txtGenderName;
+    private javax.swing.JTextArea txtGenderNotes;
+    private javax.swing.JTextField txtGendersErrorBox;
+    private javax.swing.JTextField txtLangFont;
+    private javax.swing.JTextField txtLangName;
+    private javax.swing.JTextField txtLocalWordFilter;
+    private javax.swing.JTextField txtLocalWordProp;
+    private javax.swing.JTextField txtPluralProp;
+    private javax.swing.JTextField txtPronunciationFilter;
+    private javax.swing.JTextField txtPronunciationProp;
+    private javax.swing.JTextField txtTypeName;
+    private javax.swing.JTextField txtTypesErrorBox;
+    private javax.swing.JTextArea txtTypesNotes;
+    private javax.swing.JTextPane txtWordErrorBox;
+    // End of variables declaration//GEN-END:variables
+
+}

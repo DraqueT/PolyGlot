@@ -1,0 +1,410 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="skin/print.css" type="text/css">
+<title>Apache POI - Source Code Repository</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Overview</span>
+        
+<div class="menuItem">
+<a href="index.html">Home</a>
+</div>
+        
+<div class="menuItem">
+<a href="download.html">Download</a>
+</div>
+        
+<div class="menuItem">
+<a href="overview.html">Components</a>
+</div>
+        
+<div class="menuItem">
+<a href="text-extraction.html">Text Extraction</a>
+</div>
+        
+<div class="menuItem">
+<a href="encryption.html">Encryption support</a>
+</div>
+        
+<div class="menuItem">
+<a href="casestudies.html">Case Studies</a>
+</div>
+        
+<div class="menuItem">
+<a href="legal.html">Legal</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Help</span>
+        
+<div class="menuItem">
+<a href="apidocs/index.html">Javadocs</a>
+</div>
+        
+<div class="menuItem">
+<a href="faq.html">FAQ</a>
+</div>
+        
+<div class="menuItem">
+<a href="mailinglists.html">Mailing Lists</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://issues.apache.org/bugzilla/buglist.cgi?product=POI">Bug Database</a>
+</div>
+        
+<div class="menuItem">
+<a href="changes.html">Changes Log</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Getting Involved</span>
+        
+<div class="menuItem">
+<span class="menuSelected">Subversion Repository</span>
+</div>
+        
+<div class="menuItem">
+<a href="howtobuild.html">How To Build</a>
+</div>
+        
+<div class="menuItem">
+<a href="guidelines.html">Contribution Guidelines</a>
+</div>
+        
+<div class="menuItem">
+<a href="who.html">Who We Are</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Component APIs</span>
+        
+<div class="menuItem">
+<a href="spreadsheet/index.html">Excel (SS=HSSF+XSSF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hwpf/index.html">Word (HWPF+XWPF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="slideshow/index.html">PowerPoint (HSLF+XSLF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="oxml4j/index.html">OpenXML4J (OOXML)</a>
+</div>
+        
+<div class="menuItem">
+<a href="poifs/index.html">OLE2 Filesystem (POIFS)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hpsf/index.html">OLE2 Document Props (HPSF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hsmf/index.html">Outlook (HSMF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hdgf/index.html">Visio (HDGF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hmef/index.html">TNEF (HMEF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hpbf/index.html">Publisher (HPBF)</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Apache Wide</span>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/">Apache Software Foundation</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/licenses/">License</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/security/">Security</a>
+</div>
+    
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Apache POI - Source Code Repository</h1>
+</div>
+<div class="h3">
+  
+  
+  
+    
+<a name="Download+the+Source"></a>
+<div class="h3">
+<h3>Download the Source</h3>
+</div>
+      
+<p>
+         Most users of the source code probably don't need to have day to 
+         day access to the source code as it changes. Most users will want
+         to make use of our <a href="download.html">source release</a>
+         packages, which contain the complete source tree for each binary
+         release, suitable for browsing or debugging. These source releases
+         are available from our
+         <a href="download.html">download page.</a>
+      
+</p>
+      
+<p>
+         The Apache POI sourcecode is also available as source artifacts
+         in the Maven Central repository, which may be helpful for those
+         users who make use of POI and wish to inspect the source (eg when
+         debugging in an IDE).
+      </p>
+    
+    
+<a name="Access+the+Version+Controlled+Source+Code"></a>
+<div class="h3">
+<h3>Access the Version Controlled Source Code</h3>
+</div>
+      
+<p>
+         For general information on connecting to the ASF Subversion, 
+         repositories, see the 
+         <a href="http://www.apache.org/dev/version-control.html">version control page.</a>
+      
+</p>
+      
+<p>Subversion is an open-source version control system. It has been contributed to the Apache Software Foundation and is
+	now available <a href="http://subversion.apache.org/">here</a>.
+      </p>
+      
+<p>
+       The root url of the ASF Subversion repository is 
+       <a href="http://svn.apache.org/repos/asf/">http://svn.apache.org/repos/asf/</a>
+       for non-committers and 
+       <a href="https://svn.apache.org/repos/asf/">https://svn.apache.org/repos/asf/</a> 
+       for committers. 
+      </p>
+
+      
+<p>
+<strong>NOTE</strong>: When checking out a subproject using 
+       subversion, ensure that you are checking out a tag, a branch or trunk 
+       (the main-line) and not all tags and branches, to avoid filling up 
+       your hard-disk and wasting bandwidth.
+      </p>
+
+      
+<ul>
+       
+<li>For read only access to the Apache POI svn, please use
+        <a href="http://svn.apache.org/repos/asf/poi/trunk/">http://svn.apache.org/repos/asf/poi/trunk/</a>
+</li>
+       
+<li>For committers (write) access to the Apache POI svn, please use
+        <a href="https://svn.apache.org/repos/asf/poi/trunk/">https://svn.apache.org/repos/asf/poi/trunk/</a>
+</li>
+       
+<li>To browse the svn repository in your web browser, please us
+        <a href="http://svn.apache.org/viewcvs.cgi/poi/">ViewSVN</a>
+</li>
+      
+</ul>
+
+      
+<p>If you are not a <em>Committer</em>, but you want to submit patches 
+       or even request commit privileges, please see our 
+       <a href="guidelines.html">Guidelines</a> for more 
+       information.</p>
+    
+    
+<a name="Git+access+to+POI+sources+"></a>
+<div class="h3">
+<h3>Git access to POI sources </h3>
+</div>
+      
+<p>
+        The master source repository for Apache POI is the Subversion
+        one listed above. To support those users and developers who prefer
+        to use the Git tooling, read-only access to the POI source tree is
+        also available via Git. The Git mirrors normally track SVN to 
+        within a few minutes.
+      </p>
+      
+<p>
+        The official read-only Git repository for Apache POI is available
+        from <a href="http://git.apache.org/">git.apache.org/</a> .
+        The Git Clone URL is: <a href="git://git.apache.org/poi.git">git://git.apache.org/poi.git</a> 
+        and Http Clone URL: <a href="http://git.apache.org/poi.git">http://git.apache.org/poi.git</a> .
+         Please see the <a href="http://git.apache.org/">Git at 
+         Apache</a> page for more details on the service.
+      </p>
+      
+<p>
+        In addition to the <a href="http://git.apache.org/">git.apache.org/</a>
+        repository, changes are also mirrored in near-realtime to GitHub.
+        The GitHub repository is available at
+        <a href="https://github.com/apache/poi">https://github.com/apache/poi</a> .
+        Please note that the GitHub repository is read-only, and all 
+        contributions should continue to be sent via Bugzilla for tracking.
+        (Git patches are fine though). Please see the
+        <a href="guidelines.html">contribution guidelines</a> for more 
+        information on getting involved in the project.</p>
+    
+  
+  
+
+<div id="authors" align="right">by&nbsp;Nick Burch</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

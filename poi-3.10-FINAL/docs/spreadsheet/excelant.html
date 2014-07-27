@@ -1,0 +1,604 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>ExcelAnt - Ant Tasks for Validating Excel Spreadsheets</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+        
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">HSSF+XSSF</span>
+        
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+        
+<div class="menuItem">
+<a href="quick-guide.html">Quick Guide</a>
+</div>
+        
+<div class="menuItem">
+<a href="how-to.html">HOWTO</a>
+</div>
+        
+<div class="menuItem">
+<a href="converting.html">HSSF to SS Converting</a>
+</div>
+        
+<div class="menuItem">
+<a href="formula.html">Formula Support</a>
+</div>
+        
+<div class="menuItem">
+<a href="eval.html">Formula Evaluation</a>
+</div>
+		    
+<div class="menuItem">
+<a href="eval-devguide.html">Eval Dev Guide</a>
+</div>
+        
+<div class="menuItem">
+<a href="examples.html">Examples</a>
+</div>
+        
+<div class="menuItem">
+<a href="use-case.html">Use Case</a>
+</div>
+        
+<div class="menuItem">
+<a href="diagrams.html">Pictorial Docs</a>
+</div>
+        
+<div class="menuItem">
+<a href="limitations.html">Limitations</a>
+</div>
+        
+<div class="menuItem">
+<a href="user-defined-functions.html">User Defined Functions</a>
+</div>
+        
+<div class="menuItem">
+<span class="menuSelected">ExcelAnt Tests</span>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Contributer's Guide</span>
+        
+<div class="menuItem">
+<a href="hacking-hssf.html">Hacking HSSF</a>
+</div>
+        
+<div class="menuItem">
+<a href="record-generator.html">Record Generator</a>
+</div>
+        
+<div class="menuItem">
+<a href="chart.html">Charts</a>
+</div>
+    
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>ExcelAnt - Ant Tasks for Validating Excel Spreadsheets</h1>
+</div>
+<div class="h3">
+    
+  
+    
+<a name="ExcelAnt+-+Ant+Tasks+for+Validating+Excel+Spreadsheets"></a>
+<div class="h3">
+<h3>ExcelAnt - Ant Tasks for Validating Excel Spreadsheets</h3>
+</div>
+    
+    
+<a name="Introduction"></a>
+<div class="h4">
+<h4>Introduction</h4>
+</div>
+            
+<p>ExcelAnt is a set of Ant tasks that make it possible to verify or test
+            a workbook without having to write Java code.  Of course, the tasks themselves
+            are written in Java, but to use this frame work you only need to know a little 
+            bit about Ant.</p>
+            
+<p>This document covers the basic usage and set up of ExcelAnt.</p>
+            
+<p>This document will assume basic familiarity with Ant and Ant build files.</p>
+     
+     
+<a name="Setup"></a>
+<div class="h4">
+<h4>Setup</h4>
+</div>
+            
+<p>To start with, you'll need to have the POI 3.8 or higher jar files.  If you test only .xls
+workbooks then you need to have the following jars in your path:</p>
+            
+<ul>
+                
+<li>poi-excelant-$version-YYYYDDMM.jar</li>
+                
+<li>poi-$version-YYYYDDMM.jar</li>
+                
+<li>poi-ooxml-$version-YYYYDDMM.jar</li>
+            
+</ul>
+            
+<p> If you evaluate .xlsx workbooks then you need to add these: </p>
+            
+<ul>
+                
+<li>poi-ooxml-schemas-$version-YYYYDDMM.jar</li>
+                
+<li>xmlbeans.jar</li>
+                
+<li>dom4j.jar</li>
+            
+</ul>
+            
+<p>For example, if you have these jars in a lib/ dir in your project, your build.xml 
+            might look like this:</p>
+
+<pre class="code">
+&lt;property name="lib.dir" value="lib" /&gt;
+
+&lt;path id="excelant.path"&gt;
+    &lt;pathelement location="${lib.dir}/poi-excelant-3.8-beta1-20101230.jar" /&gt;
+    &lt;pathelement location="${lib.dir}/poi-3.8-beta1-20101230.jar" /&gt;
+    &lt;pathelement location="${lib.dir}/poi-ooxml-3.8-beta1-20101230.jar" /&gt;
+&lt;/path&gt;     
+</pre>       
+        
+<p>Next, you'll need to define the Ant tasks. There are several ways to use ExcelAnt:</p>
+
+
+<ul>
+<li>The traditional way:</li>
+</ul>
+
+<pre class="code">
+    &lt;typedef resource="org/apache/poi/ss/excelant/antlib.xml" classpathref="excelant.path" /&gt;
+</pre>
+
+<p>
+ Where excelant.path refers to the classpath with POI jars.
+ Using this approach the provided extensions will live in the default namespace. Note that the default task/typenames (evaluate, test) may be too generic and should either be explicitly overridden or used with a namespace.
+</p>
+
+<ul>
+<li>Similar, but assigning a namespace URI:</li>
+</ul> 
+
+<pre class="code">
+&lt;project name="excelant-demo"  xmlns:poi="antlib:org.apache.poi.ss.excelant"&gt;
+
+    &lt;typedef resource="org/apache/poi/ss/excelant/antlib.xml"
+             classpathref="excelant.classpath"
+             uri="antlib:org.apache.poi.ss.excelant"/&gt;
+
+    &lt;target name="test-nofile"&gt;
+        &lt;poi:excelant&gt;
+
+        &lt;/poi:excelant&gt;
+    &lt;/target&gt;
+&lt;/project&gt;
+</pre>
+      
+ 
+      
+<a name="A+Simple+Example"></a>
+<div class="h4">
+<h4>A Simple Example</h4>
+</div>
+     
+<p>The simplest example of using Excel is the ability to validate that POI is giving you back
+     the value you expect it to. Does this mean that POI is inaccurate?  Hardly.  There are cases
+     where POI is unable to evaluate cells for a variety of reasons.  If you need to write code
+     to integrate a worksheet into an app, you may want to know that it's going to work before 
+     you actually try to write that code.  ExcelAnt helps with that.</p>
+     
+     
+<p>Consider the mortgage-calculation.xls file found in the Examples 
+     (/examples/src/org/apache/poi/ss/examples/excelant/simple-mortgage-calculation.xls).  This sheet
+     is shown below:</p>
+     
+     <!--img src="../resources/images/simple-xls-with-function.jpg" alt="mortgage calculation spreadsheet"/-->
+     
+          
+<p>This sheet calculates the principal and interest payment for a mortgage based
+     on the amount of the loan, term and rate. To write a simple ExcelAnt test you 
+     need to tell ExcelAnt about the file like this:</p>
+
+<pre class="code">
+&lt;property name="xls.file" value="" /&gt;
+     
+&lt;target name="simpleTest"&gt;
+    &lt;excelant fileName="${xls.file}"&gt;
+        &lt;test name="checkValue" showFailureDetail="true"&gt;
+            &lt;evaluate showDelta="true" cell="'MortgageCalculator'!$B$4" expectedValue="790.7936" precision="1.0e-4" /&gt;
+        &lt;/test&gt;
+    &lt;/excelant&gt;
+&lt;/target&gt;   
+</pre>
+
+     
+     
+<p>This code sets up ExcelAnt to access the file defined in the ant property
+     xls.file.  Then it creates a 'test' named 'checkValue'.  Finally it tries
+     to evaluate the B4 on the sheet named 'MortgageCalculator'.   There are some assumptions
+     here that are worth explaining.  For starters, ExcelAnt is focused on the testing
+     numerically oriented sheets.  The &lt;evaluate&gt; task is actually evaluating the
+     cell as a formula using a FormulaEvaluator instance from POI.  Therefore it will fail
+     if you point it to a cell that doesn't contain a formula or a test a plain old number.</p>
+     
+     
+<p>Having said all that, here is what the output looks like:</p>
+     
+
+<pre class="code">
+simpleTest:
+ [excelant] ExcelAnt version 0.4.0 Copyright 2011
+ [excelant] Using input file: resources/excelant.xls
+ [excelant] 1/1 tests passed.
+BUILD SUCCESSFUL
+Total time: 391 milliseconds     
+</pre>
+
+		
+		
+		
+<a name="Setting+Values+into+a+Cell"></a>
+<div class="h4">
+<h4>Setting Values into a Cell</h4>
+</div>
+     
+<p>So now we know that at a minimum POI can use our sheet to calculate the existing value.
+     This is an important point: in many cases sheets have dependencies, i.e., cells they reference.
+     As is often the case, these cells may have dependencies, which may have dependencies, etc.
+     The point is that sometimes a dependent cell may get adjusted by a macro or a function
+     and it may be that POI doesn't have the capabilities to do the same thing.  This test
+     verifies that we can rely on POI to retrieve the default value, based on the stored values
+     of the sheet.  Now we want to know if we can manipulate those dependencies and verify
+     the output.</p>
+     
+     
+<p>To verify that we can manipulate cell values, we need a way in ExcelAnt to set a value.
+     This is provided by the following task types:</p>
+     
+<ul>
+        
+<li>setDouble() - sets the specified cell as a double.</li>
+        
+<li>setFormula() - sets the specified cell as a formula.</li>
+        
+<li>setString() = sets the specified cell as a String.</li>
+     
+</ul>
+     
+     
+<p>For the purposes of this example we'll use the &lt;setDouble&gt; task.  Let's
+     start with a $240,000, 30 year loan at 11% (let's pretend it's like 1984).  Here
+     is how we will set that up:</p>
+     
+
+<pre class="code">
+&lt;setDouble cell="'MortgageCalculator'!$B$1" value="240000"/&gt;
+&lt;setDouble cell="'MortgageCalculator'!$B$2" value ="0.11"/&gt;
+&lt;setDouble cell="'MortgageCalculator'!$B$3" value ="30"/&gt;
+&lt;evaluate showDelta="true" cell="'MortgageCalculator'!$B$4" expectedValue="2285.576149" precision="1.0e-4" /&gt;     
+</pre>
+
+     
+<p>Don't forget that we're verifying the behavior so you need to put all this
+     into the sheet.  That is how I got the result of $2,285 and change. So save your
+     changes and run it; you should get the following: </p>
+     
+
+<pre class="code">     
+Buildfile: C:\opt\eclipse\workspaces\excelant\excelant.examples\build.xml
+simpleTest:
+ [excelant] ExcelAnt version 0.4.0 Copyright 2011
+ [excelant] Using input file: resources/excelant.xls
+ [excelant] 1/1 tests passed.
+BUILD SUCCESSFUL
+Total time: 406 milliseconds     
+</pre>
+
+
+		
+		
+<a name="Getting+More+Details"></a>
+<div class="h4">
+<h4>Getting More Details</h4>
+</div>
+
+      
+<p>This is great, it's working! However, suppose you want to see a little more detail.  The
+      ExcelAnt tasks leverage the Ant logging so you can add the -verbose and -debug flags to
+      the Ant command line to get more detail.  Try adding -verbose.  Here is what 
+      you should see:</p>
+      
+
+<pre class="code">
+simpleTest:
+ [excelant] ExcelAnt version 0.4.0 Copyright 2011
+ [excelant] Using input file: resources/excelant.xls
+ [evaluate] test precision = 1.0E-4 global precision = 0.0
+ [evaluate] Using evaluate precision of 1.0E-4
+ [excelant] 1/1 tests passed.
+BUILD SUCCESSFUL
+Total time: 406 milliseconds     
+</pre>
+
+     
+     
+<p>We see a little more detail.  Notice that we see that there is a setting for global precision.
+     Up until now we've been setting the precision on each evaluate that we call.  This 
+     is obviously useful but it gets cumbersome.  It would be better if there were a way
+     that we could specify a global precision - and there is.  There is a &lt;precision&gt; 
+     tag that you can specify as a child of the &lt;excelant&gt; tag.  Let's go back to 
+     our original task we set up earlier and modify it:</p>
+     
+
+<pre class="code">
+&lt;property name="xls.file" value="" /&gt;
+     
+&lt;target name="simpleTest"&gt;
+    &lt;excelant fileName="${xls.file}"&gt;
+        &lt;precision value="1.0e-3"/&gt;
+        &lt;test name="checkValue" showFailureDetail="true"&gt;
+            &lt;evaluate showDelta="true" cell="'MortgageCalculator'!$B$4" expectedValue="790.7936" /&gt;
+        &lt;/test&gt;
+    &lt;/excelant&gt;
+&lt;/target&gt;   
+</pre>
+     
+     
+<p>In this example we have set the global precision to 1.0e-3.  This means that
+     in the absence of something more stringent, all tests in the task will use
+     the global precision.  We can still override this by specifying the
+     precision attribute of all of our &lt;evaluate&gt; task.  Let's first run
+     this task with the global precision and the -verbose flag:</p>
+     
+
+<pre class="code">     
+simpleTest:
+[excelant] ExcelAnt version 0.4.0 Copyright 2011
+[excelant] Using input file: resources/excelant.xls
+[excelant] setting precision for the test checkValue
+    [test] setting globalPrecision to 0.0010 in the evaluator
+[evaluate] test precision = 0.0  global precision = 0.0010
+[evaluate] Using global precision of 0.0010
+[excelant] 1/1 tests passed.
+</pre>
+
+     
+     
+<p>As the output clearly shows, the test itself has no precision but there is
+     the global precision.  Additionally, it tells us we're going to use that
+     more stringent global value. Now suppose that for this test we want 
+     to use a more stringent precision, say 1.0e-4.  We can do that by adding
+     the precision attribute back to the &lt;evaluate&gt; task:</p>
+
+
+<pre class="code">
+&lt;excelant fileName="${xls.file}"&gt;
+    &lt;precision value="1.0e-3"/&gt;
+    &lt;test name="checkValue" showFailureDetail="true"&gt;
+        &lt;setDouble cell="'MortgageCalculator'!$B$1" value="240000"/&gt;
+        &lt;setDouble cell="'MortgageCalculator'!$B$2" value ="0.11"/&gt;
+        &lt;setDouble cell="'MortgageCalculator'!$B$3" value ="30"/&gt;
+        &lt;evaluate showDelta="true" cell="'MortgageCalculator'!$B$4" expectedValue="2285.576149" precision="1.0e-4" /&gt;
+    &lt;/test&gt;
+&lt;/excelant&gt;
+</pre>
+
+
+     
+<p>Now when you re-run this test with the verbose flag you will see that
+     your test ran and passed with the higher precision:</p>
+
+<pre class="code">
+simpleTest:
+ [excelant] ExcelAnt version 0.4.0 Copyright 2011
+ [excelant] Using input file: resources/excelant.xls
+ [excelant] setting precision for the test checkValue
+     [test] setting globalPrecision to 0.0010 in the evaluator
+ [evaluate] test precision = 1.0E-4 global precision = 0.0010
+ [evaluate] Using evaluate precision of 1.0E-4 over the global precision of 0.0010
+ [excelant] 1/1 tests passed.
+BUILD SUCCESSFUL
+Total time: 390 milliseconds     
+</pre>
+     
+     
+     
+<a name="Leveraging+User+Defined+Functions"></a>
+<div class="h4">
+<h4>Leveraging User Defined Functions</h4>
+</div>
+     
+<p>POI has an excellent feature (besides ExcelAnt) called <a href="user-defined-functions.html">User Defined Functions</a>,
+     that allows you to write Java code that will be used in place of custom VB
+     code or macros is a spreadsheet.  If you have read the documentation and written
+     your own FreeRefFunction implmentations, ExcelAnt can make use of this code.
+     For each &lt;excelant&gt; task you define you can nest a &lt;udf&gt; tag 
+     which allows you to specify the function alias and the class name.</p>
+     
+     
+<p>Consider the previous example of the mortgage calculator.  What if, instead
+     of being a formula in a cell, it was a function defined in a VB macro?  As luck
+     would have it, we already have an example of this in the examples from the 
+     User Defined Functions example, so let's use that. In the example spreadsheet
+     there is a tab for  MortgageCalculatorFunction, which will use.  If you look in
+     cell B4, you see that rather than a messy cell based formula, there is only the function
+     call.  Let's not get bogged down in the function/Java implementation, as these
+     are covered in the User Defined Function documentation.  Let's just add
+     a new target and test to our existing build file:</p> 
+
+<pre class="code">
+  &lt;target name="functionTest"&gt;
+      &lt;excelant fileName="${xls.file}"&gt;
+          &lt;udf functionAlias="calculatePayment" class="org.apache.poi.ss.examples.formula.CalculateMortgage"/&gt;
+          &lt;precision value="1.0e-3"/&gt;
+          &lt;test name="checkValue" showFailureDetail="true"&gt;
+              &lt;setDouble cell="'MortgageCalculator'!$B$1" value="240000"/&gt;
+              &lt;setDouble cell="'MortgageCalculator'!$B$2" value ="0.11"/&gt;
+              &lt;setDouble cell="'MortgageCalculator'!$B$3" value ="30"/&gt;
+              &lt;evaluate showDelta="true" cell="'MortgageCalculatorFunction'!$B$4" expectedValue="2285.576149" precision="1.0e-4" /&gt;
+          &lt;/test&gt;
+       &lt;/excelant&gt;
+    &lt;/target&gt;
+</pre> 
+
+     
+<p>So if you look at this carefully it looks the same as the previous examples.  We
+     still use the global precision, we're still setting values, and we still want
+     to evaluate a cell.  The only real differences are the sheet name and the
+     addition of the function.</p>    
+     
+ 
+
+
+<div id="authors" align="right">by&nbsp;Jon Svede,&nbsp;Brian Bush</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

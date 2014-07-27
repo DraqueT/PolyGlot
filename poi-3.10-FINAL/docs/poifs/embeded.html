@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>Apache POI - POIFS - Documents embeded in other documents</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+    
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+  
+</div>
+<div class="menu">
+<span class="menuLabel">POIFS</span>
+    
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+    
+<div class="menuItem">
+<a href="how-to.html">How To</a>
+</div>
+    
+<div class="menuItem">
+<span class="menuSelected">Embeded Documents</span>
+</div>
+    
+<div class="menuItem">
+<a href="fileformat.html">File System Documentation</a>
+</div>
+    
+<div class="menuItem">
+<a href="usecases.html">Use Cases</a>
+</div>
+  
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Apache POI - POIFS - Documents embeded in other documents</h1>
+</div>
+<div class="h3">
+  
+  
+    
+<a name="Overview"></a>
+<div class="h3">
+<h3>Overview</h3>
+</div>
+      
+<p>It is possible for one OLE 2 based document to have other
+         OLE 2 documents embeded in it. For example, and Excel file
+         may have a word document and a powerpoint slideshow 
+         embeded as part of it.</p>
+      
+<p>Normally, these other documents are stored in subdirectories
+         of the OLE 2 (POIFS) filesystem. The exact location of the
+         embeded documents will vary depending on the type of the
+         master document, and the exact directory names will differ
+         each time. To figure out exactly which directory to look
+         in, you will either need to process the appropriate OLE 2
+         linking entry in the master document, or simple iterate
+         over all the directories in the filesystem.</p>
+      
+<p>As a general rule, you will find the same OLE 2 entries
+         in the subdirectories, as you would've found at the root
+         of the filesystem were a document to not be embeded.</p>
+
+       
+<a name="Files+embeded+in+Excel"></a>
+<div class="h4">
+<h4>Files embeded in Excel</h4>
+</div>
+         
+<p>Excel normally stores embeded files in subdirectories
+         of the filesystem root. Typically these subdirectories
+         are named starting with MBD, with 8 hex characters following.</p>
+       
+
+       
+<a name="Files+embeded+in+Word"></a>
+<div class="h4">
+<h4>Files embeded in Word</h4>
+</div>
+         
+<p>Word normally stores embeded files in subdirectories
+         of the ObjectPool directory, itself a subdirectory of the
+         filesystem root. Typically these subdirectories and named
+         starting with an underscore, followed by 10 numbers.</p>
+       
+
+       
+<a name="Files+embeded+in+PowerPoint"></a>
+<div class="h4">
+<h4>Files embeded in PowerPoint</h4>
+</div>
+         
+<p>PowerPoint does not normally store embeded files
+         in the OLE2 layer. Instead, they are held within records
+         of the main PowerPoint file. 
+         <br>See the <a href="./../slideshow/how-to-shapes.html#OLE">HSLF Tutorial</a> 
+         for how to retrieve embedded OLE objects from a presentation</p>
+       
+    
+
+    
+<a name="Listing+POIFS+contents"></a>
+<div class="h3">
+<h3>Listing POIFS contents</h3>
+</div>
+      
+<p>POIFS provides a simple tool for listing the contents of
+         OLE2 files. This can allow you to see what your POIFS file
+         contents, and hence if it has any embeded documents in it,
+         and where.</p>
+      
+<p>The tool to use is <em>org.apache.poi.poifs.dev.POIFSLister</em>.
+         This tool may be run from the command line, and takes a filename
+         as its parameter. It will print out all the directories and 
+         files contained within the POIFS file.</p>
+    
+
+    
+<a name="Opening+embeded+files"></a>
+<div class="h3">
+<h3>Opening embeded files</h3>
+</div>
+      
+<p>All of the POIDocument classes (HSSFWorkbook, HSLFSlideShow,
+         HWPFDocument and HDGFDiagram) can either be opened from
+         a POIFSFileSystem, or from a specific directory within a
+         POIFSFileSystem. So, to open embeded files, simply locate the
+         appropriate DirectoryNode that represents the subdirectory
+         of interest, and pass this + the overall POIFSFileSystem to
+         the constructor.</p>
+      
+<p>I you want to extract the textual contents of the embeded file,
+         then open the appropriate POIDocument, and then pass this to
+         the extractor class, instead of simply passing the POIFSFilesystem
+         to the extractor.</p>
+    
+  
+
+<div id="authors" align="right">by&nbsp;Nick Burch,&nbsp;Yegor Kozlov</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

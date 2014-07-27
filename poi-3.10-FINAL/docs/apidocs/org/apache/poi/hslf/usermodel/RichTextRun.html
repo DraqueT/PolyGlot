@@ -1,0 +1,1419 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>RichTextRun (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="RichTextRun (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RichTextRun.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/hslf/usermodel/PictureData.html" title="class in org.apache.poi.hslf.usermodel"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/hslf/usermodel/SlideShow.html" title="class in org.apache.poi.hslf.usermodel"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hslf/usermodel/RichTextRun.html" target="_top">Frames</a></li>
+<li><a href="RichTextRun.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.hslf.usermodel</div>
+<h2 title="Class RichTextRun" class="title">Class RichTextRun</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>org.apache.poi.hslf.usermodel.RichTextRun</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public final class <span class="strong">RichTextRun</span>
+extends java.lang.Object</pre>
+<div class="block">Represents a run of text, all with the same style</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/apache/poi/util/POILogger.html" title="class in org.apache.poi.util">POILogger</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#logger">logger</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#RichTextRun(org.apache.poi.hslf.model.TextRun, int, int)">RichTextRun</a></strong>(<a href="../../../../../org/apache/poi/hslf/model/TextRun.html" title="class in org.apache.poi.hslf.model">TextRun</a>&nbsp;parent,
+           int&nbsp;startAt,
+           int&nbsp;len)</code>
+<div class="block">Create a new wrapper around a (currently not)
+  rich text string</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#RichTextRun(org.apache.poi.hslf.model.TextRun, int, int, org.apache.poi.hslf.model.textproperties.TextPropCollection, org.apache.poi.hslf.model.textproperties.TextPropCollection, boolean, boolean)">RichTextRun</a></strong>(<a href="../../../../../org/apache/poi/hslf/model/TextRun.html" title="class in org.apache.poi.hslf.model">TextRun</a>&nbsp;parent,
+           int&nbsp;startAt,
+           int&nbsp;len,
+           <a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a>&nbsp;pStyle,
+           <a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a>&nbsp;cStyle,
+           boolean&nbsp;pShared,
+           boolean&nbsp;cShared)</code>
+<div class="block">Create a new wrapper around a rich text string</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#_getRawCharacterStyle()">_getRawCharacterStyle</a></strong>()</code>
+<div class="block">Internal Use Only - get the underlying character style collection.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#_getRawParagraphStyle()">_getRawParagraphStyle</a></strong>()</code>
+<div class="block">Internal Use Only - get the underlying paragraph style collection.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#_isCharacterStyleShared()">_isCharacterStyleShared</a></strong>()</code>
+<div class="block">Internal Use Only - are the Character styles shared?</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#_isParagraphStyleShared()">_isParagraphStyleShared</a></strong>()</code>
+<div class="block">Internal Use Only - are the Paragraph styles shared?</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getAlignment()">getAlignment</a></strong>()</code>
+<div class="block">Returns the type of horizontal alignment for the text.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>char</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getBulletChar()">getBulletChar</a></strong>()</code>
+<div class="block">Returns the bullet character</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.awt.Color</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getBulletColor()">getBulletColor</a></strong>()</code>
+<div class="block">Returns the bullet color</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getBulletFont()">getBulletFont</a></strong>()</code>
+<div class="block">Returns the bullet font</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getBulletOffset()">getBulletOffset</a></strong>()</code>
+<div class="block">Returns the bullet offset</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getBulletSize()">getBulletSize</a></strong>()</code>
+<div class="block">Returns the bullet size</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getEndIndex()">getEndIndex</a></strong>()</code>
+<div class="block">The ending index, exclusive.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.awt.Color</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getFontColor()">getFontColor</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getFontIndex()">getFontIndex</a></strong>()</code>
+<div class="block">Gets the font index</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getFontName()">getFontName</a></strong>()</code>
+<div class="block">Gets the font name</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getFontSize()">getFontSize</a></strong>()</code>
+<div class="block">Gets the font size</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getIndentLevel()">getIndentLevel</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getLength()">getLength</a></strong>()</code>
+<div class="block">Get the length of the text</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getLineSpacing()">getLineSpacing</a></strong>()</code>
+<div class="block">Returns the line spacing
+ 
+ If linespacing >= 0, then linespacing is a percentage of normal line height.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getRawText()">getRawText</a></strong>()</code>
+<div class="block">Fetch the text, in raw storage form</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getSpaceAfter()">getSpaceAfter</a></strong>()</code>
+<div class="block">Returns spacing after a paragraph
+ 
+ If spaceafter >= 0, then spaceafter is a percentage of normal line height.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getSpaceBefore()">getSpaceBefore</a></strong>()</code>
+<div class="block">Returns spacing before a paragraph
+ 
+ If spacebefore >= 0, then spacebefore is a percentage of normal line height.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getStartIndex()">getStartIndex</a></strong>()</code>
+<div class="block">The beginning index, inclusive.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getSuperscript()">getSuperscript</a></strong>()</code>
+<div class="block">Gets the subscript/superscript option</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getText()">getText</a></strong>()</code>
+<div class="block">Fetch the text, in output suitable form</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#getTextOffset()">getTextOffset</a></strong>()</code>
+<div class="block">Returns the text offset</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#isBold()">isBold</a></strong>()</code>
+<div class="block">Is the text bold?</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#isBullet()">isBullet</a></strong>()</code>
+<div class="block">Returns whether this rich text run has bullets</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#isBulletHard()">isBulletHard</a></strong>()</code>
+<div class="block">Returns whether this rich text run has bullets</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#isEmbossed()">isEmbossed</a></strong>()</code>
+<div class="block">Is this text embossed?</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#isItalic()">isItalic</a></strong>()</code>
+<div class="block">Is the text italic?</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#isShadowed()">isShadowed</a></strong>()</code>
+<div class="block">Does the text have a shadow?</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#isStrikethrough()">isStrikethrough</a></strong>()</code>
+<div class="block">Gets the strikethrough flag</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#isUnderlined()">isUnderlined</a></strong>()</code>
+<div class="block">Is the text underlined?</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setAlignment(int)">setAlignment</a></strong>(int&nbsp;align)</code>
+<div class="block">Sets the type of horizontal alignment for the text.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setBold(boolean)">setBold</a></strong>(boolean&nbsp;bold)</code>
+<div class="block">Is the text bold?</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setBullet(boolean)">setBullet</a></strong>(boolean&nbsp;flag)</code>
+<div class="block">Sets whether this rich text run has bullets</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setBulletChar(char)">setBulletChar</a></strong>(char&nbsp;c)</code>
+<div class="block">Sets the bullet character</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setBulletColor(java.awt.Color)">setBulletColor</a></strong>(java.awt.Color&nbsp;color)</code>
+<div class="block">Sets the bullet color</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setBulletFont(int)">setBulletFont</a></strong>(int&nbsp;idx)</code>
+<div class="block">Sets the bullet font</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setBulletOffset(int)">setBulletOffset</a></strong>(int&nbsp;offset)</code>
+<div class="block">Sets the bullet offset</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setBulletSize(int)">setBulletSize</a></strong>(int&nbsp;size)</code>
+<div class="block">Sets the bullet size</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setCharTextPropVal(java.lang.String, int)">setCharTextPropVal</a></strong>(java.lang.String&nbsp;propName,
+                  int&nbsp;val)</code>
+<div class="block">Sets the value of the given Paragraph TextProp, add if required</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setEmbossed(boolean)">setEmbossed</a></strong>(boolean&nbsp;flag)</code>
+<div class="block">Is this text embossed?</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setFlag(boolean, int, boolean)">setFlag</a></strong>(boolean&nbsp;isCharacter,
+       int&nbsp;index,
+       boolean&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setFontColor(java.awt.Color)">setFontColor</a></strong>(java.awt.Color&nbsp;color)</code>
+<div class="block">Sets color of the text, as a java.awt.Color</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setFontColor(int)">setFontColor</a></strong>(int&nbsp;bgr)</code>
+<div class="block">Sets color of the text, as a int bgr.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setFontIndex(int)">setFontIndex</a></strong>(int&nbsp;idx)</code>
+<div class="block">Sets the font index</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setFontName(java.lang.String)">setFontName</a></strong>(java.lang.String&nbsp;fontName)</code>
+<div class="block">Sets the font name to use</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setFontSize(int)">setFontSize</a></strong>(int&nbsp;fontSize)</code>
+<div class="block">Sets the font size</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setIndentLevel(int)">setIndentLevel</a></strong>(int&nbsp;level)</code>
+<div class="block">Sets indentation level</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setItalic(boolean)">setItalic</a></strong>(boolean&nbsp;italic)</code>
+<div class="block">Is the text italic?</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setLineSpacing(int)">setLineSpacing</a></strong>(int&nbsp;val)</code>
+<div class="block">Sets the line spacing.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setParaTextPropVal(java.lang.String, int)">setParaTextPropVal</a></strong>(java.lang.String&nbsp;propName,
+                  int&nbsp;val)</code>
+<div class="block">Sets the value of the given Character TextProp, add if required</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setRawText(java.lang.String)">setRawText</a></strong>(java.lang.String&nbsp;text)</code>
+<div class="block">Change the text</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setShadowed(boolean)">setShadowed</a></strong>(boolean&nbsp;flag)</code>
+<div class="block">Does the text have a shadow?</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setSpaceAfter(int)">setSpaceAfter</a></strong>(int&nbsp;val)</code>
+<div class="block">Sets spacing after a paragraph.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setSpaceBefore(int)">setSpaceBefore</a></strong>(int&nbsp;val)</code>
+<div class="block">Sets spacing before a paragraph.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setStrikethrough(boolean)">setStrikethrough</a></strong>(boolean&nbsp;flag)</code>
+<div class="block">Sets the strikethrough flag</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setSuperscript(int)">setSuperscript</a></strong>(int&nbsp;val)</code>
+<div class="block">Sets the subscript/superscript option</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setText(java.lang.String)">setText</a></strong>(java.lang.String&nbsp;text)</code>
+<div class="block">Change the text</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setTextOffset(int)">setTextOffset</a></strong>(int&nbsp;offset)</code>
+<div class="block">Sets the text offset</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#setUnderlined(boolean)">setUnderlined</a></strong>(boolean&nbsp;underlined)</code>
+<div class="block">Is the text underlined?</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#supplySlideShow(org.apache.poi.hslf.usermodel.SlideShow)">supplySlideShow</a></strong>(<a href="../../../../../org/apache/poi/hslf/usermodel/SlideShow.html" title="class in org.apache.poi.hslf.usermodel">SlideShow</a>&nbsp;ss)</code>
+<div class="block">Supply the SlideShow we belong to</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#supplyTextProps(org.apache.poi.hslf.model.textproperties.TextPropCollection, org.apache.poi.hslf.model.textproperties.TextPropCollection, boolean, boolean)">supplyTextProps</a></strong>(<a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a>&nbsp;pStyle,
+               <a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a>&nbsp;cStyle,
+               boolean&nbsp;pShared,
+               boolean&nbsp;cShared)</code>
+<div class="block">Supply (normally default) textprops, and if they're shared,
+  when a run gets them</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/usermodel/RichTextRun.html#updateStartPosition(int)">updateStartPosition</a></strong>(int&nbsp;startAt)</code>
+<div class="block">Tells the RichTextRun its new position in the parent TextRun</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="logger">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>logger</h4>
+<pre>protected&nbsp;<a href="../../../../../org/apache/poi/util/POILogger.html" title="class in org.apache.poi.util">POILogger</a> logger</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="RichTextRun(org.apache.poi.hslf.model.TextRun, int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RichTextRun</h4>
+<pre>public&nbsp;RichTextRun(<a href="../../../../../org/apache/poi/hslf/model/TextRun.html" title="class in org.apache.poi.hslf.model">TextRun</a>&nbsp;parent,
+           int&nbsp;startAt,
+           int&nbsp;len)</pre>
+<div class="block">Create a new wrapper around a (currently not)
+  rich text string</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>parent</code> - </dd><dd><code>startAt</code> - </dd><dd><code>len</code> - </dd></dl>
+</li>
+</ul>
+<a name="RichTextRun(org.apache.poi.hslf.model.TextRun, int, int, org.apache.poi.hslf.model.textproperties.TextPropCollection, org.apache.poi.hslf.model.textproperties.TextPropCollection, boolean, boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RichTextRun</h4>
+<pre>public&nbsp;RichTextRun(<a href="../../../../../org/apache/poi/hslf/model/TextRun.html" title="class in org.apache.poi.hslf.model">TextRun</a>&nbsp;parent,
+           int&nbsp;startAt,
+           int&nbsp;len,
+           <a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a>&nbsp;pStyle,
+           <a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a>&nbsp;cStyle,
+           boolean&nbsp;pShared,
+           boolean&nbsp;cShared)</pre>
+<div class="block">Create a new wrapper around a rich text string</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>parent</code> - The parent TextRun</dd><dd><code>startAt</code> - The start position of this run</dd><dd><code>len</code> - The length of this run</dd><dd><code>pStyle</code> - The paragraph style property collection</dd><dd><code>cStyle</code> - The character style property collection</dd><dd><code>pShared</code> - The paragraph styles are shared with other runs</dd><dd><code>cShared</code> - The character styles are shared with other runs</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="supplyTextProps(org.apache.poi.hslf.model.textproperties.TextPropCollection, org.apache.poi.hslf.model.textproperties.TextPropCollection, boolean, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>supplyTextProps</h4>
+<pre>public&nbsp;void&nbsp;supplyTextProps(<a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a>&nbsp;pStyle,
+                   <a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a>&nbsp;cStyle,
+                   boolean&nbsp;pShared,
+                   boolean&nbsp;cShared)</pre>
+<div class="block">Supply (normally default) textprops, and if they're shared,
+  when a run gets them</div>
+</li>
+</ul>
+<a name="supplySlideShow(org.apache.poi.hslf.usermodel.SlideShow)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>supplySlideShow</h4>
+<pre>public&nbsp;void&nbsp;supplySlideShow(<a href="../../../../../org/apache/poi/hslf/usermodel/SlideShow.html" title="class in org.apache.poi.hslf.usermodel">SlideShow</a>&nbsp;ss)</pre>
+<div class="block">Supply the SlideShow we belong to</div>
+</li>
+</ul>
+<a name="getLength()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLength</h4>
+<pre>public&nbsp;int&nbsp;getLength()</pre>
+<div class="block">Get the length of the text</div>
+</li>
+</ul>
+<a name="getStartIndex()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStartIndex</h4>
+<pre>public&nbsp;int&nbsp;getStartIndex()</pre>
+<div class="block">The beginning index, inclusive.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the beginning index, inclusive.</dd></dl>
+</li>
+</ul>
+<a name="getEndIndex()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEndIndex</h4>
+<pre>public&nbsp;int&nbsp;getEndIndex()</pre>
+<div class="block">The ending index, exclusive.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the ending index, exclusive.</dd></dl>
+</li>
+</ul>
+<a name="getText()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getText</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getText()</pre>
+<div class="block">Fetch the text, in output suitable form</div>
+</li>
+</ul>
+<a name="getRawText()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRawText</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getRawText()</pre>
+<div class="block">Fetch the text, in raw storage form</div>
+</li>
+</ul>
+<a name="setText(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setText</h4>
+<pre>public&nbsp;void&nbsp;setText(java.lang.String&nbsp;text)</pre>
+<div class="block">Change the text</div>
+</li>
+</ul>
+<a name="setRawText(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRawText</h4>
+<pre>public&nbsp;void&nbsp;setRawText(java.lang.String&nbsp;text)</pre>
+<div class="block">Change the text</div>
+</li>
+</ul>
+<a name="updateStartPosition(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>updateStartPosition</h4>
+<pre>public&nbsp;void&nbsp;updateStartPosition(int&nbsp;startAt)</pre>
+<div class="block">Tells the RichTextRun its new position in the parent TextRun</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>startAt</code> - </dd></dl>
+</li>
+</ul>
+<a name="setFlag(boolean, int, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFlag</h4>
+<pre>public&nbsp;void&nbsp;setFlag(boolean&nbsp;isCharacter,
+           int&nbsp;index,
+           boolean&nbsp;value)</pre>
+</li>
+</ul>
+<a name="setParaTextPropVal(java.lang.String, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setParaTextPropVal</h4>
+<pre>public&nbsp;void&nbsp;setParaTextPropVal(java.lang.String&nbsp;propName,
+                      int&nbsp;val)</pre>
+<div class="block">Sets the value of the given Character TextProp, add if required</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>propName</code> - The name of the Character TextProp</dd><dd><code>val</code> - The value to set for the TextProp</dd></dl>
+</li>
+</ul>
+<a name="setCharTextPropVal(java.lang.String, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCharTextPropVal</h4>
+<pre>public&nbsp;void&nbsp;setCharTextPropVal(java.lang.String&nbsp;propName,
+                      int&nbsp;val)</pre>
+<div class="block">Sets the value of the given Paragraph TextProp, add if required</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>propName</code> - The name of the Paragraph TextProp</dd><dd><code>val</code> - The value to set for the TextProp</dd></dl>
+</li>
+</ul>
+<a name="isBold()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isBold</h4>
+<pre>public&nbsp;boolean&nbsp;isBold()</pre>
+<div class="block">Is the text bold?</div>
+</li>
+</ul>
+<a name="setBold(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBold</h4>
+<pre>public&nbsp;void&nbsp;setBold(boolean&nbsp;bold)</pre>
+<div class="block">Is the text bold?</div>
+</li>
+</ul>
+<a name="isItalic()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isItalic</h4>
+<pre>public&nbsp;boolean&nbsp;isItalic()</pre>
+<div class="block">Is the text italic?</div>
+</li>
+</ul>
+<a name="setItalic(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setItalic</h4>
+<pre>public&nbsp;void&nbsp;setItalic(boolean&nbsp;italic)</pre>
+<div class="block">Is the text italic?</div>
+</li>
+</ul>
+<a name="isUnderlined()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isUnderlined</h4>
+<pre>public&nbsp;boolean&nbsp;isUnderlined()</pre>
+<div class="block">Is the text underlined?</div>
+</li>
+</ul>
+<a name="setUnderlined(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setUnderlined</h4>
+<pre>public&nbsp;void&nbsp;setUnderlined(boolean&nbsp;underlined)</pre>
+<div class="block">Is the text underlined?</div>
+</li>
+</ul>
+<a name="isShadowed()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isShadowed</h4>
+<pre>public&nbsp;boolean&nbsp;isShadowed()</pre>
+<div class="block">Does the text have a shadow?</div>
+</li>
+</ul>
+<a name="setShadowed(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setShadowed</h4>
+<pre>public&nbsp;void&nbsp;setShadowed(boolean&nbsp;flag)</pre>
+<div class="block">Does the text have a shadow?</div>
+</li>
+</ul>
+<a name="isEmbossed()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isEmbossed</h4>
+<pre>public&nbsp;boolean&nbsp;isEmbossed()</pre>
+<div class="block">Is this text embossed?</div>
+</li>
+</ul>
+<a name="setEmbossed(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEmbossed</h4>
+<pre>public&nbsp;void&nbsp;setEmbossed(boolean&nbsp;flag)</pre>
+<div class="block">Is this text embossed?</div>
+</li>
+</ul>
+<a name="isStrikethrough()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isStrikethrough</h4>
+<pre>public&nbsp;boolean&nbsp;isStrikethrough()</pre>
+<div class="block">Gets the strikethrough flag</div>
+</li>
+</ul>
+<a name="setStrikethrough(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setStrikethrough</h4>
+<pre>public&nbsp;void&nbsp;setStrikethrough(boolean&nbsp;flag)</pre>
+<div class="block">Sets the strikethrough flag</div>
+</li>
+</ul>
+<a name="getSuperscript()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSuperscript</h4>
+<pre>public&nbsp;int&nbsp;getSuperscript()</pre>
+<div class="block">Gets the subscript/superscript option</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the percentage of the font size. If the value is positive, it is superscript, otherwise it is subscript</dd></dl>
+</li>
+</ul>
+<a name="setSuperscript(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSuperscript</h4>
+<pre>public&nbsp;void&nbsp;setSuperscript(int&nbsp;val)</pre>
+<div class="block">Sets the subscript/superscript option</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>val</code> - the percentage of the font size. If the value is positive, it is superscript, otherwise it is subscript</dd></dl>
+</li>
+</ul>
+<a name="getFontSize()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFontSize</h4>
+<pre>public&nbsp;int&nbsp;getFontSize()</pre>
+<div class="block">Gets the font size</div>
+</li>
+</ul>
+<a name="setFontSize(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFontSize</h4>
+<pre>public&nbsp;void&nbsp;setFontSize(int&nbsp;fontSize)</pre>
+<div class="block">Sets the font size</div>
+</li>
+</ul>
+<a name="getFontIndex()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFontIndex</h4>
+<pre>public&nbsp;int&nbsp;getFontIndex()</pre>
+<div class="block">Gets the font index</div>
+</li>
+</ul>
+<a name="setFontIndex(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFontIndex</h4>
+<pre>public&nbsp;void&nbsp;setFontIndex(int&nbsp;idx)</pre>
+<div class="block">Sets the font index</div>
+</li>
+</ul>
+<a name="setFontName(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFontName</h4>
+<pre>public&nbsp;void&nbsp;setFontName(java.lang.String&nbsp;fontName)</pre>
+<div class="block">Sets the font name to use</div>
+</li>
+</ul>
+<a name="getFontName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFontName</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getFontName()</pre>
+<div class="block">Gets the font name</div>
+</li>
+</ul>
+<a name="getFontColor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFontColor</h4>
+<pre>public&nbsp;java.awt.Color&nbsp;getFontColor()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>font color as RGB value</dd><dt><span class="strong">See Also:</span></dt><dd><code>Color</code></dd></dl>
+</li>
+</ul>
+<a name="setFontColor(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFontColor</h4>
+<pre>public&nbsp;void&nbsp;setFontColor(int&nbsp;bgr)</pre>
+<div class="block">Sets color of the text, as a int bgr.
+ (PowerPoint stores as BlueGreenRed, not the more
+  usual RedGreenBlue)</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><code>Color</code></dd></dl>
+</li>
+</ul>
+<a name="setFontColor(java.awt.Color)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFontColor</h4>
+<pre>public&nbsp;void&nbsp;setFontColor(java.awt.Color&nbsp;color)</pre>
+<div class="block">Sets color of the text, as a java.awt.Color</div>
+</li>
+</ul>
+<a name="setAlignment(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAlignment</h4>
+<pre>public&nbsp;void&nbsp;setAlignment(int&nbsp;align)</pre>
+<div class="block">Sets the type of horizontal alignment for the text.
+ One of the <code>Align*</code> constants defined in the <code>TextBox</code> class.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>align</code> - - the type of alignment</dd></dl>
+</li>
+</ul>
+<a name="getAlignment()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAlignment</h4>
+<pre>public&nbsp;int&nbsp;getAlignment()</pre>
+<div class="block">Returns the type of horizontal alignment for the text.
+ One of the <code>Align*</code> constants defined in the <code>TextBox</class> class.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the type of alignment</dd></dl>
+</li>
+</ul>
+<a name="getIndentLevel()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getIndentLevel</h4>
+<pre>public&nbsp;int&nbsp;getIndentLevel()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>indentation level</dd></dl>
+</li>
+</ul>
+<a name="setIndentLevel(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setIndentLevel</h4>
+<pre>public&nbsp;void&nbsp;setIndentLevel(int&nbsp;level)</pre>
+<div class="block">Sets indentation level</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>level</code> - indentation level. Must be in the range [0, 4]</dd></dl>
+</li>
+</ul>
+<a name="setBullet(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBullet</h4>
+<pre>public&nbsp;void&nbsp;setBullet(boolean&nbsp;flag)</pre>
+<div class="block">Sets whether this rich text run has bullets</div>
+</li>
+</ul>
+<a name="isBullet()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isBullet</h4>
+<pre>public&nbsp;boolean&nbsp;isBullet()</pre>
+<div class="block">Returns whether this rich text run has bullets</div>
+</li>
+</ul>
+<a name="isBulletHard()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isBulletHard</h4>
+<pre>public&nbsp;boolean&nbsp;isBulletHard()</pre>
+<div class="block">Returns whether this rich text run has bullets</div>
+</li>
+</ul>
+<a name="setBulletChar(char)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBulletChar</h4>
+<pre>public&nbsp;void&nbsp;setBulletChar(char&nbsp;c)</pre>
+<div class="block">Sets the bullet character</div>
+</li>
+</ul>
+<a name="getBulletChar()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBulletChar</h4>
+<pre>public&nbsp;char&nbsp;getBulletChar()</pre>
+<div class="block">Returns the bullet character</div>
+</li>
+</ul>
+<a name="setBulletOffset(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBulletOffset</h4>
+<pre>public&nbsp;void&nbsp;setBulletOffset(int&nbsp;offset)</pre>
+<div class="block">Sets the bullet offset</div>
+</li>
+</ul>
+<a name="getBulletOffset()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBulletOffset</h4>
+<pre>public&nbsp;int&nbsp;getBulletOffset()</pre>
+<div class="block">Returns the bullet offset</div>
+</li>
+</ul>
+<a name="setTextOffset(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setTextOffset</h4>
+<pre>public&nbsp;void&nbsp;setTextOffset(int&nbsp;offset)</pre>
+<div class="block">Sets the text offset</div>
+</li>
+</ul>
+<a name="getTextOffset()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTextOffset</h4>
+<pre>public&nbsp;int&nbsp;getTextOffset()</pre>
+<div class="block">Returns the text offset</div>
+</li>
+</ul>
+<a name="setBulletSize(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBulletSize</h4>
+<pre>public&nbsp;void&nbsp;setBulletSize(int&nbsp;size)</pre>
+<div class="block">Sets the bullet size</div>
+</li>
+</ul>
+<a name="getBulletSize()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBulletSize</h4>
+<pre>public&nbsp;int&nbsp;getBulletSize()</pre>
+<div class="block">Returns the bullet size</div>
+</li>
+</ul>
+<a name="setBulletColor(java.awt.Color)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBulletColor</h4>
+<pre>public&nbsp;void&nbsp;setBulletColor(java.awt.Color&nbsp;color)</pre>
+<div class="block">Sets the bullet color</div>
+</li>
+</ul>
+<a name="getBulletColor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBulletColor</h4>
+<pre>public&nbsp;java.awt.Color&nbsp;getBulletColor()</pre>
+<div class="block">Returns the bullet color</div>
+</li>
+</ul>
+<a name="setBulletFont(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBulletFont</h4>
+<pre>public&nbsp;void&nbsp;setBulletFont(int&nbsp;idx)</pre>
+<div class="block">Sets the bullet font</div>
+</li>
+</ul>
+<a name="getBulletFont()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBulletFont</h4>
+<pre>public&nbsp;int&nbsp;getBulletFont()</pre>
+<div class="block">Returns the bullet font</div>
+</li>
+</ul>
+<a name="setLineSpacing(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLineSpacing</h4>
+<pre>public&nbsp;void&nbsp;setLineSpacing(int&nbsp;val)</pre>
+<div class="block">Sets the line spacing.
+ <p>
+ If linespacing >= 0, then linespacing is a percentage of normal line height.
+ If linespacing < 0, the absolute value of linespacing is the spacing in master coordinates.
+ </p></div>
+</li>
+</ul>
+<a name="getLineSpacing()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLineSpacing</h4>
+<pre>public&nbsp;int&nbsp;getLineSpacing()</pre>
+<div class="block">Returns the line spacing
+ <p>
+ If linespacing >= 0, then linespacing is a percentage of normal line height.
+ If linespacing < 0, the absolute value of linespacing is the spacing in master coordinates.
+ </p></div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the spacing between lines</dd></dl>
+</li>
+</ul>
+<a name="setSpaceBefore(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSpaceBefore</h4>
+<pre>public&nbsp;void&nbsp;setSpaceBefore(int&nbsp;val)</pre>
+<div class="block">Sets spacing before a paragraph.
+ <p>
+ If spacebefore >= 0, then spacebefore is a percentage of normal line height.
+ If spacebefore < 0, the absolute value of spacebefore is the spacing in master coordinates.
+ </p></div>
+</li>
+</ul>
+<a name="getSpaceBefore()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSpaceBefore</h4>
+<pre>public&nbsp;int&nbsp;getSpaceBefore()</pre>
+<div class="block">Returns spacing before a paragraph
+ <p>
+ If spacebefore >= 0, then spacebefore is a percentage of normal line height.
+ If spacebefore < 0, the absolute value of spacebefore is the spacing in master coordinates.
+ </p></div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the spacing before a paragraph</dd></dl>
+</li>
+</ul>
+<a name="setSpaceAfter(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSpaceAfter</h4>
+<pre>public&nbsp;void&nbsp;setSpaceAfter(int&nbsp;val)</pre>
+<div class="block">Sets spacing after a paragraph.
+ <p>
+ If spaceafter >= 0, then spaceafter is a percentage of normal line height.
+ If spaceafter < 0, the absolute value of spaceafter is the spacing in master coordinates.
+ </p></div>
+</li>
+</ul>
+<a name="getSpaceAfter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSpaceAfter</h4>
+<pre>public&nbsp;int&nbsp;getSpaceAfter()</pre>
+<div class="block">Returns spacing after a paragraph
+ <p>
+ If spaceafter >= 0, then spaceafter is a percentage of normal line height.
+ If spaceafter < 0, the absolute value of spaceafter is the spacing in master coordinates.
+ </p></div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the spacing before a paragraph</dd></dl>
+</li>
+</ul>
+<a name="_getRawParagraphStyle()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>_getRawParagraphStyle</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a>&nbsp;_getRawParagraphStyle()</pre>
+<div class="block">Internal Use Only - get the underlying paragraph style collection.
+ For normal use, use the friendly setters and getters</div>
+</li>
+</ul>
+<a name="_getRawCharacterStyle()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>_getRawCharacterStyle</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/hslf/model/textproperties/TextPropCollection.html" title="class in org.apache.poi.hslf.model.textproperties">TextPropCollection</a>&nbsp;_getRawCharacterStyle()</pre>
+<div class="block">Internal Use Only - get the underlying character style collection.
+ For normal use, use the friendly setters and getters</div>
+</li>
+</ul>
+<a name="_isParagraphStyleShared()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>_isParagraphStyleShared</h4>
+<pre>public&nbsp;boolean&nbsp;_isParagraphStyleShared()</pre>
+<div class="block">Internal Use Only - are the Paragraph styles shared?</div>
+</li>
+</ul>
+<a name="_isCharacterStyleShared()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>_isCharacterStyleShared</h4>
+<pre>public&nbsp;boolean&nbsp;_isCharacterStyleShared()</pre>
+<div class="block">Internal Use Only - are the Character styles shared?</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RichTextRun.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/hslf/usermodel/PictureData.html" title="class in org.apache.poi.hslf.usermodel"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/hslf/usermodel/SlideShow.html" title="class in org.apache.poi.hslf.usermodel"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hslf/usermodel/RichTextRun.html" target="_top">Frames</a></li>
+<li><a href="RichTextRun.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

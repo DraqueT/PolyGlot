@@ -1,0 +1,872 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>How To Use the POIFS APIs</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+    
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+  
+</div>
+<div class="menu">
+<span class="menuLabel">POIFS</span>
+    
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+    
+<div class="menuItem">
+<span class="menuSelected">How To</span>
+</div>
+    
+<div class="menuItem">
+<a href="embeded.html">Embeded Documents</a>
+</div>
+    
+<div class="menuItem">
+<a href="fileformat.html">File System Documentation</a>
+</div>
+    
+<div class="menuItem">
+<a href="usecases.html">Use Cases</a>
+</div>
+  
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>How To Use the POIFS APIs</h1>
+</div>
+<div class="h3">
+  
+  
+    
+<a name="How+To+Use+the+POIFS+APIs"></a>
+<div class="h3">
+<h3>How To Use the POIFS APIs</h3>
+</div>
+      
+<p>This document describes how to use the POIFS APIs to read, write, 
+         and modify files that employ a POIFS-compatible data structure to 
+         organize their content.</p>
+      
+<a name="Target+Audience"></a>
+<div class="h4">
+<h4>Target Audience</h4>
+</div>
+        
+<p>This document is intended for Java developers who need to use the POIFS APIs to read, write, or modify files that employ a POIFS-compatible data structure to organize their content. It is not necessary for developers to understand the POIFS data structures, and an explanation of those data structures is beyond the scope of this document. It is expected that the members of the target audience will understand the rudiments of a hierarchical file system, and familiarity with the event pattern employed by Java APIs such as AWT would be helpful.</p>
+      
+      
+<a name="Glossary"></a>
+<div class="h4">
+<h4>Glossary</h4>
+</div>
+        
+<p>This document attempts to be consistent in its terminology, which is defined here:</p>
+        
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+          
+<tr class="b">
+            
+<td colspan="1" rowspan="1"><em>Term</em></td>
+            <td colspan="1" rowspan="1"><em>Definition</em></td>
+          
+</tr>
+          
+<tr class="a">
+            
+<td colspan="1" rowspan="1">Directory</td>
+            <td colspan="1" rowspan="1">A special file that may contain other directories and documents.</td>
+          
+</tr>
+	  
+<tr class="b">
+	    
+<td colspan="1" rowspan="1">DirectoryEntry</td>
+	    <td colspan="1" rowspan="1">Representation of a directory within another directory.</td>
+	  
+</tr>
+          
+<tr class="a">
+            
+<td colspan="1" rowspan="1">Document</td>
+            <td colspan="1" rowspan="1">A file containing data, such as word processing data or a spreadsheet workbook.</td>
+          
+</tr>
+	  
+<tr class="b">
+	    
+<td colspan="1" rowspan="1">DocumentEntry</td>
+	    <td colspan="1" rowspan="1">Representation of a document within a directory.</td>
+	  
+</tr>
+	  
+<tr class="a">
+	    
+<td colspan="1" rowspan="1">Entry</td>
+	    <td colspan="1" rowspan="1">Representation of a file in a directory.</td>
+	  
+</tr>
+          
+<tr class="b">
+            
+<td colspan="1" rowspan="1">File</td>
+            <td colspan="1" rowspan="1">A named entity, managed and contained by the file system.</td>
+          
+</tr>
+          
+<tr class="a">
+            
+<td colspan="1" rowspan="1">File System</td>
+            <td colspan="1" rowspan="1">The POIFS data structures, plus the contained directories and documents, which are maintained in a hierarchical directory structure.</td>
+          
+</tr>
+          
+<tr class="b">
+            
+<td colspan="1" rowspan="1">Root Directory</td>
+            <td colspan="1" rowspan="1">The directory at the base of a file system. All file systems have a root directory. The POIFS APIs will not allow the root directory to be removed or renamed, but it can be accessed for the purpose of reading its contents or adding files (directories and documents) to it.</td>
+          
+</tr>
+        
+</table>
+      
+    
+    
+<a name="Reading+a+File+System"></a>
+<div class="h3">
+<h3>Reading a File System</h3>
+</div>
+      
+<p>This section covers reading a file system. There are two ways to read a file system; these techniques are sketched out in the following table, and then explained in greater depth in the sections following the table.</p>
+      
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+        
+<tr class="b">
+	  
+<td colspan="1" rowspan="1"><em>Technique</em></td>
+	  <td colspan="1" rowspan="1"><em>Advantages</em></td>
+	  <td colspan="1" rowspan="1"><em>Disadvantages</em></td>
+	
+</tr>
+	
+<tr class="a">
+	  
+<td colspan="1" rowspan="1">Conventional Reading (POIFSFileSystem)</td>
+	  <td colspan="1" rowspan="1">
+	      Simpler API similar to reading a conventional file system.<br>
+	      Can read documents in any order.
+	  </td>
+	  <td colspan="1" rowspan="1">
+	      All files are resident in memory, whether your application needs them or not.
+	  </td>
+	
+</tr>
+	
+<tr class="b">
+	  
+<td colspan="1" rowspan="1">New NIO driven Reading (NPOIFSFileSystem)</td>
+	  <td colspan="1" rowspan="1">
+	      Simpler API similar to reading a conventional file system.<br>
+	      Can read documents in any order.<br>
+         Lower memory than POIFSFileSystem
+	  </td>
+	  <td colspan="1" rowspan="1">
+         If created from an InputStream, all files are resident in memory.
+         (If created from a File, only certain key structures are)<br>
+         Currently doesn't support writing
+	  </td>
+	
+</tr>
+        
+<tr class="a">
+	  
+<td colspan="1" rowspan="1">Event-Driven Reading</td>
+	  <td colspan="1" rowspan="1">
+	      Reduced footprint -- only the documents you care about are processed.<br>
+	      Improved performance -- no time is wasted reading the documents you're not interested in.
+	  </td>
+	  <td colspan="1" rowspan="1">
+	      More complicated API.<br>
+	      Need to know in advance which documents you want to read.<br>
+	      No control over the order in which the documents are read.<br>
+	      No way to go back and get additional documents except to re-read the file system, which may not be possible, e.g., if the file system is being read from an input stream that lacks random access support.
+	  </td>
+	
+</tr>
+      
+</table>
+      
+<a name="Conventional+Reading"></a>
+<div class="h4">
+<h4>Conventional Reading</h4>
+</div>
+        
+<p>In this technique for reading, the entire file system is loaded into memory, and the entire directory tree can be walked by an application, reading specific documents at the application's leisure.</p>
+	
+<a name="Preparation"></a>
+<div class="h2">
+<h2>Preparation</h2>
+</div>
+	  
+<p>Before an application can read a file from the file system, the file system needs to be loaded into memory. This is done by using the <span class="codefrag">org.apache.poi.poifs.filesystem.POIFSFileSystem</span> class. Once the file system has been loaded into memory, the application may need the root directory. The following code fragment will accomplish this preparation stage:</p>
+	  
+<pre class="code">
+// need an open InputStream; for a file-based system, this would be appropriate:
+// InputStream stream = new FileInputStream(fileName);
+POIFSFileSystem fs;
+try
+{
+    fs = new POIFSFileSystem(inputStream);
+}
+catch (IOException e)
+{
+    // an I/O error occurred, or the InputStream did not provide a compatible
+    // POIFS data structure
+}
+DirectoryEntry root = fs.getRoot();</pre>
+	  
+<p>Assuming no exception was thrown, the file system can then be read.</p>
+	  
+<p>Note: loading the file system can take noticeable time, particularly for large file systems.</p>
+	
+	
+<a name="Reading+the+Directory+Tree"></a>
+<div class="h2">
+<h2>Reading the Directory Tree</h2>
+</div>
+	  
+<p>Once the file system has been loaded into memory and the root directory has been obtained, the root directory can be read. The following code fragment shows how to read the entries in an <span class="codefrag">org.apache.poi.poifs.filesystem.DirectoryEntry</span> instance:</p>
+	  
+<pre class="code">
+// dir is an instance of DirectoryEntry ...
+for (Entry entry : dir)
+{
+    System.out.println("found entry: " + entry.getName());
+    if (entry instanceof DirectoryEntry)
+    {
+        // .. recurse into this directory
+    }
+    else if (entry instanceof DocumentEntry)
+    {
+        // entry is a document, which you can read
+    }
+    else
+    {
+        // currently, either an Entry is a DirectoryEntry or a DocumentEntry,
+	// but in the future, there may be other entry subinterfaces. The
+	// internal data structure certainly allows for a lot more entry types.
+    }
+}</pre>
+	
+	
+<a name="Reading+a+Specific+Document"></a>
+<div class="h2">
+<h2>Reading a Specific Document</h2>
+</div>
+	  
+<p>There are a couple of ways to read a document, depending on whether the document resides in the root directory or in another directory. Either way, you will obtain an <span class="codefrag">org.apache.poi.poifs.filesystem.DocumentInputStream</span> instance.</p>
+	  
+<a name="DocumentInputStream"></a>
+<div class="h5">
+<h5>DocumentInputStream</h5>
+</div>
+	    
+<p>The DocumentInputStream class is a simple implementation of InputStream that makes a few guarantees worth noting:</p>
+	    
+<ul>
+	      
+<li>
+<span class="codefrag">available()</span> always returns the number of bytes in the document from your current position in the document.</li>
+	      
+<li>
+<span class="codefrag">markSupported()</span> returns <span class="codefrag">true</span>.</li>
+	      
+<li>
+<span class="codefrag">mark(int limit)</span> ignores the limit parameter; basically the method marks the current position in the document.</li>
+	      
+<li>
+<span class="codefrag">reset()</span> takes you back to the position when <span class="codefrag">mark()</span> was last called, or to the beginning of the document if <span class="codefrag">mark()</span> has not been called.</li>
+	      
+<li>
+<span class="codefrag">skip(long n)</span> will take you to your current position + n (but not past the end of the document).</li>
+	    
+</ul>
+	    
+<p>The behavior of <span class="codefrag">available</span> means you can read in a document in a single read call like this:</p>
+	    
+<pre class="code">
+byte[] content = new byte[ stream.available() ];
+stream.read(content);
+stream.close();</pre>
+	    
+<p>The combination of <span class="codefrag">mark</span>, <span class="codefrag">reset</span>, and <span class="codefrag">skip</span> provide the basic mechanisms needed for random access of the document contents.</p>
+	  
+	  
+<a name="Reading+a+Document+From+the+Root+Directory"></a>
+<div class="h5">
+<h5>Reading a Document From the Root Directory</h5>
+</div>
+	    
+<p>If the document resides in the root directory, you can obtain a <span class="codefrag">DocumentInputStream</span> like this:</p>
+	    
+<pre class="code">
+// load file system
+try
+{
+    DocumentInputStream stream = filesystem.createDocumentInputStream(documentName);
+    // process data from stream
+}
+catch (IOException e)
+{
+    // no such document, or the Entry represented by documentName is not a
+    // DocumentEntry
+}</pre>
+          
+	  
+<a name="Reading+a+Document+From+an+Arbitrary+Directory"></a>
+<div class="h5">
+<h5>Reading a Document From an Arbitrary Directory</h5>
+</div>
+	    
+<p>A more generic technique for reading a document is to obtain an <span class="codefrag">org.apache.poi.poifs.filesystem.DirectoryEntry</span> instance for the directory containing the desired document (recall that you can use <span class="codefrag">getRoot()</span> to obtain the root directory from its file system). From that DirectoryEntry, you can then obtain a <span class="codefrag">DocumentInputStream</span> like this:</p>
+	    
+<pre class="code">
+DocumentEntry document = (DocumentEntry)directory.getEntry(documentName);
+DocumentInputStream stream = new DocumentInputStream(document);
+</pre>
+	  
+	
+      
+      
+<a name="NIO+Reading+using+NPOIFSFileSystem"></a>
+<div class="h4">
+<h4>NIO Reading using NPOIFSFileSystem</h4>
+</div>
+        
+<p>In this technique for reading, certain key structures are loaded 
+         into memory, and the entire directory tree can be walked by the
+         application, reading specific documents at leisure.</p>
+        
+<p>If you create a NPOIFSFileSystem instance from a File, the memory 
+         footprint is very small. However, if you createa a NPOIFSFileSystem
+         instance from an input stream, then the whole contents must be 
+         buffered into memory to allow random access. As such, you should
+         budget on memory use of up to 20% of the file size when using a File,
+         or up to 120% of the file size when using an InputStream.</p>
+	
+<a name="Preparation-N101C0"></a>
+<div class="h2">
+<h2>Preparation</h2>
+</div>
+	  
+<p>Before an application can read a file from the file system, the 
+       file system needs to be opened and core parts processed. This is done
+       using the <span class="codefrag">org.apache.poi.poifs.filesystem.NPOIFSFileSystem</span> 
+       class. Once the file system has been loaded into memory, the 
+       application may need the root directory. The following code fragment 
+       will accomplish this preparation stage:</p>
+	  
+<pre class="code">
+// This is the most memory efficient way to open the FileSystem
+NPOIFSFileSystem fs;
+try
+{
+    fs = new NPOIFSFileSystem(new File(filename));
+}
+catch (IOException e)
+{
+    // an I/O error occurred, or the InputStream did not provide a compatible
+    // POIFS data structure
+}
+DirectoryEntry root = fs.getRoot();
+
+
+// Using an InputStream requires more memory than using a File
+NPOIFSFileSystem fs;
+try
+{
+    fs = new NPOIFSFileSystem(inputStream);
+}
+catch (IOException e)
+{
+    // an I/O error occurred, or the InputStream did not provide a compatible
+    // POIFS data structure
+}
+DirectoryEntry root = fs.getRoot();
+     </pre>
+	  
+<p>Assuming no exception was thrown, the file system can then be read.</p>
+	  
+<p>One the NPOFSFileSytem is open, you can manipulate it just like
+      a POIFSFileSytem one.</p>
+	
+	
+      
+<a name="Event-Driven+Reading"></a>
+<div class="h4">
+<h4>Event-Driven Reading</h4>
+</div>
+        
+<p>The event-driven API for reading documents is a little more complicated and requires that your application know, in advance, which files it wants to read. The benefit of using this API is that each document is in memory just long enough for your application to read it, and documents that you never read at all are not in memory at all. When you're finished reading the documents you wanted, the file system has no data structures associated with it at all and can be discarded.</p>
+	
+<a name="Preparation-N101DF"></a>
+<div class="h2">
+<h2>Preparation</h2>
+</div>
+	  
+<p>The preparation phase involves creating an instance of <span class="codefrag">org.apache.poi.poifs.eventfilesystem.POIFSReader</span> and to then register one or more <span class="codefrag">org.apache.poi.poifs.eventfilesystem.POIFSReaderListener</span> instances with the <span class="codefrag">POIFSReader</span>.</p>
+	  
+<pre class="code">
+POIFSReader reader = new POIFSReader();
+// register for everything
+reader.registerListener(myOmnivorousListener);
+// register for selective files
+reader.registerListener(myPickyListener, "foo");
+reader.registerListener(myPickyListener, "bar");
+// register for selective files
+reader.registerListener(myOtherPickyListener, new POIFSDocumentPath(),
+     "fubar");
+reader.registerListener(myOtherPickyListener, new POIFSDocumentPath(
+    new String[] { "usr", "bin" ), "fubar");</pre>
+	
+	
+<a name="POIFSReaderListener"></a>
+<div class="h2">
+<h2>POIFSReaderListener</h2>
+</div>
+	  
+<p>
+<span class="codefrag">org.apache.poi.poifs.eventfilesystem.POIFSReaderListener</span> is an interface used to register for documents. When a matching document is read by the <span class="codefrag">org.apache.poi.poifs.eventfilesystem.POIFSReader</span>, the <span class="codefrag">POIFSReaderListener</span> instance receives an <span class="codefrag">org.apache.poi.poifs.eventfilesystem.POIFSReaderEvent</span> instance, which contains an open <span class="codefrag">DocumentInputStream</span> and information about the document.</p>
+	  
+<p>A <span class="codefrag">POIFSReaderListener</span> instance can register for individual documents, or it can register for all documents; once it has registered for all documents, subsequent (and previous!) registration requests for individual documents are ignored. There is no way to unregister a <span class="codefrag">POIFSReaderListener</span>.</p>
+	  
+<p>Thus, it is possible to register a single <span class="codefrag">POIFSReaderListener</span> for multiple documents - one, some, or all documents. It is guaranteed that a single <span class="codefrag">POIFSReaderListener</span> will receive exactly one notification per registered document. There is no guarantee as to the order in which it will receive notification of its documents, as future implementations of <span class="codefrag">POIFSReader</span> are free to change the algorithm for walking the file system's directory structure.</p>
+	  
+<p>It is also permitted to register more than one <span class="codefrag">POIFSReaderListener</span> for the same document. There is no guarantee of ordering for notification of <span class="codefrag">POIFSReaderListener</span> instances that have registered for the same document when <span class="codefrag">POIFSReader</span> processes that document.</p>
+	  
+<p>It is guaranteed that all notifications occur in the same thread. A future enhancement may be made to provide multi-threaded notifications, but such an enhancement would very probably be made in a new reader class, a <span class="codefrag">ThreadedPOIFSReader</span> perhaps.</p>
+	  
+<p>The following table describes the three ways to register a <span class="codefrag">POIFSReaderListener</span> for a document or set of documents:</p>
+	  
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+	    
+<tr class="b">
+	      
+<td colspan="1" rowspan="1"><em>Method Signature</em></td>
+	      <td colspan="1" rowspan="1"><em>What it does</em></td>
+	    
+</tr>
+	    
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">registerListener(POIFSReaderListener <em>listener</em>)</td>
+	      <td colspan="1" rowspan="1">registers <em>listener</em> for all documents.</td>
+	    
+</tr>
+	    
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">registerListener(POIFSReaderListener <em>listener</em>, String <em>name</em>)</td>
+	      <td colspan="1" rowspan="1">registers <em>listener</em> for a document with the specified <em>name</em> in the root directory.</td>
+	    
+</tr>
+	    
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">registerListener(POIFSReaderListener <em>listener</em>, POIFSDocumentPath <em>path</em>, String <em>name</em>)</td>
+	      <td colspan="1" rowspan="1">registers <em>listener</em> for a document with the specified <em>name</em> in the directory described by <em>path</em></td>
+	    
+</tr>
+	  
+</table>
+	
+	
+<a name="POIFSDocumentPath"></a>
+<div class="h2">
+<h2>POIFSDocumentPath</h2>
+</div>
+	  
+<p>The <span class="codefrag">org.apache.poi.poifs.filesystem.POIFSDocumentPath</span> class is used to describe a directory in a POIFS file system. Since there are no reserved characters in the name of a file in a POIFS file system, a more traditional string-based solution for describing a directory, with special characters delimiting the components of the directory name, is not feasible. The constructors for the class are used as follows:</p>
+	  
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+	    
+<tr class="b">
+	      
+<td colspan="1" rowspan="1"><em>Constructor example</em></td>
+	      <td colspan="1" rowspan="1"><em>Directory described</em></td>
+	    
+</tr>
+	    
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">new POIFSDocumentPath()</td>
+	      <td colspan="1" rowspan="1">The root directory.</td>
+	    
+</tr>
+	    
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">new POIFSDocumentPath(null)</td>
+	      <td colspan="1" rowspan="1">The root directory.</td>
+	    
+</tr>
+	    
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">new POIFSDocumentPath(new String[ 0 ])</td>
+	      <td colspan="1" rowspan="1">The root directory.</td>
+	    
+</tr>
+	    
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">new POIFSDocumentPath(new String[ ] { "foo", "bar"} )</td>
+	      <td colspan="1" rowspan="1">in Unix terminology, "/foo/bar".</td>
+	    
+</tr>
+	    
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">new POIFSDocumentPath(new POIFSDocumentPath(new String[] { "foo" }), new String[ ] { "fu", "bar"} )</td>
+	      <td colspan="1" rowspan="1">in Unix terminology, "/foo/fu/bar".</td>
+	    
+</tr>
+	  
+</table>
+	
+	
+<a name="Processing+POIFSReaderEvent+Events"></a>
+<div class="h2">
+<h2>Processing POIFSReaderEvent Events</h2>
+</div>
+	  
+<p>Processing <span class="codefrag">org.apache.poi.poifs.eventfilesystem.POIFSReaderEvent</span> events is relatively easy. After all of the <span class="codefrag">POIFSReaderListener</span> instances have been registered with <span class="codefrag">POIFSReader</span>, the <span class="codefrag">POIFSReader.read(InputStream stream)</span> method is called.</p>
+	  
+<p>Assuming that there are no problems with the data, as the <span class="codefrag">POIFSReader</span> processes the documents in the specified <span class="codefrag">InputStream</span>'s data, it calls registered <span class="codefrag">POIFSReaderListener</span> instances' <span class="codefrag">processPOIFSReaderEvent</span> method with a <span class="codefrag">POIFSReaderEvent</span> instance.</p>
+	  
+<p>The <span class="codefrag">POIFSReaderEvent</span> instance contains information to identify the document (a <span class="codefrag">POIFSDocumentPath</span> object to identify the directory that the document is in, and the document name), and an open <span class="codefrag">DocumentInputStream</span> instance from which to read the document.</p>
+	
+      
+    
+    
+<a name="Writing+a+File+System"></a>
+<div class="h3">
+<h3>Writing a File System</h3>
+</div>
+      
+<p>Writing a file system is very much like reading a file system in that there are multiple ways to do so. You can load an existing file system into memory and modify it (removing files, renaming files) and/or add new files to it, and write it, or you can start with a new, empty file system:</p>
+      
+<pre class="code">
+POIFSFileSystem fs = new POIFSFileSystem();</pre>
+      
+<a name="The+Naming+of+Names"></a>
+<div class="h4">
+<h4>The Naming of Names</h4>
+</div>
+        
+<p>There are two restrictions on the names of files in a file system that must be considered when creating files:</p>
+	
+<ol>
+	  
+<li>The name of the file must not exceed 31 characters. If it does, the POIFS API will silently truncate the name to fit.</li>
+	  
+<li>The name of the file must be unique within its containing directory. This seems pretty obvious, but if it isn't spelled out, there'll be hell to pay, to be sure. Uniqueness, of course, is determined <em>after</em> the name has been truncated, if the original name was too long to begin with.</li>
+	
+</ol>
+      
+      
+<a name="Creating+a+Document"></a>
+<div class="h4">
+<h4>Creating a Document</h4>
+</div>
+        
+<p>A document can be created by acquiring a <span class="codefrag">DirectoryEntry</span> and calling one of the two <span class="codefrag">createDocument</span> methods:</p>
+	
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+	  
+<tr class="b">
+	    
+<td colspan="1" rowspan="1"><em>Method Signature</em></td>
+	    <td colspan="1" rowspan="1"><em>Advantages</em></td>
+	    <td colspan="1" rowspan="1"><em>Disadvantages</em></td>
+	  
+</tr>
+	  
+<tr class="a">
+	    
+<td colspan="1" rowspan="1">CreateDocument(String name, InputStream stream)</td>
+	    <td colspan="1" rowspan="1">
+	        Simple API.
+	    </td>
+	    <td colspan="1" rowspan="1">
+	        Increased memory footprint (document is in memory until file system is written).
+	    </td>
+	  
+</tr>
+	  
+<tr class="b">
+	    
+<td colspan="1" rowspan="1">CreateDocument(String name, int size, POIFSWriterListener writer)</td>
+	    <td colspan="1" rowspan="1">
+	        Decreased memory footprint (only very small documents are held in memory, and then only for a short time).
+	    </td>
+	    <td colspan="1" rowspan="1">
+	        More complex API.<br>
+            Determining document size in advance may be difficult.<br>
+            Lose control over when document is to be written.
+	    </td>
+	  
+</tr>
+	
+</table>
+	
+<p>Unlike reading, you don't have to choose between the in-memory and event-driven writing models; both can co-exist in the same file system.</p>
+	
+<p>Writing is initiated when the <span class="codefrag">POIFSFileSystem</span> instance's <span class="codefrag">writeFilesystem()</span> method is called with an <span class="codefrag">OutputStream</span> to write to.</p>
+	
+<p>The event-driven model is quite similar to the event-driven model for reading, in that the file system calls your <span class="codefrag">org.apache.poi.poifs.filesystem.POIFSWriterListener</span> when it's time to write your document, just as the <span class="codefrag">POIFSReader</span> calls your <span class="codefrag">POIFSReaderListener</span> when it's time to read your document. Internally, when <span class="codefrag">writeFilesystem()</span> is called, the final POIFS data structures are created and are written to the specified <span class="codefrag">OutputStream</span>. When the file system needs to write a document out that was created with the event-driven model, it calls the <span class="codefrag">POIFSWriterListener</span> back, calling its <span class="codefrag">processPOIFSWriterEvent()</span> method, passing an <span class="codefrag">org.apache.poi.poifs.filesystem.POIFSWriterEvent</span> instance. This object contains the <span class="codefrag">POIFSDocumentPath</span> and name of the document, its size, and an open <span class="codefrag">org.apache.poi.poifs.filesystem.DocumentOutputStream</span> to which to write. A <span class="codefrag">DocumentOutputStream</span> is a wrapper over the <span class="codefrag">OutputStream</span> that was provided to the <span class="codefrag">POIFSFileSystem</span> to write to, and has the responsibility of making sure that the document your application writes fits within the size you specified for it.</p>
+      
+      
+<a name="Creating+a+Directory"></a>
+<div class="h4">
+<h4>Creating a Directory</h4>
+</div>
+        
+<p>Creating a directory is similar to creating a document, except that there's only one way to do so:</p>
+	
+<pre class="code">
+DirectoryEntry createdDir = existingDir.createDirectory(name);</pre>
+      
+      
+<a name="Using+POIFSFileSystem+Directly+To+Create+a+Document+Or+Directory"></a>
+<div class="h4">
+<h4>Using POIFSFileSystem Directly To Create a Document Or Directory</h4>
+</div>
+        
+<p>As with reading documents, it is possible to create a new document or directory in the root directory by using convenience methods of POIFSFileSystem.</p>
+	
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+	  
+<tr class="b">
+	    
+<td colspan="1" rowspan="1">DirectoryEntry Method Signature</td>
+	    <td colspan="1" rowspan="1">POIFSFileSystem Method Signature</td>
+	  
+</tr>
+	  
+<tr class="a">
+	    
+<td colspan="1" rowspan="1">createDocument(String name, InputStream stream)</td>
+	    <td colspan="1" rowspan="1">createDocument(InputStream stream, String name)</td>
+	  
+</tr>
+	  
+<tr class="b">
+	    
+<td colspan="1" rowspan="1">createDocument(String name, int size, POIFSWriterListener writer)</td>
+	    <td colspan="1" rowspan="1">createDocument(String name, int size, POIFSWriterListener writer)</td>
+	  
+</tr>
+	  
+<tr class="a">
+	    
+<td colspan="1" rowspan="1">createDirectory(String name)</td>
+	    <td colspan="1" rowspan="1">createDirectory(String name)</td>
+	  
+</tr>
+	
+</table>
+      
+    
+    
+<a name="Modifying+a+File+System"></a>
+<div class="h3">
+<h3>Modifying a File System</h3>
+</div>
+      
+<p>It is possible to modify an existing POIFS file system, whether it's one your application has loaded into memory, or one which you are creating on the fly.</p>
+      
+<a name="Removing+a+Document"></a>
+<div class="h4">
+<h4>Removing a Document</h4>
+</div>
+        
+<p>Removing a document is simple: you get the <span class="codefrag">Entry</span> corresponding to the document and call its <span class="codefrag">delete()</span> method. This is a boolean method, but should always return <span class="codefrag">true</span>, indicating that the operation succeeded.</p>
+      
+      
+<a name="Removing+a+Directory"></a>
+<div class="h4">
+<h4>Removing a Directory</h4>
+</div>
+        
+<p>Removing a directory is also simple: you get the <span class="codefrag">Entry</span> corresponding to the directory and call its <span class="codefrag">delete()</span> method. This is a boolean method, but, unlike deleting a document, may not always return <span class="codefrag">true</span>, indicating that the operation succeeded. Here are the reasons why the operation may fail:</p>
+	
+<ul>
+	  
+<li>The directory still has files in it (to check, call <span class="codefrag">isEmpty()</span> on its DirectoryEntry; is the return value <span class="codefrag">false</span>?)</li>
+	  
+<li>The directory is the root directory. You cannot remove the root directory.</li>
+	
+</ul>
+      
+      
+<a name="Renaming+a+File"></a>
+<div class="h4">
+<h4>Renaming a File</h4>
+</div>
+        
+<p>Regardless of whether the file is a directory or a document, it can be renamed, with one exception - the root directory has a special name that is expected by the components of a major software vendor's office suite, and the POIFS API will not let that name be changed. Renaming is done by acquiring the file's corresponding <span class="codefrag">Entry</span> instance and calling its <span class="codefrag">renameTo</span> method, passing in the new name.</p>
+	
+<p>Like <span class="codefrag">delete</span>, <span class="codefrag">renameTo</span> returns <span class="codefrag">true</span> if the operation succeeded, otherwise <span class="codefrag">false</span>. Reasons for failure include these:</p>
+	
+<ul>
+	  
+<li>The new name is the same as another file in the same directory. And don't forget - if the new name is longer than 31 characters, it <em>will</em> be silently truncated. In its original length, the new name may have been unique, but truncated to 31 characters, it may not be unique any longer.</li>
+	  
+<li>You tried to rename the root directory.</li>
+	
+</ul>
+      
+    
+  
+
+<div id="authors" align="right">by&nbsp;Marc Johnson</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

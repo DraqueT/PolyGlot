@@ -1,0 +1,346 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>Apache POI - HWPF - Java API to Handle Microsoft Word Files</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+</div>
+<div class="menu">
+<span class="menuLabel">HWPF</span>
+<div class="menuItem">
+<span class="menuSelected">Overview</span>
+</div>
+<div class="menuItem">
+<a href="quick-guide.html">Quick Guide</a>
+</div>
+<div class="menuItem">
+<a href="docoverview.html">HWPF Format</a>
+</div>
+<div class="menuItem">
+<a href="projectplan.html">HWPF Project plan</a>
+</div>
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Apache POI - HWPF - Java API to Handle Microsoft Word Files</h1>
+</div>
+<div class="h3">
+ 
+
+ 
+ 
+<a name="Overview"></a>
+<div class="h3">
+<h3>Overview</h3>
+</div>
+
+  
+<p>HWPF is the name of our port of the Microsoft Word 97(-2007) file format
+    to pure Java. It also provides limited read only support for the older
+    Word 6 and Word 95 file formats.</p>
+
+  
+<p>The partner to HWPF for the new Word 2007 .docx format is <em>XWPF</em>.
+    Whilst HWPF and XWPF provide similar features, there is not a common
+    interface across the two of them at this time.</p>
+
+  
+<p>HWPF is still in early development. It is in the <a href="http://svn.apache.org/viewcvs.cgi/poi/trunk/src/scratchpad/">
+     scratchpad section of the SVN.</a> You will need to ensure you
+     either have a recent SVN checkout, or a recent SVN nightly build
+     (including the scratchpad jar!)</p>
+
+    
+<p>
+        Source code in the
+        <em>org.apache.poi.hdf</em>
+        tree is the old legacy code. Source in the
+        <em>org.apache.poi.hwpf.model</em>
+        tree is the old legacy code refactored into an new object model. Those packages contains
+        Java representation of internal Word format structure. This code is "internal", it shall not
+        be used by your code. Because of backward-compatibility some API still has references to
+        those packages. They are subject to be deprecated and removed. Code from
+        <em>org.apache.poi.hwpf.usermodel</em>
+        package is actual public and user-friendly (as much as possible) API to access document
+        parts. Source code in the
+        <em>org.apache.poi.hwpf.extractor</em>
+        tree is a wrapper of this to facilitate easy extraction of interesting things (eg the Text),
+        and
+        <em>org.apache.poi.hwpf.converter</em>
+        package contains Word-to-HTML and Word-to-FO converters (latest can be used to generate PDF
+        from Word files when using with
+        <a href="http://xmlgraphics.apache.org/fop/">Apache FOP</a>
+        ). Also there is a small file-structure-dumping utility in
+        <em>org.apache.poi.hwpf.dev</em>
+        package, primally for developing purposes.
+    </p>
+
+    
+<p>
+        The main entry point to HWPF is HWPFDocument. Currently it has a lot of references both to
+        internal interfaces (
+        <em>org.apache.poi.hwpf.model</em>
+        package) and public API (
+        <em>org.apache.poi.hwpf.usermodel</em>
+        ) package. It is possible that it will be split into two different interfaces (like WordFile
+        and WordDocument) in later versions.
+    </p>
+
+    
+<p>Word document can be considered as very long single text buffer. HWPF API provides "pointers"
+        to document parts, like sections, paragraphs and character runs. Usually user will iterates
+        over main document part sections, paragraphs from sections and character runs from
+        paragraph. Each such interface is a pointer to document text subrange along with additional
+        properties (and they all extends same Range parent class). There is additional Range
+        implementations like Table, TableRow, TableCell, etc. Some structures like Bookmark or Field
+        can also provide subranges pointers.
+    </p>
+
+    
+<p>Changing file content usually requires a lot of synchronized changes in those structures like
+        updating property boundaries, position handlers, etc. Because of that HWPF API shall be
+        considered as not thread safe. In addition, there is a "one pointer" rule for changing
+        content. It means you should not use two different Range instances at one time. More
+        precisely, if you are changing file content using some range pointer, all other range
+        pointers except parents' ones become invalid. For example if you obtain overall range (1),
+        paragraph range (2) from overall range and character run range (3) from paragraph range and
+        change text of paragraph, character run range is now invalid and should not be used, but
+        overall range pointer still valid. Each time you obtaining range (pointer) new instance is
+        created. It means if you obtained two range pointers and changed document text using first
+        range pointer, second one became invalid.
+    </p>
+
+   
+   
+<a name="XWPF+Patches+Required%21"></a>
+<div class="h3">
+<h3>XWPF Patches Required!</h3>
+</div>
+    
+
+    
+<p>At the moment, XWPF covers many common use cases for reading and writing
+     .docx files. Whilst this is a great thing, it does mean that XWPF does
+     everything that the current POI committers need it to do, and so none of
+     the committers are actively adding new features.</p>
+
+    
+<p>If you come across a feature in XWPF that you need, and isn't currently 
+     there, please do send in a patch to add the extra functionality! More details
+     on contributing patches are available on the <a href="../guidelines.html">"Contribution to POI" page</a>.</p>
+   
+
+   
+<a name="HWPF+Pointman+Needed%21"></a>
+<div class="h3">
+<h3>HWPF Pointman Needed!</h3>
+</div>
+    
+
+    
+<p>At the moment we unfortunately do not have someone taking care for HWPF
+     and fostering its development. What we need is someone to stand up, take
+     this thing under his hood as his baby and push it forward. Ryan Ackley,
+     who put a lot of effort into HWPF, is no longer on board, so HWPF is an
+     orphan child waiting to be adopted.</p>
+
+    
+<p>If <strong>you</strong> are interested in becoming the new HWPF
+     pointman, you should look into the Microsoft Word internals. A good
+     starting point seems to be Ryan Ackley's  <a href="docoverview.html">overview</a>. Full details on the word format
+     is available from 
+     <a href="http://www.microsoft.com/interop/docs/OfficeBinaryFormats.mspx">Microsoft</a>,
+     but the documentation can be a little hard to get into at first... Try reading the
+     <a href="docoverview.html">overview</a> first, and looking at the existing
+     code, then finally look up the documentation for specific missing features.</p>
+
+    
+<p>As a first step you should familiarize yourself with the source code,
+     examples, test cases, and the HWPF patches available at <a href="http://issues.apache.org/">Bugzilla</a> (if any). Then you
+     should compile an overview of</p>
+
+    
+<ul>
+     
+<li>the current HWPF status,</li>
+     
+<li>the patches in <a href="http://issues.apache.org/bugzilla/">Bugzilla</a> to be checked
+      in (and those that should better be ditched),</li>
+     
+<li>the available test cases and the test cases still to be written,</li>
+     
+<li>the available documentation and the docs to be written,</li>
+     
+<li>anything else that seems reasonable</li>
+    
+</ul>
+
+    
+<p>When you start coding, you will not yet have write access to the
+     SVN repository. Please submit your patches to <a href="http://issues.apache.org/">Bugzilla</a> and nag <a href="mailto:dev@poi.apache.org">the dev list</a> until someone commits
+     them. Besides the actual checking in of HWPF patches, current POI
+     committers will also do some minor reviews now and then of your source code 
+     patches, test cases and documentation to help ensure software quality. But 
+     most of the time you will be on your own. However, anyone offering useful
+     contributions over a period of time will be offered committership!</p>
+
+    
+<p>Please do not forget to write <a href="http://www.junit.org/">JUnit</a> test cases and documentation!
+     We won't accept code that doesn't come with test cases. And please
+     consider that other contributors should be able to understand your source
+     code easily. If you need any help getting started with JUnit test cases
+     for HWPF, please ask on the developers' mailing list! If you show that you
+     are prepared to stick at it you will most likely be given SVN commit
+     access. See <a href="../guidelines.html">"Contribution to POI" page</a>
+     for more details and help getting started.</p>
+
+    
+<p>Of course we will help you as best as we can. However, presently there
+     is no committer who is really familiar with the Word format, so you'll be
+     mostly on your own. We are looking forward for you and your contributions!
+     Honor and glory of becoming a POI committer are waiting!</p>
+   
+ 
+
+<div id="authors" align="right">by&nbsp;Nicola Ken Barozzi,&nbsp;Andrew C. Oliver,&nbsp;Ryan Ackley,&nbsp;Rainer Klute</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit">
+<a href="http://validator.w3.org/check/referer"><img width="88" height="31" alt="Valid HTML 4.01!" src="../skin/images/valid-html401.png" class="logoImage"></a><a href="http://jigsaw.w3.org/css-validator/"><img width="88" height="31" alt="Valid CSS!" src="../skin/images/vcss.png" class="logoImage"></a><a href="http://forrest.apache.org/"><img border="0" class="logoImage" alt="Built with Apache Forrest" src="../skin/images/built-with-forrest-button.png" width="88" height="31"></a>
+</div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

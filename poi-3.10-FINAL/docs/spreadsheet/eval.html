@@ -1,0 +1,640 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>Formula Evaluation</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+        
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">HSSF+XSSF</span>
+        
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+        
+<div class="menuItem">
+<a href="quick-guide.html">Quick Guide</a>
+</div>
+        
+<div class="menuItem">
+<a href="how-to.html">HOWTO</a>
+</div>
+        
+<div class="menuItem">
+<a href="converting.html">HSSF to SS Converting</a>
+</div>
+        
+<div class="menuItem">
+<a href="formula.html">Formula Support</a>
+</div>
+        
+<div class="menuItem">
+<span class="menuSelected">Formula Evaluation</span>
+</div>
+		    
+<div class="menuItem">
+<a href="eval-devguide.html">Eval Dev Guide</a>
+</div>
+        
+<div class="menuItem">
+<a href="examples.html">Examples</a>
+</div>
+        
+<div class="menuItem">
+<a href="use-case.html">Use Case</a>
+</div>
+        
+<div class="menuItem">
+<a href="diagrams.html">Pictorial Docs</a>
+</div>
+        
+<div class="menuItem">
+<a href="limitations.html">Limitations</a>
+</div>
+        
+<div class="menuItem">
+<a href="user-defined-functions.html">User Defined Functions</a>
+</div>
+        
+<div class="menuItem">
+<a href="excelant.html">ExcelAnt Tests</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Contributer's Guide</span>
+        
+<div class="menuItem">
+<a href="hacking-hssf.html">Hacking HSSF</a>
+</div>
+        
+<div class="menuItem">
+<a href="record-generator.html">Record Generator</a>
+</div>
+        
+<div class="menuItem">
+<a href="chart.html">Charts</a>
+</div>
+    
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Formula Evaluation</h1>
+</div>
+<div class="h3">
+  
+  
+    
+<a name="Introduction"></a>
+<div class="h3">
+<h3>Introduction</h3>
+</div>
+      
+<p>The POI formula evaluation code enables you to calculate the result of 
+         formulas in Excels sheets read-in, or created in POI. This document explains
+         how to use the API to evaluate your formulas. 
+      </p>
+    
+
+    
+<a name="WhyEvaluate"></a>
+    <a name="Why+do+I+need+to+evaluate+formulas%3F"></a>
+<div class="h3">
+<h3>Why do I need to evaluate formulas?</h3>
+</div>
+      
+<p>The Excel file format (both .xls and .xlsx) stores a "cached" result for
+         every formula along with the formula itself. This means that when the file
+         is opened, it can be quickly displayed, without needing to spend a long
+         time calculating all of the formula results. It also means that when reading
+         a file through Apache POI, the result is quickly available to you too!
+      </p>
+      
+<p>After making changes with Apache POI to either Formula Cells themselves,
+         or those that they depend on, you should normally perform a Formula
+         Evaluation to have these "cached" results updated. This is normally done
+         after all changes have been performed, but before you write the file out.
+         If you don't do this, there's a good chance that when you open the file in
+         Excel, until you go to the cell and hit enter or F9, you will either see 
+         the old value or '#VALUE!' for the cell. (Sometimes Excel will notice
+         itself, and trigger a recalculation on load, but unless you know you are
+         using volatile functions it's generally best to trigger a Recalulation
+         through POI)
+      </p>
+    
+
+    
+<a name="Status"></a>
+    <a name="Status-N10028"></a>
+<div class="h3">
+<h3>Status</h3>
+</div>
+			
+<p>The code currently provides implementations for all the arithmatic operators.
+				It also provides implementations for approx. 140 built in
+				functions in Excel. The framework however makes it easy to add 
+			 	implementation of new functions. See the <a href="eval-devguide.html"> Formula
+        evaluation development guide</a>  and <a href="../apidocs/org/apache/poi/hssf/record/formula/functions/package-summary.html">javadocs</a> 
+        for details. </p>
+            
+<p> Both HSSFWorkbook and XSSFWorkbook are supported, so you can 
+                evaluate formulas on both .xls and .xlsx files.</p>
+			
+<p> Note that user-defined functions are not supported, and is not likely to done
+				any time soon... at least, not till there is a VB implementation in Java!
+			</p>
+		
+		
+<a name="User+API+How-TO"></a>
+<div class="h3">
+<h3>User API How-TO</h3>
+</div>
+			
+<p>The following code demonstrates how to use the FormulaEvaluator 
+				in the context of other POI excel reading code.
+			</p>
+			
+<p>There are several ways in which you can use the FormulaEvalutator API.</p>
+
+			
+<a name="Evaluate"></a>
+			<a name="Using+FormulaEvaluator."></a>
+<div class="h4">
+<h4>Using FormulaEvaluator.evaluate(Cell cell)</h4>
+</div>
+				
+<p>This evaluates a given cell, and returns the new value,
+				without affecting the cell</p>
+				
+<pre class="code">
+FileInputStream fis = new FileInputStream("c:/temp/test.xls");
+Workbook wb = new HSSFWorkbook(fis); //or new XSSFWorkbook("c:/temp/test.xls")
+Sheet sheet = wb.getSheetAt(0);
+FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+
+// suppose your formula is in B3
+CellReference cellReference = new CellReference("B3"); 
+Row row = sheet.getRow(cellReference.getRow());
+Cell cell = row.getCell(cellReference.getCol()); 
+
+CellValue cellValue = evaluator.evaluate(cell);
+
+switch (cellValue.getCellType()) {
+    case Cell.CELL_TYPE_BOOLEAN:
+        System.out.println(cellValue.getBooleanValue());
+        break;
+    case Cell.CELL_TYPE_NUMERIC:
+        System.out.println(cellValue.getNumberValue());
+        break;
+    case Cell.CELL_TYPE_STRING:
+        System.out.println(cellValue.getStringValue());
+        break;
+    case Cell.CELL_TYPE_BLANK:
+        break;
+    case Cell.CELL_TYPE_ERROR:
+        break;
+
+    // CELL_TYPE_FORMULA will never happen
+    case Cell.CELL_TYPE_FORMULA: 
+        break;
+}				
+        </pre>
+				
+<p>Thus using the retrieved value (of type 
+					FormulaEvaluator.CellValue - a nested class) returned 
+					by FormulaEvaluator is similar to using a Cell object 
+					containing the value of the formula evaluation. CellValue is 
+					a simple value object and does not maintain reference 
+					to the original cell.
+				</p>
+			
+
+			
+<a name="EvaluateFormulaCell"></a>
+			<a name="Using+FormulaEvaluator.-N10063"></a>
+<div class="h4">
+<h4>Using FormulaEvaluator.evaluateFormulaCell(Cell cell)</h4>
+</div>
+				
+<p>
+<strong>evaluateFormulaCell</strong>(Cell cell) 
+				will check to see if the supplied cell is a formula cell. 
+				If it isn't, then no changes will be made to it. If it is, 
+				then the formula is evaluated. The value for the formula
+				is saved alongside it, to be displayed in excel. The
+				formula remains in the cell, just with a new value</p>
+				
+<p>The return of the function is the type of the
+				formula result, such as Cell.CELL_TYPE_BOOLEAN</p>
+        
+<pre class="code">
+FileInputStream fis = new FileInputStream("/somepath/test.xls");
+Workbook wb = new HSSFWorkbook(fis); //or new XSSFWorkbook("/somepath/test.xls")
+Sheet sheet = wb.getSheetAt(0);
+FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+
+// suppose your formula is in B3
+CellReference cellReference = new CellReference("B3"); 
+Row row = sheet.getRow(cellReference.getRow());
+Cell cell = row.getCell(cellReference.getCol()); 
+
+if (cell!=null) {
+    switch (evaluator.evaluateFormulaCell(cell)) {
+        case Cell.CELL_TYPE_BOOLEAN:
+            System.out.println(cell.getBooleanCellValue());
+            break;
+        case Cell.CELL_TYPE_NUMERIC:
+            System.out.println(cell.getNumericCellValue());
+            break;
+        case Cell.CELL_TYPE_STRING:
+            System.out.println(cell.getStringCellValue());
+            break;
+        case Cell.CELL_TYPE_BLANK:
+            break;
+        case Cell.CELL_TYPE_ERROR:
+            System.out.println(cell.getErrorCellValue());
+            break;
+
+        // CELL_TYPE_FORMULA will never occur
+        case Cell.CELL_TYPE_FORMULA: 
+            break;
+    }
+}
+				</pre>
+			
+
+			
+<a name="EvaluateInCell"></a>
+			<a name="Using+FormulaEvaluator.-N1007B"></a>
+<div class="h4">
+<h4>Using FormulaEvaluator.evaluateInCell(Cell cell)</h4>
+</div>
+				
+<p>
+<strong>evaluateInCell</strong>(Cell cell) will check to
+				see if the supplied cell is a formula cell. If it isn't,
+				then no changes will be made to it. If it is, then the
+				formula is evaluated, and the new value saved into the cell,
+				in place of the old formula.</p>
+				
+<pre class="code">
+FileInputStream fis = new FileInputStream("/somepath/test.xls");
+Workbook wb = new HSSFWorkbook(fis); //or new XSSFWorkbook("/somepath/test.xls")
+Sheet sheet = wb.getSheetAt(0);
+FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+
+// suppose your formula is in B3
+CellReference cellReference = new CellReference("B3");
+Row row = sheet.getRow(cellReference.getRow());
+Cell cell = row.getCell(cellReference.getCol()); 
+
+if (cell!=null) {
+    switch (evaluator.<strong>evaluateInCell</strong>(cell).getCellType()) {
+        case Cell.CELL_TYPE_BOOLEAN:
+            System.out.println(cell.getBooleanCellValue());
+            break;
+        case Cell.CELL_TYPE_NUMERIC:
+            System.out.println(cell.getNumericCellValue());
+            break;
+        case Cell.CELL_TYPE_STRING:
+            System.out.println(cell.getStringCellValue());
+            break;
+        case Cell.CELL_TYPE_BLANK:
+            break;
+        case Cell.CELL_TYPE_ERROR:
+            System.out.println(cell.getErrorCellValue());
+            break;
+
+        // CELL_TYPE_FORMULA will never occur
+        case Cell.CELL_TYPE_FORMULA:
+            break;
+    }
+}
+
+        </pre>
+			
+
+			
+<a name="EvaluateAll"></a>
+			<a name="Re-calculating+all+formulas+in+a+Workbook"></a>
+<div class="h4">
+<h4>Re-calculating all formulas in a Workbook</h4>
+</div>
+				
+<pre class="code">
+FileInputStream fis = new FileInputStream("/somepath/test.xls");
+Workbook wb = new HSSFWorkbook(fis); //or new XSSFWorkbook("/somepath/test.xls")
+FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+for(int sheetNum = 0; sheetNum &lt; wb.getNumberOfSheets(); sheetNum++) {
+    Sheet sheet = wb.getSheetAt(sheetNum);
+    for(Row r : sheet) {
+        for(Cell c : r) {
+            if(c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+                evaluator.evaluateFormulaCell(c);
+            }
+        }
+    }
+}
+        </pre>
+
+           
+<p>Alternately, if you know which of HSSF or XSSF you're working
+            with, then you can call the static 
+            <strong>evaluateAllFormulaCells</strong> method on the appropriate
+            HSSFFormulaEvaluator or XSSFFormulaEvaluator class.</p>
+			
+		
+		
+		
+<a name="recalculation"></a>
+		<a name="Recalculation+of+Formulas"></a>
+<div class="h3">
+<h3>Recalculation of Formulas</h3>
+</div>
+      
+<p>
+        In certain cases  you may want to force Excel to re-calculate formulas when the workbook is opened.
+        Consider the following example:
+      </p>  
+      
+<p>
+        Open Excel and create a new workbook. On the first sheet set A1=1, B1=1, C1=A1+B1. 
+        Excel automatically calculates formulas and the value in C1 is 2. So far so good.
+      </p>  
+      
+<p>
+        Now modify the workbook with POI:
+      </p>
+      
+<pre class="code">
+  Workbook wb = WorkbookFactory.create(new FileInputStream("workbook.xls"));
+
+  Sheet sh = wb.getSheetAt(0);
+  sh.getRow(0).getCell(0).setCellValue(2);  // set A1=2
+
+  FileOutputStream out = new FileOutputStream("workbook2.xls");
+  wb.write(out);
+  out.close();
+      </pre>      
+      
+<p>
+        Now open workbook2.xls in Excel and the value in C1 is still 2 while you expected 3. Wrong? No!
+        The point is that Excel caches previously calculated results and you need to trigger recalculation to updated them. 
+        It is not an issue when you are creating new workbooks from scratch, but important to remember when you are modifing 
+        existing workbooks with formulas. This can be done in two ways:  
+      </p>   
+      
+<p>
+        1. Re-evaluate  formulas with POI's FormulaEvaluator:
+      </p>   
+        
+<pre class="code">
+  Workbook wb = WorkbookFactory.create(new FileInputStream("workbook.xls"));
+
+  Sheet sh = wb.getSheetAt(0);
+  sh.getRow(0).getCell(0).setCellValue(2);  // set A1=2
+
+  wb.getCreationHelper().createFormulaEvaluator().evaluateAll();
+        </pre>        
+      
+<p>
+        2. Delegate re-calculation to Excel. The application will perform a full recalculation when the workbook is opened:
+      </p>           
+        
+<pre class="code">
+  Workbook wb = WorkbookFactory.create(new FileInputStream("workbook.xls"));
+
+  Sheet sh = wb.getSheetAt(0);
+  sh.getRow(0).getCell(0).setCellValue(2);  // set A1=2
+
+  wb.setForceFormulaRecalculation(true);
+        </pre>        
+		
+
+    
+<a name="Performance"></a>
+    <a name="Performance+Notes"></a>
+<div class="h3">
+<h3>Performance Notes</h3>
+</div>
+      
+<ul>
+        
+<li>Generally you should have to create only one FormulaEvaluator 
+          instance per Workbook. The FormulaEvaluator will cache 
+          evaluations of dependent cells, so if you have multiple
+          formulas all depending on a cell then subsequent evaluations
+          will be faster.
+        </li>
+        
+<li>You should normally perform all of your updates to cells,
+          before triggering the evaluation, rather than doing one
+          cell at a time. By waiting until all the updates/sets are
+          performed, you'll be able to take best advantage of the caching
+          for complex formulas.
+        </li>
+        
+<li>If you do end up making changes to cells part way through
+          evaluation, you should call <em>notifySetFormula</em> or
+          <em>notifyUpdateCell</em> to trigger suitable cache clearance.
+          Alternately, you could instantiate a new FormulaEvaluator,
+          which will start with empty caches.
+        </li>
+        
+<li>Also note that FormulaEvaluator maintains a reference to 
+          the sheet and workbook, so ensure that the evaluator instance 
+          is available for garbage collection when you are done with it 
+          (in other words don't maintain long lived reference to 
+          FormulaEvaluator if you don't really need to - unless 
+          all references to the sheet and workbook are removed, these 
+          don't get garbage collected and continue to occupy potentially 
+          large amounts of memory). 
+        </li>	
+        
+<li>CellValue instances however do not maintain reference to the 
+          Cell or the sheet or workbook, so these can be long-lived 
+          objects without any adverse effect on performance.
+        </li>
+      
+</ul>
+    
+    
+<a name="Formula+Evaluation+Debugging"></a>
+<div class="h3">
+<h3>Formula Evaluation Debugging</h3>
+</div>
+		
+<p>POI is not perfect and you may stumble across formula evaluation problems (Java exceptions
+		or just different results) in your special use case. To support an easy detailed analysis, a special
+		logging of the full evaluation is provided.</p>
+		
+<p>The output of this logging may be very large (depends on your EXCEL), so this logging has to be explicitly enabled
+		for each single formula evaluation. Should not be used in production - only for specific development use.</p>
+		
+<p>Example use:</p>
+		
+<pre class="code">
+	// activate logging to console
+	System.setProperty("org.apache.poi.util.POILogger", "org.apache.poi.util.SystemOutLogger");
+	System.setProperty("poi.log.level", POILogger.INFO + "");
+
+	// open your file
+	Workbook wb = new HSSFWorkbook(new FileInputStream("foobar.xls"));
+    FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+
+	// get your cell
+	Cell cell = wb.getSheet(0).getRow(0).getCell(0);		// just a dummy example
+
+	// perform debug output for the next evaluate-call only
+    evaluator.setDebugEvaluationOutputForNextEval(true);
+	evaluator.evaluateFormulaCell(cell);
+	evaluator.evaluateFormulaCell(cell);		// no logging performed for this next evaluate-call
+		</pre>
+		
+<p>The special Logger called "POI.FormulaEval" is used (useful if you use the CommonsLogger and a detailed logging configuration).
+		The used log levels are WARN and INFO (for detailed parameter info and results) - the level are so high to allow this
+		special logging without beeing disturbed by the bunch of DEBUG log entries from other classes.</p>
+	
+  
+
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

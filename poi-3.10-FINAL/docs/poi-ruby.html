@@ -1,0 +1,463 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="skin/print.css" type="text/css">
+<title>POI Ruby Bindings</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Overview</span>
+        
+<div class="menuItem">
+<a href="index.html">Home</a>
+</div>
+        
+<div class="menuItem">
+<a href="download.html">Download</a>
+</div>
+        
+<div class="menuItem">
+<a href="overview.html">Components</a>
+</div>
+        
+<div class="menuItem">
+<a href="text-extraction.html">Text Extraction</a>
+</div>
+        
+<div class="menuItem">
+<a href="encryption.html">Encryption support</a>
+</div>
+        
+<div class="menuItem">
+<a href="casestudies.html">Case Studies</a>
+</div>
+        
+<div class="menuItem">
+<a href="legal.html">Legal</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Help</span>
+        
+<div class="menuItem">
+<a href="apidocs/index.html">Javadocs</a>
+</div>
+        
+<div class="menuItem">
+<a href="faq.html">FAQ</a>
+</div>
+        
+<div class="menuItem">
+<a href="mailinglists.html">Mailing Lists</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://issues.apache.org/bugzilla/buglist.cgi?product=POI">Bug Database</a>
+</div>
+        
+<div class="menuItem">
+<a href="changes.html">Changes Log</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Getting Involved</span>
+        
+<div class="menuItem">
+<a href="subversion.html">Subversion Repository</a>
+</div>
+        
+<div class="menuItem">
+<a href="howtobuild.html">How To Build</a>
+</div>
+        
+<div class="menuItem">
+<a href="guidelines.html">Contribution Guidelines</a>
+</div>
+        
+<div class="menuItem">
+<a href="who.html">Who We Are</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Component APIs</span>
+        
+<div class="menuItem">
+<a href="spreadsheet/index.html">Excel (SS=HSSF+XSSF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hwpf/index.html">Word (HWPF+XWPF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="slideshow/index.html">PowerPoint (HSLF+XSLF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="oxml4j/index.html">OpenXML4J (OOXML)</a>
+</div>
+        
+<div class="menuItem">
+<a href="poifs/index.html">OLE2 Filesystem (POIFS)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hpsf/index.html">OLE2 Document Props (HPSF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hsmf/index.html">Outlook (HSMF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hdgf/index.html">Visio (HDGF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hmef/index.html">TNEF (HMEF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hpbf/index.html">Publisher (HPBF)</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Apache Wide</span>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/">Apache Software Foundation</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/licenses/">License</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/security/">Security</a>
+</div>
+    
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>POI Ruby Bindings</h1>
+</div>
+<div class="h3">
+  
+
+  
+    
+<a name="Intro"></a>
+<div class="h3">
+<h3>Intro</h3>
+</div>
+      
+<p>The POI library can now be compiled as a Ruby extension, allowing the API to be called from
+      Ruby language programs. Ruby users can therefore read and write OLE2 documents, such as Excel files
+      with ease
+      </p>
+      
+<p>The bindings are generated by compiling POI with <a href="http://gcc.gnu.org/java/">gcj</a>,
+      and generating the Ruby wrapper using <a href="http://www.swig.org">SWIG</a>.  The aim is the keep
+      the POI api as-is. However, where java standard library objects are used, an effort is made to transform them smoothly
+      into  Ruby objects. Therefore, where the POI API takes an OutputStream, you can pass an IO object. Where the POI works
+      java.util.Date or java.util.Calendar object, you can work with a Ruby Time object. </p>
+    
+
+
+      
+<a name="Getting+Started"></a>
+<div class="h3">
+<h3>Getting Started</h3>
+</div>
+        
+<a name="Pre-Requisites"></a>
+<div class="h4">
+<h4>Pre-Requisites</h4>
+</div>
+	
+<p>The bindings have been developed with GCC 3.4.3 and Ruby 1.8.2. You are unlikely to get correct results with
+	versions of GCC prior to 3.4 or versions of Ruby prior to 1.8. To compile the Ruby extension, you must have
+	GCC (compiled with java language support), Ruby development headers, and SWIG. To run, you will need Ruby (obviously!) and
+	<em>libgcj </em>, presumably from the same version of GCC with which you compiled.
+        </p>
+	
+	
+<a name="Subversion"></a>
+<div class="h4">
+<h4>Subversion</h4>
+</div>
+	
+<p>
+	The POI-Ruby module sits under the POI <a href="http://svn.apache.org/repos/asf/poi/trunk/src/contrib/poi-ruby/">Subversion</a>. Running <em>make</em>
+	inside that directory will create a loadable ruby extention <em>poi4r.so</em> in the release subdirectory. Tests
+	are in the <em>tests/</em> subdirectory, and should be run from the <em>poi-ruby</em> directory. Please read the tests to figure out the usage.
+	</p>
+	
+<p>Note that the makefile, though designed to work accross Linux/OS X/Cygwin, has been tested only on linux.
+	There are likely to be issues on other platform; fixes gratefully accepted! </p>
+      
+      
+<a name="Binary"></a>
+<div class="h4">
+<h4>Binary</h4>
+</div>
+	
+<p>A version of poi4r.so is available <a href="http://www.apache.org/~avik/dist/poi4r.so">here</a>. Its been compiled on a linux box
+	with GCC 3.4.3 and Ruby 1.8.2. It dynamically links to libgcj. No guarantees about working on any other box.  </p>
+	
+      
+
+
+
+
+    
+<a name="Usage"></a>
+<div class="h3">
+<h3>Usage</h3>
+</div>
+      
+      
+<p>The following ruby code shows some of the things you can do with POI in Ruby</p>
+	
+<pre class="code">
+	h=Poi4r::HSSFWorkbook.new
+	#Test Sheet Creation
+	s=h.createSheet("Sheet1")
+
+	#Test setting cell values
+	s=h.getSheetAt(0)
+	r=s.createRow(0)
+	c=r.createCell(0)
+	c.setCellValue(1.5)
+
+	c=r.createCell(1)
+	c.setCellValue("Ruby")
+
+	#Test styles
+	st = h.createCellStyle()
+	c=r.createCell(2)
+	st.setAlignment(Poi4r::HSSFCellStyle.ALIGN_CENTER)
+	c.setCellStyle(st)
+	c.setCellValue("centr'd")
+
+	#Date handling
+	c=r.createCell(3)
+	t1=Time.now
+	c.setCellValue(Time.now)
+	t2= c.getDateCellValue().gmtime
+
+	st=h.createCellStyle();
+	st.setDataFormat(Poi4r::HSSFDataFormat.getBuiltinFormat("m/d/yy h:mm"))
+	c.setCellStyle(st)
+
+	#Formulas
+	c=r.createCell(4)
+	c.setCellFormula("A1*2")
+	c.getCellFormula()
+
+	#Writing
+	h.write(File.new("test.xls","w"))
+      </pre>
+      
+<p>  The <em>tc_base_tests.rb</em> file in the <em>tests</em> sub directory of the source distribution
+      contains examples of simple uses of the API. The <a href="spreadsheet/quick-guide.html">quick quide </a> is the best
+      place to learn HSSF API use. (Note however that none of the Drawing features are implemented in the Ruby binding.)
+       See also the <a href="apidocs/overview-summary.html">POI API documentation</a>  for more details.
+       </p>
+    
+
+    
+<a name="Future+Directions"></a>
+<div class="h3">
+<h3>Future Directions</h3>
+</div>
+      
+      	
+<a name="TODO%27s"></a>
+<div class="h4">
+<h4>TODO's</h4>
+</div>
+    	
+<ul>
+	
+<li>Implement support for reading Excel files (easy)</li>
+	
+<li>Expose POIFS API to read raw OLE2 files from Ruby</li>
+	
+<li>Expose HPSF API to read property streams </li>
+	
+<li>Tests... Tests... Tests...</li>
+	
+</ul>
+	
+	
+<a name="Limitations"></a>
+<div class="h4">
+<h4>Limitations</h4>
+</div>
+    	
+<ul>
+	
+<li>Check operations in 64bit machines - Java primitive types are fixed irrespective of machine type, unlike C/C++ types. The wrapping code
+	that converts C/C++ primitive types to/from Java types is making assumptions on type sizes that MAY be incorrect on wide architectures. </li>
+	
+<li>The current implementation is with the POI 2.0 release. The 2.5 release adds support for Excel drawing primitives, and
+      thus has a dependency on java AWT. Since AWT is not very mature in gcj, leaving it out seemed to be the safer option.</li>
+      
+<li>Packaging - The current make file makes no effort to install the extension into the standard ruby directories. This should probably be
+      packaged as a <a href="http://www.rubygems.org">gem</a>.</li>
+	
+</ul>
+	
+
+      
+
+  
+  
+
+<div id="authors" align="right">by&nbsp;Avik Sengupta</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

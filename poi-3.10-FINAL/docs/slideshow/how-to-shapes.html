@@ -1,0 +1,1015 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>Busy Developers' Guide to HSLF drawing layer</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+        
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">HSLF</span>
+        
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+        
+<div class="menuItem">
+<a href="quick-guide.html">Quick Guide</a>
+</div>
+        
+<div class="menuItem">
+<span class="menuSelected">HSLF Cookbok</span>
+</div>
+        
+<div class="menuItem">
+<a href="xslf-cookbook.html">XSLF Cookbok</a>
+</div>
+        
+<div class="menuItem">
+<a href="ppt-file-format.html">PPT File Format</a>
+</div>
+	
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Busy Developers' Guide to HSLF drawing layer</h1>
+</div>
+<div class="h3">
+    
+    
+        
+<a name="Busy+Developers%27+Guide+to+HSLF+drawing+layer"></a>
+<div class="h3">
+<h3>Busy Developers' Guide to HSLF drawing layer</h3>
+</div>
+             
+<a name="Index+of+Features"></a>
+<div class="h4">
+<h4>Index of Features</h4>
+</div>
+                
+<ul>
+                    
+<li>
+<a href="#NewPresentation">How to create a new presentation and add new slides to it</a>
+</li>
+                    
+<li>
+<a href="#PageSize">How to retrieve or change slide size</a>
+</li>
+                    
+<li>
+<a href="#GetShapes">How to get shapes contained in a particular slide</a>
+</li>
+                    
+<li>
+<a href="#Shapes">Drawing a shape on a slide</a>
+</li>
+                    
+<li>
+<a href="#Pictures">How to work with pictures</a>
+</li>
+                    
+<li>
+<a href="#SlideTitle">How to set slide title</a>
+</li>
+                    
+<li>
+<a href="#Fill">How to work with slide/shape background</a>
+</li>
+                    
+<li>
+<a href="#Bullets">How to create bulleted lists</a>
+</li>
+                    
+<li>
+<a href="#Hyperlinks">Hyperlinks</a>
+</li>
+                    
+<li>
+<a href="#Tables">Tables</a>
+</li>
+                    
+<li>
+<a href="#RemoveShape">How to remove shapes</a>
+</li>
+                    
+<li>
+<a href="#OLE">How to retrieve embedded OLE objects</a>
+</li>
+                    
+<li>
+<a href="#Sound">How to retrieve embedded sounds</a>
+</li>
+                    
+<li>
+<a href="#Freeform">How to create shapes of arbitrary geometry</a>
+</li>
+                    
+<li>
+<a href="#Graphics2D">Shapes and Graphics2D</a>
+</li>
+                    
+<li>
+<a href="#Render">How to convert slides into images</a>
+</li>
+                    
+<li>
+<a href="#HeadersFooters">Headers / Footers</a>
+</li>
+                
+</ul>
+            
+            
+<a name="Features"></a>
+<div class="h4">
+<h4>Features</h4>
+</div>
+                
+<a name="NewPresentation"></a>
+                <a name="New+Presentation"></a>
+<div class="h2">
+<h2>New Presentation</h2>
+</div>
+                  
+<pre class="code">
+    //create a new empty slide show
+    SlideShow ppt = new SlideShow();
+
+    //add first slide
+    Slide s1 = ppt.createSlide();
+
+    //add second slide
+    Slide s2 = ppt.createSlide();
+    
+    //save changes in a file
+    FileOutputStream out = new FileOutputStream("slideshow.ppt");
+    ppt.write(out);
+    out.close();
+                 </pre>
+                
+                
+<a name="PageSize"></a>
+                <a name="How+to+retrieve+or+change+slide+size"></a>
+<div class="h2">
+<h2>How to retrieve or change slide size</h2>
+</div>
+                    
+<pre class="code">
+    SlideShow ppt = new SlideShow(new HSLFSlideShow("slideshow.ppt"));
+    //retrieve page size. Coordinates are expressed in points (72 dpi)
+    java.awt.Dimension pgsize = ppt.getPageSize();
+    int pgx = pgsize.width; //slide width
+    int pgy = pgsize.height; //slide height
+
+    //set new page size
+    ppt.setPageSize(new java.awt.Dimension(1024, 768));
+    //save changes 
+    FileOutputStream out = new FileOutputStream("slideshow.ppt");
+    ppt.write(out);
+    out.close();
+                  </pre>
+                
+                
+<a name="GetShapes"></a>
+                <a name="How+to+get+shapes+contained+in+a+particular+slide"></a>
+<div class="h2">
+<h2>How to get shapes contained in a particular slide</h2>
+</div>
+                  
+<p>
+                    The following code demonstrates how to iterate over shapes for each slide.
+                  </p>
+                    
+<pre class="code">
+  SlideShow ppt = new SlideShow(new HSLFSlideShow("slideshow.ppt"));
+  //get slides 
+  Slide[] slide = ppt.getSlides();
+  for (int i = 0; i &lt; slide.length; i++){
+    Shape[] sh = slide[i].getShapes();
+    for (int j = 0; j &lt; sh.length; j++){
+      //name of the shape
+      String name = sh[j].getShapeName();
+
+      //shapes's anchor which defines the position of this shape in the slide
+      java.awt.Rectangle anchor = sh[j].getAnchor();
+
+      if (sh[j] instanceof Line){
+        Line line = (Line)sh[j];
+        //work with Line
+      } else if (sh[j] instanceof AutoShape){
+        AutoShape shape = (AutoShape)sh[j];
+        //work with AutoShape
+      } else if (sh[j] instanceof TextBox){
+        TextBox shape = (TextBox)sh[j];
+        //work with TextBox
+      } else if (sh[j] instanceof Picture){
+        Picture shape = (Picture)sh[j];
+        //work with Picture
+      }
+    }
+  }
+                  </pre>
+                
+                
+<a name="Shapes"></a>
+                <a name="Drawing+a+shape+on+a+slide"></a>
+<div class="h2">
+<h2>Drawing a shape on a slide</h2>
+</div>
+        
+<div class="frame warning">
+<div class="label">Warning</div>
+<div class="content">
+    To work with graphic objects HSLF uses Java2D classes
+    that may throw exceptions if graphical environment is not available. In case if graphical environment
+    is not available, you must tell Java that you are running in headless mode and
+    set the following system property: <span class="codefrag"> java.awt.headless=true </span>
+    (either via <span class="codefrag">-Djava.awt.headless=true</span> startup parameter or via <span class="codefrag">System.setProperty("java.awt.headless", "true")</span>).
+        </div>
+</div>
+                   
+<p>
+                     When you add a shape, you usually specify the dimensions of the shape and the position
+                     of the upper left corner of the bounding box for the shape relative to the upper left
+                     corner of the slide. Distances in the drawing layer are measured in points (72 points = 1 inch).
+                   </p>
+                   
+<pre class="code">
+  SlideShow ppt = new SlideShow();
+
+  Slide slide = ppt.createSlide();
+
+  //Line shape
+  Line line = new Line();
+  line.setAnchor(new java.awt.Rectangle(50, 50, 100, 20));
+  line.setLineColor(new Color(0, 128, 0));
+  line.setLineStyle(Line.LINE_DOUBLE);
+  slide.addShape(line);
+
+  //TextBox
+  TextBox txt = new TextBox();
+  txt.setText("Hello, World!");
+  txt.setAnchor(new java.awt.Rectangle(300, 100, 300, 50));
+
+  //use RichTextRun to work with the text format
+  RichTextRun rt = txt.getTextRun().getRichTextRuns()[0];
+  rt.setFontSize(32);
+  rt.setFontName("Arial");
+  rt.setBold(true);
+  rt.setItalic(true);
+  rt.setUnderlined(true);
+  rt.setFontColor(Color.red);
+  rt.setAlignment(TextBox.AlignRight);
+
+  slide.addShape(txt);
+
+  //Autoshape
+  //32-point star
+  AutoShape sh1 = new AutoShape(ShapeTypes.Star32);
+  sh1.setAnchor(new java.awt.Rectangle(50, 50, 100, 200));
+  sh1.setFillColor(Color.red);
+  slide.addShape(sh1);
+
+  //Trapezoid
+  AutoShape sh2 = new AutoShape(ShapeTypes.Trapezoid);
+  sh2.setAnchor(new java.awt.Rectangle(150, 150, 100, 200));
+  sh2.setFillColor(Color.blue);
+  slide.addShape(sh2);
+
+  FileOutputStream out = new FileOutputStream("slideshow.ppt");
+  ppt.write(out);
+  out.close();
+                    
+                  </pre>
+                
+                
+<a name="Pictures"></a>
+                <a name="How+to+work+with+pictures"></a>
+<div class="h2">
+<h2>How to work with pictures</h2>
+</div>
+                 
+  
+<p>
+  Currently, HSLF API supports the following types of pictures:
+  </p>
+  
+<ul>
+    
+<li>Windows Metafiles (WMF)</li>
+    
+<li>Enhanced Metafiles (EMF)</li>
+    
+<li>JPEG Interchange Format</li>
+    
+<li>Portable Network Graphics (PNG)</li>
+    
+<li>Macintosh PICT</li>
+  
+</ul>
+
+                    
+<pre class="code">
+  SlideShow ppt = new SlideShow(new HSLFSlideShow("slideshow.ppt"));
+
+  //extract all pictures contained in the presentation
+  PictureData[] pdata = ppt.getPictureData();
+  for (int i = 0; i &lt; pdata.length; i++){
+    PictureData pict = pdata[i];
+
+    // picture data
+    byte[] data = pict.getData();
+
+    int type = pict.getType();
+    String ext;
+    switch (type){
+      case Picture.JPEG: ext=".jpg"; break;
+      case Picture.PNG: ext=".png"; break;
+      case Picture.WMF: ext=".wmf"; break;
+      case Picture.EMF: ext=".emf"; break;
+      case Picture.PICT: ext=".pict"; break;
+      default: continue;
+    }
+    FileOutputStream out = new FileOutputStream("pict_"+i + ext);
+      out.write(data);
+      out.close();
+
+  }
+
+  // add a new picture to this slideshow and insert it in a  new slide
+  int idx = ppt.addPicture(new File("clock.jpg"), Picture.JPEG);
+
+  Picture pict = new Picture(idx);
+
+  //set image position in the slide
+  pict.setAnchor(new java.awt.Rectangle(100, 100, 300, 200));
+
+  Slide slide = ppt.createSlide();
+  slide.addShape(pict);
+
+  //now retrieve pictures containes in the first slide and save them on disk
+  slide = ppt.getSlides()[0];
+  Shape[] sh = slide.getShapes();
+  for (int i = 0; i &lt; sh.length; i++){
+    if (sh[i] instanceof Picture){
+      Picture pict = (Picture)sh[i];
+      PictureData pictData = pict.getPictureData();
+      byte[] data = pictData.getData();
+      int type = pictData.getType();
+      if (type == Picture.JPEG){
+        FileOutputStream out = new FileOutputStream("slide0_"+i+".jpg");
+        out.write(data);
+        out.close();
+      } else if (type == Picture.PNG){
+        FileOutputStream out = new FileOutputStream("slide0_"+i+".png");
+        out.write(data);
+        out.close();
+      }
+    }
+  }
+
+  FileOutputStream out = new FileOutputStream("slideshow.ppt");
+  ppt.write(out);
+  out.close();
+
+                    </pre>
+                
+                
+<a name="SlideTitle"></a>
+                <a name="How+to+set+slide+title"></a>
+<div class="h2">
+<h2>How to set slide title</h2>
+</div>
+                    
+<pre class="code">
+    SlideShow ppt = new SlideShow();
+    Slide slide = ppt.createSlide();
+    TextBox title = slide.addTitle();
+    title.setText("Hello, World!");
+    
+    //save changes 
+    FileOutputStream out = new FileOutputStream("slideshow.ppt");
+    ppt.write(out);
+    out.close();
+                  </pre>
+                  
+<p>
+                    Below is the equivalent code in PowerPoint VBA:
+                  </p>  
+                  
+<pre class="code">
+    Set myDocument = ActivePresentation.Slides(1)
+    myDocument.Shapes.AddTitle.TextFrame.TextRange.Text = "Hello, World!"
+                  </pre>
+                
+                
+<a name="Fill"></a>
+                <a name="How+to+modify+background+of+a+slide+master"></a>
+<div class="h2">
+<h2>How to modify background of a slide master</h2>
+</div>
+                    
+<pre class="code">
+        SlideShow ppt = new SlideShow();
+        SlideMaster master = ppt.getSlidesMasters()[0];
+
+        Fill fill = master.getBackground().getFill();
+        int idx = ppt.addPicture(new File("background.png"), Picture.PNG);
+        fill.setFillType(Fill.FILL_PICTURE);
+        fill.setPictureData(idx);
+                  </pre>
+                
+                
+<a name="How+to+modify+background+of+a+slide"></a>
+<div class="h2">
+<h2>How to modify background of a slide</h2>
+</div>
+                    
+<pre class="code">
+        SlideShow ppt = new SlideShow();
+        Slide slide = ppt.createSlide();
+        
+        //This slide has its own background. 
+        //Without this line it will use master's background.
+        slide.setFollowMasterBackground(false);
+        Fill fill = slide.getBackground().getFill();
+        int idx = ppt.addPicture(new File("background.png"), Picture.PNG);
+        fill.setFillType(Fill.FILL_PATTERN);
+        fill.setPictureData(idx);
+                  </pre>
+                
+                
+<a name="How+to+modify+background+of+a+shape"></a>
+<div class="h2">
+<h2>How to modify background of a shape</h2>
+</div>
+                    
+<pre class="code">
+        SlideShow ppt = new SlideShow();
+        Slide slide = ppt.createSlide();
+        
+        Shape shape = new AutoShape(ShapeTypes.Rectangle);
+        shape.setAnchor(new java.awt.Rectangle(100, 100, 200, 200));
+        Fill fill = shape.getFill();
+        fill.setFillType(Fill.FILL_SHADE);
+        fill.setBackgroundColor(Color.red);
+        fill.setForegroundColor(Color.green);
+        
+        slide.addShape(shape);
+                  </pre>
+                
+                
+<a name="Bullets"></a>
+                <a name="How+to+create+bulleted+lists"></a>
+<div class="h2">
+<h2>How to create bulleted lists</h2>
+</div>
+                    
+<pre class="code">
+  SlideShow ppt = new SlideShow();
+
+  Slide slide = ppt.createSlide();
+
+  TextBox shape = new TextBox();
+  RichTextRun rt = shape.getTextRun().getRichTextRuns()[0];
+  shape.setText(
+          "January\r" +
+          "February\r" +
+          "March\r" +
+          "April");
+  rt.setFontSize(42);
+  rt.setBullet(true);
+  rt.setBulletOffset(0);  //bullet offset
+  rt.setTextOffset(50);   //text offset (should be greater than bullet offset)
+  rt.setBulletChar('\u263A'); //bullet character
+  slide.addShape(shape);
+
+  shape.setAnchor(new java.awt.Rectangle(50, 50, 500, 300));  //position of the text box in the slide
+  slide.addShape(shape);
+
+  FileOutputStream out = new FileOutputStream("bullets.ppt");
+  ppt.write(out);
+  out.close();
+                </pre>
+                
+                
+<a name="Hyperlinks"></a>
+                <a name="How+to+read+hyperlinks+from+a+slide+show"></a>
+<div class="h2">
+<h2>How to read hyperlinks from a slide show</h2>
+</div>
+                    
+<pre class="code">
+    FileInputStream is = new FileInputStream("slideshow.ppt");
+    SlideShow ppt = new SlideShow(is);
+    is.close();
+
+    Slide[] slide = ppt.getSlides();
+    for (int j = 0; j &lt; slide.length; j++) {
+
+        //read hyperlinks from the text runs
+        TextRun[] txt = slide[j].getTextRuns();
+        for (int k = 0; k &lt; txt.length; k++) {
+            String text = txt[k].getText();
+            Hyperlink[] links = txt[k].getHyperlinks();
+            if(links != null) for (int l = 0; l &lt; links.length; l++) {
+                Hyperlink link = links[l];
+                String title = link.getTitle();
+                String address = link.getAddress();
+                String substring = text.substring(link.getStartIndex(), link.getEndIndex()-1); //in ppt end index is inclusive
+            }
+        }
+
+        //in PowerPoint you can assign a hyperlink to a shape without text,
+        //for example to a Line object. The code below demonstrates how to
+        //read such hyperlinks
+        Shape[] sh = slide[j].getShapes();
+        for (int k = 0; k &lt; sh.length; k++) {
+            Hyperlink link = sh[k].getHyperlink();
+            if(link != null)  {
+                String title = link.getTitle();
+                String address = link.getAddress();
+            }
+        }
+    }
+                </pre>
+                
+                
+<a name="Tables"></a>
+                <a name="How+to+create+tables"></a>
+<div class="h2">
+<h2>How to create tables</h2>
+</div>
+                  
+<pre class="code">
+      //table data              
+      String[][] data = {
+          {"INPUT FILE", "NUMBER OF RECORDS"},
+          {"Item File", "11,559"},
+          {"Vendor File", "300"},
+          {"Purchase History File", "10,000"},
+          {"Total # of requisitions", "10,200,038"}
+      };
+
+      SlideShow ppt = new SlideShow();
+
+      Slide slide = ppt.createSlide();
+      //create a table of 5 rows and 2 columns
+      Table table = new Table(5, 2);
+      for (int i = 0; i &lt; data.length; i++) {
+          for (int j = 0; j &lt; data[i].length; j++) {
+              TableCell cell = table.getCell(i, j);
+              cell.setText(data[i][j]);
+
+              RichTextRun rt = cell.getTextRun().getRichTextRuns()[0];
+              rt.setFontName("Arial");
+              rt.setFontSize(10);
+
+              cell.setVerticalAlignment(TextBox.AnchorMiddle);
+              cell.setHorizontalAlignment(TextBox.AlignCenter);
+          }
+      }
+
+      //set table borders
+      Line border = table.createBorder();
+      border.setLineColor(Color.black);
+      border.setLineWidth(1.0);
+      table.setAllBorders(border);
+
+      //set width of the 1st column
+      table.setColumnWidth(0, 300);
+      //set width of the 2nd column
+      table.setColumnWidth(1, 150);
+
+      slide.addShape(table);
+      table.moveTo(100, 100);
+
+      FileOutputStream out = new FileOutputStream("hslf-table.ppt");
+      ppt.write(out);
+      out.close();
+    
+                    </pre>
+                
+                  
+                
+<a name="RemoveShape"></a>
+                <a name="How+to+remove+shapes+from+a+slide"></a>
+<div class="h2">
+<h2>How to remove shapes from a slide</h2>
+</div>
+                  
+<pre class="code">
+
+        Shape[] shape = slide.getShapes();
+        for (int i = 0; i &lt; shape.length; i++) {
+    
+            //remove the shape
+            boolean ok = slide.removeShape(shape[i]);
+            if(ok){
+              //the shape was removed. Do something.
+            }
+        }
+                    </pre>
+                  
+                
+<a name="OLE"></a>
+                <a name="How+to+retrieve+embedded+OLE+objects"></a>
+<div class="h2">
+<h2>How to retrieve embedded OLE objects</h2>
+</div>
+                  
+<pre class="code">
+
+        Shape[] shape = slide.getShapes();
+        for (int i = 0; i &lt; shape.length; i++) {
+            if (shape[i] instanceof OLEShape) {
+                OLEShape ole = (OLEShape) shape[i];
+                ObjectData data = ole.getObjectData();
+                String name = ole.getInstanceName();
+                if ("Worksheet".equals(name)) {
+                    HSSFWorkbook wb = new HSSFWorkbook(data.getData());
+                } else if ("Document".equals(name)) {
+                    HWPFDocument doc = new HWPFDocument(data.getData());
+                }
+            }
+        }
+                    </pre>
+                  
+
+                
+<a name="Sound"></a>
+                <a name="How+to+retrieve+embedded+sounds"></a>
+<div class="h2">
+<h2>How to retrieve embedded sounds</h2>
+</div>
+                  
+<pre class="code">
+
+        FileInputStream is = new FileInputStream(args[0]);
+        SlideShow ppt = new SlideShow(is);
+        is.close();
+
+        SoundData[] sound = ppt.getSoundData();
+        for (int i = 0; i &lt; sound.length; i++) {
+            //save *WAV sounds on disk
+            if(sound[i].getSoundType().equals(".WAV")){
+                FileOutputStream out = new FileOutputStream(sound[i].getSoundName());
+                out.write(sound[i].getData());
+                out.close();
+            }
+        }
+                    </pre>
+                  
+                  
+                
+<a name="Freeform"></a>
+                <a name="How+to+create+shapes+of+arbitrary+geometry"></a>
+<div class="h2">
+<h2>How to create shapes of arbitrary geometry</h2>
+</div>
+                  
+<pre class="code">
+
+        SlideShow ppt = new SlideShow();
+        Slide slide = ppt.createSlide();
+
+        java.awt.geom.GeneralPath path = new java.awt.geom.GeneralPath();
+        path.moveTo(100, 100);
+        path.lineTo(200, 100);
+        path.curveTo(50, 45, 134, 22, 78, 133);
+        path.curveTo(10, 45, 134, 56, 78, 100);
+        path.lineTo(100, 200);
+        path.closePath();
+        
+        Freeform shape = new Freeform();
+        shape.setPath(path);
+        slide.addShape(shape);
+                    </pre>
+                  
+
+                
+<a name="Graphics2D"></a>
+                <a name="How+to+draw+into+a+slide+using+Graphics2D"></a>
+<div class="h2">
+<h2>How to draw into a slide using Graphics2D</h2>
+</div>
+                  
+<div class="frame warning">
+<div class="label">Warning</div>
+<div class="content">
+                   Current implementation of the PowerPoint Graphics2D driver is not fully compliant with the java.awt.Graphics2D specification.
+                   Some features like clipping, drawing of images are not yet supported. 
+                  </div>
+</div>
+                  
+<pre class="code">
+        SlideShow ppt = new SlideShow();
+        Slide slide = ppt.createSlide();
+
+        //draw a simple bar graph
+        //bar chart data. The first value is the bar color, the second is the width
+        Object[] def = new Object[]{
+            Color.yellow, new Integer(100),
+            Color.green, new Integer(150),
+            Color.gray, new Integer(75),
+            Color.red, new Integer(200),
+        };
+
+        //all objects are drawn into a shape group so we need to create one
+
+        ShapeGroup group = new ShapeGroup();
+        //define position of the drawing in the slide
+        Rectangle bounds = new java.awt.Rectangle(200, 100, 350, 300);
+        //if you want to draw in the entire slide area then define the anchor as follows:
+        //Dimension pgsize = ppt.getPageSize();
+        //java.awt.Rectangle bounds = new java.awt.Rectangle(0, 0, pgsize.width, pgsize.height);
+
+        group.setAnchor(bounds);
+        slide.addShape(group);
+
+        //draw a simple bar chart
+        Graphics2D graphics = new PPGraphics2D(group);
+        int x = bounds.x + 50, y = bounds.y + 50;
+        graphics.setFont(new Font("Arial", Font.BOLD, 10));
+        for (int i = 0, idx = 1; i &lt; def.length; i+=2, idx++) {
+            graphics.setColor(Color.black);
+            int width = ((Integer)def[i+1]).intValue();
+            graphics.drawString("Q" + idx, x-20, y+20);
+            graphics.drawString(width + "%", x + width + 10, y + 20);
+            graphics.setColor((Color)def[i]);
+            graphics.fill(new Rectangle(x, y, width, 30));
+            y += 40;
+        }
+        graphics.setColor(Color.black);
+        graphics.setFont(new Font("Arial", Font.BOLD, 14));
+        graphics.draw(bounds);
+        graphics.drawString("Performance", x + 70, y + 40);
+
+        FileOutputStream out = new FileOutputStream("hslf-graphics2d.ppt");
+        ppt.write(out);
+        out.close();
+
+                   </pre>
+                  
+
+                
+<a name="Render"></a>
+                <a name="Export+PowerPoint+slides+into+java.awt.Graphics2D"></a>
+<div class="h2">
+<h2>Export PowerPoint slides into java.awt.Graphics2D</h2>
+</div>
+                  
+<p>
+                    HSLF provides a way to export slides into images. You can capture slides into java.awt.Graphics2D object (or any other) 
+                    and serialize it into a PNG or JPEG format. Please note, although HSLF attempts to render slides as close to PowerPoint as possible, 
+                    the output may look differently from PowerPoint due to the following reasons: 
+                  </p>
+            
+<ul>
+              
+<li>Java2D renders fonts differently vs PowerPoint. There are always some differences in the way the font glyphs are painted</li>   
+              
+<li>HSLF uses java.awt.font.LineBreakMeasurer to break text into lines. PowerPoint may do it in a different way.</li>
+              
+<li>If a font from the presentation is not avaiable, then the JDK default font will be used.</li>
+            
+</ul>
+            
+<p>
+            Current Limitations:
+            </p>
+            
+<ul>
+              
+<li>Some types of shapes are not yet supported (WordArt, complex auto-shapes)</li>
+              
+<li>Only Bitmap images (PNG, JPEG, DIB) can be rendered in Java</li>  
+            
+</ul>
+                  
+<pre class="code">
+        FileInputStream is = new FileInputStream("slideshow.ppt");
+        SlideShow ppt = new SlideShow(is);
+        is.close();
+        
+        Dimension pgsize = ppt.getPageSize();
+
+        Slide[] slide = ppt.getSlides();
+        for (int i = 0; i &lt; slide.length; i++) {
+
+            BufferedImage img = new BufferedImage(pgsize.width, pgsize.height, BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphics = img.createGraphics();
+            //clear the drawing area
+            graphics.setPaint(Color.white);
+            graphics.fill(new Rectangle2D.Float(0, 0, pgsize.width, pgsize.height));
+
+            //render
+            slide[i].draw(graphics);
+
+            //save the output
+            FileOutputStream out = new FileOutputStream("slide-"  + (i+1) + ".png");
+            javax.imageio.ImageIO.write(img, "png", out);
+            out.close();
+        }
+
+                  </pre>
+                  
+                  
+                
+            
+<a name="HeadersFooters"></a>
+            <a name="How+to+extract+Headers+%2F+Footers+from+an+existing+presentation"></a>
+<div class="h4">
+<h4>How to extract Headers / Footers from an existing presentation</h4>
+</div>
+              
+<pre class="code">
+
+          FileInputStream is = new FileInputStream("slideshow.ppt");
+          SlideShow ppt = new SlideShow(is);
+          is.close();
+          Slide[] slides = ppt.getSlides();
+
+          //presentation-scope headers / footers
+          HeadersFooters hdd = ppt.getSlideHeadersFooters();
+          if(hdd.isFooterVisible()) {
+              String footerText = hdd.getFooterText();
+          }
+
+          //per-slide headers / footers
+          for (int i=0; i &lt; slides.length; i++){
+              HeadersFooters hdd2 = slides[i].getHeadersFooters();
+              if(hdd2.isFooterVisible()) {
+                  String footerText = hdd2.getFooterText();
+              }
+              if(hdd2.isUserDateVisible()) {
+                 String customDate = hdd2.getDateTimeText();
+              }
+              if(hdd2.isSlideNumberVisible()){
+                  int slideNUm = slides[i].getSlideNumber();
+              }
+
+          }
+                </pre>
+              
+            
+<a name="How+to+set+Headers+%2F+Footers"></a>
+<div class="h4">
+<h4>How to set Headers / Footers</h4>
+</div>
+              
+<pre class="code">
+
+          SlideShow ppt = new SlideShow();
+
+          //presentation-scope headers / footers
+          HeadersFooters hdd = ppt.getSlideHeadersFooters();
+          hdd.setSlideNumberVisible(true);
+          hdd.setFootersText("Created by POI-HSLF");
+                </pre>
+              
+        
+    
+
+<div id="authors" align="right">by&nbsp;Yegor Kozlov</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

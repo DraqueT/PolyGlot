@@ -1,0 +1,833 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>BinaryTree (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="BinaryTree (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/BinaryTree.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/poi/util/Beta.html" title="annotation in org.apache.poi.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/poi/util/BitField.html" title="class in org.apache.poi.util"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/poi/util/BinaryTree.html" target="_top">Frames</a></li>
+<li><a href="BinaryTree.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_java.util.AbstractMap">Nested</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.util</div>
+<h2 title="Class BinaryTree" class="title">Class BinaryTree</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>java.util.AbstractMap</li>
+<li>
+<ul class="inheritance">
+<li>org.apache.poi.util.BinaryTree</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd>java.util.Map</dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">BinaryTree</span>
+extends java.util.AbstractMap</pre>
+<div class="block">Red-Black tree-based implementation of Map. This class guarantees
+ that the map will be in both ascending key order and ascending
+ value order, sorted according to the natural order for the key's
+ and value's classes.<p>
+
+ This Map is intended for applications that need to be able to look
+ up a key-value pairing by either key or value, and need to do so
+ with equal efficiency.<p>
+
+ While that goal could be accomplished by taking a pair of TreeMaps
+ and redirecting requests to the appropriate TreeMap (e.g.,
+ containsKey would be directed to the TreeMap that maps values to
+ keys, containsValue would be directed to the TreeMap that maps keys
+ to values), there are problems with that implementation,
+ particularly when trying to keep the two TreeMaps synchronized with
+ each other. And if the data contained in the TreeMaps is large, the
+ cost of redundant storage becomes significant.<p>
+
+ This solution keeps the data properly synchronized and minimizes
+ the data storage. The red-black algorithm is based on TreeMap's,
+ but has been modified to simultaneously map a tree node by key and
+ by value. This doubles the cost of put operations (but so does
+ using two TreeMaps), and nearly doubles the cost of remove
+ operations (there is a savings in that the lookup of the node to be
+ removed only has to be performed once). And since only one node
+ contains the key and value, storage is significantly less than that
+ required by two TreeMaps.<p>
+
+ There are some limitations placed on data kept in this Map. The
+ biggest one is this:<p>
+
+ When performing a put operation, neither the key nor the value may
+ already exist in the Map. In the java.util Map implementations
+ (HashMap, TreeMap), you can perform a put with an already mapped
+ key, and neither cares about duplicate values at all ... but this
+ implementation's put method with throw an IllegalArgumentException
+ if either the key or the value is already in the Map.<p>
+
+ Obviously, that same restriction (and consequence of failing to
+ heed that restriction) applies to the putAll method.<p>
+
+ The Map.Entry instances returned by the appropriate methods will
+ not allow setValue() and will throw an
+ UnsupportedOperationException on attempts to call that method.<p>
+
+ New methods are added to take advantage of the fact that values are
+ kept sorted independently of their keys:<p>
+
+ Object getKeyForValue(Object value) is the opposite of get; it
+ takes a value and returns its key, if any.<p>
+
+ Object removeValue(Object value) finds and removes the specified
+ value and returns the now un-used key.<p>
+
+ Set entrySetByValue() returns the Map.Entry's in a Set whose
+ iterator will iterate over the Map.Entry's in ascending order by
+ their corresponding values.<p>
+
+ Set keySetByValue() returns the keys in a Set whose iterator will
+ iterate over the keys in ascending order by their corresponding
+ values.<p>
+
+ Collection valuesByValue() returns the values in a Collection whose
+ iterator will iterate over the values in ascending order.<p></div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Marc Johnson (mjohnson at apache dot org)</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_java.util.AbstractMap">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;java.util.AbstractMap</h3>
+<code>java.util.AbstractMap.SimpleEntry&lt;K,V&gt;, java.util.AbstractMap.SimpleImmutableEntry&lt;K,V&gt;</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_java.util.Map">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from interface&nbsp;java.util.Map</h3>
+<code>java.util.Map.Entry&lt;K,V&gt;</code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#BinaryTree()">BinaryTree</a></strong>()</code>
+<div class="block">Construct a new BinaryTree</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#BinaryTree(java.util.Map)">BinaryTree</a></strong>(java.util.Map&nbsp;map)</code>
+<div class="block">Constructs a new BinaryTree from an existing Map, with keys and
+ values sorted</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#clear()">clear</a></strong>()</code>
+<div class="block">Removes all mappings from this map</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#containsKey(java.lang.Object)">containsKey</a></strong>(java.lang.Object&nbsp;key)</code>
+<div class="block">Returns true if this map contains a mapping for the specified
+ key.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#containsValue(java.lang.Object)">containsValue</a></strong>(java.lang.Object&nbsp;value)</code>
+<div class="block">Returns true if this map maps one or more keys to the
+ specified value.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.util.Set</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#entrySet()">entrySet</a></strong>()</code>
+<div class="block">Returns a set view of the mappings contained in this map.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.util.Set</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#entrySetByValue()">entrySetByValue</a></strong>()</code>
+<div class="block">Returns a set view of the mappings contained in this map.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.Object</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#get(java.lang.Object)">get</a></strong>(java.lang.Object&nbsp;key)</code>
+<div class="block">Returns the value to which this map maps the specified
+ key.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.Object</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#getKeyForValue(java.lang.Object)">getKeyForValue</a></strong>(java.lang.Object&nbsp;value)</code>
+<div class="block">Returns the key to which this map maps the specified value.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.util.Set</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#keySet()">keySet</a></strong>()</code>
+<div class="block">Returns a set view of the keys contained in this map.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.util.Set</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#keySetByValue()">keySetByValue</a></strong>()</code>
+<div class="block">Returns a set view of the keys contained in this map.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>org.apache.poi.util.BinaryTree.Node</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#lookup(java.lang.Comparable, int)">lookup</a></strong>(java.lang.Comparable&nbsp;data,
+      int&nbsp;index)</code>
+<div class="block">do the actual lookup of a piece of data</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.Object</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#put(java.lang.Object, java.lang.Object)">put</a></strong>(java.lang.Object&nbsp;key,
+   java.lang.Object&nbsp;value)</code>
+<div class="block">Associates the specified value with the specified key in this
+ map.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.Object</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#remove(java.lang.Object)">remove</a></strong>(java.lang.Object&nbsp;key)</code>
+<div class="block">Removes the mapping for this key from this map if present</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.Object</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#removeValue(java.lang.Object)">removeValue</a></strong>(java.lang.Object&nbsp;value)</code>
+<div class="block">Removes the mapping for this value from this map if present</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#size()">size</a></strong>()</code>
+<div class="block">Returns the number of key-value mappings in this map.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.util.Collection</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#values()">values</a></strong>()</code>
+<div class="block">Returns a collection view of the values contained in this
+ map.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.util.Collection</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/util/BinaryTree.html#valuesByValue()">valuesByValue</a></strong>()</code>
+<div class="block">Returns a collection view of the values contained in this
+ map.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.util.AbstractMap">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.util.AbstractMap</h3>
+<code>clone, equals, hashCode, isEmpty, putAll, toString</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>finalize, getClass, notify, notifyAll, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="BinaryTree()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BinaryTree</h4>
+<pre>public&nbsp;BinaryTree()</pre>
+<div class="block">Construct a new BinaryTree</div>
+</li>
+</ul>
+<a name="BinaryTree(java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>BinaryTree</h4>
+<pre>public&nbsp;BinaryTree(java.util.Map&nbsp;map)
+           throws java.lang.ClassCastException,
+                  java.lang.NullPointerException,
+                  java.lang.IllegalArgumentException</pre>
+<div class="block">Constructs a new BinaryTree from an existing Map, with keys and
+ values sorted</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>map</code> - the map whose mappings are to be placed in this map.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>java.lang.ClassCastException</code> - if the keys in the map are not
+                               Comparable, or are not mutually
+                               comparable; also if the values in
+                               the map are not Comparable, or
+                               are not mutually Comparable</dd>
+<dd><code>java.lang.NullPointerException</code> - if any key or value in the map
+                                 is null</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - if there are duplicate keys
+                                     or duplicate values in the
+                                     map</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getKeyForValue(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getKeyForValue</h4>
+<pre>public&nbsp;java.lang.Object&nbsp;getKeyForValue(java.lang.Object&nbsp;value)
+                                throws java.lang.ClassCastException,
+                                       java.lang.NullPointerException</pre>
+<div class="block">Returns the key to which this map maps the specified value.
+ Returns null if the map contains no mapping for this value.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - value whose associated key is to be returned.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the key to which this map maps the specified value, or
+         null if the map contains no mapping for this value.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>java.lang.ClassCastException</code> - if the value is of an
+                               inappropriate type for this map.</dd>
+<dd><code>java.lang.NullPointerException</code> - if the value is null</dd></dl>
+</li>
+</ul>
+<a name="removeValue(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeValue</h4>
+<pre>public&nbsp;java.lang.Object&nbsp;removeValue(java.lang.Object&nbsp;value)</pre>
+<div class="block">Removes the mapping for this value from this map if present</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - value whose mapping is to be removed from the map.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>previous key associated with specified value, or null
+         if there was no mapping for value.</dd></dl>
+</li>
+</ul>
+<a name="entrySetByValue()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>entrySetByValue</h4>
+<pre>public&nbsp;java.util.Set&nbsp;entrySetByValue()</pre>
+<div class="block">Returns a set view of the mappings contained in this map. Each
+ element in the returned set is a Map.Entry. The set is backed
+ by the map, so changes to the map are reflected in the set, and
+ vice-versa.  If the map is modified while an iteration over the
+ set is in progress, the results of the iteration are
+ undefined. The set supports element removal, which removes the
+ corresponding mapping from the map, via the Iterator.remove,
+ Set.remove, removeAll, retainAll and clear operations.  It does
+ not support the add or addAll operations.<p>
+
+ The difference between this method and entrySet is that
+ entrySet's iterator() method returns an iterator that iterates
+ over the mappings in ascending order by key. This method's
+ iterator method iterates over the mappings in ascending order
+ by value.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>a set view of the mappings contained in this map.</dd></dl>
+</li>
+</ul>
+<a name="keySetByValue()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>keySetByValue</h4>
+<pre>public&nbsp;java.util.Set&nbsp;keySetByValue()</pre>
+<div class="block">Returns a set view of the keys contained in this map.  The set
+ is backed by the map, so changes to the map are reflected in
+ the set, and vice-versa. If the map is modified while an
+ iteration over the set is in progress, the results of the
+ iteration are undefined. The set supports element removal,
+ which removes the corresponding mapping from the map, via the
+ Iterator.remove, Set.remove, removeAll, retainAll, and clear
+ operations. It does not support the add or addAll
+ operations.<p>
+
+ The difference between this method and keySet is that keySet's
+ iterator() method returns an iterator that iterates over the
+ keys in ascending order by key. This method's iterator method
+ iterates over the keys in ascending order by value.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>a set view of the keys contained in this map.</dd></dl>
+</li>
+</ul>
+<a name="valuesByValue()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>valuesByValue</h4>
+<pre>public&nbsp;java.util.Collection&nbsp;valuesByValue()</pre>
+<div class="block">Returns a collection view of the values contained in this
+ map. The collection is backed by the map, so changes to the map
+ are reflected in the collection, and vice-versa. If the map is
+ modified while an iteration over the collection is in progress,
+ the results of the iteration are undefined. The collection
+ supports element removal, which removes the corresponding
+ mapping from the map, via the Iterator.remove,
+ Collection.remove, removeAll, retainAll and clear operations.
+ It does not support the add or addAll operations.<p>
+
+ The difference between this method and values is that values's
+ iterator() method returns an iterator that iterates over the
+ values in ascending order by key. This method's iterator method
+ iterates over the values in ascending order by key.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>a collection view of the values contained in this map.</dd></dl>
+</li>
+</ul>
+<a name="lookup(java.lang.Comparable, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>lookup</h4>
+<pre>public&nbsp;org.apache.poi.util.BinaryTree.Node&nbsp;lookup(java.lang.Comparable&nbsp;data,
+                                         int&nbsp;index)</pre>
+<div class="block">do the actual lookup of a piece of data</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - the key or value to be looked up</dd><dd><code>index</code> - _KEY or _VALUE</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the desired Node, or null if there is no mapping of the
+         specified data</dd></dl>
+</li>
+</ul>
+<a name="size()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>size</h4>
+<pre>public&nbsp;int&nbsp;size()</pre>
+<div class="block">Returns the number of key-value mappings in this map. If the
+ map contains more than Integer.MAX_VALUE elements, returns
+ Integer.MAX_VALUE.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>size</code>&nbsp;in interface&nbsp;<code>java.util.Map</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>size</code>&nbsp;in class&nbsp;<code>java.util.AbstractMap</code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the number of key-value mappings in this map.</dd></dl>
+</li>
+</ul>
+<a name="containsKey(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>containsKey</h4>
+<pre>public&nbsp;boolean&nbsp;containsKey(java.lang.Object&nbsp;key)
+                    throws java.lang.ClassCastException,
+                           java.lang.NullPointerException</pre>
+<div class="block">Returns true if this map contains a mapping for the specified
+ key.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>containsKey</code>&nbsp;in interface&nbsp;<code>java.util.Map</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>containsKey</code>&nbsp;in class&nbsp;<code>java.util.AbstractMap</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key whose presence in this map is to be tested.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>true if this map contains a mapping for the specified
+         key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>java.lang.ClassCastException</code> - if the key is of an inappropriate
+                               type for this map.</dd>
+<dd><code>java.lang.NullPointerException</code> - if the key is null</dd></dl>
+</li>
+</ul>
+<a name="containsValue(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>containsValue</h4>
+<pre>public&nbsp;boolean&nbsp;containsValue(java.lang.Object&nbsp;value)</pre>
+<div class="block">Returns true if this map maps one or more keys to the
+ specified value.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>containsValue</code>&nbsp;in interface&nbsp;<code>java.util.Map</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>containsValue</code>&nbsp;in class&nbsp;<code>java.util.AbstractMap</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - value whose presence in this map is to be tested.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>true if this map maps one or more keys to the specified
+         value.</dd></dl>
+</li>
+</ul>
+<a name="get(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre>public&nbsp;java.lang.Object&nbsp;get(java.lang.Object&nbsp;key)
+                     throws java.lang.ClassCastException,
+                            java.lang.NullPointerException</pre>
+<div class="block">Returns the value to which this map maps the specified
+ key. Returns null if the map contains no mapping for this key.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>get</code>&nbsp;in interface&nbsp;<code>java.util.Map</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>get</code>&nbsp;in class&nbsp;<code>java.util.AbstractMap</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key whose associated value is to be returned.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value to which this map maps the specified key, or
+         null if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>java.lang.ClassCastException</code> - if the key is of an inappropriate
+                               type for this map.</dd>
+<dd><code>java.lang.NullPointerException</code> - if the key is null</dd></dl>
+</li>
+</ul>
+<a name="put(java.lang.Object, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>put</h4>
+<pre>public&nbsp;java.lang.Object&nbsp;put(java.lang.Object&nbsp;key,
+                   java.lang.Object&nbsp;value)
+                     throws java.lang.ClassCastException,
+                            java.lang.NullPointerException,
+                            java.lang.IllegalArgumentException</pre>
+<div class="block">Associates the specified value with the specified key in this
+ map.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>put</code>&nbsp;in interface&nbsp;<code>java.util.Map</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>put</code>&nbsp;in class&nbsp;<code>java.util.AbstractMap</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key with which the specified value is to be
+            associated.</dd><dd><code>value</code> - value to be associated with the specified key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>null</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>java.lang.ClassCastException</code> - if the class of the specified key
+                               or value prevents it from being
+                               stored in this map.</dd>
+<dd><code>java.lang.NullPointerException</code> - if the specified key or value
+                                 is null</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - if the key duplicates an
+                                     existing key, or if the
+                                     value duplicates an
+                                     existing value</dd></dl>
+</li>
+</ul>
+<a name="remove(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>remove</h4>
+<pre>public&nbsp;java.lang.Object&nbsp;remove(java.lang.Object&nbsp;key)</pre>
+<div class="block">Removes the mapping for this key from this map if present</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>remove</code>&nbsp;in interface&nbsp;<code>java.util.Map</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>remove</code>&nbsp;in class&nbsp;<code>java.util.AbstractMap</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key whose mapping is to be removed from the map.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>previous value associated with specified key, or null
+         if there was no mapping for key.</dd></dl>
+</li>
+</ul>
+<a name="clear()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clear</h4>
+<pre>public&nbsp;void&nbsp;clear()</pre>
+<div class="block">Removes all mappings from this map</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>clear</code>&nbsp;in interface&nbsp;<code>java.util.Map</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>clear</code>&nbsp;in class&nbsp;<code>java.util.AbstractMap</code></dd>
+</dl>
+</li>
+</ul>
+<a name="keySet()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>keySet</h4>
+<pre>public&nbsp;java.util.Set&nbsp;keySet()</pre>
+<div class="block">Returns a set view of the keys contained in this map.  The set
+ is backed by the map, so changes to the map are reflected in
+ the set, and vice-versa. If the map is modified while an
+ iteration over the set is in progress, the results of the
+ iteration are undefined. The set supports element removal,
+ which removes the corresponding mapping from the map, via the
+ Iterator.remove, Set.remove, removeAll, retainAll, and clear
+ operations.  It does not support the add or addAll operations.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>keySet</code>&nbsp;in interface&nbsp;<code>java.util.Map</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>keySet</code>&nbsp;in class&nbsp;<code>java.util.AbstractMap</code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>a set view of the keys contained in this map.</dd></dl>
+</li>
+</ul>
+<a name="values()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>values</h4>
+<pre>public&nbsp;java.util.Collection&nbsp;values()</pre>
+<div class="block">Returns a collection view of the values contained in this
+ map. The collection is backed by the map, so changes to the map
+ are reflected in the collection, and vice-versa. If the map is
+ modified while an iteration over the collection is in progress,
+ the results of the iteration are undefined. The collection
+ supports element removal, which removes the corresponding
+ mapping from the map, via the Iterator.remove,
+ Collection.remove, removeAll, retainAll and clear operations.
+ It does not support the add or addAll operations.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>values</code>&nbsp;in interface&nbsp;<code>java.util.Map</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>values</code>&nbsp;in class&nbsp;<code>java.util.AbstractMap</code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>a collection view of the values contained in this map.</dd></dl>
+</li>
+</ul>
+<a name="entrySet()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>entrySet</h4>
+<pre>public&nbsp;java.util.Set&nbsp;entrySet()</pre>
+<div class="block">Returns a set view of the mappings contained in this map. Each
+ element in the returned set is a Map.Entry. The set is backed
+ by the map, so changes to the map are reflected in the set, and
+ vice-versa.  If the map is modified while an iteration over the
+ set is in progress, the results of the iteration are
+ undefined. The set supports element removal, which removes the
+ corresponding mapping from the map, via the Iterator.remove,
+ Set.remove, removeAll, retainAll and clear operations.  It does
+ not support the add or addAll operations.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>entrySet</code>&nbsp;in interface&nbsp;<code>java.util.Map</code></dd>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>entrySet</code>&nbsp;in class&nbsp;<code>java.util.AbstractMap</code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>a set view of the mappings contained in this map.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/BinaryTree.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/poi/util/Beta.html" title="annotation in org.apache.poi.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/poi/util/BitField.html" title="class in org.apache.poi.util"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/poi/util/BinaryTree.html" target="_top">Frames</a></li>
+<li><a href="BinaryTree.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_java.util.AbstractMap">Nested</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

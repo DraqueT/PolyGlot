@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>Apache POI - HWPF - Java API to Handle Microsoft Word Files</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+		
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+	
+</div>
+<div class="menu">
+<span class="menuLabel">HWPF</span>
+		
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+		
+<div class="menuItem">
+<a href="quick-guide.html">Quick Guide</a>
+</div>
+		
+<div class="menuItem">
+<span class="menuSelected">HWPF Format</span>
+</div>
+		
+<div class="menuItem">
+<a href="projectplan.html">HWPF Project plan</a>
+</div>
+	
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Apache POI - HWPF - Java API to Handle Microsoft Word Files</h1>
+</div>
+<div class="h3">
+ 
+
+ 
+  
+<a name="The+Word+97+File+Format+in+semi-plain+English"></a>
+<div class="h3">
+<h3>The Word 97 File Format in semi-plain English</h3>
+</div>
+
+   
+<p>The purpose of this document is to give a brief high level overview of the
+      HWPF document format. This document does not go into in-depth technical
+      detail and is only meant as a supplement to the Microsoft Word 97-2007 
+      Binary File Format freely available from 
+      <a href="http://www.microsoft.com/interop/docs/officebinaryformats.mspx">Microsoft</a>.</p>
+   
+<p>The OLE file format is not discussed in this document. It is assumed that
+      the reader has a working knowledge of the POIFS API. </p>
+
+   
+<a name="Word+file+structure"></a>
+<div class="h4">
+<h4>Word file structure</h4>
+</div>
+    
+<p>A Word file is made up of the document text and data structures
+       containing formatting information about the text. Of course, this is a
+       very simplified illustration. There are fields and macros and other
+       things that have not been considered. At this stage, HWPF is mainly
+       concerned with formatted text.</p>
+   
+   
+<a name="Reading+Word+files"></a>
+<div class="h4">
+<h4>Reading Word files</h4>
+</div>
+    
+<p>The entry point for HWPF's reading of a Word file is the File Information
+       Block (FIB). This structure is the entry point for the locations and size
+       of a document's text and data structures. The FIB is located at the
+       beginning of the main stream.</p>
+    
+<a name="Text"></a>
+<div class="h2">
+<h2>Text</h2>
+</div>
+     
+<p>The document's text is also located in the main stream. Its starting
+        location is given as FIB.fcMin and its length is given in bytes by
+        FIB.ccpText. These two values are not very useful in getting the text
+        because of unicode. There may be unicode text intermingled with ASCII
+        text. That brings us to the piece table.</p>
+     
+<p>The piece table is used to divide the text into non-unicode and unicode
+        pieces. The size and offset are given in FIB.fcClx and FIB.lcbClx
+        respectively. The piece table may contain Property Modifiers (prm).
+        These are for complex(fast-saved) files and are skipped. Each text piece
+        contains offsets in the main stream that contain text for that piece.
+        If the piece uses unicode, the file offset is masked with a certain bit.
+        Then you have to unmask the bit and divide by 2 to get the real file
+        offset. </p>
+    
+    
+<a name="Text+Formatting"></a>
+<div class="h2">
+<h2>Text Formatting</h2>
+</div>
+     
+<a name="Stylesheet"></a>
+<div class="h5">
+<h5>Stylesheet</h5>
+</div>
+      
+<p>All text formatting is based on styles contained in the StyleSheet.
+         The StyleSheet is a data structure containing among other things, style
+         descriptions. Each style description can contain a paragraph style and
+         a character style or simply a character style. Each style description
+         is stored in a compressed version on file. Basically these are deltas
+         from another style.</p>
+      
+<p>Eventually, you have to chain back to the nil style which is an
+         imaginary style with certain implied values.</p>
+     
+     
+<a name="Paragraph+and+Character+styles"></a>
+<div class="h5">
+<h5>Paragraph and Character styles</h5>
+</div>
+      
+<p>Paragraph and Character formatting properties for a document's text are
+         stored on file as deltas from some base style in the Stylesheet. The
+         deltas are used to create a complete uncompressed style in memory.</p>
+      
+<p>Uncompressed paragraph styles are represented by the Pargraph
+         Properties(PAP) data structure. Uncompressed character styles are
+         represented by the Character Properties(CHP) data structure. The styles
+         for the document text are stored in compressed format in the
+         corresponding Formatted Disk Pages (FKP). A compressed PAP is referred
+         to as a PAPX and a compressed CHP is a CHPX. The FKP locations are
+         stored in the bin table. There are seperate bin tables for CHPXs and
+         PAPXs. The bin tables' locations and sizes are stored in the FIB.</p>
+      
+<p>A FKP is a 512 byte OLE page. It contains the offsets of the beginning
+         and end of each paragraph/character run in the main stream and the
+         compressed properties for that interval. The compessed PAPX is based on
+         its base style in the StyleSheet. The compressed CHPX is based on the
+         enclosing paragraph's base style in the Stylesheet.</p>
+     
+     
+<a name="Uncompressing+styles+and+other+data+structures"></a>
+<div class="h5">
+<h5>Uncompressing styles and other data structures</h5>
+</div>
+      
+<p>All compressed properties(CHPX, PAPX, SEPX) contain a grpprl. A grpprl
+         is an array of sprms. A sprm defines a delta from some base property.
+         There is a table of possible sprms in the Word 97 spec. Each sprm is a
+         two byte operand followed by a parameter. The parameter size depends on
+         the sprm. Each sprm describes an operation that should be performed on
+         the base style. After every sprm in the grpprl is performed on the base
+         style you will have the style for the paragraph, character run,
+         section, etc.</p>
+     
+    
+   
+  
+ 
+
+<div id="authors" align="right">by&nbsp;S. Ryan Ackley</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

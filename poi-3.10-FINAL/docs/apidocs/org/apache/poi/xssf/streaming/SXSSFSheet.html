@@ -1,0 +1,2741 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>SXSSFSheet (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="SXSSFSheet (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/SXSSFSheet.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFRow.FilledCellIterator.html" title="class in org.apache.poi.xssf.streaming"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFWorkbook.html" title="class in org.apache.poi.xssf.streaming"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/xssf/streaming/SXSSFSheet.html" target="_top">Frames</a></li>
+<li><a href="SXSSFSheet.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.xssf.streaming</div>
+<h2 title="Class SXSSFSheet" class="title">Class SXSSFSheet</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>org.apache.poi.xssf.streaming.SXSSFSheet</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd>java.lang.Cloneable, java.lang.Iterable&lt;<a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a>&gt;, <a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">SXSSFSheet</span>
+extends java.lang.Object
+implements <a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a>, java.lang.Cloneable</pre>
+<div class="block">Streaming version of XSSFSheet implementing the "BigGridDemo" strategy.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Alex Geller, Four J's Development Tools</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.apache.poi.ss.usermodel.Sheet">
+<!--   -->
+</a>
+<h3>Fields inherited from interface&nbsp;org.apache.poi.ss.usermodel.<a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></h3>
+<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#BottomMargin">BottomMargin</a>, <a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#FooterMargin">FooterMargin</a>, <a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#HeaderMargin">HeaderMargin</a>, <a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#LeftMargin">LeftMargin</a>, <a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#PANE_LOWER_LEFT">PANE_LOWER_LEFT</a>, <a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#PANE_LOWER_RIGHT">PANE_LOWER_RIGHT</a>, <a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#PANE_UPPER_LEFT">PANE_UPPER_LEFT</a>, <a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#PANE_UPPER_RIGHT">PANE_UPPER_RIGHT</a>, <a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#RightMargin">RightMargin</a>, <a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#TopMargin">TopMargin</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#SXSSFSheet(org.apache.poi.xssf.streaming.SXSSFWorkbook, org.apache.poi.xssf.usermodel.XSSFSheet)">SXSSFSheet</a></strong>(<a href="../../../../../org/apache/poi/xssf/streaming/SXSSFWorkbook.html" title="class in org.apache.poi.xssf.streaming">SXSSFWorkbook</a>&nbsp;workbook,
+          <a href="../../../../../org/apache/poi/xssf/usermodel/XSSFSheet.html" title="class in org.apache.poi.xssf.usermodel">XSSFSheet</a>&nbsp;xSheet)</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#addMergedRegion(org.apache.poi.ss.util.CellRangeAddress)">addMergedRegion</a></strong>(<a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;region)</code>
+<div class="block">Adds a merged region of cells (hence those cells form one)</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#addValidationData(org.apache.poi.ss.usermodel.DataValidation)">addValidationData</a></strong>(<a href="../../../../../org/apache/poi/ss/usermodel/DataValidation.html" title="interface in org.apache.poi.ss.usermodel">DataValidation</a>&nbsp;dataValidation)</code>
+<div class="block">Creates a data validation object</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#autoSizeColumn(int)">autoSizeColumn</a></strong>(int&nbsp;column)</code>
+<div class="block">Adjusts the column width to fit the contents.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#autoSizeColumn(int, boolean)">autoSizeColumn</a></strong>(int&nbsp;column,
+              boolean&nbsp;useMergedCells)</code>
+<div class="block">Adjusts the column width to fit the contents.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#changeRowNum(org.apache.poi.xssf.streaming.SXSSFRow, int)">changeRowNum</a></strong>(<a href="../../../../../org/apache/poi/xssf/streaming/SXSSFRow.html" title="class in org.apache.poi.xssf.streaming">SXSSFRow</a>&nbsp;row,
+            int&nbsp;newRowNum)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/Drawing.html" title="interface in org.apache.poi.ss.usermodel">Drawing</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#createDrawingPatriarch()">createDrawingPatriarch</a></strong>()</code>
+<div class="block">Creates the top-level drawing patriarch.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#createFreezePane(int, int)">createFreezePane</a></strong>(int&nbsp;colSplit,
+                int&nbsp;rowSplit)</code>
+<div class="block">Creates a split (freezepane).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#createFreezePane(int, int, int, int)">createFreezePane</a></strong>(int&nbsp;colSplit,
+                int&nbsp;rowSplit,
+                int&nbsp;leftmostColumn,
+                int&nbsp;topRow)</code>
+<div class="block">Creates a split (freezepane).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#createRow(int)">createRow</a></strong>(int&nbsp;rownum)</code>
+<div class="block">Create a new row within the sheet and return the high level representation</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#createSplitPane(int, int, int, int, int)">createSplitPane</a></strong>(int&nbsp;xSplitPos,
+               int&nbsp;ySplitPos,
+               int&nbsp;leftmostColumn,
+               int&nbsp;topRow,
+               int&nbsp;activePane)</code>
+<div class="block">Creates a split pane.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#flushRows()">flushRows</a></strong>()</code>
+<div class="block">Flush all rows to disk.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#flushRows(int)">flushRows</a></strong>(int&nbsp;remaining)</code>
+<div class="block">Specifies how many rows can be accessed at most via getRow().</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getAutobreaks()">getAutobreaks</a></strong>()</code>
+<div class="block">Flag indicating whether the sheet displays Automatic Page Breaks.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/Comment.html" title="interface in org.apache.poi.ss.usermodel">Comment</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getCellComment(int, int)">getCellComment</a></strong>(int&nbsp;row,
+              int&nbsp;column)</code>
+<div class="block">Returns cell comment for the specified row and column</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getColumnBreaks()">getColumnBreaks</a></strong>()</code>
+<div class="block">Retrieves all the vertical page breaks</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/CellStyle.html" title="interface in org.apache.poi.ss.usermodel">CellStyle</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getColumnStyle(int)">getColumnStyle</a></strong>(int&nbsp;column)</code>
+<div class="block">Returns the CellStyle that applies to the given
+  (0 based) column, or null if no style has been
+  set for that column</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getColumnWidth(int)">getColumnWidth</a></strong>(int&nbsp;columnIndex)</code>
+<div class="block">get the width (in units of 1/256th of a character width )</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/DataValidationHelper.html" title="interface in org.apache.poi.ss.usermodel">DataValidationHelper</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getDataValidationHelper()">getDataValidationHelper</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getDefaultColumnWidth()">getDefaultColumnWidth</a></strong>()</code>
+<div class="block">Get the default column width for the sheet (if the columns do not define their own width)
+ in characters</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getDefaultRowHeight()">getDefaultRowHeight</a></strong>()</code>
+<div class="block">Get the default row height for the sheet (if the rows do not define their own height) in
+ twips (1/20 of  a point)</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>float</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getDefaultRowHeightInPoints()">getDefaultRowHeightInPoints</a></strong>()</code>
+<div class="block">Get the default row height for the sheet (if the rows do not define their own height) in
+ points.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getDisplayGuts()">getDisplayGuts</a></strong>()</code>
+<div class="block">Get whether to display the guts or not,
+ default value is true</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getFirstRowNum()">getFirstRowNum</a></strong>()</code>
+<div class="block">Gets the first row on the sheet</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getFitToPage()">getFitToPage</a></strong>()</code>
+<div class="block">Flag indicating whether the Fit to Page print option is enabled.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/Footer.html" title="interface in org.apache.poi.ss.usermodel">Footer</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getFooter()">getFooter</a></strong>()</code>
+<div class="block">Gets the user model for the default document footer.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getForceFormulaRecalculation()">getForceFormulaRecalculation</a></strong>()</code>
+<div class="block">Whether Excel will be asked to recalculate all formulas when the
+  workbook is opened.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/Header.html" title="interface in org.apache.poi.ss.usermodel">Header</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getHeader()">getHeader</a></strong>()</code>
+<div class="block">Gets the user model for the default document header.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getHorizontallyCenter()">getHorizontallyCenter</a></strong>()</code>
+<div class="block">Determine whether printed output for this sheet will be horizontally centered.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getLastRowNum()">getLastRowNum</a></strong>()</code>
+<div class="block">Gets the last row on the sheet</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getLeftCol()">getLeftCol</a></strong>()</code>
+<div class="block">The left col in the visible view when the sheet is
+ first viewed after opening it in a viewer</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getMargin(short)">getMargin</a></strong>(short&nbsp;margin)</code>
+<div class="block">Gets the size of the margin in inches.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getMergedRegion(int)">getMergedRegion</a></strong>(int&nbsp;index)</code>
+<div class="block">Returns the merged region at the specified index</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getNumMergedRegions()">getNumMergedRegions</a></strong>()</code>
+<div class="block">Returns the number of merged regions</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/hssf/util/PaneInformation.html" title="class in org.apache.poi.hssf.util">PaneInformation</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getPaneInformation()">getPaneInformation</a></strong>()</code>
+<div class="block">Returns the information regarding the currently configured pane (split or freeze)</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getPhysicalNumberOfRows()">getPhysicalNumberOfRows</a></strong>()</code>
+<div class="block">Returns the number of physically defined rows (NOT the number of rows in the sheet)</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/PrintSetup.html" title="interface in org.apache.poi.ss.usermodel">PrintSetup</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getPrintSetup()">getPrintSetup</a></strong>()</code>
+<div class="block">Gets the print setup object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getProtect()">getProtect</a></strong>()</code>
+<div class="block">Answer whether protection is enabled or disabled</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getRepeatingColumns()">getRepeatingColumns</a></strong>()</code>
+<div class="block">Gets the repeating columns used when printing the sheet, as found in 
+ File->PageSetup->Sheet.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getRepeatingRows()">getRepeatingRows</a></strong>()</code>
+<div class="block">Gets the repeating rows used when printing the sheet, as found in 
+ File->PageSetup->Sheet.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getRow(int)">getRow</a></strong>(int&nbsp;rownum)</code>
+<div class="block">Returns the logical row (not physical) 0-based.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getRowBreaks()">getRowBreaks</a></strong>()</code>
+<div class="block">Retrieves all the horizontal page breaks</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getRowNum(org.apache.poi.xssf.streaming.SXSSFRow)">getRowNum</a></strong>(<a href="../../../../../org/apache/poi/xssf/streaming/SXSSFRow.html" title="class in org.apache.poi.xssf.streaming">SXSSFRow</a>&nbsp;row)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getRowSumsBelow()">getRowSumsBelow</a></strong>()</code>
+<div class="block">Flag indicating whether summary rows appear below detail in an outline, when applying an outline.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getRowSumsRight()">getRowSumsRight</a></strong>()</code>
+<div class="block">Flag indicating whether summary columns appear to the right of detail in an outline, when applying an outline.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getScenarioProtect()">getScenarioProtect</a></strong>()</code>
+<div class="block">Answer whether scenario protection is enabled or disabled</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/SheetConditionalFormatting.html" title="interface in org.apache.poi.ss.usermodel">SheetConditionalFormatting</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getSheetConditionalFormatting()">getSheetConditionalFormatting</a></strong>()</code>
+<div class="block">The 'Conditional Formatting' facet for this <tt>Sheet</tt></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getSheetName()">getSheetName</a></strong>()</code>
+<div class="block">Returns the name of this sheet</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getTopRow()">getTopRow</a></strong>()</code>
+<div class="block">The top row in the visible view when the sheet is
+ first viewed after opening it in a viewer</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getVerticallyCenter()">getVerticallyCenter</a></strong>()</code>
+<div class="block">Determine whether printed output for this sheet will be vertically centered.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/Workbook.html" title="interface in org.apache.poi.ss.usermodel">Workbook</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getWorkbook()">getWorkbook</a></strong>()</code>
+<div class="block">Return the parent workbook</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.io.InputStream</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#getWorksheetXMLInputStream()">getWorksheetXMLInputStream</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#groupColumn(int, int)">groupColumn</a></strong>(int&nbsp;fromColumn,
+           int&nbsp;toColumn)</code>
+<div class="block">Create an outline for the provided column range.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#groupRow(int, int)">groupRow</a></strong>(int&nbsp;fromRow,
+        int&nbsp;toRow)</code>
+<div class="block">Tie a range of rows together so that they can be collapsed or expanded
+
+ 
+     Please note the rows being grouped <em>must</em> be in the current window,
+     if the rows are already flushed then groupRow has no effect.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#isColumnBroken(int)">isColumnBroken</a></strong>(int&nbsp;column)</code>
+<div class="block">Determines if there is a page break at the indicated column</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#isColumnHidden(int)">isColumnHidden</a></strong>(int&nbsp;columnIndex)</code>
+<div class="block">Get the hidden state for a given column</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#isDisplayFormulas()">isDisplayFormulas</a></strong>()</code>
+<div class="block">Returns if formulas are displayed</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#isDisplayGridlines()">isDisplayGridlines</a></strong>()</code>
+<div class="block">Returns if gridlines are displayed</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#isDisplayRowColHeadings()">isDisplayRowColHeadings</a></strong>()</code>
+<div class="block">Returns if RowColHeadings are displayed.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#isDisplayZeros()">isDisplayZeros</a></strong>()</code>
+<div class="block">Gets the flag indicating whether the window should show 0 (zero) in cells containing zero value.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#isPrintGridlines()">isPrintGridlines</a></strong>()</code>
+<div class="block">Gets the flag indicating whether this sheet displays the lines
+ between rows and columns to make editing and reading easier.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#isRightToLeft()">isRightToLeft</a></strong>()</code>
+<div class="block">Whether the text is displayed in right-to-left mode in the window</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#isRowBroken(int)">isRowBroken</a></strong>(int&nbsp;row)</code>
+<div class="block">Determines if there is a page break at the indicated row</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#isSelected()">isSelected</a></strong>()</code>
+<div class="block">Note - this is not the same as whether the sheet is focused (isActive)</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.util.Iterator&lt;<a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#iterator()">iterator</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#protectSheet(java.lang.String)">protectSheet</a></strong>(java.lang.String&nbsp;password)</code>
+<div class="block">Sets the protection enabled as well as the password</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/CellRange.html" title="interface in org.apache.poi.ss.usermodel">CellRange</a>&lt;? extends <a href="../../../../../org/apache/poi/ss/usermodel/Cell.html" title="interface in org.apache.poi.ss.usermodel">Cell</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#removeArrayFormula(org.apache.poi.ss.usermodel.Cell)">removeArrayFormula</a></strong>(<a href="../../../../../org/apache/poi/ss/usermodel/Cell.html" title="interface in org.apache.poi.ss.usermodel">Cell</a>&nbsp;cell)</code>
+<div class="block">Remove a Array Formula from this sheet.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#removeColumnBreak(int)">removeColumnBreak</a></strong>(int&nbsp;column)</code>
+<div class="block">Removes a page break at the indicated column</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#removeMergedRegion(int)">removeMergedRegion</a></strong>(int&nbsp;index)</code>
+<div class="block">Removes a merged region of cells (hence letting them free)</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#removeRow(org.apache.poi.ss.usermodel.Row)">removeRow</a></strong>(<a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a>&nbsp;row)</code>
+<div class="block">Remove a row from this sheet.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#removeRowBreak(int)">removeRowBreak</a></strong>(int&nbsp;row)</code>
+<div class="block">Removes the page break at the indicated row</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.util.Iterator&lt;<a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#rowIterator()">rowIterator</a></strong>()</code>
+<div class="block">Returns an iterator of the physical rows</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/CellRange.html" title="interface in org.apache.poi.ss.usermodel">CellRange</a>&lt;? extends <a href="../../../../../org/apache/poi/ss/usermodel/Cell.html" title="interface in org.apache.poi.ss.usermodel">Cell</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setArrayFormula(java.lang.String, org.apache.poi.ss.util.CellRangeAddress)">setArrayFormula</a></strong>(java.lang.String&nbsp;formula,
+               <a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;range)</code>
+<div class="block">Sets array formula to specified region for result.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setAutobreaks(boolean)">setAutobreaks</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Flag indicating whether the sheet displays Automatic Page Breaks.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ss/usermodel/AutoFilter.html" title="interface in org.apache.poi.ss.usermodel">AutoFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setAutoFilter(org.apache.poi.ss.util.CellRangeAddress)">setAutoFilter</a></strong>(<a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;range)</code>
+<div class="block">Enable filtering for a range of cells</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setColumnBreak(int)">setColumnBreak</a></strong>(int&nbsp;column)</code>
+<div class="block">Sets a page break at the indicated column</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setColumnGroupCollapsed(int, boolean)">setColumnGroupCollapsed</a></strong>(int&nbsp;columnNumber,
+                       boolean&nbsp;collapsed)</code>
+<div class="block">Expands or collapses a column group.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setColumnHidden(int, boolean)">setColumnHidden</a></strong>(int&nbsp;columnIndex,
+               boolean&nbsp;hidden)</code>
+<div class="block">Get the visibility state for a given column</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setColumnWidth(int, int)">setColumnWidth</a></strong>(int&nbsp;columnIndex,
+              int&nbsp;width)</code>
+<div class="block">Set the width (in units of 1/256th of a character width)
+ 
+ The maximum column width for an individual cell is 255 characters.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setDefaultColumnStyle(int, org.apache.poi.ss.usermodel.CellStyle)">setDefaultColumnStyle</a></strong>(int&nbsp;column,
+                     <a href="../../../../../org/apache/poi/ss/usermodel/CellStyle.html" title="interface in org.apache.poi.ss.usermodel">CellStyle</a>&nbsp;style)</code>
+<div class="block">Sets the default column style for a given column.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setDefaultColumnWidth(int)">setDefaultColumnWidth</a></strong>(int&nbsp;width)</code>
+<div class="block">Set the default column width for the sheet (if the columns do not define their own width)
+ in characters</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setDefaultRowHeight(short)">setDefaultRowHeight</a></strong>(short&nbsp;height)</code>
+<div class="block">Set the default row height for the sheet (if the rows do not define their own height) in
+ twips (1/20 of  a point)</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setDefaultRowHeightInPoints(float)">setDefaultRowHeightInPoints</a></strong>(float&nbsp;height)</code>
+<div class="block">Set the default row height for the sheet (if the rows do not define their own height) in
+ points</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setDisplayFormulas(boolean)">setDisplayFormulas</a></strong>(boolean&nbsp;show)</code>
+<div class="block">Sets whether the formulas are shown in a viewer</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setDisplayGridlines(boolean)">setDisplayGridlines</a></strong>(boolean&nbsp;show)</code>
+<div class="block">Sets whether the gridlines are shown in a viewer</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setDisplayGuts(boolean)">setDisplayGuts</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Set whether to display the guts or not</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setDisplayRowColHeadings(boolean)">setDisplayRowColHeadings</a></strong>(boolean&nbsp;show)</code>
+<div class="block">Sets whether the RowColHeadings are shown in a viewer</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setDisplayZeros(boolean)">setDisplayZeros</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Set whether the window should show 0 (zero) in cells containing zero value.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setFitToPage(boolean)">setFitToPage</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Flag indicating whether the Fit to Page print option is enabled.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setForceFormulaRecalculation(boolean)">setForceFormulaRecalculation</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Control if Excel should be asked to recalculate all formulas when the
+  workbook is opened, via the "sheetCalcPr fullCalcOnLoad" option.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setHorizontallyCenter(boolean)">setHorizontallyCenter</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Determines whether the output is horizontally centered on the page.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setMargin(short, double)">setMargin</a></strong>(short&nbsp;margin,
+         double&nbsp;size)</code>
+<div class="block">Sets the size of the margin in inches.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setPrintGridlines(boolean)">setPrintGridlines</a></strong>(boolean&nbsp;show)</code>
+<div class="block">Sets the flag indicating whether this sheet should display the lines
+ between rows and columns to make editing and reading easier.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setRandomAccessWindowSize(int)">setRandomAccessWindowSize</a></strong>(int&nbsp;value)</code>
+<div class="block">Specifies how many rows can be accessed at most via getRow().</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setRepeatingColumns(org.apache.poi.ss.util.CellRangeAddress)">setRepeatingColumns</a></strong>(<a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;columnRangeRef)</code>
+<div class="block">Sets the repeating columns used when printing the sheet, as found in 
+ File->PageSetup->Sheet.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setRepeatingRows(org.apache.poi.ss.util.CellRangeAddress)">setRepeatingRows</a></strong>(<a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;rowRangeRef)</code>
+<div class="block">Sets the repeating rows used when printing the sheet, as found in 
+ File->PageSetup->Sheet.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setRightToLeft(boolean)">setRightToLeft</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Sets whether the worksheet is displayed from right to left instead of from left to right.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setRowBreak(int)">setRowBreak</a></strong>(int&nbsp;row)</code>
+<div class="block">Sets a page break at the indicated row</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setRowGroupCollapsed(int, boolean)">setRowGroupCollapsed</a></strong>(int&nbsp;row,
+                    boolean&nbsp;collapse)</code>
+<div class="block">Set view state of a groupped range of rows</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setRowSumsBelow(boolean)">setRowSumsBelow</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Flag indicating whether summary rows appear below detail in an outline, when applying an outline.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setRowSumsRight(boolean)">setRowSumsRight</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Flag indicating whether summary columns appear to the right of detail in an outline, when applying an outline.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setSelected(boolean)">setSelected</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Sets a flag indicating whether this sheet is selected.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setVerticallyCenter(boolean)">setVerticallyCenter</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Determines whether the output is vertically centered on the page.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setZoom(int, int)">setZoom</a></strong>(int&nbsp;numerator,
+       int&nbsp;denominator)</code>
+<div class="block">Sets the zoom magnication for the sheet.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#shiftRows(int, int, int)">shiftRows</a></strong>(int&nbsp;startRow,
+         int&nbsp;endRow,
+         int&nbsp;n)</code>
+<div class="block">Shifts rows between startRow and endRow n number of rows.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#shiftRows(int, int, int, boolean, boolean)">shiftRows</a></strong>(int&nbsp;startRow,
+         int&nbsp;endRow,
+         int&nbsp;n,
+         boolean&nbsp;copyRowHeight,
+         boolean&nbsp;resetOriginalRowHeight)</code>
+<div class="block">Shifts rows between startRow and endRow n number of rows.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#showInPane(int, int)">showInPane</a></strong>(int&nbsp;toprow,
+          int&nbsp;leftcol)</code>
+<div class="block">Sets desktop window pane display area, when the
+ file is first opened in a viewer.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#showInPane(short, short)">showInPane</a></strong>(short&nbsp;toprow,
+          short&nbsp;leftcol)</code>
+<div class="block"><strong>Deprecated.</strong>&nbsp;
+<div class="block"><i>Use the version of showInPane() with ints as there can be more than 32767 rows.</i></div>
+</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#ungroupColumn(int, int)">ungroupColumn</a></strong>(int&nbsp;fromColumn,
+             int&nbsp;toColumn)</code>
+<div class="block">Ungroup a range of columns that were previously groupped</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#ungroupRow(int, int)">ungroupRow</a></strong>(int&nbsp;fromRow,
+          int&nbsp;toRow)</code>
+<div class="block">Ungroup a range of rows that were previously groupped</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="SXSSFSheet(org.apache.poi.xssf.streaming.SXSSFWorkbook, org.apache.poi.xssf.usermodel.XSSFSheet)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SXSSFSheet</h4>
+<pre>public&nbsp;SXSSFSheet(<a href="../../../../../org/apache/poi/xssf/streaming/SXSSFWorkbook.html" title="class in org.apache.poi.xssf.streaming">SXSSFWorkbook</a>&nbsp;workbook,
+          <a href="../../../../../org/apache/poi/xssf/usermodel/XSSFSheet.html" title="class in org.apache.poi.xssf.usermodel">XSSFSheet</a>&nbsp;xSheet)
+           throws java.io.IOException</pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getWorksheetXMLInputStream()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getWorksheetXMLInputStream</h4>
+<pre>public&nbsp;java.io.InputStream&nbsp;getWorksheetXMLInputStream()
+                                               throws java.io.IOException</pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd></dl>
+</li>
+</ul>
+<a name="iterator()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>iterator</h4>
+<pre>public&nbsp;java.util.Iterator&lt;<a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a>&gt;&nbsp;iterator()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>iterator</code>&nbsp;in interface&nbsp;<code>java.lang.Iterable&lt;<a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="createRow(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createRow</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a>&nbsp;createRow(int&nbsp;rownum)</pre>
+<div class="block">Create a new row within the sheet and return the high level representation</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#createRow(int)">createRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>rownum</code> - row number</dd>
+<dt><span class="strong">Returns:</span></dt><dd>high level Row object representing a row in the sheet</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#removeRow(org.apache.poi.ss.usermodel.Row)"><code>removeRow(Row)</code></a></dd></dl>
+</li>
+</ul>
+<a name="removeRow(org.apache.poi.ss.usermodel.Row)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeRow</h4>
+<pre>public&nbsp;void&nbsp;removeRow(<a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a>&nbsp;row)</pre>
+<div class="block">Remove a row from this sheet.  All cells contained in the row are removed as well</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#removeRow(org.apache.poi.ss.usermodel.Row)">removeRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>row</code> - representing a row to remove.</dd></dl>
+</li>
+</ul>
+<a name="getRow(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRow</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a>&nbsp;getRow(int&nbsp;rownum)</pre>
+<div class="block">Returns the logical row (not physical) 0-based.  If you ask for a row that is not
+ defined you get a null.  This is to say row 4 represents the fifth row on a sheet.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getRow(int)">getRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>rownum</code> - row to get (0-based)</dd>
+<dt><span class="strong">Returns:</span></dt><dd>Row representing the rownumber or null if its not defined on the sheet</dd></dl>
+</li>
+</ul>
+<a name="getPhysicalNumberOfRows()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPhysicalNumberOfRows</h4>
+<pre>public&nbsp;int&nbsp;getPhysicalNumberOfRows()</pre>
+<div class="block">Returns the number of physically defined rows (NOT the number of rows in the sheet)</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getPhysicalNumberOfRows()">getPhysicalNumberOfRows</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the number of physically defined rows in this sheet</dd></dl>
+</li>
+</ul>
+<a name="getFirstRowNum()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFirstRowNum</h4>
+<pre>public&nbsp;int&nbsp;getFirstRowNum()</pre>
+<div class="block">Gets the first row on the sheet</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getFirstRowNum()">getFirstRowNum</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the number of the first logical row on the sheet (0-based)</dd></dl>
+</li>
+</ul>
+<a name="getLastRowNum()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLastRowNum</h4>
+<pre>public&nbsp;int&nbsp;getLastRowNum()</pre>
+<div class="block">Gets the last row on the sheet</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getLastRowNum()">getLastRowNum</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>last row contained n this sheet (0-based)</dd></dl>
+</li>
+</ul>
+<a name="setColumnHidden(int, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setColumnHidden</h4>
+<pre>public&nbsp;void&nbsp;setColumnHidden(int&nbsp;columnIndex,
+                   boolean&nbsp;hidden)</pre>
+<div class="block">Get the visibility state for a given column</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setColumnHidden(int, boolean)">setColumnHidden</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>columnIndex</code> - - the column to get (0-based)</dd><dd><code>hidden</code> - - the visiblity state of the column</dd></dl>
+</li>
+</ul>
+<a name="isColumnHidden(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isColumnHidden</h4>
+<pre>public&nbsp;boolean&nbsp;isColumnHidden(int&nbsp;columnIndex)</pre>
+<div class="block">Get the hidden state for a given column</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#isColumnHidden(int)">isColumnHidden</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>columnIndex</code> - - the column to set (0-based)</dd>
+<dt><span class="strong">Returns:</span></dt><dd>hidden - <code>false</code> if the column is visible</dd></dl>
+</li>
+</ul>
+<a name="setColumnWidth(int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setColumnWidth</h4>
+<pre>public&nbsp;void&nbsp;setColumnWidth(int&nbsp;columnIndex,
+                  int&nbsp;width)</pre>
+<div class="block">Set the width (in units of 1/256th of a character width)
+ <p>
+ The maximum column width for an individual cell is 255 characters.
+ This value represents the number of characters that can be displayed
+ in a cell that is formatted with the standard font.
+ </p></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth(int, int)">setColumnWidth</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>columnIndex</code> - - the column to set (0-based)</dd><dd><code>width</code> - - the width in units of 1/256th of a character width</dd></dl>
+</li>
+</ul>
+<a name="getColumnWidth(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getColumnWidth</h4>
+<pre>public&nbsp;int&nbsp;getColumnWidth(int&nbsp;columnIndex)</pre>
+<div class="block">get the width (in units of 1/256th of a character width )</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getColumnWidth(int)">getColumnWidth</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>columnIndex</code> - - the column to set (0-based)</dd>
+<dt><span class="strong">Returns:</span></dt><dd>width - the width in units of 1/256th of a character width</dd></dl>
+</li>
+</ul>
+<a name="setDefaultColumnWidth(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDefaultColumnWidth</h4>
+<pre>public&nbsp;void&nbsp;setDefaultColumnWidth(int&nbsp;width)</pre>
+<div class="block">Set the default column width for the sheet (if the columns do not define their own width)
+ in characters</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setDefaultColumnWidth(int)">setDefaultColumnWidth</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>width</code> - default column width measured in characters</dd></dl>
+</li>
+</ul>
+<a name="getDefaultColumnWidth()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDefaultColumnWidth</h4>
+<pre>public&nbsp;int&nbsp;getDefaultColumnWidth()</pre>
+<div class="block">Get the default column width for the sheet (if the columns do not define their own width)
+ in characters</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getDefaultColumnWidth()">getDefaultColumnWidth</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>default column width measured in characters</dd></dl>
+</li>
+</ul>
+<a name="getDefaultRowHeight()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDefaultRowHeight</h4>
+<pre>public&nbsp;short&nbsp;getDefaultRowHeight()</pre>
+<div class="block">Get the default row height for the sheet (if the rows do not define their own height) in
+ twips (1/20 of  a point)</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getDefaultRowHeight()">getDefaultRowHeight</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>default row height measured in twips (1/20 of  a point)</dd></dl>
+</li>
+</ul>
+<a name="getDefaultRowHeightInPoints()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDefaultRowHeightInPoints</h4>
+<pre>public&nbsp;float&nbsp;getDefaultRowHeightInPoints()</pre>
+<div class="block">Get the default row height for the sheet (if the rows do not define their own height) in
+ points.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getDefaultRowHeightInPoints()">getDefaultRowHeightInPoints</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>default row height in points</dd></dl>
+</li>
+</ul>
+<a name="setDefaultRowHeight(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDefaultRowHeight</h4>
+<pre>public&nbsp;void&nbsp;setDefaultRowHeight(short&nbsp;height)</pre>
+<div class="block">Set the default row height for the sheet (if the rows do not define their own height) in
+ twips (1/20 of  a point)</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setDefaultRowHeight(short)">setDefaultRowHeight</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>height</code> - default row height measured in twips (1/20 of  a point)</dd></dl>
+</li>
+</ul>
+<a name="setDefaultRowHeightInPoints(float)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDefaultRowHeightInPoints</h4>
+<pre>public&nbsp;void&nbsp;setDefaultRowHeightInPoints(float&nbsp;height)</pre>
+<div class="block">Set the default row height for the sheet (if the rows do not define their own height) in
+ points</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setDefaultRowHeightInPoints(float)">setDefaultRowHeightInPoints</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>height</code> - default row height</dd></dl>
+</li>
+</ul>
+<a name="getColumnStyle(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getColumnStyle</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/CellStyle.html" title="interface in org.apache.poi.ss.usermodel">CellStyle</a>&nbsp;getColumnStyle(int&nbsp;column)</pre>
+<div class="block">Returns the CellStyle that applies to the given
+  (0 based) column, or null if no style has been
+  set for that column</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getColumnStyle(int)">getColumnStyle</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="addMergedRegion(org.apache.poi.ss.util.CellRangeAddress)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addMergedRegion</h4>
+<pre>public&nbsp;int&nbsp;addMergedRegion(<a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;region)</pre>
+<div class="block">Adds a merged region of cells (hence those cells form one)</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#addMergedRegion(org.apache.poi.ss.util.CellRangeAddress)">addMergedRegion</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>region</code> - (rowfrom/colfrom-rowto/colto) to merge</dd>
+<dt><span class="strong">Returns:</span></dt><dd>index of this region</dd></dl>
+</li>
+</ul>
+<a name="setVerticallyCenter(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setVerticallyCenter</h4>
+<pre>public&nbsp;void&nbsp;setVerticallyCenter(boolean&nbsp;value)</pre>
+<div class="block">Determines whether the output is vertically centered on the page.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setVerticallyCenter(boolean)">setVerticallyCenter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - true to vertically center, false otherwise.</dd></dl>
+</li>
+</ul>
+<a name="setHorizontallyCenter(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setHorizontallyCenter</h4>
+<pre>public&nbsp;void&nbsp;setHorizontallyCenter(boolean&nbsp;value)</pre>
+<div class="block">Determines whether the output is horizontally centered on the page.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setHorizontallyCenter(boolean)">setHorizontallyCenter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - true to horizontally center, false otherwise.</dd></dl>
+</li>
+</ul>
+<a name="getHorizontallyCenter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHorizontallyCenter</h4>
+<pre>public&nbsp;boolean&nbsp;getHorizontallyCenter()</pre>
+<div class="block">Determine whether printed output for this sheet will be horizontally centered.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getHorizontallyCenter()">getHorizontallyCenter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getVerticallyCenter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getVerticallyCenter</h4>
+<pre>public&nbsp;boolean&nbsp;getVerticallyCenter()</pre>
+<div class="block">Determine whether printed output for this sheet will be vertically centered.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getVerticallyCenter()">getVerticallyCenter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="removeMergedRegion(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeMergedRegion</h4>
+<pre>public&nbsp;void&nbsp;removeMergedRegion(int&nbsp;index)</pre>
+<div class="block">Removes a merged region of cells (hence letting them free)</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#removeMergedRegion(int)">removeMergedRegion</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - of the region to unmerge</dd></dl>
+</li>
+</ul>
+<a name="getNumMergedRegions()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNumMergedRegions</h4>
+<pre>public&nbsp;int&nbsp;getNumMergedRegions()</pre>
+<div class="block">Returns the number of merged regions</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getNumMergedRegions()">getNumMergedRegions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>number of merged regions</dd></dl>
+</li>
+</ul>
+<a name="getMergedRegion(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMergedRegion</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;getMergedRegion(int&nbsp;index)</pre>
+<div class="block">Returns the merged region at the specified index</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getMergedRegion(int)">getMergedRegion</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the merged region at the specified index</dd></dl>
+</li>
+</ul>
+<a name="rowIterator()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rowIterator</h4>
+<pre>public&nbsp;java.util.Iterator&lt;<a href="../../../../../org/apache/poi/ss/usermodel/Row.html" title="interface in org.apache.poi.ss.usermodel">Row</a>&gt;&nbsp;rowIterator()</pre>
+<div class="block">Returns an iterator of the physical rows</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#rowIterator()">rowIterator</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>an iterator of the PHYSICAL rows.  Meaning the 3rd element may not
+ be the third row if say for instance the second row is undefined.</dd></dl>
+</li>
+</ul>
+<a name="setAutobreaks(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAutobreaks</h4>
+<pre>public&nbsp;void&nbsp;setAutobreaks(boolean&nbsp;value)</pre>
+<div class="block">Flag indicating whether the sheet displays Automatic Page Breaks.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setAutobreaks(boolean)">setAutobreaks</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - <code>true</code> if the sheet displays Automatic Page Breaks.</dd></dl>
+</li>
+</ul>
+<a name="setDisplayGuts(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDisplayGuts</h4>
+<pre>public&nbsp;void&nbsp;setDisplayGuts(boolean&nbsp;value)</pre>
+<div class="block">Set whether to display the guts or not</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setDisplayGuts(boolean)">setDisplayGuts</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - - guts or no guts</dd></dl>
+</li>
+</ul>
+<a name="setDisplayZeros(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDisplayZeros</h4>
+<pre>public&nbsp;void&nbsp;setDisplayZeros(boolean&nbsp;value)</pre>
+<div class="block">Set whether the window should show 0 (zero) in cells containing zero value.
+ When false, cells with zero value appear blank instead of showing the number zero.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setDisplayZeros(boolean)">setDisplayZeros</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - whether to display or hide all zero values on the worksheet</dd></dl>
+</li>
+</ul>
+<a name="isDisplayZeros()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDisplayZeros</h4>
+<pre>public&nbsp;boolean&nbsp;isDisplayZeros()</pre>
+<div class="block">Gets the flag indicating whether the window should show 0 (zero) in cells containing zero value.
+ When false, cells with zero value appear blank instead of showing the number zero.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#isDisplayZeros()">isDisplayZeros</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>whether all zero values on the worksheet are displayed</dd></dl>
+</li>
+</ul>
+<a name="setRightToLeft(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRightToLeft</h4>
+<pre>public&nbsp;void&nbsp;setRightToLeft(boolean&nbsp;value)</pre>
+<div class="block">Sets whether the worksheet is displayed from right to left instead of from left to right.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setRightToLeft(boolean)">setRightToLeft</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - true for right to left, false otherwise.</dd></dl>
+</li>
+</ul>
+<a name="isRightToLeft()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isRightToLeft</h4>
+<pre>public&nbsp;boolean&nbsp;isRightToLeft()</pre>
+<div class="block">Whether the text is displayed in right-to-left mode in the window</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#isRightToLeft()">isRightToLeft</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>whether the text is displayed in right-to-left mode in the window</dd></dl>
+</li>
+</ul>
+<a name="setFitToPage(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFitToPage</h4>
+<pre>public&nbsp;void&nbsp;setFitToPage(boolean&nbsp;value)</pre>
+<div class="block">Flag indicating whether the Fit to Page print option is enabled.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setFitToPage(boolean)">setFitToPage</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - <code>true</code> if the Fit to Page print option is enabled.</dd></dl>
+</li>
+</ul>
+<a name="setRowSumsBelow(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRowSumsBelow</h4>
+<pre>public&nbsp;void&nbsp;setRowSumsBelow(boolean&nbsp;value)</pre>
+<div class="block">Flag indicating whether summary rows appear below detail in an outline, when applying an outline.
+
+ <p>
+ When true a summary row is inserted below the detailed data being summarized and a
+ new outline level is established on that row.
+ </p>
+ <p>
+ When false a summary row is inserted above the detailed data being summarized and a new outline level
+ is established on that row.
+ </p></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setRowSumsBelow(boolean)">setRowSumsBelow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - <code>true</code> if row summaries appear below detail in the outline</dd></dl>
+</li>
+</ul>
+<a name="setRowSumsRight(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRowSumsRight</h4>
+<pre>public&nbsp;void&nbsp;setRowSumsRight(boolean&nbsp;value)</pre>
+<div class="block">Flag indicating whether summary columns appear to the right of detail in an outline, when applying an outline.
+
+ <p>
+ When true a summary column is inserted to the right of the detailed data being summarized
+ and a new outline level is established on that column.
+ </p>
+ <p>
+ When false a summary column is inserted to the left of the detailed data being
+ summarized and a new outline level is established on that column.
+ </p></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setRowSumsRight(boolean)">setRowSumsRight</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - <code>true</code> if col summaries appear right of the detail in the outline</dd></dl>
+</li>
+</ul>
+<a name="getAutobreaks()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAutobreaks</h4>
+<pre>public&nbsp;boolean&nbsp;getAutobreaks()</pre>
+<div class="block">Flag indicating whether the sheet displays Automatic Page Breaks.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getAutobreaks()">getAutobreaks</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>true</code> if the sheet displays Automatic Page Breaks.</dd></dl>
+</li>
+</ul>
+<a name="getDisplayGuts()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDisplayGuts</h4>
+<pre>public&nbsp;boolean&nbsp;getDisplayGuts()</pre>
+<div class="block">Get whether to display the guts or not,
+ default value is true</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getDisplayGuts()">getDisplayGuts</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>boolean - guts or no guts</dd></dl>
+</li>
+</ul>
+<a name="getFitToPage()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFitToPage</h4>
+<pre>public&nbsp;boolean&nbsp;getFitToPage()</pre>
+<div class="block">Flag indicating whether the Fit to Page print option is enabled.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getFitToPage()">getFitToPage</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>true</code> if the Fit to Page print option is enabled.</dd></dl>
+</li>
+</ul>
+<a name="getRowSumsBelow()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRowSumsBelow</h4>
+<pre>public&nbsp;boolean&nbsp;getRowSumsBelow()</pre>
+<div class="block">Flag indicating whether summary rows appear below detail in an outline, when applying an outline.
+
+ <p>
+ When true a summary row is inserted below the detailed data being summarized and a
+ new outline level is established on that row.
+ </p>
+ <p>
+ When false a summary row is inserted above the detailed data being summarized and a new outline level
+ is established on that row.
+ </p></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getRowSumsBelow()">getRowSumsBelow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>true</code> if row summaries appear below detail in the outline</dd></dl>
+</li>
+</ul>
+<a name="getRowSumsRight()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRowSumsRight</h4>
+<pre>public&nbsp;boolean&nbsp;getRowSumsRight()</pre>
+<div class="block">Flag indicating whether summary columns appear to the right of detail in an outline, when applying an outline.
+
+ <p>
+ When true a summary column is inserted to the right of the detailed data being summarized
+ and a new outline level is established on that column.
+ </p>
+ <p>
+ When false a summary column is inserted to the left of the detailed data being
+ summarized and a new outline level is established on that column.
+ </p></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getRowSumsRight()">getRowSumsRight</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>true</code> if col summaries appear right of the detail in the outline</dd></dl>
+</li>
+</ul>
+<a name="isPrintGridlines()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isPrintGridlines</h4>
+<pre>public&nbsp;boolean&nbsp;isPrintGridlines()</pre>
+<div class="block">Gets the flag indicating whether this sheet displays the lines
+ between rows and columns to make editing and reading easier.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#isPrintGridlines()">isPrintGridlines</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>true</code> if this sheet displays gridlines.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#isPrintGridlines()"><code>to check if printing of gridlines is turned on or off</code></a></dd></dl>
+</li>
+</ul>
+<a name="setPrintGridlines(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPrintGridlines</h4>
+<pre>public&nbsp;void&nbsp;setPrintGridlines(boolean&nbsp;show)</pre>
+<div class="block">Sets the flag indicating whether this sheet should display the lines
+ between rows and columns to make editing and reading easier.
+ To turn printing of gridlines use <a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setPrintGridlines(boolean)"><code>setPrintGridlines(boolean)</code></a></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setPrintGridlines(boolean)">setPrintGridlines</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>show</code> - <code>true</code> if this sheet should display gridlines.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFSheet.html#setPrintGridlines(boolean)"><code>setPrintGridlines(boolean)</code></a></dd></dl>
+</li>
+</ul>
+<a name="getPrintSetup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPrintSetup</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/PrintSetup.html" title="interface in org.apache.poi.ss.usermodel">PrintSetup</a>&nbsp;getPrintSetup()</pre>
+<div class="block">Gets the print setup object.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getPrintSetup()">getPrintSetup</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>The user model for the print setup object.</dd></dl>
+</li>
+</ul>
+<a name="getHeader()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHeader</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/Header.html" title="interface in org.apache.poi.ss.usermodel">Header</a>&nbsp;getHeader()</pre>
+<div class="block">Gets the user model for the default document header.
+ <p/>
+ Note that XSSF offers more kinds of document headers than HSSF does
+ </p></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getHeader()">getHeader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the document header. Never <code>null</code></dd></dl>
+</li>
+</ul>
+<a name="getFooter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFooter</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/Footer.html" title="interface in org.apache.poi.ss.usermodel">Footer</a>&nbsp;getFooter()</pre>
+<div class="block">Gets the user model for the default document footer.
+ <p/>
+ Note that XSSF offers more kinds of document footers than HSSF does.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getFooter()">getFooter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the document footer. Never <code>null</code></dd></dl>
+</li>
+</ul>
+<a name="setSelected(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSelected</h4>
+<pre>public&nbsp;void&nbsp;setSelected(boolean&nbsp;value)</pre>
+<div class="block">Sets a flag indicating whether this sheet is selected.
+<p>
+ Note: multiple sheets can be selected, but only one sheet can be active at one time.
+</p></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setSelected(boolean)">setSelected</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - <code>true</code> if this sheet is selected</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Workbook.html#setActiveSheet(int)"><code>Workbook.setActiveSheet(int)</code></a></dd></dl>
+</li>
+</ul>
+<a name="getMargin(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMargin</h4>
+<pre>public&nbsp;double&nbsp;getMargin(short&nbsp;margin)</pre>
+<div class="block">Gets the size of the margin in inches.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getMargin(short)">getMargin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>margin</code> - which margin to get</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the size of the margin</dd></dl>
+</li>
+</ul>
+<a name="setMargin(short, double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setMargin</h4>
+<pre>public&nbsp;void&nbsp;setMargin(short&nbsp;margin,
+             double&nbsp;size)</pre>
+<div class="block">Sets the size of the margin in inches.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setMargin(short, double)">setMargin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>margin</code> - which margin to get</dd><dd><code>size</code> - the size of the margin</dd></dl>
+</li>
+</ul>
+<a name="getProtect()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getProtect</h4>
+<pre>public&nbsp;boolean&nbsp;getProtect()</pre>
+<div class="block">Answer whether protection is enabled or disabled</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getProtect()">getProtect</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>true => protection enabled; false => protection disabled</dd></dl>
+</li>
+</ul>
+<a name="protectSheet(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>protectSheet</h4>
+<pre>public&nbsp;void&nbsp;protectSheet(java.lang.String&nbsp;password)</pre>
+<div class="block">Sets the protection enabled as well as the password</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#protectSheet(java.lang.String)">protectSheet</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>password</code> - to set for protection. Pass <code>null</code> to remove protection</dd></dl>
+</li>
+</ul>
+<a name="getScenarioProtect()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getScenarioProtect</h4>
+<pre>public&nbsp;boolean&nbsp;getScenarioProtect()</pre>
+<div class="block">Answer whether scenario protection is enabled or disabled</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getScenarioProtect()">getScenarioProtect</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>true => protection enabled; false => protection disabled</dd></dl>
+</li>
+</ul>
+<a name="setZoom(int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setZoom</h4>
+<pre>public&nbsp;void&nbsp;setZoom(int&nbsp;numerator,
+           int&nbsp;denominator)</pre>
+<div class="block">Sets the zoom magnication for the sheet.  The zoom is expressed as a
+ fraction.  For example to express a zoom of 75% use 3 for the numerator
+ and 4 for the denominator.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setZoom(int, int)">setZoom</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>numerator</code> - The numerator for the zoom magnification.</dd><dd><code>denominator</code> - The denominator for the zoom magnification.</dd></dl>
+</li>
+</ul>
+<a name="getTopRow()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTopRow</h4>
+<pre>public&nbsp;short&nbsp;getTopRow()</pre>
+<div class="block">The top row in the visible view when the sheet is
+ first viewed after opening it in a viewer</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getTopRow()">getTopRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>short indicating the rownum (0 based) of the top row</dd></dl>
+</li>
+</ul>
+<a name="getLeftCol()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLeftCol</h4>
+<pre>public&nbsp;short&nbsp;getLeftCol()</pre>
+<div class="block">The left col in the visible view when the sheet is
+ first viewed after opening it in a viewer</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getLeftCol()">getLeftCol</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>short indicating the rownum (0 based) of the top row</dd></dl>
+</li>
+</ul>
+<a name="showInPane(int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>showInPane</h4>
+<pre>public&nbsp;void&nbsp;showInPane(int&nbsp;toprow,
+              int&nbsp;leftcol)</pre>
+<div class="block">Sets desktop window pane display area, when the
+ file is first opened in a viewer.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#showInPane(int, int)">showInPane</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>toprow</code> - the top row to show in desktop window pane</dd><dd><code>leftcol</code> - the left column to show in desktop window pane</dd></dl>
+</li>
+</ul>
+<a name="showInPane(short, short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>showInPane</h4>
+<pre>public&nbsp;void&nbsp;showInPane(short&nbsp;toprow,
+              short&nbsp;leftcol)</pre>
+<div class="block"><span class="strong">Deprecated.</span>&nbsp;<i>Use the version of showInPane() with ints as there can be more than 32767 rows.</i></div>
+<div class="block">Sets desktop window pane display area, when the
+ file is first opened in a viewer.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#showInPane(short, short)">showInPane</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>toprow</code> - the top row to show in desktop window pane</dd><dd><code>leftcol</code> - the left column to show in desktop window pane</dd></dl>
+</li>
+</ul>
+<a name="setForceFormulaRecalculation(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setForceFormulaRecalculation</h4>
+<pre>public&nbsp;void&nbsp;setForceFormulaRecalculation(boolean&nbsp;value)</pre>
+<div class="block">Control if Excel should be asked to recalculate all formulas when the
+  workbook is opened, via the "sheetCalcPr fullCalcOnLoad" option.
+  Calculating the formula values with <a href="../../../../../org/apache/poi/ss/usermodel/FormulaEvaluator.html" title="interface in org.apache.poi.ss.usermodel"><code>FormulaEvaluator</code></a> is the
+  recommended solution, but this may be used for certain cases where
+  evaluation in POI is not possible.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setForceFormulaRecalculation(boolean)">setForceFormulaRecalculation</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - true if the application will perform a full recalculation of
+ this worksheet values when the workbook is opened</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Workbook.html#setForceFormulaRecalculation(boolean)"><code>Workbook.setForceFormulaRecalculation(boolean)</code></a></dd></dl>
+</li>
+</ul>
+<a name="getForceFormulaRecalculation()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getForceFormulaRecalculation</h4>
+<pre>public&nbsp;boolean&nbsp;getForceFormulaRecalculation()</pre>
+<div class="block">Whether Excel will be asked to recalculate all formulas when the
+  workbook is opened.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getForceFormulaRecalculation()">getForceFormulaRecalculation</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="shiftRows(int, int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>shiftRows</h4>
+<pre>public&nbsp;void&nbsp;shiftRows(int&nbsp;startRow,
+             int&nbsp;endRow,
+             int&nbsp;n)</pre>
+<div class="block">Shifts rows between startRow and endRow n number of rows.
+ If you use a negative number, it will shift rows up.
+ Code ensures that rows don't wrap around.
+
+ Calls shiftRows(startRow, endRow, n, false, false);
+
+ <p>
+ Additionally shifts merged regions that are completely defined in these
+ rows (ie. merged 2 cells on a row to be shifted).</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#shiftRows(int, int, int)">shiftRows</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>startRow</code> - the row to start shifting</dd><dd><code>endRow</code> - the row to end shifting</dd><dd><code>n</code> - the number of rows to shift</dd></dl>
+</li>
+</ul>
+<a name="shiftRows(int, int, int, boolean, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>shiftRows</h4>
+<pre>public&nbsp;void&nbsp;shiftRows(int&nbsp;startRow,
+             int&nbsp;endRow,
+             int&nbsp;n,
+             boolean&nbsp;copyRowHeight,
+             boolean&nbsp;resetOriginalRowHeight)</pre>
+<div class="block">Shifts rows between startRow and endRow n number of rows.
+ If you use a negative number, it will shift rows up.
+ Code ensures that rows don't wrap around
+
+ <p>
+ Additionally shifts merged regions that are completely defined in these
+ rows (ie. merged 2 cells on a row to be shifted).
+ <p></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#shiftRows(int, int, int, boolean, boolean)">shiftRows</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>startRow</code> - the row to start shifting</dd><dd><code>endRow</code> - the row to end shifting</dd><dd><code>n</code> - the number of rows to shift</dd><dd><code>copyRowHeight</code> - whether to copy the row height during the shift</dd><dd><code>resetOriginalRowHeight</code> - whether to set the original row's height to the default</dd></dl>
+</li>
+</ul>
+<a name="createFreezePane(int, int, int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createFreezePane</h4>
+<pre>public&nbsp;void&nbsp;createFreezePane(int&nbsp;colSplit,
+                    int&nbsp;rowSplit,
+                    int&nbsp;leftmostColumn,
+                    int&nbsp;topRow)</pre>
+<div class="block">Creates a split (freezepane). Any existing freezepane or split pane is overwritten.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#createFreezePane(int, int, int, int)">createFreezePane</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>colSplit</code> - Horizonatal position of split.</dd><dd><code>rowSplit</code> - Vertical position of split.</dd><dd><code>leftmostColumn</code> - Left column visible in right pane.</dd><dd><code>topRow</code> - Top row visible in bottom pane</dd></dl>
+</li>
+</ul>
+<a name="createFreezePane(int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createFreezePane</h4>
+<pre>public&nbsp;void&nbsp;createFreezePane(int&nbsp;colSplit,
+                    int&nbsp;rowSplit)</pre>
+<div class="block">Creates a split (freezepane). Any existing freezepane or split pane is overwritten.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#createFreezePane(int, int)">createFreezePane</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>colSplit</code> - Horizonatal position of split.</dd><dd><code>rowSplit</code> - Vertical position of split.</dd></dl>
+</li>
+</ul>
+<a name="createSplitPane(int, int, int, int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createSplitPane</h4>
+<pre>public&nbsp;void&nbsp;createSplitPane(int&nbsp;xSplitPos,
+                   int&nbsp;ySplitPos,
+                   int&nbsp;leftmostColumn,
+                   int&nbsp;topRow,
+                   int&nbsp;activePane)</pre>
+<div class="block">Creates a split pane. Any existing freezepane or split pane is overwritten.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#createSplitPane(int, int, int, int, int)">createSplitPane</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>xSplitPos</code> - Horizonatal position of split (in 1/20th of a point).</dd><dd><code>ySplitPos</code> - Vertical position of split (in 1/20th of a point).</dd><dd><code>topRow</code> - Top row visible in bottom pane</dd><dd><code>leftmostColumn</code> - Left column visible in right pane.</dd><dd><code>activePane</code> - Active pane.  One of: PANE_LOWER_RIGHT,
+                      PANE_UPPER_RIGHT, PANE_LOWER_LEFT, PANE_UPPER_LEFT</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#PANE_LOWER_LEFT"><code>Sheet.PANE_LOWER_LEFT</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#PANE_LOWER_RIGHT"><code>Sheet.PANE_LOWER_RIGHT</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#PANE_UPPER_LEFT"><code>Sheet.PANE_UPPER_LEFT</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#PANE_UPPER_RIGHT"><code>Sheet.PANE_UPPER_RIGHT</code></a></dd></dl>
+</li>
+</ul>
+<a name="getPaneInformation()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPaneInformation</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/hssf/util/PaneInformation.html" title="class in org.apache.poi.hssf.util">PaneInformation</a>&nbsp;getPaneInformation()</pre>
+<div class="block">Returns the information regarding the currently configured pane (split or freeze)</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getPaneInformation()">getPaneInformation</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>null if no pane configured, or the pane information.</dd></dl>
+</li>
+</ul>
+<a name="setDisplayGridlines(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDisplayGridlines</h4>
+<pre>public&nbsp;void&nbsp;setDisplayGridlines(boolean&nbsp;show)</pre>
+<div class="block">Sets whether the gridlines are shown in a viewer</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setDisplayGridlines(boolean)">setDisplayGridlines</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>show</code> - whether to show gridlines or not</dd></dl>
+</li>
+</ul>
+<a name="isDisplayGridlines()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDisplayGridlines</h4>
+<pre>public&nbsp;boolean&nbsp;isDisplayGridlines()</pre>
+<div class="block">Returns if gridlines are displayed</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#isDisplayGridlines()">isDisplayGridlines</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>whether gridlines are displayed</dd></dl>
+</li>
+</ul>
+<a name="setDisplayFormulas(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDisplayFormulas</h4>
+<pre>public&nbsp;void&nbsp;setDisplayFormulas(boolean&nbsp;show)</pre>
+<div class="block">Sets whether the formulas are shown in a viewer</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setDisplayFormulas(boolean)">setDisplayFormulas</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>show</code> - whether to show formulas or not</dd></dl>
+</li>
+</ul>
+<a name="isDisplayFormulas()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDisplayFormulas</h4>
+<pre>public&nbsp;boolean&nbsp;isDisplayFormulas()</pre>
+<div class="block">Returns if formulas are displayed</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#isDisplayFormulas()">isDisplayFormulas</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>whether formulas are displayed</dd></dl>
+</li>
+</ul>
+<a name="setDisplayRowColHeadings(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDisplayRowColHeadings</h4>
+<pre>public&nbsp;void&nbsp;setDisplayRowColHeadings(boolean&nbsp;show)</pre>
+<div class="block">Sets whether the RowColHeadings are shown in a viewer</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setDisplayRowColHeadings(boolean)">setDisplayRowColHeadings</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>show</code> - whether to show RowColHeadings or not</dd></dl>
+</li>
+</ul>
+<a name="isDisplayRowColHeadings()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDisplayRowColHeadings</h4>
+<pre>public&nbsp;boolean&nbsp;isDisplayRowColHeadings()</pre>
+<div class="block">Returns if RowColHeadings are displayed.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#isDisplayRowColHeadings()">isDisplayRowColHeadings</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>whether RowColHeadings are displayed</dd></dl>
+</li>
+</ul>
+<a name="setRowBreak(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRowBreak</h4>
+<pre>public&nbsp;void&nbsp;setRowBreak(int&nbsp;row)</pre>
+<div class="block">Sets a page break at the indicated row</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setRowBreak(int)">setRowBreak</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>row</code> - FIXME: Document this!</dd></dl>
+</li>
+</ul>
+<a name="isRowBroken(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isRowBroken</h4>
+<pre>public&nbsp;boolean&nbsp;isRowBroken(int&nbsp;row)</pre>
+<div class="block">Determines if there is a page break at the indicated row</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#isRowBroken(int)">isRowBroken</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>row</code> - FIXME: Document this!</dd>
+<dt><span class="strong">Returns:</span></dt><dd>FIXME: Document this!</dd></dl>
+</li>
+</ul>
+<a name="removeRowBreak(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeRowBreak</h4>
+<pre>public&nbsp;void&nbsp;removeRowBreak(int&nbsp;row)</pre>
+<div class="block">Removes the page break at the indicated row</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#removeRowBreak(int)">removeRowBreak</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>row</code> - </dd></dl>
+</li>
+</ul>
+<a name="getRowBreaks()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRowBreaks</h4>
+<pre>public&nbsp;int[]&nbsp;getRowBreaks()</pre>
+<div class="block">Retrieves all the horizontal page breaks</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getRowBreaks()">getRowBreaks</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>all the horizontal page breaks, or null if there are no row page breaks</dd></dl>
+</li>
+</ul>
+<a name="getColumnBreaks()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getColumnBreaks</h4>
+<pre>public&nbsp;int[]&nbsp;getColumnBreaks()</pre>
+<div class="block">Retrieves all the vertical page breaks</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getColumnBreaks()">getColumnBreaks</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>all the vertical page breaks, or null if there are no column page breaks</dd></dl>
+</li>
+</ul>
+<a name="setColumnBreak(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setColumnBreak</h4>
+<pre>public&nbsp;void&nbsp;setColumnBreak(int&nbsp;column)</pre>
+<div class="block">Sets a page break at the indicated column</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setColumnBreak(int)">setColumnBreak</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>column</code> - </dd></dl>
+</li>
+</ul>
+<a name="isColumnBroken(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isColumnBroken</h4>
+<pre>public&nbsp;boolean&nbsp;isColumnBroken(int&nbsp;column)</pre>
+<div class="block">Determines if there is a page break at the indicated column</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#isColumnBroken(int)">isColumnBroken</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>column</code> - FIXME: Document this!</dd>
+<dt><span class="strong">Returns:</span></dt><dd>FIXME: Document this!</dd></dl>
+</li>
+</ul>
+<a name="removeColumnBreak(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeColumnBreak</h4>
+<pre>public&nbsp;void&nbsp;removeColumnBreak(int&nbsp;column)</pre>
+<div class="block">Removes a page break at the indicated column</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#removeColumnBreak(int)">removeColumnBreak</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>column</code> - </dd></dl>
+</li>
+</ul>
+<a name="setColumnGroupCollapsed(int, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setColumnGroupCollapsed</h4>
+<pre>public&nbsp;void&nbsp;setColumnGroupCollapsed(int&nbsp;columnNumber,
+                           boolean&nbsp;collapsed)</pre>
+<div class="block">Expands or collapses a column group.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setColumnGroupCollapsed(int, boolean)">setColumnGroupCollapsed</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>columnNumber</code> - One of the columns in the group.</dd><dd><code>collapsed</code> - true = collapse group, false = expand group.</dd></dl>
+</li>
+</ul>
+<a name="groupColumn(int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>groupColumn</h4>
+<pre>public&nbsp;void&nbsp;groupColumn(int&nbsp;fromColumn,
+               int&nbsp;toColumn)</pre>
+<div class="block">Create an outline for the provided column range.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#groupColumn(int, int)">groupColumn</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>fromColumn</code> - beginning of the column range.</dd><dd><code>toColumn</code> - end of the column range.</dd></dl>
+</li>
+</ul>
+<a name="ungroupColumn(int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ungroupColumn</h4>
+<pre>public&nbsp;void&nbsp;ungroupColumn(int&nbsp;fromColumn,
+                 int&nbsp;toColumn)</pre>
+<div class="block">Ungroup a range of columns that were previously groupped</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#ungroupColumn(int, int)">ungroupColumn</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>fromColumn</code> - start column (0-based)</dd><dd><code>toColumn</code> - end column (0-based)</dd></dl>
+</li>
+</ul>
+<a name="groupRow(int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>groupRow</h4>
+<pre>public&nbsp;void&nbsp;groupRow(int&nbsp;fromRow,
+            int&nbsp;toRow)</pre>
+<div class="block">Tie a range of rows together so that they can be collapsed or expanded
+
+ <p>
+     Please note the rows being grouped <em>must</em> be in the current window,
+     if the rows are already flushed then groupRow has no effect.
+ </p>
+ <p>
+      Correct code:
+      <pre><code>
+       Workbook wb = new SXSSFWorkbook(100);  // keep 100 rows in memory
+       Sheet sh = wb.createSheet();
+       for (int rownum = 0; rownum &lt; 1000; rownum++) {
+           Row row = sh.createRow(rownum);
+           if(rownum == 200)  {
+               sh.groupRow(100, 200);
+           }
+       }
+
+      </code></pre>
+ </p>
+ <p>
+      Incorrect code:
+      <pre><code>
+       Workbook wb = new SXSSFWorkbook(100);  // keep 100 rows in memory
+       Sheet sh = wb.createSheet();
+       for (int rownum = 0; rownum &lt; 1000; rownum++) {
+           Row row = sh.createRow(rownum);
+       }
+       sh.groupRow(100, 200); // the rows in the range [100, 200] are already flushed and groupRows has no effect
+
+      </code></pre>
+ </p></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#groupRow(int, int)">groupRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>fromRow</code> - start row (0-based)</dd><dd><code>toRow</code> - end row (0-based)</dd></dl>
+</li>
+</ul>
+<a name="ungroupRow(int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ungroupRow</h4>
+<pre>public&nbsp;void&nbsp;ungroupRow(int&nbsp;fromRow,
+              int&nbsp;toRow)</pre>
+<div class="block">Ungroup a range of rows that were previously groupped</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#ungroupRow(int, int)">ungroupRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>fromRow</code> - start row (0-based)</dd><dd><code>toRow</code> - end row (0-based)</dd></dl>
+</li>
+</ul>
+<a name="setRowGroupCollapsed(int, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRowGroupCollapsed</h4>
+<pre>public&nbsp;void&nbsp;setRowGroupCollapsed(int&nbsp;row,
+                        boolean&nbsp;collapse)</pre>
+<div class="block">Set view state of a groupped range of rows</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setRowGroupCollapsed(int, boolean)">setRowGroupCollapsed</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>row</code> - start row of a groupped range of rows (0-based)</dd><dd><code>collapse</code> - whether to expand/collapse the detail rows</dd></dl>
+</li>
+</ul>
+<a name="setDefaultColumnStyle(int, org.apache.poi.ss.usermodel.CellStyle)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDefaultColumnStyle</h4>
+<pre>public&nbsp;void&nbsp;setDefaultColumnStyle(int&nbsp;column,
+                         <a href="../../../../../org/apache/poi/ss/usermodel/CellStyle.html" title="interface in org.apache.poi.ss.usermodel">CellStyle</a>&nbsp;style)</pre>
+<div class="block">Sets the default column style for a given column.  POI will only apply this style to new cells added to the sheet.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setDefaultColumnStyle(int, org.apache.poi.ss.usermodel.CellStyle)">setDefaultColumnStyle</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>column</code> - the column index</dd><dd><code>style</code> - the style to set</dd></dl>
+</li>
+</ul>
+<a name="autoSizeColumn(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>autoSizeColumn</h4>
+<pre>public&nbsp;void&nbsp;autoSizeColumn(int&nbsp;column)</pre>
+<div class="block">Adjusts the column width to fit the contents.
+
+ <p>
+ This process can be relatively slow on large sheets, so this should
+  normally only be called once per column, at the end of your
+  processing.
+ </p>
+ You can specify whether the content of merged cells should be considered or ignored.
+  Default is to ignore merged cells.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#autoSizeColumn(int)">autoSizeColumn</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>column</code> - the column index</dd></dl>
+</li>
+</ul>
+<a name="autoSizeColumn(int, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>autoSizeColumn</h4>
+<pre>public&nbsp;void&nbsp;autoSizeColumn(int&nbsp;column,
+                  boolean&nbsp;useMergedCells)</pre>
+<div class="block">Adjusts the column width to fit the contents.
+ <p>
+ This process can be relatively slow on large sheets, so this should
+  normally only be called once per column, at the end of your
+  processing.
+ </p>
+ You can specify whether the content of merged cells should be considered or ignored.
+  Default is to ignore merged cells.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#autoSizeColumn(int, boolean)">autoSizeColumn</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>column</code> - the column index</dd><dd><code>useMergedCells</code> - whether to use the contents of merged cells when calculating the width of the column</dd></dl>
+</li>
+</ul>
+<a name="getCellComment(int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCellComment</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/Comment.html" title="interface in org.apache.poi.ss.usermodel">Comment</a>&nbsp;getCellComment(int&nbsp;row,
+                     int&nbsp;column)</pre>
+<div class="block">Returns cell comment for the specified row and column</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getCellComment(int, int)">getCellComment</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>cell comment or <code>null</code> if not found</dd></dl>
+</li>
+</ul>
+<a name="createDrawingPatriarch()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createDrawingPatriarch</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/Drawing.html" title="interface in org.apache.poi.ss.usermodel">Drawing</a>&nbsp;createDrawingPatriarch()</pre>
+<div class="block">Creates the top-level drawing patriarch.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#createDrawingPatriarch()">createDrawingPatriarch</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>The new drawing patriarch.</dd></dl>
+</li>
+</ul>
+<a name="getWorkbook()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getWorkbook</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/Workbook.html" title="interface in org.apache.poi.ss.usermodel">Workbook</a>&nbsp;getWorkbook()</pre>
+<div class="block">Return the parent workbook</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getWorkbook()">getWorkbook</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the parent workbook</dd></dl>
+</li>
+</ul>
+<a name="getSheetName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSheetName</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getSheetName()</pre>
+<div class="block">Returns the name of this sheet</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getSheetName()">getSheetName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the name of this sheet</dd></dl>
+</li>
+</ul>
+<a name="isSelected()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isSelected</h4>
+<pre>public&nbsp;boolean&nbsp;isSelected()</pre>
+<div class="block">Note - this is not the same as whether the sheet is focused (isActive)</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#isSelected()">isSelected</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>true</code> if this sheet is currently selected</dd></dl>
+</li>
+</ul>
+<a name="setArrayFormula(java.lang.String, org.apache.poi.ss.util.CellRangeAddress)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setArrayFormula</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/CellRange.html" title="interface in org.apache.poi.ss.usermodel">CellRange</a>&lt;? extends <a href="../../../../../org/apache/poi/ss/usermodel/Cell.html" title="interface in org.apache.poi.ss.usermodel">Cell</a>&gt;&nbsp;setArrayFormula(java.lang.String&nbsp;formula,
+                                        <a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;range)</pre>
+<div class="block">Sets array formula to specified region for result.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setArrayFormula(java.lang.String, org.apache.poi.ss.util.CellRangeAddress)">setArrayFormula</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>formula</code> - text representation of the formula</dd><dd><code>range</code> - Region of array formula for result.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the <a href="../../../../../org/apache/poi/ss/usermodel/CellRange.html" title="interface in org.apache.poi.ss.usermodel"><code>CellRange</code></a> of cells affected by this change</dd></dl>
+</li>
+</ul>
+<a name="removeArrayFormula(org.apache.poi.ss.usermodel.Cell)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeArrayFormula</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/CellRange.html" title="interface in org.apache.poi.ss.usermodel">CellRange</a>&lt;? extends <a href="../../../../../org/apache/poi/ss/usermodel/Cell.html" title="interface in org.apache.poi.ss.usermodel">Cell</a>&gt;&nbsp;removeArrayFormula(<a href="../../../../../org/apache/poi/ss/usermodel/Cell.html" title="interface in org.apache.poi.ss.usermodel">Cell</a>&nbsp;cell)</pre>
+<div class="block">Remove a Array Formula from this sheet.  All cells contained in the Array Formula range are removed as well</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#removeArrayFormula(org.apache.poi.ss.usermodel.Cell)">removeArrayFormula</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>cell</code> - any cell within Array Formula range</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the <a href="../../../../../org/apache/poi/ss/usermodel/CellRange.html" title="interface in org.apache.poi.ss.usermodel"><code>CellRange</code></a> of cells affected by this change</dd></dl>
+</li>
+</ul>
+<a name="getDataValidationHelper()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataValidationHelper</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/DataValidationHelper.html" title="interface in org.apache.poi.ss.usermodel">DataValidationHelper</a>&nbsp;getDataValidationHelper()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getDataValidationHelper()">getDataValidationHelper</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="addValidationData(org.apache.poi.ss.usermodel.DataValidation)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addValidationData</h4>
+<pre>public&nbsp;void&nbsp;addValidationData(<a href="../../../../../org/apache/poi/ss/usermodel/DataValidation.html" title="interface in org.apache.poi.ss.usermodel">DataValidation</a>&nbsp;dataValidation)</pre>
+<div class="block">Creates a data validation object</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#addValidationData(org.apache.poi.ss.usermodel.DataValidation)">addValidationData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>dataValidation</code> - The Data validation object settings</dd></dl>
+</li>
+</ul>
+<a name="setAutoFilter(org.apache.poi.ss.util.CellRangeAddress)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAutoFilter</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/AutoFilter.html" title="interface in org.apache.poi.ss.usermodel">AutoFilter</a>&nbsp;setAutoFilter(<a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;range)</pre>
+<div class="block">Enable filtering for a range of cells</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setAutoFilter(org.apache.poi.ss.util.CellRangeAddress)">setAutoFilter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>range</code> - the range of cells to filter</dd></dl>
+</li>
+</ul>
+<a name="getSheetConditionalFormatting()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSheetConditionalFormatting</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/usermodel/SheetConditionalFormatting.html" title="interface in org.apache.poi.ss.usermodel">SheetConditionalFormatting</a>&nbsp;getSheetConditionalFormatting()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getSheetConditionalFormatting()">Sheet</a></code></strong></div>
+<div class="block">The 'Conditional Formatting' facet for this <tt>Sheet</tt></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getSheetConditionalFormatting()">getSheetConditionalFormatting</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>conditional formatting rule for this sheet</dd></dl>
+</li>
+</ul>
+<a name="getRepeatingRows()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRepeatingRows</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;getRepeatingRows()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getRepeatingRows()">Sheet</a></code></strong></div>
+<div class="block">Gets the repeating rows used when printing the sheet, as found in 
+ File->PageSetup->Sheet.
+ <p/>
+ Repeating rows cover a range of contiguous rows, e.g.:
+ <pre>
+ Sheet1!$1:$1
+ Sheet2!$5:$8
+ </pre>
+ The <a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util"><code>CellRangeAddress</code></a> returned contains a column part which spans 
+ all columns, and a row part which specifies the contiguous range of 
+ repeating rows.
+ <p/>
+ If the Sheet does not have any repeating rows defined, null is returned.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getRepeatingRows()">getRepeatingRows</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util"><code>CellRangeAddress</code></a> containing the repeating rows for the 
+         Sheet, or null.</dd></dl>
+</li>
+</ul>
+<a name="getRepeatingColumns()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRepeatingColumns</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;getRepeatingColumns()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getRepeatingColumns()">Sheet</a></code></strong></div>
+<div class="block">Gets the repeating columns used when printing the sheet, as found in 
+ File->PageSetup->Sheet.
+ <p/>
+ Repeating columns cover a range of contiguous columns, e.g.:
+ <pre>
+ Sheet1!$A:$A
+ Sheet2!$C:$F
+ </pre>
+ The <a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util"><code>CellRangeAddress</code></a> returned contains a row part which spans all 
+ rows, and a column part which specifies the contiguous range of 
+ repeating columns.
+ <p/>
+ If the Sheet does not have any repeating columns defined, null is 
+ returned.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#getRepeatingColumns()">getRepeatingColumns</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util"><code>CellRangeAddress</code></a> containing the repeating columns for 
+         the Sheet, or null.</dd></dl>
+</li>
+</ul>
+<a name="setRepeatingRows(org.apache.poi.ss.util.CellRangeAddress)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRepeatingRows</h4>
+<pre>public&nbsp;void&nbsp;setRepeatingRows(<a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;rowRangeRef)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setRepeatingRows(org.apache.poi.ss.util.CellRangeAddress)">Sheet</a></code></strong></div>
+<div class="block">Sets the repeating rows used when printing the sheet, as found in 
+ File->PageSetup->Sheet.
+ <p/>
+ Repeating rows cover a range of contiguous rows, e.g.:
+ <pre>
+ Sheet1!$1:$1
+ Sheet2!$5:$8</pre>
+ The parameter <a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util"><code>CellRangeAddress</code></a> should specify a column part 
+ which spans all columns, and a row part which specifies the contiguous 
+ range of repeating rows, e.g.:
+ <pre>
+ sheet.setRepeatingRows(CellRangeAddress.valueOf("2:3"));</pre>
+ A null parameter value indicates that repeating rows should be removed 
+ from the Sheet:
+ <pre>
+ sheet.setRepeatingRows(null);</pre></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setRepeatingRows(org.apache.poi.ss.util.CellRangeAddress)">setRepeatingRows</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>rowRangeRef</code> - a <a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util"><code>CellRangeAddress</code></a> containing the repeating 
+        rows for the Sheet, or null.</dd></dl>
+</li>
+</ul>
+<a name="setRepeatingColumns(org.apache.poi.ss.util.CellRangeAddress)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRepeatingColumns</h4>
+<pre>public&nbsp;void&nbsp;setRepeatingColumns(<a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util">CellRangeAddress</a>&nbsp;columnRangeRef)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setRepeatingColumns(org.apache.poi.ss.util.CellRangeAddress)">Sheet</a></code></strong></div>
+<div class="block">Sets the repeating columns used when printing the sheet, as found in 
+ File->PageSetup->Sheet.
+ <p/>
+ Repeating columns cover a range of contiguous columns, e.g.:
+ <pre>
+ Sheet1!$A:$A
+ Sheet2!$C:$F</pre>
+ The parameter <a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util"><code>CellRangeAddress</code></a> should specify a row part 
+ which spans all rows, and a column part which specifies the contiguous 
+ range of repeating columns, e.g.:
+ <pre>
+ sheet.setRepeatingColumns(CellRangeAddress.valueOf("B:C"));</pre>
+ A null parameter value indicates that repeating columns should be removed 
+ from the Sheet:
+ <pre>
+ sheet.setRepeatingColumns(null);</pre></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html#setRepeatingColumns(org.apache.poi.ss.util.CellRangeAddress)">setRepeatingColumns</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/apache/poi/ss/usermodel/Sheet.html" title="interface in org.apache.poi.ss.usermodel">Sheet</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>columnRangeRef</code> - a <a href="../../../../../org/apache/poi/ss/util/CellRangeAddress.html" title="class in org.apache.poi.ss.util"><code>CellRangeAddress</code></a> containing the repeating 
+        columns for the Sheet, or null.</dd></dl>
+</li>
+</ul>
+<a name="setRandomAccessWindowSize(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRandomAccessWindowSize</h4>
+<pre>public&nbsp;void&nbsp;setRandomAccessWindowSize(int&nbsp;value)</pre>
+<div class="block">Specifies how many rows can be accessed at most via getRow().
+ When a new node is created via createRow() and the total number
+ of unflushed records would exeed the specified value, then the
+ row with the lowest index value is flushed and cannot be accessed
+ via getRow() anymore.
+ A value of -1 indicates unlimited access. In this case all
+ records that have not been flushed by a call to flush() are available
+ for random access.
+ A value of 0 is not allowed because it would flush any newly created row
+ without having a chance to specify any cells.</div>
+</li>
+</ul>
+<a name="flushRows(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>flushRows</h4>
+<pre>public&nbsp;void&nbsp;flushRows(int&nbsp;remaining)
+               throws java.io.IOException</pre>
+<div class="block">Specifies how many rows can be accessed at most via getRow().
+ The exeeding rows (if any) are flushed to the disk while rows
+ with lower index values are flushed first.</div>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd></dl>
+</li>
+</ul>
+<a name="flushRows()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>flushRows</h4>
+<pre>public&nbsp;void&nbsp;flushRows()
+               throws java.io.IOException</pre>
+<div class="block">Flush all rows to disk. After this call no rows can be accessed via getRow()</div>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd></dl>
+</li>
+</ul>
+<a name="changeRowNum(org.apache.poi.xssf.streaming.SXSSFRow, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>changeRowNum</h4>
+<pre>public&nbsp;void&nbsp;changeRowNum(<a href="../../../../../org/apache/poi/xssf/streaming/SXSSFRow.html" title="class in org.apache.poi.xssf.streaming">SXSSFRow</a>&nbsp;row,
+                int&nbsp;newRowNum)</pre>
+</li>
+</ul>
+<a name="getRowNum(org.apache.poi.xssf.streaming.SXSSFRow)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getRowNum</h4>
+<pre>public&nbsp;int&nbsp;getRowNum(<a href="../../../../../org/apache/poi/xssf/streaming/SXSSFRow.html" title="class in org.apache.poi.xssf.streaming">SXSSFRow</a>&nbsp;row)</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/SXSSFSheet.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFRow.FilledCellIterator.html" title="class in org.apache.poi.xssf.streaming"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/xssf/streaming/SXSSFWorkbook.html" title="class in org.apache.poi.xssf.streaming"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/xssf/streaming/SXSSFSheet.html" target="_top">Frames</a></li>
+<li><a href="SXSSFSheet.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

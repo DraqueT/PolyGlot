@@ -1,0 +1,496 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="skin/print.css" type="text/css">
+<title>Apache POI - Text Extraction</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Overview</span>
+        
+<div class="menuItem">
+<a href="index.html">Home</a>
+</div>
+        
+<div class="menuItem">
+<a href="download.html">Download</a>
+</div>
+        
+<div class="menuItem">
+<a href="overview.html">Components</a>
+</div>
+        
+<div class="menuItem">
+<span class="menuSelected">Text Extraction</span>
+</div>
+        
+<div class="menuItem">
+<a href="encryption.html">Encryption support</a>
+</div>
+        
+<div class="menuItem">
+<a href="casestudies.html">Case Studies</a>
+</div>
+        
+<div class="menuItem">
+<a href="legal.html">Legal</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Help</span>
+        
+<div class="menuItem">
+<a href="apidocs/index.html">Javadocs</a>
+</div>
+        
+<div class="menuItem">
+<a href="faq.html">FAQ</a>
+</div>
+        
+<div class="menuItem">
+<a href="mailinglists.html">Mailing Lists</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://issues.apache.org/bugzilla/buglist.cgi?product=POI">Bug Database</a>
+</div>
+        
+<div class="menuItem">
+<a href="changes.html">Changes Log</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Getting Involved</span>
+        
+<div class="menuItem">
+<a href="subversion.html">Subversion Repository</a>
+</div>
+        
+<div class="menuItem">
+<a href="howtobuild.html">How To Build</a>
+</div>
+        
+<div class="menuItem">
+<a href="guidelines.html">Contribution Guidelines</a>
+</div>
+        
+<div class="menuItem">
+<a href="who.html">Who We Are</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Component APIs</span>
+        
+<div class="menuItem">
+<a href="spreadsheet/index.html">Excel (SS=HSSF+XSSF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hwpf/index.html">Word (HWPF+XWPF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="slideshow/index.html">PowerPoint (HSLF+XSLF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="oxml4j/index.html">OpenXML4J (OOXML)</a>
+</div>
+        
+<div class="menuItem">
+<a href="poifs/index.html">OLE2 Filesystem (POIFS)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hpsf/index.html">OLE2 Document Props (HPSF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hsmf/index.html">Outlook (HSMF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hdgf/index.html">Visio (HDGF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hmef/index.html">TNEF (HMEF)</a>
+</div>
+        
+<div class="menuItem">
+<a href="hpbf/index.html">Publisher (HPBF)</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Apache Wide</span>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/">Apache Software Foundation</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/licenses/">License</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</div>
+        
+<div class="menuItem">
+<a href="http://www.apache.org/security/">Security</a>
+</div>
+    
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Apache POI - Text Extraction</h1>
+</div>
+<div class="h3">
+  
+  
+  
+    
+<a name="Overview"></a>
+<div class="h3">
+<h3>Overview</h3>
+</div>
+      
+<p>For a number of years now, Apache POI has provided basic 
+       text extraction for all the project supported file formats. In 
+       addition, as well as the (plain) text, these provides access to 
+       the metadata associated with a given file, such as title and 
+       author.</p>
+      
+<p>For more advanced text extraction needs, including Rich Text
+       extraction (such as formatting and styling), along with XML and
+       HTML output, Apache POI works closely with 
+       <a href="http://tika.apache.org/">Apache Tika</a> to deliver 
+       POI-powered Tika Parsers for all the project supported file formats.</p>
+      
+<p>If you are after turn-key text extraction, including the latest
+       support, styles etc, you are strongly advised to make use of 
+       <a href="http://tika.apache.org/">Apache Tika</a>, which builds 
+       on top of POI to provide Text and Metadata extraction. If you wish
+       to have something very simple and stand-alone, or you wish to make
+       heavy modificiations, then the POI provided text extractors documented
+       below might be a better fit for your needs.</p>
+    
+
+    
+<a name="Common+functionality"></a>
+<div class="h3">
+<h3>Common functionality</h3>
+</div>
+     
+<p>All of the POI text extractors extend from
+      <em>org.apache.poi.POITextExtractor</em>. This provides a common
+      method across all extractors, getText(). For many cases, the text
+      returned will be all you need. However, many extractors do provide
+      more targetted text extraction methods, so you may wish to use
+      these in some cases.</p>
+     
+<p>All POIFS / OLE 2 based text extractors also extend from
+      <em>org.apache.poi.POIOLE2TextExtractor</em>. This additionally
+      provides common methods to get at the <a href="hpfs/">HPFS
+      document metadata</a>.</p>
+     
+<p>All OOXML based text extractors (available in POI 3.5 and later) 
+      also extend from
+      <em>org.apache.poi.POIOOXMLTextExtractor</em>. This additionally
+      provides common methods to get at the OOXML metadata.</p>
+    
+
+    
+<a name="Text+Extractor+Factory"></a>
+<div class="h3">
+<h3>Text Extractor Factory</h3>
+</div>
+     
+<p>As part of the addition of OOXML support in Apache POI 3.5, there
+      is a common class to select the appropriate POI text extractor for 
+      you. <em>org.apache.poi.extractor.ExtractorFactory</em> provides a
+      similar function to WorkbookFactory. You simply pass it an
+      InputStream, a File, a POIFSFileSystem or a OOXML Package. It
+      figures out the correct text extractor for you, and returns it.</p>
+     
+<p>For complete detection and text extractor auto-selection, users
+      are strongly encouraged to investigate
+      <a href="http://tika.apache.org/">Apache Tika</a>.</p>
+    
+
+    
+<a name="Excel"></a>
+<div class="h3">
+<h3>Excel</h3>
+</div>
+     
+<p>For .xls files, there is 
+      <em>org.apache.poi.hssf.extractor.ExcelExtractor</em>, which will 
+      return text, optionally with formulas instead of their contents. 
+      Those using POI 3.5 can also use 
+      <em>org.apache.poi.xssf.extractor.XSSFExcelExtractor</em>, to perform
+      a similar task for .xlsx files.</p>
+     
+<p>In addition, there is a second text extractor for .xls files,
+      <em>org.apache.poi.hssf.extractor.EventBasedExcelExtractor</em>. This
+      is based on the streaming EventUserModel code, and will generally
+      deliver a lower memory footprint for extraction. However, it will
+      have problems correctly outputting more complex formulas, as it 
+      works with records as they pass, and so doesn't have access to all
+      parts of complex and shared formulas.</p>
+    
+
+    
+<a name="Word"></a>
+<div class="h3">
+<h3>Word</h3>
+</div>
+     
+<p>For .doc files from Word 97 - Word 2003, in scratchpad there is 
+      <em>org.apache.poi.hwpf.extractor.WordExtractor</em>, which will 
+      return text for your document.</p>
+     
+<p>Those using POI 3.7 can also extract simple textual content from
+      older Word 6 and Word 95 files, using the scratchpad class
+      <em>org.apache.poi.hwpf.extractor.Word6Extractor</em>.</p>
+     
+<p>Since POI 3.5, it is possible to use
+      <em>org.apache.poi.xwpf.extractor.XPFFWordExtractor</em>, to perform
+      text extraction for .docx files.</p> 
+    
+
+    
+<a name="PowerPoint"></a>
+<div class="h3">
+<h3>PowerPoint</h3>
+</div>
+     
+<p>For .ppt files, in scratchpad there is 
+      <em>org.apache.poi.hslf.extractor.PowerPointExtractor</em>, which 
+      will return text for your slideshow, optionally restricted to just
+      slides text or notes text. Those using POI 3.5 can also use 
+      <em>org.apache.poi.xslf.extractor.XSLFPowerPointExtractor</em>, to 
+      perform a similar task for .pptx files.</p>
+    
+
+    
+<a name="Publisher"></a>
+<div class="h3">
+<h3>Publisher</h3>
+</div>
+     
+<p>For .pub files, in scratchpad there is 
+      <em>org.apache.poi.hpbf.extractor.PublisherExtractor</em>, which 
+      will return text for your file.</p>
+    
+
+    
+<a name="Visio"></a>
+<div class="h3">
+<h3>Visio</h3>
+</div>
+     
+<p>For .vsd files, in scratchpad there is 
+      <em>org.apache.poi.hdgf.extractor.VisioTextExtractor</em>, which 
+      will return text for your file.</p>
+    
+
+    
+<a name="Embedded+Objects"></a>
+<div class="h3">
+<h3>Embedded Objects</h3>
+</div>
+      
+<p>Extractors already exist for Excel, Word, PowerPoint and Visio; 
+        if one of these objects is embedded into a worksheet, the ExtractorFactory class can be used to recover an extractor for it.     
+      </p>
+      
+<pre class="code">
+FileInputStream fis = new FileInputStream(inputFile);
+POIFSFileSystem fileSystem = new POIFSFileSystem(fis);
+// Firstly, get an extractor for the Workbook
+POIOLE2TextExtractor oleTextExtractor = 
+   ExtractorFactory.createExtractor(fileSystem);
+// Then a List of extractors for any embedded Excel, Word, PowerPoint
+// or Visio objects embedded into it.
+POITextExtractor[] embeddedExtractors =
+   ExtractorFactory.getEmbededDocsTextExtractors(oleTextExtractor);
+for (POITextExtractor textExtractor : embeddedExtractors) {
+   // If the embedded object was an Excel spreadsheet.
+   if (textExtractor instanceof ExcelExtractor) {
+      ExcelExtractor excelExtractor = (ExcelExtractor) textExtractor;
+      System.out.println(excelExtractor.getText());
+   }
+   // A Word Document
+   else if (textExtractor instanceof WordExtractor) {
+      WordExtractor wordExtractor = (WordExtractor) textExtractor;
+      String[] paragraphText = wordExtractor.getParagraphText();
+      for (String paragraph : paragraphText) {
+         System.out.println(paragraph);
+      }
+      // Display the document's header and footer text
+      System.out.println("Footer text: " + wordExtractor.getFooterText());
+      System.out.println("Header text: " + wordExtractor.getHeaderText());
+   }
+   // PowerPoint Presentation.
+   else if (textExtractor instanceof PowerPointExtractor) {
+      PowerPointExtractor powerPointExtractor =
+         (PowerPointExtractor) textExtractor;
+      System.out.println("Text: " + powerPointExtractor.getText());
+      System.out.println("Notes: " + powerPointExtractor.getNotes());
+   }
+   // Visio Drawing
+   else if (textExtractor instanceof VisioTextExtractor) {
+      VisioTextExtractor visioTextExtractor = 
+         (VisioTextExtractor) textExtractor;
+      System.out.println("Text: " + visioTextExtractor.getText());
+   }
+}
+      </pre>
+    
+  
+
+  
+
+<div id="authors" align="right">by&nbsp;Nick Burch</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

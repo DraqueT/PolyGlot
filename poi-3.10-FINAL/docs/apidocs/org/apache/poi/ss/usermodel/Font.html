@@ -1,0 +1,867 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>Font (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Font (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Font.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/ss/usermodel/FillPatternType.html" title="enum in org.apache.poi.ss.usermodel"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/ss/usermodel/FontCharset.html" title="enum in org.apache.poi.ss.usermodel"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/ss/usermodel/Font.html" target="_top">Frames</a></li>
+<li><a href="Font.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.ss.usermodel</div>
+<h2 title="Interface Font" class="title">Interface Font</h2>
+</div>
+<div class="contentContainer">
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Known Implementing Classes:</dt>
+<dd><a href="../../../../../org/apache/poi/hssf/usermodel/HSSFFont.html" title="class in org.apache.poi.hssf.usermodel">HSSFFont</a>, <a href="../../../../../org/apache/poi/xssf/usermodel/XSSFFont.html" title="class in org.apache.poi.xssf.usermodel">XSSFFont</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public interface <span class="strong">Font</span></pre>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static byte</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#ANSI_CHARSET">ANSI_CHARSET</a></strong></code>
+<div class="block">ANSI character set</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#BOLDWEIGHT_BOLD">BOLDWEIGHT_BOLD</a></strong></code>
+<div class="block">Bold boldness (bold)</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#BOLDWEIGHT_NORMAL">BOLDWEIGHT_NORMAL</a></strong></code>
+<div class="block">Normal boldness (not bold)</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#COLOR_NORMAL">COLOR_NORMAL</a></strong></code>
+<div class="block">normal type of black color.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#COLOR_RED">COLOR_RED</a></strong></code>
+<div class="block">Dark Red color</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static byte</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#DEFAULT_CHARSET">DEFAULT_CHARSET</a></strong></code>
+<div class="block">Default character set.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SS_NONE">SS_NONE</a></strong></code>
+<div class="block">no type offsetting (not super or subscript)</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SS_SUB">SS_SUB</a></strong></code>
+<div class="block">subscript</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SS_SUPER">SS_SUPER</a></strong></code>
+<div class="block">superscript</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static byte</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SYMBOL_CHARSET">SYMBOL_CHARSET</a></strong></code>
+<div class="block">Symbol character set</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static byte</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_DOUBLE">U_DOUBLE</a></strong></code>
+<div class="block">double underlined</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static byte</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_DOUBLE_ACCOUNTING">U_DOUBLE_ACCOUNTING</a></strong></code>
+<div class="block">accounting style double underline</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static byte</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_NONE">U_NONE</a></strong></code>
+<div class="block">not underlined</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static byte</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_SINGLE">U_SINGLE</a></strong></code>
+<div class="block">single (normal) underline</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static byte</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_SINGLE_ACCOUNTING">U_SINGLE_ACCOUNTING</a></strong></code>
+<div class="block">accounting style single underline</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getBoldweight()">getBoldweight</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getCharSet()">getCharSet</a></strong>()</code>
+<div class="block">get character-set to use.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getColor()">getColor</a></strong>()</code>
+<div class="block">get the color for the font</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getFontHeight()">getFontHeight</a></strong>()</code>
+<div class="block">get the font height in unit's of 1/20th of a point.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getFontHeightInPoints()">getFontHeightInPoints</a></strong>()</code>
+<div class="block">get the font height</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getFontName()">getFontName</a></strong>()</code>
+<div class="block">get the name for the font (i.e.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getIndex()">getIndex</a></strong>()</code>
+<div class="block">get the index within the XSSFWorkbook (sequence within the collection of Font objects)</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getItalic()">getItalic</a></strong>()</code>
+<div class="block">get whether to use italics or not</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getStrikeout()">getStrikeout</a></strong>()</code>
+<div class="block">get whether to use a strikeout horizontal line through the text or not</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getTypeOffset()">getTypeOffset</a></strong>()</code>
+<div class="block">get normal,super or subscript.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>byte</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getUnderline()">getUnderline</a></strong>()</code>
+<div class="block">get type of text underlining to use</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setBoldweight(short)">setBoldweight</a></strong>(short&nbsp;boldweight)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setCharSet(byte)">setCharSet</a></strong>(byte&nbsp;charset)</code>
+<div class="block">set character-set to use.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setCharSet(int)">setCharSet</a></strong>(int&nbsp;charset)</code>
+<div class="block">set character-set to use.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setColor(short)">setColor</a></strong>(short&nbsp;color)</code>
+<div class="block">set the color for the font</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setFontHeight(short)">setFontHeight</a></strong>(short&nbsp;height)</code>
+<div class="block">set the font height in unit's of 1/20th of a point.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setFontHeightInPoints(short)">setFontHeightInPoints</a></strong>(short&nbsp;height)</code>
+<div class="block">set the font height</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setFontName(java.lang.String)">setFontName</a></strong>(java.lang.String&nbsp;name)</code>
+<div class="block">set the name for the font (i.e.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setItalic(boolean)">setItalic</a></strong>(boolean&nbsp;italic)</code>
+<div class="block">set whether to use italics or not</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setStrikeout(boolean)">setStrikeout</a></strong>(boolean&nbsp;strikeout)</code>
+<div class="block">set whether to use a strikeout horizontal line through the text or not</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setTypeOffset(short)">setTypeOffset</a></strong>(short&nbsp;offset)</code>
+<div class="block">set normal,super or subscript.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setUnderline(byte)">setUnderline</a></strong>(byte&nbsp;underline)</code>
+<div class="block">set type of text underlining to use</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="BOLDWEIGHT_NORMAL">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BOLDWEIGHT_NORMAL</h4>
+<pre>static final&nbsp;short BOLDWEIGHT_NORMAL</pre>
+<div class="block">Normal boldness (not bold)</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.BOLDWEIGHT_NORMAL">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="BOLDWEIGHT_BOLD">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BOLDWEIGHT_BOLD</h4>
+<pre>static final&nbsp;short BOLDWEIGHT_BOLD</pre>
+<div class="block">Bold boldness (bold)</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.BOLDWEIGHT_BOLD">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="COLOR_NORMAL">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COLOR_NORMAL</h4>
+<pre>static final&nbsp;short COLOR_NORMAL</pre>
+<div class="block">normal type of black color.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.COLOR_NORMAL">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="COLOR_RED">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COLOR_RED</h4>
+<pre>static final&nbsp;short COLOR_RED</pre>
+<div class="block">Dark Red color</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.COLOR_RED">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SS_NONE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SS_NONE</h4>
+<pre>static final&nbsp;short SS_NONE</pre>
+<div class="block">no type offsetting (not super or subscript)</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.SS_NONE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SS_SUPER">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SS_SUPER</h4>
+<pre>static final&nbsp;short SS_SUPER</pre>
+<div class="block">superscript</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.SS_SUPER">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SS_SUB">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SS_SUB</h4>
+<pre>static final&nbsp;short SS_SUB</pre>
+<div class="block">subscript</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.SS_SUB">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="U_NONE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>U_NONE</h4>
+<pre>static final&nbsp;byte U_NONE</pre>
+<div class="block">not underlined</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.U_NONE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="U_SINGLE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>U_SINGLE</h4>
+<pre>static final&nbsp;byte U_SINGLE</pre>
+<div class="block">single (normal) underline</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.U_SINGLE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="U_DOUBLE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>U_DOUBLE</h4>
+<pre>static final&nbsp;byte U_DOUBLE</pre>
+<div class="block">double underlined</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.U_DOUBLE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="U_SINGLE_ACCOUNTING">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>U_SINGLE_ACCOUNTING</h4>
+<pre>static final&nbsp;byte U_SINGLE_ACCOUNTING</pre>
+<div class="block">accounting style single underline</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.U_SINGLE_ACCOUNTING">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="U_DOUBLE_ACCOUNTING">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>U_DOUBLE_ACCOUNTING</h4>
+<pre>static final&nbsp;byte U_DOUBLE_ACCOUNTING</pre>
+<div class="block">accounting style double underline</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.U_DOUBLE_ACCOUNTING">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="ANSI_CHARSET">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ANSI_CHARSET</h4>
+<pre>static final&nbsp;byte ANSI_CHARSET</pre>
+<div class="block">ANSI character set</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.ANSI_CHARSET">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="DEFAULT_CHARSET">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_CHARSET</h4>
+<pre>static final&nbsp;byte DEFAULT_CHARSET</pre>
+<div class="block">Default character set.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.DEFAULT_CHARSET">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SYMBOL_CHARSET">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SYMBOL_CHARSET</h4>
+<pre>static final&nbsp;byte SYMBOL_CHARSET</pre>
+<div class="block">Symbol character set</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.ss.usermodel.Font.SYMBOL_CHARSET">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="setFontName(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFontName</h4>
+<pre>void&nbsp;setFontName(java.lang.String&nbsp;name)</pre>
+<div class="block">set the name for the font (i.e. Arial)</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - String representing the name of the font to use</dd></dl>
+</li>
+</ul>
+<a name="getFontName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFontName</h4>
+<pre>java.lang.String&nbsp;getFontName()</pre>
+<div class="block">get the name for the font (i.e. Arial)</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>String representing the name of the font to use</dd></dl>
+</li>
+</ul>
+<a name="setFontHeight(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFontHeight</h4>
+<pre>void&nbsp;setFontHeight(short&nbsp;height)</pre>
+<div class="block">set the font height in unit's of 1/20th of a point.  Maybe you might want to
+ use the setFontHeightInPoints which matches to the familiar 10, 12, 14 etc..</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>height</code> - height in 1/20ths of a point</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setFontHeightInPoints(short)"><code>setFontHeightInPoints(short)</code></a></dd></dl>
+</li>
+</ul>
+<a name="setFontHeightInPoints(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFontHeightInPoints</h4>
+<pre>void&nbsp;setFontHeightInPoints(short&nbsp;height)</pre>
+<div class="block">set the font height</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>height</code> - height in the familiar unit of measure - points</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#setFontHeight(short)"><code>setFontHeight(short)</code></a></dd></dl>
+</li>
+</ul>
+<a name="getFontHeight()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFontHeight</h4>
+<pre>short&nbsp;getFontHeight()</pre>
+<div class="block">get the font height in unit's of 1/20th of a point.  Maybe you might want to
+ use the getFontHeightInPoints which matches to the familiar 10, 12, 14 etc..</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>short - height in 1/20ths of a point</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getFontHeightInPoints()"><code>getFontHeightInPoints()</code></a></dd></dl>
+</li>
+</ul>
+<a name="getFontHeightInPoints()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFontHeightInPoints</h4>
+<pre>short&nbsp;getFontHeightInPoints()</pre>
+<div class="block">get the font height</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>short - height in the familiar unit of measure - points</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#getFontHeight()"><code>getFontHeight()</code></a></dd></dl>
+</li>
+</ul>
+<a name="setItalic(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setItalic</h4>
+<pre>void&nbsp;setItalic(boolean&nbsp;italic)</pre>
+<div class="block">set whether to use italics or not</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>italic</code> - italics or not</dd></dl>
+</li>
+</ul>
+<a name="getItalic()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getItalic</h4>
+<pre>boolean&nbsp;getItalic()</pre>
+<div class="block">get whether to use italics or not</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>italics or not</dd></dl>
+</li>
+</ul>
+<a name="setStrikeout(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setStrikeout</h4>
+<pre>void&nbsp;setStrikeout(boolean&nbsp;strikeout)</pre>
+<div class="block">set whether to use a strikeout horizontal line through the text or not</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>strikeout</code> - or not</dd></dl>
+</li>
+</ul>
+<a name="getStrikeout()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStrikeout</h4>
+<pre>boolean&nbsp;getStrikeout()</pre>
+<div class="block">get whether to use a strikeout horizontal line through the text or not</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>strikeout or not</dd></dl>
+</li>
+</ul>
+<a name="setColor(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setColor</h4>
+<pre>void&nbsp;setColor(short&nbsp;color)</pre>
+<div class="block">set the color for the font</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>color</code> - to use</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#COLOR_NORMAL"><code>Note: Use this rather than HSSFColor.AUTOMATIC for default font color</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#COLOR_RED"><code>COLOR_RED</code></a></dd></dl>
+</li>
+</ul>
+<a name="getColor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getColor</h4>
+<pre>short&nbsp;getColor()</pre>
+<div class="block">get the color for the font</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>color to use</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#COLOR_NORMAL"><code>COLOR_NORMAL</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#COLOR_RED"><code>COLOR_RED</code></a>, 
+<a href="../../../../../org/apache/poi/hssf/usermodel/HSSFPalette.html#getColor(short)"><code>HSSFPalette.getColor(short)</code></a></dd></dl>
+</li>
+</ul>
+<a name="setTypeOffset(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setTypeOffset</h4>
+<pre>void&nbsp;setTypeOffset(short&nbsp;offset)</pre>
+<div class="block">set normal,super or subscript.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>offset</code> - type to use (none,super,sub)</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SS_NONE"><code>SS_NONE</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SS_SUPER"><code>SS_SUPER</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SS_SUB"><code>SS_SUB</code></a></dd></dl>
+</li>
+</ul>
+<a name="getTypeOffset()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTypeOffset</h4>
+<pre>short&nbsp;getTypeOffset()</pre>
+<div class="block">get normal,super or subscript.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>offset type to use (none,super,sub)</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SS_NONE"><code>SS_NONE</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SS_SUPER"><code>SS_SUPER</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SS_SUB"><code>SS_SUB</code></a></dd></dl>
+</li>
+</ul>
+<a name="setUnderline(byte)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setUnderline</h4>
+<pre>void&nbsp;setUnderline(byte&nbsp;underline)</pre>
+<div class="block">set type of text underlining to use</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>underline</code> - type</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_NONE"><code>U_NONE</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_SINGLE"><code>U_SINGLE</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_DOUBLE"><code>U_DOUBLE</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_SINGLE_ACCOUNTING"><code>U_SINGLE_ACCOUNTING</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_DOUBLE_ACCOUNTING"><code>U_DOUBLE_ACCOUNTING</code></a></dd></dl>
+</li>
+</ul>
+<a name="getUnderline()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getUnderline</h4>
+<pre>byte&nbsp;getUnderline()</pre>
+<div class="block">get type of text underlining to use</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>underlining type</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_NONE"><code>U_NONE</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_SINGLE"><code>U_SINGLE</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_DOUBLE"><code>U_DOUBLE</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_SINGLE_ACCOUNTING"><code>U_SINGLE_ACCOUNTING</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#U_DOUBLE_ACCOUNTING"><code>U_DOUBLE_ACCOUNTING</code></a></dd></dl>
+</li>
+</ul>
+<a name="getCharSet()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCharSet</h4>
+<pre>int&nbsp;getCharSet()</pre>
+<div class="block">get character-set to use.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>character-set</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#ANSI_CHARSET"><code>ANSI_CHARSET</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#DEFAULT_CHARSET"><code>DEFAULT_CHARSET</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SYMBOL_CHARSET"><code>SYMBOL_CHARSET</code></a></dd></dl>
+</li>
+</ul>
+<a name="setCharSet(byte)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCharSet</h4>
+<pre>void&nbsp;setCharSet(byte&nbsp;charset)</pre>
+<div class="block">set character-set to use.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#ANSI_CHARSET"><code>ANSI_CHARSET</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#DEFAULT_CHARSET"><code>DEFAULT_CHARSET</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SYMBOL_CHARSET"><code>SYMBOL_CHARSET</code></a></dd></dl>
+</li>
+</ul>
+<a name="setCharSet(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCharSet</h4>
+<pre>void&nbsp;setCharSet(int&nbsp;charset)</pre>
+<div class="block">set character-set to use.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/ss/usermodel/Font.html#ANSI_CHARSET"><code>ANSI_CHARSET</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#DEFAULT_CHARSET"><code>DEFAULT_CHARSET</code></a>, 
+<a href="../../../../../org/apache/poi/ss/usermodel/Font.html#SYMBOL_CHARSET"><code>SYMBOL_CHARSET</code></a></dd></dl>
+</li>
+</ul>
+<a name="getIndex()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getIndex</h4>
+<pre>short&nbsp;getIndex()</pre>
+<div class="block">get the index within the XSSFWorkbook (sequence within the collection of Font objects)</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>unique index number of the underlying record this Font represents (probably you don't care
+  unless you're comparing which one is which)</dd></dl>
+</li>
+</ul>
+<a name="setBoldweight(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBoldweight</h4>
+<pre>void&nbsp;setBoldweight(short&nbsp;boldweight)</pre>
+</li>
+</ul>
+<a name="getBoldweight()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getBoldweight</h4>
+<pre>short&nbsp;getBoldweight()</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Font.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/ss/usermodel/FillPatternType.html" title="enum in org.apache.poi.ss.usermodel"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/ss/usermodel/FontCharset.html" title="enum in org.apache.poi.ss.usermodel"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/ss/usermodel/Font.html" target="_top">Frames</a></li>
+<li><a href="Font.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

@@ -1,0 +1,1145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>POIFS File System Internals</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+    
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+  
+</div>
+<div class="menu">
+<span class="menuLabel">POIFS</span>
+    
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+    
+<div class="menuItem">
+<a href="how-to.html">How To</a>
+</div>
+    
+<div class="menuItem">
+<a href="embeded.html">Embeded Documents</a>
+</div>
+    
+<div class="menuItem">
+<span class="menuSelected">File System Documentation</span>
+</div>
+    
+<div class="menuItem">
+<a href="usecases.html">Use Cases</a>
+</div>
+  
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>POIFS File System Internals</h1>
+</div>
+<div class="h3">
+  
+  
+    
+<a name="POIFS+File+System+Internals"></a>
+<div class="h3">
+<h3>POIFS File System Internals</h3>
+</div>
+      
+<a name="Introduction"></a>
+<div class="h4">
+<h4>Introduction</h4>
+</div>
+        
+<p>POIFS file systems are essentially normal files stored on a
+           Java-compatible platform's native file system. They are
+           typically identified by names ending in a four character
+           extension noting what type of data they contain. For
+           example, a file ending in ".xls" would likely
+           contain spreadsheet data, and a file ending in
+           ".doc" would probably contain a word processing
+           document. POIFS file systems are called "file
+           system", because they contain multiple embedded files
+           in a manner similar to traditional file systems. Along
+           functional lines, it would be more accurate to call these
+           POIFS archives. For the remainder of this document it is
+           referred to as a file system in order to avoid confusion
+           with the "files" it contains.</p>
+        
+<p>POIFS file systems are compatible with those document
+           formats used by a well-known software company's popular
+           office productivity suite and programs outputting
+           compatible data. Because the POIFS file system does not
+           provide compression, encryption or any other worthwhile
+           feature, its not a good choice unless you require
+           interoperability with these programs.</p>
+        
+<p>The POIFS file system does not encode the documents
+           themselves. For example, if you had a word processor file
+           with the extension ".doc", you would actually
+           have a POIFS file system with a document file archived
+           inside of that file system.</p>
+        
+<p>Note - this document is a good overview and explanation of
+           the file format, but for the very nitty-gritty details,
+           you should refer to 
+           <a href="http://msdn.microsoft.com/en-us/library/dd942138%28v=prot.13%29.aspx">[MS-CFB].pdf</a>
+           in the (now public) Microsoft Documentation.</p>
+      
+      
+<a name="Document+Conventions"></a>
+<div class="h4">
+<h4>Document Conventions</h4>
+</div>
+        
+<p>This document utilizes the numeric types as described by
+           the Java Language Specification, which can be found at
+           <a href="http://java.sun.com">http://java.sun.com</a>. In
+           short:</p>
+        
+<ul>
+          
+<li>A <em>byte</em> is an 8 bit signed integer ranging from
+              -128 to 127.</li>
+          
+<li>A <em>short</em> is a 16 bit signed integer ranging from
+              -32768 to 32767</li>
+          
+<li>An <em>int</em> is a 32 bit signed integer ranging from
+              -2147483648 to 2147483647</li>
+          
+<li>A <em>long</em> is a 64 bit signed integer ranging from
+              -9.22E18 to 9.22E18.</li>
+        
+</ul>
+        
+<p>The Java Language Specification spells out a number of
+           other types that are not referred to by this document.</p>
+        
+<p>Where this document makes references to "endian
+           conversion" it is referring to the byte order of
+           stored numbers. Numbers in "little-endian order"
+           are stored with the <em>least</em> significant byte first. In
+           order to properly read a short, for example, you'd read two
+           bytes and then shift the second byte 8 bits to the left
+           before performing an <span class="codefrag">or</span> operation to it
+           against the first byte. The following code illustrates this
+           method:</p>
+	
+<pre class="code">
+public int getShort (byte[] rec)
+{
+    return ((rec[1] &lt;&lt; 8) | (rec[0] &amp; 0x00ff));
+}</pre>
+      
+      
+<a name="File+System+Walkthrough"></a>
+<div class="h4">
+<h4>File System Walkthrough</h4>
+</div>
+        
+<p>This is a walkthrough of a POIFS file system and how it is
+           put together. It is not intended to give a concise
+           description but to give a "big picture" of the
+           general structure and how it's interpreted.</p>
+        
+<p>A POIFS file system begins with a header. This header
+           identifies locations in the file by function and provides a
+           sanity check identifying a file as a POIFS file system.</p>
+        
+<p>The first 64 bits of the header compose a <em>magic number
+           identifier.</em> This identifier tells the client software
+           that this is indeed a POIFS file system and that it should
+           be treated as such. This is a "sanity check" to
+           make sure this is a POIFS file system and not some other
+           format. The header also contains an <em>array of block
+           numbers</em>. These block numbers refer to blocks in the
+           file. When these blocks are read together they form the
+           <em>Block Allocation Table</em>. The header also contains a
+           pointer to the first element in the <em>property table</em>,
+           also known as the <em>root element</em>, and a pointer to the
+           <em>small Block Allocation Table (SBAT)</em>.</p>
+        
+<p>The <em>block allocation table</em> or <em>BAT</em>, along with
+           the <em>property table</em>, specify which blocks in the file
+           system belong to which files. After the header block, the
+           file system is divided into identically sized blocks of
+           data, numbered from 0 to however many blocks there are in
+           the file system. For each file in the file system, its
+           entry in the property table includes the index of the first
+           block in the array of blocks. Each block's index into the
+           array of blocks is also its index into the BAT, and the
+           integer value stored at that index in the BAT gives the
+           index of the next block in the array (and thus the index of
+           the next BAT value). A special value is stored in the BAT
+           to indicate "end of file".</p>
+        
+<p>The <em>property table</em> is essentially the directory
+           storage for the file system. It consists of the name of the
+           file or directory, its <em>start block</em> in both the file
+           system and <em>BAT</em>, and its actual size. The first
+           property in the property table is the <em>root
+           element</em>. It has two purposes: to be a directory entry
+           (the root of the directory tree, to be specific), and to
+           hold the start block for the <em>small block data</em>.</p>
+	
+<p>Small block data is a special file that contains the data
+	   for small files (less than 4K bytes). It subdivides its
+	   blocks into smaller blocks and there is a special small
+	   block allocation table that, like the main BAT for larger
+	   files, is used to map a small file to its small blocks.</p>
+      
+	
+<a name="Header+Block"></a>
+<div class="h4">
+<h4>Header Block</h4>
+</div>
+          
+<p>The POIFS file system begins with a <em>header
+             block</em>. The first 64 bits of the header form a long
+             <em>file type id</em> or <em>magic number identifier</em> of
+             <span class="codefrag">0xE11AB1A1E011CFD0L</span>. This is basically a
+             sanity check. If this isn't the first thing in the header
+             (and consequently the file system) then this is not a
+             POIFS file system and should be read with some other
+             library.</p>
+          
+<p>It's important to know the most important parts of the
+             header. These are discussed in the rest of this
+             section.</p>
+	  
+<a name="BATs"></a>
+<div class="h2">
+<h2>BATs</h2>
+</div>
+            
+<p>At offset <em>0x2C</em> is an int specifying the number
+               of elements in the <em>BAT array</em>. The array at
+               <em>0x4C</em> an array of ints. This array contains the
+               indices of every block in the Block Allocation
+               Table.</p>
+	  
+	  
+<a name="XBATs"></a>
+<div class="h2">
+<h2>XBATs</h2>
+</div>
+	    
+<p>Very large POIFS archives may have more blocks than can
+               be addressed by the BAT blocks enumerated in the header
+               block. How large? Well, the BAT array in the header can
+               contain up to 109 BAT block indices; each BAT block
+               references up to 128 blocks, and each block is 512
+               bytes, so we're talking about 109 * 128 * 512 =
+               6.8MB. That's a pretty respectable document! But, you
+               could have much more data than that, and in today's
+               world of cheap gigabyte drives, why not? So, the BAT
+               may be extended in that event. The integer value at
+               offset <em>0x44</em> of the header is the index of the
+               first <em>extended BAT (XBAT) block</em>. At offset
+               <em>0x48</em> of the header, there is an int value that
+               specifies how many XBAT blocks there are. The XBAT
+               blocks begin at the specified index into the array of
+               blocks making up the POIFS file system, and are chained
+               for the specified count of XBAT blocks.</p>
+            
+<p>Each XBAT block contains the indices of up to 127 BAT
+               blocks, so the document size can be expanded by another
+               ~8MB for each XBAT block. The BAT blocks indexed by an
+               XBAT block are appended to the end of the list of BAT
+               blocks enumerated in the header block. Thus the BAT
+               blocks enumerated in the header block are BAT blocks 0
+               through 108, the BAT blocks enumerated in the first
+               XBAT block are BAT blocks 109 through 235, the BAT
+               blocks enumerated in the second XBAT block are BAT
+               blocks 236 through 362, and so on.</p>
+             
+<p>While a normal BAT block holds 128 entries, each XBAT
+               only references 127 BAT blocks. The last, 128th entry
+               in an XBAT is the offset to the next XBAT block in the
+               chain (or -1 if this is the last XBAT).</p>
+	    
+<p>Through the use of XBAT blocks, the limit on the
+	       overall document size is that imposed by the 4-byte
+	       block indices; if the indices are unsigned ints, the
+	       maximum file size is 2 terabytes, 1 terabyte if the
+	       indices are treated as signed ints. Either way, I have
+	       yet to see a disk drive large enough to accommodate
+	       such a file on the shelves at the local office supply
+	       stores.</p>
+	  
+	  
+<a name="SBATs"></a>
+<div class="h2">
+<h2>SBATs</h2>
+</div>
+            
+<p>If a file contained in a POIFS archive is smaller than
+               4096 bytes, it is stored in small blocks. Small blocks
+               are 64 bytes in length and are contained within big
+               blocks, up to 8 to a big block. As the main BAT is used
+               to navigate the array of big blocks, so the <em>small
+               block allocation table</em> is used to navigate the
+               array of small blocks. The SBAT's start block index is
+               found at offset <em>0x3C</em> of the header block, and
+               remaining blocks constituting the SBAT are found by
+               walking the main BAT as if it were an ordinary file in
+               the POIFS file system (this process is described
+               below).</p>
+	  
+	  
+<a name="Property+Table+Start+Index"></a>
+<div class="h2">
+<h2>Property Table Start Index</h2>
+</div>
+            
+<p>An integer at address <em>0x30</em> specifies the start
+               index of the property table. This integer is specified
+               as a <em>"block index"</em>. The Property Table
+               is stored, as is almost everything in a POIFS file
+               system, in big blocks and walked via the BAT. The
+               Property Table is described below.</p>
+	  
+	
+	
+<a name="Property+Table"></a>
+<div class="h4">
+<h4>Property Table</h4>
+</div>
+          
+<p>The property table is essentially nothing more than the
+             directory system. Properties are 128 byte records
+             contained within the 512 byte blocks. The first property
+             is always the Root Entry. The following applies to
+             individual properties within a property table:</p>
+	  
+<ul>
+	    
+<li>At offset <em>0x00</em> in the property is the
+                "<em>name</em>". This is stored as an
+                uncompressed 16 bit unicode string. In short every
+                other byte corresponds to an "ASCII"
+                character. The size of this string is stored at offset
+                <em>0x40</em> (<em>string size</em>) as a short.</li>
+            
+<li>At offset <em>0x42</em> is the <em>property type</em>
+                (byte). The type is 1 for directory, 2 for file or 5
+                for the Root Entry.</li>
+	    
+<li>At offset <em>0x43</em> is the <em>node color</em>
+                (byte). The color is either 1, (black), or 0,
+                (red). Properties are apparently meant to be arranged
+                in a red-black binary tree, subject to the following
+                rules:
+	      <ol>
+	        
+<li>The root of the tree is always black</li>
+		
+<li>Two consecutive nodes cannot both be red</li>
+		
+<li>A property is less than another property if its
+		    name length is less than the other property's name
+		    length</li>
+		
+<li>If two properties have the same name length, the
+		    sort order is determined by the sort order of the
+		    properties' names.</li>
+	      
+</ol>
+</li>
+	    
+<li>At offset <em>0x44</em> is the index (int) of the
+	        <em>previous property</em>.</li>
+	    
+<li>At offset <em>0x48</em> is the index (int) of the
+                <em>next property</em>.</li>
+            
+<li>At offset <em>0x4C</em> is the index (int) of the
+                <em>first directory entry</em>. This is used by
+                directory entries.</li>
+	    
+<li>At offset <em>0x74</em> is an integer giving the
+                <em>start block</em> for the file described by this
+                property. This index corresponds to an index in the
+                array of indices that is the Block Allocation Table
+                (or the Small Block Allocation Table) as well as the
+                index of the first block in the file. This is used by
+                files and the root entry.</li>
+	    
+<li>At offset <em>0x78</em> is an integer giving the total
+                <em>actual size</em> of the file pointed at by this
+                property. If the file size is less than 4096, the file
+                is stored in small blocks and the SBAT is used to walk
+                the small blocks making up the file. If the file size
+                is 4096 or larger, the file is stored in big blocks
+                and the main BAT is used to walk the big blocks making
+                up the file. The exception to this rule is the <em>Root
+                Entry</em>, which, regardless of its size, is
+                <em>always</em> stored in big blocks and the main BAT is
+                used to walk the big blocks making up this special
+                file.</li>
+	  
+</ul>
+	
+	
+<a name="Root+Entry"></a>
+<div class="h4">
+<h4>Root Entry</h4>
+</div>
+          
+<p>The <em>Root Entry</em> in the <em>Property Table</em>
+             contains the information necessary to read and write
+             small files, which are files less than 4096 bytes
+             long. The start block field of the Root Entry is the
+             start index of the <em>Small Block Array</em>, which is
+             read like any other file in the POIFS file system. Since
+             the SBAT cannot be used without the Small Block Array,
+             the Root Entry MUST be read or written using the <em>Block
+             Allocation Table</em>. The blocks making up the Small
+             Block Array are divided into 64-byte small blocks, up to
+             the size indicated in the Root Entry (which should always
+             be a multiple of 64).</p>
+	
+	
+<a name="Walking+the+Nodes+of+the+Property+Table"></a>
+<div class="h4">
+<h4>Walking the Nodes of the Property Table</h4>
+</div>
+          
+<p>The individual properties form a directory tree, with the
+             <em>Root Entry</em> as the directory tree's root, as shown
+             in the accompanying drawing. Note the numbers in
+             parentheses in each node; they represent the node's index
+             in the array of properties. The <em>NEXT_PROP</em>,
+             <em>PREVIOUS_PROP</em>, and <em>CHILD_PROP</em> fields hold
+             these indices, and are used to navigate the tree.</p>
+          
+<p>
+<img alt="property set" src="images/PropertySet.jpg"></p>
+	  
+<p>Each directory entry (i.e., a property whose type is
+             <em>directory</em> or <em>root entry</em>) uses its
+             <em>CHILD_PROP</em> field to point to one of its
+             subordinate (child) properties. It doesn't seem to matter
+             which of its children it points to. Thus in the previous
+             drawing, the Root Entry's CHILD_PROP field may contain 1,
+             4, or the index of one of its other children.  Similarly,
+             the directory node (index 1) may have, in its CHILD_PROP
+             field, 2, 3, or the index of one of its other
+             children.</p>
+          
+<p>The children of a given directory property point to each
+             other in a similar fashion by using their
+             <em>NEXT_PROP</em> and <em>PREVIOUS_PROP</em> fields.</p>
+	  
+<p>Unused <em>NEXT_PROP</em>, <em>PREVIOUS_PROP</em>, and
+             <em>CHILD_PROP</em> fields contain the marker value of
+             -1. All file properties have a value of -1 for their
+             CHILD_PROP fields for example.</p>
+	
+	
+<a name="Block+Allocation+Table"></a>
+<div class="h4">
+<h4>Block Allocation Table</h4>
+</div>
+	  
+<p>The <em>BAT blocks</em> are pointed at by the bat array
+             contained in the header and supplemented, if necessary,
+             by the <em>XBAT blocks</em>. These blocks form a large
+             table of integers. These integers are block numbers. The
+             <em>Block Allocation Table</em> holds chains of integers.
+             These chains are terminated with -2. The elements in
+             these chains refer to blocks in the files. The starting
+             block of a file is NOT specified in the BAT.  It is
+             specified by the <em>property</em> for a given file. The
+             elements in this BAT are both the block number (within
+             the file minus the header) <em>and</em> the number of the
+             next BAT element in the chain. This can be thought of as
+             a linked list of blocks. The BAT array contains the links
+             from one block to the next, including the end of chain
+             marker.</p>
+          
+<p>Here's an example: Let's assume that the BAT begins as
+             follows:</p>
+	  
+<p>
+<span class="codefrag">BAT[ 0 ] = 2</span>
+</p>
+	  
+<p>
+<span class="codefrag">BAT[ 1 ] = 5</span>
+</p>
+	  
+<p>
+<span class="codefrag">BAT[ 2 ] = 3</span>
+</p>
+	  
+<p>
+<span class="codefrag">BAT[ 3 ] = 4</span>
+</p>
+	  
+<p>
+<span class="codefrag">BAT[ 4 ] = 6</span>
+</p>
+	  
+<p>
+<span class="codefrag">BAT[ 5 ] = -2</span>
+</p>
+	  
+<p>
+<span class="codefrag">BAT[ 6 ] = 7</span>
+</p>
+	  
+<p>
+<span class="codefrag">BAT[ 7 ] = -2</span>
+</p>
+	  
+<p>
+<span class="codefrag">...</span>
+</p>
+	  
+<p>Now, if we have a file whose Property Table entry says it
+             begins with index 0, we walk the BAT array and see that
+             the file consists of blocks 0 (because the start block is
+             0), 2 (because BAT[ 0 ] is 2), 3 (BAT[ 2 ] is 3), 4 (BAT[
+             3 ] is 4), 6 (BAT[ 4 ] is 6), and 7 (BAT[ 6 ] is 7). It
+             ends at block 7 because BAT[ 7 ] is -2, which is the end
+             of chain marker.</p>
+          
+<p>Similarly, a file beginning at index 1 consists of
+             blocks 1 and 5.</p>
+	  
+<p>Other special numbers in a BAT array are:</p>
+          
+<ul>
+            
+<li>-1, which indicates an unused block</li>
+            
+<li>-3, which indicates a "special" block, such
+                as a block used to make up the Small Block Array, the
+                Property Table, the main BAT, or the SBAT</li>
+          
+</ul>
+	
+      
+<a name="File+System+Structures"></a>
+<div class="h4">
+<h4>File System Structures</h4>
+</div>
+        
+<p>The following outlines the basic file system structures.</p>
+	
+<a name="Header+%28block+1%29+--+512+%280x200%29+bytes"></a>
+<div class="h2">
+<h2>Header (block 1) -- 512 (0x200) bytes</h2>
+</div>
+          
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+	    
+<tr class="b">
+	      
+<td colspan="1" rowspan="1"><em>Field</em></td>
+	      <td colspan="1" rowspan="1"><em>Description</em></td>
+	      <td colspan="1" rowspan="1"><em>Offset</em></td>
+	      <td colspan="1" rowspan="1"><em>Length</em></td>
+	      <td colspan="1" rowspan="1"><em>Default value or const</em></td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">FILETYPE</td>
+	      <td colspan="1" rowspan="1">Magic number identifying this as a POIFS file
+	          system.</td>
+	      <td colspan="1" rowspan="1">0x0000</td>
+	      <td colspan="1" rowspan="1">Long</td>
+	      <td colspan="1" rowspan="1">0xE11AB1A1E011CFD0</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">UK1</td>
+	      <td colspan="1" rowspan="1">Unknown constant</td>
+	      <td colspan="1" rowspan="1">0x0008</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">UK2</td>
+	      <td colspan="1" rowspan="1">Unknown Constant</td>
+	      <td colspan="1" rowspan="1">0x000C</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">UK3</td>
+	      <td colspan="1" rowspan="1">Unknown Constant</td>
+	      <td colspan="1" rowspan="1">0x0014</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">UK4</td>
+	      <td colspan="1" rowspan="1">Unknown Constant (revision?)</td>
+	      <td colspan="1" rowspan="1">0x0018</td>
+	      <td colspan="1" rowspan="1">Short</td>
+	      <td colspan="1" rowspan="1">0x003B</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">UK5</td>
+	      <td colspan="1" rowspan="1">Unknown Constant (version?)</td>
+	      <td colspan="1" rowspan="1">0x001A</td>
+	      <td colspan="1" rowspan="1">Short</td>
+	      <td colspan="1" rowspan="1">0x0003</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">UK6</td>
+	      <td colspan="1" rowspan="1">Unknown Constant</td>
+	      <td colspan="1" rowspan="1">0x001C</td>
+	      <td colspan="1" rowspan="1">Short</td>
+	      <td colspan="1" rowspan="1">-2</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">LOG_2_BIG_BLOCK_SIZE</td>
+	      <td colspan="1" rowspan="1">Log, base 2, of the big block size</td>
+	      <td colspan="1" rowspan="1">0x001E</td>
+	      <td colspan="1" rowspan="1">Short</td>
+	      <td colspan="1" rowspan="1">9 (2 ^ 9 = 512 bytes)</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">LOG_2_SMALL_BLOCK_SIZE</td>
+	      <td colspan="1" rowspan="1">Log, base 2, of the small block size</td>
+	      <td colspan="1" rowspan="1">0x0020</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">6 (2 ^ 6 = 64 bytes)</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">UK7</td>
+	      <td colspan="1" rowspan="1">Unknown Constant</td>
+	      <td colspan="1" rowspan="1">0x0024</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">UK8</td>
+	      <td colspan="1" rowspan="1">Unknown Constant</td>
+	      <td colspan="1" rowspan="1">0x0028</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">BAT_COUNT</td>
+	      <td colspan="1" rowspan="1">Number of elements in the BAT array</td>
+	      <td colspan="1" rowspan="1">0x002C</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">required</td>
+	    
+</tr>
+	    
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">PROPERTIES_START</td>
+	      <td colspan="1" rowspan="1">Block index of the first block of the property
+	          table</td>
+	      <td colspan="1" rowspan="1">0x0030</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">required</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">UK9</td>
+	      <td colspan="1" rowspan="1">Unknown Constant</td>
+	      <td colspan="1" rowspan="1">0x0034</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">UK10</td>
+	      <td colspan="1" rowspan="1">Unknown Constant</td>
+	      <td colspan="1" rowspan="1">0x0038</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0x00001000</td>
+	    
+</tr>
+	    
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">SBAT_START</td>
+	      <td colspan="1" rowspan="1">Block index of first big block containing the small
+	          block allocation table (SBAT)</td>
+	      <td colspan="1" rowspan="1">0x003C</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">-2</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">SBAT_Block_Count</td>
+	      <td colspan="1" rowspan="1">Number of big blocks holding the SBAT</td>
+	      <td colspan="1" rowspan="1">0x0040</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">1</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">XBAT_START</td>
+	      <td colspan="1" rowspan="1">Block index of the first block in the Extended Block
+	          Allocation Table (XBAT)</td>
+	      <td colspan="1" rowspan="1">0x0044</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">-2</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">XBAT_COUNT</td>
+	      <td colspan="1" rowspan="1">Number of elements in the Extended Block Allocation
+	          Table (to be added to the BAT)</td>
+	      <td colspan="1" rowspan="1">0x0048</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">BAT_ARRAY</td>
+	      <td colspan="1" rowspan="1">Array of block indices constituting the Block
+	          Allocation Table (BAT)</td>
+	      <td colspan="1" rowspan="1">0x004C, 0x0050, 0x0054 ... 0x01FC</td>
+	      <td colspan="1" rowspan="1">Integer[]</td>
+	      <td colspan="1" rowspan="1">-1 for unused elements, at least first element must
+	          be filled.</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">N/A</td>
+      	      <td colspan="1" rowspan="1">Header block data not otherwise described in this
+	          table</td>
+	      <td colspan="1" rowspan="1">N/A</td>
+	      <td colspan="1" rowspan="1">N/A</td>
+	      <td colspan="1" rowspan="1">-1</td>
+	    
+</tr>
+          
+</table>
+	
+          
+<a name="Block+Allocation+Table+Block+--+512+%280x200%29+bytes"></a>
+<div class="h2">
+<h2>Block Allocation Table Block -- 512 (0x200) bytes</h2>
+</div>
+              
+              
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+                  
+<tr class="b">
+                      
+<td colspan="1" rowspan="1">
+                          <em>Field</em>
+                      </td>
+                      <td colspan="1" rowspan="1">
+                          <em>Description</em>
+                      </td>
+                      <td colspan="1" rowspan="1">
+                          <em>Offset</em>
+                      </td>
+                      <td colspan="1" rowspan="1">
+                          <em>Length</em>
+                      </td>
+                      <td colspan="1" rowspan="1">
+                          <em>Default value or const</em>
+                      </td>
+                  
+</tr>
+                  
+<tr class="a">
+                      
+<td colspan="1" rowspan="1">BAT_ELEMENT</td>
+                      <td colspan="1" rowspan="1">Any given element in the BAT block</td>
+                      <td colspan="1" rowspan="1">0x0000, 0x0004, 0x0008, ... 0x01FC</td>
+                      <td colspan="1" rowspan="1">Integer</td>
+                      <td colspan="1" rowspan="1">
+                          -1 = unused<br>
+                          -2 = end of chain<br>
+                          -3 = special (e.g., BAT block)<br>
+                          All other values point to the next element in the
+                          chain and the next index of a block composing the
+                          file.
+                      </td>
+                  
+</tr>
+              
+</table>
+          
+	
+<a name="Property+Block+--+512+%280x200%29+byte+block"></a>
+<div class="h2">
+<h2>Property Block -- 512 (0x200) byte block</h2>
+</div>
+          
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+	    
+<tr class="b">
+	      
+<td colspan="1" rowspan="1"><em>Field</em></td>
+	      <td colspan="1" rowspan="1"><em>Description</em></td>
+	      <td colspan="1" rowspan="1"><em>Offset</em></td>
+	      <td colspan="1" rowspan="1"><em>Length</em></td>
+	      <td colspan="1" rowspan="1"><em>Default value or const</em></td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">Properties[]</td>
+	      <td colspan="1" rowspan="1">This block contains the properties.</td>
+	      <td colspan="1" rowspan="1">0x0000, 0x0080, 0x0100, 0x0180</td>
+	      <td colspan="1" rowspan="1">128 bytes</td>
+	      <td colspan="1" rowspan="1">All unused space is set to -1.</td>
+	    
+</tr>
+          
+</table>
+	
+	
+<a name="Property+--+128+%280x80%29+byte+block"></a>
+<div class="h2">
+<h2>Property -- 128 (0x80) byte block</h2>
+</div>
+          
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+	    
+<tr class="b">
+	      
+<td colspan="1" rowspan="1"><em>Field</em></td>
+	      <td colspan="1" rowspan="1"><em>Description</em></td>
+	      <td colspan="1" rowspan="1"><em>Offset</em></td>
+	      <td colspan="1" rowspan="1"><em>Length</em></td>
+	      <td colspan="1" rowspan="1"><em>Default value or const</em></td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">NAME</td>
+	      <td colspan="1" rowspan="1">A unicode null-terminated uncompressed 16bit string
+	          (lose the high bytes) containing the name of the
+	          property.</td>
+	      <td colspan="1" rowspan="1">0x00, 0x02, 0x04, ... 0x3E</td>
+	      <td colspan="1" rowspan="1">Short[]</td>
+	      <td colspan="1" rowspan="1">0x0000 for unused elements, field required, 32
+	          (0x40) element max</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">NAME_SIZE</td>
+	      <td colspan="1" rowspan="1">Number of characters in the NAME field</td>
+	      <td colspan="1" rowspan="1">0x40</td>
+	      <td colspan="1" rowspan="1">Short</td>
+	      <td colspan="1" rowspan="1">Required</td>
+	    
+</tr>
+	    
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">PROPERTY_TYPE</td>
+	      <td colspan="1" rowspan="1">Property type (directory, file, or root)</td>
+	      <td colspan="1" rowspan="1">0x42</td>
+	      <td colspan="1" rowspan="1">Byte</td>
+	      <td colspan="1" rowspan="1">1 (directory), 2 (file), or 5 (root entry)</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">NODE_COLOR</td>
+	      <td colspan="1" rowspan="1">Node color</td>
+	      <td colspan="1" rowspan="1">0x43</td>
+	      <td colspan="1" rowspan="1">Byte</td>
+	      <td colspan="1" rowspan="1">0 (red) or 1 (black)</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">PREVIOUS_PROP</td>
+	      <td colspan="1" rowspan="1">Previous property index</td>
+	      <td colspan="1" rowspan="1">0x44</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">-1</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">NEXT_PROP</td>
+	      <td colspan="1" rowspan="1">Next property index</td>
+	      <td colspan="1" rowspan="1">0x48</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">-1</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">CHILD_PROP</td>
+	      <td colspan="1" rowspan="1">First child property index</td>
+	      <td colspan="1" rowspan="1">0x4c</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">-1</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">SECONDS_1</td>
+	      <td colspan="1" rowspan="1">Seconds component of the created timestamp?</td>
+	      <td colspan="1" rowspan="1">0x64</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">DAYS_1</td>
+	      <td colspan="1" rowspan="1">Days component of the created timestamp?</td>
+	      <td colspan="1" rowspan="1">0x68</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">SECONDS_2</td>
+	      <td colspan="1" rowspan="1">Seconds component of the modified timestamp?</td>
+	      <td colspan="1" rowspan="1">0x6C</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">DAYS_2</td>
+	      <td colspan="1" rowspan="1">Days component of the modified timestamp?</td>
+	      <td colspan="1" rowspan="1">0x70</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+            
+<tr class="b">
+	      
+<td colspan="1" rowspan="1">START_BLOCK</td>
+	      <td colspan="1" rowspan="1">Starting block of the file, used as the first block
+	          in the file and the pointer to the next block from
+	          the BAT</td>
+	      <td colspan="1" rowspan="1">0x74</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">Required</td>
+	    
+</tr>
+            
+<tr class="a">
+	      
+<td colspan="1" rowspan="1">SIZE</td>
+	      <td colspan="1" rowspan="1">Actual size of the file this property points
+	          to. (used to truncate the blocks to the real
+	          size).</td>
+	      <td colspan="1" rowspan="1">0x78</td>
+	      <td colspan="1" rowspan="1">Integer</td>
+	      <td colspan="1" rowspan="1">0</td>
+	    
+</tr>
+          
+</table>
+	
+      
+    
+  
+
+<div id="authors" align="right">by&nbsp;Marc Johnson</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

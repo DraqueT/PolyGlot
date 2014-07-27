@@ -1,0 +1,656 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>Developing Formula Evaluation</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+        
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">HSSF+XSSF</span>
+        
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+        
+<div class="menuItem">
+<a href="quick-guide.html">Quick Guide</a>
+</div>
+        
+<div class="menuItem">
+<a href="how-to.html">HOWTO</a>
+</div>
+        
+<div class="menuItem">
+<a href="converting.html">HSSF to SS Converting</a>
+</div>
+        
+<div class="menuItem">
+<a href="formula.html">Formula Support</a>
+</div>
+        
+<div class="menuItem">
+<a href="eval.html">Formula Evaluation</a>
+</div>
+		    
+<div class="menuItem">
+<span class="menuSelected">Eval Dev Guide</span>
+</div>
+        
+<div class="menuItem">
+<a href="examples.html">Examples</a>
+</div>
+        
+<div class="menuItem">
+<a href="use-case.html">Use Case</a>
+</div>
+        
+<div class="menuItem">
+<a href="diagrams.html">Pictorial Docs</a>
+</div>
+        
+<div class="menuItem">
+<a href="limitations.html">Limitations</a>
+</div>
+        
+<div class="menuItem">
+<a href="user-defined-functions.html">User Defined Functions</a>
+</div>
+        
+<div class="menuItem">
+<a href="excelant.html">ExcelAnt Tests</a>
+</div>
+    
+</div>
+<div class="menu">
+<span class="menuLabel">Contributer's Guide</span>
+        
+<div class="menuItem">
+<a href="hacking-hssf.html">Hacking HSSF</a>
+</div>
+        
+<div class="menuItem">
+<a href="record-generator.html">Record Generator</a>
+</div>
+        
+<div class="menuItem">
+<a href="chart.html">Charts</a>
+</div>
+    
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Developing Formula Evaluation</h1>
+</div>
+<div class="h3">
+    
+    
+	
+<a name="Introduction"></a>
+<div class="h3">
+<h3>Introduction</h3>
+</div>
+		
+<p>This document is for developers wishing to contribute to the 
+			FormulaEvaluator API functionality.</p>
+        
+<p>When evaluating workbooks you may encounter a org.apache.poi.ss.formula.eval.NotImplementedException
+            which indicates that a function is not (yet) supported by POI. Is there a workaround?
+            Yes, the POI framework  makes it easy to add implementation of new functions. Prior to POI-3.8
+            you had to checkout the source code from svn and make a custom build with your function implementation.
+            Since POI-3.8 you can register new functions in run-time.
+        </p>
+		
+<p>Currently, contribution is desired for implementing the standard MS
+			excel functions. Place holder classes for these have been created, 
+			contributors only need to insert implementation for the 
+			individual "evaluate()" methods that do the actual evaluation.</p>
+	
+
+	
+<a name="Overview+of+FormulaEvaluator+"></a>
+<div class="h3">
+<h3>Overview of FormulaEvaluator </h3>
+</div>
+		
+<p>Briefly, a formula string (along with the sheet and workbook that 
+			form the context in which the formula is evaluated) is first parsed 
+			into RPN tokens using the FormulaParser class .
+			(If you dont know what RPN tokens are, now is a good time to 
+			read <a href="http://www-stone.ch.cam.ac.uk/documentation/rrf/rpn.html">
+			this</a>.)
+		</p>
+		
+<a name="+The+big+picture"></a>
+<div class="h4">
+<h4> The big picture</h4>
+</div>
+			
+<p>RPN tokens are mapped to Eval classes. (Class hierarchy for the Evals 
+				is best understood if you view the class diagram in a class diagram 
+				viewer.) Depending on the type of RPN token (also called as Ptgs 
+				henceforth since that is what the FormulaParser calls the classes) a 
+				specific type of Eval wrapper is constructed to wrap the RPN token and 
+				is pushed on the stack.... UNLESS the Ptg is an OperationPtg. If it is an 
+				OperationPtg, an OperationEval instance is created for the specific 
+				type of OperationPtg. And depending on how many operands it takes, 
+				that many Evals are popped of the stack and passed in an array to 
+				the OperationEval instance's evaluate method which returns an Eval 
+				of subtype ValueEval.Thus an operation in the formula is evaluated. </p>
+				
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content"> An Eval is of subinterface ValueEval or OperationEval. 
+				Operands are always ValueEvals, Operations are always OperationEvals.</div>
+</div> 
+				
+<p>
+<span class="codefrag">OperationEval.evaluate(Eval[])</span> returns an Eval which is supposed 
+				to be of type ValueEval (actually since ValueEval is an interface, 
+				the return value is instance of one of the implementations of 
+				ValueEval). The valueEval resulting from evaluate() is pushed on the 
+				stack and the next RPN token is evaluated.... this continues till 
+				eventually there are no more RPN tokens at which point, if the formula 
+				string was correctly parsed, there should be just one Eval on the 
+				stack - which contains the result of evaluating the formula.</p>
+			
+<p>Of course I glossed over the details of how AreaPtg and ReferencePtg
+				are handled a little differently, but the code should be self 
+				explanatory for that. Very briefly, the cells included in AreaPtg and 
+				RefPtg are examined and their values are populated in individual 
+				ValueEval objects which are set into the AreaEval and RefEval (ok, 
+				since AreaEval and RefEval are interfaces, the implementations of 
+				AreaEval and RefEval - but you'll figure all that out from the code)</p>
+			
+<p>OperationEvals for the standard operators have been implemented and tested.</p>
+		
+	
+
+        
+<a name="What+functions+are+supported%3F"></a>
+<div class="h3">
+<h3>What functions are supported?</h3>
+</div>
+            
+<p>
+                As of Feb 2012, POI supports about 140 built-in functions,
+                see <a href="#appendixA">Appendix A</a> for the full list.
+                You can programmatically list supported / unsuported functions using the following helper methods:
+            </p>
+            
+<pre class="code">
+    // list of functions that POI can evaluate
+    Collection&lt;String&gt; supportedFuncs = WorkbookEvaluator.getSupportedFunctionNames();
+
+    // list of functions that are not supported by POI
+    Collection&lt;String&gt; unsupportedFuncs = WorkbookEvaluator.getNotSupportedFunctionNames();
+
+            </pre>
+        
+
+        
+<a name="Two+base+interfaces+to+start+your+implementation"></a>
+<div class="h3">
+<h3>Two base interfaces to start your implementation</h3>
+</div>
+            
+<p>
+                All Excel formula function classes implement either
+                org.apache.poi.hssf.record.formula.functions.Function or
+                org.apache.poi.hssf.record.formula.functions.FreeRefFunction interface.
+
+                Function is a commonn interface for the functions defined in the binary Excel format (BIFF8): these are "classic" Excel functions like SUM, COUNT, LOOKUP, etc.
+                FreeRefFunction is a common interface for the functions from the Excel Analysis Toolpack and for User-Defined Functions.
+                In the future these two interfaces are expected be unified into one, but for now you have to start your implementation from two slightly different roots.
+
+            </p>
+        
+
+        
+<a name="Which+interface+to+start+from%3F"></a>
+<div class="h3">
+<h3>Which interface to start from?</h3>
+</div>
+            
+<p>
+                You are about to implement a function XXX and don't know which interface to start from: Function or FreeRefFunction.
+                Use the following code to check whether your function is from the excel Analysis Toolpack:
+            </p>
+            
+<pre class="code">
+    if(AnalysisToolPack.isATPFunction(functionName)){
+        // the function implements org.apache.poi.hssf.record.formula.functions.Function
+    } else {
+        // the function implements org.apache.poi.hssf.record.formula.functions.FreeRefFunction
+    }
+            </pre>
+        
+
+
+        
+<a name="Walkthrough+of+an+%22evaluate%28%29%22+implementation."></a>
+<div class="h3">
+<h3>Walkthrough of an "evaluate()" implementation.</h3>
+</div>
+            
+<p>Here is the fun part: lets walk through the implementation of the excel function  <strong>SQRT()</strong>
+            
+</p>
+            
+<p>
+                AnalysisToolPack.isATPFunction("SQRTPI") returns false so the base interface is Function.
+
+                There are sub-interfaces that make life easier when implementing numeric functions or functions
+                with fixed number of arguments, 1-arg, 2-arg and 3-arg function:
+            </p>
+            
+<ul>
+                
+<li>org.apache.poi.hssf.record.formula.functions.NumericFunction</li>
+                
+<li>org.apache.poi.hssf.record.formula.functions.Fixed1ArgFunction</li>
+                
+<li>org.apache.poi.hssf.record.formula.functions.Fixed2ArgFunction</li>
+                
+<li>org.apache.poi.hssf.record.formula.functions.Fixed3ArgFunction</li>
+                
+<li>org.apache.poi.hssf.record.formula.functions.Fixed4ArgFunction</li>
+            
+</ul>
+            
+<p>
+                Since SQRTPI takes exactly one argument we start our implementation from org.apache.poi.hssf.record.formula.functions.Fixed1ArgFunction:
+            </p>
+
+            
+<pre class="code">
+    Function SQRTPI = new Fixed1ArgFunction() {
+        public ValueEval evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0) {
+            try {
+                // Retrieves a single value from a variety of different argument types according to standard
+                // Excel rules.  Does not perform any type conversion.
+                ValueEval ve = OperandResolver.getSingleValue(arg0, srcRowIndex, srcColumnIndex);
+
+                // Applies some conversion rules if the supplied value is not already a number.
+                // Throws EvaluationException(#VALUE!) if the supplied parameter is not a number
+                double arg = OperandResolver.coerceValueToDouble(ve);
+
+                // this where all the heavy-lifting happens
+                double result = Math.sqrt(arg*Math.PI);
+
+                // Excel uses the error code #NUM! instead of IEEE <em>NaN</em> and <em>Infinity</em>,
+                // so when a numeric function evaluates to Double.NaN or Double.Infinity,
+                // be sure to translate the result to the appropriate error code
+                if (Double.isNaN(result) || Double.isInfinite(result)) {
+                    throw new EvaluationException(ErrorEval.NUM_ERROR);
+                }
+
+                return new NumberEval(result);
+            } catch (EvaluationException e){
+                return e.getErrorEval();
+            }
+        }
+    }
+            </pre>
+
+            
+<p>Now when the implementation is ready we need to register it in the formula evaluator:</p>
+            
+<pre class="code">
+    WorkbookEvaluator.registerFunction("SQRTPI", SQRTPI);
+            </pre>
+
+            
+<p>Voila! The formula evaluator now recognizes SQRTPI! </p>
+
+        
+
+        
+<a name="Floating-point+Arithmetic+in+Excel"></a>
+<div class="h3">
+<h3>Floating-point Arithmetic in Excel</h3>
+</div>
+            
+<p>Excel uses the IEEE Standard for Double Precision Floating Point numbers
+                except two cases where it does not adhere to IEEE 754:
+            </p>
+            
+<ol>
+                
+<li>Positive/Negative Infinities: Infinities occur when you divide by 0.
+                    Excel does not support infinities, rather, it gives a #DIV/0! error in these cases.
+                </li>
+                
+<li>Not-a-Number (NaN): NaN is used to represent invalid operations
+                    (such as infinity/infinity, infinity-infinity, or the square root of -1).
+                    NaNs allow a program to continue past an invalid operation.
+                    Excel instead immediately generates an error such as #NUM! or #DIV/0!.
+                </li>
+            
+</ol>
+            
+<p>Be aware of these two cases when saving results of your scientific calculations in Excel:
+                &ldquo;where are my Infinities and NaNs? They are gone!&rdquo;
+            </p>
+        
+
+	
+<a name="Testing+Framework"></a>
+<div class="h3">
+<h3>Testing Framework</h3>
+</div>
+	
+<p>Automated testing of the implemented Function is easy.
+	The source code for this is in the file: o.a.p.h.record.formula.GenericFormulaTestCase.java
+	This class has a reference to the test xls file (not /a/ test xls, /the/ test xls :)
+	which may need to be changed for your environment. Once you do that, in the test xls,
+	locate the entry for the function that you have implemented and enter different tests 
+	in a cell in the FORMULA row. Then copy the "value of" the formula that you entered in the
+	cell just below it (this is easily done in excel as: 
+	[copy the formula cell] &gt; [go to cell below] &gt; Edit &gt; Paste Special &gt; Values &gt; "ok").
+	You can enter multiple such formulas and paste their values in the cell below and the
+	test framework will automatically test if the formula evaluation matches the expected
+	value (Again, hard to put in words, so if you will, please take time to quickly look
+	at the code and the currently entered tests in the patch attachment "FormulaEvalTestData.xls" 
+	file).
+	</p>	
+	
+
+        
+<a name="appendixA"></a>
+        <a name="Appendix+A"></a>
+<div class="h3">
+<h3>Appendix A</h3>
+</div>
+           
+            
+<p>Functions supported by POI ( as of Feb 2012)</p>
+            
+<pre class="code">
+    ABS
+    ACOS
+    ACOSH
+    ADDRESS
+    AND
+    ASIN
+    ASINH
+    ATAN
+    ATAN2
+    ATANH
+    AVEDEV
+    AVERAGE
+    CEILING
+    CHAR
+    CHOOSE
+    CLEAN
+    COLUMN
+    COLUMNS
+    COMBIN
+    CONCATENATE
+    COS
+    COSH
+    COUNT
+    COUNTA
+    COUNTBLANK
+    COUNTIF
+    DATE
+    DAY
+    DAYS360
+    DEGREES
+    DEVSQ
+    DOLLAR
+    ERROR.TYPE
+    EVEN
+    EXACT
+    EXP
+    FACT
+    FALSE
+    FIND
+    FLOOR
+    FV
+    HLOOKUP
+    HOUR
+    HYPERLINK
+    IF
+    INDEX
+    INDIRECT
+    INT
+    IRR
+    ISBLANK
+    ISERROR
+    ISEVEN
+    ISLOGICAL
+    ISNA
+    ISNONTEXT
+    ISNUMBER
+    ISODD
+    ISREF
+    ISTEXT
+    LARGE
+    LEFT
+    LEN
+    LN
+    LOG
+    LOG10
+    LOOKUP
+    LOWER
+    MATCH
+    MAX
+    MAXA
+    MEDIAN
+    MID
+    MIN
+    MINA
+    MINUTE
+    MOD
+    MODE
+    MONTH
+    MROUND
+    NA
+    NETWORKDAYS
+    NOT
+    NOW
+    NPER
+    NPV
+    ODD
+    OFFSET
+    OR
+    PI
+    PMT
+    POISSON
+    POWER
+    PRODUCT
+    PV
+    RADIANS
+    RAND
+    RANDBETWEEN
+    RANK
+    RATE
+    REPLACE
+    RIGHT
+    ROUND
+    ROUNDDOWN
+    ROUNDUP
+    ROW
+    ROWS
+    SEARCH
+    SECOND
+    SIGN
+    SIN
+    SINH
+    SMALL
+    SQRT
+    STDEV
+    SUBSTITUTE
+    SUBTOTAL
+    SUM
+    SUMIF
+    SUMIFS
+    SUMPRODUCT
+    SUMSQ
+    SUMX2MY2
+    SUMX2PY2
+    SUMXMY2
+    T
+    TAN
+    TANH
+    TEXT
+    TIME
+    TODAY
+    TRIM
+    TRUE
+    TRUNC
+    UPPER
+    VALUE
+    VAR
+    VARP
+    VLOOKUP
+    WEEKDAY
+    WORKDAY
+    YEAR
+    YEARFRAC
+            </pre>
+        
+	
+
+<div id="authors" align="right">by&nbsp;Amol Deshmukh,&nbsp;Yegor Kozlov</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

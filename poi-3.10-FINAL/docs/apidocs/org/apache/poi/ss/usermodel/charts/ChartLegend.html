@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>ChartLegend (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="ChartLegend (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/ChartLegend.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ChartDataSource.html" title="interface in org.apache.poi.ss.usermodel.charts"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ChartSerie.html" title="interface in org.apache.poi.ss.usermodel.charts"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?org/apache/poi/ss/usermodel/charts/ChartLegend.html" target="_top">Frames</a></li>
+<li><a href="ChartLegend.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.ss.usermodel.charts</div>
+<h2 title="Interface ChartLegend" class="title">Interface ChartLegend</h2>
+</div>
+<div class="contentContainer">
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Superinterfaces:</dt>
+<dd><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ManuallyPositionable.html" title="interface in org.apache.poi.ss.usermodel.charts">ManuallyPositionable</a></dd>
+</dl>
+<dl>
+<dt>All Known Implementing Classes:</dt>
+<dd><a href="../../../../../../org/apache/poi/xssf/usermodel/charts/XSSFChartLegend.html" title="class in org.apache.poi.xssf.usermodel.charts">XSSFChartLegend</a></dd>
+</dl>
+<hr>
+<br>
+<pre><a href="../../../../../../org/apache/poi/util/Beta.html" title="annotation in org.apache.poi.util">@Beta</a>
+public interface <span class="strong">ChartLegend</span>
+extends <a href="../../../../../../org/apache/poi/ss/usermodel/charts/ManuallyPositionable.html" title="interface in org.apache.poi.ss.usermodel.charts">ManuallyPositionable</a></pre>
+<div class="block">High level representation of chart legend.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Roman Kashitsyn, Martin Andersson</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/poi/ss/usermodel/charts/LegendPosition.html" title="enum in org.apache.poi.ss.usermodel.charts">LegendPosition</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ChartLegend.html#getPosition()">getPosition</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ChartLegend.html#isOverlay()">isOverlay</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ChartLegend.html#setOverlay(boolean)">setOverlay</a></strong>(boolean&nbsp;value)</code>
+<div class="block">If true the legend is positioned over the chart area otherwise
+ the legend is displayed next to it.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ChartLegend.html#setPosition(org.apache.poi.ss.usermodel.charts.LegendPosition)">setPosition</a></strong>(<a href="../../../../../../org/apache/poi/ss/usermodel/charts/LegendPosition.html" title="enum in org.apache.poi.ss.usermodel.charts">LegendPosition</a>&nbsp;position)</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.poi.ss.usermodel.charts.ManuallyPositionable">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.apache.poi.ss.usermodel.charts.<a href="../../../../../../org/apache/poi/ss/usermodel/charts/ManuallyPositionable.html" title="interface in org.apache.poi.ss.usermodel.charts">ManuallyPositionable</a></h3>
+<code><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ManuallyPositionable.html#getManualLayout()">getManualLayout</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getPosition()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPosition</h4>
+<pre><a href="../../../../../../org/apache/poi/ss/usermodel/charts/LegendPosition.html" title="enum in org.apache.poi.ss.usermodel.charts">LegendPosition</a>&nbsp;getPosition()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>legend position</dd></dl>
+</li>
+</ul>
+<a name="setPosition(org.apache.poi.ss.usermodel.charts.LegendPosition)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPosition</h4>
+<pre>void&nbsp;setPosition(<a href="../../../../../../org/apache/poi/ss/usermodel/charts/LegendPosition.html" title="enum in org.apache.poi.ss.usermodel.charts">LegendPosition</a>&nbsp;position)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>position</code> - new legend position</dd></dl>
+</li>
+</ul>
+<a name="isOverlay()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isOverlay</h4>
+<pre>boolean&nbsp;isOverlay()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>overlay value.</dd></dl>
+</li>
+</ul>
+<a name="setOverlay(boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setOverlay</h4>
+<pre>void&nbsp;setOverlay(boolean&nbsp;value)</pre>
+<div class="block">If true the legend is positioned over the chart area otherwise
+ the legend is displayed next to it.
+
+ Default is no overlay.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - </dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/ChartLegend.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ChartDataSource.html" title="interface in org.apache.poi.ss.usermodel.charts"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ChartSerie.html" title="interface in org.apache.poi.ss.usermodel.charts"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?org/apache/poi/ss/usermodel/charts/ChartLegend.html" target="_top">Frames</a></li>
+<li><a href="ChartLegend.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

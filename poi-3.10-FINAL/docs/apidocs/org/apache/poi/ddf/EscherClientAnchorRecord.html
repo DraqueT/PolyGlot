@@ -1,0 +1,796 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>EscherClientAnchorRecord (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="EscherClientAnchorRecord (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/EscherClientAnchorRecord.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/poi/ddf/EscherChildAnchorRecord.html" title="class in org.apache.poi.ddf"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/poi/ddf/EscherClientDataRecord.html" title="class in org.apache.poi.ddf"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/poi/ddf/EscherClientAnchorRecord.html" target="_top">Frames</a></li>
+<li><a href="EscherClientAnchorRecord.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.ddf</div>
+<h2 title="Class EscherClientAnchorRecord" class="title">Class EscherClientAnchorRecord</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../org/apache/poi/ddf/EscherRecord.html" title="class in org.apache.poi.ddf">org.apache.poi.ddf.EscherRecord</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.poi.ddf.EscherClientAnchorRecord</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public class <span class="strong">EscherClientAnchorRecord</span>
+extends <a href="../../../../org/apache/poi/ddf/EscherRecord.html" title="class in org.apache.poi.ddf">EscherRecord</a></pre>
+<div class="block">The escher client anchor specifies which rows and cells the shape is bound to as well as
+ the offsets within those cells.  Each cell is 1024 units wide by 256 units long regardless
+ of the actual size of the cell.  The EscherClientAnchorRecord only applies to the top-most
+ shapes.  Shapes contained in groups are bound using the EscherChildAnchorRecords.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Glen Stampoultzis</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../org/apache/poi/ddf/EscherChildAnchorRecord.html" title="class in org.apache.poi.ddf"><code>EscherChildAnchorRecord</code></a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#RECORD_DESCRIPTION">RECORD_DESCRIPTION</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#RECORD_ID">RECORD_ID</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#EscherClientAnchorRecord()">EscherClientAnchorRecord</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#fillFields(byte[], int, org.apache.poi.ddf.EscherRecordFactory)">fillFields</a></strong>(byte[]&nbsp;data,
+          int&nbsp;offset,
+          <a href="../../../../org/apache/poi/ddf/EscherRecordFactory.html" title="interface in org.apache.poi.ddf">EscherRecordFactory</a>&nbsp;recordFactory)</code>
+<div class="block">The contract of this method is to deserialize an escher record including
+ it's children.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getCol1()">getCol1</a></strong>()</code>
+<div class="block">The column number for the top-left position.  0 based.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getCol2()">getCol2</a></strong>()</code>
+<div class="block">The column of the bottom right corner of this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getDx1()">getDx1</a></strong>()</code>
+<div class="block">The x offset within the top-left cell.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getDx2()">getDx2</a></strong>()</code>
+<div class="block">The x offset withing the cell for the bottom-right corner of this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getDy1()">getDy1</a></strong>()</code>
+<div class="block">The y offset within the top-left corner of the current shape.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getDy2()">getDy2</a></strong>()</code>
+<div class="block">The y offset withing the cell for the bottom-right corner of this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getFlag()">getFlag</a></strong>()</code>
+<div class="block">0 = Move and size with Cells, 2 = Move but don't size with cells, 3 = Don't move or size with cells.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getRecordId()">getRecordId</a></strong>()</code>
+<div class="block">Return the current record id.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getRecordName()">getRecordName</a></strong>()</code>
+<div class="block">Subclasses should return the short name for this escher record.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getRecordSize()">getRecordSize</a></strong>()</code>
+<div class="block">Subclasses should effeciently return the number of bytes required to
+ serialize the record.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getRemainingData()">getRemainingData</a></strong>()</code>
+<div class="block">Any remaining data in the record</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getRow1()">getRow1</a></strong>()</code>
+<div class="block">The row number for the top-left corner of the shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#getRow2()">getRow2</a></strong>()</code>
+<div class="block">The row number for the bottom-right corner of the current shape.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#serialize(int, byte[], org.apache.poi.ddf.EscherSerializationListener)">serialize</a></strong>(int&nbsp;offset,
+         byte[]&nbsp;data,
+         <a href="../../../../org/apache/poi/ddf/EscherSerializationListener.html" title="interface in org.apache.poi.ddf">EscherSerializationListener</a>&nbsp;listener)</code>
+<div class="block">Serializes the record to an existing byte array.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#setCol1(short)">setCol1</a></strong>(short&nbsp;field_2_col1)</code>
+<div class="block">The column number for the top-left position.  0 based.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#setCol2(short)">setCol2</a></strong>(short&nbsp;field_6_col2)</code>
+<div class="block">The column of the bottom right corner of this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#setDx1(short)">setDx1</a></strong>(short&nbsp;field_3_dx1)</code>
+<div class="block">The x offset within the top-left cell.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#setDx2(short)">setDx2</a></strong>(short&nbsp;field_7_dx2)</code>
+<div class="block">The x offset withing the cell for the bottom-right corner of this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#setDy1(short)">setDy1</a></strong>(short&nbsp;field_5_dy1)</code>
+<div class="block">The y offset within the top-left corner of the current shape.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#setDy2(short)">setDy2</a></strong>(short&nbsp;field_9_dy2)</code>
+<div class="block">The y offset withing the cell for the bottom-right corner of this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#setFlag(short)">setFlag</a></strong>(short&nbsp;field_1_flag)</code>
+<div class="block">0 = Move and size with Cells, 2 = Move but don't size with cells, 3 = Don't move or size with cells.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#setRemainingData(byte[])">setRemainingData</a></strong>(byte[]&nbsp;remainingData)</code>
+<div class="block">Any remaining data in the record</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#setRow1(short)">setRow1</a></strong>(short&nbsp;field_4_row1)</code>
+<div class="block">The row number for the top-left corner of the shape.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#setRow2(short)">setRow2</a></strong>(short&nbsp;field_8_row2)</code>
+<div class="block">The row number for the bottom-right corner of the current shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#toString()">toString</a></strong>()</code>
+<div class="block">Returns the string representation for this record.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/poi/ddf/EscherClientAnchorRecord.html#toXml(java.lang.String)">toXml</a></strong>(java.lang.String&nbsp;tab)</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.poi.ddf.EscherRecord">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.apache.poi.ddf.<a href="../../../../org/apache/poi/ddf/EscherRecord.html" title="class in org.apache.poi.ddf">EscherRecord</a></h3>
+<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#clone()">clone</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#display(java.io.PrintWriter, int)">display</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#fillFields(byte[], org.apache.poi.ddf.EscherRecordFactory)">fillFields</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#formatXmlRecordHeader(java.lang.String, java.lang.String, java.lang.String, java.lang.String)">formatXmlRecordHeader</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#getChild(int)">getChild</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#getChildRecords()">getChildRecords</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#getInstance()">getInstance</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#getOptions()">getOptions</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#getVersion()">getVersion</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#isContainerRecord()">isContainerRecord</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#readHeader(byte[], int)">readHeader</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#readInstance(byte[], int)">readInstance</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#serialize()">serialize</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#serialize(int, byte[])">serialize</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#setChildRecords(java.util.List)">setChildRecords</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#setInstance(short)">setInstance</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#setOptions(short)">setOptions</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#setRecordId(short)">setRecordId</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#setVersion(short)">setVersion</a>, <a href="../../../../org/apache/poi/ddf/EscherRecord.html#toXml()">toXml</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>equals, finalize, getClass, hashCode, notify, notifyAll, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="RECORD_ID">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RECORD_ID</h4>
+<pre>public static final&nbsp;short RECORD_ID</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.apache.poi.ddf.EscherClientAnchorRecord.RECORD_ID">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="RECORD_DESCRIPTION">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RECORD_DESCRIPTION</h4>
+<pre>public static final&nbsp;java.lang.String RECORD_DESCRIPTION</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.apache.poi.ddf.EscherClientAnchorRecord.RECORD_DESCRIPTION">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="EscherClientAnchorRecord()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>EscherClientAnchorRecord</h4>
+<pre>public&nbsp;EscherClientAnchorRecord()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="fillFields(byte[], int, org.apache.poi.ddf.EscherRecordFactory)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fillFields</h4>
+<pre>public&nbsp;int&nbsp;fillFields(byte[]&nbsp;data,
+             int&nbsp;offset,
+             <a href="../../../../org/apache/poi/ddf/EscherRecordFactory.html" title="interface in org.apache.poi.ddf">EscherRecordFactory</a>&nbsp;recordFactory)</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#fillFields(byte[], int, org.apache.poi.ddf.EscherRecordFactory)">EscherRecord</a></code></strong></div>
+<div class="block">The contract of this method is to deserialize an escher record including
+ it's children.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#fillFields(byte[], int, org.apache.poi.ddf.EscherRecordFactory)">fillFields</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html" title="class in org.apache.poi.ddf">EscherRecord</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - The byte array containing the serialized escher
+                  records.</dd><dd><code>offset</code> - The offset into the byte array.</dd><dd><code>recordFactory</code> - A factory for creating new escher records.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The number of bytes written.</dd></dl>
+</li>
+</ul>
+<a name="serialize(int, byte[], org.apache.poi.ddf.EscherSerializationListener)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>serialize</h4>
+<pre>public&nbsp;int&nbsp;serialize(int&nbsp;offset,
+            byte[]&nbsp;data,
+            <a href="../../../../org/apache/poi/ddf/EscherSerializationListener.html" title="interface in org.apache.poi.ddf">EscherSerializationListener</a>&nbsp;listener)</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#serialize(int, byte[], org.apache.poi.ddf.EscherSerializationListener)">EscherRecord</a></code></strong></div>
+<div class="block">Serializes the record to an existing byte array.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#serialize(int, byte[], org.apache.poi.ddf.EscherSerializationListener)">serialize</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html" title="class in org.apache.poi.ddf">EscherRecord</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>offset</code> - the offset within the byte array</dd><dd><code>data</code> - the data array to serialize to</dd><dd><code>listener</code> - a listener for begin and end serialization events.  This
+                  is useful because the serialization is
+                  hierarchical/recursive and sometimes you need to be able
+                  break into that.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the number of bytes written.</dd></dl>
+</li>
+</ul>
+<a name="getRecordSize()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRecordSize</h4>
+<pre>public&nbsp;int&nbsp;getRecordSize()</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#getRecordSize()">EscherRecord</a></code></strong></div>
+<div class="block">Subclasses should effeciently return the number of bytes required to
+ serialize the record.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#getRecordSize()">getRecordSize</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html" title="class in org.apache.poi.ddf">EscherRecord</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>number of bytes</dd></dl>
+</li>
+</ul>
+<a name="getRecordId()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRecordId</h4>
+<pre>public&nbsp;short&nbsp;getRecordId()</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#getRecordId()">EscherRecord</a></code></strong></div>
+<div class="block">Return the current record id.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#getRecordId()">getRecordId</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html" title="class in org.apache.poi.ddf">EscherRecord</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>The 16 bit record id.</dd></dl>
+</li>
+</ul>
+<a name="getRecordName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRecordName</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getRecordName()</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#getRecordName()">EscherRecord</a></code></strong></div>
+<div class="block">Subclasses should return the short name for this escher record.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#getRecordName()">getRecordName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html" title="class in org.apache.poi.ddf">EscherRecord</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="toString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;java.lang.String&nbsp;toString()</pre>
+<div class="block">Returns the string representation for this record.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>A string</dd></dl>
+</li>
+</ul>
+<a name="toXml(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toXml</h4>
+<pre>public&nbsp;java.lang.String&nbsp;toXml(java.lang.String&nbsp;tab)</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../org/apache/poi/ddf/EscherRecord.html#toXml(java.lang.String)">toXml</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/apache/poi/ddf/EscherRecord.html" title="class in org.apache.poi.ddf">EscherRecord</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>tab</code> - - each children must be a right of his parent</dd>
+<dt><span class="strong">Returns:</span></dt><dd>xml representation of this record</dd></dl>
+</li>
+</ul>
+<a name="getFlag()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFlag</h4>
+<pre>public&nbsp;short&nbsp;getFlag()</pre>
+<div class="block">0 = Move and size with Cells, 2 = Move but don't size with cells, 3 = Don't move or size with cells.</div>
+</li>
+</ul>
+<a name="setFlag(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFlag</h4>
+<pre>public&nbsp;void&nbsp;setFlag(short&nbsp;field_1_flag)</pre>
+<div class="block">0 = Move and size with Cells, 2 = Move but don't size with cells, 3 = Don't move or size with cells.</div>
+</li>
+</ul>
+<a name="getCol1()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCol1</h4>
+<pre>public&nbsp;short&nbsp;getCol1()</pre>
+<div class="block">The column number for the top-left position.  0 based.</div>
+</li>
+</ul>
+<a name="setCol1(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCol1</h4>
+<pre>public&nbsp;void&nbsp;setCol1(short&nbsp;field_2_col1)</pre>
+<div class="block">The column number for the top-left position.  0 based.</div>
+</li>
+</ul>
+<a name="getDx1()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDx1</h4>
+<pre>public&nbsp;short&nbsp;getDx1()</pre>
+<div class="block">The x offset within the top-left cell.  Range is from 0 to 1023.</div>
+</li>
+</ul>
+<a name="setDx1(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDx1</h4>
+<pre>public&nbsp;void&nbsp;setDx1(short&nbsp;field_3_dx1)</pre>
+<div class="block">The x offset within the top-left cell.  Range is from 0 to 1023.</div>
+</li>
+</ul>
+<a name="getRow1()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRow1</h4>
+<pre>public&nbsp;short&nbsp;getRow1()</pre>
+<div class="block">The row number for the top-left corner of the shape.</div>
+</li>
+</ul>
+<a name="setRow1(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRow1</h4>
+<pre>public&nbsp;void&nbsp;setRow1(short&nbsp;field_4_row1)</pre>
+<div class="block">The row number for the top-left corner of the shape.</div>
+</li>
+</ul>
+<a name="getDy1()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDy1</h4>
+<pre>public&nbsp;short&nbsp;getDy1()</pre>
+<div class="block">The y offset within the top-left corner of the current shape.</div>
+</li>
+</ul>
+<a name="setDy1(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDy1</h4>
+<pre>public&nbsp;void&nbsp;setDy1(short&nbsp;field_5_dy1)</pre>
+<div class="block">The y offset within the top-left corner of the current shape.</div>
+</li>
+</ul>
+<a name="getCol2()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCol2</h4>
+<pre>public&nbsp;short&nbsp;getCol2()</pre>
+<div class="block">The column of the bottom right corner of this shape.</div>
+</li>
+</ul>
+<a name="setCol2(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCol2</h4>
+<pre>public&nbsp;void&nbsp;setCol2(short&nbsp;field_6_col2)</pre>
+<div class="block">The column of the bottom right corner of this shape.</div>
+</li>
+</ul>
+<a name="getDx2()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDx2</h4>
+<pre>public&nbsp;short&nbsp;getDx2()</pre>
+<div class="block">The x offset withing the cell for the bottom-right corner of this shape.</div>
+</li>
+</ul>
+<a name="setDx2(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDx2</h4>
+<pre>public&nbsp;void&nbsp;setDx2(short&nbsp;field_7_dx2)</pre>
+<div class="block">The x offset withing the cell for the bottom-right corner of this shape.</div>
+</li>
+</ul>
+<a name="getRow2()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRow2</h4>
+<pre>public&nbsp;short&nbsp;getRow2()</pre>
+<div class="block">The row number for the bottom-right corner of the current shape.</div>
+</li>
+</ul>
+<a name="setRow2(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRow2</h4>
+<pre>public&nbsp;void&nbsp;setRow2(short&nbsp;field_8_row2)</pre>
+<div class="block">The row number for the bottom-right corner of the current shape.</div>
+</li>
+</ul>
+<a name="getDy2()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDy2</h4>
+<pre>public&nbsp;short&nbsp;getDy2()</pre>
+<div class="block">The y offset withing the cell for the bottom-right corner of this shape.</div>
+</li>
+</ul>
+<a name="setDy2(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDy2</h4>
+<pre>public&nbsp;void&nbsp;setDy2(short&nbsp;field_9_dy2)</pre>
+<div class="block">The y offset withing the cell for the bottom-right corner of this shape.</div>
+</li>
+</ul>
+<a name="getRemainingData()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRemainingData</h4>
+<pre>public&nbsp;byte[]&nbsp;getRemainingData()</pre>
+<div class="block">Any remaining data in the record</div>
+</li>
+</ul>
+<a name="setRemainingData(byte[])">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setRemainingData</h4>
+<pre>public&nbsp;void&nbsp;setRemainingData(byte[]&nbsp;remainingData)</pre>
+<div class="block">Any remaining data in the record</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/EscherClientAnchorRecord.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/poi/ddf/EscherChildAnchorRecord.html" title="class in org.apache.poi.ddf"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/poi/ddf/EscherClientDataRecord.html" title="class in org.apache.poi.ddf"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/poi/ddf/EscherClientAnchorRecord.html" target="_top">Frames</a></li>
+<li><a href="EscherClientAnchorRecord.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

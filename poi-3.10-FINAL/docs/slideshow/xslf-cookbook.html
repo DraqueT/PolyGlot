@@ -1,0 +1,577 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>XSLF Cookbook</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td width="50%" align="left">
+<div class="groupLogo">
+<a href="http://poi.apache.org"><img border="0" class="logoImage" alt="Apache POI" src="../resources/images/group-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="50%" align="right">
+<div align="right" class="projectLogo">
+<a href="http://poi.apache.org/"><img border="0" class="logoImage" alt="POI" src="../resources/images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://poi.apache.org/">POI</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">Home</a></span> | <script language="Javascript" type="text/javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script><script language="Javascript" type="text/javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a title="PRINT this page OUT" href="javascript:printit()">PRINT</a>');
+}
+</script>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Apache POI</span>
+<div class="menuItem">
+<a href="../index.html">Top</a>
+</div>
+</div>
+<div class="menu">
+<span class="menuLabel">HSLF</span>
+<div class="menuItem">
+<a href="index.html">Overview</a>
+</div>
+<div class="menuItem">
+<a href="quick-guide.html">Quick Guide</a>
+</div>
+<div class="menuItem">
+<a href="how-to-shapes.html">HSLF Cookbok</a>
+</div>
+<div class="menuItem">
+<span class="menuSelected">XSLF Cookbok</span>
+</div>
+<div class="menuItem">
+<a href="ppt-file-format.html">PPT File Format</a>
+</div>
+</div>
+</div>
+</div>
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap">
+                          Search Apache POI<br>
+<input value="poi.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>XSLF Cookbook</h1>
+</div>
+<div class="h3">
+    
+    
+        
+<a name="XSLF+Cookbook"></a>
+<div class="h3">
+<h3>XSLF Cookbook</h3>
+</div>
+            
+<p>
+              This page offers a short introduction into the XSLF API. More examples can be found in the
+                <a href="http://svn.apache.org/repos/asf/poi/trunk/src/examples/src/org/apache/poi/xslf/usermodel/"> XSLF Examples</a>
+               in the POI SVN repository. 
+            </p>
+            
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">
+            Please note that XSLF is still in early development and is a subject to incompatible changes in a future release. 
+            </div>
+</div>
+             
+<a name="Index+of+Features"></a>
+<div class="h4">
+<h4>Index of Features</h4>
+</div>
+                
+<ul>
+                    
+<li>
+<a href="#NewPresentation">Create a new presentation</a>
+</li>
+                    
+<li>
+<a href="#ReadPresentation">Read an existing presentation</a>
+</li>
+                    
+<li>
+<a href="#SlideLayout">Create a slide with a predefined layout</a>
+</li>
+                    
+<li>
+<a href="#DeleteSlide">Delete slide</a>
+</li>
+                    
+<li>
+<a href="#MoveSlide">Re-order slides</a>
+</li>
+                    
+<li>
+<a href="#SlideSize">Change slide size</a>
+</li>
+                    
+<li>
+<a href="#GetShapes">Read shapes</a>
+</li>
+                    
+<li>
+<a href="#AddImage">Add image</a>
+</li>
+                    
+<li>
+<a href="#ReadImages">Read images contained in a presentation</a>
+</li>
+                    
+<li>
+<a href="#Text">Format text</a>
+</li>
+                    
+<li>
+<a href="#Hyperlinks">Hyperlinks</a>
+</li>
+                    
+<li>
+<a href="#PPTX2PNG">Convert .pptx slides into images</a>
+</li>
+                    
+<li>
+<a href="#Merge">Merge multiple presentations together</a>
+</li>
+                
+</ul>
+            
+            
+<a name="Cookbok"></a>
+<div class="h4">
+<h4>Cookbok</h4>
+</div>
+                
+<a name="NewPresentation"></a>
+                <a name="New+Presentation"></a>
+<div class="h2">
+<h2>New Presentation</h2>
+</div>
+                
+<p>
+                The following code creates a new .pptx slide show and adds a blank slide to it:
+                </p>
+                  
+<pre class="code">
+    //create a new empty slide show
+    XMLSlideShow ppt = new XMLSlideShow();
+
+    //add first slide
+    XSLFSlide blankSlide = ppt.createSlide();
+                 </pre>
+                
+                
+<a name="ReadPresentation"></a>
+                <a name="Read+an+existing+presentation+and+append+a+slide+to+it"></a>
+<div class="h2">
+<h2>Read an existing presentation and append a slide to it</h2>
+</div>
+                  
+<pre class="code">
+    XMLSlideShow ppt = new XMLSlideShow(new FileInputStream("slideshow.pptx"));
+
+    //append a new slide to the end
+    XSLFSlide blankSlide = ppt.createSlide();
+                 </pre>
+                
+
+                
+<a name="SlideLayout"></a>
+                <a name="Create+a+new+slide+from+a+predefined+slide+layout"></a>
+<div class="h2">
+<h2>Create a new slide from a predefined slide layout</h2>
+</div>
+                  
+<pre class="code">
+    XMLSlideShow ppt = new XMLSlideShow(new FileInputStream("slideshow.pptx"));
+
+    // first see what slide layouts are available :
+    System.out.println("Available slide layouts:");
+    for(XSLFSlideMaster master : ppt.getSlideMasters()){
+        for(XSLFSlideLayout layout : master.getSlideLayouts()){
+            System.out.println(layout.getType());
+        }
+    }
+
+    // blank slide
+    XSLFSlide blankSlide = ppt.createSlide();
+
+    // there can be multiple masters each referencing a number of layouts
+    // for demonstration purposes we use the first (default) slide master
+    XSLFSlideMaster defaultMaster = ppt.getSlideMasters()[0];
+
+    // title slide
+    XSLFSlideLayout titleLayout = defaultMaster.getLayout(SlideLayout.TITLE);
+    // fill the placeholders
+    XSLFSlide slide1 = ppt.createSlide(titleLayout);
+    XSLFTextShape title1 = slide1.getPlaceholder(0);
+    title1.setText("First Title");
+
+    // title and content
+    XSLFSlideLayout titleBodyLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
+    XSLFSlide slide2 = ppt.createSlide(titleBodyLayout);
+
+    XSLFTextShape title2 = slide2.getPlaceholder(0);
+    title2.setText("Second Title");
+
+    XSLFTextShape body2 = slide2.getPlaceholder(1);
+    body2.clearText(); // unset any existing text
+    body2.addNewTextParagraph().addNewTextRun().setText("First paragraph");
+    body2.addNewTextParagraph().addNewTextRun().setText("Second paragraph");
+    body2.addNewTextParagraph().addNewTextRun().setText("Third paragraph");
+                </pre>
+                
+
+                
+<a name="DeleteSlide"></a>
+                <a name="Delete+slide"></a>
+<div class="h2">
+<h2>Delete slide</h2>
+</div>
+                  
+<pre class="code">
+    XMLSlideShow ppt = new XMLSlideShow(new FileInputStream("slideshow.pptx"));
+
+    ppt.removeSlide(0); // 0-based index of a slide to be removed
+                </pre>
+                
+
+                
+<a name="MoveSlide"></a>
+                <a name="Re-order+slides"></a>
+<div class="h2">
+<h2>Re-order slides</h2>
+</div>
+                  
+<pre class="code">
+    XMLSlideShow ppt = new XMLSlideShow(new FileInputStream("slideshow.pptx"));
+    XSLFSlide[] slides = ppt.getSlides();
+
+    XSLFSlide thirdSlide = slides[2];
+    ppt.setSlideOrder(thirdSlide, 0); // move the third slide to the beginning
+                </pre>
+                
+
+                
+<a name="SlideSize"></a>
+                <a name="How+to+retrieve+or+change+slide+size"></a>
+<div class="h2">
+<h2>How to retrieve or change slide size</h2>
+</div>
+                    
+<pre class="code">
+    XMLSlideShow ppt = new XMLSlideShow();
+    //retrieve page size. Coordinates are expressed in points (72 dpi)
+    java.awt.Dimension pgsize = ppt.getPageSize();
+    int pgx = pgsize.width; //slide width in points
+    int pgy = pgsize.height; //slide height in points
+
+    //set new page size
+    ppt.setPageSize(new java.awt.Dimension(1024, 768));
+                  </pre>
+                
+                
+<a name="GetShapes"></a>
+                <a name="How+to+read+shapes+contained+in+a+particular+slide"></a>
+<div class="h2">
+<h2>How to read shapes contained in a particular slide</h2>
+</div>
+                  
+<p>
+                    The following code demonstrates how to iterate over shapes for each slide.
+                  </p>
+                    
+<pre class="code">
+  XMLSlideShow ppt = new XMLSlideShow(new FileInputStream("slideshow.pptx"));
+  //get slides 
+  XSLFSlide[] slide = ppt.getSlides();
+  for (int i = 0; i &lt; slide.length; i++){
+    XSLFShape[] sh = slide[i].getShapes();
+    for (int j = 0; j &lt; sh.length; j++){
+      //name of the shape
+      String name = sh[j].getShapeName();
+
+      //shapes's anchor which defines the position of this shape in the slide
+      java.awt.geom.Rectangle2D anchor = sh[j].getAnchor();
+
+      if (sh[j] instanceof XSLFConnectorShape){
+        XSLFConnectorShape line = (XSLFConnectorShape)sh[j];
+        //work with Line
+      } else if (sh[j] instanceof XSLFTextShape){
+        XSLFTextShape shape = (XSLFTextShape)sh[j];
+        //work with a shape that can hold text
+      } else if (sh[j] instanceof XSLFPictureShape){
+        XSLFPictureShape shape = (XSLFPictureShape)sh[j];
+        //work with Picture
+      }
+    }
+  }
+                  </pre>
+                
+                
+<a name="AddImage"></a>
+                <a name="Add+Image+to+Slide"></a>
+<div class="h2">
+<h2>Add Image to Slide</h2>
+</div>
+                    
+<pre class="code">
+        XMLSlideShow ppt = new XMLSlideShow();
+        XSLFSlide slide = ppt.createSlide();
+        
+        byte[] pictureData = IOUtils.toByteArray(new FileInputStream("image.png"));
+
+        int idx = ppt.addPicture(pictureData, XSLFPictureData.PICTURE_TYPE_PNG);
+        XSLFPictureShape pic = slide.createPicture(idx);
+                    </pre>
+                
+
+                
+<a name="ReadImages"></a>
+                <a name="Read+Images+contained+within+a+presentation"></a>
+<div class="h2">
+<h2>Read Images contained within a presentation</h2>
+</div>
+                    
+<pre class="code">
+        XMLSlideShow ppt = new XMLSlideShow(new FileInputStream("slideshow.pptx"));
+        for(XSLFPictureData data : ppt.getAllPictures()){
+            byte[] bytes = data.getData();
+            String fileName = data.getFileName();
+            
+        }
+                    </pre>
+                
+
+         
+<a name="Text"></a>
+                <a name="Basic+text+formatting"></a>
+<div class="h2">
+<h2>Basic text formatting</h2>
+</div>
+                    
+<pre class="code">
+    XMLSlideShow ppt = new XMLSlideShow();
+    XSLFSlide slide = ppt.createSlide();
+
+    XSLFTextBox shape = slide.createTextBox();
+    XSLFTextParagraph p = shape.addNewTextParagraph();
+
+    XSLFTextRun r1 = p.addNewTextRun();
+    r1.setText("The");
+    r1.setFontColor(Color.blue);
+    r1.setFontSize(24);
+
+    XSLFTextRun r2 = p.addNewTextRun();
+    r2.setText(" quick");
+    r2.setFontColor(Color.red);
+    r2.setBold(true);
+
+    XSLFTextRun r3 = p.addNewTextRun();
+    r3.setText(" brown");
+    r3.setFontSize(12);
+    r3.setItalic(true);
+    r3.setStrikethrough(true);
+    
+    XSLFTextRun r4 = p.addNewTextRun();
+    r4.setText(" fox");
+    r4.setUnderline(true);
+            </pre>
+                
+                
+<a name="Hyperlinks"></a>
+                <a name="How+to+read+hyperlinks+from+a+slide+show"></a>
+<div class="h2">
+<h2>How to read hyperlinks from a slide show</h2>
+</div>
+                    
+<pre class="code">
+    XMLSlideShow ppt = new XMLSlideShow();
+    XSLFSlide slide = ppt.createSlide();
+
+    // assign a hyperlink to a text run
+    XSLFTextBox shape = slide.createTextBox();
+    XSLFTextRun r = shape.addNewTextParagraph().addNewTextRun();
+    r.setText("Apache POI");
+    XSLFHyperlink link = r.createHyperlink();
+    link.setAddress("http://poi.apache.org");
+                </pre>
+                
+                
+<a name="PPTX2PNG"></a>
+                <a name="PPTX2PNG+is+an+application+that+converts+each+slide+of+a+.pptx+slideshow+into+a+PNG+image"></a>
+<div class="h2">
+<h2>PPTX2PNG is an application that converts each slide of a .pptx slideshow into a PNG image</h2>
+</div>
+                
+<pre class="code">
+Usage: PPTX2PNG [options] &lt;pptx file&gt;
+Options:
+    -scale &lt;float&gt;   scale factor (default is 1.0)
+    -slide &lt;integer&gt; 1-based index of a slide to render. Default is to render all slides.
+                </pre>
+                
+<p>How it works:</p>
+                
+<p>
+                    The XSLFSlide object implements a draw(Graphics2D graphics) method that recursively paints all shapes
+                    in the slide into the supplied graphics canvas:
+                </p>
+                
+<pre class="code">
+            slide.draw(graphics);
+                </pre>
+                
+<p>
+                where graphics is a class implementing java.awt.Graphics2D. In PPTX2PNG the graphic canvas is derived from
+                java.awt.image.BufferedImage, i.e. the destination is an image in memory, but in general case you can pass
+                any compliant implementation of  java.awt.Graphics2D. The 
+                <a href="http://svn.apache.org/repos/asf/poi/trunk/src/examples/src/org/apache/poi/xslf/usermodel/PPTX2SVG.txt">PPTX2SVG</a>
+                example demonstrates how to use Apache Batik to convert .pptx slides into SVG format. 
+                </p>
+                
+                
+<a name="Merge"></a>
+                <a name="Merge+multiple+presentations+together"></a>
+<div class="h2">
+<h2>Merge multiple presentations together</h2>
+</div>
+                    
+                    
+<pre class="code">
+    XMLSlideShow ppt = new XMLSlideShow();
+    String[] inputs = {"presentations1.pptx", "presentation2.pptx"};
+    for(String arg : inputs){
+        FileInputStream is = new FileInputStream(arg);
+        XMLSlideShow src = new XMLSlideShow(is);
+        is.close();
+
+        for(XSLFSlide srcSlide : src.getSlides()){
+            ppt.createSlide().importContent(srcSlide);
+        }
+    }
+
+    FileOutputStream out = new FileOutputStream("merged.pptx");
+    ppt.write(out);
+    out.close();
+                    </pre>
+                
+
+            
+        
+    
+
+<div id="authors" align="right">by&nbsp;Yegor Kozlov</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2002-2012&nbsp;The Apache Software Foundation. All rights reserved.<br>
+              Apache POI, POI, Apache, the Apache feather logo, and the Apache 
+              POI project logo are trademarks of The Apache Software Foundation.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>

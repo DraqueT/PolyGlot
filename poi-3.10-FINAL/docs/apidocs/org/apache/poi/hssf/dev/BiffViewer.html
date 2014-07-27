@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>BiffViewer (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="BiffViewer (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/BiffViewer.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/hssf/dev/BiffDrawingToXml.html" title="class in org.apache.poi.hssf.dev"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/hssf/dev/EFBiffViewer.html" title="class in org.apache.poi.hssf.dev"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hssf/dev/BiffViewer.html" target="_top">Frames</a></li>
+<li><a href="BiffViewer.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.hssf.dev</div>
+<h2 title="Class BiffViewer" class="title">Class BiffViewer</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>org.apache.poi.hssf.dev.BiffViewer</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public final class <span class="strong">BiffViewer</span>
+extends java.lang.Object</pre>
+<div class="block">Utillity for reading in BIFF8 records and displaying data from them.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Andrew C. Oliver (acoliver at apache dot org), Glen Stampoultzis (glens at apache.org)</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/hssf/dev/BiffViewer.html#main(java.lang.String[])"><code>main(java.lang.String[])</code></a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/poi/hssf/record/Record.html" title="class in org.apache.poi.hssf.record">Record</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hssf/dev/BiffViewer.html#createRecords(java.io.InputStream, java.io.PrintStream, org.apache.poi.hssf.dev.BiffViewer.BiffRecordListener, boolean)">createRecords</a></strong>(java.io.InputStream&nbsp;is,
+             java.io.PrintStream&nbsp;ps,
+             org.apache.poi.hssf.dev.BiffViewer.BiffRecordListener&nbsp;recListener,
+             boolean&nbsp;dumpInterpretedRecords)</code>
+<div class="block">Create an array of records from an input stream</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static java.io.InputStream</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hssf/dev/BiffViewer.html#getPOIFSInputStream(java.io.File)">getPOIFSInputStream</a></strong>(java.io.File&nbsp;file)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hssf/dev/BiffViewer.html#main(java.lang.String[])">main</a></strong>(java.lang.String[]&nbsp;args)</code>
+<div class="block">Method main with 1 argument just run straight biffview against given
+ file
+
+ <b>Usage</b>:<br/>
+
+ BiffViewer [--biffhex] [--noint] [--noescher] [--out] &lt;fileName&gt; <br/>
+ BiffViewer --rawhex  [--out] &lt;fileName&gt; <br/>
+ <br/>
+
+ 
+ --biffhexshow hex dump of each BIFF record
+ --nointdo not output interpretation of BIFF records
+ --outsend output to &lt;fileName&gt;.out
+ --rawhexoutput raw hex dump of whole workbook stream
+ --escherturn on deserialization of escher records (default is off)
+ --noheaderdo not print record header (default is on)
+ </div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hssf/dev/BiffViewer.html#runBiffViewer(java.io.PrintStream, java.io.InputStream, boolean, boolean, boolean, boolean)">runBiffViewer</a></strong>(java.io.PrintStream&nbsp;ps,
+             java.io.InputStream&nbsp;is,
+             boolean&nbsp;dumpInterpretedRecords,
+             boolean&nbsp;dumpHex,
+             boolean&nbsp;zeroAlignHexDump,
+             boolean&nbsp;suppressHeader)</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="createRecords(java.io.InputStream, java.io.PrintStream, org.apache.poi.hssf.dev.BiffViewer.BiffRecordListener, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createRecords</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/poi/hssf/record/Record.html" title="class in org.apache.poi.hssf.record">Record</a>[]&nbsp;createRecords(java.io.InputStream&nbsp;is,
+                     java.io.PrintStream&nbsp;ps,
+                     org.apache.poi.hssf.dev.BiffViewer.BiffRecordListener&nbsp;recListener,
+                     boolean&nbsp;dumpInterpretedRecords)
+                              throws <a href="../../../../../org/apache/poi/hssf/record/RecordFormatException.html" title="class in org.apache.poi.hssf.record">RecordFormatException</a></pre>
+<div class="block">Create an array of records from an input stream</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>is</code> - the InputStream from which the records will be obtained</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an array of Records created from the InputStream</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../org/apache/poi/hssf/record/RecordFormatException.html" title="class in org.apache.poi.hssf.record">RecordFormatException</a></code> - on error processing the InputStream</dd></dl>
+</li>
+</ul>
+<a name="main(java.lang.String[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>main</h4>
+<pre>public static&nbsp;void&nbsp;main(java.lang.String[]&nbsp;args)</pre>
+<div class="block">Method main with 1 argument just run straight biffview against given
+ file<P>
+
+ <b>Usage</b>:<br/>
+
+ BiffViewer [--biffhex] [--noint] [--noescher] [--out] &lt;fileName&gt; <br/>
+ BiffViewer --rawhex  [--out] &lt;fileName&gt; <br/>
+ <br/>
+
+ <table>
+ <tr><td>--biffhex</td><td>show hex dump of each BIFF record</td></tr>
+ <tr><td>--noint</td><td>do not output interpretation of BIFF records</td></tr>
+ <tr><td>--out</td><td>send output to &lt;fileName&gt;.out</td></tr>
+ <tr><td>--rawhex</td><td>output raw hex dump of whole workbook stream</td></tr>
+ <tr><td>--escher</td><td>turn on deserialization of escher records (default is off)</td></tr>
+ <tr><td>--noheader</td><td>do not print record header (default is on)</td></tr>
+ </table></div>
+</li>
+</ul>
+<a name="getPOIFSInputStream(java.io.File)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPOIFSInputStream</h4>
+<pre>protected static&nbsp;java.io.InputStream&nbsp;getPOIFSInputStream(java.io.File&nbsp;file)
+                                                  throws java.io.IOException,
+                                                         java.io.FileNotFoundException</pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd>
+<dd><code>java.io.FileNotFoundException</code></dd></dl>
+</li>
+</ul>
+<a name="runBiffViewer(java.io.PrintStream, java.io.InputStream, boolean, boolean, boolean, boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>runBiffViewer</h4>
+<pre>protected static&nbsp;void&nbsp;runBiffViewer(java.io.PrintStream&nbsp;ps,
+                 java.io.InputStream&nbsp;is,
+                 boolean&nbsp;dumpInterpretedRecords,
+                 boolean&nbsp;dumpHex,
+                 boolean&nbsp;zeroAlignHexDump,
+                 boolean&nbsp;suppressHeader)</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/BiffViewer.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/hssf/dev/BiffDrawingToXml.html" title="class in org.apache.poi.hssf.dev"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/hssf/dev/EFBiffViewer.html" title="class in org.apache.poi.hssf.dev"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hssf/dev/BiffViewer.html" target="_top">Frames</a></li>
+<li><a href="BiffViewer.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

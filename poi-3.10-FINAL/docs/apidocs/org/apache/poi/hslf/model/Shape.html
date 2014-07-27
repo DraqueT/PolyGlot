@@ -1,0 +1,909 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>Shape (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Shape (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Shape.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/hslf/model/PPGraphics2D.html" title="class in org.apache.poi.hslf.model"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/hslf/model/ShapeFactory.html" title="class in org.apache.poi.hslf.model"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hslf/model/Shape.html" target="_top">Frames</a></li>
+<li><a href="Shape.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.hslf.model</div>
+<h2 title="Class Shape" class="title">Class Shape</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>org.apache.poi.hslf.model.Shape</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../org/apache/poi/hslf/model/Background.html" title="class in org.apache.poi.hslf.model">Background</a>, <a href="../../../../../org/apache/poi/hslf/model/ShapeGroup.html" title="class in org.apache.poi.hslf.model">ShapeGroup</a>, <a href="../../../../../org/apache/poi/hslf/model/SimpleShape.html" title="class in org.apache.poi.hslf.model">SimpleShape</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public abstract class <span class="strong">Shape</span>
+extends java.lang.Object</pre>
+<div class="block"><p>
+ Represents a Shape which is the elemental object that composes a drawing.
+  This class is a wrapper around EscherSpContainer which holds all information
+  about a shape in PowerPoint document.
+  </p>
+  <p>
+  When you add a shape, you usually specify the dimensions of the shape and the position
+  of the upper'left corner of the bounding box for the shape relative to the upper'left
+  corner of the page, worksheet, or slide. Distances in the drawing layer are measured
+  in points (72 points = 1 inch).
+  </p>
+ <p></div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Yegor Kozlov</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/apache/poi/ddf/EscherContainerRecord.html" title="class in org.apache.poi.ddf">EscherContainerRecord</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#_escherContainer">_escherContainer</a></strong></code>
+<div class="block">Either EscherSpContainer or EscheSpgrContainer record
+ which holds information about this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/apache/poi/hslf/model/Fill.html" title="class in org.apache.poi.hslf.model">Fill</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#_fill">_fill</a></strong></code>
+<div class="block">Fill</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/apache/poi/hslf/model/Shape.html" title="class in org.apache.poi.hslf.model">Shape</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#_parent">_parent</a></strong></code>
+<div class="block">Parent of this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/apache/poi/hslf/model/Sheet.html" title="class in org.apache.poi.hslf.model">Sheet</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#_sheet">_sheet</a></strong></code>
+<div class="block">The <code>Sheet</code> this shape belongs to</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#EMU_PER_CENTIMETER">EMU_PER_CENTIMETER</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#EMU_PER_INCH">EMU_PER_INCH</a></strong></code>
+<div class="block">In Escher absolute distances are specified in
+ English Metric Units (EMUs), occasionally referred to as A units;
+ there are 360000 EMUs per centimeter, 914400 EMUs per inch, 12700 EMUs per point.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#EMU_PER_POINT">EMU_PER_POINT</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/apache/poi/util/POILogger.html" title="class in org.apache.poi.util">POILogger</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#logger">logger</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#MASTER_DPI">MASTER_DPI</a></strong></code>
+<div class="block">Master DPI (576 pixels per inch).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#PIXEL_DPI">PIXEL_DPI</a></strong></code>
+<div class="block">Pixels DPI (96 pixels per inch)</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#POINT_DPI">POINT_DPI</a></strong></code>
+<div class="block">Points DPI (72 pixels per inch)</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier</th>
+<th class="colLast" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected </code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#Shape(org.apache.poi.ddf.EscherContainerRecord, org.apache.poi.hslf.model.Shape)">Shape</a></strong>(<a href="../../../../../org/apache/poi/ddf/EscherContainerRecord.html" title="class in org.apache.poi.ddf">EscherContainerRecord</a>&nbsp;escherRecord,
+     <a href="../../../../../org/apache/poi/hslf/model/Shape.html" title="class in org.apache.poi.hslf.model">Shape</a>&nbsp;parent)</code>
+<div class="block">Create a Shape object.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#afterInsert(org.apache.poi.hslf.model.Sheet)">afterInsert</a></strong>(<a href="../../../../../org/apache/poi/hslf/model/Sheet.html" title="class in org.apache.poi.hslf.model">Sheet</a>&nbsp;sh)</code>
+<div class="block">Event which fires when a shape is inserted in the sheet.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected abstract <a href="../../../../../org/apache/poi/ddf/EscherContainerRecord.html" title="class in org.apache.poi.ddf">EscherContainerRecord</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#createSpContainer(boolean)">createSpContainer</a></strong>(boolean&nbsp;isChild)</code>
+<div class="block">Creates the lowerlevel escher records for this shape.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#draw(java.awt.Graphics2D)">draw</a></strong>(java.awt.Graphics2D&nbsp;graphics)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.awt.Rectangle</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getAnchor()">getAnchor</a></strong>()</code>
+<div class="block">Returns the anchor (the bounding box rectangle) of this shape.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.awt.geom.Rectangle2D</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getAnchor2D()">getAnchor2D</a></strong>()</code>
+<div class="block">Returns the anchor (the bounding box rectangle) of this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/poi/ddf/EscherRecord.html" title="class in org.apache.poi.ddf">EscherRecord</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getEscherChild(org.apache.poi.ddf.EscherContainerRecord, int)">getEscherChild</a></strong>(<a href="../../../../../org/apache/poi/ddf/EscherContainerRecord.html" title="class in org.apache.poi.ddf">EscherContainerRecord</a>&nbsp;owner,
+              int&nbsp;recordId)</code>
+<div class="block">Helper method to return escher child by record ID</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/poi/ddf/EscherProperty.html" title="class in org.apache.poi.ddf">EscherProperty</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getEscherProperty(org.apache.poi.ddf.EscherOptRecord, int)">getEscherProperty</a></strong>(<a href="../../../../../org/apache/poi/ddf/EscherOptRecord.html" title="class in org.apache.poi.ddf">EscherOptRecord</a>&nbsp;opt,
+                 int&nbsp;propId)</code>
+<div class="block">Returns  escher property by id.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getEscherProperty(short)">getEscherProperty</a></strong>(short&nbsp;propId)</code>
+<div class="block">Get the value of a simple escher property for this shape.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getEscherProperty(short, int)">getEscherProperty</a></strong>(short&nbsp;propId,
+                 int&nbsp;defaultValue)</code>
+<div class="block">Get the value of a simple escher property for this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/hslf/model/Fill.html" title="class in org.apache.poi.hslf.model">Fill</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getFill()">getFill</a></strong>()</code>
+<div class="block">Fill properties of this shape</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/hslf/model/Hyperlink.html" title="class in org.apache.poi.hslf.model">Hyperlink</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getHyperlink()">getHyperlink</a></strong>()</code>
+<div class="block">Returns the hyperlink assigned to this shape</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.awt.geom.Rectangle2D</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getLogicalAnchor2D()">getLogicalAnchor2D</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.awt.Shape</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getOutline()">getOutline</a></strong>()</code>
+<div class="block">Return shape outline as a java.awt.Shape object</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/hslf/model/Shape.html" title="class in org.apache.poi.hslf.model">Shape</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getParent()">getParent</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getShapeId()">getShapeId</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getShapeName()">getShapeName</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getShapeType()">getShapeType</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/hslf/model/Sheet.html" title="class in org.apache.poi.hslf.model">Sheet</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getSheet()">getSheet</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/ddf/EscherContainerRecord.html" title="class in org.apache.poi.ddf">EscherContainerRecord</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#getSpContainer()">getSpContainer</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#moveTo(float, float)">moveTo</a></strong>(float&nbsp;x,
+      float&nbsp;y)</code>
+<div class="block">Moves the top left corner of the shape to the specified point.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#setAnchor(java.awt.geom.Rectangle2D)">setAnchor</a></strong>(java.awt.geom.Rectangle2D&nbsp;anchor)</code>
+<div class="block">Sets the anchor (the bounding box rectangle) of this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#setEscherProperty(org.apache.poi.ddf.EscherOptRecord, short, int)">setEscherProperty</a></strong>(<a href="../../../../../org/apache/poi/ddf/EscherOptRecord.html" title="class in org.apache.poi.ddf">EscherOptRecord</a>&nbsp;opt,
+                 short&nbsp;propId,
+                 int&nbsp;value)</code>
+<div class="block">Set an escher property for this shape.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#setEscherProperty(short, int)">setEscherProperty</a></strong>(short&nbsp;propId,
+                 int&nbsp;value)</code>
+<div class="block">Set an simple escher property for this shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#setShapeId(int)">setShapeId</a></strong>(int&nbsp;id)</code>
+<div class="block">Sets shape ID</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#setShapeType(int)">setShapeType</a></strong>(int&nbsp;type)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/model/Shape.html#setSheet(org.apache.poi.hslf.model.Sheet)">setSheet</a></strong>(<a href="../../../../../org/apache/poi/hslf/model/Sheet.html" title="class in org.apache.poi.hslf.model">Sheet</a>&nbsp;sheet)</code>
+<div class="block">Assign the <code>SlideShow</code> this shape belongs to</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="logger">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>logger</h4>
+<pre>protected&nbsp;<a href="../../../../../org/apache/poi/util/POILogger.html" title="class in org.apache.poi.util">POILogger</a> logger</pre>
+</li>
+</ul>
+<a name="EMU_PER_INCH">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>EMU_PER_INCH</h4>
+<pre>public static final&nbsp;int EMU_PER_INCH</pre>
+<div class="block">In Escher absolute distances are specified in
+ English Metric Units (EMUs), occasionally referred to as A units;
+ there are 360000 EMUs per centimeter, 914400 EMUs per inch, 12700 EMUs per point.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hslf.model.Shape.EMU_PER_INCH">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="EMU_PER_POINT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>EMU_PER_POINT</h4>
+<pre>public static final&nbsp;int EMU_PER_POINT</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hslf.model.Shape.EMU_PER_POINT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="EMU_PER_CENTIMETER">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>EMU_PER_CENTIMETER</h4>
+<pre>public static final&nbsp;int EMU_PER_CENTIMETER</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hslf.model.Shape.EMU_PER_CENTIMETER">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="MASTER_DPI">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>MASTER_DPI</h4>
+<pre>public static final&nbsp;int MASTER_DPI</pre>
+<div class="block">Master DPI (576 pixels per inch).
+ Used by the reference coordinate system in PowerPoint.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hslf.model.Shape.MASTER_DPI">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PIXEL_DPI">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PIXEL_DPI</h4>
+<pre>public static final&nbsp;int PIXEL_DPI</pre>
+<div class="block">Pixels DPI (96 pixels per inch)</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hslf.model.Shape.PIXEL_DPI">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="POINT_DPI">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>POINT_DPI</h4>
+<pre>public static final&nbsp;int POINT_DPI</pre>
+<div class="block">Points DPI (72 pixels per inch)</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hslf.model.Shape.POINT_DPI">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="_escherContainer">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>_escherContainer</h4>
+<pre>protected&nbsp;<a href="../../../../../org/apache/poi/ddf/EscherContainerRecord.html" title="class in org.apache.poi.ddf">EscherContainerRecord</a> _escherContainer</pre>
+<div class="block">Either EscherSpContainer or EscheSpgrContainer record
+ which holds information about this shape.</div>
+</li>
+</ul>
+<a name="_parent">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>_parent</h4>
+<pre>protected&nbsp;<a href="../../../../../org/apache/poi/hslf/model/Shape.html" title="class in org.apache.poi.hslf.model">Shape</a> _parent</pre>
+<div class="block">Parent of this shape.
+ <code>null</code> for the topmost shapes.</div>
+</li>
+</ul>
+<a name="_sheet">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>_sheet</h4>
+<pre>protected&nbsp;<a href="../../../../../org/apache/poi/hslf/model/Sheet.html" title="class in org.apache.poi.hslf.model">Sheet</a> _sheet</pre>
+<div class="block">The <code>Sheet</code> this shape belongs to</div>
+</li>
+</ul>
+<a name="_fill">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>_fill</h4>
+<pre>protected&nbsp;<a href="../../../../../org/apache/poi/hslf/model/Fill.html" title="class in org.apache.poi.hslf.model">Fill</a> _fill</pre>
+<div class="block">Fill</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="Shape(org.apache.poi.ddf.EscherContainerRecord, org.apache.poi.hslf.model.Shape)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>Shape</h4>
+<pre>protected&nbsp;Shape(<a href="../../../../../org/apache/poi/ddf/EscherContainerRecord.html" title="class in org.apache.poi.ddf">EscherContainerRecord</a>&nbsp;escherRecord,
+     <a href="../../../../../org/apache/poi/hslf/model/Shape.html" title="class in org.apache.poi.hslf.model">Shape</a>&nbsp;parent)</pre>
+<div class="block">Create a Shape object. This constructor is used when an existing Shape is read from from a PowerPoint document.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>escherRecord</code> - <code>EscherSpContainer</code> container which holds information about this shape</dd><dd><code>parent</code> - the parent of this Shape</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="createSpContainer(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createSpContainer</h4>
+<pre>protected abstract&nbsp;<a href="../../../../../org/apache/poi/ddf/EscherContainerRecord.html" title="class in org.apache.poi.ddf">EscherContainerRecord</a>&nbsp;createSpContainer(boolean&nbsp;isChild)</pre>
+<div class="block">Creates the lowerlevel escher records for this shape.</div>
+</li>
+</ul>
+<a name="getParent()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getParent</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/hslf/model/Shape.html" title="class in org.apache.poi.hslf.model">Shape</a>&nbsp;getParent()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the parent of this shape</dd></dl>
+</li>
+</ul>
+<a name="getShapeName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getShapeName</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getShapeName()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>name of the shape.</dd></dl>
+</li>
+</ul>
+<a name="getShapeType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getShapeType</h4>
+<pre>public&nbsp;int&nbsp;getShapeType()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>type of the shape.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/hslf/record/RecordTypes.html" title="class in org.apache.poi.hslf.record"><code>RecordTypes</code></a></dd></dl>
+</li>
+</ul>
+<a name="setShapeType(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setShapeType</h4>
+<pre>public&nbsp;void&nbsp;setShapeType(int&nbsp;type)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>type</code> - type of the shape.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/poi/hslf/record/RecordTypes.html" title="class in org.apache.poi.hslf.record"><code>RecordTypes</code></a></dd></dl>
+</li>
+</ul>
+<a name="getAnchor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAnchor</h4>
+<pre>public&nbsp;java.awt.Rectangle&nbsp;getAnchor()</pre>
+<div class="block">Returns the anchor (the bounding box rectangle) of this shape.
+ All coordinates are expressed in points (72 dpi).</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the anchor of this shape</dd></dl>
+</li>
+</ul>
+<a name="getAnchor2D()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAnchor2D</h4>
+<pre>public&nbsp;java.awt.geom.Rectangle2D&nbsp;getAnchor2D()</pre>
+<div class="block">Returns the anchor (the bounding box rectangle) of this shape.
+ All coordinates are expressed in points (72 dpi).</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the anchor of this shape</dd></dl>
+</li>
+</ul>
+<a name="getLogicalAnchor2D()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLogicalAnchor2D</h4>
+<pre>public&nbsp;java.awt.geom.Rectangle2D&nbsp;getLogicalAnchor2D()</pre>
+</li>
+</ul>
+<a name="setAnchor(java.awt.geom.Rectangle2D)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAnchor</h4>
+<pre>public&nbsp;void&nbsp;setAnchor(java.awt.geom.Rectangle2D&nbsp;anchor)</pre>
+<div class="block">Sets the anchor (the bounding box rectangle) of this shape.
+ All coordinates should be expressed in points (72 dpi).</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>anchor</code> - new anchor</dd></dl>
+</li>
+</ul>
+<a name="moveTo(float, float)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>moveTo</h4>
+<pre>public&nbsp;void&nbsp;moveTo(float&nbsp;x,
+          float&nbsp;y)</pre>
+<div class="block">Moves the top left corner of the shape to the specified point.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>x</code> - the x coordinate of the top left corner of the shape</dd><dd><code>y</code> - the y coordinate of the top left corner of the shape</dd></dl>
+</li>
+</ul>
+<a name="getEscherChild(org.apache.poi.ddf.EscherContainerRecord, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEscherChild</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/poi/ddf/EscherRecord.html" title="class in org.apache.poi.ddf">EscherRecord</a>&nbsp;getEscherChild(<a href="../../../../../org/apache/poi/ddf/EscherContainerRecord.html" title="class in org.apache.poi.ddf">EscherContainerRecord</a>&nbsp;owner,
+                          int&nbsp;recordId)</pre>
+<div class="block">Helper method to return escher child by record ID</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>escher record or <code>null</code> if not found.</dd></dl>
+</li>
+</ul>
+<a name="getEscherProperty(org.apache.poi.ddf.EscherOptRecord, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEscherProperty</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/poi/ddf/EscherProperty.html" title="class in org.apache.poi.ddf">EscherProperty</a>&nbsp;getEscherProperty(<a href="../../../../../org/apache/poi/ddf/EscherOptRecord.html" title="class in org.apache.poi.ddf">EscherOptRecord</a>&nbsp;opt,
+                               int&nbsp;propId)</pre>
+<div class="block">Returns  escher property by id.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>escher property or <code>null</code> if not found.</dd></dl>
+</li>
+</ul>
+<a name="setEscherProperty(org.apache.poi.ddf.EscherOptRecord, short, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEscherProperty</h4>
+<pre>public static&nbsp;void&nbsp;setEscherProperty(<a href="../../../../../org/apache/poi/ddf/EscherOptRecord.html" title="class in org.apache.poi.ddf">EscherOptRecord</a>&nbsp;opt,
+                     short&nbsp;propId,
+                     int&nbsp;value)</pre>
+<div class="block">Set an escher property for this shape.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>opt</code> - The opt record to set the properties to.</dd><dd><code>propId</code> - The id of the property. One of the constants defined in EscherOptRecord.</dd><dd><code>value</code> - value of the property. If value = -1 then the property is removed.</dd></dl>
+</li>
+</ul>
+<a name="setEscherProperty(short, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEscherProperty</h4>
+<pre>public&nbsp;void&nbsp;setEscherProperty(short&nbsp;propId,
+                     int&nbsp;value)</pre>
+<div class="block">Set an simple escher property for this shape.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>propId</code> - The id of the property. One of the constants defined in EscherOptRecord.</dd><dd><code>value</code> - value of the property. If value = -1 then the property is removed.</dd></dl>
+</li>
+</ul>
+<a name="getEscherProperty(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEscherProperty</h4>
+<pre>public&nbsp;int&nbsp;getEscherProperty(short&nbsp;propId)</pre>
+<div class="block">Get the value of a simple escher property for this shape.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>propId</code> - The id of the property. One of the constants defined in EscherOptRecord.</dd></dl>
+</li>
+</ul>
+<a name="getEscherProperty(short, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEscherProperty</h4>
+<pre>public&nbsp;int&nbsp;getEscherProperty(short&nbsp;propId,
+                    int&nbsp;defaultValue)</pre>
+<div class="block">Get the value of a simple escher property for this shape.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>propId</code> - The id of the property. One of the constants defined in EscherOptRecord.</dd></dl>
+</li>
+</ul>
+<a name="getSpContainer()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSpContainer</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/ddf/EscherContainerRecord.html" title="class in org.apache.poi.ddf">EscherContainerRecord</a>&nbsp;getSpContainer()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The shape container and it's children that can represent this
+          shape.</dd></dl>
+</li>
+</ul>
+<a name="afterInsert(org.apache.poi.hslf.model.Sheet)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>afterInsert</h4>
+<pre>protected&nbsp;void&nbsp;afterInsert(<a href="../../../../../org/apache/poi/hslf/model/Sheet.html" title="class in org.apache.poi.hslf.model">Sheet</a>&nbsp;sh)</pre>
+<div class="block">Event which fires when a shape is inserted in the sheet.
+ In some cases we need to propagate changes to upper level containers.
+ <br>
+ Default implementation does nothing.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>sh</code> - - owning shape</dd></dl>
+</li>
+</ul>
+<a name="getSheet()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSheet</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/hslf/model/Sheet.html" title="class in org.apache.poi.hslf.model">Sheet</a>&nbsp;getSheet()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the <code>SlideShow</code> this shape belongs to</dd></dl>
+</li>
+</ul>
+<a name="setSheet(org.apache.poi.hslf.model.Sheet)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSheet</h4>
+<pre>public&nbsp;void&nbsp;setSheet(<a href="../../../../../org/apache/poi/hslf/model/Sheet.html" title="class in org.apache.poi.hslf.model">Sheet</a>&nbsp;sheet)</pre>
+<div class="block">Assign the <code>SlideShow</code> this shape belongs to</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>sheet</code> - owner of this shape</dd></dl>
+</li>
+</ul>
+<a name="getShapeId()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getShapeId</h4>
+<pre>public&nbsp;int&nbsp;getShapeId()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>id for the shape.</dd></dl>
+</li>
+</ul>
+<a name="setShapeId(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setShapeId</h4>
+<pre>public&nbsp;void&nbsp;setShapeId(int&nbsp;id)</pre>
+<div class="block">Sets shape ID</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>id</code> - of the shape</dd></dl>
+</li>
+</ul>
+<a name="getFill()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFill</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/hslf/model/Fill.html" title="class in org.apache.poi.hslf.model">Fill</a>&nbsp;getFill()</pre>
+<div class="block">Fill properties of this shape</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>fill properties of this shape</dd></dl>
+</li>
+</ul>
+<a name="getHyperlink()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHyperlink</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/hslf/model/Hyperlink.html" title="class in org.apache.poi.hslf.model">Hyperlink</a>&nbsp;getHyperlink()</pre>
+<div class="block">Returns the hyperlink assigned to this shape</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the hyperlink assigned to this shape
+ or <code>null</code> if not found.</dd></dl>
+</li>
+</ul>
+<a name="draw(java.awt.Graphics2D)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>draw</h4>
+<pre>public&nbsp;void&nbsp;draw(java.awt.Graphics2D&nbsp;graphics)</pre>
+</li>
+</ul>
+<a name="getOutline()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getOutline</h4>
+<pre>public&nbsp;java.awt.Shape&nbsp;getOutline()</pre>
+<div class="block">Return shape outline as a java.awt.Shape object</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the shape outline</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Shape.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/hslf/model/PPGraphics2D.html" title="class in org.apache.poi.hslf.model"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/hslf/model/ShapeFactory.html" title="class in org.apache.poi.hslf.model"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hslf/model/Shape.html" target="_top">Frames</a></li>
+<li><a href="Shape.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>Uses of Class org.apache.poi.ss.util.CellReference (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Uses of Class org.apache.poi.ss.util.CellReference (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="../package-summary.html">Package</a></li>
+<li><a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">Class</a></li>
+<li class="navBarCell1Rev">Use</li>
+<li><a href="../package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev</li>
+<li>Next</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?org/apache/poi/ss/util/class-use/CellReference.html" target="_top">Frames</a></li>
+<li><a href="CellReference.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<div class="header">
+<h2 title="Uses of Class org.apache.poi.ss.util.CellReference" class="title">Uses of Class<br>org.apache.poi.ss.util.CellReference</h2>
+</div>
+<div class="classUseContainer">
+<ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing packages, and an explanation">
+<caption><span>Packages that use <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Package</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.apache.poi.hssf.record.aggregates">org.apache.poi.hssf.record.aggregates</a></td>
+<td class="colLast">
+<div class="block">record aggregates are not real "records" but collections of records that act as a single record.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.apache.poi.hssf.util">org.apache.poi.hssf.util</a></td>
+<td class="colLast">
+<div class="block">util package contains tools needed for writing HSSF files that are not necesarily "real" 
+HSSF concepts.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.apache.poi.ss.formula">org.apache.poi.ss.formula</a></td>
+<td class="colLast">
+<div class="block">This package contains common internal POI code for manipulating formulas.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.apache.poi.ss.formula.ptg">org.apache.poi.ss.formula.ptg</a></td>
+<td class="colLast">
+<div class="block">formula package contains binary PTG structures used in Formulas 
+
+Related Documentation
+
+For overviews, tutorials, examples, guides, and tool documentation, please see:
+
+<a href="http://poi.apache.org">Apache POI Project</a>
+
+
+<!</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.apache.poi.ss.usermodel.charts">org.apache.poi.ss.usermodel.charts</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.apache.poi.ss.util">org.apache.poi.ss.util</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.apache.poi.xssf.usermodel">org.apache.poi.xssf.usermodel</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.apache.poi.xssf.usermodel.charts">org.apache.poi.xssf.usermodel.charts</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<ul class="blockList">
+<li class="blockList"><a name="org.apache.poi.hssf.record.aggregates">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a> in <a href="../../../../../../org/apache/poi/hssf/record/aggregates/package-summary.html">org.apache.poi.hssf.record.aggregates</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../org/apache/poi/hssf/record/aggregates/package-summary.html">org.apache.poi.hssf.record.aggregates</a> with parameters of type <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/apache/poi/hssf/record/aggregates/SharedValueManager.html" title="class in org.apache.poi.hssf.record.aggregates">SharedValueManager</a></code></td>
+<td class="colLast"><span class="strong">SharedValueManager.</span><code><strong><a href="../../../../../../org/apache/poi/hssf/record/aggregates/SharedValueManager.html#create(org.apache.poi.hssf.record.SharedFormulaRecord[], org.apache.poi.ss.util.CellReference[], org.apache.poi.hssf.record.ArrayRecord[], org.apache.poi.hssf.record.TableRecord[])">create</a></strong>(<a href="../../../../../../org/apache/poi/hssf/record/SharedFormulaRecord.html" title="class in org.apache.poi.hssf.record">SharedFormulaRecord</a>[]&nbsp;sharedFormulaRecords,
+      <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>[]&nbsp;firstCells,
+      <a href="../../../../../../org/apache/poi/hssf/record/ArrayRecord.html" title="class in org.apache.poi.hssf.record">ArrayRecord</a>[]&nbsp;arrayRecords,
+      <a href="../../../../../../org/apache/poi/hssf/record/TableRecord.html" title="class in org.apache.poi.hssf.record">TableRecord</a>[]&nbsp;tableRecords)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/poi/hssf/record/SharedFormulaRecord.html" title="class in org.apache.poi.hssf.record">SharedFormulaRecord</a></code></td>
+<td class="colLast"><span class="strong">SharedValueManager.</span><code><strong><a href="../../../../../../org/apache/poi/hssf/record/aggregates/SharedValueManager.html#linkSharedFormulaRecord(org.apache.poi.ss.util.CellReference, org.apache.poi.hssf.record.aggregates.FormulaRecordAggregate)">linkSharedFormulaRecord</a></strong>(<a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>&nbsp;firstCell,
+                       <a href="../../../../../../org/apache/poi/hssf/record/aggregates/FormulaRecordAggregate.html" title="class in org.apache.poi.hssf.record.aggregates">FormulaRecordAggregate</a>&nbsp;agg)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.apache.poi.hssf.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a> in <a href="../../../../../../org/apache/poi/hssf/util/package-summary.html">org.apache.poi.hssf.util</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a> in <a href="../../../../../../org/apache/poi/hssf/util/package-summary.html">org.apache.poi.hssf.util</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/hssf/util/CellReference.html" title="class in org.apache.poi.hssf.util">CellReference</a></strong></code>
+<div class="block">Common conversion functions between Excel style A1, C27 style
+  cell references, and POI usermodel style row=0, column=0
+  style references.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.apache.poi.ss.formula">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a> in <a href="../../../../../../org/apache/poi/ss/formula/package-summary.html">org.apache.poi.ss.formula</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../org/apache/poi/ss/formula/package-summary.html">org.apache.poi.ss.formula</a> that return <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></code></td>
+<td class="colLast"><span class="strong">Formula.</span><code><strong><a href="../../../../../../org/apache/poi/ss/formula/Formula.html#getExpReference()">getExpReference</a></strong>()</code>
+<div class="block">Gets the locator for the corresponding <a href="../../../../../../org/apache/poi/hssf/record/SharedFormulaRecord.html" title="class in org.apache.poi.hssf.record"><code>SharedFormulaRecord</code></a>,
+ <a href="../../../../../../org/apache/poi/hssf/record/ArrayRecord.html" title="class in org.apache.poi.hssf.record"><code>ArrayRecord</code></a> or <a href="../../../../../../org/apache/poi/hssf/record/TableRecord.html" title="class in org.apache.poi.hssf.record"><code>TableRecord</code></a>
+ if this formula belongs to such a grouping.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.apache.poi.ss.formula.ptg">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a> in <a href="../../../../../../org/apache/poi/ss/formula/ptg/package-summary.html">org.apache.poi.ss.formula.ptg</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../org/apache/poi/ss/formula/ptg/package-summary.html">org.apache.poi.ss.formula.ptg</a> with parameters of type <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/ptg/Ref3DPtg.html#Ref3DPtg(org.apache.poi.ss.util.CellReference, int)">Ref3DPtg</a></strong>(<a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>&nbsp;c,
+        int&nbsp;externIdx)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/ptg/RefPtg.html#RefPtg(org.apache.poi.ss.util.CellReference)">RefPtg</a></strong>(<a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>&nbsp;cr)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/formula/ptg/RefPtgBase.html#RefPtgBase(org.apache.poi.ss.util.CellReference)">RefPtgBase</a></strong>(<a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>&nbsp;c)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.apache.poi.ss.usermodel.charts">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a> in <a href="../../../../../../org/apache/poi/ss/usermodel/charts/package-summary.html">org.apache.poi.ss.usermodel.charts</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../org/apache/poi/ss/usermodel/charts/package-summary.html">org.apache.poi.ss.usermodel.charts</a> that return <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></code></td>
+<td class="colLast"><span class="strong">ChartSerie.</span><code><strong><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ChartSerie.html#getTitleCellReference()">getTitleCellReference</a></strong>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../org/apache/poi/ss/usermodel/charts/package-summary.html">org.apache.poi.ss.usermodel.charts</a> with parameters of type <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">ChartSerie.</span><code><strong><a href="../../../../../../org/apache/poi/ss/usermodel/charts/ChartSerie.html#setTitle(org.apache.poi.ss.util.CellReference)">setTitle</a></strong>(<a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>&nbsp;titleReference)</code>
+<div class="block">Sets the title of the series as a cell reference.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.apache.poi.ss.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a> in <a href="../../../../../../org/apache/poi/ss/util/package-summary.html">org.apache.poi.ss.util</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../org/apache/poi/ss/util/package-summary.html">org.apache.poi.ss.util</a> that return <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>[]</code></td>
+<td class="colLast"><span class="strong">AreaReference.</span><code><strong><a href="../../../../../../org/apache/poi/ss/util/AreaReference.html#getAllReferencedCells()">getAllReferencedCells</a></strong>()</code>
+<div class="block">Returns a reference to every cell covered by this area</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></code></td>
+<td class="colLast"><span class="strong">AreaReference.</span><code><strong><a href="../../../../../../org/apache/poi/ss/util/AreaReference.html#getFirstCell()">getFirstCell</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></code></td>
+<td class="colLast"><span class="strong">AreaReference.</span><code><strong><a href="../../../../../../org/apache/poi/ss/util/AreaReference.html#getLastCell()">getLastCell</a></strong>()</code>
+<div class="block">Note - if this area reference refers to a single cell, the return value of this method will
+ be identical to that of <tt>getFirstCell()</tt></div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../org/apache/poi/ss/util/package-summary.html">org.apache.poi.ss.util</a> with parameters of type <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><span class="strong">AreaReference.</span><code><strong><a href="../../../../../../org/apache/poi/ss/util/AreaReference.html#isWholeColumnReference(org.apache.poi.ss.util.CellReference, org.apache.poi.ss.util.CellReference)">isWholeColumnReference</a></strong>(<a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>&nbsp;topLeft,
+                      <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>&nbsp;botRight)</code>
+<div class="block">Is the reference for a whole-column reference,
+  such as C:C or D:G ?</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../org/apache/poi/ss/util/package-summary.html">org.apache.poi.ss.util</a> with parameters of type <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/poi/ss/util/AreaReference.html#AreaReference(org.apache.poi.ss.util.CellReference, org.apache.poi.ss.util.CellReference)">AreaReference</a></strong>(<a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>&nbsp;topLeft,
+             <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>&nbsp;botRight)</code>
+<div class="block">Creates an area ref from a pair of Cell References.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.apache.poi.xssf.usermodel">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a> in <a href="../../../../../../org/apache/poi/xssf/usermodel/package-summary.html">org.apache.poi.xssf.usermodel</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../org/apache/poi/xssf/usermodel/package-summary.html">org.apache.poi.xssf.usermodel</a> that return <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></code></td>
+<td class="colLast"><span class="strong">XSSFTable.</span><code><strong><a href="../../../../../../org/apache/poi/xssf/usermodel/XSSFTable.html#getEndCellReference()">getEndCellReference</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></code></td>
+<td class="colLast"><span class="strong">XSSFTable.</span><code><strong><a href="../../../../../../org/apache/poi/xssf/usermodel/XSSFTable.html#getStartCellReference()">getStartCellReference</a></strong>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.apache.poi.xssf.usermodel.charts">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a> in <a href="../../../../../../org/apache/poi/xssf/usermodel/charts/package-summary.html">org.apache.poi.xssf.usermodel.charts</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../org/apache/poi/xssf/usermodel/charts/package-summary.html">org.apache.poi.xssf.usermodel.charts</a> that return <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></code></td>
+<td class="colLast"><span class="strong">AbstractXSSFChartSerie.</span><code><strong><a href="../../../../../../org/apache/poi/xssf/usermodel/charts/AbstractXSSFChartSerie.html#getTitleCellReference()">getTitleCellReference</a></strong>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../org/apache/poi/xssf/usermodel/charts/package-summary.html">org.apache.poi.xssf.usermodel.charts</a> with parameters of type <a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">AbstractXSSFChartSerie.</span><code><strong><a href="../../../../../../org/apache/poi/xssf/usermodel/charts/AbstractXSSFChartSerie.html#setTitle(org.apache.poi.ss.util.CellReference)">setTitle</a></strong>(<a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">CellReference</a>&nbsp;titleReference)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="../package-summary.html">Package</a></li>
+<li><a href="../../../../../../org/apache/poi/ss/util/CellReference.html" title="class in org.apache.poi.ss.util">Class</a></li>
+<li class="navBarCell1Rev">Use</li>
+<li><a href="../package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev</li>
+<li>Next</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?org/apache/poi/ss/util/class-use/CellReference.html" target="_top">Frames</a></li>
+<li><a href="CellReference.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

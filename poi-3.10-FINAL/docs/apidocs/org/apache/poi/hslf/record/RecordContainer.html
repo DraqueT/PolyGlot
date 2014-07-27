@@ -1,0 +1,559 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>RecordContainer (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="RecordContainer (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RecordContainer.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/hslf/record/RecordAtom.html" title="class in org.apache.poi.hslf.record"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/hslf/record/RecordTypes.html" title="class in org.apache.poi.hslf.record"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hslf/record/RecordContainer.html" target="_top">Frames</a></li>
+<li><a href="RecordContainer.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.hslf.record</div>
+<h2 title="Class RecordContainer" class="title">Class RecordContainer</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">org.apache.poi.hslf.record.Record</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.poi.hslf.record.RecordContainer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../org/apache/poi/hslf/record/AnimationInfo.html" title="class in org.apache.poi.hslf.record">AnimationInfo</a>, <a href="../../../../../org/apache/poi/hslf/record/Comment2000.html" title="class in org.apache.poi.hslf.record">Comment2000</a>, <a href="../../../../../org/apache/poi/hslf/record/DummyRecordWithChildren.html" title="class in org.apache.poi.hslf.record">DummyRecordWithChildren</a>, <a href="../../../../../org/apache/poi/hslf/record/EscherTextboxWrapper.html" title="class in org.apache.poi.hslf.record">EscherTextboxWrapper</a>, <a href="../../../../../org/apache/poi/hslf/record/ExEmbed.html" title="class in org.apache.poi.hslf.record">ExEmbed</a>, <a href="../../../../../org/apache/poi/hslf/record/ExHyperlink.html" title="class in org.apache.poi.hslf.record">ExHyperlink</a>, <a href="../../../../../org/apache/poi/hslf/record/ExMCIMovie.html" title="class in org.apache.poi.hslf.record">ExMCIMovie</a>, <a href="../../../../../org/apache/poi/hslf/record/ExObjList.html" title="class in org.apache.poi.hslf.record">ExObjList</a>, <a href="../../../../../org/apache/poi/hslf/record/ExVideoContainer.html" title="class in org.apache.poi.hslf.record">ExVideoContainer</a>, <a href="../../../../../org/apache/poi/hslf/record/FontCollection.html" title="class in org.apache.poi.hslf.record">FontCollection</a>, <a href="../../../../../org/apache/poi/hslf/record/HeadersFootersContainer.html" title="class in org.apache.poi.hslf.record">HeadersFootersContainer</a>, <a href="../../../../../org/apache/poi/hslf/record/InteractiveInfo.html" title="class in org.apache.poi.hslf.record">InteractiveInfo</a>, <a href="../../../../../org/apache/poi/hslf/record/PositionDependentRecordContainer.html" title="class in org.apache.poi.hslf.record">PositionDependentRecordContainer</a>, <a href="../../../../../org/apache/poi/hslf/record/SlideListWithText.html" title="class in org.apache.poi.hslf.record">SlideListWithText</a>, <a href="../../../../../org/apache/poi/hslf/record/Sound.html" title="class in org.apache.poi.hslf.record">Sound</a>, <a href="../../../../../org/apache/poi/hslf/record/SoundCollection.html" title="class in org.apache.poi.hslf.record">SoundCollection</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public abstract class <span class="strong">RecordContainer</span>
+extends <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a></pre>
+<div class="block">Abstract class which all container records will extend. Providers
+  helpful methods for writing child records out to disk</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Nick Burch</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#_children">_children</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.apache.poi.hslf.record.Record">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.apache.poi.hslf.record.<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a></h3>
+<code><a href="../../../../../org/apache/poi/hslf/record/Record.html#logger">logger</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#RecordContainer()">RecordContainer</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#addChildAfter(org.apache.poi.hslf.record.Record, org.apache.poi.hslf.record.Record)">addChildAfter</a></strong>(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;newChild,
+             <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;after)</code>
+<div class="block">Adds the given Child Record after the supplied record</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#addChildBefore(org.apache.poi.hslf.record.Record, org.apache.poi.hslf.record.Record)">addChildBefore</a></strong>(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;newChild,
+              <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;before)</code>
+<div class="block">Adds the given Child Record before the supplied record</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#appendChildRecord(org.apache.poi.hslf.record.Record)">appendChildRecord</a></strong>(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;newChild)</code>
+<div class="block">Add a new child record onto a record's list of children.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#findFirstOfType(long)">findFirstOfType</a></strong>(long&nbsp;type)</code>
+<div class="block">Finds the first child record of the given type,
+  or null if none of the child records are of the
+  given type.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#getChildRecords()">getChildRecords</a></strong>()</code>
+<div class="block">Return any children</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#handleParentAwareRecords(org.apache.poi.hslf.record.RecordContainer)">handleParentAwareRecords</a></strong>(<a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html" title="class in org.apache.poi.hslf.record">RecordContainer</a>&nbsp;br)</code>
+<div class="block">Find the records that are parent-aware, and tell them who their parent is</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#isAnAtom()">isAnAtom</a></strong>()</code>
+<div class="block">We're not an atom</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#moveChildBefore(org.apache.poi.hslf.record.Record, org.apache.poi.hslf.record.Record)">moveChildBefore</a></strong>(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;child,
+               <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;before)</code>
+<div class="block">Moves the given Child Record to before the supplied record</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#moveChildrenAfter(org.apache.poi.hslf.record.Record, int, org.apache.poi.hslf.record.Record)">moveChildrenAfter</a></strong>(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;firstChild,
+                 int&nbsp;number,
+                 <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;after)</code>
+<div class="block">Moves the given Child Records to after the supplied record</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#moveChildrenBefore(org.apache.poi.hslf.record.Record, int, org.apache.poi.hslf.record.Record)">moveChildrenBefore</a></strong>(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;firstChild,
+                  int&nbsp;number,
+                  <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;before)</code>
+<div class="block">Moves the given Child Records to before the supplied record</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#removeChild(org.apache.poi.hslf.record.Record)">removeChild</a></strong>(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;ch)</code>
+<div class="block">Remove a child record from this record container</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#setChildRecord(org.apache.poi.hslf.record.Record[])">setChildRecord</a></strong>(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>[]&nbsp;records)</code>
+<div class="block">Set child records.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html#writeOut(byte, byte, long, org.apache.poi.hslf.record.Record[], java.io.OutputStream)">writeOut</a></strong>(byte&nbsp;headerA,
+        byte&nbsp;headerB,
+        long&nbsp;type,
+        <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>[]&nbsp;children,
+        java.io.OutputStream&nbsp;out)</code>
+<div class="block">Write out our header, and our children.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.poi.hslf.record.Record">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.apache.poi.hslf.record.<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a></h3>
+<code><a href="../../../../../org/apache/poi/hslf/record/Record.html#buildRecordAtOffset(byte[], int)">buildRecordAtOffset</a>, <a href="../../../../../org/apache/poi/hslf/record/Record.html#createRecordForType(long, byte[], int, int)">createRecordForType</a>, <a href="../../../../../org/apache/poi/hslf/record/Record.html#findChildRecords(byte[], int, int)">findChildRecords</a>, <a href="../../../../../org/apache/poi/hslf/record/Record.html#getRecordType()">getRecordType</a>, <a href="../../../../../org/apache/poi/hslf/record/Record.html#writeLittleEndian(int, java.io.OutputStream)">writeLittleEndian</a>, <a href="../../../../../org/apache/poi/hslf/record/Record.html#writeLittleEndian(short, java.io.OutputStream)">writeLittleEndian</a>, <a href="../../../../../org/apache/poi/hslf/record/Record.html#writeOut(java.io.OutputStream)">writeOut</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="_children">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>_children</h4>
+<pre>protected&nbsp;<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>[] _children</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="RecordContainer()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RecordContainer</h4>
+<pre>public&nbsp;RecordContainer()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getChildRecords()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getChildRecords</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>[]&nbsp;getChildRecords()</pre>
+<div class="block">Return any children</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/hslf/record/Record.html#getChildRecords()">getChildRecords</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="isAnAtom()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isAnAtom</h4>
+<pre>public&nbsp;boolean&nbsp;isAnAtom()</pre>
+<div class="block">We're not an atom</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/apache/poi/hslf/record/Record.html#isAnAtom()">isAnAtom</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="findFirstOfType(long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findFirstOfType</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;findFirstOfType(long&nbsp;type)</pre>
+<div class="block">Finds the first child record of the given type,
+  or null if none of the child records are of the
+  given type. Does not descend.</div>
+</li>
+</ul>
+<a name="removeChild(org.apache.poi.hslf.record.Record)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeChild</h4>
+<pre>public&nbsp;<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;removeChild(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;ch)</pre>
+<div class="block">Remove a child record from this record container</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>ch</code> - the child to remove</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the removed record</dd></dl>
+</li>
+</ul>
+<a name="appendChildRecord(org.apache.poi.hslf.record.Record)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>appendChildRecord</h4>
+<pre>public&nbsp;void&nbsp;appendChildRecord(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;newChild)</pre>
+<div class="block">Add a new child record onto a record's list of children.</div>
+</li>
+</ul>
+<a name="addChildAfter(org.apache.poi.hslf.record.Record, org.apache.poi.hslf.record.Record)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addChildAfter</h4>
+<pre>public&nbsp;void&nbsp;addChildAfter(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;newChild,
+                 <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;after)</pre>
+<div class="block">Adds the given Child Record after the supplied record</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>newChild</code> - </dd><dd><code>after</code> - </dd></dl>
+</li>
+</ul>
+<a name="addChildBefore(org.apache.poi.hslf.record.Record, org.apache.poi.hslf.record.Record)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addChildBefore</h4>
+<pre>public&nbsp;void&nbsp;addChildBefore(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;newChild,
+                  <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;before)</pre>
+<div class="block">Adds the given Child Record before the supplied record</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>newChild</code> - </dd><dd><code>before</code> - </dd></dl>
+</li>
+</ul>
+<a name="moveChildBefore(org.apache.poi.hslf.record.Record, org.apache.poi.hslf.record.Record)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>moveChildBefore</h4>
+<pre>public&nbsp;void&nbsp;moveChildBefore(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;child,
+                   <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;before)</pre>
+<div class="block">Moves the given Child Record to before the supplied record</div>
+</li>
+</ul>
+<a name="moveChildrenBefore(org.apache.poi.hslf.record.Record, int, org.apache.poi.hslf.record.Record)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>moveChildrenBefore</h4>
+<pre>public&nbsp;void&nbsp;moveChildrenBefore(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;firstChild,
+                      int&nbsp;number,
+                      <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;before)</pre>
+<div class="block">Moves the given Child Records to before the supplied record</div>
+</li>
+</ul>
+<a name="moveChildrenAfter(org.apache.poi.hslf.record.Record, int, org.apache.poi.hslf.record.Record)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>moveChildrenAfter</h4>
+<pre>public&nbsp;void&nbsp;moveChildrenAfter(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;firstChild,
+                     int&nbsp;number,
+                     <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>&nbsp;after)</pre>
+<div class="block">Moves the given Child Records to after the supplied record</div>
+</li>
+</ul>
+<a name="setChildRecord(org.apache.poi.hslf.record.Record[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setChildRecord</h4>
+<pre>public&nbsp;void&nbsp;setChildRecord(<a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>[]&nbsp;records)</pre>
+<div class="block">Set child records.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>records</code> - the new child records</dd></dl>
+</li>
+</ul>
+<a name="writeOut(byte, byte, long, org.apache.poi.hslf.record.Record[], java.io.OutputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeOut</h4>
+<pre>public&nbsp;void&nbsp;writeOut(byte&nbsp;headerA,
+            byte&nbsp;headerB,
+            long&nbsp;type,
+            <a href="../../../../../org/apache/poi/hslf/record/Record.html" title="class in org.apache.poi.hslf.record">Record</a>[]&nbsp;children,
+            java.io.OutputStream&nbsp;out)
+              throws java.io.IOException</pre>
+<div class="block">Write out our header, and our children.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>headerA</code> - the first byte of the header</dd><dd><code>headerB</code> - the second byte of the header</dd><dd><code>type</code> - the record type</dd><dd><code>children</code> - our child records</dd><dd><code>out</code> - the stream to write to</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd></dl>
+</li>
+</ul>
+<a name="handleParentAwareRecords(org.apache.poi.hslf.record.RecordContainer)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>handleParentAwareRecords</h4>
+<pre>public static&nbsp;void&nbsp;handleParentAwareRecords(<a href="../../../../../org/apache/poi/hslf/record/RecordContainer.html" title="class in org.apache.poi.hslf.record">RecordContainer</a>&nbsp;br)</pre>
+<div class="block">Find the records that are parent-aware, and tell them who their parent is</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RecordContainer.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/poi/hslf/record/RecordAtom.html" title="class in org.apache.poi.hslf.record"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/poi/hslf/record/RecordTypes.html" title="class in org.apache.poi.hslf.record"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hslf/record/RecordContainer.html" target="_top">Frames</a></li>
+<li><a href="RecordContainer.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>

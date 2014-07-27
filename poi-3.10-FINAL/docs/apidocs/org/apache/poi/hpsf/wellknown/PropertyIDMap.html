@@ -1,0 +1,1109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="ru">
+<head>
+<title>PropertyIDMap (POI API Documentation)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="PropertyIDMap (POI API Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/PropertyIDMap.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev Class</li>
+<li><a href="../../../../../org/apache/poi/hpsf/wellknown/SectionIDMap.html" title="class in org.apache.poi.hpsf.wellknown"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hpsf/wellknown/PropertyIDMap.html" target="_top">Frames</a></li>
+<li><a href="PropertyIDMap.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_java.util.AbstractMap">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.poi.hpsf.wellknown</div>
+<h2 title="Class PropertyIDMap" class="title">Class PropertyIDMap</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>java.util.AbstractMap&lt;K,V&gt;</li>
+<li>
+<ul class="inheritance">
+<li>java.util.HashMap</li>
+<li>
+<ul class="inheritance">
+<li>org.apache.poi.hpsf.wellknown.PropertyIDMap</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd>java.io.Serializable, java.lang.Cloneable, java.util.Map</dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">PropertyIDMap</span>
+extends java.util.HashMap</pre>
+<div class="block"><p>This is a dictionary which maps property ID values to property
+ ID strings.</p>
+
+ <p>The methods <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#getSummaryInformationProperties()"><code>getSummaryInformationProperties()</code></a> and <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#getDocumentSummaryInformationProperties()"><code>getDocumentSummaryInformationProperties()</code></a> return singleton <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown"><code>PropertyIDMap</code></a>s. An application that wants to extend these maps
+ should treat them as unmodifiable, copy them and modifiy the
+ copies.</p></div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Rainer Klute <a
+ href="mailto:klute@rainer-klute.de">&lt;klute@rainer-klute.de&gt;</a></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../serialized-form.html#org.apache.poi.hpsf.wellknown.PropertyIDMap">Serialized Form</a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_java.util.AbstractMap">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;java.util.AbstractMap</h3>
+<code>java.util.AbstractMap.SimpleEntry&lt;K,V&gt;, java.util.AbstractMap.SimpleImmutableEntry&lt;K,V&gt;</code></li>
+</ul>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_APPNAME">PID_APPNAME</a></strong></code>
+<div class="block">ID of the property that denotes the application that created the
+ document</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_AUTHOR">PID_AUTHOR</a></strong></code>
+<div class="block">ID of the property that denotes the document's author</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_BYTECOUNT">PID_BYTECOUNT</a></strong></code>
+<div class="block">Number of bytes.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_CATEGORY">PID_CATEGORY</a></strong></code>
+<div class="block">The entry is a string denoting the category the file belongs
+ to, e.g. review, memo, etc.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_CHARCOUNT">PID_CHARCOUNT</a></strong></code>
+<div class="block">ID of the property that denotes the number of characters in the
+ document</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_CODEPAGE">PID_CODEPAGE</a></strong></code>
+<div class="block">The entry denotes a code page.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_COMMENTS">PID_COMMENTS</a></strong></code>
+<div class="block">ID of the property that denotes the document's comments</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_COMPANY">PID_COMPANY</a></strong></code>
+<div class="block">This entry contains the company name.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_CREATE_DTM">PID_CREATE_DTM</a></strong></code>
+<div class="block">ID of the property that denotes the date and time the document was
+ created.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_DICTIONARY">PID_DICTIONARY</a></strong></code>
+<div class="block">The entry is a dictionary.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_DOCPARTS">PID_DOCPARTS</a></strong></code>
+<div class="block">This entry contains the names of document parts (word: names
+ of the documents in the master document, excel: sheet names,
+ power point: slide titles, binder: document names).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_EDITTIME">PID_EDITTIME</a></strong></code>
+<div class="block">ID of the property that denotes the document's edit time</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_HEADINGPAIR">PID_HEADINGPAIR</a></strong></code>
+<div class="block">This entry denotes an internally used property.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_HIDDENCOUNT">PID_HIDDENCOUNT</a></strong></code>
+<div class="block">Number of hidden slides.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_KEYWORDS">PID_KEYWORDS</a></strong></code>
+<div class="block">ID of the property that denotes the document's keywords</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_LASTAUTHOR">PID_LASTAUTHOR</a></strong></code>
+<div class="block">ID of the property that denotes the document's last author</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_LASTPRINTED">PID_LASTPRINTED</a></strong></code>
+<div class="block">ID of the property that denotes the date and time the document was
+ last printed</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_LASTSAVE_DTM">PID_LASTSAVE_DTM</a></strong></code>
+<div class="block">ID of the property that denotes the date and time the document was
+ saved</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_LINECOUNT">PID_LINECOUNT</a></strong></code>
+<div class="block">Number of lines.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_LINKSDIRTY">PID_LINKSDIRTY</a></strong></code>
+<div class="block">If this entry is -1 the links are dirty and should be
+ re-evaluated.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_MANAGER">PID_MANAGER</a></strong></code>
+<div class="block">This entry contains the name of the project manager.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_MAX">PID_MAX</a></strong></code>
+<div class="block">The highest well-known property ID.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_MMCLIPCOUNT">PID_MMCLIPCOUNT</a></strong></code>
+<div class="block">Number of multimedia clips, e.g. sound or video.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_NOTECOUNT">PID_NOTECOUNT</a></strong></code>
+<div class="block">Number of slides with notes.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_PAGECOUNT">PID_PAGECOUNT</a></strong></code>
+<div class="block">ID of the property that denotes the number of pages in the
+ document</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_PARCOUNT">PID_PARCOUNT</a></strong></code>
+<div class="block">Number of paragraphs.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_PRESFORMAT">PID_PRESFORMAT</a></strong></code>
+<div class="block">Target format for power point presentation, e.g. 35mm,
+ printer, video etc.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_REVNUMBER">PID_REVNUMBER</a></strong></code>
+<div class="block">ID of the property that denotes the document's revision number</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_SCALE">PID_SCALE</a></strong></code>
+<div class="block">This entry is set to -1 when scaling of the thumbnail is
+ desired.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_SECURITY">PID_SECURITY</a></strong></code>
+<div class="block">ID of the property that denotes whether read/write access to the
+ document is allowed or whether is should be opened as read-only.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_SLIDECOUNT">PID_SLIDECOUNT</a></strong></code>
+<div class="block">Number of slides in a power point presentation.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_SUBJECT">PID_SUBJECT</a></strong></code>
+<div class="block">ID of the property that denotes the document's subject</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_TEMPLATE">PID_TEMPLATE</a></strong></code>
+<div class="block">ID of the property that denotes the document's template</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_THUMBNAIL">PID_THUMBNAIL</a></strong></code>
+<div class="block">ID of the property that denotes the document's thumbnail</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_TITLE">PID_TITLE</a></strong></code>
+<div class="block">ID of the property that denotes the document's title</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PID_WORDCOUNT">PID_WORDCOUNT</a></strong></code>
+<div class="block">ID of the property that denotes the number of words in the
+ document</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PropertyIDMap(int, float)">PropertyIDMap</a></strong>(int&nbsp;initialCapacity,
+             float&nbsp;loadFactor)</code>
+<div class="block">Creates a <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown"><code>PropertyIDMap</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#PropertyIDMap(java.util.Map)">PropertyIDMap</a></strong>(java.util.Map&nbsp;map)</code>
+<div class="block">Creates a <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown"><code>PropertyIDMap</code></a> backed by another map.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.Object</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#get(long)">get</a></strong>(long&nbsp;id)</code>
+<div class="block">Gets the ID string for an ID from the <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown"><code>PropertyIDMap</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown">PropertyIDMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#getDocumentSummaryInformationProperties()">getDocumentSummaryInformationProperties</a></strong>()</code>
+<div class="block">Returns the Document Summary Information properties
+ singleton.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown">PropertyIDMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#getSummaryInformationProperties()">getSummaryInformationProperties</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#main(java.lang.String[])">main</a></strong>(java.lang.String[]&nbsp;args)</code>
+<div class="block">For the most basic testing.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.Object</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html#put(long, java.lang.String)">put</a></strong>(long&nbsp;id,
+   java.lang.String&nbsp;idString)</code>
+<div class="block">Puts a ID string for an ID into the <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown"><code>PropertyIDMap</code></a>.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.util.HashMap">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.util.HashMap</h3>
+<code>clear, clone, containsKey, containsValue, entrySet, get, isEmpty, keySet, put, putAll, remove, size, values</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.util.AbstractMap">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.util.AbstractMap</h3>
+<code>equals, hashCode, toString</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>finalize, getClass, notify, notifyAll, wait, wait, wait</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.util.Map">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;java.util.Map</h3>
+<code>equals, hashCode</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="PID_TITLE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_TITLE</h4>
+<pre>public static final&nbsp;int PID_TITLE</pre>
+<div class="block"><p>ID of the property that denotes the document's title</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_TITLE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_SUBJECT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_SUBJECT</h4>
+<pre>public static final&nbsp;int PID_SUBJECT</pre>
+<div class="block"><p>ID of the property that denotes the document's subject</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_SUBJECT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_AUTHOR">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_AUTHOR</h4>
+<pre>public static final&nbsp;int PID_AUTHOR</pre>
+<div class="block"><p>ID of the property that denotes the document's author</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_AUTHOR">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_KEYWORDS">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_KEYWORDS</h4>
+<pre>public static final&nbsp;int PID_KEYWORDS</pre>
+<div class="block"><p>ID of the property that denotes the document's keywords</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_KEYWORDS">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_COMMENTS">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_COMMENTS</h4>
+<pre>public static final&nbsp;int PID_COMMENTS</pre>
+<div class="block"><p>ID of the property that denotes the document's comments</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_COMMENTS">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_TEMPLATE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_TEMPLATE</h4>
+<pre>public static final&nbsp;int PID_TEMPLATE</pre>
+<div class="block"><p>ID of the property that denotes the document's template</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_TEMPLATE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_LASTAUTHOR">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_LASTAUTHOR</h4>
+<pre>public static final&nbsp;int PID_LASTAUTHOR</pre>
+<div class="block"><p>ID of the property that denotes the document's last author</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_LASTAUTHOR">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_REVNUMBER">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_REVNUMBER</h4>
+<pre>public static final&nbsp;int PID_REVNUMBER</pre>
+<div class="block"><p>ID of the property that denotes the document's revision number</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_REVNUMBER">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_EDITTIME">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_EDITTIME</h4>
+<pre>public static final&nbsp;int PID_EDITTIME</pre>
+<div class="block"><p>ID of the property that denotes the document's edit time</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_EDITTIME">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_LASTPRINTED">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_LASTPRINTED</h4>
+<pre>public static final&nbsp;int PID_LASTPRINTED</pre>
+<div class="block"><p>ID of the property that denotes the date and time the document was
+ last printed</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_LASTPRINTED">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_CREATE_DTM">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_CREATE_DTM</h4>
+<pre>public static final&nbsp;int PID_CREATE_DTM</pre>
+<div class="block"><p>ID of the property that denotes the date and time the document was
+ created.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_CREATE_DTM">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_LASTSAVE_DTM">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_LASTSAVE_DTM</h4>
+<pre>public static final&nbsp;int PID_LASTSAVE_DTM</pre>
+<div class="block"><p>ID of the property that denotes the date and time the document was
+ saved</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_LASTSAVE_DTM">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_PAGECOUNT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_PAGECOUNT</h4>
+<pre>public static final&nbsp;int PID_PAGECOUNT</pre>
+<div class="block"><p>ID of the property that denotes the number of pages in the
+ document</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_PAGECOUNT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_WORDCOUNT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_WORDCOUNT</h4>
+<pre>public static final&nbsp;int PID_WORDCOUNT</pre>
+<div class="block"><p>ID of the property that denotes the number of words in the
+ document</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_WORDCOUNT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_CHARCOUNT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_CHARCOUNT</h4>
+<pre>public static final&nbsp;int PID_CHARCOUNT</pre>
+<div class="block"><p>ID of the property that denotes the number of characters in the
+ document</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_CHARCOUNT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_THUMBNAIL">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_THUMBNAIL</h4>
+<pre>public static final&nbsp;int PID_THUMBNAIL</pre>
+<div class="block"><p>ID of the property that denotes the document's thumbnail</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_THUMBNAIL">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_APPNAME">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_APPNAME</h4>
+<pre>public static final&nbsp;int PID_APPNAME</pre>
+<div class="block"><p>ID of the property that denotes the application that created the
+ document</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_APPNAME">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_SECURITY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_SECURITY</h4>
+<pre>public static final&nbsp;int PID_SECURITY</pre>
+<div class="block"><p>ID of the property that denotes whether read/write access to the
+ document is allowed or whether is should be opened as read-only. It can
+ have the following values:</p>
+
+ <table>
+  <tbody>
+   <tr>
+    <th><p>Value</p></th>
+    <th><p>Description</p></th>
+   </tr>
+   <tr>
+    <th><p>0</p></th>
+    <th><p>No restriction</p></th>
+   </tr>
+   <tr>
+    <th><p>2</p></th>
+    <th><p>Read-only recommended</p></th>
+   </tr>
+   <tr>
+    <th><p>4</p></th>
+    <th><p>Read-only enforced</p></th>
+   </tr>
+  </tbody>
+ </table></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_SECURITY">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_DICTIONARY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_DICTIONARY</h4>
+<pre>public static final&nbsp;int PID_DICTIONARY</pre>
+<div class="block"><p>The entry is a dictionary.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_DICTIONARY">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_CODEPAGE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_CODEPAGE</h4>
+<pre>public static final&nbsp;int PID_CODEPAGE</pre>
+<div class="block"><p>The entry denotes a code page.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_CODEPAGE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_CATEGORY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_CATEGORY</h4>
+<pre>public static final&nbsp;int PID_CATEGORY</pre>
+<div class="block"><p>The entry is a string denoting the category the file belongs
+ to, e.g. review, memo, etc. This is useful to find documents of
+ same type.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_CATEGORY">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_PRESFORMAT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_PRESFORMAT</h4>
+<pre>public static final&nbsp;int PID_PRESFORMAT</pre>
+<div class="block"><p>Target format for power point presentation, e.g. 35mm,
+ printer, video etc.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_PRESFORMAT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_BYTECOUNT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_BYTECOUNT</h4>
+<pre>public static final&nbsp;int PID_BYTECOUNT</pre>
+<div class="block"><p>Number of bytes.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_BYTECOUNT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_LINECOUNT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_LINECOUNT</h4>
+<pre>public static final&nbsp;int PID_LINECOUNT</pre>
+<div class="block"><p>Number of lines.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_LINECOUNT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_PARCOUNT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_PARCOUNT</h4>
+<pre>public static final&nbsp;int PID_PARCOUNT</pre>
+<div class="block"><p>Number of paragraphs.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_PARCOUNT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_SLIDECOUNT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_SLIDECOUNT</h4>
+<pre>public static final&nbsp;int PID_SLIDECOUNT</pre>
+<div class="block"><p>Number of slides in a power point presentation.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_SLIDECOUNT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_NOTECOUNT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_NOTECOUNT</h4>
+<pre>public static final&nbsp;int PID_NOTECOUNT</pre>
+<div class="block"><p>Number of slides with notes.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_NOTECOUNT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_HIDDENCOUNT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_HIDDENCOUNT</h4>
+<pre>public static final&nbsp;int PID_HIDDENCOUNT</pre>
+<div class="block"><p>Number of hidden slides.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_HIDDENCOUNT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_MMCLIPCOUNT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_MMCLIPCOUNT</h4>
+<pre>public static final&nbsp;int PID_MMCLIPCOUNT</pre>
+<div class="block"><p>Number of multimedia clips, e.g. sound or video.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_MMCLIPCOUNT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_SCALE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_SCALE</h4>
+<pre>public static final&nbsp;int PID_SCALE</pre>
+<div class="block"><p>This entry is set to -1 when scaling of the thumbnail is
+ desired. Otherwise the thumbnail should be cropped.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_SCALE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_HEADINGPAIR">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_HEADINGPAIR</h4>
+<pre>public static final&nbsp;int PID_HEADINGPAIR</pre>
+<div class="block"><p>This entry denotes an internally used property. It is a
+ vector of variants consisting of pairs of a string (VT_LPSTR)
+ and a number (VT_I4). The string is a heading name, and the
+ number tells how many document parts are under that
+ heading.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_HEADINGPAIR">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_DOCPARTS">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_DOCPARTS</h4>
+<pre>public static final&nbsp;int PID_DOCPARTS</pre>
+<div class="block"><p>This entry contains the names of document parts (word: names
+ of the documents in the master document, excel: sheet names,
+ power point: slide titles, binder: document names).</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_DOCPARTS">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_MANAGER">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_MANAGER</h4>
+<pre>public static final&nbsp;int PID_MANAGER</pre>
+<div class="block"><p>This entry contains the name of the project manager.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_MANAGER">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_COMPANY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_COMPANY</h4>
+<pre>public static final&nbsp;int PID_COMPANY</pre>
+<div class="block"><p>This entry contains the company name.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_COMPANY">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_LINKSDIRTY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PID_LINKSDIRTY</h4>
+<pre>public static final&nbsp;int PID_LINKSDIRTY</pre>
+<div class="block"><p>If this entry is -1 the links are dirty and should be
+ re-evaluated.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_LINKSDIRTY">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="PID_MAX">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>PID_MAX</h4>
+<pre>public static final&nbsp;int PID_MAX</pre>
+<div class="block"><p>The highest well-known property ID. Applications are free to use higher values for custom purposes.</p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#org.apache.poi.hpsf.wellknown.PropertyIDMap.PID_MAX">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="PropertyIDMap(int, float)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PropertyIDMap</h4>
+<pre>public&nbsp;PropertyIDMap(int&nbsp;initialCapacity,
+             float&nbsp;loadFactor)</pre>
+<div class="block"><p>Creates a <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown"><code>PropertyIDMap</code></a>.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>initialCapacity</code> - The initial capacity as defined for
+ <code>HashMap</code></dd><dd><code>loadFactor</code> - The load factor as defined for <code>HashMap</code></dd></dl>
+</li>
+</ul>
+<a name="PropertyIDMap(java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>PropertyIDMap</h4>
+<pre>public&nbsp;PropertyIDMap(java.util.Map&nbsp;map)</pre>
+<div class="block"><p>Creates a <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown"><code>PropertyIDMap</code></a> backed by another map.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>map</code> - The instance to be created is backed by this map.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="put(long, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>put</h4>
+<pre>public&nbsp;java.lang.Object&nbsp;put(long&nbsp;id,
+                   java.lang.String&nbsp;idString)</pre>
+<div class="block"><p>Puts a ID string for an ID into the <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown"><code>PropertyIDMap</code></a>.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>id</code> - The ID.</dd><dd><code>idString</code> - The ID string.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>As specified by the <code>Map</code> interface, this method
+ returns the previous value associated with the specified
+ <var>id</var>, or <code>null</code> if there was no mapping for
+ key.</dd></dl>
+</li>
+</ul>
+<a name="get(long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre>public&nbsp;java.lang.Object&nbsp;get(long&nbsp;id)</pre>
+<div class="block"><p>Gets the ID string for an ID from the <a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown"><code>PropertyIDMap</code></a>.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>id</code> - The ID.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The ID string associated with <var>id</var>.</dd></dl>
+</li>
+</ul>
+<a name="getSummaryInformationProperties()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSummaryInformationProperties</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown">PropertyIDMap</a>&nbsp;getSummaryInformationProperties()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the Summary Information properties singleton</dd></dl>
+</li>
+</ul>
+<a name="getDocumentSummaryInformationProperties()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDocumentSummaryInformationProperties</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/poi/hpsf/wellknown/PropertyIDMap.html" title="class in org.apache.poi.hpsf.wellknown">PropertyIDMap</a>&nbsp;getDocumentSummaryInformationProperties()</pre>
+<div class="block"><p>Returns the Document Summary Information properties
+ singleton.</p></div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The Document Summary Information properties singleton.</dd></dl>
+</li>
+</ul>
+<a name="main(java.lang.String[])">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>main</h4>
+<pre>public static&nbsp;void&nbsp;main(java.lang.String[]&nbsp;args)</pre>
+<div class="block"><p>For the most basic testing.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>args</code> - The command-line arguments</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/PropertyIDMap.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev Class</li>
+<li><a href="../../../../../org/apache/poi/hpsf/wellknown/SectionIDMap.html" title="class in org.apache.poi.hpsf.wellknown"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/poi/hpsf/wellknown/PropertyIDMap.html" target="_top">Frames</a></li>
+<li><a href="PropertyIDMap.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_java.util.AbstractMap">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>
+                <i>Copyright 2014 The Apache Software Foundation or
+        its licensors, as applicable.</i>
+            </small></p>
+</body>
+</html>
