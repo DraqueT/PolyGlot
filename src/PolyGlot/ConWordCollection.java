@@ -454,7 +454,7 @@ public class ConWordCollection extends DictionaryCollection {
         ret += "<br><br>";
         
         // build display for ends-with statistics
-        ret += " Breakdown of words counted starting with letter:<br>";
+        ret += " Breakdown of words counted ending with letter:<br>";
         for (char letter : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
             ret += "<font " + conFontTag + ">" + letter + "</font> : " 
                     + (wordEnd.containsKey(""+letter) ? wordEnd.get(""+letter) : "0") + "<br>";
@@ -503,7 +503,7 @@ public class ConWordCollection extends DictionaryCollection {
             }
             ret += "</tr>";
         }        
-        ret += "</table>";
+        ret += "</table><br><br>";
         
         // buid grid of 2 phoneme combos
         ret += "Heat map of phoneme combination frequency:<br>";        

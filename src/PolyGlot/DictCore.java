@@ -123,7 +123,11 @@ public class DictCore {
      * @return String formatted report
      */
     public String buildLanguageReport() {
-        String ret = "";
+        String ret = "<center>---LANGUAGE STAT REPORT---</center><br><br>";
+    
+        ret += propertiesManager.buildPropertiesReport();
+        
+        ret += wordCollection.buildWordReport();
         
         wordCollection.buildWordReport();
         

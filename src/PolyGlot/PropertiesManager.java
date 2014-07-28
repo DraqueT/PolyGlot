@@ -205,4 +205,12 @@ public class PropertiesManager {
     public void setLocalUniqueness(boolean localUniqueness) {
         this.localUniqueness = localUniqueness;
     }
+
+    String buildPropertiesReport() {
+        String ret = "";
+        
+        ret += "Language Name: " + langName + "<br><br>";
+        
+        return ret;
+    }
 }

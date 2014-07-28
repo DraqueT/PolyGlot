@@ -44,23 +44,27 @@ public class ScrLangStats extends javax.swing.JDialog {
         initComponents();
         core = _core;
         
-        // this won't do people much good without the alphabet and order defined
-        if (core.getPropertiesManager().getAlphaPlainText().equals(""))
-        {
-            InfoBox.error("Missing Properties", "In order to report correctly, all "
-                    + "characters must be ordered in the alphabetical order property "
-                    + "box under Language Properties.", this);
-        }
-        
         jTextPane1.setContentType("text/html");
-        //jTextPane1.setText("<html><font face = \"Kukun_Linear_A\" color = \"red\">TEST</font> TEST</html>");
-        jTextPane1.setText("<html>" + core.getWordCollection().buildWordReport() + "</html>");
+        
+        jTextPane1.setText("<html>" + core.buildLanguageReport() + "</html>");
+        
+        jTextPane1.setCaretPosition(0);
+        jScrollPane2.getVerticalScrollBar().setValue(0);
+        jScrollPane2.getHorizontalScrollBar().setValue(0);
     }
     
     public static void run(DictCore _core) {
         
         ScrLangStats s = new ScrLangStats(_core);
        
+        // this won't do people much good without the alphabet and order defined
+        if (_core.getPropertiesManager().getAlphaPlainText().equals(""))
+        {
+            InfoBox.error("Missing Properties", "In order to report correctly, all "
+                    + "characters must be ordered in the alphabetical order property "
+                    + "box under Language Properties.", s);
+        }
+        
         s.setModal(true);
         s.setVisible(true);
     }
