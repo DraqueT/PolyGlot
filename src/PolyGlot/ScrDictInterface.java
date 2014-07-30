@@ -2967,6 +2967,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private void setEnabledTypeLexicon(boolean enabled) {
         lstTypesList.setEnabled(enabled);
         btnAddType.setEnabled(enabled);
+        
+        if (enabled) {
+            txtTypesErrorBox.setText("");
+        }
     }
 
     private void addGender() {
@@ -3143,6 +3147,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private void setEnabledGenderLexicon(boolean enabled) {
         lstGenderList.setEnabled(enabled);
         btnAddGender.setEnabled(enabled);
+        
+        if (enabled) {
+            txtGendersErrorBox.setText("");
+        }
     }
 
     private void deleteWord() {
@@ -3560,6 +3568,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         setFilterEnabled(isEnabled);
         lstDict.setEnabled(isEnabled);
         btnAdd.setEnabled(isEnabled);
+        
+        if (isEnabled) {
+            txtWordErrorBox.setText("");
+        }
     }
 
     private void setFilterEnabled(boolean enabled) {
