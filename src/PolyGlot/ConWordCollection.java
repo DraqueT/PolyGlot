@@ -163,6 +163,24 @@ public class ConWordCollection extends DictionaryCollection {
 
         super.modifyNode(_id, _modNode);
     }
+    
+    /**
+     * recalculates all non-overridden pronunciations
+     * @throws java.lang.Exception
+     */
+    void recalcAllProcs() throws Exception {
+        Iterator<ConWord> it = this.getNodeIterator();
+        
+        while (it.hasNext()) {
+            ConWord curWord = it.next();
+            
+            // only runs if word's pronunciation not overridden
+            if (!curWord.isProcOverride()) {
+                curWord.setPronunciation(core.getPronunciation(curWord.getValue()));
+                this.modifyNode(curWord.getId(), curWord);
+            }
+        }
+    }
 
     /**
      * Returns list of words in descending list of synonym match

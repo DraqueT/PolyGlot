@@ -1624,7 +1624,12 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="chkAutopopProcs" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="chkAutopopProcs" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnRecalcProc" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
                               <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
                                       <Component id="scrlProcGuide" alignment="0" pref="0" max="32767" attributes="0"/>
@@ -1662,7 +1667,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="btnUpProc" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="182" max="32767" attributes="0"/>
+                                  <EmptySpace pref="176" max="32767" attributes="0"/>
                                   <Component id="btnDownProc" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="scrlProcGuide" pref="0" max="32767" attributes="0"/>
@@ -1673,7 +1678,10 @@
                               <Component id="btnDeleteProcGuide" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="chkAutopopProcs" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="chkAutopopProcs" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnRecalcProc" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1725,7 +1733,7 @@
                 </Container>
                 <Component class="javax.swing.JCheckBox" name="chkAutopopProcs">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Autopopulate Pronunciations"/>
+                    <Property name="text" type="java.lang.String" value="Autopopulate"/>
                     <Property name="toolTipText" type="java.lang.String" value="If selected, PolyGlot will attempt to generate pronunciations as you type your words."/>
                   </Properties>
                   <Events>
@@ -1769,6 +1777,15 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteProcGuideActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnRecalcProc">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Recalculate"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Recalculates pronunciations for all words which do not have the pronunciation override feature set"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRecalcProcActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>

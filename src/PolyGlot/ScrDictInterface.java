@@ -44,6 +44,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.simplericity.macify.eawt.*;
 
+// TODO: create keyboard shortcuts for ADD/DELETE that conditionally apply depending on the tab which is currently selected.
+// TODO: create ability to click one button and recalculate all pronunciations for all words that do not have an exception set
+
 /**
  *
  * @author draque
@@ -378,6 +381,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         btnDownProc = new javax.swing.JButton();
         btnAddProcGuide = new javax.swing.JButton();
         btnDeleteProcGuide = new javax.swing.JButton();
+        btnRecalcProc = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuSave = new javax.swing.JMenuItem();
@@ -1298,7 +1302,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             tblProcGuide.getColumnModel().getColumn(1).setHeaderValue("Pronunciation");
         }
 
-        chkAutopopProcs.setText("Autopopulate Pronunciations");
+        chkAutopopProcs.setText("Autopopulate");
         chkAutopopProcs.setToolTipText("If selected, PolyGlot will attempt to generate pronunciations as you type your words.");
         chkAutopopProcs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1339,6 +1343,14 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             }
         });
 
+        btnRecalcProc.setText("Recalculate");
+        btnRecalcProc.setToolTipText("Recalculates pronunciations for all words which do not have the pronunciation override feature set");
+        btnRecalcProc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecalcProcActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -1346,7 +1358,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(chkAutopopProcs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(chkAutopopProcs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRecalcProc)
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(scrlProcGuide, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -1374,7 +1390,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(btnUpProc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
                         .addComponent(btnDownProc))
                     .addComponent(scrlProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1382,7 +1398,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                     .addComponent(btnAddProcGuide)
                     .addComponent(btnDeleteProcGuide))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkAutopopProcs))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(chkAutopopProcs)
+                    .addComponent(btnRecalcProc)))
         );
 
         javax.swing.GroupLayout tabLangPropLayout = new javax.swing.GroupLayout(tabLangProp);
@@ -1740,6 +1758,15 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private void mnuLangStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLangStatsActionPerformed
         viewStats();
     }//GEN-LAST:event_mnuLangStatsActionPerformed
+
+    private void btnRecalcProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecalcProcActionPerformed
+        try {
+            core.recalcAllProcs();
+        } catch (Exception e) {
+            InfoBox.error("Recauculation Error", "Unable to recalculate pronunciations: "
+                    + e.getLocalizedMessage(), this);
+        }
+    }//GEN-LAST:event_btnRecalcProcActionPerformed
 
     @Override
     public void dispose() {
@@ -3651,6 +3678,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JButton btnDeleteProcGuide;
     private javax.swing.JButton btnDeleteType;
     private javax.swing.JButton btnDownProc;
+    private javax.swing.JButton btnRecalcProc;
     private javax.swing.JButton btnUpProc;
     private javax.swing.JCheckBox chkAutopopProcs;
     private javax.swing.JCheckBox chkDeclensionMandatory;

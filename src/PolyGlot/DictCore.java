@@ -129,9 +129,15 @@ public class DictCore {
         
         ret += wordCollection.buildWordReport();
         
-        wordCollection.buildWordReport();
-        
         return ret;
+    }
+    
+    /**
+     * recalculates all non-overridden pronunciations
+     * @throws java.lang.Exception
+     */
+    public void recalcAllProcs() throws Exception {
+        wordCollection.recalcAllProcs();
     }
     
     /**
