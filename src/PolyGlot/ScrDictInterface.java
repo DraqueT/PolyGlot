@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
@@ -46,12 +47,12 @@ import javax.xml.transform.TransformerException;
 import org.simplericity.macify.eawt.*;
 
 // TODO: create keyboard shortcuts for ADD/DELETE that conditionally apply depending on the tab which is currently selected.
-
 /**
  *
  * @author draque
  */
 public class ScrDictInterface extends JFrame implements ApplicationListener { // implementation of ApplicationListener is part of macify
+
     private DictCore core;
     private Map scrToCoreMap = new HashMap<Integer, Integer>();
     private Map scrTypeMap = new HashMap<String, Integer>();
@@ -69,7 +70,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private String curFileName = "";
     private boolean curPopulating = false;
     private final String screenTitle = "PolyGlot BETA";
-    
+
     /**
      * Creates new form scrDictInterface
      */
@@ -1777,13 +1778,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 return;
             }
         }
-        
+
         killAllChildren();
-        
+
         this.setVisible(false);
         super.dispose();
     }
-    
+
     private void recalcAllProcs() {
         try {
             core.recalcAllProcs();
@@ -1791,16 +1792,19 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             InfoBox.error("Recauculation Error", "Unable to recalculate pronunciations: "
                     + e.getLocalizedMessage(), this);
         }
-        
+
         InfoBox.info("Success", "Pronunciation recalculation successfully completed.", this);
     }
 
     private void addProcGuide() {
         addProcGuideWithValues("", "");
-        
-        // TODO: figure out why this sets the value to 1 less than it should...
-        JScrollBar bar = sclProcGuide.getVerticalScrollBar();
-        bar.setValue(bar.getMaximum() + bar.getBlockIncrement());
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JScrollBar bar = sclProcGuide.getVerticalScrollBar();
+                bar.setValue (bar.getMaximum() + bar.getBlockIncrement());
+            }
+        });
     }
 
     private void addProcGuideWithValues(String base, String proc) {
@@ -1877,16 +1881,16 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         curPopulating = localPopulating;
     }
-    
+
     /**
      * kills all child windows
      */
     private void killAllChildren() {
         Iterator<JFrame> it = childFrames.iterator();
-        
+
         while (it.hasNext()) {
             JFrame curFrame = it.next();
-            
+
             if (curFrame != null) {
                 curFrame.setVisible(false);
                 curFrame.dispose();
@@ -1997,7 +2001,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         JFrame window = ScrTranslationWindow.run(core, this);
         childFrames.add(window);
     }
-    
+
     private void viewStats() {
         ScrLangStats.run(core);
     }
@@ -2258,16 +2262,21 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScrExcelImport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ScrExcelImport.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScrExcelImport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ScrExcelImport.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScrExcelImport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ScrExcelImport.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScrExcelImport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ScrExcelImport.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         ScrExcelImport s = new ScrExcelImport(core);
@@ -2809,14 +2818,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         curPopulating = true;
 
         clearTypeProps();
-        
 
         Integer typeIndex = tListModel.getSize();
         tListModel.add(typeIndex, "NEW TYPE");
         lstTypesList.setSelectedIndex(typeIndex);
         scrToCoreTypes.put(typeIndex, -1);
         curPopulating = false;
-        
+
         // types always have blank name on creation...
         setEnabledTypeLexicon(false);
         txtTypesErrorBox.setText("Types cannot have blank name.");
@@ -2884,7 +2892,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         curPopulating = false;
     }
-    
+
     private void updateTypeListName() {
         Integer typeIndex = lstTypesList.getSelectedIndex();
 
@@ -2944,9 +2952,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         if (typeIndex == -1) {
             return;
         }
-        
+
         boolean localPopulating = curPopulating;
-        
+
         curPopulating = true;
 
         Integer typeId = scrToCoreTypes.containsKey(typeIndex)
@@ -2979,7 +2987,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         populateTypes();
     }
-    
+
     /**
      * Checks/sets whether the type lexicon should be and is enabled
      */
@@ -3000,11 +3008,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             txtTypesErrorBox.setText("");
         }
     }
-    
+
     private void setEnabledTypeLexicon(boolean enabled) {
         lstTypesList.setEnabled(enabled);
         btnAddType.setEnabled(enabled);
-        
+
         if (enabled) {
             txtTypesErrorBox.setText("");
         }
@@ -3026,7 +3034,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         lstGenderList.setSelectedIndex(genderIndex);
         scrToCoreGenders.put(genderIndex, -1);
         curPopulating = false;
-        
+
         // genders are always created with a blank name
         setEnabledGenderLexicon(false);
         txtGendersErrorBox.setText("Genders cannot have blank names.");
@@ -3161,7 +3169,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             setEnabledGenderLexicon(true);
             txtGendersErrorBox.setText("");
         }
-        
+
         try {
             // split logic for creating, rather than modifying Gender
             if (genderId == -1) {
@@ -3180,11 +3188,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         populateGenders();
     }
-    
+
     private void setEnabledGenderLexicon(boolean enabled) {
         lstGenderList.setEnabled(enabled);
         btnAddGender.setEnabled(enabled);
-        
+
         if (enabled) {
             txtGendersErrorBox.setText("");
         }
@@ -3457,7 +3465,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         // forces combobox display to refresh. This is sloppy, but it works...
         cmbGenderProp.setVisible(false);
         cmbGenderProp.setVisible(true);
-        
+
         // make sure scroll is set to top for definition
         txtDefProp.setCaretPosition(0);
 
@@ -3605,7 +3613,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         setFilterEnabled(isEnabled);
         lstDict.setEnabled(isEnabled);
         btnAdd.setEnabled(isEnabled);
-        
+
         if (isEnabled) {
             txtWordErrorBox.setText("");
         }
@@ -3619,10 +3627,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         cmbGenderFilter.setEnabled(enabled);
         cmbTypeFilter.setEnabled(enabled);
     }
-    
+
     /**
      * sets index of lexicon list and positions scroller appropriately
-     * @param scrIndex 
+     *
+     * @param scrIndex
      */
     private void setLexPosition(Integer scrIndex) {
         lstDict.setSelectedIndex(scrIndex);
@@ -3634,33 +3643,35 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         scrlDict.getVerticalScrollBar().setValue(newScrollHeight);
     }
-    
+
     /**
      * Selects word in lexicon by ID, pulls ScrDictInterface to the fore,
      * selects Lexicon tab
+     *
      * @param id the ID of the word to select
      */
     public void selectWordById(Integer id) {
         Integer index = -1;
-        
-        for (Entry<Integer, Integer> entry : (Set<Entry<Integer, Integer>>)scrToCoreMap.entrySet()) {
+
+        for (Entry<Integer, Integer> entry : (Set<Entry<Integer, Integer>>) scrToCoreMap.entrySet()) {
             if (entry.getValue().equals(id)) {
                 index = entry.getKey();
             }
         }
-        
+
         // if no match, inform user, then do nothing.
         if (index == -1) {
             InfoBox.error("Word Not Found", "word with ID: " + id.toString() + " not found.", this);
             return;
         }
-        
+
         setLexPosition(index);
         jTabbedPane1.setSelectedIndex(0);
     }
-    
+
     /**
      * Creates new word by a local word, leaving other fields blank
+     *
      * @param newLocal new local word value
      */
     public void createNewWordByLocal(String newLocal) {
@@ -3668,7 +3679,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         if (newLocal.equals("")) {
             return;
         }
-        
+
         newWord();
         txtLocalWordProp.setText(newLocal);
         this.requestFocus();
