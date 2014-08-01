@@ -1799,6 +1799,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private void addProcGuide() {
         addProcGuideWithValues("", "");
 
+        // perform this action later, once the scroll object is properly updated
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JScrollBar bar = sclProcGuide.getVerticalScrollBar();
