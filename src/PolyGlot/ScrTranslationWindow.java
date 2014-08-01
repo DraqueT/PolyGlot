@@ -60,7 +60,7 @@ public class ScrTranslationWindow extends JFrame {
     private final Map<Integer, Integer> scrToCoreMap = new HashMap<Integer, Integer>();
     private final Map<Integer, Integer> transToLocal = new HashMap<Integer, Integer>();
     private boolean curTranslating = false;
-    private List<JFrame> childFrames = new ArrayList<JFrame>();
+    private final List<JFrame> childFrames = new ArrayList<JFrame>();
     
     // list of related indexes, the first being 
     List<Entry<Integer, Integer>> links = new ArrayList<Entry<Integer, Integer>>();
