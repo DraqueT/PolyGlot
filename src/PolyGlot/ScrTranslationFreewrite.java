@@ -38,12 +38,15 @@ public class ScrTranslationFreewrite extends javax.swing.JFrame {
     
     /**
      * Creates new form ScrTranslationFreewrite
+     * @param _core Dictionary Core
+     * @param initialText initial text for translation
      */
-    public ScrTranslationFreewrite(DictCore _core) {
+    public ScrTranslationFreewrite(DictCore _core, String initialText) {
         initComponents();
         core = _core;
         
         jTextArea1.setFont(core.getLangFont());
+        jTextArea1.setText(initialText);
     }
 
     /**
@@ -82,8 +85,8 @@ public class ScrTranslationFreewrite extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    public static ScrTranslationFreewrite run(DictCore _core) {
-        ScrTranslationFreewrite s = new ScrTranslationFreewrite(_core);
+    public static ScrTranslationFreewrite run(DictCore _core, String initialText) {
+        ScrTranslationFreewrite s = new ScrTranslationFreewrite(_core, initialText);
         s.setVisible(true);
         return s;
     }

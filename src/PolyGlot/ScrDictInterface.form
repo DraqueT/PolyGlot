@@ -1632,7 +1632,7 @@
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="scrlProcGuide" alignment="0" pref="0" max="32767" attributes="0"/>
+                                      <Component id="sclProcGuide" alignment="0" pref="0" max="32767" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="1" attributes="0">
                                               <Component id="jLabel14" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -1670,7 +1670,7 @@
                                   <EmptySpace pref="176" max="32767" attributes="0"/>
                                   <Component id="btnDownProc" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="scrlProcGuide" pref="0" max="32767" attributes="0"/>
+                              <Component id="sclProcGuide" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -1692,7 +1692,7 @@
                     <Property name="text" type="java.lang.String" value="Character Pronunciation Guide"/>
                   </Properties>
                 </Component>
-                <Container class="javax.swing.JScrollPane" name="scrlProcGuide">
+                <Container class="javax.swing.JScrollPane" name="sclProcGuide">
                   <AuxValues>
                     <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
                   </AuxValues>

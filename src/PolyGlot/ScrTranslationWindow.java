@@ -27,6 +27,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+// TODO: make the lexicon switch to the selected word (if it exists) when clicked in the Transliterated text.
+
 package PolyGlot;
 
 import java.awt.Font;
@@ -120,7 +122,7 @@ public class ScrTranslationWindow extends JFrame {
     }
     
     private void viewFinalTextBox() {
-        JFrame window = ScrTranslationFreewrite.run(core);
+        JFrame window = ScrTranslationFreewrite.run(core, txtTransText.getText());
         childFrames.add(window);
     }
     
@@ -135,6 +137,7 @@ public class ScrTranslationWindow extends JFrame {
         btnSkipWord.setEnabled(_curTranslating);
         btnTranslate.setEnabled(!_curTranslating);
         btnCreateNew.setEnabled(_curTranslating);
+        btnUseWord.setEnabled(_curTranslating);
         
         curTranslating = _curTranslating;
     }

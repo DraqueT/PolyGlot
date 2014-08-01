@@ -30,6 +30,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollBar;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
@@ -45,7 +46,6 @@ import javax.xml.transform.TransformerException;
 import org.simplericity.macify.eawt.*;
 
 // TODO: create keyboard shortcuts for ADD/DELETE that conditionally apply depending on the tab which is currently selected.
-// TODO: create ability to click one button and recalculate all pronunciations for all words that do not have an exception set
 
 /**
  *
@@ -374,7 +374,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         chkPropLocalUniqueness = new javax.swing.JCheckBox();
         jPanel7 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        scrlProcGuide = new javax.swing.JScrollPane();
+        sclProcGuide = new javax.swing.JScrollPane();
         tblProcGuide = new javax.swing.JTable();
         chkAutopopProcs = new javax.swing.JCheckBox();
         btnUpProc = new javax.swing.JButton();
@@ -1295,7 +1295,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         tblProcGuide.setColumnSelectionAllowed(true);
         tblProcGuide.setRowHeight(30);
         tblProcGuide.getTableHeader().setReorderingAllowed(false);
-        scrlProcGuide.setViewportView(tblProcGuide);
+        sclProcGuide.setViewportView(tblProcGuide);
         tblProcGuide.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tblProcGuide.getColumnModel().getColumnCount() > 0) {
             tblProcGuide.getColumnModel().getColumn(0).setHeaderValue("Character");
@@ -1365,7 +1365,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(scrlProcGuide, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(sclProcGuide, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING)
@@ -1392,7 +1392,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                         .addComponent(btnUpProc)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
                         .addComponent(btnDownProc))
-                    .addComponent(scrlProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(sclProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddProcGuide)
@@ -1760,12 +1760,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }//GEN-LAST:event_mnuLangStatsActionPerformed
 
     private void btnRecalcProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecalcProcActionPerformed
-        try {
-            core.recalcAllProcs();
-        } catch (Exception e) {
-            InfoBox.error("Recauculation Error", "Unable to recalculate pronunciations: "
-                    + e.getLocalizedMessage(), this);
-        }
+        recalcAllProcs();
     }//GEN-LAST:event_btnRecalcProcActionPerformed
 
     @Override
@@ -1788,9 +1783,24 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         this.setVisible(false);
         super.dispose();
     }
+    
+    private void recalcAllProcs() {
+        try {
+            core.recalcAllProcs();
+        } catch (Exception e) {
+            InfoBox.error("Recauculation Error", "Unable to recalculate pronunciations: "
+                    + e.getLocalizedMessage(), this);
+        }
+        
+        InfoBox.info("Success", "Pronunciation recalculation successfully completed.", this);
+    }
 
     private void addProcGuide() {
         addProcGuideWithValues("", "");
+        
+        // TODO: figure out why this sets the value to 1 less than it should...
+        JScrollBar bar = sclProcGuide.getVerticalScrollBar();
+        bar.setValue(bar.getMaximum() + bar.getBlockIncrement());
     }
 
     private void addProcGuideWithValues(String base, String proc) {
@@ -3760,9 +3770,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JPanel pnlProperties;
     private javax.swing.JScrollPane sclDefProp;
     private javax.swing.JScrollPane sclGenderList;
+    private javax.swing.JScrollPane sclProcGuide;
     private javax.swing.JScrollPane sclTypesList;
     private javax.swing.JScrollPane scrlDict;
-    private javax.swing.JScrollPane scrlProcGuide;
     private javax.swing.JPanel tabDeclensions;
     private javax.swing.JPanel tabDict;
     private javax.swing.JPanel tabGender;
