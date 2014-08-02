@@ -113,6 +113,7 @@
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="columns" type="int" value="20"/>
                 <Property name="rows" type="int" value="5"/>
+                <Property name="toolTipText" type="java.lang.String" value="Transliterated text."/>
               </Properties>
               <Events>
                 <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="txtTransTextCaretUpdate"/>
@@ -208,6 +209,7 @@
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
                   <StringArray count="0"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Possible matches for search word"/>
               </Properties>
               <Events>
                 <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstMatchListValueChanged"/>
@@ -221,6 +223,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtSearchText">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Word to search on."/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
@@ -242,10 +247,14 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtTransWord">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Translated word"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnUseWord">
           <Properties>
             <Property name="text" type="java.lang.String" value="Use"/>
+            <Property name="toolTipText" type="java.lang.String" value="Use currently translated word"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUseWordActionPerformed"/>
@@ -254,6 +263,7 @@
         <Component class="javax.swing.JButton" name="btnSkipWord">
           <Properties>
             <Property name="text" type="java.lang.String" value="Skip"/>
+            <Property name="toolTipText" type="java.lang.String" value="Move on to next word to translate"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSkipWordActionPerformed"/>
@@ -264,6 +274,7 @@
     <Component class="javax.swing.JButton" name="btnTranslate">
       <Properties>
         <Property name="text" type="java.lang.String" value="Begin Translation"/>
+        <Property name="toolTipText" type="java.lang.String" value="Start translation process for local language text."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTranslateActionPerformed"/>
@@ -272,6 +283,7 @@
     <Component class="javax.swing.JButton" name="btnClear">
       <Properties>
         <Property name="text" type="java.lang.String" value="Reset"/>
+        <Property name="toolTipText" type="java.lang.String" value="Completely reset window. Erase all values."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClearActionPerformed"/>
@@ -324,6 +336,7 @@
                 <Property name="columns" type="int" value="20"/>
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="5"/>
+                <Property name="toolTipText" type="java.lang.String" value="Text to translate."/>
                 <Property name="wrapStyleWord" type="boolean" value="true"/>
               </Properties>
             </Component>

@@ -409,6 +409,7 @@ public class ScrTranslationWindow extends JFrame {
         txtTransText.setEditable(false);
         txtTransText.setColumns(20);
         txtTransText.setRows(5);
+        txtTransText.setToolTipText("Transliterated text.");
         txtTransText.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 txtTransTextCaretUpdate(evt);
@@ -438,6 +439,7 @@ public class ScrTranslationWindow extends JFrame {
 
         pnlCtrl.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
+        lstMatchList.setToolTipText("Possible matches for search word");
         lstMatchList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstMatchListValueChanged(evt);
@@ -446,6 +448,8 @@ public class ScrTranslationWindow extends JFrame {
         jScrollPane2.setViewportView(lstMatchList);
 
         lblSearchWord.setText("Searching On:");
+
+        txtSearchText.setToolTipText("Word to search on.");
 
         jLabel1.setText("Possible Matches");
 
@@ -459,7 +463,10 @@ public class ScrTranslationWindow extends JFrame {
 
         jLabel2.setText("Translation");
 
+        txtTransWord.setToolTipText("Translated word");
+
         btnUseWord.setText("Use");
+        btnUseWord.setToolTipText("Use currently translated word");
         btnUseWord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUseWordActionPerformed(evt);
@@ -467,6 +474,7 @@ public class ScrTranslationWindow extends JFrame {
         });
 
         btnSkipWord.setText("Skip");
+        btnSkipWord.setToolTipText("Move on to next word to translate");
         btnSkipWord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSkipWordActionPerformed(evt);
@@ -523,6 +531,7 @@ public class ScrTranslationWindow extends JFrame {
         );
 
         btnTranslate.setText("Begin Translation");
+        btnTranslate.setToolTipText("Start translation process for local language text.");
         btnTranslate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTranslateActionPerformed(evt);
@@ -530,6 +539,7 @@ public class ScrTranslationWindow extends JFrame {
         });
 
         btnClear.setText("Reset");
+        btnClear.setToolTipText("Completely reset window. Erase all values.");
         btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClearActionPerformed(evt);
@@ -543,6 +553,7 @@ public class ScrTranslationWindow extends JFrame {
         txtLocalText.setColumns(20);
         txtLocalText.setLineWrap(true);
         txtLocalText.setRows(5);
+        txtLocalText.setToolTipText("Text to translate.");
         txtLocalText.setWrapStyleWord(true);
         jScrollPane1.setViewportView(txtLocalText);
 
