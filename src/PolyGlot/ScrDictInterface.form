@@ -941,7 +941,7 @@
                 <Component class="javax.swing.JCheckBox" name="chkTypeGenderMandatory">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Gender Mandatory"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select to make the  Gender field mandatory for all words of this type."/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to make the Gender field mandatory for all words of this type."/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
@@ -951,7 +951,7 @@
                 <Component class="javax.swing.JCheckBox" name="chkTypeProcMandatory">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Pronunciation Mandatory"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select to make the  Pronunciation field mandatory for all words of this type."/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to make the Pronunciation field mandatory for all words of this type."/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
@@ -961,7 +961,7 @@
                 <Component class="javax.swing.JCheckBox" name="chkTypePluralMandatory">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Plural Mandatory"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select to make the  Plural field mandatory for all words of this type."/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to make the Plural field mandatory for all words of this type."/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
@@ -971,7 +971,7 @@
                 <Component class="javax.swing.JCheckBox" name="chkTypeDefinitionMandatory">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Definition Mandatory"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select to make the  Definition field mandatory for all words of this type."/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to make the Definition field mandatory for all words of this type."/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>

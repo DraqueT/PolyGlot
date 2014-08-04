@@ -810,7 +810,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         chkTypeGenderMandatory.setText("Gender Mandatory");
-        chkTypeGenderMandatory.setToolTipText("Select to make the  Gender field mandatory for all words of this type.");
+        chkTypeGenderMandatory.setToolTipText("Select to make the Gender field mandatory for all words of this type.");
         chkTypeGenderMandatory.setEnabled(false);
         chkTypeGenderMandatory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -819,7 +819,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         });
 
         chkTypeProcMandatory.setText("Pronunciation Mandatory");
-        chkTypeProcMandatory.setToolTipText("Select to make the  Pronunciation field mandatory for all words of this type.");
+        chkTypeProcMandatory.setToolTipText("Select to make the Pronunciation field mandatory for all words of this type.");
         chkTypeProcMandatory.setEnabled(false);
         chkTypeProcMandatory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -828,7 +828,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         });
 
         chkTypePluralMandatory.setText("Plural Mandatory");
-        chkTypePluralMandatory.setToolTipText("Select to make the  Plural field mandatory for all words of this type.");
+        chkTypePluralMandatory.setToolTipText("Select to make the Plural field mandatory for all words of this type.");
         chkTypePluralMandatory.setEnabled(false);
         chkTypePluralMandatory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -837,7 +837,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         });
 
         chkTypeDefinitionMandatory.setText("Definition Mandatory");
-        chkTypeDefinitionMandatory.setToolTipText("Select to make the  Definition field mandatory for all words of this type.");
+        chkTypeDefinitionMandatory.setToolTipText("Select to make the Definition field mandatory for all words of this type.");
         chkTypeDefinitionMandatory.setEnabled(false);
         chkTypeDefinitionMandatory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
