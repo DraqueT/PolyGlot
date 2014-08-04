@@ -1801,6 +1801,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         // perform this action later, once the scroll object is properly updated
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 JScrollBar bar = sclProcGuide.getVerticalScrollBar();
                 bar.setValue (bar.getMaximum() + bar.getBlockIncrement());
@@ -2556,18 +2557,21 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         txtGenderName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
+                checkGenderLexEnabled();
                 saveGender();
                 updateGenderListName();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
+                checkGenderLexEnabled();
                 saveGender();
                 updateGenderListName();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
+                checkGenderLexEnabled();
                 saveGender();
                 updateGenderListName();
             }
@@ -3159,18 +3163,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         gender.setValue(txtGenderName.getText());
         gender.setNotes(txtGenderNotes.getText());
 
-        // do not allow duplicate types
-        if (core.getGenders().findGenderByName(txtGenderName.getText().trim()) != null) {
-            setEnabledGenderLexicon(false);
-            txtGendersErrorBox.setText("Genders must have unique names.");
-        } else if (txtGenderName.getText().trim().equals("")) {
-            setEnabledGenderLexicon(false);
-            txtGendersErrorBox.setText("Genders cannot have blank names.");
-        } else {
-            setEnabledGenderLexicon(true);
-            txtGendersErrorBox.setText("");
-        }
-
         try {
             // split logic for creating, rather than modifying Gender
             if (genderId == -1) {
@@ -3188,6 +3180,20 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         curPopulating = false;
 
         populateGenders();
+    }
+    
+    private void checkGenderLexEnabled() {
+        // do not allow duplicate types
+        if (core.getGenders().findGenderByName(txtGenderName.getText().trim()) != null) {
+            setEnabledGenderLexicon(false);
+            txtGendersErrorBox.setText("Genders must have unique names.");
+        } else if (txtGenderName.getText().trim().equals("")) {
+            setEnabledGenderLexicon(false);
+            txtGendersErrorBox.setText("Genders cannot have blank names.");
+        } else {
+            setEnabledGenderLexicon(true);
+            txtGendersErrorBox.setText("");
+        }
     }
 
     private void setEnabledGenderLexicon(boolean enabled) {
