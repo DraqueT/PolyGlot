@@ -1781,17 +1781,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
     @Override
     public void dispose() {
-        // if there's a current dictionary loaded, prompt user to save before exiting
-        if (lstDict.getModel().getSize() > 0 && this.isVisible()) {
-            Integer saveFirst = InfoBox.yesNoCancel("Save First?",
-                    "Save current dictionary before exiting?", this);
-
-            if (saveFirst == JOptionPane.YES_OPTION) {
-                saveFile();
-            } else if (saveFirst == JOptionPane.CANCEL_OPTION) {
-                // return to prevent dispose if cancel
-                return;
-            }
+        // only exit if save/cancel test is passed
+        if (!saveOrCancelTest()) {
+            return;
         }
 
         killAllChildren();
@@ -2681,8 +2673,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         });
     }
 
-    private void saveFileAs() {
+    /**
+     * saves file as particular type
+     * @return true if file saved, false otherwise
+     */
+    private boolean saveFileAs() {
         JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Save Dictionary");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd", "xml");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
@@ -2693,11 +2690,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
         } else {
-            return;
+            return false;
         }
 
         // if user has not provided an extension, add one
-        if (!fileName.contains(".")) {
+        if (!fileName.contains(".pgd")) {
             fileName += ".pgd";
         }
 
@@ -2708,10 +2705,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                     "Overwrite existing file? " + fileName, this);
 
             if (overWrite == JOptionPane.NO_OPTION) {
-                saveFileAs();
-                return;
+                return saveFileAs();
             } else if (overWrite == JOptionPane.CANCEL_OPTION) {
-                return;
+                return false;
             }
         }
 
@@ -2723,19 +2719,38 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         } catch (TransformerException e) {
             InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
         }
+        
+        return true;
     }
 
-    private void newFile() {
+    /**
+     * Gives user option to save file, returns continue/don't continue
+     * @return true to signal continue, false to signal stop
+     */
+    private boolean saveOrCancelTest() {
         // if there's a current dictionary loaded, prompt user to save before creating new
         if (lstDict.getModel().getSize() > 0) {
             Integer saveFirst = InfoBox.yesNoCancel("Save First?",
                     "Save current dictionary before creating new dictionary?", this);
 
             if (saveFirst == JOptionPane.YES_OPTION) {
-                saveFile();
+                boolean saved = saveFile();
+                
+                // if the file didn't save (usually due to a last minute cancel) don't continue.
+                if (!saved) {
+                    return false;
+                }
             } else if (saveFirst == JOptionPane.CANCEL_OPTION) {
-                return;
+                return false;
             }
+        }
+        
+        return true;
+    }
+    
+    private void newFile() {
+        if (!saveOrCancelTest()) {
+            return;
         }
 
         core = new DictCore();
@@ -2751,10 +2766,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         popLangProps();
     }
 
-    private void saveFile() {
+    /**
+     * save file, open save as dialog if no file name already
+     * @return true if file saved, false otherwise
+     */
+    private boolean saveFile() {
         if (curFileName.equals("")) {
-            saveFileAs();
-            return;
+            return saveFileAs();
         }
 
         try {
@@ -2764,10 +2782,18 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         } catch (TransformerException e) {
             InfoBox.error("Save Error", "Unable to save to file: " + curFileName + "\n\n" + e.getMessage(), this);
         }
+        
+        return true;
     }
 
     private void openFile() {
+        // only open another if save/cancel test is passed
+        if (!saveOrCancelTest()) {
+            return;
+        }
+        
         JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Open Dictionary");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd", "xml");
         chooser.setFileFilter(filter);
         String fileName;
