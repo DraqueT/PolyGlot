@@ -250,9 +250,10 @@ public class ExcelConReader {
         // specified
         if (bCreateTypes && !newWord.getWordType().trim().equals("")
                 && !core.getTypes().nodeExists(newWord.getWordType())) {
-            ConWord newType = new ConWord();
+            core.getTypes().clear();
+            TypeNode newType = core.getTypes().getBufferType();
             newType.setValue(newWord.getWordType());
-            core.getTypes().addNode(newType);
+            core.getTypes().insert();
         }
 
         core.addWord(newWord);
