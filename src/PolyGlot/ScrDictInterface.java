@@ -780,7 +780,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                         .addContainerGap())))
         );
 
-        jTabbedPane1.addTab("Lexicon", null, tabDict, "Your bank of words");
+        jTabbedPane1.addTab("Lexicon", null, tabDict, "Your lexicon");
 
         lstTypesList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstTypesList.setToolTipText("List of types for your con lang");
@@ -940,7 +940,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                     .addComponent(txtTypesErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        jTabbedPane1.addTab("Types", null, tabType, "Add or edit word types");
+        jTabbedPane1.addTab("Types", null, tabType, "Add or edit parts of speech");
 
         lstGenderList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstGenderList.setToolTipText("list of genders for your conlang");

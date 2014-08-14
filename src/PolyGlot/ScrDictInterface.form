@@ -172,9 +172,9 @@
         <Container class="javax.swing.JPanel" name="tabDict">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Lexicon" toolTip="Your bank of words">
+              <JTabbedPaneConstraints tabName="Lexicon" toolTip="Your lexicon">
                 <Property name="tabTitle" type="java.lang.String" value="Lexicon"/>
-                <Property name="tabToolTip" type="java.lang.String" value="Your bank of words"/>
+                <Property name="tabToolTip" type="java.lang.String" value="Your lexicon"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -754,9 +754,9 @@
         <Container class="javax.swing.JPanel" name="tabType">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Types" toolTip="Add or edit word types">
+              <JTabbedPaneConstraints tabName="Types" toolTip="Add or edit parts of speech">
                 <Property name="tabTitle" type="java.lang.String" value="Types"/>
-                <Property name="tabToolTip" type="java.lang.String" value="Add or edit word types"/>
+                <Property name="tabToolTip" type="java.lang.String" value="Add or edit parts of speech"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
