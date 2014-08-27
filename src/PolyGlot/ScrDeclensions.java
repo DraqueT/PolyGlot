@@ -237,7 +237,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
         while (dimIt.hasNext()) {
             DeclensionDimension curDim = dimIt.next();
             
-            createFields(depth + 1, curId + "," + curDim.getId().toString(), declensionList);
+            createFields(depth + 1, curId + (curId.equals("")? "" : ",") + curDim.getId().toString(), declensionList);
         }
     }
     

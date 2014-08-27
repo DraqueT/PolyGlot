@@ -784,7 +784,10 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
                 scrDeclensionMap.put(decl.getValue(), decIndex);
             } else {
                 decl = new DeclensionNode(-1);
-
+                DeclensionNode oldDecl = core.getDeclensionManager().getDeclension(myType.getId(), decId);
+                
+                decl.setEqual(oldDecl);
+                
                 decl.setValue(txtDeclensionName.getText().trim());
                 decl.setNotes(txtDeclensionNotes.getText().trim());
 

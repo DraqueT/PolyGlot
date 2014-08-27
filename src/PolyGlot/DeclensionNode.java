@@ -34,7 +34,7 @@ public class DeclensionNode extends DictNode{
     private String notes = "";
     private boolean mandatory = false;
     private int highestDimension = 1;
-    private final Map<Integer, DeclensionDimension> dimensions = new HashMap<Integer, DeclensionDimension>();
+    private Map<Integer, DeclensionDimension> dimensions = new HashMap<Integer, DeclensionDimension>();
     
     /**
      * Adds a dimension to this declension
@@ -103,15 +103,20 @@ public class DeclensionNode extends DictNode{
     
     public Collection<DeclensionDimension> getDimensions() {
         return dimensions.values();
+
     }
 
+    protected Map<Integer, DeclensionDimension> getRawDimensions() {
+        return dimensions;
+    }
+    
     @Override
     public void setEqual(DictNode _node) {
         DeclensionNode node = (DeclensionNode) _node;
         
-        this.setId(node.getId());
         this.setNotes(node.getNotes());
         this.setValue(node.getValue());
         this.setMandatory(node.isMandatory());
+        dimensions = node.getRawDimensions();
     }
 }

@@ -307,9 +307,10 @@ public class DeclensionManager {
 
                 if (curNode.getId().equals(declensionId)) {
                     DeclensionNode modified = new DeclensionNode(declensionId);
-                    modified.setMandatory(declension.isMandatory());
+                    /*modified.setMandatory(declension.isMandatory());
                     modified.setValue(declension.getValue());
-                    modified.setNotes(declension.getNotes());
+                    modified.setNotes(declension.getNotes());*/
+                    modified.setEqual(declension);
                     copyTo.add(modified);
                     continue;
                 }

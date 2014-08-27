@@ -66,11 +66,11 @@ public class CustHandlerFactory {
                 || versionNumber.equals("0.6.5")
                 || versionNumber.equals("0.7")) {
             ret = CustHandlerFactory.get7orLowerHandler(core);
-        } else if (versionNumber.equals("0.8")) {
+        } else if (versionNumber.equals("0.7.5")) {
             ret = CustHandlerFactory.get8Handler(core);
         } else {
             throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
-                    + "written with a newer version: Ver " + core.getVersion() + ".");
+                    + "written with an unsupported version: Ver " + core.getVersion() + ".");
         }
 
         return ret;
