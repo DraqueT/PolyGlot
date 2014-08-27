@@ -17,13 +17,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package PolyGlot;
 
-import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -62,6 +61,7 @@ import javax.xml.transform.TransformerException;
 import org.simplericity.macify.eawt.*;
 
 // TODO: create keyboard shortcuts for ADD/DELETE that conditionally apply depending on the tab which is currently selected.
+// TODO: modify pronunciation generation so that if nothing is found, it is set to blank
 /**
  *
  * @author draque
@@ -74,13 +74,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private Map scrToCoreTypes = new HashMap<Integer, Integer>();
     private Map scrToCoreGenders = new HashMap<Integer, Integer>();
     private Map scrGenderMap = new HashMap<String, Integer>();
-    private Map scrToCoreDeclensions = new HashMap<Integer, Integer>();
-    private Map scrDeclensionMap = new HashMap<String, Integer>();
-    private final List<JFrame> childFrames = new ArrayList<JFrame>();
+    private final List<Window> childFrames = new ArrayList<Window>();
     private final DefaultListModel dListModel;
     private final DefaultListModel tListModel;
     private final DefaultListModel gListModel;
-    private final DefaultListModel declListModel;
     private DefaultTableModel procTableModel;
     private String curFileName = "";
     private boolean curPopulating = false;
@@ -112,8 +109,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         initComponents();
 
         // models for controling list objects
-        declListModel = new DefaultListModel();
-        lstDeclensionList.setModel(declListModel);
         dListModel = new DefaultListModel();
         lstDict.setModel(dListModel);
         tListModel = new DefaultListModel();
@@ -347,6 +342,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         chkTypePluralMandatory = new javax.swing.JCheckBox();
         chkTypeDefinitionMandatory = new javax.swing.JCheckBox();
         txtTypesErrorBox = new javax.swing.JTextField();
+        btnConjDecl = new javax.swing.JButton();
         tabGender = new javax.swing.JPanel();
         sclGenderList = new javax.swing.JScrollPane();
         lstGenderList = new javax.swing.JList();
@@ -358,21 +354,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         btnAddGender = new javax.swing.JButton();
         btnDeleteGender = new javax.swing.JButton();
         txtGendersErrorBox = new javax.swing.JTextField();
-        tabDeclensions = new javax.swing.JPanel();
-        cmbDeclensionTypes = new javax.swing.JComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        lstDeclensionList = new javax.swing.JList();
-        btnDeclensionAdd = new javax.swing.JButton();
-        btnDeclensionDelete = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        txtDeclensionName = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        txtDeclensionNotes = new javax.swing.JTextArea();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
-        chkDeclensionMandatory = new javax.swing.JCheckBox();
         tabLangProp = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -577,16 +558,18 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         });
         scrlDict.setViewportView(lstDict);
 
-        btnAdd.setText("Add");
+        btnAdd.setText("+");
         btnAdd.setToolTipText("Adds new word to dictionary");
+        btnAdd.setActionCommand("");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
             }
         });
 
-        btnDelete.setText("Delete");
+        btnDelete.setText("-");
         btnDelete.setToolTipText("Deletes selected word from dictionary");
+        btnDelete.setActionCommand("");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
@@ -700,7 +683,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                         .addContainerGap()
                         .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))))
+                            .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         pnlPropertiesLayout.setVerticalGroup(
@@ -735,7 +718,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDefinitionProp)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sclDefProp)
+                .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -751,12 +734,12 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlFilter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(tabDictLayout.createSequentialGroup()
-                        .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(scrlDict, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(tabDictLayout.createSequentialGroup()
-                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -769,7 +752,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabDictLayout.createSequentialGroup()
-                        .addComponent(scrlDict, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                        .addComponent(scrlDict, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdd)
@@ -806,15 +789,16 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         txtTypesNotes.setEnabled(false);
         jScrollPane2.setViewportView(txtTypesNotes);
 
-        btnAddType.setText("Add");
+        btnAddType.setText("+");
         btnAddType.setToolTipText("Creates a new type");
+        btnAddType.setVerifyInputWhenFocusTarget(false);
         btnAddType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddTypeActionPerformed(evt);
             }
         });
 
-        btnDeleteType.setText("Delete");
+        btnDeleteType.setText("-");
         btnDeleteType.setToolTipText("Deletes selected type");
         btnDeleteType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -891,6 +875,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         txtTypesErrorBox.setDisabledTextColor(new java.awt.Color(255, 51, 51));
         txtTypesErrorBox.setEnabled(false);
 
+        btnConjDecl.setText("Conjugations/Declensions");
+        btnConjDecl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConjDeclActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout tabTypeLayout = new javax.swing.GroupLayout(tabType);
         tabType.setLayout(tabTypeLayout);
         tabTypeLayout.setHorizontalGroup(
@@ -898,24 +889,27 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             .addGroup(tabTypeLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(sclTypesList, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(tabTypeLayout.createSequentialGroup()
-                        .addComponent(btnAddType)
+                        .addComponent(btnAddType, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnDeleteType)))
+                        .addComponent(btnDeleteType, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(sclTypesList, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
                     .addGroup(tabTypeLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTypeName))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTypesErrorBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(tabTypeLayout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTypeName)))
+                        .addContainerGap())
                     .addGroup(tabTypeLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(txtTypesErrorBox))
-                .addContainerGap())
+                    .addComponent(btnConjDecl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         tabTypeLayout.setVerticalGroup(
             tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -928,16 +922,21 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                             .addComponent(txtTypeName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnConjDecl)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(sclTypesList, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE))
+                    .addComponent(sclTypesList))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddType)
-                    .addComponent(btnDeleteType)
-                    .addComponent(txtTypesErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnDeleteType)
+                        .addComponent(txtTypesErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabTypeLayout.createSequentialGroup()
+                        .addComponent(btnAddType)
+                        .addContainerGap())))
         );
 
         jTabbedPane1.addTab("Types", null, tabType, "Add or edit parts of speech");
@@ -966,7 +965,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         txtGenderNotes.setEnabled(false);
         jScrollPane3.setViewportView(txtGenderNotes);
 
-        btnAddGender.setText("Add");
+        btnAddGender.setText("+");
         btnAddGender.setToolTipText("Add a new gender to conlang");
         btnAddGender.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -974,7 +973,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             }
         });
 
-        btnDeleteGender.setText("Delete");
+        btnDeleteGender.setText("-");
         btnDeleteGender.setToolTipText("Remove gender from conlang");
         btnDeleteGender.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -991,24 +990,25 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabGenderLayout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(tabGenderLayout.createSequentialGroup()
+                        .addComponent(btnAddGender, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(79, 79, 79)
+                        .addComponent(btnDeleteGender, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(sclGenderList, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtGendersErrorBox)
                     .addGroup(tabGenderLayout.createSequentialGroup()
-                        .addComponent(btnAddGender)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDeleteGender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtGendersErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(tabGenderLayout.createSequentialGroup()
-                        .addComponent(sclGenderList, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3)
                             .addGroup(tabGenderLayout.createSequentialGroup()
-                                .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5))
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtGenderName)))
+                                .addComponent(txtGenderName, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))
+                            .addGroup(tabGenderLayout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3))
                         .addContainerGap())))
         );
         tabGenderLayout.setVerticalGroup(
@@ -1022,158 +1022,20 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                             .addComponent(txtGenderName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE))
-                    .addComponent(sclGenderList, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))
+                    .addComponent(sclGenderList))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddGender)
-                    .addComponent(btnDeleteGender)
-                    .addComponent(txtGendersErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnDeleteGender)
+                        .addComponent(txtGendersErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabGenderLayout.createSequentialGroup()
+                        .addComponent(btnAddGender)
+                        .addContainerGap())))
         );
 
         jTabbedPane1.addTab("Genders", null, tabGender, "Add or edit genders to be assigned to words");
-
-        cmbDeclensionTypes.setToolTipText("the type with which you will add or edit forms of declension");
-        cmbDeclensionTypes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbDeclensionTypesActionPerformed(evt);
-            }
-        });
-
-        lstDeclensionList.setToolTipText("All forms for words of the related type");
-        lstDeclensionList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lstDeclensionListValueChanged(evt);
-            }
-        });
-        jScrollPane1.setViewportView(lstDeclensionList);
-
-        btnDeclensionAdd.setText("Add");
-        btnDeclensionAdd.setToolTipText("Add a form to the related type");
-        btnDeclensionAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeclensionAddActionPerformed(evt);
-            }
-        });
-
-        btnDeclensionDelete.setText("Delete");
-        btnDeclensionDelete.setToolTipText("Delete a form from the related type");
-        btnDeclensionDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeclensionDeleteActionPerformed(evt);
-            }
-        });
-
-        jLabel10.setText("Declension");
-
-        txtDeclensionName.setToolTipText("The name of the conjugation/declension associated with the related type");
-        txtDeclensionName.setEnabled(false);
-
-        jLabel11.setText("Notes");
-
-        txtDeclensionNotes.setColumns(20);
-        txtDeclensionNotes.setLineWrap(true);
-        txtDeclensionNotes.setRows(5);
-        txtDeclensionNotes.setWrapStyleWord(true);
-        txtDeclensionNotes.setEnabled(false);
-        jScrollPane4.setViewportView(txtDeclensionNotes);
-
-        jLabel12.setText("Related Type");
-
-        jLabel13.setText("Declensions for type");
-        jLabel13.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        jPanel6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-
-        chkDeclensionMandatory.setText("Mandatory Conj/Declen");
-        chkDeclensionMandatory.setToolTipText("Form is mandatory for words of related type.");
-        chkDeclensionMandatory.setEnabled(false);
-        chkDeclensionMandatory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkDeclensionMandatoryActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(chkDeclensionMandatory)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(chkDeclensionMandatory)
-                .addContainerGap())
-        );
-
-        javax.swing.GroupLayout tabDeclensionsLayout = new javax.swing.GroupLayout(tabDeclensions);
-        tabDeclensions.setLayout(tabDeclensionsLayout);
-        tabDeclensionsLayout.setHorizontalGroup(
-            tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabDeclensionsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(tabDeclensionsLayout.createSequentialGroup()
-                            .addComponent(btnDeclensionAdd)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDeclensionDelete))
-                        .addGroup(tabDeclensionsLayout.createSequentialGroup()
-                            .addComponent(jLabel13)
-                            .addGap(27, 27, 27)))
-                    .addComponent(cmbDeclensionTypes, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(tabDeclensionsLayout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(jLabel12))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4)
-                    .addGroup(tabDeclensionsLayout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDeclensionName))
-                    .addGroup(tabDeclensionsLayout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        tabDeclensionsLayout.setVerticalGroup(
-            tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabDeclensionsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbDeclensionTypes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDeclensionAdd)
-                    .addComponent(btnDeclensionDelete)))
-            .addGroup(tabDeclensionsLayout.createSequentialGroup()
-                .addGap(1, 1, 1)
-                .addGroup(tabDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(txtDeclensionName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("Conj/Declen", null, tabDeclensions, "Edit conjugations or declensions for a type of word");
 
         jLabel6.setText("Conlang Name");
 
@@ -1212,7 +1074,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addComponent(jLabel9))
-                        .addGap(0, 76, Short.MAX_VALUE)))
+                        .addGap(0, 20, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -1271,7 +1133,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                     .addComponent(chkPropLocalMandatory)
                     .addComponent(chkPropWordUniqueness)
                     .addComponent(chkPropLocalUniqueness))
-                .addGap(0, 84, Short.MAX_VALUE))
+                .addGap(0, 28, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1313,10 +1175,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         tblProcGuide.getTableHeader().setReorderingAllowed(false);
         sclProcGuide.setViewportView(tblProcGuide);
         tblProcGuide.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        if (tblProcGuide.getColumnModel().getColumnCount() > 0) {
-            tblProcGuide.getColumnModel().getColumn(0).setHeaderValue("Character");
-            tblProcGuide.getColumnModel().getColumn(1).setHeaderValue("Pronunciation");
-        }
 
         chkAutopopProcs.setText("Autopopulate");
         chkAutopopProcs.setToolTipText("If selected, PolyGlot will attempt to generate pronunciations as you type your words.");
@@ -1343,7 +1201,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             }
         });
 
-        btnAddProcGuide.setText("Add");
+        btnAddProcGuide.setText("+");
         btnAddProcGuide.setToolTipText("Add a row");
         btnAddProcGuide.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1351,7 +1209,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             }
         });
 
-        btnDeleteProcGuide.setText("Delete");
+        btnDeleteProcGuide.setText("-");
         btnDeleteProcGuide.setToolTipText("Delete a row");
         btnDeleteProcGuide.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1386,9 +1244,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
-                                        .addComponent(btnAddProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnDeleteProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(btnAddProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(125, 125, 125)
+                                        .addComponent(btnDeleteProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1406,7 +1264,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(btnUpProc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
                         .addComponent(btnDownProc))
                     .addComponent(sclProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1677,18 +1535,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         viewAbout();
     }//GEN-LAST:event_mnuAboutActionPerformed
 
-    private void btnDeclensionAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclensionAddActionPerformed
-        addDeclension();
-    }//GEN-LAST:event_btnDeclensionAddActionPerformed
-
-    private void btnDeclensionDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclensionDeleteActionPerformed
-        deleteDeclension();
-    }//GEN-LAST:event_btnDeclensionDeleteActionPerformed
-
-    private void lstDeclensionListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstDeclensionListValueChanged
-        populateDeclensionProps();
-    }//GEN-LAST:event_lstDeclensionListValueChanged
-
     private void btnConwordDeclensionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConwordDeclensionsActionPerformed
         viewDeclensions();
     }//GEN-LAST:event_btnConwordDeclensionsActionPerformed
@@ -1713,11 +1559,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private void mnuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExitActionPerformed
         dispose();
     }//GEN-LAST:event_mnuExitActionPerformed
-
-    private void cmbDeclensionTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDeclensionTypesActionPerformed
-        populateDeclensionList();
-        populateDeclensionProps();
-    }//GEN-LAST:event_cmbDeclensionTypesActionPerformed
 
     private void mnuTranslationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTranslationActionPerformed
         viewTranslationWindow();
@@ -1767,10 +1608,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         core.getPropertiesManager().setLocalUniqueness(chkPropLocalUniqueness.isSelected());
     }//GEN-LAST:event_chkPropLocalUniquenessActionPerformed
 
-    private void chkDeclensionMandatoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDeclensionMandatoryActionPerformed
-        saveDeclension();
-    }//GEN-LAST:event_chkDeclensionMandatoryActionPerformed
-
     private void mnuLangStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLangStatsActionPerformed
         viewStats();
     }//GEN-LAST:event_mnuLangStatsActionPerformed
@@ -1778,6 +1615,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private void btnRecalcProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecalcProcActionPerformed
         recalcAllProcs();
     }//GEN-LAST:event_btnRecalcProcActionPerformed
+
+    private void btnConjDeclActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConjDeclActionPerformed
+        viewDeclensionSetup((Integer) scrToCoreTypes.get(lstTypesList.getSelectedIndex()));
+    }//GEN-LAST:event_btnConjDeclActionPerformed
 
     @Override
     public void dispose() {
@@ -1790,6 +1631,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         this.setVisible(false);
         super.dispose();
+        System.exit(0);
     }
 
     private void recalcAllProcs() {
@@ -1811,7 +1653,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             @Override
             public void run() {
                 JScrollBar bar = sclProcGuide.getVerticalScrollBar();
-                bar.setValue (bar.getMaximum() + bar.getBlockIncrement());
+                bar.setValue(bar.getMaximum() + bar.getBlockIncrement());
             }
         });
     }
@@ -1837,17 +1679,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             }
         };
 
-        // set saving properties for first column editor and renderer
+        // set saving properties for first column editor
         TableColumnEditor editor = (TableColumnEditor) tblProcGuide.getCellEditor(procTableModel.getRowCount() - 1, 0);
-        TableColumnRenderer renderer = (TableColumnRenderer) tblProcGuide.getCellRenderer(procTableModel.getRowCount() - 1, 0);
         editor.setDocuListener(docuListener);
-        renderer.setDocuListener(docuListener);
 
-        // set saving properties for second column editor and renderer
+        // set saving properties for second column editor
         editor = (TableColumnEditor) tblProcGuide.getCellEditor(procTableModel.getRowCount() - 1, 1);
-        renderer = (TableColumnRenderer) tblProcGuide.getCellRenderer(procTableModel.getRowCount() - 1, 1);
         editor.setDocuListener(docuListener);
-        renderer.setDocuListener(docuListener);
     }
 
     private void deleteProcGuide() {
@@ -1868,8 +1706,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }
 
     private void saveProcGuide() {
-        List<PronunciationNode> newPro = new ArrayList<PronunciationNode>();
-
         if (curPopulating) {
             return;
         }
@@ -1877,11 +1713,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         boolean localPopulating = curPopulating;
         curPopulating = true;
 
-        for (int i = 0; i < procTableModel.getRowCount(); i++) {
+        List<PronunciationNode> newPro = new ArrayList<PronunciationNode>();
+
+        for (int i = 0; i < tblProcGuide.getRowCount(); i++) {
             PronunciationNode newNode = new PronunciationNode();
 
-            newNode.setValue(procTableModel.getValueAt(i, 0).toString());
-            newNode.setPronunciation(procTableModel.getValueAt(i, 1).toString());
+            newNode.setValue((String) tblProcGuide.getCellEditor(i, 0).getCellEditorValue());
+            newNode.setPronunciation((String) tblProcGuide.getCellEditor(i, 1).getCellEditorValue());
 
             newPro.add(newNode);
         }
@@ -1895,10 +1733,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
      * kills all child windows
      */
     private void killAllChildren() {
-        Iterator<JFrame> it = childFrames.iterator();
+        Iterator<Window> it = childFrames.iterator();
 
         while (it.hasNext()) {
-            JFrame curFrame = it.next();
+            Window curFrame = it.next();
 
             if (curFrame != null) {
                 curFrame.setVisible(false);
@@ -2015,257 +1853,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         ScrLangStats.run(core);
     }
 
-    private void addDeclension() {
-        if (cmbDeclensionTypes.getSelectedIndex() == -1) {
-            InfoBox.info("Declensions", "You must select a word type to associate a declension construct with.", this);
-            return;
-        }
-
-        if (lstDeclensionList.getModel().getSize() != 0
-                && scrToCoreDeclensions.containsKey((Integer) lstDeclensionList.getSelectedIndex())
-                && (Integer) scrToCoreDeclensions.get((Integer) lstDeclensionList.getSelectedIndex()) == -1) {
-            return;
-        }
-
-        boolean localPopulating = curPopulating;
-
-        curPopulating = true;
-
-        clearDeclensionProps();
-        Integer declIndex = declListModel.getSize();
-        declListModel.add(declIndex, "NEW DECLENSION");
-        lstDeclensionList.setSelectedIndex(declIndex);
-        scrToCoreDeclensions.put(declIndex, -1);
-        curPopulating = localPopulating;
-    }
-
-    private void clearDeclensionProps() {
-        // prevents this from resetting population values
-        boolean localPop = curPopulating;
-
-        curPopulating = true;
-
-        txtDeclensionName.setText("");
-        txtDeclensionNotes.setText("");
-        chkDeclensionMandatory.setSelected(false);
-
-        curPopulating = localPop;
-    }
-
-    private void populateDeclensionProps() {
-        DeclensionNode curDec = new DeclensionNode(-1);
-        Integer decIndex = lstDeclensionList.getSelectedIndex();
-
-        // keep local settings from stomping on higher level population
-        boolean populatingLocal = curPopulating;
-
-        if (decIndex != -1) {
-            txtDeclensionName.setEnabled(true);
-            txtDeclensionNotes.setEnabled(true);
-            chkDeclensionMandatory.setEnabled(true);
-        }
-
-        //avoid recursive population
-        if (curPopulating) {
-            return;
-        }
-
-        curPopulating = true;
-
-        if (decIndex == -1) {
-            txtDeclensionName.setText("");
-            txtDeclensionNotes.setText("");
-            curPopulating = populatingLocal;
-            txtDeclensionName.setEnabled(false);
-            txtDeclensionNotes.setEnabled(false);
-            chkDeclensionMandatory.setEnabled(false);
-            chkDeclensionMandatory.setSelected(false);
-        } else {
-            txtDeclensionName.setEnabled(true);
-            txtDeclensionNotes.setEnabled(true);
-            chkDeclensionMandatory.setEnabled(true);
-            chkDeclensionMandatory.setSelected(true);
-        }
-
-        Integer typeId = (Integer) scrToCoreTypes.get(scrTypeMap.get(cmbDeclensionTypes.getSelectedItem()));
-
-        if (typeId == null || typeId == -1) {
-            curPopulating = populatingLocal;
-            return;
-        }
-
-        Integer decId = (Integer) scrToCoreDeclensions.get(decIndex);
-
-        if (decId != null && decId != -1) {
-            try {
-                curDec = core.getDeclensionTemplate(typeId, decId);
-            } catch (Exception e) {
-                InfoBox.error("Declension Population Error", "Unable to populate declension.\n\n"
-                        + e.getMessage(), this);
-                curPopulating = populatingLocal;
-                return;
-            }
-        }
-
-        if (curDec == null) {
-            txtDeclensionName.setEnabled(true);
-            txtDeclensionNotes.setEnabled(true);
-            curPopulating = populatingLocal;
-            return;
-        }
-
-        // prevent self setting (from user mod)
-        if (!txtDeclensionName.getText().trim().equals(curDec.getValue().trim())) {
-            txtDeclensionName.setText(curDec.getValue());
-        }
-        if (!txtDeclensionNotes.getText().equals(curDec.getNotes())) {
-            txtDeclensionNotes.setText(curDec.getNotes());
-        }
-
-        chkDeclensionMandatory.setSelected(curDec.isMandatory());
-
-        curPopulating = populatingLocal;
-    }
-
-    private void updateDeclensionListName() {
-        Integer decIndex = lstDeclensionList.getSelectedIndex();
-
-        // keep local settings from stomping on higher level population
-        boolean populatingLocal = curPopulating;
-
-        if (decIndex == -1 || curPopulating) {
-            return;
-        }
-
-        curPopulating = true;
-
-        declListModel.remove(decIndex);
-        declListModel.add(decIndex, txtDeclensionName.getText().trim());
-
-        lstDeclensionList.setSelectedIndex(decIndex);
-
-        curPopulating = populatingLocal;
-    }
-
-    private void deleteDeclension() {
-        Integer curIndex = lstDeclensionList.getSelectedIndex();
-        Integer typeId = (Integer) scrToCoreTypes.get(scrTypeMap.get(cmbDeclensionTypes.getSelectedItem()));
-
-        if (curIndex == -1) {
-            return;
-        }
-
-        try {
-            core.deleteDeclensionFromTemplate(typeId, (Integer) scrToCoreDeclensions.get(curIndex));
-        } catch (Exception e) {
-            InfoBox.error("Declension Deletion Error", "Unable to delete Declension: "
-                    + (String) lstDeclensionList.getSelectedValue() + "\n\n" + e.getMessage(), this);
-        }
-
-        if (curIndex > 0) {
-            curIndex--;
-        }
-
-        populateDeclensionList();
-
-        populateDeclensionProps();
-
-        lstDeclensionList.setSelectedIndex(curIndex);
-    }
-
-    private void saveDeclension() {
-        Integer typeId = (Integer) scrToCoreTypes.get(scrTypeMap.get(cmbDeclensionTypes.getSelectedItem()));
-        Integer decIndex = lstDeclensionList.getSelectedIndex();
-
-        if (curPopulating) {
-            return;
-        }
-
-        if (decIndex == -1) {
-            return;
-        }
-
-        curPopulating = true;
-
-        Integer decId = scrToCoreDeclensions.containsKey(decIndex)
-                ? (Integer) scrToCoreDeclensions.get(decIndex) : -1;
-
-        DeclensionNode decl;
-
-        try {
-            // split logic for creating, rather than modifying Declension
-            if (decId == -1) {
-                decl = core.addDeclensionToTemplate(typeId, txtDeclensionName.getText());
-                decl.setValue(txtDeclensionName.getText().trim());
-                decl.setNotes(txtDeclensionNotes.getText().trim());
-                decl.setMandatory(chkDeclensionMandatory.isSelected());
-
-                scrToCoreDeclensions.put(decIndex, decl.getId());
-                scrDeclensionMap.put(decl.getValue(), decIndex);
-            } else {
-                decl = new DeclensionNode(-1);
-
-                decl.setValue(txtDeclensionName.getText().trim());
-                decl.setNotes(txtDeclensionNotes.getText().trim());
-                decl.setMandatory(chkDeclensionMandatory.isSelected());
-
-                core.modifyDeclensionTemplate(typeId, decId, decl);
-            }
-        } catch (Exception e) {
-            InfoBox.error("Declension Creation Error", "Unable to create Declension "
-                    + txtDeclensionName.getText() + "\n\n" + e.getMessage(), this);
-        }
-
-        curPopulating = false;
-    }
-
-    private void populateDeclensionList() {
-        if (cmbDeclensionTypes.getSelectedIndex() == -1) {
-            declListModel.clear();
-            return;
-        }
-
-        // avoid recursive population
-        if (curPopulating) {
-            return;
-        }
-
-        Integer typeId = (Integer) scrToCoreTypes.get(cmbDeclensionTypes.getSelectedIndex());
-        Integer curdecId = (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
-        Integer setIndex = -1;
-
-        curPopulating = true;
-
-        Iterator<DeclensionNode> declIt = core.getDeclensionListTemplate(typeId).iterator();
-        DeclensionNode curdec;
-
-        // relevant objects should be rebuilt
-        scrDeclensionMap = new HashMap<String, Integer>();
-        scrToCoreDeclensions = new HashMap<Integer, Integer>();
-
-        declListModel.clear();
-
-        for (int i = 0; declIt.hasNext(); i++) {
-            curdec = declIt.next();
-
-            scrDeclensionMap.put(curdec.getValue(), i);
-
-            declListModel.add(i, curdec.getValue());
-            scrToCoreDeclensions.put(i, curdec.getId());
-
-            // replaced call to Object type here
-            if (curdecId != null
-                    && curdecId.equals(curdec.getId())) {
-                setIndex = i;
-            }
-        }
-
-        lstDeclensionList.setSelectedIndex(setIndex);
-
-        curPopulating = false;
+    private void viewDeclensionSetup(Integer _typeId) {
+        Window window = ScrDeclensionSetup.run(core, _typeId);
+        childFrames.add(window);
     }
 
     private void importExcel() {
+        // TODO: move all this code into a run method on the excel import form
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -2618,63 +2212,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 setTitle(screenTitle + " " + core.getVersion() + ": " + txtLangName.getText());
             }
         });
-        txtDeclensionName.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                Cursor cursor = txtDeclensionName.getCursor();
-                saveDeclension();
-                updateDeclensionListName();
-                txtDeclensionName.requestFocus();
-                txtDeclensionName.setCursor(cursor);
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                Cursor cursor = txtDeclensionName.getCursor();
-                saveDeclension();
-                updateDeclensionListName();
-                txtDeclensionName.requestFocus();
-                txtDeclensionName.setCursor(cursor);
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                Cursor cursor = txtDeclensionName.getCursor();
-                saveDeclension();
-                updateDeclensionListName();
-                txtDeclensionName.requestFocus();
-                txtDeclensionName.setCursor(cursor);
-            }
-        });
-        txtDeclensionNotes.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                Cursor cursor = txtDeclensionNotes.getCursor();
-                saveDeclension();
-                txtDeclensionNotes.requestFocus();
-                txtDeclensionNotes.setCursor(cursor);
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                Cursor cursor = txtDeclensionNotes.getCursor();
-                saveDeclension();
-                txtDeclensionNotes.requestFocus();
-                txtDeclensionNotes.setCursor(cursor);
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                Cursor cursor = txtDeclensionNotes.getCursor();
-                saveDeclension();
-                txtDeclensionNotes.requestFocus();
-                txtDeclensionNotes.setCursor(cursor);
-            }
-        });
     }
 
     /**
      * saves file as particular type
+     *
      * @return true if file saved, false otherwise
      */
     private boolean saveFileAs() {
@@ -2719,23 +2261,24 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         } catch (TransformerException e) {
             InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
         }
-        
+
         return true;
     }
 
     /**
      * Gives user option to save file, returns continue/don't continue
+     *
      * @return true to signal continue, false to signal stop
      */
     private boolean saveOrCancelTest() {
         // if there's a current dictionary loaded, prompt user to save before creating new
         if (lstDict.getModel().getSize() > 0) {
             Integer saveFirst = InfoBox.yesNoCancel("Save First?",
-                    "Save current dictionary before creating new dictionary?", this);
+                    "Save current dictionary before performing action?", this);
 
             if (saveFirst == JOptionPane.YES_OPTION) {
                 boolean saved = saveFile();
-                
+
                 // if the file didn't save (usually due to a last minute cancel) don't continue.
                 if (!saved) {
                     return false;
@@ -2744,10 +2287,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     private void newFile() {
         if (!saveOrCancelTest()) {
             return;
@@ -2768,6 +2311,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
     /**
      * save file, open save as dialog if no file name already
+     *
      * @return true if file saved, false otherwise
      */
     private boolean saveFile() {
@@ -2782,7 +2326,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         } catch (TransformerException e) {
             InfoBox.error("Save Error", "Unable to save to file: " + curFileName + "\n\n" + e.getMessage(), this);
         }
-        
+
         return true;
     }
 
@@ -2791,7 +2335,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         if (!saveOrCancelTest()) {
             return;
         }
-        
+
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Open Dictionary");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd", "xml");
@@ -2888,6 +2432,28 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         curPopulating = false;
     }
 
+    private void setEnabledTypeProps(boolean enable) {
+        txtTypeName.setEnabled(enable);
+            txtTypesNotes.setEnabled(enable);
+            chkTypeDefinitionMandatory.setEnabled(enable);
+            chkTypeGenderMandatory.setEnabled(enable);
+            chkTypePluralMandatory.setEnabled(enable);
+            chkTypeProcMandatory.setEnabled(enable);
+            setEnabledConjDeclBtn();
+    }
+    
+    // only sets conjugation as enabled if there is an active type
+    private void setEnabledConjDeclBtn() {
+        Integer typeId = scrToCoreTypes.containsKey(lstTypesList.getSelectedIndex()) ?
+               (Integer)scrToCoreTypes.get(lstTypesList.getSelectedIndex()) : -1;
+        
+        if (typeId != -1) {
+            btnConjDecl.setEnabled(true);
+        } else {
+            btnConjDecl.setEnabled(false);
+        }
+    }
+    
     private void populateTypeProps() {
         //avoid recursive population
         if (curPopulating) {
@@ -2907,23 +2473,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             }
         }
 
-        // if no type selected, grey out properties, enable otherwise
-        if (typeIndex == -1) {
-            txtTypeName.setEnabled(false);
-            txtTypesNotes.setEnabled(false);
-            chkTypeDefinitionMandatory.setEnabled(false);
-            chkTypeGenderMandatory.setEnabled(false);
-            chkTypePluralMandatory.setEnabled(false);
-            chkTypeProcMandatory.setEnabled(false);
-        } else {
-            txtTypeName.setEnabled(true);
-            txtTypesNotes.setEnabled(true);
-            chkTypeDefinitionMandatory.setEnabled(true);
-            chkTypeGenderMandatory.setEnabled(true);
-            chkTypePluralMandatory.setEnabled(true);
-            chkTypeProcMandatory.setEnabled(true);
-        }
-
+        // set type props enabled only of a type is selected
+        setEnabledTypeProps(typeIndex != -1);
+        
         // prevent self setting (from user mod)
         if (!txtTypeName.getText().trim().equals(curType.getValue().trim())) {
             txtTypeName.setText(curType.getValue());
@@ -3032,6 +2584,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         curPopulating = localPopulating;
 
         populateTypes();
+        setEnabledConjDeclBtn();
     }
 
     /**
@@ -3222,7 +2775,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         populateGenders();
     }
-    
+
     private void checkGenderLexEnabled() {
         // do not allow duplicate types
         if (core.getGenders().findGenderByName(txtGenderName.getText().trim()) != null) {
@@ -3339,15 +2892,12 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         cmbTypeProp.removeAllItems();
         cmbTypeFilter.removeAllItems();
-        cmbDeclensionTypes.removeAllItems();
-        clearDeclensionProps();
 
         for (int i = 0; typeIt.hasNext(); i++) {
             curType = typeIt.next();
 
             cmbTypeProp.insertItemAt(curType.getValue(), i);
             cmbTypeFilter.insertItemAt(curType.getValue(), i);
-            cmbDeclensionTypes.insertItemAt(curType.getValue(), i);
 
             scrTypeMap.put(curType.getValue(), i);
 
@@ -3366,10 +2916,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         lstTypesList.setSelectedIndex(setIndex);
 
         curPopulating = false;
-
-        // ensures that declensions aren't listed for an empty relation
-        cmbDeclensionTypes.setSelectedIndex(cmbDeclensionTypes.getModel().getSize() == 0 ? -1 : 0);
-        populateDeclensionList();
     }
 
     private void populateGenders() {
@@ -3739,9 +3285,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JButton btnAddProcGuide;
     private javax.swing.JButton btnAddType;
     private javax.swing.JButton btnChangeFont;
+    private javax.swing.JButton btnConjDecl;
     private javax.swing.JButton btnConwordDeclensions;
-    private javax.swing.JButton btnDeclensionAdd;
-    private javax.swing.JButton btnDeclensionDelete;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDeleteGender;
     private javax.swing.JButton btnDeleteProcGuide;
@@ -3750,7 +3295,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JButton btnRecalcProc;
     private javax.swing.JButton btnUpProc;
     private javax.swing.JCheckBox chkAutopopProcs;
-    private javax.swing.JCheckBox chkDeclensionMandatory;
     private javax.swing.JCheckBox chkPronunciationOverrideProp;
     private javax.swing.JCheckBox chkPropLocalMandatory;
     private javax.swing.JCheckBox chkPropLocalUniqueness;
@@ -3760,16 +3304,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JCheckBox chkTypeGenderMandatory;
     private javax.swing.JCheckBox chkTypePluralMandatory;
     private javax.swing.JCheckBox chkTypeProcMandatory;
-    private javax.swing.JComboBox cmbDeclensionTypes;
     private javax.swing.JComboBox cmbGenderFilter;
     private javax.swing.JComboBox cmbGenderProp;
     private javax.swing.JComboBox cmbTypeFilter;
     private javax.swing.JComboBox cmbTypeProp;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -3786,12 +3325,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -3808,7 +3344,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JLabel lblPronunciationFilter;
     private javax.swing.JLabel lblTypeFilter;
     private javax.swing.JLabel lblTypeProp;
-    private javax.swing.JList lstDeclensionList;
     private javax.swing.JList lstDict;
     private javax.swing.JList lstGenderList;
     private javax.swing.JList lstTypesList;
@@ -3832,7 +3367,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JScrollPane sclProcGuide;
     private javax.swing.JScrollPane sclTypesList;
     private javax.swing.JScrollPane scrlDict;
-    private javax.swing.JPanel tabDeclensions;
     private javax.swing.JPanel tabDict;
     private javax.swing.JPanel tabGender;
     private javax.swing.JPanel tabLangProp;
@@ -3841,8 +3375,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JTextField txtAlphaOrder;
     private javax.swing.JTextField txtConWordFilter;
     private javax.swing.JTextField txtConWordProp;
-    private javax.swing.JTextField txtDeclensionName;
-    private javax.swing.JTextArea txtDeclensionNotes;
     private javax.swing.JTextField txtDefFilter;
     private javax.swing.JTextArea txtDefProp;
     private javax.swing.JTextField txtGenderName;
@@ -3860,5 +3392,4 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JTextArea txtTypesNotes;
     private javax.swing.JTextPane txtWordErrorBox;
     // End of variables declaration//GEN-END:variables
-
 }

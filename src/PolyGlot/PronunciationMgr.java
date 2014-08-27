@@ -147,7 +147,7 @@ public class PronunciationMgr {
         Iterator<PronunciationNode> finder = getPronunciations();
 
         // return blank for empty string
-        if (base.length() == 0) {
+        if (base.length() == 0 || !finder.hasNext()) {
             return ret;
         }
 

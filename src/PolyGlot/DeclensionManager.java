@@ -17,10 +17,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package PolyGlot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +33,6 @@ import java.util.Map;
 public class DeclensionManager {
 
     // Integer is ID of related word, list is list of declension nodes
-
     private final Map dList = new HashMap<Integer, List<DeclensionNode>>();
 
     // Integer is ID of related type, list is list of declensions for this type
@@ -66,9 +65,38 @@ public class DeclensionManager {
     public void updateDeclensionWord(Integer wordId, Integer declensionId, DeclensionNode declension) {
         updateDeclension(wordId, declensionId, declension, dList);
     }
-    
+
+    /**
+     * Gets a particular declension template of a particular word type
+     *
+     * @param typeId the type which contains the declension in question
+     * @param declensionId the declension within the type to retrieve
+     * @return the object representing the declension
+     */
+    public DeclensionNode getDeclension(Integer typeId, Integer declensionId) {
+        DeclensionNode ret = null;
+        List<DeclensionNode> decList = (List) dTemplates.get(typeId);
+
+        // only search farther if declension itself actually exists
+        if (decList != null) {
+            Iterator<DeclensionNode> decIt = decList.iterator();
+
+            while (decIt.hasNext()) {
+                DeclensionNode curNode = decIt.next();
+
+                if (curNode.getId().equals(declensionId)) {
+                    ret = curNode;
+                    break;
+                }
+            }
+        }
+
+        return ret;
+    }
+
     /**
      * Tests whether type based requirements met for word
+     *
      * @param word word to check
      * @param type type of word
      * @return empty if no problems, string with problem description otherwise
@@ -80,23 +108,23 @@ public class DeclensionManager {
             Map decMap = new HashMap<Integer, String>();
             Iterator<DeclensionNode> template = getDeclensionListTemplate(type.getId()).iterator();
             Iterator<DeclensionNode> declensions = getDeclensionListWord(word.getId()).iterator();
-            
+
             while (declensions.hasNext()) {
                 DeclensionNode curNode = declensions.next();
-                
+
                 decMap.put(curNode.getId(), curNode.getValue());
             }
-            
+
             while (template.hasNext()) {
                 DeclensionNode curNode = template.next();
-                
+
                 if (curNode.isMandatory() && (!decMap.containsKey(curNode.getId()) || decMap.get(curNode.getId()).equals(""))) {
                     ret = "Word requires declension type: " + curNode.getValue();
                     break;
                 }
             }
         }
-        
+
         return ret;
     }
 
@@ -180,11 +208,11 @@ public class DeclensionManager {
 
     public void insertDeclension() {
         DeclensionNode ins = new DeclensionNode(-1);
-        
+
         ins.setValue(bufferDecText);
         ins.setNotes(bufferDecNotes);
         ins.setMandatory(isBufferDecMandatory());
-        
+
         if (bufferDecTemp) {
             this.addDeclensionToTemplate(bufferRelId, bufferId, ins);
         } else {
@@ -292,7 +320,7 @@ public class DeclensionManager {
             list.remove(typeId);
             list.put(typeId, copyTo);
         }
-        
+
     }
 
     /**

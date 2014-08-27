@@ -37,6 +37,13 @@ public class TypeCollection extends DictionaryCollection {
         return (TypeNode) bufferNode;
     }
 
+    @Override
+    public int addNode(DictNode _addType) throws Exception {
+        bufferNode = new TypeNode();
+        
+        return super.addNode(_addType);
+    }
+    
     public TypeCollection() {
         bufferNode = new TypeNode();
     }

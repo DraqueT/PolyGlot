@@ -27,8 +27,10 @@ import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Panel;
 import java.awt.TextField;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -216,7 +218,38 @@ public class ScrDeclensions extends javax.swing.JDialog {
         dispose();
     }
     
+    /**
+     * This is a recursive method that creates all the fields for declension combinations
+     * @param depth current depth through declension list
+     * @param curId The generated id of the current declension combination
+     * @param declensionList list of all declensions
+     */
+    private void createFields(int depth, String curId, List<DeclensionNode> declensionList) {
+        if (depth >= declensionList.size()) {
+            System.out.println(curId);
+            return;
+        }
+        
+        DeclensionNode curNode = declensionList.get(depth);
+        Collection<DeclensionDimension> dimensions = curNode.getDimensions();
+        Iterator<DeclensionDimension> dimIt = dimensions.iterator();
+        
+        while (dimIt.hasNext()) {
+            DeclensionDimension curDim = dimIt.next();
+            
+            createFields(depth + 1, curId + "," + curDim.getId().toString(), declensionList);
+        }
+    }
+    
+    /**
+     * This method kicks off the recursive calls that generate fields for declension combinations
+     */
+    private void createFields() {
+         createFields(0, "", core.getDeclensionListTemplate(typeId));
+    }
+    
     private void buildForm() {
+        createFields();
         Integer numDeclensions = core.getDeclensionListTemplate(typeId).size();
         final Integer textHeight = 25;
         Iterator<DeclensionNode> templates = core.getDeclensionListTemplate(typeId).iterator();        

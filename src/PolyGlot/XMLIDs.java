@@ -25,6 +25,7 @@ package PolyGlot;
  * @author draque
  */
 public class XMLIDs {
+    public static final String dictionaryXID = "dictionary";
     public static final String pgVersionXID = "PolyGlotVer";
     public static final String wordXID = "word";
     public static final String localWordXID = "localWord";
