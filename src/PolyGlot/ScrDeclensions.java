@@ -25,7 +25,6 @@ package PolyGlot;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
-import java.awt.Panel;
 import java.awt.TextField;
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,11 +41,13 @@ import javax.swing.JFrame;
  */
 public class ScrDeclensions extends javax.swing.JDialog {
 
-    Map<Integer, TextField> fieldMap = new HashMap<Integer, TextField>();
+    Map<String, TextField> fieldMap = new HashMap<String, TextField>();
     DictCore core;
     ConWord word;
     Integer typeId;
     Font conFont;
+    Integer numFields = 0;
+    final Integer textHeight = 25; // TODO: this should be calculated...
 
     public ScrDeclensions(DictCore _core) {
         core = _core;
@@ -199,11 +200,11 @@ public class ScrDeclensions extends javax.swing.JDialog {
     
     private void saveDeclension() {
         core.clearAllDeclensionsWord(word.getId());
-        Set<Entry<Integer, TextField>> saveSet =  fieldMap.entrySet();
+        Set<Entry<String, TextField>> saveSet =  fieldMap.entrySet();
         
-        for (Entry<Integer, TextField> e : saveSet) {
+        for (Entry<String, TextField> e : saveSet) {
             DeclensionNode saveNode = new DeclensionNode(-1);
-            Integer curId = e.getKey();
+            String curId = e.getKey();
             TextField curField = e.getValue();
             
             if (curField.getText().trim().equals("")) {
@@ -211,8 +212,10 @@ public class ScrDeclensions extends javax.swing.JDialog {
             }
             
             saveNode.setValue(curField.getText().trim());
+            saveNode.setCombinedDimId(curId);
             
-            core.addDeclensionToWord(word.getId(), curId, saveNode);
+            // declensions per word not saved via int id any longer
+            core.addDeclensionToWord(word.getId(), -1, saveNode);
         }
         
         dispose();
@@ -222,11 +225,29 @@ public class ScrDeclensions extends javax.swing.JDialog {
      * This is a recursive method that creates all the fields for declension combinations
      * @param depth current depth through declension list
      * @param curId The generated id of the current declension combination
+     * @param curLabel the current generated label of this declension
      * @param declensionList list of all declensions
      */
-    private void createFields(int depth, String curId, List<DeclensionNode> declensionList) {
+    private void createFields(int depth, String curId, String curLabel, List<DeclensionNode> declensionList) {
         if (depth >= declensionList.size()) {
-            System.out.println(curId);
+            Label newLabel = new Label(curLabel);
+            TextField newField = new TextField();
+
+            DeclensionNode findDec = core.getDeclensionManager().getDeclensionByCombinedId(word.getId(), curId);
+            
+            if (findDec != null) {
+                newField.setText(findDec.getValue());
+            }
+            
+            if (conFont != null) {
+                newField.setFont(conFont);
+            }
+            
+            pnlDeclensions.add(newLabel);
+            pnlDeclensions.add(newField);
+            
+            fieldMap.put(curId, newField);
+            numFields++;
             return;
         }
         
@@ -237,7 +258,8 @@ public class ScrDeclensions extends javax.swing.JDialog {
         while (dimIt.hasNext()) {
             DeclensionDimension curDim = dimIt.next();
             
-            createFields(depth + 1, curId + (curId.equals("")? "" : ",") + curDim.getId().toString(), declensionList);
+            createFields(depth + 1, curId + curDim.getId().toString() + ",",
+                    curLabel + (curLabel.equals("") ? "" : " ") + curDim.getValue(),declensionList);
         }
     }
     
@@ -245,53 +267,25 @@ public class ScrDeclensions extends javax.swing.JDialog {
      * This method kicks off the recursive calls that generate fields for declension combinations
      */
     private void createFields() {
-         createFields(0, "", core.getDeclensionListTemplate(typeId));
+         createFields(0, ",", "", core.getDeclensionListTemplate(typeId));
     }
     
+    /**
+     * sets basic properties of form based on contents
+     */
+    private void setFormProps() {
+        pnlDeclensions.setSize(pnlDeclensions.getSize().width, numFields * textHeight);        
+        pnlDeclensions.setLayout(new GridLayout(0, 2));
+        this.setSize(this.getWidth() + 10, pnlDeclensions.getHeight() + 70);
+        this.setResizable(false);
+    }
+      
     private void buildForm() {
         createFields();
-        Integer numDeclensions = core.getDeclensionListTemplate(typeId).size();
-        final Integer textHeight = 25;
-        Iterator<DeclensionNode> templates = core.getDeclensionListTemplate(typeId).iterator();        
         
-        Panel p = new Panel();
-        p.setSize(pnlDeclensions.getSize().width, numDeclensions * textHeight);
+        // TODO: Create deprecated combinations here
         
-        p.setLayout(new GridLayout(0, 2));
-                
-        while (templates.hasNext()) {
-            DeclensionNode curNode = templates.next();
-            
-            Label newLabel = new Label(curNode.getValue());
-            TextField newField = new TextField();
-            
-            if (conFont != null) {
-                newField.setFont(conFont);
-            }
-            
-            p.add(newLabel);
-            p.add(newField);
-            
-            fieldMap.put(curNode.getId(), newField);
-        }
-        
-        Iterator<DeclensionNode> declensions = core.getDeclensionListWord(word.getId()).iterator();
-        
-        while (declensions.hasNext()) {
-            DeclensionNode curNode = declensions.next();
-            
-            if (!fieldMap.containsKey(curNode.getId())) {
-                continue;
-            }
-            
-            TextField curField = fieldMap.get(curNode.getId());
-            curField.setText(curNode.getValue());
-        }
-        
-        pnlDeclensions.add(p);
-        
-        this.setSize(this.getWidth() + 10, p.getHeight() + 70);
-        this.setResizable(false);
+        setFormProps();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

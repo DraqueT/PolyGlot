@@ -4,18 +4,9 @@ ${licenseFirst}
 ${licensePrefix}Copyright (c) ${date?date?string("yyyy")}, ${project.organization!user}
 ${licensePrefix}All rights reserved.
 ${licensePrefix?replace(" +$", "", "r")}
-${licensePrefix}Redistribution and use in source and binary forms, with or without
-${licensePrefix}modification, are permitted provided that the following conditions are met:
-${licensePrefix?replace(" +$", "", "r")}
-${licensePrefix}* Redistributions of source code must retain the above copyright notice, this
-${licensePrefix}  list of conditions and the following disclaimer.
-${licensePrefix}* Redistributions in binary form must reproduce the above copyright notice,
-${licensePrefix}  this list of conditions and the following disclaimer in the documentation
-${licensePrefix}  and/or other materials provided with the distribution.
-${licensePrefix}* This source code may not be included in any commercial or for profit 
-${licensePrefix} software without the express written and signed consent of the copyright
-${licensePrefix} holder.
-${licensePrefix?replace(" +$", "", "r")}
+${licensePrefix}Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
+${licensePrefix} See LICENSE.TXT included with this code to read the full license agreement.
+
 ${licensePrefix}THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 ${licensePrefix}AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 ${licensePrefix}IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE

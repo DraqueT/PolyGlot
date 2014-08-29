@@ -61,7 +61,6 @@ import javax.xml.transform.TransformerException;
 import org.simplericity.macify.eawt.*;
 
 // TODO: create keyboard shortcuts for ADD/DELETE that conditionally apply depending on the tab which is currently selected.
-// TODO: modify pronunciation generation so that if nothing is found, it is set to blank
 /**
  *
  * @author draque

@@ -343,7 +343,7 @@ public class ConWordCollection extends DictionaryCollection {
         Map<String, Integer> wordEnd = new HashMap<String, Integer>();
         Map<String, Integer> characterCombos2 = new HashMap<String, Integer>();
         Integer highestCombo2 = 0;
-        Map<String, Integer> characterCombos3 = new HashMap<String, Integer>(); // TODO: display this? Too much?
+        Map<String, Integer> characterCombos3 = new HashMap<String, Integer>();
         Map<String, Integer> typeCountByWord = new HashMap<String, Integer>();
         Map<String, Integer> phonemeCount = new HashMap<String, Integer>();
         Map<String, Integer> charCount = new HashMap<String, Integer>();

@@ -18,8 +18,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-// TODO: make the lexicon switch to the selected word (if it exists) when clicked in the Transliterated text.
-
 package PolyGlot;
 
 import java.awt.Font;

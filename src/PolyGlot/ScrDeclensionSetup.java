@@ -107,7 +107,7 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
             tblDimensions.getColumnModel().getColumn(0).setMinWidth(0);
             tblDimensions.getColumnModel().getColumn(1).setMinWidth(0);
             tblDimensions.getColumnModel().getColumn(1).setPreferredWidth(10);
-            tblDimensions.getColumnModel().getColumn(2).setWidth(0);
+            tblDimensions.removeColumn(tblDimensions.getColumn(tblDimensions.getColumnName(2)));
         }
 
         TableColumn column = tblDimensions.getColumnModel().getColumn(0);
@@ -195,6 +195,9 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
         });
     }
 
+    /**
+     * adds new, empty dimensional row
+     */
     private void addDimension() {
         addDemensionWithValues("", false, -1);
 
@@ -208,6 +211,9 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
         });
     }
 
+    /**
+     * deletes selected dimension row, if one is selected
+     */
     private void delDimension() {
         Integer curRow = tblDimensions.getSelectedRow();
 
@@ -216,16 +222,14 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
             return;
         }
 
-        // TODO: actual core deletion goes here
-        /*PronunciationNode delNode = new PronunciationNode();
+        Integer nodeId = (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
+        DeclensionNode delFrom = core.getDeclensionTemplate(myType.getId(), nodeId);
+        Integer delDimId = (Integer)tblDimensions.getModel().getValueAt(tblDimensions.getSelectedRow(), 2);
+        delFrom.deleteDimension(delDimId);
 
-         delNode.setValue(tblDimensions.getValueAt(curRow, 0).toString());
-         delNode.setPronunciation(tblDimensions.getValueAt(curRow, 1).toString());
-
-         core.deletePronunciation(delNode);*/
         populateDimensions();
     }
-    
+
     private void populateDimensions() {
         Integer declensionId = (Integer) scrToCoreDeclensions.get((Integer) lstDeclensionList.getSelectedIndex());
         DeclensionNode curDec = core.getDeclensionManager().getDeclension(myType.getId(), declensionId);
@@ -237,7 +241,7 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
         }
 
         Iterator<DeclensionDimension> dimIt = curDec.getDimensions().iterator();
-        
+
         setupDimTable();
 
         while (dimIt.hasNext()) {
@@ -291,15 +295,15 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
             public void run() {
                 int curRow = tblDimensions.getSelectedRow();
                 int curCol = tblDimensions.getSelectedColumn();
-                
+
                 DeclensionNode curDec = core.getDeclensionManager().getDeclension(myType.getId(),
                         (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()));
 
                 for (int i = 0; i < tblDimensions.getRowCount(); i++) {
-                    
+
                     String dimName = "";
                     Boolean dimMand = false;
-                    
+
                     // The currently selected row will have name information in buffer, not in model
                     if (i == curRow) {
                         if (curCol == 0) {
@@ -313,14 +317,14 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
                         dimName = (String) tblDimensions.getModel().getValueAt(i, 0);
                         dimMand = (Boolean) tblDimensions.getModel().getValueAt(i, 1);
                     }
-                    
+
                     Integer dimId = (Integer) tblDimensions.getModel().getValueAt(i, 2);
                     DeclensionDimension dim = new DeclensionDimension();
-                    
+
                     dim.setId(dimId);
                     dim.setValue(dimName);
-                    dim.setMandatory( dimMand);
-                    
+                    dim.setMandatory(dimMand);
+
                     Integer setId = curDec.addDimension(dim);
                     tblDimensions.getModel().setValueAt(setId, i, 2);
                 }
@@ -614,7 +618,7 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
         lstDeclensionList.setSelectedIndex(declIndex);
         scrToCoreDeclensions.put(declIndex, -1);
         curPopulating = localPopulating;
-        
+
         populateDeclensionProps();
     }
 
@@ -626,7 +630,7 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
 
         txtDeclensionName.setText("");
         txtDeclensionNotes.setText("");
-        
+
         this.setupDimTable();
 
         curPopulating = localPop;
@@ -639,7 +643,7 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
         btnDelDimension.setEnabled(enable);
         txtDeclensionNotes.setEnabled(enable);
     }
-    
+
     private void populateDeclensionProps() {
         DeclensionNode curDec = new DeclensionNode(-1);
         Integer decIndex = lstDeclensionList.getSelectedIndex();
@@ -651,7 +655,7 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
         if (curPopulating) {
             return;
         }
-        
+
         curPopulating = true;
 
         if (decIndex == -1) {
@@ -674,12 +678,12 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
         }
 
         setEnabledDecProps(decIndex != -1);
-              
+
         if (curDec == null) {
             curPopulating = populatingLocal;
             return;
-        } 
-        
+        }
+
         setIsActiveDimensions();
 
         // prevent self setting (from user mod)
@@ -694,14 +698,14 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
 
         curPopulating = populatingLocal;
     }
-    
+
     /**
      * Sets the dimension controls active if appropriate, inactive otherwise
      */
     private void setIsActiveDimensions() {
-        Integer decId = scrToCoreDeclensions.containsKey(lstDeclensionList.getSelectedIndex()) ?
-                (Integer)scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()) : -1;
-        
+        Integer decId = scrToCoreDeclensions.containsKey(lstDeclensionList.getSelectedIndex())
+                ? (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()) : -1;
+
         if (decId == -1) {
             // the dimensions can only be added without error if there is a declension
             tblDimensions.setEnabled(false);
@@ -785,9 +789,9 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
             } else {
                 decl = new DeclensionNode(-1);
                 DeclensionNode oldDecl = core.getDeclensionManager().getDeclension(myType.getId(), decId);
-                
+
                 decl.setEqual(oldDecl);
-                
+
                 decl.setValue(txtDeclensionName.getText().trim());
                 decl.setNotes(txtDeclensionNotes.getText().trim());
 
@@ -799,7 +803,7 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
         }
 
         setIsActiveDimensions();
-        
+
         curPopulating = false;
     }
 

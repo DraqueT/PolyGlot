@@ -32,6 +32,7 @@ import java.util.Map;
  */
 public class DeclensionNode extends DictNode{
     private String notes = "";
+    private String combinedDimId = "";
     private boolean mandatory = false;
     private int highestDimension = 1;
     private Map<Integer, DeclensionDimension> dimensions = new HashMap<Integer, DeclensionDimension>();
@@ -110,6 +111,14 @@ public class DeclensionNode extends DictNode{
         return dimensions;
     }
     
+    public void setCombinedDimId(String _id) {
+        combinedDimId = _id;
+    }
+    
+    public String getCombinedDimId() {
+        return combinedDimId;
+    }
+    
     @Override
     public void setEqual(DictNode _node) {
         DeclensionNode node = (DeclensionNode) _node;
@@ -117,6 +126,7 @@ public class DeclensionNode extends DictNode{
         this.setNotes(node.getNotes());
         this.setValue(node.getValue());
         this.setMandatory(node.isMandatory());
+        this.setCombinedDimId(node.getCombinedDimId());
         dimensions = node.getRawDimensions();
     }
 }

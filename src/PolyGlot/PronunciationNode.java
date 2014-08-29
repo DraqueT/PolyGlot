@@ -18,8 +18,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-// TODO: sometimes the last populated pronunciation will not fire off in autopopulate
-// figure out why that is and correct it.
 package PolyGlot;
 
 /**

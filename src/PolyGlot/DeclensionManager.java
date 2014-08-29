@@ -19,6 +19,8 @@
  */
 package PolyGlot;
 
+import java.awt.Label;
+import java.awt.TextField;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -95,6 +97,59 @@ public class DeclensionManager {
     }
 
     /**
+     * Recursive method to get all mandatory declensions for a type
+     * @param depth current dim depth
+     * @param curId current generated id
+     * @param retValue return list(passed by ref)
+     * @param declensionList list of all declensions headers
+     * @param mand whether any dimensions were mandatory
+     * @return string list of all mandatory declensions
+     */
+    private List<DeclensionNode> getMandDims(int depth, 
+            String curId, 
+            List<DeclensionNode> retValue, 
+            List<DeclensionNode> declensionList, 
+            String label,
+            boolean mand) {
+        if (depth >= declensionList.size()) {
+            if (mand) {
+                DeclensionNode ret = new DeclensionNode(-1);
+                ret.setCombinedDimId(curId);
+                ret.setValue(label);
+                retValue.add(ret);
+            }
+            
+            return retValue;
+        }
+
+        DeclensionNode curNode = declensionList.get(depth);
+        Collection<DeclensionDimension> dimensions = curNode.getDimensions();
+        Iterator<DeclensionDimension> dimIt = dimensions.iterator();
+
+        while (dimIt.hasNext()) {
+            DeclensionDimension curDim = dimIt.next();
+            
+            getMandDims(depth + 1, 
+                    curId + curDim.getId().toString() + ",",
+                    retValue, 
+                    declensionList, 
+                    label + " " + curDim.value,
+                    curDim.isMandatory() || mand);
+        }
+        
+        return retValue;
+    }
+
+    /**
+     * returns ids of all generated declensions for given type that are mandatory
+     * @param typeId the type  to get mandatories for
+     * @return a list of all mandatory declensions
+     */
+    public List<DeclensionNode> getMandDims(Integer typeId) {
+        return getMandDims(0, ",", new ArrayList<DeclensionNode>(), getDeclensionListTemplate(typeId), "", false);
+    }
+
+    /**
      * Tests whether type based requirements met for word
      *
      * @param word word to check
@@ -105,21 +160,14 @@ public class DeclensionManager {
         String ret = "";
         // type will be null if no type (or bad type) on word, no type = no requirements
         if (type != null) {
-            Map decMap = new HashMap<Integer, String>();
-            Iterator<DeclensionNode> template = getDeclensionListTemplate(type.getId()).iterator();
-            Iterator<DeclensionNode> declensions = getDeclensionListWord(word.getId()).iterator();
-
-            while (declensions.hasNext()) {
-                DeclensionNode curNode = declensions.next();
-
-                decMap.put(curNode.getId(), curNode.getValue());
-            }
-
-            while (template.hasNext()) {
-                DeclensionNode curNode = template.next();
-
-                if (curNode.isMandatory() && (!decMap.containsKey(curNode.getId()) || decMap.get(curNode.getId()).equals(""))) {
-                    ret = "Word requires declension type: " + curNode.getValue();
+            Iterator<DeclensionNode> mandIt = getMandDims(type.getId()).iterator();
+            
+            while (mandIt.hasNext()) {
+                DeclensionNode curMand = mandIt.next();
+                DeclensionNode dimExists = getDeclensionByCombinedId(word.getId(), curMand.getCombinedDimId());
+                
+                if (dimExists == null) {
+                    ret = "Required Decl/Conj " + curMand.getValue() + " must be filled in.";
                     break;
                 }
             }
@@ -171,6 +219,7 @@ public class DeclensionManager {
 
             if (test.getId().equals(templateId)) {
                 ret = test;
+                break;
             }
         }
 
@@ -251,6 +300,10 @@ public class DeclensionManager {
     private DeclensionNode addDeclension(Integer typeId, Integer declensionId, DeclensionNode declension, Map list) {
         List wordList;
 
+        if (declensionId == -1) {
+            declensionId = topId + 1;
+        }
+
         deleteDeclensionFromWord(typeId, declensionId);
 
         if (list.containsKey(typeId)) {
@@ -261,8 +314,7 @@ public class DeclensionManager {
         }
 
         DeclensionNode addNode = new DeclensionNode(declensionId);
-        addNode.setValue(declension.getValue());
-        addNode.setNotes(declension.getNotes());
+        addNode.setEqual(declension);
 
         wordList.add(addNode);
 
@@ -271,6 +323,33 @@ public class DeclensionManager {
         }
 
         return addNode;
+    }
+
+    /**
+     * Gets declension for a word from combined dimensional Id of declension
+     *
+     * @param wordId the id of the root word
+     * @param dimId the combined dim Id of the dimension
+     * @return The declension node if found, null if otherwise
+     */
+    public DeclensionNode getDeclensionByCombinedId(Integer wordId, String dimId) {
+        DeclensionNode ret = null;
+
+        if (dList.containsKey(wordId)) {
+            List<DeclensionNode> searchList = (List<DeclensionNode>) dList.get(wordId);
+            Iterator<DeclensionNode> searchIt = searchList.iterator();
+
+            while (searchIt.hasNext()) {
+                DeclensionNode test = searchIt.next();
+
+                if (dimId.equals(test.getCombinedDimId())) {
+                    ret = test;
+                    break;
+                }
+            }
+        }
+
+        return ret;
     }
 
     public void deleteDeclension(Integer typeId, Integer declensionId, Map list) {
@@ -307,9 +386,6 @@ public class DeclensionManager {
 
                 if (curNode.getId().equals(declensionId)) {
                     DeclensionNode modified = new DeclensionNode(declensionId);
-                    /*modified.setMandatory(declension.isMandatory());
-                    modified.setValue(declension.getValue());
-                    modified.setNotes(declension.getNotes());*/
                     modified.setEqual(declension);
                     copyTo.add(modified);
                     continue;
