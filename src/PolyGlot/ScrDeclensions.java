@@ -41,13 +41,14 @@ import javax.swing.JFrame;
  */
 public class ScrDeclensions extends javax.swing.JDialog {
 
-    Map<String, TextField> fieldMap = new HashMap<String, TextField>();
-    DictCore core;
-    ConWord word;
-    Integer typeId;
-    Font conFont;
-    Integer numFields = 0;
-    final Integer textHeight = 25; // TODO: this should be calculated...
+    private Map<String, TextField> fieldMap = new HashMap<String, TextField>();
+    private DictCore core;
+    private ConWord word;
+    private Integer typeId;
+    private Font conFont;
+    private Integer numFields = 0;
+    private final Integer textHeight = 25; // TODO: this should be calculated...
+    private Map allWordDeclensions;
 
     public ScrDeclensions(DictCore _core) {
         core = _core;
@@ -243,6 +244,8 @@ public class ScrDeclensions extends javax.swing.JDialog {
                 newField.setFont(conFont);
             }
             
+            // TODO: make the declension subtract itself from the total list here (to find deprecated ones)
+            
             pnlDeclensions.add(newLabel);
             pnlDeclensions.add(newField);
             
@@ -280,7 +283,13 @@ public class ScrDeclensions extends javax.swing.JDialog {
         this.setResizable(false);
     }
       
+    /**
+     * builds all aspects of the form which are generated per case
+     */
     private void buildForm() {
+        // creates list of all declensions in word (even deprecated ones
+        allWordDeclensions = core.getDeclensionManager().getWordDeclensions(word.getId());
+        
         createFields();
         
         // TODO: Create deprecated combinations here

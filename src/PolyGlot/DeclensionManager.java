@@ -19,8 +19,6 @@
  */
 package PolyGlot;
 
-import java.awt.Label;
-import java.awt.TextField;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -41,12 +39,9 @@ public class DeclensionManager {
     private final Map dTemplates = new HashMap<Integer, List<DeclensionNode>>();
 
     private Integer topId = 0;
-    private Integer bufferId = -1;
-    private String bufferDecText = "";
-    private String bufferDecNotes = "";
     private boolean bufferDecTemp = false;
-    private boolean bufferDecMandatory = false;
     private Integer bufferRelId = -1;
+    private DeclensionNode buffer = new DeclensionNode(-1);
 
     public Map<Integer, List<DeclensionNode>> getTemplateMap() {
         return dTemplates;
@@ -236,15 +231,15 @@ public class DeclensionManager {
     }
 
     public void setBufferId(Integer _bufferId) {
-        bufferId = _bufferId;
+        buffer.setId(_bufferId);
     }
 
     public void setBufferDecText(String _bufferDecText) {
-        bufferDecText = _bufferDecText;
+        buffer.setValue(_bufferDecText);
     }
 
     public void setBufferDecNotes(String _bufferDecNotes) {
-        bufferDecNotes = _bufferDecNotes;
+        buffer.setNotes(_bufferDecNotes);
     }
 
     public void setBufferDecTemp(boolean _bufferDecTemp) {
@@ -254,29 +249,61 @@ public class DeclensionManager {
     public void setBufferRelId(Integer _bufferRelId) {
         bufferRelId = _bufferRelId;
     }
+    
+    public Integer getBufferRelId() {
+        return bufferRelId;
+    }
+    
+    public boolean isBufferDecTemp() {
+        return bufferDecTemp;
+    }
 
-    public void insertDeclension() {
-        DeclensionNode ins = new DeclensionNode(-1);
-
-        ins.setValue(bufferDecText);
-        ins.setNotes(bufferDecNotes);
-        ins.setMandatory(isBufferDecMandatory());
+    public void insertBuffer() {
+        buffer.setMandatory(isBufferDecMandatory());
 
         if (bufferDecTemp) {
-            this.addDeclensionToTemplate(bufferRelId, bufferId, ins);
+            this.addDeclensionToTemplate(bufferRelId, buffer.getId(), buffer);
         } else {
-            this.addDeclensionToWord(bufferRelId, bufferId, ins);
+            this.addDeclensionToWord(bufferRelId, buffer.getId(), buffer);
         }
+    }
+    
+    /**
+     * gets current declension node buffer object
+     * @return buffer node object
+     */
+    public DeclensionNode getBuffer() {
+        return buffer;
     }
 
     public void clearBuffer() {
-        bufferId = -1;
-        bufferDecText = "";
-        bufferDecNotes = "";
+        buffer = new DeclensionNode(-1);
         bufferDecTemp = false;
         bufferRelId = -1;
     }
 
+    /**
+     * adds declension template directly to the map
+     * @param typeId ID of type to add to
+     * @param node new node to add
+     * @return the passed node
+     * @throws java.lang.Exception Throws exception if you feed in a dupe node
+     */
+    public DeclensionNode addDeclensionTemplate(Integer typeId, DeclensionNode node) throws Exception {
+        List recList;
+        
+        if (dTemplates.containsKey(node.getId())) {
+            recList = (List)dTemplates.get(node.getId());
+            recList.add(node);
+        } else {
+            recList = new ArrayList<DeclensionNode>();
+            recList.add(node);
+            dTemplates.put(typeId, recList);
+        }
+        
+        return node;
+    }
+    
     private DeclensionNode addDeclension(Integer typeId, String declension, Map list) {
         List wordList;
 
@@ -425,13 +452,32 @@ public class DeclensionManager {
      * @return the bufferDecMandatory
      */
     public boolean isBufferDecMandatory() {
-        return bufferDecMandatory;
+        return buffer.isMandatory();
     }
 
     /**
      * @param bufferDecMandatory the bufferDecMandatory to set
      */
     public void setBufferDecMandatory(boolean bufferDecMandatory) {
-        this.bufferDecMandatory = bufferDecMandatory;
+        buffer.setMandatory(bufferDecMandatory);
+    }
+
+    /**
+     * Gets a word's declensions, with their combined dim Ids as the keys
+     * @param wordId word to get declensions of
+     * @return map of all declensions in a word (empty if none)
+     */
+    public Map getWordDeclensions(Integer wordId) {
+        Map<String, DeclensionNode> ret = new HashMap<String, DeclensionNode>();
+        
+        Iterator<DeclensionNode> decs = getDeclensionListWord(wordId).iterator();
+        
+        while (decs.hasNext()) {
+            DeclensionNode curNode = decs.next();
+            
+            ret.put(curNode.getCombinedDimId(), curNode);
+        }
+        
+        return ret;
     }
 }

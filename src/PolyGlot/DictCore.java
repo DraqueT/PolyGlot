@@ -412,6 +412,25 @@ public class DictCore {
                 wordValue = doc.createElement(XMLIDs.declensionMandatoryXID);
                 wordValue.appendChild(doc.createTextNode(curNode.isMandatory() ? "T" : "F"));
                 wordNode.appendChild(wordValue);
+                
+                wordValue = doc.createElement(XMLIDs.dimensionNodeXID);
+                Iterator<DeclensionDimension> dimIt = curNode.getDimensions().iterator();
+                while (dimIt.hasNext()) {
+                    DeclensionDimension curDim = dimIt.next();
+                    
+                    Element dimNode = doc.createElement(XMLIDs.dimensionIdXID);
+                    dimNode.appendChild(doc.createTextNode(curDim.getId().toString()));
+                    wordValue.appendChild(dimNode);
+                    
+                    dimNode = doc.createElement(XMLIDs.dimensionNameXID);
+                    dimNode.appendChild(doc.createTextNode(curDim.getValue()));
+                    wordValue.appendChild(dimNode);
+                    
+                    dimNode = doc.createElement(XMLIDs.dimensionMandXID);
+                    dimNode.appendChild(doc.createTextNode(curDim.isMandatory() ? "T" : "F"));
+                    wordValue.appendChild(dimNode);
+                }
+                wordNode.appendChild(wordValue);
             }
         }
 
@@ -438,6 +457,10 @@ public class DictCore {
 
                 wordValue = doc.createElement(XMLIDs.declensionRelatedIdXID);
                 wordValue.appendChild(doc.createTextNode(relatedId.toString()));
+                wordNode.appendChild(wordValue);
+                
+                wordValue = doc.createElement(XMLIDs.declensionComDimIdXID);
+                wordValue.appendChild(doc.createTextNode(curNode.getCombinedDimId()));
                 wordNode.appendChild(wordValue);
 
                 wordValue = doc.createElement(XMLIDs.declensionIsTemplateXID);

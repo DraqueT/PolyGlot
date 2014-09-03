@@ -2361,6 +2361,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         } catch (Exception e) {
             InfoBox.error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage(), this);
+            //e.printStackTrace();
             return;
         }
 

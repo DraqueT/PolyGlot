@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: mandatory noe moved to dimensions, remove references here and fix elsewhere
+// TODO: mandatory now moved to dimensions, remove references here and fix elsewhere (worth the bother?)
 
 /**
  *
@@ -36,6 +36,31 @@ public class DeclensionNode extends DictNode{
     private boolean mandatory = false;
     private int highestDimension = 1;
     private Map<Integer, DeclensionDimension> dimensions = new HashMap<Integer, DeclensionDimension>();
+    private DeclensionDimension buffer = new DeclensionDimension(-1);
+    
+    /**
+     * gets dimensional buffer
+     * @return current buffer
+     */
+    public DeclensionDimension getBuffer() {
+        return buffer;
+    }
+    
+    /**
+     * Inserts current value of dimensional buffer.
+     * Clears buffer after insert.
+     */
+    public void insertBuffer() {
+        this.addDimension(buffer);
+        buffer = new DeclensionDimension(-1);
+    }
+    
+    /**
+     * clears current value of buffer
+     */
+    public void clearBuffer() {
+        buffer = new DeclensionDimension(-1);
+    }
     
     /**
      * Adds a dimension to this declension

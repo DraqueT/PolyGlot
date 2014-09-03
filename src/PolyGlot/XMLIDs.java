@@ -62,10 +62,15 @@ public class XMLIDs {
     public static final String declensionXID = "declensionNode";
     public static final String declensionIdXID = "declensionId";
     public static final String declensionTextXID = "declensionText";
+    public static final String declensionComDimIdXID = "combinedDimId";
     public static final String declensionNotesXID = "declensionNotes";
     public static final String declensionIsTemplateXID = "declensionTemplate";
     public static final String declensionRelatedIdXID = "declensionRelatedId";
     public static final String declensionMandatoryXID = "declensionMandatory";
+    public static final String dimensionNodeXID = "dimensionNode";
+    public static final String dimensionIdXID = "dimensionId";
+    public static final String dimensionMandXID = "dimensionMand";
+    public static final String dimensionNameXID = "dimensionName";
     public static final String proGuideXID = "proGuide";
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";
