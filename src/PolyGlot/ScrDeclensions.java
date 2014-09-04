@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -41,14 +42,15 @@ import javax.swing.JFrame;
  */
 public class ScrDeclensions extends javax.swing.JDialog {
 
-    private Map<String, TextField> fieldMap = new HashMap<String, TextField>();
-    private DictCore core;
+    private final Map<String, TextField> fieldMap = new HashMap<String, TextField>();
+    private final DictCore core;
     private ConWord word;
     private Integer typeId;
     private Font conFont;
     private Integer numFields = 0;
-    private final Integer textHeight = 25; // TODO: this should be calculated...
+    private Integer textHeight = 0; // TODO: this should be calculated...
     private Map allWordDeclensions;
+    private TextField firstField;
 
     public ScrDeclensions(DictCore _core) {
         core = _core;
@@ -174,7 +176,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
         //</editor-fold>
 
         /* Create and display the form */
-        ScrDeclensions s = new ScrDeclensions(_core);
+        final ScrDeclensions s = new ScrDeclensions(_core);
         s.setConWord(_word);
         s.setWordType(_typeId);
         s.setConFont(_conFont);
@@ -182,7 +184,18 @@ public class ScrDeclensions extends javax.swing.JDialog {
         s.buildForm();
         
         s.setModal(true);
+        
+        // set up screen after it has been built (in setVisible)
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                s.setFormProps();
+            }
+        });
+        
         s.setVisible(true);
+        
+        
     }
     
     @Override
@@ -190,13 +203,12 @@ public class ScrDeclensions extends javax.swing.JDialog {
         if (core.getDeclensionListTemplate(typeId) == null
                 || core.getDeclensionListTemplate(typeId).isEmpty()) {
             InfoBox.info("Declensions", "No declensions for type: " + word.getWordType() 
-                    + " set. Declensions can be created per type under the Declensions tab.", this);
+                    + " set. Declensions can be created per type under the Types tab by clicking the Declensions button.", this);
             
             this.dispose();
         } else {
             super.setVisible(visible);
         }
-
     }
     
     private void saveDeclension() {
@@ -249,6 +261,11 @@ public class ScrDeclensions extends javax.swing.JDialog {
             pnlDeclensions.add(newLabel);
             pnlDeclensions.add(newField);
             
+            // capture text height if not done already...
+            if (firstField == null) {
+                firstField = newField;
+            }
+            
             fieldMap.put(curId, newField);
             numFields++;
             return;
@@ -277,6 +294,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
      * sets basic properties of form based on contents
      */
     private void setFormProps() {
+        textHeight = firstField.getHeight();
         pnlDeclensions.setSize(pnlDeclensions.getSize().width, numFields * textHeight);        
         pnlDeclensions.setLayout(new GridLayout(0, 2));
         this.setSize(this.getWidth() + 10, pnlDeclensions.getHeight() + 70);
