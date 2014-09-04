@@ -413,9 +413,10 @@ public class DictCore {
                 wordValue.appendChild(doc.createTextNode(curNode.isMandatory() ? "T" : "F"));
                 wordNode.appendChild(wordValue);
                 
-                wordValue = doc.createElement(XMLIDs.dimensionNodeXID);
                 Iterator<DeclensionDimension> dimIt = curNode.getDimensions().iterator();
                 while (dimIt.hasNext()) {
+                    wordValue = doc.createElement(XMLIDs.dimensionNodeXID);
+                    
                     DeclensionDimension curDim = dimIt.next();
                     
                     Element dimNode = doc.createElement(XMLIDs.dimensionIdXID);
@@ -429,8 +430,9 @@ public class DictCore {
                     dimNode = doc.createElement(XMLIDs.dimensionMandXID);
                     dimNode.appendChild(doc.createTextNode(curDim.isMandatory() ? "T" : "F"));
                     wordValue.appendChild(dimNode);
+                
+                    wordNode.appendChild(wordValue);
                 }
-                wordNode.appendChild(wordValue);
             }
         }
 

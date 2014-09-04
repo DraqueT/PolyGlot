@@ -21,7 +21,7 @@
 package PolyGlot;
 
 /**
- *
+ * This contains all the XML markers for saving/loading files
  * @author draque
  */
 public class XMLIDs {

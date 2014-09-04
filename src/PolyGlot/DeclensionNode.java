@@ -49,8 +49,13 @@ public class DeclensionNode extends DictNode{
     /**
      * Inserts current value of dimensional buffer.
      * Clears buffer after insert.
+     * @throws java.lang.Exception if buffer ID is -1
      */
-    public void insertBuffer() {
+    public void insertBuffer() throws Exception {
+        if (buffer.getId() == -1) {
+            throw new Exception("Dimension with ID -1 cannot be inserted.");
+        }
+        
         this.addDimension(buffer);
         buffer = new DeclensionDimension(-1);
     }
