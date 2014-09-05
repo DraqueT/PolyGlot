@@ -1833,6 +1833,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                     (Integer) scrToCoreTypes.get(cmbTypeProp.getSelectedIndex()), core.getLangFont());
         } catch (Exception ex) {
             InfoBox.error("Decension Error", "Unable to find word." + ex.getLocalizedMessage(), this);
+            ex.printStackTrace();
         }
 
         saveModWord();

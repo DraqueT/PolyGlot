@@ -77,6 +77,32 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
 
         setupDimTable();
     }
+    
+    @Override
+    public void dispose() {
+        if (canClose()) {
+            super.dispose();
+        }
+    }
+    
+    /**
+     * Tests whether window can be closed. Displays error to user if it cannot be.
+     * @return boolean as to whether it is legal to close the window.
+     */
+    private boolean canClose() {
+        Iterator<DeclensionNode> decIt = core.getDeclensionManager().getDeclensionListTemplate(myType.getId()).iterator();
+        
+        while (decIt.hasNext()) {
+            DeclensionNode curDec = decIt.next();
+            if (curDec.getDimensions().isEmpty())
+            {
+                InfoBox.error("Illegal Declension", "Declension \'" + curDec.getValue() + "\' must have at least one dimension.", this);
+                return false;
+            }
+        }
+        
+        return true;
+    }
 
     private void setupDimTable() {
         DefaultTableModel dimTableModel = new javax.swing.table.DefaultTableModel(

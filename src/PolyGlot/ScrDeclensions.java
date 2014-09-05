@@ -17,10 +17,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package PolyGlot;
-
-// TODO: make the fields resize vertically if a font is too large to fit
 
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -43,13 +40,14 @@ import javax.swing.SwingUtilities;
 public class ScrDeclensions extends javax.swing.JDialog {
 
     private final Map<String, TextField> fieldMap = new HashMap<String, TextField>();
+    private final Map<String, String> labelMap = new HashMap<String, String>();
     private final DictCore core;
     private ConWord word;
     private Integer typeId;
     private Font conFont;
     private Integer numFields = 0;
-    private Integer textHeight = 0; // TODO: this should be calculated...
-    private Map allWordDeclensions;
+    private Integer textHeight = 0;
+    private Map<String, DeclensionNode> allWordDeclensions = new HashMap<String, DeclensionNode>();
     private TextField firstField;
 
     public ScrDeclensions(DictCore _core) {
@@ -65,7 +63,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
     public void setWordType(Integer _typeId) {
         typeId = _typeId;
     }
-    
+
     public void setConFont(Font _conFont) {
         conFont = _conFont;
     }
@@ -180,11 +178,12 @@ public class ScrDeclensions extends javax.swing.JDialog {
         s.setConWord(_word);
         s.setWordType(_typeId);
         s.setConFont(_conFont);
+        s.getAllWordDeclensions();
 
         s.buildForm();
-        
+
         s.setModal(true);
-        
+
         // set up screen after it has been built (in setVisible)
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -192,50 +191,52 @@ public class ScrDeclensions extends javax.swing.JDialog {
                 s.setFormProps();
             }
         });
-        
+
         s.setVisible(true);
-        
-        
+
     }
-    
+
     @Override
     public void setVisible(boolean visible) {
         if (core.getDeclensionListTemplate(typeId) == null
                 || core.getDeclensionListTemplate(typeId).isEmpty()) {
-            InfoBox.info("Declensions", "No declensions for type: " + word.getWordType() 
+            InfoBox.info("Declensions", "No declensions for type: " + word.getWordType()
                     + " set. Declensions can be created per type under the Types tab by clicking the Declensions button.", this);
-            
+
             this.dispose();
         } else {
             super.setVisible(visible);
         }
     }
-    
+
     private void saveDeclension() {
         core.clearAllDeclensionsWord(word.getId());
-        Set<Entry<String, TextField>> saveSet =  fieldMap.entrySet();
-        
+        Set<Entry<String, TextField>> saveSet = fieldMap.entrySet();
+
         for (Entry<String, TextField> e : saveSet) {
             DeclensionNode saveNode = new DeclensionNode(-1);
             String curId = e.getKey();
             TextField curField = e.getValue();
-            
+
             if (curField.getText().trim().equals("")) {
                 continue;
             }
-            
+
             saveNode.setValue(curField.getText().trim());
             saveNode.setCombinedDimId(curId);
-            
+            saveNode.setNotes(labelMap.get(curId));
+
             // declensions per word not saved via int id any longer
             core.addDeclensionToWord(word.getId(), -1, saveNode);
         }
-        
+
         dispose();
     }
-    
+
     /**
-     * This is a recursive method that creates all the fields for declension combinations
+     * This is a recursive method that creates all the fields for declension
+     * combinations
+     *
      * @param depth current depth through declension list
      * @param curId The generated id of the current declension combination
      * @param curLabel the current generated label of this declension
@@ -247,71 +248,122 @@ public class ScrDeclensions extends javax.swing.JDialog {
             TextField newField = new TextField();
 
             DeclensionNode findDec = core.getDeclensionManager().getDeclensionByCombinedId(word.getId(), curId);
-            
+
             if (findDec != null) {
                 newField.setText(findDec.getValue());
             }
-            
+
+            if (conFont != null) {
+                newField.setFont(conFont);
+            }
+
+            pnlDeclensions.add(newLabel);
+            pnlDeclensions.add(newField);
+            allWordDeclensions.remove(curId);
+
+            // capture first field to pull height from later...
+            if (firstField == null) {
+                firstField = newField;
+            }
+
+            fieldMap.put(curId, newField);
+            labelMap.put(curId, curLabel);
+            numFields++;
+            return;
+        }
+
+        DeclensionNode curNode = declensionList.get(depth);
+        Collection<DeclensionDimension> dimensions = curNode.getDimensions();
+        Iterator<DeclensionDimension> dimIt = dimensions.iterator();
+
+        while (dimIt.hasNext()) {
+            DeclensionDimension curDim = dimIt.next();
+
+            createFields(depth + 1, curId + curDim.getId().toString() + ",",
+                    curLabel + (curLabel.equals("") ? "" : " ") + curDim.getValue(), declensionList);
+        }
+    }
+
+    /**
+     * This method kicks off the recursive calls that generate fields for
+     * declension combinations
+     */
+    private void createFields() {
+        createFields(0, ",", "", core.getDeclensionListTemplate(typeId));
+    }
+
+    /**
+     * creates fields for deprecated dimension combinations
+     */
+    private void createDeprecatedFields() {
+        Set decSet = allWordDeclensions.entrySet();
+        Iterator<Entry<String, DeclensionNode>> depIt = decSet.iterator();
+
+        // separates new and deprecated fields
+        if (!decSet.isEmpty()) {
+            pnlDeclensions.add(new Label("DEPRECATED DECLENSIONS"));
+            pnlDeclensions.add(new Label(" "));
+            numFields ++;
+        }
+        
+        while (depIt.hasNext()) {
+            Entry<String, DeclensionNode> decEnt = depIt.next();
+            DeclensionNode curDec = decEnt.getValue();
+
+            TextField newField = new TextField();
+            Label newLabel = new Label(curDec.getNotes());
+
+            newField.setText(curDec.getValue());
+
             if (conFont != null) {
                 newField.setFont(conFont);
             }
             
-            // TODO: make the declension subtract itself from the total list here (to find deprecated ones)
-            
             pnlDeclensions.add(newLabel);
             pnlDeclensions.add(newField);
             
-            // capture text height if not done already...
-            if (firstField == null) {
-                firstField = newField;
-            }
+            fieldMap.put(curDec.getCombinedDimId(), newField);
+            labelMap.put(curDec.getCombinedDimId(), curDec.getNotes());
             
-            fieldMap.put(curId, newField);
             numFields++;
-            return;
-        }
-        
-        DeclensionNode curNode = declensionList.get(depth);
-        Collection<DeclensionDimension> dimensions = curNode.getDimensions();
-        Iterator<DeclensionDimension> dimIt = dimensions.iterator();
-        
-        while (dimIt.hasNext()) {
-            DeclensionDimension curDim = dimIt.next();
-            
-            createFields(depth + 1, curId + curDim.getId().toString() + ",",
-                    curLabel + (curLabel.equals("") ? "" : " ") + curDim.getValue(),declensionList);
         }
     }
-    
-    /**
-     * This method kicks off the recursive calls that generate fields for declension combinations
-     */
-    private void createFields() {
-         createFields(0, ",", "", core.getDeclensionListTemplate(typeId));
-    }
-    
+
     /**
      * sets basic properties of form based on contents
      */
     private void setFormProps() {
         textHeight = firstField.getHeight();
-        pnlDeclensions.setSize(pnlDeclensions.getSize().width, numFields * textHeight);        
+        pnlDeclensions.setSize(pnlDeclensions.getSize().width, numFields * textHeight);
         pnlDeclensions.setLayout(new GridLayout(0, 2));
         this.setSize(this.getWidth() + 10, pnlDeclensions.getHeight() + 70);
         this.setResizable(false);
     }
-      
+
+    /**
+     * Populates object with all currently existing declensions for word
+     * (including deprecated ones)
+     */
+    private void getAllWordDeclensions() {
+        Iterator<DeclensionNode> decIt = core.getDeclensionManager().getDeclensionListWord(word.getId()).iterator();
+
+        while (decIt.hasNext()) {
+            DeclensionNode curNode = decIt.next();
+            allWordDeclensions.put(curNode.getCombinedDimId(), curNode);
+        }
+    }
+
     /**
      * builds all aspects of the form which are generated per case
      */
     private void buildForm() {
         // creates list of all declensions in word (even deprecated ones
         allWordDeclensions = core.getDeclensionManager().getWordDeclensions(word.getId());
-        
+
         createFields();
-        
-        // TODO: Create deprecated combinations here
-        
+
+        createDeprecatedFields();
+
         setFormProps();
     }
 
