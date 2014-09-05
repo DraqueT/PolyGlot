@@ -389,6 +389,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuHelp = new javax.swing.JMenu();
         mnuPloyHelp = new javax.swing.JMenuItem();
         mnuAbout = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        mnuCheckForUpdates = new javax.swing.JMenuItem();
         mnuTools = new javax.swing.JMenu();
         mnuImportExcel = new javax.swing.JMenuItem();
         mnuTranslation = new javax.swing.JMenuItem();
@@ -1390,6 +1392,15 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             }
         });
         mnuHelp.add(mnuAbout);
+        mnuHelp.add(jSeparator3);
+
+        mnuCheckForUpdates.setText("Check for Updates");
+        mnuCheckForUpdates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCheckForUpdatesActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(mnuCheckForUpdates);
 
         jMenuBar1.add(mnuHelp);
 
@@ -1620,6 +1631,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         viewDeclensionSetup((Integer) scrToCoreTypes.get(lstTypesList.getSelectedIndex()));
     }//GEN-LAST:event_btnConjDeclActionPerformed
 
+    private void mnuCheckForUpdatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCheckForUpdatesActionPerformed
+        checkForUpdates(true);
+    }//GEN-LAST:event_mnuCheckForUpdatesActionPerformed
+
     @Override
     public void dispose() {
         // only exit if save/cancel test is passed
@@ -1634,6 +1649,29 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         System.exit(0);
     }
 
+    /**
+     * checks web for updates to PolyGlot
+     * @param verbose Set this to have messages post to user.
+     */
+    private void checkForUpdates(boolean verbose) {
+        try {
+            String updateText = WebInterface.checkForUpdates();
+            
+            if (updateText.equals("")) {
+                if (verbose) {
+                    InfoBox.info("Update Status", "You're all up to date and on the newest version: " 
+                            + core.getVersion() + ".", this);
+                }
+            } else {
+                // TODO: pop update window here
+            }
+        } catch(Exception e) {
+            if (verbose) {
+                InfoBox.error("Update Problem", e.getLocalizedMessage(), this);
+            }
+        }
+    }
+    
     private void recalcAllProcs() {
         try {
             core.recalcAllProcs();
@@ -3260,13 +3298,15 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
     /**
      * Selects word in lexicon by ID, pulls ScrDictInterface to the fore,
-     * selects Lexicon tab
+     * selects Lexicon tab, removes all filters
      *
      * @param id the ID of the word to select
      */
     public void selectWordById(Integer id) {
         Integer index = -1;
 
+        clearLexFilter();
+        
         for (Entry<Integer, Integer> entry : (Set<Entry<Integer, Integer>>) scrToCoreMap.entrySet()) {
             if (entry.getValue().equals(id)) {
                 index = entry.getKey();
@@ -3281,6 +3321,20 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         setLexPosition(index);
         jTabbedPane1.setSelectedIndex(0);
+    }
+    
+    /**
+     * clears all filters set on lexicon
+     */
+    private void clearLexFilter() {
+        txtConWordFilter.setText("");
+        txtLocalWordFilter.setText("");
+        txtPronunciationFilter.setText("");
+        txtDefFilter.setText("");
+        cmbGenderFilter.setSelectedIndex(cmbGenderFilter.getModel().getSize() - 1);
+        cmbTypeFilter.setSelectedIndex(cmbTypeFilter.getModel().getSize() - 1);
+        
+        filterDict();
     }
 
     /**
@@ -3350,6 +3404,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblConWordFilter;
     private javax.swing.JLabel lblConWordProp;
@@ -3368,6 +3423,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JList lstGenderList;
     private javax.swing.JList lstTypesList;
     private javax.swing.JMenuItem mnuAbout;
+    private javax.swing.JMenuItem mnuCheckForUpdates;
     private javax.swing.JMenuItem mnuExit;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
