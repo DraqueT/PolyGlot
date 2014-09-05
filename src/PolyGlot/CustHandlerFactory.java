@@ -73,7 +73,7 @@ public class CustHandlerFactory {
             ret = CustHandlerFactory.get075Handler(core);
         } else {
             throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
-                    + "written with an unsupported version: Ver " + core.getVersion() + ".");
+                    + "written with an unsupported version: Ver " + versionNumber + ".");
         }
 
         return ret;
