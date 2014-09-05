@@ -2334,6 +2334,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             InfoBox.error("Save Error", "Unable to save to file: " + curFileName + "\n\n" + e.getMessage(), this);
         }
 
+        InfoBox.info("Success", "Dictionary saved to: " + curFileName + ".", this);
+        
         return true;
     }
 
