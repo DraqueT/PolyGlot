@@ -2372,6 +2372,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             core.readFile(fileName);
             curFileName = fileName;
         } catch (Exception e) {
+            core = new DictCore(); // don't allow partial loads
             InfoBox.error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage(), this);
             //e.printStackTrace();
