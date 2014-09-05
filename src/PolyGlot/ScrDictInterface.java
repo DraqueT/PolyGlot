@@ -2357,6 +2357,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         } else {
             return;
         }
+        
+        // might want to clean up where this is enabled/disabled later...
+        btnConwordDeclensions.setEnabled(true);
 
         setFile(fileName);
         setLexiconEnabled(true);
