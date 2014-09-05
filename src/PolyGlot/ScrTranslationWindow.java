@@ -266,7 +266,7 @@ public class ScrTranslationWindow extends JFrame {
                 
         txtLocalText.setText(txtLocalText.getText().replaceAll("[^\\S\\r\\n]{2,}", " "));
         String userInput = txtLocalText.getText();
-        String[] splitInput = userInput.split(" ");
+        String[] splitInput = userInput.split("\\s");
         
         localText = new ArrayList<String>();
         
