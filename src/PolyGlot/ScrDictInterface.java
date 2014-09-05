@@ -270,6 +270,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             dictInterface.setFile(args[0]);
         }
 
+        dictInterface.checkForUpdates(false); // verbose set to only notify if update
         dictInterface.setVisible(true);
     }
 
@@ -1651,27 +1652,37 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
     /**
      * checks web for updates to PolyGlot
+     *
      * @param verbose Set this to have messages post to user.
      */
-    private void checkForUpdates(boolean verbose) {
-        try {
-            String updateText = WebInterface.checkForUpdates();
-            
-            if (updateText.equals("")) {
-                if (verbose) {
-                    InfoBox.info("Update Status", "You're all up to date and on the newest version: " 
-                            + core.getVersion() + ".", this);
+    private void checkForUpdates(final boolean verbose) {
+        final Window parent = this;
+        
+        Thread check = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    String[] updateText = WebInterface.checkForUpdates();
+
+                    if (updateText[0] == null || updateText[0].equals("")) {
+                        if (verbose) {
+                            InfoBox.info("Update Status", "You're all up to date and on the newest version: "
+                                    + core.getVersion() + ".", parent);
+                        }
+                    } else {
+                        ScrUpdateAlert.run(updateText[0], updateText[1]);
+                    }
+                } catch (Exception e) {
+                    if (verbose) {
+                        InfoBox.error("Update Problem", e.getLocalizedMessage(), parent);
+                    }
                 }
-            } else {
-                // TODO: pop update window here
             }
-        } catch(Exception e) {
-            if (verbose) {
-                InfoBox.error("Update Problem", e.getLocalizedMessage(), this);
-            }
-        }
+        };
+
+        check.start();
     }
-    
+
     private void recalcAllProcs() {
         try {
             core.recalcAllProcs();
@@ -1868,11 +1879,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
     private void viewDeclensions() {
         Integer wordId = (Integer) scrToCoreMap.get(lstDict.getSelectedIndex());
-        
+
         if (wordId == -1) {
             return;
         }
-        
+
         try {
             ScrDeclensions.run(core, core.getWordById(wordId),
                     (Integer) scrToCoreTypes.get(cmbTypeProp.getSelectedIndex()), core.getLangFont());
@@ -2373,7 +2384,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         }
 
         InfoBox.info("Success", "Dictionary saved to: " + curFileName + ".", this);
-        
+
         return true;
     }
 
@@ -2395,7 +2406,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         } else {
             return;
         }
-        
+
         // might want to clean up where this is enabled/disabled later...
         btnConwordDeclensions.setEnabled(true);
 
@@ -2486,26 +2497,26 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
     private void setEnabledTypeProps(boolean enable) {
         txtTypeName.setEnabled(enable);
-            txtTypesNotes.setEnabled(enable);
-            chkTypeDefinitionMandatory.setEnabled(enable);
-            chkTypeGenderMandatory.setEnabled(enable);
-            chkTypePluralMandatory.setEnabled(enable);
-            chkTypeProcMandatory.setEnabled(enable);
-            setEnabledConjDeclBtn();
+        txtTypesNotes.setEnabled(enable);
+        chkTypeDefinitionMandatory.setEnabled(enable);
+        chkTypeGenderMandatory.setEnabled(enable);
+        chkTypePluralMandatory.setEnabled(enable);
+        chkTypeProcMandatory.setEnabled(enable);
+        setEnabledConjDeclBtn();
     }
-    
+
     // only sets conjugation as enabled if there is an active type
     private void setEnabledConjDeclBtn() {
-        Integer typeId = scrToCoreTypes.containsKey(lstTypesList.getSelectedIndex()) ?
-               (Integer)scrToCoreTypes.get(lstTypesList.getSelectedIndex()) : -1;
-        
+        Integer typeId = scrToCoreTypes.containsKey(lstTypesList.getSelectedIndex())
+                ? (Integer) scrToCoreTypes.get(lstTypesList.getSelectedIndex()) : -1;
+
         if (typeId != -1) {
             btnConjDecl.setEnabled(true);
         } else {
             btnConjDecl.setEnabled(false);
         }
     }
-    
+
     private void populateTypeProps() {
         //avoid recursive population
         if (curPopulating) {
@@ -2527,7 +2538,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         // set type props enabled only of a type is selected
         setEnabledTypeProps(typeIndex != -1);
-        
+
         // prevent self setting (from user mod)
         if (!txtTypeName.getText().trim().equals(curType.getValue().trim())) {
             txtTypeName.setText(curType.getValue());
@@ -2874,7 +2885,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         if (lstDict.getModel().getSize() == 0) {
             btnConwordDeclensions.setEnabled(false);
         }
-        
+
         populateDict();
 
         // select the next lowest word (if it exists)
@@ -3306,7 +3317,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         Integer index = -1;
 
         clearLexFilter();
-        
+
         for (Entry<Integer, Integer> entry : (Set<Entry<Integer, Integer>>) scrToCoreMap.entrySet()) {
             if (entry.getValue().equals(id)) {
                 index = entry.getKey();
@@ -3322,7 +3333,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         setLexPosition(index);
         jTabbedPane1.setSelectedIndex(0);
     }
-    
+
     /**
      * clears all filters set on lexicon
      */
@@ -3333,7 +3344,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         txtDefFilter.setText("");
         cmbGenderFilter.setSelectedIndex(cmbGenderFilter.getModel().getSize() - 1);
         cmbTypeFilter.setSelectedIndex(cmbTypeFilter.getModel().getSize() - 1);
-        
+
         filterDict();
     }
 

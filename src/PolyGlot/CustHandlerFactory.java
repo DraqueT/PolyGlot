@@ -60,7 +60,7 @@ public class CustHandlerFactory {
         versionNode = doc.getDocumentElement().getElementsByTagName(XMLIDs.pgVersionXID).item(0);
         versionNumber = versionNode == null ? "0" : versionNode.getTextContent();
 
-        // switch not used to maintain Java 6 compatibility...
+        // switch not used to maintain Java 6 compatibility... fucking 6. X(
         if (versionNumber.equals("0")
                 || versionNumber.equals("0.5")
                 || versionNumber.equals("0.5.1")
