@@ -714,6 +714,7 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Conword Declensions"/>
                     <Property name="toolTipText" type="java.lang.String" value="Displays fields for declension forms of current word (if any)"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConwordDeclensionsActionPerformed"/>

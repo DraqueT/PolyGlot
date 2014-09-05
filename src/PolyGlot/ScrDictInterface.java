@@ -622,6 +622,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         btnConwordDeclensions.setText("Conword Declensions");
         btnConwordDeclensions.setToolTipText("Displays fields for declension forms of current word (if any)");
+        btnConwordDeclensions.setEnabled(false);
         btnConwordDeclensions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConwordDeclensionsActionPerformed(evt);
@@ -1828,8 +1829,14 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }
 
     private void viewDeclensions() {
+        Integer wordId = (Integer) scrToCoreMap.get(lstDict.getSelectedIndex());
+        
+        if (wordId == -1) {
+            return;
+        }
+        
         try {
-            ScrDeclensions.run(core, core.getWordById((Integer) scrToCoreMap.get(lstDict.getSelectedIndex())),
+            ScrDeclensions.run(core, core.getWordById(wordId),
                     (Integer) scrToCoreTypes.get(cmbTypeProp.getSelectedIndex()), core.getLangFont());
         } catch (Exception ex) {
             InfoBox.error("Decension Error", "Unable to find word." + ex.getLocalizedMessage(), this);
@@ -2819,6 +2826,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             }
         }
 
+        // disable conjugation button if no words left
+        if (lstDict.getModel().getSize() == 0) {
+            btnConwordDeclensions.setEnabled(false);
+        }
+        
         populateDict();
 
         // select the next lowest word (if it exists)
@@ -3135,6 +3147,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         cmbTypeProp.setEnabled(true);
         cmbGenderProp.setEnabled(true);
         chkPronunciationOverrideProp.setEnabled(true);
+        btnConwordDeclensions.setEnabled(true);
 
         // prevents user from navigating away before new word is valid
         setLexiconEnabled(false);
