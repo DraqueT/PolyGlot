@@ -15,9 +15,9 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * POSSIBILITY OF SUCH DAMAGE. 
  */
-
+ 
 package PolyGlot;
 
 import java.awt.Font;
@@ -397,8 +397,10 @@ public class ScrTranslationWindow extends JFrame {
 
         txtTransText.setEditable(false);
         txtTransText.setColumns(20);
+        txtTransText.setLineWrap(true);
         txtTransText.setRows(5);
         txtTransText.setToolTipText("Transliterated text.");
+        txtTransText.setWrapStyleWord(true);
         txtTransText.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 txtTransTextCaretUpdate(evt);
