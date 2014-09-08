@@ -99,10 +99,18 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportExcel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Import Excel"/>
+                <Property name="text" type="java.lang.String" value="Import from Excel"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportExcelActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuExcelExport">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Export to Excel"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExcelExportActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuTranslation">

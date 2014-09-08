@@ -394,6 +394,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuCheckForUpdates = new javax.swing.JMenuItem();
         mnuTools = new javax.swing.JMenu();
         mnuImportExcel = new javax.swing.JMenuItem();
+        mnuExcelExport = new javax.swing.JMenuItem();
         mnuTranslation = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
 
@@ -1407,13 +1408,21 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         mnuTools.setText("Tools");
 
-        mnuImportExcel.setText("Import Excel");
+        mnuImportExcel.setText("Import from Excel");
         mnuImportExcel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuImportExcelActionPerformed(evt);
             }
         });
         mnuTools.add(mnuImportExcel);
+
+        mnuExcelExport.setText("Export to Excel");
+        mnuExcelExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExcelExportActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuExcelExport);
 
         mnuTranslation.setText("Translation Window");
         mnuTranslation.addActionListener(new java.awt.event.ActionListener() {
@@ -1636,6 +1645,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         checkForUpdates(true);
     }//GEN-LAST:event_mnuCheckForUpdatesActionPerformed
 
+    private void mnuExcelExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExcelExportActionPerformed
+        exportToExcel();
+    }//GEN-LAST:event_mnuExcelExportActionPerformed
+
     @Override
     public void dispose() {
         // only exit if save/cancel test is passed
@@ -1648,6 +1661,37 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         this.setVisible(false);
         super.dispose();
         System.exit(0);
+    }
+    
+    /**
+     * Export dictionary to excel file
+     */
+    private void exportToExcel() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Export Dictionary to Excel");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls");
+        chooser.setFileFilter(filter);
+        chooser.setApproveButtonText("Save");
+        chooser.setCurrentDirectory(new File("."));
+
+        String fileName;
+        
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            fileName = chooser.getSelectedFile().getAbsolutePath();
+        } else {
+            return;
+        }
+        
+        if (!fileName.contains(".xls")) {
+            fileName += ".xls";
+        }
+        
+        try {
+            ExcelExport.exportExcelDict(fileName, core);
+            InfoBox.info("Export Status", "Dictionary exported to " + fileName + ".", this);
+        } catch (Exception e) {
+            InfoBox.error("Export Problem", e.getLocalizedMessage(), this);
+        }
     }
 
     /**
@@ -1889,7 +1933,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                     (Integer) scrToCoreTypes.get(cmbTypeProp.getSelectedIndex()), core.getLangFont());
         } catch (Exception ex) {
             InfoBox.error("Decension Error", "Unable to find word." + ex.getLocalizedMessage(), this);
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
 
         saveModWord();
@@ -3435,6 +3479,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JList lstTypesList;
     private javax.swing.JMenuItem mnuAbout;
     private javax.swing.JMenuItem mnuCheckForUpdates;
+    private javax.swing.JMenuItem mnuExcelExport;
     private javax.swing.JMenuItem mnuExit;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
