@@ -1546,6 +1546,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private void jTabbedPane1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabbedPane1FocusGained
         populateDict();
         popWordProps();
+        setLexiconEnabled(true);
     }//GEN-LAST:event_jTabbedPane1FocusGained
 
     private void mnuPloyHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPloyHelpActionPerformed
