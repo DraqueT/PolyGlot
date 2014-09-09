@@ -1960,33 +1960,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }
 
     private void importExcel() {
-        // TODO: move all this code into a run method on the excel import form
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScrExcelImport.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScrExcelImport.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScrExcelImport.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScrExcelImport.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-
-        ScrExcelImport s = new ScrExcelImport(core);
-
-        s.setModal(true);
-        s.setVisible(true);
+        ScrExcelImport.run(core);
 
         populateDict();
         populateGenders();
