@@ -24,8 +24,6 @@ package PolyGlot;
  *
  * @author draque
  */
-// TODO: replace type string with type ID... offer some way to current users to
-// upgrade their saved dictionaries.
 public class ConWord extends DictNode {
 
     // so long as the conword is not blank, this can be blank

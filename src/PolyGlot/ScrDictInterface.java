@@ -49,7 +49,6 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -60,9 +59,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.simplericity.macify.eawt.*;
 
-// TODO: create keyboard shortcuts for ADD/DELETE that conditionally apply depending on the tab which is currently selected.
 /**
- *
+ * This is the main interface for PolyGlot.
  * @author draque
  */
 public class ScrDictInterface extends JFrame implements ApplicationListener { // implementation of ApplicationListener is part of macify
@@ -181,7 +179,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
      */
     private void setupAccelerators() {
         String OS = System.getProperty("os.name");
-        // TODO: create shortcuts for translation window open
         if (OS.startsWith("Mac")) {
             mnuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
             mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
@@ -1985,7 +1982,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }
 
     private Font fontDialog() {
-        // TODO: figure out font kerning
         JFontChooser fontChooser = new JFontChooser();
         Integer result = fontChooser.showDialog(btnChangeFont);
         Font font = null;

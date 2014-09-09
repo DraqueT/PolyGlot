@@ -24,10 +24,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: mandatory now moved to dimensions, remove references here and fix elsewhere (worth the bother?)
-
 /**
- *
+ * This class represents both the header for declension templates, and the actual
+ * body object for fully realized declension constructs (with full combined Dim Ids)
  * @author draque
  */
 public class DeclensionNode extends DictNode{

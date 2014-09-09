@@ -95,9 +95,7 @@ public class DictCore {
     public String getPronunciation(String base) {
         return pronuncMgr.getPronunciation(base);
     }
-    
-    // TODO: make way to find all words that have no valid pronunciations
-    
+        
     /**
      * Returns pronunciation elements of word
      * @param base word to find pronunciation elements of
@@ -201,7 +199,6 @@ public class DictCore {
      * @throws javax.xml.parsers.ParserConfigurationException
      * @throws javax.xml.transform.TransformerException
      */
-    // TODO: segment XML generation into respective collection managers
     public void writeFile(String _fileName)
             throws ParserConfigurationException, TransformerException {
         Iterator<ConWord> wordLoop = wordCollection.getNodeIterator();
