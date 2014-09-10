@@ -181,13 +181,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         String OS = System.getProperty("os.name");
         if (OS.startsWith("Mac")) {
             mnuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
-            mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
+            mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
             mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
             mnuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
         } else {
             // I'm pretty sure all other OSes just use CTRL+ to do stuff
             mnuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
-            mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
+            mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
             mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
             mnuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
         }
@@ -1809,8 +1809,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         for (int i = 0; i < tblProcGuide.getRowCount(); i++) {
             PronunciationNode newNode = new PronunciationNode();
 
-            newNode.setValue((String) tblProcGuide.getCellEditor(i, 0).getCellEditorValue());
-            newNode.setPronunciation((String) tblProcGuide.getCellEditor(i, 1).getCellEditorValue());
+            if (i == tblProcGuide.getSelectedRow()) {
+                newNode.setValue((String) tblProcGuide.getCellEditor(i, 0).getCellEditorValue());
+                newNode.setPronunciation((String) tblProcGuide.getCellEditor(i, 1).getCellEditorValue());
+            } else {
+                newNode.setValue((String)tblProcGuide.getModel().getValueAt(i, 0));
+                newNode.setPronunciation((String)tblProcGuide.getModel().getValueAt(i, 1));
+            }            
 
             newPro.add(newNode);
         }
