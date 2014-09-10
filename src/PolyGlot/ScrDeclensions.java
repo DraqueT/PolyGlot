@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
@@ -49,6 +50,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
     private Integer textHeight = 0;
     private Map<String, DeclensionNode> allWordDeclensions = new HashMap<String, DeclensionNode>();
     private TextField firstField;
+    private final Integer MAXLABELWIDTH = 300;
 
     public ScrDeclensions(DictCore _core) {
         core = _core;
@@ -246,7 +248,10 @@ public class ScrDeclensions extends javax.swing.JDialog {
         if (depth >= declensionList.size()) {
             Label newLabel = new Label(curLabel);
             TextField newField = new TextField();
-
+            Dimension labelDim = new Dimension();
+            labelDim.setSize(MAXLABELWIDTH, 0);
+            newLabel.setMaximumSize(labelDim);
+            
             DeclensionNode findDec = core.getDeclensionManager().getDeclensionByCombinedId(word.getId(), curId);
 
             if (findDec != null) {
@@ -337,7 +342,6 @@ public class ScrDeclensions extends javax.swing.JDialog {
         pnlDeclensions.setSize(pnlDeclensions.getSize().width, numFields * textHeight);
         pnlDeclensions.setLayout(new GridLayout(0, 2));
         this.setSize(this.getWidth() + 10, pnlDeclensions.getHeight() + 70);
-        this.setResizable(false);
     }
 
     /**
