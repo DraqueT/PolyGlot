@@ -1704,7 +1704,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             @Override
             public void run() {
                 try {
-                    String[] updateText = WebInterface.checkForUpdates();
+                    String[] updateText = WebInterface.checkForUpdates(core.getVersion());
 
                     if (updateText[0] == null || updateText[0].equals("")) {
                         if (verbose) {

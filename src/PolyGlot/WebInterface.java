@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map.Entry;
 import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,10 +40,11 @@ public class WebInterface {
     /**
      * Checks for updates to PolyGlot
      *
+     * @param curVersion current version from core
      * @return Entry containing the new version number and the associated message in String[2] array
      * @throws java.lang.Exception if something goes wrong along the way.
      */
-    public static String[] checkForUpdates() throws Exception {
+    public static String[] checkForUpdates(String curVersion) throws Exception {
         String[] ret = new String[2];
         String xmlText = "";
         URL url;
@@ -72,7 +72,7 @@ public class WebInterface {
             Node message = doc.getElementsByTagName("VersionText").item(0);
             
             // only show message if it's not this versino or an earlier version
-            if (!ver.getTextContent().equals("0.7.5")) {
+            if (!ver.getTextContent().equals(curVersion)) {
                 ret[0] = ver.getTextContent();
                 ret[1] = message.getTextContent();
             }

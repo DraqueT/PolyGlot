@@ -45,7 +45,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 public class DictCore {
-    private final String version = "0.7.5";
+    private final String version = "0.7.6";
     private final ConWordCollection wordCollection = new ConWordCollection(this);
     private final TypeCollection typeCollection = new TypeCollection();
     private final GenderCollection genderCollection = new GenderCollection();
