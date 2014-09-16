@@ -364,14 +364,18 @@ public class ConWordCollection extends DictionaryCollection {
             
             // either increment or create value for starting character
             if (wordStart.containsKey(beginsWith)) {
-                wordStart.replace(beginsWith, wordStart.get(beginsWith) + 1);
+                int newValue = wordStart.get(beginsWith) + 1;
+                wordStart.remove(beginsWith);
+                wordStart.put(beginsWith, newValue);
             } else {
                 wordStart.put(beginsWith, 1);
             }
             
             // either increment or create value for ending character
             if (wordEnd.containsKey(endsWith)) {
-                wordEnd.replace(endsWith, wordEnd.get(endsWith) + 1);                
+                int newValue = wordEnd.get(endsWith) + 1;
+                wordEnd.remove(endsWith);
+                wordEnd.put(endsWith, newValue);
             } else {
                 wordEnd.put(endsWith, 1);
             }
@@ -380,8 +384,9 @@ public class ConWordCollection extends DictionaryCollection {
             List<PronunciationNode> phonArray = core.getPronunciationElements(curValue);
             for (int i = 0; i < phonArray.size(); i++) {
                 if (phonemeCount.containsKey(phonArray.get(i).getPronunciation())) {
-                    phonemeCount.replace(phonArray.get(i).getPronunciation(),
-                            phonemeCount.get(phonArray.get(i).getPronunciation()) + 1);
+                    int newValue = phonemeCount.get(phonArray.get(i).getPronunciation()) + 1;
+                    phonemeCount.remove(phonArray.get(i).getPronunciation());
+                    phonemeCount.put(phonArray.get(i).getPronunciation(), newValue);
                 } else {
                     phonemeCount.put(phonArray.get(i).getPronunciation(), 1);
                 }
@@ -392,7 +397,9 @@ public class ConWordCollection extends DictionaryCollection {
                             + phonArray.get(i+1).getPronunciation();
                     
                     if (phonemeCombo2.containsKey(curCombo)) {
-                        phonemeCombo2.replace(curCombo, phonemeCombo2.get(curCombo) + 1);
+                        int newValue = phonemeCombo2.get(curCombo) + 1;
+                        phonemeCombo2.remove(curCombo);
+                        phonemeCombo2.put(curCombo, newValue);
                     } else {
                         phonemeCombo2.put(curCombo, 1);
                     }
@@ -404,7 +411,9 @@ public class ConWordCollection extends DictionaryCollection {
                 String curChar = curValue.substring(i, i + 1);
                 
                 if (charCount.containsKey(curChar)) {
-                    charCount.replace(curChar, charCount.get(curChar) + 1);
+                    int newValue = charCount.get(curChar) + 1;
+                    charCount.remove(curChar);
+                    charCount.put(curChar, newValue);
                 } else {
                     charCount.put(curChar, 1);
                 }
@@ -421,7 +430,9 @@ public class ConWordCollection extends DictionaryCollection {
                         highestCombo2 = curComboCount + 1;
                     }
                     
-                    characterCombos2.replace(combo, curComboCount + 1);
+                    int newValue = characterCombos2.get(combo) + 1;
+                    characterCombos2.remove(combo);
+                    characterCombos2.put(combo, newValue);
                 } else {
                     characterCombos2.put(combo, 1);
                 }
@@ -432,7 +443,9 @@ public class ConWordCollection extends DictionaryCollection {
                 String combo = curValue.substring(i, i + 3);
                 
                 if (characterCombos3.containsKey(combo)) {
-                    characterCombos3.replace(combo, characterCombos3.get(combo) + 1);
+                    int newValue = characterCombos3.get(combo) + 1;
+                    characterCombos3.remove(combo);
+                    characterCombos3.put(combo, newValue);
                 } else {
                     characterCombos3.put(combo, 1);
                 }
@@ -440,7 +453,9 @@ public class ConWordCollection extends DictionaryCollection {
             
             // record type count...
             if (typeCountByWord.containsKey(curType)) {
-                typeCountByWord.replace(curType, typeCountByWord.get(curType) + 1);
+                int newValue = typeCountByWord.get(curType) + 1;
+                typeCountByWord.remove(curType);
+                typeCountByWord.put(curType, newValue);
             } else {
                 typeCountByWord.put(curType, 1);
             }
