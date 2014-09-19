@@ -79,6 +79,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private String curFileName = "";
     private boolean curPopulating = false;
     private final String screenTitle = "PolyGlot BETA";
+    private boolean filterListenersActive = true;
 
     /**
      * Creates new form scrDictInterface
@@ -1514,11 +1515,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }//GEN-LAST:event_cmbGenderPropActionPerformed
 
     private void cmbTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeFilterActionPerformed
-        filterDict();
+        if (filterListenersActive) filterDict();
     }//GEN-LAST:event_cmbTypeFilterActionPerformed
 
     private void cmbGenderFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGenderFilterActionPerformed
-        filterDict();
+        if (filterListenersActive) filterDict();
     }//GEN-LAST:event_cmbGenderFilterActionPerformed
 
     private void btnDeleteTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteTypeActionPerformed
@@ -2132,65 +2133,77 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         txtConWordFilter.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
         });
         txtDefFilter.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
         });
         txtLocalWordFilter.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
         });
         txtPronunciationFilter.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                filterDict();
+                // only filter if filtering is active
+                if (filterListenersActive) filterDict();
             }
         });
         txtTypeName.getDocument().addDocumentListener(new DocumentListener() {
@@ -3242,6 +3255,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         if (curPopulating) {
             return;
         }
+        
+        // if word has been modified, clear filters
+        clearLexFilterValues();
 
         curPopulating = true;
         ConWord saveWord = new ConWord();
@@ -3366,14 +3382,25 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
      * clears all filters set on lexicon
      */
     private void clearLexFilter() {
+        clearLexFilterValues();
+
+        filterDict();
+    }
+    
+    /**
+     * Clears values of LexFilter without re-filtering
+     */
+    private void clearLexFilterValues() {
+        filterListenersActive = false;
+        
         txtConWordFilter.setText("");
         txtLocalWordFilter.setText("");
         txtPronunciationFilter.setText("");
         txtDefFilter.setText("");
         cmbGenderFilter.setSelectedIndex(cmbGenderFilter.getModel().getSize() - 1);
         cmbTypeFilter.setSelectedIndex(cmbTypeFilter.getModel().getSize() - 1);
-
-        filterDict();
+        
+        filterListenersActive = true;
     }
 
     /**
