@@ -40,10 +40,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 /**
- *
+ * This is the setup form for word forms (declensions/conjugations and their
+ * dimensional values.
  * @author draque
  */
-public class ScrDeclensionSetup extends javax.swing.JDialog {
+public final class ScrDeclensionSetup extends javax.swing.JDialog {
 
     private Map scrToCoreDeclensions = new HashMap<Integer, Integer>();
     private Map scrDeclensionMap = new HashMap<String, Integer>();
@@ -302,7 +303,7 @@ public class ScrDeclensionSetup extends javax.swing.JDialog {
         // set saving properties for first column editor
         TableColumnEditor editor1 = (TableColumnEditor) tblDimensions.getCellEditor(model.getRowCount() - 1, 0);
         editor1.setDocuListener(docuListener);
-
+        
         ActionListener actListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

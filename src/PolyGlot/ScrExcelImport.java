@@ -301,7 +301,7 @@ public class ScrExcelImport extends JDialog {
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     /**
-     * @param _core duh
+     * @param _core the dictionary core
      */
     public static void run(DictCore _core) {
         /* Set the Nimbus look and feel */
