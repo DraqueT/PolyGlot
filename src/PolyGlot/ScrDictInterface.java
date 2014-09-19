@@ -2234,6 +2234,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         txtGenderName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
+                if (curPopulating) return;
+                
                 checkGenderLexEnabled();
                 saveGender();
                 updateGenderListName();
@@ -2241,6 +2243,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
             @Override
             public void removeUpdate(DocumentEvent e) {
+                if (curPopulating) return;
+                
                 checkGenderLexEnabled();
                 saveGender();
                 updateGenderListName();
@@ -2248,6 +2252,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
             @Override
             public void insertUpdate(DocumentEvent e) {
+                if (curPopulating) return;
+                
                 checkGenderLexEnabled();
                 saveGender();
                 updateGenderListName();
@@ -2860,8 +2866,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }
 
     private void checkGenderLexEnabled() {
+        GenderNode genNode = core.getGenders().findGenderByName(txtGenderName.getText().trim());
+        
         // do not allow duplicate types
-        if (core.getGenders().findGenderByName(txtGenderName.getText().trim()) != null) {
+        if (genNode != null) {
             setEnabledGenderLexicon(false);
             txtGendersErrorBox.setText("Genders must have unique names.");
         } else if (txtGenderName.getText().trim().equals("")) {
