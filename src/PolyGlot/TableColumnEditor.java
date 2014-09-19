@@ -23,6 +23,7 @@ package PolyGlot;
 import java.awt.Component;
 import java.awt.Font;
 import javax.swing.AbstractCellEditor;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -47,6 +48,9 @@ public class TableColumnEditor extends AbstractCellEditor implements TableCellEd
     
     public TableColumnEditor(Font _myFont) {
         myFont = _myFont;
+        JTextField setupText = (JTextField) component;
+        
+        setupText.setBorder(BorderFactory.createEmptyBorder());
     }
 
     public Component tableColumnEditor(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
