@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /**
@@ -296,7 +297,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
     private void createFields() {
         createFields(0, ",", "", core.getDeclensionListTemplate(typeId));
     }
-
+    
     /**
      * creates fields for deprecated dimension combinations
      */

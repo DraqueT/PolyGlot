@@ -30,6 +30,7 @@ import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
@@ -358,6 +359,22 @@ public final class ScrDeclensionSetup extends javax.swing.JDialog {
             }
         });
     }
+    
+    
+    /**
+     * confirms with user an action that deprecates all current word forms
+     * @return user choice yes/no
+     */
+    private boolean confirmDeprecate() {
+        boolean ret = false;
+        
+        if (InfoBox.yesNoCancel("Confirm action", "This action will deprecate all currently filled out \n"
+                + " declensions/conjugations ()they won't be lost, but set to a deprecated.\nstatus). Continue?", this) == JOptionPane.YES_OPTION) {
+            ret = true;
+        }
+        
+        return ret;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -628,7 +645,18 @@ public final class ScrDeclensionSetup extends javax.swing.JDialog {
         return s;
     }
 
+    /**
+     * adds a declension to the list and readies the system to create it in the core on modification
+     */
     private void addDeclension() {
+        // confirm user is will to deprecate all existing forms
+        if (!confirmDeprecate()) {
+            return;
+        }
+        
+        // deprecate all existing forms
+        core.getDeclensionManager().deprecateAllDeclensions();
+        
         if (lstDeclensionList.getModel().getSize() != 0
                 && scrToCoreDeclensions.containsKey((Integer) lstDeclensionList.getSelectedIndex())
                 && (Integer) scrToCoreDeclensions.get((Integer) lstDeclensionList.getSelectedIndex()) == -1) {
@@ -765,7 +793,18 @@ public final class ScrDeclensionSetup extends javax.swing.JDialog {
         curPopulating = populatingLocal;
     }
 
+    /**
+     * deletes currently selected declension in list
+     */
     private void deleteDeclension() {
+        // confirm user is will to deprecate all existing forms
+        if (!confirmDeprecate()) {
+            return;
+        }
+        
+        // deprecate all existing forms
+        core.getDeclensionManager().deprecateAllDeclensions();
+        
         Integer curIndex = lstDeclensionList.getSelectedIndex();
 
         try {

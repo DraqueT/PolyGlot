@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  *
@@ -61,6 +63,25 @@ public class DeclensionManager {
 
     public void updateDeclensionWord(Integer wordId, Integer declensionId, DeclensionNode declension) {
         updateDeclension(wordId, declensionId, declension, dList);
+    }
+    
+    /**
+     * sets all declensions to deprecated state
+     */
+    public void deprecateAllDeclensions() {
+        Iterator<Entry<Integer, List<DeclensionNode>>> decIt = dList.entrySet().iterator();
+        
+        while (decIt.hasNext()) {
+            List<DeclensionNode> curList = decIt.next().getValue();
+            
+            Iterator<DeclensionNode> nodeIt = curList.iterator();
+            
+            while (nodeIt.hasNext()) {
+                DeclensionNode curNode = nodeIt.next();
+                
+                curNode.setCombinedDimId("D" + curNode.getCombinedDimId());
+            }
+        }
     }
 
     /**
