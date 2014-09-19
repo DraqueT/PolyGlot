@@ -70,7 +70,8 @@ public class CustHandlerFactory {
                 || versionNumber.equals("0.7")) {
             ret = CustHandlerFactory.get7orLowerHandler(core);
         } else if (versionNumber.equals("0.7.5")
-                || versionNumber.equals("0.7.6")) {
+                || versionNumber.equals("0.7.6")
+                || versionNumber.equals("0.7.6.1")) {
             ret = CustHandlerFactory.get075Handler(core);
         } else {
             throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
