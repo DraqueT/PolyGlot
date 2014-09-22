@@ -50,7 +50,7 @@ public class IOHandler {
         if (isFileZipArchive(_filename)) {
             ZipFile zipFile = new ZipFile(_filename);
 
-            ZipEntry xmlEntry = zipFile.getEntry("PGDictionary.xml"); // TODO: remove hardcoded value here as in DictCore
+            ZipEntry xmlEntry = zipFile.getEntry(XMLIDs.dictFileName);
 
             return zipFile.getInputStream(xmlEntry);
         }

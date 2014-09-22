@@ -75,4 +75,5 @@ public class XMLIDs {
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";
     public static final String proAutoPopXID = "proAutoPop";
+    public static final String dictFileName = "PGDictionary.xml";
 }

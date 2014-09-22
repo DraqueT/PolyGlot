@@ -207,6 +207,7 @@ public class DictCore {
      * @param _fileName filename to write to
      * @throws javax.xml.parsers.ParserConfigurationException
      * @throws javax.xml.transform.TransformerException
+     * @throws java.io.FileNotFoundException
      */
     public void writeFile(String _fileName)
             throws ParserConfigurationException, TransformerException, FileNotFoundException, IOException {
@@ -508,7 +509,7 @@ public class DictCore {
 
         final File f = new File(_fileName);
         final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f));
-        ZipEntry e = new ZipEntry("PGDictionary.xml"); // TODO: remove hardcoded value here
+        ZipEntry e = new ZipEntry(XMLIDs.dictFileName);
         out.putNextEntry(e);
 
         byte[] data = sb.toString().getBytes();
