@@ -17,18 +17,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 // TODO: finish test suites for classes...
 package PolyGlot;
 
 import java.awt.Font;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javax.swing.JTextField;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,6 +49,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 public class DictCore {
+
     private final String version = "0.7.6.1";
     private final ConWordCollection wordCollection = new ConWordCollection(this);
     private final TypeCollection typeCollection = new TypeCollection();
@@ -56,11 +61,11 @@ public class DictCore {
     public PropertiesManager getPropertiesManager() {
         return propertiesManager;
     }
-    
+
     public String getVersion() {
         return version;
     }
-    
+
     public ConWordCollection getWordCollection() {
         return wordCollection;
     }
@@ -95,9 +100,10 @@ public class DictCore {
     public String getPronunciation(String base) {
         return pronuncMgr.getPronunciation(base);
     }
-        
+
     /**
      * Returns pronunciation elements of word
+     *
      * @param base word to find pronunciation elements of
      * @return elements of pronunciation for word. Empty if no perfect match
      * found
@@ -105,34 +111,37 @@ public class DictCore {
     public List<PronunciationNode> getPronunciationElements(String base) {
         return pronuncMgr.getPronunciationElements(base);
     }
-    
+
     /**
-     * Builds a report on the conlang. Potentially very computationally 
+     * Builds a report on the conlang. Potentially very computationally
      * expensive.
+     *
      * @return String formatted report
      */
     public String buildLanguageReport() {
         String ret = "<center>---LANGUAGE STAT REPORT---</center><br><br>";
-    
+
         ret += propertiesManager.buildPropertiesReport();
-        
+
         ret += wordCollection.buildWordReport();
-        
+
         return ret;
     }
-    
+
     /**
      * recalculates all non-overridden pronunciations
+     *
      * @throws java.lang.Exception
      */
     public void recalcAllProcs() throws Exception {
         wordCollection.recalcAllProcs();
     }
-    
+
     /**
      * Gets conlang's Font (minimizing display class use in core, but this is
      * just too common of a function to handle case by case
-     * @return 
+     *
+     * @return
      */
     public Font getLangFont() {
         Font ret;
@@ -175,13 +184,13 @@ public class DictCore {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
-                        
-            CustHandler handler = CustHandlerFactory.getCustHandler(_fileName, this);
             
+            CustHandler handler = CustHandlerFactory.getCustHandler(IOHandler.getDictFile(_fileName), this);
+
             handler.setWordCollection(wordCollection);
             handler.setTypeCollection(typeCollection);
-
-            saxParser.parse(_fileName, handler);
+            
+            saxParser.parse(IOHandler.getDictFile(_fileName), handler);
         } catch (ParserConfigurationException e) {
             throw new Exception(e.getMessage());
         } catch (SAXException e) {
@@ -200,7 +209,7 @@ public class DictCore {
      * @throws javax.xml.transform.TransformerException
      */
     public void writeFile(String _fileName)
-            throws ParserConfigurationException, TransformerException {
+            throws ParserConfigurationException, TransformerException, FileNotFoundException, IOException {
         Iterator<ConWord> wordLoop = wordCollection.getNodeIterator();
         Iterator<TypeNode> typeLoop = typeCollection.getNodeIterator();
         Iterator<GenderNode> genderLoop = genderCollection.getNodeIterator();
@@ -405,29 +414,29 @@ public class DictCore {
                 wordValue = doc.createElement(XMLIDs.declensionRelatedIdXID);
                 wordValue.appendChild(doc.createTextNode(relatedId.toString()));
                 wordNode.appendChild(wordValue);
-                
+
                 wordValue = doc.createElement(XMLIDs.declensionMandatoryXID);
                 wordValue.appendChild(doc.createTextNode(curNode.isMandatory() ? "T" : "F"));
                 wordNode.appendChild(wordValue);
-                
+
                 Iterator<DeclensionDimension> dimIt = curNode.getDimensions().iterator();
                 while (dimIt.hasNext()) {
                     wordValue = doc.createElement(XMLIDs.dimensionNodeXID);
-                    
+
                     DeclensionDimension curDim = dimIt.next();
-                    
+
                     Element dimNode = doc.createElement(XMLIDs.dimensionIdXID);
                     dimNode.appendChild(doc.createTextNode(curDim.getId().toString()));
                     wordValue.appendChild(dimNode);
-                    
+
                     dimNode = doc.createElement(XMLIDs.dimensionNameXID);
                     dimNode.appendChild(doc.createTextNode(curDim.getValue()));
                     wordValue.appendChild(dimNode);
-                    
+
                     dimNode = doc.createElement(XMLIDs.dimensionMandXID);
                     dimNode.appendChild(doc.createTextNode(curDim.isMandatory() ? "T" : "F"));
                     wordValue.appendChild(dimNode);
-                
+
                     wordNode.appendChild(wordValue);
                 }
             }
@@ -457,7 +466,7 @@ public class DictCore {
                 wordValue = doc.createElement(XMLIDs.declensionRelatedIdXID);
                 wordValue.appendChild(doc.createTextNode(relatedId.toString()));
                 wordNode.appendChild(wordValue);
-                
+
                 wordValue = doc.createElement(XMLIDs.declensionComDimIdXID);
                 wordValue.appendChild(doc.createTextNode(curNode.getCombinedDimId()));
                 wordNode.appendChild(wordValue);
@@ -485,14 +494,29 @@ public class DictCore {
             wordNode.appendChild(wordValue);
         }
 
-        // write the content into xml file
+        // write the content into xml file within zip archive
         TransformerFactory transformerFactory = TransformerFactory
                 .newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File(_fileName));
+        StringWriter writer = new StringWriter();
+        transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
-        transformer.transform(source, result);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(writer.getBuffer().toString().replaceAll("\n|\r", ""));
+
+        final File f = new File(_fileName);
+        final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f));
+        ZipEntry e = new ZipEntry("PGDictionary.xml"); // TODO: remove hardcoded value here
+        out.putNextEntry(e);
+
+        byte[] data = sb.toString().getBytes();
+        out.write(data, 0, data.length);
+
+        out.closeEntry();
+
+        out.close();
     }
 
     /**
@@ -530,7 +554,7 @@ public class DictCore {
     public DeclensionNode getDeclensionTemplate(Integer typeId, Integer templateId) {
         return declensionMgr.getDeclensionTemplate(typeId, templateId);
     }
-    
+
     public DeclensionManager getDeclensionManager() {
         return declensionMgr;
     }
@@ -570,7 +594,7 @@ public class DictCore {
      */
     public String isWordLegal(ConWord word) {
         String ret = "";
-        
+
         if (word.getValue().equals("")) {
             ret = "Words must have a cownword value set.";
         } else if (word.getWordType().equals("") && propertiesManager.isTypesMandatory()) {
@@ -579,16 +603,16 @@ public class DictCore {
             ret = "Local word set to mandatory; please fill in local word.";
         } else if (propertiesManager.isWordUniqueness() && wordCollection.containsWord(word.getValue())) {
             ret = "ConWords set to enforced unique, plese select spelling without existing homonyms.";
-        } else if (propertiesManager.isLocalUniqueness() && !word.getLocalWord().equals("") 
+        } else if (propertiesManager.isLocalUniqueness() && !word.getLocalWord().equals("")
                 && wordCollection.containsLocalMultiples(word.getLocalWord())) {
             ret = "Local words set to enforced unique, and this local exists elsewhere.";
-        } 
-        
+        }
+
         // for more complex checks, use this pattern, only checking if other problems do not exist
         if (ret.equals("")) {
             ret = typeCollection.typeRequirementsMet(word);
         }
-        
+
         if (ret.equals("")) {
             ret = declensionMgr.declensionRequirementsMet(word, typeCollection.findTypeByName(word.getWordType()));
         }
@@ -742,7 +766,7 @@ public class DictCore {
     public GenderCollection getGenders() {
         return genderCollection;
     }
-    
+
     public PronunciationMgr getPronunciationMgr() {
         return pronuncMgr;
     }

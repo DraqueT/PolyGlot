@@ -19,7 +19,7 @@
  */
 package PolyGlot;
 
-import java.io.File;
+import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -40,17 +40,36 @@ public class CustHandlerFactory {
      * Creates appropriate handler to read file (based on version of PolyGlot
      * file was saved with)
      *
-     * @param fileName name of file to be loaded
+     * @param fileStream stream of file to be loaded
      * @param core dictionary core
      * @return an appropriate handler for the xml file
      * @throws java.lang.Exception when unable to read given file or if file is
      * from newer version of PolyGlot
      */
-    public static CustHandler getCustHandler(String fileName, DictCore core) throws Exception {
-        File XMLFile = new File(fileName);
+    public static CustHandler getCustHandler(InputStream fileStream, DictCore core) throws Exception {
+        //File XMLFile = new File(fileName);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(XMLFile);
+        Document doc;
+
+        // decode from zip archive if appropriate to do so
+        /*if (IOHandler.isFileZipArchive(fileName)) {
+            ZipFile zipFile = new ZipFile(fileName);
+
+            ZipEntry xmlEntry = zipFile.getEntry("PGDictionary.xml"); // TODO: remove hardcoded value here as in DictCore
+
+            java.util.Scanner s = new java.util.Scanner(zipFile.getInputStream(xmlEntry), StandardCharsets.UTF_8.name())
+                    .useDelimiter("\\A");
+            
+            // replaces illegal characters (that look the same...)
+            String xmlStringVal = s.next().replaceAll("[^\\x20-\\x7e]", "");
+            
+            doc = dBuilder.parse(new InputSource(new StringReader(xmlStringVal)));
+        } else {
+            doc = dBuilder.parse(XMLFile);
+        }*/
+
+        doc = dBuilder.parse(fileStream);
         doc.getDocumentElement().normalize();
         Node versionNode;
         String versionNumber;
@@ -656,7 +675,7 @@ public class CustHandlerFactory {
                     bdimName = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.declensionComDimIdXID)) {
                     bDecCombId = true;
-                } 
+                }
             }
 
             @Override
@@ -778,7 +797,7 @@ public class CustHandlerFactory {
                         declensionMgr.getBuffer().clearBuffer();
                     } catch (Exception e) {
                         throw new SAXException(e);
-                    }                    
+                    }
                     bdimNode = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.dimensionIdXID)) {
                     bdimId = false;
