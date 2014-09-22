@@ -1462,7 +1462,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveActionPerformed
-        saveFile();
+        if (saveFile()) {
+            InfoBox.info("Success", "Dictionary saved to: " + curFileName + ".", this);
+        }
     }//GEN-LAST:event_mnuSaveActionPerformed
 
     private void mnuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenActionPerformed
@@ -2430,8 +2432,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         } catch (IOException e) {
             InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
         }
-
-        InfoBox.info("Success", "Dictionary saved to: " + curFileName + ".", this);
 
         return true;
     }
