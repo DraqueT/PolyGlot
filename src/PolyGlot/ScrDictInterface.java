@@ -26,6 +26,7 @@ import java.awt.Window;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -2355,6 +2356,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
         } catch (TransformerException e) {
             InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
+        } catch (FileNotFoundException e) {
+            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
+        } catch (IOException e) {
+            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
         }
 
         return true;
@@ -2420,6 +2425,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             InfoBox.error("Save Error", "Unable to save to file: " + curFileName + "\n\n" + e.getMessage(), this);
         } catch (TransformerException e) {
             InfoBox.error("Save Error", "Unable to save to file: " + curFileName + "\n\n" + e.getMessage(), this);
+        } catch (FileNotFoundException e) {
+            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
+        } catch (IOException e) {
+            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
         }
 
         InfoBox.info("Success", "Dictionary saved to: " + curFileName + ".", this);
