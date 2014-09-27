@@ -21,6 +21,7 @@
 // This is the type which all nodes and storage types extend.
 package PolyGlot;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,7 +36,7 @@ public abstract class DictNode implements Comparable<DictNode> {
     protected Integer id = 0;
     
     // used for alphabetic ordering of nodes
-    private Map<Character, Integer> alphaOrder;
+    private Map<Character, Integer> alphaOrder = new HashMap<Character, Integer>();
     
     /**
      * Sets a node equal to the argument node

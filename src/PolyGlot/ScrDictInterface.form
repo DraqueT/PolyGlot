@@ -100,6 +100,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportExcel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Import from Excel"/>
+                <Property name="toolTipText" type="java.lang.String" value="Import words from Excel file"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportExcelActionPerformed"/>
@@ -108,14 +109,25 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuExcelExport">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Export to Excel"/>
+                <Property name="toolTipText" type="java.lang.String" value="Export words to excel file"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExcelExportActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuThesaurus">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Thesaurus"/>
+                <Property name="toolTipText" type="java.lang.String" value="A thesaurus to help you organize your words."/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuThesaurusActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuTranslation">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Translation Window"/>
+                <Property name="toolTipText" type="java.lang.String" value="A tool to help you translate to your ConLang"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuTranslationActionPerformed"/>
@@ -124,6 +136,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuLangStats">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Language Statistics"/>
+                <Property name="toolTipText" type="java.lang.String" value="A statistical breakdown of linguistic features"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuLangStatsActionPerformed"/>

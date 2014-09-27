@@ -394,6 +394,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuTools = new javax.swing.JMenu();
         mnuImportExcel = new javax.swing.JMenuItem();
         mnuExcelExport = new javax.swing.JMenuItem();
+        mnuThesaurus = new javax.swing.JMenuItem();
         mnuTranslation = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
 
@@ -1408,6 +1409,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuTools.setText("Tools");
 
         mnuImportExcel.setText("Import from Excel");
+        mnuImportExcel.setToolTipText("Import words from Excel file");
         mnuImportExcel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuImportExcelActionPerformed(evt);
@@ -1416,6 +1418,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuTools.add(mnuImportExcel);
 
         mnuExcelExport.setText("Export to Excel");
+        mnuExcelExport.setToolTipText("Export words to excel file");
         mnuExcelExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuExcelExportActionPerformed(evt);
@@ -1423,7 +1426,17 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         });
         mnuTools.add(mnuExcelExport);
 
+        mnuThesaurus.setText("Thesaurus");
+        mnuThesaurus.setToolTipText("A thesaurus to help you organize your words.");
+        mnuThesaurus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuThesaurusActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuThesaurus);
+
         mnuTranslation.setText("Translation Window");
+        mnuTranslation.setToolTipText("A tool to help you translate to your ConLang");
         mnuTranslation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuTranslationActionPerformed(evt);
@@ -1432,6 +1445,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuTools.add(mnuTranslation);
 
         mnuLangStats.setText("Language Statistics");
+        mnuLangStats.setToolTipText("A statistical breakdown of linguistic features");
         mnuLangStats.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuLangStatsActionPerformed(evt);
@@ -1651,6 +1665,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         exportToExcel();
     }//GEN-LAST:event_mnuExcelExportActionPerformed
 
+    private void mnuThesaurusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuThesaurusActionPerformed
+        viewThesaurus();
+    }//GEN-LAST:event_mnuThesaurusActionPerformed
+
     @Override
     public void dispose() {
         // only exit if save/cancel test is passed
@@ -1727,6 +1745,22 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         };
 
         check.start();
+    }
+    
+    /**
+     * Gets the currently selected word in your dictionary
+     * @return conword object, null if nothing selected
+     */
+    public ConWord getCurrentWord() {
+        ConWord ret;
+        
+        try {
+            ret = core.getWordById((Integer)scrToCoreMap.get(lstDict.getSelectedIndex()));
+        } catch (Exception e) {
+            ret = null;
+        }
+        
+        return ret;
     }
 
     private void recalcAllProcs() {
@@ -1960,8 +1994,17 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         ScrLangStats.run(core);
     }
 
+    
     private void viewDeclensionSetup(Integer _typeId) {
         Window window = ScrDeclensionSetup.run(core, _typeId);
+        childFrames.add(window);
+    }
+    
+    /**
+     * Opens thesaurus window, adds to children windows
+     */
+    private void viewThesaurus() {
+        Window window = ScrThesaurus.run(core, this);
         childFrames.add(window);
     }
 
@@ -3510,6 +3553,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private javax.swing.JMenuItem mnuPloyHelp;
     private javax.swing.JMenuItem mnuSave;
     private javax.swing.JMenuItem mnuSaveAs;
+    private javax.swing.JMenuItem mnuThesaurus;
     private javax.swing.JMenu mnuTools;
     private javax.swing.JMenuItem mnuTranslation;
     private javax.swing.JPanel pnlFilter;

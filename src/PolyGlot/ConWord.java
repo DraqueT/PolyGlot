@@ -54,6 +54,11 @@ public class ConWord extends DictNode {
         id = -1;
         procOverride = false;
     }
+    
+    @Override
+    public String toString() {
+        return value;
+    }
 
     /**
      * @param _set sets all non ID values equal to that of parameter
