@@ -222,6 +222,10 @@ public class ScrThesaurus extends javax.swing.JFrame {
         
         model.clear();
         
+        if (curNode == null) {
+            return;
+        }
+        
         Iterator<ConWord> wordIt;
         
         if (chkInclSubFam.isSelected()) {

@@ -19,7 +19,9 @@
  */
 package PolyGlot;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -30,6 +32,11 @@ import org.w3c.dom.Element;
 public class ThesaurusManager {
     private ThesNode thesRoot = null;
     private ThesNode buffer;
+    DictCore core;
+    
+    public ThesaurusManager(DictCore _core) {
+        core = _core;
+    }
     
     /**
      * Gets root thesaurus node
@@ -37,10 +44,27 @@ public class ThesaurusManager {
      */
     public ThesNode getRoot() {
         if (thesRoot == null) {
-            thesRoot = new ThesNode(null, "Thesarus");
+            thesRoot = new ThesNode(null, "Thesarus", this);
         }
         
         return thesRoot;
+    }
+    
+    /**
+     * This deletes words from the word list that no longer exist in the lexicon
+     * @param thes thesaurus entry to clean
+     * @param wordList raw words from entry
+     */
+    public void removeDeadWords(ThesNode thes, List<ConWord> wordList) {
+        Iterator wordIt = new ArrayList(wordList).iterator();
+        
+        while (wordIt.hasNext()) {
+            ConWord curWord = (ConWord)wordIt.next();
+            
+            if (!core.getWordCollection().exists(curWord.getId())) {
+                thes.removeWord(curWord);
+            }
+        }
     }
     
     /**
@@ -49,11 +73,11 @@ public class ThesaurusManager {
      */
     public void buildNewBuffer() {
         if (thesRoot == null) {
-            thesRoot = new ThesNode(null);
+            thesRoot = new ThesNode(null, this);
             
             buffer = thesRoot;
         } else {
-            ThesNode newBuffer = new ThesNode(buffer);
+            ThesNode newBuffer = new ThesNode(buffer, this);
             buffer.addNode(newBuffer);
             buffer = newBuffer;
         }

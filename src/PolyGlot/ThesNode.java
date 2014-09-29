@@ -33,7 +33,8 @@ public class ThesNode extends DictNode {
     private final List<ConWord> words = new ArrayList<ConWord>();
     private ThesNode parent;
     private String notes = "";
-    
+    private final ThesaurusManager manager;
+
     /**
      * sets notes
      * @param _notes new notes
@@ -62,8 +63,9 @@ public class ThesNode extends DictNode {
      * sets parent of node
      * @param _parent node's parent (null if root)
      */    
-    public ThesNode(ThesNode _parent) {
+    public ThesNode(ThesNode _parent, ThesaurusManager _manager) {
         parent = _parent;
+        manager = _manager;
     }
     
     /**
@@ -71,9 +73,18 @@ public class ThesNode extends DictNode {
      * @param _parent parent of note (null if root)
      * @param _value node's string value
      */
-    public ThesNode(ThesNode _parent, String _value) {
+    public ThesNode(ThesNode _parent, String _value, ThesaurusManager _manager) {
         parent = _parent;
         this.setValue(_value);
+        manager = _manager;
+    }
+    
+    /**
+     * gets node's manager
+     * @return ThesaurusManager
+     */
+    public ThesaurusManager getManager() {
+        return manager;
     }
     
     /**
@@ -108,6 +119,7 @@ public class ThesNode extends DictNode {
      * @return iterator of all words in immediate family
      */
     public Iterator<ConWord> getWords() {
+        manager.removeDeadWords(this, words);
         Collections.sort(words);
         return words.iterator();
     }
@@ -128,6 +140,8 @@ public class ThesNode extends DictNode {
      * @return list of (non duped) words in this and all subnodes
      */
     private List<ConWord> getWordsIncludeSubsInternal() {
+        manager.removeDeadWords(this, words);
+        
         List<ConWord> ret = new ArrayList(words);
         
         Iterator<ThesNode> subIt = subNodes.iterator();

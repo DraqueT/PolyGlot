@@ -38,7 +38,7 @@ public class ThesTreeNode extends DefaultMutableTreeNode {
      * @param parent
      */
     public ThesTreeNode(ThesNode parent) {
-        thesNode = new ThesNode(parent);
+        thesNode = new ThesNode(parent, parent.getManager());
     }
 
     /**

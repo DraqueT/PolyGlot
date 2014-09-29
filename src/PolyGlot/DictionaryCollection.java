@@ -72,6 +72,15 @@ public abstract class DictionaryCollection {
         nodeMap.put(_modNode.getId(), _modNode);
     }
     
+    /**
+     * Tests whether object in collection exists by object's ID
+     * @param objectId id of object to test for
+     * @return true if exists, false otherwise
+     */
+    public boolean exists(Integer objectId) {
+        return nodeMap.containsKey(objectId);
+    }
+    
     public Object getNodeById(Integer _id) throws Exception {
         if (!nodeMap.containsKey(_id)) {
             throw new Exception("Node with id: " + _id.toString()

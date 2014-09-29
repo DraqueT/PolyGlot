@@ -57,7 +57,7 @@ public class DictCore {
     private final DeclensionManager declensionMgr = new DeclensionManager();
     private final PropertiesManager propertiesManager = new PropertiesManager();
     private final PronunciationMgr pronuncMgr = new PronunciationMgr();
-    private final ThesaurusManager thesManager = new ThesaurusManager();
+    private final ThesaurusManager thesManager = new ThesaurusManager(this);
     
     /**
      * gets thesaurus manager
