@@ -28,14 +28,54 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class ThesaurusManager {
-    private final ThesNode thesRoot = new ThesNode(null, "Thesarus");
+    private ThesNode thesRoot = null;
+    private ThesNode buffer;
     
     /**
      * Gets root thesaurus node
      * @return 
      */
     public ThesNode getRoot() {
+        if (thesRoot == null) {
+            thesRoot = new ThesNode(null, "Thesarus");
+        }
+        
         return thesRoot;
+    }
+    
+    /**
+     * Used when loading from save file and building thesaurus.
+     * Either creates new root or adds child/sets buffer to that.
+     */
+    public void buildNewBuffer() {
+        if (thesRoot == null) {
+            thesRoot = new ThesNode(null);
+            
+            buffer = thesRoot;
+        } else {
+            ThesNode newBuffer = new ThesNode(buffer);
+            buffer.addNode(newBuffer);
+            buffer = newBuffer;
+        }
+    }
+    
+    /**
+     * Gets buffer for building thesaurus from saved file
+     * @return current ThesNode buffer
+     */
+    public ThesNode getBuffer() {
+        return buffer;
+    }
+    
+    /**
+     * jumps to buffer parent, or does nothing if at root
+     */
+    public void bufferDone() {
+        if(buffer.getParent() == null) {
+            return;
+        }
+        
+        buffer = buffer.getParent();
     }
     
     /**

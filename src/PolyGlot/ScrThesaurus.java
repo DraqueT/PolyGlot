@@ -123,6 +123,11 @@ public class ScrThesaurus extends javax.swing.JFrame {
      * removes currently selected word (in thesaurus window) from currently selected family
      */
     private void removeWord() {
+        if (chkInclSubFam.isSelected()) {
+            InfoBox.info("Alert", "Words may only be removed when \"Include Subfamilies\" box is unchecked.", this);
+            return;
+        }
+        
         ConWord curWord = (ConWord)lstWords.getSelectedValue();
         ThesTreeNode curNode  = (ThesTreeNode) treThes.getLastSelectedPathComponent();
         

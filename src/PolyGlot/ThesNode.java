@@ -43,6 +43,14 @@ public class ThesNode extends DictNode {
     }
     
     /**
+     * Gets node's parent
+     * @return ThesNode representing node's parent. null if root
+     */
+    public ThesNode getParent() {
+        return parent;
+    }
+    
+    /**
      * gets notes
      * @return notes of node
      */

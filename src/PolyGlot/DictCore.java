@@ -59,18 +59,34 @@ public class DictCore {
     private final PronunciationMgr pronuncMgr = new PronunciationMgr();
     private final ThesaurusManager thesManager = new ThesaurusManager();
     
+    /**
+     * gets thesaurus manager
+     * @return ThesaurusManager object from core
+     */
     public ThesaurusManager getThesManager() {
         return thesManager;
     }
 
+    /**
+     * gets properties manager 
+     * @return PropertiesManager object from core
+     */
     public PropertiesManager getPropertiesManager() {
         return propertiesManager;
     }
-
+    
+    /**
+     * gets version ID of PolyGlot
+     * @return String value of version
+     */
     public String getVersion() {
         return version;
     }
 
+    /**
+     * Gets lexicon manager
+     * @return ConWordCollection from core
+     */
     public ConWordCollection getWordCollection() {
         return wordCollection;
     }

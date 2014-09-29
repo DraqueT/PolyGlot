@@ -37,7 +37,7 @@ import java.util.zip.ZipFile;
 public class IOHandler {
 
     /**
-     * Gets the File from the filename of the pgd, whether it's raw XML or an
+     * Gets the dictionary File from the filename of the pgd, whether it's raw XML or an
      * archive
      *
      * @param _filename the filename of the actual file

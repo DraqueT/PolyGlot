@@ -52,23 +52,6 @@ public class CustHandlerFactory {
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc;
 
-        // decode from zip archive if appropriate to do so
-        /*if (IOHandler.isFileZipArchive(fileName)) {
-            ZipFile zipFile = new ZipFile(fileName);
-
-            ZipEntry xmlEntry = zipFile.getEntry("PGDictionary.xml"); // TODO: remove hardcoded value here as in DictCore
-
-            java.util.Scanner s = new java.util.Scanner(zipFile.getInputStream(xmlEntry), StandardCharsets.UTF_8.name())
-                    .useDelimiter("\\A");
-            
-            // replaces illegal characters (that look the same...)
-            String xmlStringVal = s.next().replaceAll("[^\\x20-\\x7e]", "");
-            
-            doc = dBuilder.parse(new InputSource(new StringReader(xmlStringVal)));
-        } else {
-            doc = dBuilder.parse(XMLFile);
-        }*/
-
         doc = dBuilder.parse(fileStream);
         doc.getDocumentElement().normalize();
         Node versionNode;
@@ -566,6 +549,9 @@ public class CustHandlerFactory {
             boolean bdimId = false;
             boolean bdimMand = false;
             boolean bdimName = false;
+            boolean bthesName = false;
+            boolean bthesNotes = false;
+            boolean bthesWord = false;
 
             int wId;
             int wCId;
@@ -575,6 +561,7 @@ public class CustHandlerFactory {
             GenderCollection genderCollection = core.getGenders();
             PronunciationMgr pronuncMgr = core.getPronunciationMgr();
             PropertiesManager propertiesManager = core.getPropertiesManager();
+            ThesaurusManager thesMgr = core.getThesManager();
 
             @Override
             public void startElement(String uri, String localName,
@@ -675,6 +662,14 @@ public class CustHandlerFactory {
                     bdimName = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.declensionComDimIdXID)) {
                     bDecCombId = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.thesNameXID)) {
+                    bthesName = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.thesNodeXID)) {
+                    thesMgr.buildNewBuffer();
+                } else if (qName.equalsIgnoreCase(XMLIDs.thesNotesXID)) {
+                    bthesNotes = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.thesWordXID)) {
+                    bthesWord = true;
                 }
             }
 
@@ -805,6 +800,14 @@ public class CustHandlerFactory {
                     bdimMand = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.dimensionNameXID)) {
                     bdimName = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.thesNameXID)) {
+                    bthesName = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.thesNodeXID)) {
+                     thesMgr.bufferDone();
+                } else if (qName.equalsIgnoreCase(XMLIDs.thesNotesXID)) {
+                    bthesNotes = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.thesWordXID)) {
+                    bthesWord = false;
                 }
             }
 
@@ -947,6 +950,20 @@ public class CustHandlerFactory {
                 } else if (bdimName) {
                     declensionMgr.getBuffer().getBuffer().setValue(new String(ch, start, length));
                     bdimName = false;
+                } else if (bthesName) {
+                    thesMgr.getBuffer().setValue(new String(ch, start, length));
+                    bthesName = false;
+                } else if (bthesNotes) {
+                    thesMgr.getBuffer().setNotes(new String(ch, start, length));
+                    bthesNotes = false;
+                } else if (bthesWord) {
+                    try {
+                        thesMgr.getBuffer().addWord(core.getWordById(
+                            Integer.parseInt(new String(ch, start, length))));
+                    } catch (Exception e) {
+                        // I really shouldn't have made the word search return error on not found...
+                    }
+                    bthesWord = false;
                 }
             }
         };
