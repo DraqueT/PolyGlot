@@ -499,6 +499,9 @@ public class DictCore {
             wordValue.appendChild(doc.createTextNode(curNode.getPronunciation()));
             wordNode.appendChild(wordValue);
         }
+        
+        // write thesaurus entried
+        rootElement.appendChild(thesManager.writeToSaveXML(doc));
 
         // write the content into xml file within zip archive
         TransformerFactory transformerFactory = TransformerFactory

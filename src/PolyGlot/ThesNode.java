@@ -105,6 +105,45 @@ public class ThesNode extends DictNode {
     }
     
     /**
+     * returns all words within family and subfamilies
+     * @return sorted list of ConWords
+     */
+    public List<ConWord> getWordsIncludeSubs() {
+        List<ConWord> ret = getWordsIncludeSubsInternal();
+        Collections.sort(ret);
+        
+        return ret;
+    }
+    
+    /**
+     * internally facing, recursive method for getting all words in this and subfamilies
+     * @return list of (non duped) words in this and all subnodes
+     */
+    private List<ConWord> getWordsIncludeSubsInternal() {
+        List<ConWord> ret = new ArrayList(words);
+        
+        Iterator<ThesNode> subIt = subNodes.iterator();
+        
+        while (subIt.hasNext()) {
+            ThesNode curNode = subIt.next();
+            
+            Iterator<ConWord> wordIt = curNode.getWordsIncludeSubsInternal()
+                    .iterator();
+            
+            while (wordIt.hasNext()) {
+                ConWord curWord = wordIt.next();
+                
+                // only add current word to return value if not already present
+                if (!ret.contains(curWord)) {
+                    ret.add(curWord);
+                }
+            }
+        }
+        
+        return ret;
+    }
+    
+    /**
      * gets all subnodes
      * @return alphabetically sorted iterator of all subnodes
      */

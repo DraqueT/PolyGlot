@@ -19,6 +19,10 @@
  */
 package PolyGlot;
 
+import java.util.Iterator;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 /**
  * This is the manager class for dictionary thesaurus entries
  * @author draque
@@ -34,5 +38,52 @@ public class ThesaurusManager {
         return thesRoot;
     }
     
-    // TODO: when saving nodes, do NOT save ID.
+    /**
+     * returns Element containing all thesaurus data to be saved to XML
+     * @param doc the document this is to be inserted into
+     * @return an element containing all thesaurus data
+     */
+    public Element writeToSaveXML(Document doc) {
+        return writeToSaveXML(doc, thesRoot);
+    }
+    
+    /**
+     * this is the recursive function that completes the work of its overridden method
+     * @param doc the document this is to be inserted into
+     * @param curNode node to build element for
+     * @return an element containing all thesaurus data
+     */
+    private Element writeToSaveXML(Document doc, ThesNode curNode) {
+        Element curElement = doc.createElement(XMLIDs.thesNodeXID);
+        
+        // save name
+        Element property = doc.createElement(XMLIDs.thesNameXID);
+        property.appendChild(doc.createTextNode(curNode.getValue()));
+        curElement.appendChild(property);
+        
+        // save notes
+        property = doc.createElement(XMLIDs.thesNotesXID);
+        property.appendChild(doc.createTextNode(curNode.getNotes()));
+        curElement.appendChild(property);
+        
+        // save words
+        Iterator<ConWord> wordIt = curNode.getWords();
+        while (wordIt.hasNext()) {
+            ConWord curWord = wordIt.next();
+            
+            property = doc.createElement(XMLIDs.thesWordXID);
+            property.appendChild(doc.createTextNode(curWord.getId().toString()));
+            curElement.appendChild(property);
+        }
+        
+        // save subnodes
+        Iterator<ThesNode> thesIt = curNode.getNodes();
+        while (thesIt.hasNext()) {
+            ThesNode curChild = thesIt.next();
+            
+            curElement.appendChild(writeToSaveXML(doc, curChild));
+        }
+        
+        return curElement;
+    }
 }

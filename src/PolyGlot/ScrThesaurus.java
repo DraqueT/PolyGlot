@@ -217,7 +217,13 @@ public class ScrThesaurus extends javax.swing.JFrame {
         
         model.clear();
         
-        Iterator<ConWord> wordIt = curNode.getNode().getWords();
+        Iterator<ConWord> wordIt;
+        
+        if (chkInclSubFam.isSelected()) {
+            wordIt = curNode.getNode().getWordsIncludeSubs().iterator();
+        } else {
+            wordIt = curNode.getNode().getWords();
+        }
         
         for (int i = 0; wordIt.hasNext(); i++) {
             model.add(i, wordIt.next());
@@ -338,6 +344,11 @@ public class ScrThesaurus extends javax.swing.JFrame {
 
         chkInclSubFam.setText("Include Subfamilies");
         chkInclSubFam.setToolTipText("Include all words from subfamilies in list disables remove (-) button");
+        chkInclSubFam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkInclSubFamActionPerformed(evt);
+            }
+        });
 
         lstWords.setToolTipText("Words in family");
         lstWords.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -495,6 +506,10 @@ public class ScrThesaurus extends javax.swing.JFrame {
     private void lstWordsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstWordsValueChanged
         if (!curUpdating) updateLexSelection();
     }//GEN-LAST:event_lstWordsValueChanged
+
+    private void chkInclSubFamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkInclSubFamActionPerformed
+        if (!curUpdating) updateWordsProp();
+    }//GEN-LAST:event_chkInclSubFamActionPerformed
 
     /**
      * Opens thesaurus window and returns instance of self

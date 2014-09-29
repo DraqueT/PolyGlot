@@ -75,5 +75,11 @@ public class XMLIDs {
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";
     public static final String proAutoPopXID = "proAutoPop";
+    
+    public static final String thesNodeXID = "thesNode";
+    public static final String thesNotesXID = "thesNotes";
+    public static final String thesNameXID = "thesName";
+    public static final String thesWordXID = "thesWord";
+    
     public static final String dictFileName = "PGDictionary.xml";
 }
