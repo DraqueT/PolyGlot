@@ -1877,6 +1877,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 curFrame.dispose();
             }
         }
+        
+        childFrames.clear();
     }
 
     private void populateProcGuide() {
@@ -2444,6 +2446,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         core = new DictCore();
         curFileName = "";
 
+        killAllChildren();
         populateDict();
         popWordProps();
         populateTypes();
@@ -2503,6 +2506,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         setFile(fileName);
         setLexiconEnabled(true);
+        killAllChildren();
     }
 
     private void setFile(String fileName) {
