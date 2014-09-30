@@ -557,6 +557,9 @@ public class ScrThesaurus extends javax.swing.JFrame {
             }
         });
         
+        // center window in screen
+        s.setLocationRelativeTo(null);
+        
         return s;
     }
 

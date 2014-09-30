@@ -642,6 +642,9 @@ public final class ScrDeclensionSetup extends javax.swing.JDialog {
         s.setModal(true);
         s.setVisible(true);
 
+        // center window in screen
+        s.setLocationRelativeTo(null);
+        
         return s;
     }
 

@@ -330,6 +330,9 @@ public class ScrExcelImport extends JDialog {
         /* Create and display the form */
         ScrExcelImport s = new ScrExcelImport(_core);
 
+        // center window in screen
+        s.setLocationRelativeTo(null);
+        
         s.setModal(true);
         s.setVisible(true);
     }

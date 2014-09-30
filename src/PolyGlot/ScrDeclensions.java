@@ -194,6 +194,9 @@ public class ScrDeclensions extends javax.swing.JDialog {
                 s.setFormProps();
             }
         });
+        
+        // center window in screen
+        s.setLocationRelativeTo(null);
 
         s.setVisible(true);
 

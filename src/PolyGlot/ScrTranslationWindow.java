@@ -254,6 +254,9 @@ public class ScrTranslationWindow extends JFrame {
        
         s.setVisible(true);
         
+        // center window in screen
+        s.setLocationRelativeTo(null);
+        
         return s;
     }
     

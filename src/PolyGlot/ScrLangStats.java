@@ -56,6 +56,9 @@ public class ScrLangStats extends javax.swing.JDialog {
                     + "box under Language Properties.", s);
         }
         
+        // center window in screen
+        s.setLocationRelativeTo(null);
+        
         s.setModal(true);
         s.setVisible(true);
     }

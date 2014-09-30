@@ -79,6 +79,10 @@ public class ScrTranslationFreewrite extends javax.swing.JFrame {
     public static ScrTranslationFreewrite run(DictCore _core, String initialText) {
         ScrTranslationFreewrite s = new ScrTranslationFreewrite(_core, initialText);
         s.setVisible(true);
+        
+        // center window in screen
+        s.setLocationRelativeTo(null);
+        
         return s;
     }
 
