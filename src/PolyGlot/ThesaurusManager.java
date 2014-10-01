@@ -120,6 +120,10 @@ public class ThesaurusManager {
     private Element writeToSaveXML(Document doc, ThesNode curNode) {
         Element curElement = doc.createElement(XMLIDs.thesNodeXID);
         
+        if (curNode == null) {
+            return curElement;
+        }
+
         // save name
         Element property = doc.createElement(XMLIDs.thesNameXID);
         property.appendChild(doc.createTextNode(curNode.getValue()));
