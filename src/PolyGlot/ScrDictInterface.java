@@ -2457,6 +2457,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         populateGenderProps();
         populateProcGuide();
         popLangProps();
+        setConFont(new JTextField().getFont());
     }
 
     /**
