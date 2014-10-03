@@ -82,4 +82,5 @@ public class XMLIDs {
     public static final String thesWordXID = "thesWord";
     
     public static final String dictFileName = "PGDictionary.xml";
+    public static final String fontFileName = "conLangFont";
 }

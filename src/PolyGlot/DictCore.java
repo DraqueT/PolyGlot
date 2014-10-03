@@ -17,11 +17,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-// TODO: finish test suites for classes...
 package PolyGlot;
 
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,9 +59,10 @@ public class DictCore {
     private final PropertiesManager propertiesManager = new PropertiesManager();
     private final PronunciationMgr pronuncMgr = new PronunciationMgr();
     private final ThesaurusManager thesManager = new ThesaurusManager(this);
-    
+
     /**
      * gets thesaurus manager
+     *
      * @return ThesaurusManager object from core
      */
     public ThesaurusManager getThesManager() {
@@ -68,15 +70,17 @@ public class DictCore {
     }
 
     /**
-     * gets properties manager 
+     * gets properties manager
+     *
      * @return PropertiesManager object from core
      */
     public PropertiesManager getPropertiesManager() {
         return propertiesManager;
     }
-    
+
     /**
      * gets version ID of PolyGlot
+     *
      * @return String value of version
      */
     public String getVersion() {
@@ -85,6 +89,7 @@ public class DictCore {
 
     /**
      * Gets lexicon manager
+     *
      * @return ConWordCollection from core
      */
     public ConWordCollection getWordCollection() {
@@ -165,22 +170,9 @@ public class DictCore {
      * @return
      */
     public Font getLangFont() {
-        Font ret;
-
-        String fontCon = getFontCon();
-
-        if (!(fontCon.equals(""))) {
-            int size = getFontSize();
-
-            // if size = 0 default to 12
-            if (size == 0) {
-                size = 12;
-            }
-
-            // Unrecognized fonts return as OS default font, warning error thrown at time of file load
-            ret = new Font(fontCon, getFontStyle(), size);
-        } else {
-            // set font to standard if no font found
+        Font ret = getFontCon();
+        
+        if (ret == null) {
             ret = new JTextField().getFont();
         }
 
@@ -205,13 +197,23 @@ public class DictCore {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
-            
+
             CustHandler handler = CustHandlerFactory.getCustHandler(IOHandler.getDictFile(_fileName), this);
 
             handler.setWordCollection(wordCollection);
             handler.setTypeCollection(typeCollection);
-            
+
             saxParser.parse(IOHandler.getDictFile(_fileName), handler);
+            
+            Font conFont = IOHandler.getFontFrom(_fileName);
+            if (conFont != null) {
+                propertiesManager.setFontCon(conFont);
+            }
+            
+            if (propertiesManager.getFontCon() == null
+                    && !propertiesManager.getFontName().equals("")) {
+                throw new FontFormatException("Could not load font: " + propertiesManager.getFontName());
+            }
         } catch (ParserConfigurationException e) {
             throw new Exception(e.getMessage());
         } catch (SAXException e) {
@@ -219,7 +221,6 @@ public class DictCore {
         } catch (IOException e) {
             throw new Exception(e.getMessage());
         }
-
     }
 
     /**
@@ -256,7 +257,7 @@ public class DictCore {
 
         // store font for Conlang words
         wordValue = doc.createElement(XMLIDs.fontConXID);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.getFontCon()));
+        wordValue.appendChild(doc.createTextNode(propertiesManager.getFontCon().getName()));
         rootElement.appendChild(wordValue);
 
         // store font style
@@ -515,10 +516,11 @@ public class DictCore {
             wordValue.appendChild(doc.createTextNode(curNode.getPronunciation()));
             wordNode.appendChild(wordValue);
         }
-        
-        // write thesaurus entried
+
+        // write thesaurus entries
         rootElement.appendChild(thesManager.writeToSaveXML(doc));
 
+        // TODO: The below should be moved to IOHandler class
         // write the content into xml file within zip archive
         TransformerFactory transformerFactory = TransformerFactory
                 .newInstance();
@@ -538,6 +540,23 @@ public class DictCore {
 
         byte[] data = sb.toString().getBytes();
         out.write(data, 0, data.length);
+
+        // embed font in PGD archive if applicable
+        File fontFile = IOHandler.getFontFile(getLangFont());
+
+        if (fontFile != null) {
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = new FileInputStream(fontFile);
+            out.putNextEntry(new ZipEntry(XMLIDs.fontFileName));
+            int length;
+
+            while ((length = fis.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+
+            out.closeEntry();
+            fis.close();
+        }
 
         out.closeEntry();
 
@@ -766,7 +785,7 @@ public class DictCore {
         return wordCollection.getNodeIterator();
     }
 
-    public String getFontCon() {
+    public Font getFontCon() {
         return propertiesManager.getFontCon();
     }
 
@@ -778,7 +797,7 @@ public class DictCore {
         return propertiesManager.getFontStyle();
     }
 
-    public void setFontCon(String _fontCon, Integer _fontStyle, Integer _fontSize) {
+    public void setFontCon(Font _fontCon, Integer _fontStyle, Integer _fontSize) {
         propertiesManager.setFontCon(_fontCon);
         propertiesManager.setFontSize(_fontSize);
         propertiesManager.setFontStyle(_fontStyle);

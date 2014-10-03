@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import java.awt.Font;
 import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -402,7 +403,8 @@ public class CustHandlerFactory {
                             .setProcOverride(new String(ch, start, length).equals("T"));
                     bwordProcOverride = false;
                 } else if (bfontcon) {
-                    propertiesManager.setFontCon(new String(ch, start, length));
+                    propertiesManager.setFontCon(new Font(new String(ch, start, length), 0, 0));
+                    propertiesManager.setFontName(new String(ch, start, length));
                     bfontcon = false;
                 } else if (bwordClassNotes) {
                     this.getTypeCollection().getBufferType()
@@ -843,7 +845,7 @@ public class CustHandlerFactory {
                             .setProcOverride(new String(ch, start, length).equals("T"));
                     bwordProcOverride = false;
                 } else if (bfontcon) {
-                    propertiesManager.setFontCon(new String(ch, start, length));
+                    propertiesManager.setFontCon(new Font(new String(ch, start, length), 0, 0));
                     bfontcon = false;
                 } else if (bwordClassNotes) {
                     this.getTypeCollection().getBufferType()

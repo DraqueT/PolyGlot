@@ -20,7 +20,7 @@
 package PolyGlot;
 
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
+import java.awt.FontFormatException;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.InputEvent;
@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -2029,7 +2028,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         txtAlphaOrder.setFont(conFont);
         txtPluralProp.setFont(conFont);
 
-        core.setFontCon(conFont.getName(), conFont.getStyle(), conFont.getSize());
+        core.setFontCon(conFont, conFont.getStyle(), conFont.getSize());
         txtLangFont.setText(conFont.getFontName());
 
         // set font for first column of pronunciation grid
@@ -2518,6 +2517,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         try {
             core.readFile(fileName);
             curFileName = fileName;
+        } catch (FontFormatException e) {
+            InfoBox.error("Loading Problem", "Problem reading file: " + e.getMessage(), this);
         } catch (Exception e) {
             core = new DictCore(); // don't allow partial loads
             InfoBox.error("File Read Error", "Could not read file: " + fileName
@@ -2526,13 +2527,14 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             return;
         }
 
+        // TODO: delete this if no trouble comes up from font reworking
         // if conlang font DNE, inform user during load (default OS font will be used)
-        List<String> allFonts = Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+        /*List<String> allFonts = Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
         String fontCon = core.getFontCon();
         if (!fontCon.equals("") && !allFonts.contains(fontCon)) {
             InfoBox.info("Font not Found.", "Font " + fontCon
                     + " not found. Please install font to dislpay conlang correctly or reselect appropriate font.", this);
-        }
+        }*/
 
         populateDict();
         populateTypes();

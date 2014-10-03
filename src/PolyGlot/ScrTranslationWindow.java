@@ -192,9 +192,9 @@ public class ScrTranslationWindow extends JFrame {
     private Font getLangFont() {
         Font ret;
 
-        String fontCon = core.getFontCon();
+        Font fontCon = core.getFontCon();
 
-        if (!(fontCon.equals(""))) {
+        if (fontCon != null) {
             int size = core.getFontSize();
 
             // if size = 0 default to 12
@@ -203,7 +203,7 @@ public class ScrTranslationWindow extends JFrame {
             }
 
             // Unrecognized fonts return as OS default font, warning error thrown at time of file load
-            ret = new Font(fontCon, core.getFontStyle(), size);
+            ret = new Font(fontCon.getName(), core.getFontStyle(), size);
         } else {
             // set font to standard if no font found
             ret = new JTextField().getFont();

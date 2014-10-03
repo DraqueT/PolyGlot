@@ -20,6 +20,7 @@
 
 package PolyGlot;
 
+import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ import java.util.Map;
  * @author draque
  */
 public class PropertiesManager {
-    private String fontCon = "";
+    private Font font = null;
     private Integer fontStyle = 0;
     private Integer fontSize = 0;
     private boolean proAutoPop = false;
@@ -39,23 +40,40 @@ public class PropertiesManager {
     private boolean localMandatory = false;
     private boolean wordUniqueness = false;
     private boolean localUniqueness = false;
+    String fontName = "";
     
     public PropertiesManager() {
         alphaOrder = new HashMap<Character, Integer>();
     }
     
     /**
+     * gets font name for table keeping loading purposes. Does NOT populate from actual font
+     * @return font name if any
+     */
+    public String getFontName() {
+        return fontName;
+    }
+    
+    /**
+     * Sets font name for table keeping loading purposes. Does NOT populate from actual font
+     * @param _fontName name to set
+     */
+    public void setFontName(String _fontName) {
+        fontName = _fontName;
+    }
+    
+    /**
      * @return the fontCon
      */
-    public String getFontCon() {
-        return fontCon;
+    public Font getFontCon() {
+        return font == null? null : font.deriveFont(fontStyle, fontSize);
     }
 
     /**
      * @param fontCon the fontCon to set
      */
-    public void setFontCon(String fontCon) {
-        this.fontCon = fontCon;
+    public void setFontCon(Font fontCon) {
+        font = fontCon;
     }
 
     /**

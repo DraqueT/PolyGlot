@@ -19,15 +19,19 @@
  */
 package PolyGlot;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import org.apache.poi.util.IOUtils;
 
 /**
  * This class handles file IO for PolyGlot
@@ -37,8 +41,8 @@ import java.util.zip.ZipFile;
 public class IOHandler {
 
     /**
-     * Gets the dictionary File from the filename of the pgd, whether it's raw XML or an
-     * archive
+     * Gets the dictionary File from the filename of the pgd, whether it's raw
+     * XML or an archive
      *
      * @param _filename the filename of the actual file
      * @return the File object of the dictionary
@@ -56,6 +60,37 @@ public class IOHandler {
         }
 
         return rawFile;
+    }
+
+    /**
+     * Gets font from save file if possible, null otherwise
+     *
+     * @param _path The path of the PGD file
+     * @return a Font object if the PGD file is both a zip archive and contains
+     * a font
+     * @throws java.io.IOException
+     * @throws java.awt.FontFormatException
+     */
+    public static Font getFontFrom(String _path) throws IOException, FontFormatException {
+        Font ret = null;
+        
+        if (isFileZipArchive(_path)) {
+            ZipFile zipFile = new ZipFile(_path);
+
+            ZipEntry fontEntry = zipFile.getEntry(XMLIDs.fontFileName);
+
+            if (fontEntry != null) {
+                final File tempFile = File.createTempFile("stream2file", ".tmp");
+                tempFile.deleteOnExit();
+
+                FileOutputStream out = new FileOutputStream(tempFile);
+                IOUtils.copy(zipFile.getInputStream(fontEntry), out);
+
+                ret = Font.createFont(Font.TRUETYPE_FONT, tempFile);
+            }
+        }
+
+        return ret;
     }
 
     /**
@@ -78,5 +113,104 @@ public class IOHandler {
         int test = in.readInt();
         in.close();
         return test == 0x504b0304;
+    }
+
+    /**
+     * gets the file of the current conlang font from the user's system
+     *
+     * @param font the font to find a file for
+     * @return the font's file if found, null otherwise
+     */
+    public static File getFontFile(Font font) {
+        File ret = null;
+
+        if (font == null) {
+            return ret;
+        }
+
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            ret = IOHandler.getFontFromLocation("/Library/Fonts/", font);
+
+            if (ret == null) {
+                ret = IOHandler.getFontFromLocation("/System/Library/Fonts/", font);
+            }
+
+            if (ret == null) {
+                ret = IOHandler.getFontFromLocation(System.getProperty("user.home")
+                        + "/Library/Fonts/", font);
+            }
+        } else if (System.getProperty("os.name").startsWith("Windows")) {
+            // TODO: THIS NEEDS TO BE TESTED IN WINDOWS
+            ret = getFontFromLocation(System.getenv("WINDIR") + "\\Fonts", font);
+        } else {
+            // Other OSes don't support this yet
+        }
+
+        // TODO: Inform user if font cannot be found (mostly a mac issue...)
+        return ret;
+    }
+
+    /**
+     * Returns a font's file based on the font and a path
+     *
+     * @param path path to check for a font
+     * @param font font to check for
+     * @return the font's file, null otherwise
+     */
+    private static File getFontFromLocation(String path, Font font) {
+        File folder = new File(path);
+        File[] listOfFiles = folder.listFiles();
+        File ret = null;
+
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isFile()) {
+                File fontFile = loadFont(listOfFile.getPath(), font);
+
+                if (fontFile != null) {
+                    ret = fontFile;
+                    break;
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+     * compares testfont to loaded file. returns file if it represents the font
+     *
+     * @param path full path of file to test
+     * @param testFont font to test against
+     * @return file if path leads to passed font, null otherwise
+     */
+    private static File loadFont(String path, Font testFont) {
+        File fontFile = new File(path);
+        File ret = null;
+
+        // unrecgnized types won't be loaded
+        if (path.toLowerCase().endsWith(".ttf")
+                || path.toLowerCase().endsWith(".otf")
+                || path.toLowerCase().endsWith(".ttc")
+                || path.toLowerCase().endsWith(".ttc")
+                || path.toLowerCase().endsWith(".dfont")) {
+            try {
+                Font f = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+
+                // if names match, set ret to return file
+                if (f.getName().equals(testFont.getName())
+                        || f.getName().equals(testFont.getName() + " Regular")) {
+                    ret = fontFile;
+                }
+
+            } catch (FontFormatException e) {
+                // null detected and message bubbled to user elsewhere
+                ret = null;
+            } catch (IOException e) {
+                // null detected and message bubbled to user elsewhere
+                ret = null;
+            }
+        }
+
+        return ret;
     }
 }
