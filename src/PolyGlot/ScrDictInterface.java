@@ -388,17 +388,17 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuNew = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuExit = new javax.swing.JMenuItem();
-        mnuHelp = new javax.swing.JMenu();
-        mnuPloyHelp = new javax.swing.JMenuItem();
-        mnuAbout = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
-        mnuCheckForUpdates = new javax.swing.JMenuItem();
         mnuTools = new javax.swing.JMenu();
         mnuImportExcel = new javax.swing.JMenuItem();
         mnuExcelExport = new javax.swing.JMenuItem();
         mnuThesaurus = new javax.swing.JMenuItem();
         mnuTranslation = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
+        mnuHelp = new javax.swing.JMenu();
+        mnuPloyHelp = new javax.swing.JMenuItem();
+        mnuAbout = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        mnuCheckForUpdates = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -1336,7 +1336,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuFile.setText("File");
 
         mnuSave.setText("Save");
-        mnuSave.setToolTipText("");
+        mnuSave.setToolTipText("Save your current dictionary");
         mnuSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuSaveActionPerformed(evt);
@@ -1345,6 +1345,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuFile.add(mnuSave);
 
         mnuSaveAs.setText("Save As");
+        mnuSaveAs.setToolTipText("Save your current dictionary to a particular name/location");
         mnuSaveAs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuSaveAsActionPerformed(evt);
@@ -1353,6 +1354,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuFile.add(mnuSaveAs);
 
         mnuOpen.setText("Open");
+        mnuOpen.setToolTipText("Open a PolyGlot dictionary");
         mnuOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuOpenActionPerformed(evt);
@@ -1361,6 +1363,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuFile.add(mnuOpen);
 
         mnuNew.setText("New");
+        mnuNew.setToolTipText("Create new language file");
         mnuNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuNewActionPerformed(evt);
@@ -1370,6 +1373,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuFile.add(jSeparator2);
 
         mnuExit.setText("Exit");
+        mnuExit.setToolTipText("Exit PolyGLot");
         mnuExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuExitActionPerformed(evt);
@@ -1378,35 +1382,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuFile.add(mnuExit);
 
         jMenuBar1.add(mnuFile);
-
-        mnuHelp.setText("Help");
-
-        mnuPloyHelp.setText("Help");
-        mnuPloyHelp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuPloyHelpActionPerformed(evt);
-            }
-        });
-        mnuHelp.add(mnuPloyHelp);
-
-        mnuAbout.setText("About");
-        mnuAbout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuAboutActionPerformed(evt);
-            }
-        });
-        mnuHelp.add(mnuAbout);
-        mnuHelp.add(jSeparator3);
-
-        mnuCheckForUpdates.setText("Check for Updates");
-        mnuCheckForUpdates.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuCheckForUpdatesActionPerformed(evt);
-            }
-        });
-        mnuHelp.add(mnuCheckForUpdates);
-
-        jMenuBar1.add(mnuHelp);
 
         mnuTools.setText("Tools");
 
@@ -1456,6 +1431,38 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         mnuTools.add(mnuLangStats);
 
         jMenuBar1.add(mnuTools);
+
+        mnuHelp.setText("Help");
+
+        mnuPloyHelp.setText("Help");
+        mnuPloyHelp.setToolTipText("Open PolyGlot help file");
+        mnuPloyHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuPloyHelpActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(mnuPloyHelp);
+
+        mnuAbout.setText("About");
+        mnuAbout.setToolTipText("About PolyGlot");
+        mnuAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAboutActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(mnuAbout);
+        mnuHelp.add(jSeparator3);
+
+        mnuCheckForUpdates.setText("Check for Updates");
+        mnuCheckForUpdates.setToolTipText("Check online for new versions of PolyGlot");
+        mnuCheckForUpdates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCheckForUpdatesActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(mnuCheckForUpdates);
+
+        jMenuBar1.add(mnuHelp);
 
         setJMenuBar(jMenuBar1);
 
@@ -1985,8 +1992,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }
 
     private void viewAbout() {
-        InfoBox.info("ABOUT", "PolyGlot is copyright Draque Thompson 2014. Free to distribute, "
-                + "so long as distribution package is not modified. Please don't sell this or call it your own.", this);
+        JFrame window = ScrAbout.run(core);
+        childFrames.add(window);
     }
 
     private void viewTranslationWindow() {

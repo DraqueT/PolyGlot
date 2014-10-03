@@ -17,7 +17,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuSave">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Save"/>
-                <Property name="toolTipText" type="java.lang.String" value=""/>
+                <Property name="toolTipText" type="java.lang.String" value="Save your current dictionary"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSaveActionPerformed"/>
@@ -26,6 +26,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuSaveAs">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Save As"/>
+                <Property name="toolTipText" type="java.lang.String" value="Save your current dictionary to a particular name/location"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSaveAsActionPerformed"/>
@@ -34,6 +35,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuOpen">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Open"/>
+                <Property name="toolTipText" type="java.lang.String" value="Open a PolyGlot dictionary"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuOpenActionPerformed"/>
@@ -42,6 +44,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuNew">
               <Properties>
                 <Property name="text" type="java.lang.String" value="New"/>
+                <Property name="toolTipText" type="java.lang.String" value="Create new language file"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuNewActionPerformed"/>
@@ -52,42 +55,10 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuExit">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Exit"/>
+                <Property name="toolTipText" type="java.lang.String" value="Exit PolyGLot"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExitActionPerformed"/>
-              </Events>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="mnuHelp">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Help"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuPloyHelp">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Help"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuPloyHelpActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuAbout">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="About"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuAboutActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator3">
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuCheckForUpdates">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Check for Updates"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCheckForUpdatesActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -140,6 +111,42 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuLangStatsActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="mnuHelp">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Help"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuPloyHelp">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Help"/>
+                <Property name="toolTipText" type="java.lang.String" value="Open PolyGlot help file"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuPloyHelpActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuAbout">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="About"/>
+                <Property name="toolTipText" type="java.lang.String" value="About PolyGlot"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuAboutActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator3">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuCheckForUpdates">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Check for Updates"/>
+                <Property name="toolTipText" type="java.lang.String" value="Check online for new versions of PolyGlot"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCheckForUpdatesActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
