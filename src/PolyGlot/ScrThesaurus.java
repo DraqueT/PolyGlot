@@ -28,6 +28,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 
 /**
  *
@@ -88,19 +89,21 @@ public class ScrThesaurus extends javax.swing.JFrame {
      */
     private void removeThesNode() {
         ThesTreeNode curNode = (ThesTreeNode) treThes.getLastSelectedPathComponent();
-
-        // do nothing if nothing selected
-        if (curNode == null) {
+        int position = treThes.getLeadSelectionRow();
+        
+        // the root node may not be deleted/do nothing if nothing selected
+        if (position < 1
+                || curNode == null) {
             return;
         }
-
-        ThesTreeNode parent = (ThesTreeNode) curNode.getParent();
-
+                    
         // only remove if not root node
         if (!curNode.isRoot()) {
             ((DefaultTreeModel) treThes.getModel()).removeNodeFromParent(curNode);
             curNode.removeFromParent();
         }
+        
+        treThes.setSelectionRow(position - 1);
     }
     
     /**
