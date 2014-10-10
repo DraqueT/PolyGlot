@@ -171,6 +171,7 @@ public class ScrAbout extends javax.swing.JFrame {
             ScrAbout s = new ScrAbout(_core);
             
             s.setVisible(true);
+            s.setLocationRelativeTo(null);
             
             return s;
     }
