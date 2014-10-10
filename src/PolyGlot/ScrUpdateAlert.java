@@ -89,10 +89,10 @@ public class ScrUpdateAlert extends javax.swing.JFrame {
         s.setTitle("PolyGlot " + version + " available");
         s.jTextPane1.setText(updateNotes);
         
+        s.setVisible(true);
+        
         // center window in screen
         s.setLocationRelativeTo(null);
-        
-        s.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
