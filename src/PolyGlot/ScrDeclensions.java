@@ -24,6 +24,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.TextField;
+import java.awt.Toolkit;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,7 +33,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /**
@@ -80,23 +80,13 @@ public class ScrDeclensions extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlDeclensions = new javax.swing.JPanel();
         btnCancel = new javax.swing.JButton();
         btnOk = new javax.swing.JButton();
+        scrDeclensions = new javax.swing.JScrollPane();
+        pnlDeclensions = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Conjugations/Declensions");
-
-        javax.swing.GroupLayout pnlDeclensionsLayout = new javax.swing.GroupLayout(pnlDeclensions);
-        pnlDeclensions.setLayout(pnlDeclensionsLayout);
-        pnlDeclensionsLayout.setHorizontalGroup(
-            pnlDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 336, Short.MAX_VALUE)
-        );
-        pnlDeclensionsLayout.setVerticalGroup(
-            pnlDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 439, Short.MAX_VALUE)
-        );
 
         btnCancel.setText("Cancel");
         btnCancel.setToolTipText("Exit screen without saving anything.");
@@ -114,26 +104,35 @@ public class ScrDeclensions extends javax.swing.JDialog {
             }
         });
 
+        javax.swing.GroupLayout pnlDeclensionsLayout = new javax.swing.GroupLayout(pnlDeclensions);
+        pnlDeclensions.setLayout(pnlDeclensionsLayout);
+        pnlDeclensionsLayout.setHorizontalGroup(
+            pnlDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 344, Short.MAX_VALUE)
+        );
+        pnlDeclensionsLayout.setVerticalGroup(
+            pnlDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 441, Short.MAX_VALUE)
+        );
+
+        scrDeclensions.setViewportView(pnlDeclensions);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 169, Short.MAX_VALUE)
-                        .addComponent(btnOk)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancel))
-                    .addComponent(pnlDeclensions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(175, Short.MAX_VALUE)
+                .addComponent(btnOk)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCancel)
                 .addContainerGap())
+            .addComponent(scrDeclensions)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlDeclensions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(scrDeclensions, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel)
@@ -342,10 +341,22 @@ public class ScrDeclensions extends javax.swing.JDialog {
      * sets basic properties of form based on contents
      */
     private void setFormProps() {
+        double maxHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight()/2;
+        int setHeight;
         textHeight = firstField.getHeight();
+        
+        // the max height determines whether the window would be too big to fit onto the screen
+        if (maxHeight <= numFields * textHeight) {
+            setHeight = (int)maxHeight;
+        } else {
+            setHeight = numFields * textHeight;
+        }        
+        
         pnlDeclensions.setSize(pnlDeclensions.getSize().width, numFields * textHeight);
         pnlDeclensions.setLayout(new GridLayout(0, 2));
-        this.setSize(this.getWidth() + 10, pnlDeclensions.getHeight() + 70);
+        this.setSize(this.getWidth() + 10, scrDeclensions.getHeight() + 70);
+        
+        scrDeclensions.setSize(pnlDeclensions.getSize().width, setHeight);
     }
 
     /**
@@ -379,5 +390,6 @@ public class ScrDeclensions extends javax.swing.JDialog {
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
     private javax.swing.JPanel pnlDeclensions;
+    private javax.swing.JScrollPane scrDeclensions;
     // End of variables declaration//GEN-END:variables
 }
