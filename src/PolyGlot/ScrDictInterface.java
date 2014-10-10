@@ -1984,7 +1984,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             ScrDeclensions.run(core, core.getWordById(wordId),
                     (Integer) scrToCoreTypes.get(cmbTypeProp.getSelectedIndex()), core.getLangFont());
         } catch (Exception ex) {
-            InfoBox.error("Decension Error", "Unable to find word." + ex.getLocalizedMessage(), this);
+            InfoBox.error("Delcension Error", ex.getLocalizedMessage(), this);
             //ex.printStackTrace();
         }
 
