@@ -257,7 +257,8 @@ public class DictCore {
 
         // store font for Conlang words
         wordValue = doc.createElement(XMLIDs.fontConXID);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.getFontCon().getName()));
+        Font curFont = propertiesManager.getFontCon();
+        wordValue.appendChild(doc.createTextNode(curFont == null ? "" : curFont.getName()));
         rootElement.appendChild(wordValue);
 
         // store font style

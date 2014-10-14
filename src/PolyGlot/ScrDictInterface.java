@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Toolkit;
@@ -48,6 +49,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -61,6 +63,7 @@ import org.simplericity.macify.eawt.*;
 
 /**
  * This is the main interface for PolyGlot.
+ *
  * @author draque
  */
 public class ScrDictInterface extends JFrame implements ApplicationListener { // implementation of ApplicationListener is part of macify
@@ -80,6 +83,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private boolean curPopulating = false;
     private final String screenTitle = "PolyGlot BETA";
     private boolean filterListenersActive = true;
+    private String saveError = "";
 
     /**
      * Creates new form scrDictInterface
@@ -126,7 +130,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         if (System.getProperty("os.name").startsWith("Mac")) {
             activateMacify();
         }
-        
+
         // center window in screen
         setLocationRelativeTo(null);
     }
@@ -1485,9 +1489,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveActionPerformed
-        if (saveFile()) {
-            InfoBox.info("Success", "Dictionary saved to: " + curFileName + ".", this);
-        }
+        saveFile();
     }//GEN-LAST:event_mnuSaveActionPerformed
 
     private void mnuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenActionPerformed
@@ -1496,6 +1498,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
     private void mnuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveAsActionPerformed
         saveFileAs();
+        saveFile();
     }//GEN-LAST:event_mnuSaveAsActionPerformed
 
     private void mnuNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewActionPerformed
@@ -1541,11 +1544,15 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }//GEN-LAST:event_cmbGenderPropActionPerformed
 
     private void cmbTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeFilterActionPerformed
-        if (filterListenersActive) filterDict();
+        if (filterListenersActive) {
+            filterDict();
+        }
     }//GEN-LAST:event_cmbTypeFilterActionPerformed
 
     private void cmbGenderFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGenderFilterActionPerformed
-        if (filterListenersActive) filterDict();
+        if (filterListenersActive) {
+            filterDict();
+        }
     }//GEN-LAST:event_cmbGenderFilterActionPerformed
 
     private void btnDeleteTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteTypeActionPerformed
@@ -1691,7 +1698,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         super.dispose();
         System.exit(0);
     }
-    
+
     /**
      * Export dictionary to excel file
      */
@@ -1704,17 +1711,17 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         chooser.setCurrentDirectory(new File("."));
 
         String fileName;
-        
+
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
         } else {
             return;
         }
-        
+
         if (!fileName.contains(".xls")) {
             fileName += ".xls";
         }
-        
+
         try {
             ExcelExport.exportExcelDict(fileName, core);
             InfoBox.info("Export Status", "Dictionary exported to " + fileName + ".", this);
@@ -1730,7 +1737,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
      */
     private void checkForUpdates(final boolean verbose) {
         final Window parent = this;
-        
+
         Thread check = new Thread() {
             @Override
             public void run() {
@@ -1755,20 +1762,21 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         check.start();
     }
-    
+
     /**
      * Gets the currently selected word in your dictionary
+     *
      * @return conword object, null if nothing selected
      */
     public ConWord getCurrentWord() {
         ConWord ret;
-        
+
         try {
-            ret = core.getWordById((Integer)scrToCoreMap.get(lstDict.getSelectedIndex()));
+            ret = core.getWordById((Integer) scrToCoreMap.get(lstDict.getSelectedIndex()));
         } catch (Exception e) {
             ret = null;
         }
-        
+
         return ret;
     }
 
@@ -1860,9 +1868,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 newNode.setValue((String) tblProcGuide.getCellEditor(i, 0).getCellEditorValue());
                 newNode.setPronunciation((String) tblProcGuide.getCellEditor(i, 1).getCellEditorValue());
             } else {
-                newNode.setValue((String)tblProcGuide.getModel().getValueAt(i, 0));
-                newNode.setPronunciation((String)tblProcGuide.getModel().getValueAt(i, 1));
-            }            
+                newNode.setValue((String) tblProcGuide.getModel().getValueAt(i, 0));
+                newNode.setPronunciation((String) tblProcGuide.getModel().getValueAt(i, 1));
+            }
 
             newPro.add(newNode);
         }
@@ -1886,7 +1894,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                 curFrame.dispose();
             }
         }
-        
+
         childFrames.clear();
     }
 
@@ -2005,12 +2013,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         ScrLangStats.run(core);
     }
 
-    
     private void viewDeclensionSetup(Integer _typeId) {
         Window window = ScrDeclensionSetup.run(core, _typeId);
         childFrames.add(window);
     }
-    
+
     /**
      * Opens thesaurus window, adds to children windows
      */
@@ -2191,76 +2198,100 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             @Override
             public void changedUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
         });
         txtDefFilter.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
         });
         txtLocalWordFilter.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
         });
         txtPronunciationFilter.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
                 // only filter if filtering is active
-                if (filterListenersActive) filterDict();
+                if (filterListenersActive) {
+                    filterDict();
+                }
             }
         });
         txtTypeName.getDocument().addDocumentListener(new DocumentListener() {
@@ -2304,8 +2335,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         txtGenderName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                if (curPopulating) return;
-                
+                if (curPopulating) {
+                    return;
+                }
+
                 checkGenderLexEnabled();
                 saveGender();
                 updateGenderListName();
@@ -2313,8 +2346,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (curPopulating) return;
-                
+                if (curPopulating) {
+                    return;
+                }
+
                 checkGenderLexEnabled();
                 saveGender();
                 updateGenderListName();
@@ -2322,8 +2357,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (curPopulating) return;
-                
+                if (curPopulating) {
+                    return;
+                }
+
                 checkGenderLexEnabled();
                 saveGender();
                 updateGenderListName();
@@ -2371,7 +2408,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
      *
      * @return true if file saved, false otherwise
      */
-    private boolean saveFileAs() {
+    private void saveFileAs() {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Save Dictionary");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd", "xml");
@@ -2384,7 +2421,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
         } else {
-            return false;
+            return;
         }
 
         // if user has not provided an extension, add one
@@ -2399,26 +2436,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
                     "Overwrite existing file? " + fileName, this);
 
             if (overWrite == JOptionPane.NO_OPTION) {
-                return saveFileAs();
+                saveFileAs();
             } else if (overWrite == JOptionPane.CANCEL_OPTION) {
-                return false;
+                return;
             }
         }
 
-        try {
-            core.writeFile(fileName);
-            curFileName = fileName;
-        } catch (ParserConfigurationException e) {//  | TransformerException e) {
-            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
-        } catch (TransformerException e) {
-            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
-        } catch (FileNotFoundException e) {
-            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
-        } catch (IOException e) {
-            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
-        }
-
-        return true;
+        curFileName = fileName;
     }
 
     /**
@@ -2474,22 +2498,76 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
      */
     private boolean saveFile() {
         if (curFileName.equals("")) {
-            return saveFileAs();
+            saveFileAs();
         }
 
-        try {
-            core.writeFile(curFileName);
-        } catch (ParserConfigurationException e) {
-            InfoBox.error("Save Error", "Unable to save to file: " + curFileName + "\n\n" + e.getMessage(), this);
-        } catch (TransformerException e) {
-            InfoBox.error("Save Error", "Unable to save to file: " + curFileName + "\n\n" + e.getMessage(), this);
-        } catch (FileNotFoundException e) {
-            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
-        } catch (IOException e) {
-            InfoBox.error("File Write Error", "Unable to write file: " + e.getMessage(), this);
+        return doWrite(curFileName);
+    }
+
+    /**
+     * sends the write command to the core in a new thread
+     *
+     * @param _fileName path to write to
+     * @return returns success
+     */
+    private boolean doWrite(final String _fileName) {
+        final ScrDictInterface parent = this;
+        boolean ret;
+        
+        parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+        final SwingWorker worker = new SwingWorker() {
+            
+            //Runs on the event-dispatching thread.
+            public void finished() {
+                parent.setCursor(Cursor.getDefaultCursor());
+            }
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                try {
+                    core.writeFile(_fileName);
+                } catch (ParserConfigurationException e) {
+                    parent.setSaveError("Unable to save to file: " + curFileName + "\n\n" + e.getMessage());
+                } catch (TransformerException e) {
+                    parent.setSaveError("Unable to save to file: " + curFileName + "\n\n" + e.getMessage());
+                } catch (FileNotFoundException e) {
+                    parent.setSaveError("Unable to write file: " + e.getMessage());
+                } catch (IOException e) {
+                    parent.setSaveError("Unable to write file: " + e.getMessage());
+                }
+
+                parent.setCursor(Cursor.getDefaultCursor());
+                return null;
+            }
+        };
+
+        worker.execute();
+
+        while (!worker.isDone()) {
+            // do nothing
         }
 
-        return true;
+        if (!saveError.equals("")) {
+            ret = false;
+            InfoBox.error("Save Error", saveError, this);
+        } else {
+            ret = true;
+            InfoBox.info("Success", "Dictionary saved to: " + curFileName + ".", parent);
+        }
+
+        saveError = "";
+
+        return ret;
+    }
+
+    /**
+     * Allows workers to return error messages to polyglot
+     *
+     * @param error The string error to return
+     */
+    public void setSaveError(String error) {
+        saveError = error;
     }
 
     private void openFile() {
@@ -2538,12 +2616,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         // TODO: delete this if no trouble comes up from font reworking
         // if conlang font DNE, inform user during load (default OS font will be used)
         /*List<String> allFonts = Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
-        String fontCon = core.getFontCon();
-        if (!fontCon.equals("") && !allFonts.contains(fontCon)) {
-            InfoBox.info("Font not Found.", "Font " + fontCon
-                    + " not found. Please install font to dislpay conlang correctly or reselect appropriate font.", this);
-        }*/
-
+         String fontCon = core.getFontCon();
+         if (!fontCon.equals("") && !allFonts.contains(fontCon)) {
+         InfoBox.info("Font not Found.", "Font " + fontCon
+         + " not found. Please install font to dislpay conlang correctly or reselect appropriate font.", this);
+         }*/
         populateDict();
         populateTypes();
         populateGenders();
@@ -2949,7 +3026,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
     private void checkGenderLexEnabled() {
         GenderNode genNode = core.getGenders().findGenderByName(txtGenderName.getText().trim());
-        
+
         // do not allow duplicate types
         if (genNode != null) {
             setEnabledGenderLexicon(false);
@@ -3324,7 +3401,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         if (curPopulating) {
             return;
         }
-        
+
         // if word has been modified, clear filters
         clearLexFilterValues();
 
@@ -3455,20 +3532,20 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
         filterDict();
     }
-    
+
     /**
      * Clears values of LexFilter without re-filtering
      */
     private void clearLexFilterValues() {
         filterListenersActive = false;
-        
+
         txtConWordFilter.setText("");
         txtLocalWordFilter.setText("");
         txtPronunciationFilter.setText("");
         txtDefFilter.setText("");
         cmbGenderFilter.setSelectedIndex(cmbGenderFilter.getModel().getSize() - 1);
         cmbTypeFilter.setSelectedIndex(cmbTypeFilter.getModel().getSize() - 1);
-        
+
         filterListenersActive = true;
     }
 
