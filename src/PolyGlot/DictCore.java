@@ -525,7 +525,6 @@ public class DictCore {
         TransformerFactory transformerFactory = TransformerFactory
                 .newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        DOMSource source = new DOMSource(doc);
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
