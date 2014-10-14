@@ -51,7 +51,7 @@ import org.xml.sax.SAXException;
 
 public class DictCore {
 
-    private final String version = "0.8";
+    private final String version = "0.8.1";
     private final ConWordCollection wordCollection = new ConWordCollection(this);
     private final TypeCollection typeCollection = new TypeCollection();
     private final GenderCollection genderCollection = new GenderCollection();
