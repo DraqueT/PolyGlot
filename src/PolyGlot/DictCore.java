@@ -21,30 +21,20 @@ package PolyGlot;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 import javax.swing.JTextField;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -54,7 +44,7 @@ public class DictCore {
     private final String version = "0.8.1.1";
     private final ConWordCollection wordCollection = new ConWordCollection(this);
     private final TypeCollection typeCollection = new TypeCollection();
-    private final GenderCollection genderCollection = new GenderCollection();
+    private final GenderCollection genderCollection = new GenderCollection(this);
     private final DeclensionManager declensionMgr = new DeclensionManager();
     private final PropertiesManager propertiesManager = new PropertiesManager();
     private final PronunciationMgr pronuncMgr = new PronunciationMgr();
@@ -694,7 +684,6 @@ public class DictCore {
         typeCollection.modifyNode(id, modType);
     }
 
-    // TODO: move this logic into the GenderCollection class
     /**
      * Safely modify a gender (updates words of this gender automatically
      *
@@ -703,27 +692,6 @@ public class DictCore {
      * @throws Exception
      */
     public void modifyGender(Integer id, GenderNode modGender) throws Exception {
-        Iterator<ConWord> it;
-        ConWord genderWord = new ConWord();
-
-        genderWord.setGender(genderCollection.getNodeById(id).getValue());
-        genderWord.setValue("");
-        genderWord.setDefinition("");
-        genderWord.setWordType("");
-        genderWord.setLocalWord("");
-        genderWord.setPlural("");
-        genderWord.setPronunciation("");
-
-        it = wordCollection.filteredList(genderWord);
-
-        while (it.hasNext()) {
-            ConWord modWord = it.next();
-
-            modWord.setGender(modGender.getValue());
-
-            wordCollection.modifyNode(modWord.getId(), modWord);
-        }
-
         genderCollection.modifyNode(id, modGender);
     }
 

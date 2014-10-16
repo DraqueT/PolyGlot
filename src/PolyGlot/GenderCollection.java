@@ -32,8 +32,11 @@ import java.util.Map.Entry;
  * @author draque
  */
 public class GenderCollection extends DictionaryCollection{
-    public GenderCollection(){
+    private final DictCore core;
+    
+    public GenderCollection(DictCore _core){
         bufferNode = new GenderNode();
+        core = _core;
     }
     
     @Override
@@ -43,6 +46,37 @@ public class GenderCollection extends DictionaryCollection{
     
     public GenderNode getGenderBuffer(){
         return (GenderNode)bufferNode;
+    }
+    
+    @Override
+    /**
+     * in addition to passing this to its super, this deletes all instances of
+     * the gender's appearance in conwords
+     */
+    public void deleteNodeById(Integer _id) throws Exception {
+        Iterator<ConWord> it;
+        ConWord genderWord = new ConWord();
+        GenderNode delGender = getNodeById(_id);
+
+        genderWord.setGender(delGender.getValue());
+        genderWord.setValue("");
+        genderWord.setDefinition("");
+        genderWord.setWordType("");
+        genderWord.setLocalWord("");
+        genderWord.setPlural("");
+        genderWord.setPronunciation("");
+
+        it = core.getWordCollection().filteredList(genderWord);
+
+        while (it.hasNext()) {
+            ConWord modWord = it.next();
+
+            modWord.setGender("");
+
+            core.getWordCollection().modifyNode(modWord.getId(), modWord);
+        }
+        
+        super.deleteNodeById(_id);
     }
     
     /**
@@ -143,5 +177,38 @@ public class GenderCollection extends DictionaryCollection{
         }
         
         return ret;
+    }
+    
+    @Override
+    /**
+     * Safely modify a gender (updates words of this gender automatically
+     *
+     * @param id gender id
+     * @param modGender new gender
+     * @throws Exception
+     */
+    public void modifyNode(Integer id, DictNode modGender) throws Exception {
+        Iterator<ConWord> it;
+        ConWord genderWord = new ConWord();
+
+        genderWord.setGender(getNodeById(id).getValue());
+        genderWord.setValue("");
+        genderWord.setDefinition("");
+        genderWord.setWordType("");
+        genderWord.setLocalWord("");
+        genderWord.setPlural("");
+        genderWord.setPronunciation("");
+
+        it = core.getWordCollection().filteredList(genderWord);
+
+        while (it.hasNext()) {
+            ConWord modWord = it.next();
+
+            modWord.setGender(modGender.getValue());
+
+            core.getWordCollection().modifyNode(modWord.getId(), modWord);
+        }
+
+        super.modifyNode(id, modGender);
     }
 }
