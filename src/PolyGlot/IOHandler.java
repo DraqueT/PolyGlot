@@ -151,8 +151,12 @@ public class IOHandler {
         ZipEntry e = new ZipEntry(XMLIDs.dictFileName);
         out.putNextEntry(e);
 
-        byte[] data = sb.toString().getBytes();
+        // force UTF8 for newer versions of windows
+        String xmlOutput = new String(sb.toString().getBytes(), "UTF8");
+        byte[] data = xmlOutput.getBytes();
         out.write(data, 0, data.length);
+        
+        out.closeEntry();
 
         // embed font in PGD archive if applicable
         File fontFile = IOHandler.getFontFile(core.getLangFont());
@@ -171,13 +175,10 @@ public class IOHandler {
             fis.close();
         }
 
-        out.closeEntry();
-
         out.finish();
         out.close();
         
-        // attempt to open file in dummy core. On success, copy file to end
-        // destination, on fail, delete file, and inform user by bubbling error
+        // only save to final destination if uncorrupt. Delete and throw error otherwise
         try {
             File file = new File(directoryPath, tempFileName);
             
