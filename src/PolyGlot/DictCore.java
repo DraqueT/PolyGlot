@@ -305,6 +305,13 @@ public class DictCore {
         wordValue = doc.createElement(XMLIDs.langPropWordUniquenessXID);
         wordValue.appendChild(doc.createTextNode(propertiesManager.isWordUniqueness() ? "T" : "F"));
         rootElement.appendChild(wordValue);
+        
+        // store option for ignoring case
+        // TODO: Uncomment
+        /* COMMENTED TEMPORARILY UNTIL SAVING PROBLEM RESOLVED
+        wordValue = doc.createElement(XMLIDs.langPropIgnoreCase);
+        wordValue.appendChild(doc.createTextNode(propertiesManager.isIgnoreCase() ? "T" : "F"));
+        rootElement.appendChild(wordValue);*/
 
         // record all genders
         while (genderLoop.hasNext()) {
@@ -560,6 +567,7 @@ public class DictCore {
 
         out.closeEntry();
 
+        out.finish();
         out.close();
     }
 
