@@ -141,7 +141,7 @@ public class IOHandler {
             }
         } else if (System.getProperty("os.name").startsWith("Windows")) {
             // TODO: THIS NEEDS TO BE TESTED IN WINDOWS
-            ret = getFontFromLocation(System.getenv("WINDIR") + "\\Fonts", font);
+            //ret = getFontFromLocation(System.getenv("WINDIR") + "\\Fonts", font);
         } else {
             // Other OSes don't support this yet
         }
