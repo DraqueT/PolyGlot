@@ -527,48 +527,9 @@ public class DictCore {
 
         // write thesaurus entries
         rootElement.appendChild(thesManager.writeToSaveXML(doc));
-
-        // TODO: The below should be moved to IOHandler class
-        // write the content into xml file within zip archive
-        TransformerFactory transformerFactory = TransformerFactory
-                .newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        StringWriter writer = new StringWriter();
-        transformer.transform(new DOMSource(doc), new StreamResult(writer));
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(writer.getBuffer().toString().replaceAll("\n|\r", ""));
-
-        final File f = new File(_fileName);
-        final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f));
-        ZipEntry e = new ZipEntry(XMLIDs.dictFileName);
-        out.putNextEntry(e);
-
-        byte[] data = sb.toString().getBytes();
-        out.write(data, 0, data.length);
-
-        // embed font in PGD archive if applicable
-        File fontFile = IOHandler.getFontFile(getLangFont());
-
-        if (fontFile != null) {
-            byte[] buffer = new byte[1024];
-            FileInputStream fis = new FileInputStream(fontFile);
-            out.putNextEntry(new ZipEntry(XMLIDs.fontFileName));
-            int length;
-
-            while ((length = fis.read(buffer)) > 0) {
-                out.write(buffer, 0, length);
-            }
-
-            out.closeEntry();
-            fis.close();
-        }
-
-        out.closeEntry();
-
-        out.finish();
-        out.close();
+        
+        // have IOHandler write constructed document to file
+        IOHandler.writeFile(_fileName, doc, this);
     }
 
     /**
@@ -733,6 +694,7 @@ public class DictCore {
         typeCollection.modifyNode(id, modType);
     }
 
+    // TODO: move this logic into the GenderCollection class
     /**
      * Safely modify a gender (updates words of this gender automatically
      *

@@ -29,9 +29,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.apache.poi.util.IOUtils;
+import org.w3c.dom.Document;
 
 /**
  * This class handles file IO for PolyGlot
@@ -73,7 +81,7 @@ public class IOHandler {
      */
     public static Font getFontFrom(String _path) throws IOException, FontFormatException {
         Font ret = null;
-        
+
         if (isFileZipArchive(_path)) {
             ZipFile zipFile = new ZipFile(_path);
 
@@ -113,6 +121,85 @@ public class IOHandler {
         int test = in.readInt();
         in.close();
         return test == 0x504b0304;
+    }
+
+    public static void writeFile(String _fileName, Document doc, DictCore core) throws IOException, TransformerException {
+        final String tempFileName = "xxTEMPPGTFILExx";
+        String fileName;
+        String directoryPath;
+        
+        {
+            File file = new File(_fileName);
+            
+            fileName = file.getName();
+            directoryPath = file.getParentFile().getAbsolutePath();
+        }
+        
+        TransformerFactory transformerFactory = TransformerFactory
+                .newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        StringWriter writer = new StringWriter();
+        transformer.transform(new DOMSource(doc), new StreamResult(writer));
+        
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(writer.getBuffer().toString().replaceAll("\n|\r", ""));
+
+        // save file to temp location initially.
+        final File f = new File(directoryPath, tempFileName);
+        final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f));
+        ZipEntry e = new ZipEntry(XMLIDs.dictFileName);
+        out.putNextEntry(e);
+
+        byte[] data = sb.toString().getBytes();
+        out.write(data, 0, data.length);
+
+        // embed font in PGD archive if applicable
+        File fontFile = IOHandler.getFontFile(core.getLangFont());
+
+        if (fontFile != null) {
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = new FileInputStream(fontFile);
+            out.putNextEntry(new ZipEntry(XMLIDs.fontFileName));
+            int length;
+
+            while ((length = fis.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+
+            out.closeEntry();
+            fis.close();
+        }
+
+        out.closeEntry();
+
+        out.finish();
+        out.close();
+        
+        // attempt to open file in dummy core. On success, copy file to end
+        // destination, on fail, delete file, and inform user by bubbling error
+        try {
+            File file = new File(directoryPath, tempFileName);
+            
+            DictCore test = new DictCore();
+            test.readFile(file.getAbsolutePath());
+            
+        } catch (Exception ex) {
+            File file = new File(directoryPath, tempFileName);
+            file.delete();
+            
+            throw new IOException(ex);
+        }
+        
+        File fileTemp = new File(directoryPath, tempFileName);
+        File fileFinal = new File(directoryPath, fileName);
+        
+        boolean success = fileTemp.renameTo(fileFinal);
+        
+        if (!success) {
+            fileTemp.delete();
+            throw new IOException("Unable to save file. Check permissions.");
+        }
     }
 
     /**
