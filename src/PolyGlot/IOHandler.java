@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.file.StandardCopyOption;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -127,20 +128,18 @@ public class IOHandler {
         final String tempFileName = "xxTEMPPGTFILExx";
         String fileName;
         String directoryPath;
-        
-        {
-            File file = new File(_fileName);
-            
-            fileName = file.getName();
-            directoryPath = file.getParentFile().getAbsolutePath();
-        }
-        
+
+        File finalFile = new File(_fileName);
+
+        fileName = finalFile.getName();
+        directoryPath = finalFile.getParentFile().getAbsolutePath();
+
         TransformerFactory transformerFactory = TransformerFactory
                 .newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(doc), new StreamResult(writer));
-        
+
         StringBuilder sb = new StringBuilder();
 
         sb.append(writer.getBuffer().toString().replaceAll("\n|\r", ""));
@@ -151,11 +150,9 @@ public class IOHandler {
         ZipEntry e = new ZipEntry(XMLIDs.dictFileName);
         out.putNextEntry(e);
 
-        // force UTF8 for newer versions of windows
-        String xmlOutput = new String(sb.toString().getBytes(), "UTF8");
-        byte[] data = xmlOutput.getBytes();
+        byte[] data = sb.toString().getBytes();
         out.write(data, 0, data.length);
-        
+
         out.closeEntry();
 
         // embed font in PGD archive if applicable
@@ -177,29 +174,25 @@ public class IOHandler {
 
         out.finish();
         out.close();
-        
-        // only save to final destination if uncorrupt. Delete and throw error otherwise
+
+        // attempt to open file in dummy core. On success, copy file to end
+        // destination, on fail, delete file, and inform user by bubbling error
         try {
-            File file = new File(directoryPath, tempFileName);
-            
             DictCore test = new DictCore();
-            test.readFile(file.getAbsolutePath());
-            
+            test.readFile(f.getAbsolutePath());
+
         } catch (Exception ex) {
-            File file = new File(directoryPath, tempFileName);
-            file.delete();
-            
+            f.delete();
+
             throw new IOException(ex);
         }
-        
-        File fileTemp = new File(directoryPath, tempFileName);
-        File fileFinal = new File(directoryPath, fileName);
-        
-        boolean success = fileTemp.renameTo(fileFinal);
-        
-        if (!success) {
-            fileTemp.delete();
-            throw new IOException("Unable to save file. Check permissions.");
+
+        try {
+            java.nio.file.Files.copy(f.toPath(), finalFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            f.delete();
+        } catch (IOException ex) {
+            f.delete();
+            throw new IOException("Unable to save file: " + ex.getMessage());
         }
     }
 
