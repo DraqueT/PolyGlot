@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.nio.file.StandardCopyOption;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -126,12 +127,10 @@ public class IOHandler {
 
     public static void writeFile(String _fileName, Document doc, DictCore core) throws IOException, TransformerException {
         final String tempFileName = "xxTEMPPGTFILExx";
-        String fileName;
         String directoryPath;
 
         File finalFile = new File(_fileName);
 
-        fileName = finalFile.getName();
         directoryPath = finalFile.getParentFile().getAbsolutePath();
 
         TransformerFactory transformerFactory = TransformerFactory
@@ -146,11 +145,11 @@ public class IOHandler {
 
         // save file to temp location initially.
         final File f = new File(directoryPath, tempFileName);
-        final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f));
+        final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f), Charset.forName("ISO-8859-1"));
         ZipEntry e = new ZipEntry(XMLIDs.dictFileName);
         out.putNextEntry(e);
 
-        byte[] data = sb.toString().getBytes();
+        byte[] data = sb.toString().getBytes("UTF-8");
         out.write(data, 0, data.length);
 
         out.closeEntry();
