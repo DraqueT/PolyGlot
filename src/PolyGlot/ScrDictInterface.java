@@ -1497,8 +1497,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }//GEN-LAST:event_mnuOpenActionPerformed
 
     private void mnuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveAsActionPerformed
-        saveFileAs();
-        saveFile();
+        if (saveFileAs()) {
+            saveFile();
+        }
     }//GEN-LAST:event_mnuSaveAsActionPerformed
 
     private void mnuNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewActionPerformed
@@ -2408,7 +2409,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
      *
      * @return true if file saved, false otherwise
      */
-    private void saveFileAs() {
+    private boolean saveFileAs() {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Save Dictionary");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd", "xml");
@@ -2421,7 +2422,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
         } else {
-            return;
+            return false;
         }
 
         // if user has not provided an extension, add one
@@ -2438,11 +2439,12 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
             if (overWrite == JOptionPane.NO_OPTION) {
                 saveFileAs();
             } else if (overWrite == JOptionPane.CANCEL_OPTION) {
-                return;
+                return false;
             }
         }
 
         curFileName = fileName;
+        return true;
     }
 
     /**
