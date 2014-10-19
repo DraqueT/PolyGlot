@@ -53,6 +53,8 @@ import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -66,7 +68,8 @@ import org.simplericity.macify.eawt.*;
  *
  * @author draque
  */
-public class ScrDictInterface extends JFrame implements ApplicationListener { // implementation of ApplicationListener is part of macify
+public class ScrDictInterface extends JFrame implements ApplicationListener {
+// implementation of ApplicationListener is part of macify
 
     private DictCore core;
     private Map scrToCoreMap = new HashMap<Integer, Integer>();
@@ -206,6 +209,13 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         procTableModel.addColumn("Character(s)");
         procTableModel.addColumn("Pronuncation");
         tblProcGuide.setModel(procTableModel);
+
+        procTableModel.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                saveProcGuide();
+            }
+        });
 
         Font defaultFont = new JLabel().getFont();
 
@@ -1806,6 +1816,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     }
 
     private void addProcGuideWithValues(String base, String proc) {
+        boolean populatingLocal = curPopulating;
+        curPopulating = true;
+
         procTableModel.addRow(new Object[]{base, proc});
 
         // document listener to be fed into editor/renderers for cells...
@@ -1829,10 +1842,14 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         // set saving properties for first column editor
         TableColumnEditor editor = (TableColumnEditor) tblProcGuide.getCellEditor(procTableModel.getRowCount() - 1, 0);
         editor.setDocuListener(docuListener);
+        editor.setInitialValue(base);
 
         // set saving properties for second column editor
         editor = (TableColumnEditor) tblProcGuide.getCellEditor(procTableModel.getRowCount() - 1, 1);
         editor.setDocuListener(docuListener);
+        editor.setInitialValue(proc);
+
+        curPopulating = populatingLocal;
     }
 
     private void deleteProcGuide() {
@@ -1860,18 +1877,17 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
         boolean localPopulating = curPopulating;
         curPopulating = true;
 
+        if (tblProcGuide.getCellEditor() != null) {
+            tblProcGuide.getCellEditor().stopCellEditing();
+        }
+
         List<PronunciationNode> newPro = new ArrayList<PronunciationNode>();
 
         for (int i = 0; i < tblProcGuide.getRowCount(); i++) {
             PronunciationNode newNode = new PronunciationNode();
 
-            if (i == tblProcGuide.getSelectedRow()) {
-                newNode.setValue((String) tblProcGuide.getCellEditor(i, 0).getCellEditorValue());
-                newNode.setPronunciation((String) tblProcGuide.getCellEditor(i, 1).getCellEditorValue());
-            } else {
-                newNode.setValue((String) tblProcGuide.getModel().getValueAt(i, 0));
-                newNode.setPronunciation((String) tblProcGuide.getModel().getValueAt(i, 1));
-            }
+            newNode.setValue((String) tblProcGuide.getModel().getValueAt(i, 0));
+            newNode.setPronunciation((String) tblProcGuide.getModel().getValueAt(i, 1));
 
             newPro.add(newNode);
         }
@@ -1916,16 +1932,12 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
     private void moveProcUp() {
         Integer curRow = tblProcGuide.getSelectedRow();
-        PronunciationNode node = new PronunciationNode();
 
         if (curRow == -1) {
             return;
         }
 
-        node.setValue(tblProcGuide.getValueAt(curRow, 0).toString());
-        node.setPronunciation(tblProcGuide.getValueAt(curRow, 1).toString());
-
-        core.moveProcUp(node);
+        core.getPronunciationMgr().moveProcUp(curRow);
 
         populateProcGuide();
 
@@ -1938,16 +1950,12 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
 
     private void moveProcDown() {
         Integer curRow = tblProcGuide.getSelectedRow();
-        PronunciationNode node = new PronunciationNode();
 
         if (curRow == -1) {
             return;
         }
 
-        node.setValue(tblProcGuide.getValueAt(curRow, 0).toString());
-        node.setPronunciation(tblProcGuide.getValueAt(curRow, 1).toString());
-
-        core.moveProcDown(node);
+        core.getPronunciationMgr().moveProcDown(curRow);
 
         populateProcGuide();
 
@@ -2515,11 +2523,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener { //
     private boolean doWrite(final String _fileName) {
         final ScrDictInterface parent = this;
         boolean ret;
-        
+
         parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         final SwingWorker worker = new SwingWorker() {
-            
+
             //Runs on the event-dispatching thread.
             public void finished() {
                 parent.setCursor(Cursor.getDefaultCursor());

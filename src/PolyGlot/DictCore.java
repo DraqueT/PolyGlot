@@ -98,14 +98,6 @@ public class DictCore {
         pronuncMgr.deletePronunciation(remove);
     }
 
-    public void moveProcUp(PronunciationNode node) {
-        pronuncMgr.moveProcUp(node);
-    }
-
-    public void moveProcDown(PronunciationNode node) {
-        pronuncMgr.moveProcDown(node);
-    }
-
     /**
      * Returns pronunciation of a given word
      *

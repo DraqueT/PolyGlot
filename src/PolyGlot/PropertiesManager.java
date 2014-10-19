@@ -40,10 +40,27 @@ public class PropertiesManager {
     private boolean localMandatory = false;
     private boolean wordUniqueness = false;
     private boolean localUniqueness = false;
+    private boolean ignoreCase = false;
     String fontName = "";
     
     public PropertiesManager() {
         alphaOrder = new HashMap<Character, Integer>();
+    }
+    
+    /**
+     * Sets ignore case value for dictionary
+     * @param _ignoreCase new value
+     */
+    public void setIgnoreCase(boolean _ignoreCase) {
+        ignoreCase = _ignoreCase;
+    }
+    
+    /**
+     * Retrieves ignore case 
+     * @return ignore case status of dictionary
+     */
+    public boolean isIgnoreCase() {
+        return ignoreCase;
     }
     
     /**

@@ -68,27 +68,34 @@ public class PronunciationMgr {
         return ret;
     }
         
+    // replaces the pronunciation node at given index
+    public void modifyProc(int index, PronunciationNode newNode) {
+        pronunciations.remove(index);
+        pronunciations.add(index, newNode);
+    }
+    
     /**
      * moves a pronunciation up one slot to increase priority by 1
-     * @param node pronunciation to reposition
+     * @param index index of node to move up
      */
-    public void moveProcUp(PronunciationNode node) {
-        int index = getProcIndex(node);
+    public void moveProcUp(int index) {
+        PronunciationNode node = pronunciations.get(index);
         
-        // 0 = highest possible position, -1 = not found
-        if (index == 0 || index == -1) {
+        // -1 = not found, size 0 = start of list
+        if (index == -1 || index == 0) {
             return;
         }
-
+        
         pronunciations.remove(index);
         pronunciations.add(index - 1, node);
     }
+    
     /**
      *  moves a pronunciation down one slot to decrease priority by 1
-     * @param node pronunciation to reposition
+     * @param index index of the node to move down
      */
-    public void moveProcDown(PronunciationNode node) {
-        int index = getProcIndex(node);
+    public void moveProcDown(int index) {
+        PronunciationNode node = pronunciations.get(index);
         
         // -1 = not found, size - 1 = end of list already
         if (index == -1 || index == pronunciations.size() - 1) {

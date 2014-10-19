@@ -64,11 +64,25 @@ public class TableColumnEditor extends AbstractCellEditor implements TableCellEd
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value,
             boolean isSelected, int rowIndex, int vColIndex) {
-
-        ((JTextField) component).setText((String) value);
-        ((JTextField) component).setFont(myFont);
+        JTextField curComp = (JTextField)component;
+        
+        curComp.getDocument().removeDocumentListener(docListener);
+        curComp.setText((String) value);
+        curComp.getDocument().addDocumentListener(docListener);
+        
+        curComp.setFont(myFont);
 
         return component;
+    }
+    
+    /**
+     * Allows user to set initial value (helps avoid unnecessary listener firing later
+     * @param value The value to set.
+     */
+    public void setInitialValue(String value) {
+        JTextField curComp = (JTextField)component;
+        
+        curComp.setText(value);
     }
 
     // This method is called when editing is completed.
