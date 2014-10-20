@@ -67,8 +67,21 @@ public class PronunciationMgr {
         
         return ret;
     }
+    
+    /**
+     * Inserts a node at an arbitrary position
+     * @param index position to insert
+     * @param newNode node to be inserted
+     */
+    public void addAtPosition(int index, PronunciationNode newNode) {
+        pronunciations.add(index, newNode);
+    }
         
-    // replaces the pronunciation node at given index
+    /**
+     * replaces the pronunciation node at given index
+     * @param index index to modify
+     * @param newNode new node
+     */
     public void modifyProc(int index, PronunciationNode newNode) {
         pronunciations.remove(index);
         pronunciations.add(index, newNode);

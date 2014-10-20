@@ -1803,14 +1803,17 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
     }
 
     private void addProcGuide() {
-        addProcGuideWithValues("", "");
+        final int curPosition = tblProcGuide.getSelectedRow();
+        
+        core.getPronunciationMgr().addAtPosition(curPosition + 1, new PronunciationNode());
+        populateProcGuide();
 
         // perform this action later, once the scroll object is properly updated
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 JScrollBar bar = sclProcGuide.getVerticalScrollBar();
-                bar.setValue(bar.getMaximum() + bar.getBlockIncrement());
+                bar.setValue((curPosition + 1) * bar.getBlockIncrement());
             }
         });
     }
