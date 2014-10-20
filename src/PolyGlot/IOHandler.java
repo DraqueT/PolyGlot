@@ -141,7 +141,7 @@ public class IOHandler {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append(writer.getBuffer().toString().replaceAll("\n|\r", ""));
+        sb.append(writer.getBuffer().toString());
 
         // save file to temp location initially.
         final File f = new File(directoryPath, tempFileName);
