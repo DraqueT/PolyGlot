@@ -1982,9 +1982,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         if (chkAutopopProcs.isSelected()) {
             String setText = core.getPronunciation(txtConWordProp.getText());
 
-            if (!setText.trim().equals("")) {
-                txtPronunciationProp.setText(setText);
-            }
+            txtPronunciationProp.setText(setText);
         }
 
         curPopulating = localPopulating;

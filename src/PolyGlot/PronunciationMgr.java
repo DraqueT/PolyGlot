@@ -23,6 +23,8 @@ package PolyGlot;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -147,7 +149,7 @@ public class PronunciationMgr {
     public String getPronunciation(String base) {
         String ret = "";
 
-        Iterator<PronunciationNode> procCycle = getPronunciationElements(base).iterator();
+        Iterator<PronunciationNode> procCycle = getPronunciationElements(base, true).iterator();
         while (procCycle.hasNext()) {
             PronunciationNode curProc = procCycle.next();
             ret += curProc.getPronunciation() + " ";
@@ -159,10 +161,11 @@ public class PronunciationMgr {
     /**
      * returns pronunciation objects of a given word
      * @param base word to find pronunciation objects of
+     * @param isFirst set to true if first iteration.
      * @return pronunciation object list. If no perfect match found, empty
      * string returned
      */
-    public List<PronunciationNode> getPronunciationElements(String base) {
+    public List<PronunciationNode> getPronunciationElements(String base, boolean isFirst) {
         List<PronunciationNode> ret = new ArrayList<PronunciationNode>();
         Iterator<PronunciationNode> finder = getPronunciations();
 
@@ -173,18 +176,28 @@ public class PronunciationMgr {
 
         while (finder.hasNext()) {
             PronunciationNode curNode = finder.next();
-
-            // do not overstep string
-            if (curNode.getValue().length() > base.length()) {
+            String pattern = curNode.getValue();
+            
+            // skip if set as starting characters, but later in word
+            if (pattern.startsWith("^") && !isFirst) {
                 continue;
             }
+            
+            // make starting pattern if not already, and have it return the character group
+            if (!pattern.startsWith("^")) {
+                pattern = "^(" + pattern + ").*";
+            }
 
-            String comp = base.substring(0, curNode.getValue().length());
-            if (comp.equals(curNode.getValue())) {
-                List<PronunciationNode> temp = getPronunciationElements(base.substring(curNode.getValue().length(), base.length()));
+            Pattern findString = Pattern.compile(pattern);
+            Matcher matcher = findString.matcher(base);
+            
+            if (matcher.matches()) {
+                String leadingChars = matcher.group(1);
+                List<PronunciationNode> temp = 
+                        getPronunciationElements(base.substring(leadingChars.length(), base.length()), false);
 
                 // if lengths are equal, success! return. If unequal and no further match found-failure
-                if (curNode.getValue().length() == base.length() || !temp.isEmpty()) {
+                if (leadingChars.length() == base.length() || !temp.isEmpty()) {
                     ret.add(curNode);
                     ret.addAll(temp);
                     break;

@@ -117,7 +117,7 @@ public class DictCore {
      * found
      */
     public List<PronunciationNode> getPronunciationElements(String base) {
-        return pronuncMgr.getPronunciationElements(base);
+        return pronuncMgr.getPronunciationElements(base, true);
     }
 
     /**
