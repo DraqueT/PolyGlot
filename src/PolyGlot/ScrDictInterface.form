@@ -655,7 +655,7 @@
               <SubComponents>
                 <Component class="javax.swing.JTextField" name="txtConWordProp">
                   <Properties>
-                    <Property name="toolTipText" type="java.lang.String" value="Con Word value"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Constructed language word value"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblConWordProp">
@@ -670,7 +670,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtLocalWordProp">
                   <Properties>
-                    <Property name="toolTipText" type="java.lang.String" value="local word synonym (if any)"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Synonym for conword in local language"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblTypeProp">
@@ -683,7 +683,7 @@
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="word&apos;s type, or part of speech"/>
+                    <Property name="toolTipText" type="java.lang.String" value="word&apos;s part of speech"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbTypePropActionPerformed"/>
@@ -1470,7 +1470,7 @@
                 <Component class="javax.swing.JCheckBox" name="chkDisableProcRegex">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Disable Proc Regex"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Disable regex on pronunciations (this allows for ignoring case on regex)"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Disable regex on pronunciations (this allows for ignoring case on pronunciation)"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkDisableProcRegexActionPerformed"/>

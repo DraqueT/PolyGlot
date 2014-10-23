@@ -599,17 +599,17 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
 
         pnlProperties.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        txtConWordProp.setToolTipText("Con Word value");
+        txtConWordProp.setToolTipText("Constructed language word value");
 
         lblConWordProp.setText("Con Word");
 
         lblLocalWordProp.setText("Local Word");
 
-        txtLocalWordProp.setToolTipText("local word synonym (if any)");
+        txtLocalWordProp.setToolTipText("Synonym for conword in local language");
 
         lblTypeProp.setText("Type");
 
-        cmbTypeProp.setToolTipText("word's type, or part of speech");
+        cmbTypeProp.setToolTipText("word's part of speech");
         cmbTypeProp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbTypePropActionPerformed(evt);
@@ -1154,7 +1154,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         });
 
         chkDisableProcRegex.setText("Disable Proc Regex");
-        chkDisableProcRegex.setToolTipText("Disable regex on pronunciations (this allows for ignoring case on regex)");
+        chkDisableProcRegex.setToolTipText("Disable regex on pronunciations (this allows for ignoring case on pronunciation)");
         chkDisableProcRegex.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkDisableProcRegexActionPerformed(evt);

@@ -94,7 +94,12 @@ public class ExcelConReader {
         Integer ret;
 
         try {
-            ret = Integer.valueOf(entry.trim());
+            // initialy, try to parse as int, if failure there, try to parse as column letters
+            try {
+                ret = Integer.valueOf(entry.trim());
+            } catch (Exception e) {
+                ret = columnStringValue(entry.trim());
+            }
         } catch (NumberFormatException e) {
             throw new Exception("non-integer value in field.");
         }
@@ -257,5 +262,71 @@ public class ExcelConReader {
         }
 
         core.addWord(newWord);
+    }
+    
+    /**
+     * Gets int value of columns when addressed by letter names
+     * @param _input string representing alpha value of column
+     * @return int value of string for column
+     * @throws Exception on invalid characters
+     */
+    private static int columnStringValue(String _input) throws Exception {
+        int ret = 0;
+        
+        for (int i = 0; i < _input.length(); i++) {
+            int baseMultiplier = (int)Math.pow(26, (_input.length() - 1) - i);
+            
+            ret += (getLetterValue(_input.substring(i, i+1)) * baseMultiplier);
+        }
+        
+        return ret - 1;
+    }
+    
+    /**
+     * Gets base 26 style value of letter fed in
+     * @param letter string of single letter to be evaluated
+     * @return integer value of character in string
+     * @throws Exception if string length != 1, or not a letter
+     */
+    private static int getLetterValue(String letter) throws Exception {
+        int ret = 0;
+        
+        if (letter.length() > 1 || letter.length() == 0) {
+            throw new Exception("Invalid character: " + letter);
+        }
+        
+        Character c = letter.toUpperCase().charAt(0);
+        
+        switch(c) {
+            case 'A': ret = 1; break;
+            case 'B': ret = 2; break;
+            case 'C': ret = 3; break;
+            case 'D': ret = 4; break;
+            case 'E': ret = 5; break;
+            case 'F': ret = 6; break;
+            case 'G': ret = 7; break;
+            case 'H': ret = 8; break;
+            case 'I': ret = 9; break;
+            case 'J': ret = 10; break;
+            case 'K': ret = 11; break;
+            case 'L': ret = 12; break;
+            case 'M': ret = 13; break;
+            case 'N': ret = 14; break;
+            case 'O': ret = 15; break;
+            case 'P': ret = 16; break;
+            case 'Q': ret = 17; break;
+            case 'R': ret = 18; break;
+            case 'S': ret = 19; break;
+            case 'T': ret = 20; break;
+            case 'U': ret = 21; break;
+            case 'V': ret = 22; break;
+            case 'W': ret = 23; break;
+            case 'X': ret = 24; break;
+            case 'Y': ret = 25; break;
+            case 'Z': ret = 26; break;
+            default: throw new Exception("Invalid character: " + letter);
+        }
+        
+        return ret;
     }
 }
