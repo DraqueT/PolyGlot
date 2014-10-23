@@ -384,6 +384,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         chkPropLocalMandatory = new javax.swing.JCheckBox();
         chkPropWordUniqueness = new javax.swing.JCheckBox();
         chkPropLocalUniqueness = new javax.swing.JCheckBox();
+        chkIgnoreCase = new javax.swing.JCheckBox();
+        chkDisableProcRegex = new javax.swing.JCheckBox();
         jPanel7 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         sclProcGuide = new javax.swing.JScrollPane();
@@ -1143,6 +1145,22 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
             }
         });
 
+        chkIgnoreCase.setText("Ignore Case");
+        chkIgnoreCase.setToolTipText("Check this to ignore case in searches and setting alphabetic order. (does NOT include regex statements)");
+        chkIgnoreCase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkIgnoreCaseActionPerformed(evt);
+            }
+        });
+
+        chkDisableProcRegex.setText("Disable Proc Regex");
+        chkDisableProcRegex.setToolTipText("Disable regex on pronunciations (this allows for ignoring case on regex)");
+        chkDisableProcRegex.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkDisableProcRegexActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -1152,8 +1170,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
                     .addComponent(chkPropTypesMandatory)
                     .addComponent(chkPropLocalMandatory)
                     .addComponent(chkPropWordUniqueness)
-                    .addComponent(chkPropLocalUniqueness))
-                .addGap(0, 28, Short.MAX_VALUE))
+                    .addComponent(chkPropLocalUniqueness)
+                    .addComponent(chkIgnoreCase)
+                    .addComponent(chkDisableProcRegex))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1166,6 +1186,10 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
                 .addComponent(chkPropWordUniqueness)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkPropLocalUniqueness)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkIgnoreCase)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkDisableProcRegex)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1696,6 +1720,14 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         viewThesaurus();
     }//GEN-LAST:event_mnuThesaurusActionPerformed
 
+    private void chkIgnoreCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkIgnoreCaseActionPerformed
+        core.getPropertiesManager().setIgnoreCase(chkIgnoreCase.isSelected());
+    }//GEN-LAST:event_chkIgnoreCaseActionPerformed
+
+    private void chkDisableProcRegexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDisableProcRegexActionPerformed
+        core.getPropertiesManager().setDisableProcRegex(chkDisableProcRegex.isSelected());
+    }//GEN-LAST:event_chkDisableProcRegexActionPerformed
+
     @Override
     public void dispose() {
         // only exit if save/cancel test is passed
@@ -1888,7 +1920,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
 
         for (int i = 0; i < tblProcGuide.getRowCount(); i++) {
             PronunciationNode newNode = new PronunciationNode();
-
+            
             newNode.setValue((String) tblProcGuide.getModel().getValueAt(i, 0));
             newNode.setPronunciation((String) tblProcGuide.getModel().getValueAt(i, 1));
 
@@ -2624,14 +2656,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
             return;
         }
 
-        // TODO: delete this if no trouble comes up from font reworking
-        // if conlang font DNE, inform user during load (default OS font will be used)
-        /*List<String> allFonts = Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
-         String fontCon = core.getFontCon();
-         if (!fontCon.equals("") && !allFonts.contains(fontCon)) {
-         InfoBox.info("Font not Found.", "Font " + fontCon
-         + " not found. Please install font to dislpay conlang correctly or reselect appropriate font.", this);
-         }*/
         populateDict();
         populateTypes();
         populateGenders();
@@ -2647,6 +2671,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         chkPropLocalUniqueness.setSelected(core.getPropertiesManager().isLocalUniqueness());
         chkPropTypesMandatory.setSelected(core.getPropertiesManager().isTypesMandatory());
         chkPropWordUniqueness.setSelected(core.getPropertiesManager().isWordUniqueness());
+        chkIgnoreCase.setSelected(core.getPropertiesManager().isIgnoreCase());
+        chkDisableProcRegex.setSelected(core.getPropertiesManager().isDisableProcRegex());
 
         // only set conlang font if it is not the OS default font
         Font setFont = core.getLangFont();
@@ -3592,6 +3618,8 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
     private javax.swing.JButton btnRecalcProc;
     private javax.swing.JButton btnUpProc;
     private javax.swing.JCheckBox chkAutopopProcs;
+    private javax.swing.JCheckBox chkDisableProcRegex;
+    private javax.swing.JCheckBox chkIgnoreCase;
     private javax.swing.JCheckBox chkPronunciationOverrideProp;
     private javax.swing.JCheckBox chkPropLocalMandatory;
     private javax.swing.JCheckBox chkPropLocalUniqueness;

@@ -17,7 +17,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package PolyGlot;
 
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ import java.util.Map.Entry;
  *
  */
 public class ConWordCollection extends DictionaryCollection {
+
     private final DictCore core;
     Map<String, Integer> allConWords;
     Map<String, Integer> allLocalWords;
@@ -155,17 +155,18 @@ public class ConWordCollection extends DictionaryCollection {
 
         super.modifyNode(_id, _modNode);
     }
-    
+
     /**
      * recalculates all non-overridden pronunciations
+     *
      * @throws java.lang.Exception
      */
     void recalcAllProcs() throws Exception {
         Iterator<ConWord> it = this.getNodeIterator();
-        
+
         while (it.hasNext()) {
             ConWord curWord = it.next();
-            
+
             // only runs if word's pronunciation not overridden
             if (!curWord.isProcOverride()) {
                 curWord.setPronunciation(core.getPronunciation(curWord.getValue()));
@@ -190,42 +191,52 @@ public class ConWordCollection extends DictionaryCollection {
         if (_match.equals("")) {
             return localEquals;
         }
-        
+
         Entry<Integer, ConWord> curEntry;
         ConWord curWord;
-        
+
         // cycles through all words, searching for matches
         while (allWords.hasNext()) {
             curEntry = allWords.next();
             curWord = curEntry.getValue();
-            
-            if(curWord.getLocalWord().equals(_match)) {
-                // local word equility is the hiest ranking matc
+
+            String word = curWord.getValue();
+            String compare = _match;
+            String definition = curWord.getDefinition();
+
+            // on ignore case, force all to lowercase
+            if (core.getPropertiesManager().isIgnoreCase()) {
+                word = word.toLowerCase();
+                compare = compare.toLowerCase();
+                definition = definition.toLowerCase();
+            }
+
+            if (word.equals(compare)) {
+                // local word equility is the highest ranking match
                 localEquals.add(curWord);
-            } else if (curWord.getLocalWord().contains(_match)) {
+            } else if (word.contains(compare)) {
                 // local word contains value is the second highest ranking match
                 localContains.add(curWord);
-            } else if (curWord.getDefinition().contains(_match)) {
+            } else if (definition.contains(compare)) {
                 // definition contains is ranked third, and itself raked inernally
-                // by match poition
-                definitionContains.add(new RankedObject(curWord, curWord.getDefinition().indexOf(_match))); 
-            }            
+                // by match position
+                definitionContains.add(new RankedObject(curWord, definition.indexOf(compare)));
+            }
         }
-        
+
         Collections.sort(definitionContains);
-        
-        
+
         // concatinate results
         ArrayList<ConWord> ret = new ArrayList<ConWord>();
         ret.addAll(localEquals);
         ret.addAll(localContains);
-        
+
         // must add through iteration here
         Iterator<RankedObject> it = definitionContains.iterator();
         while (it.hasNext()) {
             RankedObject curObject = it.next();
-            ConWord curDefMatch = (ConWord)curObject.getHolder();
-            
+            ConWord curDefMatch = (ConWord) curObject.getHolder();
+
             ret.add(curDefMatch);
         }
 
@@ -245,44 +256,72 @@ public class ConWordCollection extends DictionaryCollection {
             curEntry = filterList.next();
             curWord = curEntry.getValue();
 
-            try {
-		// each filter test split up to minimize compares
+            // set filter to lowercase if ignoring case
+            if (core.getPropertiesManager().isIgnoreCase()) {
+                _filter.setDefinition(_filter.getDefinition().toLowerCase());
+                _filter.setWordType(_filter.getWordType().toLowerCase());
+                _filter.setLocalWord(_filter.getLocalWord().toLowerCase());
+                _filter.setValue(_filter.getValue().toLowerCase());
+                _filter.setGender(_filter.getGender().toLowerCase());
+                _filter.setPronunciation(_filter.getPronunciation().toLowerCase());
+            }
 
+            try {
+                String definition, type, local, value, gender, proc;
+
+                // if set to ignore case, set up caseless matches, normal otherwise
+                if (core.getPropertiesManager().isIgnoreCase()) {
+                    definition = curWord.getDefinition().toLowerCase();
+                    type = curWord.getWordType().toLowerCase();
+                    local = curWord.getLocalWord().toLowerCase();
+                    value = curWord.getValue().toLowerCase();
+                    gender = curWord.getGender().toLowerCase();
+                    proc = curWord.getPronunciation().toLowerCase();
+                } else {
+                    definition = curWord.getDefinition();
+                    type = curWord.getWordType();
+                    local = curWord.getLocalWord();
+                    value = curWord.getValue();
+                    gender = curWord.getGender();
+                    proc = curWord.getPronunciation();
+                }
+
+                // each filter test split up to minimize compares                
                 // definition
                 if (!_filter.getDefinition().trim().equals("")
-                        && !curWord.getDefinition().contains(
+                        && !definition.contains(
                                 _filter.getDefinition())) {
                     continue;
                 }
 
                 // type (exact match only)
                 if (!_filter.getWordType().trim().equals("")
-                        && !curWord.getWordType().equals(_filter.getWordType())) {
+                        && !type.equals(_filter.getWordType())) {
                     continue;
                 }
 
                 // local word
                 if (!_filter.getLocalWord().trim().equals("")
-                        && !curWord.getLocalWord().contains(
+                        && !local.contains(
                                 _filter.getLocalWord())) {
                     continue;
                 }
 
                 // con word
                 if (!_filter.getValue().trim().equals("")
-                        && !curWord.getValue().contains(_filter.getValue())) {
+                        && !value.contains(_filter.getValue())) {
                     continue;
                 }
 
                 // gender (exact match only)
                 if (!_filter.getGender().trim().equals("")
-                        && !curWord.getGender().equals(_filter.getGender())) {
+                        && !gender.equals(_filter.getGender())) {
                     continue;
                 }
 
                 // pronunciation
                 if (!_filter.getPronunciation().trim().equals("")
-                        && !curWord.getPronunciation().contains(_filter.getPronunciation())) {
+                        && !proc.contains(_filter.getPronunciation())) {
                     continue;
                 }
 
@@ -330,15 +369,16 @@ public class ConWordCollection extends DictionaryCollection {
 
         return retList.iterator();
     }
-    
+
     /**
      * Builds report on words in ConLang. Potentially computationally expensive.
-     * @return 
+     *
+     * @return
      */
     public String buildWordReport() {
         String ret = "";
         String conFontTag = "face=\"" + core.getLangFont().getFontName() + "\"";
-        
+
         Map<String, Integer> wordStart = new HashMap<String, Integer>();
         Map<String, Integer> wordEnd = new HashMap<String, Integer>();
         Map<String, Integer> characterCombos2 = new HashMap<String, Integer>();
@@ -347,21 +387,21 @@ public class ConWordCollection extends DictionaryCollection {
         Map<String, Integer> typeCountByWord = new HashMap<String, Integer>();
         Map<String, Integer> phonemeCount = new HashMap<String, Integer>();
         Map<String, Integer> charCount = new HashMap<String, Integer>();
-        Map<String, Integer> phonemeCombo2 = new HashMap<String, Integer>(); 
+        Map<String, Integer> phonemeCombo2 = new HashMap<String, Integer>();
         Integer wordCount = nodeMap.size();
-        
+
         Iterator<ConWord> wordIt = new ArrayList<ConWord>(nodeMap.values()).iterator();
-        
+
         // Put values into maps to count/record... 
         while (wordIt.hasNext()) {
             ConWord curWord = wordIt.next();
             final String curValue = curWord.getValue();
             final int curValueLength = curValue.length();
             final String curType = curWord.getWordType();
-            
+
             String beginsWith = curValue.substring(0, 1);
             String endsWith = curValue.substring(curValueLength - 1, curValueLength);
-            
+
             // either increment or create value for starting character
             if (wordStart.containsKey(beginsWith)) {
                 int newValue = wordStart.get(beginsWith) + 1;
@@ -370,7 +410,7 @@ public class ConWordCollection extends DictionaryCollection {
             } else {
                 wordStart.put(beginsWith, 1);
             }
-            
+
             // either increment or create value for ending character
             if (wordEnd.containsKey(endsWith)) {
                 int newValue = wordEnd.get(endsWith) + 1;
@@ -379,7 +419,7 @@ public class ConWordCollection extends DictionaryCollection {
             } else {
                 wordEnd.put(endsWith, 1);
             }
-            
+
             // capture and record all phonemes in word and phoneme combinations
             List<PronunciationNode> phonArray = core.getPronunciationElements(curValue);
             for (int i = 0; i < phonArray.size(); i++) {
@@ -390,12 +430,12 @@ public class ConWordCollection extends DictionaryCollection {
                 } else {
                     phonemeCount.put(phonArray.get(i).getPronunciation(), 1);
                 }
-                
+
                 // grab combo if there are additinal phonemes, otherwise you're done
                 if (i + 1 < phonArray.size()) {
-                    String curCombo = phonArray.get(i).getPronunciation() + " " 
-                            + phonArray.get(i+1).getPronunciation();
-                    
+                    String curCombo = phonArray.get(i).getPronunciation() + " "
+                            + phonArray.get(i + 1).getPronunciation();
+
                     if (phonemeCombo2.containsKey(curCombo)) {
                         int newValue = phonemeCombo2.get(curCombo) + 1;
                         phonemeCombo2.remove(curCombo);
@@ -405,11 +445,11 @@ public class ConWordCollection extends DictionaryCollection {
                     }
                 }
             }
-            
+
             // caupture all individual characters
             for (int i = 0; i < curValueLength; i++) {
                 String curChar = curValue.substring(i, i + 1);
-                
+
                 if (charCount.containsKey(curChar)) {
                     int newValue = charCount.get(curChar) + 1;
                     charCount.remove(curChar);
@@ -418,18 +458,18 @@ public class ConWordCollection extends DictionaryCollection {
                     charCount.put(curChar, 1);
                 }
             }
-            
+
             // capture and record all 2 character combinations in words
             for (int i = 0; i < curValueLength - 1; i++) {
                 String combo = curValue.substring(i, i + 2);
-                
+
                 if (characterCombos2.containsKey(combo)) {
                     int curComboCount = characterCombos2.get(combo);
-                    
+
                     if (highestCombo2 <= curComboCount) {
                         highestCombo2 = curComboCount + 1;
                     }
-                    
+
                     int newValue = characterCombos2.get(combo) + 1;
                     characterCombos2.remove(combo);
                     characterCombos2.put(combo, newValue);
@@ -437,11 +477,11 @@ public class ConWordCollection extends DictionaryCollection {
                     characterCombos2.put(combo, 1);
                 }
             }
-            
+
             // capture and record all 3 character combinations in words
             for (int i = 0; i < curValueLength - 2; i++) {
                 String combo = curValue.substring(i, i + 3);
-                
+
                 if (characterCombos3.containsKey(combo)) {
                     int newValue = characterCombos3.get(combo) + 1;
                     characterCombos3.remove(combo);
@@ -450,7 +490,7 @@ public class ConWordCollection extends DictionaryCollection {
                     characterCombos3.put(combo, 1);
                 }
             }
-            
+
             // record type count...
             if (typeCountByWord.containsKey(curType)) {
                 int newValue = typeCountByWord.get(curType) + 1;
@@ -459,107 +499,107 @@ public class ConWordCollection extends DictionaryCollection {
             } else {
                 typeCountByWord.put(curType, 1);
             }
-        } 
-        
+        }
+
         ret += "Count of words in conlang lexicon: " + wordCount + "<br><br>";
-        
+
         // build display of type counts
         ret += "count of words by type:<br>";
-        for(Entry<String, Integer> curEntry : typeCountByWord.entrySet()) {
+        for (Entry<String, Integer> curEntry : typeCountByWord.entrySet()) {
             ret += curEntry.getKey() + " : " + curEntry.getValue() + "<br>";
         }
-        ret += "<br><br>";        
+        ret += "<br><br>";
 
         // build display for starts-with statistics
         ret += " Breakdown of words counted starting with letter:<br>";
         for (char letter : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
-            ret += "<font " + conFontTag + ">" + letter + "</font> : " 
-                    + (wordStart.containsKey(""+letter) ? wordStart.get(""+letter) : "0") + "<br>";
-        }        
+            ret += "<font " + conFontTag + ">" + letter + "</font> : "
+                    + (wordStart.containsKey("" + letter) ? wordStart.get("" + letter) : "0") + "<br>";
+        }
         ret += "<br><br>";
-        
+
         // build display for ends-with statistics
         ret += " Breakdown of words counted ending with letter:<br>";
         for (char letter : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
-            ret += "<font " + conFontTag + ">" + letter + "</font> : " 
-                    + (wordEnd.containsKey(""+letter) ? wordEnd.get(""+letter) : "0") + "<br>";
-        }        
+            ret += "<font " + conFontTag + ">" + letter + "</font> : "
+                    + (wordEnd.containsKey("" + letter) ? wordEnd.get("" + letter) : "0") + "<br>";
+        }
         ret += "<br><br>";
-        
+
         // build display for character counts
         ret += " Breakdown of characters counted across all words:<br>";
         for (char letter : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
-            ret += "<font " + conFontTag + ">" + letter + "</font> : " 
-                    + (charCount.containsKey(""+letter) ? charCount.get(""+letter) : "0") + "<br>";
-        }        
+            ret += "<font " + conFontTag + ">" + letter + "</font> : "
+                    + (charCount.containsKey("" + letter) ? charCount.get("" + letter) : "0") + "<br>";
+        }
         ret += "<br><br>";
-        
+
         // build display for phoneme count
         ret += " Breakdown of phonemes counted across all words:<br>";
         Iterator<PronunciationNode> procLoop = core.getPronunciations();
         while (procLoop.hasNext()) {
             PronunciationNode curNode = procLoop.next();
-            ret += curNode.getPronunciation() + " : " 
-                    + (phonemeCount.containsKey(curNode.getPronunciation()) ? 
-                    phonemeCount.get(curNode.getPronunciation()) : "0") + "<br>";
-        }        
+            ret += curNode.getPronunciation() + " : "
+                    + (phonemeCount.containsKey(curNode.getPronunciation())
+                            ? phonemeCount.get(curNode.getPronunciation()) : "0") + "<br>";
+        }
         ret += "<br><br>";
-       
+
         // buid grid of 2 letter combos
-        ret += "Heat map of letter combination frequency:<br>";        
-        ret += "<table border=\"1\">";        
+        ret += "Heat map of letter combination frequency:<br>";
+        ret += "<table border=\"1\">";
         ret += "<tr><td></td>";
         for (char topRow : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
             ret += "<td><font " + conFontTag + ">" + topRow + "</font></td>";
         }
-        ret += "</tr>";               
+        ret += "</tr>";
         for (char y : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
             ret += "<tr><td><font " + conFontTag + ">" + y + "</font></td>";
             for (char x : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
-                String search = ""+x+y;
-                Integer comboValue = (characterCombos2.containsKey(search) ? 
-                        characterCombos2.get(search) : 0);
-                
+                String search = "" + x + y;
+                Integer comboValue = (characterCombos2.containsKey(search)
+                        ? characterCombos2.get(search) : 0);
+
                 Integer red = (255 / highestCombo2) * comboValue;
                 Integer blue = 255 - red;
-                ret += "<td bgcolor=rgb(" + red + "," + blue + "," + blue + ")>" 
-                        + "<font " + conFontTag + ">" + x + y + "</font>" + ":" 
+                ret += "<td bgcolor=rgb(" + red + "," + blue + "," + blue + ")>"
+                        + "<font " + conFontTag + ">" + x + y + "</font>" + ":"
                         + comboValue.toString() + "</td>";
             }
             ret += "</tr>";
-        }        
+        }
         ret += "</table><br><br>";
-        
+
         // buid grid of 2 phoneme combos
-        ret += "Heat map of phoneme combination frequency:<br>";        
-        ret += "<table border=\"1\">";        
+        ret += "Heat map of phoneme combination frequency:<br>";
+        ret += "<table border=\"1\">";
         ret += "<tr><td></td>";
         Iterator<PronunciationNode> procIty = core.getPronunciations();
         while (procIty.hasNext()) {
             ret += "<td>" + procIty.next().getPronunciation() + "</td>";
         }
-        ret += "</tr>";               
+        ret += "</tr>";
         procIty = core.getPronunciations();
         while (procIty.hasNext()) {
-            PronunciationNode y = procIty.next();            
-            ret += "<tr><td>" + y.getPronunciation() + "</td>";            
+            PronunciationNode y = procIty.next();
+            ret += "<tr><td>" + y.getPronunciation() + "</td>";
             Iterator<PronunciationNode> procItx = core.getPronunciations();
             while (procItx.hasNext()) {
                 PronunciationNode x = procItx.next();
-                String search = x.getPronunciation() + " " +y.getPronunciation();
-                Integer comboValue = (phonemeCombo2.containsKey(search) ? 
-                        phonemeCombo2.get(search) : 0);
-                
+                String search = x.getPronunciation() + " " + y.getPronunciation();
+                Integer comboValue = (phonemeCombo2.containsKey(search)
+                        ? phonemeCombo2.get(search) : 0);
+
                 Integer red = (255 / highestCombo2) * comboValue;
                 Integer blue = 255 - red;
-                ret += "<td bgcolor=rgb(" + red + "," + blue + "," + blue + ")>" 
-                        + x.getPronunciation() + y.getPronunciation() + ":" 
+                ret += "<td bgcolor=rgb(" + red + "," + blue + "," + blue + ")>"
+                        + x.getPronunciation() + y.getPronunciation() + ":"
                         + comboValue.toString() + "</td>";
             }
             ret += "</tr>";
-        }        
+        }
         ret += "</table>";
-        
+
         return ret;
     }
 }

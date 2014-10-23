@@ -41,10 +41,19 @@ public class PropertiesManager {
     private boolean wordUniqueness = false;
     private boolean localUniqueness = false;
     private boolean ignoreCase = false;
+    private boolean disableProcRegex = false;
     String fontName = "";
     
     public PropertiesManager() {
         alphaOrder = new HashMap<Character, Integer>();
+    }
+    
+    public void setDisableProcRegex(boolean _disableProcRegex) {
+        disableProcRegex = _disableProcRegex;
+    }
+    
+    public boolean isDisableProcRegex() {
+        return disableProcRegex;
     }
     
     /**

@@ -78,7 +78,8 @@ public class CustHandlerFactory {
                 || versionNumber.equals("0.8")
                 || versionNumber.equals("0.8.1")
                 || versionNumber.equals("0.8.1.1")
-                || versionNumber.equals("0.8.1.2")) {
+                || versionNumber.equals("0.8.1.2")
+                || versionNumber.equals("0.8.5")) {
             ret = CustHandlerFactory.get075Handler(core);
         } else {
             throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
@@ -558,6 +559,8 @@ public class CustHandlerFactory {
             boolean bthesName = false;
             boolean bthesNotes = false;
             boolean bthesWord = false;
+            boolean bignoreCase = false;
+            boolean bdisableProcRegex = false;
 
             int wId;
             int wCId;
@@ -676,6 +679,10 @@ public class CustHandlerFactory {
                     bthesNotes = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.thesWordXID)) {
                     bthesWord = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.langPropIgnoreCase)) {
+                    bignoreCase = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.langPropDisableProcRegex)) {
+                    bdisableProcRegex = true;
                 }
             }
 
@@ -814,6 +821,10 @@ public class CustHandlerFactory {
                     bthesNotes = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.thesWordXID)) {
                     bthesWord = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.langPropIgnoreCase)) {
+                    bignoreCase = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.langPropDisableProcRegex)) {
+                    bdisableProcRegex = false;
                 }
             }
 
@@ -970,6 +981,12 @@ public class CustHandlerFactory {
                         // I really shouldn't have made the word search return error on not found...
                     }
                     bthesWord = false;
+                } else if (bignoreCase) {
+                    core.getPropertiesManager().setIgnoreCase(new String(ch, start, length).equals("T"));
+                    bignoreCase = false;
+                } else if (bdisableProcRegex) {
+                    core.getPropertiesManager().setDisableProcRegex(new String(ch, start, length).equals("T"));
+                    bdisableProcRegex = false;
                 }
             }
         };

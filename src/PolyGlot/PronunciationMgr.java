@@ -17,7 +17,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package PolyGlot;
 
 import java.util.ArrayList;
@@ -31,6 +30,12 @@ import java.util.regex.Pattern;
  * @author draque
  */
 public class PronunciationMgr {
+
+    private final DictCore core;
+
+    public PronunciationMgr(DictCore _core) {
+        core = _core;
+    }
 
     private List<PronunciationNode> pronunciations = new ArrayList<PronunciationNode>();
 
@@ -54,33 +59,36 @@ public class PronunciationMgr {
 
     /**
      * Returns index of pronunciation
+     *
      * @param node to search for
      * @return node's index, -1 = not found
      */
     public int getProcIndex(PronunciationNode node) {
         int ret = -1;
-        
+
         for (int i = 0; i < pronunciations.size(); i++) {
             if (node.equals(pronunciations.get(i))) {
                 ret = i;
                 break;
             }
         }
-        
+
         return ret;
     }
-    
+
     /**
      * Inserts a node at an arbitrary position
+     *
      * @param index position to insert
      * @param newNode node to be inserted
      */
     public void addAtPosition(int index, PronunciationNode newNode) {
         pronunciations.add(index, newNode);
     }
-        
+
     /**
      * replaces the pronunciation node at given index
+     *
      * @param index index to modify
      * @param newNode new node
      */
@@ -88,30 +96,32 @@ public class PronunciationMgr {
         pronunciations.remove(index);
         pronunciations.add(index, newNode);
     }
-    
+
     /**
      * moves a pronunciation up one slot to increase priority by 1
+     *
      * @param index index of node to move up
      */
     public void moveProcUp(int index) {
         PronunciationNode node = pronunciations.get(index);
-        
+
         // -1 = not found, size 0 = start of list
         if (index == -1 || index == 0) {
             return;
         }
-        
+
         pronunciations.remove(index);
         pronunciations.add(index - 1, node);
     }
-    
+
     /**
-     *  moves a pronunciation down one slot to decrease priority by 1
+     * moves a pronunciation down one slot to decrease priority by 1
+     *
      * @param index index of the node to move down
      */
     public void moveProcDown(int index) {
         PronunciationNode node = pronunciations.get(index);
-        
+
         // -1 = not found, size - 1 = end of list already
         if (index == -1 || index == pronunciations.size() - 1) {
             return;
@@ -120,7 +130,7 @@ public class PronunciationMgr {
         pronunciations.remove(index);
         pronunciations.add(index + 1, node);
     }
-    
+
     public void deletePronunciation(PronunciationNode remove) {
         List<PronunciationNode> newProcs = new ArrayList<PronunciationNode>();
 
@@ -157,9 +167,10 @@ public class PronunciationMgr {
 
         return ret;
     }
-    
+
     /**
      * returns pronunciation objects of a given word
+     *
      * @param base word to find pronunciation objects of
      * @param isFirst set to true if first iteration.
      * @return pronunciation object list. If no perfect match found, empty
@@ -177,30 +188,58 @@ public class PronunciationMgr {
         while (finder.hasNext()) {
             PronunciationNode curNode = finder.next();
             String pattern = curNode.getValue();
-            
-            // skip if set as starting characters, but later in word
-            if (pattern.startsWith("^") && !isFirst) {
-                continue;
-            }
-            
-            // make starting pattern if not already, and have it return the character group
-            if (!pattern.startsWith("^")) {
-                pattern = "^(" + pattern + ").*";
-            }
 
-            Pattern findString = Pattern.compile(pattern);
-            Matcher matcher = findString.matcher(base);
-            
-            if (matcher.matches()) {
-                String leadingChars = matcher.group(1);
-                List<PronunciationNode> temp = 
-                        getPronunciationElements(base.substring(leadingChars.length(), base.length()), false);
+            // split logic here to use either string comparison or regex matching
+            if (core.getPropertiesManager().isDisableProcRegex()) {
+                // do not overstep string
+                if (pattern.length() > base.length()) {
+                    continue;
+                }
 
-                // if lengths are equal, success! return. If unequal and no further match found-failure
-                if (leadingChars.length() == base.length() || !temp.isEmpty()) {
-                    ret.add(curNode);
-                    ret.addAll(temp);
-                    break;
+                // capture string to compare based on pattern length
+                String comp = base.substring(0, curNode.getValue().length());
+                
+                if (core.getPropertiesManager().isIgnoreCase()) {
+                    comp = comp.toLowerCase();
+                    pattern = pattern.toLowerCase();
+                }
+                
+                if (comp.equals(pattern)) {
+                    List<PronunciationNode> temp
+                            = getPronunciationElements(base.substring(pattern.length(), base.length()), false);
+
+                    // if lengths are equal, success! return. If unequal and no further match found-failure
+                    if (pattern.length() == base.length() || !temp.isEmpty()) {
+                        ret.add(curNode);
+                        ret.addAll(temp);
+                        break;
+                    }
+                }
+            } else {
+                // skip if set as starting characters, but later in word
+                if (pattern.startsWith("^") && !isFirst) {
+                    continue;
+                }
+
+                // make starting pattern if not already, and have it return the character group
+                if (!pattern.startsWith("^")) {
+                    pattern = "^(" + pattern + ").*";
+                }
+
+                Pattern findString = Pattern.compile(pattern);
+                Matcher matcher = findString.matcher(base);
+
+                if (matcher.matches()) {
+                    String leadingChars = matcher.group(1);
+                    List<PronunciationNode> temp
+                            = getPronunciationElements(base.substring(leadingChars.length(), base.length()), false);
+
+                    // if lengths are equal, success! return. If unequal and no further match found-failure
+                    if (leadingChars.length() == base.length() || !temp.isEmpty()) {
+                        ret.add(curNode);
+                        ret.addAll(temp);
+                        break;
+                    }
                 }
             }
         }

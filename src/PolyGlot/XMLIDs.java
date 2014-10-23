@@ -51,6 +51,7 @@ public class XMLIDs {
     public static final String genderIdXID = "genderId";
     public static final String genderNotesXID = "genderNotes";
     public static final String pronunciationXID = "pronunciation";
+    
     public static final String langPropLangNameXID = "langName";
     public static final String langPropFontSizeXID = "fontSize";
     public static final String langPropFontStyleXID = "fontStyle";
@@ -59,6 +60,9 @@ public class XMLIDs {
     public static final String langPropLocalMandatoryXID = "langPropLocalMandatory";
     public static final String langPropWordUniquenessXID = "langPropWordUniqueness";
     public static final String langPropLocalUniquenessXID = "langPropLocalUniqueness";
+    public static final String langPropIgnoreCase = "langPropIgnoreCase";
+    public static final String langPropDisableProcRegex = "langPropDisableProcRegex";
+    
     public static final String declensionXID = "declensionNode";
     public static final String declensionIdXID = "declensionId";
     public static final String declensionTextXID = "declensionText";
@@ -71,6 +75,7 @@ public class XMLIDs {
     public static final String dimensionIdXID = "dimensionId";
     public static final String dimensionMandXID = "dimensionMand";
     public static final String dimensionNameXID = "dimensionName";
+    
     public static final String proGuideXID = "proGuide";
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";

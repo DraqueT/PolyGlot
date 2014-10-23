@@ -41,13 +41,13 @@ import org.xml.sax.SAXException;
 
 public class DictCore {
 
-    private final String version = "0.8.1.2";
+    private final String version = "0.8.5";
     private final ConWordCollection wordCollection = new ConWordCollection(this);
     private final TypeCollection typeCollection = new TypeCollection();
     private final GenderCollection genderCollection = new GenderCollection(this);
     private final DeclensionManager declensionMgr = new DeclensionManager();
     private final PropertiesManager propertiesManager = new PropertiesManager();
-    private final PronunciationMgr pronuncMgr = new PronunciationMgr();
+    private final PronunciationMgr pronuncMgr = new PronunciationMgr(this);
     private final ThesaurusManager thesManager = new ThesaurusManager(this);
 
     /**
@@ -289,11 +289,14 @@ public class DictCore {
         rootElement.appendChild(wordValue);
         
         // store option for ignoring case
-        // TODO: Uncomment
-        /* COMMENTED TEMPORARILY UNTIL SAVING PROBLEM RESOLVED
         wordValue = doc.createElement(XMLIDs.langPropIgnoreCase);
         wordValue.appendChild(doc.createTextNode(propertiesManager.isIgnoreCase() ? "T" : "F"));
-        rootElement.appendChild(wordValue);*/
+        rootElement.appendChild(wordValue);
+        
+        // store option for disabling regex or pronunciations
+        wordValue = doc.createElement(XMLIDs.langPropDisableProcRegex);
+        wordValue.appendChild(doc.createTextNode(propertiesManager.isDisableProcRegex()? "T" : "F"));
+        rootElement.appendChild(wordValue);
 
         // record all genders
         while (genderLoop.hasNext()) {
