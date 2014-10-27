@@ -318,10 +318,15 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(XMLIDs.conWordXID)) {
                     bconWord = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordPlurXID)) {
-                                        // plurality now a declension (as it should be)
+                    // plurality now a declension (as it should be)
                     // special position granted to plurals... fixes awful ID collision error
-                    declensionMgr.getBuffer().setCombinedDimId("," + wId + "," + XMLIDs.wordPlurXID + ",");
-                    declensionMgr.addDeclensionToWord(wId, Integer.MAX_VALUE, declensionMgr.getBuffer());
+                    
+                    // skip if empty
+                    if (!declensionMgr.getBuffer().getValue().trim().equals("")) {
+                        declensionMgr.getBuffer().setCombinedDimId("," + wId + "," + XMLIDs.wordPlurXID + ",");
+                        declensionMgr.addDeclensionToWord(wId, Integer.MAX_VALUE, declensionMgr.getBuffer());
+                    }
+                    
                     declensionMgr.clearBuffer();
                     bwordPlur = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordTypeXID)) {
@@ -753,8 +758,13 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordPlurXID)) {
                     // plurality now a declension (as it should be)
                     // special position granted to plurals... fixes awful ID collision error
-                    declensionMgr.getBuffer().setCombinedDimId("," + wId + "," + XMLIDs.wordPlurXID + ",");
-                    declensionMgr.addDeclensionToWord(wId, Integer.MAX_VALUE, declensionMgr.getBuffer());
+
+                    // skip insertion of empty
+                    if (!declensionMgr.getBuffer().getValue().trim().equals("")) {
+                        declensionMgr.getBuffer().setCombinedDimId("," + wId + "," + XMLIDs.wordPlurXID + ",");
+                        declensionMgr.addDeclensionToWord(wId, Integer.MAX_VALUE, declensionMgr.getBuffer());
+                    }
+
                     declensionMgr.clearBuffer();
                     bwordPlur = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordTypeXID)) {
@@ -832,7 +842,7 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(XMLIDs.thesNameXID)) {
                     bthesName = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.thesNodeXID)) {
-                     thesMgr.bufferDone();
+                    thesMgr.bufferDone();
                 } else if (qName.equalsIgnoreCase(XMLIDs.thesNotesXID)) {
                     bthesNotes = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.thesWordXID)) {
@@ -994,7 +1004,7 @@ public class CustHandlerFactory {
                 } else if (bthesWord) {
                     try {
                         thesMgr.getBuffer().addWord(core.getWordById(
-                            Integer.parseInt(new String(ch, start, length))));
+                                Integer.parseInt(new String(ch, start, length))));
                     } catch (Exception e) {
                         // I really shouldn't have made the word search return error on not found...
                     }

@@ -23,7 +23,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
-import java.awt.TextField;
 import java.awt.Toolkit;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,6 +32,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 /**
@@ -41,7 +41,7 @@ import javax.swing.SwingUtilities;
  */
 public class ScrDeclensions extends javax.swing.JDialog {
 
-    private final Map<String, TextField> fieldMap = new HashMap<String, TextField>();
+    private final Map<String, JTextField> fieldMap = new HashMap<String, JTextField>();
     private final Map<String, String> labelMap = new HashMap<String, String>();
     private final DictCore core;
     private ConWord word;
@@ -50,7 +50,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
     private Integer numFields = 0;
     private Integer textHeight = 0;
     private Map<String, DeclensionNode> allWordDeclensions = new HashMap<String, DeclensionNode>();
-    private TextField firstField;
+    private JTextField firstField;
     private final Integer MAXLABELWIDTH = 300;
 
     public ScrDeclensions(DictCore _core) {
@@ -219,12 +219,12 @@ public class ScrDeclensions extends javax.swing.JDialog {
 
     private void saveDeclension() {
         core.clearAllDeclensionsWord(word.getId());
-        Set<Entry<String, TextField>> saveSet = fieldMap.entrySet();
+        Set<Entry<String, JTextField>> saveSet = fieldMap.entrySet();
 
-        for (Entry<String, TextField> e : saveSet) {
+        for (Entry<String, JTextField> e : saveSet) {
             DeclensionNode saveNode = new DeclensionNode(-1);
             String curId = e.getKey();
-            TextField curField = e.getValue();
+            JTextField curField = e.getValue();
 
             if (curField.getText().trim().equals("")) {
                 continue;
@@ -258,7 +258,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
         
         if (depth >= declensionList.size()) {
             Label newLabel = new Label(curLabel);
-            TextField newField = new TextField();
+            JTextField newField = new JTextField();
             Dimension labelDim = new Dimension();
             labelDim.setSize(MAXLABELWIDTH, 0);
             newLabel.setMaximumSize(labelDim);
@@ -326,7 +326,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
             Entry<String, DeclensionNode> decEnt = depIt.next();
             DeclensionNode curDec = decEnt.getValue();
 
-            TextField newField = new TextField();
+            JTextField newField = new JTextField();
             Label newLabel = new Label(curDec.getNotes());
             
             // in the case of no patterns for word type, but existing deprecated declensions
@@ -339,7 +339,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
             if (conFont != null) {
                 newField.setFont(conFont);
             }
-            
+                       
             pnlDeclensions.add(newLabel);
             pnlDeclensions.add(newField);
             
@@ -356,7 +356,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
     private void setFormProps() {
         double maxHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight()/2;
         int setHeight;
-        textHeight = firstField.getHeight();
+        textHeight = firstField.getMinimumSize().height;
         
         // the max height determines whether the window would be too big to fit onto the screen
         if (maxHeight <= numFields * textHeight) {
@@ -367,7 +367,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
         
         pnlDeclensions.setSize(pnlDeclensions.getSize().width, numFields * textHeight);
         pnlDeclensions.setLayout(new GridLayout(0, 2));
-        this.setSize(this.getWidth() + 10, scrDeclensions.getHeight() + 70);
+        this.setSize(this.getWidth() + 10, pnlDeclensions.getHeight() + 70);
         
         scrDeclensions.setSize(pnlDeclensions.getSize().width, setHeight);
     }
@@ -395,7 +395,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
         createFields();
 
         createDeprecatedFields();
-
+        
         setFormProps();
     }
 
