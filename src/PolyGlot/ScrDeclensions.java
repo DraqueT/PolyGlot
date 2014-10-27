@@ -203,8 +203,11 @@ public class ScrDeclensions extends javax.swing.JDialog {
 
     @Override
     public void setVisible(boolean visible) {
-        if (core.getDeclensionListTemplate(typeId) == null
-                || core.getDeclensionListTemplate(typeId).isEmpty()) {
+        // do not display window if there are no existing declensions for the word,
+        // and if there are no declension patterns associated with the type in question
+        if ((core.getDeclensionListTemplate(typeId) == null
+                    || core.getDeclensionListTemplate(typeId).isEmpty())
+                && core.getDeclensionListWord(word.getId()).isEmpty()) {
             InfoBox.info("Declensions", "No declensions for type: " + word.getWordType()
                     + " set. Declensions can be created per type under the Types tab by clicking the Declensions button.", this);
 
@@ -248,6 +251,11 @@ public class ScrDeclensions extends javax.swing.JDialog {
      * @param declensionList list of all declensions
      */
     private void createFields(int depth, String curId, String curLabel, List<DeclensionNode> declensionList) {
+        // for the specific case that a word with no declension patterns has a deprecated declension
+        if (declensionList.isEmpty()) {
+            return;
+        }
+        
         if (depth >= declensionList.size()) {
             Label newLabel = new Label(curLabel);
             TextField newField = new TextField();
@@ -320,6 +328,11 @@ public class ScrDeclensions extends javax.swing.JDialog {
 
             TextField newField = new TextField();
             Label newLabel = new Label(curDec.getNotes());
+            
+            // in the case of no patterns for word type, but existing deprecated declensions
+            if (firstField == null) {
+                firstField = newField;
+            }
 
             newField.setText(curDec.getValue());
 

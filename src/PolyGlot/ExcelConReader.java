@@ -214,24 +214,6 @@ public class ExcelConReader {
                 }
             }
         }
-        
-        // add plural form
-        columnList = Arrays.asList(iPlural.split(","));
-        for (String entry : columnList) {
-            if (entry == null || entry.equals("")) {
-                continue;
-            }
-
-            Integer cellNum = cellNumCheckGet(entry);
-
-            if (newWord.getPlural().trim().equals("")) {
-                newWord.setPlural(row.getCell(cellNum) != null ? row.getCell(cellNum).toString() : "");
-            } else {
-                if (row.getCell(cellNum) != null) {
-                    newWord.setDefinition(newWord.getDefinition() + ", " + row.getCell(cellNum).toString());
-                }
-            }
-        }
 
         // add type
         columnList = Arrays.asList(iType.split(","));

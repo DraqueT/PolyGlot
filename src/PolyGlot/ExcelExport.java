@@ -59,7 +59,6 @@ public class ExcelExport {
         ret.add(conWord.getValue());
         ret.add(conWord.getLocalWord());
         ret.add(conWord.getWordType());
-        ret.add(conWord.getPlural());
         ret.add(conWord.getPronunciation());
         ret.add(conWord.getGender());
      

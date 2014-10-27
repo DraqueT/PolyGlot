@@ -162,6 +162,8 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(XMLIDs.definitionXID)) {
                     bdef = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordPlurXID)) {
+                    // plurality made into declension-deprecated from main screen
+                    declensionMgr.clearBuffer();
                     bwordPlur = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.fontConXID)) {
                     bfontcon = true;
@@ -316,6 +318,11 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(XMLIDs.conWordXID)) {
                     bconWord = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordPlurXID)) {
+                                        // plurality now a declension (as it should be)
+                    // special position granted to plurals... fixes awful ID collision error
+                    declensionMgr.getBuffer().setCombinedDimId("," + wId + "," + XMLIDs.wordPlurXID + ",");
+                    declensionMgr.addDeclensionToWord(wId, Integer.MAX_VALUE, declensionMgr.getBuffer());
+                    declensionMgr.clearBuffer();
                     bwordPlur = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordTypeXID)) {
                     btype = false;
@@ -400,9 +407,11 @@ public class CustHandlerFactory {
                             .setDefinition(new String(ch, start, length));
                     bdef = false;
                 } else if (bwordPlur) {
-                    this.getWordCollection().getBufferWord()
-                            .setPlural(new String(ch, start, length));
-                    bdef = false;
+                    // plurality now handled as declension
+                    declensionMgr.setBufferDecTemp(false);
+                    declensionMgr.setBufferDecText(new String(ch, start, length));
+                    declensionMgr.setBufferDecNotes("Plural");
+                    bwordPlur = false;
                 } else if (bwordProcOverride) {
                     this.getWordCollection().getBufferWord()
                             .setProcOverride(new String(ch, start, length).equals("T"));
@@ -593,6 +602,8 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(XMLIDs.definitionXID)) {
                     bdef = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordPlurXID)) {
+                    // plurality made into declension-deprecated from main screen
+                    declensionMgr.clearBuffer();
                     bwordPlur = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.fontConXID)) {
                     bfontcon = true;
@@ -740,6 +751,11 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(XMLIDs.conWordXID)) {
                     bconWord = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordPlurXID)) {
+                    // plurality now a declension (as it should be)
+                    // special position granted to plurals... fixes awful ID collision error
+                    declensionMgr.getBuffer().setCombinedDimId("," + wId + "," + XMLIDs.wordPlurXID + ",");
+                    declensionMgr.addDeclensionToWord(wId, Integer.MAX_VALUE, declensionMgr.getBuffer());
+                    declensionMgr.clearBuffer();
                     bwordPlur = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordTypeXID)) {
                     btype = false;
@@ -852,9 +868,11 @@ public class CustHandlerFactory {
                             .setDefinition(new String(ch, start, length));
                     bdef = false;
                 } else if (bwordPlur) {
-                    this.getWordCollection().getBufferWord()
-                            .setPlural(new String(ch, start, length));
-                    bdef = false;
+                    // plurality now handled as declension
+                    declensionMgr.setBufferDecTemp(false);
+                    declensionMgr.setBufferDecText(new String(ch, start, length));
+                    declensionMgr.setBufferDecNotes("Plural");
+                    bwordPlur = false;
                 } else if (bwordProcOverride) {
                     this.getWordCollection().getBufferWord()
                             .setProcOverride(new String(ch, start, length).equals("T"));

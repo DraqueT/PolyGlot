@@ -573,11 +573,9 @@
                                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                               <Component id="lblGenderProp" max="32767" attributes="0"/>
                                               <Component id="lblPrononciationProp" alignment="1" max="32767" attributes="0"/>
-                                              <Component id="lblPluralProp" alignment="0" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="txtPluralProp" alignment="0" max="32767" attributes="0"/>
                                               <Component id="cmbGenderProp" alignment="1" max="32767" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Component id="txtPronunciationProp" max="32767" attributes="0"/>
@@ -636,14 +634,9 @@
                               <Component id="chkPronunciationOverrideProp" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="lblPluralProp" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtPluralProp" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="lblDefinitionProp" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="sclDefProp" pref="78" max="32767" attributes="0"/>
+                          <Component id="sclDefProp" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jScrollPane5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -710,19 +703,9 @@
                     <Property name="text" type="java.lang.String" value="Pronunciation"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="lblPluralProp">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Plural Form"/>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JTextField" name="txtPronunciationProp">
                   <Properties>
                     <Property name="toolTipText" type="java.lang.String" value="word&apos;s pronunciation"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="txtPluralProp">
-                  <Properties>
-                    <Property name="toolTipText" type="java.lang.String" value="word&apos;s plural form (if any)"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblDefinitionProp">

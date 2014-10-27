@@ -389,10 +389,6 @@ public class DictCore {
             wordValue.appendChild(doc.createTextNode(curWord.getGender()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.wordPlurXID);
-            wordValue.appendChild(doc.createTextNode(curWord.getPlural()));
-            wordNode.appendChild(wordValue);
-
             wordValue = doc.createElement(XMLIDs.definitionXID);
             wordValue.appendChild(doc.createTextNode(curWord.getDefinition()));
             wordNode.appendChild(wordValue);
@@ -663,7 +659,6 @@ public class DictCore {
         typeWord.setDefinition("");
         typeWord.setGender("");
         typeWord.setLocalWord("");
-        typeWord.setPlural("");
         typeWord.setPronunciation("");
 
         it = wordCollection.filteredList(typeWord);

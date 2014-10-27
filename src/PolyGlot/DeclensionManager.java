@@ -345,25 +345,33 @@ public class DeclensionManager {
         return addNode;
     }
 
-    private DeclensionNode addDeclension(Integer typeId, Integer declensionId, DeclensionNode declension, Map list) {
+    /**
+     * Adds declension to related object (type or word)
+     * @param relId ID of related object
+     * @param declensionId ID of declension to be created
+     * @param declension declension node to be created
+     * @param list list to add node to (word list or type list)
+     * @return declension node created
+     */
+    private DeclensionNode addDeclension(Integer relId, Integer declensionId, DeclensionNode declension, Map list) {
         List wordList;
 
         if (declensionId == -1) {
             declensionId = topId + 1;
         }
 
-        deleteDeclensionFromWord(typeId, declensionId);
+        deleteDeclensionFromWord(relId, declensionId);
 
-        if (list.containsKey(typeId)) {
-            wordList = (List) list.get(typeId);
+        if (list.containsKey(relId)) {
+            wordList = (List) list.get(relId);
         } else {
             wordList = new ArrayList<DeclensionNode>();
-            list.put(typeId, wordList);
+            list.put(relId, wordList);
         }
-
+        
         DeclensionNode addNode = new DeclensionNode(declensionId);
         addNode.setEqual(declension);
-
+        
         wordList.add(addNode);
 
         if (declensionId > topId) {

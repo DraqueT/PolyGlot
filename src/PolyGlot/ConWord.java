@@ -32,16 +32,7 @@ public class ConWord extends DictNode {
     private String definition;
     private String pronunciation;
     private String gender;
-    private String plural;
     private boolean procOverride;
-
-    public String getPlural() {
-        return plural;
-    }
-
-    public void setPlural(String _plural) {
-        plural = _plural;
-    }
 
     public ConWord() {
         value = "";
@@ -50,7 +41,6 @@ public class ConWord extends DictNode {
         definition = "";
         pronunciation = "";
         gender = "";
-        plural = "";
         id = -1;
         procOverride = false;
     }
@@ -74,7 +64,6 @@ public class ConWord extends DictNode {
         this.setPronunciation(set.getPronunciation());
         this.setId(set.getId());
         this.setGender(set.getGender());
-        this.setPlural(set.getPlural());
         this.setProcOverride(set.isProcOverride());
     }
 

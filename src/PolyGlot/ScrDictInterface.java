@@ -331,9 +331,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         lblGenderProp = new javax.swing.JLabel();
         cmbGenderProp = new javax.swing.JComboBox();
         lblPrononciationProp = new javax.swing.JLabel();
-        lblPluralProp = new javax.swing.JLabel();
         txtPronunciationProp = new javax.swing.JTextField();
-        txtPluralProp = new javax.swing.JTextField();
         lblDefinitionProp = new javax.swing.JLabel();
         sclDefProp = new javax.swing.JScrollPane();
         txtDefProp = new javax.swing.JTextArea();
@@ -627,11 +625,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
 
         lblPrononciationProp.setText("Pronunciation");
 
-        lblPluralProp.setText("Plural Form");
-
         txtPronunciationProp.setToolTipText("word's pronunciation");
-
-        txtPluralProp.setToolTipText("word's plural form (if any)");
 
         lblDefinitionProp.setText("Definition");
 
@@ -688,11 +682,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
                             .addGroup(pnlPropertiesLayout.createSequentialGroup()
                                 .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(lblGenderProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblPrononciationProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblPluralProp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(lblPrononciationProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtPluralProp)
                                     .addComponent(cmbGenderProp, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(pnlPropertiesLayout.createSequentialGroup()
                                         .addComponent(txtPronunciationProp)
@@ -734,13 +726,9 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
                         .addComponent(txtPronunciationProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(chkPronunciationOverrideProp))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPluralProp)
-                    .addComponent(txtPluralProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDefinitionProp)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                .addComponent(sclDefProp)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2082,7 +2070,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         txtConWordFilter.setFont(conFont);
         txtConWordProp.setFont(conFont);
         txtAlphaOrder.setFont(conFont);
-        txtPluralProp.setFont(conFont);
 
         core.setFontCon(conFont, conFont.getStyle(), conFont.getSize());
         txtLangFont.setText(conFont.getFontName());
@@ -2173,22 +2160,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
             }
         });
         txtLocalWordProp.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                saveModWord();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                saveModWord();
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                saveModWord();
-            }
-        });
-        txtPluralProp.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 saveModWord();
@@ -3264,7 +3235,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         txtConWordProp.setText(curWord.getValue());
         txtLocalWordProp.setText(curWord.getLocalWord());
         txtDefProp.setText(curWord.getDefinition());
-        txtPluralProp.setText(curWord.getPlural());
         txtPronunciationProp.setText(curWord.getPronunciation());
         chkPronunciationOverrideProp.setSelected(false);
         cmbTypeProp.setSelectedIndex(-1);
@@ -3273,7 +3243,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         txtConWordProp.setEnabled(false);
         txtLocalWordProp.setEnabled(false);
         txtDefProp.setEnabled(false);
-        txtPluralProp.setEnabled(false);
         txtPronunciationProp.setEnabled(false);
         cmbTypeProp.setEnabled(false);
         cmbGenderProp.setEnabled(false);
@@ -3305,7 +3274,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         txtConWordProp.setEnabled(true);
         txtLocalWordProp.setEnabled(true);
         txtDefProp.setEnabled(true);
-        txtPluralProp.setEnabled(true);
         txtPronunciationProp.setEnabled(true);
         cmbTypeProp.setEnabled(true);
         cmbGenderProp.setEnabled(true);
@@ -3328,7 +3296,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         txtConWordProp.setText(curWord.getValue());
         txtLocalWordProp.setText(curWord.getLocalWord());
         txtDefProp.setText(curWord.getDefinition());
-        txtPluralProp.setText(curWord.getPlural());
         txtPronunciationProp.setText(curWord.getPronunciation());
         chkPronunciationOverrideProp.setSelected(curWord.isProcOverride());
 
@@ -3421,7 +3388,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         txtConWordProp.setEnabled(true);
         txtLocalWordProp.setEnabled(true);
         txtDefProp.setEnabled(true);
-        txtPluralProp.setEnabled(true);
         txtPronunciationProp.setEnabled(true);
         cmbTypeProp.setEnabled(true);
         cmbGenderProp.setEnabled(true);
@@ -3462,7 +3428,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
         saveWord.setPronunciation(txtPronunciationProp.getText());
         saveWord.setGender(scrGenderMap.containsKey(cmbGenderProp.getSelectedItem())
                 ? (String) cmbGenderProp.getSelectedItem() : "");
-        saveWord.setPlural(txtPluralProp.getText());
         saveWord.setProcOverride(chkPronunciationOverrideProp.isSelected());
 
         if (wordId == -1) {
@@ -3665,7 +3630,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
     private javax.swing.JLabel lblGenderProp;
     private javax.swing.JLabel lblLocalWordFilter;
     private javax.swing.JLabel lblLocalWordProp;
-    private javax.swing.JLabel lblPluralProp;
     private javax.swing.JLabel lblPrononciationProp;
     private javax.swing.JLabel lblPronunciationFilter;
     private javax.swing.JLabel lblTypeFilter;
@@ -3713,7 +3677,6 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
     private javax.swing.JTextField txtLangName;
     private javax.swing.JTextField txtLocalWordFilter;
     private javax.swing.JTextField txtLocalWordProp;
-    private javax.swing.JTextField txtPluralProp;
     private javax.swing.JTextField txtPronunciationFilter;
     private javax.swing.JTextField txtPronunciationProp;
     private javax.swing.JTextField txtTypeName;

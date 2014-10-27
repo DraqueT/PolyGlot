@@ -65,8 +65,6 @@ public class TypeCollection extends DictionaryCollection {
                 ret = word.getWordType() + "requires a definition.";
             } else if (type.isGenderMandatory() && word.getGender().equals("")) {
                 ret = word.getWordType() + "requires a gender.";
-            } else if (type.isPluralMandatory() && word.getPlural().equals("")) {
-                ret = word.getWordType() + "requires plurality.";
             } else if (type.isProcMandatory() && word.getPronunciation().equals("")) {
                 ret = word.getWordType() + "requires a pronunciation.";
             }

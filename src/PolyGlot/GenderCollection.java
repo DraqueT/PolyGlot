@@ -63,7 +63,6 @@ public class GenderCollection extends DictionaryCollection{
         genderWord.setDefinition("");
         genderWord.setWordType("");
         genderWord.setLocalWord("");
-        genderWord.setPlural("");
         genderWord.setPronunciation("");
 
         it = core.getWordCollection().filteredList(genderWord);
@@ -196,7 +195,6 @@ public class GenderCollection extends DictionaryCollection{
         genderWord.setDefinition("");
         genderWord.setWordType("");
         genderWord.setLocalWord("");
-        genderWord.setPlural("");
         genderWord.setPronunciation("");
 
         it = core.getWordCollection().filteredList(genderWord);
