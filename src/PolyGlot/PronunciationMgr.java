@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -245,5 +247,31 @@ public class PronunciationMgr {
         }
 
         return ret;
+    }
+    
+    /**
+     * Writes all pronunciation information to XML document
+     * @param doc Document to write to
+     * @param rootElement root element of document
+     */
+    public void writeXML(Document doc, Element rootElement) {
+        Iterator<PronunciationNode> procGuide = getPronunciations();
+        Element wordNode;
+        Element wordValue;
+        
+        while (procGuide.hasNext()) {
+            PronunciationNode curNode = procGuide.next();
+
+            wordNode = doc.createElement(XMLIDs.proGuideXID);
+            rootElement.appendChild(wordNode);
+
+            wordValue = doc.createElement(XMLIDs.proGuideBaseXID);
+            wordValue.appendChild(doc.createTextNode(curNode.getValue()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.proGuidePhonXID);
+            wordValue.appendChild(doc.createTextNode(curNode.getPronunciation()));
+            wordNode.appendChild(wordValue);
+        }
     }
 }

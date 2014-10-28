@@ -23,6 +23,8 @@ package PolyGlot;
 import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -241,11 +243,81 @@ public class PropertiesManager {
         this.localUniqueness = localUniqueness;
     }
 
-    String buildPropertiesReport() {
+    public String buildPropertiesReport() {
         String ret = "";
         
         ret += "Language Name: " + langName + "<br><br>";
         
         return ret;
+    }
+    
+    /**
+     * Writes all dictionary properties to XML document
+     * @param doc Document to write dictionary properties to
+     * @param rootElement root element of document
+     */
+    public void writeXML(Document doc, Element rootElement) {
+        Element wordValue;
+        
+        // store font for Conlang words
+        wordValue = doc.createElement(XMLIDs.fontConXID);
+        Font curFont = getFontCon();
+        wordValue.appendChild(doc.createTextNode(curFont == null ? "" : curFont.getName()));
+        rootElement.appendChild(wordValue);
+
+        // store font style
+        wordValue = doc.createElement(XMLIDs.langPropFontStyleXID);
+        wordValue.appendChild(doc.createTextNode(getFontStyle().toString()));
+        rootElement.appendChild(wordValue);
+
+        // store font for Local words
+        wordValue = doc.createElement(XMLIDs.langPropFontSizeXID);
+        wordValue.appendChild(doc.createTextNode(getFontSize().toString()));
+        rootElement.appendChild(wordValue);
+
+        // store name for conlang
+        wordValue = doc.createElement(XMLIDs.langPropLangNameXID);
+        wordValue.appendChild(doc.createTextNode(getLangName()));
+        rootElement.appendChild(wordValue);
+
+        // store alpha order for conlang
+        wordValue = doc.createElement(XMLIDs.langPropAlphaOrderXID);
+        wordValue.appendChild(doc.createTextNode(getAlphaPlainText()));
+        rootElement.appendChild(wordValue);
+
+        // store option to autopopulate pronunciations
+        wordValue = doc.createElement(XMLIDs.proAutoPopXID);
+        wordValue.appendChild(doc.createTextNode(isProAutoPop() ? "T" : "F"));
+        rootElement.appendChild(wordValue);
+
+        // store option for mandatory Types
+        wordValue = doc.createElement(XMLIDs.langPropTypeMandatoryXID);
+        wordValue.appendChild(doc.createTextNode(isTypesMandatory() ? "T" : "F"));
+        rootElement.appendChild(wordValue);
+
+        // store option for mandatory Local word
+        wordValue = doc.createElement(XMLIDs.langPropLocalMandatoryXID);
+        wordValue.appendChild(doc.createTextNode(isLocalMandatory() ? "T" : "F"));
+        rootElement.appendChild(wordValue);
+
+        // store option for unique local word
+        wordValue = doc.createElement(XMLIDs.langPropLocalUniquenessXID);
+        wordValue.appendChild(doc.createTextNode(isLocalUniqueness() ? "T" : "F"));
+        rootElement.appendChild(wordValue);
+
+        // store option for unique conwords
+        wordValue = doc.createElement(XMLIDs.langPropWordUniquenessXID);
+        wordValue.appendChild(doc.createTextNode(isWordUniqueness() ? "T" : "F"));
+        rootElement.appendChild(wordValue);
+        
+        // store option for ignoring case
+        wordValue = doc.createElement(XMLIDs.langPropIgnoreCase);
+        wordValue.appendChild(doc.createTextNode(isIgnoreCase() ? "T" : "F"));
+        rootElement.appendChild(wordValue);
+        
+        // store option for disabling regex or pronunciations
+        wordValue = doc.createElement(XMLIDs.langPropDisableProcRegex);
+        wordValue.appendChild(doc.createTextNode(isDisableProcRegex()? "T" : "F"));
+        rootElement.appendChild(wordValue);
     }
 }

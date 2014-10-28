@@ -26,8 +26,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import javax.swing.JTextField;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -214,16 +212,9 @@ public class DictCore {
      * @throws java.io.FileNotFoundException
      */
     public void writeFile(String _fileName)
-            throws ParserConfigurationException, TransformerException, FileNotFoundException, IOException {
-        Iterator<ConWord> wordLoop = wordCollection.getNodeIterator();
-        Iterator<TypeNode> typeLoop = typeCollection.getNodeIterator();
-        Iterator<GenderNode> genderLoop = genderCollection.getNodeIterator();
-        ConWord curWord;
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory
-                .newInstance();
+            throws ParserConfigurationException, TransformerException, FileNotFoundException, IOException {        
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-        Element wordNode;
         Element wordValue;
 
         // root elements
@@ -232,279 +223,17 @@ public class DictCore {
         doc.appendChild(rootElement);
 
         // store version of PolyGlot
-        // store font for Conlang words
         wordValue = doc.createElement(XMLIDs.pgVersionXID);
         wordValue.appendChild(doc.createTextNode(version));
         rootElement.appendChild(wordValue);
 
-        // store font for Conlang words
-        wordValue = doc.createElement(XMLIDs.fontConXID);
-        Font curFont = propertiesManager.getFontCon();
-        wordValue.appendChild(doc.createTextNode(curFont == null ? "" : curFont.getName()));
-        rootElement.appendChild(wordValue);
-
-        // store font style
-        wordValue = doc.createElement(XMLIDs.langPropFontStyleXID);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.getFontStyle().toString()));
-        rootElement.appendChild(wordValue);
-
-        // store font for Local words
-        wordValue = doc.createElement(XMLIDs.langPropFontSizeXID);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.getFontSize().toString()));
-        rootElement.appendChild(wordValue);
-
-        // store name for conlang
-        wordValue = doc.createElement(XMLIDs.langPropLangNameXID);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.getLangName()));
-        rootElement.appendChild(wordValue);
-
-        // store alpha order for conlang
-        wordValue = doc.createElement(XMLIDs.langPropAlphaOrderXID);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.getAlphaPlainText()));
-        rootElement.appendChild(wordValue);
-
-        // store option to autopopulate pronunciations
-        wordValue = doc.createElement(XMLIDs.proAutoPopXID);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.isProAutoPop() ? "T" : "F"));
-        rootElement.appendChild(wordValue);
-
-        // store option for mandatory Types
-        wordValue = doc.createElement(XMLIDs.langPropTypeMandatoryXID);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.isTypesMandatory() ? "T" : "F"));
-        rootElement.appendChild(wordValue);
-
-        // store option for mandatory Local word
-        wordValue = doc.createElement(XMLIDs.langPropLocalMandatoryXID);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.isLocalMandatory() ? "T" : "F"));
-        rootElement.appendChild(wordValue);
-
-        // store option for unique local word
-        wordValue = doc.createElement(XMLIDs.langPropLocalUniquenessXID);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.isLocalUniqueness() ? "T" : "F"));
-        rootElement.appendChild(wordValue);
-
-        // store option for unique conwords
-        wordValue = doc.createElement(XMLIDs.langPropWordUniquenessXID);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.isWordUniqueness() ? "T" : "F"));
-        rootElement.appendChild(wordValue);
-        
-        // store option for ignoring case
-        wordValue = doc.createElement(XMLIDs.langPropIgnoreCase);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.isIgnoreCase() ? "T" : "F"));
-        rootElement.appendChild(wordValue);
-        
-        // store option for disabling regex or pronunciations
-        wordValue = doc.createElement(XMLIDs.langPropDisableProcRegex);
-        wordValue.appendChild(doc.createTextNode(propertiesManager.isDisableProcRegex()? "T" : "F"));
-        rootElement.appendChild(wordValue);
-
-        // record all genders
-        while (genderLoop.hasNext()) {
-            GenderNode curGen = genderLoop.next();
-
-            wordNode = doc.createElement(XMLIDs.genderXID);
-            rootElement.appendChild(wordNode);
-
-            wordValue = doc.createElement(XMLIDs.genderIdXID);
-            Integer wordId = curGen.getId();
-            wordValue.appendChild(doc.createTextNode(wordId.toString()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.genderNameXID);
-            wordValue.appendChild(doc.createTextNode(curGen.getValue()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.genderNotesXID);
-            wordValue.appendChild(doc.createTextNode(curGen.getNotes()));
-            wordNode.appendChild(wordValue);
-        }
-
-        // record all word types
-        while (typeLoop.hasNext()) {
-            TypeNode curType = typeLoop.next();
-
-            wordNode = doc.createElement(XMLIDs.wordClassXID);
-            rootElement.appendChild(wordNode);
-
-            wordValue = doc.createElement(XMLIDs.wordClassIdXID);
-            Integer wordId = curType.getId();
-            wordValue.appendChild(doc.createTextNode(wordId.toString()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.wordClassNameXID);
-            wordValue.appendChild(doc.createTextNode(curType.getValue()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.wordClassNotesXID);
-            wordValue.appendChild(doc.createTextNode(curType.getNotes()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.wordClassDefManXID);
-            wordValue.appendChild(doc.createTextNode(curType.isDefMandatory() ? "T" : "F"));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.wordClassGenderManXID);
-            wordValue.appendChild(doc.createTextNode(curType.isGenderMandatory() ? "T" : "F"));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.wordClassPlurManXID);
-            wordValue.appendChild(doc.createTextNode(curType.isPluralMandatory() ? "T" : "F"));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.wordClassProcManXID);
-            wordValue.appendChild(doc.createTextNode(curType.isProcMandatory() ? "T" : "F"));
-            wordNode.appendChild(wordValue);
-        }
-
-        // record all words
-        while (wordLoop.hasNext()) {
-            curWord = wordLoop.next();
-
-            wordNode = doc.createElement(XMLIDs.wordXID);
-            rootElement.appendChild(wordNode);
-
-            wordValue = doc.createElement(XMLIDs.wordIdXID);
-            Integer wordId = curWord.getId();
-            wordValue.appendChild(doc.createTextNode(wordId.toString()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.localWordXID);
-            wordValue.appendChild(doc.createTextNode(curWord.getLocalWord()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.conWordXID);
-            wordValue.appendChild(doc.createTextNode(curWord.getValue()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.wordTypeXID);
-            wordValue.appendChild(doc.createTextNode(curWord.getWordType()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.pronunciationXID);
-            wordValue
-                    .appendChild(doc.createTextNode(curWord.getPronunciation()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.wordGenderXID);
-            wordValue.appendChild(doc.createTextNode(curWord.getGender()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.definitionXID);
-            wordValue.appendChild(doc.createTextNode(curWord.getDefinition()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.wordProcOverrideXID);
-            wordValue.appendChild(doc.createTextNode(curWord.isProcOverride() ? "T" : "F"));
-            wordNode.appendChild(wordValue);
-        }
-
-        // record declension templates
-        Set<Entry<Integer, List<DeclensionNode>>> declensionSet = declensionMgr.getTemplateMap().entrySet();
-        for (Entry<Integer, List<DeclensionNode>> e : declensionSet) {
-            Integer relatedId = e.getKey();
-
-            for (DeclensionNode curNode : e.getValue()) {
-                wordNode = doc.createElement(XMLIDs.declensionXID);
-                rootElement.appendChild(wordNode);
-
-                wordValue = doc.createElement(XMLIDs.declensionIdXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getId().toString()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(XMLIDs.declensionTextXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getValue()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(XMLIDs.declensionNotesXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getNotes()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(XMLIDs.declensionIsTemplateXID);
-                wordValue.appendChild(doc.createTextNode("1"));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(XMLIDs.declensionRelatedIdXID);
-                wordValue.appendChild(doc.createTextNode(relatedId.toString()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(XMLIDs.declensionMandatoryXID);
-                wordValue.appendChild(doc.createTextNode(curNode.isMandatory() ? "T" : "F"));
-                wordNode.appendChild(wordValue);
-
-                Iterator<DeclensionDimension> dimIt = curNode.getDimensions().iterator();
-                while (dimIt.hasNext()) {
-                    wordValue = doc.createElement(XMLIDs.dimensionNodeXID);
-
-                    DeclensionDimension curDim = dimIt.next();
-
-                    Element dimNode = doc.createElement(XMLIDs.dimensionIdXID);
-                    dimNode.appendChild(doc.createTextNode(curDim.getId().toString()));
-                    wordValue.appendChild(dimNode);
-
-                    dimNode = doc.createElement(XMLIDs.dimensionNameXID);
-                    dimNode.appendChild(doc.createTextNode(curDim.getValue()));
-                    wordValue.appendChild(dimNode);
-
-                    dimNode = doc.createElement(XMLIDs.dimensionMandXID);
-                    dimNode.appendChild(doc.createTextNode(curDim.isMandatory() ? "T" : "F"));
-                    wordValue.appendChild(dimNode);
-
-                    wordNode.appendChild(wordValue);
-                }
-            }
-        }
-
-        // record word declensions
-        declensionSet = declensionMgr.getDeclensionMap().entrySet();
-        for (Entry<Integer, List<DeclensionNode>> e : declensionSet) {
-            Integer relatedId = e.getKey();
-
-            for (DeclensionNode curNode : e.getValue()) {
-                wordNode = doc.createElement(XMLIDs.declensionXID);
-                rootElement.appendChild(wordNode);
-
-                wordValue = doc.createElement(XMLIDs.declensionIdXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getId().toString()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(XMLIDs.declensionTextXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getValue()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(XMLIDs.declensionNotesXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getNotes()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(XMLIDs.declensionRelatedIdXID);
-                wordValue.appendChild(doc.createTextNode(relatedId.toString()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(XMLIDs.declensionComDimIdXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getCombinedDimId()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(XMLIDs.declensionIsTemplateXID);
-                wordValue.appendChild(doc.createTextNode("0"));
-                wordNode.appendChild(wordValue);
-            }
-        }
-
-        // record pronunciation guide
-        Iterator<PronunciationNode> procGuide = getPronunciations();
-        while (procGuide.hasNext()) {
-            PronunciationNode curNode = procGuide.next();
-
-            wordNode = doc.createElement(XMLIDs.proGuideXID);
-            rootElement.appendChild(wordNode);
-
-            wordValue = doc.createElement(XMLIDs.proGuideBaseXID);
-            wordValue.appendChild(doc.createTextNode(curNode.getValue()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.proGuidePhonXID);
-            wordValue.appendChild(doc.createTextNode(curNode.getPronunciation()));
-            wordNode.appendChild(wordValue);
-        }
+        // collect XML representation of all dictionary elements
+        propertiesManager.writeXML(doc, rootElement);
+        genderCollection.writeXML(doc, rootElement);
+        typeCollection.writeXML(doc, rootElement);
+        wordCollection.writeXML(doc, rootElement);
+        declensionMgr.writeXML(doc, rootElement);
+        pronuncMgr.writeXML(doc, rootElement);
 
         // write thesaurus entries
         rootElement.appendChild(thesManager.writeToSaveXML(doc));

@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -508,5 +510,108 @@ public class DeclensionManager {
         }
         
         return ret;
+    }
+    
+    /**
+     * Writes all declension information to XML document
+     * @param doc Document to write to
+     * @param rootElement root element of document
+     */
+    public void writeXML(Document doc, Element rootElement) {
+        Set<Entry<Integer, List<DeclensionNode>>> declensionSet;
+        Element wordNode;
+        Element wordValue;
+        
+        // record declension templates
+        declensionSet = getTemplateMap().entrySet();
+        
+        for (Entry<Integer, List<DeclensionNode>> e : declensionSet) {
+            Integer relatedId = e.getKey();
+
+            for (DeclensionNode curNode : e.getValue()) {
+                wordNode = doc.createElement(XMLIDs.declensionXID);
+                rootElement.appendChild(wordNode);
+
+                wordValue = doc.createElement(XMLIDs.declensionIdXID);
+                wordValue.appendChild(doc.createTextNode(curNode.getId().toString()));
+                wordNode.appendChild(wordValue);
+
+                wordValue = doc.createElement(XMLIDs.declensionTextXID);
+                wordValue.appendChild(doc.createTextNode(curNode.getValue()));
+                wordNode.appendChild(wordValue);
+
+                wordValue = doc.createElement(XMLIDs.declensionNotesXID);
+                wordValue.appendChild(doc.createTextNode(curNode.getNotes()));
+                wordNode.appendChild(wordValue);
+
+                wordValue = doc.createElement(XMLIDs.declensionIsTemplateXID);
+                wordValue.appendChild(doc.createTextNode("1"));
+                wordNode.appendChild(wordValue);
+
+                wordValue = doc.createElement(XMLIDs.declensionRelatedIdXID);
+                wordValue.appendChild(doc.createTextNode(relatedId.toString()));
+                wordNode.appendChild(wordValue);
+
+                wordValue = doc.createElement(XMLIDs.declensionMandatoryXID);
+                wordValue.appendChild(doc.createTextNode(curNode.isMandatory() ? "T" : "F"));
+                wordNode.appendChild(wordValue);
+
+                Iterator<DeclensionDimension> dimIt = curNode.getDimensions().iterator();
+                while (dimIt.hasNext()) {
+                    wordValue = doc.createElement(XMLIDs.dimensionNodeXID);
+
+                    DeclensionDimension curDim = dimIt.next();
+
+                    Element dimNode = doc.createElement(XMLIDs.dimensionIdXID);
+                    dimNode.appendChild(doc.createTextNode(curDim.getId().toString()));
+                    wordValue.appendChild(dimNode);
+
+                    dimNode = doc.createElement(XMLIDs.dimensionNameXID);
+                    dimNode.appendChild(doc.createTextNode(curDim.getValue()));
+                    wordValue.appendChild(dimNode);
+
+                    dimNode = doc.createElement(XMLIDs.dimensionMandXID);
+                    dimNode.appendChild(doc.createTextNode(curDim.isMandatory() ? "T" : "F"));
+                    wordValue.appendChild(dimNode);
+
+                    wordNode.appendChild(wordValue);
+                }
+            }
+        }
+
+        // record word declensions
+        declensionSet = getDeclensionMap().entrySet();
+        for (Entry<Integer, List<DeclensionNode>> e : declensionSet) {
+            Integer relatedId = e.getKey();
+
+            for (DeclensionNode curNode : e.getValue()) {
+                wordNode = doc.createElement(XMLIDs.declensionXID);
+                rootElement.appendChild(wordNode);
+
+                wordValue = doc.createElement(XMLIDs.declensionIdXID);
+                wordValue.appendChild(doc.createTextNode(curNode.getId().toString()));
+                wordNode.appendChild(wordValue);
+
+                wordValue = doc.createElement(XMLIDs.declensionTextXID);
+                wordValue.appendChild(doc.createTextNode(curNode.getValue()));
+                wordNode.appendChild(wordValue);
+
+                wordValue = doc.createElement(XMLIDs.declensionNotesXID);
+                wordValue.appendChild(doc.createTextNode(curNode.getNotes()));
+                wordNode.appendChild(wordValue);
+
+                wordValue = doc.createElement(XMLIDs.declensionRelatedIdXID);
+                wordValue.appendChild(doc.createTextNode(relatedId.toString()));
+                wordNode.appendChild(wordValue);
+
+                wordValue = doc.createElement(XMLIDs.declensionComDimIdXID);
+                wordValue.appendChild(doc.createTextNode(curNode.getCombinedDimId()));
+                wordNode.appendChild(wordValue);
+
+                wordValue = doc.createElement(XMLIDs.declensionIsTemplateXID);
+                wordValue.appendChild(doc.createTextNode("0"));
+                wordNode.appendChild(wordValue);
+            }
+        }
     }
 }

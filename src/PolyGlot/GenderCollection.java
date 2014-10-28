@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -208,5 +210,37 @@ public class GenderCollection extends DictionaryCollection{
         }
 
         super.modifyNode(id, modGender);
+    }
+    
+    /**
+     * Writes all gender information to XML document
+     * @param doc Document to write to
+     * @param rootElement root element of document
+     */
+    public void writeXML(Document doc, Element rootElement) {
+        Iterator<GenderNode> genderLoop = getNodeIterator();
+        Element wordNode;
+        Element wordValue;
+
+        // record all genders
+        while (genderLoop.hasNext()) {
+            GenderNode curGen = genderLoop.next();
+
+            wordNode = doc.createElement(XMLIDs.genderXID);
+            rootElement.appendChild(wordNode);
+
+            wordValue = doc.createElement(XMLIDs.genderIdXID);
+            Integer wordId = curGen.getId();
+            wordValue.appendChild(doc.createTextNode(wordId.toString()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.genderNameXID);
+            wordValue.appendChild(doc.createTextNode(curGen.getValue()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.genderNotesXID);
+            wordValue.appendChild(doc.createTextNode(curGen.getNotes()));
+            wordNode.appendChild(wordValue);
+        }
     }
 }

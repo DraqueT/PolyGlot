@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -177,5 +179,52 @@ public class TypeCollection extends DictionaryCollection {
         }
 
         return ret;
+    }
+    
+    /**
+     * Writes all type information to XML document
+     * @param doc Document to write to
+     * @param rootElement root element of document
+     */
+    public void writeXML(Document doc, Element rootElement) {
+        Iterator<TypeNode> typeLoop = getNodeIterator();
+        Element wordNode;
+        Element wordValue;
+        
+        while (typeLoop.hasNext()) {
+            TypeNode curType = typeLoop.next();
+
+            wordNode = doc.createElement(XMLIDs.wordClassXID);
+            rootElement.appendChild(wordNode);
+
+            wordValue = doc.createElement(XMLIDs.wordClassIdXID);
+            Integer wordId = curType.getId();
+            wordValue.appendChild(doc.createTextNode(wordId.toString()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.wordClassNameXID);
+            wordValue.appendChild(doc.createTextNode(curType.getValue()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.wordClassNotesXID);
+            wordValue.appendChild(doc.createTextNode(curType.getNotes()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.wordClassDefManXID);
+            wordValue.appendChild(doc.createTextNode(curType.isDefMandatory() ? "T" : "F"));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.wordClassGenderManXID);
+            wordValue.appendChild(doc.createTextNode(curType.isGenderMandatory() ? "T" : "F"));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.wordClassPlurManXID);
+            wordValue.appendChild(doc.createTextNode(curType.isPluralMandatory() ? "T" : "F"));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.wordClassProcManXID);
+            wordValue.appendChild(doc.createTextNode(curType.isProcMandatory() ? "T" : "F"));
+            wordNode.appendChild(wordValue);
+        }
     }
 }

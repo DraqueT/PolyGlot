@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * @author draque
@@ -601,5 +603,58 @@ public class ConWordCollection extends DictionaryCollection {
         ret += "</table>";
 
         return ret;
+    }
+    
+    /**
+     * Writes all word information to XML document
+     * @param doc Document to write to
+     * @param rootElement root element of document
+     */
+    public void writeXML(Document doc, Element rootElement) {
+        Iterator<ConWord> wordLoop = getNodeIterator();
+        Element wordNode;
+        Element wordValue;
+        ConWord curWord;
+        
+        while (wordLoop.hasNext()) {
+            curWord = wordLoop.next();
+
+            wordNode = doc.createElement(XMLIDs.wordXID);
+            rootElement.appendChild(wordNode);
+
+            wordValue = doc.createElement(XMLIDs.wordIdXID);
+            Integer wordId = curWord.getId();
+            wordValue.appendChild(doc.createTextNode(wordId.toString()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.localWordXID);
+            wordValue.appendChild(doc.createTextNode(curWord.getLocalWord()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.conWordXID);
+            wordValue.appendChild(doc.createTextNode(curWord.getValue()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.wordTypeXID);
+            wordValue.appendChild(doc.createTextNode(curWord.getWordType()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.pronunciationXID);
+            wordValue
+                    .appendChild(doc.createTextNode(curWord.getPronunciation()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.wordGenderXID);
+            wordValue.appendChild(doc.createTextNode(curWord.getGender()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.definitionXID);
+            wordValue.appendChild(doc.createTextNode(curWord.getDefinition()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(XMLIDs.wordProcOverrideXID);
+            wordValue.appendChild(doc.createTextNode(curWord.isProcOverride() ? "T" : "F"));
+            wordNode.appendChild(wordValue);
+        }
     }
 }
