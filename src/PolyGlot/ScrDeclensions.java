@@ -356,6 +356,12 @@ public class ScrDeclensions extends javax.swing.JDialog {
     private void setFormProps() {
         double maxHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight()/2;
         int setHeight;
+        
+        // firstField only set if no objects initialized: do nothing
+        if (firstField == null){
+            return;
+        }   
+        
         textHeight = firstField.getMinimumSize().height;
         
         // the max height determines whether the window would be too big to fit onto the screen
