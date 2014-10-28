@@ -1773,19 +1773,11 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
             @Override
             public void run() {
                 try {
-                    String[] updateText = WebInterface.checkForUpdates(core.getVersion());
-
-                    if (updateText[0] == null || updateText[0].equals("")) {
-                        if (verbose) {
-                            InfoBox.info("Update Status", "You're all up to date and on the newest version: "
-                                    + core.getVersion() + ".", parent);
-                        }
-                    } else {
-                        ScrUpdateAlert.run(updateText[0], updateText[1]);
-                    }
+                    ScrUpdateAlert.run(verbose, core.getVersion());
                 } catch (Exception e) {
                     if (verbose) {
-                        InfoBox.error("Update Problem", e.getLocalizedMessage(), parent);
+                        InfoBox.error("Update Problem", "Unable to check for update for reason:" 
+                                + e.getLocalizedMessage(), parent);
                     }
                 }
             }

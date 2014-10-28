@@ -38,14 +38,13 @@ import org.xml.sax.InputSource;
 public class WebInterface {
 
     /**
-     * Checks for updates to PolyGlot
-     *
+     * Checks for updates to PolyGlot     *
      * @param curVersion current version from core
      * @return Entry containing the new version number and the associated message in String[2] array
      * @throws java.lang.Exception if something goes wrong along the way.
      */
-    public static String[] checkForUpdates(String curVersion) throws Exception {
-        String[] ret = new String[2];
+    public static Document checkForUpdates(String curVersion) throws Exception {
+        Document ret = null;
         String xmlText = "";
         URL url;
 
@@ -69,12 +68,10 @@ public class WebInterface {
             Document doc = builder.parse(is);
             
             Node ver = doc.getElementsByTagName("Version").item(0);
-            Node message = doc.getElementsByTagName("VersionText").item(0);
             
             // only show message if it's not this versino or an earlier version
             if (!ver.getTextContent().equals(curVersion)) {
-                ret[0] = ver.getTextContent();
-                ret[1] = message.getTextContent();
+                ret = doc;
             }
         }
 
