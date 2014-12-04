@@ -61,7 +61,7 @@ public class ExcelExport {
         ret.add(conWord.getWordType());
         ret.add(conWord.getPronunciation());
         ret.add(conWord.getGender());
-     
+        
         List<DeclensionNode> declensions = core.getDeclensionManager().getDeclensionListWord(conWord.getId());
         
         for(DeclensionNode curNode : declensions) {
@@ -69,9 +69,12 @@ public class ExcelExport {
         }
         
         ret.add(declensionCell);
+        ret.add(conWord.getDefinition());        
         
         return ret.toArray();
     }
+    
+    
     
     /**
      * Exports a dictionary to an excel file
@@ -82,7 +85,6 @@ public class ExcelExport {
     private void export(String fileName, DictCore core) throws Exception {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet;
-        Map<String, Object[]> data;
         CellStyle localStyle = workbook.createCellStyle();
         CellStyle conStyle = workbook.createCellStyle();
         Font conFont = workbook.createFont();
@@ -101,10 +103,10 @@ public class ExcelExport {
         row.createCell(0).setCellValue("CON WORD");
         row.createCell(1).setCellValue("LOCAL WORD");
         row.createCell(2).setCellValue("TYPE");
-        row.createCell(3).setCellValue("PLURAL");
-        row.createCell(4).setCellValue("PRONUNCIATION");
-        row.createCell(5).setCellValue("GENDER");
-        row.createCell(6).setCellValue("DECLENSIONS");
+        row.createCell(3).setCellValue("PRONUNCIATION");
+        row.createCell(4).setCellValue("GENDER");
+        row.createCell(5).setCellValue("DECLENSIONS");
+        row.createCell(6).setCellValue("DEFINITIONS");
         
         for (Integer i = 1; wordIt.hasNext(); i++) {
             Object[] wordArray = getWordForm(wordIt.next(), core);
