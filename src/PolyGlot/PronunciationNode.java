@@ -35,6 +35,11 @@ public class PronunciationNode extends DictNode{
         pronunciation = _pronunciation;
     }
 
+    public boolean equals(PronunciationNode test) {
+        return (pronunciation.equals(test.getPronunciation())
+                && value.equals(test.getValue()));
+    }
+    
     @Override
     public void setEqual(DictNode _node) {
         PronunciationNode node = (PronunciationNode) _node;
