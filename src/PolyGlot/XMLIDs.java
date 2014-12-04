@@ -51,6 +51,7 @@ public class XMLIDs {
     public static final String genderIdXID = "genderId";
     public static final String genderNotesXID = "genderNotes";
     public static final String pronunciationXID = "pronunciation";
+    public static final String wordAutoDeclenOverrideXID = "autoDeclOverride";
     
     public static final String langPropLangNameXID = "langName";
     public static final String langPropFontSizeXID = "fontSize";
@@ -85,6 +86,16 @@ public class XMLIDs {
     public static final String thesNotesXID = "thesNotes";
     public static final String thesNameXID = "thesName";
     public static final String thesWordXID = "thesWord";
+    
+    public static final String decGenRuleXID = "decGenRule";
+    public static final String decGenRuleTypeXID = "decGenRuleTypeId";
+    public static final String decGenRuleCombXID = "decGenRuleComb";
+    public static final String decGenRuleRegexXID = "decGenRuleRegex";
+    public static final String decGenRuleNameXID = "decGenRuleName";
+    
+    public static final String decGenTransXID = "decGenTrans";
+    public static final String decGenTransRegexXID = "decGenTransRegex";
+    public static final String decGenTransReplaceXID = "decGenTransReplace";
     
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";

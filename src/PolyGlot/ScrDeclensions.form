@@ -25,13 +25,14 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
+              <Component id="chkAutogenOverride" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
               <Component id="btnOk" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnCancel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <Component id="scrDeclensions" alignment="0" max="32767" attributes="0"/>
+          <Component id="scrDeclensions" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -42,6 +43,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnCancel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnOk" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="chkAutogenOverride" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -88,5 +90,11 @@
         </Container>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JCheckBox" name="chkAutogenOverride">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Autogen Override"/>
+        <Property name="toolTipText" type="java.lang.String" value="Check to override autogeneration of declension forms (if autogeneration patterns exist)"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

@@ -575,7 +575,14 @@ public class CustHandlerFactory {
             boolean bthesWord = false;
             boolean bignoreCase = false;
             boolean bdisableProcRegex = false;
-
+            boolean bwordoverAutoDec = false;
+            boolean bdecGenRuleComb = false;
+            boolean bdecGenRuleName = false;
+            boolean bdecGenRuleRegex = false;
+            boolean bdecGenRuleType = false;
+            boolean bdecGenTransRegex = false;
+            boolean bdecGenTransRep = false;
+            
             int wId;
             int wCId;
             int wGId;
@@ -638,6 +645,8 @@ public class CustHandlerFactory {
                     bfontStyle = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.langPropAlphaOrderXID)) {
                     balphaOrder = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.wordAutoDeclenOverrideXID)) {
+                    bwordoverAutoDec = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.declensionXID)) {
                     // from old versions, declensions are loaded as dimensions of a master declension
                     declensionMgr.getBuffer().clearBuffer();
@@ -699,6 +708,18 @@ public class CustHandlerFactory {
                     bignoreCase = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.langPropDisableProcRegex)) {
                     bdisableProcRegex = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleCombXID)) {
+                    bdecGenRuleComb = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleNameXID)) {
+                    bdecGenRuleName = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleRegexXID)) {
+                    bdecGenRuleRegex = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleTypeXID)) {
+                    bdecGenRuleType = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransRegexXID)) {
+                    bdecGenTransRegex = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransReplaceXID)) {
+                    bdecGenTransRep = true;
                 }
             }
 
@@ -797,6 +818,8 @@ public class CustHandlerFactory {
                     bgenderName = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.genderNotesXID)) {
                     bgenderNotes = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.wordAutoDeclenOverrideXID)) {
+                    bwordoverAutoDec = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.langPropLangNameXID)) {
                     blangName = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.langPropFontSizeXID)) {
@@ -851,6 +874,22 @@ public class CustHandlerFactory {
                     bignoreCase = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.langPropDisableProcRegex)) {
                     bdisableProcRegex = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleXID)) {
+                    core.getDeclensionManager().insRuleBuffer();
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleCombXID)) {
+                    bdecGenRuleComb = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleNameXID)) {
+                    bdecGenRuleName = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleRegexXID)) {
+                    bdecGenRuleRegex = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleTypeXID)) {
+                    bdecGenRuleType = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransXID)) {
+                    core.getDeclensionManager().getRuleBuffer().insertTransBuffer();
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransRegexXID)) {
+                    bdecGenTransRegex = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransReplaceXID)) {
+                    bdecGenTransRep = false;
                 }
             }
 
@@ -887,6 +926,10 @@ public class CustHandlerFactory {
                     this.getWordCollection().getBufferWord()
                             .setProcOverride(new String(ch, start, length).equals("T"));
                     bwordProcOverride = false;
+                } else if (bwordoverAutoDec) {
+                    this.getWordCollection().getBufferWord()
+                            .setOverrideAutoDeclen(new String(ch, start, length).equals("T"));
+                    bwordoverAutoDec = false;
                 } else if (bfontcon) {
                     propertiesManager.setFontCon(new Font(new String(ch, start, length), 0, 0));
                     bfontcon = false;
@@ -1015,6 +1058,24 @@ public class CustHandlerFactory {
                 } else if (bdisableProcRegex) {
                     core.getPropertiesManager().setDisableProcRegex(new String(ch, start, length).equals("T"));
                     bdisableProcRegex = false;
+                } else if (bdecGenRuleComb) {
+                    core.getDeclensionManager().getRuleBuffer().setCombinationId(new String(ch, start, length));
+                    bdecGenRuleComb = false;
+                } else if (bdecGenRuleName) {
+                    core.getDeclensionManager().getRuleBuffer().setName(new String(ch, start, length));
+                    bdecGenRuleName = false;
+                } else if (bdecGenRuleRegex) {
+                    core.getDeclensionManager().getRuleBuffer().setRegex(new String(ch, start, length));
+                    bdecGenRuleRegex = false;
+                } else if (bdecGenRuleType) {
+                    core.getDeclensionManager().getRuleBuffer().setTypeId(Integer.parseInt(new String(ch, start, length)));
+                    bdecGenRuleType = false;
+                } else if (bdecGenTransRegex) {
+                    core.getDeclensionManager().getRuleBuffer().getTransBuffer().regex = new String(ch, start, length);
+                    bdecGenTransRegex = false;
+                } else if (bdecGenTransRep) {
+                    core.getDeclensionManager().getRuleBuffer().getTransBuffer().replaceText = new String(ch, start, length);
+                    bdecGenTransRep = false;
                 }
             }
         };

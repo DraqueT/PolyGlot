@@ -46,7 +46,114 @@ public class DeclensionManager {
     private boolean bufferDecTemp = false;
     private Integer bufferRelId = -1;
     private DeclensionNode buffer = new DeclensionNode(-1);
+    private final List<DeclensionGenRule> generationRules = new ArrayList<DeclensionGenRule>();
+    private DeclensionGenRule ruleBuffer = new DeclensionGenRule();
 
+    /**
+     * Gets current declension rule buffer
+     * @return current declension rule buffer
+     */
+    public DeclensionGenRule getRuleBuffer() {
+        return ruleBuffer;
+    }
+    
+    /**
+     * inserts current rule buffer and sets to blank value
+     */
+    public void insRuleBuffer() {
+        addDeclensionGenRule(ruleBuffer);
+        ruleBuffer = new DeclensionGenRule();
+    }
+    
+    /**
+     * add a declension generation rule to the list
+     * @param newRule rule to add
+     */
+    public void addDeclensionGenRule(DeclensionGenRule newRule) {
+        generationRules.add(newRule);
+    }
+    
+    /**
+     * delete all rules of a particular typeID from rule set
+     * @param typeId ID of type to wipe
+     */
+    public void wipeDeclensionGenRules(int typeId) {
+        Iterator<DeclensionGenRule> itRules = generationRules.iterator();
+        
+        while (itRules.hasNext()) {
+            DeclensionGenRule curRule = itRules.next();
+            
+            if (curRule.getTypeId() == typeId) {
+                generationRules.remove(curRule);
+            }
+        }
+    }
+    
+    /**
+     * Deletes rule based on unique regex value
+     * @param delRule rule to delete 
+     */
+    public void deleteDeclensionGenRule(DeclensionGenRule delRule) {
+        generationRules.remove(delRule);
+    }
+    
+    /**
+     * get list of all declension rules for a particular type
+     * @param typeId typeID of type to get rules for
+     * @return list of rules
+     */
+    public List<DeclensionGenRule> getDeclensionRules(int typeId) {
+        List<DeclensionGenRule> ret = new ArrayList<DeclensionGenRule>();
+        
+        Iterator<DeclensionGenRule> itRules = generationRules.iterator();
+        
+        while (itRules.hasNext()) {
+            DeclensionGenRule curRule = itRules.next();
+            
+            if (curRule.getTypeId() == typeId) {
+                ret.add(curRule);
+            }
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Generates the new form of a declined/conjugated word based on rules for its type
+     * @param typeId type of word to transform
+     * @param combinedId combined ID of word form to create
+     * @param base base word string
+     * @return new word value if exists, empty string otherwise
+     */
+    public String declineWord(int typeId, String combinedId, String base) {
+        Iterator<DeclensionGenRule> typeRules = getDeclensionRules(typeId).iterator();
+        String ret = "";
+
+        while (typeRules.hasNext()) {
+            DeclensionGenRule curRule = typeRules.next();
+            
+            // skip all entries not applicable to this particular combined word ID
+            if (!curRule.getCombinationId().equals(combinedId)) {
+                continue;
+            }
+
+            // apply transforms within rule if rule matches current base
+            if (base.matches(curRule.getRegex())) {
+                Iterator<DeclensionGenTransform> transforms = curRule.getTransforms();
+                
+                while (transforms.hasNext()) {
+                    DeclensionGenTransform curTrans = transforms.next();
+                    
+                    base = base.replaceAll(curTrans.regex, curTrans.replaceText);
+                    
+                    ret = base;
+                }
+            }
+        }
+        
+        return ret;
+    }
+    
     public Map<Integer, List<DeclensionNode>> getTemplateMap() {
         return dTemplates;
     }
@@ -66,21 +173,21 @@ public class DeclensionManager {
     public void updateDeclensionWord(Integer wordId, Integer declensionId, DeclensionNode declension) {
         updateDeclension(wordId, declensionId, declension, dList);
     }
-    
+
     /**
      * sets all declensions to deprecated state
      */
     public void deprecateAllDeclensions() {
         Iterator<Entry<Integer, List<DeclensionNode>>> decIt = dList.entrySet().iterator();
-        
+
         while (decIt.hasNext()) {
             List<DeclensionNode> curList = decIt.next().getValue();
-            
+
             Iterator<DeclensionNode> nodeIt = curList.iterator();
-            
+
             while (nodeIt.hasNext()) {
                 DeclensionNode curNode = nodeIt.next();
-                
+
                 curNode.setCombinedDimId("D" + curNode.getCombinedDimId());
             }
         }
@@ -116,6 +223,7 @@ public class DeclensionManager {
 
     /**
      * Recursive method to get all mandatory declensions for a type
+     *
      * @param depth current dim depth
      * @param curId current generated id
      * @param retValue return list(passed by ref)
@@ -123,10 +231,10 @@ public class DeclensionManager {
      * @param mand whether any dimensions were mandatory
      * @return string list of all mandatory declensions
      */
-    private List<DeclensionNode> getMandDims(int depth, 
-            String curId, 
-            List<DeclensionNode> retValue, 
-            List<DeclensionNode> declensionList, 
+    private List<DeclensionNode> getMandDims(int depth,
+            String curId,
+            List<DeclensionNode> retValue,
+            List<DeclensionNode> declensionList,
             String label,
             boolean mand) {
         if (depth >= declensionList.size()) {
@@ -136,7 +244,7 @@ public class DeclensionManager {
                 ret.setValue(label);
                 retValue.add(ret);
             }
-            
+
             return retValue;
         }
 
@@ -146,21 +254,23 @@ public class DeclensionManager {
 
         while (dimIt.hasNext()) {
             DeclensionDimension curDim = dimIt.next();
-            
-            getMandDims(depth + 1, 
+
+            getMandDims(depth + 1,
                     curId + curDim.getId().toString() + ",",
-                    retValue, 
-                    declensionList, 
+                    retValue,
+                    declensionList,
                     label + " " + curDim.value,
                     curDim.isMandatory() || mand);
         }
-        
+
         return retValue;
     }
 
     /**
-     * returns ids of all generated declensions for given type that are mandatory
-     * @param typeId the type  to get mandatories for
+     * returns ids of all generated declensions for given type that are
+     * mandatory
+     *
+     * @param typeId the type to get mandatories for
      * @return a list of all mandatory declensions
      */
     public List<DeclensionNode> getMandDims(Integer typeId) {
@@ -179,11 +289,11 @@ public class DeclensionManager {
         // type will be null if no type (or bad type) on word, no type = no requirements
         if (type != null) {
             Iterator<DeclensionNode> mandIt = getMandDims(type.getId()).iterator();
-            
+
             while (mandIt.hasNext()) {
                 DeclensionNode curMand = mandIt.next();
                 DeclensionNode dimExists = getDeclensionByCombinedId(word.getId(), curMand.getCombinedDimId());
-                
+
                 if (dimExists == null) {
                     ret = "Required Decl/Conj " + curMand.getValue() + " must be filled in.";
                     break;
@@ -201,6 +311,53 @@ public class DeclensionManager {
      */
     public void clearAllDeclensionsWord(Integer wordId) {
         clearAllDeclensions(wordId, dList);
+    }
+
+    /**
+     * get list of all labels and combined IDs of all declension combinations
+     * for a type
+     *
+     * @param typeId ID of type to fetch combined IDs for
+     * @return list of labels and IDs
+     */
+    public List<DeclensionPair> getAllCombinedIds(Integer typeId) {
+        return getAllCombinedIds(0, ",", "", getDeclensionListTemplate(typeId));
+    }
+
+    /**
+     * recursive method to calculate value of overridden method
+     *
+     * @param depth current depth in calculation
+     * @param curId current combined ID
+     * @param curLabel current constructed label
+     * @param declensionList list of template declensions for type
+     * @return list of currently constructed labels and ids
+     */
+    private List<DeclensionPair> getAllCombinedIds(int depth, String curId, String curLabel, List<DeclensionNode> declensionList) {
+        List<DeclensionPair> ret = new ArrayList<DeclensionPair>();
+
+        // for the specific case that a word with no declension patterns has a deprecated declension
+        if (declensionList.isEmpty()) {
+            return ret;
+        }
+
+        if (depth >= declensionList.size()) {
+            ret.add(new DeclensionPair(curId, curLabel));
+        } else {
+
+            DeclensionNode curNode = declensionList.get(depth);
+            Collection<DeclensionDimension> dimensions = curNode.getDimensions();
+            Iterator<DeclensionDimension> dimIt = dimensions.iterator();
+
+            while (dimIt.hasNext()) {
+                DeclensionDimension curDim = dimIt.next();
+
+                ret.addAll(getAllCombinedIds(depth + 1, curId + curDim.getId().toString() + ",",
+                        curLabel + (curLabel.equals("") ? "" : " ") + curDim.getValue(), declensionList));
+            }
+        }
+
+        return ret;
     }
 
     public List<DeclensionNode> getDeclensionListWord(Integer wordId) {
@@ -272,11 +429,11 @@ public class DeclensionManager {
     public void setBufferRelId(Integer _bufferRelId) {
         bufferRelId = _bufferRelId;
     }
-    
+
     public Integer getBufferRelId() {
         return bufferRelId;
     }
-    
+
     public boolean isBufferDecTemp() {
         return bufferDecTemp;
     }
@@ -290,9 +447,10 @@ public class DeclensionManager {
             this.addDeclensionToWord(bufferRelId, buffer.getId(), buffer);
         }
     }
-    
+
     /**
      * gets current declension node buffer object
+     *
      * @return buffer node object
      */
     public DeclensionNode getBuffer() {
@@ -307,6 +465,7 @@ public class DeclensionManager {
 
     /**
      * adds declension template directly to the map
+     *
      * @param typeId ID of type to add to
      * @param node new node to add
      * @return the passed node
@@ -314,19 +473,19 @@ public class DeclensionManager {
      */
     public DeclensionNode addDeclensionTemplate(Integer typeId, DeclensionNode node) throws Exception {
         List recList;
-        
+
         if (dTemplates.containsKey(node.getId())) {
-            recList = (List)dTemplates.get(node.getId());
+            recList = (List) dTemplates.get(node.getId());
             recList.add(node);
         } else {
             recList = new ArrayList<DeclensionNode>();
             recList.add(node);
             dTemplates.put(typeId, recList);
         }
-        
+
         return node;
     }
-    
+
     private DeclensionNode addDeclension(Integer typeId, String declension, Map list) {
         List wordList;
 
@@ -349,6 +508,7 @@ public class DeclensionManager {
 
     /**
      * Adds declension to related object (type or word)
+     *
      * @param relId ID of related object
      * @param declensionId ID of declension to be created
      * @param declension declension node to be created
@@ -370,10 +530,10 @@ public class DeclensionManager {
             wordList = new ArrayList<DeclensionNode>();
             list.put(relId, wordList);
         }
-        
+
         DeclensionNode addNode = new DeclensionNode(declensionId);
         addNode.setEqual(declension);
-        
+
         wordList.add(addNode);
 
         if (declensionId > topId) {
@@ -495,25 +655,27 @@ public class DeclensionManager {
 
     /**
      * Gets a word's declensions, with their combined dim Ids as the keys
+     *
      * @param wordId word to get declensions of
      * @return map of all declensions in a word (empty if none)
      */
     public Map getWordDeclensions(Integer wordId) {
         Map<String, DeclensionNode> ret = new HashMap<String, DeclensionNode>();
-        
+
         Iterator<DeclensionNode> decs = getDeclensionListWord(wordId).iterator();
-        
+
         while (decs.hasNext()) {
             DeclensionNode curNode = decs.next();
-            
+
             ret.put(curNode.getCombinedDimId(), curNode);
         }
-        
+
         return ret;
     }
-    
+
     /**
      * Writes all declension information to XML document
+     *
      * @param doc Document to write to
      * @param rootElement root element of document
      */
@@ -521,10 +683,10 @@ public class DeclensionManager {
         Set<Entry<Integer, List<DeclensionNode>>> declensionSet;
         Element wordNode;
         Element wordValue;
-        
+
         // record declension templates
         declensionSet = getTemplateMap().entrySet();
-        
+
         for (Entry<Integer, List<DeclensionNode>> e : declensionSet) {
             Integer relatedId = e.getKey();
 
@@ -611,6 +773,43 @@ public class DeclensionManager {
                 wordValue = doc.createElement(XMLIDs.declensionIsTemplateXID);
                 wordValue.appendChild(doc.createTextNode("0"));
                 wordNode.appendChild(wordValue);
+            }
+        }
+        
+        // record declension autogeneration rules
+        for(DeclensionGenRule curRule : generationRules) {
+            Element ruleNode = doc.createElement(XMLIDs.decGenRuleXID);
+            rootElement.appendChild(ruleNode);
+            
+            wordValue = doc.createElement(XMLIDs.decGenRuleCombXID);
+            wordValue.appendChild(doc.createTextNode(curRule.getCombinationId()));
+            ruleNode.appendChild(wordValue);
+            
+            wordValue = doc.createElement(XMLIDs.decGenRuleNameXID);
+            wordValue.appendChild(doc.createTextNode(curRule.getName()));
+            ruleNode.appendChild(wordValue);
+            
+            wordValue = doc.createElement(XMLIDs.decGenRuleRegexXID);
+            wordValue.appendChild(doc.createTextNode(curRule.getRegex()));
+            ruleNode.appendChild(wordValue);
+            
+            wordValue = doc.createElement(XMLIDs.decGenRuleTypeXID);
+            wordValue.appendChild(doc.createTextNode(Integer.toString(curRule.getTypeId())));
+            ruleNode.appendChild(wordValue);
+            
+            Iterator<DeclensionGenTransform> transIt = curRule.getTransforms();
+            while (transIt.hasNext()) {
+                DeclensionGenTransform curTransform = transIt.next();
+                Element transNode = doc.createElement(XMLIDs.decGenTransXID);
+                ruleNode.appendChild(transNode);
+                
+                wordValue = doc.createElement(XMLIDs.decGenTransRegexXID);
+                wordValue.appendChild(doc.createTextNode(curTransform.regex));
+                transNode.appendChild(wordValue);
+                
+                wordValue = doc.createElement(XMLIDs.decGenTransReplaceXID);
+                wordValue.appendChild(doc.createTextNode(curTransform.replaceText));
+                transNode.appendChild(wordValue);
             }
         }
     }

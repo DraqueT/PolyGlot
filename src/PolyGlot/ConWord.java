@@ -33,6 +33,7 @@ public class ConWord extends DictNode {
     private String pronunciation;
     private String gender;
     private boolean procOverride;
+    private boolean autoDeclensionOverride; // TODO: Add to menu on conj/declens
 
     public ConWord() {
         value = "";
@@ -43,6 +44,7 @@ public class ConWord extends DictNode {
         gender = "";
         id = -1;
         procOverride = false;
+        autoDeclensionOverride = false;
     }
     
     @Override
@@ -65,8 +67,17 @@ public class ConWord extends DictNode {
         this.setId(set.getId());
         this.setGender(set.getGender());
         this.setProcOverride(set.isProcOverride());
+        this.setOverrideAutoDeclen(set.isOverrideAutoDeclen());
     }
 
+    public boolean isOverrideAutoDeclen() {
+        return autoDeclensionOverride;
+    }
+    
+    public void setOverrideAutoDeclen(boolean _autoDeclensionOverride) {
+        autoDeclensionOverride = _autoDeclensionOverride;
+    }
+    
     public boolean isProcOverride() {
         return procOverride;
     }

@@ -369,7 +369,7 @@ public final class ScrDeclensionSetup extends javax.swing.JDialog {
         boolean ret = false;
         
         if (InfoBox.yesNoCancel("Confirm action", "This action will deprecate all currently filled out \n"
-                + " declensions/conjugations ()they won't be lost, but set to a deprecated.\nstatus). Continue?", this) == JOptionPane.YES_OPTION) {
+                + " declensions/conjugations (they won't be lost, but set to a deprecated.\nstatus). Continue?", this) == JOptionPane.YES_OPTION) {
             ret = true;
         }
         

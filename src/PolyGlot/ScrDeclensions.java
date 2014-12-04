@@ -24,10 +24,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Toolkit;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -84,6 +82,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
         btnOk = new javax.swing.JButton();
         scrDeclensions = new javax.swing.JScrollPane();
         pnlDeclensions = new javax.swing.JPanel();
+        chkAutogenOverride = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Conjugations/Declensions");
@@ -117,12 +116,16 @@ public class ScrDeclensions extends javax.swing.JDialog {
 
         scrDeclensions.setViewportView(pnlDeclensions);
 
+        chkAutogenOverride.setText("Autogen Override");
+        chkAutogenOverride.setToolTipText("Check to override autogeneration of declension forms (if autogeneration patterns exist)");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(175, Short.MAX_VALUE)
+                .addComponent(chkAutogenOverride)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnOk)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCancel)
@@ -132,11 +135,12 @@ public class ScrDeclensions extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(scrDeclensions, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+                .addComponent(scrDeclensions)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel)
-                    .addComponent(btnOk))
+                    .addComponent(btnOk)
+                    .addComponent(chkAutogenOverride))
                 .addContainerGap())
         );
 
@@ -218,6 +222,12 @@ public class ScrDeclensions extends javax.swing.JDialog {
     }
 
     private void saveDeclension() {
+        word.setOverrideAutoDeclen(chkAutogenOverride.isSelected());
+        
+        /*try {
+            core.getWordCollection().modifyNode(word.getId(), word);
+        } catch (Exception e){/*do nothing}*/
+        
         core.clearAllDeclensionsWord(word.getId());
         Set<Entry<String, JTextField>> saveSet = fieldMap.entrySet();
 
@@ -242,21 +252,17 @@ public class ScrDeclensions extends javax.swing.JDialog {
     }
 
     /**
-     * This is a recursive method that creates all the fields for declension
+     * creates all the fields for declension
      * combinations
-     *
-     * @param depth current depth through declension list
-     * @param curId The generated id of the current declension combination
-     * @param curLabel the current generated label of this declension
-     * @param declensionList list of all declensions
      */
-    private void createFields(int depth, String curId, String curLabel, List<DeclensionNode> declensionList) {
-        // for the specific case that a word with no declension patterns has a deprecated declension
-        if (declensionList.isEmpty()) {
-            return;
-        }
+    private void createFields() {
+        Iterator<DeclensionPair> decIt = core.getDeclensionManager().getAllCombinedIds(typeId).iterator();
         
-        if (depth >= declensionList.size()) {
+        while (decIt.hasNext()) {
+            DeclensionPair curDec = decIt.next();
+            String curId = curDec.combinedId;
+            String curLabel = curDec.label;
+            
             Label newLabel = new Label(curLabel);
             JTextField newField = new JTextField();
             Dimension labelDim = new Dimension();
@@ -267,6 +273,16 @@ public class ScrDeclensions extends javax.swing.JDialog {
 
             if (findDec != null) {
                 newField.setText(findDec.getValue());
+            }
+            
+            // if the autodeclension override is not set, create a value
+            if (!word.isOverrideAutoDeclen()) {
+                String newForm = core.getDeclensionManager().declineWord(typeId, curId, word.getValue());
+                
+                // only set value if form found
+                if (!newForm.equals("")) {
+                    newField.setText(newForm);
+                }
             }
 
             if (conFont != null) {
@@ -285,27 +301,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
             fieldMap.put(curId, newField);
             labelMap.put(curId, curLabel);
             numFields++;
-            return;
         }
-
-        DeclensionNode curNode = declensionList.get(depth);
-        Collection<DeclensionDimension> dimensions = curNode.getDimensions();
-        Iterator<DeclensionDimension> dimIt = dimensions.iterator();
-
-        while (dimIt.hasNext()) {
-            DeclensionDimension curDim = dimIt.next();
-
-            createFields(depth + 1, curId + curDim.getId().toString() + ",",
-                    curLabel + (curLabel.equals("") ? "" : " ") + curDim.getValue(), declensionList);
-        }
-    }
-
-    /**
-     * This method kicks off the recursive calls that generate fields for
-     * declension combinations
-     */
-    private void createFields() {
-        createFields(0, ",", "", core.getDeclensionListTemplate(typeId));
     }
     
     /**
@@ -398,6 +394,8 @@ public class ScrDeclensions extends javax.swing.JDialog {
         // creates list of all declensions in word (even deprecated ones
         allWordDeclensions = core.getDeclensionManager().getWordDeclensions(word.getId());
 
+        chkAutogenOverride.setSelected(word.isOverrideAutoDeclen());
+        
         createFields();
 
         createDeprecatedFields();
@@ -408,6 +406,7 @@ public class ScrDeclensions extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
+    private javax.swing.JCheckBox chkAutogenOverride;
     private javax.swing.JPanel pnlDeclensions;
     private javax.swing.JScrollPane scrDeclensions;
     // End of variables declaration//GEN-END:variables
