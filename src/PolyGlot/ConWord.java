@@ -33,7 +33,7 @@ public class ConWord extends DictNode {
     private String pronunciation;
     private String gender;
     private boolean procOverride;
-    private boolean autoDeclensionOverride; // TODO: Add to menu on conj/declens
+    private boolean autoDeclensionOverride;
 
     public ConWord() {
         value = "";

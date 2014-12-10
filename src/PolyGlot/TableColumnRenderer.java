@@ -22,6 +22,7 @@ package PolyGlot;
 
 import java.awt.Component;
 import java.awt.Font;
+import javax.swing.BorderFactory;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentListener;
@@ -50,6 +51,8 @@ public class TableColumnRenderer implements TableCellRenderer {
         
         editor.getDocument().addDocumentListener(docListener);
 
+        editor.setBorder(BorderFactory.createEmptyBorder());
+        
         return editor;
     }
       

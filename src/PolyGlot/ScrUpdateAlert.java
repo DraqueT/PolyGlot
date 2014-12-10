@@ -19,8 +19,6 @@
  */
 package PolyGlot;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,8 +27,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

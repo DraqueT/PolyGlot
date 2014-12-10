@@ -26,19 +26,22 @@ import javax.swing.DefaultListModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-// TODO: make window not pop if no declensions for this type (maybe make button not activate on prior window?)
+import javax.swing.table.TableColumn;
+
 /**
  *
  * @author draque
  */
 public class ScrSetupDeclGen extends javax.swing.JDialog {
 
+    final String depRulesLabel = "DEPRECATED RULES";
     final int typeId;
     final DictCore core;
     DefaultListModel decListModel;
     DefaultListModel rulesModel;
     DefaultTableModel transModel;
     boolean curPopulating = false;
+    List<DeclensionGenRule> depRulesList;
 
     /**
      * Creates new form scrSetupDeclGen
@@ -49,33 +52,33 @@ public class ScrSetupDeclGen extends javax.swing.JDialog {
     private ScrSetupDeclGen(DictCore _core, int _typeId) {
         core = _core;
         typeId = _typeId;
-        
+        depRulesList = core.getDeclensionManager().getAllDepGenerationRules(_typeId);
+
         initComponents();
         setupObjectModels();
         setupListeners();
-        setFonts();
-        
-        populateconstructedDecl();
+        setObjectProperties();
+
+        populateCombinedDecl();
     }
-    
+
     @Override
     public void dispose() {
         if (tblTransforms.getCellEditor() != null) {
             tblTransforms.getCellEditor().stopCellEditing();
         }
-        
+
         saveTransPairs(lstRules.getSelectedIndex());
-        
+
         super.dispose();
     }
-    
+
     /**
      * sets fonts of objects
      */
-    private void setFonts() {
+    private void setObjectProperties() {
         Font setFont = core.getFontCon();
         txtRuleRegex.setFont(setFont);
-        tblTransforms.setFont(setFont);
     }
 
     /**
@@ -88,121 +91,167 @@ public class ScrSetupDeclGen extends javax.swing.JDialog {
     public static ScrSetupDeclGen run(DictCore _core, int _typeId) {
         ScrSetupDeclGen s = new ScrSetupDeclGen(_core, _typeId);
         s.setModal(true);
-        
+
         // center window in screen
         s.setLocationRelativeTo(null);
-        
+
         s.setVisible(true);
         return s;
     }
 
     /**
-     * populates rules for currently selected declension pair, returns if nothing selected
+     * populates rules for currently selected declension pair, returns if
+     * nothing selected
      */
     private void populateRules() {
-        DeclensionPair curPair = (DeclensionPair)lstCombinedDec.getSelectedValue();
-        
-        if (curPair == null) {
-            return;
-        }
-        
-        List<DeclensionGenRule> ruleList = core.getDeclensionManager().getDeclensionRules(typeId);
-        
         rulesModel.clear();
         
-        for(DeclensionGenRule curRule : ruleList) {
-            if (curRule.getCombinationId().equals(curPair.combinedId)) {
+        // population of rules works differently if deprecated rules are selected
+        if (lstCombinedDec.getSelectedValue().equals(depRulesLabel)) {
+            depRulesList = core.getDeclensionManager().getAllDepGenerationRules(typeId);
+            
+            for (DeclensionGenRule curRule : depRulesList) {
                 rulesModel.addElement(curRule);
             }
+            
+            enableEditing(false);
+        } else {
+
+            DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+
+            if (curPair == null) {
+                return;
+            }
+
+            List<DeclensionGenRule> ruleList = core.getDeclensionManager().getDeclensionRules(typeId);
+
+            for (DeclensionGenRule curRule : ruleList) {
+                if (curRule.getCombinationId().equals(curPair.combinedId)) {
+                    rulesModel.addElement(curRule);
+                }
+            }
+            
+            enableEditing(true);
         }
-        
+
         lstRules.setSelectedIndex(0);
     }
-    
+
     /**
      * populates all rule values from currently selected rule
      */
     public void populateRuleProperties() {
-        if (curPopulating)
-        {
+        if (curPopulating) {
             return;
         }
-        
+
         curPopulating = true;
-        
-        DeclensionGenRule curRule = (DeclensionGenRule)lstRules.getSelectedValue();
-        
+
+        DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
+
         if (curRule == null) {
             txtRuleName.setText("");
             txtRuleRegex.setText("");
             populateTransforms();
-            
+
             curPopulating = false;
             return;
         }
-        
+
         txtRuleName.setText(curRule.getName());
         txtRuleRegex.setText(curRule.getRegex());
-        
+
         populateTransforms();
-        
+
         curPopulating = false;
     }
-    
+
     /**
      * populates transforms of currently selected rule
      */
     private void populateTransforms() {
-        DeclensionGenRule curRule = (DeclensionGenRule)lstRules.getSelectedValue();
-        
+        DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
+        Font setFont = core.getFontCon();
+
         transModel = new DefaultTableModel();
         tblTransforms.setModel(transModel);
-        transModel.addColumn("regex");
-        transModel.addColumn("replacement");
-        
+
+        transModel.addColumn("Regex");
+        transModel.addColumn("Replacement");
+
+        TableColumn column = tblTransforms.getColumnModel().getColumn(0);
+        column.setCellEditor(new TableColumnEditor(setFont));
+        column.setCellRenderer(new TableColumnRenderer(setFont));
+
+        column = tblTransforms.getColumnModel().getColumn(1);
+        column.setCellEditor(new TableColumnEditor(setFont));
+        column.setCellRenderer(new TableColumnRenderer(setFont));
+
         // do nothing if nothing selected in rule list
         if (curRule == null) {
             return;
         }
-        
+
         Iterator<DeclensionGenTransform> curTransform = curRule.getTransforms();
-        
+
         while (curTransform.hasNext()) {
             DeclensionGenTransform curTrans = curTransform.next();
             String[] newRow = {curTrans.regex, curTrans.replaceText};
-            
+
             transModel.addRow(newRow);
+
+            TableColumnEditor editor = (TableColumnEditor) tblTransforms.getCellEditor(transModel.getRowCount() - 1, 0);
+            editor.setInitialValue(curTrans.regex);
+
+            editor = (TableColumnEditor) tblTransforms.getCellEditor(transModel.getRowCount() - 1, 1);
+            editor.setInitialValue(curTrans.replaceText);
         }
     }
-    
+
     /**
      * populates constructed declension list
      */
-    private void populateconstructedDecl() {
+    private void populateCombinedDecl() {
         Iterator<DeclensionPair> it = core.getDeclensionManager().getAllCombinedIds(typeId).iterator();
         while (it.hasNext()) {
             DeclensionPair curNode = it.next();
-            
+
             decListModel.addElement(curNode);
         }
-        
+
+        if (!depRulesList.isEmpty()) {
+            decListModel.addElement(depRulesLabel);
+        }
+
         lstCombinedDec.setSelectedIndex(0);
     }
     
+    /**
+     * Enables or disables editing of the properties/rules/transforms
+     * @param choice 
+     */
+    public void enableEditing(boolean choice) {
+        txtRuleName.setEditable(choice);
+        txtRuleRegex.setEditable(choice);
+        tblTransforms.setEnabled(choice);
+        btnAddRule.setEnabled(choice);
+        btnAddTransform.setEnabled(choice);
+    }
+
     /**
      * sets up object models for visual components
      */
     private void setupObjectModels() {
         decListModel = new DefaultListModel();
         lstCombinedDec.setModel(decListModel);
-        
+
         rulesModel = new DefaultListModel();
         lstRules.setModel(rulesModel);
-        
+
         transModel = new DefaultTableModel();
         tblTransforms.setModel(transModel);
     }
-    
+
     /**
      * sets up object listeners for form objects
      */
@@ -240,82 +289,83 @@ public class ScrSetupDeclGen extends javax.swing.JDialog {
             }
         });
     }
-    
+
     /**
      * Saves transformation pairs to appropriate rule
+     *
      * @param saveIndex index of rule to save to
      */
     private void saveTransPairs(int saveIndex) {
         if (saveIndex == -1) {
             return;
         }
-        
-        DeclensionGenRule saveRule = (DeclensionGenRule)rulesModel.get(saveIndex);
-        
+
+        DeclensionGenRule saveRule = (DeclensionGenRule) rulesModel.get(saveIndex);
+
         if (saveRule == null) {
             return;
         }
-        
+
         // return if nothing to save
         if (tblTransforms.getRowCount() == 0) {
             return;
         }
-        
+
         saveRule.wipeTransforms();
 
         if (tblTransforms.getCellEditor() != null) {
             tblTransforms.getCellEditor().stopCellEditing();
         }
-        
+
         for (int i = 0; i < tblTransforms.getRowCount(); i++) {
             String regex = tblTransforms.getValueAt(i, 0).toString();
             String replaceText = tblTransforms.getValueAt(i, 1).toString();
-            
+
             saveRule.addTransform(new DeclensionGenTransform(regex, replaceText));
         }
     }
-    
+
     /**
-     * Sets currently selected rule's name equal to proper text box if not 
+     * Sets currently selected rule's name equal to proper text box if not
      * already equal
      */
     private void setRuleName() {
-        DeclensionGenRule rule = (DeclensionGenRule)lstRules.getSelectedValue();
-        String ruleName = txtRuleName.getText().trim();        
+        DeclensionGenRule rule = (DeclensionGenRule) lstRules.getSelectedValue();
+        String ruleName = txtRuleName.getText().trim();
 
         if (!curPopulating && rule != null && !rule.getName().equals(ruleName)) {
             rule.setName(ruleName);
             lstRules.updateUI();
         }
     }
-    
+
     /**
-     * Sets currently selected rule's regex equal to proper text box if not 
+     * Sets currently selected rule's regex equal to proper text box if not
      * already equal
      */
     private void setRuleRegex() {
-        DeclensionGenRule rule = (DeclensionGenRule)lstRules.getSelectedValue();
+        DeclensionGenRule rule = (DeclensionGenRule) lstRules.getSelectedValue();
         String ruleRegex = txtRuleRegex.getText().trim();
-        
+
         if (!curPopulating && rule != null && !rule.getName().equals(ruleRegex)) {
             rule.setRegex(ruleRegex);
         }
     }
-    
+
     /**
      * adds new rule
      */
     private void addRule() {
-        DeclensionPair curPair = (DeclensionPair)lstCombinedDec.getSelectedValue();
-        
+        DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+
         if (curPair == null) {
             return;
         }
-        
+
         saveTransPairs(lstRules.getSelectedIndex());
-        
+
         DeclensionGenRule newRule = new DeclensionGenRule(typeId, curPair.combinedId);
-        
+
         core.getDeclensionManager().addDeclensionGenRule(newRule);
         rulesModel.addElement(newRule);
         lstRules.setSelectedIndex(lstRules.getLastVisibleIndex());
@@ -323,23 +373,23 @@ public class ScrSetupDeclGen extends javax.swing.JDialog {
         txtRuleRegex.setText("");
         populateTransforms();
     }
-    
+
     /**
      * deletes currently selected rule
      */
     private void deleteRule() {
         DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
-        
+
         if (curRule == null) {
             return;
         }
-        
+
         core.getDeclensionManager().deleteDeclensionGenRule(curRule);
         populateRules();
         populateRuleProperties();
         populateTransforms();
     }
-    
+
     /**
      * adds transform set to currently selected rule
      */
@@ -347,11 +397,10 @@ public class ScrSetupDeclGen extends javax.swing.JDialog {
         if (lstRules.getSelectedValue() == null) {
             return;
         }
-        
-        String[] newRow = {"", ""};
-        transModel.addRow(newRow);
+
+        transModel.addRow(new Object[]{"", ""});
     }
-    
+
     /**
      * deletes currently selected transform from currently selected rule
      */
@@ -422,7 +471,7 @@ public class ScrSetupDeclGen extends javax.swing.JDialog {
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        lstRules.setToolTipText("Strings which, when matched, apply their transforms to word");
+        lstRules.setToolTipText("List of rules associated with the selected conjugation");
         lstRules.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstRulesValueChanged(evt);
@@ -488,7 +537,7 @@ public class ScrSetupDeclGen extends javax.swing.JDialog {
 
         jLabel5.setText("Regex");
 
-        txtRuleRegex.setToolTipText("Regex word must match before tranformations are applied");
+        txtRuleRegex.setToolTipText("Regex expression a word must match before tranformations are applied to it");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -611,10 +660,10 @@ public class ScrSetupDeclGen extends javax.swing.JDialog {
         if (!evt.getValueIsAdjusting()) {
             return;
         }
-        
+
         int selected = lstRules.getSelectedIndex();
         int previous = selected == evt.getFirstIndex() ? evt.getLastIndex() : evt.getFirstIndex();
-        
+
         saveTransPairs(previous);
         populateRuleProperties();
     }//GEN-LAST:event_lstRulesValueChanged

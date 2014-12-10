@@ -50,6 +50,33 @@ public class DeclensionManager {
     private DeclensionGenRule ruleBuffer = new DeclensionGenRule();
 
     /**
+     * Gets list of all deprecated autogeneration rules
+     * @param typeId type to get deprecated values for
+     * @return list of all deprecated gen rules
+     */
+    public List<DeclensionGenRule> getAllDepGenerationRules(int typeId) {
+        List<DeclensionGenRule> ret = new ArrayList<DeclensionGenRule>();
+        Iterator<DeclensionPair> typeRules = getAllCombinedIds(typeId).iterator();
+        Map<String, Integer> ruleMap = new HashMap<String, Integer>();
+        
+        // creates searchable map of extant combination IDs
+        while (typeRules.hasNext()) {
+            DeclensionPair curPair = typeRules.next();
+            ruleMap.put(curPair.combinedId, 0);
+        }
+        
+        // adds to return value only if rule matches ID, and is orphaned
+        for (DeclensionGenRule curRule : generationRules) {
+            if (curRule.getTypeId() == typeId
+                    && !ruleMap.containsKey(curRule.getCombinationId())) {
+                ret.add(curRule);
+            }
+        }
+        
+        return ret;
+    }
+    
+    /**
      * Gets current declension rule buffer
      * @return current declension rule buffer
      */

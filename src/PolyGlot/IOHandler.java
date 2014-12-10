@@ -222,7 +222,7 @@ public class IOHandler {
         } else if (System.getProperty("os.name").startsWith("Windows")) {
             ret = getFontFromLocation(System.getenv("WINDIR") + "\\Fonts", font);
         } else {
-            // Other OSes don't support this yet
+            // TODO: figure out how to make this work in Linux, maybe?
         }
 
         // TODO: Inform user if font cannot be found (mostly a mac issue...)

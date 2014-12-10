@@ -223,7 +223,7 @@
                         <StringItem index="4" value="Item 5"/>
                       </StringArray>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Strings which, when matched, apply their transforms to word"/>
+                    <Property name="toolTipText" type="java.lang.String" value="List of rules associated with the selected conjugation"/>
                   </Properties>
                   <Events>
                     <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstRulesValueChanged"/>
@@ -323,7 +323,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtRuleRegex">
               <Properties>
-                <Property name="toolTipText" type="java.lang.String" value="Regex word must match before tranformations are applied"/>
+                <Property name="toolTipText" type="java.lang.String" value="Regex expression a word must match before tranformations are applied to it"/>
               </Properties>
             </Component>
           </SubComponents>
