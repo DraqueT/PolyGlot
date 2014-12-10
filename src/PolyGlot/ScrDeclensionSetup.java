@@ -639,11 +639,12 @@ public final class ScrDeclensionSetup extends javax.swing.JDialog {
         //</editor-fold>
 
         ScrDeclensionSetup s = new ScrDeclensionSetup(_core, _typeId);
+        
+        // center window
+        s.setLocationRelativeTo(null);
+        
         s.setModal(true);
         s.setVisible(true);
-
-        // center window in screen
-        s.setLocationRelativeTo(null);
         
         return s;
     }
