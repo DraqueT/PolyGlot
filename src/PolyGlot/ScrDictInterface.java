@@ -2650,6 +2650,7 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
     private void popLangProps() {
         txtLangName.setText(core.getPropertiesManager().getLangName());
         txtAlphaOrder.setText(core.getPropertiesManager().getAlphaPlainText());
+        txtLangFont.setText(core.getFontCon() == null ? "" : core.getFontCon().getFontName());
         chkAutopopProcs.setSelected(core.getPropertiesManager().isProAutoPop());
         chkPropLocalMandatory.setSelected(core.getPropertiesManager().isLocalMandatory());
         chkPropLocalUniqueness.setSelected(core.getPropertiesManager().isLocalUniqueness());
