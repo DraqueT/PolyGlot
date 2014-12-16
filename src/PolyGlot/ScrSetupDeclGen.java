@@ -32,7 +32,7 @@ import javax.swing.table.TableColumn;
  *
  * @author draque
  */
-public class ScrSetupDeclGen extends javax.swing.JDialog {
+public class ScrSetupDeclGen extends PDialog {
 
     final String depRulesLabel = "DEPRECATED RULES";
     final int typeId;

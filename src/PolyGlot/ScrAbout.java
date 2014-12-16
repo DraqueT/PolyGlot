@@ -23,7 +23,7 @@ package PolyGlot;
  *
  * @author draque
  */
-public class ScrAbout extends javax.swing.JFrame {
+public class ScrAbout extends PFrame {
 
     private final DictCore core;
     

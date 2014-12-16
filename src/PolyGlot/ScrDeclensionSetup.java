@@ -45,7 +45,7 @@ import javax.swing.table.TableColumn;
  * dimensional values.
  * @author draque
  */
-public final class ScrDeclensionSetup extends javax.swing.JDialog {
+public final class ScrDeclensionSetup extends PDialog {
 
     private Map scrToCoreDeclensions = new HashMap<Integer, Integer>();
     private Map scrDeclensionMap = new HashMap<String, Integer>();

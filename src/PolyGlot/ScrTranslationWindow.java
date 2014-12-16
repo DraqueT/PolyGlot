@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -39,7 +38,7 @@ import javax.swing.event.DocumentListener;
  *
  * @author draque
  */
-public class ScrTranslationWindow extends JFrame {
+public class ScrTranslationWindow extends PFrame {
     private final DictCore core;
     public final ScrDictInterface parent;
     private boolean curPopulating = false;
@@ -49,7 +48,7 @@ public class ScrTranslationWindow extends JFrame {
     private final Map<Integer, Integer> scrToCoreMap = new HashMap<Integer, Integer>();
     private final Map<Integer, Integer> transToLocal = new HashMap<Integer, Integer>();
     private boolean curTranslating = false;
-    private final List<JFrame> childFrames = new ArrayList<JFrame>();
+    private final List<PFrame> childFrames = new ArrayList<PFrame>();
     
     // list of related indexes, the first being 
     List<Entry<Integer, Integer>> links = new ArrayList<Entry<Integer, Integer>>();
@@ -111,7 +110,7 @@ public class ScrTranslationWindow extends JFrame {
     }
     
     private void viewFinalTextBox() {
-        JFrame window = ScrTranslationFreewrite.run(core, txtTransText.getText());
+        PFrame window = ScrTranslationFreewrite.run(core, txtTransText.getText());
         childFrames.add(window);
     }
     
@@ -150,10 +149,10 @@ public class ScrTranslationWindow extends JFrame {
      * kills all child windows
      */
     private void killAllChildren() {
-        Iterator<JFrame> it = childFrames.iterator();
+        Iterator<PFrame> it = childFrames.iterator();
         
         while (it.hasNext()) {
-            JFrame curFrame = it.next();
+            PFrame curFrame = it.next();
             
             if (curFrame != null) {
                 curFrame.setVisible(false);

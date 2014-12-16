@@ -42,7 +42,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
@@ -68,7 +67,7 @@ import org.simplericity.macify.eawt.*;
  *
  * @author draque
  */
-public class ScrDictInterface extends JFrame implements ApplicationListener {
+public class ScrDictInterface extends PFrame implements ApplicationListener {
 // implementation of ApplicationListener is part of macify
 
     private DictCore core;
@@ -2038,12 +2037,12 @@ public class ScrDictInterface extends JFrame implements ApplicationListener {
     }
 
     private void viewAbout() {
-        JFrame window = ScrAbout.run(core);
+        PFrame window = ScrAbout.run(core);
         childFrames.add(window);
     }
 
     private void viewTranslationWindow() {
-        JFrame window = ScrTranslationWindow.run(core, this);
+        PFrame window = ScrTranslationWindow.run(core, this);
         childFrames.add(window);
     }
 
