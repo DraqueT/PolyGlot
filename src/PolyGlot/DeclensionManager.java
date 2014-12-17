@@ -166,11 +166,9 @@ public class DeclensionManager {
 
             // apply transforms within rule if rule matches current base
             if (base.matches(curRule.getRegex())) {
-                Iterator<DeclensionGenTransform> transforms = curRule.getTransforms();
+                List<DeclensionGenTransform> transforms = curRule.getTransforms();
                 
-                while (transforms.hasNext()) {
-                    DeclensionGenTransform curTrans = transforms.next();
-                    
+                for (DeclensionGenTransform curTrans : transforms) {
                     base = base.replaceAll(curTrans.regex, curTrans.replaceText);
                     
                     ret = base;
@@ -824,9 +822,8 @@ public class DeclensionManager {
             wordValue.appendChild(doc.createTextNode(Integer.toString(curRule.getTypeId())));
             ruleNode.appendChild(wordValue);
             
-            Iterator<DeclensionGenTransform> transIt = curRule.getTransforms();
-            while (transIt.hasNext()) {
-                DeclensionGenTransform curTransform = transIt.next();
+            List<DeclensionGenTransform> transIt = curRule.getTransforms();
+            for (DeclensionGenTransform curTransform : transIt) {
                 Element transNode = doc.createElement(XMLIDs.decGenTransXID);
                 ruleNode.appendChild(transNode);
                 

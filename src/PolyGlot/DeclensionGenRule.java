@@ -20,7 +20,6 @@
 package PolyGlot;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -79,8 +78,8 @@ public class DeclensionGenRule {
      * gets all transformations for this rule
      * @return iterator of DeclensionGenTransform objects
      */
-    public Iterator<DeclensionGenTransform> getTransforms() {
-        return transformations.iterator();
+    public List<DeclensionGenTransform> getTransforms() {
+        return transformations;
     }
     
     /**

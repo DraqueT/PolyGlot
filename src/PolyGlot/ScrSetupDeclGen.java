@@ -27,7 +27,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-
+// TODO: make menus turn on/off as appropriate when their parents fields are populated.
+// TODO: make a test in the replacement text to warn users about $& issue
 /**
  *
  * @author draque
@@ -70,7 +71,45 @@ public class ScrSetupDeclGen extends javax.swing.JDialog {
 
         saveTransPairs(lstRules.getSelectedIndex());
 
-        super.dispose();
+        if (canClose()) {
+            super.dispose();
+        }
+    }
+    
+    /**
+     * only allows the form to close on success, displays user prompt otherwise
+     * @return whether form may close
+     */
+    private boolean canClose() {
+        boolean ret = true;
+        String userMessage = "";
+        
+        List<DeclensionGenRule> typeRules = core.getDeclensionManager().getDeclensionRules(typeId);
+        
+        for (DeclensionGenRule curRule : typeRules) {
+            try {
+                "TESTVAL".replaceAll(curRule.getRegex(), "");
+            } catch (Exception e) {
+                userMessage += "\nProblem with word match regex in rule " + curRule.getName() + ": " + e.getMessage();
+                ret = false;
+            }
+            
+            for (DeclensionGenTransform curTransform : curRule.getTransforms()) {
+                try {
+                    "TESTVAL".replaceAll(curTransform.regex, curTransform.replaceText);
+                } catch (Exception e) {
+                    userMessage += "\nProblem with transform in rule " + curRule.getName() 
+                            + " transform " + curTransform.regex + ": " + e.getMessage();
+                    ret = false;
+                }
+            }
+        }
+        
+        if (!ret) {
+            InfoBox.error("Unable to Close With Error", userMessage, this);
+        }
+        
+        return ret;
     }
 
     /**
@@ -192,10 +231,9 @@ public class ScrSetupDeclGen extends javax.swing.JDialog {
             return;
         }
 
-        Iterator<DeclensionGenTransform> curTransform = curRule.getTransforms();
+        List<DeclensionGenTransform> curTransform = curRule.getTransforms();
 
-        while (curTransform.hasNext()) {
-            DeclensionGenTransform curTrans = curTransform.next();
+        for (DeclensionGenTransform curTrans : curTransform) {
             String[] newRow = {curTrans.regex, curTrans.replaceText};
 
             transModel.addRow(newRow);
