@@ -23,12 +23,12 @@ import java.awt.Font;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-// TODO: make menus turn on/off as appropriate when their parents fields are populated.
-// TODO: make a test in the replacement text to warn users about $& issue
+
 /**
  *
  * @author draque
@@ -96,6 +96,10 @@ public class ScrSetupDeclGen extends PDialog {
             
             for (DeclensionGenTransform curTransform : curRule.getTransforms()) {
                 try {
+                    if (curTransform.replaceText.contains("$&")) {
+                        throw new Exception ("Java regex does not regognize the regex pattern \"$&\"");
+                    }
+                    
                     "TESTVAL".replaceAll(curTransform.regex, curTransform.replaceText);
                 } catch (Exception e) {
                     userMessage += "\nProblem with transform in rule " + curRule.getName() 
@@ -164,13 +168,14 @@ public class ScrSetupDeclGen extends PDialog {
 
             List<DeclensionGenRule> ruleList = core.getDeclensionManager().getDeclensionRules(typeId);
 
+            // only allow editing if there are actually rules to be populated... 
+            enableTransformEditing(!ruleList.isEmpty());
+            
             for (DeclensionGenRule curRule : ruleList) {
                 if (curRule.getCombinationId().equals(curPair.combinedId)) {
                     rulesModel.addElement(curRule);
                 }
             }
-            
-            enableEditing(true);
         }
 
         lstRules.setSelectedIndex(0);
@@ -275,6 +280,18 @@ public class ScrSetupDeclGen extends PDialog {
         btnAddRule.setEnabled(choice);
         btnAddTransform.setEnabled(choice);
     }
+    
+     /**
+     * Enables or disables editing of the properties/rules/transforms
+     * @param choice 
+     */
+    public void enableTransformEditing(boolean choice) {
+        txtRuleName.setEditable(choice);
+        txtRuleRegex.setEditable(choice);
+        tblTransforms.setEnabled(choice);
+        btnAddTransform.setEnabled(choice);
+        btnDeleteTransform.setEnabled(choice);
+    }
 
     /**
      * sets up object models for visual components
@@ -287,6 +304,7 @@ public class ScrSetupDeclGen extends PDialog {
         lstRules.setModel(rulesModel);
 
         transModel = new DefaultTableModel();
+        tblTransforms.clearSelection();
         tblTransforms.setModel(transModel);
     }
 
@@ -410,6 +428,7 @@ public class ScrSetupDeclGen extends PDialog {
         txtRuleName.setText("NEW RULE");
         txtRuleRegex.setText("");
         populateTransforms();
+        enableTransformEditing(true);
     }
 
     /**
@@ -447,6 +466,15 @@ public class ScrSetupDeclGen extends PDialog {
                 && tblTransforms.getSelectedRow() != -1) {
             int removeRow = tblTransforms.convertRowIndexToModel(tblTransforms.getSelectedRow());
             transModel.removeRow(removeRow);
+            tblTransforms.setModel(new DefaultTableModel());
+            
+            // perform this action later, once the model is properly updated
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    tblTransforms.setModel(transModel);
+                }
+            });
         }
     }
 
@@ -553,6 +581,7 @@ public class ScrSetupDeclGen extends PDialog {
 
         btnAddTransform.setText("+");
         btnAddTransform.setToolTipText("Add Transformation");
+        btnAddTransform.setEnabled(false);
         btnAddTransform.setPreferredSize(new java.awt.Dimension(40, 29));
         btnAddTransform.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -571,10 +600,12 @@ public class ScrSetupDeclGen extends PDialog {
 
         jLabel4.setText("Rule Name");
 
+        txtRuleName.setEditable(false);
         txtRuleName.setToolTipText("Name of rule");
 
         jLabel5.setText("Regex");
 
+        txtRuleRegex.setEditable(false);
         txtRuleRegex.setToolTipText("Regex expression a word must match before tranformations are applied to it");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
