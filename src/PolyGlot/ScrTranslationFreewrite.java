@@ -24,7 +24,7 @@ package PolyGlot;
  *
  * @author draque
  */
-public class ScrTranslationFreewrite extends javax.swing.JFrame {
+public class ScrTranslationFreewrite extends PFrame {
     private final DictCore core;
     
     /**

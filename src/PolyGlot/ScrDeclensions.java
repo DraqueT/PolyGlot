@@ -37,7 +37,7 @@ import javax.swing.SwingUtilities;
  *
  * @author draque
  */
-public class ScrDeclensions extends javax.swing.JDialog {
+public class ScrDeclensions extends PDialog {
 
     private final Map<String, JTextField> fieldMap = new HashMap<String, JTextField>();
     private final Map<String, String> labelMap = new HashMap<String, String>();

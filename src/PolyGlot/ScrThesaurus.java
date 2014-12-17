@@ -33,7 +33,7 @@ import javax.swing.tree.TreeModel;
  *
  * @author draque
  */
-public class ScrThesaurus extends javax.swing.JFrame {
+public class ScrThesaurus extends PFrame {
 
     private final DictCore core;
     private boolean curUpdating = false;

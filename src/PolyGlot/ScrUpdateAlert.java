@@ -36,7 +36,7 @@ import org.w3c.dom.Node;
  *
  * @author draque
  */
-public class ScrUpdateAlert extends javax.swing.JFrame {
+public class ScrUpdateAlert extends PFrame {
 
     private final Map<String, String> buttonMap = new HashMap<String, String>();
 

@@ -24,7 +24,7 @@ package PolyGlot;
  *
  * @author draque
  */
-public class ScrLangStats extends javax.swing.JDialog {
+public class ScrLangStats extends PDialog {
     private final DictCore core;
     
     /**
