@@ -109,4 +109,9 @@ public abstract class DictNode implements Comparable<DictNode> {
             return AFTER;
         }    
     }
+    
+    @Override
+    public String toString() {
+        return value;
+    }
 }

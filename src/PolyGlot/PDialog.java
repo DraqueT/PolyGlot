@@ -54,4 +54,11 @@ public class PDialog extends JDialog{
             UIManager.put("TextPane.focusInputMap", im);
         }
     }
+    
+    // positions on screen once form has already been build/sized
+    @Override
+    public void pack() {
+        super.pack();
+        this.setLocationRelativeTo(null);
+    }
 }

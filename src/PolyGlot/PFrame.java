@@ -17,7 +17,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package PolyGlot;
 
 import java.awt.Toolkit;
@@ -31,27 +30,37 @@ import javax.swing.text.DefaultEditorKit;
 /**
  * superclass for JFrame windows in PolyGlot. Includes setup instructions for
  * features like mac copy/paste in PolyGlot
+ *
  * @author Draque
  */
 public class PFrame extends JFrame {
+
     public PFrame() {
         // enable copy/paste on macs
-    if (System.getProperty("os.name").startsWith("Mac")) {
-        InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
-        UIManager.put("TextField.focusInputMap", im);
-        im = (InputMap) UIManager.get("TextArea.focusInputMap");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
-        UIManager.put("TextArea.focusInputMap", im);
-        im = (InputMap) UIManager.get("TextPane.focusInputMap");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
-        UIManager.put("TextPane.focusInputMap", im);
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+            UIManager.put("TextField.focusInputMap", im);
+            im = (InputMap) UIManager.get("TextArea.focusInputMap");
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+            UIManager.put("TextArea.focusInputMap", im);
+            im = (InputMap) UIManager.get("TextPane.focusInputMap");
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+            UIManager.put("TextPane.focusInputMap", im);
+        }
     }
+    
+    // positions on screen once form has already been build/sized
+    @Override
+    public void pack() {
+        super.pack();
+        this.setLocationRelativeTo(null);
     }
+    //TODO: remove setLocationRelativeTo from all other scr classes
 }

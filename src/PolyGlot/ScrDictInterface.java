@@ -403,8 +403,11 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuExit = new javax.swing.JMenuItem();
         mnuTools = new javax.swing.JMenu();
+        mnuQuickEntry = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuImportExcel = new javax.swing.JMenuItem();
         mnuExcelExport = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
         mnuThesaurus = new javax.swing.JMenuItem();
         mnuTranslation = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
@@ -1422,6 +1425,16 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         mnuTools.setText("Tools");
 
+        mnuQuickEntry.setText("Word Quickentry");
+        mnuQuickEntry.setToolTipText("A tool for quickly entering many words, one after another");
+        mnuQuickEntry.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuQuickEntryActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuQuickEntry);
+        mnuTools.add(jSeparator1);
+
         mnuImportExcel.setText("Import from Excel");
         mnuImportExcel.setToolTipText("Import words from Excel file");
         mnuImportExcel.addActionListener(new java.awt.event.ActionListener() {
@@ -1439,6 +1452,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             }
         });
         mnuTools.add(mnuExcelExport);
+        mnuTools.add(jSeparator4);
 
         mnuThesaurus.setText("Thesaurus");
         mnuThesaurus.setToolTipText("A thesaurus to help you organize your words.");
@@ -1730,6 +1744,10 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private void btnAutoConjDecSetupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAutoConjDecSetupActionPerformed
         viewConjAutoGen((Integer) scrToCoreTypes.get(lstTypesList.getSelectedIndex()));
     }//GEN-LAST:event_btnAutoConjDecSetupActionPerformed
+
+    private void mnuQuickEntryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuQuickEntryActionPerformed
+        viewQuickEntry();
+    }//GEN-LAST:event_mnuQuickEntryActionPerformed
 
     @Override
     public void dispose() {
@@ -2064,6 +2082,11 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
      */
     private void viewThesaurus() {
         Window window = ScrThesaurus.run(core, this);
+        childFrames.add(window);
+    }
+    
+    private void viewQuickEntry() {
+        Window window = ScrQuickWordEntry.run(core);
         childFrames.add(window);
     }
 
@@ -3642,8 +3665,10 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblConWordFilter;
     private javax.swing.JLabel lblConWordProp;
@@ -3671,6 +3696,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JMenuItem mnuNew;
     private javax.swing.JMenuItem mnuOpen;
     private javax.swing.JMenuItem mnuPloyHelp;
+    private javax.swing.JMenuItem mnuQuickEntry;
     private javax.swing.JMenuItem mnuSave;
     private javax.swing.JMenuItem mnuSaveAs;
     private javax.swing.JMenuItem mnuThesaurus;

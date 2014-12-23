@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.FileNotFoundException;
@@ -48,6 +49,14 @@ public class DictCore {
     private final PronunciationMgr pronuncMgr = new PronunciationMgr(this);
     private final ThesaurusManager thesManager = new ThesaurusManager(this);
 
+    /**
+     * Gets proper color for fields marked as required
+     * @return 
+     */
+    public Color getRequiredColor() {
+        return new Color(255,204,204);
+    }
+    
     /**
      * gets thesaurus manager
      *
@@ -415,10 +424,10 @@ public class DictCore {
     }
 
     /**
-     * Inserts new type into dictionary
+     * Returns iterator of words in dictionary matching filter word
      *
-     * @param _filter word to be inserted
-     * @return ID of newly inserted word
+     * @param _filter word to be matched against
+     * @return Iterator filled with matching words
      * @throws Exception
      */
     public Iterator<ConWord> filteredWordList(ConWord _filter) throws Exception {
