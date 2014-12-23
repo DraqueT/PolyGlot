@@ -640,9 +640,6 @@ public final class ScrDeclensionSetup extends PDialog {
 
         ScrDeclensionSetup s = new ScrDeclensionSetup(_core, _typeId);
         
-        // center window
-        s.setLocationRelativeTo(null);
-        
         s.setModal(true);
         s.setVisible(true);
         

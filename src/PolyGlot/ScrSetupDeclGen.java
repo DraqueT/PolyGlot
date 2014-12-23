@@ -135,10 +135,6 @@ public class ScrSetupDeclGen extends PDialog {
         ScrSetupDeclGen s = new ScrSetupDeclGen(_core, _typeId);
         s.setModal(true);
 
-        // TODO: Delete all of these setlocations now that it's in parent classes
-        // center window in screen
-        s.setLocationRelativeTo(null);
-
         s.setVisible(true);
         return s;
     }

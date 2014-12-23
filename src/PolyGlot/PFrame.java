@@ -62,5 +62,4 @@ public class PFrame extends JFrame {
         super.pack();
         this.setLocationRelativeTo(null);
     }
-    //TODO: remove setLocationRelativeTo from all other scr classes
 }

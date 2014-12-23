@@ -132,9 +132,6 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         if (System.getProperty("os.name").startsWith("Mac")) {
             activateMacify();
         }
-
-        // center window in screen
-        setLocationRelativeTo(null);
     }
 
     // MACIFY RELATED CODE ->    

@@ -80,9 +80,6 @@ public class ScrTranslationFreewrite extends PFrame {
         ScrTranslationFreewrite s = new ScrTranslationFreewrite(_core, initialText);
         s.setVisible(true);
         
-        // center window in screen
-        s.setLocationRelativeTo(null);
-        
         return s;
     }
 

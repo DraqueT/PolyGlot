@@ -23,7 +23,7 @@ package PolyGlot;
  *
  * @author draque
  */
-public class ScrAbout extends PFrame {
+public class ScrAbout extends PDialog {
 
     private final DictCore core;
     
@@ -169,9 +169,8 @@ public class ScrAbout extends PFrame {
         //</editor-fold>
 
             ScrAbout s = new ScrAbout(_core);
-            
+           
             s.setVisible(true);
-            s.setLocationRelativeTo(null);
             
             return s;
     }
