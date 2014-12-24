@@ -2051,12 +2051,12 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     }
 
     private void viewAbout() {
-        PFrame window = ScrAbout.run(core);
+        Window window = ScrAbout.run(core);
         childFrames.add(window);
     }
 
     private void viewTranslationWindow() {
-        PFrame window = ScrTranslationWindow.run(core, this);
+        Window window = ScrTranslationWindow.run(core, this);
         childFrames.add(window);
     }
 
