@@ -151,7 +151,7 @@ public class ScrQuickWordEntry extends PDialog {
             word.setLocalWord(txtLocalWord.getText());
             try {
                 if (core.filteredWordList(word).hasNext()) {
-                    throw new Exception("Conword \"" + word.getValue() + "\" already exists.");
+                    throw new Exception("Local word \"" + word.getValue() + "\" already exists.");
                 }
             } catch (Exception e) {
                 InfoBox.error("Quickinsert Error", "Unable to quickinsert: "+ e.getMessage(), this);
