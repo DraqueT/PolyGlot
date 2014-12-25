@@ -40,7 +40,7 @@ public class WebInterface {
     /**
      * Checks for updates to PolyGlot     *
      * @param curVersion current version from core
-     * @return Entry containing the new version number and the associated message in String[2] array
+     * @return The XML document retrieved from the web
      * @throws java.lang.Exception if something goes wrong along the way.
      */
     public static Document checkForUpdates(String curVersion) throws Exception {
@@ -67,12 +67,7 @@ public class WebInterface {
             InputSource is = new InputSource(new StringReader(xmlText));
             Document doc = builder.parse(is);
             
-            Node ver = doc.getElementsByTagName("Version").item(0);
-            
-            // only show message if it's not this versino or an earlier version
-            if (!ver.getTextContent().equals(curVersion)) {
-                ret = doc;
-            }
+            ret = doc;
         }
 
         return ret;
