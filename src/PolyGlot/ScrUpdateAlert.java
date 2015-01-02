@@ -78,7 +78,9 @@ public class ScrUpdateAlert extends PFrame {
                         uri = new URI(link);
                         uri.normalize();
                         java.awt.Desktop.getDesktop().browse(uri);
-                    } catch (IOException | URISyntaxException ex) {
+                    } catch (IOException ex) {
+                        InfoBox.error("Browser Error", "Unable to open page: " + link, parent);
+                    } catch (URISyntaxException ex) {
                         InfoBox.error("Browser Error", "Unable to open page: " + link, parent);
                     }
                 }
@@ -183,7 +185,13 @@ public class ScrUpdateAlert extends PFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ScrUpdateAlert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ScrUpdateAlert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ScrUpdateAlert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(ScrUpdateAlert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 

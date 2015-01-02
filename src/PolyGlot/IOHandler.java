@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
-import java.nio.file.StandardCopyOption;
+import org.apache.commons.io.FileUtils;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -145,7 +145,14 @@ public class IOHandler {
 
         // save file to temp location initially.
         final File f = new File(directoryPath, tempFileName);
-        final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f), Charset.forName("ISO-8859-1"));
+        final ZipOutputStream out;
+        
+        if (System.getProperty("java.version").startsWith("1.6")) {
+            out = new ZipOutputStream(new FileOutputStream(f));
+        } else {
+            out = new ZipOutputStream(new FileOutputStream(f), Charset.forName("ISO-8859-1"));
+        }
+        
         ZipEntry e = new ZipEntry(XMLIDs.dictFileName);
         out.putNextEntry(e);
 
@@ -187,7 +194,14 @@ public class IOHandler {
         }
 
         try {
-            java.nio.file.Files.copy(f.toPath(), finalFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            if (System.getProperty("java.version").startsWith("1.6")) {
+                if (finalFile.exists()) {
+                    finalFile.delete();
+                }
+                FileUtils.copyFile(f, finalFile);
+            } else {
+                java.nio.file.Files.copy(f.toPath(), finalFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
             f.delete();
         } catch (IOException ex) {
             f.delete();

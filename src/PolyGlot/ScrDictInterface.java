@@ -1803,7 +1803,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             @Override
             public void run() {
                 try {
-                    ScrUpdateAlert.run(verbose, core.getVersion());
+                     ScrUpdateAlert.run(verbose, core.getVersion());
                 } catch (Exception e) {
                     if (verbose) {
                         InfoBox.error("Update Problem", "Unable to check for update for reason:" 

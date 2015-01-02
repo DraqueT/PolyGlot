@@ -64,30 +64,27 @@ public class CustHandlerFactory {
         versionNumber = versionNode == null ? "0" : versionNode.getTextContent();
 
         // switch not used to maintain Java 6 compatibility... fucking 6. X(
-        switch (versionNumber) {
-            case "0":
-            case "0.5":
-            case "0.5.1":
-            case "0.6":
-            case "0.6.1":
-            case "0.6.5":
-            case "0.7":
-                ret = CustHandlerFactory.get7orLowerHandler(core);
-                break;
-            case "0.7.5":
-            case "0.7.6":
-            case "0.7.6.1":
-            case "0.8":
-            case "0.8.1":
-            case "0.8.1.1":
-            case "0.8.1.2":
-            case "0.8.5":
-            case "0.9":
-                ret = CustHandlerFactory.get075Handler(core);
-                break;
-            default:
-                throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
-                        + "written with an unsupported version: Ver " + versionNumber + ".");
+        if (versionNumber.equals("0")
+                || versionNumber.equals("0.5")
+                || versionNumber.equals("0.5.1")
+                || versionNumber.equals("0.6")
+                || versionNumber.equals("0.6.1")
+                || versionNumber.equals("0.6.5")
+                || versionNumber.equals("0.7")) {
+            ret = CustHandlerFactory.get7orLowerHandler(core);
+        } else if (versionNumber.equals("0.7.5")
+                || versionNumber.equals("0.7.6")
+                || versionNumber.equals("0.7.6.1")
+                || versionNumber.equals("0.8")
+                || versionNumber.equals("0.8.1")
+                || versionNumber.equals("0.8.1.1")
+                || versionNumber.equals("0.8.1.2")
+                || versionNumber.equals("0.8.5")
+                || versionNumber.equals("0.9")) {
+            ret = CustHandlerFactory.get075Handler(core);
+        } else {
+            throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
+                    + "written with an unsupported version: Ver " + versionNumber + ".");
         }
 
         return ret;
