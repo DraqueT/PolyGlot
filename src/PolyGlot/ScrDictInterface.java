@@ -120,7 +120,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         gListModel = new DefaultListModel();
         lstGenderList.setModel(gListModel);
 
-        newFile();
+        newFile(true);
 
         setTitle(screenTitle + " " + core.getVersion());
 
@@ -1547,7 +1547,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     }//GEN-LAST:event_mnuSaveAsActionPerformed
 
     private void mnuNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewActionPerformed
-        newFile();
+        newFile(true);
     }//GEN-LAST:event_mnuNewActionPerformed
 
     private void mnuImportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportExcelActionPerformed
@@ -2515,15 +2515,20 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         return true;
     }
-
-    private void newFile() {
-        if (!saveOrCancelTest()) {
+    
+    /**
+     * Creates totally new file
+     * @param performTest whether the UI ask for confirmation
+     */
+    private void newFile(boolean performTest) {
+        if (performTest && !saveOrCancelTest()) {
             return;
         }
 
         core = new DictCore();
         curFileName = "";
 
+        setLexiconEnabled(true);        
         killAllChildren();
         populateDict();
         popWordProps();
@@ -2532,7 +2537,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         populateGenders();
         populateGenderProps();
         populateProcGuide();
-        popLangProps();
+        popLangProps();        
         setConFont(new JTextField().getFont());
     }
 
@@ -2637,9 +2642,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         // might want to clean up where this is enabled/disabled later...
         btnConwordDeclensions.setEnabled(true);
 
+        newFile(false); // wipe out all current settings before loading
         setFile(fileName);
-        setLexiconEnabled(true);
-        killAllChildren();
     }
 
     private void setFile(String fileName) {
