@@ -900,24 +900,23 @@ public class CustHandlerFactory {
                     throws SAXException {
 
                 if (blocalWord) {
-                    this.getWordCollection().getBufferWord()
-                            .setLocalWord(new String(ch, start, length));
-                    blocalWord = false;
+                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    bufferWord.setLocalWord(bufferWord.getLocalWord() 
+                            + new String(ch, start, length));
                 } else if (bconWord) {
-                    this.getWordCollection().getBufferWord()
-                            .setValue(new String(ch, start, length));
-                    bconWord = false;
+                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    bufferWord.setValue(bufferWord.getValue()
+                            + new String(ch, start, length));
                 } else if (btype) {
-                    this.getWordCollection().getBufferWord()
-                            .setWordType(new String(ch, start, length));
-                    btype = false;
+                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    bufferWord.setWordType(bufferWord.getWordType()
+                            + new String(ch, start, length));
                 } else if (bId) {
                     wId = Integer.parseInt(new String(ch, start, length));
-                    bId = false;
                 } else if (bdef) {
-                    this.getWordCollection().getBufferWord()
-                            .setDefinition(new String(ch, start, length));
-                    bdef = false;
+                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    bufferWord.setDefinition(bufferWord.getDefinition()
+                            + new String(ch, start, length));
                 } else if (bwordPlur) {
                     // plurality now handled as declension
                     declensionMgr.setBufferDecTemp(false);
@@ -936,38 +935,38 @@ public class CustHandlerFactory {
                     propertiesManager.setFontCon(new Font(new String(ch, start, length), 0, 0));
                     bfontcon = false;
                 } else if (bwordClassNotes) {
-                    this.getTypeCollection().getBufferType()
-                            .setNotes(new String(ch, start, length));
-                    bwordClassNotes = false;
+                    TypeNode bufferType = this.getTypeCollection().getBufferType();
+                    bufferType.setNotes(bufferType.getNotes()
+                            + new String(ch, start, length));
                 } else if (bwordClassName) {
-                    this.getTypeCollection().getBufferType()
-                            .setValue(new String(ch, start, length));
-                    bwordClassName = false;
+                    TypeNode bufferType = this.getTypeCollection().getBufferType();
+                    bufferType.setValue(bufferType.getValue()
+                            + new String(ch, start, length));
                 } else if (bwordClassId) {
                     wCId = Integer.parseInt(new String(ch, start, length));
                     bwordClassId = false;
                 } else if (bpronuncation) {
-                    wordCollection.getBufferWord().setPronunciation(
-                            new String(ch, start, length));
-                    bpronuncation = false;
+                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    bufferWord.setPronunciation(bufferWord.getPronunciation()
+                            + new String(ch, start, length));
                 } else if (bgender) {
-                    wordCollection.getBufferWord().setGender(
-                            new String(ch, start, length));
-                    bgender = false;
+                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    bufferWord.setGender(bufferWord.getGender()
+                            + new String(ch, start, length));
                 } else if (bgenderId) {
                     wGId = Integer.parseInt(new String(ch, start, length));
                     bgenderId = false;
                 } else if (bgenderName) {
-                    genderCollection.getGenderBuffer().setValue(
-                            new String(ch, start, length));
-                    bgenderName = false;
+                    GenderNode genderBuffer = genderCollection.getGenderBuffer();
+                    genderBuffer.setValue(genderBuffer.getValue()
+                            + new String(ch, start, length));
                 } else if (bgenderNotes) {
-                    genderCollection.getGenderBuffer().setNotes(
-                            new String(ch, start, length));
-                    bgenderNotes = false;
+                    GenderNode genderBuffer = genderCollection.getGenderBuffer();
+                    genderBuffer.setNotes(genderBuffer.getNotes()
+                            + new String(ch, start, length));
                 } else if (blangName) {
-                    propertiesManager.setLangName(new String(ch, start, length));
-                    blangName = false;
+                    propertiesManager.setLangName(propertiesManager.getLangName()
+                            +new String(ch, start, length));
                 } else if (bfontSize) {
                     propertiesManager.setFontSize(Integer.parseInt(new String(ch, start, length)));
                     bfontSize = false;
@@ -975,17 +974,17 @@ public class CustHandlerFactory {
                     propertiesManager.setFontStyle(Integer.parseInt(new String(ch, start, length)));
                     bfontStyle = false;
                 } else if (balphaOrder) {
-                    propertiesManager.setAlphaOrder(new String(ch, start, length));
-                    balphaOrder = false;
+                    propertiesManager.setAlphaOrder(propertiesManager.getAlphaPlainText()
+                            + new String(ch, start, length));
                 } else if (bDecId) {
                     declensionMgr.setBufferId(Integer.parseInt(new String(ch, start, length)));
                     bDecId = false;
                 } else if (bDecText) {
-                    declensionMgr.setBufferDecText(new String(ch, start, length));
-                    bDecText = false;
+                    declensionMgr.setBufferDecText(declensionMgr.getBufferDecText()
+                            + new String(ch, start, length));
                 } else if (bDecNotes) {
-                    declensionMgr.setBufferDecNotes(new String(ch, start, length));
-                    bDecNotes = false;
+                    declensionMgr.setBufferDecNotes(declensionMgr.getBufferDecNotes()
+                            + new String(ch, start, length));
                 } else if (bDecIsTemp) {
                     declensionMgr.setBufferDecTemp(new String(ch, start, length).equals("1"));
                     bDecIsTemp = false;
@@ -996,11 +995,11 @@ public class CustHandlerFactory {
                     declensionMgr.setBufferRelId(Integer.parseInt(new String(ch, start, length)));
                     bDecRelId = false;
                 } else if (bpronBase) {
-                    proBuffer.setValue(new String(ch, start, length));
-                    bpronBase = false;
+                    proBuffer.setValue(proBuffer.getValue()
+                            +new String(ch, start, length));
                 } else if (bpronPhon) {
-                    proBuffer.setPronunciation(new String(ch, start, length));
-                    bpronPhon = false;
+                    proBuffer.setPronunciation(proBuffer.getPronunciation()
+                            + new String(ch, start, length));
                 } else if (bproAutoPop) {
                     propertiesManager.setProAutoPop((new String(ch, start, length).equalsIgnoreCase("T")));
                     bproAutoPop = false;
@@ -1038,11 +1037,13 @@ public class CustHandlerFactory {
                     declensionMgr.getBuffer().getBuffer().setId(Integer.parseInt(new String(ch, start, length)));
                     bdimId = false;
                 } else if (bdimName) {
-                    declensionMgr.getBuffer().getBuffer().setValue(new String(ch, start, length));
-                    bdimName = false;
+                    DeclensionDimension dimBuffer = declensionMgr.getBuffer().getBuffer();
+                    dimBuffer.setValue(dimBuffer.getValue()
+                            +new String(ch, start, length));
                 } else if (bthesName) {
-                    thesMgr.getBuffer().setValue(new String(ch, start, length));
-                    bthesName = false;
+                    ThesNode thesBuffer = thesMgr.getBuffer();
+                    thesBuffer.setValue(thesBuffer.getValue()
+                            + new String(ch, start, length));
                 } else if (bthesNotes) {
                     thesMgr.getBuffer().setNotes(new String(ch, start, length));
                     bthesNotes = false;
@@ -1051,7 +1052,7 @@ public class CustHandlerFactory {
                         thesMgr.getBuffer().addWord(core.getWordById(
                                 Integer.parseInt(new String(ch, start, length))));
                     } catch (Exception e) {
-                        // I really shouldn't have made the word search return error on not found...
+                        // TODO: Should this case be handled somehow? Maybe build a load log to display all loading errors?
                     }
                     bthesWord = false;
                 } else if (bignoreCase) {
@@ -1064,20 +1065,22 @@ public class CustHandlerFactory {
                     core.getDeclensionManager().getRuleBuffer().setCombinationId(new String(ch, start, length));
                     bdecGenRuleComb = false;
                 } else if (bdecGenRuleName) {
-                    core.getDeclensionManager().getRuleBuffer().setName(new String(ch, start, length));
-                    bdecGenRuleName = false;
+                    DeclensionGenRule ruleBuffer = core.getDeclensionManager().getRuleBuffer();
+                    ruleBuffer.setName(ruleBuffer.getName()
+                            + new String(ch, start, length));
                 } else if (bdecGenRuleRegex) {
-                    core.getDeclensionManager().getRuleBuffer().setRegex(new String(ch, start, length));
-                    bdecGenRuleRegex = false;
+                    DeclensionGenRule ruleBuffer = core.getDeclensionManager().getRuleBuffer();
+                    ruleBuffer.setRegex(ruleBuffer.getRegex()
+                            + new String(ch, start, length));
                 } else if (bdecGenRuleType) {
                     core.getDeclensionManager().getRuleBuffer().setTypeId(Integer.parseInt(new String(ch, start, length)));
                     bdecGenRuleType = false;
                 } else if (bdecGenTransRegex) {
-                    core.getDeclensionManager().getRuleBuffer().getTransBuffer().regex = new String(ch, start, length);
-                    bdecGenTransRegex = false;
+                    DeclensionGenTransform transBuffer = core.getDeclensionManager().getRuleBuffer().getTransBuffer();
+                    transBuffer.regex += new String(ch, start, length);
                 } else if (bdecGenTransRep) {
-                    core.getDeclensionManager().getRuleBuffer().getTransBuffer().replaceText = new String(ch, start, length);
-                    bdecGenTransRep = false;
+                    DeclensionGenTransform transBuffer = core.getDeclensionManager().getRuleBuffer().getTransBuffer();
+                    transBuffer.replaceText += new String(ch, start, length);
                 }
             }
         };

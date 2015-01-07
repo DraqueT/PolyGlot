@@ -442,9 +442,17 @@ public class DeclensionManager {
     public void setBufferDecText(String _bufferDecText) {
         buffer.setValue(_bufferDecText);
     }
+    
+    public String getBufferDecText() {
+        return buffer.getValue();
+    }
 
     public void setBufferDecNotes(String _bufferDecNotes) {
         buffer.setNotes(_bufferDecNotes);
+    }
+    
+    public String getBufferDecNotes() {
+        return buffer.getNotes();
     }
 
     public void setBufferDecTemp(boolean _bufferDecTemp) {
