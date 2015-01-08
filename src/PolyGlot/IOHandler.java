@@ -96,7 +96,13 @@ public class IOHandler {
                 FileOutputStream out = new FileOutputStream(tempFile);
                 IOUtils.copy(zipFile.getInputStream(fontEntry), out);
 
-                ret = Font.createFont(Font.TRUETYPE_FONT, tempFile);
+                try {
+                    ret = Font.createFont(Font.TRUETYPE_FONT, tempFile);
+                } catch (FontFormatException e) {
+                    throw new FontFormatException("Could not load language font. Possible incompatible font: " + e.getMessage());
+                } catch (IOException e) {
+                    throw new FontFormatException("Could not load language font. I/O exception: " + e.getMessage());
+                }
             }
         }
 
@@ -162,7 +168,7 @@ public class IOHandler {
         out.closeEntry();
 
         // embed font in PGD archive if applicable
-        File fontFile = IOHandler.getFontFile(core.getLangFont());
+        File fontFile = IOHandler.getFontFile(core.getPropertiesManager().getFontCon());
 
         if (fontFile != null) {
             byte[] buffer = new byte[1024];

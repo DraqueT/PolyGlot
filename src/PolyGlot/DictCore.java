@@ -21,13 +21,10 @@ package PolyGlot;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import javax.swing.JTextField;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -93,40 +90,6 @@ public class DictCore {
         return wordCollection;
     }
 
-    public void setPronunciations(List<PronunciationNode> _pronunciations) {
-        pronuncMgr.setPronunciations(_pronunciations);
-    }
-
-    public Iterator<PronunciationNode> getPronunciations() {
-        return pronuncMgr.getPronunciations();
-    }
-
-    public void deletePronunciation(PronunciationNode remove) {
-        pronuncMgr.deletePronunciation(remove);
-    }
-
-    /**
-     * Returns pronunciation of a given word
-     *
-     * @param base word to find pronunciation of
-     * @return pronunciation string. If no perfect match found, empty string
-     * returned
-     */
-    public String getPronunciation(String base) {
-        return pronuncMgr.getPronunciation(base);
-    }
-
-    /**
-     * Returns pronunciation elements of word
-     *
-     * @param base word to find pronunciation elements of
-     * @return elements of pronunciation for word. Empty if no perfect match
-     * found
-     */
-    public List<PronunciationNode> getPronunciationElements(String base) {
-        return pronuncMgr.getPronunciationElements(base, true);
-    }
-
     /**
      * Builds a report on the conlang. Potentially very computationally
      * expensive.
@@ -139,31 +102,6 @@ public class DictCore {
         ret += propertiesManager.buildPropertiesReport();
 
         ret += wordCollection.buildWordReport();
-
-        return ret;
-    }
-
-    /**
-     * recalculates all non-overridden pronunciations
-     *
-     * @throws java.lang.Exception
-     */
-    public void recalcAllProcs() throws Exception {
-        wordCollection.recalcAllProcs();
-    }
-
-    /**
-     * Gets conlang's Font (minimizing display class use in core, but this is
-     * just too common of a function to handle case by case
-     *
-     * @return
-     */
-    public Font getLangFont() {
-        Font ret = getFontCon();
-        
-        if (ret == null) {
-            ret = new JTextField().getFont();
-        }
 
         return ret;
     }
@@ -197,11 +135,6 @@ public class DictCore {
             Font conFont = IOHandler.getFontFrom(_fileName);
             if (conFont != null) {
                 propertiesManager.setFontCon(conFont);
-            }
-            
-            if (propertiesManager.getFontCon() == null
-                    && !propertiesManager.getFontName().equals("")) {
-                throw new FontFormatException("Could not load font: " + propertiesManager.getFontName());
             }
         } catch (ParserConfigurationException e) {
             throw new Exception(e.getMessage());
@@ -253,25 +186,13 @@ public class DictCore {
 
     /**
      * deletes word based on word ID
-     *
+     * Makes sure to clear all records of word declension
      * @param _id
      * @throws java.lang.Exception
      */
     public void deleteWordById(Integer _id) throws Exception {
         wordCollection.deleteNodeById(_id);
         clearAllDeclensionsWord(_id);
-    }
-
-    public void addDeclensionToWord(Integer wordId, Integer declensionId, DeclensionNode declension) {
-        declensionMgr.addDeclensionToWord(wordId, declensionId, declension);
-    }
-
-    public void deleteDeclensionFromWord(Integer wordId, Integer declensionId) {
-        declensionMgr.deleteDeclensionFromWord(wordId, declensionId);
-    }
-
-    public void updateDeclensionWord(Integer wordId, Integer declensionId, DeclensionNode declension) {
-        declensionMgr.updateDeclensionWord(wordId, declensionId, declension);
     }
 
     /**
@@ -289,32 +210,6 @@ public class DictCore {
 
     public DeclensionManager getDeclensionManager() {
         return declensionMgr;
-    }
-
-    /**
-     * Returns list of words in descending list of synonym match
-     *
-     * @param _match The string value to match for
-     * @return List of matching words
-     */
-    public List<ConWord> getSuggestedTransWords(String _match) {
-        return wordCollection.getSuggestedTransWords(_match);
-    }
-
-    public List<DeclensionNode> getDeclensionListWord(Integer typeId) {
-        return declensionMgr.getDeclensionListWord(typeId);
-    }
-
-    public DeclensionNode addDeclensionToTemplate(Integer typeId, String declension) {
-        return declensionMgr.addDeclensionToTemplate(typeId, declension);
-    }
-
-    public void deleteDeclensionFromTemplate(Integer typeId, Integer declensionId) {
-        declensionMgr.deleteDeclensionFromTemplate(typeId, declensionId);
-    }
-
-    public void modifyDeclensionTemplate(Integer typeId, Integer declensionId, DeclensionNode declension) {
-        declensionMgr.updateDeclensionTemplate(typeId, declensionId, declension);
     }
 
     /**
@@ -353,35 +248,6 @@ public class DictCore {
     }
 
     /**
-     * Clears all declensions from word
-     *
-     * @param typeId ID of word to clear of all declensions
-     */
-    public void clearAllDeclensionsTemplate(Integer typeId) {
-        declensionMgr.clearAllDeclensionsTemplate(typeId);
-    }
-
-    public List<DeclensionNode> getDeclensionListTemplate(Integer typeId) {
-        return declensionMgr.getDeclensionListTemplate(typeId);
-    }
-
-    /**
-     * Inserts new word into dictionary
-     *
-     * @param _addWord word to be inserted
-     * @return ID of newly inserted word
-     * @throws Exception
-     */
-    public int addWord(ConWord _addWord) throws Exception {
-        int ret;
-        wordCollection.getBufferWord().setEqual(_addWord);
-
-        ret = wordCollection.insert();
-
-        return ret;
-    }
-
-    /**
      * Safely modify a type (updates words of this type automatically)
      *
      * @param id type id
@@ -410,63 +276,6 @@ public class DictCore {
         }
 
         typeCollection.modifyNode(id, modType);
-    }
-
-    /**
-     * Safely modify a gender (updates words of this gender automatically
-     *
-     * @param id gender id
-     * @param modGender new gender
-     * @throws Exception
-     */
-    public void modifyGender(Integer id, GenderNode modGender) throws Exception {
-        genderCollection.modifyNode(id, modGender);
-    }
-
-    /**
-     * Returns iterator of words in dictionary matching filter word
-     *
-     * @param _filter word to be matched against
-     * @return Iterator filled with matching words
-     * @throws Exception
-     */
-    public Iterator<ConWord> filteredWordList(ConWord _filter) throws Exception {
-        return wordCollection.filteredList(_filter);
-    }
-
-    /**
-     * @param id ID of type to modify
-     * @param _modWord Updated word
-     * @throws Exception If word DNE
-     */
-    public void modifyWord(Integer id, ConWord _modWord) throws Exception {
-        wordCollection.modifyNode(id, _modWord);
-    }
-
-    public ConWord getWordById(Integer _id) throws Exception {
-        return wordCollection.getNodeById(_id);
-    }
-
-    public Iterator<ConWord> getWordIterator() {
-        return wordCollection.getNodeIterator();
-    }
-
-    public Font getFontCon() {
-        return propertiesManager.getFontCon();
-    }
-
-    public Integer getFontSize() {
-        return propertiesManager.getFontSize();
-    }
-
-    public Integer getFontStyle() {
-        return propertiesManager.getFontStyle();
-    }
-
-    public void setFontCon(Font _fontCon, Integer _fontStyle, Integer _fontSize) {
-        propertiesManager.setFontCon(_fontCon);
-        propertiesManager.setFontSize(_fontSize);
-        propertiesManager.setFontStyle(_fontStyle);
     }
 
     public TypeCollection getTypes() {

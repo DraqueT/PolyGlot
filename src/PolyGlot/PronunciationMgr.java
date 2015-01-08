@@ -171,6 +171,17 @@ public class PronunciationMgr {
     }
 
     /**
+     * Returns pronunciation elements of word
+     *
+     * @param base word to find pronunciation elements of
+     * @return elements of pronunciation for word. Empty if no perfect match
+     * found
+     */
+    public List<PronunciationNode> getPronunciationElements(String base) {
+        return getPronunciationElements(base, true);
+    }
+    
+    /**
      * returns pronunciation objects of a given word
      *
      * @param base word to find pronunciation objects of
@@ -178,7 +189,7 @@ public class PronunciationMgr {
      * @return pronunciation object list. If no perfect match found, empty
      * string returned
      */
-    public List<PronunciationNode> getPronunciationElements(String base, boolean isFirst) {
+    private List<PronunciationNode> getPronunciationElements(String base, boolean isFirst) {
         List<PronunciationNode> ret = new ArrayList<PronunciationNode>();
         Iterator<PronunciationNode> finder = getPronunciations();
 

@@ -58,7 +58,7 @@ public class ScrQuickWordEntry extends PDialog {
             @Override public void keyTyped(KeyEvent e) { /*DO NOTHING*/}
         };
 
-        txtConWord.setFont(core.getFontCon());
+        txtConWord.setFont(core.getPropertiesManager().getFontCon());
         txtConWord.addKeyListener(enterListener);
         txtDefinition.addKeyListener(enterListener);
         txtLocalWord.addKeyListener(enterListener);
@@ -135,7 +135,7 @@ public class ScrQuickWordEntry extends PDialog {
                 &&core.getPropertiesManager().isWordUniqueness()) {
             word.setValue(txtConWord.getText());
             try {
-                if (core.filteredWordList(word).hasNext()) {
+                if (core.getWordCollection().filteredList(word).hasNext()) {
                     throw new Exception("Conword \"" + word.getValue() + "\" already exists.");
                 }
             } catch (Exception e) {
@@ -150,7 +150,7 @@ public class ScrQuickWordEntry extends PDialog {
                 && core.getPropertiesManager().isLocalUniqueness()) {
             word.setLocalWord(txtLocalWord.getText());
             try {
-                if (core.filteredWordList(word).hasNext()) {
+                if (core.getWordCollection().filteredList(word).hasNext()) {
                     throw new Exception("Local word \"" + word.getValue() + "\" already exists.");
                 }
             } catch (Exception e) {
@@ -172,7 +172,7 @@ public class ScrQuickWordEntry extends PDialog {
             word.setGender(cmbGender.getSelectedItem().toString());
             word.setWordType(cmbType.getSelectedItem().toString());
             
-            core.addWord(word);
+            core.getWordCollection().addWord(word);
             blankWord();
             txtConWord.requestFocus();
         } catch (Exception e) {

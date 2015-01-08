@@ -58,7 +58,7 @@ public class ScrThesaurus extends PFrame {
 
         setupListeners();
         
-        lstWords.setFont(core.getLangFont());
+        lstWords.setFont(core.getPropertiesManager().getFontCon());
     }
 
     /**

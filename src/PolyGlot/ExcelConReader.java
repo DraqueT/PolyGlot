@@ -243,7 +243,7 @@ public class ExcelConReader {
             core.getTypes().insert();
         }
 
-        core.addWord(newWord);
+        core.getWordCollection().addWord(newWord);
     }
     
     /**

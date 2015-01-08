@@ -170,7 +170,8 @@ public class ScrTranslationWindow extends PFrame {
     }
         
     private void populateMatchList() {
-        List<ConWord> printMe = core.getSuggestedTransWords(txtSearchText.getText());
+        List<ConWord> printMe = core.getWordCollection()
+                .getSuggestedTransWords(txtSearchText.getText());
                 
         matchListModel.clear();
         
@@ -191,10 +192,10 @@ public class ScrTranslationWindow extends PFrame {
     private Font getLangFont() {
         Font ret;
 
-        Font fontCon = core.getFontCon();
+        Font fontCon = core.getPropertiesManager().getFontCon();
 
         if (fontCon != null) {
-            int size = core.getFontSize();
+            int size = core.getPropertiesManager().getFontSize();
 
             // if size = 0 default to 12
             if (size == 0) {
@@ -202,7 +203,8 @@ public class ScrTranslationWindow extends PFrame {
             }
 
             // Unrecognized fonts return as OS default font, warning error thrown at time of file load
-            ret = new Font(fontCon.getName(), core.getFontStyle(), size);
+            ret = new Font(fontCon.getName(), 
+                    core.getPropertiesManager().getFontStyle(), size);
         } else {
             // set font to standard if no font found
             ret = new JTextField().getFont();

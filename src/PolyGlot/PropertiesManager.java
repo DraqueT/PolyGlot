@@ -23,6 +23,7 @@ package PolyGlot;
 import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JTextField;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -83,18 +84,31 @@ public class PropertiesManager {
     }
     
     /**
+     * Sets font.
+     * @param _fontCon The font being set
+     * @param _fontStyle The style of the font (bold, underlined, etc.)
+     * @param _fontSize Size of font
+     */
+    public void setFontCon(Font _fontCon, Integer _fontStyle, Integer _fontSize) {
+        setFontCon(_fontCon);
+        setFontSize(_fontSize);
+        setFontStyle(_fontStyle);
+    }
+    
+    /**
      * Sets font name for table keeping loading purposes. Does NOT populate from actual font
      * @param _fontName name to set
      */
-    public void setFontName(String _fontName) {
+    void setFontName(String _fontName) {
         fontName = _fontName;
     }
     
     /**
+     * Gets language's font
      * @return the fontCon
      */
     public Font getFontCon() {
-        return font == null? null : font.deriveFont(fontStyle, fontSize);
+        return font == null? new JTextField().getFont() : font.deriveFont(fontStyle, fontSize);
     }
 
     /**

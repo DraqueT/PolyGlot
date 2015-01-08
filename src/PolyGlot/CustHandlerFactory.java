@@ -1050,7 +1050,7 @@ public class CustHandlerFactory {
                     bthesNotes = false;
                 } else if (bthesWord) {
                     try {
-                        thesMgr.getBuffer().addWord(core.getWordById(
+                        thesMgr.getBuffer().addWord(core.getWordCollection().getNodeById(
                                 Integer.parseInt(new String(ch, start, length))));
                     } catch (Exception e) {
                         // TODO: Should this case be handled somehow? Maybe build a load log to display all loading errors?

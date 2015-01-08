@@ -34,6 +34,7 @@ public class PGTools {
      *
      * @param flashMe component to make flash
      * @param flashColor color to use for flashing
+     * @param isBack whether display color is background (rather than foreground)
      */
     public static void flashComponent(final JComponent flashMe, final Color flashColor, final boolean isBack) {
         // this will pop out in its own little thread...

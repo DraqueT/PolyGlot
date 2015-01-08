@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -88,7 +87,7 @@ public class ExcelExport {
         CellStyle localStyle = workbook.createCellStyle();
         CellStyle conStyle = workbook.createCellStyle();
         Font conFont = workbook.createFont();
-        conFont.setFontName(core.getLangFont().getFontName());
+        conFont.setFontName(core.getPropertiesManager().getFontCon().getFontName());
         
         localStyle.setWrapText(true);
         
@@ -97,7 +96,7 @@ public class ExcelExport {
         
         // record words on sheet 1        
         sheet = workbook.createSheet("Lexicon");
-        Iterator<ConWord> wordIt = core.getWordIterator();
+        Iterator<ConWord> wordIt = core.getWordCollection().getNodeIterator();
         
         Row row  = sheet.createRow(0);
         row.createCell(0).setCellValue("CON WORD");
@@ -163,7 +162,7 @@ public class ExcelExport {
         
         // record pronunciations on sheet 4
         sheet = workbook.createSheet("Pronunciations");
-        Iterator<PronunciationNode> procIt = core.getPronunciations();
+        Iterator<PronunciationNode> procIt = core.getPronunciationMgr().getPronunciations();
         
         row = sheet.createRow(0);
         row.createCell(0).setCellValue("CHARACTER(S)");

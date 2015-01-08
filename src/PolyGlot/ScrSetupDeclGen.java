@@ -120,7 +120,7 @@ public class ScrSetupDeclGen extends PDialog {
      * sets fonts of objects
      */
     private void setObjectProperties() {
-        Font setFont = core.getFontCon();
+        Font setFont = core.getPropertiesManager().getFontCon();
         txtRuleRegex.setFont(setFont);
     }
 
@@ -216,7 +216,7 @@ public class ScrSetupDeclGen extends PDialog {
      */
     private void populateTransforms() {
         DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
-        Font setFont = core.getFontCon();
+        Font setFont = core.getPropertiesManager().getFontCon();
 
         transModel = new DefaultTableModel();
         tblTransforms.setModel(transModel);

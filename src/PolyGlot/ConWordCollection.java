@@ -139,6 +139,11 @@ public class ConWordCollection extends DictionaryCollection {
         allLocalWords.put(insWord.getLocalWord(), curCount + (additive ? 1 : -1));
     }
 
+    /**
+     * WARNING: DO NOT CALL THIS OUTSIDE OF DICT CORE: CLEANUP DONE THERE
+     * @param _id ID of word to delete
+     * @throws Exception 
+     */
     @Override
     public void deleteNodeById(Integer _id) throws Exception {
         ConWord deleteWord = this.getNodeById(_id);
@@ -171,7 +176,7 @@ public class ConWordCollection extends DictionaryCollection {
 
             // only runs if word's pronunciation not overridden
             if (!curWord.isProcOverride()) {
-                curWord.setPronunciation(core.getPronunciation(curWord.getValue()));
+                curWord.setPronunciation(core.getPronunciationMgr().getPronunciation(curWord.getValue()));
                 this.modifyNode(curWord.getId(), curWord);
             }
         }
@@ -373,13 +378,29 @@ public class ConWordCollection extends DictionaryCollection {
     }
 
     /**
+     * Inserts new word into dictionary
+     *
+     * @param _addWord word to be inserted
+     * @return ID of newly inserted word
+     * @throws Exception
+     */
+    public int addWord(ConWord _addWord) throws Exception {
+        int ret;
+        bufferNode.setEqual(_addWord);
+
+        ret = insert();
+
+        return ret;
+    }
+    
+    /**
      * Builds report on words in ConLang. Potentially computationally expensive.
      *
      * @return
      */
     public String buildWordReport() {
         String ret = "";
-        String conFontTag = "face=\"" + core.getLangFont().getFontName() + "\"";
+        String conFontTag = "face=\"" + core.getPropertiesManager().getFontCon().getFontName() + "\"";
 
         Map<String, Integer> wordStart = new HashMap<String, Integer>();
         Map<String, Integer> wordEnd = new HashMap<String, Integer>();
@@ -423,7 +444,9 @@ public class ConWordCollection extends DictionaryCollection {
             }
 
             // capture and record all phonemes in word and phoneme combinations
-            List<PronunciationNode> phonArray = core.getPronunciationElements(curValue);
+            List<PronunciationNode> phonArray = core.getPronunciationMgr()
+                    .getPronunciationElements(curValue);
+            
             for (int i = 0; i < phonArray.size(); i++) {
                 if (phonemeCount.containsKey(phonArray.get(i).getPronunciation())) {
                     int newValue = phonemeCount.get(phonArray.get(i).getPronunciation()) + 1;
@@ -538,7 +561,7 @@ public class ConWordCollection extends DictionaryCollection {
 
         // build display for phoneme count
         ret += " Breakdown of phonemes counted across all words:<br>";
-        Iterator<PronunciationNode> procLoop = core.getPronunciations();
+        Iterator<PronunciationNode> procLoop = core.getPronunciationMgr().getPronunciations();
         while (procLoop.hasNext()) {
             PronunciationNode curNode = procLoop.next();
             ret += curNode.getPronunciation() + " : "
@@ -576,16 +599,16 @@ public class ConWordCollection extends DictionaryCollection {
         ret += "Heat map of phoneme combination frequency:<br>";
         ret += "<table border=\"1\">";
         ret += "<tr><td></td>";
-        Iterator<PronunciationNode> procIty = core.getPronunciations();
+        Iterator<PronunciationNode> procIty = core.getPronunciationMgr().getPronunciations();
         while (procIty.hasNext()) {
             ret += "<td>" + procIty.next().getPronunciation() + "</td>";
         }
         ret += "</tr>";
-        procIty = core.getPronunciations();
+        procIty = core.getPronunciationMgr().getPronunciations();
         while (procIty.hasNext()) {
             PronunciationNode y = procIty.next();
             ret += "<tr><td>" + y.getPronunciation() + "</td>";
-            Iterator<PronunciationNode> procItx = core.getPronunciations();
+            Iterator<PronunciationNode> procItx = core.getPronunciationMgr().getPronunciations();
             while (procItx.hasNext()) {
                 PronunciationNode x = procItx.next();
                 String search = x.getPronunciation() + " " + y.getPronunciation();

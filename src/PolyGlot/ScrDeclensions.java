@@ -205,9 +205,9 @@ public class ScrDeclensions extends PDialog {
     public void setVisible(boolean visible) {
         // do not display window if there are no existing declensions for the word,
         // and if there are no declension patterns associated with the type in question
-        if ((core.getDeclensionListTemplate(typeId) == null
-                    || core.getDeclensionListTemplate(typeId).isEmpty())
-                && core.getDeclensionListWord(word.getId()).isEmpty()) {
+        if ((core.getDeclensionManager().getDeclensionListTemplate(typeId) == null
+                    || core.getDeclensionManager().getDeclensionListTemplate(typeId).isEmpty())
+                && core.getDeclensionManager().getDeclensionListWord(word.getId()).isEmpty()) {
             InfoBox.info("Declensions", "No declensions for type: " + word.getWordType()
                     + " set. Declensions can be created per type under the Types tab by clicking the Declensions button.", this);
 
@@ -241,7 +241,7 @@ public class ScrDeclensions extends PDialog {
             saveNode.setNotes(labelMap.get(curId));
 
             // declensions per word not saved via int id any longer
-            core.addDeclensionToWord(word.getId(), -1, saveNode);
+            core.getDeclensionManager().addDeclensionToWord(word.getId(), -1, saveNode);
         }
 
         dispose();

@@ -36,7 +36,7 @@ public class ScrTranslationFreewrite extends PFrame {
         initComponents();
         core = _core;
         
-        jTextArea1.setFont(core.getLangFont());
+        jTextArea1.setFont(core.getPropertiesManager().getFontCon());
         jTextArea1.setText(initialText);
     }
 

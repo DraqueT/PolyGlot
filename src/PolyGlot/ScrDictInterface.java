@@ -216,8 +216,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         Font defaultFont = new JLabel().getFont();
 
         TableColumn column = tblProcGuide.getColumnModel().getColumn(0);
-        column.setCellEditor(new TableColumnEditor(core.getLangFont()));
-        column.setCellRenderer(new TableColumnRenderer(core.getLangFont()));
+        column.setCellEditor(new TableColumnEditor(core.getPropertiesManager().getFontCon()));
+        column.setCellRenderer(new TableColumnRenderer(core.getPropertiesManager().getFontCon()));
 
         column = tblProcGuide.getColumnModel().getColumn(1);
         column.setCellEditor(new TableColumnEditor(defaultFont));
@@ -1825,7 +1825,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         ConWord ret;
 
         try {
-            ret = core.getWordById((Integer) scrToCoreMap.get(lstDict.getSelectedIndex()));
+            ret = core.getWordCollection().getNodeById((Integer) scrToCoreMap.get(lstDict.getSelectedIndex()));
         } catch (Exception e) {
             ret = null;
         }
@@ -1835,7 +1835,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
     private void recalcAllProcs() {
         try {
-            core.recalcAllProcs();
+            core.getWordCollection().recalcAllProcs();
         } catch (Exception e) {
             InfoBox.error("Recauculation Error", "Unable to recalculate pronunciations: "
                     + e.getLocalizedMessage(), this);
@@ -1910,7 +1910,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         delNode.setValue(tblProcGuide.getValueAt(curRow, 0).toString());
         delNode.setPronunciation(tblProcGuide.getValueAt(curRow, 1).toString());
 
-        core.deletePronunciation(delNode);
+        core.getPronunciationMgr().deletePronunciation(delNode);
         populateProcGuide();
     }
 
@@ -1937,7 +1937,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             newPro.add(newNode);
         }
 
-        core.setPronunciations(newPro);
+        core.getPronunciationMgr().setPronunciations(newPro);
 
         curPopulating = localPopulating;
     }
@@ -1961,7 +1961,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     }
 
     private void populateProcGuide() {
-        Iterator<PronunciationNode> popGuide = core.getPronunciations();
+        Iterator<PronunciationNode> popGuide = core.getPronunciationMgr().getPronunciations();
 
         // wipe current rows, repopulate from core
         setupProcTable();
@@ -2022,7 +2022,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         curPopulating = true;
 
         if (chkAutopopProcs.isSelected()) {
-            String setText = core.getPronunciation(txtConWordProp.getText());
+            String setText = core.getPronunciationMgr().getPronunciation(txtConWordProp.getText());
 
             txtPronunciationProp.setText(setText);
         }
@@ -2041,8 +2041,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         }
 
         try {
-            ScrDeclensions.run(core, core.getWordById(wordId),
-                    (Integer) scrToCoreTypes.get(cmbTypeProp.getSelectedIndex()), core.getLangFont());
+            ScrDeclensions.run(core, core.getWordCollection().getNodeById(wordId),
+                    (Integer) scrToCoreTypes.get(cmbTypeProp.getSelectedIndex()), core.getPropertiesManager().getFontCon());
         } catch (Exception ex) {
             InfoBox.error("Delcension Error", ex.getLocalizedMessage(), this);
         }
@@ -2102,7 +2102,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         txtConWordProp.setFont(conFont);
         txtAlphaOrder.setFont(conFont);
 
-        core.setFontCon(conFont, conFont.getStyle(), conFont.getSize());
+        core.getPropertiesManager().setFontCon(conFont, conFont.getStyle(), conFont.getSize());
         txtLangFont.setText(conFont.getFontName());
 
         // set font for first column of pronunciation grid
@@ -2672,7 +2672,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private void popLangProps() {
         txtLangName.setText(core.getPropertiesManager().getLangName());
         txtAlphaOrder.setText(core.getPropertiesManager().getAlphaPlainText());
-        txtLangFont.setText(core.getFontCon() == null ? "" : core.getFontCon().getFontName());
+        txtLangFont.setText(core.getPropertiesManager().getFontCon().getFontName());
         chkAutopopProcs.setSelected(core.getPropertiesManager().isProAutoPop());
         chkPropLocalMandatory.setSelected(core.getPropertiesManager().isLocalMandatory());
         chkPropLocalUniqueness.setSelected(core.getPropertiesManager().isLocalUniqueness());
@@ -2682,7 +2682,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         chkDisableProcRegex.setSelected(core.getPropertiesManager().isDisableProcRegex());
 
         // only set conlang font if it is not the OS default font
-        Font setFont = core.getLangFont();
+        Font setFont = core.getPropertiesManager().getFontCon();
         if (!(new JTextField()).getFont().equals(setFont)) {
             setConFont(setFont);
         }
@@ -3058,7 +3058,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 scrToCoreGenders.put(genderIndex, genderId);
                 scrGenderMap.put(gender.getValue(), genderIndex);
             } else {
-                core.modifyGender(genderId, gender);
+                core.getGenders().modifyNode(genderId, gender);
             }
         } catch (Exception e) {
             InfoBox.error("Gender Creation Error", "Unable to create gender "
@@ -3139,7 +3139,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
     private void populateDict() {
         curPopulating = true;
-        Iterator<ConWord> itWords = core.getWordIterator();
+        Iterator<ConWord> itWords = core.getWordCollection().getNodeIterator();
 
         this.populateWordsFromList(itWords);
         curPopulating = false;
@@ -3323,7 +3323,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         }
 
         try {
-            curWord = core.getWordById(wordId);
+            curWord = core.getWordCollection().getNodeById(wordId);
         } catch (Exception e) {
             InfoBox.error("Property Population Error", "Unable to populate properties of word: "
                     + (String) lstDict.getSelectedValue() + "\n\n" + e.getMessage(), this);
@@ -3390,7 +3390,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         filter.setPronunciation(txtPronunciationFilter.getText() != null ? txtPronunciationFilter.getText().trim() : "");
 
         try {
-            populateWordsFromList(core.filteredWordList(filter));
+            populateWordsFromList(core.getWordCollection().filteredList(filter));
         } catch (Exception e) {
             InfoBox.error("Filter Error", "Unable to apply filter.\n\n" + e.getMessage(), this);
         }
@@ -3478,14 +3478,14 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         if (wordId == -1) {
             try {
-                wordId = core.addWord(saveWord);
+                wordId = core.getWordCollection().addWord(saveWord);
             } catch (Exception e) {
                 InfoBox.error("Word Creation Error", "Unable to create word:"
                         + saveWord.getValue() + "\n\n" + e.getMessage(), this);
             }
         } else {
             try {
-                core.modifyWord(wordId, saveWord);
+                core.getWordCollection().modifyNode(wordId, saveWord);
             } catch (Exception e) {
                 InfoBox.error("Word Save Error", "Unable to save word:"
                         + saveWord.getValue() + "\n\n" + e.getMessage(), this);

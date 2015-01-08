@@ -809,7 +809,7 @@ public final class ScrDeclensionSetup extends PDialog {
         Integer curIndex = lstDeclensionList.getSelectedIndex();
 
         try {
-            core.deleteDeclensionFromTemplate(myType.getId(), (Integer) scrToCoreDeclensions.get(curIndex));
+            core.getDeclensionManager().deleteDeclensionFromTemplate(myType.getId(), (Integer) scrToCoreDeclensions.get(curIndex));
         } catch (Exception e) {
             InfoBox.error("Declension Deletion Error", "Unable to delete Declension: "
                     + (String) lstDeclensionList.getSelectedValue() + "\n\n" + e.getMessage(), this);
@@ -847,7 +847,7 @@ public final class ScrDeclensionSetup extends PDialog {
         try {
             // split logic for creating, rather than modifying Declension
             if (decId == -1) {
-                decl = core.addDeclensionToTemplate(myType.getId(), txtDeclensionName.getText());
+                decl = core.getDeclensionManager().addDeclensionToTemplate(myType.getId(), txtDeclensionName.getText());
                 decl.setValue(txtDeclensionName.getText().trim());
                 decl.setNotes(txtDeclensionNotes.getText().trim());
 
@@ -862,7 +862,7 @@ public final class ScrDeclensionSetup extends PDialog {
                 decl.setValue(txtDeclensionName.getText().trim());
                 decl.setNotes(txtDeclensionNotes.getText().trim());
 
-                core.modifyDeclensionTemplate(myType.getId(), decId, decl);
+                core.getDeclensionManager().updateDeclensionTemplate(myType.getId(), decId, decl);
             }
         } catch (Exception e) {
             InfoBox.error("Declension Creation Error", "Unable to create Declension "
@@ -885,7 +885,8 @@ public final class ScrDeclensionSetup extends PDialog {
 
         curPopulating = true;
 
-        Iterator<DeclensionNode> declIt = core.getDeclensionListTemplate(myType.getId()).iterator();
+        Iterator<DeclensionNode> declIt = core.getDeclensionManager()
+                .getDeclensionListTemplate(myType.getId()).iterator();
         DeclensionNode curdec;
 
         // relevant objects should be rebuilt
