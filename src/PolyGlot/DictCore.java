@@ -40,7 +40,7 @@ import org.xml.sax.SAXException;
 
 public class DictCore {
 
-    private final String version = "0.9.1";
+    private final String version = "0.9.2";
     private final ConWordCollection wordCollection = new ConWordCollection(this);
     private final TypeCollection typeCollection = new TypeCollection();
     private final GenderCollection genderCollection = new GenderCollection(this);
