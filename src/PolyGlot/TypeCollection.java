@@ -34,6 +34,7 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class TypeCollection extends DictionaryCollection {
+    final DictCore core;
 
     public TypeNode getBufferType() {
         return (TypeNode) bufferNode;
@@ -46,8 +47,9 @@ public class TypeCollection extends DictionaryCollection {
         return super.addNode(_addType);
     }
     
-    public TypeCollection() {
+    public TypeCollection(DictCore _core) {
         bufferNode = new TypeNode();
+        core = _core;
     }
 
     /**
@@ -145,6 +147,38 @@ public class TypeCollection extends DictionaryCollection {
         return (TypeNode) super.getNodeById(_id);
     }
 
+    @Override
+    /**
+     * Safely modify a type (updates words of this type automatically)
+     *
+     * @param id type id
+     * @param modGender new type
+     * @throws Exception
+     */
+    public void modifyNode(Integer id, DictNode modType) throws Exception {
+        Iterator<ConWord> it;
+        ConWord typeWord = new ConWord();
+
+        typeWord.setGender("");
+        typeWord.setValue("");
+        typeWord.setDefinition("");
+        typeWord.setWordType(getNodeById(id).getValue());
+        typeWord.setLocalWord("");
+        typeWord.setPronunciation("");
+
+        it = core.getWordCollection().filteredList(typeWord);
+
+        while (it.hasNext()) {
+            ConWord modWord = it.next();
+
+            modWord.setWordType(modType.getValue());
+
+            core.getWordCollection().modifyNode(modWord.getId(), modWord);
+        }
+
+        super.modifyNode(id, modType);
+    }
+    
     @Override
     public void clear() {
         bufferNode = new TypeNode();

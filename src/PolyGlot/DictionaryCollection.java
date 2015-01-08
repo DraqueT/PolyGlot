@@ -52,8 +52,6 @@ public abstract class DictionaryCollection {
     }
     
     /**
-     * WARNING: DO NOT CALL THIS OUTSIDE THE DICTIONARY CORE.
-     * THIS DOES NO CLEANUP OF WORD/TYPE RELATIONSHIP
      * @param _id ID of node to replace
      * @param _modNode Node to replace prior word with
      * @throws Exception Throws exception when ID matches no node in collection

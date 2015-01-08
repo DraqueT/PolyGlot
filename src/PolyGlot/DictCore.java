@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -39,7 +38,7 @@ public class DictCore {
 
     private final String version = "0.9.2";
     private final ConWordCollection wordCollection = new ConWordCollection(this);
-    private final TypeCollection typeCollection = new TypeCollection();
+    private final TypeCollection typeCollection = new TypeCollection(this);
     private final GenderCollection genderCollection = new GenderCollection(this);
     private final DeclensionManager declensionMgr = new DeclensionManager();
     private final PropertiesManager propertiesManager = new PropertiesManager();
@@ -245,37 +244,6 @@ public class DictCore {
         }
 
         return ret;
-    }
-
-    /**
-     * Safely modify a type (updates words of this type automatically)
-     *
-     * @param id type id
-     * @param modType new type
-     * @throws Exception
-     */
-    public void modifyType(Integer id, TypeNode modType) throws Exception {
-        Iterator<ConWord> it;
-        ConWord typeWord = new ConWord();
-
-        typeWord.setWordType(typeCollection.getNodeById(id).getValue());
-        typeWord.setValue("");
-        typeWord.setDefinition("");
-        typeWord.setGender("");
-        typeWord.setLocalWord("");
-        typeWord.setPronunciation("");
-
-        it = wordCollection.filteredList(typeWord);
-
-        while (it.hasNext()) {
-            ConWord modWord = it.next();
-
-            modWord.setWordType(modType.getValue());
-
-            wordCollection.modifyNode(modWord.getId(), modWord);
-        }
-
-        typeCollection.modifyNode(id, modType);
     }
 
     public TypeCollection getTypes() {

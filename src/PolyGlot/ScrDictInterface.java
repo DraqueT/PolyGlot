@@ -2868,7 +2868,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 scrToCoreTypes.put(typeIndex, typeId);
                 scrTypeMap.put(type.getValue(), typeIndex);
             } else {
-                core.modifyType(typeId, type);
+                core.getTypes().modifyNode(typeId, type);
             }
         } catch (Exception e) {
             InfoBox.error("Type Population Error", "Error populating types. Please reload dictionary. \n\n"
