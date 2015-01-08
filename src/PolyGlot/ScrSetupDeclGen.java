@@ -180,6 +180,7 @@ public class ScrSetupDeclGen extends PDialog {
 
     /**
      * populates all rule values from currently selected rule
+     * also sets controls to allow editing only if a rule is selected
      */
     public void populateRuleProperties() {
         if (curPopulating) {
@@ -195,9 +196,12 @@ public class ScrSetupDeclGen extends PDialog {
             txtRuleRegex.setText("");
             populateTransforms();
 
+            enableTransformEditing(false);
             curPopulating = false;
             return;
         }
+        
+        enableTransformEditing(true);
 
         txtRuleName.setText(curRule.getName());
         txtRuleRegex.setText(curRule.getRegex());
