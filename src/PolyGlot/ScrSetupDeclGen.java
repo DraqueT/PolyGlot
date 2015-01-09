@@ -507,6 +507,7 @@ public class ScrSetupDeclGen extends PDialog {
         txtRuleName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtRuleRegex = new javax.swing.JTextField();
+        chkDisableWordform = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Conjugation/Declension Autogeneration Setup");
@@ -609,6 +610,14 @@ public class ScrSetupDeclGen extends PDialog {
         txtRuleRegex.setEditable(false);
         txtRuleRegex.setToolTipText("Regex expression a word must match before tranformations are applied to it");
 
+        chkDisableWordform.setText("Disable Wordform");
+        chkDisableWordform.setToolTipText("Disables currently selected conjugation/declension, and prevents it from being displayed at any point.");
+        chkDisableWordform.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkDisableWordformActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -619,7 +628,8 @@ public class ScrSetupDeclGen extends PDialog {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(btnDeleteRule, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(chkDisableWordform))
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(sclTransforms, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -633,7 +643,7 @@ public class ScrSetupDeclGen extends PDialog {
                         .addComponent(txtRuleName))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addGap(0, 131, Short.MAX_VALUE))
+                        .addGap(0, 128, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -646,15 +656,20 @@ public class ScrSetupDeclGen extends PDialog {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtRuleName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(chkDisableWordform)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(txtRuleName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(txtRuleRegex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -662,7 +677,7 @@ public class ScrSetupDeclGen extends PDialog {
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sclTransforms, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddRule)
@@ -716,6 +731,9 @@ public class ScrSetupDeclGen extends PDialog {
 
     private void lstCombinedDecValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstCombinedDecValueChanged
         saveTransPairs(lstRules.getSelectedIndex());
+        DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+        chkDisableWordform.setSelected(core.getDeclensionManager()
+                .isCombinedDeclSurpressed(curPair == null?"":curPair.combinedId));
         populateRules();
         populateRuleProperties();
         populateTransforms();
@@ -750,11 +768,27 @@ public class ScrSetupDeclGen extends PDialog {
         deleteTransform();
     }//GEN-LAST:event_btnDeleteTransformActionPerformed
 
+    private void chkDisableWordformActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDisableWordformActionPerformed
+        DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+        
+        if (curPair == null) {
+            return;
+        }
+        
+        core.getDeclensionManager().setCombinedDeclSurpressed(curPair.combinedId, chkDisableWordform.isSelected());
+        
+        enableEditing(!chkDisableWordform.isSelected()
+            && lstCombinedDec.getSelectedIndex() != -1);
+        enableTransformEditing(!chkDisableWordform.isSelected()
+            && lstRules.getSelectedIndex() != -1);
+    }//GEN-LAST:event_chkDisableWordformActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddRule;
     private javax.swing.JButton btnAddTransform;
     private javax.swing.JButton btnDeleteRule;
     private javax.swing.JButton btnDeleteTransform;
+    private javax.swing.JCheckBox chkDisableWordform;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

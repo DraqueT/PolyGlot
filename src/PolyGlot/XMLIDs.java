@@ -72,6 +72,7 @@ public class XMLIDs {
     public static final String declensionIsTemplateXID = "declensionTemplate";
     public static final String declensionRelatedIdXID = "declensionRelatedId";
     public static final String declensionMandatoryXID = "declensionMandatory";
+    
     public static final String dimensionNodeXID = "dimensionNode";
     public static final String dimensionIdXID = "dimensionId";
     public static final String dimensionMandXID = "dimensionMand";
@@ -96,6 +97,11 @@ public class XMLIDs {
     public static final String decGenTransXID = "decGenTrans";
     public static final String decGenTransRegexXID = "decGenTransRegex";
     public static final String decGenTransReplaceXID = "decGenTransReplace";
+    
+    public static final String decCombinedFormSectionXID = "decCombinedFormSection";
+    public static final String decCombinedFormXID = "decCombinedForm";
+    public static final String decCombinedIdXID = "decCombinedId";
+    public static final String decCombinedSurpressXID = "decCombinedSurpress";
     
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";

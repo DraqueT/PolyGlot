@@ -259,6 +259,12 @@ public class ScrDeclensions extends PDialog {
             String curId = curDec.combinedId;
             String curLabel = curDec.label;
             
+            // skip forms that have been surpressed
+            if (core.getDeclensionManager().isCombinedDeclSurpressed(curId)) {
+                allWordDeclensions.remove(curId);
+                continue;
+            }
+            
             Label newLabel = new Label(curLabel);
             JTextField newField = new JTextField();
             Dimension labelDim = new Dimension();

@@ -585,10 +585,13 @@ public class CustHandlerFactory {
             boolean bdecGenRuleType = false;
             boolean bdecGenTransRegex = false;
             boolean bdecGenTransRep = false;
+            boolean bcombinedFormId = false;
+            boolean bcombinedFormSurpress = false;
             
             int wId;
             int wCId;
             int wGId;
+            String combinedDecId = "";
 
             DeclensionManager declensionMgr = core.getDeclensionManager();
             GenderCollection genderCollection = core.getGenders();
@@ -723,6 +726,10 @@ public class CustHandlerFactory {
                     bdecGenTransRegex = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransReplaceXID)) {
                     bdecGenTransRep = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decCombinedIdXID)) {
+                    bcombinedFormId = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decCombinedSurpressXID)) {
+                    bcombinedFormSurpress = true;
                 }
             }
 
@@ -893,6 +900,12 @@ public class CustHandlerFactory {
                     bdecGenTransRegex = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransReplaceXID)) {
                     bdecGenTransRep = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decCombinedIdXID)) {
+                    bcombinedFormId = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decCombinedSurpressXID)) {
+                    bcombinedFormSurpress = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.decCombinedFormXID)) {
+                    combinedDecId = "";
                 }
             }
 
@@ -1082,6 +1095,11 @@ public class CustHandlerFactory {
                 } else if (bdecGenTransRep) {
                     DeclensionGenTransform transBuffer = core.getDeclensionManager().getRuleBuffer().getTransBuffer();
                     transBuffer.replaceText += new String(ch, start, length);
+                } else if (bcombinedFormId) {
+                    combinedDecId += new String(ch, start, length);
+                } else if (bcombinedFormSurpress) {
+                    core.getDeclensionManager().setCombinedDeclSurpressed(combinedDecId,
+                            new String(ch, start, length).equals("T"));
                 }
             }
         };

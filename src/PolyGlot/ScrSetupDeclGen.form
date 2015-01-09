@@ -132,6 +132,7 @@
                               <Component id="jScrollPane2" min="-2" pref="142" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkDisableWordform" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -148,7 +149,7 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="131" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="128" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
@@ -167,16 +168,24 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtRuleName" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
+                              <Component id="chkDisableWordform" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtRuleRegex" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -186,7 +195,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="sclTransforms" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane2" pref="406" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" pref="397" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -328,6 +337,15 @@
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="toolTipText" type="java.lang.String" value="Regex expression a word must match before tranformations are applied to it"/>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkDisableWordform">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Disable Wordform"/>
+                <Property name="toolTipText" type="java.lang.String" value="Disables currently selected conjugation/declension, and prevents it from being displayed at any point."/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkDisableWordformActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
