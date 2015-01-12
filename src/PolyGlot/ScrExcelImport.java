@@ -74,15 +74,13 @@ public class ScrExcelImport extends PDialog {
         txtGender = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jLabel10 = new javax.swing.JLabel();
-        txtPlural = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtExcelSheet = new javax.swing.JTextField();
         btnImport = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Import From Excel");
+        setTitle("Import From External Format");
         setAlwaysOnTop(true);
         setResizable(false);
 
@@ -143,13 +141,9 @@ public class ScrExcelImport extends PDialog {
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Columns may be addressed numerically or alphabetically. If numerically, begin with 0.\n\nMap the columns within the target Excel file to their related fields within the conlang dictionary. \n\nIf the “First row is labels” box is selected, the first row of the Excel sheet will be ignored.\n\nTo map multiple columns to a single field (generally multiple to definition), simply add the row numbers separated by a comma.\n\nIf you don't know what \"Excel Sheet\" means, leave it at 0.");
+        jTextArea1.setText("Columns may be addressed numerically or alphabetically. If numerically, begin with 0.\n\nMap the columns within the target Excel/CSV file to their related fields within the conlang dictionary. \n\nIf the “First row is labels” box is selected, the first row of the grid will be ignored.\n\nTo map multiple columns to a single field (generally multiple to definition), simply add the row numbers separated by a comma.\n\nIf you don't know what \"Excel Sheet\" means, or are using a CSV leave it at 0.");
         jTextArea1.setWrapStyleWord(true);
         jScrollPane1.setViewportView(jTextArea1);
-
-        jLabel10.setText("Plural Form");
-
-        txtPlural.setToolTipText("Column number of plural form");
 
         jLabel11.setText("Excel Sheet");
 
@@ -166,7 +160,6 @@ public class ScrExcelImport extends PDialog {
                     .addComponent(chkFirstLabels)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -178,8 +171,7 @@ public class ScrExcelImport extends PDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtPlural, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                                .addComponent(txtGender, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtGender, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                                 .addComponent(txtPronunciation, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtDefinition, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtType, javax.swing.GroupLayout.Alignment.LEADING)
@@ -230,19 +222,11 @@ public class ScrExcelImport extends PDialog {
                             .addComponent(jLabel8)
                             .addComponent(txtGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(txtPlural, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(10, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(txtExcelSheet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(txtExcelSheet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         btnImport.setText("Import");
@@ -350,7 +334,7 @@ public class ScrExcelImport extends PDialog {
     private void browseFile() {
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File("."));
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Documents", "xls", "xlsx", "xlsm");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel/CSV Documents", "xls", "xlsx", "xlsm", "csv");
         chooser.setFileFilter(filter);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             txtFileName.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -366,12 +350,12 @@ public class ScrExcelImport extends PDialog {
         }
 
         try {
-            ExcelConReader reader = new ExcelConReader(core);
+            ImportFileHelper reader = new ImportFileHelper(core);
             reader.setOptions(txtConWord.getText(), txtLocalWord.getText(),
                     txtType.getText(), txtGender.getText(),
                     txtDefinition.getText(), txtPronunciation.getText(),
-                    txtPlural.getText(), chkFirstLabels.isSelected(), true, true);
-            reader.importExcel(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
+                    chkFirstLabels.isSelected(), true, true);
+            reader.importFile(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
             // if everything has completed without error, close the window
             dispose();
         } catch (NumberFormatException e) {
@@ -390,7 +374,6 @@ public class ScrExcelImport extends PDialog {
     private javax.swing.JButton btnImport;
     private javax.swing.JCheckBox chkFirstLabels;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -409,7 +392,6 @@ public class ScrExcelImport extends PDialog {
     private javax.swing.JTextField txtFileName;
     private javax.swing.JTextField txtGender;
     private javax.swing.JTextField txtLocalWord;
-    private javax.swing.JTextField txtPlural;
     private javax.swing.JTextField txtPronunciation;
     private javax.swing.JTextField txtType;
     // End of variables declaration//GEN-END:variables

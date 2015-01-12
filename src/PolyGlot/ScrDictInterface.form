@@ -81,8 +81,8 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportExcel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Import from Excel"/>
-                <Property name="toolTipText" type="java.lang.String" value="Import words from Excel file"/>
+                <Property name="text" type="java.lang.String" value="Import from File"/>
+                <Property name="toolTipText" type="java.lang.String" value="Import words from Excel or CSV file"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportExcelActionPerformed"/>

@@ -1432,8 +1432,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         mnuTools.add(mnuQuickEntry);
         mnuTools.add(jSeparator1);
 
-        mnuImportExcel.setText("Import from Excel");
-        mnuImportExcel.setToolTipText("Import words from Excel file");
+        mnuImportExcel.setText("Import from File");
+        mnuImportExcel.setToolTipText("Import words from Excel or CSV file");
         mnuImportExcel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuImportExcelActionPerformed(evt);
