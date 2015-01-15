@@ -138,7 +138,7 @@ public class ScrThesaurus extends PFrame {
             return;
         }
         
-        curNode.getNode().removeWord(curWord);
+        curNode.getNode().removeWord(curWord.getId());
         
         updateWordsProp();
     }

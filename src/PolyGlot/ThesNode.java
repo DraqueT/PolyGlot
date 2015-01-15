@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class ThesNode extends DictNode {
     private final List<ThesNode> subNodes = new ArrayList<ThesNode>();
-    private final List<ConWord> words = new ArrayList<ConWord>();
+    private final List<Integer> words = new ArrayList<Integer>();
     final private ThesNode parent;
     private String notes = "";
     private final ThesaurusManager manager;
@@ -62,6 +62,7 @@ public class ThesNode extends DictNode {
     /**
      * sets parent of node
      * @param _parent node's parent (null if root)
+     * @param _manager a link to the parent manager
      */    
     public ThesNode(ThesNode _parent, ThesaurusManager _manager) {
         parent = _parent;
@@ -72,6 +73,7 @@ public class ThesNode extends DictNode {
      * sets parent and value of node
      * @param _parent parent of note (null if root)
      * @param _value node's string value
+     * @param _manager A link to the parent manager
      */
     public ThesNode(ThesNode _parent, String _value, ThesaurusManager _manager) {
         parent = _parent;
@@ -101,16 +103,16 @@ public class ThesNode extends DictNode {
      * @param _word the word to add
      */
     public void addWord(ConWord _word) {
-        if (!words.contains(_word)) {
-            words.add(_word);
+        if (!words.contains(_word.getId())) {
+            words.add(_word.getId());
         }
     }
     
     /**
      * removes word from family
-     * @param _word word to remove
+     * @param _word id of word to remove
      */
-    public void removeWord(ConWord _word) {
+    public void removeWord(Integer _word) {
         words.remove(_word);
     }
     
@@ -119,9 +121,23 @@ public class ThesNode extends DictNode {
      * @return iterator of all words in immediate family
      */
     public Iterator<ConWord> getWords() {
+        List<ConWord> ret = new ArrayList<ConWord>();
         manager.removeDeadWords(this, words);
-        Collections.sort(words);
-        return words.iterator();
+        
+        
+        Iterator<Integer> convert = words.iterator();
+        
+        while (convert.hasNext()) {
+            Integer curId = convert.next();
+            
+            try {
+                ret.add(manager.getCore().getWordCollection().getNodeById(curId));
+            } catch (Exception e) {/*simply skip missing entries*/}
+        }
+        
+        Collections.sort(ret);
+        
+        return ret.iterator();
     }
     
     /**
