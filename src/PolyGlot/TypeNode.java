@@ -26,10 +26,20 @@ package PolyGlot;
  */
 public class TypeNode extends DictNode{
     private String notes = "";
+    private String regexPattern = "";
     private boolean genderMandatory = false;
     private boolean pluralMandatory = false;
     private boolean procMandatory = false;
     private boolean defMandatory = false;
+    
+    
+    public void setPattern(String _regexPattern) {
+        regexPattern = _regexPattern;
+    }
+    
+    public String getPattern() {
+        return regexPattern;
+    }
     
     public String getNotes(){
         return notes;

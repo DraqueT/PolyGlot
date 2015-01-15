@@ -568,6 +568,7 @@ public class CustHandlerFactory {
             boolean bwordClassGenderMan = false;
             boolean bwordClassProcMan = false;
             boolean bwordClassPlurMan = false;
+            boolean bwordClassPattern = false;
             boolean bwordProcOverride = false;
             boolean bdimNode = false;
             boolean bdimId = false;
@@ -682,6 +683,8 @@ public class CustHandlerFactory {
                     bwordClassGenderMan = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordClassDefManXID)) {
                     bwordClassDefMan = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassPatternXID)) {
+                    bwordClassPattern = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.declensionMandatoryXID)) {
                     bdeclensionMandatory = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.langPropLocalUniquenessXID)) {
@@ -819,7 +822,9 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordClassGenderManXID)) {
                     bwordClassGenderMan = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordClassDefManXID)) {
-                    bwordClassDefMan = true;
+                    bwordClassDefMan = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassPatternXID)) {
+                    bwordClassPattern = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.pronunciationXID)) {
                     bpronuncation = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.genderIdXID)) {
@@ -955,6 +960,10 @@ public class CustHandlerFactory {
                 } else if (bwordClassName) {
                     TypeNode bufferType = this.getTypeCollection().getBufferType();
                     bufferType.setValue(bufferType.getValue()
+                            + new String(ch, start, length));
+                } else if (bwordClassPattern) {
+                    TypeNode bufferType = this.getTypeCollection().getBufferType();
+                    bufferType.setPattern(bufferType.getPattern()
                             + new String(ch, start, length));
                 } else if (bwordClassId) {
                     wCId = Integer.parseInt(new String(ch, start, length));

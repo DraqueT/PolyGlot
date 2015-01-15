@@ -25,6 +25,7 @@ package PolyGlot;
  * @author draque
  */
 public class XMLIDs {
+    // properties on words
     public static final String dictionaryXID = "dictionary";
     public static final String pgVersionXID = "PolyGlotVer";
     public static final String wordXID = "word";
@@ -33,11 +34,14 @@ public class XMLIDs {
     public static final String wordTypeXID = "wordType";
     public static final String wordGenderXID = "wordGender";
     public static final String wordIdXID = "wordId";
-    public static final String wordPlurXID = "wordPlural";
+    public static final String wordPlurXID = "wordPlural"; // LEGACY VALUE
     public static final String wordProcOverrideXID = "wordProcOverride";
     public static final String definitionXID = "definition";
-    public static final String fontConXID = "fontCon";
-    public static final String fontLocalXID = "fontLocal";
+    public static final String wordAutoDeclenOverrideXID = "autoDeclOverride";
+    public static final String pronunciationXID = "pronunciation";
+    
+    // properties for types/parts of speech
+    // TODO: rename the objects (NOT THEIR VALUES) to match modern standards
     public static final String wordClassXID = "class";
     public static final String wordClassNameXID = "className";
     public static final String wordClassIdXID = "classId";
@@ -46,13 +50,17 @@ public class XMLIDs {
     public static final String wordClassProcManXID = "pronunciationMandatoryClass";
     public static final String wordClassPlurManXID = "pluralityMandatoryClass";
     public static final String wordClassDefManXID = "definitionMandatoryClass";
+    public static final String wordClassPatternXID = "classPattern";
+    
+    // properties for genders
     public static final String genderXID = "gender";
     public static final String genderNameXID = "genderName";
     public static final String genderIdXID = "genderId";
-    public static final String genderNotesXID = "genderNotes";
-    public static final String pronunciationXID = "pronunciation";
-    public static final String wordAutoDeclenOverrideXID = "autoDeclOverride";
+    public static final String genderNotesXID = "genderNotes";    
     
+    // language properties
+    public static final String fontConXID = "fontCon";
+    public static final String fontLocalXID = "fontLocal";
     public static final String langPropLangNameXID = "langName";
     public static final String langPropFontSizeXID = "fontSize";
     public static final String langPropFontStyleXID = "fontStyle";
@@ -64,6 +72,7 @@ public class XMLIDs {
     public static final String langPropIgnoreCase = "langPropIgnoreCase";
     public static final String langPropDisableProcRegex = "langPropDisableProcRegex";
     
+    // declension properties
     public static final String declensionXID = "declensionNode";
     public static final String declensionIdXID = "declensionId";
     public static final String declensionTextXID = "declensionText";
@@ -73,36 +82,43 @@ public class XMLIDs {
     public static final String declensionRelatedIdXID = "declensionRelatedId";
     public static final String declensionMandatoryXID = "declensionMandatory";
     
+    // dimensional declension properties
     public static final String dimensionNodeXID = "dimensionNode";
     public static final String dimensionIdXID = "dimensionId";
     public static final String dimensionMandXID = "dimensionMand";
     public static final String dimensionNameXID = "dimensionName";
     
+    // pronunciation properties
     public static final String proGuideXID = "proGuide";
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";
     public static final String proAutoPopXID = "proAutoPop";
     
+    // thesaurus properties
     public static final String thesNodeXID = "thesNode";
     public static final String thesNotesXID = "thesNotes";
     public static final String thesNameXID = "thesName";
     public static final String thesWordXID = "thesWord";
     
+    // autodeclansion generation properties
     public static final String decGenRuleXID = "decGenRule";
     public static final String decGenRuleTypeXID = "decGenRuleTypeId";
     public static final String decGenRuleCombXID = "decGenRuleComb";
     public static final String decGenRuleRegexXID = "decGenRuleRegex";
     public static final String decGenRuleNameXID = "decGenRuleName";
     
+    // autodeclension transform properties
     public static final String decGenTransXID = "decGenTrans";
     public static final String decGenTransRegexXID = "decGenTransRegex";
     public static final String decGenTransReplaceXID = "decGenTransReplace";
     
+    // constructed declension dimension properties
     public static final String decCombinedFormSectionXID = "decCombinedFormSection";
     public static final String decCombinedFormXID = "decCombinedForm";
     public static final String decCombinedIdXID = "decCombinedId";
     public static final String decCombinedSurpressXID = "decCombinedSurpress";
     
+    // string constants
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";
 }

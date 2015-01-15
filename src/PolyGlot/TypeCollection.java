@@ -259,6 +259,10 @@ public class TypeCollection extends DictionaryCollection {
             wordValue = doc.createElement(XMLIDs.wordClassProcManXID);
             wordValue.appendChild(doc.createTextNode(curType.isProcMandatory() ? "T" : "F"));
             wordNode.appendChild(wordValue);
+            
+            wordValue = doc.createElement(XMLIDs.wordClassPatternXID);
+            wordValue.appendChild(doc.createTextNode(curType.getPattern()));
+            wordNode.appendChild(wordValue);
         }
     }
 }

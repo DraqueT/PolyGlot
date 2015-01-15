@@ -47,12 +47,13 @@ public class DictCore {
 
     /**
      * Gets proper color for fields marked as required
-     * @return 
+     *
+     * @return
      */
     public Color getRequiredColor() {
-        return new Color(255,204,204);
+        return new Color(255, 204, 204);
     }
-    
+
     /**
      * gets thesaurus manager
      *
@@ -130,7 +131,7 @@ public class DictCore {
             handler.setTypeCollection(typeCollection);
 
             saxParser.parse(IOHandler.getDictFile(_fileName), handler);
-            
+
             Font conFont = IOHandler.getFontFrom(_fileName);
             if (conFont != null) {
                 propertiesManager.setFontCon(conFont);
@@ -153,7 +154,7 @@ public class DictCore {
      * @throws java.io.FileNotFoundException
      */
     public void writeFile(String _fileName)
-            throws ParserConfigurationException, TransformerException, FileNotFoundException, IOException {        
+            throws ParserConfigurationException, TransformerException, FileNotFoundException, IOException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
         Element wordValue;
@@ -178,14 +179,15 @@ public class DictCore {
 
         // write thesaurus entries
         rootElement.appendChild(thesManager.writeToSaveXML(doc));
-        
+
         // have IOHandler write constructed document to file
         IOHandler.writeFile(_fileName, doc, this);
     }
 
     /**
-     * deletes word based on word ID
-     * Makes sure to clear all records of word declension
+     * deletes word based on word ID Makes sure to clear all records of word
+     * declension
+     *
      * @param _id
      * @throws java.lang.Exception
      */
@@ -215,32 +217,50 @@ public class DictCore {
      * Checks whether word is legal and returns error reason if not
      *
      * @param word word to check legality of
-     * @return String of error is illegal, empty string otherwise (returns first
-     * problem)
+     * @return Conword with any illegal entries saved as word values
      */
-    public String isWordLegal(ConWord word) {
-        String ret = "";
+    public ConWord isWordLegal(ConWord word) {
+        ConWord ret = new ConWord();
 
         if (word.getValue().equals("")) {
-            ret = "Words must have a cownword value set.";
-        } else if (word.getWordType().equals("") && propertiesManager.isTypesMandatory()) {
-            ret = "Types set to mandatory; please fill in type.";
-        } else if (word.getLocalWord().equals("") && propertiesManager.isLocalMandatory()) {
-            ret = "Local word set to mandatory; please fill in local word.";
-        } else if (propertiesManager.isWordUniqueness() && wordCollection.containsWord(word.getValue())) {
-            ret = "ConWords set to enforced unique, plese select spelling without existing homonyms.";
-        } else if (propertiesManager.isLocalUniqueness() && !word.getLocalWord().equals("")
+            ret.setValue("ConWord value cannot be blank.");
+        }
+
+        if (word.getWordType().equals("") && propertiesManager.isTypesMandatory()) {
+            ret.setWordType("Types set to mandatory.");
+        }
+
+        if (word.getLocalWord().equals("") && propertiesManager.isLocalMandatory()) {
+            ret.setLocalWord("Local word set to mandatory.");
+        }
+
+        if (propertiesManager.isWordUniqueness() && wordCollection.containsWord(word.getValue())) {
+            ret.setValue(ret.getValue() + (ret.getValue().equals("") ? "" : "\n")
+                    + "ConWords set to enforced unique: this conword exists elsewhere.");
+        }
+
+        if (propertiesManager.isLocalUniqueness() && !word.getLocalWord().equals("")
                 && wordCollection.containsLocalMultiples(word.getLocalWord())) {
-            ret = "Local words set to enforced unique, and this local exists elsewhere.";
+            ret.setLocalWord(ret.getLocalWord() + (ret.getLocalWord().equals("") ? "" : "\n")
+                    + "Local words set to enforced unique: this local exists elsewhere.");
         }
 
-        // for more complex checks, use this pattern, only checking if other problems do not exist
-        if (ret.equals("")) {
-            ret = typeCollection.typeRequirementsMet(word);
-        }
+        ret.setWordType(ret.getWordType() + (ret.getWordType().equals("") ? "" : "\n")
+                + typeCollection.typeRequirementsMet(word));
 
-        if (ret.equals("")) {
-            ret = declensionMgr.declensionRequirementsMet(word, typeCollection.findTypeByName(word.getWordType()));
+        ret.setDefinition(ret.getDefinition() + (ret.getDefinition().equals("") ? "" : "\n")
+                + declensionMgr.declensionRequirementsMet(word, typeCollection.findTypeByName(word.getWordType())));
+
+        TypeNode wordType = typeCollection.findTypeByName(word.getWordType());
+
+        if (wordType != null) {
+            String typeRegex = wordType.getPattern();
+
+            if (!typeRegex.equals("") && !word.getValue().matches(typeRegex)) {
+                ret.setDefinition(ret.getDefinition() + (ret.getDefinition().equals("") ? "" : "\n")
+                        + "Word does not match enforced pattern for type: " + word.getWordType() + ".");
+                ret.setProcOverride(true);
+            }
         }
 
         return ret;

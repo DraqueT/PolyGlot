@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -353,6 +354,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         txtTypesErrorBox = new javax.swing.JTextField();
         btnConjDecl = new javax.swing.JButton();
         btnAutoConjDecSetup = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        txtTypePattern = new javax.swing.JTextField();
         tabGender = new javax.swing.JPanel();
         sclGenderList = new javax.swing.JScrollPane();
         lstGenderList = new javax.swing.JList();
@@ -697,7 +700,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                         .addContainerGap()
                         .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))))
+                            .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         pnlPropertiesLayout.setVerticalGroup(
@@ -728,7 +731,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDefinitionProp)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sclDefProp)
+                .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -762,7 +765,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabDictLayout.createSequentialGroup()
-                        .addComponent(scrlDict, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                        .addComponent(scrlDict, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdd)
@@ -900,6 +903,11 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             }
         });
 
+        jLabel10.setText("Type Pattern");
+
+        txtTypePattern.setToolTipText("Regex pattern words of this type must conform to (blank for no enforcement). Text red if an invalid regex.");
+        txtTypePattern.setEnabled(false);
+
         javax.swing.GroupLayout tabTypeLayout = new javax.swing.GroupLayout(tabType);
         tabType.setLayout(tabTypeLayout);
         tabTypeLayout.setHorizontalGroup(
@@ -917,17 +925,21 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                     .addGroup(tabTypeLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabTypeLayout.createSequentialGroup()
-                        .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnConjDecl, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtTypesErrorBox)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabTypeLayout.createSequentialGroup()
+                    .addGroup(tabTypeLayout.createSequentialGroup()
+                        .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnConjDecl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtTypesErrorBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(tabTypeLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtTypeName))
-                            .addComponent(btnAutoConjDecSetup, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnAutoConjDecSetup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(tabTypeLayout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTypePattern)))
                         .addContainerGap())))
         );
         tabTypeLayout.setVerticalGroup(
@@ -942,7 +954,11 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(txtTypePattern, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnConjDecl)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1025,7 +1041,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                             .addGroup(tabGenderLayout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtGenderName, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))
+                                .addComponent(txtGenderName, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE))
                             .addGroup(tabGenderLayout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1044,7 +1060,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
                     .addComponent(sclGenderList))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1095,7 +1111,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addComponent(jLabel9))
-                        .addGap(0, 20, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -1307,7 +1323,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(btnUpProc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                         .addComponent(btnDownProc))
                     .addComponent(sclProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1519,13 +1535,13 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2341,23 +2357,40 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         txtTypeName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                checkTypeLexEnabled();
+                checkTypeLexEnabled(true);
                 saveType();
                 updateTypeListName();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                checkTypeLexEnabled();
+                checkTypeLexEnabled(true);
                 saveType();
                 updateTypeListName();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                checkTypeLexEnabled();
+                checkTypeLexEnabled(true);
                 saveType();
                 updateTypeListName();
+            }
+        });
+        txtTypePattern.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                checkTypeLexEnabled(false);
+                saveType();
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                checkTypeLexEnabled(false);
+                saveType();
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                checkTypeLexEnabled(false);
+                saveType();
             }
         });
         txtTypesNotes.getDocument().addDocumentListener(new DocumentListener() {
@@ -2720,6 +2753,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         txtTypeName.setEnabled(false);
         txtTypesNotes.setEnabled(false);
+        txtTypePattern.setEnabled(false);
 
         curPopulating = false;
     }
@@ -2727,6 +2761,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private void setEnabledTypeProps(boolean enable) {
         txtTypeName.setEnabled(enable);
         txtTypesNotes.setEnabled(enable);
+        txtTypePattern.setEnabled(enable);
         chkTypeDefinitionMandatory.setEnabled(enable);
         chkTypeGenderMandatory.setEnabled(enable);
         chkTypePluralMandatory.setEnabled(enable);
@@ -2754,6 +2789,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             return;
         }
 
+        testTypePattern();
+        
         curPopulating = true;
         TypeNode curType = new TypeNode();
         Integer typeIndex = lstTypesList.getSelectedIndex();
@@ -2777,12 +2814,29 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         if (!txtTypesNotes.getText().equals(curType.getNotes())) {
             txtTypesNotes.setText(curType.getNotes());
         }
+        if (!txtTypePattern.getText().trim().equals(curType.getPattern())) {
+            txtTypePattern.setText((curType.getPattern()));
+        }
+        
         chkTypeDefinitionMandatory.setSelected(curType.isDefMandatory());
         chkTypeGenderMandatory.setSelected(curType.isGenderMandatory());
         chkTypePluralMandatory.setSelected(curType.isPluralMandatory());
         chkTypeProcMandatory.setSelected(curType.isProcMandatory());
 
         curPopulating = false;
+    }
+    
+    /**
+     * tests/sets the color of the type pattern box as is appropriate
+     */
+    public void testTypePattern() {
+        String regex = txtTypePattern.getText();
+        
+        if (regex.equals("") || RegexTools.testRegex(regex)) {
+            txtTypePattern.setBackground(new JTextField().getBackground());
+        } else {
+            txtTypePattern.setBackground(core.getRequiredColor());
+        }
     }
 
     private void updateTypeListName() {
@@ -2844,6 +2898,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         if (typeIndex == -1) {
             return;
         }
+        
+        testTypePattern();
 
         boolean localPopulating = curPopulating;
 
@@ -2856,6 +2912,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         type.setValue(txtTypeName.getText().trim());
         type.setNotes(txtTypesNotes.getText());
+        type.setPattern(txtTypePattern.getText().trim());
         type.setDefMandatory(chkTypeDefinitionMandatory.isSelected());
         type.setGenderMandatory(chkTypeGenderMandatory.isSelected());
         type.setProcMandatory(chkTypeProcMandatory.isSelected());
@@ -2883,19 +2940,23 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
     /**
      * Checks/sets whether the type lexicon should be and is enabled
+     * @param setName set this to true if the type's name has been changed
      */
-    private void checkTypeLexEnabled() {
+    private void checkTypeLexEnabled(boolean setName) {
         if (curPopulating) {
             return;
         }
 
         // do not allow duplicate types
-        if (core.getTypes().findTypeByName(txtTypeName.getText().trim()) != null) {
+        if (setName && core.getTypes().findTypeByName(txtTypeName.getText().trim()) != null) {
             setEnabledTypeLexicon(false);
             txtTypesErrorBox.setText("Types must have unique names.");
         } else if (txtTypeName.getText().trim().equals("")) {
             setEnabledTypeLexicon(false);
             txtTypesErrorBox.setText("Types cannot have blank name.");
+        } else if (!RegexTools.testRegex(txtTypePattern.getText())) { 
+            setEnabledTypeLexicon(false);
+            txtTypesErrorBox.setText("Illegal regex in type pattern.");
         } else {
             setEnabledTypeLexicon(true);
             txtTypesErrorBox.setText("");
@@ -3432,9 +3493,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         chkPronunciationOverrideProp.setEnabled(true);
         btnConwordDeclensions.setEnabled(true);
 
-        // prevents user from navigating away before new word is valid
-        setLexiconEnabled(false);
-        txtWordErrorBox.setText("ConWord value cannot be blank.");
+        setWordLegality(new ConWord());
     }
 
     private void saveModWord() {
@@ -3502,12 +3561,61 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         curPopulating = false;
 
-        // handle words that are or are not legal by checking core
-        String wordLegal = core.isWordLegal(saveWord);
-        txtWordErrorBox.setText(wordLegal);
-        setLexiconEnabled(wordLegal.equals(""));
+        setWordLegality(saveWord);
 
         populateDict();
+    }
+    
+    /**
+     * Sets lexicon tab's currently displayed word legality (highlighted fields,
+     * error message, etc.)
+     * @param results current word
+     */
+    private void setWordLegality(ConWord testWord) {
+        ConWord results = core.isWordLegal(testWord);
+        Color bColor = new JTextField().getBackground();
+        Color hColor = core.getRequiredColor();
+        boolean isLegal = true;
+        
+        txtWordErrorBox.setText("");
+                
+        if (!results.getValue().equals("") || results.isProcOverride()) {
+            if (!results.getValue().equals("")) {
+                txtWordErrorBox.setText(txtWordErrorBox.getText() 
+                        + (txtWordErrorBox.getText().equals("")?"":"\n") + results.getValue());
+            }
+            
+            txtConWordProp.setBackground(hColor);
+            isLegal = false;
+        } else {
+            txtConWordProp.setBackground(bColor);
+        }
+        
+        if (!results.getWordType().equals("")) {
+            txtWordErrorBox.setText(txtWordErrorBox.getText() 
+                    + (txtWordErrorBox.getText().equals("")?"":"\n") + results.getWordType());
+            PGTools.flashComponent(cmbTypeProp, hColor, false);
+            isLegal = false;
+        } else {
+            cmbTypeProp.setForeground(bColor);
+        }
+        
+        if (!results.getLocalWord().equals("")) {
+            txtWordErrorBox.setText(txtWordErrorBox.getText() 
+                    + (txtWordErrorBox.getText().equals("")?"":"\n") + results.getLocalWord());
+            txtLocalWordProp.setBackground(hColor);
+            isLegal = false;
+        } else {
+            txtLocalWordProp.setBackground(bColor);
+        }
+        
+        if (!results.getDefinition().equals("")) {
+            txtWordErrorBox.setText(txtWordErrorBox.getText() 
+                    + (txtWordErrorBox.getText().equals("")?"":"\n") + results.getDefinition());
+            isLegal = false;
+        }
+        
+        setLexiconEnabled(isLegal);
     }
 
     private void setLexiconEnabled(boolean isEnabled) {
@@ -3646,6 +3754,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JComboBox cmbTypeFilter;
     private javax.swing.JComboBox cmbTypeProp;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -3730,6 +3839,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JTextField txtPronunciationFilter;
     private javax.swing.JTextField txtPronunciationProp;
     private javax.swing.JTextField txtTypeName;
+    private javax.swing.JTextField txtTypePattern;
     private javax.swing.JTextField txtTypesErrorBox;
     private javax.swing.JTextArea txtTypesNotes;
     private javax.swing.JTextPane txtWordErrorBox;
