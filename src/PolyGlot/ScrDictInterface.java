@@ -2948,7 +2948,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         }
 
         // do not allow duplicate types
-        if (setName && core.getTypes().findTypeByName(txtTypeName.getText().trim()) != null) {
+        if (setName && core.getTypes().findTypeByName(txtTypeName.getText()) != null) {
             setEnabledTypeLexicon(false);
             txtTypesErrorBox.setText("Types must have unique names.");
         } else if (txtTypeName.getText().trim().equals("")) {
