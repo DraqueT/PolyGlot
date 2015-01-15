@@ -3274,6 +3274,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         }
 
         cmbTypeFilter.insertItemAt("", cmbTypeFilter.getModel().getSize());
+        cmbTypeProp.insertItemAt("", cmbTypeProp.getModel().getSize());
 
         lstTypesList.setSelectedIndex(setIndex);
 
