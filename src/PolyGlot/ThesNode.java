@@ -31,7 +31,7 @@ import java.util.List;
 public class ThesNode extends DictNode {
     private final List<ThesNode> subNodes = new ArrayList<ThesNode>();
     private final List<ConWord> words = new ArrayList<ConWord>();
-    private ThesNode parent;
+    final private ThesNode parent;
     private String notes = "";
     private final ThesaurusManager manager;
 
