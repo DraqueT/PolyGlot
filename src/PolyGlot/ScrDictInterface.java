@@ -2077,7 +2077,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     }
 
     private void viewConjAutoGen(int _typeId) {
-        Window window = ScrSetupDeclGen.run(core, _typeId);
+        Window window = ScrDeclensionGenSetup.run(core, _typeId);
         childFrames.add(window);
     }
     

@@ -33,7 +33,7 @@ import javax.swing.table.TableColumn;
  *
  * @author draque
  */
-public class ScrSetupDeclGen extends PDialog {
+public class ScrDeclensionGenSetup extends PDialog {
 
     final String depRulesLabel = "DEPRECATED RULES";
     final int typeId;
@@ -50,7 +50,7 @@ public class ScrSetupDeclGen extends PDialog {
      * @param _core dictionary core
      * @param _typeId ID of type to pull rules for
      */
-    private ScrSetupDeclGen(DictCore _core, int _typeId) {
+    private ScrDeclensionGenSetup(DictCore _core, int _typeId) {
         core = _core;
         typeId = _typeId;
         depRulesList = core.getDeclensionManager().getAllDepGenerationRules(_typeId);
@@ -131,8 +131,8 @@ public class ScrSetupDeclGen extends PDialog {
      * @param _typeId type ID to open window for
      * @return a copy of itself
      */
-    public static ScrSetupDeclGen run(DictCore _core, int _typeId) {
-        ScrSetupDeclGen s = new ScrSetupDeclGen(_core, _typeId);
+    public static ScrDeclensionGenSetup run(DictCore _core, int _typeId) {
+        ScrDeclensionGenSetup s = new ScrDeclensionGenSetup(_core, _typeId);
         s.setModal(true);
 
         s.setVisible(true);
