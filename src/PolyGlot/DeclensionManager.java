@@ -636,7 +636,34 @@ public class DeclensionManager {
 
         return ret;
     }
-
+    
+    public String getCombNameFromCombId(int typeId, String combId) {
+        String ret = "";
+        Iterator<DeclensionNode> it = getDeclensionListTemplate(typeId).iterator();
+        String[] splitIds = combId.split(",");
+        
+        for (int i = 0; it.hasNext(); i++) {
+            DeclensionNode curNode = it.next();
+            int dimId = Integer.parseInt(splitIds[i+1]);
+            Iterator<DeclensionDimension> dimIt = curNode.getDimensions().iterator();
+            DeclensionDimension curDim = null;
+            
+            while (dimIt.hasNext()) {
+                curDim = dimIt.next();
+                
+                if (curDim.getId().equals(dimId)) {
+                    break;
+                }
+            }
+            
+            if (curDim != null) {
+                ret += " " + curDim.getValue();
+            }
+        }
+        
+        return ret.trim();
+    }
+    
     public void deleteDeclension(Integer typeId, Integer declensionId, Map list) {
         if (list.containsKey(typeId)) {
             List<DeclensionNode> copyTo = new ArrayList<DeclensionNode>();

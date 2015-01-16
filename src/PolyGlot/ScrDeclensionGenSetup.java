@@ -102,8 +102,10 @@ public class ScrDeclensionGenSetup extends PDialog {
                     
                     "TESTVAL".replaceAll(curTransform.regex, curTransform.replaceText);
                 } catch (Exception e) {
-                    userMessage += "\nProblem with transform in rule " + curRule.getName() 
-                            + " transform " + curTransform.regex + ": " + e.getMessage();
+                    userMessage += "\nProblem with regular expression under declension \'" 
+                            + core.getDeclensionManager().getCombNameFromCombId(typeId, curRule.getCombinationId()) 
+                            + "\' in rule \'" + curRule.getName() + "\' transform \'" + curTransform.regex + " -> " 
+                            + curTransform.replaceText + "\':\n " + e.getMessage();
                     ret = false;
                 }
             }
