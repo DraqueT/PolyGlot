@@ -476,6 +476,8 @@ public class ScrDeclensionGenSetup extends PDialog {
                 @Override
                 public void run() {
                     tblTransforms.setModel(transModel);
+                    saveTransPairs(lstRules.getSelectedIndex());
+                    populateTransforms();
                 }
             });
         }
