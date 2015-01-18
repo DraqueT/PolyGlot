@@ -287,6 +287,8 @@
                       </Table>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Transformations to be applied."/>
+                    <Property name="cellSelectionEnabled" type="boolean" value="true"/>
+                    <Property name="rowHeight" type="int" value="30"/>
                   </Properties>
                 </Component>
               </SubComponents>

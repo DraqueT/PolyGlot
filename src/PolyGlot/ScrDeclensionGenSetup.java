@@ -220,12 +220,11 @@ public class ScrDeclensionGenSetup extends PDialog {
         DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
         Font setFont = core.getPropertiesManager().getFontCon();
 
-        transModel = new DefaultTableModel();
-        tblTransforms.setModel(transModel);
-
+        transModel = new DefaultTableModel(); 
         transModel.addColumn("Regex");
         transModel.addColumn("Replacement");
-
+        tblTransforms.setModel(transModel);
+        
         TableColumn column = tblTransforms.getColumnModel().getColumn(0);
         column.setCellEditor(new TableColumnEditor(setFont));
         column.setCellRenderer(new TableColumnRenderer(setFont));
@@ -242,16 +241,12 @@ public class ScrDeclensionGenSetup extends PDialog {
         List<DeclensionGenTransform> curTransform = curRule.getTransforms();
 
         for (DeclensionGenTransform curTrans : curTransform) {
-            String[] newRow = {curTrans.regex, curTrans.replaceText};
+            Object[] newRow = {curTrans.regex, curTrans.replaceText};
 
             transModel.addRow(newRow);
-
-            TableColumnEditor editor = (TableColumnEditor) tblTransforms.getCellEditor(transModel.getRowCount() - 1, 0);
-            editor.setInitialValue(curTrans.regex);
-
-            editor = (TableColumnEditor) tblTransforms.getCellEditor(transModel.getRowCount() - 1, 1);
-            editor.setInitialValue(curTrans.replaceText);
         }
+        
+        tblTransforms.setModel(transModel);
     }
 
     /**
@@ -583,6 +578,8 @@ public class ScrDeclensionGenSetup extends PDialog {
             }
         ));
         tblTransforms.setToolTipText("Transformations to be applied.");
+        tblTransforms.setCellSelectionEnabled(true);
+        tblTransforms.setRowHeight(30);
         sclTransforms.setViewportView(tblTransforms);
 
         btnAddTransform.setText("+");
