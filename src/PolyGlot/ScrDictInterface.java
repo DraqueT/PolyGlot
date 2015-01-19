@@ -336,6 +336,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         jScrollPane5 = new javax.swing.JScrollPane();
         txtWordErrorBox = new javax.swing.JTextPane();
         chkPronunciationOverrideProp = new javax.swing.JCheckBox();
+        jLabel11 = new javax.swing.JLabel();
+        chkWordRulesOverride = new javax.swing.JCheckBox();
         tabType = new javax.swing.JPanel();
         sclTypesList = new javax.swing.JScrollPane();
         lstTypesList = new javax.swing.JList();
@@ -662,37 +664,22 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             }
         });
 
+        jLabel11.setText("Override Rules");
+        jLabel11.setToolTipText("");
+
+        chkWordRulesOverride.setToolTipText("Overrides all typically enforced requirements for this word, allowing it to be saved as an exception");
+        chkWordRulesOverride.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkWordRulesOverrideActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlPropertiesLayout = new javax.swing.GroupLayout(pnlProperties);
         pnlProperties.setLayout(pnlPropertiesLayout);
         pnlPropertiesLayout.setHorizontalGroup(
             pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlPropertiesLayout.createSequentialGroup()
                 .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlPropertiesLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblDefinitionProp)
-                            .addGroup(pnlPropertiesLayout.createSequentialGroup()
-                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(lblLocalWordProp, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-                                    .addComponent(lblTypeProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblConWordProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtLocalWordProp)
-                                    .addComponent(txtConWordProp)
-                                    .addComponent(cmbTypeProp, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(pnlPropertiesLayout.createSequentialGroup()
-                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(lblGenderProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblPrononciationProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cmbGenderProp, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(pnlPropertiesLayout.createSequentialGroup()
-                                        .addComponent(txtPronunciationProp)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(chkPronunciationOverrideProp))))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPropertiesLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnConwordDeclensions, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -700,7 +687,34 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                         .addContainerGap()
                         .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))))
+                            .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+                            .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblConWordProp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblLocalWordProp, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(6, 6, 6)
+                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtLocalWordProp)
+                                    .addComponent(txtConWordProp)))
+                            .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblGenderProp, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblPrononciationProp)
+                                    .addComponent(lblTypeProp, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbTypeProp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                                        .addComponent(txtPronunciationProp)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(chkPronunciationOverrideProp))
+                                    .addComponent(cmbGenderProp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel11)
+                                    .addComponent(lblDefinitionProp))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(chkWordRulesOverride)))))
                 .addContainerGap())
         );
         pnlPropertiesLayout.setVerticalGroup(
@@ -729,9 +743,14 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                         .addComponent(txtPronunciationProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(chkPronunciationOverrideProp))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblDefinitionProp)
+                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDefinitionProp))
+                    .addComponent(chkWordRulesOverride))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+                .addComponent(sclDefProp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -765,7 +784,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabDictLayout.createSequentialGroup()
-                        .addComponent(scrlDict, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+                        .addComponent(scrlDict, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(tabDictLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdd)
@@ -929,7 +948,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                         .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnConjDecl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtTypesErrorBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(tabTypeLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -954,7 +973,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
@@ -1041,7 +1060,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                             .addGroup(tabGenderLayout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtGenderName, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE))
+                                .addComponent(txtGenderName, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
                             .addGroup(tabGenderLayout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1060,7 +1079,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE))
                     .addComponent(sclGenderList))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(tabGenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1323,7 +1342,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(btnUpProc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
                         .addComponent(btnDownProc))
                     .addComponent(sclProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1534,14 +1553,12 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
 
@@ -1761,6 +1778,10 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private void mnuQuickEntryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuQuickEntryActionPerformed
         viewQuickEntry();
     }//GEN-LAST:event_mnuQuickEntryActionPerformed
+
+    private void chkWordRulesOverrideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkWordRulesOverrideActionPerformed
+        saveModWord();
+    }//GEN-LAST:event_chkWordRulesOverrideActionPerformed
 
     @Override
     public void dispose() {
@@ -3347,6 +3368,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         cmbTypeProp.setEnabled(false);
         cmbGenderProp.setEnabled(false);
         chkPronunciationOverrideProp.setEnabled(false);
+        chkWordRulesOverride.setEnabled(false);
 
         curPopulating = false;
     }
@@ -3378,6 +3400,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         cmbTypeProp.setEnabled(true);
         cmbGenderProp.setEnabled(true);
         chkPronunciationOverrideProp.setEnabled(true);
+        chkWordRulesOverride.setEnabled(true);
 
         // split to ensure that word may still be modified
         if (wordId == null || wordId == -1) {
@@ -3398,6 +3421,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         txtDefProp.setText(curWord.getDefinition());
         txtPronunciationProp.setText(curWord.getPronunciation());
         chkPronunciationOverrideProp.setSelected(curWord.isProcOverride());
+        chkWordRulesOverride.setSelected(curWord.isRulesOverrride());
 
         if (scrTypeMap.containsKey(curWord.getWordType())) {
             cmbTypeProp.setSelectedIndex((Integer) scrTypeMap.get(curWord.getWordType()));
@@ -3423,6 +3447,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         txtDefProp.setCaretPosition(0);
 
         curPopulating = false;
+        
+        setWordLegality(curWord);
     }
 
     private void filterDict() {
@@ -3492,6 +3518,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         cmbTypeProp.setEnabled(true);
         cmbGenderProp.setEnabled(true);
         chkPronunciationOverrideProp.setEnabled(true);
+        chkWordRulesOverride.setEnabled(true);
         btnConwordDeclensions.setEnabled(true);
 
         setWordLegality(new ConWord());
@@ -3535,6 +3562,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         saveWord.setGender(scrGenderMap.containsKey(cmbGenderProp.getSelectedItem())
                 ? (String) cmbGenderProp.getSelectedItem() : "");
         saveWord.setProcOverride(chkPronunciationOverrideProp.isSelected());
+        saveWord.setRulesOverride(chkWordRulesOverride.isSelected());
 
         if (wordId == -1) {
             try {
@@ -3616,7 +3644,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             isLegal = false;
         }
         
-        setLexiconEnabled(isLegal);
+        setLexiconEnabled(isLegal || testWord.isRulesOverrride());
     }
 
     private void setLexiconEnabled(boolean isEnabled) {
@@ -3750,12 +3778,14 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JCheckBox chkTypeGenderMandatory;
     private javax.swing.JCheckBox chkTypePluralMandatory;
     private javax.swing.JCheckBox chkTypeProcMandatory;
+    private javax.swing.JCheckBox chkWordRulesOverride;
     private javax.swing.JComboBox cmbGenderFilter;
     private javax.swing.JComboBox cmbGenderProp;
     private javax.swing.JComboBox cmbTypeFilter;
     private javax.swing.JComboBox cmbTypeProp;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -39,6 +39,7 @@ public class XMLIDs {
     public static final String definitionXID = "definition";
     public static final String wordAutoDeclenOverrideXID = "autoDeclOverride";
     public static final String pronunciationXID = "pronunciation";
+    public static final String wordRuleOverrideXID = "wordRuleOverride";
     
     // properties for types/parts of speech
     // TODO: rename the objects (NOT THEIR VALUES) to match modern standards

@@ -682,6 +682,10 @@ public class ConWordCollection extends DictionaryCollection {
             wordValue = doc.createElement(XMLIDs.wordAutoDeclenOverrideXID);
             wordValue.appendChild(doc.createTextNode(curWord.isOverrideAutoDeclen() ? "T" : "F"));
             wordNode.appendChild(wordValue);
+            
+            wordValue = doc.createElement(XMLIDs.wordRuleOverrideXID);
+            wordValue.appendChild(doc.createTextNode(curWord.isRulesOverrride()? "T" : "F"));
+            wordNode.appendChild(wordValue);
         }
     }
 }

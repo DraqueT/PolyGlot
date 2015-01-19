@@ -134,6 +134,7 @@ public class CustHandlerFactory {
             boolean bwordClassProcMan = false;
             boolean bwordClassPlurMan = false;
             boolean bwordProcOverride = false;
+            boolean bwordRuleOverride = false;
 
             int wId;
             int wCId;
@@ -235,6 +236,8 @@ public class CustHandlerFactory {
                     blangPropLocalMandatory = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.langPropTypeMandatoryXID)) {
                     blangPropTypeMandatory = true;
+                } else if (qName.equalsIgnoreCase(XMLIDs.wordRuleOverrideXID)) {
+                    bwordRuleOverride = true;
                 }
             }
 
@@ -388,6 +391,8 @@ public class CustHandlerFactory {
                     bpronPhon = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.proAutoPopXID)) {
                     bproAutoPop = false;
+                }  else if (qName.equalsIgnoreCase(XMLIDs.wordRuleOverrideXID)) { 
+                    bwordRuleOverride = false;
                 }
             }
 
@@ -443,6 +448,10 @@ public class CustHandlerFactory {
                     wordCollection.getBufferWord().setPronunciation(
                             new String(ch, start, length));
                     bpronuncation = false;
+                } else if (bwordRuleOverride) { 
+                    wordCollection.getBufferWord().setRulesOverride(
+                        new String(ch, start, length).equals("T"));
+                    bwordRuleOverride = false;
                 } else if (bgender) {
                     wordCollection.getBufferWord().setGender(
                             new String(ch, start, length));
@@ -521,7 +530,7 @@ public class CustHandlerFactory {
                 } else if (blangPropTypeMandatory) {
                     propertiesManager.setTypesMandatory(new String(ch, start, length).equals("T"));
                     blangPropTypeMandatory = false;
-                }
+                } 
             }
         };
     }
@@ -588,6 +597,7 @@ public class CustHandlerFactory {
             boolean bdecGenTransRep = false;
             boolean bcombinedFormId = false;
             boolean bcombinedFormSurpress = false;
+            boolean bwordRuleOverride = false;
             
             int wId;
             int wCId;
@@ -624,6 +634,8 @@ public class CustHandlerFactory {
                     // plurality made into declension-deprecated from main screen
                     declensionMgr.clearBuffer();
                     bwordPlur = true;
+                }  else if (qName.equalsIgnoreCase(XMLIDs.wordRuleOverrideXID)) {
+                    bwordRuleOverride = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.fontConXID)) {
                     bfontcon = true;
                 } else if (qName.equalsIgnoreCase(XMLIDs.fontLocalXID)) {
@@ -805,6 +817,8 @@ public class CustHandlerFactory {
                     btype = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.wordIdXID)) {
                     bId = false;
+                } else if (qName.equalsIgnoreCase(XMLIDs.wordRuleOverrideXID)) {
+                    bwordRuleOverride = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.definitionXID)) {
                     bdef = false;
                 } else if (qName.equalsIgnoreCase(XMLIDs.fontConXID)) {
@@ -946,6 +960,10 @@ public class CustHandlerFactory {
                     this.getWordCollection().getBufferWord()
                             .setProcOverride(new String(ch, start, length).equals("T"));
                     bwordProcOverride = false;
+                } else if (bwordRuleOverride) {
+                    wordCollection.getBufferWord()
+                            .setRulesOverride(new String(ch, start, length).equals("T"));
+                    bwordRuleOverride = false;
                 } else if (bwordoverAutoDec) {
                     this.getWordCollection().getBufferWord()
                             .setOverrideAutoDeclen(new String(ch, start, length).equals("T"));
