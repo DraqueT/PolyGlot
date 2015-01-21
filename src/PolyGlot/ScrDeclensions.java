@@ -220,10 +220,6 @@ public class ScrDeclensions extends PDialog {
     private void saveDeclension() {
         word.setOverrideAutoDeclen(chkAutogenOverride.isSelected());
         
-        /*try {
-            core.getWordCollection().modifyNode(word.getId(), word);
-        } catch (Exception e){/*do nothing}*/
-        
         core.clearAllDeclensionsWord(word.getId());
         Set<Entry<String, JTextField>> saveSet = fieldMap.entrySet();
 
