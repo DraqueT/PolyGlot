@@ -189,28 +189,14 @@ public class ScrTranslationWindow extends PFrame {
         txtTransWord.setFont(conFont);
     }
     
+    /**
+     * Fetches proper language font
+     * @return language font, default font otherwise
+     */
     private Font getLangFont() {
-        Font ret;
-
         Font fontCon = core.getPropertiesManager().getFontCon();
 
-        if (fontCon != null) {
-            int size = core.getPropertiesManager().getFontSize();
-
-            // if size = 0 default to 12
-            if (size == 0) {
-                size = 12;
-            }
-
-            // Unrecognized fonts return as OS default font, warning error thrown at time of file load
-            ret = new Font(fontCon.getName(), 
-                    core.getPropertiesManager().getFontStyle(), size);
-        } else {
-            // set font to standard if no font found
-            ret = new JTextField().getFont();
-        }
-
-        return ret;
+        return fontCon == null ? new JTextField().getFont() : fontCon;
     }
     
     private void setupListeners() {
