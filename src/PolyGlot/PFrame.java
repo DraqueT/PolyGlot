@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Draque
+ * Copyright (c) 2014 - 2015, Draque Thompson - draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,7 +19,9 @@
  */
 package PolyGlot;
 
+import PolyGlot.PGTUtil.WindowMode;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.KeyEvent;
 import javax.swing.InputMap;
 import javax.swing.JFrame;
@@ -34,8 +36,47 @@ import javax.swing.text.DefaultEditorKit;
  * @author Draque
  */
 public class PFrame extends JFrame {
+    private boolean isDisposed = false;
+    private boolean ignoreCenter = false;
+    protected WindowMode mode = WindowMode.STANDARD;
+    
+    /**
+     * Returns current running mode of window
+     * @return 
+     */
+    public WindowMode getMode() {
+        return mode;
+    }
+    
+    @Override
+    public void dispose() {
+        isDisposed = true;
+        super.dispose();
+    }
 
-    public PFrame() {
+    /**
+     * returns true if window has been disposed
+     *
+     * @return disposed value
+     */
+    public boolean isDisposed() {
+        return isDisposed;
+    }
+
+    /**
+     * Sets window visibly to the right of the window handed in
+     *
+     * @param w window to set location relative to
+     */
+    public void setBeside(final Window w) {
+        int x = w.getLocation().x + w.getWidth();
+        int y = w.getLocation().y;
+
+        setLocation(x, y);
+        ignoreCenter = true;
+    }
+
+    private void setupKeyStrokes() {
         // enable copy/paste on macs
         if (System.getProperty("os.name").startsWith("Mac")) {
             InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
@@ -55,11 +96,16 @@ public class PFrame extends JFrame {
             UIManager.put("TextPane.focusInputMap", im);
         }
     }
-    
+
     // positions on screen once form has already been build/sized
     @Override
-    public void pack() {
-        super.pack();
-        this.setLocationRelativeTo(null);
+    public void setVisible(boolean visible) {
+        setupKeyStrokes();
+        
+        if (!ignoreCenter) {
+            this.setLocationRelativeTo(null);
+        }
+        
+        super.setVisible(visible);     
     }
 }

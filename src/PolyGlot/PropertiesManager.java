@@ -274,63 +274,63 @@ public class PropertiesManager {
         Element wordValue;
         
         // store font for Conlang words
-        wordValue = doc.createElement(XMLIDs.fontConXID);
+        wordValue = doc.createElement(PGTUtil.fontConXID);
         Font curFont = getFontCon();
         wordValue.appendChild(doc.createTextNode(curFont == null ? "" : curFont.getName()));
         rootElement.appendChild(wordValue);
 
         // store font style
-        wordValue = doc.createElement(XMLIDs.langPropFontStyleXID);
+        wordValue = doc.createElement(PGTUtil.langPropFontStyleXID);
         wordValue.appendChild(doc.createTextNode(getFontStyle().toString()));
         rootElement.appendChild(wordValue);
 
         // store font for Local words
-        wordValue = doc.createElement(XMLIDs.langPropFontSizeXID);
+        wordValue = doc.createElement(PGTUtil.langPropFontSizeXID);
         wordValue.appendChild(doc.createTextNode(getFontSize().toString()));
         rootElement.appendChild(wordValue);
 
         // store name for conlang
-        wordValue = doc.createElement(XMLIDs.langPropLangNameXID);
+        wordValue = doc.createElement(PGTUtil.langPropLangNameXID);
         wordValue.appendChild(doc.createTextNode(getLangName()));
         rootElement.appendChild(wordValue);
 
         // store alpha order for conlang
-        wordValue = doc.createElement(XMLIDs.langPropAlphaOrderXID);
+        wordValue = doc.createElement(PGTUtil.langPropAlphaOrderXID);
         wordValue.appendChild(doc.createTextNode(getAlphaPlainText()));
         rootElement.appendChild(wordValue);
 
         // store option to autopopulate pronunciations
-        wordValue = doc.createElement(XMLIDs.proAutoPopXID);
+        wordValue = doc.createElement(PGTUtil.proAutoPopXID);
         wordValue.appendChild(doc.createTextNode(isProAutoPop() ? "T" : "F"));
         rootElement.appendChild(wordValue);
 
         // store option for mandatory Types
-        wordValue = doc.createElement(XMLIDs.langPropTypeMandatoryXID);
+        wordValue = doc.createElement(PGTUtil.langPropTypeMandatoryXID);
         wordValue.appendChild(doc.createTextNode(isTypesMandatory() ? "T" : "F"));
         rootElement.appendChild(wordValue);
 
         // store option for mandatory Local word
-        wordValue = doc.createElement(XMLIDs.langPropLocalMandatoryXID);
+        wordValue = doc.createElement(PGTUtil.langPropLocalMandatoryXID);
         wordValue.appendChild(doc.createTextNode(isLocalMandatory() ? "T" : "F"));
         rootElement.appendChild(wordValue);
 
         // store option for unique local word
-        wordValue = doc.createElement(XMLIDs.langPropLocalUniquenessXID);
+        wordValue = doc.createElement(PGTUtil.langPropLocalUniquenessXID);
         wordValue.appendChild(doc.createTextNode(isLocalUniqueness() ? "T" : "F"));
         rootElement.appendChild(wordValue);
 
         // store option for unique conwords
-        wordValue = doc.createElement(XMLIDs.langPropWordUniquenessXID);
+        wordValue = doc.createElement(PGTUtil.langPropWordUniquenessXID);
         wordValue.appendChild(doc.createTextNode(isWordUniqueness() ? "T" : "F"));
         rootElement.appendChild(wordValue);
         
         // store option for ignoring case
-        wordValue = doc.createElement(XMLIDs.langPropIgnoreCase);
+        wordValue = doc.createElement(PGTUtil.langPropIgnoreCase);
         wordValue.appendChild(doc.createTextNode(isIgnoreCase() ? "T" : "F"));
         rootElement.appendChild(wordValue);
         
         // store option for disabling regex or pronunciations
-        wordValue = doc.createElement(XMLIDs.langPropDisableProcRegex);
+        wordValue = doc.createElement(PGTUtil.langPropDisableProcRegex);
         wordValue.appendChild(doc.createTextNode(isDisableProcRegex()? "T" : "F"));
         rootElement.appendChild(wordValue);
     }

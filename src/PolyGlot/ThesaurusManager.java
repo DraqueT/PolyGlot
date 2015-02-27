@@ -126,19 +126,19 @@ public class ThesaurusManager {
      * @return an element containing all thesaurus data
      */
     private Element writeToSaveXML(Document doc, ThesNode curNode) {
-        Element curElement = doc.createElement(XMLIDs.thesNodeXID);
+        Element curElement = doc.createElement(PGTUtil.thesNodeXID);
         
         if (curNode == null) {
             return curElement;
         }
 
         // save name
-        Element property = doc.createElement(XMLIDs.thesNameXID);
+        Element property = doc.createElement(PGTUtil.thesNameXID);
         property.appendChild(doc.createTextNode(curNode.getValue()));
         curElement.appendChild(property);
         
         // save notes
-        property = doc.createElement(XMLIDs.thesNotesXID);
+        property = doc.createElement(PGTUtil.thesNotesXID);
         property.appendChild(doc.createTextNode(curNode.getNotes()));
         curElement.appendChild(property);
         
@@ -147,7 +147,7 @@ public class ThesaurusManager {
         while (wordIt.hasNext()) {
             ConWord curWord = wordIt.next();
             
-            property = doc.createElement(XMLIDs.thesWordXID);
+            property = doc.createElement(PGTUtil.thesWordXID);
             property.appendChild(doc.createTextNode(curWord.getId().toString()));
             curElement.appendChild(property);
         }

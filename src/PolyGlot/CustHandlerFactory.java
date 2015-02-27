@@ -60,7 +60,7 @@ public class CustHandlerFactory {
         CustHandler ret = null;
 
         // test for version number in pgd file, set to 0 if none found (pre 0.6)
-        versionNode = doc.getDocumentElement().getElementsByTagName(XMLIDs.pgVersionXID).item(0);
+        versionNode = doc.getDocumentElement().getElementsByTagName(PGTUtil.pgVersionXID).item(0);
         versionNumber = versionNode == null ? "0" : versionNode.getTextContent();
 
         // switch not used to maintain Java 6 compatibility... fucking 6. X(
@@ -82,11 +82,12 @@ public class CustHandlerFactory {
                 || versionNumber.equals("0.8.5")
                 || versionNumber.equals("0.9")
                 || versionNumber.equals("0.9.1")
-                || versionNumber.equals("0.9.2")) {
+                || versionNumber.equals("0.9.2")
+                || versionNumber.equals("0.9.9")) {
             ret = CustHandlerFactory.get075Handler(core);
         } else {
             throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
-                    + "written with an unsupported version: Ver " + versionNumber + ".");
+                    + "written with a newer version with additional features: Ver " + versionNumber + ".");
         }
 
         return ret;
@@ -151,92 +152,92 @@ public class CustHandlerFactory {
                     throws SAXException {
 
                 // test to see whether this is the first node in a word
-                if (qName.equalsIgnoreCase(XMLIDs.wordXID)) {
+                if (qName.equalsIgnoreCase(PGTUtil.wordXID)) {
                     this.getWordCollection().clear();
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuideXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuideXID)) {
                     proBuffer = new PronunciationNode();
-                } else if (qName.equalsIgnoreCase(XMLIDs.localWordXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.localWordXID)) {
                     blocalWord = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.conWordXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.conWordXID)) {
                     bconWord = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordTypeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordTypeXID)) {
                     btype = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordIdXID)) {
                     bId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.definitionXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.definitionXID)) {
                     bdef = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordPlurXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordPlurXID)) {
                     // plurality made into declension-deprecated from main screen
                     declensionMgr.clearBuffer();
                     bwordPlur = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.fontConXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.fontConXID)) {
                     bfontcon = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.fontLocalXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.fontLocalXID)) {
                     bfontlocal = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassIdXID)) {
                     bwordClassId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassNameXID)) {
                     bwordClassName = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassNotesXID)) {
                     bwordClassNotes = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.pronunciationXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.pronunciationXID)) {
                     bpronuncation = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordGenderXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
                     bgender = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderIdXID)) {
                     bgenderId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderNameXID)) {
                     bgenderName = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderNotesXID)) {
                     bgenderNotes = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropLangNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLangNameXID)) {
                     blangName = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropFontSizeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontSizeXID)) {
                     bfontSize = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropFontStyleXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontStyleXID)) {
                     bfontStyle = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropAlphaOrderXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropAlphaOrderXID)) {
                     balphaOrder = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionXID)) {
                     // from old versions, declensions are loaded as dimensions of a master declension
                     declensionMgr.getBuffer().clearBuffer();
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionIdXID)) {
                     bDecId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionTextXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionTextXID)) {
                     bDecText = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionNotesXID)) {
                     bDecNotes = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionIsTemplateXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionIsTemplateXID)) {
                     bDecIsTemp = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionRelatedIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionRelatedIdXID)) {
                     bDecRelId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuideBaseXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuideBaseXID)) {
                     bpronBase = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuidePhonXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuidePhonXID)) {
                     bpronPhon = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proAutoPopXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
                     bproAutoPop = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordProcOverrideXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordProcOverrideXID)) {
                     bwordProcOverride = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassPlurManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassPlurManXID)) {
                     bwordClassPlurMan = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassProcManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassProcManXID)) {
                     bwordClassProcMan = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassGenderManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassGenderManXID)) {
                     bwordClassGenderMan = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassDefManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassDefManXID)) {
                     bwordClassDefMan = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionMandatoryXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionMandatoryXID)) {
                     bdeclensionMandatory = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropLocalUniquenessXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalUniquenessXID)) {
                     blangPropLocalUniqueness = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropWordUniquenessXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropWordUniquenessXID)) {
                     blangPropWordUniqueness = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropLocalMandatoryXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalMandatoryXID)) {
                     blangPropLocalMandatory = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropTypeMandatoryXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropTypeMandatoryXID)) {
                     blangPropTypeMandatory = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordRuleOverrideXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordRuleOverrideXID)) {
                     bwordRuleOverride = true;
                 }
             }
@@ -246,7 +247,7 @@ public class CustHandlerFactory {
                     String qName) throws SAXException {
 
                 // save word to word collection
-                if (qName.equalsIgnoreCase(XMLIDs.wordXID)) {
+                if (qName.equalsIgnoreCase(PGTUtil.wordXID)) {
                     ConWord curWord = this.getWordCollection()
                             .getBufferWord();
 
@@ -263,24 +264,24 @@ public class CustHandlerFactory {
                     } catch (Exception e) {
                         throw new SAXException();
                     }
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassXID)) {
                     // insertion for word types is much simpler
                     try {
                         this.getTypeCollection().insert(wCId);
                     } catch (Exception e) {
                         throw new SAXException();
                     }
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderXID)) {
                     try {
                         genderCollection.insert(wGId);
                     } catch (Exception e) {
                         throw new SAXException();
                     }
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuideXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuideXID)) {
                     pronuncMgr.addPronunciation(proBuffer);
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordGenderXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
                     bgender = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionXID)) {
                     Integer relId = declensionMgr.getBufferRelId();
 
                     // dec templates handled differently than actual saved declensions for words
@@ -319,79 +320,79 @@ public class CustHandlerFactory {
                         declensionMgr.getBuffer().setCombinedDimId("," + declensionMgr.getBuffer().getId().toString() + ",");
                         declensionMgr.addDeclensionToWord(relId, declensionMgr.getBuffer().getId(), declensionMgr.getBuffer());
                     }
-                } else if (qName.equalsIgnoreCase(XMLIDs.localWordXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.localWordXID)) {
                     blocalWord = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.conWordXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.conWordXID)) {
                     bconWord = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordPlurXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordPlurXID)) {
                     // plurality now a declension (as it should be)
                     // special position granted to plurals... fixes awful ID collision error
                     
                     // skip if empty
                     if (!declensionMgr.getBuffer().getValue().trim().equals("")) {
-                        declensionMgr.getBuffer().setCombinedDimId("," + wId + "," + XMLIDs.wordPlurXID + ",");
+                        declensionMgr.getBuffer().setCombinedDimId("," + wId + "," + PGTUtil.wordPlurXID + ",");
                         declensionMgr.addDeclensionToWord(wId, Integer.MAX_VALUE, declensionMgr.getBuffer());
                     }
                     
                     declensionMgr.clearBuffer();
                     bwordPlur = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordTypeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordTypeXID)) {
                     btype = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordIdXID)) {
                     bId = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.definitionXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.definitionXID)) {
                     bdef = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.fontConXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.fontConXID)) {
                     bfontcon = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.fontLocalXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.fontLocalXID)) {
                     bfontlocal = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassNameXID)) {
                     bwordClassName = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassNotesXID)) {
                     bwordClassNotes = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassPlurManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassPlurManXID)) {
                     bwordClassPlurMan = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassProcManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassProcManXID)) {
                     bwordClassProcMan = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassGenderManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassGenderManXID)) {
                     bwordClassGenderMan = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassDefManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassDefManXID)) {
                     bwordClassDefMan = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.pronunciationXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.pronunciationXID)) {
                     bpronuncation = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderIdXID)) {
                     bgenderId = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderNameXID)) {
                     bgenderName = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderNotesXID)) {
                     bgenderNotes = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropLangNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLangNameXID)) {
                     blangName = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropFontSizeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontSizeXID)) {
                     bfontSize = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropFontStyleXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontStyleXID)) {
                     bfontStyle = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropAlphaOrderXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropAlphaOrderXID)) {
                     balphaOrder = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionIdXID)) {
                     bDecId = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionTextXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionTextXID)) {
                     bDecText = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionNotesXID)) {
                     bDecNotes = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionIsTemplateXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionIsTemplateXID)) {
                     bDecIsTemp = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionRelatedIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionRelatedIdXID)) {
                     bDecRelId = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionMandatoryXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionMandatoryXID)) {
                     bdeclensionMandatory = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuideBaseXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuideBaseXID)) {
                     bpronBase = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuidePhonXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuidePhonXID)) {
                     bpronPhon = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proAutoPopXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
                     bproAutoPop = false;
-                }  else if (qName.equalsIgnoreCase(XMLIDs.wordRuleOverrideXID)) { 
+                }  else if (qName.equalsIgnoreCase(PGTUtil.wordRuleOverrideXID)) { 
                     bwordRuleOverride = false;
                 }
             }
@@ -503,9 +504,6 @@ public class CustHandlerFactory {
                 } else if (bproAutoPop) {
                     propertiesManager.setProAutoPop((new String(ch, start, length).equalsIgnoreCase("T")));
                     bproAutoPop = false;
-                } else if (bwordClassPlurMan) {
-                    typeCollection.getBufferType().setPluralMandatory(new String(ch, start, length).equals("T"));
-                    bwordClassPlurMan = false;
                 } else if (bwordClassProcMan) {
                     typeCollection.getBufferType().setProcMandatory(new String(ch, start, length).equals("T"));
                     bwordClassProcMan = false;
@@ -598,6 +596,15 @@ public class CustHandlerFactory {
             boolean bcombinedFormId = false;
             boolean bcombinedFormSurpress = false;
             boolean bwordRuleOverride = false;
+            boolean blogoStrokes = false;
+            boolean blogoNotes = false;
+            boolean blogoRadical = false;
+            boolean blogoRadicalList = false;
+            boolean blogoReading = false;
+            boolean blogoValue = false;
+            boolean blogoId = false;
+            boolean blogoNode = false;
+            boolean blogoWordRelation = false;
             
             int wId;
             int wCId;
@@ -616,136 +623,155 @@ public class CustHandlerFactory {
                     throws SAXException {
 
                 // test to see whether this is the first node in a word
-                if (qName.equalsIgnoreCase(XMLIDs.wordXID)) {
+                if (qName.equalsIgnoreCase(PGTUtil.wordXID)) {
                     this.getWordCollection().clear();
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuideXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuideXID)) {
                     proBuffer = new PronunciationNode();
-                } else if (qName.equalsIgnoreCase(XMLIDs.localWordXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.localWordXID)) {
                     blocalWord = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.conWordXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.conWordXID)) {
                     bconWord = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordTypeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordTypeXID)) {
                     btype = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordIdXID)) {
                     bId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.definitionXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.definitionXID)) {
                     bdef = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordPlurXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordPlurXID)) {
                     // plurality made into declension-deprecated from main screen
                     declensionMgr.clearBuffer();
                     bwordPlur = true;
-                }  else if (qName.equalsIgnoreCase(XMLIDs.wordRuleOverrideXID)) {
+                }  else if (qName.equalsIgnoreCase(PGTUtil.wordRuleOverrideXID)) {
                     bwordRuleOverride = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.fontConXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.fontConXID)) {
                     bfontcon = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.fontLocalXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.fontLocalXID)) {
                     bfontlocal = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassIdXID)) {
                     bwordClassId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassNameXID)) {
                     bwordClassName = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassNotesXID)) {
                     bwordClassNotes = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.pronunciationXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.pronunciationXID)) {
                     bpronuncation = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordGenderXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
                     bgender = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderIdXID)) {
                     bgenderId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderNameXID)) {
                     bgenderName = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderNotesXID)) {
                     bgenderNotes = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropLangNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLangNameXID)) {
                     blangName = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropFontSizeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontSizeXID)) {
                     bfontSize = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropFontStyleXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontStyleXID)) {
                     bfontStyle = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropAlphaOrderXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropAlphaOrderXID)) {
                     balphaOrder = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordAutoDeclenOverrideXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordAutoDeclenOverrideXID)) {
                     bwordoverAutoDec = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionXID)) {
                     // from old versions, declensions are loaded as dimensions of a master declension
                     declensionMgr.getBuffer().clearBuffer();
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionIdXID)) {
                     bDecId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionTextXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionTextXID)) {
                     bDecText = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionNotesXID)) {
                     bDecNotes = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionIsTemplateXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionIsTemplateXID)) {
                     bDecIsTemp = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionRelatedIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionRelatedIdXID)) {
                     bDecRelId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuideBaseXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuideBaseXID)) {
                     bpronBase = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuidePhonXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuidePhonXID)) {
                     bpronPhon = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proAutoPopXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
                     bproAutoPop = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordProcOverrideXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordProcOverrideXID)) {
                     bwordProcOverride = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassPlurManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassPlurManXID)) {
                     bwordClassPlurMan = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassProcManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassProcManXID)) {
                     bwordClassProcMan = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassGenderManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassGenderManXID)) {
                     bwordClassGenderMan = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassDefManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassDefManXID)) {
                     bwordClassDefMan = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassPatternXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassPatternXID)) {
                     bwordClassPattern = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionMandatoryXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionMandatoryXID)) {
                     bdeclensionMandatory = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropLocalUniquenessXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalUniquenessXID)) {
                     blangPropLocalUniqueness = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropWordUniquenessXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropWordUniquenessXID)) {
                     blangPropWordUniqueness = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropLocalMandatoryXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalMandatoryXID)) {
                     blangPropLocalMandatory = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropTypeMandatoryXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropTypeMandatoryXID)) {
                     blangPropTypeMandatory = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.dimensionNodeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionNodeXID)) {
                     bdimNode = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.dimensionIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionIdXID)) {
                     bdimId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.dimensionMandXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionMandXID)) {
                     bdimMand = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.dimensionNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionNameXID)) {
                     bdimName = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionComDimIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionComDimIdXID)) {
                     bDecCombId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.thesNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.thesNameXID)) {
                     bthesName = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.thesNodeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.thesNodeXID)) {
                     thesMgr.buildNewBuffer();
-                } else if (qName.equalsIgnoreCase(XMLIDs.thesNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.thesNotesXID)) {
                     bthesNotes = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.thesWordXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.thesWordXID)) {
                     bthesWord = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropIgnoreCase)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropIgnoreCase)) {
                     bignoreCase = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropDisableProcRegex)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropDisableProcRegex)) {
                     bdisableProcRegex = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleCombXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleCombXID)) {
                     bdecGenRuleComb = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleNameXID)) {
                     bdecGenRuleName = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleRegexXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleRegexXID)) {
                     bdecGenRuleRegex = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleTypeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleTypeXID)) {
                     bdecGenRuleType = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransRegexXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenTransRegexXID)) {
                     bdecGenTransRegex = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransReplaceXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenTransReplaceXID)) {
                     bdecGenTransRep = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decCombinedIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decCombinedIdXID)) {
                     bcombinedFormId = true;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decCombinedSurpressXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decCombinedSurpressXID)) {
                     bcombinedFormSurpress = true;
-                }
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoStrokesXID)) {
+                    blogoStrokes = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoNotesXID)) {
+                    blogoNotes = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoIsRadicalXID)) {
+                    blogoRadical = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoRadicalListXID)) {
+                    blogoRadicalList = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoReadingXID)) {
+                    blogoReading = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoGraphValueXID)) {
+                    blogoValue = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoGraphIdXID)) {
+                    blogoId = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoGraphNodeXID)) {
+                    blogoNode = true;
+                    core.getLogoCollection().clear();
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoWordRelationXID)) {
+                    blogoWordRelation = true;
+                } 
             }
 
             @Override
@@ -753,7 +779,7 @@ public class CustHandlerFactory {
                     String qName) throws SAXException {
 
                 // save word to word collection
-                if (qName.equalsIgnoreCase(XMLIDs.wordXID)) {
+                if (qName.equalsIgnoreCase(PGTUtil.wordXID)) {
                     ConWord curWord = this.getWordCollection()
                             .getBufferWord();
 
@@ -770,24 +796,24 @@ public class CustHandlerFactory {
                     } catch (Exception e) {
                         throw new SAXException();
                     }
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassXID)) {
                     // insertion for word types is much simpler
                     try {
                         this.getTypeCollection().insert(wCId);
                     } catch (Exception e) {
                         throw new SAXException();
                     }
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderXID)) {
                     try {
                         genderCollection.insert(wGId);
                     } catch (Exception e) {
                         throw new SAXException();
                     }
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuideXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuideXID)) {
                     pronuncMgr.addPronunciation(proBuffer);
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordGenderXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
                     bgender = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionXID)) {
                     // dec templates handled differently than actual saved declensions for words
                     if (declensionMgr.isBufferDecTemp()) {
                         declensionMgr.insertBuffer();
@@ -796,88 +822,89 @@ public class CustHandlerFactory {
                         Integer relId = declensionMgr.getBufferRelId();
                         declensionMgr.getBuffer().setCombinedDimId(declensionMgr.getBuffer().getCombinedDimId());
                         declensionMgr.addDeclensionToWord(relId, declensionMgr.getBuffer().getId(), declensionMgr.getBuffer());
+                        declensionMgr.clearBuffer();
                     }
-                } else if (qName.equalsIgnoreCase(XMLIDs.localWordXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.localWordXID)) {
                     blocalWord = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.conWordXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.conWordXID)) {
                     bconWord = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordPlurXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordPlurXID)) {
                     // plurality now a declension (as it should be)
                     // special position granted to plurals... fixes awful ID collision error
 
                     // skip insertion of empty
                     if (!declensionMgr.getBuffer().getValue().trim().equals("")) {
-                        declensionMgr.getBuffer().setCombinedDimId("," + wId + "," + XMLIDs.wordPlurXID + ",");
+                        declensionMgr.getBuffer().setCombinedDimId("," + wId + "," + PGTUtil.wordPlurXID + ",");
                         declensionMgr.addDeclensionToWord(wId, Integer.MAX_VALUE, declensionMgr.getBuffer());
                     }
 
                     declensionMgr.clearBuffer();
                     bwordPlur = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordTypeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordTypeXID)) {
                     btype = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordIdXID)) {
                     bId = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordRuleOverrideXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordRuleOverrideXID)) {
                     bwordRuleOverride = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.definitionXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.definitionXID)) {
                     bdef = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.fontConXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.fontConXID)) {
                     bfontcon = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.fontLocalXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.fontLocalXID)) {
                     bfontlocal = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassNameXID)) {
                     bwordClassName = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassNotesXID)) {
                     bwordClassNotes = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassPlurManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassPlurManXID)) {
                     bwordClassPlurMan = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassProcManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassProcManXID)) {
                     bwordClassProcMan = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassGenderManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassGenderManXID)) {
                     bwordClassGenderMan = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassDefManXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassDefManXID)) {
                     bwordClassDefMan = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordClassPatternXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassPatternXID)) {
                     bwordClassPattern = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.pronunciationXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.pronunciationXID)) {
                     bpronuncation = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderIdXID)) {
                     bgenderId = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderNameXID)) {
                     bgenderName = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.genderNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.genderNotesXID)) {
                     bgenderNotes = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.wordAutoDeclenOverrideXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordAutoDeclenOverrideXID)) {
                     bwordoverAutoDec = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropLangNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLangNameXID)) {
                     blangName = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropFontSizeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontSizeXID)) {
                     bfontSize = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropFontStyleXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontStyleXID)) {
                     bfontStyle = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropAlphaOrderXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropAlphaOrderXID)) {
                     balphaOrder = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionIdXID)) {
                     bDecId = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionTextXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionTextXID)) {
                     bDecText = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionNotesXID)) {
                     bDecNotes = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionIsTemplateXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionIsTemplateXID)) {
                     bDecIsTemp = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionRelatedIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionRelatedIdXID)) {
                     bDecRelId = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionMandatoryXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionMandatoryXID)) {
                     bdeclensionMandatory = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.declensionComDimIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionComDimIdXID)) {
                     bDecCombId = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuideBaseXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuideBaseXID)) {
                     bpronBase = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proGuidePhonXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuidePhonXID)) {
                     bpronPhon = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.proAutoPopXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
                     bproAutoPop = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.dimensionNodeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionNodeXID)) {
                     try {
                         declensionMgr.getBuffer().insertBuffer();
                         declensionMgr.getBuffer().clearBuffer();
@@ -885,47 +912,72 @@ public class CustHandlerFactory {
                         throw new SAXException(e);
                     }
                     bdimNode = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.dimensionIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionIdXID)) {
                     bdimId = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.dimensionMandXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionMandXID)) {
                     bdimMand = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.dimensionNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionNameXID)) {
                     bdimName = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.thesNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.thesNameXID)) {
                     bthesName = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.thesNodeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.thesNodeXID)) {
                     thesMgr.bufferDone();
-                } else if (qName.equalsIgnoreCase(XMLIDs.thesNotesXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.thesNotesXID)) {
                     bthesNotes = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.thesWordXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.thesWordXID)) {
                     bthesWord = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropIgnoreCase)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropIgnoreCase)) {
                     bignoreCase = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.langPropDisableProcRegex)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropDisableProcRegex)) {
                     bdisableProcRegex = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleXID)) {
                     core.getDeclensionManager().insRuleBuffer();
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleCombXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleCombXID)) {
                     bdecGenRuleComb = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleNameXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleNameXID)) {
                     bdecGenRuleName = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleRegexXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleRegexXID)) {
                     bdecGenRuleRegex = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenRuleTypeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleTypeXID)) {
                     bdecGenRuleType = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenTransXID)) {
                     core.getDeclensionManager().getRuleBuffer().insertTransBuffer();
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransRegexXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenTransRegexXID)) {
                     bdecGenTransRegex = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decGenTransReplaceXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenTransReplaceXID)) {
                     bdecGenTransRep = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decCombinedIdXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decCombinedIdXID)) {
                     bcombinedFormId = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decCombinedSurpressXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decCombinedSurpressXID)) {
                     bcombinedFormSurpress = false;
-                } else if (qName.equalsIgnoreCase(XMLIDs.decCombinedFormXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.decCombinedFormXID)) {
                     combinedDecId = "";
-                }
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoStrokesXID)) {
+                    blogoStrokes = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoNotesXID)) {
+                    blogoNotes = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoIsRadicalXID)) {
+                    blogoRadical = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoRadicalListXID)) {
+                    blogoRadicalList = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoReadingXID)) {
+                    core.getLogoCollection().getBufferNode().insertReadingBuffer();
+                    blogoReading = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoGraphValueXID)) {
+                    blogoValue = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoGraphIdXID)) {
+                    blogoId = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoGraphNodeXID)) {
+                    blogoNode = false;
+                    try {
+                        core.getLogoCollection().insert();
+                    } catch (Exception e) {
+                        // TODO: loading log?
+                    }
+                    core.getLogoCollection().clear();
+                } else if (qName.equalsIgnoreCase(PGTUtil.logoWordRelationXID)) {
+                    blogoWordRelation = false;
+                } 
             }
 
             @Override
@@ -1044,9 +1096,6 @@ public class CustHandlerFactory {
                 } else if (bproAutoPop) {
                     propertiesManager.setProAutoPop((new String(ch, start, length).equalsIgnoreCase("T")));
                     bproAutoPop = false;
-                } else if (bwordClassPlurMan) {
-                    typeCollection.getBufferType().setPluralMandatory(new String(ch, start, length).equals("T"));
-                    bwordClassPlurMan = false;
                 } else if (bwordClassProcMan) {
                     typeCollection.getBufferType().setProcMandatory(new String(ch, start, length).equals("T"));
                     bwordClassProcMan = false;
@@ -1127,6 +1176,34 @@ public class CustHandlerFactory {
                 } else if (bcombinedFormSurpress) {
                     core.getDeclensionManager().setCombinedDeclSurpressed(combinedDecId,
                             new String(ch, start, length).equals("T"));
+                } else if (blogoStrokes) {
+                    try {
+                        core.getLogoCollection().getBufferNode().setStrokes(Integer.parseInt(new String(ch, start, length)));
+                    } catch (Exception e) {
+                        // TODO: loading log?
+                    }
+                } else if (blogoNotes) {
+                    LogoNode curNode = core.getLogoCollection().getBufferNode();
+                    curNode.setNotes(curNode.getNotes() + new String(ch, start, length));
+                } else if (blogoRadical) {
+                    core.getLogoCollection().getBufferNode().setRadical(
+                        new String(ch, start, length).equals("T"));
+                } else if (blogoRadicalList) {
+                    core.getLogoCollection().getBufferNode().setTmpRadEntries(new String(ch, start, length));
+                } else if (blogoReading) {
+                    LogoNode curNode = core.getLogoCollection().getBufferNode();
+                    curNode.setReadingBuffer(curNode.getReadingBuffer() + new String(ch, start, length));
+                } else if (blogoValue) {
+                    LogoNode curNode = core.getLogoCollection().getBufferNode();
+                    curNode.setValue(curNode.getValue() + new String(ch, start, length));
+                } else if (blogoId) {
+                    try {
+                        core.getLogoCollection().getBufferNode().setId(Integer.parseInt(new String(ch, start, length)));
+                    } catch (Exception e) {
+                        // TODO: loading log?
+                    }
+                } else if (blogoWordRelation) {
+                    core.getLogoCollection().loadLogoRelations(new String(ch, start, length));
                 }
             }
         };

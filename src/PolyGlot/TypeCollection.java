@@ -228,39 +228,35 @@ public class TypeCollection extends DictionaryCollection {
         while (typeLoop.hasNext()) {
             TypeNode curType = typeLoop.next();
 
-            wordNode = doc.createElement(XMLIDs.wordClassXID);
+            wordNode = doc.createElement(PGTUtil.wordClassXID);
             rootElement.appendChild(wordNode);
 
-            wordValue = doc.createElement(XMLIDs.wordClassIdXID);
+            wordValue = doc.createElement(PGTUtil.wordClassIdXID);
             Integer wordId = curType.getId();
             wordValue.appendChild(doc.createTextNode(wordId.toString()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.wordClassNameXID);
+            wordValue = doc.createElement(PGTUtil.wordClassNameXID);
             wordValue.appendChild(doc.createTextNode(curType.getValue()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.wordClassNotesXID);
+            wordValue = doc.createElement(PGTUtil.wordClassNotesXID);
             wordValue.appendChild(doc.createTextNode(curType.getNotes()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.wordClassDefManXID);
+            wordValue = doc.createElement(PGTUtil.wordClassDefManXID);
             wordValue.appendChild(doc.createTextNode(curType.isDefMandatory() ? "T" : "F"));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.wordClassGenderManXID);
+            wordValue = doc.createElement(PGTUtil.wordClassGenderManXID);
             wordValue.appendChild(doc.createTextNode(curType.isGenderMandatory() ? "T" : "F"));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.wordClassPlurManXID);
-            wordValue.appendChild(doc.createTextNode(curType.isPluralMandatory() ? "T" : "F"));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(XMLIDs.wordClassProcManXID);
+            wordValue = doc.createElement(PGTUtil.wordClassProcManXID);
             wordValue.appendChild(doc.createTextNode(curType.isProcMandatory() ? "T" : "F"));
             wordNode.appendChild(wordValue);
             
-            wordValue = doc.createElement(XMLIDs.wordClassPatternXID);
+            wordValue = doc.createElement(PGTUtil.wordClassPatternXID);
             wordValue.appendChild(doc.createTextNode(curType.getPattern()));
             wordNode.appendChild(wordValue);
         }

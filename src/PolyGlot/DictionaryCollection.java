@@ -44,6 +44,8 @@ public abstract class DictionaryCollection {
     public int addNode(DictNode _addType) throws Exception {
         int ret;
         
+        clear();
+        
         bufferNode.setEqual(_addType);
 
         ret = this.insert(bufferNode);

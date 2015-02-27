@@ -273,14 +273,14 @@ public class PronunciationMgr {
         while (procGuide.hasNext()) {
             PronunciationNode curNode = procGuide.next();
 
-            wordNode = doc.createElement(XMLIDs.proGuideXID);
+            wordNode = doc.createElement(PGTUtil.proGuideXID);
             rootElement.appendChild(wordNode);
 
-            wordValue = doc.createElement(XMLIDs.proGuideBaseXID);
+            wordValue = doc.createElement(PGTUtil.proGuideBaseXID);
             wordValue.appendChild(doc.createTextNode(curNode.getValue()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.proGuidePhonXID);
+            wordValue = doc.createElement(PGTUtil.proGuidePhonXID);
             wordValue.appendChild(doc.createTextNode(curNode.getPronunciation()));
             wordNode.appendChild(wordValue);
         }

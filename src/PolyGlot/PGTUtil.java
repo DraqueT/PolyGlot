@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -24,7 +24,7 @@ package PolyGlot;
  * This contains all the XML markers for saving/loading files
  * @author draque
  */
-public class XMLIDs {
+public class PGTUtil {
     // properties on words
     public static final String dictionaryXID = "dictionary";
     public static final String pgVersionXID = "PolyGlotVer";
@@ -119,7 +119,30 @@ public class XMLIDs {
     public static final String decCombinedIdXID = "decCombinedId";
     public static final String decCombinedSurpressXID = "decCombinedSurpress";
     
+    // properties for logographs
+    public static final String logoRootNoteXID = "logoRootNode";
+    public static final String logoGraphsCollectionXID = "logoGraphsCollection";
+    public static final String logoStrokesXID = "logoStrokes";
+    public static final String logoNotesXID = "logoNotes";
+    public static final String logoIsRadicalXID = "logoIsRadical";
+    public static final String logoRadicalListXID = "logoRadicalList";
+    public static final String logoReadingXID = "logoReading";
+    public static final String logoGraphValueXID = "logoGraphValue";
+    public static final String logoGraphIdXID = "logoGraphId";
+    public static final String logoGraphNodeXID = "LogoGraphNode";
+    public static final String logoWordRelationXID = "LogoWordRelation";
+    public static final String logoRelationsCollectionXID = "LogoRelationsCollection";
+            
     // string constants
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";
+    public static final String logoGraphSavePath = "logoGraphs/";
+    
+    /**
+     * This records the mode of a given PDialog or PFrame window. Defaults to
+     * STANDARD
+     */
+    public enum WindowMode {
+        STANDARD, SINGLEVALUE, SELECTLIST
+    }
 }

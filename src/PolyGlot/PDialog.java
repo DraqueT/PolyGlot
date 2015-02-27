@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Draque
+ * Copyright (c) 2014 - 2015, Draque Thompson - draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -20,7 +20,9 @@
 
 package PolyGlot;
 
+import PolyGlot.PGTUtil.WindowMode;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.KeyEvent;
 import javax.swing.InputMap;
 import javax.swing.JDialog;
@@ -34,7 +36,48 @@ import javax.swing.text.DefaultEditorKit;
  * @author Draque
  */
 public class PDialog extends JDialog{
-    public PDialog() {
+    private boolean isDisposed = false;
+    protected WindowMode mode = WindowMode.STANDARD;
+    private boolean skipCenter = false;
+    
+    /**
+     * Returns current running mode of window
+     * @return 
+     */
+    public WindowMode getMode() {
+        return mode;
+    }
+    
+    @Override
+    public void dispose() {
+        isDisposed = true;
+        super.dispose();
+    }
+    
+    /**
+     * returns true if window has been disposed
+     * @return disposed value
+     */
+    public boolean isDisposed() {
+        return isDisposed;
+    }
+    
+    /**
+     * Sets window visibly to the right of the window handed in
+     *
+     * @param w window to set location relative to
+     */
+    public void setBeside(final Window w) {
+        final Window self = this;
+        skipCenter = true;
+        
+        int x = w.getLocation().x + w.getWidth();
+        int y = w.getLocation().y;
+
+        self.setLocation(x, y);
+    }
+    
+    private void setupKeyStrokes() {
         // enable copy/paste on macs
         if (System.getProperty("os.name").startsWith("Mac")) {
             InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
@@ -58,7 +101,11 @@ public class PDialog extends JDialog{
     // positions on screen once form has already been build/sized
     @Override
     public void pack() {
+        setupKeyStrokes();
         super.pack();
-        this.setLocationRelativeTo(null);
+        
+        if (!skipCenter) {
+            this.setLocationRelativeTo(null);
+        }
     }
 }

@@ -58,7 +58,6 @@ public class TypeNode extends DictNode{
         this.setDefMandatory(set.isDefMandatory());
         this.setGenderMandatory(set.isGenderMandatory());
         this.setProcMandatory(set.isProcMandatory());
-        this.setPluralMandatory(set.isPluralMandatory());
     }
 
     /**
@@ -73,20 +72,6 @@ public class TypeNode extends DictNode{
      */
     public void setGenderMandatory(boolean genderMandatory) {
         this.genderMandatory = genderMandatory;
-    }
-
-    /**
-     * @return the pronMandatory
-     */
-    public boolean isPluralMandatory() {
-        return pluralMandatory;
-    }
-
-    /**
-     * @param pronMandatory the pronMandatory to set
-     */
-    public void setPluralMandatory(boolean pronMandatory) {
-        this.pluralMandatory = pronMandatory;
     }
 
     /**

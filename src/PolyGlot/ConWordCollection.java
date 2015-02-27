@@ -128,6 +128,7 @@ public class ConWordCollection extends DictionaryCollection {
      * @param additive true if adding, false if removing
      */
     private void balanceWordCounts(ConWord insWord, boolean additive) {
+        // TODO: this must also balance wordcounts in logograms
         Integer curCount = allConWords.containsKey(insWord.getValue())
                 ? allConWords.get(insWord.getValue()) : 0;
         allConWords.remove(insWord.getValue());
@@ -642,48 +643,48 @@ public class ConWordCollection extends DictionaryCollection {
         while (wordLoop.hasNext()) {
             curWord = wordLoop.next();
 
-            wordNode = doc.createElement(XMLIDs.wordXID);
+            wordNode = doc.createElement(PGTUtil.wordXID);
             rootElement.appendChild(wordNode);
 
-            wordValue = doc.createElement(XMLIDs.wordIdXID);
+            wordValue = doc.createElement(PGTUtil.wordIdXID);
             Integer wordId = curWord.getId();
             wordValue.appendChild(doc.createTextNode(wordId.toString()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.localWordXID);
+            wordValue = doc.createElement(PGTUtil.localWordXID);
             wordValue.appendChild(doc.createTextNode(curWord.getLocalWord()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.conWordXID);
+            wordValue = doc.createElement(PGTUtil.conWordXID);
             wordValue.appendChild(doc.createTextNode(curWord.getValue()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.wordTypeXID);
+            wordValue = doc.createElement(PGTUtil.wordTypeXID);
             wordValue.appendChild(doc.createTextNode(curWord.getWordType()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.pronunciationXID);
+            wordValue = doc.createElement(PGTUtil.pronunciationXID);
             wordValue
                     .appendChild(doc.createTextNode(curWord.getPronunciation()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.wordGenderXID);
+            wordValue = doc.createElement(PGTUtil.wordGenderXID);
             wordValue.appendChild(doc.createTextNode(curWord.getGender()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.definitionXID);
+            wordValue = doc.createElement(PGTUtil.definitionXID);
             wordValue.appendChild(doc.createTextNode(curWord.getDefinition()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.wordProcOverrideXID);
+            wordValue = doc.createElement(PGTUtil.wordProcOverrideXID);
             wordValue.appendChild(doc.createTextNode(curWord.isProcOverride() ? "T" : "F"));
             wordNode.appendChild(wordValue);
             
-            wordValue = doc.createElement(XMLIDs.wordAutoDeclenOverrideXID);
+            wordValue = doc.createElement(PGTUtil.wordAutoDeclenOverrideXID);
             wordValue.appendChild(doc.createTextNode(curWord.isOverrideAutoDeclen() ? "T" : "F"));
             wordNode.appendChild(wordValue);
             
-            wordValue = doc.createElement(XMLIDs.wordRuleOverrideXID);
+            wordValue = doc.createElement(PGTUtil.wordRuleOverrideXID);
             wordValue.appendChild(doc.createTextNode(curWord.isRulesOverrride()? "T" : "F"));
             wordNode.appendChild(wordValue);
         }

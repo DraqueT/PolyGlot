@@ -99,15 +99,6 @@
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator4">
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuThesaurus">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Thesaurus"/>
-                <Property name="toolTipText" type="java.lang.String" value="A thesaurus to help you organize your words."/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuThesaurusActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuTranslation">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Translation Window"/>
@@ -124,6 +115,31 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuLangStatsActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="mnuView">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="View"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuViewLogographsDetail">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Logograph Dictionary"/>
+                <Property name="toolTipText" type="java.lang.String" value="Logographic dictionary tool"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuViewLogographsDetailActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuThesaurus">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Thesaurus"/>
+                <Property name="toolTipText" type="java.lang.String" value="A thesaurus to help you organize your words."/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuThesaurusActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -561,56 +577,53 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  <Component id="btnConwordDeclensions" min="-2" pref="171" max="-2" attributes="0"/>
+                              <Component id="jScrollPane5" alignment="1" max="32767" attributes="0"/>
+                              <Component id="sclDefProp" pref="243" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="lblConWordProp" alignment="1" min="-2" pref="87" max="-2" attributes="0"/>
+                                      <Component id="lblLocalWordProp" min="-2" pref="87" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="txtLocalWordProp" max="32767" attributes="0"/>
+                                      <Component id="txtConWordProp" max="32767" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <Group type="102" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="lblGenderProp" min="-2" pref="87" max="-2" attributes="0"/>
+                                      <Component id="lblPrononciationProp" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblTypeProp" alignment="0" min="-2" pref="87" max="-2" attributes="0"/>
+                                  </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane5" alignment="1" max="32767" attributes="0"/>
-                                      <Component id="sclDefProp" pref="243" max="32767" attributes="0"/>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="lblConWordProp" alignment="1" min="-2" pref="87" max="-2" attributes="0"/>
-                                              <Component id="lblLocalWordProp" min="-2" pref="87" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="txtLocalWordProp" max="32767" attributes="0"/>
-                                              <Component id="txtConWordProp" max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="lblGenderProp" min="-2" pref="87" max="-2" attributes="0"/>
-                                              <Component id="lblPrononciationProp" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="lblTypeProp" alignment="0" min="-2" pref="87" max="-2" attributes="0"/>
-                                          </Group>
+                                      <Component id="cmbTypeProp" max="32767" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="txtPronunciationProp" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="cmbTypeProp" max="32767" attributes="0"/>
-                                              <Group type="102" attributes="0">
-                                                  <Component id="txtPronunciationProp" max="32767" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="chkPronunciationOverrideProp" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Component id="cmbGenderProp" max="32767" attributes="0"/>
-                                          </Group>
+                                          <Component id="chkPronunciationOverrideProp" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                                              <Component id="lblDefinitionProp" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="chkWordRulesOverride" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="cmbGenderProp" max="32767" attributes="0"/>
                                   </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblDefinitionProp" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="chkWordRulesOverride" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="btnConwordDeclensions" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="btnWordLogographs" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -655,11 +668,14 @@
                               <Component id="chkWordRulesOverride" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="sclDefProp" pref="0" max="32767" attributes="0"/>
+                          <Component id="sclDefProp" pref="71" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jScrollPane5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnConwordDeclensions" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="btnConwordDeclensions" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnWordLogographs" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -752,8 +768,8 @@
                 </Container>
                 <Component class="javax.swing.JButton" name="btnConwordDeclensions">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Conword Declensions"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Displays fields for declension forms of current word (if any)"/>
+                    <Property name="text" type="java.lang.String" value="Declensions"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Displays fields for declensions/conjugations forms of current word"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
@@ -802,6 +818,25 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkWordRulesOverrideActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnWordLogographs">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Logographs"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Logographs associated with this word"/>
+                    <Property name="enabled" type="boolean" value="false"/>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[121, 29]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[121, 29]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[121, 29]"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnWordLogographsActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>
@@ -997,10 +1032,9 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="chkTypeGenderMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="chkTypeProcMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="chkTypePluralMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="chkTypeDefinitionMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="66" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1012,10 +1046,8 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="chkTypeProcMandatory" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="chkTypePluralMandatory" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="chkTypeDefinitionMandatory" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1039,16 +1071,6 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkTypeProcMandatoryActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JCheckBox" name="chkTypePluralMandatory">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Plural Mandatory"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select to make the Plural field mandatory for all words of this type."/>
-                    <Property name="enabled" type="boolean" value="false"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkTypePluralMandatoryActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="chkTypeDefinitionMandatory">

@@ -226,19 +226,19 @@ public class GenderCollection extends DictionaryCollection{
         while (genderLoop.hasNext()) {
             GenderNode curGen = genderLoop.next();
 
-            wordNode = doc.createElement(XMLIDs.genderXID);
+            wordNode = doc.createElement(PGTUtil.genderXID);
             rootElement.appendChild(wordNode);
 
-            wordValue = doc.createElement(XMLIDs.genderIdXID);
+            wordValue = doc.createElement(PGTUtil.genderIdXID);
             Integer wordId = curGen.getId();
             wordValue.appendChild(doc.createTextNode(wordId.toString()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.genderNameXID);
+            wordValue = doc.createElement(PGTUtil.genderNameXID);
             wordValue.appendChild(doc.createTextNode(curGen.getValue()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.genderNotesXID);
+            wordValue = doc.createElement(PGTUtil.genderNotesXID);
             wordValue.appendChild(doc.createTextNode(curGen.getNotes()));
             wordNode.appendChild(wordValue);
         }

@@ -44,6 +44,7 @@ public class DictCore {
     private final PropertiesManager propertiesManager = new PropertiesManager();
     private final PronunciationMgr pronuncMgr = new PronunciationMgr(this);
     private final ThesaurusManager thesManager = new ThesaurusManager(this);
+    private final LogoCollection logoCollection = new LogoCollection(this);
 
     /**
      * Gets proper color for fields marked as required
@@ -61,6 +62,10 @@ public class DictCore {
      */
     public ThesaurusManager getThesManager() {
         return thesManager;
+    }
+    
+    public LogoCollection getLogoCollection() {
+        return logoCollection;
     }
 
     /**
@@ -112,6 +117,7 @@ public class DictCore {
         wordCollection.setAlphaOrder(alphaOrder);
         typeCollection.setAlphaOrder(alphaOrder);
         genderCollection.setAlphaOrder(alphaOrder);
+        logoCollection.setAlphaOrder(alphaOrder);
     }
 
     /**
@@ -143,6 +149,9 @@ public class DictCore {
         } catch (IOException e) {
             throw new Exception(e.getMessage());
         }
+        
+        logoCollection.loadRadicalRelations();
+        IOHandler.loadImages(logoCollection, _fileName);
     }
 
     /**
@@ -161,11 +170,11 @@ public class DictCore {
 
         // root elements
         Document doc = docBuilder.newDocument();
-        Element rootElement = doc.createElement(XMLIDs.dictionaryXID);
+        Element rootElement = doc.createElement(PGTUtil.dictionaryXID);
         doc.appendChild(rootElement);
 
         // store version of PolyGlot
-        wordValue = doc.createElement(XMLIDs.pgVersionXID);
+        wordValue = doc.createElement(PGTUtil.pgVersionXID);
         wordValue.appendChild(doc.createTextNode(version));
         rootElement.appendChild(wordValue);
 
@@ -176,6 +185,7 @@ public class DictCore {
         wordCollection.writeXML(doc, rootElement);
         declensionMgr.writeXML(doc, rootElement);
         pronuncMgr.writeXML(doc, rootElement);
+        logoCollection.writeXML(doc, rootElement);
 
         // write thesaurus entries
         rootElement.appendChild(thesManager.writeToSaveXML(doc));

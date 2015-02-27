@@ -785,48 +785,48 @@ public class DeclensionManager {
             Integer relatedId = e.getKey();
 
             for (DeclensionNode curNode : e.getValue()) {
-                wordNode = doc.createElement(XMLIDs.declensionXID);
+                wordNode = doc.createElement(PGTUtil.declensionXID);
                 rootElement.appendChild(wordNode);
 
-                wordValue = doc.createElement(XMLIDs.declensionIdXID);
+                wordValue = doc.createElement(PGTUtil.declensionIdXID);
                 wordValue.appendChild(doc.createTextNode(curNode.getId().toString()));
                 wordNode.appendChild(wordValue);
 
-                wordValue = doc.createElement(XMLIDs.declensionTextXID);
+                wordValue = doc.createElement(PGTUtil.declensionTextXID);
                 wordValue.appendChild(doc.createTextNode(curNode.getValue()));
                 wordNode.appendChild(wordValue);
 
-                wordValue = doc.createElement(XMLIDs.declensionNotesXID);
+                wordValue = doc.createElement(PGTUtil.declensionNotesXID);
                 wordValue.appendChild(doc.createTextNode(curNode.getNotes()));
                 wordNode.appendChild(wordValue);
 
-                wordValue = doc.createElement(XMLIDs.declensionIsTemplateXID);
+                wordValue = doc.createElement(PGTUtil.declensionIsTemplateXID);
                 wordValue.appendChild(doc.createTextNode("1"));
                 wordNode.appendChild(wordValue);
 
-                wordValue = doc.createElement(XMLIDs.declensionRelatedIdXID);
+                wordValue = doc.createElement(PGTUtil.declensionRelatedIdXID);
                 wordValue.appendChild(doc.createTextNode(relatedId.toString()));
                 wordNode.appendChild(wordValue);
 
-                wordValue = doc.createElement(XMLIDs.declensionMandatoryXID);
+                wordValue = doc.createElement(PGTUtil.declensionMandatoryXID);
                 wordValue.appendChild(doc.createTextNode(curNode.isMandatory() ? "T" : "F"));
                 wordNode.appendChild(wordValue);
 
                 Iterator<DeclensionDimension> dimIt = curNode.getDimensions().iterator();
                 while (dimIt.hasNext()) {
-                    wordValue = doc.createElement(XMLIDs.dimensionNodeXID);
+                    wordValue = doc.createElement(PGTUtil.dimensionNodeXID);
 
                     DeclensionDimension curDim = dimIt.next();
 
-                    Element dimNode = doc.createElement(XMLIDs.dimensionIdXID);
+                    Element dimNode = doc.createElement(PGTUtil.dimensionIdXID);
                     dimNode.appendChild(doc.createTextNode(curDim.getId().toString()));
                     wordValue.appendChild(dimNode);
 
-                    dimNode = doc.createElement(XMLIDs.dimensionNameXID);
+                    dimNode = doc.createElement(PGTUtil.dimensionNameXID);
                     dimNode.appendChild(doc.createTextNode(curDim.getValue()));
                     wordValue.appendChild(dimNode);
 
-                    dimNode = doc.createElement(XMLIDs.dimensionMandXID);
+                    dimNode = doc.createElement(PGTUtil.dimensionMandXID);
                     dimNode.appendChild(doc.createTextNode(curDim.isMandatory() ? "T" : "F"));
                     wordValue.appendChild(dimNode);
 
@@ -841,30 +841,30 @@ public class DeclensionManager {
             Integer relatedId = e.getKey();
 
             for (DeclensionNode curNode : e.getValue()) {
-                wordNode = doc.createElement(XMLIDs.declensionXID);
+                wordNode = doc.createElement(PGTUtil.declensionXID);
                 rootElement.appendChild(wordNode);
 
-                wordValue = doc.createElement(XMLIDs.declensionIdXID);
+                wordValue = doc.createElement(PGTUtil.declensionIdXID);
                 wordValue.appendChild(doc.createTextNode(curNode.getId().toString()));
                 wordNode.appendChild(wordValue);
 
-                wordValue = doc.createElement(XMLIDs.declensionTextXID);
+                wordValue = doc.createElement(PGTUtil.declensionTextXID);
                 wordValue.appendChild(doc.createTextNode(curNode.getValue()));
                 wordNode.appendChild(wordValue);
 
-                wordValue = doc.createElement(XMLIDs.declensionNotesXID);
+                wordValue = doc.createElement(PGTUtil.declensionNotesXID);
                 wordValue.appendChild(doc.createTextNode(curNode.getNotes()));
                 wordNode.appendChild(wordValue);
 
-                wordValue = doc.createElement(XMLIDs.declensionRelatedIdXID);
+                wordValue = doc.createElement(PGTUtil.declensionRelatedIdXID);
                 wordValue.appendChild(doc.createTextNode(relatedId.toString()));
                 wordNode.appendChild(wordValue);
 
-                wordValue = doc.createElement(XMLIDs.declensionComDimIdXID);
+                wordValue = doc.createElement(PGTUtil.declensionComDimIdXID);
                 wordValue.appendChild(doc.createTextNode(curNode.getCombinedDimId()));
                 wordNode.appendChild(wordValue);
 
-                wordValue = doc.createElement(XMLIDs.declensionIsTemplateXID);
+                wordValue = doc.createElement(PGTUtil.declensionIsTemplateXID);
                 wordValue.appendChild(doc.createTextNode("0"));
                 wordNode.appendChild(wordValue);
             }
@@ -872,56 +872,56 @@ public class DeclensionManager {
 
         // record declension autogeneration rules
         for (DeclensionGenRule curRule : generationRules) {
-            Element ruleNode = doc.createElement(XMLIDs.decGenRuleXID);
+            Element ruleNode = doc.createElement(PGTUtil.decGenRuleXID);
             rootElement.appendChild(ruleNode);
 
-            wordValue = doc.createElement(XMLIDs.decGenRuleCombXID);
+            wordValue = doc.createElement(PGTUtil.decGenRuleCombXID);
             wordValue.appendChild(doc.createTextNode(curRule.getCombinationId()));
             ruleNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.decGenRuleNameXID);
+            wordValue = doc.createElement(PGTUtil.decGenRuleNameXID);
             wordValue.appendChild(doc.createTextNode(curRule.getName()));
             ruleNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.decGenRuleRegexXID);
+            wordValue = doc.createElement(PGTUtil.decGenRuleRegexXID);
             wordValue.appendChild(doc.createTextNode(curRule.getRegex()));
             ruleNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(XMLIDs.decGenRuleTypeXID);
+            wordValue = doc.createElement(PGTUtil.decGenRuleTypeXID);
             wordValue.appendChild(doc.createTextNode(Integer.toString(curRule.getTypeId())));
             ruleNode.appendChild(wordValue);
 
             List<DeclensionGenTransform> transIt = curRule.getTransforms();
             for (DeclensionGenTransform curTransform : transIt) {
-                Element transNode = doc.createElement(XMLIDs.decGenTransXID);
+                Element transNode = doc.createElement(PGTUtil.decGenTransXID);
                 ruleNode.appendChild(transNode);
 
-                wordValue = doc.createElement(XMLIDs.decGenTransRegexXID);
+                wordValue = doc.createElement(PGTUtil.decGenTransRegexXID);
                 wordValue.appendChild(doc.createTextNode(curTransform.regex));
                 transNode.appendChild(wordValue);
 
-                wordValue = doc.createElement(XMLIDs.decGenTransReplaceXID);
+                wordValue = doc.createElement(PGTUtil.decGenTransReplaceXID);
                 wordValue.appendChild(doc.createTextNode(curTransform.replaceText));
                 transNode.appendChild(wordValue);
             }
         }
 
         // record combined form settings
-        Element combinedForms = doc.createElement(XMLIDs.decCombinedFormSectionXID);
+        Element combinedForms = doc.createElement(PGTUtil.decCombinedFormSectionXID);
         rootElement.appendChild(combinedForms);
 
         Iterator it = combSettings.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry) it.next();
-            Element curCombForm = doc.createElement(XMLIDs.decCombinedFormXID);
+            Element curCombForm = doc.createElement(PGTUtil.decCombinedFormXID);
             Element curAttrib;
             
             // This section will have to be slightly rewritten if the combined settings become more complex
-            curAttrib = doc.createElement(XMLIDs.decCombinedIdXID);
+            curAttrib = doc.createElement(PGTUtil.decCombinedIdXID);
             curAttrib.appendChild(doc.createTextNode((String)pairs.getKey()));
             curCombForm.appendChild(curAttrib);
             
-            curAttrib = doc.createElement(XMLIDs.decCombinedSurpressXID);
+            curAttrib = doc.createElement(PGTUtil.decCombinedSurpressXID);
             curAttrib.appendChild(doc.createTextNode((Boolean)pairs.getValue()?"T":"F"));
             curCombForm.appendChild(curAttrib);
             

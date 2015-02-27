@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -27,6 +27,8 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -338,6 +340,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         chkPronunciationOverrideProp = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
         chkWordRulesOverride = new javax.swing.JCheckBox();
+        btnWordLogographs = new javax.swing.JButton();
         tabType = new javax.swing.JPanel();
         sclTypesList = new javax.swing.JScrollPane();
         lstTypesList = new javax.swing.JList();
@@ -351,7 +354,6 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         jPanel4 = new javax.swing.JPanel();
         chkTypeGenderMandatory = new javax.swing.JCheckBox();
         chkTypeProcMandatory = new javax.swing.JCheckBox();
-        chkTypePluralMandatory = new javax.swing.JCheckBox();
         chkTypeDefinitionMandatory = new javax.swing.JCheckBox();
         txtTypesErrorBox = new javax.swing.JTextField();
         btnConjDecl = new javax.swing.JButton();
@@ -410,9 +412,11 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         mnuImportExcel = new javax.swing.JMenuItem();
         mnuExcelExport = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
-        mnuThesaurus = new javax.swing.JMenuItem();
         mnuTranslation = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
+        mnuView = new javax.swing.JMenu();
+        mnuViewLogographsDetail = new javax.swing.JMenuItem();
+        mnuThesaurus = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
         mnuPloyHelp = new javax.swing.JMenuItem();
         mnuAbout = new javax.swing.JMenuItem();
@@ -641,8 +645,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         txtDefProp.setWrapStyleWord(true);
         sclDefProp.setViewportView(txtDefProp);
 
-        btnConwordDeclensions.setText("Conword Declensions");
-        btnConwordDeclensions.setToolTipText("Displays fields for declension forms of current word (if any)");
+        btnConwordDeclensions.setText("Declensions");
+        btnConwordDeclensions.setToolTipText("Displays fields for declensions/conjugations forms of current word");
         btnConwordDeclensions.setEnabled(false);
         btnConwordDeclensions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -674,48 +678,59 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             }
         });
 
+        btnWordLogographs.setText("Logographs");
+        btnWordLogographs.setToolTipText("Logographs associated with this word");
+        btnWordLogographs.setEnabled(false);
+        btnWordLogographs.setMaximumSize(new java.awt.Dimension(121, 29));
+        btnWordLogographs.setMinimumSize(new java.awt.Dimension(121, 29));
+        btnWordLogographs.setPreferredSize(new java.awt.Dimension(121, 29));
+        btnWordLogographs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnWordLogographsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlPropertiesLayout = new javax.swing.GroupLayout(pnlProperties);
         pnlProperties.setLayout(pnlPropertiesLayout);
         pnlPropertiesLayout.setHorizontalGroup(
             pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPropertiesLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnConwordDeclensions, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
                     .addGroup(pnlPropertiesLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+                            .addComponent(lblConWordProp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblLocalWordProp, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtLocalWordProp)
+                            .addComponent(txtConWordProp)))
+                    .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                        .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblGenderProp, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPrononciationProp)
+                            .addComponent(lblTypeProp, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbTypeProp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(pnlPropertiesLayout.createSequentialGroup()
-                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblConWordProp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblLocalWordProp, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(6, 6, 6)
-                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtLocalWordProp)
-                                    .addComponent(txtConWordProp)))
-                            .addGroup(pnlPropertiesLayout.createSequentialGroup()
-                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblGenderProp, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblPrononciationProp)
-                                    .addComponent(lblTypeProp, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtPronunciationProp)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cmbTypeProp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(pnlPropertiesLayout.createSequentialGroup()
-                                        .addComponent(txtPronunciationProp)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(chkPronunciationOverrideProp))
-                                    .addComponent(cmbGenderProp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(pnlPropertiesLayout.createSequentialGroup()
-                                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11)
-                                    .addComponent(lblDefinitionProp))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(chkWordRulesOverride)))))
+                                .addComponent(chkPronunciationOverrideProp))
+                            .addComponent(cmbGenderProp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                        .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(lblDefinitionProp))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(chkWordRulesOverride)))
                 .addContainerGap())
+            .addGroup(pnlPropertiesLayout.createSequentialGroup()
+                .addComponent(btnConwordDeclensions)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnWordLogographs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlPropertiesLayout.setVerticalGroup(
             pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -750,11 +765,13 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                         .addComponent(lblDefinitionProp))
                     .addComponent(chkWordRulesOverride))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sclDefProp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnConwordDeclensions))
+                .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnConwordDeclensions)
+                    .addComponent(btnWordLogographs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         javax.swing.GroupLayout tabDictLayout = new javax.swing.GroupLayout(tabDict);
@@ -858,15 +875,6 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             }
         });
 
-        chkTypePluralMandatory.setText("Plural Mandatory");
-        chkTypePluralMandatory.setToolTipText("Select to make the Plural field mandatory for all words of this type.");
-        chkTypePluralMandatory.setEnabled(false);
-        chkTypePluralMandatory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkTypePluralMandatoryActionPerformed(evt);
-            }
-        });
-
         chkTypeDefinitionMandatory.setText("Definition Mandatory");
         chkTypeDefinitionMandatory.setToolTipText("Select to make the Definition field mandatory for all words of this type.");
         chkTypeDefinitionMandatory.setEnabled(false);
@@ -885,9 +893,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chkTypeGenderMandatory)
                     .addComponent(chkTypeProcMandatory)
-                    .addComponent(chkTypePluralMandatory)
                     .addComponent(chkTypeDefinitionMandatory))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -897,10 +904,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkTypeProcMandatory)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkTypePluralMandatory)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkTypeDefinitionMandatory)
-                .addContainerGap())
+                .addGap(35, 35, 35))
         );
 
         txtTypesErrorBox.setEditable(false);
@@ -1486,15 +1491,6 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         mnuTools.add(mnuExcelExport);
         mnuTools.add(jSeparator4);
 
-        mnuThesaurus.setText("Thesaurus");
-        mnuThesaurus.setToolTipText("A thesaurus to help you organize your words.");
-        mnuThesaurus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuThesaurusActionPerformed(evt);
-            }
-        });
-        mnuTools.add(mnuThesaurus);
-
         mnuTranslation.setText("Translation Window");
         mnuTranslation.setToolTipText("A tool to help you translate to your ConLang");
         mnuTranslation.addActionListener(new java.awt.event.ActionListener() {
@@ -1514,6 +1510,28 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         mnuTools.add(mnuLangStats);
 
         jMenuBar1.add(mnuTools);
+
+        mnuView.setText("View");
+
+        mnuViewLogographsDetail.setText("Logograph Dictionary");
+        mnuViewLogographsDetail.setToolTipText("Logographic dictionary tool");
+        mnuViewLogographsDetail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuViewLogographsDetailActionPerformed(evt);
+            }
+        });
+        mnuView.add(mnuViewLogographsDetail);
+
+        mnuThesaurus.setText("Thesaurus");
+        mnuThesaurus.setToolTipText("A thesaurus to help you organize your words.");
+        mnuThesaurus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuThesaurusActionPerformed(evt);
+            }
+        });
+        mnuView.add(mnuThesaurus);
+
+        jMenuBar1.add(mnuView);
 
         mnuHelp.setText("Help");
 
@@ -1715,10 +1733,6 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         saveType();
     }//GEN-LAST:event_chkTypeProcMandatoryActionPerformed
 
-    private void chkTypePluralMandatoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkTypePluralMandatoryActionPerformed
-        saveType();
-    }//GEN-LAST:event_chkTypePluralMandatoryActionPerformed
-
     private void chkTypeDefinitionMandatoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkTypeDefinitionMandatoryActionPerformed
         saveType();
     }//GEN-LAST:event_chkTypeDefinitionMandatoryActionPerformed
@@ -1783,6 +1797,14 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         saveModWord();
     }//GEN-LAST:event_chkWordRulesOverrideActionPerformed
 
+    private void mnuViewLogographsDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuViewLogographsDetailActionPerformed
+        viewLogographDetail();
+    }//GEN-LAST:event_mnuViewLogographsDetailActionPerformed
+
+    private void btnWordLogographsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWordLogographsActionPerformed
+        viewQuickLogoGraph();
+    }//GEN-LAST:event_btnWordLogographsActionPerformed
+    
     @Override
     public void dispose() {
         // only exit if save/cancel test is passed
@@ -1796,7 +1818,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         super.dispose();
         System.exit(0);
     }
-
+    
     /**
      * Export dictionary to excel file
      */
@@ -2117,6 +2139,42 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private void viewThesaurus() {
         Window window = ScrThesaurus.run(core, this);
         childFrames.add(window);
+    }
+    
+    private void viewLogographDetail() {
+        Window window = ScrLogoDetails.run(core);
+        childFrames.add(window);
+    }
+    
+    private void viewQuickLogoGraph() {
+        Integer curIndex = lstDict.getSelectedIndex();
+        Integer wordId = (Integer) scrToCoreMap.get(curIndex);
+        ConWord curWord = new ConWord();
+
+        if (curIndex == -1) {
+            return;
+        }
+        
+        try {
+            curWord = core.getWordCollection().getNodeById(wordId);
+        } catch (Exception e) {
+            InfoBox.error("Error", "Unable to open logographs for word: "
+                    + (String) lstDict.getSelectedValue() + "\n\n" + e.getMessage(), this);
+        }
+        
+        Window window = new ScrLogoQuickView(core, curWord);
+        childFrames.add(window);
+        window.setVisible(true);
+        final Window parent = this;
+        this.setEnabled(false);
+        
+        window.addWindowListener(new WindowAdapter() {
+
+        @Override
+        public void windowClosing(WindowEvent arg0) {
+                parent.setEnabled(true);
+            }
+        });
     }
     
     private void viewQuickEntry() {
@@ -2695,6 +2753,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         // might want to clean up where this is enabled/disabled later...
         btnConwordDeclensions.setEnabled(true);
+        btnWordLogographs.setEnabled(true);
 
         newFile(false); // wipe out all current settings before loading
         setFile(fileName);
@@ -2785,7 +2844,6 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         txtTypePattern.setEnabled(enable);
         chkTypeDefinitionMandatory.setEnabled(enable);
         chkTypeGenderMandatory.setEnabled(enable);
-        chkTypePluralMandatory.setEnabled(enable);
         chkTypeProcMandatory.setEnabled(enable);
         setEnabledConjDeclBtn();
     }
@@ -2841,7 +2899,6 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         
         chkTypeDefinitionMandatory.setSelected(curType.isDefMandatory());
         chkTypeGenderMandatory.setSelected(curType.isGenderMandatory());
-        chkTypePluralMandatory.setSelected(curType.isPluralMandatory());
         chkTypeProcMandatory.setSelected(curType.isProcMandatory());
 
         curPopulating = false;
@@ -2937,7 +2994,6 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         type.setDefMandatory(chkTypeDefinitionMandatory.isSelected());
         type.setGenderMandatory(chkTypeGenderMandatory.isSelected());
         type.setProcMandatory(chkTypeProcMandatory.isSelected());
-        type.setPluralMandatory(chkTypePluralMandatory.isSelected());
 
         try {
             // split logic for creating, rather than modifying types
@@ -3196,12 +3252,13 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             }
         }
 
+        populateDict();
+        
         // disable conjugation button if no words left
         if (lstDict.getModel().getSize() == 0) {
             btnConwordDeclensions.setEnabled(false);
+            btnWordLogographs.setEnabled(false);
         }
-
-        populateDict();
 
         // select the next lowest word (if it exists)
         if (lstDict.getModel().getSize() > 1) {
@@ -3520,6 +3577,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         chkPronunciationOverrideProp.setEnabled(true);
         chkWordRulesOverride.setEnabled(true);
         btnConwordDeclensions.setEnabled(true);
+        btnWordLogographs.setEnabled(true);
 
         setWordLegality(new ConWord());
     }
@@ -3766,6 +3824,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JButton btnDownProc;
     private javax.swing.JButton btnRecalcProc;
     private javax.swing.JButton btnUpProc;
+    private javax.swing.JButton btnWordLogographs;
     private javax.swing.JCheckBox chkAutopopProcs;
     private javax.swing.JCheckBox chkDisableProcRegex;
     private javax.swing.JCheckBox chkIgnoreCase;
@@ -3776,7 +3835,6 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JCheckBox chkPropWordUniqueness;
     private javax.swing.JCheckBox chkTypeDefinitionMandatory;
     private javax.swing.JCheckBox chkTypeGenderMandatory;
-    private javax.swing.JCheckBox chkTypePluralMandatory;
     private javax.swing.JCheckBox chkTypeProcMandatory;
     private javax.swing.JCheckBox chkWordRulesOverride;
     private javax.swing.JComboBox cmbGenderFilter;
@@ -3843,6 +3901,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JMenuItem mnuThesaurus;
     private javax.swing.JMenu mnuTools;
     private javax.swing.JMenuItem mnuTranslation;
+    private javax.swing.JMenu mnuView;
+    private javax.swing.JMenuItem mnuViewLogographsDetail;
     private javax.swing.JPanel pnlFilter;
     private javax.swing.JPanel pnlProperties;
     private javax.swing.JScrollPane sclDefProp;

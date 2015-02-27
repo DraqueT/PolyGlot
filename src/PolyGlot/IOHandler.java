@@ -19,8 +19,10 @@
  */
 package PolyGlot;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -31,10 +33,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.util.Iterator;
 import org.apache.commons.io.FileUtils;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -64,7 +70,7 @@ public class IOHandler {
         if (isFileZipArchive(_filename)) {
             ZipFile zipFile = new ZipFile(_filename);
 
-            ZipEntry xmlEntry = zipFile.getEntry(XMLIDs.dictFileName);
+            ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.dictFileName);
 
             return zipFile.getInputStream(xmlEntry);
         }
@@ -72,6 +78,39 @@ public class IOHandler {
         return rawFile;
     }
 
+    /**
+     * Opens and returns image from URL given (can be file path)
+     * @param filePath path of image
+     * @return BufferedImage
+     * @throws IOException in IO 
+     */
+    public static BufferedImage getImage(String filePath) throws IOException {
+        return ImageIO.read(new File(filePath));
+    }
+    
+    /**
+     * Queries user for image file, and returns it
+     * @param parent the parent window from which this is called
+     * @return the image chosen by the user, null if canceled
+     * @throws IOException If the image cannot be opened for some reason
+     */
+    public static BufferedImage openImageFile(Component parent) throws IOException {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Open Images");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "gif", "jpg", "jpeg", "bmp", "png", "wbmp");
+        chooser.setFileFilter(filter);
+        String fileName;
+        chooser.setCurrentDirectory(new File("."));
+
+        if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
+            fileName = chooser.getSelectedFile().getAbsolutePath();
+        } else {
+            return null;
+        }
+        
+        return getImage(fileName);
+    }
+    
     /**
      * Gets font from save file if possible, null otherwise
      *
@@ -87,7 +126,7 @@ public class IOHandler {
         if (isFileZipArchive(_path)) {
             ZipFile zipFile = new ZipFile(_path);
 
-            ZipEntry fontEntry = zipFile.getEntry(XMLIDs.fontFileName);
+            ZipEntry fontEntry = zipFile.getEntry(PGTUtil.fontFileName);
 
             if (fontEntry != null) {
                 final File tempFile = File.createTempFile("stream2file", ".tmp");
@@ -159,7 +198,7 @@ public class IOHandler {
             out = new ZipOutputStream(new FileOutputStream(f), Charset.forName("ISO-8859-1"));
         }
         
-        ZipEntry e = new ZipEntry(XMLIDs.dictFileName);
+        ZipEntry e = new ZipEntry(PGTUtil.dictFileName);
         out.putNextEntry(e);
 
         byte[] data = sb.toString().getBytes("UTF-8");
@@ -173,7 +212,7 @@ public class IOHandler {
         if (fontFile != null) {
             byte[] buffer = new byte[1024];
             FileInputStream fis = new FileInputStream(fontFile);
-            out.putNextEntry(new ZipEntry(XMLIDs.fontFileName));
+            out.putNextEntry(new ZipEntry(PGTUtil.fontFileName));
             int length;
 
             while ((length = fis.read(buffer)) > 0) {
@@ -182,6 +221,22 @@ public class IOHandler {
 
             out.closeEntry();
             fis.close();
+        }
+        
+        // write all logograph images to file
+        Iterator<LogoNode> it = core.getLogoCollection().getAllLogos().iterator();
+        if (it.hasNext()) {
+            out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath));
+            
+            while (it.hasNext()) {
+                LogoNode curNode = it.next();
+                out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath 
+                        + curNode.getId().toString() + ".png"));
+                
+                ImageIO.write(curNode.getLogoGraph(), "png", out);
+                
+                out.closeEntry();
+            }
         }
 
         out.finish();
@@ -311,5 +366,29 @@ public class IOHandler {
         }
 
         return ret;
+    }
+    
+    /**
+     * loads all images into their logographs from archive
+     * @param logoCollection logocollection from dictionary core
+     * @param fileName name/path of archive
+     * @throws java.lang.Exception
+     */
+    public static void loadImages(LogoCollection logoCollection, String fileName) throws Exception {
+        if (!isFileZipArchive(fileName)) {
+            return;
+        }
+        
+        Iterator<LogoNode> it = logoCollection.getAllLogos().iterator();
+        ZipFile zipFile = new ZipFile(fileName);
+        
+        while (it.hasNext()) {
+            LogoNode curNode = it.next();
+            ZipEntry imgEntry = zipFile.getEntry(PGTUtil.logoGraphSavePath 
+                    + curNode.getId().toString() + ".png");
+            
+            BufferedImage img = ImageIO.read(zipFile.getInputStream(imgEntry));
+            curNode.setLogoGraph(img);
+        }
     }
 }
