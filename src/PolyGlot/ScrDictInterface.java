@@ -515,7 +515,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         txtPronunciationFilter.setToolTipText("filter via pronunciation");
 
-        txtDefFilter.setToolTipText("filter via plural form");
+        txtDefFilter.setToolTipText("filter on definition");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

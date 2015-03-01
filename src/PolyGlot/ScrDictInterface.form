@@ -513,7 +513,7 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtDefFilter">
                       <Properties>
-                        <Property name="toolTipText" type="java.lang.String" value="filter via plural form"/>
+                        <Property name="toolTipText" type="java.lang.String" value="filter on definition"/>
                       </Properties>
                     </Component>
                   </SubComponents>
