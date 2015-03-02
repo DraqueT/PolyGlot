@@ -3539,6 +3539,9 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 && cmbTypeFilter.getSelectedIndex() == -1) {
             populateDict();
             lstDict.setSelectedIndex(lstDict.getModel().getSize() > 0 ? 0 : -1);
+            if (lstDict.getModel().getSize() > 0) {
+                lstDict.ensureIndexIsVisible(0);
+            }
             return;
         }
 
@@ -3559,6 +3562,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         if (lstDict.getModel().getSize() > 0) {
             lstDict.setSelectedIndex(0);
+            lstDict.ensureIndexIsVisible(0);
         } else {
             lstDict.setSelectedIndex(-1);
         }
@@ -3582,6 +3586,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         scrToCoreMap.put(curIndex, -1);
 
         lstDict.setSelectedIndex(curIndex);
+        lstDict.ensureIndexIsVisible(curIndex);
 
         clearProps();
 
@@ -3748,13 +3753,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
      */
     private void setLexPosition(Integer scrIndex) {
         lstDict.setSelectedIndex(scrIndex);
-
-        // This adjusts the position of the scroller to match the current word's position
-        int newScrollHeight = scrIndex * lstDict.getCellBounds(0, 0).height;
-        newScrollHeight = newScrollHeight > scrlDict.getVerticalScrollBar().getMaximum()
-                ? scrlDict.getVerticalScrollBar().getMaximum() : newScrollHeight;
-
-        scrlDict.getVerticalScrollBar().setValue(newScrollHeight);
+        lstDict.ensureIndexIsVisible(scrIndex);
     }
 
     /**
