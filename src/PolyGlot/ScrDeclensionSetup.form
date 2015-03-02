@@ -141,13 +141,11 @@
                                       <Component id="txtDeclensionName" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="sclDimensions" pref="0" max="32767" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="btnAddDimension" min="-2" pref="40" max="-2" attributes="0"/>
-                                          <Component id="btnDelDimension" alignment="0" min="-2" pref="40" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="btnAddDimension" min="-2" pref="40" max="-2" attributes="0"/>
+                                      <EmptySpace pref="120" max="32767" attributes="0"/>
+                                      <Component id="btnDelDimension" min="-2" pref="40" max="-2" attributes="0"/>
                                   </Group>
+                                  <Component id="sclDimensions" pref="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -166,13 +164,11 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="btnAddDimension" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="149" max="32767" attributes="0"/>
-                              <Component id="btnDelDimension" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="sclDimensions" pref="0" max="32767" attributes="0"/>
+                      <Component id="sclDimensions" pref="189" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnDelDimension" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnAddDimension" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>

@@ -43,8 +43,30 @@ public class InfoBox extends JFrame {
         new InfoBox().doError(title, message, parent);
     }
     
+    public static void warning(String title, String message, Window parent) {
+        new InfoBox().doWarning(title, message, parent);
+    }
+    
     public static Integer yesNoCancel(String title, String message, Window parent) { 
         return new InfoBox().doYesNoCancel(title, message, parent);
+    }
+    
+    /**
+     * Displays confirmation to user for deletion of element
+     * @param parent parent caller
+     * @return true if chooser accepts, false otherwise
+     */
+    public static boolean deletionConfirmation(Window parent) {
+        int option = JOptionPane.showOptionDialog(parent,
+                "Delete Entry? Cannot be undone.", 
+                "Delete Confirmation", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.WARNING_MESSAGE,
+                UIManager.getIcon("OptionPane.questionIcon"),
+                null,
+                null);
+        
+        return option == JOptionPane.YES_OPTION;
     }
     
     private Integer doYesNoCancel(String title, String message, Window parent) {     
@@ -53,6 +75,10 @@ public class InfoBox extends JFrame {
     
     private void doError(String title, String message, Window parent) {
         JOptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void doWarning(String title, String message, Window parent) {
+        JOptionPane.showMessageDialog(parent, message, title, JOptionPane.WARNING_MESSAGE);
     }
     
     private void doInfo(String title, String message, Window parent) {

@@ -678,7 +678,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 .addContainerGap()
                 .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(sclDefProp, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+                    .addComponent(sclDefProp)
                     .addGroup(pnlPropertiesLayout.createSequentialGroup()
                         .addGroup(pnlPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblConWordProp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -874,7 +874,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                     .addComponent(chkTypeGenderMandatory)
                     .addComponent(chkTypeProcMandatory)
                     .addComponent(chkTypeDefinitionMandatory))
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -933,7 +933,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                         .addGroup(tabTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnConjDecl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtTypesErrorBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(tabTypeLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -1045,7 +1045,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                             .addGroup(tabGenderLayout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtGenderName, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
+                                .addComponent(txtGenderName, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
                             .addGroup(tabGenderLayout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1307,9 +1307,9 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
-                                        .addComponent(btnAddProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnAddProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(125, 125, 125)
-                                        .addComponent(btnDeleteProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(btnDeleteProcGuide, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1941,6 +1941,10 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         // return if nothing selected
         if (curRow == -1) {
+            return;
+        }
+        
+        if (!InfoBox.deletionConfirmation(this)) {
             return;
         }
 
@@ -2949,6 +2953,10 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         if (curIndex == -1) {
             return;
         }
+        
+        if (!InfoBox.deletionConfirmation(this)) {
+            return;
+        }
 
         // avoid attempt to delete unsaved types
         if ((Integer) scrToCoreTypes.get(curIndex) != -1) {
@@ -3154,6 +3162,10 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         if (curIndex == -1) {
             return;
         }
+        
+        if (!InfoBox.deletionConfirmation(this)) {
+            return;
+        }
 
         // don't try to delete new genders, just populate to eliminate them.
         if ((Integer) scrToCoreGenders.get(curIndex) != -1) {
@@ -3250,6 +3262,10 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         Integer selectedIndex = lstDict.getSelectedIndex();
 
         if (selectedIndex == -1) {
+            return;
+        }
+        
+        if (!InfoBox.deletionConfirmation(this)) {
             return;
         }
 

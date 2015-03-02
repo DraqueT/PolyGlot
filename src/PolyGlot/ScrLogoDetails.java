@@ -693,6 +693,10 @@ public class ScrLogoDetails extends PFrame {
         if (curNode == null || curPopulating) {
             return;
         }
+        
+        if (!InfoBox.deletionConfirmation(this)) {
+            return;
+        }
 
         try {
             core.getLogoCollection().deleteNodeById(curNode.getId());

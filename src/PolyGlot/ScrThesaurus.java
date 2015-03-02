@@ -96,6 +96,10 @@ public class ScrThesaurus extends PFrame {
                 || curNode == null) {
             return;
         }
+        
+        if (!InfoBox.deletionConfirmation(this)) {
+            return;
+        }
                     
         // only remove if not root node
         if (!curNode.isRoot()) {

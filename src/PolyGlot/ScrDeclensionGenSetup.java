@@ -434,6 +434,10 @@ public class ScrDeclensionGenSetup extends PDialog {
      * deletes currently selected rule
      */
     private void deleteRule() {
+        if (!InfoBox.deletionConfirmation(this)) {
+            return;
+        }
+        
         DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
 
         if (curRule == null) {
@@ -461,6 +465,10 @@ public class ScrDeclensionGenSetup extends PDialog {
      * deletes currently selected transform from currently selected rule
      */
     private void deleteTransform() {
+        if (!InfoBox.deletionConfirmation(this)) {
+            return;
+        }
+        
         if (lstRules.getSelectedValue() != null
                 && tblTransforms.getSelectedRow() != -1) {
             int removeRow = tblTransforms.convertRowIndexToModel(tblTransforms.getSelectedRow());
