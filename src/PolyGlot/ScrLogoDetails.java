@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Draque Thompson - draquemail@gmail.com
+ * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -1323,21 +1323,6 @@ public class ScrLogoDetails extends PFrame {
         ((DefaultListModel) lstRadicals.getModel()).
                 remove(lstRadicals.getSelectedIndex());
     }//GEN-LAST:event_btnDelRadActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                DictCore core = new DictCore();
-                //core.getPropertiesManager().setAlphaOrder("");
-
-                new ScrLogoDetails(new DictCore()).setVisible(true);
-            }
-        });
-    }
 
     /**
      * Sets window to word fetch mode, which alters the title and eliminates the
