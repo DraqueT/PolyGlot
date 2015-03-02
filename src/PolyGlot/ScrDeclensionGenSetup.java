@@ -55,6 +55,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         typeId = _typeId;
         depRulesList = core.getDeclensionManager().getAllDepGenerationRules(_typeId);
 
+        setupKeyStrokes();
         initComponents();
         setupObjectModels();
         setupListeners();

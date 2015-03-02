@@ -47,6 +47,7 @@ public class ScrThesaurus extends PFrame {
     public ScrThesaurus(DictCore _core, ScrDictInterface _parent) {
         core = _core;
         parent = _parent;
+        setupKeyStrokes();
         initComponents();
         ThesTreeNode root = new ThesTreeNode();
         root.setAsRootNode(core.getThesManager().getRoot());

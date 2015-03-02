@@ -57,6 +57,7 @@ public class ScrLogoDetails extends PFrame {
      */
     public ScrLogoDetails(DictCore _core) {
         setNimbus();
+        setupKeyStrokes();
         initComponents();        
 
         core = _core;
@@ -76,6 +77,7 @@ public class ScrLogoDetails extends PFrame {
      */
     public ScrLogoDetails(DictCore _core, int logoId) {
         setNimbus();
+        setupKeyStrokes();
         initComponents();
         
         core = _core;

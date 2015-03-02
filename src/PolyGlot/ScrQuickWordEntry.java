@@ -41,6 +41,7 @@ public class ScrQuickWordEntry extends PDialog {
     public ScrQuickWordEntry(DictCore _core) {
         core = _core;
 
+        setupKeyStrokes();
         initComponents();
 
         enterListener = new KeyListener() {

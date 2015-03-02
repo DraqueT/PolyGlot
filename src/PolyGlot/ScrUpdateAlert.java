@@ -48,7 +48,9 @@ public class ScrUpdateAlert extends PFrame {
      * @throws java.lang.Exception if unable to connect
      */
     public ScrUpdateAlert(boolean verbose, String curVersion) throws Exception {
+        setupKeyStrokes();
         initComponents();
+        
         jTextPane1.setContentType("text/html");
 
         Document doc = WebInterface.checkForUpdates(curVersion);

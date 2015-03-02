@@ -64,6 +64,7 @@ public class ScrTranslationWindow extends PFrame {
         core = _core;
         parent = _parent;
         
+        setupKeyStrokes();
         initComponents();
         txtLocalText.setCaret(new HighlightCaret());
         

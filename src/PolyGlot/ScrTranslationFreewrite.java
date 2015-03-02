@@ -33,6 +33,7 @@ public class ScrTranslationFreewrite extends PFrame {
      * @param initialText initial text for translation
      */
     public ScrTranslationFreewrite(DictCore _core, String initialText) {
+        setupKeyStrokes();
         initComponents();
         core = _core;
         

@@ -77,8 +77,10 @@ public class PDialog extends JDialog{
         self.setLocation(x, y);
     }
     
-    private void setupKeyStrokes() {
-        // enable copy/paste on macs
+    /**
+     * enable cut/copy/paste if running on a mac
+     */
+    protected void setupKeyStrokes() {
         if (System.getProperty("os.name").startsWith("Mac")) {
             InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
             im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
@@ -101,7 +103,6 @@ public class PDialog extends JDialog{
     // positions on screen once form has already been build/sized
     @Override
     public void pack() {
-        setupKeyStrokes();
         super.pack();
         
         if (!skipCenter) {

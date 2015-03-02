@@ -61,6 +61,7 @@ public final class ScrDeclensionSetup extends PDialog {
      * @param _typeId ID of the type for which declensions are to be modified
      */
     public ScrDeclensionSetup(DictCore _core, Integer _typeId) {
+        setupKeyStrokes();
         initComponents();
         try {
             core = _core;

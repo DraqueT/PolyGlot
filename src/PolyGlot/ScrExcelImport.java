@@ -37,6 +37,7 @@ public class ScrExcelImport extends PDialog {
      * @param _core feed this the dictCore from the main program
      */
     public ScrExcelImport(DictCore _core) {
+        setupKeyStrokes();
         initComponents();
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

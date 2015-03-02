@@ -76,8 +76,10 @@ public class PFrame extends JFrame {
         ignoreCenter = true;
     }
 
-    private void setupKeyStrokes() {
-        // enable copy/paste on macs
+    /**
+     * enable cut/copy/paste if running on a mac
+     */
+    protected void setupKeyStrokes() {
         if (System.getProperty("os.name").startsWith("Mac")) {
             InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
             im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
@@ -100,8 +102,6 @@ public class PFrame extends JFrame {
     // positions on screen once form has already been build/sized
     @Override
     public void setVisible(boolean visible) {
-        setupKeyStrokes();
-        
         if (!ignoreCenter) {
             this.setLocationRelativeTo(null);
         }
