@@ -128,7 +128,6 @@ public class ConWordCollection extends DictionaryCollection {
      * @param additive true if adding, false if removing
      */
     private void balanceWordCounts(ConWord insWord, boolean additive) {
-        // TODO: this must also balance wordcounts in logograms
         Integer curCount = allConWords.containsKey(insWord.getValue())
                 ? allConWords.get(insWord.getValue()) : 0;
         allConWords.remove(insWord.getValue());

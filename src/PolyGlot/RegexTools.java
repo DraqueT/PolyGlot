@@ -30,7 +30,7 @@ import java.util.regex.PatternSyntaxException;
  * @author draque
  */
 public class RegexTools {
-    // TODO: consider how the blow lines are to work
+    // TODO: consider how the below lines are to work
     private static final int miscalcRetries = 5;
     private static final int collisionRetries = 10;
     

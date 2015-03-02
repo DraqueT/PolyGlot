@@ -120,7 +120,6 @@ public class ImportFileHelper {
         }
 
         while ((line = br.readLine()) != null) {
-            // TODO: consider allowing user to define delimiter
             String[] columns = line.split(",");
 
             ConWord newWord = new ConWord();
