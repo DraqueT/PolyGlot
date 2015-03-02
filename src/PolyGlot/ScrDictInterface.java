@@ -42,7 +42,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.DefaultListModel;
-import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -52,7 +51,6 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
@@ -60,7 +58,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.text.DefaultEditorKit;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.simplericity.macify.eawt.*;
@@ -2074,6 +2071,33 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         // save word to populate core with new pronunciation
         saveModWord();
     }
+    
+    /**
+     * forces refresh of word list
+     * @param wordId id of newly created word
+     */
+    public void refreshWordList(int wordId) {
+        populateDict();
+        selectListWordById(wordId);
+    }
+    
+    /**
+     * ensures that conword with given ID is selected and visible
+     * @param wordId ID of word to select
+     */
+    private void selectListWordById(Integer wordId) {
+        Iterator<Entry<Integer, Integer>> it = scrToCoreMap.entrySet().iterator();
+        
+        while (it.hasNext()) {
+            Entry<Integer, Integer> curNode = it.next();
+            
+            if (curNode.getValue().equals(wordId)) {
+                lstDict.setSelectedIndex(curNode.getKey());
+                lstDict.ensureIndexIsVisible(curNode.getKey());
+                break;
+            }
+        }
+    }
 
     private void viewDeclensions() {
         Integer wordId = (Integer) scrToCoreMap.get(lstDict.getSelectedIndex());
@@ -2161,7 +2185,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     }
     
     private void viewQuickEntry() {
-        Window window = ScrQuickWordEntry.run(core);
+        Window window = ScrQuickWordEntry.run(core, this);
         childFrames.add(window);
     }
 
@@ -2800,6 +2824,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         Integer typeIndex = tListModel.getSize();
         tListModel.add(typeIndex, "NEW TYPE");
         lstTypesList.setSelectedIndex(typeIndex);
+        lstTypesList.ensureIndexIsVisible(typeIndex);
         scrToCoreTypes.put(typeIndex, -1);
         curPopulating = false;
 
@@ -2913,6 +2938,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         tListModel.add(typeIndex, txtTypeName.getText().trim());
 
         lstTypesList.setSelectedIndex(typeIndex);
+        lstTypesList.ensureIndexIsVisible(typeIndex);
 
         curPopulating = false;
     }
@@ -2946,6 +2972,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         populateTypes();
 
         lstTypesList.setSelectedIndex(curIndex);
+        lstTypesList.ensureIndexIsVisible(curIndex);
         populateTypeProps();
     }
 
@@ -3046,6 +3073,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         Integer genderIndex = gListModel.getSize();
         gListModel.add(genderIndex, "NEW GENDER");
         lstGenderList.setSelectedIndex(genderIndex);
+        lstGenderList.ensureIndexIsVisible(genderIndex);
         scrToCoreGenders.put(genderIndex, -1);
         curPopulating = false;
 
@@ -3115,6 +3143,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         gListModel.add(genderIndex, txtGenderName.getText().trim());
 
         lstGenderList.setSelectedIndex(genderIndex);
+        lstGenderList.ensureIndexIsVisible(genderIndex);
 
         curPopulating = false;
     }
@@ -3144,6 +3173,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         populateGenderProps();
 
         lstGenderList.setSelectedIndex(curIndex);
+        lstGenderList.ensureIndexIsVisible(curIndex);
 
         // reenables gender selection/creation in case user deleted illegal gender
         lstGenderList.setEnabled(true);
@@ -3246,6 +3276,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         // select the next lowest word (if it exists)
         if (lstDict.getModel().getSize() > 1) {
             lstDict.setSelectedIndex(selectedIndex - 1);
+            lstDict.ensureIndexIsVisible(selectedIndex - 1);
             popWordProps();
         } else if (lstDict.getModel().getSize() == 1) {
             lstDict.setSelectedIndex(0);
@@ -3291,6 +3322,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         }
 
         lstDict.setSelectedIndex(newIndex);
+        lstDict.ensureIndexIsVisible(newIndex);
         lstDict.setVisible(true);
     }
 
@@ -3338,6 +3370,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         cmbTypeProp.insertItemAt("", cmbTypeProp.getModel().getSize());
 
         lstTypesList.setSelectedIndex(setIndex);
+        lstTypesList.ensureIndexIsVisible(setIndex);
 
         curPopulating = false;
     }
@@ -3385,6 +3418,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         cmbGenderFilter.insertItemAt("", cmbGenderFilter.getModel().getSize());
 
         lstGenderList.setSelectedIndex(setIndex);
+        lstGenderList.ensureIndexIsVisible(setIndex);
 
         curPopulating = false;
     }

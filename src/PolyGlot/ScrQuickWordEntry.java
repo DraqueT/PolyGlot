@@ -32,14 +32,17 @@ public class ScrQuickWordEntry extends PDialog {
     private final KeyListener enterListener;
     private final DictCore core;
     private final String cstSELET = "";
+    private final ScrDictInterface parent;
 
     /**
      * Creates new form scrQuickWordEntry
      *
      * @param _core Dictionary core
+     * @param _parent parent dictionary interface
      */
-    public ScrQuickWordEntry(DictCore _core) {
+    public ScrQuickWordEntry(DictCore _core, ScrDictInterface _parent) {
         core = _core;
+        parent = _parent;
 
         setupKeyStrokes();
         initComponents();
@@ -173,9 +176,11 @@ public class ScrQuickWordEntry extends PDialog {
             word.setGender(cmbGender.getSelectedItem().toString());
             word.setWordType(cmbType.getSelectedItem().toString());
             
-            core.getWordCollection().addWord(word);
+            int wordId = core.getWordCollection().addWord(word);
             blankWord();
             txtConWord.requestFocus();
+            
+            parent.refreshWordList(wordId);
         } catch (Exception e) {
             InfoBox.error("Word Error", "Unable to insert word: " + e.getMessage(), this);
         }
@@ -453,9 +458,10 @@ public class ScrQuickWordEntry extends PDialog {
 
     /**
      * @param _core Dictionary Core
+     * @param _parent parent dictionary interface
      * @return created window
      */
-    public static ScrQuickWordEntry run(DictCore _core) {
+    public static ScrQuickWordEntry run(DictCore _core, ScrDictInterface _parent) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -479,7 +485,7 @@ public class ScrQuickWordEntry extends PDialog {
         }
         //</editor-fold>
 
-        ScrQuickWordEntry ret = new ScrQuickWordEntry(_core);
+        ScrQuickWordEntry ret = new ScrQuickWordEntry(_core, _parent);
         ret.setModal(true);
         ret.setVisible(true);
         return ret;
