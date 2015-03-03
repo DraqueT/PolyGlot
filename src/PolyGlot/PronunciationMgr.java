@@ -234,9 +234,11 @@ public class PronunciationMgr {
                     continue;
                 }
 
-                // make starting pattern if not already, and have it return the character group
+                // make pattern a starting pattern if not already, if it is already, allow it to accept following strings
                 if (!pattern.startsWith("^")) {
                     pattern = "^(" + pattern + ").*";
+                } else {
+                    pattern = "^(" + pattern.substring(1) + ").*";
                 }
 
                 Pattern findString = Pattern.compile(pattern);
