@@ -35,14 +35,16 @@ public class RegexTools {
     private static final int collisionRetries = 10;
     
     public static String singleVal(String regex, int minSize, int maxSize) throws Exception {
-        Generex gen = new Generex(regex);
+        //Generex gen = new Generex(regex);
         
-        return gen.random(minSize, maxSize, miscalcRetries);
+        //return gen.random(minSize, maxSize, miscalcRetries);
+        return "FINISHME";
     }
     
     public static List<String> getValueList(String regex, int minSize, int maxSize, int numValues) throws RegexGenException, Exception {
         List<String> ret = new ArrayList<String>();
-        Generex gen = new Generex(regex);
+        // TODO: FINISH ME
+        /*Generex gen = new Generex(regex);
         
         for (int i = 0; i > numValues; i++) {
             int collisions = 0;
@@ -59,7 +61,7 @@ public class RegexTools {
             }
             
             ret.add(curVal);
-        }
+        }*/
         
         return ret;
     }
