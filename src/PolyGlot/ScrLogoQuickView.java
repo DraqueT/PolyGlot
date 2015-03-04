@@ -288,6 +288,7 @@ public class ScrLogoQuickView extends PFrame {
             
             if (core.getLogoCollection().addWordLogoRelation(conWord, addLogo)) {
                 ((DefaultListModel) lstLogos.getModel()).addElement(addLogo);
+                logoFinder.refreshRelatedWords();
             }
         }
     }//GEN-LAST:event_btnAddActionPerformed

@@ -629,6 +629,13 @@ public class ScrLogoDetails extends PFrame {
 
         curPopulating = false;
     }
+    
+    /**
+     * refreshes view of related words
+     */
+    public void refreshRelatedWords() {
+        populateRelatedWords();
+    }
 
     private void setNimbus() {
         /* Set the Nimbus look and feel */
