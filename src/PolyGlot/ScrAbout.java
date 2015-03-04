@@ -36,7 +36,7 @@ public class ScrAbout extends PDialog {
         core = _core;
         
         txtAbout.setText("PolyGlot ver. " + core.getVersion() + "\n\nPolyGlot is "
-                + "copyright Draque Thompson 2014. It is licensed under the Creative Commons "
+                + "copyright Draque Thompson 2014-2015. It is licensed under the Creative Commons "
                 + "Attribution-Noncommercial 4.0 International Public License, so it is free "
                 + "to distribute, so long as my work is credited and it not used for commercial "
                 + "purposes. Please don't sell this or call it your own, but feel free to "
@@ -90,7 +90,6 @@ public class ScrAbout extends PDialog {
         txtAbout.setLineWrap(true);
         txtAbout.setRows(5);
         txtAbout.setWrapStyleWord(true);
-        txtAbout.setEnabled(false);
         jScrollPane1.setViewportView(txtAbout);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
