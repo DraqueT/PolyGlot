@@ -83,7 +83,8 @@ public class CustHandlerFactory {
                 || versionNumber.equals("0.9")
                 || versionNumber.equals("0.9.1")
                 || versionNumber.equals("0.9.2")
-                || versionNumber.equals("0.9.9")) {
+                || versionNumber.equals("0.9.9")
+                || versionNumber.equals("0.9.9.1")) {
             ret = CustHandlerFactory.get075Handler(core);
         } else {
             throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
