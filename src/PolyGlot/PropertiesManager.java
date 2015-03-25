@@ -32,6 +32,7 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class PropertiesManager {
+    private String overrideProgramPath = "";
     private Font font = null;
     private Integer fontStyle = 0;
     private Integer fontSize = 0;
@@ -49,6 +50,18 @@ public class PropertiesManager {
     
     public PropertiesManager() {
         alphaOrder = new HashMap<Character, Integer>();
+    }
+
+    public void setOverrideProgramPath(String override) {
+        if (override.equals(PGTUtil.emptyFile)) {
+            overrideProgramPath = "";
+        } else {
+            overrideProgramPath = override;
+        }
+    }
+    
+    public String getOverrideProgramPath() {
+        return overrideProgramPath;
     }
     
     public void setDisableProcRegex(boolean _disableProcRegex) {

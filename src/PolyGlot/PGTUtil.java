@@ -137,6 +137,7 @@ public class PGTUtil {
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";
     public static final String logoGraphSavePath = "logoGraphs/";
+    public static final String emptyFile = "<EMPTY>";
     
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to

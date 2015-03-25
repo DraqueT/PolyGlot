@@ -231,6 +231,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
     /**
      * @param args the command line arguments
+     * argument 1 = file to open. Blank of value of PGTUtil.emptyFile is no file
+     * argument 2 = override path of program. Blank or value of PGTUtil.emptyFile if none
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -262,6 +264,10 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         // open file if one is provided via arguments
         if (args.length > 0) {
             dictInterface.setFile(args[0]);
+        }
+        
+        if (args.length > 1) {
+            dictInterface.setOverrideProgramPath(args[1]);
         }
 
         dictInterface.checkForUpdates(false); // verbose set to only notify if update
@@ -2233,6 +2239,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         URI uri;
         try {
             String OS = System.getProperty("os.name");
+            String overridePath = core.getPropertiesManager().getOverrideProgramPath();
             if (OS.startsWith("Windows")) {
                 String relLocation = new File(".").getAbsolutePath();
                 relLocation = relLocation.substring(0, relLocation.length() - 1);
@@ -2243,15 +2250,22 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 uri.normalize();
                 java.awt.Desktop.getDesktop().browse(uri);
             } else if (OS.startsWith("Mac")) {
-                String relLocation = new File(".").getAbsolutePath();
-                relLocation = relLocation.substring(0, relLocation.length() - 1);
-                relLocation = "file://" + relLocation + "readme.html";
+                String relLocation = "";
+                if (overridePath.equals("")) {
+                    relLocation = new File(".").getAbsolutePath();
+                    relLocation = relLocation.substring(0, relLocation.length() - 1);
+                    relLocation = "file://" + relLocation + "readme.html";
+                } else {
+                    relLocation = core.getPropertiesManager().getOverrideProgramPath();
+                    relLocation = "file://" + relLocation + "/Contents/Resources/readme.html";
+                }                
                 relLocation = relLocation.replaceAll(" ", "%20");
                 uri = new URI(relLocation);
                 uri.normalize();
                 java.awt.Desktop.getDesktop().browse(uri);
             } else {
-                InfoBox.info("Help", "I haven't messed with your OS for URI calls yet. Please just open readme.html.", this);
+                InfoBox.info("Help", "This is not yet implemented for OS: " + OS 
+                        + ". Please open readme.html in the application directory", this);
             }
         } catch (URISyntaxException e) {
             InfoBox.info("Missing File", "Unable to open readme.html.", this);
@@ -2770,9 +2784,18 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         setFile(fileName);
     }
 
+    private void setOverrideProgramPath(String override) {
+        core.getPropertiesManager().setOverrideProgramPath(override);
+    }
+    
     private void setFile(String fileName) {
+        // some wrappers communicate emty files like this
+        if (fileName.equals(PGTUtil.emptyFile)) {
+            return;
+        }
+        
         core = new DictCore();
-
+        
         try {
             core.readFile(fileName);
             curFileName = fileName;
