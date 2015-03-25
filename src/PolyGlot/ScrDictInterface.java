@@ -2776,7 +2776,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             return;
         }
 
-        // might want to clean up where this is enabled/disabled later...
+        // TODO: might want to clean up where this is enabled/disabled later...
         btnConwordDeclensions.setEnabled(true);
         btnWordLogographs.setEnabled(true);
 
@@ -2814,6 +2814,10 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         populateGenders();
         popWordProps();
         popLangProps();
+        
+        // TODO: might want to clean up where this is enabled/disabled later...
+        btnConwordDeclensions.setEnabled(true);
+        btnWordLogographs.setEnabled(true);
     }
 
     private void popLangProps() {
