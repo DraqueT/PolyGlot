@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.InputEvent;
@@ -1899,8 +1900,9 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                JScrollBar bar = sclProcGuide.getVerticalScrollBar();
-                bar.setValue((curPosition + 1) * bar.getBlockIncrement());
+                tblProcGuide.getSelectionModel().setSelectionInterval(curPosition + 1, curPosition + 1);
+                tblProcGuide.scrollRectToVisible(new Rectangle(tblProcGuide.getCellRect(curPosition + 1, 0, true)));
+                tblProcGuide.changeSelection(curPosition + 1, 0, false, false);
             }
         });
     }
