@@ -47,7 +47,6 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollBar;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -272,6 +271,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         }
 
         dictInterface.checkForUpdates(false); // verbose set to only notify if update
+        dictInterface.setupKeyStrokes();
         dictInterface.setVisible(true);
     }
 
