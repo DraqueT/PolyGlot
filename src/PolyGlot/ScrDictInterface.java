@@ -2687,6 +2687,11 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         if (curFileName.equals("")) {
             saveFileAs();
         }
+        
+        // if it still is blank, the user has hit cancel on the save as dialog
+        if (curFileName.equals("")) {
+            return false;
+        }
 
         return doWrite(curFileName);
     }
