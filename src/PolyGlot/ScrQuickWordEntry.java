@@ -228,6 +228,7 @@ public class ScrQuickWordEntry extends PDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         btnDone = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Word Quickentry");
@@ -294,7 +295,7 @@ public class ScrQuickWordEntry extends PDialog {
                         .addGap(40, 40, 40)
                         .addComponent(chkDefinition))
                     .addComponent(chkProc))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 67, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -407,6 +408,9 @@ public class ScrQuickWordEntry extends PDialog {
             }
         });
 
+        jLabel7.setText("Hit Enter/Return to save word and clear values");
+        jLabel7.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -416,7 +420,9 @@ public class ScrQuickWordEntry extends PDialog {
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 312, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDone))
         );
         layout.setVerticalGroup(
@@ -426,7 +432,9 @@ public class ScrQuickWordEntry extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnDone))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDone)
+                    .addComponent(jLabel7)))
         );
 
         pack();
@@ -506,6 +514,7 @@ public class ScrQuickWordEntry extends PDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
