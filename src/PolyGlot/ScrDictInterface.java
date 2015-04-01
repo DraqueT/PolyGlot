@@ -1595,7 +1595,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private void lstDictValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstDictValueChanged
         // to avoid multiple, useless firings
         if (!evt.getValueIsAdjusting()) {
-            this.popWordProps();
+            this.popWordProps(false);
         }
     }//GEN-LAST:event_lstDictValueChanged
 
@@ -3497,7 +3497,18 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         curPopulating = false;
     }
 
+    /**
+     * Populates properties of currently selected word, checks legality
+     */
     private void popWordProps() {
+        popWordProps(true);
+    }
+    
+    /**
+     * Populates properties of currently selected word
+     * @param disableIllegal whether to disable controls if illegal word
+     */
+    private void popWordProps(boolean disableIllegal) {
         // if currently populating, abandon recursive process
         if (curPopulating) {
             return;
@@ -3572,7 +3583,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         curPopulating = false;
         
-        setWordLegality(curWord);
+        setWordLegality(curWord, disableIllegal);
     }
 
     private void filterDict() {
@@ -3617,7 +3628,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             lstDict.setSelectedIndex(-1);
         }
 
-        popWordProps();
+        popWordProps(false);
     }
 
     private void newWord() {
@@ -3731,6 +3742,16 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
      * @param results current word
      */
     private void setWordLegality(ConWord testWord) {
+        setWordLegality(testWord, true);
+    }
+    
+    /**
+     * Sets lexicon tab's currently displayed word legality (highlighted fields,
+     * error message, etc.)
+     * @param results current word
+     * @param disableElements whether to disable control elements on fail
+     */
+    private void setWordLegality(ConWord testWord, boolean disableElements) {
         ConWord results = core.isWordLegal(testWord);
         Color bColor = new JTextField().getBackground();
         Color hColor = core.getRequiredColor();
@@ -3774,7 +3795,9 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             isLegal = false;
         }
         
-        setLexiconEnabled(isLegal || testWord.isRulesOverrride());
+        if (disableElements) {
+            setLexiconEnabled(isLegal || testWord.isRulesOverrride());
+        }
     }
 
     private void setLexiconEnabled(boolean isEnabled) {
