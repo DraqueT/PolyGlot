@@ -33,6 +33,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
 import org.apache.commons.io.FileUtils;
 import java.util.zip.ZipEntry;
@@ -80,16 +84,18 @@ public class IOHandler {
 
     /**
      * Opens and returns image from URL given (can be file path)
+     *
      * @param filePath path of image
      * @return BufferedImage
-     * @throws IOException in IO 
+     * @throws IOException in IO
      */
     public static BufferedImage getImage(String filePath) throws IOException {
         return ImageIO.read(new File(filePath));
     }
-    
+
     /**
      * Queries user for image file, and returns it
+     *
      * @param parent the parent window from which this is called
      * @return the image chosen by the user, null if canceled
      * @throws IOException If the image cannot be opened for some reason
@@ -107,10 +113,10 @@ public class IOHandler {
         } else {
             return null;
         }
-        
+
         return getImage(fileName);
     }
-    
+
     /**
      * Gets font from save file if possible, null otherwise
      *
@@ -142,6 +148,8 @@ public class IOHandler {
                 } catch (IOException e) {
                     throw new FontFormatException("Could not load language font. I/O exception: " + e.getMessage());
                 }
+
+                zipFile.close();
             }
         }
 
@@ -191,13 +199,13 @@ public class IOHandler {
         // save file to temp location initially.
         final File f = new File(directoryPath, tempFileName);
         final ZipOutputStream out;
-        
+
         if (System.getProperty("java.version").startsWith("1.6")) {
             out = new ZipOutputStream(new FileOutputStream(f));
         } else {
             out = new ZipOutputStream(new FileOutputStream(f), Charset.forName("ISO-8859-1"));
         }
-        
+
         ZipEntry e = new ZipEntry(PGTUtil.dictFileName);
         out.putNextEntry(e);
 
@@ -222,19 +230,19 @@ public class IOHandler {
             out.closeEntry();
             fis.close();
         }
-        
+
         // write all logograph images to file
         Iterator<LogoNode> it = core.getLogoCollection().getAllLogos().iterator();
         if (it.hasNext()) {
             out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath));
-            
+
             while (it.hasNext()) {
                 LogoNode curNode = it.next();
-                out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath 
+                out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath
                         + curNode.getId().toString() + ".png"));
-                
+
                 ImageIO.write(curNode.getLogoGraph(), "png", out);
-                
+
                 out.closeEntry();
             }
         }
@@ -367,9 +375,10 @@ public class IOHandler {
 
         return ret;
     }
-    
+
     /**
      * loads all images into their logographs from archive
+     *
      * @param logoCollection logocollection from dictionary core
      * @param fileName name/path of archive
      * @throws java.lang.Exception
@@ -378,17 +387,47 @@ public class IOHandler {
         if (!isFileZipArchive(fileName)) {
             return;
         }
-        
+
         Iterator<LogoNode> it = logoCollection.getAllLogos().iterator();
         ZipFile zipFile = new ZipFile(fileName);
-        
+
         while (it.hasNext()) {
             LogoNode curNode = it.next();
-            ZipEntry imgEntry = zipFile.getEntry(PGTUtil.logoGraphSavePath 
+            ZipEntry imgEntry = zipFile.getEntry(PGTUtil.logoGraphSavePath
                     + curNode.getId().toString() + ".png");
-            
+
             BufferedImage img = ImageIO.read(zipFile.getInputStream(imgEntry));
             curNode.setLogoGraph(img);
+        }
+        zipFile.close();
+    }
+
+    /**
+     * Exports font in PGD to external file
+     *
+     * @param exportPath path to export to
+     * @param dictionaryPath path of PGT dictionary
+     * @throws IOException
+     */
+    public static void exportFont(String exportPath, String dictionaryPath) throws IOException {
+        ZipFile zipFile = new ZipFile(dictionaryPath);
+
+        if (zipFile == null) {
+            throw new IOException("Dictionary must be saved before font can be exported.");
+        }
+        
+        // ensure export file has the proper extension
+        if (!exportPath.toLowerCase().endsWith(".ttf")) {
+            exportPath += ".ttf";
+        }
+
+        ZipEntry fontEntry = zipFile.getEntry(PGTUtil.fontFileName);
+
+        if (fontEntry != null) {
+            Path path = Paths.get(exportPath);
+            Files.copy(zipFile.getInputStream(fontEntry), path, StandardCopyOption.REPLACE_EXISTING);
+        } else {
+            throw new IOException("Custom font not found in PGD dictionary file.");
         }
     }
 }

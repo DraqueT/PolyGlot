@@ -21,6 +21,7 @@
 package PolyGlot;
 
 import java.awt.Font;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JTextField;
@@ -274,6 +275,23 @@ public class PropertiesManager {
         String ret = "";
         
         ret += "Language Name: " + langName + "<br><br>";
+        
+        return ret;
+    }
+    
+    /**
+     * Tests whether system has given font installed
+     * @param testFont Font to test system for
+     * @return true if system has font, false otherwise
+     */
+    public static boolean testSystemHasFont(Font testFont) {
+        boolean ret = false;
+        String[] fontNames = java.awt.GraphicsEnvironment
+                .getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        
+        if (Arrays.asList(fontNames).contains(testFont.getName())) {
+            ret = true;
+        }
         
         return ret;
     }

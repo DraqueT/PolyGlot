@@ -398,6 +398,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuImportExcel = new javax.swing.JMenuItem();
         mnuExcelExport = new javax.swing.JMenuItem();
+        mnuExportFont = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         mnuTranslation = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
@@ -1476,6 +1477,15 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             }
         });
         mnuTools.add(mnuExcelExport);
+
+        mnuExportFont.setText("Export Font");
+        mnuExportFont.setToolTipText("Export conlang font embedded in PGD file");
+        mnuExportFont.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportFontActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuExportFont);
         mnuTools.add(jSeparator4);
 
         mnuTranslation.setText("Translation Window");
@@ -1791,6 +1801,10 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private void btnWordLogographsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWordLogographsActionPerformed
         viewQuickLogoGraph();
     }//GEN-LAST:event_btnWordLogographsActionPerformed
+
+    private void mnuExportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportFontActionPerformed
+        exportFont();
+    }//GEN-LAST:event_mnuExportFontActionPerformed
     
     @Override
     public void dispose() {
@@ -2252,7 +2266,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 uri.normalize();
                 java.awt.Desktop.getDesktop().browse(uri);
             } else if (OS.startsWith("Mac")) {
-                String relLocation = "";
+                String relLocation;
                 if (overridePath.equals("")) {
                     relLocation = new File(".").getAbsolutePath();
                     relLocation = relLocation.substring(0, relLocation.length() - 1);
@@ -2791,6 +2805,11 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         setFile(fileName);
     }
 
+    /**
+     * Provided for cases where the jave is run from an odd source folder (such
+     * as under an app file in OSX)
+     * @param override directory for base PolyGlot directory
+     */
     private void setOverrideProgramPath(String override) {
         core.getPropertiesManager().setOverrideProgramPath(override);
     }
@@ -2808,6 +2827,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             curFileName = fileName;
         } catch (FontFormatException e) {
             InfoBox.error("Loading Problem", "Problem reading file: " + e.getMessage(), this);
+            return;
         } catch (Exception e) {
             core = new DictCore(); // don't allow partial loads
             InfoBox.error("File Read Error", "Could not read file: " + fileName
@@ -2825,6 +2845,49 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         // TODO: might want to clean up where this is enabled/disabled later...
         btnConwordDeclensions.setEnabled(true);
         btnWordLogographs.setEnabled(true);
+        
+        // TODO: Delete this if I find a good way around the problem
+        //testPromptUserFont();
+    }
+    
+    /**
+     * Tests whether conlang font is installed on current computer. If not,
+     * prompts user to export font for install
+     */
+    /*private void testPromptUserFont() {
+        Font testFont = core.getPropertiesManager().getFontCon();
+        if (PropertiesManager.testSystemHasFont(testFont)) {
+            if (InfoBox.yesNoCancel("Font Export", "The font " + testFont.getName() +
+                    " is not installed on this system. This may cause some viewing errors"
+                    + " with this dictionary. Export font as file?", this) == JOptionPane.YES_OPTION) {
+                exportFont();
+            }
+        }
+    }*/
+    
+    /**
+     * Prompts user for a location and exports font within PGD to given path
+     */
+    public void exportFont() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Export Font");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf");
+        chooser.setFileFilter(filter);
+        String fileName;
+        chooser.setCurrentDirectory(new File("."));
+        chooser.setApproveButtonText("Save");
+
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            fileName = chooser.getSelectedFile().getAbsolutePath();
+        } else {
+            return;
+        }
+        
+        try {
+            IOHandler.exportFont(fileName, curFileName);
+        } catch (IOException e) {
+            InfoBox.error("Export Error", "Unable to export font: " + e.getMessage(), this);
+        }
     }
 
     private void popLangProps() {
@@ -3977,6 +4040,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JMenuItem mnuCheckForUpdates;
     private javax.swing.JMenuItem mnuExcelExport;
     private javax.swing.JMenuItem mnuExit;
+    private javax.swing.JMenuItem mnuExportFont;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
     private javax.swing.JMenuItem mnuImportExcel;
