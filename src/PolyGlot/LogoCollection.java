@@ -73,6 +73,25 @@ public class LogoCollection extends DictionaryCollection {
         wordToLogo.get(word.getId()).remove(logo.getId());
     }
     
+    /**
+     * Deletes LogoNode by ID. Ensures all words relations are struck.
+     * @param _id ID to delete
+     * @throws Exception if no ID exists as listed
+     */
+    @Override
+    public void deleteNodeById(Integer _id) throws Exception {
+        LogoNode logo = (LogoNode)getNodeById(_id);
+        Iterator<ConWord> it = getLogoWords(logo).iterator();
+        
+        while (it.hasNext()) {
+            ConWord word = it.next();
+            
+            removeWordLogoRelation(word, logo);
+        }
+        
+        super.deleteNodeById(_id);
+    }
+    
     public LogoCollection(DictCore _core) {
         wordToLogo = new HashMap<Integer, ArrayList<Integer>>();
         logoToWord = new HashMap<Integer, ArrayList<Integer>>();
@@ -313,7 +332,7 @@ public class LogoCollection extends DictionaryCollection {
     }
     
     public int insert() throws Exception {
-        int ret = insert(bufferNode);
+        int ret = insert(bufferNode.getId(), bufferNode);
         
         bufferNode = new LogoNode();
         

@@ -179,7 +179,7 @@ public class IOHandler {
     }
 
     public static void writeFile(String _fileName, Document doc, DictCore core) throws IOException, TransformerException {
-        final String tempFileName = "xxTEMPPGTFILExx";
+        final String tempFileName = "xxTEMPPGTFILExx"; // TODO: Replace this with constant
         String directoryPath;
 
         File finalFile = new File(_fileName);
