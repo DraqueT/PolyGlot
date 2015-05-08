@@ -19,6 +19,8 @@
  */
 package PolyGlot;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.Font;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +44,7 @@ public class ScrDeclensionGenSetup extends PDialog {
     DefaultListModel rulesModel;
     DefaultTableModel transModel;
     boolean curPopulating = false;
+    boolean upDownPress = false;
     List<DeclensionGenRule> depRulesList;
 
     /**
@@ -341,6 +344,15 @@ public class ScrDeclensionGenSetup extends PDialog {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 setRuleRegex();
+            }
+        });
+        lstRules.addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyPressed(KeyEvent k) {
+                if (k.getKeyCode() == KeyEvent.VK_DOWN
+                        || k.getKeyCode() == KeyEvent.VK_UP) {
+                    upDownPress = true;
+                }
             }
         });
     }
@@ -909,10 +921,13 @@ public class ScrDeclensionGenSetup extends PDialog {
 
     private void lstRulesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstRulesValueChanged
         // only fire this once
-        if (!evt.getValueIsAdjusting()) {
+        if (!evt.getValueIsAdjusting()
+                && upDownPress == false) {
             return;
         }
 
+        upDownPress = false;
+                
         int selected = lstRules.getSelectedIndex();
         int previous = selected == evt.getFirstIndex() ? evt.getLastIndex() : evt.getFirstIndex();
 
