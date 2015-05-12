@@ -102,7 +102,7 @@ public class DictCore {
      * @return String formatted report
      */
     public String buildLanguageReport() {
-        String ret = "<center>---LANGUAGE STAT REPORT---</center><br><br>";
+        String ret = ConWordCollection.formatPlain("<center>---LANGUAGE STAT REPORT---</center><br><br>");
 
         ret += propertiesManager.buildPropertiesReport();
 

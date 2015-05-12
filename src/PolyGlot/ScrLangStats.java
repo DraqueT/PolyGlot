@@ -20,6 +20,8 @@
 
 package PolyGlot;
 
+import java.util.Enumeration;
+
 /**
  *
  * @author draque
@@ -39,6 +41,7 @@ public class ScrLangStats extends PDialog {
         jTextPane1.setContentType("text/html");
         
         jTextPane1.setText("<html>" + core.buildLanguageReport() + "</html>");
+        jTextPane1.setFont(core.getPropertiesManager().getFontCon());
         
         jTextPane1.setCaretPosition(0);
         jScrollPane2.getVerticalScrollBar().setValue(0);

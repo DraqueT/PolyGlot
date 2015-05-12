@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -400,7 +401,8 @@ public class ConWordCollection extends DictionaryCollection {
      */
     public String buildWordReport() {
         String ret = "";
-        String conFontTag = "face=\"" + core.getPropertiesManager().getFontCon().getFontName() + "\"";
+        //String conFontTag = "face=\"" + core.getPropertiesManager().getFontCon().getFontName() + "\"";
+        String defaultFont = "face=\"" + Font.SANS_SERIF + "\"";
 
         Map<String, Integer> wordStart = new HashMap<String, Integer>();
         Map<String, Integer> wordEnd = new HashMap<String, Integer>();
@@ -526,60 +528,60 @@ public class ConWordCollection extends DictionaryCollection {
             }
         }
 
-        ret += "Count of words in conlang lexicon: " + wordCount + "<br><br>";
+        ret += formatPlain("Count of words in conlang lexicon: " + wordCount + "<br><br>");
 
         // build display of type counts
-        ret += "count of words by type:<br>";
+        ret += formatPlain("count of words by type:<br>");
         for (Entry<String, Integer> curEntry : typeCountByWord.entrySet()) {
-            ret += curEntry.getKey() + " : " + curEntry.getValue() + "<br>";
+            ret += formatPlain(curEntry.getKey() + " : " + curEntry.getValue() + "<br>");
         }
-        ret += "<br><br>";
+        ret += formatPlain("<br><br>");
 
         // build display for starts-with statistics
-        ret += " Breakdown of words counted starting with letter:<br>";
+        ret += formatPlain(" Breakdown of words counted starting with letter:<br>");
         for (char letter : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
-            ret += "<font " + conFontTag + ">" + letter + "</font> : "
-                    + (wordStart.containsKey("" + letter) ? wordStart.get("" + letter) : "0") + "<br>";
+            ret += letter + formatPlain(" : "
+                    + (wordStart.containsKey("" + letter) ? wordStart.get("" + letter) : formatPlain("0")) + "<br>");
         }
-        ret += "<br><br>";
+        ret += formatPlain("<br><br>");
 
         // build display for ends-with statistics
-        ret += " Breakdown of words counted ending with letter:<br>";
+        ret += formatPlain(" Breakdown of words counted ending with letter:<br>");
         for (char letter : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
-            ret += "<font " + conFontTag + ">" + letter + "</font> : "
-                    + (wordEnd.containsKey("" + letter) ? wordEnd.get("" + letter) : "0") + "<br>";
+            ret += letter + formatPlain(" : "
+                    + (wordEnd.containsKey("" + letter) ? wordEnd.get("" + letter) : formatPlain("0")) + "<br>");
         }
-        ret += "<br><br>";
+        ret += formatPlain("<br><br>");
 
         // build display for character counts
-        ret += " Breakdown of characters counted across all words:<br>";
+        ret += formatPlain(" Breakdown of characters counted across all words:<br>");
         for (char letter : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
-            ret += "<font " + conFontTag + ">" + letter + "</font> : "
-                    + (charCount.containsKey("" + letter) ? charCount.get("" + letter) : "0") + "<br>";
+            ret += letter + formatPlain(" : "
+                    + (charCount.containsKey("" + letter) ? charCount.get("" + letter) : formatPlain("0")) + "<br>");
         }
-        ret += "<br><br>";
+        ret += formatPlain("<br><br>");
 
         // build display for phoneme count
-        ret += " Breakdown of phonemes counted across all words:<br>";
+        ret += formatPlain(" Breakdown of phonemes counted across all words:<br>");
         Iterator<PronunciationNode> procLoop = core.getPronunciationMgr().getPronunciations();
         while (procLoop.hasNext()) {
             PronunciationNode curNode = procLoop.next();
-            ret += curNode.getPronunciation() + " : "
+            ret += formatPlain(curNode.getPronunciation() + " : "
                     + (phonemeCount.containsKey(curNode.getPronunciation())
-                            ? phonemeCount.get(curNode.getPronunciation()) : "0") + "<br>";
+                            ? phonemeCount.get(curNode.getPronunciation()) : formatPlain("0")) + "<br>");
         }
-        ret += "<br><br>";
+        ret += formatPlain("<br><br>");
 
         // buid grid of 2 letter combos
-        ret += "Heat map of letter combination frequency:<br>";
+        ret += formatPlain("Heat map of letter combination frequency:<br>");
         ret += "<table border=\"1\">";
         ret += "<tr><td></td>";
         for (char topRow : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
-            ret += "<td><font " + conFontTag + ">" + topRow + "</font></td>";
+            ret += "<td>" + topRow + "</td>";
         }
         ret += "</tr>";
         for (char y : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
-            ret += "<tr><td><font " + conFontTag + ">" + y + "</font></td>";
+            ret += "<tr><td>" + y + "</td>";
             for (char x : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
                 String search = "" + x + y;
                 Integer comboValue = (characterCombos2.containsKey(search)
@@ -588,26 +590,26 @@ public class ConWordCollection extends DictionaryCollection {
                 Integer red = (255 / highestCombo2) * comboValue;
                 Integer blue = 255 - red;
                 ret += "<td bgcolor=rgb(" + red + "," + blue + "," + blue + ")>"
-                        + "<font " + conFontTag + ">" + x + y + "</font>" + ":"
-                        + comboValue.toString() + "</td>";
+                        + x + y + formatPlain(":"
+                        + comboValue.toString()) + "</td>";
             }
             ret += "</tr>";
         }
-        ret += "</table><br><br>";
+        ret += "</table>"+formatPlain("<br><br>");
 
         // buid grid of 2 phoneme combos
-        ret += "Heat map of phoneme combination frequency:<br>";
+        ret += formatPlain("Heat map of phoneme combination frequency:<br>");
         ret += "<table border=\"1\">";
-        ret += "<tr><td></td>";
+        ret += "<tr>" + formatPlain("<td></td>");
         Iterator<PronunciationNode> procIty = core.getPronunciationMgr().getPronunciations();
         while (procIty.hasNext()) {
-            ret += "<td>" + procIty.next().getPronunciation() + "</td>";
+            ret += "<td>" + formatPlain(formatPlain(procIty.next().getPronunciation())) + "</td>";
         }
         ret += "</tr>";
         procIty = core.getPronunciationMgr().getPronunciations();
         while (procIty.hasNext()) {
             PronunciationNode y = procIty.next();
-            ret += "<tr><td>" + y.getPronunciation() + "</td>";
+            ret += "<tr><td>" + formatPlain(y.getPronunciation()) + "</td>";
             Iterator<PronunciationNode> procItx = core.getPronunciationMgr().getPronunciations();
             while (procItx.hasNext()) {
                 PronunciationNode x = procItx.next();
@@ -618,14 +620,24 @@ public class ConWordCollection extends DictionaryCollection {
                 Integer red = (255 / highestCombo2) * comboValue;
                 Integer blue = 255 - red;
                 ret += "<td bgcolor=rgb(" + red + "," + blue + "," + blue + ")>"
-                        + x.getPronunciation() + y.getPronunciation() + ":"
-                        + comboValue.toString() + "</td>";
+                        + formatPlain(x.getPronunciation() + y.getPronunciation() + ":"
+                        + comboValue.toString()) + "</td>";
             }
             ret += "</tr>";
         }
         ret += "</table>";
 
         return ret;
+    }
+    
+    /**
+     * Formats in HTML to a plain font to avoid conlang font
+     * @param toPlain text to make plain
+     * @return text in plain tag
+     */
+    public static String formatPlain(String toPlain) {
+        String defaultFont = "face=\"" + Font.SANS_SERIF + "\"";
+        return "<font " + defaultFont + ">" + toPlain + "</font>";
     }
     
     /**
