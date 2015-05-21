@@ -403,6 +403,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         mnuTranslation = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
         mnuView = new javax.swing.JMenu();
+        mnuGrammarGuide = new javax.swing.JMenuItem();
         mnuViewLogographsDetail = new javax.swing.JMenuItem();
         mnuThesaurus = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
@@ -1510,6 +1511,14 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
 
         mnuView.setText("View");
 
+        mnuGrammarGuide.setText("Grammar Guide");
+        mnuGrammarGuide.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuGrammarGuideActionPerformed(evt);
+            }
+        });
+        mnuView.add(mnuGrammarGuide);
+
         mnuViewLogographsDetail.setText("Logograph Dictionary");
         mnuViewLogographsDetail.setToolTipText("Logographic dictionary tool");
         mnuViewLogographsDetail.addActionListener(new java.awt.event.ActionListener() {
@@ -1805,6 +1814,10 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private void mnuExportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportFontActionPerformed
         exportFont();
     }//GEN-LAST:event_mnuExportFontActionPerformed
+
+    private void mnuGrammarGuideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGrammarGuideActionPerformed
+        viewGrammarDetail();
+    }//GEN-LAST:event_mnuGrammarGuideActionPerformed
     
     @Override
     public void dispose() {
@@ -2212,6 +2225,11 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     
     private void viewQuickEntry() {
         Window window = ScrQuickWordEntry.run(core, this);
+        childFrames.add(window);
+    }
+    
+    private void viewGrammarDetail() {
+        Window window = ScrGrammarGuide.run(core);
         childFrames.add(window);
     }
 
@@ -4042,6 +4060,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JMenuItem mnuExit;
     private javax.swing.JMenuItem mnuExportFont;
     private javax.swing.JMenu mnuFile;
+    private javax.swing.JMenuItem mnuGrammarGuide;
     private javax.swing.JMenu mnuHelp;
     private javax.swing.JMenuItem mnuImportExcel;
     private javax.swing.JMenuItem mnuLangStats;

@@ -45,6 +45,7 @@ public class DictCore {
     private final PronunciationMgr pronuncMgr = new PronunciationMgr(this);
     private final ThesaurusManager thesManager = new ThesaurusManager(this);
     private final LogoCollection logoCollection = new LogoCollection(this);
+    private final GrammarManager grammarManager = new GrammarManager(this);
 
     /**
      * Gets proper color for fields marked as required
@@ -66,6 +67,10 @@ public class DictCore {
     
     public LogoCollection getLogoCollection() {
         return logoCollection;
+    }
+    
+    public GrammarManager getGrammarManager() {
+        return grammarManager;
     }
 
     /**

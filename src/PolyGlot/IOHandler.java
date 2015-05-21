@@ -22,6 +22,7 @@ package PolyGlot;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -415,7 +416,7 @@ public class IOHandler {
         if (zipFile == null) {
             throw new IOException("Dictionary must be saved before font can be exported.");
         }
-        
+
         // ensure export file has the proper extension
         if (!exportPath.toLowerCase().endsWith(".ttf")) {
             exportPath += ".ttf";
@@ -429,5 +430,27 @@ public class IOHandler {
         } else {
             throw new IOException("Custom font not found in PGD dictionary file.");
         }
+    }
+
+    /**
+     * Fetches and returns LCD style font NOTE: the font returned is very small,
+     * use deriveFont() to make it a usable size
+     *
+     * @return LCD display font
+     * @throws java.awt.FontFormatException if font corrupted
+     * @throws java.io.IOException if unable to load font
+     */
+    public Font getLcdFont() throws FontFormatException, IOException {
+        //InputStream is = this.getClass().getResourceAsStream("/PolyGlot/EmptyImage.png");
+        File tmp = new File("/Users/draque/Desktop/digital_7/lcdFont.ttf");
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        //Font ret = Font.createFont(Font.TRUETYPE_FONT, is);
+        Font ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
+        
+        if (ret != null) {
+            ge.registerFont(ret);
+        }
+
+        return ret;
     }
 }
