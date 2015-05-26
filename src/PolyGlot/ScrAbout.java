@@ -32,6 +32,7 @@ public class ScrAbout extends PDialog {
      * @param _core dictionary core
      */
     public ScrAbout(DictCore _core) {
+        this.setupKeyStrokes();
         initComponents();
         core = _core;
         

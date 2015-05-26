@@ -53,6 +53,7 @@ public class ScrDeclensions extends PDialog {
 
     public ScrDeclensions(DictCore _core) {
         core = _core;
+        this.setupKeyStrokes();
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
