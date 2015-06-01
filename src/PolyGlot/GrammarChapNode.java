@@ -19,10 +19,7 @@
  */
 package PolyGlot;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.MutableTreeNode;
 
 /**
  * This node represents a chapter within the grammar recording section of
@@ -31,7 +28,13 @@ import javax.swing.tree.MutableTreeNode;
  */
 public class GrammarChapNode extends DefaultMutableTreeNode {
     private String name = "";
-    private List<GrammarSectionNode> sections = new ArrayList<GrammarSectionNode>();
+    private GrammarSectionNode buffer;
+    private final GrammarManager parentManager;
+    
+    public GrammarChapNode(GrammarManager _parentManager) {
+        parentManager = _parentManager;
+        buffer = new GrammarSectionNode(parentManager);
+    }
     
     public void setName(String _name) {
         name = _name;
@@ -40,37 +43,27 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
         return name;
     }
     
-    public List<GrammarSectionNode> getSections() {
-        return sections;
-    }    
-    public void setSections(List<GrammarSectionNode> _sections) {
-        sections = _sections;
+    /**
+     * fetches section buffer
+     * @return section buffer
+     */
+    public GrammarSectionNode getBuffer() {
+        return buffer;
     }
     
     /**
-     * Adds a new section to the end of the list of sections in the chapter
-     * @param newNode 
+     * inserts current section buffer to sections and clears it
      */
-    public void addSection(GrammarSectionNode newNode) {
-        sections.add(newNode);
-    }
-    
-    public void addSectionAtIndex(GrammarSectionNode newNode, int index) {
-        if (index > sections.size()){
-            sections.add(newNode);
-        } else {            
-            sections.add(index, newNode);
-        }
+    public void insert() {
+        this.add(buffer);
+        clear();
     }
     
     /**
-     * Removes passed node from list of sections in chapter.
-     * @param remNode Section to be removed.
+     * clears current buffer
      */
-    @Override
-    public void remove(MutableTreeNode remNode) {
-        sections.remove(remNode);
-        super.remove(remNode);
+    public void clear() {
+        buffer = new GrammarSectionNode(parentManager);
     }
     
     @Override

@@ -39,6 +39,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.apache.commons.io.FileUtils;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -180,7 +182,6 @@ public class IOHandler {
     }
 
     public static void writeFile(String _fileName, Document doc, DictCore core) throws IOException, TransformerException {
-        final String tempFileName = "xxTEMPPGTFILExx"; // TODO: Replace this with constant
         String directoryPath;
 
         File finalFile = new File(_fileName);
@@ -198,7 +199,7 @@ public class IOHandler {
         sb.append(writer.getBuffer().toString());
 
         // save file to temp location initially.
-        final File f = new File(directoryPath, tempFileName);
+        final File f = new File(directoryPath, PGTUtil.tempFile);
         final ZipOutputStream out;
 
         if (System.getProperty("java.version").startsWith("1.6")) {
@@ -247,6 +248,24 @@ public class IOHandler {
                 out.closeEntry();
             }
         }
+        
+        // write all grammar wav recordings to file
+        Map<Integer, byte[]> grammarSoundMap = core.getGrammarManager().getSoundMap();
+        Iterator<Entry<Integer, byte[]>> gramSoundIt = grammarSoundMap.entrySet().iterator();
+        if (gramSoundIt.hasNext()) {
+            out.putNextEntry(new ZipEntry(PGTUtil.grammarSoundSavePath));
+            
+            while (gramSoundIt.hasNext()) {
+                Entry<Integer, byte[]> curEntry = gramSoundIt.next();
+                Integer curId = curEntry.getKey();
+                byte[] curSound = curEntry.getValue();
+                
+                out.putNextEntry(new ZipEntry(PGTUtil.grammarSoundSavePath
+                        + curId.toString() + ".raw"));
+                out.write(curSound);
+                out.closeEntry();
+            }
+        }
 
         out.finish();
         out.close();
@@ -288,6 +307,8 @@ public class IOHandler {
     public static File getFontFile(Font font) {
         File ret = null;
 
+        // TODO: This is where to create logic to check for cached font file and return that if present
+        
         if (font == null) {
             return ret;
         }
@@ -433,6 +454,62 @@ public class IOHandler {
     }
 
     /**
+     * Loads any related grammar recordings into the passed grammar manager via id
+     * @param _fileName name of file to load sound recordings from
+     * @param grammarManager grammar manager to populate with sounds
+     */
+    static void loadGrammarSounds(String fileName, GrammarManager grammarManager) {
+        ZipFile zipFile = null;
+        
+        try {
+            if (!isFileZipArchive(fileName)) {
+                return;
+            }
+            
+            zipFile = new ZipFile(fileName);
+        } catch (Exception e) {
+            // Do nothing: if the file were missing, it would have blown up earlier
+            if (zipFile == null) {
+                return;
+            }
+        }
+    
+        Iterator<GrammarChapNode> chapIt = grammarManager.getChapters().iterator();
+        
+        while (chapIt.hasNext()) {
+            GrammarChapNode curChap = chapIt.next();
+            
+            for (int i = 0; i < curChap.getChildCount(); i++) {
+                GrammarSectionNode curNode = (GrammarSectionNode)curChap.getChildAt(i);
+                
+                if (curNode.getRecordingId() == -1) {
+                    continue;
+                }
+                
+                String soundPath = PGTUtil.grammarSoundSavePath
+                    + curNode.getRecordingId().toString() + ".raw";
+                ZipEntry soundEntry = zipFile.getEntry(soundPath);
+                
+                byte[] sound = null;
+                
+                try {
+                    sound = IOUtils.toByteArray(zipFile.getInputStream(soundEntry));
+                } catch (IOException e) {
+                    // TODO: create load log?
+                } catch (Exception e) {
+                    // TODO: create load log? (sound not found error)
+                }
+                
+                if (sound == null) {
+                    continue;
+                }
+                
+                grammarManager.addChangeRecording(curNode.getRecordingId(), sound);
+            }
+        }
+    }
+
+    /**
      * Fetches and returns LCD style font NOTE: the font returned is very small,
      * use deriveFont() to make it a usable size
      *
@@ -441,10 +518,9 @@ public class IOHandler {
      * @throws java.io.IOException if unable to load font
      */
     public Font getLcdFont() throws FontFormatException, IOException {
-        //InputStream is = this.getClass().getResourceAsStream("/PolyGlot/EmptyImage.png");
-        File tmp = new File("/Users/draque/Desktop/digital_7/lcdFont.ttf");
+        // TODO: move font to a resource folder, and change to a constant
+        InputStream tmp = this.getClass().getResourceAsStream("/PolyGlot/lcdFont.ttf");
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        //Font ret = Font.createFont(Font.TRUETYPE_FONT, is);
         Font ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
         
         if (ret != null) {

@@ -22,15 +22,19 @@ package PolyGlot;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -39,58 +43,72 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 /**
- * This form displays and allows editing of a chapter/section style grammar
- * text for Conlanging authors to use.
+ * This form displays and allows editing of a chapter/section style grammar text
+ * for Conlanging authors to use.
+ *
  * @author draque
  */
 public class ScrGrammarGuide extends PFrame {
+
     private final DictCore core;
-    private final String searchText; // TODO: Move to constants class
-    private final String defName;// TODO: move to constants class
+    private final String searchText;
+    private final String defName;
+    private final String defTime;
     private SoundRecorder soundRecorder;
     private boolean isUpdating;
+    private final ImageIcon playButtonUp;
+    private final ImageIcon playButtonDown;
+    private final ImageIcon recordButtonUp;
+    private final ImageIcon recordButtonDown;
+    private final ImageIcon addButton;
+    private final ImageIcon deleteButton;
+    private final ImageIcon addButtonPressed;
+    private final ImageIcon deleteButtonPressed;
+
     // TODO: allow import of audio wav files (how to autodetect audio format?)
     /**
      * Creates new form scrGrammarGuide
+     *
      * @param _core Dictionary core
      */
     public ScrGrammarGuide(DictCore _core) {
-        // TODO: clean up this instantiation so all the object setup is in a called method
         this.isUpdating = false;
         searchText = "Search...";
         defName = "Name...";
+        defTime = "00:00:00";
         core = _core;
+        playButtonUp = getButtonSizeIcon(
+                new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/play_OFF_BIG.png")));
+        playButtonDown = getButtonSizeIcon(
+                new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/play_ON_BIG.png")));
+        recordButtonUp = getButtonSizeIcon(
+                new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/recording_OFF_BIG.png")));
+        recordButtonDown = getButtonSizeIcon(
+                new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/recording_ON_BIG.png")));
+        addButton = getButtonSizeIcon(
+                new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/add_button.png")));
+        deleteButton = getButtonSizeIcon(
+                new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button.png")));
+        addButtonPressed = getButtonSizeIcon(
+                new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/add_button_pressed.png")));
+        deleteButtonPressed = getButtonSizeIcon(
+                new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button_pressed.png")));
         
-        initComponents();
-        treChapList.setCellRenderer(new PGTreeCellRenderer());
-        
-        treChapList.requestFocus();
-        
-        txtSearch.setText(searchText);
-        txtSearch.setForeground(Color.gray);
-        txtName.setText(defName);
-        txtName.setForeground(Color.gray);
-        soundRecorder = new SoundRecorder();
-        soundRecorder.setTimer(txtTimer);
-        soundRecorder.setSlider(sldSoundPosition);
-        txtSection.setStyledDocument(new PGDocument(core.getPropertiesManager().getFontCon()));
-        treChapList.setRootVisible(false);
-        txtTimer.setText("00:00:00");
-        
-        try {
-            txtTimer.setFont(new IOHandler().getLcdFont().deriveFont(0, 18f));
-        } catch (FontFormatException e) {
-            InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), this);
-        } catch (IOException e) {
-            InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), this);
-        }
-        
-        cmbFonts.addItem("NatLang Font");
-        cmbFonts.addItem(core.getPropertiesManager().getFontCon().getName());
-        
-        setupListeners();
         setupKeyStrokes();
+        initComponents();
+        
+        soundRecorder = new SoundRecorder(this);
+        soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
+        
+        setInitialValues();
+        setupListeners();
         populateSections();
+    }
+    
+    @Override
+    public void dispose() {
+        savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
+        super.dispose();
     }
     
     /**
@@ -117,9 +135,9 @@ public class ScrGrammarGuide extends PFrame {
         sldSoundPosition = new javax.swing.JSlider();
         jToolBar2 = new javax.swing.JToolBar();
         jLabel2 = new javax.swing.JLabel();
-        btnPlayPauseAudio = new javax.swing.JButton();
-        btnRecordAudio = new javax.swing.JButton();
         txtTimer = new javax.swing.JTextField();
+        btnRecordAudio = new javax.swing.JButton();
+        btnPlayPauseAudio = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         treChapList = new javax.swing.JTree();
@@ -130,12 +148,14 @@ public class ScrGrammarGuide extends PFrame {
         btnAddChapter = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Grammar Guide");
 
         jSplitPane1.setDividerLocation(170);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         txtName.setToolTipText("Name of chapter/section");
+        txtName.setEnabled(false);
         txtName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtNameFocusGained(evt);
@@ -151,21 +171,46 @@ public class ScrGrammarGuide extends PFrame {
         jToolBar1.setRollover(true);
 
         cmbFonts.setToolTipText("Text font");
+        cmbFonts.setEnabled(false);
         cmbFonts.setMaximumSize(new java.awt.Dimension(120, 32767));
+        cmbFonts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbFontsActionPerformed(evt);
+            }
+        });
         jToolBar1.add(cmbFonts);
 
         txtFontSize.setText("12");
         txtFontSize.setToolTipText("Font Size");
+        txtFontSize.setEnabled(false);
         txtFontSize.setMaximumSize(new java.awt.Dimension(40, 20));
+        txtFontSize.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtFontSizeFocusLost(evt);
+            }
+        });
+        txtFontSize.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFontSizeKeyPressed(evt);
+            }
+        });
         jToolBar1.add(txtFontSize);
 
         cmbFontColor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "black", "red", "blue", "green", "gray", "yellow" }));
         cmbFontColor.setToolTipText("Font Color");
+        cmbFontColor.setEnabled(false);
         cmbFontColor.setMaximumSize(new java.awt.Dimension(96, 20));
+        cmbFontColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbFontColorActionPerformed(evt);
+            }
+        });
         jToolBar1.add(cmbFontColor);
 
-        btnApply.setText("Apply");
+        btnApply.setText(" Apply ");
         btnApply.setToolTipText("Switches currently selected text to current font style");
+        btnApply.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnApply.setEnabled(false);
         btnApply.setFocusable(false);
         btnApply.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnApply.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -177,6 +222,8 @@ public class ScrGrammarGuide extends PFrame {
         jToolBar1.add(btnApply);
 
         txtSection.setBorder(null);
+        txtSection.setToolTipText("Formatted segment text");
+        txtSection.setEnabled(false);
         jScrollPane2.setViewportView(txtSection);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -193,7 +240,7 @@ public class ScrGrammarGuide extends PFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
         );
 
         jPanel4.setMaximumSize(new java.awt.Dimension(32767, 76));
@@ -201,6 +248,7 @@ public class ScrGrammarGuide extends PFrame {
 
         sldSoundPosition.setToolTipText("");
         sldSoundPosition.setValue(0);
+        sldSoundPosition.setEnabled(false);
         sldSoundPosition.setMinimumSize(new java.awt.Dimension(10, 29));
 
         jToolBar2.setFloatable(false);
@@ -209,36 +257,47 @@ public class ScrGrammarGuide extends PFrame {
         jLabel2.setText("Spoken Example  ");
         jToolBar2.add(jLabel2);
 
-        btnPlayPauseAudio.setText("Play");
-        btnPlayPauseAudio.setToolTipText("Plays spoken example of grammar, if it exists.");
-        btnPlayPauseAudio.setFocusable(false);
-        btnPlayPauseAudio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnPlayPauseAudio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPlayPauseAudio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPlayPauseAudioActionPerformed(evt);
-            }
-        });
-        jToolBar2.add(btnPlayPauseAudio);
-
-        btnRecordAudio.setText("Record");
-        btnRecordAudio.setToolTipText("Records spoken example of grammar (erases any current example)");
-        btnRecordAudio.setFocusable(false);
-        btnRecordAudio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnRecordAudio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnRecordAudio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRecordAudioActionPerformed(evt);
-            }
-        });
-        jToolBar2.add(btnRecordAudio);
-
         txtTimer.setEditable(false);
         txtTimer.setBackground(new java.awt.Color(0, 0, 0));
         txtTimer.setForeground(new java.awt.Color(51, 255, 51));
         txtTimer.setText("00:00:00");
         txtTimer.setToolTipText("Recording/play time");
         txtTimer.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        btnRecordAudio.setText("Record");
+        btnRecordAudio.setToolTipText("Records spoken example of grammar (erases any current example)");
+        btnRecordAudio.setBorder(null);
+        btnRecordAudio.setBorderPainted(false);
+        btnRecordAudio.setEnabled(false);
+        btnRecordAudio.setFocusable(false);
+        btnRecordAudio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRecordAudio.setMaximumSize(new java.awt.Dimension(40, 40));
+        btnRecordAudio.setMinimumSize(new java.awt.Dimension(40, 40));
+        btnRecordAudio.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnRecordAudio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRecordAudio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecordAudioActionPerformed(evt);
+            }
+        });
+
+        btnPlayPauseAudio.setText("Play");
+        btnPlayPauseAudio.setToolTipText("Plays spoken example of grammar, if it exists.");
+        btnPlayPauseAudio.setBorder(null);
+        btnPlayPauseAudio.setBorderPainted(false);
+        btnPlayPauseAudio.setEnabled(false);
+        btnPlayPauseAudio.setFocusable(false);
+        btnPlayPauseAudio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPlayPauseAudio.setMaximumSize(new java.awt.Dimension(40, 40));
+        btnPlayPauseAudio.setMinimumSize(new java.awt.Dimension(40, 40));
+        btnPlayPauseAudio.setName(""); // NOI18N
+        btnPlayPauseAudio.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnPlayPauseAudio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPlayPauseAudio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlayPauseAudioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -248,21 +307,27 @@ public class ScrGrammarGuide extends PFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(sldSoundPosition, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(sldSoundPosition, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPlayPauseAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRecordAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtTimer, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(289, 289, 289)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(42, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTimer, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jToolBar2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPlayPauseAudio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRecordAudio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTimer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sldSoundPosition, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -310,9 +375,16 @@ public class ScrGrammarGuide extends PFrame {
 
         btnAddSection.setText("+");
         btnAddSection.setToolTipText("Add a new section to a chapter");
+        btnAddSection.setBorder(null);
+        btnAddSection.setBorderPainted(false);
+        btnAddSection.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnAddSection.setFocusPainted(false);
+        btnAddSection.setFocusTraversalKeysEnabled(false);
+        btnAddSection.setFocusable(false);
         btnAddSection.setMaximumSize(new java.awt.Dimension(40, 29));
         btnAddSection.setMinimumSize(new java.awt.Dimension(40, 29));
         btnAddSection.setPreferredSize(new java.awt.Dimension(40, 29));
+        btnAddSection.setRequestFocusEnabled(false);
         btnAddSection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddSectionActionPerformed(evt);
@@ -320,18 +392,22 @@ public class ScrGrammarGuide extends PFrame {
         });
 
         btnDelete.setToolTipText("Delete current chapter/node");
+        btnDelete.setBorderPainted(false);
+        btnDelete.setFocusPainted(false);
+        btnDelete.setFocusable(false);
         btnDelete.setLabel("-");
         btnDelete.setMaximumSize(new java.awt.Dimension(40, 29));
         btnDelete.setMinimumSize(new java.awt.Dimension(40, 29));
         btnDelete.setOpaque(true);
         btnDelete.setPreferredSize(new java.awt.Dimension(40, 29));
+        btnDelete.setRequestFocusEnabled(false);
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
             }
         });
 
-        btnAddChapter.setText("+Chap");
+        btnAddChapter.setText("Chapter");
         btnAddChapter.setToolTipText("Create a new chapter");
         btnAddChapter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -364,7 +440,7 @@ public class ScrGrammarGuide extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddSection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -444,6 +520,75 @@ public class ScrGrammarGuide extends PFrame {
         setFont();
     }//GEN-LAST:event_btnApplyActionPerformed
 
+    private void cmbFontsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFontsActionPerformed
+        setFont();
+    }//GEN-LAST:event_cmbFontsActionPerformed
+
+    private void cmbFontColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFontColorActionPerformed
+        setFont();
+    }//GEN-LAST:event_cmbFontColorActionPerformed
+
+    private void txtFontSizeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFontSizeFocusLost
+        updateFontSize();
+    }//GEN-LAST:event_txtFontSizeFocusLost
+
+    private void txtFontSizeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFontSizeKeyPressed
+        int event = evt.getKeyCode();
+        if (event == KeyEvent.VK_ENTER) {
+            updateFontSize();
+        }
+    }//GEN-LAST:event_txtFontSizeKeyPressed
+
+    private void updateFontSize() {
+        try {
+            Integer.parseInt(txtFontSize.getText());
+        } catch (NumberFormatException e) {
+            InfoBox.warning("Font Size", "Invalid size: " + txtFontSize.getText(), this);
+            txtFontSize.setText("12");
+        }
+        setFont();
+    }
+    
+    /**
+     * Sets up initial values of components
+     */
+    private void setInitialValues() {
+        treChapList.setCellRenderer(new PGTreeCellRenderer());
+        treChapList.requestFocus();
+        txtSearch.setText(searchText);
+        txtSearch.setForeground(Color.gray);
+        txtName.setText(defName);
+        txtName.setForeground(Color.gray);
+        soundRecorder.setTimer(txtTimer);
+        soundRecorder.setSlider(sldSoundPosition);
+        txtSection.setDocument(new PGDocument(core.getPropertiesManager().getFontCon()));
+        treChapList.setRootVisible(false);
+        txtTimer.setText(defTime);
+        txtSection.addStyle("default", null); // default style makes word wrap active
+
+        try {
+            txtTimer.setFont(new IOHandler().getLcdFont().deriveFont(0, 18f));
+        } catch (FontFormatException e) {
+            InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), this);
+        } catch (IOException e) {
+            InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), this);
+        }
+
+        cmbFonts.addItem("NatLang Font");
+        cmbFonts.addItem(core.getPropertiesManager().getFontCon().getName());
+        
+        btnPlayPauseAudio.setText("");
+        btnRecordAudio.setText("");
+        btnAddSection.setText("");
+        btnDelete.setText("");
+        btnAddSection.setIcon(getButtonSizeIcon(addButton, 21, 21));
+        btnAddSection.setPressedIcon(getButtonSizeIcon(addButtonPressed, 21, 21));
+        btnDelete.setIcon(getButtonSizeIcon(deleteButton, 21, 21));
+        btnDelete.setPressedIcon(getButtonSizeIcon(deleteButtonPressed, 21, 21));
+        btnAddSection.setContentAreaFilled(false);
+        btnDelete.setContentAreaFilled(false);    
+    }
+    
     /**
      * Sets input font/font of selected text
      */
@@ -451,7 +596,7 @@ public class ScrGrammarGuide extends PFrame {
         Font natFont = this.getFont();
         Font conFont = core.getPropertiesManager().getFontCon();
         SimpleAttributeSet aset = new SimpleAttributeSet();
-        
+
         // natlang font is always 0, conlang font always 1
         if (cmbFonts.getSelectedIndex() == 0) {
             StyleConstants.setFontFamily(aset, natFont.getFamily());
@@ -459,16 +604,16 @@ public class ScrGrammarGuide extends PFrame {
             StyleConstants.setFontFamily(aset, conFont.getFamily());
         }
 
-        StyleConstants.setForeground(aset, 
-                FormattedTextHelper.textToColor((String)cmbFontColor.getSelectedItem()));
-        
+        StyleConstants.setForeground(aset,
+                FormattedTextHelper.textToColor((String) cmbFontColor.getSelectedItem()));
+
         StyleConstants.setFontSize(aset, Integer.parseInt(txtFontSize.getText()));
-        
+
         txtSection.setCharacterAttributes(aset, true);
 
         txtSection.requestFocus();
     }
-    
+
     /**
      * sets up object listeners
      */
@@ -495,30 +640,87 @@ public class ScrGrammarGuide extends PFrame {
                 }
             }
         });
+        treChapList.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                TreePath oldPath = e.getOldLeadSelectionPath();
+                if (oldPath != null) {
+                    Object oldNode = oldPath.getPathComponent(oldPath.getPathCount() - 1);
+                    savePropsToNode((DefaultMutableTreeNode) oldNode);
+                }
+
+                closeAllPlayRecord();
+                populateProperties();
+            }
+        });
+    }
+
+    /**
+     * Saves current grammar properties to the node passed in. If null, nothing.
+     * @param node node to save values to
+     */
+    public void savePropsToNode(DefaultMutableTreeNode node) {
+        if (node instanceof GrammarSectionNode) {
+            GrammarSectionNode secNode = (GrammarSectionNode) node;
+            secNode.setName(txtName.getText());
+            secNode.setRecording(soundRecorder.getSound());
+            try {
+                secNode.setSectionText(FormattedTextHelper.storageFormat(txtSection));
+            } catch (BadLocationException e) {
+                //e.printStackTrace();
+                InfoBox.error("Section Save Error", "Unable to save section text: "
+                        + e.getLocalizedMessage(), this);
+            }
+        } else if (node instanceof GrammarChapNode) {
+            GrammarChapNode chapNode = (GrammarChapNode) node;
+            chapNode.setName(txtName.getText());
+        }
+    }
+
+    /**
+     * converts arbitrarily sized image to one appropriate for a button icon
+     * size
+     *
+     * @param rawImage image to shrink
+     * @return image of appropriate size
+     */
+    private ImageIcon getButtonSizeIcon(ImageIcon rawImage) {
+        return getButtonSizeIcon(rawImage, 30, 30);
     }
     
+    /**
+     * converts an icon to a user defined size for buttons
+     * @param rawImage image to convert
+     * @param width new width
+     * @param height new height
+     * @return resized image
+     */
+    private ImageIcon getButtonSizeIcon(ImageIcon rawImage, int width, int height) {
+        return new ImageIcon(rawImage.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
+    }
+
     /**
      * Updates name from UI element of currently selected chapter or section
      */
     private void updateName() {
         boolean localUpdating = isUpdating;
         isUpdating = true;
-        
+
         Object selection = treChapList.getLastSelectedPathComponent();
-        
+
         if (selection instanceof GrammarSectionNode) {
-            ((GrammarSectionNode)selection).setName(txtName.getText());
+            ((GrammarSectionNode) selection).setName(txtName.getText());
         } else if (selection instanceof GrammarChapNode) {
-            ((GrammarChapNode)selection).setName(txtName.getText());
+            ((GrammarChapNode) selection).setName(txtName.getText());
         }
+        
         treChapList.repaint();
         isUpdating = localUpdating;
     }
-    
+
     /**
      * Stops all recording and play streams
      */
-    // TODO: make sure this is called before populateProperties when tree value changes
     private void closeAllPlayRecord() {
         try {
             if (soundRecorder.isPlaying()) {
@@ -529,17 +731,19 @@ public class ScrGrammarGuide extends PFrame {
             }
         } catch (LineUnavailableException e) {
             // on exception, inform user and replace sound recorder
-            soundRecorder = new SoundRecorder();
+            soundRecorder = new SoundRecorder(this);
+            soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
             InfoBox.error("Recorder Error", "Unable to end audio stream: " + e.getLocalizedMessage(), this);
             //e.printStackTrace();
         } catch (IOException e) {
             // on exception, inform user and replace sound recorder
-            soundRecorder = new SoundRecorder();
+            soundRecorder = new SoundRecorder(this);
+            soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
             InfoBox.error("Recorder Error", "Unable to end audio stream: " + e.getLocalizedMessage(), this);
             //e.printStackTrace();
         }
     }
-    
+
     /**
      * Populates properties of chapter/section and sets appropriate controls
      */
@@ -547,13 +751,14 @@ public class ScrGrammarGuide extends PFrame {
         if (isUpdating) {
             return;
         }
-        
+
         isUpdating = true;
-        
+
         Object selection = treChapList.getLastSelectedPathComponent();
         if (selection instanceof GrammarChapNode) {
-            GrammarChapNode chapNode = (GrammarChapNode)selection;
+            GrammarChapNode chapNode = (GrammarChapNode) selection;
             txtName.setText(chapNode.getName());
+            txtName.setEnabled(true);
             txtSection.setText("");
             txtSection.setEnabled(false);
             btnApply.setEnabled(false);
@@ -564,9 +769,17 @@ public class ScrGrammarGuide extends PFrame {
             btnRecordAudio.setEnabled(false);
             sldSoundPosition.setValue(0);
             sldSoundPosition.setEnabled(false);
-        } if (selection instanceof GrammarSectionNode) {
-            GrammarSectionNode secNode = (GrammarSectionNode)selection;
+            txtTimer.setText(defTime);
+            soundRecorder.setSound(null);
+            if (txtName.getText().equals(defName)) {
+                txtName.setForeground(Color.gray);
+            } else {
+                txtName.setForeground(Color.black);
+            }
+        } else if (selection instanceof GrammarSectionNode) {
+            GrammarSectionNode secNode = (GrammarSectionNode) selection;
             txtName.setText(secNode.getName());
+            txtName.setEnabled(true);
             txtSection.setEnabled(true);
             btnApply.setEnabled(true);
             txtFontSize.setEnabled(true);
@@ -576,83 +789,118 @@ public class ScrGrammarGuide extends PFrame {
             btnRecordAudio.setEnabled(true);
             sldSoundPosition.setValue(0);
             sldSoundPosition.setEnabled(true);
+            txtTimer.setText(defTime);
+            if (txtName.getText().equals(defName)) {
+                txtName.setForeground(Color.gray);
+            } else {
+                txtName.setForeground(Color.black);
+            }
             try {
-                FormattedTextHelper.restoreFromString(secNode.getSectionText(), 
+                soundRecorder.setSound(secNode.getRecording());
+            } catch (Exception e) {
+                //e.printStackTrace();
+                InfoBox.error("Recording Load Failure", "Unable to load recording: "
+                        + e.getLocalizedMessage(), this);
+            }
+            try {
+                FormattedTextHelper.restoreFromString(secNode.getSectionText(),
                         txtSection);
             } catch (BadLocationException e) {
                 InfoBox.error("Section Load Error", "Unable to load section text: "
                         + e.getLocalizedMessage(), this);
                 //e.printStackTrace();
             }
+        } else {
+            // if neither is selected, then the whole tree has been deleted by the user
+            txtName.setText(defName);
+            txtName.setForeground(Color.gray);
+            txtName.setEnabled(false);
+            txtSection.setText(defName);
+            txtSection.setEnabled(false);
+            btnApply.setEnabled(false);
+            txtFontSize.setEnabled(false);
+            cmbFontColor.setEnabled(false);
+            cmbFonts.setEnabled(false);
+            btnPlayPauseAudio.setEnabled(false);
+            btnRecordAudio.setEnabled(false);
+            sldSoundPosition.setValue(0);
+            sldSoundPosition.setEnabled(false);
+            txtTimer.setText(defTime);
+            soundRecorder.setSound(null);
         }
-        
+
         isUpdating = false;
     }
-    
+
     private void deleteNode() {
-        // TODO: add confirmation
         Object selection = treChapList.getLastSelectedPathComponent();
-        DefaultTreeModel model = (DefaultTreeModel)treChapList.getModel();
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
-            
+        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+
         if (selection == null) {
             return;
         }
         
+        if (InfoBox.yesNoCancel("Confirmation", "Really delete? This cannot be undone.", this)
+                != JOptionPane.YES_OPTION) {
+            return;
+        }
+
         if (selection instanceof GrammarSectionNode) {
-            GrammarSectionNode curNode = (GrammarSectionNode)selection;
-            GrammarChapNode parent = (GrammarChapNode)curNode.getParent();
+            GrammarSectionNode curNode = (GrammarSectionNode) selection;
+            GrammarChapNode parent = (GrammarChapNode) curNode.getParent();
             parent.remove(curNode);
             treChapList.expandPath(new TreePath(model.getPathToRoot(parent)));
             treChapList.setSelectionPath(new TreePath(model.getPathToRoot(parent)));
-        } else if (selection instanceof GrammarChapNode){
-            root.remove((GrammarChapNode)selection);
-            core.getGrammarManager().removeChapter((GrammarChapNode)selection);
+        } else if (selection instanceof GrammarChapNode) {
+            root.remove((GrammarChapNode) selection);
+            core.getGrammarManager().removeChapter((GrammarChapNode) selection);
         }
-        
+
         model.reload(root);
     }
-    
+
     private void addChapter() {
-        DefaultTreeModel model = (DefaultTreeModel)treChapList.getModel();
+        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
         Object selection = treChapList.getLastSelectedPathComponent();
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
-        GrammarChapNode newNode = new GrammarChapNode();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        GrammarChapNode newNode = new GrammarChapNode(core.getGrammarManager());
         newNode.setName("NEW CHAPTER");
-        
+
         if (selection instanceof GrammarSectionNode) {
-            GrammarChapNode parent = (GrammarChapNode)((GrammarSectionNode)selection).getParent();
+            GrammarChapNode parent = (GrammarChapNode) ((GrammarSectionNode) selection).getParent();
             int index = root.getIndex(parent);
             model.insertNodeInto(newNode, root, index + 1);
             core.getGrammarManager().addChapterAtIndex(newNode, index + 1);
         } else if (selection instanceof GrammarChapNode) {
-            int index = root.getIndex((GrammarChapNode)selection);
+            int index = root.getIndex((GrammarChapNode) selection);
             model.insertNodeInto(newNode, root, index + 1);
             core.getGrammarManager().addChapterAtIndex(newNode, index + 1);
-        } else {           
+        } else {
             root.add(newNode);
             core.getGrammarManager().addChapter(newNode);
         }
-        
+
         model.reload();
         treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
+        txtName.setText(defName);
+        txtName.setForeground(Color.gray);
     }
-    
+
     private void addSection() {
-        DefaultTreeModel model = (DefaultTreeModel)treChapList.getModel();
+        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
         Object selection = treChapList.getLastSelectedPathComponent();
-        
+
         if (selection instanceof GrammarSectionNode) {
-            GrammarChapNode parent = (GrammarChapNode)((GrammarSectionNode)selection).getParent();
-            int index = parent.getIndex((GrammarSectionNode)selection);
+            GrammarChapNode parent = (GrammarChapNode) ((GrammarSectionNode) selection).getParent();
+            int index = parent.getIndex((GrammarSectionNode) selection);
             GrammarSectionNode newNode = core.getGrammarManager().getNewSection();
             newNode.setName("NEW SECTION");
             model.insertNodeInto(newNode, parent, index + 1);
-            parent.addSectionAtIndex(newNode, index + 1);
             model.reload();
             treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
         } else if (selection instanceof GrammarChapNode) {
-            GrammarChapNode parent = (GrammarChapNode)selection;
+            GrammarChapNode parent = (GrammarChapNode) selection;
             GrammarSectionNode newNode = core.getGrammarManager().getNewSection();
             newNode.setName("NEW SECTION");
             parent.add(newNode);
@@ -661,8 +909,11 @@ public class ScrGrammarGuide extends PFrame {
         } else {
             InfoBox.warning("Section Creation", "Select a chapter in which to create a section.", this);
         }
+
+        txtName.setText(defName);
+        txtName.setForeground(Color.gray);
     }
-    
+
     private void playPauseAudio() {
         try {
             soundRecorder.playPause();
@@ -673,66 +924,28 @@ public class ScrGrammarGuide extends PFrame {
             InfoBox.error("Play Error", "Unable to play due to: " + e.getLocalizedMessage(), this);
             //e.printStackTrace();
         }
-        // TODO: make buttons animate to proper state
     }
-    
+
     private void recordAudio() {
         try {
             if (soundRecorder.isRecording()) {
                 soundRecorder.endRecording();
             } else {
                 if (soundRecorder.getSound() != null) { // confirm overwrite of existing data
-                    if (InfoBox.yesNoCancel("Overwrite Confirmation", 
+                    if (InfoBox.yesNoCancel("Overwrite Confirmation",
                             "Discard existing audio recording?", this) != JOptionPane.YES_OPTION) {
                         return;
                     }
                 }
-                
+
                 soundRecorder.beginRecording();
             }
         } catch (Exception e) {
             InfoBox.error("Recording Error", "Unable to record due to: " + e.getLocalizedMessage(), this);
             //e.printStackTrace();
         }
-        // TODO: make buttons animate to proper state
     }
-    // TODO: delete main method
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScrGrammarGuide.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScrGrammarGuide.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScrGrammarGuide.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScrGrammarGuide.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ScrGrammarGuide(new DictCore()).setVisible(true);
-            }
-        });
-    }
-    
     public static ScrGrammarGuide run(DictCore _core) {
         final ScrGrammarGuide s = new ScrGrammarGuide(_core);
 
@@ -743,32 +956,33 @@ public class ScrGrammarGuide extends PFrame {
                 s.setVisible(true);
             }
         });
+        
+        // For some reason, adding items to the combobox moves this to the back... this fixes it
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                s.toFront();
+                s.requestFocus();
+            }
+        });
 
         return s;
     }
-    
+
     private void populateSections() {
-        // TODO: Set proper icons
         List<GrammarChapNode> chapters = core.getGrammarManager().getChapters();
         Iterator<GrammarChapNode> chapIt = chapters.iterator();
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root Node");
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
-        
+
         while (chapIt.hasNext()) {
             GrammarChapNode curChap = chapIt.next();
             rootNode.add(curChap);
-            
-            List<GrammarSectionNode> sections = curChap.getSections();
-            Iterator<GrammarSectionNode> secIt = sections.iterator();
-            
-            while (secIt.hasNext()) {
-                GrammarSectionNode curSec = secIt.next();
-                curChap.add(curSec);
-            }
         }
-        
+
         treeModel.reload(rootNode);
+        treChapList.setLargeModel(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

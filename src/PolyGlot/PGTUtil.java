@@ -132,12 +132,25 @@ public class PGTUtil {
     public static final String logoGraphNodeXID = "LogoGraphNode";
     public static final String logoWordRelationXID = "LogoWordRelation";
     public static final String logoRelationsCollectionXID = "LogoRelationsCollection";
-            
+    
+    // properties for the grammar dictioary
+    public static final String grammarSectionXID = "grammarCollection";        
+    public static final String grammarChapterNodeXID = "grammarChapterNode";
+    public static final String grammarChapterNameXID = "grammarChapterName";
+    public static final String grammarSectionsListXID = "grammarSectionsList";
+    public static final String grammarSectionNodeXID = "grammarSectionNode";
+    public static final String grammarSectionNameXID = "grammarSectionName";
+    public static final String grammarSectionRecordingXID = "grammarSectionRecordingXID";
+    public static final String grammarSectionTextXID = "grammarSectionText";
+    
     // string constants
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";
     public static final String logoGraphSavePath = "logoGraphs/";
+    public static final String grammarSoundSavePath = "grammarSounds/";
     public static final String emptyFile = "<EMPTY>";
+    public static final String tempFile = "xxTEMPPGTFILExx";
+    public static final String polyGlotFont = "PolyGlot";
     
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to

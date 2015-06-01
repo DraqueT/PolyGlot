@@ -20,43 +20,46 @@
 package PolyGlot;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import javax.swing.Icon;
-import javax.swing.JLabel;
+import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
 /**
  *
  * @author draque
  */
-public class PGTreeCellRenderer extends JLabel implements TreeCellRenderer {
+public class PGTreeCellRenderer extends DefaultTreeCellRenderer {
 
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) value;
-        
+
         Object userObject = nodo.getUserObject();
         if (userObject != null) {
             setText(value.toString() + " [" + userObject.getClass().getName() + "]");
         } else {
             setText(value.toString());
         }
-        
+
         if (nodo instanceof GrammarChapNode
                 && expanded) {
-            setIcon((Icon)UIManager.get("Tree.openIcon"));
-            // TODO: Create custom chapter icon
+            setIcon((Icon) UIManager.get("Tree.openIcon"));
         } else if (nodo instanceof GrammarChapNode
                 && !expanded) {
-            setIcon((Icon)UIManager.get("Tree.closedIcon"));
-            // TODO: Create custom chapter icon
+            setIcon((Icon) UIManager.get("Tree.closedIcon"));
         } else {
-            // TODO: Create custom leaf icon
-            setIcon((Icon)UIManager.get("Tree.leafIcon"));
+            setIcon((Icon) new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/treeNode.png")));
         }
         
-        return (Component)this;
+        return this;
+    }
+    
+    @Override
+    public String getText() {
+        return super.getText();
     }
 }

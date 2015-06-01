@@ -29,12 +29,12 @@ public class GrammarSectionNode extends DefaultMutableTreeNode {
     private final GrammarManager manager;
     private String name;
     private String sectionText;
-    private int recording;
+    private int recordingId;
     
     public GrammarSectionNode(GrammarManager _manager) {
         name = "";
         sectionText = "";
-        recording = -1;
+        recordingId = -1;
         manager = _manager;
     }
     
@@ -45,6 +45,14 @@ public class GrammarSectionNode extends DefaultMutableTreeNode {
         return name;
     }
     
+    public void setRecordingId(int _recordingId) {
+        recordingId = _recordingId;
+    }
+    
+    public Integer getRecordingId() {
+        return recordingId;
+    }
+    
     public void setSectionText(String _sectionText) {
         sectionText = _sectionText;
     }
@@ -53,10 +61,10 @@ public class GrammarSectionNode extends DefaultMutableTreeNode {
     }
     
     public void setRecording(byte[] _recording) {
-        recording = manager.addChangeRecording(recording, _recording);
+        recordingId = manager.addChangeRecording(recordingId, _recording);
     }
     public byte[] getRecording() throws Exception {
-        return manager.getRecording(recording);
+        return manager.getRecording(recordingId);
     }
     
     @Override

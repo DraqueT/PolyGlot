@@ -85,7 +85,7 @@ public class CustHandlerFactory {
                 || versionNumber.equals("0.9.2")
                 || versionNumber.equals("0.9.9")
                 || versionNumber.equals("0.9.9.1")) {
-            ret = CustHandlerFactory.get075Handler(core);
+            ret = CustHandlerFactory.get075orHigherHandler(core);
         } else {
             throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
                     + "written with a newer version with additional features: Ver " + versionNumber + ".");
@@ -534,7 +534,7 @@ public class CustHandlerFactory {
         };
     }
 
-    private static CustHandler get075Handler(final DictCore core) {
+    private static CustHandler get075orHigherHandler(final DictCore core) {
         return new CustHandler() {
 
             PronunciationNode proBuffer;
@@ -606,6 +606,12 @@ public class CustHandlerFactory {
             boolean blogoId = false;
             boolean blogoNode = false;
             boolean blogoWordRelation = false;
+            boolean bgrammarChapNode = false;
+            boolean bgrammarChapName = false;
+            boolean bgrammarSecNode = false;
+            boolean bgrammarSecName = false;
+            boolean bgrammarSecRecId = false;
+            boolean bgrammarSecText = false;
             
             int wId;
             int wCId;
@@ -772,7 +778,19 @@ public class CustHandlerFactory {
                     core.getLogoCollection().clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.logoWordRelationXID)) {
                     blogoWordRelation = true;
-                } 
+                } else if (qName.equalsIgnoreCase(PGTUtil.grammarChapterNodeXID)) {
+                    bgrammarChapNode = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.grammarChapterNameXID)) {
+                    bgrammarChapName = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.grammarSectionNodeXID)) {
+                    bgrammarSecNode = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.grammarSectionNameXID)) {
+                    bgrammarSecName = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.grammarSectionRecordingXID)) {
+                    bgrammarSecRecId = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.grammarSectionTextXID)) {
+                    bgrammarSecText = true;
+                }
             }
 
             @Override
@@ -978,7 +996,25 @@ public class CustHandlerFactory {
                     core.getLogoCollection().clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.logoWordRelationXID)) {
                     blogoWordRelation = false;
-                } 
+                }  else if (qName.equalsIgnoreCase(PGTUtil.grammarChapterNodeXID)) {
+                    GrammarManager gMan = core.getGrammarManager();
+                    gMan.insert();
+                    gMan.clear();
+                    bgrammarChapNode = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.grammarChapterNameXID)) {
+                    bgrammarChapName = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.grammarSectionNodeXID)) {
+                    GrammarChapNode gChap = core.getGrammarManager().getBuffer();
+                    gChap.insert();
+                    gChap.clear();
+                    bgrammarSecNode = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.grammarSectionNameXID)) {
+                    bgrammarSecName = false;
+                }  else if (qName.equalsIgnoreCase(PGTUtil.grammarSectionRecordingXID)) {
+                    bgrammarSecRecId = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.grammarSectionTextXID)) {
+                    bgrammarSecText = true;
+                }
             }
 
             @Override
@@ -1205,6 +1241,18 @@ public class CustHandlerFactory {
                     }
                 } else if (blogoWordRelation) {
                     core.getLogoCollection().loadLogoRelations(new String(ch, start, length));
+                } else if (bgrammarChapName) {
+                    GrammarChapNode buffer = core.getGrammarManager().getBuffer();
+                    buffer.setName(buffer.getName() + new String(ch, start, length));
+                } else if (bgrammarSecName) {
+                    GrammarSectionNode buffer = core.getGrammarManager().getBuffer().getBuffer();
+                    buffer.setName(buffer.getName() + new String(ch, start, length));
+                } else if (bgrammarSecRecId) {
+                    core.getGrammarManager().getBuffer().getBuffer()
+                            .setRecordingId(Integer.parseInt(new String(ch, start, length)));
+                } else if (bgrammarSecText) {
+                    GrammarSectionNode buffer = core.getGrammarManager().getBuffer().getBuffer();
+                    buffer.setSectionText(buffer.getSectionText() + new String(ch, start, length));
                 }
             }
         };

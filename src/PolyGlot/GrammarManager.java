@@ -21,21 +21,47 @@ package PolyGlot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
- *
+ * Grammar manager for PolyGlot organizes and stores all grammar data
  * @author draque
  */
 public class GrammarManager {
     private final List<GrammarChapNode> chapters = new ArrayList<GrammarChapNode>();
     private final Map<Integer, byte[]> soundMap;
-    private final DictCore core; // TODO: remove this if I complete work and it's still unnecessary... 
+    private GrammarChapNode buffer;
     
-    public GrammarManager(DictCore _core) {
-        core = _core;
+    public GrammarManager() {
         soundMap = new HashMap<Integer, byte[]>();
+        buffer = new GrammarChapNode(this);
+    }
+    
+    /**
+     * Fetches buffer chapter node
+     * @return buffer chapter node
+     */
+    public GrammarChapNode getBuffer() {
+        return buffer;
+    }
+    
+    /**
+     * Inserts current buffer node to chapter list and clears buffer
+     */
+    public void insert() {
+        chapters.add(buffer);
+        clear();
+    }
+    
+    /**
+     * clears chapter buffer
+     */
+    public void clear() {
+        buffer = new GrammarChapNode(this);
     }
     
     public List<GrammarChapNode> getChapters() {
@@ -48,6 +74,10 @@ public class GrammarManager {
      */
     public void addChapter(GrammarChapNode newChap) {
         chapters.add(newChap);
+    }
+    
+    public Map<Integer, byte[]> getSoundMap() {
+        return soundMap;
     }
     
     /**
@@ -79,10 +109,14 @@ public class GrammarManager {
      * Adds or changes a grammar recording.
      * @param id ID of sound to replace. -1 if newly adding
      * @param newRec New wave recording
-     * @return ID of sound replaced/created
+     * @return ID of sound replaced/created, -1 if null passed in
      */
     public Integer addChangeRecording(Integer id, byte[] newRec) {
         Integer ret = id;
+        
+        if (newRec == null) {
+            return -1;
+        }
         
         if (ret == -1) {
             for (ret = 0; soundMap.containsKey(ret); ret++){}
@@ -102,13 +136,12 @@ public class GrammarManager {
             if (soundMap.containsKey(id)) {
                 ret = soundMap.get(id);
             } else {
-                throw new Exception("Unable to retrieve related sound with ID: " + id);
+                throw new Exception("Unable to retrieve related recording with ID: " + id);
             }
         }
         
         return ret;
-    }
-    
+    }    
     
     /**
      * Creates a new grammar section node
@@ -116,5 +149,53 @@ public class GrammarManager {
      */
     public GrammarSectionNode getNewSection() {
         return new GrammarSectionNode(this);
+    }
+    
+    /**
+     * Writes all Grammar information to XML document
+     * @param doc Document to write to
+     * @param rootElement root element of document
+     */
+    public void writeXML(Document doc, Element rootElement) {
+        Iterator<GrammarChapNode> it = chapters.iterator();
+        Element grammarRoot = doc.createElement(PGTUtil.grammarSectionXID);
+        rootElement.appendChild(grammarRoot);
+        Element chapNode;
+        GrammarChapNode curChap;
+        
+        while (it.hasNext()) {
+            curChap = it.next();
+
+            chapNode = doc.createElement(PGTUtil.grammarChapterNodeXID);
+            grammarRoot.appendChild(chapNode);
+
+            Element chapElement = doc.createElement(PGTUtil.grammarChapterNameXID);
+            chapElement.appendChild(doc.createTextNode(curChap.getName()));
+            chapNode.appendChild(chapElement);
+            
+            chapElement = doc.createElement(PGTUtil.grammarSectionsListXID);
+            
+            for (int i = 0; i < curChap.getChildCount(); i++) {
+                GrammarSectionNode curSec = (GrammarSectionNode)curChap.getChildAt(i);
+                
+                Element secNode = doc.createElement(PGTUtil.grammarSectionNodeXID);
+                
+                Element secElement = doc.createElement(PGTUtil.grammarSectionNameXID);
+                secElement.appendChild(doc.createTextNode(curSec.getName()));
+                secNode.appendChild(secElement);
+                
+                secElement = doc.createElement(PGTUtil.grammarSectionRecordingXID);
+                secElement.appendChild(doc.createTextNode(curSec.getRecordingId().toString()));
+                secNode.appendChild(secElement);
+                
+                secElement = doc.createElement(PGTUtil.grammarSectionTextXID);
+                secElement.appendChild(doc.createTextNode(curSec.getSectionText()));
+                secNode.appendChild(secElement);
+                
+                chapElement.appendChild(secNode);
+            }
+            
+            chapNode.appendChild(chapElement);
+        }
     }
 }

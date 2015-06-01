@@ -47,10 +47,10 @@ public class PGDocument extends DefaultStyledDocument {
     public Font getFont(AttributeSet attr) {
         Font ret = super.getFont(attr);
         
-        if (customFont != null
-                && (attr.containsAttribute("PolkyGlot", "font") // TODO: STANDARDIZE VIA CONSTANTS
-                    || StyleConstants.getFontFamily(attr).equals(customFont.getName()))) {
-            ret = customFont;
+        if (customFont != null 
+                && StyleConstants.getFontFamily(attr).equals(customFont.getFamily())) {
+            
+            ret = customFont.deriveFont((float)StyleConstants.getFontSize(attr));            
         }
         
         return ret;

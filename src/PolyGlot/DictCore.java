@@ -45,7 +45,7 @@ public class DictCore {
     private final PronunciationMgr pronuncMgr = new PronunciationMgr(this);
     private final ThesaurusManager thesManager = new ThesaurusManager(this);
     private final LogoCollection logoCollection = new LogoCollection(this);
-    private final GrammarManager grammarManager = new GrammarManager(this);
+    private final GrammarManager grammarManager = new GrammarManager();
 
     /**
      * Gets proper color for fields marked as required
@@ -144,6 +144,8 @@ public class DictCore {
             saxParser.parse(IOHandler.getDictFile(_fileName), handler);
 
             Font conFont = IOHandler.getFontFrom(_fileName);
+            
+            IOHandler.loadGrammarSounds(_fileName, grammarManager);
             if (conFont != null) {
                 propertiesManager.setFontCon(conFont);
             }
@@ -191,6 +193,7 @@ public class DictCore {
         declensionMgr.writeXML(doc, rootElement);
         pronuncMgr.writeXML(doc, rootElement);
         logoCollection.writeXML(doc, rootElement);
+        grammarManager.writeXML(doc, rootElement);
 
         // write thesaurus entries
         rootElement.appendChild(thesManager.writeToSaveXML(doc));

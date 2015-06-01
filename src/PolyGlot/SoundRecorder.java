@@ -19,14 +19,11 @@
  */
 package PolyGlot;
 
+import java.awt.Window;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -34,6 +31,8 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.TargetDataLine;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 
@@ -58,13 +57,54 @@ public class SoundRecorder {
     private final int timeToDie = 100;
     private String playThread = "";
     private String recordThread = "";
+    private final Window parentWindow;
+    private JButton playPauseBut;
+    private JButton recordBut;
+    ImageIcon playUp;
+    ImageIcon playDown;
+    ImageIcon recUp;
+    ImageIcon recDown;
 
-    public SoundRecorder() {
+    /**
+     * Instantiates recorder with default format
+     * @param _parent parent window (for error communication)
+     */
+    public SoundRecorder(Window _parent) {
         format = getAudioFormat();
+        parentWindow = _parent;
+    }
+    
+    /**
+     * Set buttons to be managed by Sound Recorder
+     * @param _playPause play/pause button
+     * @param _record record button
+     * @param _playUp play button up graphic
+     * @param _playDown play button down graphic
+     * @param _recUp record button up graphic
+     * @param _recDown record button down graphic
+     */
+    public void setButtons(JButton _record, JButton _playPause,
+            ImageIcon _playUp, ImageIcon _playDown, ImageIcon _recUp,
+            ImageIcon _recDown) {
+        playPauseBut = _playPause;
+        recordBut = _record;
+        playUp = _playUp;
+        playDown = _playDown;
+        recUp = _recUp;
+        recDown = _recDown;
+        
+        playPauseBut.setIcon(playUp);
+        recordBut.setIcon(recUp);
     }
 
-    public SoundRecorder(AudioFormat _format) {
+    /**
+     * Instantiates recorder with custom format
+     * @param _format custom format for recorder
+     * @param _parent parent window (for error communication)
+     */
+    public SoundRecorder(AudioFormat _format, Window _parent) {
         format = _format;
+        parentWindow = _parent;
     }
 
     public void setTimer(JTextField _timer) {
@@ -97,6 +137,10 @@ public class SoundRecorder {
     public byte[] getSound() {
         return sound;
     }
+    
+    public void setSound(byte[] _sound) {
+        sound = _sound;
+    }
 
     /**
      * wipes prior sound (if any) and begins recording of new one
@@ -108,7 +152,7 @@ public class SoundRecorder {
         sound = null;
         killPlay = true;
         try{Thread.sleep(timeToDie);} // max amount of time before player kills self
-        catch(Exception e){e.printStackTrace();}//TODO: handle?}
+        catch(Exception e){/*do nothing*/}
 
         if (soundThread != null
                 && soundThread.isAlive()
@@ -134,6 +178,7 @@ public class SoundRecorder {
         out = new ByteArrayOutputStream();
 
         curRecording = true;
+        recordBut.setIcon(recDown);
 
         line.open(format);
         line.start();
@@ -152,7 +197,6 @@ public class SoundRecorder {
                         * format.getSampleSizeInBits()) / 8;
                 
                 while (parent.isRecording()) {
-                    // TODO: make slider increment for recording
                     int count = line.read(buffer, 0, buffer.length);
                     if (count > 0) {
                         out.write(buffer, 0, count);
@@ -162,11 +206,15 @@ public class SoundRecorder {
                     float seconds = bytesRecorded / BPS;
                     timer.setText(getTimerValue(seconds));
                 }
+                
+                recordBut.setIcon(recUp);
+                
                 try {
                     out.close();
                 } catch (IOException e) {
-                    // TODO: handle
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    InfoBox.error("Recording wrror: ", "Unable to record: " 
+                            + e.getLocalizedMessage(), parentWindow);
                 }
                 line.close();
                 
@@ -192,7 +240,7 @@ public class SoundRecorder {
 
         // wait for recording thread to die
         try{Thread.sleep(timeToDie);} // longest time for thread to die
-        catch (Exception e){}// TODO: handle?
+        catch (Exception e){/*do nothing*/}
 
         out.close();
 
@@ -221,16 +269,18 @@ public class SoundRecorder {
 
         final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
-        String testThread = soundThread.toString();
-        if (soundThread != null
-                && soundThread.isAlive()
-                && testThread.equals(playThread)) {
-            playing = !playing;
-            return;
+        if (soundThread != null) {
+            String testThread = soundThread.toString();
+            if (soundThread.isAlive()
+                    && testThread.equals(playThread)) {
+                playing = !playing;
+                return;
+            }
         }
 
         playing = true;
         killPlay = false;
+        playPauseBut.setIcon(playDown);
 
         soundThread = new Thread(new Runnable() {
             @Override
@@ -251,6 +301,7 @@ public class SoundRecorder {
                         if (count > 0) {
                             while (playing == false) { // if paused, wait until unpaused
                                 Thread.sleep(timeToDie);
+                                playPauseBut.setIcon(playUp);
                                 
                                 if (killPlay) { // immediately ends playing process
                                     killPlay = false;
@@ -263,6 +314,8 @@ public class SoundRecorder {
                                 }
                             }
                             
+                            playPauseBut.setIcon(playDown);
+                            
                             if (killPlay) { // immediately ends playing process
                                 killPlay = false;
                                 playing = false;
@@ -270,6 +323,7 @@ public class SoundRecorder {
                                 sourceLine.close();
                                 ais.close();
                                 input.close();
+                                playPauseBut.setIcon(playUp);
                                 return;
                             }
 
@@ -291,21 +345,27 @@ public class SoundRecorder {
                     if (slider != null) {
                         slider.setValue(slider.getMaximum());
                     }
-
+                    
+                    playing = false;
                     sourceLine.drain();
                     sourceLine.close();
                     ais.close();
                     input.close();
                 } catch (LineUnavailableException e) {
-                    // TODO: handle
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    InfoBox.error("Play Error", "Unable to play audio: "
+                            + e.getLocalizedMessage(), parentWindow);
                 } catch (IOException e) {
-                    // TODO: handle
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    InfoBox.error("Play Error", "Unable to play audio: "
+                            + e.getLocalizedMessage(), parentWindow);
                 } catch (InterruptedException e) {
-                    // TODO: handle
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    InfoBox.error("Play Error", "Unable to play audio: "
+                            + e.getLocalizedMessage(), parentWindow);
                 }
+                
+                playPauseBut.setIcon(playUp);
             }
         });
 
@@ -350,30 +410,6 @@ public class SoundRecorder {
         ret += hundredths >= 10 ? hundredths : "0" + hundredths;
         
         return ret;
-    }
-
-    // TODO: movethis to IO class
-    /**
-     * Save wav file
-     *
-     * @param waveArray array representing wav data
-     * @param fullPath full path including filename to save to
-     * @throws java.io.IOException on error saving file
-     */
-    public static void writeWavFile(byte[] waveArray, String fullPath) throws IOException {
-        Files.write(Paths.get(fullPath), waveArray);
-    }
-
-    // TODO: movethis to IO class
-    /**
-     * Opens wav file and returns as byte array
-     *
-     * @param fullPath full file path of wav file
-     * @return wave file as byte array
-     * @throws IOException throws when unable to read file
-     */
-    public static byte[] readWaveFile(String fullPath) throws IOException {
-        return Files.readAllBytes(Paths.get(fullPath));
     }
 
     /**
