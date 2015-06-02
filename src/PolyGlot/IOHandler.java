@@ -202,7 +202,7 @@ public class IOHandler {
         sb.append(writer.getBuffer().toString());
 
         // save file to temp location initially.
-        final File f = new File(directoryPath, PGTUtil.tempFile);
+        final File f = File.createTempFile(_fileName, null);//new File(directoryPath, PGTUtil.tempFile);
         final ZipOutputStream out;
 
         if (System.getProperty("java.version").startsWith("1.6")) {
@@ -290,8 +290,6 @@ public class IOHandler {
             test.readFile(f.getAbsolutePath());
 
         } catch (Exception ex) {
-            f.delete();
-
             throw new IOException(ex);
         }
 
@@ -304,9 +302,9 @@ public class IOHandler {
             } else {
                 java.nio.file.Files.copy(f.toPath(), finalFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             }
-            f.delete();
+            //f.delete();
         } catch (IOException ex) {
-            f.delete();
+            //f.delete();
             throw new IOException("Unable to save file: " + ex.getMessage());
         }
     }
