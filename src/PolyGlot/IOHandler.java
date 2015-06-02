@@ -320,8 +320,6 @@ public class IOHandler {
     public static File getFontFile(Font font) {
         File ret = null;
 
-        // TODO: This is where to create logic to check for cached font file and return that if present
-        
         if (font == null) {
             return ret;
         }
@@ -337,18 +335,24 @@ public class IOHandler {
                 ret = IOHandler.getFontFromLocation(System.getProperty("user.home")
                         + "/Library/Fonts/", font);
             }
-        } else if (System.getProperty("os.name").startsWith("Windows")) {
+        } else if (System.getProperty("os.name").startsWith("Win")) {
             ret = getFontFromLocation(System.getenv("WINDIR") + "\\Fonts", font);
+        } else if (System.getProperty("os.name").indexOf("nix") > 0
+                || System.getProperty("os.name").indexOf("bunt") > 0
+                || System.getProperty("os.name").indexOf("fed") > 0
+                || System.getProperty("os.name").indexOf("nux") > 0) {
+            ret = getFontFromLocation("/usr/share/fonts", font);
         } else {
-            // TODO: figure out how to make this work in Linux, maybe?
+            // TODO: throw cathable error to inform user of unrecognized OS
         }
 
-        // TODO: Inform user if font cannot be found (mostly a mac issue...)
+        // TODO: Inform user via catchable error if font cannot be found (mostly a mac issue...)
         return ret;
     }
 
     /**
      * Returns a font's file based on the font and a path
+     * Recurses on any subdirectories found
      *
      * @param path path to check for a font
      * @param font font to check for
@@ -359,10 +363,22 @@ public class IOHandler {
         File[] listOfFiles = folder.listFiles();
         File ret = null;
 
+        if (listOfFiles.length == 0) {
+            return null;
+        }
+        
         for (File listOfFile : listOfFiles) {
             if (listOfFile.isFile()) {
                 File fontFile = loadFont(listOfFile.getPath(), font);
 
+                if (fontFile != null) {
+                    ret = fontFile;
+                    break;
+                }
+            } else if (listOfFile.isDirectory()) {
+                File fontFile = getFontFromLocation(path + "/" 
+                        + listOfFile.getName(), font);
+                
                 if (fontFile != null) {
                     ret = fontFile;
                     break;
