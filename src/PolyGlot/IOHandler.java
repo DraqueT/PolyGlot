@@ -185,11 +185,7 @@ public class IOHandler {
     }
 
     public static void writeFile(String _fileName, Document doc, DictCore core) throws IOException, TransformerException {
-        String directoryPath;
-
         File finalFile = new File(_fileName);
-
-        directoryPath = finalFile.getParentFile().getAbsolutePath();
 
         TransformerFactory transformerFactory = TransformerFactory
                 .newInstance();
@@ -202,7 +198,7 @@ public class IOHandler {
         sb.append(writer.getBuffer().toString());
 
         // save file to temp location initially.
-        final File f = File.createTempFile(_fileName, null);//new File(directoryPath, PGTUtil.tempFile);
+        final File f = File.createTempFile(_fileName, null);
         final ZipOutputStream out;
 
         if (System.getProperty("java.version").startsWith("1.6")) {
