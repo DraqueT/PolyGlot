@@ -47,7 +47,25 @@ public class PropertiesManager {
     private boolean localUniqueness = false;
     private boolean ignoreCase = false;
     private boolean disableProcRegex = false;
-    String fontName = "";
+    private String fontName = "";
+    private byte[] cachedFont = null;
+    
+    /**
+     * Sets value of cached font file as byte array
+     * @param _cachedFont value of cached font
+     */
+    public void setCachedFont(byte[] _cachedFont) {
+        cachedFont = _cachedFont;
+    }
+    
+    /**
+     * Gets cached font file if one exists, null otherwise
+     * @return byte array of cached font file
+     */
+    public byte[] getCachedFont() {
+        return cachedFont;
+    } 
+    
     
     public PropertiesManager() {
         alphaOrder = new HashMap<Character, Integer>();
@@ -109,6 +127,7 @@ public class PropertiesManager {
         setFontStyle(_fontStyle);
     }
     
+    // TODO: consider removing- this is a relic from older versions
     /**
      * Sets font name for table keeping loading purposes. Does NOT populate from actual font
      * @param _fontName name to set
@@ -126,9 +145,15 @@ public class PropertiesManager {
     }
 
     /**
+     * Sets conlang font and nulls cached font value
      * @param fontCon the fontCon to set
      */
     public void setFontCon(Font fontCon) {
+        // null cached font if being set to new font
+        if (font != null && !font.getFamily().equals(fontCon.getFamily())) {
+            cachedFont = null;
+        }
+        
         font = fontCon;
     }
 
@@ -140,10 +165,10 @@ public class PropertiesManager {
     }
 
     /**
-     * @param fontStyle the fontStyle to set
+     * @param _fontStyle the fontStyle to set
      */
-    public void setFontStyle(Integer fontStyle) {
-        this.fontStyle = fontStyle;
+    public void setFontStyle(Integer _fontStyle) {
+        fontStyle = _fontStyle;
     }
 
     /**
@@ -154,10 +179,10 @@ public class PropertiesManager {
     }
 
     /**
-     * @param fontSize the fontSize to set
+     * @param _fontSize the fontSize to set
      */
-    public void setFontSize(Integer fontSize) {
-        this.fontSize = fontSize;
+    public void setFontSize(Integer _fontSize) {
+        fontSize = _fontSize;
     }
 
     /**
@@ -168,10 +193,10 @@ public class PropertiesManager {
     }
 
     /**
-     * @param proAutoPop the proAutoPop to set
+     * @param _proAutoPop the proAutoPop to set
      */
-    public void setProAutoPop(boolean proAutoPop) {
-        this.proAutoPop = proAutoPop;
+    public void setProAutoPop(boolean _proAutoPop) {
+        proAutoPop = _proAutoPop;
     }
 
     /**

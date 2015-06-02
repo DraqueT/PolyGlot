@@ -143,12 +143,8 @@ public class DictCore {
 
             saxParser.parse(IOHandler.getDictFile(_fileName), handler);
 
-            Font conFont = IOHandler.getFontFrom(_fileName);
-            
+            IOHandler.setFontFrom(_fileName, this);
             IOHandler.loadGrammarSounds(_fileName, grammarManager);
-            if (conFont != null) {
-                propertiesManager.setFontCon(conFont);
-            }
         } catch (ParserConfigurationException e) {
             throw new Exception(e.getMessage());
         } catch (SAXException e) {

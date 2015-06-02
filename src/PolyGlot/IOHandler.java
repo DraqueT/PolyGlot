@@ -121,17 +121,14 @@ public class IOHandler {
     }
 
     /**
-     * Gets font from save file if possible, null otherwise
+     * Sets the conlang font, if one exists and caches its file for quicksaving
      *
      * @param _path The path of the PGD file
-     * @return a Font object if the PGD file is both a zip archive and contains
-     * a font
+     * @param core the dictionary core
      * @throws java.io.IOException
      * @throws java.awt.FontFormatException
      */
-    public static Font getFontFrom(String _path) throws IOException, FontFormatException {
-        Font ret = null;
-
+    public static void setFontFrom(String _path, DictCore core) throws IOException, FontFormatException {
         if (isFileZipArchive(_path)) {
             ZipFile zipFile = new ZipFile(_path);
 
@@ -145,18 +142,24 @@ public class IOHandler {
                 IOUtils.copy(zipFile.getInputStream(fontEntry), out);
 
                 try {
-                    ret = Font.createFont(Font.TRUETYPE_FONT, tempFile);
+                    Font conFont = Font.createFont(Font.TRUETYPE_FONT, tempFile);
+                    
+                    if (conFont == null) {
+                        return;
+                    }
+                    
+                    byte[] cachedFont = IOUtils.toByteArray(new FileInputStream(tempFile));
+                    core.getPropertiesManager().setFontCon(conFont);
+                    core.getPropertiesManager().setCachedFont(cachedFont);
                 } catch (FontFormatException e) {
                     throw new FontFormatException("Could not load language font. Possible incompatible font: " + e.getMessage());
                 } catch (IOException e) {
-                    throw new FontFormatException("Could not load language font. I/O exception: " + e.getMessage());
+                    throw new IOException("Could not load language font. I/O exception: " + e.getMessage());
                 }
 
                 zipFile.close();
             }
         }
-
-        return ret;
     }
 
     /**
@@ -216,21 +219,31 @@ public class IOHandler {
 
         out.closeEntry();
 
-        // embed font in PGD archive if applicable
-        File fontFile = IOHandler.getFontFile(core.getPropertiesManager().getFontCon());
+        byte[] cachedFont = core.getPropertiesManager().getCachedFont();
+        
+        // only search for font if the cached font is null
+        if (cachedFont == null) {
+            // embed font in PGD archive if applicable
+            File fontFile = IOHandler.getFontFile(core.getPropertiesManager().getFontCon());
+            
+            if (fontFile != null) {
+                core.getPropertiesManager().setCachedFont(IOUtils.toByteArray(new FileInputStream(fontFile)));
+                byte[] buffer = new byte[1024];
+                FileInputStream fis = new FileInputStream(fontFile);
+                out.putNextEntry(new ZipEntry(PGTUtil.fontFileName));
+                int length;
 
-        if (fontFile != null) {
-            byte[] buffer = new byte[1024];
-            FileInputStream fis = new FileInputStream(fontFile);
-            out.putNextEntry(new ZipEntry(PGTUtil.fontFileName));
-            int length;
+                while ((length = fis.read(buffer)) > 0) {
+                    out.write(buffer, 0, length);
+                }
 
-            while ((length = fis.read(buffer)) > 0) {
-                out.write(buffer, 0, length);
+                out.closeEntry();
+                fis.close();
             }
-
+        } else {
+            out.putNextEntry(new ZipEntry(PGTUtil.fontFileName));
+            out.write(cachedFont);
             out.closeEntry();
-            fis.close();
         }
 
         // write all logograph images to file
