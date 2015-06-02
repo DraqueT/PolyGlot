@@ -381,8 +381,8 @@ public class IOHandler {
                 Font f = Font.createFont(Font.TRUETYPE_FONT, fontFile);
 
                 // if names match, set ret to return file
-                if (f.getName().equals(testFont.getName())
-                        || f.getName().equals(testFont.getName() + " Regular")) {
+                if (f.getFamily().equals(testFont.getFamily())
+                        || f.getFamily().equals(testFont.getFamily())) {
                     ret = fontFile;
                 }
 
@@ -510,8 +510,10 @@ public class IOHandler {
     }
 
     /**
-     * Fetches and returns LCD style font NOTE: the font returned is very small,
-     * use deriveFont() to make it a usable size
+     * Fetches and returns LCD style font 
+     * NOTE 1: the font returned is very small, use deriveFont() to make it a
+     * usable size
+     * NOTE 2: this is a nonstatic method due to an inputstream restriction
      *
      * @return LCD display font
      * @throws java.awt.FontFormatException if font corrupted
