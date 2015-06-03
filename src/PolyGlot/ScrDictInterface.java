@@ -2758,9 +2758,9 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
                 } catch (TransformerException e) {
                     parent.setSaveError("Unable to save to file: " + curFileName + "\n\n" + e.getMessage());
                 } catch (FileNotFoundException e) {
-                    parent.setSaveError("Unable to write file: " + e.getMessage());
+                    parent.setSaveError("Unable to write file: " + curFileName + "\n\n" + e.getMessage());
                 } catch (IOException e) {
-                    parent.setSaveError("Unable to write file: " + e.getMessage());
+                    parent.setSaveError("Problems writing to file: " + curFileName + "\n\n" + e.getMessage());
                 }
 
                 parent.setCursor(Cursor.getDefaultCursor());
