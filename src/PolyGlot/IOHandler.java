@@ -519,9 +519,11 @@ public class IOHandler {
      *
      * @param _fileName name of file to load sound recordings from
      * @param grammarManager grammar manager to populate with sounds
+     * @throws Exception on sound load errors
      */
-    static void loadGrammarSounds(String fileName, GrammarManager grammarManager) {
+    static void loadGrammarSounds(String fileName, GrammarManager grammarManager) throws Exception {
         ZipFile zipFile = null;
+        String loadLog = "";
 
         try {
             if (!isFileZipArchive(fileName)) {
@@ -557,9 +559,9 @@ public class IOHandler {
                 try {
                     sound = IOUtils.toByteArray(zipFile.getInputStream(soundEntry));
                 } catch (IOException e) {
-                    // TODO: create load log?
+                    loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
                 } catch (Exception e) {
-                    // TODO: create load log? (sound not found error)
+                    loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
                 }
 
                 if (sound == null) {
@@ -568,6 +570,10 @@ public class IOHandler {
 
                 grammarManager.addChangeRecording(curNode.getRecordingId(), sound);
             }
+        }
+        
+        if (!loadLog.equals("")) {
+            throw new Exception(loadLog);
         }
     }
 

@@ -208,25 +208,6 @@ public class LogoNode extends DictNode {
     }
 
     /**
-     * Loads temporary radicals (to be run only after all logographs are loaded
-     * into memory)
-     *
-     * @param core dictionary core
-     */
-    public void loadTmpRads(DictCore core) {
-        String[] allRads = tmpRads.split(",");
-
-        for (String curRad : allRads) {
-            try {
-                addRadical((LogoNode) core.getLogoCollection().getNodeById(
-                        Integer.parseInt(curRad)));
-            } catch (Exception e) {
-                // TODO: maybe handle this? Make loading log?
-            }
-        }
-    }
-
-    /**
      * Used when loading from file
      *
      * @return reading buffer
@@ -262,12 +243,15 @@ public class LogoNode extends DictNode {
      * radicals
      *
      * @param nodeMap pass nodeMap from parent collection for reference
+     * @throws java.lang.Exception on load error
      */
-    public void loadRadicalRelations(Map<Integer, DictNode> nodeMap) {
+    public void loadRadicalRelations(Map<Integer, DictNode> nodeMap) throws Exception {
         if (tmpRads.equals("")) {
             return;
         }
 
+        String loadLog = "";
+        
         String[] radIds = tmpRads.split(",");
 
         for (String radId : radIds) {
@@ -275,8 +259,12 @@ public class LogoNode extends DictNode {
                 int nodeId = Integer.parseInt(radId);
                 addRadical((LogoNode) nodeMap.get(nodeId));
             } catch (Exception e) {
-                // TODO: loading log?
+                loadLog += "\nlogograph error: " + e.getLocalizedMessage();
             }
+        }
+        
+        if (!loadLog.equals("")) {
+            throw new Exception("Logograph load error(s):" + loadLog);
         }
     }
 

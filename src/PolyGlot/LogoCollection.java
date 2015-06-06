@@ -344,14 +344,15 @@ public class LogoCollection extends DictionaryCollection {
      * string of node IDs
      * @param relations comma delimited list
      */
-    public void loadLogoRelations(String relations) {
+    public void loadLogoRelations(String relations) throws Exception {
         String[] ids = relations.split(",");
         LogoNode relNode = null;
+        String loadLog = "";
         
         try {
             relNode = (LogoNode)getNodeById(Integer.parseInt(ids[0]));
         } catch (Exception e) {
-            // TODO: should I report this? consider loading log
+            throw new Exception("Unable to load logograph relations.");
         }
         
         if (relNode == null) {
@@ -365,8 +366,12 @@ public class LogoCollection extends DictionaryCollection {
                 
                 addWordLogoRelation(word, relNode);
             } catch (Exception e) {
-                // TODO: same as above. Loading log?
+                loadLog += "\nLogograph load error: " + e.getLocalizedMessage();
             }
+        }
+        
+        if (!loadLog.equals("")) {
+            throw new Exception("\nLogograph load errors:");
         }
     }
     

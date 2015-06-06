@@ -612,6 +612,7 @@ public class CustHandlerFactory {
             boolean bgrammarSecName = false;
             boolean bgrammarSecRecId = false;
             boolean bgrammarSecText = false;
+            String loadLog = "";
             
             int wId;
             int wCId;
@@ -991,7 +992,7 @@ public class CustHandlerFactory {
                     try {
                         core.getLogoCollection().insert();
                     } catch (Exception e) {
-                        // TODO: loading log?
+                        loadLog += "\nLogograph load error: " + e.getLocalizedMessage();
                     }
                     core.getLogoCollection().clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.logoWordRelationXID)) {
@@ -1179,7 +1180,7 @@ public class CustHandlerFactory {
                         thesMgr.getBuffer().addWord(core.getWordCollection().getNodeById(
                                 Integer.parseInt(new String(ch, start, length))));
                     } catch (Exception e) {
-                        // TODO: Should this case be handled somehow? Maybe build a load log to display all loading errors?
+                        loadLog += "\nThesaurus load error: " + e.getLocalizedMessage();
                     }
                     bthesWord = false;
                 } else if (bignoreCase) {
@@ -1217,7 +1218,7 @@ public class CustHandlerFactory {
                     try {
                         core.getLogoCollection().getBufferNode().setStrokes(Integer.parseInt(new String(ch, start, length)));
                     } catch (Exception e) {
-                        // TODO: loading log?
+                        loadLog += "\nLogograph load error: " +e.getLocalizedMessage();
                     }
                 } else if (blogoNotes) {
                     LogoNode curNode = core.getLogoCollection().getBufferNode();
@@ -1237,10 +1238,14 @@ public class CustHandlerFactory {
                     try {
                         core.getLogoCollection().getBufferNode().setId(Integer.parseInt(new String(ch, start, length)));
                     } catch (Exception e) {
-                        // TODO: loading log?
+                        loadLog += "\nLogograph load error: " +e.getLocalizedMessage();
                     }
                 } else if (blogoWordRelation) {
-                    core.getLogoCollection().loadLogoRelations(new String(ch, start, length));
+                    try {
+                        core.getLogoCollection().loadLogoRelations(new String(ch, start, length));
+                    } catch (Exception e) {
+                        loadLog += "\nLogograph relation load error: " + e.getLocalizedMessage();
+                    }
                 } else if (bgrammarChapName) {
                     GrammarChapNode buffer = core.getGrammarManager().getBuffer();
                     buffer.setName(buffer.getName() + new String(ch, start, length));
