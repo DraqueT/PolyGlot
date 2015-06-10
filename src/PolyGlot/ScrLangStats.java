@@ -20,8 +20,6 @@
 
 package PolyGlot;
 
-import java.util.Enumeration;
-
 /**
  *
  * @author draque
