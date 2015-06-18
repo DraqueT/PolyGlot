@@ -343,6 +343,7 @@ public class LogoCollection extends DictionaryCollection {
      * Loads logograph and word relations with one another from comma delimited
      * string of node IDs
      * @param relations comma delimited list
+     * @throws java.lang.Exception if problems loading logo relations
      */
     public void loadLogoRelations(String relations) throws Exception {
         String[] ids = relations.split(",");
@@ -377,13 +378,23 @@ public class LogoCollection extends DictionaryCollection {
     
     /**
      * after pass 1 file loading, this tells all logoNodes to load their radicals
+     * @throws java.lang.Exception if problems with loading any radical relations
      */
-    public void loadRadicalRelations() {
+    public void loadRadicalRelations() throws Exception {
         Iterator<LogoNode> it = new ArrayList<LogoNode>(nodeMap.values()).iterator();
+        String loadLog = "";
         // TODO: missed this... complete #172 loading log
         while (it.hasNext()) {
-            LogoNode curNode = it.next();
-            curNode.loadRadicalRelations(nodeMap);
+            try {
+                LogoNode curNode = it.next();
+                curNode.loadRadicalRelations(nodeMap);
+            } catch (Exception e) {
+                loadLog = e.getLocalizedMessage() + "\n";
+            }
+        }
+        
+        if (!loadLog.equals("")) {
+            throw new Exception("Problem loading radicals:\n" + loadLog);
         }
     }
     

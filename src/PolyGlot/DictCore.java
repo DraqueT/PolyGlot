@@ -129,9 +129,10 @@ public class DictCore {
      * Reads from given file
      *
      * @param _fileName filename to read from
-     * @throws Exception
+     * @throws Exception detailing any loading problems
      */
     public void readFile(String _fileName) throws Exception {
+        String loadLog = "";
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
@@ -142,9 +143,6 @@ public class DictCore {
             handler.setTypeCollection(typeCollection);
 
             saxParser.parse(IOHandler.getDictFile(_fileName), handler);
-
-            IOHandler.setFontFrom(_fileName, this);
-            IOHandler.loadGrammarSounds(_fileName, grammarManager);
         } catch (ParserConfigurationException e) {
             throw new Exception(e.getMessage());
         } catch (SAXException e) {
@@ -153,8 +151,33 @@ public class DictCore {
             throw new Exception(e.getMessage());
         }
         
-        logoCollection.loadRadicalRelations();
-        IOHandler.loadImages(logoCollection, _fileName);
+        try {
+            IOHandler.setFontFrom(_fileName, this);
+        } catch (Exception e) {
+            loadLog += e.getLocalizedMessage() + "\n";
+        }
+        
+        try {
+            IOHandler.loadGrammarSounds(_fileName, grammarManager);
+        } catch (Exception e) {
+            loadLog += e.getLocalizedMessage() + "\n";
+        }
+        
+        try {
+            logoCollection.loadRadicalRelations();
+        } catch (Exception e) {
+            loadLog += e.getLocalizedMessage() + "\n";
+        }
+        
+        try {
+            IOHandler.loadImages(logoCollection, _fileName);
+        } catch (Exception e) {
+            loadLog += e.getLocalizedMessage() + "\n";
+        }
+        
+        if (!loadLog.equals("")) {
+            throw new Exception("Problems lodaing file:\n");
+        }
     }
 
     /**
