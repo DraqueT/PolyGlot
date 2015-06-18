@@ -276,8 +276,8 @@ public class ScrDeclensionGenSetup extends PDialog {
      * @param choice 
      */
     public void enableEditing(boolean choice) {
-        txtRuleName.setEditable(choice);
-        txtRuleRegex.setEditable(choice);
+        txtRuleName.setEnabled(choice);
+        txtRuleRegex.setEnabled(choice);
         tblTransforms.setEnabled(choice);
         btnAddRule.setEnabled(choice);
         btnAddTransform.setEnabled(choice);
@@ -288,8 +288,8 @@ public class ScrDeclensionGenSetup extends PDialog {
      * @param choice 
      */
     public void enableTransformEditing(boolean choice) {
-        txtRuleName.setEditable(choice);
-        txtRuleRegex.setEditable(choice);
+        txtRuleName.setEnabled(choice);
+        txtRuleRegex.setEnabled(choice);
         tblTransforms.setEnabled(choice);
         btnAddTransform.setEnabled(choice);
         btnDeleteTransform.setEnabled(choice);
@@ -718,13 +718,13 @@ public class ScrDeclensionGenSetup extends PDialog {
 
         jLabel4.setText("Rule Name");
 
-        txtRuleName.setEditable(false);
         txtRuleName.setToolTipText("Name of rule");
+        txtRuleName.setEnabled(false);
 
         jLabel5.setText("Regex");
 
-        txtRuleRegex.setEditable(false);
         txtRuleRegex.setToolTipText("Regex expression a word must match before tranformations are applied to it");
+        txtRuleRegex.setEnabled(false);
 
         chkDisableWordform.setText("Disable Wordform");
         chkDisableWordform.setToolTipText("Disables currently selected conjugation/declension, and prevents it from being displayed at any point.");

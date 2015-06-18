@@ -359,8 +359,8 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtRuleName">
               <Properties>
-                <Property name="editable" type="boolean" value="false"/>
                 <Property name="toolTipText" type="java.lang.String" value="Name of rule"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
@@ -370,8 +370,8 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtRuleRegex">
               <Properties>
-                <Property name="editable" type="boolean" value="false"/>
                 <Property name="toolTipText" type="java.lang.String" value="Regex expression a word must match before tranformations are applied to it"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkDisableWordform">
