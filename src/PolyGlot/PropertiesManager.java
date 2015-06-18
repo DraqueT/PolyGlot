@@ -51,6 +51,23 @@ public class PropertiesManager {
     private byte[] cachedFont = null;
     
     /**
+     * Gets the java FX version of an AWT font
+     * @return javafx font
+     */
+    public javafx.scene.text.Font getFXFont() {
+        javafx.scene.text.Font ret;
+        
+        if (font == null) {
+            ret = (new javafx.scene.control.TextField()).getFont();
+        } else {
+            java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+            ret = javafx.scene.text.Font.font(font.getFamily(), fontSize);
+        }
+        
+        return ret;
+    }
+    
+    /**
      * Sets value of cached font file as byte array
      * @param _cachedFont value of cached font
      */

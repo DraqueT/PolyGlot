@@ -48,11 +48,6 @@ public class ConWord extends DictNode {
         autoDeclensionOverride = false;
         rulesOverride = false;
     }
-    
-    @Override
-    public String toString() {
-        return value;
-    }
 
     public boolean isRulesOverrride() {
         return rulesOverride;
@@ -61,7 +56,7 @@ public class ConWord extends DictNode {
     public void setRulesOverride(boolean _rulesOverride) {
         rulesOverride = _rulesOverride;
     }
-    
+        
     /**
      * @param _set sets all non ID values equal to that of parameter
      */

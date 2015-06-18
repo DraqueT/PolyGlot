@@ -139,6 +139,25 @@ public class ConWordCollection extends DictionaryCollection {
         allLocalWords.remove(insWord.getLocalWord());
         allLocalWords.put(insWord.getLocalWord(), curCount + (additive ? 1 : -1));
     }
+    
+    /**
+     * Balances word counts when modifying word value or local word
+     * MUST BE RUN BEFORE PERSISTING NEW VALUES TO WORD
+     * @param id id of word to modify
+     * @param wordVal new conword value
+     * @param wordLoc 
+     * @throws java.lang.Exception if word not found
+     */    
+    public void extertalBalanceWordCounts(Integer id, String wordVal, String wordLoc) throws Exception {
+        ConWord oldWord = getNodeById(id);
+        ConWord newWord = new ConWord();
+        
+        newWord.setValue(wordVal);
+        newWord.setLocalWord(wordLoc);
+        
+        balanceWordCounts(oldWord, false);
+        balanceWordCounts(newWord, true);
+    }
 
     /**
      * WARNING: DO NOT CALL THIS OUTSIDE OF DICT CORE: CLEANUP DONE THERE

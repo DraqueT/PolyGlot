@@ -24,6 +24,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -156,6 +157,31 @@ public class ScrDeclensions extends PDialog {
         saveDeclension();
     }//GEN-LAST:event_btnOkActionPerformed
 
+    public static Window run(DictCore _core, ConWord _word) {
+        TypeNode wordType = _core.getTypes().findTypeByName(_word.getWordType());
+        
+        final ScrDeclensions s = new ScrDeclensions(_core);
+        s.setConWord(_word);
+        s.setConFont(_core.getPropertiesManager().getFontCon());
+        s.setWordType(wordType == null ? -1 : wordType.getId());
+        s.getAllWordDeclensions();
+        s.buildForm();        
+        s.setModal(true);
+
+        // set up screen after it has been built (in setVisible)
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                s.setFormProps();
+            }
+        });
+
+        s.setVisible(true);
+        
+        return s;
+    }
+
+    // TODO: delete this method once ScrDictInterface is gone
     public static void run(DictCore _core, ConWord _word, Integer _typeId, Font _conFont) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -204,9 +230,11 @@ public class ScrDeclensions extends PDialog {
 
     @Override
     public void setVisible(boolean visible) {
-        // do not display window if there are no existing declensions for the word,
-        // and if there are no declension patterns associated with the type in question
-        if ((core.getDeclensionManager().getDeclensionListTemplate(typeId) == null
+
+        if (typeId == -1) {
+            InfoBox.info("Missing Type", "Word must have a type set, and declensions defined before using this feature.", this);
+            this.dispose();
+        } else if ((core.getDeclensionManager().getDeclensionListTemplate(typeId) == null
                     || core.getDeclensionManager().getDeclensionListTemplate(typeId).isEmpty())
                 && core.getDeclensionManager().getDeclensionListWord(word.getId()).isEmpty()) {
             InfoBox.info("Declensions", "No declensions for type: " + word.getWordType()

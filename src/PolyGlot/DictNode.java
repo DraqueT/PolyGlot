@@ -112,6 +112,6 @@ public abstract class DictNode implements Comparable<DictNode> {
     
     @Override
     public String toString() {
-        return value;
+        return value.equals("") ? " " : value;
     }
 }

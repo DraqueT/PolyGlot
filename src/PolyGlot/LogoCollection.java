@@ -380,7 +380,7 @@ public class LogoCollection extends DictionaryCollection {
      */
     public void loadRadicalRelations() {
         Iterator<LogoNode> it = new ArrayList<LogoNode>(nodeMap.values()).iterator();
-        
+        // TODO: missed this... complete #172 loading log
         while (it.hasNext()) {
             LogoNode curNode = it.next();
             curNode.loadRadicalRelations(nodeMap);
