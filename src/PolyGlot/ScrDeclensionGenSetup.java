@@ -414,7 +414,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         DeclensionGenRule rule = (DeclensionGenRule) lstRules.getSelectedValue();
         String ruleRegex = txtRuleRegex.getText().trim();
 
-        if (!curPopulating && rule != null && !rule.getName().equals(ruleRegex)) {
+        if (!curPopulating && rule != null) {
             rule.setRegex(ruleRegex);
         }
     }
