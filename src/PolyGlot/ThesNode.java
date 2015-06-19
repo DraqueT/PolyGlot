@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class ThesNode extends DictNode {
     private final List<ThesNode> subNodes = new ArrayList<ThesNode>();
-    private final List<Integer> words = new ArrayList<Integer>();
+    private final List<ConWord> words = new ArrayList<ConWord>();
     final private ThesNode parent;
     private String notes = "";
     private final ThesaurusManager manager;
@@ -103,8 +103,8 @@ public class ThesNode extends DictNode {
      * @param _word the word to add
      */
     public void addWord(ConWord _word) {
-        if (!words.contains(_word.getId())) {
-            words.add(_word.getId());
+        if (!words.contains(_word)) {
+            words.add(_word);
         }
     }
     
@@ -112,7 +112,7 @@ public class ThesNode extends DictNode {
      * removes word from family
      * @param _word id of word to remove
      */
-    public void removeWord(Integer _word) {
+    public void removeWord(ConWord _word) {
         words.remove(_word);
     }
     
@@ -125,14 +125,12 @@ public class ThesNode extends DictNode {
         manager.removeDeadWords(this, words);
         
         
-        Iterator<Integer> convert = words.iterator();
+        Iterator<ConWord> convert = words.iterator();
         
         while (convert.hasNext()) {
-            Integer curId = convert.next();
+            ConWord curWord = convert.next();
             
-            try {
-                ret.add(manager.getCore().getWordCollection().getNodeById(curId));
-            } catch (Exception e) {/*simply skip missing entries*/}
+            ret.add(curWord);
         }
         
         Collections.sort(ret);

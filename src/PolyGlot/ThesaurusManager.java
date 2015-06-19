@@ -63,14 +63,14 @@ public class ThesaurusManager {
      * @param thes thesaurus entry to clean
      * @param wordList raw words from entry
      */
-    public void removeDeadWords(ThesNode thes, List<Integer> wordList) {
-        Iterator<Integer> wordIt = new ArrayList(wordList).iterator();
+    public void removeDeadWords(ThesNode thes, List<ConWord> wordList) {
+        Iterator<ConWord> wordIt = new ArrayList(wordList).iterator();
         
         while (wordIt.hasNext()) {
-            Integer curId = wordIt.next();
+            ConWord curWord = wordIt.next();
             
-            if (!core.getWordCollection().exists(curId)) {
-                thes.removeWord(curId);
+            if (!core.getWordCollection().exists(curWord.getId())) {
+                thes.removeWord(curWord);
             }
         }
     }

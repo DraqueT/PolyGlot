@@ -19,6 +19,8 @@
  */
 package PolyGlot;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.UIManager;
@@ -28,6 +30,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 /**
  *
@@ -38,9 +41,10 @@ public class ScrThesaurus extends PFrame {
     private final DictCore core;
     private boolean curUpdating = false;
     private final ScrDictInterface parent;
-    
+
     /**
      * Creates new form ScrThesaurus
+     *
      * @param _core dictionary core
      * @param _parent parent window
      */
@@ -54,11 +58,12 @@ public class ScrThesaurus extends PFrame {
 
         TreeModel newModel = new DefaultTreeModel(root);
         treThes.setModel(newModel);
-        
+        treThes.setRootVisible(false);
+
         lstWords.setModel(new DefaultListModel());
 
         setupListeners();
-        
+
         lstWords.setFont(core.getPropertiesManager().getFontCon());
     }
 
@@ -68,18 +73,22 @@ public class ScrThesaurus extends PFrame {
     private void addThesNode() {
         ThesTreeNode curNode = (ThesTreeNode) treThes.getLastSelectedPathComponent();
 
-        // don't continue of no node selected
+        // select root if no user selection
         if (curNode == null) {
-            return;
+            curNode = (ThesTreeNode) treThes.getModel().getRoot();
         }
 
         ThesTreeNode newNode = new ThesTreeNode(curNode.getNode());
         newNode.setUserObject("NEW FAMILY");
-        
+
         // set ID = 1 to indicate new node
         newNode.getNode().setId(1);
 
         ((DefaultTreeModel) treThes.getModel()).insertNodeInto(newNode, curNode, 0);
+
+        if (treThes.getLastSelectedPathComponent() == null) {
+            treThes.setSelectionPath(new TreePath(newNode.getPath()));
+        }
 
         treThes.expandRow(treThes.getSelectionRows()[0]);
     }
@@ -90,61 +99,62 @@ public class ScrThesaurus extends PFrame {
     private void removeThesNode() {
         ThesTreeNode curNode = (ThesTreeNode) treThes.getLastSelectedPathComponent();
         int position = treThes.getLeadSelectionRow();
-        
+
         // the root node may not be deleted/do nothing if nothing selected
         if (position < 1
                 || curNode == null) {
             return;
         }
-        
+
         if (!InfoBox.deletionConfirmation(this)) {
             return;
         }
-                    
+
         // only remove if not root node
         if (!curNode.isRoot()) {
             ((DefaultTreeModel) treThes.getModel()).removeNodeFromParent(curNode);
             curNode.removeFromParent();
         }
-        
+
         treThes.setSelectionRow(position - 1);
     }
-    
+
     /**
      * Adds word currently selected in lexicon to currently selected family
      */
     private void addWord() {
         ConWord curWord = parent.getCurrentWord();
-        
+
         if (curWord == null) {
             return;
         }
-        
-        ((ThesTreeNode)treThes.getLastSelectedPathComponent())
+
+        ((ThesTreeNode) treThes.getLastSelectedPathComponent())
                 .getNode().addWord(curWord);
-        
+
         updateWordsProp();
     }
-    
+
     /**
-     * removes currently selected word (in thesaurus window) from currently selected family
+     * removes currently selected word (in thesaurus window) from currently
+     * selected family
      */
     private void removeWord() {
         if (chkInclSubFam.isSelected()) {
             InfoBox.info("Alert", "Words may only be removed when \"Include Subfamilies\" box is unchecked.", this);
             return;
         }
-        
-        ConWord curWord = (ConWord)lstWords.getSelectedValue();
-        ThesTreeNode curNode  = (ThesTreeNode) treThes.getLastSelectedPathComponent();
-        
+
+        ConWord curWord = (ConWord) lstWords.getSelectedValue();
+        ThesTreeNode curNode = (ThesTreeNode) treThes.getLastSelectedPathComponent();
+
         if (curWord == null
                 || curNode == null) {
             return;
         }
-        
-        curNode.getNode().removeWord(curWord.getId());
-        
+
+        curNode.getNode().removeWord(curWord);
+
         updateWordsProp();
     }
 
@@ -218,44 +228,44 @@ public class ScrThesaurus extends PFrame {
 
         curUpdating = false;
     }
-    
+
     /**
      * updates words list for family
      */
     private void updateWordsProp() {
         ThesTreeNode curNode = (ThesTreeNode) treThes.getLastSelectedPathComponent();
-        
-        DefaultListModel model = (DefaultListModel)lstWords.getModel();
-        
+
+        DefaultListModel model = (DefaultListModel) lstWords.getModel();
+
         model.clear();
-        
+
         if (curNode == null) {
             return;
         }
-        
+
         Iterator<ConWord> wordIt;
-        
+
         if (chkInclSubFam.isSelected()) {
             wordIt = curNode.getNode().getWordsIncludeSubs().iterator();
         } else {
             wordIt = curNode.getNode().getWords();
         }
-        
+
         for (int i = 0; wordIt.hasNext(); i++) {
             model.add(i, wordIt.next());
         }
     }
-    
+
     /**
      * cause lexicon to select currently selected word
      */
     private void updateLexSelection() {
-        ConWord curWord = (ConWord)lstWords.getSelectedValue();
-        
+        ConWord curWord = (ConWord) lstWords.getSelectedValue();
+
         if (curWord == null) {
             return;
         }
-        
+
         parent.selectWordById(curWord.getId());
     }
 
@@ -312,7 +322,20 @@ public class ScrThesaurus extends PFrame {
         treThes.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
-                if (treThes.getLastSelectedPathComponent() != null) updateAllProps();
+                if (treThes.getLastSelectedPathComponent() != null) {
+                    updateAllProps();
+                }
+            }
+        });
+        
+        treThes.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                TreePath selPath = treThes.getPathForLocation(e.getX(), e.getY());
+                
+                if (selPath == null) {
+                    treThes.setSelectionPath(null);
+                }
             }
         });
     }
@@ -517,15 +540,20 @@ public class ScrThesaurus extends PFrame {
     }//GEN-LAST:event_btnDelWordActionPerformed
 
     private void lstWordsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstWordsValueChanged
-        if (!curUpdating) updateLexSelection();
+        if (!curUpdating) {
+            updateLexSelection();
+        }
     }//GEN-LAST:event_lstWordsValueChanged
 
     private void chkInclSubFamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkInclSubFamActionPerformed
-        if (!curUpdating) updateWordsProp();
+        if (!curUpdating) {
+            updateWordsProp();
+        }
     }//GEN-LAST:event_chkInclSubFamActionPerformed
 
     /**
      * Opens thesaurus window and returns instance of self
+     *
      * @param _core the dictionary core
      * @param parent the parent calling window
      * @return an instantiated copy of itself
@@ -547,12 +575,12 @@ public class ScrThesaurus extends PFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ScrThesaurus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        
+
         // set the leaf icon to be a folder, since all nodes are for containing words
         UIManager.put("Tree.leafIcon", UIManager.get("Tree.closedIcon"));
 
         final ScrThesaurus s = new ScrThesaurus(_core, parent);
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
@@ -560,7 +588,7 @@ public class ScrThesaurus extends PFrame {
                 s.setVisible(true);
             }
         });
-        
+
         return s;
     }
 
