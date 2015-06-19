@@ -1020,6 +1020,11 @@ public final class ScrLexicon extends PFrame {
     }
 
     private void addWord() {
+        ConWord curNode = (ConWord)lstLexicon.getSelectedValue();
+        if (curNode != null) {
+            saveValuesTo(curNode);
+        }
+        
         clearFilter();
         curPopulating = true;
         core.getWordCollection().clear();
