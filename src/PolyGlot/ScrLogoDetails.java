@@ -800,8 +800,8 @@ public class ScrLogoDetails extends PFrame {
         fltRadical = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstLogos = new javax.swing.JList();
-        btnAddLogo = new javax.swing.JButton();
-        btnDelLogo = new javax.swing.JButton();
+        btnAddLogo = new PButton("+");
+        btnDelLogo = new PButton("-");
         jPanel2 = new javax.swing.JPanel();
         picLogo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -810,10 +810,10 @@ public class ScrLogoDetails extends PFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         lstRadicals = new javax.swing.JList();
         jLabel10 = new javax.swing.JLabel();
-        btnAddReading = new javax.swing.JButton();
-        btnDelReading = new javax.swing.JButton();
-        btnAddRad = new javax.swing.JButton();
-        btnDelRad = new javax.swing.JButton();
+        btnAddReading = new PButton("+");
+        btnDelReading = new PButton("-");
+        btnAddRad = new PButton("+");
+        btnDelRad = new PButton("-");
         chkIsRad = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
@@ -926,7 +926,6 @@ public class ScrLogoDetails extends PFrame {
         });
         jScrollPane1.setViewportView(lstLogos);
 
-        btnAddLogo.setText("+");
         btnAddLogo.setToolTipText("New logograph");
         btnAddLogo.setPreferredSize(new java.awt.Dimension(40, 29));
         btnAddLogo.setSize(new java.awt.Dimension(30, 29));
@@ -936,7 +935,6 @@ public class ScrLogoDetails extends PFrame {
             }
         });
 
-        btnDelLogo.setText("-");
         btnDelLogo.setToolTipText("Delete selected logograph");
         btnDelLogo.setPreferredSize(new java.awt.Dimension(40, 29));
         btnDelLogo.addActionListener(new java.awt.event.ActionListener() {
@@ -976,7 +974,6 @@ public class ScrLogoDetails extends PFrame {
 
         jLabel10.setText("Related Words");
 
-        btnAddReading.setText("+");
         btnAddReading.setToolTipText("Add reading");
         btnAddReading.setPreferredSize(new java.awt.Dimension(40, 29));
         btnAddReading.setSize(new java.awt.Dimension(40, 29));
@@ -986,7 +983,6 @@ public class ScrLogoDetails extends PFrame {
             }
         });
 
-        btnDelReading.setText("-");
         btnDelReading.setToolTipText("Remove selected reading");
         btnDelReading.setPreferredSize(new java.awt.Dimension(40, 29));
         btnDelReading.setSize(new java.awt.Dimension(40, 29));
@@ -996,7 +992,6 @@ public class ScrLogoDetails extends PFrame {
             }
         });
 
-        btnAddRad.setText("+");
         btnAddRad.setToolTipText("Add radical");
         btnAddRad.setPreferredSize(new java.awt.Dimension(40, 29));
         btnAddRad.addActionListener(new java.awt.event.ActionListener() {
@@ -1005,7 +1000,6 @@ public class ScrLogoDetails extends PFrame {
             }
         });
 
-        btnDelRad.setText("-");
         btnDelRad.setToolTipText("Remove selected radical");
         btnDelRad.setPreferredSize(new java.awt.Dimension(40, 29));
         btnDelRad.addActionListener(new java.awt.event.ActionListener() {

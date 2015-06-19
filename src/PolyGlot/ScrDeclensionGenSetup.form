@@ -281,7 +281,6 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnAddRule">
               <Properties>
-                <Property name="text" type="java.lang.String" value="+"/>
                 <Property name="toolTipText" type="java.lang.String" value="Add Rule"/>
                 <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[40, 29]"/>
@@ -290,10 +289,12 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddRuleActionPerformed"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;+&quot;)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnDeleteRule">
               <Properties>
-                <Property name="text" type="java.lang.String" value="-"/>
                 <Property name="toolTipText" type="java.lang.String" value="Delete Rule"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[40, 29]"/>
@@ -302,6 +303,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteRuleActionPerformed"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;-&quot;)"/>
+              </AuxValues>
             </Component>
             <Container class="javax.swing.JScrollPane" name="sclTransforms">
               <AuxValues>
@@ -329,7 +333,6 @@
             </Container>
             <Component class="javax.swing.JButton" name="btnAddTransform">
               <Properties>
-                <Property name="text" type="java.lang.String" value="+"/>
                 <Property name="toolTipText" type="java.lang.String" value="Add Transformation"/>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -339,10 +342,12 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddTransformActionPerformed"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;+&quot;)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnDeleteTransform">
               <Properties>
-                <Property name="text" type="java.lang.String" value="-"/>
                 <Property name="toolTipText" type="java.lang.String" value="Delete Transformation"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[40, 29]"/>
@@ -351,6 +356,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteTransformActionPerformed"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;-&quot;)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>

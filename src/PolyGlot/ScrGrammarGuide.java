@@ -143,8 +143,8 @@ public class ScrGrammarGuide extends PFrame {
         treChapList = new javax.swing.JTree();
         txtSearch = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        btnAddSection = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
+        btnAddSection = new PButton("+");
+        btnDelete = new PButton("-");
         btnAddChapter = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -373,18 +373,11 @@ public class ScrGrammarGuide extends PFrame {
 
         jLabel1.setText("Sections");
 
-        btnAddSection.setText("+");
         btnAddSection.setToolTipText("Add a new section to a chapter");
-        btnAddSection.setBorder(null);
-        btnAddSection.setBorderPainted(false);
         btnAddSection.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        btnAddSection.setFocusPainted(false);
-        btnAddSection.setFocusTraversalKeysEnabled(false);
-        btnAddSection.setFocusable(false);
         btnAddSection.setMaximumSize(new java.awt.Dimension(40, 29));
         btnAddSection.setMinimumSize(new java.awt.Dimension(40, 29));
         btnAddSection.setPreferredSize(new java.awt.Dimension(40, 29));
-        btnAddSection.setRequestFocusEnabled(false);
         btnAddSection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddSectionActionPerformed(evt);
@@ -392,15 +385,9 @@ public class ScrGrammarGuide extends PFrame {
         });
 
         btnDelete.setToolTipText("Delete current chapter/node");
-        btnDelete.setBorderPainted(false);
-        btnDelete.setFocusPainted(false);
-        btnDelete.setFocusable(false);
-        btnDelete.setLabel("-");
         btnDelete.setMaximumSize(new java.awt.Dimension(40, 29));
         btnDelete.setMinimumSize(new java.awt.Dimension(40, 29));
-        btnDelete.setOpaque(true);
         btnDelete.setPreferredSize(new java.awt.Dimension(40, 29));
-        btnDelete.setRequestFocusEnabled(false);
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
@@ -440,7 +427,7 @@ public class ScrGrammarGuide extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddSection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

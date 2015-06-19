@@ -214,21 +214,25 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnAddWord">
           <Properties>
-            <Property name="text" type="java.lang.String" value="+"/>
             <Property name="toolTipText" type="java.lang.String" value="Add word selected in lexicon to family"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddWordActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;+&quot;)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnDelWord">
           <Properties>
-            <Property name="text" type="java.lang.String" value="-"/>
             <Property name="toolTipText" type="java.lang.String" value="Remove word selected in list from family"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDelWordActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;-&quot;)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
@@ -244,21 +248,25 @@
     </Container>
     <Component class="javax.swing.JButton" name="btnAddFamily">
       <Properties>
-        <Property name="text" type="java.lang.String" value="+"/>
         <Property name="toolTipText" type="java.lang.String" value="Add Family Node"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddFamilyActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;+&quot;)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btnDelFamily">
       <Properties>
-        <Property name="text" type="java.lang.String" value="-"/>
         <Property name="toolTipText" type="java.lang.String" value="Remove family node"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDelFamilyActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;-&quot;)"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

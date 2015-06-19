@@ -252,7 +252,6 @@
     </Container>
     <Component class="javax.swing.JButton" name="btnAddLogo">
       <Properties>
-        <Property name="text" type="java.lang.String" value="+"/>
         <Property name="toolTipText" type="java.lang.String" value="New logograph"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[40, 29]"/>
@@ -264,10 +263,12 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddLogoActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;+&quot;)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btnDelLogo">
       <Properties>
-        <Property name="text" type="java.lang.String" value="-"/>
         <Property name="toolTipText" type="java.lang.String" value="Delete selected logograph"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[40, 29]"/>
@@ -276,6 +277,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDelLogoActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;-&quot;)"/>
+      </AuxValues>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel2">
       <Properties>
@@ -484,7 +488,6 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnAddReading">
           <Properties>
-            <Property name="text" type="java.lang.String" value="+"/>
             <Property name="toolTipText" type="java.lang.String" value="Add reading"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[40, 29]"/>
@@ -496,10 +499,12 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddReadingActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;+&quot;)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnDelReading">
           <Properties>
-            <Property name="text" type="java.lang.String" value="-"/>
             <Property name="toolTipText" type="java.lang.String" value="Remove selected reading"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[40, 29]"/>
@@ -511,10 +516,12 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDelReadingActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;-&quot;)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnAddRad">
           <Properties>
-            <Property name="text" type="java.lang.String" value="+"/>
             <Property name="toolTipText" type="java.lang.String" value="Add radical"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[40, 29]"/>
@@ -523,10 +530,12 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddRadActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;+&quot;)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnDelRad">
           <Properties>
-            <Property name="text" type="java.lang.String" value="-"/>
             <Property name="toolTipText" type="java.lang.String" value="Remove selected radical"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[40, 29]"/>
@@ -535,6 +544,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDelRadActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;-&quot;)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JCheckBox" name="chkIsRad">
           <Properties>

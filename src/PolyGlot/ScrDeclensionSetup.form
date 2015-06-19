@@ -227,23 +227,27 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnAddDimension">
               <Properties>
-                <Property name="text" type="java.lang.String" value="+"/>
                 <Property name="toolTipText" type="java.lang.String" value="Add a dimension to selected conjugation class"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddDimensionActionPerformed"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;+&quot;)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnDelDimension">
               <Properties>
-                <Property name="text" type="java.lang.String" value="-"/>
                 <Property name="toolTipText" type="java.lang.String" value="Delete selected dimension"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDelDimensionActionPerformed"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;-&quot;)"/>
+              </AuxValues>
             </Component>
             <Container class="javax.swing.JScrollPane" name="sclDimensions">
               <AuxValues>
@@ -290,21 +294,25 @@
         </Container>
         <Component class="javax.swing.JButton" name="btnDeleteDeclension">
           <Properties>
-            <Property name="text" type="java.lang.String" value="-"/>
             <Property name="toolTipText" type="java.lang.String" value="Delete selected conjugation class"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteDeclensionActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;-&quot;)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnAddDeclension">
           <Properties>
-            <Property name="text" type="java.lang.String" value="+"/>
             <Property name="toolTipText" type="java.lang.String" value="Add conjugation class"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddDeclensionActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(&quot;+&quot;)"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

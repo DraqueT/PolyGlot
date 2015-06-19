@@ -336,12 +336,12 @@ public class ScrThesaurus extends PFrame {
         lstWords = new javax.swing.JList();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        btnAddWord = new javax.swing.JButton();
-        btnDelWord = new javax.swing.JButton();
+        btnAddWord = new PButton("+");
+        btnDelWord = new PButton("-");
         jLabel3 = new javax.swing.JLabel();
         txtFamName = new javax.swing.JTextField();
-        btnAddFamily = new javax.swing.JButton();
-        btnDelFamily = new javax.swing.JButton();
+        btnAddFamily = new PButton("+");
+        btnDelFamily = new PButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Thesaurus");
@@ -379,7 +379,6 @@ public class ScrThesaurus extends PFrame {
         jLabel2.setText("Notes");
         jLabel2.setToolTipText("Notes on family");
 
-        btnAddWord.setText("+");
         btnAddWord.setToolTipText("Add word selected in lexicon to family");
         btnAddWord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -387,7 +386,6 @@ public class ScrThesaurus extends PFrame {
             }
         });
 
-        btnDelWord.setText("-");
         btnDelWord.setToolTipText("Remove word selected in list from family");
         btnDelWord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -452,15 +450,14 @@ public class ScrThesaurus extends PFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        btnAddFamily.setText("+");
         btnAddFamily.setToolTipText("Add Family Node");
+        btnAddFamily.setActionCommand("");
         btnAddFamily.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddFamilyActionPerformed(evt);
             }
         });
 
-        btnDelFamily.setText("-");
         btnDelFamily.setToolTipText("Remove family node");
         btnDelFamily.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

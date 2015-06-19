@@ -607,12 +607,12 @@ public class ScrDeclensionGenSetup extends PDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         lstRules = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
-        btnAddRule = new javax.swing.JButton();
-        btnDeleteRule = new javax.swing.JButton();
+        btnAddRule = new PButton("+");
+        btnDeleteRule = new PButton("-");
         sclTransforms = new javax.swing.JScrollPane();
         tblTransforms = new javax.swing.JTable();
-        btnAddTransform = new javax.swing.JButton();
-        btnDeleteTransform = new javax.swing.JButton();
+        btnAddTransform = new PButton("+");
+        btnDeleteTransform = new PButton("-");
         jLabel4 = new javax.swing.JLabel();
         txtRuleName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -663,7 +663,6 @@ public class ScrDeclensionGenSetup extends PDialog {
 
         jLabel3.setText("Transformations");
 
-        btnAddRule.setText("+");
         btnAddRule.setToolTipText("Add Rule");
         btnAddRule.setSize(new java.awt.Dimension(40, 29));
         btnAddRule.addActionListener(new java.awt.event.ActionListener() {
@@ -672,7 +671,6 @@ public class ScrDeclensionGenSetup extends PDialog {
             }
         });
 
-        btnDeleteRule.setText("-");
         btnDeleteRule.setToolTipText("Delete Rule");
         btnDeleteRule.setPreferredSize(new java.awt.Dimension(40, 29));
         btnDeleteRule.addActionListener(new java.awt.event.ActionListener() {
@@ -697,7 +695,6 @@ public class ScrDeclensionGenSetup extends PDialog {
         tblTransforms.setRowHeight(30);
         sclTransforms.setViewportView(tblTransforms);
 
-        btnAddTransform.setText("+");
         btnAddTransform.setToolTipText("Add Transformation");
         btnAddTransform.setEnabled(false);
         btnAddTransform.setPreferredSize(new java.awt.Dimension(40, 29));
@@ -707,7 +704,6 @@ public class ScrDeclensionGenSetup extends PDialog {
             }
         });
 
-        btnDeleteTransform.setText("-");
         btnDeleteTransform.setToolTipText("Delete Transformation");
         btnDeleteTransform.setPreferredSize(new java.awt.Dimension(40, 29));
         btnDeleteTransform.addActionListener(new java.awt.event.ActionListener() {

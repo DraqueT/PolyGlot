@@ -182,8 +182,8 @@ public class ScrLogoQuickView extends PFrame {
         btnDetails = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstLogos = new javax.swing.JList();
-        btnAdd = new javax.swing.JButton();
-        btnDel = new javax.swing.JButton();
+        btnAdd = new PButton("+");
+        btnDel = new PButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -208,14 +208,12 @@ public class ScrLogoQuickView extends PFrame {
         });
         jScrollPane1.setViewportView(lstLogos);
 
-        btnAdd.setText("+");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
             }
         });
 
-        btnDel.setText("-");
         btnDel.setMaximumSize(new java.awt.Dimension(30, 29));
         btnDel.setMinimumSize(new java.awt.Dimension(30, 29));
         btnDel.setPreferredSize(new java.awt.Dimension(30, 29));

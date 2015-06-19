@@ -401,12 +401,12 @@ public final class ScrDeclensionSetup extends PDialog {
         txtDeclensionName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        btnAddDimension = new javax.swing.JButton();
-        btnDelDimension = new javax.swing.JButton();
+        btnAddDimension = new PButton("+");
+        btnDelDimension = new PButton("-");
         sclDimensions = new javax.swing.JScrollPane();
         tblDimensions = new javax.swing.JTable();
-        btnDeleteDeclension = new javax.swing.JButton();
-        btnAddDeclension = new javax.swing.JButton();
+        btnDeleteDeclension = new PButton("-");
+        btnAddDeclension = new PButton("+");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -440,7 +440,6 @@ public final class ScrDeclensionSetup extends PDialog {
 
         jLabel4.setText("Notes");
 
-        btnAddDimension.setText("+");
         btnAddDimension.setToolTipText("Add a dimension to selected conjugation class");
         btnAddDimension.setEnabled(false);
         btnAddDimension.addActionListener(new java.awt.event.ActionListener() {
@@ -449,7 +448,6 @@ public final class ScrDeclensionSetup extends PDialog {
             }
         });
 
-        btnDelDimension.setText("-");
         btnDelDimension.setToolTipText("Delete selected dimension");
         btnDelDimension.setEnabled(false);
         btnDelDimension.addActionListener(new java.awt.event.ActionListener() {
@@ -534,7 +532,6 @@ public final class ScrDeclensionSetup extends PDialog {
                 .addContainerGap())
         );
 
-        btnDeleteDeclension.setText("-");
         btnDeleteDeclension.setToolTipText("Delete selected conjugation class");
         btnDeleteDeclension.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -542,7 +539,6 @@ public final class ScrDeclensionSetup extends PDialog {
             }
         });
 
-        btnAddDeclension.setText("+");
         btnAddDeclension.setToolTipText("Add conjugation class");
         btnAddDeclension.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

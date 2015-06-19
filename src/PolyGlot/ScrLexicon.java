@@ -1103,8 +1103,8 @@ public final class ScrLexicon extends PFrame {
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         lstLexicon = new javax.swing.JList();
-        btnAddWord = new javax.swing.JButton();
-        btnDelWord = new javax.swing.JButton();
+        btnAddWord = new PButton("+");
+        btnDelWord = new PButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lexicon");
@@ -1279,7 +1279,6 @@ public final class ScrLexicon extends PFrame {
         });
         jScrollPane3.setViewportView(lstLexicon);
 
-        btnAddWord.setText("+");
         btnAddWord.setToolTipText("Adds new word to dictionary");
         btnAddWord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1287,7 +1286,6 @@ public final class ScrLexicon extends PFrame {
             }
         });
 
-        btnDelWord.setText("-");
         btnDelWord.setToolTipText("Deletes selected word from dictionary");
         btnDelWord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
