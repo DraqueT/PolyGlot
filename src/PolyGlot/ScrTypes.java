@@ -61,8 +61,13 @@ public class ScrTypes extends PDialog {
         }
         // TODO: signal core to updae relevant windows
         
-        killAllChildren();
-        super.dispose();
+        if (txtName.getText().equals("")) {
+            InfoBox.warning("Illegal Type",
+                    "Currently selected type is illegal. Please correct or delete.", this);
+        } else {
+            killAllChildren();
+            super.dispose();
+        }
     }
     
     /**
@@ -236,6 +241,8 @@ public class ScrTypes extends PDialog {
         }
         populateTypes();
         lstTypes.setSelectedIndex(0);
+        
+        txtName.requestFocus();
     }
     
     /**

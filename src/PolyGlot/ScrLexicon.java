@@ -743,7 +743,9 @@ public final class ScrLexicon extends PFrame {
         try {
             if (curWord == null) {
                 if (!namePopulating) {
+                    namePopulating = true;
                     txtConWord.setText(defConValue);
+                    namePopulating = false;
                 }
                 txtDefinition.setText(defDefValue);
                 txtLocalWord.setText(defLocalValue);
@@ -755,7 +757,9 @@ public final class ScrLexicon extends PFrame {
                 setPropertiesEnabled(false);
             } else {
                 if (!namePopulating) {
+                    namePopulating = true;
                     txtConWord.setText(curWord.getValue());
+                    namePopulating = false;
                 }
                 txtDefinition.setText(curWord.getDefinition().equals("")
                         ? defDefValue : curWord.getDefinition());
@@ -955,11 +959,8 @@ public final class ScrLexicon extends PFrame {
             }
 
             saveValuesTo(curWord);
-            int caretPosition = txtConWord.getCaretPosition();
             populateLexicon();
             lstLexicon.setSelectedValue(curWord, true);
-            txtConWord.requestFocus();
-            txtConWord.setCaretPosition(caretPosition);
         } catch (Exception e) {
             InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), this);
         }
@@ -1041,6 +1042,7 @@ public final class ScrLexicon extends PFrame {
         curPopulating = false;
 
         setWordLegality();
+        txtConWord.requestFocus();
     }
     
     private void viewQuickLogographs() {
@@ -1419,7 +1421,8 @@ public final class ScrLexicon extends PFrame {
     }//GEN-LAST:event_txtDefinitionFocusLost
 
     private void lstLexiconValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLexiconValueChanged
-        if (evt.getValueIsAdjusting()) {
+        if (evt.getValueIsAdjusting()
+                || namePopulating) {
             return;
         }
 
