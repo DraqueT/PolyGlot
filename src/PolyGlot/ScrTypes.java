@@ -61,7 +61,8 @@ public class ScrTypes extends PDialog {
         }
         // TODO: signal core to updae relevant windows
         
-        if (txtName.getText().equals("")) {
+        if (txtName.getText().equals("")
+                && curType != null) {
             InfoBox.warning("Illegal Type",
                     "Currently selected type is illegal. Please correct or delete.", this);
         } else {
