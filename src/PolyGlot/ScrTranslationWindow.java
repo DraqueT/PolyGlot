@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.swing.DefaultListModel;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -76,6 +77,11 @@ public class ScrTranslationWindow extends PFrame {
         setupListeners();
         
         setCurTranslating(false);
+    }
+    
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        // do nothing
     }
     
     private void startTranslation() {

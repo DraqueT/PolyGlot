@@ -19,10 +19,19 @@
  */
 package PolyGlot;
 
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.DefaultListModel;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -51,8 +60,8 @@ public class ScrThesaurus extends PFrame {
     public ScrThesaurus(DictCore _core, ScrDictInterface _parent) {
         core = _core;
         parent = _parent;
-        setupKeyStrokes();
         initComponents();
+        setupKeyStrokes(); // TODO: address warning...
         ThesTreeNode root = new ThesTreeNode();
         root.setAsRootNode(core.getThesManager().getRoot());
 
@@ -65,6 +74,50 @@ public class ScrThesaurus extends PFrame {
         setupListeners();
 
         lstWords.setFont(core.getPropertiesManager().getFontCon());
+        
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            btnAddFamily.setToolTipText(btnAddFamily.getToolTipText() + " (⌘ +)");
+            btnDelFamily.setToolTipText(btnDelFamily.getToolTipText() + " (⌘ -)");
+        } else {
+            btnAddFamily.setToolTipText(btnAddFamily.getToolTipText() + " (CTRL +)");
+            btnDelFamily.setToolTipText(btnDelFamily.getToolTipText() + " (CTRL -)");
+        }
+    }
+    
+    @Override
+    public void setupKeyStrokes() {
+        addBindingsToPanelComponents(this.getRootPane());
+        super.setupKeyStrokes();
+    }
+    
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        Action addAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addThesNode();
+            }
+        };
+        Action delAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeThesNode();
+            }
+        };
+        String addKey = "addNode";
+        String delKey = "delNode";
+        int mask;
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            mask = KeyEvent.META_DOWN_MASK;
+        } else {
+            mask = KeyEvent.CTRL_DOWN_MASK;
+        }
+        InputMap im = c.getInputMap();
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), addKey);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), delKey);
+        ActionMap am = c.getActionMap();
+        am.put(addKey, addAction);
+        am.put(delKey, delAction);
     }
 
     /**

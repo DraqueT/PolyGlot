@@ -21,6 +21,9 @@ package PolyGlot;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
@@ -64,11 +67,11 @@ public class DictCore {
     public ThesaurusManager getThesManager() {
         return thesManager;
     }
-    
+
     public LogoCollection getLogoCollection() {
         return logoCollection;
     }
-    
+
     public GrammarManager getGrammarManager() {
         return grammarManager;
     }
@@ -150,31 +153,31 @@ public class DictCore {
         } catch (IOException e) {
             throw new Exception(e.getMessage());
         }
-        
+
         try {
             IOHandler.setFontFrom(_fileName, this);
         } catch (Exception e) {
             loadLog += e.getLocalizedMessage() + "\n";
         }
-        
+
         try {
             IOHandler.loadGrammarSounds(_fileName, grammarManager);
         } catch (Exception e) {
             loadLog += e.getLocalizedMessage() + "\n";
         }
-        
+
         try {
             logoCollection.loadRadicalRelations();
         } catch (Exception e) {
             loadLog += e.getLocalizedMessage() + "\n";
         }
-        
+
         try {
             IOHandler.loadImages(logoCollection, _fileName);
         } catch (Exception e) {
             loadLog += e.getLocalizedMessage() + "\n";
         }
-        
+
         if (!loadLog.equals("")) {
             throw new Exception("Problems lodaing file:\n");
         }

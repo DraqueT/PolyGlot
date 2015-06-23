@@ -4158,4 +4158,9 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JTextArea txtTypesNotes;
     private javax.swing.JTextPane txtWordErrorBox;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        // no special bindings
+    }
 }

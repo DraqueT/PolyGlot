@@ -23,9 +23,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -48,12 +51,17 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.DefaultListModel;
+import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -62,6 +70,7 @@ import javax.swing.event.DocumentListener;
  * @author draque
  */
 public final class ScrLexicon extends PFrame {
+
     private final List<Window> childFrames = new ArrayList<Window>();
     private TitledPane gridTitlePane = null;
     private final JFXPanel fxPanel;
@@ -90,7 +99,7 @@ public final class ScrLexicon extends PFrame {
     public ScrLexicon(DictCore _core) {
         defTypeValue.setValue("-- Type --");
         defGenderValue.setValue("-- Gender --");
-        
+
         core = _core;
         fxPanel = new JFXPanel();
 
@@ -98,6 +107,7 @@ public final class ScrLexicon extends PFrame {
 
         lstLexicon.setModel(new DefaultListModel());
 
+        setupKeyStrokes();
         setupFilterMenu();
         setupComboBoxesSwing();
         setDefaultValues();
@@ -105,6 +115,50 @@ public final class ScrLexicon extends PFrame {
         lstLexicon.setSelectedIndex(0);
         populateProperties();
         setupListeners();
+
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            btnAddWord.setToolTipText(btnAddWord.getToolTipText() + " (⌘ +)");
+            btnDelWord.setToolTipText(btnDelWord.getToolTipText() + " (⌘ -)");
+        } else {
+            btnAddWord.setToolTipText(btnAddWord.getToolTipText() + " (CTRL +)");
+            btnDelWord.setToolTipText(btnDelWord.getToolTipText() + " (CTRL -)");
+        }
+    }
+
+    @Override
+    protected void setupKeyStrokes() {
+        addBindingsToPanelComponents(this.getRootPane());
+        super.setupKeyStrokes();
+    }
+
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        Action addAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addWord();
+            }
+        };
+        Action delAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteWord();
+            }
+        };
+        String addKey = "addWord";
+        String delKey = "delWord";
+        int mask;
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            mask = KeyEvent.META_DOWN_MASK;
+        } else {
+            mask = KeyEvent.CTRL_DOWN_MASK;
+        }
+        InputMap im = c.getInputMap();
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), addKey);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), delKey);
+        ActionMap am = c.getActionMap();
+        am.put(addKey, addAction);
+        am.put(delKey, delAction);
     }
 
     /**
@@ -219,7 +273,7 @@ public final class ScrLexicon extends PFrame {
                     lstLexicon.ensureIndexIsVisible(0);
                     populateProperties();
                     Thread.sleep(50); // wait for other elements to paint first...
-                    jPanel1.repaint();                    
+                    jPanel1.repaint();
                 } catch (InterruptedException e) {
                     // do nothing: interruption is due to additional user input
                 }
@@ -290,11 +344,11 @@ public final class ScrLexicon extends PFrame {
             };
 
             Platform.runLater(fxSetup);
-            
+
             try {
                 latch.await(); // do not continue until filter cleared
             } catch (Exception e) {
-                InfoBox.error("JavaFX Problem", "Unable to clear filter: " 
+                InfoBox.error("JavaFX Problem", "Unable to clear filter: "
                         + e.getLocalizedMessage(), this);
             }
         } else {
@@ -494,13 +548,13 @@ public final class ScrLexicon extends PFrame {
             if (curWord != null) {
                 saveValuesTo(curWord);
             }
-            
+
             killAllChildren();
 
             super.dispose();
         }
     }
-    
+
     /**
      * Closes all child windows
      */
@@ -932,8 +986,8 @@ public final class ScrLexicon extends PFrame {
     }
 
     public static ScrLexicon run(DictCore _core) {
-        ScrLexicon s = new ScrLexicon(_core);
-        s.setupKeyStrokes();
+        final ScrLexicon s = new ScrLexicon(_core);
+
         s.setVisible(true);
 
         return s;
@@ -978,7 +1032,7 @@ public final class ScrLexicon extends PFrame {
         if (txtConWord.getText().equals(defConValue)) {
             return;
         }
-        
+
         saveWord.setValue(txtConWord.getText());
         saveWord.setDefinition(txtDefinition.getText().equals(defDefValue)
                 ? "" : txtDefinition.getText());
@@ -1004,7 +1058,7 @@ public final class ScrLexicon extends PFrame {
         if (curSelection == -1) {
             return;
         }
-        
+
         try {
             core.getWordCollection().deleteNodeById(curWord.getId());
         } catch (Exception e) {
@@ -1021,11 +1075,10 @@ public final class ScrLexicon extends PFrame {
     }
 
     private void addWord() {
-        ConWord curNode = (ConWord)lstLexicon.getSelectedValue();
+        ConWord curNode = (ConWord) lstLexicon.getSelectedValue();
         if (curNode != null) {
             saveValuesTo(curNode);
         }
-        
         clearFilter();
         curPopulating = true;
         core.getWordCollection().clear();
@@ -1044,37 +1097,37 @@ public final class ScrLexicon extends PFrame {
         setWordLegality();
         txtConWord.requestFocus();
     }
-    
+
     private void viewQuickLogographs() {
-        ConWord curWord = (ConWord)lstLexicon.getSelectedValue();
-        
+        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+
         if (curWord == null) {
             return;
         }
-        
+
         Window window = new ScrLogoQuickView(core, curWord);
         childFrames.add(window);
         window.setVisible(true);
         final Window parent = this;
         this.setEnabled(false);
-        
+
         window.addWindowListener(new WindowAdapter() {
 
-        @Override
-        public void windowClosing(WindowEvent arg0) {
+            @Override
+            public void windowClosing(WindowEvent arg0) {
                 parent.setEnabled(true);
             }
         });
     }
-    
+
     private void viewDeclensions() {
-        ConWord curWord = (ConWord)lstLexicon.getSelectedValue();
-        
+        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+
         if (curWord == null) {
             return;
         }
-        
-        saveValuesTo(curWord);        
+
+        saveValuesTo(curWord);
         Window window = ScrDeclensions.run(core, curWord);
         childFrames.add(window);
     }

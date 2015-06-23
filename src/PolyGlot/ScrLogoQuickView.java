@@ -23,13 +23,22 @@ import PolyGlot.PGTUtil.WindowMode;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -56,8 +65,8 @@ public class ScrLogoQuickView extends PFrame {
      * @param _conWord conword to open logographs for
      */
     public ScrLogoQuickView(DictCore _core, ConWord _conWord) {
-        setupKeyStrokes();
         initComponents();
+        setupKeyStrokes(); // TODO: take care of this warning...
 
         conWord = _conWord;
         core = _core;
@@ -68,6 +77,50 @@ public class ScrLogoQuickView extends PFrame {
         setTitle("Associated Logographs");
         populateLogos(core.getLogoCollection().getWordLogos(conWord));
         mode = WindowMode.SELECTLIST;
+        
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            btnAdd.setToolTipText(btnAdd.getToolTipText() + " (⌘ +)");
+            btnDel.setToolTipText(btnDel.getToolTipText() + " (⌘ -)");
+        } else {
+            btnAdd.setToolTipText(btnAdd.getToolTipText() + " (CTRL +)");
+            btnDel.setToolTipText(btnDel.getToolTipText() + " (CTRL -)");
+        }
+    }
+    
+    @Override
+    protected void setupKeyStrokes() {
+        addBindingsToPanelComponents(this.getRootPane());
+        super.setupKeyStrokes();
+    }
+
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        Action addAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addLogo();
+            }
+        };
+        Action delAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                delLogo();
+            }
+        };
+        String addKey = "addLogo";
+        String delKey = "delLogo";
+        int mask;
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            mask = KeyEvent.META_DOWN_MASK;
+        } else {
+            mask = KeyEvent.CTRL_DOWN_MASK;
+        }
+        InputMap im = c.getInputMap();
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), addKey);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), delKey);
+        ActionMap am = c.getActionMap();
+        am.put(addKey, addAction);
+        am.put(delKey, delAction);
     }
 
     /**
@@ -77,7 +130,7 @@ public class ScrLogoQuickView extends PFrame {
      * @param showRadicalsOnly set true to limit to only radicals
      */
     public ScrLogoQuickView(DictCore _core, boolean showRadicalsOnly) {
-        setupKeyStrokes();
+        super.setupKeyStrokes();
         initComponents();
 
         core = _core;
@@ -97,6 +150,8 @@ public class ScrLogoQuickView extends PFrame {
 
         mode = WindowMode.SELECTLIST;
     }
+    
+    
 
     /**
      * Sets up fonts based on core properties
@@ -167,6 +222,48 @@ public class ScrLogoQuickView extends PFrame {
      */
     public LogoNode getCurrentLogo() {
         return (LogoNode) lstLogos.getSelectedValue();
+    }
+    
+    private void addLogo() {
+        if (logoFinder != null && !logoFinder.isDisposed()
+                && logoFinder.getMode() == WindowMode.SINGLEVALUE) {
+            InfoBox.info("Action currently unavailable.",
+                    "Please close Logograph Details/Modification window before adding logographs.",
+                    this);
+
+            return;
+        }
+
+        if (logoFinder == null || logoFinder.isDisposed()) {
+            logoFinder = new ScrLogoDetails(core);
+            logoFinder.setWordFetchMode(true);
+            logoFinder.setBeside(this);
+
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    logoFinder.setVisible(true);
+                }
+            });
+        } else {
+            LogoNode addLogo = logoFinder.getSelectedLogo();
+            
+            if (core.getLogoCollection().addWordLogoRelation(conWord, addLogo)) {
+                ((DefaultListModel) lstLogos.getModel()).addElement(addLogo);
+                logoFinder.refreshRelatedWords();
+            }
+        }
+    }
+    
+    private void delLogo() {
+        LogoNode curNode = (LogoNode) lstLogos.getSelectedValue();
+
+        if (curNode == null) {
+            return;
+        }
+
+        core.getLogoCollection().removeWordLogoRelation(conWord, curNode);
+        populateLogos(core.getLogoCollection().getWordLogos(conWord));
     }
 
     /**
@@ -261,34 +358,7 @@ public class ScrLogoQuickView extends PFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        if (logoFinder != null && !logoFinder.isDisposed()
-                && logoFinder.getMode() == WindowMode.SINGLEVALUE) {
-            InfoBox.info("Action currently unavailable.",
-                    "Please close Logograph Details/Modification window before adding logographs.",
-                    this);
-
-            return;
-        }
-
-        if (logoFinder == null || logoFinder.isDisposed()) {
-            logoFinder = new ScrLogoDetails(core);
-            logoFinder.setWordFetchMode(true);
-            logoFinder.setBeside(this);
-
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    logoFinder.setVisible(true);
-                }
-            });
-        } else {
-            LogoNode addLogo = logoFinder.getSelectedLogo();
-            
-            if (core.getLogoCollection().addWordLogoRelation(conWord, addLogo)) {
-                ((DefaultListModel) lstLogos.getModel()).addElement(addLogo);
-                logoFinder.refreshRelatedWords();
-            }
-        }
+        addLogo();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void lstLogosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLogosValueChanged
@@ -308,14 +378,7 @@ public class ScrLogoQuickView extends PFrame {
     }//GEN-LAST:event_lstLogosValueChanged
 
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
-        LogoNode curNode = (LogoNode) lstLogos.getSelectedValue();
-
-        if (curNode == null) {
-            return;
-        }
-
-        core.getLogoCollection().removeWordLogoRelation(conWord, curNode);
-        populateLogos(core.getLogoCollection().getWordLogos(conWord));
+        delLogo();
     }//GEN-LAST:event_btnDelActionPerformed
 
     private void btnDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailsActionPerformed

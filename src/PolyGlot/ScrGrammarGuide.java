@@ -23,13 +23,21 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import javax.sound.sampled.LineUnavailableException;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -94,8 +102,8 @@ public class ScrGrammarGuide extends PFrame {
         deleteButtonPressed = getButtonSizeIcon(
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button_pressed.png")));
         
-        setupKeyStrokes();
         initComponents();
+        setupKeyStrokes(); // TODO: address warning...
         
         soundRecorder = new SoundRecorder(this);
         soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
@@ -103,6 +111,50 @@ public class ScrGrammarGuide extends PFrame {
         setInitialValues();
         setupListeners();
         populateSections();
+        
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (⌘ +)");
+            btnDelete.setToolTipText(btnDelete.getToolTipText() + " (⌘ -)");
+        } else {
+            btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (CTRL +)");
+            btnDelete.setToolTipText(btnDelete.getToolTipText() + " (CTRL -)");
+        }
+    }
+    
+    @Override
+    public void setupKeyStrokes() {
+        addBindingsToPanelComponents(this.getRootPane());
+        super.setupKeyStrokes();
+    }
+    
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        Action addAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addSection();
+            }
+        };
+        Action delAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteNode();
+            }
+        };
+        String addKey = "addSection";
+        String delKey = "delNode";
+        int mask;
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            mask = KeyEvent.META_DOWN_MASK;
+        } else {
+            mask = KeyEvent.CTRL_DOWN_MASK;
+        }
+        InputMap im = c.getInputMap();
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), addKey);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), delKey);
+        ActionMap am = c.getActionMap();
+        am.put(addKey, addAction);
+        am.put(delKey, delAction);
     }
     
     @Override

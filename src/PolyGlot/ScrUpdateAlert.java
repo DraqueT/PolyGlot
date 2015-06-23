@@ -28,6 +28,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -113,6 +114,11 @@ public class ScrUpdateAlert extends PFrame {
         } else {
             setVisible(true);
         }
+    }
+    
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        // do nothing
     }
 
     /**

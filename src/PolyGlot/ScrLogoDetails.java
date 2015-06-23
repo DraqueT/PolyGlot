@@ -22,7 +22,10 @@ package PolyGlot;
 import PolyGlot.PGTUtil.WindowMode;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -30,9 +33,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -57,8 +66,8 @@ public class ScrLogoDetails extends PFrame {
      */
     public ScrLogoDetails(DictCore _core) {
         setNimbus();
-        setupKeyStrokes();
         initComponents();        
+        setupKeyStrokes(); // TODO: address this warning...
 
         core = _core;
         
@@ -67,6 +76,50 @@ public class ScrLogoDetails extends PFrame {
         populateLogographs();
         populateLogoProps();
         setupListeners();
+        
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            btnAddLogo.setToolTipText(btnAddLogo.getToolTipText() + " (⌘ +)");
+            btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (⌘ -)");
+        } else {
+            btnAddLogo.setToolTipText(btnAddLogo.getToolTipText() + " (CTRL +)");
+            btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (CTRL -)");
+        }
+    }
+    
+    @Override
+    protected void setupKeyStrokes() {
+        addBindingsToPanelComponents(this.getRootPane());
+        super.setupKeyStrokes();
+    }
+
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        Action addAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addLogo();
+            }
+        };
+        Action delAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteLogo();
+            }
+        };
+        String addKey = "addLogoGraph";
+        String delKey = "delLogoGraph";
+        int mask;
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            mask = KeyEvent.META_DOWN_MASK;
+        } else {
+            mask = KeyEvent.CTRL_DOWN_MASK;
+        }
+        InputMap im = c.getInputMap();
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), addKey);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), delKey);
+        ActionMap am = c.getActionMap();
+        am.put(addKey, addAction);
+        am.put(delKey, delAction);
     }
 
     /**
@@ -776,7 +829,34 @@ public class ScrLogoDetails extends PFrame {
 
         super.dispose();
     }
+    
+    private void addLogo() {
+        LogoNode newNode = new LogoNode();
+        newNode.setValue("NEW LOGOGRAPH");
 
+        curPopulating = true;
+        // save table/list values before continuing
+        int curNode = lstLogos.getSelectedIndex();
+        if (curNode != -1) {
+            saveReadings(curNode, true);
+            saveRads(curNode, true);
+        }
+
+        try {
+            core.getLogoCollection().addNode(newNode);
+        } catch (Exception e) {
+            InfoBox.error("Logograph Error", "Unable to create Logograph: " + e.getMessage(), this);
+        }
+
+        populateLogographs();
+
+        lstLogos.setSelectedIndex(0);
+        lstLogos.ensureIndexIsVisible(0);
+
+        curPopulating = false;
+
+        populateLogoProps();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1215,31 +1295,7 @@ public class ScrLogoDetails extends PFrame {
      * @param evt event leading to action
      */
     private void btnAddLogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLogoActionPerformed
-        LogoNode newNode = new LogoNode();
-        newNode.setValue("NEW LOGOGRAPH");
-
-        curPopulating = true;
-        // save table/list values before continuing
-        int curNode = lstLogos.getSelectedIndex();
-        if (curNode != -1) {
-            saveReadings(curNode, true);
-            saveRads(curNode, true);
-        }
-
-        try {
-            core.getLogoCollection().addNode(newNode);
-        } catch (Exception e) {
-            InfoBox.error("Logograph Error", "Unable to create Logograph: " + e.getMessage(), this);
-        }
-
-        populateLogographs();
-
-        lstLogos.setSelectedIndex(0);
-        lstLogos.ensureIndexIsVisible(0);
-
-        curPopulating = false;
-
-        populateLogoProps();
+        addLogo();
     }//GEN-LAST:event_btnAddLogoActionPerformed
 
     private void lstLogosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLogosValueChanged

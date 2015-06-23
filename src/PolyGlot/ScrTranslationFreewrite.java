@@ -20,6 +20,8 @@
 
 package PolyGlot;
 
+import javax.swing.JComponent;
+
 /**
  *
  * @author draque
@@ -82,6 +84,11 @@ public class ScrTranslationFreewrite extends PFrame {
         s.setVisible(true);
         
         return s;
+    }
+    
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        // do nothing
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
