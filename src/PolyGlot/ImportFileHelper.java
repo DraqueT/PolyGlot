@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -41,6 +42,7 @@ public class ImportFileHelper {
     private String iGender;
     private String iDefinition;
     private String iPronunciation;
+    private String delimiter;
     private boolean bFirstLineLabels;
     private boolean bCreateGenders;
     private boolean bCreateTypes;
@@ -51,7 +53,7 @@ public class ImportFileHelper {
 
     public void setOptions(String _iConWord, String _iLocalWord, String _iType,
             String _iGender, String _iDefinition, String _iPronunciation,
-            boolean _bFirstLineLabels, boolean _bCreateTypes,
+            String _delimiter, boolean _bFirstLineLabels, boolean _bCreateTypes,
             boolean _bCreateGenders) {
         iConWord = _iConWord;
         iLocalWord = _iLocalWord;
@@ -62,6 +64,7 @@ public class ImportFileHelper {
         bFirstLineLabels = _bFirstLineLabels;
         bCreateTypes = _bCreateTypes;
         bCreateGenders = _bCreateGenders;
+        delimiter = _delimiter;
     }
 
     /**
@@ -77,10 +80,13 @@ public class ImportFileHelper {
                 || inputFile.endsWith("xlsx")
                 || inputFile.endsWith("xlsm")) {
             importExcel(inputFile, sheetNum);
-        } else if (inputFile.endsWith("csv")) {
+        } else if (inputFile.endsWith("csv")
+                || inputFile.endsWith("txt")) {
             importCSV(inputFile);
         } else {
-            throw new Exception("Unrecognized file type for file: " + inputFile);
+            importCSV(inputFile);
+            throw new InvalidFormatException("Unrecognized file type for file: " 
+                    + inputFile + ". Defaulting to CSV functionality.");
         }
     }
 
@@ -120,7 +126,7 @@ public class ImportFileHelper {
         }
 
         while ((line = br.readLine()) != null) {
-            String[] columns = line.split(",");
+            String[] columns = line.split(delimiter);
 
             ConWord newWord = new ConWord();
 

@@ -33,7 +33,7 @@
                   <Group type="102" attributes="0">
                       <Component id="jLabel1" min="-2" pref="81" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtFileName" pref="261" max="32767" attributes="0"/>
+                      <Component id="txtFileName" pref="299" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnBrowse" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -106,14 +106,17 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="chkFirstLabels" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jLabel8" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jLabel4" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jLabel5" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jLabel6" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jLabel7" alignment="0" pref="95" max="32767" attributes="0"/>
-                              <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="jLabel8" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jLabel4" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jLabel5" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jLabel6" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jLabel7" alignment="0" pref="95" max="32767" attributes="0"/>
+                                  <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -126,12 +129,13 @@
                                   <Component id="txtLocalWord" alignment="0" max="32767" attributes="0"/>
                                   <Component id="txtConWord" alignment="0" max="32767" attributes="0"/>
                               </Group>
+                              <Component id="txtDelimiter" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPane1" pref="254" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="292" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -184,13 +188,21 @@
                               <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtGender" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="txtDelimiter" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="43" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="jScrollPane1" min="-2" pref="309" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace pref="12" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtExcelSheet" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtExcelSheet" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -298,7 +310,7 @@
                 <Property name="columns" type="int" value="20"/>
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="5"/>
-                <Property name="text" type="java.lang.String" value="Columns may be addressed numerically or alphabetically. If numerically, begin with 0.&#xa;&#xa;Map the columns within the target Excel/CSV file to their related fields within the conlang dictionary. &#xa;&#xa;If the &#x201c;First row is labels&#x201d; box is selected, the first row of the grid will be ignored.&#xa;&#xa;To map multiple columns to a single field (generally multiple to definition), simply add the row numbers separated by a comma.&#xa;&#xa;If you don&apos;t know what &quot;Excel Sheet&quot; means, or are using a CSV leave it at 0."/>
+                <Property name="text" type="java.lang.String" value="Columns may be addressed numerically or alphabetically. If numerically, begin with 0.&#xa;&#xa;Map the columns within the target Excel/CSV file to their related fields within the conlang dictionary. &#xa;&#xa;If the &#x201c;First row is labels&#x201d; box is selected, the first row of the grid will be ignored.&#xa;&#xa;To map multiple columns to a single field (generally multiple to definition), simply add the row numbers separated by a comma.&#xa;&#xa;The dilimiter is the character separating entries if you are importing from a CSV. Leave blank to default to a comma.&#xa;&#xa;If you don&apos;t know what &quot;Excel Sheet&quot; means, or are using a CSV leave it at 0."/>
                 <Property name="wrapStyleWord" type="boolean" value="true"/>
               </Properties>
             </Component>
@@ -313,6 +325,16 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="0"/>
             <Property name="toolTipText" type="java.lang.String" value="Sheet of excel doument to import"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel10">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Delimiter"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtDelimiter">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Delimiter character for CSV files. Blank to default to comma. Unneccessary for excel imports."/>
           </Properties>
         </Component>
       </SubComponents>
