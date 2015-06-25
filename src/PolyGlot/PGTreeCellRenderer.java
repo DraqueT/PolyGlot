@@ -35,20 +35,26 @@ public class PGTreeCellRenderer extends DefaultTreeCellRenderer {
 
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-        DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) value;
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 
-        Object userObject = nodo.getUserObject();
+        Object userObject = node.getUserObject();
         if (userObject != null) {
             setText(value.toString() + " [" + userObject.getClass().getName() + "]");
         } else {
             setText(value.toString());
         }
 
-        if (nodo instanceof GrammarChapNode
+        if (node instanceof GrammarChapNode
                 && expanded) {
             setIcon((Icon) UIManager.get("Tree.openIcon"));
-        } else if (nodo instanceof GrammarChapNode
+        } else if (node instanceof GrammarChapNode
                 && !expanded) {
+            setIcon((Icon) UIManager.get("Tree.closedIcon"));
+        } else if (node instanceof GrammarSectionNode) {
+            setIcon((Icon) new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/treeNode.png")));
+        } else if (expanded) {
+            setIcon((Icon) UIManager.get("Tree.openIcon"));
+        } else if (!expanded && !leaf) {
             setIcon((Icon) UIManager.get("Tree.closedIcon"));
         } else {
             setIcon((Icon) new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/treeNode.png")));

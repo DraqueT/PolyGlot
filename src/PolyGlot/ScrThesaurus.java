@@ -65,6 +65,7 @@ public class ScrThesaurus extends PFrame {
         root.setAsRootNode(core.getThesManager().getRoot());
 
         TreeModel newModel = new DefaultTreeModel(root);
+        treThes.setCellRenderer(new PGTreeCellRenderer());
         treThes.setModel(newModel);
         treThes.setRootVisible(false);
 
