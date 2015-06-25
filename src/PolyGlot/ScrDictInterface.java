@@ -415,6 +415,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -1601,6 +1602,14 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         });
         jMenu1.add(jMenuItem4);
 
+        jMenuItem5.setText("LANG PROPS");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem5);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -1865,6 +1874,11 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         Window window = ScrGenders.run(core);
         childFrames.add(window);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        Window window = ScrLangProps.run(core);
+        childFrames.add(window);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
     
     @Override
     public void dispose() {
@@ -4076,6 +4090,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
