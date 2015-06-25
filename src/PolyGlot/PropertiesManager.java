@@ -37,7 +37,6 @@ public class PropertiesManager {
     private Font font = null;
     private Integer fontStyle = 0;
     private Integer fontSize = 0;
-    private boolean proAutoPop = false;
     private final Map alphaOrder;
     private String alphaPlainText = "";
     private String langName = "";
@@ -203,20 +202,6 @@ public class PropertiesManager {
     }
 
     /**
-     * @return the proAutoPop
-     */
-    public boolean isProAutoPop() {
-        return proAutoPop;
-    }
-
-    /**
-     * @param _proAutoPop the proAutoPop to set
-     */
-    public void setProAutoPop(boolean _proAutoPop) {
-        proAutoPop = _proAutoPop;
-    }
-
-    /**
      * @return the alphaOrder
      */
     public Map getAlphaOrder() {
@@ -370,11 +355,6 @@ public class PropertiesManager {
         // store alpha order for conlang
         wordValue = doc.createElement(PGTUtil.langPropAlphaOrderXID);
         wordValue.appendChild(doc.createTextNode(getAlphaPlainText()));
-        rootElement.appendChild(wordValue);
-
-        // store option to autopopulate pronunciations
-        wordValue = doc.createElement(PGTUtil.proAutoPopXID);
-        wordValue.appendChild(doc.createTextNode(isProAutoPop() ? "T" : "F"));
         rootElement.appendChild(wordValue);
 
         // store option for mandatory Types

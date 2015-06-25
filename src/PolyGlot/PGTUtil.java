@@ -93,7 +93,6 @@ public class PGTUtil {
     public static final String proGuideXID = "proGuide";
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";
-    public static final String proAutoPopXID = "proAutoPop";
     
     // thesaurus properties
     public static final String thesNodeXID = "thesNode";

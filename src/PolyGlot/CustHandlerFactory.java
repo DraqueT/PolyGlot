@@ -124,7 +124,6 @@ public class CustHandlerFactory {
             boolean bDecRelId = false;
             boolean bpronBase = false;
             boolean bpronPhon = false;
-            boolean bproAutoPop = false;
             boolean bwordPlur = false;
             boolean blangPropTypeMandatory = false;
             boolean blangPropLocalMandatory = false;
@@ -216,9 +215,10 @@ public class CustHandlerFactory {
                     bpronBase = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuidePhonXID)) {
                     bpronPhon = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
+                } /*else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
+                    // Removed as of 1.0
                     bproAutoPop = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.wordProcOverrideXID)) {
+                }*/ else if (qName.equalsIgnoreCase(PGTUtil.wordProcOverrideXID)) {
                     bwordProcOverride = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordClassPlurManXID)) {
                     bwordClassPlurMan = true;
@@ -391,9 +391,10 @@ public class CustHandlerFactory {
                     bpronBase = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuidePhonXID)) {
                     bpronPhon = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
+                } /*else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
+                    // Removed as of 1.0
                     bproAutoPop = false;
-                }  else if (qName.equalsIgnoreCase(PGTUtil.wordRuleOverrideXID)) { 
+                }*/  else if (qName.equalsIgnoreCase(PGTUtil.wordRuleOverrideXID)) { 
                     bwordRuleOverride = false;
                 }
             }
@@ -502,10 +503,11 @@ public class CustHandlerFactory {
                 } else if (bpronPhon) {
                     proBuffer.setPronunciation(new String(ch, start, length));
                     bpronPhon = false;
-                } else if (bproAutoPop) {
+                } /*else if (bproAutoPop) {
+                    // Removed as of 1.0
                     propertiesManager.setProAutoPop((new String(ch, start, length).equalsIgnoreCase("T")));
                     bproAutoPop = false;
-                } else if (bwordClassProcMan) {
+                }*/ else if (bwordClassProcMan) {
                     typeCollection.getBufferType().setProcMandatory(new String(ch, start, length).equals("T"));
                     bwordClassProcMan = false;
                 } else if (bwordClassGenderMan) {
@@ -565,7 +567,6 @@ public class CustHandlerFactory {
             boolean bDecCombId = false;
             boolean bpronBase = false;
             boolean bpronPhon = false;
-            boolean bproAutoPop = false;
             boolean bwordPlur = false;
             boolean blangPropTypeMandatory = false;
             boolean blangPropLocalMandatory = false;
@@ -698,9 +699,10 @@ public class CustHandlerFactory {
                     bpronBase = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuidePhonXID)) {
                     bpronPhon = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
+                } /*else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
+                    // Removed as of 1.0
                     bproAutoPop = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.wordProcOverrideXID)) {
+                }*/ else if (qName.equalsIgnoreCase(PGTUtil.wordProcOverrideXID)) {
                     bwordProcOverride = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordClassPlurManXID)) {
                     bwordClassPlurMan = true;
@@ -922,9 +924,10 @@ public class CustHandlerFactory {
                     bpronBase = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuidePhonXID)) {
                     bpronPhon = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
+                } /*else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
+                    // Removed as of 1.0
                     bproAutoPop = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionNodeXID)) {
+                }*/ else if (qName.equalsIgnoreCase(PGTUtil.dimensionNodeXID)) {
                     try {
                         declensionMgr.getBuffer().insertBuffer();
                         declensionMgr.getBuffer().clearBuffer();
@@ -1131,10 +1134,11 @@ public class CustHandlerFactory {
                 } else if (bpronPhon) {
                     proBuffer.setPronunciation(proBuffer.getPronunciation()
                             + new String(ch, start, length));
-                } else if (bproAutoPop) {
+                } /*else if (bproAutoPop) {
+                    // Removed as of 1.0
                     propertiesManager.setProAutoPop((new String(ch, start, length).equalsIgnoreCase("T")));
                     bproAutoPop = false;
-                } else if (bwordClassProcMan) {
+                }*/ else if (bwordClassProcMan) {
                     typeCollection.getBufferType().setProcMandatory(new String(ch, start, length).equals("T"));
                     bwordClassProcMan = false;
                 } else if (bwordClassGenderMan) {

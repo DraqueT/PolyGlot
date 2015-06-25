@@ -211,8 +211,7 @@ public final class ScrLexicon extends PFrame {
      */
     private void genProc() {
         if (curPopulating
-                || chkProcOverride.isSelected()
-                || !core.getPropertiesManager().isProAutoPop()) {
+                || chkProcOverride.isSelected()) {
             return;
         }
 

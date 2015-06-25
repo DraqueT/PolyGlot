@@ -1749,7 +1749,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     }//GEN-LAST:event_btnChangeFontActionPerformed
 
     private void chkAutopopProcsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAutopopProcsActionPerformed
-        core.getPropertiesManager().setProAutoPop(chkAutopopProcs.isSelected());
+        // Removed as of 1.0
+        //core.getPropertiesManager().setProAutoPop(chkAutopopProcs.isSelected());
     }//GEN-LAST:event_chkAutopopProcsActionPerformed
 
     private void mnuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExitActionPerformed
@@ -2973,7 +2974,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         txtLangName.setText(core.getPropertiesManager().getLangName());
         txtAlphaOrder.setText(core.getPropertiesManager().getAlphaPlainText());
         txtLangFont.setText(core.getPropertiesManager().getFontCon().getFontName());
-        chkAutopopProcs.setSelected(core.getPropertiesManager().isProAutoPop());
+        //chkAutopopProcs.setSelected(core.getPropertiesManager().isProAutoPop()); // Removed as of 1.0
         chkPropLocalMandatory.setSelected(core.getPropertiesManager().isLocalMandatory());
         chkPropLocalUniqueness.setSelected(core.getPropertiesManager().isLocalUniqueness());
         chkPropTypesMandatory.setSelected(core.getPropertiesManager().isTypesMandatory());
