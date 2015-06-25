@@ -110,21 +110,28 @@ public class FormattedTextHelper {
         pos = strip.indexOf("\"");
         strip = strip.substring(0, pos);
         
-        // can't switch on strings in java 1.6...
-        if (strip.equals(black)) {
-            ret = Color.black;
-        } else if (strip.equals(red)) {
-            ret = Color.red;
-        } else if (strip.equals(blue)) {
-            ret = Color.blue;
-        } else if (strip.equals(gray)) {
-            ret = Color.gray;
-        } else if (strip.equals(yellow)) {
-            ret = Color.yellow;
-        } else if (strip.equals(green)) {
-            ret = Color.green;
-        } else {
-            ret = Color.black;
+        switch (strip) {
+            case black:
+                ret = Color.black;
+                break;
+            case red:
+                ret = Color.red;
+                break;
+            case blue:
+                ret = Color.blue;
+                break;
+            case gray:
+                ret = Color.gray;
+                break;
+            case yellow:
+                ret = Color.yellow;
+                break;
+            case green:
+                ret = Color.green;
+                break;
+            default:
+                ret = Color.black;
+                break;
         }
                 
         return ret;
@@ -285,21 +292,28 @@ public class FormattedTextHelper {
     public static Color textToColor(String color) {
         Color ret;
         
-        // Java 1.6 can't switch on a string...
-        if (color.equals(black)) {
-            ret = Color.black;
-        } else if (color.equals(red)) {
-            ret = Color.red;
-        } else if (color.equals(green)) {
-            ret = Color.green;
-        } else if (color.equals(yellow)) {
-            ret = Color.yellow;
-        } else if (color.equals(blue)) {
-            ret = Color.blue;
-        } else if (color.equals(gray)) {
-            ret = Color.gray;
-        } else {
-            ret = Color.black;
+        switch (color) {
+            case black:
+                ret = Color.black;
+                break;
+            case red:
+                ret = Color.red;
+                break;
+            case green:
+                ret = Color.green;
+                break;
+            case yellow:
+                ret = Color.yellow;
+                break;
+            case blue:
+                ret = Color.blue;
+                break;
+            case gray:
+                ret = Color.gray;
+                break;
+            default:
+                ret = Color.black;
+                break;
         }
         
         return ret;

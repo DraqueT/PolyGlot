@@ -51,7 +51,7 @@ public class ScrUpdateAlert extends PFrame {
     public ScrUpdateAlert(boolean verbose, String curVersion) throws Exception {
         setupKeyStrokes();
         initComponents();
-        
+
         jTextPane1.setContentType("text/html");
 
         Document doc = WebInterface.checkForUpdates(curVersion);
@@ -64,11 +64,11 @@ public class ScrUpdateAlert extends PFrame {
         for (Node curButton = buttons.getFirstChild();
                 curButton != null;
                 curButton = curButton.getNextSibling()) {
-            Node nameNode = ((Element)curButton.getChildNodes()).getElementsByTagName("Text").item(0);
-            Node linkNode = ((Element)curButton.getChildNodes()).getElementsByTagName("Link").item(0);
-            
+            Node nameNode = ((Element) curButton.getChildNodes()).getElementsByTagName("Text").item(0);
+            Node linkNode = ((Element) curButton.getChildNodes()).getElementsByTagName("Link").item(0);
+
             buttonMap.put(nameNode.getTextContent(), linkNode.getTextContent());
-            
+
             JButton newButton = new JButton();
             newButton.addActionListener(new ActionListener() {
                 @Override
@@ -76,14 +76,12 @@ public class ScrUpdateAlert extends PFrame {
                     JButton thisButton = (JButton) e.getSource();
                     String link = buttonMap.get(thisButton.getText());
                     URI uri;
-                    
+
                     try {
                         uri = new URI(link);
                         uri.normalize();
                         java.awt.Desktop.getDesktop().browse(uri);
-                    } catch (IOException ex) {
-                        InfoBox.error("Browser Error", "Unable to open page: " + link, parent);
-                    } catch (URISyntaxException ex) {
+                    } catch (IOException | URISyntaxException ex) {
                         InfoBox.error("Browser Error", "Unable to open page: " + link, parent);
                     }
                 }
@@ -115,7 +113,7 @@ public class ScrUpdateAlert extends PFrame {
             setVisible(true);
         }
     }
-    
+
     @Override
     public void addBindingToComponent(JComponent c) {
         // do nothing
@@ -193,13 +191,7 @@ public class ScrUpdateAlert extends PFrame {
                     break;
                 }
             }
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScrUpdateAlert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScrUpdateAlert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScrUpdateAlert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(ScrUpdateAlert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 

@@ -285,8 +285,7 @@ public class SoundRecorder {
         soundThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info);
+                try (SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info)){
                     sourceLine.open(format);
                     sourceLine.start();
 
@@ -351,15 +350,7 @@ public class SoundRecorder {
                     sourceLine.close();
                     ais.close();
                     input.close();
-                } catch (LineUnavailableException e) {
-                    //e.printStackTrace();
-                    InfoBox.error("Play Error", "Unable to play audio: "
-                            + e.getLocalizedMessage(), parentWindow);
-                } catch (IOException e) {
-                    //e.printStackTrace();
-                    InfoBox.error("Play Error", "Unable to play audio: "
-                            + e.getLocalizedMessage(), parentWindow);
-                } catch (InterruptedException e) {
+                } catch (LineUnavailableException | IOException | InterruptedException e) {
                     //e.printStackTrace();
                     InfoBox.error("Play Error", "Unable to play audio: "
                             + e.getLocalizedMessage(), parentWindow);

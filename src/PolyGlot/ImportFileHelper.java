@@ -116,173 +116,173 @@ public class ImportFileHelper {
 
     private void importCSV(String inputFile) throws Exception {
         File file = new File(inputFile);
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String line;
-        List<String> columnList;
-
-        // skip first line if specified by user
-        if (bFirstLineLabels) {
-            br.readLine();
-        }
-
-        while ((line = br.readLine()) != null) {
-            String[] columns = line.split(delimiter);
-
-            ConWord newWord = new ConWord();
-
-            // add conword
-            columnList = Arrays.asList(iConWord.split(","));
-            for (String entry : columnList) {
-                if (entry == null || entry.equals("")) {
-                    continue;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            List<String> columnList;
+            
+            // skip first line if specified by user
+            if (bFirstLineLabels) {
+                br.readLine();
+            }
+            
+            while ((line = br.readLine()) != null) {
+                String[] columns = line.split(delimiter);
+                
+                ConWord newWord = new ConWord();
+                
+                // add conword
+                columnList = Arrays.asList(iConWord.split(","));
+                for (String entry : columnList) {
+                    if (entry == null || entry.equals("")) {
+                        continue;
+                    }
+                    
+                    Integer cellNum = cellNumCheckGet(entry);
+                    
+                    // fail silently for files that truncate empty trailing fields
+                    if (cellNum > columns.length) {
+                        continue;
+                    }
+                    
+                    if (newWord.getValue().trim().equals("")) {
+                        newWord.setValue(columns[cellNum].trim());
+                    } else {
+                        newWord.setValue(newWord.getValue() + ", " + columns[cellNum].trim());
+                    }
                 }
-
-                Integer cellNum = cellNumCheckGet(entry);
-
-                // fail silently for files that truncate empty trailing fields
-                if (cellNum > columns.length) {
-                    continue;
-                }
-
+                
+                // if conword is blank, continue. Bare minimum for imported word is a conword value.
                 if (newWord.getValue().trim().equals("")) {
-                    newWord.setValue(columns[cellNum].trim());
-                } else {
-                    newWord.setValue(newWord.getValue() + ", " + columns[cellNum].trim());
+                    continue;
                 }
+                
+                // add definition
+                columnList = Arrays.asList(iDefinition.split(","));
+                for (String entry : columnList) {
+                    if (entry == null || entry.equals("")) {
+                        continue;
+                    }
+                    
+                    Integer cellNum = cellNumCheckGet(entry);
+                    
+                    // fail silently for files that truncate empty trailing fields
+                    if (cellNum > columns.length) {
+                        continue;
+                    }
+                    
+                    if (newWord.getDefinition().trim().equals("")) {
+                        newWord.setDefinition(columns[cellNum].trim());
+                    } else {
+                        newWord.setDefinition(newWord.getDefinition() + "\n\n" + columns[cellNum].trim());
+                    }
+                }
+                
+                // add gender
+                columnList = Arrays.asList(iGender.split(","));
+                for (String entry : columnList) {
+                    if (entry == null || entry.equals("")) {
+                        continue;
+                    }
+                    
+                    Integer cellNum = cellNumCheckGet(entry);
+                    
+                    // fail silently for files that truncate empty trailing fields
+                    if (cellNum > columns.length) {
+                        continue;
+                    }
+                    
+                    if (newWord.getGender().trim().equals("")) {
+                        newWord.setGender(columns[cellNum].trim());
+                    } else {
+                        newWord.setGender(newWord.getGender() + ", " + columns[cellNum].trim());
+                    }
+                }
+                // add gender to list of potential genders if applicable and user
+                // specified
+                if (bCreateGenders && !newWord.getGender().trim().equals("")
+                        && !core.getGenders().nodeExists(newWord.getGender())) {
+                    GenderNode newGender = new GenderNode();
+                    newGender.setValue(newWord.getGender());
+                    core.getGenders().clear();
+                    core.getGenders().addNode(newGender);
+                }
+                
+                // add local word
+                columnList = Arrays.asList(iLocalWord.split(","));
+                for (String entry : columnList) {
+                    if (entry == null || entry.equals("")) {
+                        continue;
+                    }
+                    
+                    Integer cellNum = cellNumCheckGet(entry);
+                    
+                    // fail silently for files that truncate empty trailing fields
+                    if (cellNum > columns.length) {
+                        continue;
+                    }
+                    
+                    if (newWord.getLocalWord().trim().equals("")) {
+                        newWord.setLocalWord(columns[cellNum].trim());
+                    } else {
+                        newWord.setLocalWord(newWord.getLocalWord() + ", " + columns[cellNum].trim());
+                    }
+                }
+                
+                // add pronunciation
+                columnList = Arrays.asList(iPronunciation.split(","));
+                for (String entry : columnList) {
+                    if (entry == null || entry.equals("")) {
+                        continue;
+                    }
+                    
+                    Integer cellNum = cellNumCheckGet(entry);
+                    
+                    // fail silently for files that truncate empty trailing fields
+                    if (cellNum > columns.length) {
+                        continue;
+                    }
+                    
+                    if (newWord.getPronunciation().trim().equals("")) {
+                        newWord.setPronunciation(columns[cellNum].trim());
+                    } else {
+                        newWord.setPronunciation(newWord.getPronunciation() + ", " + columns[cellNum].trim());
+                    }
+                }
+                
+                // add type
+                columnList = Arrays.asList(iType.split(","));
+                for (String entry : columnList) {
+                    if (entry == null || entry.equals("")) {
+                        continue;
+                    }
+                    
+                    Integer cellNum = cellNumCheckGet(entry);
+                    
+                    // fail silently for files that truncate empty trailing fields
+                    if (cellNum > columns.length) {
+                        continue;
+                    }
+                    
+                    if (newWord.getWordType().trim().equals("")) {
+                        newWord.setWordType(columns[cellNum].trim());
+                    } else {
+                        newWord.setWordType(newWord.getWordType() + ", " + columns[cellNum].trim());
+                    }
+                }
+                
+                // add type to list of potential types if applicable and user
+                // specified
+                if (bCreateTypes && !newWord.getWordType().trim().equals("")
+                        && !core.getTypes().nodeExists(newWord.getWordType())) {
+                    core.getTypes().clear();
+                    TypeNode newType = core.getTypes().getBufferType();
+                    newType.setValue(newWord.getWordType());
+                    core.getTypes().insert();
+                }
+                
+                core.getWordCollection().addWord(newWord);
             }
-
-            // if conword is blank, continue. Bare minimum for imported word is a conword value.
-            if (newWord.getValue().trim().equals("")) {
-                continue;
-            }
-
-            // add definition
-            columnList = Arrays.asList(iDefinition.split(","));
-            for (String entry : columnList) {
-                if (entry == null || entry.equals("")) {
-                    continue;
-                }
-
-                Integer cellNum = cellNumCheckGet(entry);
-
-                // fail silently for files that truncate empty trailing fields
-                if (cellNum > columns.length) {
-                    continue;
-                }
-
-                if (newWord.getDefinition().trim().equals("")) {
-                    newWord.setDefinition(columns[cellNum].trim());
-                } else {
-                    newWord.setDefinition(newWord.getDefinition() + "\n\n" + columns[cellNum].trim());
-                }
-            }
-
-            // add gender
-            columnList = Arrays.asList(iGender.split(","));
-            for (String entry : columnList) {
-                if (entry == null || entry.equals("")) {
-                    continue;
-                }
-
-                Integer cellNum = cellNumCheckGet(entry);
-
-                // fail silently for files that truncate empty trailing fields
-                if (cellNum > columns.length) {
-                    continue;
-                }
-
-                if (newWord.getGender().trim().equals("")) {
-                    newWord.setGender(columns[cellNum].trim());
-                } else {
-                    newWord.setGender(newWord.getGender() + ", " + columns[cellNum].trim());
-                }
-            }
-            // add gender to list of potential genders if applicable and user
-            // specified
-            if (bCreateGenders && !newWord.getGender().trim().equals("")
-                    && !core.getGenders().nodeExists(newWord.getGender())) {
-                GenderNode newGender = new GenderNode();
-                newGender.setValue(newWord.getGender());
-                core.getGenders().clear();
-                core.getGenders().addNode(newGender);
-            }
-
-            // add local word
-            columnList = Arrays.asList(iLocalWord.split(","));
-            for (String entry : columnList) {
-                if (entry == null || entry.equals("")) {
-                    continue;
-                }
-
-                Integer cellNum = cellNumCheckGet(entry);
-
-                // fail silently for files that truncate empty trailing fields
-                if (cellNum > columns.length) {
-                    continue;
-                }
-
-                if (newWord.getLocalWord().trim().equals("")) {
-                    newWord.setLocalWord(columns[cellNum].trim());
-                } else {
-                    newWord.setLocalWord(newWord.getLocalWord() + ", " + columns[cellNum].trim());
-                }
-            }
-
-            // add pronunciation
-            columnList = Arrays.asList(iPronunciation.split(","));
-            for (String entry : columnList) {
-                if (entry == null || entry.equals("")) {
-                    continue;
-                }
-
-                Integer cellNum = cellNumCheckGet(entry);
-
-                // fail silently for files that truncate empty trailing fields
-                if (cellNum > columns.length) {
-                    continue;
-                }
-
-                if (newWord.getPronunciation().trim().equals("")) {
-                    newWord.setPronunciation(columns[cellNum].trim());
-                } else {
-                    newWord.setPronunciation(newWord.getPronunciation() + ", " + columns[cellNum].trim());
-                }
-            }
-
-            // add type
-            columnList = Arrays.asList(iType.split(","));
-            for (String entry : columnList) {
-                if (entry == null || entry.equals("")) {
-                    continue;
-                }
-
-                Integer cellNum = cellNumCheckGet(entry);
-
-                // fail silently for files that truncate empty trailing fields
-                if (cellNum > columns.length) {
-                    continue;
-                }
-
-                if (newWord.getWordType().trim().equals("")) {
-                    newWord.setWordType(columns[cellNum].trim());
-                } else {
-                    newWord.setWordType(newWord.getWordType() + ", " + columns[cellNum].trim());
-                }
-            }
-
-            // add type to list of potential types if applicable and user
-            // specified
-            if (bCreateTypes && !newWord.getWordType().trim().equals("")
-                    && !core.getTypes().nodeExists(newWord.getWordType())) {
-                core.getTypes().clear();
-                TypeNode newType = core.getTypes().getBufferType();
-                newType.setValue(newWord.getWordType());
-                core.getTypes().insert();
-            }
-
-            core.getWordCollection().addWord(newWord);
         }
-        br.close();
     }
 
     private Integer cellNumCheckGet(String entry) throws Exception {

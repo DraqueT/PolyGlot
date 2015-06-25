@@ -182,10 +182,9 @@ public class ExcelExport {
         }
 
         try {
-            FileOutputStream out
-                    = new FileOutputStream(new File(fileName));
-            workbook.write(out);
-            out.close();
+            try (FileOutputStream out = new FileOutputStream(new File(fileName))) {
+                workbook.write(out);
+            }
         } catch (IOException e) {
             throw new Exception("Unable to write file: " + fileName);
         }

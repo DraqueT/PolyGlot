@@ -28,7 +28,6 @@ public class TypeNode extends DictNode{
     private String notes = "";
     private String regexPattern = "";
     private boolean genderMandatory = false;
-    private boolean pluralMandatory = false;
     private boolean procMandatory = false;
     private boolean defMandatory = false;
     

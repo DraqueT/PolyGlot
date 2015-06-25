@@ -66,8 +66,7 @@ public class ScrLogoQuickView extends PFrame {
      */
     public ScrLogoQuickView(DictCore _core, ConWord _conWord) {
         initComponents();
-        setupKeyStrokes(); // TODO: take care of this warning...
-
+        
         conWord = _conWord;
         core = _core;
 

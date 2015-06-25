@@ -67,8 +67,7 @@ public class ScrLogoDetails extends PFrame {
     public ScrLogoDetails(DictCore _core) {
         setNimbus();
         initComponents();        
-        setupKeyStrokes(); // TODO: address this warning...
-
+        
         core = _core;
         
         setupFonts();
@@ -1408,7 +1407,8 @@ public class ScrLogoDetails extends PFrame {
 
     public static ScrLogoDetails run(DictCore _core) {
         final ScrLogoDetails s = new ScrLogoDetails(_core);
-
+        s.setupKeyStrokes();
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override

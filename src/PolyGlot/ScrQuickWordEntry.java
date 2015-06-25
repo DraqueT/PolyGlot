@@ -482,15 +482,11 @@ public class ScrQuickWordEntry extends PDialog {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScrQuickWordEntry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScrQuickWordEntry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScrQuickWordEntry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScrQuickWordEntry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            InfoBox.error("Window Error", "Unable to open quick word entry screen: " + ex.getLocalizedMessage(), _parent);
         }
+        //</editor-fold>
+        
         //</editor-fold>
 
         ScrQuickWordEntry ret = new ScrQuickWordEntry(_core, _parent);

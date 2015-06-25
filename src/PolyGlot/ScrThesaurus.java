@@ -61,7 +61,6 @@ public class ScrThesaurus extends PFrame {
         core = _core;
         parent = _parent;
         initComponents();
-        setupKeyStrokes(); // TODO: address warning...
         ThesTreeNode root = new ThesTreeNode();
         root.setAsRootNode(core.getThesManager().getRoot());
 
@@ -619,20 +618,15 @@ public class ScrThesaurus extends PFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScrThesaurus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScrThesaurus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScrThesaurus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScrThesaurus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            InfoBox.error("Window Error", "Unable to open thesarus: " + ex.getLocalizedMessage(), parent);
         }
 
         // set the leaf icon to be a folder, since all nodes are for containing words
         UIManager.put("Tree.leafIcon", UIManager.get("Tree.closedIcon"));
 
         final ScrThesaurus s = new ScrThesaurus(_core, parent);
+        s.setupKeyStrokes();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

@@ -20,10 +20,7 @@
 package PolyGlot;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
-import java.awt.event.KeyEvent;
+import java.awt.FontFormatException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
@@ -146,17 +143,13 @@ public class DictCore {
             handler.setTypeCollection(typeCollection);
 
             saxParser.parse(IOHandler.getDictFile(_fileName), handler);
-        } catch (ParserConfigurationException e) {
-            throw new Exception(e.getMessage());
-        } catch (SAXException e) {
-            throw new Exception(e.getMessage());
-        } catch (IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new Exception(e.getMessage());
         }
 
         try {
             IOHandler.setFontFrom(_fileName, this);
-        } catch (Exception e) {
+        } catch (IOException | FontFormatException e) {
             loadLog += e.getLocalizedMessage() + "\n";
         }
 

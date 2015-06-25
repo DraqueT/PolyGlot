@@ -20,7 +20,6 @@
 package PolyGlot;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;

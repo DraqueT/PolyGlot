@@ -30,8 +30,30 @@ public class ScrDictMenu extends javax.swing.JFrame {
      */
     public ScrDictMenu() {
         initComponents();
+        checkJavaVersion();
     }
 
+    /**
+     * Checks to make certain Java is a high enough version. Informs user and 
+     * quits otherwise.
+     */
+    private void checkJavaVersion() {
+        String javaVersion = System.getProperty("java.version");
+        
+        if (javaVersion.startsWith("1.0")
+                || javaVersion.startsWith("1.1")
+                || javaVersion.startsWith("1.2")
+                || javaVersion.startsWith("1.3")
+                || javaVersion.startsWith("1.4")
+                || javaVersion.startsWith("1.5")
+                || javaVersion.startsWith("1.6")) {
+            InfoBox.error("Please Upgrade Java", "Java " + javaVersion
+                    + " must be upgraded to run PolyGlot. Version 1.7 or higher is required to run PolyGlot.\n\n"
+                    + "Please upgrade at https://java.com/en/download/.", this);
+            System.exit(0);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -73,19 +95,17 @@ public class ScrDictMenu extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScrDictMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScrDictMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScrDictMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            // This is the only form that should have the traditional logger.
             java.util.logging.Logger.getLogger(ScrDictMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new ScrDictMenu().setVisible(true);
             }

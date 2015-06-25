@@ -1104,7 +1104,9 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        Window window = new ScrLogoQuickView(core, curWord);
+        // TODO: put this into a run method like all the other windows have...
+        ScrLogoQuickView window = new ScrLogoQuickView(core, curWord);
+        window.setupKeyStrokes();
         childFrames.add(window);
         window.setVisible(true);
         final Window parent = this;

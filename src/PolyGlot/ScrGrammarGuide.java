@@ -103,7 +103,6 @@ public class ScrGrammarGuide extends PFrame {
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button_pressed.png")));
         
         initComponents();
-        setupKeyStrokes(); // TODO: address warning...
         
         soundRecorder = new SoundRecorder(this);
         soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
@@ -607,9 +606,7 @@ public class ScrGrammarGuide extends PFrame {
 
         try {
             txtTimer.setFont(new IOHandler().getLcdFont().deriveFont(0, 18f));
-        } catch (FontFormatException e) {
-            InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), this);
-        } catch (IOException e) {
+        } catch (FontFormatException | IOException e) {
             InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), this);
         }
 
@@ -768,13 +765,7 @@ public class ScrGrammarGuide extends PFrame {
             if (soundRecorder.isRecording()) {
                 soundRecorder.endRecording();
             }
-        } catch (LineUnavailableException e) {
-            // on exception, inform user and replace sound recorder
-            soundRecorder = new SoundRecorder(this);
-            soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
-            InfoBox.error("Recorder Error", "Unable to end audio stream: " + e.getLocalizedMessage(), this);
-            //e.printStackTrace();
-        } catch (IOException e) {
+        } catch (LineUnavailableException | IOException e) {
             // on exception, inform user and replace sound recorder
             soundRecorder = new SoundRecorder(this);
             soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
@@ -956,10 +947,7 @@ public class ScrGrammarGuide extends PFrame {
     private void playPauseAudio() {
         try {
             soundRecorder.playPause();
-        } catch (LineUnavailableException e) {
-            InfoBox.error("Play Error", "Unable to play due to: " + e.getLocalizedMessage(), this);
-            //e.printStackTrace();
-        } catch (IOException e) {
+        } catch (LineUnavailableException | IOException e) {
             InfoBox.error("Play Error", "Unable to play due to: " + e.getLocalizedMessage(), this);
             //e.printStackTrace();
         }
@@ -987,6 +975,7 @@ public class ScrGrammarGuide extends PFrame {
 
     public static ScrGrammarGuide run(DictCore _core) {
         final ScrGrammarGuide s = new ScrGrammarGuide(_core);
+        s.setupKeyStrokes();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

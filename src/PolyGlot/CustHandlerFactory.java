@@ -63,32 +63,34 @@ public class CustHandlerFactory {
         versionNode = doc.getDocumentElement().getElementsByTagName(PGTUtil.pgVersionXID).item(0);
         versionNumber = versionNode == null ? "0" : versionNode.getTextContent();
 
-        // switch not used to maintain Java 6 compatibility... fucking 6. X(
-        if (versionNumber.equals("0")
-                || versionNumber.equals("0.5")
-                || versionNumber.equals("0.5.1")
-                || versionNumber.equals("0.6")
-                || versionNumber.equals("0.6.1")
-                || versionNumber.equals("0.6.5")
-                || versionNumber.equals("0.7")) {
-            ret = CustHandlerFactory.get7orLowerHandler(core);
-        } else if (versionNumber.equals("0.7.5")
-                || versionNumber.equals("0.7.6")
-                || versionNumber.equals("0.7.6.1")
-                || versionNumber.equals("0.8")
-                || versionNumber.equals("0.8.1")
-                || versionNumber.equals("0.8.1.1")
-                || versionNumber.equals("0.8.1.2")
-                || versionNumber.equals("0.8.5")
-                || versionNumber.equals("0.9")
-                || versionNumber.equals("0.9.1")
-                || versionNumber.equals("0.9.2")
-                || versionNumber.equals("0.9.9")
-                || versionNumber.equals("0.9.9.1")) {
-            ret = CustHandlerFactory.get075orHigherHandler(core);
-        } else {
-            throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
-                    + "written with a newer version with additional features: Ver " + versionNumber + ".");
+        switch (versionNumber) {
+            case "0":
+            case "0.5":
+            case "0.5.1":
+            case "0.6":
+            case "0.6.1":
+            case "0.6.5":
+            case "0.7":
+                ret = CustHandlerFactory.get7orLowerHandler(core);
+                break;
+            case "0.7.5":
+            case "0.7.6":
+            case "0.7.6.1":
+            case "0.8":
+            case "0.8.1":
+            case "0.8.1.1":
+            case "0.8.1.2":
+            case "0.8.5":
+            case "0.9":
+            case "0.9.1":
+            case "0.9.2":
+            case "0.9.9":
+            case "0.9.9.1":
+                ret = CustHandlerFactory.get075orHigherHandler(core);
+                break;
+            default:
+                throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
+                        + "written with a newer version with additional features: Ver " + versionNumber + ".");
         }
 
         return ret;

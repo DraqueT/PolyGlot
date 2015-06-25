@@ -178,9 +178,10 @@ public class IOHandler {
             return false;
         }
 
-        DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
-        int test = in.readInt();
-        in.close();
+        int test;
+        try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
+            test = in.readInt();
+        }
         return test == 0x504b0304;
     }
 
@@ -232,16 +233,16 @@ public class IOHandler {
                 try {
                     core.getPropertiesManager().setCachedFont(IOUtils.toByteArray(new FileInputStream(fontFile)));
                     byte[] buffer = new byte[1024];
-                    FileInputStream fis = new FileInputStream(fontFile);
-                    out.putNextEntry(new ZipEntry(PGTUtil.fontFileName));
-                    int length;
-
-                    while ((length = fis.read(buffer)) > 0) {
-                        out.write(buffer, 0, length);
+                    try (FileInputStream fis = new FileInputStream(fontFile)) {
+                        out.putNextEntry(new ZipEntry(PGTUtil.fontFileName));
+                        int length;
+                        
+                        while ((length = fis.read(buffer)) > 0) {
+                            out.write(buffer, 0, length);
+                        }
+                        
+                        out.closeEntry();
                     }
-
-                    out.closeEntry();
-                    fis.close();
                 } catch (FileNotFoundException ex) {
                     writeLog += "\nUnable to write font to archive: " + ex.getMessage();
                 } catch (IOException ex) {
@@ -446,10 +447,7 @@ public class IOHandler {
                     ret = fontFile;
                 }
 
-            } catch (FontFormatException e) {
-                // null detected and message bubbled to user elsewhere
-                ret = null;
-            } catch (IOException e) {
+            } catch (FontFormatException | IOException e) {
                 // null detected and message bubbled to user elsewhere
                 ret = null;
             }
@@ -471,17 +469,16 @@ public class IOHandler {
         }
 
         Iterator<LogoNode> it = logoCollection.getAllLogos().iterator();
-        ZipFile zipFile = new ZipFile(fileName);
-
-        while (it.hasNext()) {
-            LogoNode curNode = it.next();
-            ZipEntry imgEntry = zipFile.getEntry(PGTUtil.logoGraphSavePath
-                    + curNode.getId().toString() + ".png");
-
-            BufferedImage img = ImageIO.read(zipFile.getInputStream(imgEntry));
-            curNode.setLogoGraph(img);
+        try (ZipFile zipFile = new ZipFile(fileName)) {
+            while (it.hasNext()) {
+                LogoNode curNode = it.next();
+                ZipEntry imgEntry = zipFile.getEntry(PGTUtil.logoGraphSavePath
+                        + curNode.getId().toString() + ".png");
+                
+                BufferedImage img = ImageIO.read(zipFile.getInputStream(imgEntry));
+                curNode.setLogoGraph(img);
+            }
         }
-        zipFile.close();
     }
 
     /**
