@@ -19,6 +19,23 @@
  */
 package PolyGlot;
 
+import PolyGlot.Nodes.DeclensionGenTransform;
+import PolyGlot.Nodes.DeclensionGenRule;
+import PolyGlot.Nodes.ConWord;
+import PolyGlot.Nodes.PronunciationNode;
+import PolyGlot.Nodes.LogoNode;
+import PolyGlot.Nodes.DeclensionNode;
+import PolyGlot.Nodes.ThesNode;
+import PolyGlot.Nodes.GenderNode;
+import PolyGlot.Nodes.TypeNode;
+import PolyGlot.ManagersCollections.GenderCollection;
+import PolyGlot.ManagersCollections.PropertiesManager;
+import PolyGlot.ManagersCollections.GrammarManager;
+import PolyGlot.ManagersCollections.PronunciationMgr;
+import PolyGlot.ManagersCollections.ThesaurusManager;
+import PolyGlot.ManagersCollections.DeclensionManager;
+import PolyGlot.CustomControls.GrammarSectionNode;
+import PolyGlot.CustomControls.GrammarChapNode;
 import java.awt.Font;
 import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;

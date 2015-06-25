@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -17,39 +17,43 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+package PolyGlot.CustomControls;
 
-package PolyGlot;
-
-import PolyGlot.Nodes.DictNode;
+import java.awt.Font;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.StyleConstants;
 
 /**
  *
  * @author draque
+ * 
+ * This allows custom fonts which are unregistered in the local computer to be used
+ * in abstract documents
  */
-public class DeclensionDimension extends DictNode {
-    private boolean mandatory = false;
+public class PGDocument extends DefaultStyledDocument {
+    private final Font customFont;
     
-    public DeclensionDimension(Integer _id) {
-        id = _id;
+    public PGDocument(Font _customFont) {
+        customFont = _customFont;
     }
     
-    public DeclensionDimension() {
-        id = -1;
-    }
-    
+    /**
+     * Gets font. Returns custom font if PolyGlot special entry found in attr
+     * @param attr attributes to pull font from
+     * @return font in attributes if no PGT entry, custom font otherwise
+     */
     @Override
-    public void setEqual(DictNode _node) {
-        DeclensionDimension copyNode = (DeclensionDimension)_node;
+    public Font getFont(AttributeSet attr) {
+        Font ret = super.getFont(attr);
         
-        this.value = copyNode.getValue();
-        mandatory = copyNode.isMandatory();
-    }
-    
-    public void setMandatory(boolean _mandatory) {
-        mandatory = _mandatory;
-    }
-    
-    public boolean isMandatory() {
-        return mandatory;
+        if (customFont != null 
+                && StyleConstants.getFontFamily(attr).equals(customFont.getFamily())) {
+            
+            ret = customFont.deriveFont((float)StyleConstants.getFontSize(attr));            
+        }
+        
+        return ret;
     }
 }
+

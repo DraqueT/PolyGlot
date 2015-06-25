@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import PolyGlot.CustomControls.InfoBox;
 import java.awt.Window;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

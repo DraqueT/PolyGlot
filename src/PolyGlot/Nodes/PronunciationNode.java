@@ -18,34 +18,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package PolyGlot;
-
-import PolyGlot.ManagersCollections.TypeCollection;
-import PolyGlot.ManagersCollections.ConWordCollection;
-import org.xml.sax.helpers.DefaultHandler;
+package PolyGlot.Nodes;
 
 /**
  *
  * @author draque
  */
-public class CustHandler extends DefaultHandler{
+public class PronunciationNode extends DictNode{
+    private String pronunciation = "";
+    
+    public String getPronunciation() {
+        return pronunciation;
+    }
+    
+    public void setPronunciation(String _pronunciation) {
+        pronunciation = _pronunciation;
+    }
 
-	ConWordCollection wordCollection;
-	TypeCollection typeCollection;
-	
-	public ConWordCollection getWordCollection() {
-		return wordCollection;
-	}
-
-	public void setWordCollection(ConWordCollection wordCollection) {
-		this.wordCollection = wordCollection;
-	}
-
-	public TypeCollection getTypeCollection() {
-		return typeCollection;
-	}
-
-	public void setTypeCollection(TypeCollection typeCollection) {
-		this.typeCollection = typeCollection;
-	}
+    public boolean equals(PronunciationNode test) {
+        return (pronunciation.equals(test.getPronunciation())
+                && value.equals(test.getValue()));
+    }
+    
+    @Override
+    public void setEqual(DictNode _node) {
+        PronunciationNode node = (PronunciationNode) _node;
+        
+        this.setPronunciation(node.getPronunciation());
+        this.setValue(node.getValue());
+        this.setId(node.getId());
+    }
 }

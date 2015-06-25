@@ -19,6 +19,9 @@
  */
 package PolyGlot;
 
+import PolyGlot.Nodes.ConWord;
+import PolyGlot.Nodes.GenderNode;
+import PolyGlot.Nodes.TypeNode;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;

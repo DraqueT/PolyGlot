@@ -3,8 +3,8 @@
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
- * See LICENSE.TXT included with this code to read the full license agreement.
- *
+ *  See LICENSE.TXT included with this code to read the full license agreement.
+
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -17,35 +17,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+package PolyGlot.CustomControls;
 
-package PolyGlot;
-
-import PolyGlot.ManagersCollections.TypeCollection;
-import PolyGlot.ManagersCollections.ConWordCollection;
-import org.xml.sax.helpers.DefaultHandler;
+import PolyGlot.Nodes.ConWord;
+import java.awt.Component;
 
 /**
  *
  * @author draque
  */
-public class CustHandler extends DefaultHandler{
-
-	ConWordCollection wordCollection;
-	TypeCollection typeCollection;
-	
-	public ConWordCollection getWordCollection() {
-		return wordCollection;
-	}
-
-	public void setWordCollection(ConWordCollection wordCollection) {
-		this.wordCollection = wordCollection;
-	}
-
-	public TypeCollection getTypeCollection() {
-		return typeCollection;
-	}
-
-	public void setTypeCollection(TypeCollection typeCollection) {
-		this.typeCollection = typeCollection;
-	}
+public class ThesComponent extends Component{
+    private final ConWord word;
+    
+    public ThesComponent(ConWord _word) {
+        word = _word;
+    }
+    
+    public ConWord getWord() {
+        return word;
+    }
+    
+    @Override
+    protected String paramString() {
+        return word.getValue();
+    }
 }

@@ -18,34 +18,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package PolyGlot;
-
-import PolyGlot.ManagersCollections.TypeCollection;
-import PolyGlot.ManagersCollections.ConWordCollection;
-import org.xml.sax.helpers.DefaultHandler;
+package PolyGlot.Nodes;
 
 /**
  *
  * @author draque
  */
-public class CustHandler extends DefaultHandler{
+public class GenderNode extends DictNode{
+    private String notes = "";
+    
+    public String getNotes(){
+        return notes;
+    }
+    
+    public void setNotes(String _notes){
+        notes = _notes;
+    }
 
-	ConWordCollection wordCollection;
-	TypeCollection typeCollection;
-	
-	public ConWordCollection getWordCollection() {
-		return wordCollection;
-	}
-
-	public void setWordCollection(ConWordCollection wordCollection) {
-		this.wordCollection = wordCollection;
-	}
-
-	public TypeCollection getTypeCollection() {
-		return typeCollection;
-	}
-
-	public void setTypeCollection(TypeCollection typeCollection) {
-		this.typeCollection = typeCollection;
-	}
+    @Override
+    public void setEqual(DictNode _node) {
+        GenderNode set = (GenderNode) _node;
+        
+        this.setId(set.getId());
+        this.setValue(set.getValue());
+    }
+    
 }

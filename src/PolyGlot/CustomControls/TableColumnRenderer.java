@@ -18,50 +18,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package PolyGlot;
+package PolyGlot.CustomControls;
+
+import java.awt.Component;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.TableCellRenderer;
 
 /**
- * Used to rank any given object by numeric value. WHY ISN'T THIS IN JAVA 
- * BY DEFAULT???
+ *
  * @author draque
  */
-public class RankedObject implements Comparable<RankedObject>{
-    private final int rank;
-    private int LOWER = -1;
-    private int HIGHER = 1;
-    Object holder;
-    
-    public RankedObject(Object _holder, int _rank) {
-        holder = _holder;        
-        rank = _rank;
-    }
-    
-    public int getRank() {
-        return rank;
-    }
-    
-    public Object getHolder() {
-        return holder;
-    }
-    
-    public void setDescending(boolean descending) {
-        if (descending) {
-            LOWER = 1;
-            HIGHER = -1;
-        } else {
-            LOWER = -1;
-            HIGHER = 1;
-        }
-    }
-    
-    // does not handle equal values. Returning 0 would merge, and this is undesirable.
+public class TableColumnRenderer implements TableCellRenderer {
+
+    Font myFont;
+    DocumentListener docListener;
+
     @Override
-    public int compareTo(RankedObject _compare) {        
-        if (_compare.getRank() > this.getRank()) {
-            return LOWER;
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        JTextField editor = new JTextField();
+        
+        if (value != null) {
+            editor.setText(value.toString());
         }
-        else {
-            return HIGHER;
-        }    
+        
+        if (myFont != null) {
+            editor.setFont(myFont);
+        }
+        
+        editor.getDocument().addDocumentListener(docListener);
+
+        editor.setBorder(BorderFactory.createEmptyBorder());
+        
+        return editor;
+    }
+      
+    public void setDocuListener(DocumentListener _listener) {
+        docListener = _listener;
+    }
+
+    public TableColumnRenderer(Font _myFont) {
+        myFont = _myFont;
     }
 }

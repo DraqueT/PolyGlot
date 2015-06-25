@@ -19,6 +19,11 @@
  */
 package PolyGlot;
 
+import PolyGlot.Nodes.LogoNode;
+import PolyGlot.ManagersCollections.GrammarManager;
+import PolyGlot.ManagersCollections.LogoCollection;
+import PolyGlot.CustomControls.GrammarSectionNode;
+import PolyGlot.CustomControls.GrammarChapNode;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -585,7 +590,7 @@ public class IOHandler {
      */
     public Font getLcdFont() throws FontFormatException, IOException {
         // TODO: move font to a resource folder, and change to a constant
-        InputStream tmp = this.getClass().getResourceAsStream("/PolyGlot/lcdFont.ttf");
+        InputStream tmp = this.getClass().getResourceAsStream("/PolyGlot/GeneralResources/lcdFont.ttf");
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Font ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
 

@@ -18,50 +18,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package PolyGlot;
+package PolyGlot.CustomControls;
 
-/**
- * Used to rank any given object by numeric value. WHY ISN'T THIS IN JAVA 
- * BY DEFAULT???
- * @author draque
- */
-public class RankedObject implements Comparable<RankedObject>{
-    private final int rank;
-    private int LOWER = -1;
-    private int HIGHER = 1;
-    Object holder;
-    
-    public RankedObject(Object _holder, int _rank) {
-        holder = _holder;        
-        rank = _rank;
-    }
-    
-    public int getRank() {
-        return rank;
-    }
-    
-    public Object getHolder() {
-        return holder;
-    }
-    
-    public void setDescending(boolean descending) {
-        if (descending) {
-            LOWER = 1;
-            HIGHER = -1;
-        } else {
-            LOWER = -1;
-            HIGHER = 1;
-        }
-    }
-    
-    // does not handle equal values. Returning 0 would merge, and this is undesirable.
+import java.awt.Color;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+
+public class HighlightCaret extends DefaultCaret {
+
+    private static final Highlighter.HighlightPainter unfocusedPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
+    private static final Highlighter.HighlightPainter focusedPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
+    private static final long serialVersionUID = 1L;
+    private boolean isFocused;
+
     @Override
-    public int compareTo(RankedObject _compare) {        
-        if (_compare.getRank() > this.getRank()) {
-            return LOWER;
+    protected Highlighter.HighlightPainter getSelectionPainter() {
+        setBlinkRate(500); // otherwise is disabled, stopped
+        return isFocused ? focusedPainter/*super.getSelectionPainter()*/ : unfocusedPainter;
+    }
+
+    @Override
+    public void setSelectionVisible(boolean hasFocus) {
+        if (hasFocus != isFocused) {
+            isFocused = hasFocus;
+            super.setSelectionVisible(false);
+            super.setSelectionVisible(true);
         }
-        else {
-            return HIGHER;
-        }    
     }
 }

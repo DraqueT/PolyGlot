@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import PolyGlot.CustomControls.RegexGenException;
 import com.mifmif.common.regex.Generex;
 import java.util.ArrayList;
 import java.util.List;

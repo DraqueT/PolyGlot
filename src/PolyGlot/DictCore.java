@@ -19,6 +19,18 @@
  */
 package PolyGlot;
 
+import PolyGlot.Nodes.ConWord;
+import PolyGlot.Nodes.DeclensionNode;
+import PolyGlot.Nodes.TypeNode;
+import PolyGlot.ManagersCollections.GenderCollection;
+import PolyGlot.ManagersCollections.PropertiesManager;
+import PolyGlot.ManagersCollections.GrammarManager;
+import PolyGlot.ManagersCollections.PronunciationMgr;
+import PolyGlot.ManagersCollections.LogoCollection;
+import PolyGlot.ManagersCollections.ThesaurusManager;
+import PolyGlot.ManagersCollections.DeclensionManager;
+import PolyGlot.ManagersCollections.TypeCollection;
+import PolyGlot.ManagersCollections.ConWordCollection;
 import java.awt.Color;
 import java.awt.FontFormatException;
 import java.io.FileNotFoundException;

@@ -3,8 +3,8 @@
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
- * See LICENSE.TXT included with this code to read the full license agreement.
- *
+ *  See LICENSE.TXT included with this code to read the full license agreement.
+
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -17,35 +17,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
-package PolyGlot;
-
-import PolyGlot.ManagersCollections.TypeCollection;
-import PolyGlot.ManagersCollections.ConWordCollection;
-import org.xml.sax.helpers.DefaultHandler;
+package PolyGlot.Nodes;
 
 /**
- *
+ * A label/combined ID pair for a constructed declension
  * @author draque
  */
-public class CustHandler extends DefaultHandler{
-
-	ConWordCollection wordCollection;
-	TypeCollection typeCollection;
-	
-	public ConWordCollection getWordCollection() {
-		return wordCollection;
-	}
-
-	public void setWordCollection(ConWordCollection wordCollection) {
-		this.wordCollection = wordCollection;
-	}
-
-	public TypeCollection getTypeCollection() {
-		return typeCollection;
-	}
-
-	public void setTypeCollection(TypeCollection typeCollection) {
-		this.typeCollection = typeCollection;
-	}
+public class DeclensionPair {
+    public final String combinedId;
+    public final String label;
+    
+    public DeclensionPair(String _combinedId, String _label) {
+        label = _label;
+        combinedId = _combinedId;
+    }
+    
+    @Override
+    public String toString() {
+        return label;
+    }
 }

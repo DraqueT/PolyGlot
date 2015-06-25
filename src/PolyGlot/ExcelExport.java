@@ -19,6 +19,11 @@
  */
 package PolyGlot;
 
+import PolyGlot.Nodes.ConWord;
+import PolyGlot.Nodes.PronunciationNode;
+import PolyGlot.Nodes.DeclensionNode;
+import PolyGlot.Nodes.GenderNode;
+import PolyGlot.Nodes.TypeNode;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
