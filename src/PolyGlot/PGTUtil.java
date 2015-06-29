@@ -70,8 +70,10 @@ public class PGTUtil {
     public static final String langPropLocalMandatoryXID = "langPropLocalMandatory";
     public static final String langPropWordUniquenessXID = "langPropWordUniqueness";
     public static final String langPropLocalUniquenessXID = "langPropLocalUniqueness";
+    // TODO: make below entries conform to naming standards...
     public static final String langPropIgnoreCase = "langPropIgnoreCase";
     public static final String langPropDisableProcRegex = "langPropDisableProcRegex";
+    public static final String langPropEnforceRTL = "langPropEnforceRTL";
     
     // declension properties
     public static final String declensionXID = "declensionNode";
@@ -150,6 +152,7 @@ public class PGTUtil {
     public static final String emptyFile = "<EMPTY>";
     public static final String tempFile = "xxTEMPPGTFILExx";
     public static final String polyGlotFont = "PolyGlot";
+    public static final String conLangFont = "PolyGlotConlangGrammarFont";
     
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to

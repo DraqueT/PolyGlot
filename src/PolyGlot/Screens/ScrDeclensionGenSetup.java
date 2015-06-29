@@ -26,6 +26,7 @@ import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.TableColumnEditor;
 import PolyGlot.CustomControls.TableColumnRenderer;
 import java.awt.event.KeyAdapter;
@@ -474,7 +475,7 @@ public class ScrDeclensionGenSetup extends PDialog {
     /**
      * adds transform set to currently selected rule
      */
-    private void addTransform() {
+    private void addTransform() { // TODO: somehow integrate RTL letters here?
         if (lstRules.getSelectedValue() == null) {
             return;
         }
@@ -625,7 +626,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         jLabel4 = new javax.swing.JLabel();
         txtRuleName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtRuleRegex = new javax.swing.JTextField();
+        txtRuleRegex = new PTextField(core.getPropertiesManager());
         chkDisableWordform = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();

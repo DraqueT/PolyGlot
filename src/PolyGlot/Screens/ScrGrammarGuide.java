@@ -23,6 +23,7 @@ import PolyGlot.DictCore;
 import PolyGlot.FormattedTextHelper;
 import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.CustomControls.GrammarSectionNode;
+import PolyGlot.CustomControls.HighlightCaret;
 import PolyGlot.IOHandler;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
@@ -114,6 +115,7 @@ public class ScrGrammarGuide extends PFrame {
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button_pressed.png")));
         
         initComponents();
+        txtSection.setCaret(new HighlightCaret());
         
         soundRecorder = new SoundRecorder(this);
         soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
@@ -655,9 +657,15 @@ public class ScrGrammarGuide extends PFrame {
                 FormattedTextHelper.textToColor((String) cmbFontColor.getSelectedItem()));
 
         StyleConstants.setFontSize(aset, Integer.parseInt(txtFontSize.getText()));
-
+        
         txtSection.setCharacterAttributes(aset, true);
 
+        if (core.getPropertiesManager().isEnforceRTL()) {
+            // this ensures that the correct sections are displayed RTL
+            savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
+            populateProperties();
+        }
+        
         txtSection.requestFocus();
     }
 
@@ -845,7 +853,7 @@ public class ScrGrammarGuide extends PFrame {
             }
             try {
                 FormattedTextHelper.restoreFromString(secNode.getSectionText(),
-                        txtSection);
+                        txtSection, core);
             } catch (BadLocationException e) {
                 InfoBox.error("Section Load Error", "Unable to load section text: "
                         + e.getLocalizedMessage(), this);

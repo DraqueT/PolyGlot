@@ -24,6 +24,7 @@ import PolyGlot.DictCore;
 import PolyGlot.Nodes.GenderNode;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PTextField;
 import PolyGlot.PGTools;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.event.KeyEvent;
@@ -221,7 +222,7 @@ public class ScrQuickWordEntry extends PDialog {
         chkProc = new javax.swing.JCheckBox();
         chkDefinition = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
-        txtConWord = new javax.swing.JTextField();
+        txtConWord = new PTextField(core.getPropertiesManager());
         txtLocalWord = new javax.swing.JTextField();
         cmbType = new javax.swing.JComboBox();
         cmbGender = new javax.swing.JComboBox();

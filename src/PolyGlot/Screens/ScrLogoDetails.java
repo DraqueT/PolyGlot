@@ -663,7 +663,8 @@ public class ScrLogoDetails extends PFrame {
         lstRadicals.setModel(radModel);
 
         // Populate readings
-        Iterator<String> procIt = curNode.getReadings().iterator();
+        Iterator<String> procIt = curNode.getReadings().iterator(); 
+// TODO: figure out a way to make this respect RTL languages... maybe just insert char here? and cut at save time? Messy but effective...
 
         DefaultTableModel procModel = new DefaultTableModel();
         procModel.addColumn("Readings");

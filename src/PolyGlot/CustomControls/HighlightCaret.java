@@ -25,6 +25,11 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
+/**
+ * This caret class retains its highlight even when its parent object loses
+ * focus.
+ * @author draque
+ */
 public class HighlightCaret extends DefaultCaret {
 
     private static final Highlighter.HighlightPainter unfocusedPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);

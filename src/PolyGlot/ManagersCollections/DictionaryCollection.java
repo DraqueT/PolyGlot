@@ -110,12 +110,25 @@ public abstract class DictionaryCollection {
         alphaOrder = _alphaOrder;
     }
 
+    /**
+     * Inserts buffer node, applying next logical ID to node
+     * @param _buffer buffer to insert
+     * @return ID of inserted buffer
+     * @throws Exception if unable to insert node to nodemap
+     */
     protected Integer insert(DictNode _buffer) throws Exception {
         highestNodeId++;
 
         return this.insert(highestNodeId, _buffer);
     }
 
+    /**
+     * Inserts given buffer node to nodemap
+     * @param _id ID to apply to buffer
+     * @param _buffer buffer to be inserted
+     * @return ID of inserted buffer
+     * @throws Exception if unable to insert
+     */
     protected Integer insert(Integer _id, DictNode _buffer) throws Exception {
         _buffer.setId(_id);
         _buffer.setAlphaOrder(alphaOrder);

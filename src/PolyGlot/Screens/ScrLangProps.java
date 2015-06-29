@@ -24,6 +24,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.JFontChooser;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.CustomControls.TableColumnEditor;
@@ -60,8 +61,8 @@ public class ScrLangProps extends PDialog {
      * @param _core Dictionary Core
      */
     public ScrLangProps(DictCore _core) {
-        initComponents();
         core = _core;
+        initComponents();
         populateProperties();
         txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
         
@@ -87,6 +88,7 @@ public class ScrLangProps extends PDialog {
         chkLocalUniqueness.setSelected(prop.isLocalUniqueness());
         chkTypesMandatory.setSelected(prop.isTypesMandatory());
         chkWordUniqueness.setSelected(prop.isWordUniqueness());
+        chkEnforceRTL.setSelected(prop.isEnforceRTL());
         
         populateProcs();
     }
@@ -105,6 +107,7 @@ public class ScrLangProps extends PDialog {
         propMan.setLocalUniqueness(chkLocalUniqueness.isSelected());
         propMan.setTypesMandatory(chkTypesMandatory.isSelected());
         propMan.setWordUniqueness(chkWordUniqueness.isSelected());
+        propMan.setEnforceRTL(chkEnforceRTL.isSelected());
         
         saveProcGuide();
     }
@@ -333,6 +336,10 @@ public class ScrLangProps extends PDialog {
     }
     
     private void setConFont(Font conFont) {
+        if (conFont == null) {
+            return;
+        }
+        
         txtAlphaOrder.setFont(conFont);
 
         core.getPropertiesManager().setFontCon(conFont, conFont.getStyle(), conFont.getSize());
@@ -358,7 +365,7 @@ public class ScrLangProps extends PDialog {
         btnChangeFont = new javax.swing.JButton();
         txtFont = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
-        txtAlphaOrder = new javax.swing.JTextField();
+        txtAlphaOrder = new PTextField(core.getPropertiesManager());
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
@@ -368,6 +375,7 @@ public class ScrLangProps extends PDialog {
         chkLocalUniqueness = new javax.swing.JCheckBox();
         chkIgnoreCase = new javax.swing.JCheckBox();
         chkDisableProcRegex = new javax.swing.JCheckBox();
+        chkEnforceRTL = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnAddProc = new PButton("+");
@@ -451,6 +459,14 @@ public class ScrLangProps extends PDialog {
         chkDisableProcRegex.setText("Disable Proc Regex");
         chkDisableProcRegex.setToolTipText("Disable regex features in the pronunciation guide. (this allows for ignoring case properly there)");
 
+        chkEnforceRTL.setText("Enforce RTL");
+        chkEnforceRTL.setToolTipText("Check this to force all conlang text to appear in RTL fashion through PolyGlot. This works even if the character set you are using is not typically RTL.");
+        chkEnforceRTL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkEnforceRTLActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -461,6 +477,7 @@ public class ScrLangProps extends PDialog {
             .addComponent(chkLocalUniqueness)
             .addComponent(chkIgnoreCase)
             .addComponent(chkDisableProcRegex)
+            .addComponent(chkEnforceRTL)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -476,7 +493,9 @@ public class ScrLangProps extends PDialog {
                 .addComponent(chkIgnoreCase)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkDisableProcRegex)
-                .addGap(0, 43, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkEnforceRTL)
+                .addGap(0, 14, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -658,6 +677,11 @@ public class ScrLangProps extends PDialog {
         setConFont(fontDialog());
     }//GEN-LAST:event_btnChangeFontActionPerformed
 
+    private void chkEnforceRTLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEnforceRTLActionPerformed
+        // needs to update value immediately for text elements on this form affected by change
+        core.getPropertiesManager().setEnforceRTL(chkEnforceRTL.isSelected());
+    }//GEN-LAST:event_chkEnforceRTLActionPerformed
+
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
         s.setupKeyStrokes();
@@ -671,6 +695,7 @@ public class ScrLangProps extends PDialog {
     private javax.swing.JButton btnDownProc;
     private javax.swing.JButton btnUpProc;
     private javax.swing.JCheckBox chkDisableProcRegex;
+    private javax.swing.JCheckBox chkEnforceRTL;
     private javax.swing.JCheckBox chkIgnoreCase;
     private javax.swing.JCheckBox chkLocalMandatory;
     private javax.swing.JCheckBox chkLocalUniqueness;

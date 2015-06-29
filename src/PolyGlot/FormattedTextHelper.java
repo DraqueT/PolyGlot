@@ -20,6 +20,7 @@
 package PolyGlot;
 
 import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -50,9 +51,10 @@ public class FormattedTextHelper {
      * value string
      * @param savedVal value to restore formatted text from
      * @param pane Text pane to restore formatted text to.
+     * @param core Dictionary Core (needed for references)
      * @throws javax.swing.text.BadLocationException if unable to load
      */
-    public static void restoreFromString(String savedVal, JTextPane pane) throws BadLocationException {
+    public static void restoreFromString(String savedVal, JTextPane pane, DictCore core) throws BadLocationException {
         String remaining = savedVal;
         pane.setText("");
         Color fontColor = Color.black;
@@ -61,6 +63,7 @@ public class FormattedTextHelper {
                 
         while (!remaining.isEmpty()) {
             String nextNode = getNextNode(remaining);
+            Font conFont = core.getPropertiesManager().getFontCon();
             
             remaining = remaining.substring(nextNode.length(), remaining.length());
             
@@ -69,16 +72,27 @@ public class FormattedTextHelper {
                 font = extractFamily(nextNode);
                 fontSize = extractSize(nextNode);
                 fontColor = extractColor(nextNode);
+                
+                if (font.equals(conFont.getFamily())) {
+                    font = PGTUtil.conLangFont;
+                }
             } else if (nextNode.startsWith("</font")) {
                 // do nothing
             } else {
                 Document doc = pane.getDocument();
                 
                 MutableAttributeSet aset = new SimpleAttributeSet();
-                
-                if (!font.equals("")) {
+                if (font.equals(PGTUtil.conLangFont)) {
+                    nextNode = "\u202e" + nextNode;
+                    StyleConstants.setFontFamily(aset, conFont.getFamily());
+                } else if (!font.equals("")) {
+                    // TODO: In the future, consider whether to leverege this logic to allow arbitrary fonts in grammar section text
+                    nextNode = "\u202c" + nextNode;
                     StyleConstants.setFontFamily(aset, font);
+                } else {
+                    nextNode = "\u202c" + nextNode;
                 }
+                
                 if (fontSize != -1) {
                     StyleConstants.setFontSize(aset, fontSize);
                 }
@@ -217,13 +231,14 @@ public class FormattedTextHelper {
     
     /**
      * Creates and returns string representing complex formatted text, which 
-     * can be saved
+     * can be saved. Filters out all RTL and LTR characters before returning.
      * @param pane JTextPane containing text to be saved
      * @return encoded values of pane
      * @throws BadLocationException if unable to create string format
      */
     public static String storageFormat(JTextPane pane) throws BadLocationException {
-        return storeFormatRecurse(pane.getDocument().getDefaultRootElement(), pane);
+        String ret = storeFormatRecurse(pane.getDocument().getDefaultRootElement(), pane);
+        return ret.replace("\u202e", "").replace("\u202c", "");
     }
 
     /**

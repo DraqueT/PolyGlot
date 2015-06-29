@@ -591,6 +591,7 @@ public class CustHandlerFactory {
             boolean blangPropLocalMandatory = false;
             boolean blangPropWordUniqueness = false;
             boolean blangPropLocalUniqueness = false;
+            boolean blangPropEnforceRTL = false;
             boolean bdeclensionMandatory = false;
             boolean bwordClassDefMan = false;
             boolean bwordClassGenderMan = false;
@@ -699,6 +700,8 @@ public class CustHandlerFactory {
                     bfontStyle = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropAlphaOrderXID)) {
                     balphaOrder = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropEnforceRTL)) {
+                    blangPropEnforceRTL = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordAutoDeclenOverrideXID)) {
                     bwordoverAutoDec = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionXID)) {
@@ -925,6 +928,8 @@ public class CustHandlerFactory {
                     bfontStyle = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropAlphaOrderXID)) {
                     balphaOrder = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropEnforceRTL)) {
+                    blangPropEnforceRTL = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionIdXID)) {
                     bDecId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionTextXID)) {
@@ -1181,6 +1186,9 @@ public class CustHandlerFactory {
                 } else if (blangPropTypeMandatory) {
                     propertiesManager.setTypesMandatory(new String(ch, start, length).equals("T"));
                     blangPropTypeMandatory = false;
+                } else if (blangPropEnforceRTL) {
+                    propertiesManager.setEnforceRTL(new String(ch, start, length).equals("T"));
+                    blangPropEnforceRTL = false;
                 } else if (bdimMand) {
                     declensionMgr.getBuffer().getBuffer().setMandatory(new String(ch, start, length).equals("T"));
                     bdimMand = false;

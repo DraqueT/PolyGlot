@@ -163,6 +163,9 @@
               <Properties>
                 <Property name="toolTipText" type="java.lang.String" value="List of all characters in conlang in alphabetical order (both upper and lower case)"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core.getPropertiesManager())"/>
+              </AuxValues>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane1">
               <AuxValues>
@@ -203,6 +206,7 @@
                   <Component id="chkLocalUniqueness" min="-2" max="-2" attributes="0"/>
                   <Component id="chkIgnoreCase" min="-2" max="-2" attributes="0"/>
                   <Component id="chkDisableProcRegex" min="-2" max="-2" attributes="0"/>
+                  <Component id="chkEnforceRTL" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -219,7 +223,9 @@
                       <Component id="chkIgnoreCase" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="chkDisableProcRegex" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="43" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="chkEnforceRTL" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="14" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -260,6 +266,15 @@
                 <Property name="text" type="java.lang.String" value="Disable Proc Regex"/>
                 <Property name="toolTipText" type="java.lang.String" value="Disable regex features in the pronunciation guide. (this allows for ignoring case properly there)"/>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkEnforceRTL">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Enforce RTL"/>
+                <Property name="toolTipText" type="java.lang.String" value="Check this to force all conlang text to appear in RTL fashion through PolyGlot. This works even if the character set you are using is not typically RTL."/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkEnforceRTLActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

@@ -25,6 +25,8 @@ import PolyGlot.Nodes.GenderNode;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
+import PolyGlot.CustomControls.PList;
+import PolyGlot.CustomControls.PTextField;
 import PolyGlot.PGTools;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Color;
@@ -1155,7 +1157,7 @@ public final class ScrLexicon extends PFrame {
         jPanel2 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
-        txtConWord = new javax.swing.JTextField();
+        txtConWord = new PTextField(core.getPropertiesManager());
         txtLocalWord = new javax.swing.JTextField();
         cmbType = new javax.swing.JComboBox();
         cmbGender = new javax.swing.JComboBox();
@@ -1171,7 +1173,7 @@ public final class ScrLexicon extends PFrame {
         txtErrorBox = new javax.swing.JTextPane();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        lstLexicon = new javax.swing.JList();
+        lstLexicon = new PList(core);
         btnAddWord = new PButton("+");
         btnDelWord = new PButton("-");
 
@@ -1341,6 +1343,11 @@ public final class ScrLexicon extends PFrame {
         lstLexicon.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstLexicon.setToolTipText("List of Conlang Words");
         lstLexicon.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lstLexicon.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                lstLexiconFocusGained(evt);
+            }
+        });
         lstLexicon.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstLexiconValueChanged(evt);
@@ -1519,6 +1526,10 @@ public final class ScrLexicon extends PFrame {
     private void btnLogographsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogographsActionPerformed
         viewQuickLogographs();
     }//GEN-LAST:event_btnLogographsActionPerformed
+
+    private void lstLexiconFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lstLexiconFocusGained
+        lstLexicon.repaint();
+    }//GEN-LAST:event_lstLexiconFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddWord;

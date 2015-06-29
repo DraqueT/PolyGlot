@@ -185,8 +185,22 @@ public class ConWordCollection extends DictionaryCollection {
         ConWord oldWord = getNodeById(_id);
         balanceWordCounts(oldWord, false);
         balanceWordCounts((ConWord) _modNode, true);
+        ((ConWord)_modNode).setCore(core);
 
         super.modifyNode(_id, _modNode);
+    }
+    
+    /**
+     * Performs all actions of superclass, and additionally sets core value of words
+     * @param _id same as super
+     * @param _buffer same as super
+     * @return same as super
+     * @throws Exception same as super
+     */
+    @Override
+    protected Integer insert(Integer _id, DictNode _buffer) throws Exception {
+        ((ConWord)_buffer).setCore(core);
+        return super.insert(_id, _buffer);
     }
 
     /**
@@ -426,8 +440,6 @@ public class ConWordCollection extends DictionaryCollection {
      */
     public String buildWordReport() {
         String ret = "";
-        //String conFontTag = "face=\"" + core.getPropertiesManager().getFontCon().getFontName() + "\"";
-        String defaultFont = "face=\"" + Font.SANS_SERIF + "\"";
 
         Map<String, Integer> wordStart = new HashMap<String, Integer>();
         Map<String, Integer> wordEnd = new HashMap<String, Integer>();

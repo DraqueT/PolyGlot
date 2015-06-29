@@ -26,6 +26,7 @@ import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.Nodes.TypeNode;
+import PolyGlot.CustomControls.PTextField;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -294,7 +295,7 @@ public class ScrDeclensions extends PDialog {
             }
             
             Label newLabel = new Label(curLabel);
-            JTextField newField = new JTextField();
+            JTextField newField = new PTextField(core.getPropertiesManager());
             Dimension labelDim = new Dimension();
             labelDim.setSize(MAXLABELWIDTH, 0);
             newLabel.setMaximumSize(labelDim);
@@ -352,7 +353,7 @@ public class ScrDeclensions extends PDialog {
             Entry<String, DeclensionNode> decEnt = depIt.next();
             DeclensionNode curDec = decEnt.getValue();
 
-            JTextField newField = new JTextField();
+            JTextField newField = new PTextField(core.getPropertiesManager());
             Label newLabel = new Label(curDec.getNotes());
             
             // in the case of no patterns for word type, but existing deprecated declensions

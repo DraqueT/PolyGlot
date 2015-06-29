@@ -20,6 +20,9 @@
 
 package PolyGlot.Nodes;
 
+import PolyGlot.DictCore;
+import PolyGlot.ManagersCollections.DictionaryCollection;
+
 /**
  *
  * @author draque
@@ -35,6 +38,7 @@ public class ConWord extends DictNode {
     private boolean procOverride;
     private boolean autoDeclensionOverride;
     private boolean rulesOverride;
+    private DictCore core;
 
     public ConWord() {
         value = "";
@@ -73,6 +77,29 @@ public class ConWord extends DictNode {
         this.setGender(set.getGender());
         this.setProcOverride(set.isProcOverride());
         this.setOverrideAutoDeclen(set.isOverrideAutoDeclen());
+    }
+    
+    public void setCore(DictCore _core) {
+        core = _core;
+    }
+    
+    /**
+     * Returns string value of conword (reversed if appropriate)
+     * @return 
+     */
+    @Override
+    public String toString() {
+        String ret;
+        
+        if (core == null
+                || !core.getPropertiesManager().isEnforceRTL())
+        {
+            ret = super.toString();
+        } else {
+            ret = '\u202e' + super.toString();
+        }
+        
+        return ret;
     }
 
     public boolean isOverrideAutoDeclen() {

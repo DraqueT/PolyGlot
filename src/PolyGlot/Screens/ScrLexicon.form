@@ -213,6 +213,9 @@
                         <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtConWordFocusGained"/>
                         <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtConWordFocusLost"/>
                       </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core.getPropertiesManager())"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtLocalWord">
                       <Properties>
@@ -377,8 +380,12 @@
                             </Property>
                           </Properties>
                           <Events>
+                            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="lstLexiconFocusGained"/>
                             <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstLexiconValueChanged"/>
                           </Events>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(core)"/>
+                          </AuxValues>
                         </Component>
                       </SubComponents>
                     </Container>

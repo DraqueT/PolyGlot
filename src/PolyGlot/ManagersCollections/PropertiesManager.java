@@ -47,6 +47,7 @@ public class PropertiesManager {
     private boolean localUniqueness = false;
     private boolean ignoreCase = false;
     private boolean disableProcRegex = false;
+    private boolean enforceRTL = false;
     private String fontName = "";
     private byte[] cachedFont = null;
     
@@ -106,6 +107,14 @@ public class PropertiesManager {
     
     public boolean isDisableProcRegex() {
         return disableProcRegex;
+    }
+    
+    public void setEnforceRTL(boolean _enforceRTL) {
+        enforceRTL = _enforceRTL;
+    }
+    
+    public boolean isEnforceRTL() {
+        return enforceRTL;
     }
     
     /**
@@ -386,6 +395,11 @@ public class PropertiesManager {
         // store option for disabling regex or pronunciations
         wordValue = doc.createElement(PGTUtil.langPropDisableProcRegex);
         wordValue.appendChild(doc.createTextNode(isDisableProcRegex()? "T" : "F"));
+        rootElement.appendChild(wordValue);
+        
+        // store option for enforcing RTL in conlang
+        wordValue = doc.createElement(PGTUtil.langPropEnforceRTL);
+        wordValue.appendChild(doc.createTextNode(isEnforceRTL()? "T" : "F"));
         rootElement.appendChild(wordValue);
     }
 }
