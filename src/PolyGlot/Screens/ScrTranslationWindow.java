@@ -70,6 +70,10 @@ public class ScrTranslationWindow extends PFrame {
         core = _core;
         parent = _parent;
         
+        InfoBox.warning("Deprecated Functionality", 
+                "The Translation window is not up to date with current functionality. In future releases of PolyGlot, it will be"
+                + "\ndeprecated and replaced. Be aware that some modern features of PolyGlot are not integrated to this module.", parent);
+        
         setupKeyStrokes();
         initComponents();
         txtLocalText.setCaret(new HighlightCaret());
