@@ -39,6 +39,7 @@ import java.util.List;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -349,6 +350,23 @@ public class ScrLangProps extends PDialog {
         column.setCellEditor(new TableColumnEditor(conFont));
         column.setCellRenderer(new TableColumnRenderer(conFont));
         populateProcs();
+        testRTLWarning();
+    }
+    
+    /**
+     * Displays warning to user if RTL is enforced and confont is standard
+     */
+    private void testRTLWarning() {
+        Font conFont = core.getPropertiesManager().getFontCon();
+        Font stdFont = (new JTextField()).getFont();
+        
+        if (core.getPropertiesManager().isEnforceRTL()
+                && (conFont == null
+                    || conFont.getFamily().equals(stdFont.getFamily()))) {
+            InfoBox.warning("RTL Font Warning", "Enforcing RTL with default font"
+                    + " is not recommended. For best results, please set distinct"
+                    + " conlang font.", this);
+        }
     }
 
     /**
@@ -680,6 +698,7 @@ public class ScrLangProps extends PDialog {
     private void chkEnforceRTLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEnforceRTLActionPerformed
         // needs to update value immediately for text elements on this form affected by change
         core.getPropertiesManager().setEnforceRTL(chkEnforceRTL.isSelected());
+        testRTLWarning();
     }//GEN-LAST:event_chkEnforceRTLActionPerformed
 
     public static ScrLangProps run(DictCore _core) {
