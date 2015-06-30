@@ -150,6 +150,7 @@ public class TypeCollection extends DictionaryCollection {
         ret = super.insert(bufferNode);
 
         bufferNode = new TypeNode();
+        core.pushUpdate();
 
         return ret;
     }
