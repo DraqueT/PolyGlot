@@ -757,7 +757,8 @@ public class DeclensionManager {
 
     /**
      * Gets a word's declensions, with their combined dim Ids as the keys
-     *
+     * DOES NOT GENERATE DECLENSIONS THAT ARE SET TO AUTOGENERATE, BUT HAVE
+     * NOT YET BEEN SAVED.
      * @param wordId word to get declensions of
      * @return map of all declensions in a word (empty if none)
      */

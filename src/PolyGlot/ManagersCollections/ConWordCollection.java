@@ -21,9 +21,12 @@ package PolyGlot.ManagersCollections;
 
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
+import PolyGlot.Nodes.DeclensionNode;
+import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.Nodes.DictNode;
 import PolyGlot.PGTUtil;
 import PolyGlot.Nodes.PronunciationNode;
+import PolyGlot.Nodes.TypeNode;
 import PolyGlot.RankedObject;
 import java.awt.Font;
 import java.util.ArrayList;
@@ -145,30 +148,32 @@ public class ConWordCollection extends DictionaryCollection {
         allLocalWords.remove(insWord.getLocalWord());
         allLocalWords.put(insWord.getLocalWord(), curCount + (additive ? 1 : -1));
     }
-    
+
     /**
-     * Balances word counts when modifying word value or local word
-     * MUST BE RUN BEFORE PERSISTING NEW VALUES TO WORD
+     * Balances word counts when modifying word value or local word MUST BE RUN
+     * BEFORE PERSISTING NEW VALUES TO WORD
+     *
      * @param id id of word to modify
      * @param wordVal new conword value
-     * @param wordLoc 
+     * @param wordLoc
      * @throws java.lang.Exception if word not found
-     */    
+     */
     public void extertalBalanceWordCounts(Integer id, String wordVal, String wordLoc) throws Exception {
         ConWord oldWord = getNodeById(id);
         ConWord newWord = new ConWord();
-        
+
         newWord.setValue(wordVal);
         newWord.setLocalWord(wordLoc);
-        
+
         balanceWordCounts(oldWord, false);
         balanceWordCounts(newWord, true);
     }
 
     /**
      * WARNING: DO NOT CALL THIS OUTSIDE OF DICT CORE: CLEANUP DONE THERE
+     *
      * @param _id ID of word to delete
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public void deleteNodeById(Integer _id) throws Exception {
@@ -185,13 +190,15 @@ public class ConWordCollection extends DictionaryCollection {
         ConWord oldWord = getNodeById(_id);
         balanceWordCounts(oldWord, false);
         balanceWordCounts((ConWord) _modNode, true);
-        ((ConWord)_modNode).setCore(core);
+        ((ConWord) _modNode).setCore(core);
 
         super.modifyNode(_id, _modNode);
     }
-    
+
     /**
-     * Performs all actions of superclass, and additionally sets core value of words
+     * Performs all actions of superclass, and additionally sets core value of
+     * words
+     *
      * @param _id same as super
      * @param _buffer same as super
      * @return same as super
@@ -199,7 +206,7 @@ public class ConWordCollection extends DictionaryCollection {
      */
     @Override
     protected Integer insert(Integer _id, DictNode _buffer) throws Exception {
-        ((ConWord)_buffer).setCore(core);
+        ((ConWord) _buffer).setCore(core);
         return super.insert(_id, _buffer);
     }
 
@@ -290,6 +297,17 @@ public class ConWordCollection extends DictionaryCollection {
         return ret;
     }
 
+    /**
+     * Uses conword passed as parameter to filter on the entire dictionary of
+     * words, based on attributes set on the parameter. Returns iterator of all
+     * words that match. As a note: the conword value of the filter parameter is
+     * matched not only against the values of all conwords in the dictionary,
+     * but also their conjugations/declensions
+     *
+     * @param _filter A conword object containing filter values
+     * @return an iterator of conwords which match the given search
+     * @throws Exception on filtering error
+     */
     public Iterator<ConWord> filteredList(ConWord _filter) throws Exception {
         ConWordCollection retValues = new ConWordCollection(core);
         retValues.setAlphaOrder(alphaOrder);
@@ -299,36 +317,40 @@ public class ConWordCollection extends DictionaryCollection {
         Entry<Integer, ConWord> curEntry;
         ConWord curWord;
 
+        // set filter to lowercase if ignoring case
+        if (core.getPropertiesManager().isIgnoreCase()) {
+            _filter.setDefinition(_filter.getDefinition().toLowerCase());
+            _filter.setWordType(_filter.getWordType().toLowerCase());
+            _filter.setLocalWord(_filter.getLocalWord().toLowerCase());
+            _filter.setValue(_filter.getValue().toLowerCase());
+            _filter.setGender(_filter.getGender().toLowerCase());
+            _filter.setPronunciation(_filter.getPronunciation().toLowerCase());
+        }
+
         while (filterList.hasNext()) {
             curEntry = filterList.next();
             curWord = curEntry.getValue();
-
-            // set filter to lowercase if ignoring case
-            if (core.getPropertiesManager().isIgnoreCase()) {
-                _filter.setDefinition(_filter.getDefinition().toLowerCase());
-                _filter.setWordType(_filter.getWordType().toLowerCase());
-                _filter.setLocalWord(_filter.getLocalWord().toLowerCase());
-                _filter.setValue(_filter.getValue().toLowerCase());
-                _filter.setGender(_filter.getGender().toLowerCase());
-                _filter.setPronunciation(_filter.getPronunciation().toLowerCase());
-            }
-
             try {
-                String definition, type, local, value, gender, proc;
+                String definition;
+                String type;
+                String local;
+                //String value;
+                String gender;
+                String proc;
 
                 // if set to ignore case, set up caseless matches, normal otherwise
                 if (core.getPropertiesManager().isIgnoreCase()) {
                     definition = curWord.getDefinition().toLowerCase();
                     type = curWord.getWordType().toLowerCase();
                     local = curWord.getLocalWord().toLowerCase();
-                    value = curWord.getValue().toLowerCase();
+                    //value = curWord.getValue().toLowerCase();
                     gender = curWord.getGender().toLowerCase();
                     proc = curWord.getPronunciation().toLowerCase();
                 } else {
                     definition = curWord.getDefinition();
                     type = curWord.getWordType();
                     local = curWord.getLocalWord();
-                    value = curWord.getValue();
+                    //value = curWord.getValue();
                     gender = curWord.getGender();
                     proc = curWord.getPronunciation();
                 }
@@ -355,8 +377,7 @@ public class ConWordCollection extends DictionaryCollection {
                 }
 
                 // con word
-                if (!_filter.getValue().trim().equals("")
-                        && !value.contains(_filter.getValue())) {
+                if (!matchHeadAndDeclensions(_filter.getValue(), curWord)) {
                     continue;
                 }
 
@@ -375,12 +396,49 @@ public class ConWordCollection extends DictionaryCollection {
                 retValues.getBufferWord().setEqual(curWord);
                 retValues.insert(curWord.getId());
             } catch (Exception e) {
-                throw new Exception("FILTERING ERROR" + e.getMessage());
+                throw new Exception("FILTERING ERROR: " + e.getMessage());
             }
 
         }
 
         return retValues.getNodeIterator();
+    }
+
+    /**
+     * Tests whether matchText matches the headword of the passed word, or any
+     * declensions/conjugations of the word.
+     *
+     * @param matchText Text to match.
+     * @param word Word within which to search for matches
+     * @return true if match, false otherwise
+     */
+    private boolean matchHeadAndDeclensions(String matchText, ConWord word) {
+        boolean ret = false;
+        boolean ignoreCase = core.getPropertiesManager().isIgnoreCase();
+
+        String head = ignoreCase ? word.getValue().toLowerCase() : word.getValue();
+
+        if (!matchText.trim().isEmpty() && head.contains(matchText)) {
+            ret = true;
+        }
+        TypeNode type = core.getTypes().findTypeByName(word.getWordType());
+
+        if (type != null) {
+            int typeId = type.getId();
+            Iterator<DeclensionPair> decIt = core.getDeclensionManager().getAllCombinedIds(typeId).iterator();
+
+            while (!ret && decIt.hasNext()) {
+                DeclensionPair curPair = decIt.next();
+                String declension = core.getDeclensionManager()
+                        .declineWord(typeId, curPair.combinedId, word.getValue());
+
+                if (!declension.trim().isEmpty() && declension.contains(matchText)) {
+                    ret = true;
+                }
+            }
+        }
+        
+        return ret;
     }
 
     @Override
@@ -432,7 +490,7 @@ public class ConWordCollection extends DictionaryCollection {
 
         return ret;
     }
-    
+
     /**
      * Builds report on words in ConLang. Potentially computationally expensive.
      *
@@ -485,7 +543,7 @@ public class ConWordCollection extends DictionaryCollection {
             // capture and record all phonemes in word and phoneme combinations
             List<PronunciationNode> phonArray = core.getPronunciationMgr()
                     .getPronunciationElements(curValue);
-            
+
             for (int i = 0; i < phonArray.size(); i++) {
                 if (phonemeCount.containsKey(phonArray.get(i).getPronunciation())) {
                     int newValue = phonemeCount.get(phonArray.get(i).getPronunciation()) + 1;
@@ -628,11 +686,11 @@ public class ConWordCollection extends DictionaryCollection {
                 Integer blue = 255 - red;
                 ret += "<td bgcolor=rgb(" + red + "," + blue + "," + blue + ")>"
                         + x + y + formatPlain(":"
-                        + comboValue.toString()) + "</td>";
+                                + comboValue.toString()) + "</td>";
             }
             ret += "</tr>";
         }
-        ret += "</table>"+formatPlain("<br><br>");
+        ret += "</table>" + formatPlain("<br><br>");
 
         // buid grid of 2 phoneme combos
         ret += formatPlain("Heat map of phoneme combination frequency:<br>");
@@ -658,7 +716,7 @@ public class ConWordCollection extends DictionaryCollection {
                 Integer blue = 255 - red;
                 ret += "<td bgcolor=rgb(" + red + "," + blue + "," + blue + ")>"
                         + formatPlain(x.getPronunciation() + y.getPronunciation() + ":"
-                        + comboValue.toString()) + "</td>";
+                                + comboValue.toString()) + "</td>";
             }
             ret += "</tr>";
         }
@@ -666,9 +724,10 @@ public class ConWordCollection extends DictionaryCollection {
 
         return ret;
     }
-    
+
     /**
      * Formats in HTML to a plain font to avoid conlang font
+     *
      * @param toPlain text to make plain
      * @return text in plain tag
      */
@@ -676,9 +735,10 @@ public class ConWordCollection extends DictionaryCollection {
         String defaultFont = "face=\"" + Font.SANS_SERIF + "\"";
         return "<font " + defaultFont + ">" + toPlain + "</font>";
     }
-    
+
     /**
      * Writes all word information to XML document
+     *
      * @param doc Document to write to
      * @param rootElement root element of document
      */
@@ -687,7 +747,7 @@ public class ConWordCollection extends DictionaryCollection {
         Element wordNode;
         Element wordValue;
         ConWord curWord;
-        
+
         while (wordLoop.hasNext()) {
             curWord = wordLoop.next();
 
@@ -727,13 +787,13 @@ public class ConWordCollection extends DictionaryCollection {
             wordValue = doc.createElement(PGTUtil.wordProcOverrideXID);
             wordValue.appendChild(doc.createTextNode(curWord.isProcOverride() ? "T" : "F"));
             wordNode.appendChild(wordValue);
-            
+
             wordValue = doc.createElement(PGTUtil.wordAutoDeclenOverrideXID);
             wordValue.appendChild(doc.createTextNode(curWord.isOverrideAutoDeclen() ? "T" : "F"));
             wordNode.appendChild(wordValue);
-            
+
             wordValue = doc.createElement(PGTUtil.wordRuleOverrideXID);
-            wordValue.appendChild(doc.createTextNode(curWord.isRulesOverrride()? "T" : "F"));
+            wordValue.appendChild(doc.createTextNode(curWord.isRulesOverrride() ? "T" : "F"));
             wordNode.appendChild(wordValue);
         }
     }
