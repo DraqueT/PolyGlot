@@ -19,6 +19,8 @@
  */
 package PolyGlot;
 
+import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PFrame;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.TypeNode;
@@ -58,6 +60,45 @@ public class DictCore {
     private final ThesaurusManager thesManager = new ThesaurusManager(this);
     private final LogoCollection logoCollection = new LogoCollection(this);
     private final GrammarManager grammarManager = new GrammarManager();
+    private PFrame rootWindow;
+    
+    public DictCore() {
+        Map alphaOrder = propertiesManager.getAlphaOrder();
+
+        wordCollection.setAlphaOrder(alphaOrder);
+        typeCollection.setAlphaOrder(alphaOrder);
+        genderCollection.setAlphaOrder(alphaOrder);
+        logoCollection.setAlphaOrder(alphaOrder);
+        rootWindow = null;
+    }
+    
+    public void setRootWindow(PFrame _rootWindow) {
+        rootWindow = _rootWindow;
+    }
+    
+    /**
+     * Pushes signal to all forms to update their values from the core.
+     * Cascades through windows and their children.
+     */
+    public void pushUpdate() {
+        StackTraceElement stack [] = Thread.currentThread().getStackTrace();
+        
+        // prevent recursion (exclude check of top method, obviously)
+        for (int i = (stack.length - 1); i > 1; i--) {
+            StackTraceElement element = stack[i];
+            if (element.getMethodName().equals("pushUpdate")) {
+                return;
+            }
+        }
+        
+        if (rootWindow == null) {
+            InfoBox.warning("Bad Update", "This warning inicates that a root"
+                    + " window was null at the time of an update push.", 
+                    rootWindow);
+        } else {
+            rootWindow.updateAllValues();
+        }
+    }
 
     /**
      * Gets proper color for fields marked as required
@@ -126,15 +167,6 @@ public class DictCore {
         ret += wordCollection.buildWordReport();
 
         return ret;
-    }
-
-    public DictCore() {
-        Map alphaOrder = propertiesManager.getAlphaOrder();
-
-        wordCollection.setAlphaOrder(alphaOrder);
-        typeCollection.setAlphaOrder(alphaOrder);
-        genderCollection.setAlphaOrder(alphaOrder);
-        logoCollection.setAlphaOrder(alphaOrder);
     }
 
     /**

@@ -25,6 +25,7 @@ import PolyGlot.ExcelExport;
 import PolyGlot.Nodes.GenderNode;
 import PolyGlot.IOHandler;
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PDialog;
 import PolyGlot.JFontChooser;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.PGTUtil;
@@ -102,6 +103,23 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private boolean filterListenersActive = true;
     private String saveError = "";
 
+    @Override
+    public void updateAllValues() {
+        for (Window window : childFrames) {
+            if (window instanceof PFrame) {
+                PFrame frame = ((PFrame)window);
+                if (!frame.isDisposed()) {
+                    frame.updateAllValues();
+                }
+            } else if (window instanceof PDialog) {
+                PDialog dialog = ((PDialog)window);
+                if (!dialog.isDisposed()) {
+                    dialog.updateAllValues();
+                }
+            }
+        }
+    }
+    
     /**
      * Creates new form scrDictInterface
      */
@@ -2774,6 +2792,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         }
 
         core = new DictCore();
+        core.setRootWindow(this);
         curFileName = "";
 
         setLexiconEnabled(true);        

@@ -50,6 +50,11 @@ public class ScrLangStats extends PDialog {
         jScrollPane2.getHorizontalScrollBar().setValue(0);
     }
     
+    @Override
+    public void updateAllValues() {
+        // does nothing
+    }
+    
     public static void run(DictCore _core) {
         
         ScrLangStats s = new ScrLangStats(_core);
@@ -101,4 +106,5 @@ public class ScrLangStats extends PDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
+
 }

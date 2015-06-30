@@ -30,6 +30,7 @@ import PolyGlot.Nodes.TypeNode;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -93,6 +94,19 @@ public class ScrQuickWordEntry extends PDialog {
         
         populateTypes();
         populateGenders();
+    }
+    
+    @Override
+    public void updateAllValues() {
+        // ensure this is on the UI component stack to avoid read/writelocks...
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                populateTypes();
+                populateGenders();
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
     }
     
     private void populateTypes() {

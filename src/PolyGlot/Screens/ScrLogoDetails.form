@@ -180,6 +180,9 @@
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Filter on related words"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core.getPropertiesManager())"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="fltStrokes">
           <Properties>
@@ -206,6 +209,9 @@
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Filter by reading"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core.getPropertiesManager())"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="fltNotes">
           <Properties>
@@ -221,6 +227,9 @@
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Filter by radical name"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core.getPropertiesManager())"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -566,6 +575,9 @@
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Name of logograph"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core.getPropertiesManager())"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel12">
           <Properties>

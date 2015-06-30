@@ -76,6 +76,11 @@ public class ScrTypes extends PDialog {
         }
     }
     
+    @Override
+    public void updateAllValues() {
+        // No values need to be updated
+    }
+    
     /**
      * Closes all child windows
      */

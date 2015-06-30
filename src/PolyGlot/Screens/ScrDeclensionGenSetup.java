@@ -73,6 +73,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         setupObjectModels();
         setupListeners();
         setObjectProperties();
+        setModal(true);
 
         populateCombinedDecl();
     }
@@ -130,6 +131,11 @@ public class ScrDeclensionGenSetup extends PDialog {
         }
         
         return ret;
+    }
+    
+    @Override
+    public void updateAllValues() {
+        // No values to update due to modular nature of window
     }
 
     /**

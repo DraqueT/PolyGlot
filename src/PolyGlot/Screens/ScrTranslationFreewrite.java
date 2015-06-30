@@ -44,6 +44,12 @@ public class ScrTranslationFreewrite extends PFrame {
         jTextArea1.setFont(core.getPropertiesManager().getFontCon());
         jTextArea1.setText(initialText);
     }
+    
+    @Override
+    public void updateAllValues() {
+        // Deprecated screens don't need updates
+        // TODO: revisit if this window is re-upped
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

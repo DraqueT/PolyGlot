@@ -116,6 +116,11 @@ public class ScrUpdateAlert extends PFrame {
             setVisible(true);
         }
     }
+    
+    @Override
+    public void updateAllValues() {
+        // No values to update
+    }
 
     @Override
     public void addBindingToComponent(JComponent c) {

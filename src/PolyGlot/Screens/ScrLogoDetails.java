@@ -25,6 +25,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.LogoNode;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
+import PolyGlot.CustomControls.PTextField;
 import PolyGlot.PGTUtil.WindowMode;
 import PolyGlot.CustomControls.TableColumnEditor;
 import PolyGlot.CustomControls.TableColumnRenderer;
@@ -137,7 +138,6 @@ public class ScrLogoDetails extends PFrame {
      */
     public ScrLogoDetails(DictCore _core, int logoId) {
         setNimbus();
-        setupKeyStrokes();
         initComponents();
         
         core = _core;
@@ -161,6 +161,11 @@ public class ScrLogoDetails extends PFrame {
         mode = WindowMode.SINGLEVALUE;
     }
     
+    @Override
+    public void updateAllValues() {
+        setupFonts();
+    }
+    
     /**
      * Sets up fonts based on core properties
      */
@@ -175,11 +180,7 @@ public class ScrLogoDetails extends PFrame {
         lstRelWords.setFont(font);
         lstRadicals.setFont(font);
         tblReadings.setFont(font);
-        txtName.setFont(font);
-        fltRadical.setFont(font);
-        fltReading.setFont(font);
-        fltRelatedWord.setFont(font);
-    }
+        }
 
     /**
      * sets up custom listeners
@@ -707,13 +708,7 @@ public class ScrLogoDetails extends PFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScrLogoDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScrLogoDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScrLogoDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ScrLogoDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
     }
@@ -877,15 +872,15 @@ public class ScrLogoDetails extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        fltRelatedWord = new javax.swing.JTextField();
+        fltRelatedWord = new PTextField(core.getPropertiesManager());
         fltStrokes = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        fltReading = new javax.swing.JTextField();
+        fltReading = new PTextField(core.getPropertiesManager());
         fltNotes = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        fltRadical = new javax.swing.JTextField();
+        fltRadical = new PTextField(core.getPropertiesManager());
         jScrollPane1 = new javax.swing.JScrollPane();
         lstLogos = new javax.swing.JList();
         btnAddLogo = new PButton("+");
@@ -904,7 +899,7 @@ public class ScrLogoDetails extends PFrame {
         btnDelRad = new PButton("-");
         chkIsRad = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
-        txtName = new javax.swing.JTextField();
+        txtName = new PTextField(core.getPropertiesManager());
         jLabel12 = new javax.swing.JLabel();
         txtStrokes = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();

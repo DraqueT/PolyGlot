@@ -92,6 +92,15 @@ public class ScrLogoQuickView extends PFrame {
         }
     }
     
+    
+    @Override
+    public void updateAllValues() {
+        if (logoFinder != null
+                && !logoFinder.isDisposed()) {
+            logoFinder.updateAllValues();
+        }
+    }
+    
     @Override
     protected void setupKeyStrokes() {
         addBindingsToPanelComponents(this.getRootPane());

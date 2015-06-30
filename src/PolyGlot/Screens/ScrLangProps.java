@@ -71,6 +71,11 @@ public class ScrLangProps extends PDialog {
     }
     
     @Override
+    public void updateAllValues() {
+        // does nothing
+    }
+    
+    @Override
     public void dispose() {
         saveAllProps();
         // TODO: Call forceupdate in to core here
@@ -117,7 +122,7 @@ public class ScrLangProps extends PDialog {
         DefaultTableModel procTableModel = new DefaultTableModel();
         procTableModel.addColumn("Character(s)");
         procTableModel.addColumn("Pronuncation");
-        tblProcs.setModel(procTableModel);
+        tblProcs.setModel(procTableModel); // TODO: find way to make tblProcs display RTL order when appropriate Maybe something on my custom cell editor
 
         procTableModel.addTableModelListener(new TableModelListener() {
             @Override

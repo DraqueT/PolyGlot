@@ -69,6 +69,11 @@ public class ScrGenders extends PDialog {
         }
     }
     
+    @Override
+    public void updateAllValues() {
+        // nothing to update
+    }
+    
     /**
      * Sets up object listeners
      */
@@ -115,6 +120,7 @@ public class ScrGenders extends PDialog {
         populateGenders();
         lstGenders.setSelectedValue(curNode, true);
         updatingName = false;
+        core.pushUpdate();
     }
     
     /**
@@ -181,6 +187,7 @@ public class ScrGenders extends PDialog {
                 "" : txtName.getText());
         saveNode.setNotes(txtNotes.getText().equals(defNotes) ?
                 "" : txtNotes.getText());
+        core.pushUpdate();
     }
     
     /**

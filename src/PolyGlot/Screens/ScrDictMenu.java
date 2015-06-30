@@ -20,12 +20,14 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PFrame;
+import javax.swing.JComponent;
 
 /**
  *
  * @author draque
  */
-public class ScrDictMenu extends javax.swing.JFrame {
+public class ScrDictMenu extends PFrame {
 
     /**
      * Creates new form ScrDictMenu
@@ -33,6 +35,18 @@ public class ScrDictMenu extends javax.swing.JFrame {
     public ScrDictMenu() {
         initComponents();
         checkJavaVersion();
+    }
+    
+    @Override
+    public void updateAllValues() {
+        // TODO: All child windows must be told to update
+        // consider putting all children in an array of fixed length.
+        // That would allow preloading of lengthier loading windows...
+    }
+    
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        // no bindings necessary for this window
     }
 
     /**
@@ -50,7 +64,7 @@ public class ScrDictMenu extends javax.swing.JFrame {
                 || javaVersion.startsWith("1.5")
                 || javaVersion.startsWith("1.6")) {
             InfoBox.error("Please Upgrade Java", "Java " + javaVersion
-                    + " must be upgraded to run PolyGlot. Version 1.7 or higher is required to run PolyGlot.\n\n"
+                    + " must be upgraded to run PolyGlot. Version 1.7 or higher is required.\n\n"
                     + "Please upgrade at https://java.com/en/download/.", this);
             System.exit(0);
         }

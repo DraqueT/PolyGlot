@@ -83,11 +83,17 @@ public final class ScrDeclensionSetup extends PDialog {
 
         declListModel = new DefaultListModel();
         lstDeclensionList.setModel(declListModel);
+        setModal(true);
 
         populateDeclensionList();
         setupListeners();
 
         setupDimTable();
+    }
+    
+    @Override
+    public void updateAllValues() {
+        // No values to update due to modal nature of window
     }
     
     @Override

@@ -98,6 +98,11 @@ public class ScrThesaurus extends PFrame {
     }
     
     @Override
+    public void updateAllValues() {
+        // nothing up update
+    }
+    
+    @Override
     public void addBindingToComponent(JComponent c) {
         Action addAction = new AbstractAction() {
             @Override

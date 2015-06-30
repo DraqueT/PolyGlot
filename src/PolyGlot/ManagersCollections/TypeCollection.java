@@ -44,6 +44,12 @@ public class TypeCollection extends DictionaryCollection {
     public TypeNode getBufferType() {
         return (TypeNode) bufferNode;
     }
+    
+    @Override
+    public void deleteNodeById(Integer _id) throws Exception {
+        super.deleteNodeById(_id);
+        core.pushUpdate();
+    }
 
     @Override
     public int addNode(DictNode _addType) throws Exception {
@@ -126,6 +132,7 @@ public class TypeCollection extends DictionaryCollection {
         ret = super.insert(_id, bufferNode);
 
         bufferNode = new TypeNode();
+        core.pushUpdate();
 
         return ret;
     }

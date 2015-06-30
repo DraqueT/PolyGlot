@@ -134,6 +134,11 @@ public class ScrGrammarGuide extends PFrame {
     }
     
     @Override
+    public void updateAllValues() {
+        populateProperties();
+    }
+    
+    @Override
     public void setupKeyStrokes() {
         addBindingsToPanelComponents(this.getRootPane());
         super.setupKeyStrokes();

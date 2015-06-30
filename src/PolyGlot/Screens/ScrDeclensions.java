@@ -65,8 +65,14 @@ public class ScrDeclensions extends PDialog {
         this.setupKeyStrokes();
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setModal(true);
     }
 
+    @Override
+    public void updateAllValues() {
+        // No values to update due to modal nature of window
+    }
+    
     public void setConWord(ConWord _word) {
         word = _word;
     }

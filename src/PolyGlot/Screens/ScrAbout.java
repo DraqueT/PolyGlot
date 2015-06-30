@@ -173,6 +173,11 @@ public class ScrAbout extends PDialog {
             
             return s;
     }
+    
+    @Override
+    public void updateAllValues() {
+        // No values to update
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

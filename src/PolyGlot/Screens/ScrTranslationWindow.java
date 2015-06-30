@@ -89,6 +89,12 @@ public class ScrTranslationWindow extends PFrame {
     }
     
     @Override
+    public void updateAllValues() {
+        // Deprecated screens don't need updates
+        // TODO: revisit if this window is re-upped
+    }
+    
+    @Override
     public void addBindingToComponent(JComponent c) {
         // do nothing
     }

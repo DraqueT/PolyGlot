@@ -84,6 +84,11 @@ public abstract class PFrame extends JFrame {
     }
 
     /**
+     * Forces window to update all relevant values from core
+     */
+    public abstract void updateAllValues();
+    
+    /**
      * enable cut/copy/paste if running on a mac
      */
     protected void setupKeyStrokes() {

@@ -49,6 +49,11 @@ public class ScrExcelImport extends PDialog {
 
         core = _core;
     }
+    
+    @Override
+    public void updateAllValues() {
+        // does nothing
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -317,7 +322,7 @@ public class ScrExcelImport extends PDialog {
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
         browseFile();
     }//GEN-LAST:event_btnBrowseActionPerformed
-
+    
     /**
      * @param _core the dictionary core
      */

@@ -20,7 +20,6 @@
 
 package PolyGlot.ManagersCollections;
 
-import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.DictNode;
@@ -84,6 +83,7 @@ public class GenderCollection extends DictionaryCollection{
         }
         
         super.deleteNodeById(_id);
+        core.pushUpdate();
     }
     
     /**
@@ -147,6 +147,7 @@ public class GenderCollection extends DictionaryCollection{
         ret = super.insert(bufferNode);
         
         bufferNode = new GenderNode();
+        core.pushUpdate();
         
         return ret;
     }

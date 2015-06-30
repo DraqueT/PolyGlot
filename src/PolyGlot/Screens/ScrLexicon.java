@@ -24,6 +24,7 @@ import PolyGlot.DictCore;
 import PolyGlot.Nodes.GenderNode;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTextField;
@@ -72,6 +73,7 @@ import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -81,6 +83,7 @@ import javax.swing.event.DocumentListener;
  */
 public final class ScrLexicon extends PFrame {
 // TODO: the title bar should be updated with the language name? Maybe on top menu? Consider.
+
     private final List<Window> childFrames = new ArrayList<Window>();
     private TitledPane gridTitlePane = null;
     private final JFXPanel fxPanel;
@@ -99,6 +102,7 @@ public final class ScrLexicon extends PFrame {
     private final DictCore core;
     private boolean curPopulating = false;
     private boolean namePopulating = false;
+    private boolean forceUpdate = false;
     private Thread filterThread = null;
 
     /**
@@ -133,6 +137,52 @@ public final class ScrLexicon extends PFrame {
             btnAddWord.setToolTipText(btnAddWord.getToolTipText() + " (CTRL +)");
             btnDelWord.setToolTipText(btnDelWord.getToolTipText() + " (CTRL -)");
         }
+    }
+
+    @Override
+    public void updateAllValues() {
+        // ensure this is on the UI component stack to avoid read/writelocks...
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                // first push update to all child frames...
+                boolean localPopulating = curPopulating;
+                curPopulating = true;
+                forceUpdate = true;
+                for (Window window : childFrames) {
+                    if (window instanceof PFrame) {
+                        PFrame frame = ((PFrame) window);
+                        if (!frame.isDisposed()) {
+                            frame.updateAllValues();
+                        }
+                    } else if (window instanceof PDialog) {
+                        PDialog dialog = ((PDialog) window);
+                        if (!dialog.isDisposed()) {
+                            dialog.updateAllValues();
+                        }
+                    }
+                }
+
+                Runnable fxSetup = new Runnable() {
+                    @Override
+                    public void run() {
+                        setupComboBoxesFX();
+                        setFonts();
+                    }
+                };
+                Platform.setImplicitExit(false);
+                Platform.runLater(fxSetup);
+
+                ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+                lstLexicon.clearSelection();
+                setupComboBoxesSwing();
+                lstLexicon.setSelectedValue(curWord, true);
+                curPopulating = localPopulating;
+                forceUpdate = false;                
+                populateProperties();
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
     }
 
     @Override
@@ -378,6 +428,10 @@ public final class ScrLexicon extends PFrame {
     private void setWordLegality() {
         ConWord testWord = (ConWord) lstLexicon.getSelectedValue();
 
+        if (forceUpdate) {
+            return;
+        }
+        
         if (testWord == null) {
             setWordLegality(testWord, true);
         }
@@ -909,7 +963,8 @@ public final class ScrLexicon extends PFrame {
             }
         } else if (comp instanceof JComboBox) {
             JComboBox compCmb = (JComboBox) comp;
-            if (compCmb.getSelectedItem().toString().equals(defValue)) {
+            if (compCmb.getSelectedItem() != null
+                    && compCmb.getSelectedItem().toString().equals(defValue)) {
                 compCmb.setForeground(Color.red);
             } else {
                 compCmb.setForeground(Color.black);
@@ -940,26 +995,6 @@ public final class ScrLexicon extends PFrame {
         txtConSrc.setFont(fontFx);
         txtConWord.setFont(font);
         lstLexicon.setFont(font);
-    }
-
-    // TODO: Add override annotation once this is a mandatory abstract value
-    // TODO: This must be properly tested
-    public void updateValues() {
-        Runnable fxSetup = new Runnable() {
-            @Override
-            public void run() {
-                setupComboBoxesFX();
-                setFonts();
-            }
-        };
-        Platform.runLater(fxSetup);
-
-        setupComboBoxesSwing();
-
-        ConWord curSelected = (ConWord) lstLexicon.getSelectedValue();
-        populateLexicon();
-        lstLexicon.setSelectedValue(curSelected, true);
-        populateProperties();
     }
 
     /**
@@ -1180,6 +1215,13 @@ public final class ScrLexicon extends PFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lexicon");
         setMinimumSize(new java.awt.Dimension(500, 450));
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                formWindowLostFocus(evt);
+            }
+        });
 
         jLayeredPane1.setMinimumSize(new java.awt.Dimension(351, 350));
         jLayeredPane1.setName(""); // NOI18N
@@ -1491,7 +1533,8 @@ public final class ScrLexicon extends PFrame {
 
     private void lstLexiconValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLexiconValueChanged
         if (evt.getValueIsAdjusting()
-                || namePopulating) {
+                || namePopulating
+                || forceUpdate) {
             return;
         }
 
@@ -1530,6 +1573,13 @@ public final class ScrLexicon extends PFrame {
     private void lstLexiconFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lstLexiconFocusGained
         lstLexicon.repaint();
     }//GEN-LAST:event_lstLexiconFocusGained
+
+    private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
+        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        if (curWord != null) {
+            saveValuesTo(curWord);
+        }
+    }//GEN-LAST:event_formWindowLostFocus
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddWord;

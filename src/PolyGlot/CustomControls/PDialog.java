@@ -35,7 +35,7 @@ import javax.swing.text.DefaultEditorKit;
  * features like mac copy/paste in PolyGlot
  * @author Draque
  */
-public class PDialog extends JDialog{
+public abstract class PDialog extends JDialog{
     private boolean isDisposed = false;
     protected WindowMode mode = WindowMode.STANDARD;
     private boolean skipCenter = false;
@@ -61,6 +61,11 @@ public class PDialog extends JDialog{
     public boolean isDisposed() {
         return isDisposed;
     }
+    
+    /**
+     * Forces window to update all relevant values from core
+     */
+    public abstract void updateAllValues();
     
     /**
      * Sets window visibly to the right of the window handed in
