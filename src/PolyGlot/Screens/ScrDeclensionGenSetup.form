@@ -382,7 +382,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core.getPropertiesManager())"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkDisableWordform">

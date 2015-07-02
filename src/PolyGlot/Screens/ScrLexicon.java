@@ -82,8 +82,6 @@ import javax.swing.event.DocumentListener;
  * @author draque
  */
 public final class ScrLexicon extends PFrame {
-// TODO: the title bar should be updated with the language name? Maybe on top menu? Consider.
-
     private final List<Window> childFrames = new ArrayList<Window>();
     private TitledPane gridTitlePane = null;
     private final JFXPanel fxPanel;
@@ -99,7 +97,6 @@ public final class ScrLexicon extends PFrame {
     private TextField txtDefSrc;
     private ComboBox cmbTypeSrc;
     private ComboBox cmbGenderSrc;
-    private final DictCore core;
     private boolean curPopulating = false;
     private boolean namePopulating = false;
     private boolean forceUpdate = false;
@@ -116,7 +113,6 @@ public final class ScrLexicon extends PFrame {
 
         core = _core;
         fxPanel = new JFXPanel();
-
         initComponents();
 
         lstLexicon.setModel(new DefaultListModel());
@@ -138,9 +134,36 @@ public final class ScrLexicon extends PFrame {
             btnDelWord.setToolTipText(btnDelWord.getToolTipText() + " (CTRL -)");
         }
     }
+    
+    /**
+     * Opens quickentry window if not already open
+     * @return quickentry window
+     */
+    public ScrQuickWordEntry openQuickEntry() {
+        ScrQuickWordEntry s = ScrQuickWordEntry.run(core, this);
+        childFrames.add(s);
+        
+        return s;
+    }
+    
+    /**
+     * forces refresh of word list
+     * @param wordId id of newly created word
+     */
+    public void refreshWordList(int wordId) {
+        populateLexicon();
+        try{
+            lstLexicon.setSelectedValue(
+                    core.getWordCollection().getNodeById(wordId), true);
+        } catch (Exception e) {
+            InfoBox.error("Refresh Error", "Unable to refresh lexicon: "
+                    + e.getLocalizedMessage(), this);
+            //e.printStackTrace();
+        }
+    }
 
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(final DictCore _core) {
         // ensure this is on the UI component stack to avoid read/writelocks...
         Runnable runnable = new Runnable() {
             @Override
@@ -153,16 +176,23 @@ public final class ScrLexicon extends PFrame {
                     if (window instanceof PFrame) {
                         PFrame frame = ((PFrame) window);
                         if (!frame.isDisposed()) {
-                            frame.updateAllValues();
+                            frame.updateAllValues(_core);
                         }
                     } else if (window instanceof PDialog) {
                         PDialog dialog = ((PDialog) window);
                         if (!dialog.isDisposed()) {
-                            dialog.updateAllValues();
+                            dialog.updateAllValues(_core);
                         }
                     }
                 }
 
+                if (core != _core) {
+                    core = _core;
+                    lstLexicon.setModel(new DefaultListModel());
+                    setDefaultValues();
+                    populateLexicon();
+                    lstLexicon.setSelectedIndex(0);
+                }
                 Runnable fxSetup = new Runnable() {
                     @Override
                     public void run() {
@@ -178,7 +208,7 @@ public final class ScrLexicon extends PFrame {
                 setupComboBoxesSwing();
                 lstLexicon.setSelectedValue(curWord, true);
                 curPopulating = localPopulating;
-                forceUpdate = false;                
+                forceUpdate = false;
                 populateProperties();
             }
         };
@@ -302,12 +332,19 @@ public final class ScrLexicon extends PFrame {
         txtProc.setText(defProcValue);
         cmbGender.setSelectedIndex(0);
         cmbType.setSelectedIndex(0);
-        txtConSrc.setText("");
-        txtDefSrc.setText("");
-        txtLocalSrc.setText("");
-        txtProcSrc.setText("");
-        cmbGenderSrc.getSelectionModel().select(0);
-        cmbTypeSrc.getSelectionModel().select(0);
+        Runnable fxSetup = new Runnable() {
+            @Override
+            public void run() {
+                txtConSrc.setText("");
+                txtDefSrc.setText("");
+                txtLocalSrc.setText("");
+                txtProcSrc.setText("");
+                cmbGenderSrc.getSelectionModel().select(0);
+                cmbTypeSrc.getSelectionModel().select(0);
+            }
+        };
+        Platform.setImplicitExit(false);
+        Platform.runLater(fxSetup);
 
         setAllGreyProps();
     }
@@ -431,7 +468,7 @@ public final class ScrLexicon extends PFrame {
         if (forceUpdate) {
             return;
         }
-        
+
         if (testWord == null) {
             setWordLegality(testWord, true);
         }
@@ -613,7 +650,6 @@ public final class ScrLexicon extends PFrame {
             }
 
             killAllChildren();
-
             super.dispose();
         }
     }
@@ -635,6 +671,26 @@ public final class ScrLexicon extends PFrame {
         }
 
         childFrames.clear();
+    }
+    
+    public ConWord getCurrentWord() {
+        return (ConWord)lstLexicon.getSelectedValue();
+    }
+    
+    public void selectWordById(int id) {
+        ConWord target = null;
+        
+        try {
+            target = core.getWordCollection().getNodeById(id);
+        } catch (Exception e) {
+            InfoBox.error("Word Selection Error", "Unable to select word:\n" 
+                    + e.getLocalizedMessage(), this);
+        }
+        
+        if (target == null) {
+            return;
+        }        
+        lstLexicon.setSelectedValue(target, true);
     }
 
     /**
@@ -907,16 +963,22 @@ public final class ScrLexicon extends PFrame {
      *
      * @param enable
      */
-    private void setPropertiesEnabled(boolean enable) {
-        txtConWord.setEnabled(enable);
-        txtDefinition.setEnabled(enable);
-        txtLocalWord.setEnabled(enable);
-        txtProc.setEnabled(enable);
-        cmbGender.setEnabled(enable);
-        cmbType.setEnabled(enable);
-        chkProcOverride.setEnabled(enable);
-        chkRuleOverride.setEnabled(enable);
-        jLabel1.setEnabled(enable);
+    private void setPropertiesEnabled(final boolean enable) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                txtConWord.setEnabled(enable);
+                txtDefinition.setEnabled(enable);
+                txtLocalWord.setEnabled(enable);
+                txtProc.setEnabled(enable);
+                cmbGender.setEnabled(enable);
+                cmbType.setEnabled(enable);
+                chkProcOverride.setEnabled(enable);
+                chkRuleOverride.setEnabled(enable);
+                jLabel1.setEnabled(enable);
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
     }
 
     /**
@@ -989,12 +1051,8 @@ public final class ScrLexicon extends PFrame {
      * thread
      */
     private void setFonts() {
-        Font font = core.getPropertiesManager().getFontCon();
         javafx.scene.text.Font fontFx = core.getPropertiesManager().getFXFont();
-
         txtConSrc.setFont(fontFx);
-        txtConWord.setFont(font);
-        lstLexicon.setFont(font);
     }
 
     /**
@@ -1031,9 +1089,6 @@ public final class ScrLexicon extends PFrame {
 
     public static ScrLexicon run(DictCore _core) {
         final ScrLexicon s = new ScrLexicon(_core);
-
-        s.setVisible(true);
-
         return s;
     }
 
@@ -1139,7 +1194,14 @@ public final class ScrLexicon extends PFrame {
         curPopulating = false;
 
         setWordLegality();
-        txtConWord.requestFocus();
+        
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                txtConWord.requestFocus();
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
     }
 
     private void viewQuickLogographs() {
@@ -1192,7 +1254,7 @@ public final class ScrLexicon extends PFrame {
         jPanel2 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
-        txtConWord = new PTextField(core.getPropertiesManager());
+        txtConWord = new PTextField(this);
         txtLocalWord = new javax.swing.JTextField();
         cmbType = new javax.swing.JComboBox();
         cmbGender = new javax.swing.JComboBox();
@@ -1208,7 +1270,7 @@ public final class ScrLexicon extends PFrame {
         txtErrorBox = new javax.swing.JTextPane();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        lstLexicon = new PList(core);
+        lstLexicon = new PList(this);
         btnAddWord = new PButton("+");
         btnDelWord = new PButton("-");
 

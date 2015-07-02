@@ -19,6 +19,7 @@
  */
 package PolyGlot.CustomControls;
 
+import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -34,12 +35,27 @@ import javax.swing.event.ChangeListener;
  */
 public class PTextField extends JTextField {
 
-    private final PropertiesManager propMan;
+    private PFrame parent;
+    private DictCore core;
     boolean skipRepaint = false;
     boolean curSetText = false;
 
-    public PTextField(PropertiesManager _propMan) {
-        propMan = _propMan;
+    /**
+     * Init for PDialogs
+     *
+     * @param _core
+     */
+    public PTextField(DictCore _core) {
+        core = _core;
+    }
+
+    /**
+     * Init for PFrames
+     *
+     * @param _parent
+     */
+    public PTextField(PFrame _parent) {
+        parent = _parent;
         DefaultBoundedRangeModel pVis = (DefaultBoundedRangeModel) this.getHorizontalVisibility();
 
         // remove change listener to add custom one
@@ -59,26 +75,26 @@ public class PTextField extends JTextField {
             }
         }
     }
-    
+
     /**
      * Prefixes the RTL character if not prefixed already
      */
     private void prefixRTL() {
         if (super.getText().startsWith("\u202e")) {
             return;
-        } 
-        
+        }
+
         setText('\u202e' + getText());
     }
-    
+
     private void defixRTL() {
         if (!super.getText().startsWith("\u202e")) {
             return;
-        } 
-        
-        setText(getText()); 
+        }
+
+        setText(getText());
     }
-    
+
     @Override
     public void repaint() {
         if (skipRepaint) {
@@ -86,15 +102,23 @@ public class PTextField extends JTextField {
         }
 
         try {
+            if (parent != null) {
+                core = parent.getCore();
+            }
+            if (core == null) {
+                //InfoBox.error("RENDERING ERROR", "Unable to render text.", parent);
+                return;
+            }
+
+            PropertiesManager propMan = core.getPropertiesManager();
             skipRepaint = true;
-            if (propMan != null
-                    && !curSetText) {
+            if (!curSetText) {
                 if (propMan.isEnforceRTL()) {
                     prefixRTL();
                 } else {
                     defixRTL();
                 }
-                
+
                 Font testFont = propMan.getFontCon();
                 if (!testFont.getFamily().equals(getFont().getFamily())) {
                     setFont(testFont);
@@ -114,8 +138,17 @@ public class PTextField extends JTextField {
         if (skipRepaint) {
             return;
         }
-        
+
+        if (parent != null) {
+            core = parent.getCore();
+        }
+        if (core == null) {
+            //InfoBox.error("RENDERING ERROR", "Unable to render text.", parent);
+            return;
+        }
+
         try {
+            PropertiesManager propMan = core.getPropertiesManager();
             skipRepaint = true;
             if (propMan != null
                     && !curSetText
@@ -132,11 +165,11 @@ public class PTextField extends JTextField {
             super.paint(g);
         } catch (NullPointerException e) {
             /* Do nothing. This fires due to a Java bug between the 
-            javax.swing.text.GlyphView class returning null values of fonts in 
-            some instances where the javax.swing.text.GlyphPainter1.sync() class
-            method is unable to properly handle it (it never checks an object for 
-            a null value when the object is populated from a method that returns
-            null under certain circumstances). Thanks, Java.*/
+             javax.swing.text.GlyphView class returning null values of fonts in 
+             some instances where the javax.swing.text.GlyphPainter1.sync() class
+             method is unable to properly handle it (it never checks an object for 
+             a null value when the object is populated from a method that returns
+             null under certain circumstances). Thanks, Java.*/
         }
     }
 

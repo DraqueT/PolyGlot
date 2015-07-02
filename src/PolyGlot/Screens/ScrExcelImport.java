@@ -44,6 +44,7 @@ public class ScrExcelImport extends PDialog {
     public ScrExcelImport(DictCore _core) {
         setupKeyStrokes();
         initComponents();
+        setModal(true);
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -51,7 +52,7 @@ public class ScrExcelImport extends PDialog {
     }
     
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _core) {
         // does nothing
     }
 

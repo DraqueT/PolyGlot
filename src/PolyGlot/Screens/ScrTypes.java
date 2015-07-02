@@ -77,8 +77,8 @@ public class ScrTypes extends PDialog {
     }
     
     @Override
-    public void updateAllValues() {
-        // No values need to be updated
+    public void updateAllValues(DictCore _core) {
+        // Due to modal nature of form, no need to update
     }
     
     /**
@@ -293,8 +293,6 @@ public class ScrTypes extends PDialog {
     public static ScrTypes run(DictCore _core) {
         ScrTypes s = new ScrTypes(_core);
         s.setupKeyStrokes();
-        s.setVisible(true);
-        
         return s;
     }
 

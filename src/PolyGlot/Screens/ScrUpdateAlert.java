@@ -20,7 +20,8 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PFrame;
+import PolyGlot.CustomControls.PDialog;
+import PolyGlot.DictCore;
 import PolyGlot.WebInterface;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -40,7 +41,7 @@ import org.w3c.dom.Node;
  *
  * @author draque
  */
-public class ScrUpdateAlert extends PFrame {
+public class ScrUpdateAlert extends PDialog {
 
     private final Map<String, String> buttonMap = new HashMap<String, String>();
 
@@ -118,13 +119,8 @@ public class ScrUpdateAlert extends PFrame {
     }
     
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _dictCore) {
         // No values to update
-    }
-
-    @Override
-    public void addBindingToComponent(JComponent c) {
-        // do nothing
     }
 
     /**
@@ -190,7 +186,6 @@ public class ScrUpdateAlert extends PFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    //public static void run(String version, String updateNotes) {
     public static void run(boolean verbose, String curVersion) throws Exception {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -204,6 +199,7 @@ public class ScrUpdateAlert extends PFrame {
         }
 
         ScrUpdateAlert s = new ScrUpdateAlert(verbose, curVersion);
+        s.setModal(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

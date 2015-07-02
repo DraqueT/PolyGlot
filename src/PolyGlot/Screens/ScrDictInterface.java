@@ -104,17 +104,17 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     private String saveError = "";
 
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _core) {
         for (Window window : childFrames) {
             if (window instanceof PFrame) {
                 PFrame frame = ((PFrame)window);
                 if (!frame.isDisposed()) {
-                    frame.updateAllValues();
+                    frame.updateAllValues(core);
                 }
             } else if (window instanceof PDialog) {
                 PDialog dialog = ((PDialog)window);
                 if (!dialog.isDisposed()) {
-                    dialog.updateAllValues();
+                    dialog.updateAllValues(core);
                 }
             }
         }
@@ -200,7 +200,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     /**
      * sets menu accelerators and menu item text to reflect this
      */
-    private void setupAccelerators() {
+    @Override
+    public void setupAccelerators() {
         String OS = System.getProperty("os.name");
         if (OS.startsWith("Mac")) {
             mnuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
@@ -2256,8 +2257,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     }
 
     private void viewTranslationWindow() {
-        Window window = ScrTranslationWindow.run(core, this);
-        childFrames.add(window);
+        //Window window = ScrTranslationWindow.run(core, this);
+        //childFrames.add(window);
     }
 
     private void viewConjAutoGen(int _typeId) {
@@ -2278,8 +2279,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
      * Opens thesaurus window, adds to children windows
      */
     private void viewThesaurus() {
-        Window window = ScrThesaurus.run(core, this);
-        childFrames.add(window);
+        //Window window = ScrThesaurus.run(core, this);
+        //childFrames.add(window);
     }
     
     private void viewLogographDetail() {
@@ -2319,8 +2320,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     }
     
     private void viewQuickEntry() {
-        Window window = ScrQuickWordEntry.run(core, this);
-        childFrames.add(window);
+        //Window window = ScrQuickWordEntry.run(core, this);
+        //childFrames.add(window);
     }
     
     private void viewGrammarDetail() {
@@ -2920,7 +2921,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
     }
 
     /**
-     * Provided for cases where the jave is run from an odd source folder (such
+     * Provided for cases where the java is run from an odd source folder (such
      * as under an app file in OSX)
      * @param override directory for base PolyGlot directory
      */
@@ -2959,26 +2960,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         // TODO: might want to clean up where this is enabled/disabled later...
         btnConwordDeclensions.setEnabled(true);
         btnWordLogographs.setEnabled(true);
-        
-        // TODO: Delete this if I find a good way around the problem
-        //testPromptUserFont();
     }
-    
-    /**
-     * Tests whether conlang font is installed on current computer. If not,
-     * prompts user to export font for install
-     */
-    /*private void testPromptUserFont() {
-        Font testFont = core.getPropertiesManager().getFontCon();
-        if (PropertiesManager.testSystemHasFont(testFont)) {
-            if (InfoBox.yesNoCancel("Font Export", "The font " + testFont.getName() +
-                    " is not installed on this system. This may cause some viewing errors"
-                    + " with this dictionary. Export font as file?", this) == JOptionPane.YES_OPTION) {
-                exportFont();
-            }
-        }
-    }*/
-    
+       
     /**
      * Prompts user for a location and exports font within PGD to given path
      */

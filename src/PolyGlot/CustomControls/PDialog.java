@@ -20,6 +20,7 @@
 
 package PolyGlot.CustomControls;
 
+import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -64,8 +65,9 @@ public abstract class PDialog extends JDialog{
     
     /**
      * Forces window to update all relevant values from core
+     * @param _core current dictionary core
      */
-    public abstract void updateAllValues();
+    public abstract void updateAllValues(DictCore _core);
     
     /**
      * Sets window visibly to the right of the window handed in

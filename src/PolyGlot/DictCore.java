@@ -33,6 +33,7 @@ import PolyGlot.ManagersCollections.ThesaurusManager;
 import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.ManagersCollections.TypeCollection;
 import PolyGlot.ManagersCollections.ConWordCollection;
+import PolyGlot.Screens.ScrDictMenu;
 import java.awt.Color;
 import java.awt.FontFormatException;
 import java.io.FileNotFoundException;
@@ -77,6 +78,28 @@ public class DictCore {
     }
     
     /**
+     * Pushes save signal to main interface menu
+     */
+    public void coreSave() {
+        ((ScrDictMenu)rootWindow).saveFile();
+    }
+    
+    /**
+     * Pushes save signal to main interface menu
+     */
+    public void coreOpen() {
+        ((ScrDictMenu)rootWindow).open();
+    }
+    
+    /**
+     * Pushes save signal to main interface menu
+     * @param performTest whether to prompt user to save
+     */
+    public void coreNew(boolean performTest) {
+        ((ScrDictMenu)rootWindow).newFile(performTest);
+    }
+    
+    /**
      * Pushes signal to all forms to update their values from the core.
      * Cascades through windows and their children.
      */
@@ -96,7 +119,7 @@ public class DictCore {
                     + " window was null at the time of an update push.", 
                     rootWindow);
         } else {
-            rootWindow.updateAllValues();
+            rootWindow.updateAllValues(this);
         }
     }
 

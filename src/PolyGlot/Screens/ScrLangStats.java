@@ -51,7 +51,7 @@ public class ScrLangStats extends PDialog {
     }
     
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _core) {
         // does nothing
     }
     
@@ -67,7 +67,6 @@ public class ScrLangStats extends PDialog {
                     + "box under Language Properties.", s);
         }
         
-        s.setModal(true);
         s.setVisible(true);
     }
 

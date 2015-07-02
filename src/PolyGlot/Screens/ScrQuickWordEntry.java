@@ -39,9 +39,9 @@ import javax.swing.SwingUtilities;
 public class ScrQuickWordEntry extends PDialog {
 
     private final KeyListener enterListener;
-    private final DictCore core;
+    private DictCore core;
     private final String cstSELET = "";
-    private final ScrDictInterface parent;
+    private final ScrLexicon parent;
 
     /**
      * Creates new form scrQuickWordEntry
@@ -49,7 +49,7 @@ public class ScrQuickWordEntry extends PDialog {
      * @param _core Dictionary core
      * @param _parent parent dictionary interface
      */
-    public ScrQuickWordEntry(DictCore _core, ScrDictInterface _parent) {
+    public ScrQuickWordEntry(DictCore _core, ScrLexicon _parent) {
         core = _core;
         parent = _parent;
 
@@ -97,7 +97,8 @@ public class ScrQuickWordEntry extends PDialog {
     }
     
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _core) {
+        core = _core;
         // ensure this is on the UI component stack to avoid read/writelocks...
         Runnable runnable = new Runnable() {
             @Override
@@ -236,7 +237,7 @@ public class ScrQuickWordEntry extends PDialog {
         chkProc = new javax.swing.JCheckBox();
         chkDefinition = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
-        txtConWord = new PTextField(core.getPropertiesManager());
+        txtConWord = new PTextField(core);
         txtLocalWord = new javax.swing.JTextField();
         cmbType = new javax.swing.JComboBox();
         cmbGender = new javax.swing.JComboBox();
@@ -491,7 +492,7 @@ public class ScrQuickWordEntry extends PDialog {
      * @param _parent parent dictionary interface
      * @return created window
      */
-    public static ScrQuickWordEntry run(DictCore _core, ScrDictInterface _parent) {
+    public static ScrQuickWordEntry run(DictCore _core, ScrLexicon _parent) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -513,7 +514,6 @@ public class ScrQuickWordEntry extends PDialog {
 
         ScrQuickWordEntry ret = new ScrQuickWordEntry(_core, _parent);
         ret.setModal(true);
-        ret.setVisible(true);
         return ret;
     }
 

@@ -45,8 +45,7 @@ import javax.swing.event.DocumentListener;
  * @author draque
  */
 public class ScrTranslationWindow extends PFrame {
-    private final DictCore core;
-    public final ScrDictInterface parent;
+    public final ScrDictMenu parent;
     private boolean curPopulating = false;
     private List<String> localText = new ArrayList<String>();
     private List<String> transText = new ArrayList<String>();
@@ -66,7 +65,7 @@ public class ScrTranslationWindow extends PFrame {
      * @param _core Set dictionary core
      * @param _parent Set parent value for callbacks
      */
-    public ScrTranslationWindow(DictCore _core, ScrDictInterface _parent) {
+    public ScrTranslationWindow(DictCore _core, ScrDictMenu _parent) {
         core = _core;
         parent = _parent;
         
@@ -89,7 +88,7 @@ public class ScrTranslationWindow extends PFrame {
     }
     
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _core) {
         // Deprecated screens don't need updates
         // TODO: revisit if this window is re-upped
     }
@@ -258,7 +257,7 @@ public class ScrTranslationWindow extends PFrame {
         });
     }
     
-    public static ScrTranslationWindow run(DictCore _core, ScrDictInterface parent) {
+    public static ScrTranslationWindow run(DictCore _core, ScrDictMenu parent) {
         ScrTranslationWindow s = new ScrTranslationWindow(_core, parent);
        
         s.setVisible(true);
@@ -635,7 +634,11 @@ public class ScrTranslationWindow extends PFrame {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnCreateNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateNewActionPerformed
-        parent.createNewWordByLocal(txtSearchText.getText());
+        // TODO: DISABLED THIS, ADDRESS WHEN REWORKING
+        InfoBox.warning("Disabled Feature", 
+                "This feature has been disabled until a later version of PolyGlot.", 
+                this);
+        //parent.createNewWordByLocal(txtSearchText.getText());
     }//GEN-LAST:event_btnCreateNewActionPerformed
 
     private void txtTransTextCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtTransTextCaretUpdate

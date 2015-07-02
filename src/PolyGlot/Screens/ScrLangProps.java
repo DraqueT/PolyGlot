@@ -71,8 +71,8 @@ public class ScrLangProps extends PDialog {
     }
     
     @Override
-    public void updateAllValues() {
-        // does nothing
+    public void updateAllValues(DictCore _core) {
+        // due to modal nature of form, does nothing
     }
     
     @Override
@@ -388,7 +388,7 @@ public class ScrLangProps extends PDialog {
         btnChangeFont = new javax.swing.JButton();
         txtFont = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
-        txtAlphaOrder = new PTextField(core.getPropertiesManager());
+        txtAlphaOrder = new PTextField(core);
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
@@ -709,7 +709,6 @@ public class ScrLangProps extends PDialog {
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
         s.setupKeyStrokes();
-        s.setVisible(true);
         return s;
     }
 

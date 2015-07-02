@@ -58,7 +58,8 @@ public class ScrLogoQuickView extends PFrame {
 
     @Override
     public void dispose() {
-        if (logoFinder != null && !logoFinder.isDisposed()) {
+        if (logoFinder != null 
+                && !logoFinder.isDisposed()) {
             logoFinder.dispose();
         }
         super.dispose();
@@ -94,10 +95,15 @@ public class ScrLogoQuickView extends PFrame {
     
     
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _core) {
+        if (core != _core) {
+            // this window by its very nature is for single words. Close on load of new dictionary.
+            dispose();
+        }
+        
         if (logoFinder != null
                 && !logoFinder.isDisposed()) {
-            logoFinder.updateAllValues();
+            logoFinder.updateAllValues(_core);
         }
     }
     

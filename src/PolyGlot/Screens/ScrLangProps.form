@@ -164,7 +164,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="List of all characters in conlang in alphabetical order (both upper and lower case)"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core.getPropertiesManager())"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core)"/>
               </AuxValues>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane1">

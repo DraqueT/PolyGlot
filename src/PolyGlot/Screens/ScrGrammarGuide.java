@@ -69,8 +69,6 @@ import javax.swing.tree.TreePath;
  * @author draque
  */
 public class ScrGrammarGuide extends PFrame {
-
-    private final DictCore core;
     private final String searchText;
     private final String defName;
     private final String defTime;
@@ -92,7 +90,7 @@ public class ScrGrammarGuide extends PFrame {
      * @param _core Dictionary core
      */
     public ScrGrammarGuide(DictCore _core) {
-        this.isUpdating = false;
+        isUpdating = false;
         searchText = "Search...";
         defName = "Name...";
         defTime = "00:00:00";
@@ -134,7 +132,13 @@ public class ScrGrammarGuide extends PFrame {
     }
     
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _core) {
+        if (core != _core) {
+            core = _core;
+            setInitialValues();
+            populateSections();
+        }
+        
         populateProperties();
     }
     
@@ -1000,15 +1004,7 @@ public class ScrGrammarGuide extends PFrame {
     public static ScrGrammarGuide run(DictCore _core) {
         final ScrGrammarGuide s = new ScrGrammarGuide(_core);
         s.setupKeyStrokes();
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                s.setVisible(true);
-            }
-        });
-        
+       
         // For some reason, adding items to the combobox moves this to the back... this fixes it
         SwingUtilities.invokeLater(new Runnable() {
             @Override

@@ -38,6 +38,7 @@ public class ScrAbout extends PDialog {
         this.setupKeyStrokes();
         initComponents();
         core = _core;
+        setModal(true);
         
         txtAbout.setText("PolyGlot ver. " + core.getVersion() + "\n\nPolyGlot is "
                 + "copyright Draque Thompson 2014-2015. It is licensed under the Creative Commons "
@@ -170,12 +171,13 @@ public class ScrAbout extends PDialog {
             ScrAbout s = new ScrAbout(_core);
            
             s.setVisible(true);
+            s.setModal(true);
             
             return s;
     }
     
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _core) {
         // No values to update
     }
 

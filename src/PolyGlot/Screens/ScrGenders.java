@@ -61,7 +61,8 @@ public class ScrGenders extends PDialog {
         }
         // TODO: signal core to updae relevant windows
         
-        if (txtName.getText().equals("")) {
+        if (txtName.getText().equals("")
+                && lstGenders.getSelectedIndex() != -1) {
             InfoBox.warning("Illegal Gender",
                     "Currently selected gender is illegal. Please correct or delete.", this);
         } else {
@@ -70,8 +71,8 @@ public class ScrGenders extends PDialog {
     }
     
     @Override
-    public void updateAllValues() {
-        // nothing to update
+    public void updateAllValues(DictCore _core) {
+        // due to modal nature of screen, nothing to update
     }
     
     /**
@@ -245,8 +246,6 @@ public class ScrGenders extends PDialog {
     public static ScrGenders run(DictCore _core) {
         ScrGenders s = new ScrGenders(_core);
         s.setupKeyStrokes();
-        s.setVisible(true);
-        
         return s;
     }
 

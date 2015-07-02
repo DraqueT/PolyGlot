@@ -63,7 +63,6 @@ import javax.swing.table.TableColumn;
  */
 public class ScrLogoDetails extends PFrame {
 
-    private final DictCore core;
     private boolean curPopulating = false;
     private ScrLogoQuickView quickView = null;
     private LogoNode singleModeLogo;
@@ -75,16 +74,16 @@ public class ScrLogoDetails extends PFrame {
      */
     public ScrLogoDetails(DictCore _core) {
         setNimbus();
-        initComponents();        
-        
+        initComponents();
+
         core = _core;
-        
+
         setupFonts();
 
         populateLogographs();
         populateLogoProps();
         setupListeners();
-        
+
         if (System.getProperty("os.name").startsWith("Mac")) {
             btnAddLogo.setToolTipText(btnAddLogo.getToolTipText() + " (⌘ +)");
             btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (⌘ -)");
@@ -93,7 +92,7 @@ public class ScrLogoDetails extends PFrame {
             btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (CTRL -)");
         }
     }
-    
+
     @Override
     protected void setupKeyStrokes() {
         addBindingsToPanelComponents(this.getRootPane());
@@ -139,10 +138,10 @@ public class ScrLogoDetails extends PFrame {
     public ScrLogoDetails(DictCore _core, int logoId) {
         setNimbus();
         initComponents();
-        
+
         core = _core;
         setupFonts();
-                
+
         try {
             singleModeLogo = (LogoNode) core.getLogoCollection().getNodeById(logoId);
             List<LogoNode> list = new ArrayList();
@@ -156,31 +155,36 @@ public class ScrLogoDetails extends PFrame {
         setSingleLogoMode(true);
         populateLogoProps();
         setupListeners();
-        
+
         setTitle("Logograph Details/Modification");
         mode = WindowMode.SINGLEVALUE;
     }
-    
+
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _core) {
+        if (core != _core) {
+            core = _core;
+            populateLogographs();
+            populateLogoProps();
+        }
         setupFonts();
     }
-    
+
     /**
      * Sets up fonts based on core properties
      */
     private void setupFonts() {
         Font font = core.getPropertiesManager().getFontCon();
-        
+
         if (font == null) {
             return;
         }
-        
+
         lstLogos.setFont(font);
         lstRelWords.setFont(font);
         lstRadicals.setFont(font);
         tblReadings.setFont(font);
-        }
+    }
 
     /**
      * sets up custom listeners
@@ -415,9 +419,9 @@ public class ScrLogoDetails extends PFrame {
         }
 
         List<LogoNode> radList = new ArrayList<LogoNode>();
-        DefaultListModel radModel = (DefaultListModel)lstRadicals.getModel();
-        
-        for (int i = 0; i < radModel.getSize(); i++) {            
+        DefaultListModel radModel = (DefaultListModel) lstRadicals.getModel();
+
+        for (int i = 0; i < radModel.getSize(); i++) {
             LogoNode curRad = (LogoNode) radModel.get(i);
             radList.add(curRad);
         }
@@ -490,41 +494,41 @@ public class ScrLogoDetails extends PFrame {
      * populates all related words of currently selected logonode
      */
     private void populateRelatedWords() {
-        LogoNode curNode = (LogoNode)lstLogos.getSelectedValue();
-        
+        LogoNode curNode = (LogoNode) lstLogos.getSelectedValue();
+
         if (curNode == null) {
             lstRelWords.setModel(new DefaultListModel());
             return;
         }
-        
+
         Iterator<ConWord> it = core.getLogoCollection().getLogoWords(curNode).iterator();
-        
+
         DefaultListModel wordModel = new DefaultListModel();
-        
+
         while (it.hasNext()) {
             wordModel.addElement(it.next());
         }
-        
+
         lstRelWords.setModel(wordModel);
     }
-    
+
     /**
-     * Applies filter to logograph list, or populates normally if nothing to filter on
+     * Applies filter to logograph list, or populates normally if nothing to
+     * filter on
      */
     private void runFilter() {
         // before modifying any values, save...
         saveRads(lstLogos.getSelectedIndex());
         saveReadings(lstLogos.getSelectedIndex());
-        
+
         if (fltNotes.getText().trim().equals("")
                 && fltRadical.getText().trim().equals("")
                 && fltReading.getText().trim().equals("")
                 && fltRelatedWord.getText().trim().equals("")
-                && fltStrokes.getText().trim().equals(""))
-        {
+                && fltStrokes.getText().trim().equals("")) {
             populateLogographs();
         }
-        
+
         int strokes = fltStrokes.getText().trim().equals("")
                 ? 0 : Integer.parseInt(fltStrokes.getText());
 
@@ -534,7 +538,7 @@ public class ScrLogoDetails extends PFrame {
                 fltRadical.getText(),
                 strokes,
                 fltNotes.getText()).iterator());
-        
+
         populateLogoProps();
     }
 
@@ -548,7 +552,7 @@ public class ScrLogoDetails extends PFrame {
             try {
                 Integer.parseInt(fltStrokes.getText());
             } catch (Exception e) {
-                
+
                 final Window parent = this;
                 // run later to avoid update conflicts
                 java.awt.EventQueue.invokeLater(new Runnable() {
@@ -560,7 +564,7 @@ public class ScrLogoDetails extends PFrame {
                         curPopulating = false;
                     }
                 });
-                
+
                 return false;
             }
         }
@@ -601,7 +605,7 @@ public class ScrLogoDetails extends PFrame {
 
         curPopulating = true;
         lstLogos.setModel(logoModel);
-        
+
         // TODO: consider reworking selection
         lstLogos.setSelectedIndex(0);
         curPopulating = false;
@@ -664,34 +668,34 @@ public class ScrLogoDetails extends PFrame {
         lstRadicals.setModel(radModel);
 
         // Populate readings
-        Iterator<String> procIt = curNode.getReadings().iterator(); 
+        Iterator<String> procIt = curNode.getReadings().iterator();
 // TODO: figure out a way to make this respect RTL languages... maybe just insert char here? and cut at save time? Messy but effective...
 
         DefaultTableModel procModel = new DefaultTableModel();
         procModel.addColumn("Readings");
         tblReadings.setModel(procModel);
-        
+
         // Readings font must be set each time the table is rebuilt
-        Font setFont = core.getPropertiesManager().getFontCon();        
+        Font setFont = core.getPropertiesManager().getFontCon();
         TableColumn column = tblReadings.getColumnModel().getColumn(0);
         column.setCellEditor(new TableColumnEditor(setFont));
         column.setCellRenderer(new TableColumnRenderer(setFont));
-        
+
         while (procIt.hasNext()) {
             Object[] newRow = {procIt.next()};
             procModel.addRow(newRow);
         }
         tblReadings.setModel(procModel);
-                
+
         // set logograph picture
         picLogo.setIcon(new ImageIcon(curNode.getLogoGraph().getScaledInstance(
                 picLogo.getWidth(), picLogo.getHeight(), Image.SCALE_SMOOTH)));
-        
+
         populateRelatedWords();
 
         curPopulating = false;
     }
-    
+
     /**
      * refreshes view of related words
      */
@@ -756,7 +760,7 @@ public class ScrLogoDetails extends PFrame {
         if (curNode == null || curPopulating) {
             return;
         }
-        
+
         if (!InfoBox.deletionConfirmation(this)) {
             return;
         }
@@ -786,15 +790,15 @@ public class ScrLogoDetails extends PFrame {
     private void addRadFromQuickview() {
         LogoNode rad = quickView.getCurrentLogo();
         DefaultListModel radModel = (DefaultListModel) lstRadicals.getModel();
-        
+
         if (rad != null) {
             // ignore calls to add radicals already in list
             for (int i = 0; i < radModel.getSize(); i++) {
-                if (rad.getId().equals(((LogoNode)radModel.get(i)).getId())) {
+                if (rad.getId().equals(((LogoNode) radModel.get(i)).getId())) {
                     return;
                 }
             }
-            
+
             radModel.addElement(rad);
         }
     }
@@ -832,7 +836,7 @@ public class ScrLogoDetails extends PFrame {
 
         super.dispose();
     }
-    
+
     private void addLogo() {
         LogoNode newNode = new LogoNode();
         newNode.setValue("NEW LOGOGRAPH");
@@ -860,6 +864,7 @@ public class ScrLogoDetails extends PFrame {
 
         populateLogoProps();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -872,15 +877,15 @@ public class ScrLogoDetails extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        fltRelatedWord = new PTextField(core.getPropertiesManager());
+        fltRelatedWord = new PTextField(this);
         fltStrokes = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        fltReading = new PTextField(core.getPropertiesManager());
+        fltReading = new PTextField(this);
         fltNotes = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        fltRadical = new PTextField(core.getPropertiesManager());
+        fltRadical = new PTextField(this);
         jScrollPane1 = new javax.swing.JScrollPane();
         lstLogos = new javax.swing.JList();
         btnAddLogo = new PButton("+");
@@ -899,7 +904,7 @@ public class ScrLogoDetails extends PFrame {
         btnDelRad = new PButton("-");
         chkIsRad = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
-        txtName = new PTextField(core.getPropertiesManager());
+        txtName = new PTextField(this);
         jLabel12 = new javax.swing.JLabel();
         txtStrokes = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
@@ -1324,7 +1329,7 @@ public class ScrLogoDetails extends PFrame {
         if (lstLogos.getSelectedIndex() == -1) {
             return;
         }
-        
+
         openImage();
     }//GEN-LAST:event_btnLoadImageActionPerformed
 
@@ -1336,7 +1341,7 @@ public class ScrLogoDetails extends PFrame {
         if (lstLogos.getSelectedIndex() == -1) {
             return;
         }
-        
+
         DefaultTableModel model = (DefaultTableModel) tblReadings.getModel();
         model.addRow(new Object[]{"New Reading"});
     }//GEN-LAST:event_btnAddReadingActionPerformed
@@ -1353,7 +1358,7 @@ public class ScrLogoDetails extends PFrame {
         if (lstLogos.getSelectedIndex() == -1) {
             return;
         }
-        
+
         if (quickView == null || quickView.isDisposed()) {
             quickView = new ScrLogoQuickView(core, true);
             quickView.setBeside(this);
@@ -1412,7 +1417,7 @@ public class ScrLogoDetails extends PFrame {
     public static ScrLogoDetails run(DictCore _core) {
         final ScrLogoDetails s = new ScrLogoDetails(_core);
         s.setupKeyStrokes();
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override

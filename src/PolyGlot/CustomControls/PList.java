@@ -28,16 +28,16 @@ import javax.swing.JList;
  * @author draque
  */
 public class PList extends JList {
-    private final DictCore core;
+    private final PFrame parent;
     
-    public PList(DictCore _core) {
-        core = _core;
+    public PList(PFrame _parent) {
+        parent = _parent;
     }
 
     @Override
     public void repaint() {
-        if (core != null) {
-            Font testFont = core.getPropertiesManager().getFontCon();
+        if (parent != null) {
+            Font testFont = parent.getCore().getPropertiesManager().getFontCon();
             
             if (!testFont.getFamily().equals(getFont().getFamily())) {
                 setFont(testFont);

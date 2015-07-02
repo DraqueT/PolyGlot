@@ -134,7 +134,7 @@ public class ScrDeclensionGenSetup extends PDialog {
     }
     
     @Override
-    public void updateAllValues() {
+public void updateAllValues(DictCore _core) {
         // No values to update due to modular nature of window
     }
 
@@ -632,7 +632,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         jLabel4 = new javax.swing.JLabel();
         txtRuleName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtRuleRegex = new PTextField(core.getPropertiesManager());
+        txtRuleRegex = new PTextField(core);
         chkDisableWordform = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();

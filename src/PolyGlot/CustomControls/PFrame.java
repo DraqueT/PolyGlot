@@ -19,15 +19,19 @@
  */
 package PolyGlot.CustomControls;
 
+import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
+import javax.swing.AbstractButton;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
@@ -43,18 +47,25 @@ import javax.swing.text.DefaultEditorKit;
  * @author Draque
  */
 public abstract class PFrame extends JFrame {
+
+    private final JMenuItem mnuSave = new JMenuItem();
+    private final JMenuItem mnuNew = new JMenuItem();
+    private final JMenuItem mnuExit = new JMenuItem();
+    private final JMenuItem mnuOpen = new JMenuItem();
+    protected DictCore core;
     private boolean isDisposed = false;
     private boolean ignoreCenter = false;
     protected WindowMode mode = WindowMode.STANDARD;
-    
+
     /**
      * Returns current running mode of window
-     * @return 
+     *
+     * @return
      */
     public WindowMode getMode() {
         return mode;
     }
-    
+
     @Override
     public void dispose() {
         isDisposed = true;
@@ -85,52 +96,59 @@ public abstract class PFrame extends JFrame {
 
     /**
      * Forces window to update all relevant values from core
+     *
+     * @param _core current dictionary core
      */
-    public abstract void updateAllValues();
-    
+    public abstract void updateAllValues(DictCore _core);
+
     /**
-     * enable cut/copy/paste if running on a mac
+     * enable cut/copy/paste/select all if running on a Mac, and any other
+     * specific, text based bindings I might choose to add later
      */
     protected void setupKeyStrokes() {
         int mask;
-        
-        if (System.getProperty("os.name").startsWith("Mac")) {
-            mask = KeyEvent.META_DOWN_MASK;           
+        String OS = System.getProperty("os.name");
+
+        if (OS.startsWith("Mac")) {
+            mask = KeyEvent.META_DOWN_MASK;
         } else {
             mask = KeyEvent.CTRL_DOWN_MASK;
         }
-        
-        InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.selectAllAction);
-            UIManager.put("TextField.focusInputMap", im);
-            
-            im = (InputMap) UIManager.get("TextArea.focusInputMap");
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
-            UIManager.put("TextArea.focusInputMap", im);
-            
-            im = (InputMap) UIManager.get("TextPane.focusInputMap");
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
-            UIManager.put("TextPane.focusInputMap", im); 
+
+        if (OS.startsWith("Mac")) {
+            addTextBindings("TextField.focusInputMap", mask);
+            addTextBindings("TextArea.focusInputMap", mask);
+            addTextBindings("TextPane.focusInputMap", mask);
+        }
     }
-    
+
+    /**
+     * Adds copy/paste/cut/select all bindings to the input map provided
+     *
+     * @param UIElement the string representing a UI Element in UIManager
+     * @param mask the mask to associate the binding with (command or control,
+     * for Macs or PC/Linux boxes, respectively.)
+     */
+    private void addTextBindings(String UIElement, int mask) {
+        InputMap im = (InputMap) UIManager.get(UIElement);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.selectAllAction);
+        UIManager.put(UIElement, im);
+    }
+
     /**
      * Recursive method that adds appropriate key bindings to all components
+     *
      * @param curObject parent object within form
      */
-    protected void addBindingsToPanelComponents(Object curObject) {        
+    protected void addBindingsToPanelComponents(Object curObject) {
         if (curObject instanceof JRootPane) {
-            addBindingToComponent((JComponent)curObject);
-            JRootPane root = (JRootPane)curObject;
+            addBindingToComponent((JComponent) curObject);
+            JRootPane root = (JRootPane) curObject;
             Component[] components = root.getComponents();
+            setupAccelerators();
 
             for (Component c : components) {
                 addBindingsToPanelComponents(c);
@@ -145,7 +163,7 @@ public abstract class PFrame extends JFrame {
         } else if (curObject instanceof JPanel) {
             JPanel jPanel = (JPanel) curObject;
             Component[] components = jPanel.getComponents();
-            
+
             for (Component c : components) {
                 addBindingsToPanelComponents(c);
             }
@@ -164,19 +182,78 @@ public abstract class PFrame extends JFrame {
                 addBindingsToPanelComponents(c);
             }
         } else if (curObject instanceof JComponent) {
-            addBindingToComponent((JComponent)curObject);
-        } 
+            addBindingToComponent((JComponent) curObject);
+        }
     }
-    
+
+    /**
+     * Get core from PFrame (used by custom PolyGlot elements)
+     *
+     * @return current dictionary core
+     */
+    public DictCore getCore() {
+        return core;
+    }
+
+    /**
+     * sets menu accelerators and menu item text to reflect this
+     */
+    public void setupAccelerators() {
+        mnuSave.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                core.coreSave();
+            }
+        });
+        this.rootPane.add(mnuSave);
+
+        mnuNew.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                core.coreNew(true);
+            }
+        });
+        this.rootPane.add(mnuNew);
+
+        mnuOpen.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                core.coreOpen();
+            }
+        });
+        this.rootPane.add(mnuOpen);
+
+        mnuExit.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dispose();
+            }
+        });
+        this.rootPane.add(mnuExit);
+
+        String OS = System.getProperty("os.name");
+        if (OS.startsWith("Mac")) {
+            mnuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
+            mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
+            mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
+            mnuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
+        } else {
+            mnuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
+            mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
+            mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
+            mnuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
+        }
+    }
+
     public abstract void addBindingToComponent(JComponent c);
-    
+
     // positions on screen once form has already been build/sized
     @Override
     public void setVisible(boolean visible) {
         if (!ignoreCenter) {
             this.setLocationRelativeTo(null);
         }
-        
-        super.setVisible(visible);     
+
+        super.setVisible(visible);
     }
 }

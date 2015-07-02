@@ -69,7 +69,7 @@ public class ScrDeclensions extends PDialog {
     }
 
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _core) {
         // No values to update due to modal nature of window
     }
     
@@ -301,7 +301,7 @@ public class ScrDeclensions extends PDialog {
             }
             
             Label newLabel = new Label(curLabel);
-            JTextField newField = new PTextField(core.getPropertiesManager());
+            JTextField newField = new PTextField(core);
             Dimension labelDim = new Dimension();
             labelDim.setSize(MAXLABELWIDTH, 0);
             newLabel.setMaximumSize(labelDim);
@@ -359,7 +359,7 @@ public class ScrDeclensions extends PDialog {
             Entry<String, DeclensionNode> decEnt = depIt.next();
             DeclensionNode curDec = decEnt.getValue();
 
-            JTextField newField = new PTextField(core.getPropertiesManager());
+            JTextField newField = new PTextField(core);
             Label newLabel = new Label(curDec.getNotes());
             
             // in the case of no patterns for word type, but existing deprecated declensions

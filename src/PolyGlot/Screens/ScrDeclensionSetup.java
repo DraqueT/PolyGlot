@@ -55,7 +55,6 @@ import javax.swing.table.TableColumn;
  * @author draque
  */
 public final class ScrDeclensionSetup extends PDialog {
-
     private Map scrToCoreDeclensions = new HashMap<Integer, Integer>();
     private Map scrDeclensionMap = new HashMap<String, Integer>();
     private TypeNode myType;
@@ -92,7 +91,7 @@ public final class ScrDeclensionSetup extends PDialog {
     }
     
     @Override
-    public void updateAllValues() {
+    public void updateAllValues(DictCore _core) {
         // No values to update due to modal nature of window
     }
     

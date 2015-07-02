@@ -54,9 +54,8 @@ import javax.swing.tree.TreePath;
  */
 public class ScrThesaurus extends PFrame {
 
-    private final DictCore core;
     private boolean curUpdating = false;
-    private final ScrDictInterface parent;
+    private final ScrDictMenu parent;
 
     /**
      * Creates new form ScrThesaurus
@@ -64,24 +63,14 @@ public class ScrThesaurus extends PFrame {
      * @param _core dictionary core
      * @param _parent parent window
      */
-    public ScrThesaurus(DictCore _core, ScrDictInterface _parent) {
+    public ScrThesaurus(DictCore _core, ScrDictMenu _parent) {
         core = _core;
         parent = _parent;
         initComponents();
-        ThesTreeNode root = new ThesTreeNode();
-        root.setAsRootNode(core.getThesManager().getRoot());
-
-        TreeModel newModel = new DefaultTreeModel(root);
-        treThes.setCellRenderer(new PGTreeCellRenderer());
-        treThes.setModel(newModel);
-        treThes.setRootVisible(false);
-
-        lstWords.setModel(new DefaultListModel());
+        setupComponents();
 
         setupListeners();
 
-        lstWords.setFont(core.getPropertiesManager().getFontCon());
-        
         if (System.getProperty("os.name").startsWith("Mac")) {
             btnAddFamily.setToolTipText(btnAddFamily.getToolTipText() + " (⌘ +)");
             btnDelFamily.setToolTipText(btnDelFamily.getToolTipText() + " (⌘ -)");
@@ -91,6 +80,21 @@ public class ScrThesaurus extends PFrame {
         }
     }
     
+    /**
+     * Sets up all screen components. Can be run more than once if core is 
+     * replaced.
+     */
+    private void setupComponents() {
+        ThesTreeNode root = new ThesTreeNode();
+        root.setAsRootNode(core.getThesManager().getRoot());
+        TreeModel newModel = new DefaultTreeModel(root);
+        treThes.setCellRenderer(new PGTreeCellRenderer());
+        treThes.setModel(newModel);
+        treThes.setRootVisible(false);
+        lstWords.setModel(new DefaultListModel());
+        lstWords.setFont(core.getPropertiesManager().getFontCon());
+    }
+    
     @Override
     public void setupKeyStrokes() {
         addBindingsToPanelComponents(this.getRootPane());
@@ -98,8 +102,11 @@ public class ScrThesaurus extends PFrame {
     }
     
     @Override
-    public void updateAllValues() {
-        // nothing up update
+    public void updateAllValues(DictCore _core) {
+        if (core != _core) {
+            core = _core;
+            setupComponents();
+        }
     }
     
     @Override
@@ -622,7 +629,7 @@ public class ScrThesaurus extends PFrame {
      * @param parent the parent calling window
      * @return an instantiated copy of itself
      */
-    public static ScrThesaurus run(final DictCore _core, ScrDictInterface parent) {
+    public static ScrThesaurus run(final DictCore _core, ScrDictMenu parent) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
