@@ -62,7 +62,7 @@ public class DictCore {
     private final LogoCollection logoCollection = new LogoCollection(this);
     private final GrammarManager grammarManager = new GrammarManager();
     private PFrame rootWindow;
-    
+// TODO: make this load options from ini file
     public DictCore() {
         Map alphaOrder = propertiesManager.getAlphaOrder();
 

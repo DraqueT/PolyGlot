@@ -36,10 +36,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
@@ -65,20 +70,31 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private ScrLogoDetails scrLogos;
     private ScrThesaurus scrThes;
     private boolean cleanSave = true;
+    // TODO: don't set this here once ini file is implemented
+    private final List<String> lastFiles = new ArrayList<String>();
 
     /**
      * Creates new form ScrDictMenu
      */
     public ScrDictMenu() {
         initComponents();
+        // TODO: uncomment this once ini file is implemented
+        //lastFiles = core.getProgramOptions().getLastFiles();
+        populateRecentOpened();
         checkJavaVersion();
         newFile(true);
         scrLexicon = ScrLexicon.run(core);
-        
+
         // activates macify for menu integration...
         if (System.getProperty("os.name").startsWith("Mac")) {
             activateMacify();
         }
+    }
+    
+    @Override
+    public void dispose() {
+        // TODO: set all cfg items and tell core to save ini file here
+        super.dispose();
     }
 
     @Override
@@ -97,7 +113,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             mnuOpenLocal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
         }
     }
-    
+
     // MACIFY RELATED CODE ->    
     private void activateMacify() {
         Application application = new DefaultApplication();
@@ -146,6 +162,46 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     // <- MACIFY RELATED CODE
 
     /**
+     * Populates recently opened files menu
+     */
+    private void populateRecentOpened() {
+        mnuRecents.removeAll();
+        
+        for (final String curFile : lastFiles) {
+            Path p = Paths.get(curFile);
+            String fileName = p.getFileName().toString();
+            JMenuItem lastFile = new JMenuItem();
+            lastFile.setText(fileName);
+            lastFile.setToolTipText(curFile);
+            lastFile.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    newFile(true);
+                    setFile(curFile);
+                }
+            });
+            mnuRecents.add(lastFile);
+        }
+    }
+    
+    /**
+     * Pushes a recently opened file (if appropriate) into the recent files list
+     * @param file full path of file
+     */
+    private void pushRecentFile(String file) {
+        if (!lastFiles.isEmpty()
+                && lastFiles.get(lastFiles.size() - 1).equals(file)) {            
+            return;
+        }
+        
+        while (lastFiles.size() > 5) {
+            lastFiles.remove(0);
+        }
+        
+        lastFiles.add(file);
+    }
+
+    /**
      * Used by saving worker to communicate whether files saved were successful
      *
      * @param _cleanSave whether the save was a success
@@ -174,7 +230,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      * opens dictionary file
      */
     public void open() {
-        // only open another if save/cancel test is passed
+        // only open if save/cancel test is passed
         if (!saveOrCancelTest()) {
             return;
         }
@@ -194,6 +250,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
         newFile(false); // wipe everything before loading new
         setFile(fileName);
+        pushRecentFile(fileName);
+        populateRecentOpened();
     }
 
     /**
@@ -219,7 +277,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 return false;
             }
         }
-
+        
         return true;
     }
 
@@ -238,6 +296,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             return false;
         }
 
+        pushRecentFile(curFileName);
+        populateRecentOpened();
         return doWrite(curFileName);
     }
 
@@ -338,7 +398,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         String langName = core.getPropertiesManager().getLangName().trim();
         if (!langName.isEmpty()) {
             title += (" : " + langName);
-        } // TODO: Else blank name
+        } 
+        
         if (scrLexicon != null) {
             scrLexicon.updateAllValues(_core);
         }
@@ -435,44 +496,46 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private void setOverrideProgramPath(String override) {
         core.getPropertiesManager().setOverrideProgramPath(override);
     }
-    
+
     /**
      * Retrieves currently selected word (if any) from ScrLexicon
-     * @return current word selected in scrLexicon, null otherwise (or if 
+     *
+     * @return current word selected in scrLexicon, null otherwise (or if
      * lexicon is not visible)
      */
     public ConWord getCurrentWord() {
         ConWord ret;
-        
-        if (scrLexicon == null 
+
+        if (scrLexicon == null
                 || !scrLexicon.isVisible()
                 || scrLexicon.isDisposed()) {
             ret = null;
         } else {
             ret = scrLexicon.getCurrentWord();
         }
-        
+
         return ret;
     }
-    
-    /** 
+
+    /**
      * Sets selection on lexicon by word id
-     * @param id 
+     *
+     * @param id
      */
     public void selectWordById(int id) {
         scrLexicon.selectWordById(id);
     }
-    
+
     @Override
     protected void setupKeyStrokes() {
         addBindingsToPanelComponents(this.getRootPane());
         super.setupKeyStrokes();
     }
-    
+
     private void viewAbout() {
         ScrAbout.run(core);
     }
-    
+
     private void lexHit() {
         if (btnLexicon.isSelected()) {
             try {
@@ -496,13 +559,13 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         }
     }
-    
+
     public void quickEntryHit() {
         ScrQuickWordEntry s = scrLexicon.openQuickEntry();
         bindButtonToWindow(s, btnQuickEntry);
         s.setVisible(true);
     }
-    
+
     public void grammarHit() {
         if (btnGrammar.isSelected()) {
             try {
@@ -526,7 +589,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         }
     }
-    
+
     private void logoHit() {
         if (btnLogos.isSelected()) {
             try {
@@ -550,7 +613,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         }
     }
-    
+
     private void thesHit() {
         if (btnThes.isSelected()) {
             try {
@@ -574,7 +637,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         }
     }
-    
+
     /**
      * Export dictionary to excel file
      */
@@ -605,7 +668,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             InfoBox.error("Export Problem", e.getLocalizedMessage(), this);
         }
     }
-    
+
     /**
      * Prompts user for a location and exports font within PGD to given path
      */
@@ -623,14 +686,14 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         } else {
             return;
         }
-        
+
         try {
             IOHandler.exportFont(fileName, curFileName);
         } catch (IOException e) {
             InfoBox.error("Export Error", "Unable to export font: " + e.getMessage(), this);
         }
     }
-    
+
     private void openHelp() {
         URI uri;
         try {
@@ -654,14 +717,14 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 } else {
                     relLocation = core.getPropertiesManager().getOverrideProgramPath();
                     relLocation = "file://" + relLocation + "/Contents/Resources/readme.html";
-                }                
+                }
                 relLocation = relLocation.replaceAll(" ", "%20");
                 uri = new URI(relLocation);
                 uri.normalize();
                 java.awt.Desktop.getDesktop().browse(uri);
             } else {
                 // TODO: Implement this for Linux
-                InfoBox.info("Help", "This is not yet implemented for OS: " + OS 
+                InfoBox.info("Help", "This is not yet implemented for OS: " + OS
                         + ". Please open readme.html in the application directory", this);
             }
         } catch (URISyntaxException | IOException e) {
