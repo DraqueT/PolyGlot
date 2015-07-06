@@ -52,6 +52,27 @@ public class DeclensionGenRule {
     }
     
     /**
+     * Sets declension gen rule equal to passed value, copying all subnodes
+     * @param r rule to copy from
+     * @param setTypeAndComb set to true to copy the typeId and combinationId
+     * from the original, false to skip values
+     */
+    public void setEqual(DeclensionGenRule r, boolean setTypeAndComb) {
+        if (setTypeAndComb) {
+            typeId = r.getTypeId();
+            combinationId = r.getCombinationId();
+        }
+        name = r.getName();
+        regex = r.getRegex();
+        transformations.clear();
+        for (DeclensionGenTransform copyFrom : r.getTransforms()) {
+            DeclensionGenTransform copyTo = new DeclensionGenTransform();
+            copyTo.setEqual(copyFrom);
+            transformations.add(copyTo);
+        }
+    }
+    
+    /**
      * initializes new declension rule
      * @param _typeId TypeID of type this rule applies to
      * @param _combinationId the combined ID of the constructed declension rule applies to

@@ -266,7 +266,7 @@
                         <StringItem index="4" value="Item 5"/>
                       </StringArray>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="List of rules associated with the selected conjugation"/>
+                    <Property name="toolTipText" type="java.lang.String" value="List of rules associated with the selected conjugation (right click to copy/paste)"/>
                   </Properties>
                   <Events>
                     <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstRulesValueChanged"/>

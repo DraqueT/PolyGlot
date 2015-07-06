@@ -65,6 +65,7 @@ public class DictCore {
     private final GrammarManager grammarManager = new GrammarManager();
     private final OptionsManager optionsManager = new OptionsManager(this);
     private PFrame rootWindow;
+    private Object clipBoard;
 
     public DictCore() {
         Map alphaOrder = propertiesManager.getAlphaOrder();
@@ -99,6 +100,22 @@ public class DictCore {
         }
         
         return ret;
+    }
+    
+    /**
+     * Clipboard can be used to hold any object
+     * @param c object to hold
+     */
+    public void setClipBoard(Object c) {
+        clipBoard = c;
+    }
+    
+    /**
+     * Retrieves object held in clipboard, even if null, regardless of type
+     * @return contents of clipboard
+     */
+    public Object getClipBoard() {
+        return clipBoard;
     }
     
     /**

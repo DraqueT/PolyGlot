@@ -36,4 +36,13 @@ public class DeclensionGenTransform {
         regex = "";
         replaceText = "";
     }
+    
+    /**
+     * Sets transform equal to that of passed value
+     * @param d transform to copy values from
+     */
+    public void setEqual(DeclensionGenTransform d) {
+        regex = d.regex;
+        replaceText = d.replaceText;
+    }
 }

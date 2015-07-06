@@ -31,7 +31,6 @@ import PolyGlot.CustomControls.PTextField;
 import PolyGlot.PGTools;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;

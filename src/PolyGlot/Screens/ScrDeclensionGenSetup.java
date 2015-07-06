@@ -32,9 +32,21 @@ import PolyGlot.CustomControls.TableColumnRenderer;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.DefaultListModel;
+import javax.swing.InputMap;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -90,17 +102,18 @@ public class ScrDeclensionGenSetup extends PDialog {
             super.dispose();
         }
     }
-    
+
     /**
      * only allows the form to close on success, displays user prompt otherwise
+     *
      * @return whether form may close
      */
     private boolean canClose() {
         boolean ret = true;
         String userMessage = "";
-        
+
         List<DeclensionGenRule> typeRules = core.getDeclensionManager().getDeclensionRules(typeId);
-        
+
         for (DeclensionGenRule curRule : typeRules) {
             try {
                 "TESTVAL".replaceAll(curRule.getRegex(), "");
@@ -108,33 +121,33 @@ public class ScrDeclensionGenSetup extends PDialog {
                 userMessage += "\nProblem with word match regex in rule " + curRule.getName() + ": " + e.getMessage();
                 ret = false;
             }
-            
+
             for (DeclensionGenTransform curTransform : curRule.getTransforms()) {
                 try {
                     if (curTransform.replaceText.contains("$&")) {
-                        throw new Exception ("Java regex does not regognize the regex pattern \"$&\"");
+                        throw new Exception("Java regex does not regognize the regex pattern \"$&\"");
                     }
-                    
+
                     "TESTVAL".replaceAll(curTransform.regex, curTransform.replaceText);
                 } catch (Exception e) {
-                    userMessage += "\nProblem with regular expression under declension \'" 
-                            + core.getDeclensionManager().getCombNameFromCombId(typeId, curRule.getCombinationId()) 
-                            + "\' in rule \'" + curRule.getName() + "\' transform \'" + curTransform.regex + " -> " 
+                    userMessage += "\nProblem with regular expression under declension \'"
+                            + core.getDeclensionManager().getCombNameFromCombId(typeId, curRule.getCombinationId())
+                            + "\' in rule \'" + curRule.getName() + "\' transform \'" + curTransform.regex + " -> "
                             + curTransform.replaceText + "\':\n " + e.getMessage();
                     ret = false;
                 }
             }
         }
-        
+
         if (!ret) {
             InfoBox.error("Unable to Close With Error", userMessage, this);
         }
-        
+
         return ret;
     }
-    
+
     @Override
-public void updateAllValues(DictCore _core) {
+    public void updateAllValues(DictCore _core) {
         // No values to update due to modular nature of window
     }
 
@@ -167,15 +180,15 @@ public void updateAllValues(DictCore _core) {
      */
     private void populateRules() {
         rulesModel.clear();
-        
+
         // population of rules works differently if deprecated rules are selected
         if (lstCombinedDec.getSelectedValue().equals(depRulesLabel)) {
             depRulesList = core.getDeclensionManager().getAllDepGenerationRules(typeId);
-            
+
             for (DeclensionGenRule curRule : depRulesList) {
                 rulesModel.addElement(curRule);
             }
-            
+
             enableEditing(false);
         } else {
 
@@ -189,7 +202,7 @@ public void updateAllValues(DictCore _core) {
 
             // only allow editing if there are actually rules to be populated... 
             enableTransformEditing(!ruleList.isEmpty());
-            
+
             for (DeclensionGenRule curRule : ruleList) {
                 if (curRule.getCombinationId().equals(curPair.combinedId)) {
                     rulesModel.addElement(curRule);
@@ -201,8 +214,8 @@ public void updateAllValues(DictCore _core) {
     }
 
     /**
-     * populates all rule values from currently selected rule
-     * also sets controls to allow editing only if a rule is selected
+     * populates all rule values from currently selected rule also sets controls
+     * to allow editing only if a rule is selected
      */
     public void populateRuleProperties() {
         if (curPopulating) {
@@ -222,7 +235,7 @@ public void updateAllValues(DictCore _core) {
             curPopulating = false;
             return;
         }
-        
+
         enableTransformEditing(true);
 
         txtRuleName.setText(curRule.getName());
@@ -240,11 +253,11 @@ public void updateAllValues(DictCore _core) {
         DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
         Font setFont = core.getPropertiesManager().getFontCon();
 
-        transModel = new DefaultTableModel(); 
+        transModel = new DefaultTableModel();
         transModel.addColumn("Regex");
         transModel.addColumn("Replacement");
         tblTransforms.setModel(transModel);
-        
+
         TableColumn column = tblTransforms.getColumnModel().getColumn(0);
         column.setCellEditor(new TableColumnEditor(setFont));
         column.setCellRenderer(new TableColumnRenderer(setFont));
@@ -265,7 +278,7 @@ public void updateAllValues(DictCore _core) {
 
             transModel.addRow(newRow);
         }
-        
+
         tblTransforms.setModel(transModel);
     }
 
@@ -286,10 +299,11 @@ public void updateAllValues(DictCore _core) {
 
         lstCombinedDec.setSelectedIndex(0);
     }
-    
+
     /**
      * Enables or disables editing of the properties/rules/transforms
-     * @param choice 
+     *
+     * @param choice
      */
     public void enableEditing(boolean choice) {
         txtRuleName.setEnabled(choice);
@@ -298,10 +312,11 @@ public void updateAllValues(DictCore _core) {
         btnAddRule.setEnabled(choice);
         btnAddTransform.setEnabled(choice);
     }
-    
-     /**
+
+    /**
      * Enables or disables editing of the properties/rules/transforms
-     * @param choice 
+     *
+     * @param choice
      */
     public void enableTransformEditing(boolean choice) {
         txtRuleName.setEnabled(choice);
@@ -362,7 +377,7 @@ public void updateAllValues(DictCore _core) {
                 setRuleRegex();
             }
         });
-        lstRules.addKeyListener(new KeyAdapter(){
+        lstRules.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent k) {
                 if (k.getKeyCode() == KeyEvent.VK_DOWN
@@ -371,6 +386,120 @@ public void updateAllValues(DictCore _core) {
                 }
             }
         });
+
+        Action ruleCopyAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copyRuleToClipboard();
+            }
+        };
+        Action rulePasteAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pasteRuleFromClipboard();
+            }
+        };
+        String copyKey = "copyRule";
+        String pasteKey = "pasteRule";
+        int mask;
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            mask = KeyEvent.META_DOWN_MASK;
+        } else {
+            mask = KeyEvent.CTRL_DOWN_MASK;
+        }
+        InputMap ruleIm = lstRules.getInputMap();
+        ActionMap ruleAm = lstRules.getActionMap();
+        ruleIm.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), copyKey);
+        ruleIm.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), pasteKey);
+        ruleAm.put(copyKey, ruleCopyAction);
+        ruleAm.put(pasteKey, rulePasteAction);
+        
+        final JPopupMenu ruleMenu = new JPopupMenu();
+        final JMenuItem copyItem = new JMenuItem("Copy Rule");
+        final JMenuItem pasteItem = new JMenuItem("Paste Rule");
+        copyItem.setToolTipText("Copy currently selected rule.");
+        pasteItem.setToolTipText("Paste rule in clipboard to rule list.");
+
+        copyItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                copyRuleToClipboard();
+            }
+        });        
+        pasteItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                pasteRuleFromClipboard();
+            }
+        });        
+        ruleMenu.add(copyItem);
+        ruleMenu.add(pasteItem);
+        lstRules.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    doPop(e);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    doPop(e);
+                }
+            }
+
+            private void doPop(MouseEvent e) {
+                if (lstRules.getSelectedValue() != null) {
+                    copyItem.setEnabled(true);
+                } else {
+
+                }
+
+                ruleMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
+        });
+    }
+
+    /**
+     * Copies selected rule (if any) to clipboard
+     */
+    private void copyRuleToClipboard() {
+        DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
+        
+        if (curRule == null) {
+            return;
+        }
+        
+        DeclensionGenRule copyRule = new DeclensionGenRule();
+        copyRule.setEqual(curRule, true);
+        core.setClipBoard(copyRule);
+    }
+
+    /**
+     * If rule exists on clipboard, copy to current rule list (with appropriate
+     * changes to type made, if necessary)
+     */
+    private void pasteRuleFromClipboard() {
+        Object fromClipBoard = core.getClipBoard();
+        DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+        
+        if (fromClipBoard == null
+                || !(fromClipBoard instanceof DeclensionGenRule)
+                || curPair == null)
+        {
+            return;
+        }
+        
+        DeclensionGenRule copyRule = new DeclensionGenRule(typeId, curPair.combinedId);
+        copyRule.setEqual((DeclensionGenRule)fromClipBoard, false);
+                
+        core.getDeclensionManager().addDeclensionGenRule(copyRule);
+        rulesModel.addElement(copyRule);
+        lstRules.setSelectedValue(copyRule, true);
+        populateRuleProperties();
+        populateTransforms();
+        enableTransformEditing(true);                
     }
 
     /**
@@ -465,7 +594,7 @@ public void updateAllValues(DictCore _core) {
         if (!InfoBox.deletionConfirmation(this)) {
             return;
         }
-        
+
         DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
 
         if (curRule == null) {
@@ -496,13 +625,13 @@ public void updateAllValues(DictCore _core) {
         if (!InfoBox.deletionConfirmation(this)) {
             return;
         }
-        
+
         if (lstRules.getSelectedValue() != null
                 && tblTransforms.getSelectedRow() != -1) {
             int removeRow = tblTransforms.convertRowIndexToModel(tblTransforms.getSelectedRow());
             transModel.removeRow(removeRow);
             tblTransforms.setModel(new DefaultTableModel());
-            
+
             // perform this action later, once the model is properly updated
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -514,7 +643,7 @@ public void updateAllValues(DictCore _core) {
             });
         }
     }
-    
+
     /**
      * move selected transform up in the list
      */
@@ -526,20 +655,20 @@ public void updateAllValues(DictCore _core) {
         if (index <= 0) {
             return;
         }
-        
+
         if (tblTransforms.getCellEditor() != null) {
             tblTransforms.getCellEditor().stopCellEditing();
         }
-        
+
         String regex = transModel.getValueAt(index, 0).toString();
         String replaceText = transModel.getValueAt(index, 1).toString();
-        
+
         transModel.removeRow(index);
         transModel.insertRow(index - 1, new Object[]{regex, replaceText});
-        
+
         tblTransforms.changeSelection(tblIndex - 1, column, false, false);
     }
-    
+
     /**
      * move selected transform down in list
      */
@@ -551,57 +680,55 @@ public void updateAllValues(DictCore _core) {
         if (index == -1 || index == tblTransforms.getRowCount() - 1) {
             return;
         }
-        
+
         if (tblTransforms.getCellEditor() != null) {
             tblTransforms.getCellEditor().stopCellEditing();
         }
-        
+
         String regex = transModel.getValueAt(index, 0).toString();
         String replaceText = transModel.getValueAt(index, 1).toString();
-        
+
         transModel.removeRow(index);
         transModel.insertRow(index + 1, new Object[]{regex, replaceText});
-        
+
         tblTransforms.changeSelection(tblIndex + 1, column, false, false);
     }
-    
+
     /**
      * move rule up in list
      */
     private void moveRuleUp() {
         int index = lstRules.getSelectedIndex();
-        
+
         if (index <= 0) {
             return;
         }
-        
-        DeclensionGenRule curRule = (DeclensionGenRule)lstRules.getSelectedValue();
-        DefaultListModel lstModel = (DefaultListModel)lstRules.getModel();
-        
-        
+
+        DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
+        DefaultListModel lstModel = (DefaultListModel) lstRules.getModel();
+
         lstModel.remove(index);
         lstModel.add(index - 1, curRule);
-        
+
         lstRules.setSelectedIndex(index - 1);
     }
-    
+
     /**
      * move rule down in list
      */
     private void moveRuleDown() {
         int index = lstRules.getSelectedIndex();
-        
+
         if (index == -1 || index == lstRules.getModel().getSize()) {
             return;
         }
-        
-        DeclensionGenRule curRule = (DeclensionGenRule)lstRules.getSelectedValue();
-        DefaultListModel lstModel = (DefaultListModel)lstRules.getModel();
-        
-        
+
+        DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
+        DefaultListModel lstModel = (DefaultListModel) lstRules.getModel();
+
         lstModel.remove(index);
         lstModel.add(index + 1, curRule);
-        
+
         lstRules.setSelectedIndex(index + 1);
     }
 
@@ -669,7 +796,7 @@ public void updateAllValues(DictCore _core) {
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        lstRules.setToolTipText("List of rules associated with the selected conjugation");
+        lstRules.setToolTipText("List of rules associated with the selected conjugation (right click to copy/paste)");
         lstRules.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstRulesValueChanged(evt);
@@ -921,7 +1048,7 @@ public void updateAllValues(DictCore _core) {
         saveTransPairs(lstRules.getSelectedIndex());
         DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
         chkDisableWordform.setSelected(core.getDeclensionManager()
-                .isCombinedDeclSurpressed(curPair == null?"":curPair.combinedId));
+                .isCombinedDeclSurpressed(curPair == null ? "" : curPair.combinedId));
         populateRules();
         populateRuleProperties();
         populateTransforms();
@@ -939,7 +1066,7 @@ public void updateAllValues(DictCore _core) {
         }
 
         upDownPress = false;
-                
+
         int selected = lstRules.getSelectedIndex();
         int previous = selected == evt.getFirstIndex() ? evt.getLastIndex() : evt.getFirstIndex();
 
@@ -961,17 +1088,17 @@ public void updateAllValues(DictCore _core) {
 
     private void chkDisableWordformActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDisableWordformActionPerformed
         DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
-        
+
         if (curPair == null) {
             return;
         }
-        
+
         core.getDeclensionManager().setCombinedDeclSurpressed(curPair.combinedId, chkDisableWordform.isSelected());
-        
+
         enableEditing(!chkDisableWordform.isSelected()
-            && lstCombinedDec.getSelectedIndex() != -1);
+                && lstCombinedDec.getSelectedIndex() != -1);
         enableTransformEditing(!chkDisableWordform.isSelected()
-            && lstRules.getSelectedIndex() != -1);
+                && lstRules.getSelectedIndex() != -1);
     }//GEN-LAST:event_chkDisableWordformActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

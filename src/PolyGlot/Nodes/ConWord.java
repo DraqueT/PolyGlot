@@ -21,7 +21,6 @@
 package PolyGlot.Nodes;
 
 import PolyGlot.DictCore;
-import PolyGlot.ManagersCollections.DictionaryCollection;
 
 /**
  *
