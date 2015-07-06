@@ -78,7 +78,7 @@ public class ScrLangProps extends PDialog {
     @Override
     public void dispose() {
         saveAllProps();
-        // TODO: Call forceupdate in to core here
+        core.pushUpdate();
         super.dispose();
     }
     

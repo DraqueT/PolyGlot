@@ -59,7 +59,8 @@ public class ScrGenders extends PDialog {
         if (curGender != null) {
             savePropertiesTo(curGender);
         }
-        // TODO: signal core to updae relevant windows
+        
+        core.pushUpdate();
         
         if (txtName.getText().equals("")
                 && lstGenders.getSelectedIndex() != -1) {
@@ -121,7 +122,11 @@ public class ScrGenders extends PDialog {
         populateGenders();
         lstGenders.setSelectedValue(curNode, true);
         updatingName = false;
-        core.pushUpdate();
+        
+        // only push update if not core loading file
+        if (!core.isCurLoading()) {
+            core.pushUpdate();
+        }
     }
     
     /**
@@ -188,7 +193,11 @@ public class ScrGenders extends PDialog {
                 "" : txtName.getText());
         saveNode.setNotes(txtNotes.getText().equals(defNotes) ?
                 "" : txtNotes.getText());
-        core.pushUpdate();
+        
+        // only push update if not core loading file
+        if (!core.isCurLoading()) {
+            core.pushUpdate();
+        }
     }
     
     /**

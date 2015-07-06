@@ -66,6 +66,7 @@ public class DictCore {
     private final OptionsManager optionsManager = new OptionsManager(this);
     private PFrame rootWindow;
     private Object clipBoard;
+    private boolean curLoading = false;
 
     public DictCore() {
         Map alphaOrder = propertiesManager.getAlphaOrder();
@@ -83,6 +84,14 @@ public class DictCore {
     
     public OptionsManager getOptionsManager() {
         return optionsManager;
+    }
+    
+    /**
+     * Returns whether core is currently loading a file
+     * @return true if currently loading
+     */
+    public boolean isCurLoading() {
+        return curLoading;
     }
     
     /**
@@ -240,6 +249,7 @@ public class DictCore {
      * @throws Exception detailing any loading problems
      */
     public void readFile(String _fileName) throws Exception {
+        curLoading = true;
         String loadLog = "";
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -278,6 +288,8 @@ public class DictCore {
         } catch (Exception e) {
             loadLog += e.getLocalizedMessage() + "\n";
         }
+        
+        curLoading = false;
 
         if (!loadLog.equals("")) {
             throw new Exception("Problems lodaing file:\n");

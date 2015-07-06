@@ -19,6 +19,7 @@
  */
 package PolyGlot.Nodes;
 
+import PolyGlot.PGTUtil;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -43,8 +44,8 @@ public class LogoNode extends DictNode {
     protected List<String> readings = new ArrayList<String>();
 
     public LogoNode() {
-        // TODO: move this text constant to a more appropriate location. Maybe put whole thing in IO class?
-        ImageIcon loadBlank = new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/EmptyImage.png"));
+        // TODO: Maybe put whole thing in IO class?
+        ImageIcon loadBlank = new ImageIcon(getClass().getResource(PGTUtil.emptyLogoImage));
         BufferedImage image = new BufferedImage(
                 loadBlank.getIconWidth(),
                 loadBlank.getIconHeight(),

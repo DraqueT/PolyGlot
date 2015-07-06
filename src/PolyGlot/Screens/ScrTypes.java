@@ -64,7 +64,8 @@ public class ScrTypes extends PDialog {
         if (curType != null) {
             savePropertiesTo(curType);
         }
-        // TODO: signal core to updae relevant windows
+        
+        core.pushUpdate();
         
         if (txtName.getText().equals("")
                 && curType != null) {

@@ -48,7 +48,11 @@ public class TypeCollection extends DictionaryCollection {
     @Override
     public void deleteNodeById(Integer _id) throws Exception {
         super.deleteNodeById(_id);
-        core.pushUpdate();
+        
+        // only push update if not core loading file
+        if (!core.isCurLoading()) {
+            core.pushUpdate();
+        }
     }
 
     @Override
@@ -132,7 +136,11 @@ public class TypeCollection extends DictionaryCollection {
         ret = super.insert(_id, bufferNode);
 
         bufferNode = new TypeNode();
-        core.pushUpdate();
+        
+        // only push update if not due to a core file load
+        if (!core.isCurLoading()) {
+            core.pushUpdate();
+        }
 
         return ret;
     }
@@ -150,7 +158,11 @@ public class TypeCollection extends DictionaryCollection {
         ret = super.insert(bufferNode);
 
         bufferNode = new TypeNode();
-        core.pushUpdate();
+        
+        // only push update if not core loading file
+        if (!core.isCurLoading()) {
+            core.pushUpdate();
+        }
 
         return ret;
     }

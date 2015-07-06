@@ -2242,8 +2242,8 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         }
 
         try {
-            ScrDeclensions.run(core, core.getWordCollection().getNodeById(wordId),
-                    (Integer) scrToCoreTypes.get(cmbTypeProp.getSelectedIndex()), core.getPropertiesManager().getFontCon());
+            //ScrDeclensions.run(core, core.getWordCollection().getNodeById(wordId),
+            //        (Integer) scrToCoreTypes.get(cmbTypeProp.getSelectedIndex()), core.getPropertiesManager().getFontCon());
         } catch (Exception ex) {
             InfoBox.error("Delcension Error", ex.getLocalizedMessage(), this);
         }

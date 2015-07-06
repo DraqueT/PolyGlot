@@ -90,7 +90,10 @@ public class ThesaurusManager {
             buffer = thesRoot;
         } else {
             ThesNode newBuffer = new ThesNode(buffer, this);
-            buffer.addNode(newBuffer);
+            if (buffer != null) {
+                buffer.addNode(newBuffer);
+            }
+            
             buffer = newBuffer;
         }
     }

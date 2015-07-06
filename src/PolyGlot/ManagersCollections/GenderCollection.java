@@ -83,7 +83,11 @@ public class GenderCollection extends DictionaryCollection{
         }
         
         super.deleteNodeById(_id);
-        core.pushUpdate();
+        
+        // only push update if not core loading file
+        if (!core.isCurLoading()) {
+            core.pushUpdate();
+        }
     }
     
     /**
@@ -147,7 +151,11 @@ public class GenderCollection extends DictionaryCollection{
         ret = super.insert(bufferNode);
         
         bufferNode = new GenderNode();
-        core.pushUpdate();
+        
+        // only push update if not core loading file
+        if (!core.isCurLoading()) {
+            core.pushUpdate();
+        }
         
         return ret;
     }

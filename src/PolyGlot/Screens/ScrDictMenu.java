@@ -257,6 +257,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
         newFile(false); // wipe everything before loading new
         setFile(fileName);
+        updateAllValues(core);
         pushRecentFile(fileName);
         populateRecentOpened();
     }
@@ -397,9 +398,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
     @Override
     public void updateAllValues(DictCore _core) {
-        // TODO: All child windows must be told to update
-        // consider putting all children in an array of fixed length.
-        // That would allow preloading of lengthier loading windows...
         core = _core;
         String title = "PolyGlot " + core.getVersion();
         String langName = core.getPropertiesManager().getLangName().trim();
@@ -407,10 +405,26 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             title += (" : " + langName);
         } 
         
-        if (scrLexicon != null) {
+        if (scrLexicon != null
+                && !scrLexicon.isDisposed()) {
             scrLexicon.updateAllValues(_core);
         }
-        this.setTitle(title);
+        if (scrGrammar != null
+                && !scrGrammar.isDisposed()) {
+            scrGrammar.updateAllValues(_core);
+        }
+        if (scrLogos != null
+                && !scrLogos.isDisposed()) {
+            scrLogos.updateAllValues(_core);
+        }
+        if (scrThes != null
+                && !scrThes.isDisposed()) {
+            scrThes.updateAllValues(_core);
+        }
+        
+        //TODO: correct this before release
+        //this.setTitle(title);
+        this.setTitle("CLOSED BETA: POLYGLOT");
     }
 
     @Override
@@ -456,7 +470,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             core = new DictCore(); // don't allow partial loads
             InfoBox.error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage(), this);
-            //e.printStackTrace();
+            e.printStackTrace();
         }
     }
 

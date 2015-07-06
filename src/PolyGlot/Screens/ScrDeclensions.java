@@ -195,49 +195,6 @@ public class ScrDeclensions extends PDialog {
         return s;
     }
 
-    // TODO: delete this method once ScrDictInterface is gone
-    public static void run(DictCore _core, ConWord _word, Integer _typeId, Font _conFont) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScrExcelImport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        
-        //</editor-fold>
-
-        /* Create and display the form */
-        final ScrDeclensions s = new ScrDeclensions(_core);
-        s.setConWord(_word);
-        s.setWordType(_typeId);
-        s.setConFont(_conFont);
-        s.getAllWordDeclensions();
-
-        s.buildForm();
-
-        s.setModal(true);
-
-        // set up screen after it has been built (in setVisible)
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                s.setFormProps();
-            }
-        });
-
-        s.setVisible(true);
-    }
-
     @Override
     public void setVisible(boolean visible) {
 

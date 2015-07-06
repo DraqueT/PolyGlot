@@ -150,6 +150,7 @@ public class PGTUtil {
     // string constants
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";
+    public static final String LCDFontLocation = "/PolyGlot/GeneralResources/lcdFont.ttf";
     public static final String logoGraphSavePath = "logoGraphs/";
     public static final String grammarSoundSavePath = "grammarSounds/";
     public static final String emptyFile = "<EMPTY>";
@@ -157,6 +158,7 @@ public class PGTUtil {
     public static final String polyGlotFont = "PolyGlot";
     public static final String conLangFont = "PolyGlotConlangGrammarFont";
     public static final String polyGlotIni = "PolyGlot.ini";
+    public static final String emptyLogoImage = "/PolyGlot/ImageAssets/EmptyImage.png";
     
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to

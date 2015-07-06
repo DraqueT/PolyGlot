@@ -589,8 +589,7 @@ public class IOHandler {
      * @throws java.io.IOException if unable to load font
      */
     public Font getLcdFont() throws FontFormatException, IOException {
-        // TODO: move font to a resource folder, and change to a constant
-        InputStream tmp = this.getClass().getResourceAsStream("/PolyGlot/GeneralResources/lcdFont.ttf");
+        InputStream tmp = this.getClass().getResourceAsStream(PGTUtil.LCDFontLocation);
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Font ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
 
