@@ -33,11 +33,13 @@ import PolyGlot.ManagersCollections.ThesaurusManager;
 import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.ManagersCollections.TypeCollection;
 import PolyGlot.ManagersCollections.ConWordCollection;
+import PolyGlot.ManagersCollections.OptionsManager;
 import PolyGlot.Screens.ScrDictMenu;
 import java.awt.Color;
 import java.awt.FontFormatException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -61,8 +63,9 @@ public class DictCore {
     private final ThesaurusManager thesManager = new ThesaurusManager(this);
     private final LogoCollection logoCollection = new LogoCollection(this);
     private final GrammarManager grammarManager = new GrammarManager();
+    private final OptionsManager optionsManager = new OptionsManager(this);
     private PFrame rootWindow;
-// TODO: make this load options from ini file
+
     public DictCore() {
         Map alphaOrder = propertiesManager.getAlphaOrder();
 
@@ -75,6 +78,27 @@ public class DictCore {
     
     public void setRootWindow(PFrame _rootWindow) {
         rootWindow = _rootWindow;
+    }
+    
+    public OptionsManager getOptionsManager() {
+        return optionsManager;
+    }
+    
+    /**
+     * Retrieves working directory of PolyGlot
+     * @return current working directory
+     */
+    public String getWorkingDirectory() {
+        String ret = propertiesManager.getOverrideProgramPath();
+        
+        try {
+            ret = ret.isEmpty() ? DictCore.class.getProtectionDomain().getCodeSource().getLocation().toURI().g‌​etPath() : ret;
+        } catch (URISyntaxException e) {
+            InfoBox.error("PATH ERROR", "Unable to resolve root path of PolyGlot:\n" 
+                    + e.getLocalizedMessage(), rootWindow);
+        }
+        
+        return ret;
     }
     
     /**

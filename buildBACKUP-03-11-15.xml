@@ -9,22 +9,6 @@
 <!-- in the project's Project Properties dialog box.-->
 <project name="PolyGlot" default="default" basedir=".">
     <description>Builds, tests, and runs the project PolyGlot.</description>
-    <!-- START MAC BUNDLER MODIFICATION -->
-    <taskdef name="bundleapp"
-             classname="com.oracle.appbundler.AppBundlerTask"   
-             classpath="lib/appbundler-1.0.jar" />
-
-    <target name="PolyGlot">
-        <bundleapp outputdirectory="dist"
-            name="PolyGlot"
-			icon="macSet.icns"
-            displayname="PolyGlot BETA"
-            identifier="PolyGlot.ScrDictInterface"
-            mainclassname="PolyGlot.ScrDictInterface">
-            <classpath file="dist/PolyGlot.jar" />
-        </bundleapp>
-    </target>
-    <!-- END MAC BUNDLER MODIFICATION -->
     <import file="nbproject/build-impl.xml"/>
     <!--
 
@@ -85,5 +69,5 @@
     properties which you can use, check the target you are overriding in the
     nbproject/build-impl.xml file. 
 
-    -->    
+    -->
 </project>

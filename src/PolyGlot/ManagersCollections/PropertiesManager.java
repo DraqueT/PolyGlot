@@ -388,17 +388,17 @@ public class PropertiesManager {
         rootElement.appendChild(wordValue);
         
         // store option for ignoring case
-        wordValue = doc.createElement(PGTUtil.langPropIgnoreCase);
+        wordValue = doc.createElement(PGTUtil.langPropIgnoreCaseXID);
         wordValue.appendChild(doc.createTextNode(isIgnoreCase() ? "T" : "F"));
         rootElement.appendChild(wordValue);
         
         // store option for disabling regex or pronunciations
-        wordValue = doc.createElement(PGTUtil.langPropDisableProcRegex);
+        wordValue = doc.createElement(PGTUtil.langPropDisableProcRegexXID);
         wordValue.appendChild(doc.createTextNode(isDisableProcRegex()? "T" : "F"));
         rootElement.appendChild(wordValue);
         
         // store option for enforcing RTL in conlang
-        wordValue = doc.createElement(PGTUtil.langPropEnforceRTL);
+        wordValue = doc.createElement(PGTUtil.langPropEnforceRTLXID);
         wordValue.appendChild(doc.createTextNode(isEnforceRTL()? "T" : "F"));
         rootElement.appendChild(wordValue);
     }

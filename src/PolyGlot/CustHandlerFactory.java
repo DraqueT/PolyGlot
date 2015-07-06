@@ -700,7 +700,7 @@ public class CustHandlerFactory {
                     bfontStyle = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropAlphaOrderXID)) {
                     balphaOrder = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.langPropEnforceRTL)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropEnforceRTLXID)) {
                     blangPropEnforceRTL = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordAutoDeclenOverrideXID)) {
                     bwordoverAutoDec = true;
@@ -764,9 +764,9 @@ public class CustHandlerFactory {
                     bthesNotes = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.thesWordXID)) {
                     bthesWord = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.langPropIgnoreCase)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropIgnoreCaseXID)) {
                     bignoreCase = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.langPropDisableProcRegex)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropDisableProcRegexXID)) {
                     bdisableProcRegex = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleCombXID)) {
                     bdecGenRuleComb = true;
@@ -928,7 +928,7 @@ public class CustHandlerFactory {
                     bfontStyle = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropAlphaOrderXID)) {
                     balphaOrder = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.langPropEnforceRTL)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropEnforceRTLXID)) {
                     blangPropEnforceRTL = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionIdXID)) {
                     bDecId = false;
@@ -973,9 +973,9 @@ public class CustHandlerFactory {
                     bthesNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.thesWordXID)) {
                     bthesWord = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.langPropIgnoreCase)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropIgnoreCaseXID)) {
                     bignoreCase = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.langPropDisableProcRegex)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropDisableProcRegexXID)) {
                     bdisableProcRegex = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleXID)) {
                     core.getDeclensionManager().insRuleBuffer();

@@ -38,7 +38,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -70,19 +69,20 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private ScrLogoDetails scrLogos;
     private ScrThesaurus scrThes;
     private boolean cleanSave = true;
-    // TODO: don't set this here once ini file is implemented
-    private final List<String> lastFiles = new ArrayList<String>();
+    private final List<String> lastFiles;
 
     /**
      * Creates new form ScrDictMenu
+     * @param overridePath Path PolyGlot should treat as home directory
+     * (blank if default)
      */
-    public ScrDictMenu() {
+    public ScrDictMenu(String overridePath) {
         initComponents();
-        // TODO: uncomment this once ini file is implemented
-        //lastFiles = core.getProgramOptions().getLastFiles();
+        newFile(true);
+        setOverrideProgramPath(overridePath);
+        lastFiles = core.getOptionsManager().getLastFiles();
         populateRecentOpened();
         checkJavaVersion();
-        newFile(true);
         scrLexicon = ScrLexicon.run(core);
 
         // activates macify for menu integration...
@@ -93,8 +93,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     
     @Override
     public void dispose() {
-        // TODO: set all cfg items and tell core to save ini file here
+        try {
+            core.getOptionsManager().setLastFiles(lastFiles);
+            core.getOptionsManager().saveIni();
+        } catch (IOException e) {
+            InfoBox.error("Ini Save Error", "Unable to save PolyGlot.ini:\n" 
+                    + e.getLocalizedMessage(), this);
+        }
         super.dispose();
+        System.exit(0);
     }
 
     @Override
@@ -194,7 +201,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             return;
         }
         
-        while (lastFiles.size() > 5) {
+        while (lastFiles.size() > PGTUtil.optionsNumLastFiles) {
             lastFiles.remove(0);
         }
         
@@ -495,6 +502,12 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     private void setOverrideProgramPath(String override) {
         core.getPropertiesManager().setOverrideProgramPath(override);
+        try {
+            core.getOptionsManager().loadIni();
+        } catch (Exception e) {
+            InfoBox.error("Options Load Error", "Unable to load or create options file:\n"
+                    + e.getLocalizedMessage(), this);
+        }
     }
 
     /**
@@ -771,7 +784,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenuItem8 = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
 
         btnLexicon.setText("Lexicon");
@@ -1115,18 +1128,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                ScrDictMenu s = new ScrDictMenu();
+                String overridePath = args.length > 1 ? args[1] : "";
+                ScrDictMenu s = new ScrDictMenu(overridePath);
 
                 // open file if one is provided via arguments
                 if (args.length > 0) {
                     s.setFile(args[0]);
                 }
 
-                if (args.length > 1) {
-                    s.setOverrideProgramPath(args[1]);
-                }
-
-                s.checkForUpdates(false); // verbose set to only notify if update
+                s.checkForUpdates(false);
                 s.setupKeyStrokes();
                 s.setVisible(true);
             }

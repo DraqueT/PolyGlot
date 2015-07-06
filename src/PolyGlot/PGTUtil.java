@@ -70,10 +70,9 @@ public class PGTUtil {
     public static final String langPropLocalMandatoryXID = "langPropLocalMandatory";
     public static final String langPropWordUniquenessXID = "langPropWordUniqueness";
     public static final String langPropLocalUniquenessXID = "langPropLocalUniqueness";
-    // TODO: make below entries conform to naming standards...
-    public static final String langPropIgnoreCase = "langPropIgnoreCase";
-    public static final String langPropDisableProcRegex = "langPropDisableProcRegex";
-    public static final String langPropEnforceRTL = "langPropEnforceRTL";
+    public static final String langPropIgnoreCaseXID = "langPropIgnoreCase";
+    public static final String langPropDisableProcRegexXID = "langPropDisableProcRegex";
+    public static final String langPropEnforceRTLXID = "langPropEnforceRTL";
     
     // declension properties
     public static final String declensionXID = "declensionNode";
@@ -144,6 +143,10 @@ public class PGTUtil {
     public static final String grammarSectionRecordingXID = "grammarSectionRecordingXID";
     public static final String grammarSectionTextXID = "grammarSectionText";
     
+    // constants for PolyGlot options found in PolyGlot.ini
+    public static final int optionsNumLastFiles = 5;
+    public static final String optionsLastFiles = "LastFiles";
+    
     // string constants
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";
@@ -153,6 +156,7 @@ public class PGTUtil {
     public static final String tempFile = "xxTEMPPGTFILExx";
     public static final String polyGlotFont = "PolyGlot";
     public static final String conLangFont = "PolyGlotConlangGrammarFont";
+    public static final String polyGlotIni = "PolyGlot.ini";
     
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to
