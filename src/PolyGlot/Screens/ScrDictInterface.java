@@ -120,6 +120,12 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
         }
     }
     
+    @Override
+    public boolean thisOrChildrenFocused() {
+        InfoBox.error("Why are you calling this?", "WHY?", this);
+        return false;
+    }
+    
     /**
      * Creates new form scrDictInterface
      */
@@ -1972,7 +1978,7 @@ public class ScrDictInterface extends PFrame implements ApplicationListener {
             @Override
             public void run() {
                 try {
-                     ScrUpdateAlert.run(verbose, core.getVersion());
+                     ScrUpdateAlert.run(verbose, core);
                 } catch (Exception e) {
                     if (verbose) {
                         InfoBox.error("Update Problem", "Unable to check for update for reason:" 

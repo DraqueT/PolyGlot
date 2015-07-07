@@ -52,6 +52,11 @@ public class ScrExcelImport extends PDialog {
     }
     
     @Override
+    public boolean thisOrChildrenFocused() {
+        return this.isFocusOwner();
+    }
+    
+    @Override
     public void updateAllValues(DictCore _core) {
         // does nothing
     }

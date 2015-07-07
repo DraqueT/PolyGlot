@@ -24,7 +24,11 @@ import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import javax.swing.InputMap;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
@@ -36,10 +40,12 @@ import javax.swing.text.DefaultEditorKit;
  * features like mac copy/paste in PolyGlot
  * @author Draque
  */
-public abstract class PDialog extends JDialog{
+public abstract class PDialog extends JDialog implements FocusListener, WindowFocusListener {
     private boolean isDisposed = false;
     protected WindowMode mode = WindowMode.STANDARD;
     private boolean skipCenter = false;
+    private boolean hasFocus = false;
+    protected DictCore core;
     
     /**
      * Returns current running mode of window
@@ -47,6 +53,10 @@ public abstract class PDialog extends JDialog{
      */
     public WindowMode getMode() {
         return mode;
+    }
+    
+    public void setCore(DictCore _core) {
+        core = _core;
     }
     
     @Override
@@ -68,6 +78,12 @@ public abstract class PDialog extends JDialog{
      * @param _core current dictionary core
      */
     public abstract void updateAllValues(DictCore _core);
+    
+    /**
+     * Tests whether given window or any child windows posess focus
+     * @return true if focus held, false otherwise
+     */
+    public abstract boolean thisOrChildrenFocused();
     
     /**
      * Sets window visibly to the right of the window handed in
@@ -115,5 +131,41 @@ public abstract class PDialog extends JDialog{
         if (!skipCenter) {
             this.setLocationRelativeTo(null);
         }
+    }
+    
+    @Override
+    public void focusGained(FocusEvent fe) {
+        // Do nothing
+    }
+
+    @Override
+    public void focusLost(FocusEvent fe) {
+        // Do nothing
+    }
+
+    @Override
+    public void windowGainedFocus(WindowEvent e) {
+        hasFocus = true;
+        core.checkProgramFocus();
+    }
+
+    @Override
+    public void windowLostFocus(WindowEvent e) {
+        hasFocus = false;
+        core.checkProgramFocus();
+    }
+    
+    @Override
+    public boolean isFocusOwner() {
+        return hasFocus;
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        if (core == null) {
+            InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
+        }
+
+        super.setVisible(visible);
     }
 }

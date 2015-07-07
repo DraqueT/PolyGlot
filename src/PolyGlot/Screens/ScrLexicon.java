@@ -145,6 +145,19 @@ public final class ScrLexicon extends PFrame {
         return s;
     }
     
+    @Override
+    public boolean thisOrChildrenFocused() {
+        boolean ret = this.isFocusOwner();        
+        for (Window w : childFrames) {
+            if (w instanceof PFrame) {
+                ret = ret || ((PFrame)w).thisOrChildrenFocused();
+            } else if (w instanceof PDialog) {
+                ret = ret || ((PDialog)w).thisOrChildrenFocused();
+            }
+        }        
+        return ret;
+    }
+    
     /**
      * forces refresh of word list
      * @param wordId id of newly created word
@@ -1214,6 +1227,7 @@ public final class ScrLexicon extends PFrame {
         ScrLogoQuickView window = new ScrLogoQuickView(core, curWord);
         window.setupKeyStrokes();
         childFrames.add(window);
+        ((PFrame)window).setCore(core);
         window.setVisible(true);
         final Window parent = this;
         this.setEnabled(false);

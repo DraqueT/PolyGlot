@@ -95,6 +95,20 @@ public class DictCore {
     }
     
     /**
+     * Checks whether PolyGlot has focus, and sets main menu to always on top
+     * ONLY if so
+     */
+    public void checkProgramFocus() {
+        boolean top = rootWindow.thisOrChildrenFocused();
+        
+        rootWindow.setAlwaysOnTop(top);
+        
+        if (!top) {
+            rootWindow.toBack();
+        }
+    }
+    
+    /**
      * Retrieves working directory of PolyGlot
      * @return current working directory
      */

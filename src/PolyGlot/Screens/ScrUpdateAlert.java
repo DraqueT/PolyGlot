@@ -32,7 +32,6 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -49,16 +48,17 @@ public class ScrUpdateAlert extends PDialog {
      * Creates new form ScrUpdateAlert
      *
      * @param verbose run in verbose mode
-     * @param curVersion current version of PolyGlot
+     * @param _core current dictionary core
      * @throws java.lang.Exception if unable to connect
      */
-    public ScrUpdateAlert(boolean verbose, String curVersion) throws Exception {
+    public ScrUpdateAlert(boolean verbose, DictCore _core) throws Exception {
         setupKeyStrokes();
         initComponents();
-
+        setCore(_core);
+        
         jTextPane1.setContentType("text/html");
 
-        Document doc = WebInterface.checkForUpdates(curVersion);
+        Document doc = WebInterface.checkForUpdates(core.getVersion());
         final Window parent = this;
         Node ver = doc.getElementsByTagName("Version").item(0);
         Node message = doc.getElementsByTagName("VersionText").item(0);
@@ -104,11 +104,10 @@ public class ScrUpdateAlert extends PDialog {
         jTextPane1.setText(message.getTextContent());
         txtVersion.setText("New Version: " + ver.getTextContent());
 
-        //this.pack();
-        if (ver.getTextContent().equals(curVersion)) {
+        if (ver.getTextContent().equals(core.getVersion())) {
             if (verbose) {
                 InfoBox.info("Update Status", "You're all up to date and on the newest version: "
-                        + curVersion + ".", this);
+                        + core.getVersion() + ".", this);
             }
 
             this.setVisible(false);
@@ -121,6 +120,11 @@ public class ScrUpdateAlert extends PDialog {
     @Override
     public void updateAllValues(DictCore _dictCore) {
         // No values to update
+    }
+    
+    @Override
+    public boolean thisOrChildrenFocused() {
+        return this.isFocusOwner();
     }
 
     /**
@@ -186,7 +190,7 @@ public class ScrUpdateAlert extends PDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void run(boolean verbose, String curVersion) throws Exception {
+    public static void run(boolean verbose, DictCore core) throws Exception {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -198,7 +202,7 @@ public class ScrUpdateAlert extends PDialog {
             java.util.logging.Logger.getLogger(ScrUpdateAlert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-        ScrUpdateAlert s = new ScrUpdateAlert(verbose, curVersion);
+        ScrUpdateAlert s = new ScrUpdateAlert(verbose, core);
         s.setModal(true);
     }
 

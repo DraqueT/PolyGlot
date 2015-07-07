@@ -80,6 +80,11 @@ public class ScrThesaurus extends PFrame {
         }
     }
     
+    @Override
+    public boolean thisOrChildrenFocused() {
+        return this.isFocusOwner();
+    }
+    
     /**
      * Sets up all screen components. Can be run more than once if core is 
      * replaced.

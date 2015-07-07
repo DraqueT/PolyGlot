@@ -92,6 +92,13 @@ public class ScrLogoDetails extends PFrame {
             btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (CTRL -)");
         }
     }
+    
+    @Override
+    public boolean thisOrChildrenFocused() {
+        boolean ret = this.isFocusOwner();
+        ret = ret || (quickView != null && quickView.thisOrChildrenFocused());
+        return ret;
+    }
 
     @Override
     protected void setupKeyStrokes() {
@@ -1362,6 +1369,7 @@ public class ScrLogoDetails extends PFrame {
         if (quickView == null || quickView.isDisposed()) {
             quickView = new ScrLogoQuickView(core, true);
             quickView.setBeside(this);
+            quickView.setCore(core);
             quickView.setVisible(true);
         } else {
             addRadFromQuickview();

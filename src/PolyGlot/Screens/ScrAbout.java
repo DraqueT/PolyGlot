@@ -181,6 +181,11 @@ public class ScrAbout extends PDialog {
         // No values to update
     }
 
+    @Override
+    public boolean thisOrChildrenFocused() {
+        return this.isFocusOwner();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

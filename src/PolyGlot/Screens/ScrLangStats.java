@@ -55,6 +55,11 @@ public class ScrLangStats extends PDialog {
         // does nothing
     }
     
+    @Override
+    public boolean thisOrChildrenFocused() {
+        return this.isFocusOwner();
+    }
+    
     public static void run(DictCore _core) {
         
         ScrLangStats s = new ScrLangStats(_core);

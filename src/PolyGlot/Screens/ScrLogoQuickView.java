@@ -64,6 +64,13 @@ public class ScrLogoQuickView extends PFrame {
         }
         super.dispose();
     }
+    
+    @Override
+    public boolean thisOrChildrenFocused() {
+        boolean ret = this.isFocusOwner();
+        ret = ret || (logoFinder != null && logoFinder.thisOrChildrenFocused());
+        return ret;
+    }
 
     /**
      * Opens window populated with all logographs for a word

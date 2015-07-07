@@ -69,6 +69,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private ScrLogoDetails scrLogos;
     private ScrThesaurus scrThes;
     private boolean cleanSave = true;
+    private boolean openingFile = false;
     private final List<String> lastFiles;
 
     /**
@@ -89,6 +90,16 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         if (System.getProperty("os.name").startsWith("Mac")) {
             activateMacify();
         }
+    }
+    
+    @Override
+    public boolean thisOrChildrenFocused() {
+        boolean ret = this.isFocusOwner() || openingFile;
+        ret = ret || (scrLexicon != null && scrLexicon.thisOrChildrenFocused());
+        ret = ret || (scrGrammar != null && scrGrammar.thisOrChildrenFocused());
+        ret = ret || (scrLogos != null && scrLogos.thisOrChildrenFocused());
+        ret = ret || (scrThes != null && scrThes.thisOrChildrenFocused());
+        return ret;
     }
     
     @Override
@@ -241,6 +252,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         if (!saveOrCancelTest()) {
             return;
         }
+        
+        openingFile = true;
 
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Open Dictionary");
@@ -254,6 +267,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         } else {
             return;
         }
+        openingFile = false;
 
         newFile(false); // wipe everything before loading new
         setFile(fileName);
@@ -470,7 +484,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             core = new DictCore(); // don't allow partial loads
             InfoBox.error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage(), this);
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -486,7 +500,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             @Override
             public void run() {
                 try {
-                    ScrUpdateAlert.run(verbose, core.getVersion());
+                    ScrUpdateAlert.run(verbose, core);
                 } catch (Exception e) {
                     if (verbose) {
                         InfoBox.error("Update Problem", "Unable to check for update:\n"

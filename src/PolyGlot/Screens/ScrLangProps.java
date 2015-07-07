@@ -18,7 +18,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package PolyGlot.Screens;
-// TODO: Implement greyed values, as in other new forms
+
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.JFontChooser;
@@ -83,6 +83,11 @@ public class ScrLangProps extends PDialog {
         saveAllProps();
         core.pushUpdate();
         super.dispose();
+    }
+    
+    @Override
+    public boolean thisOrChildrenFocused() {
+        return this.isFocusOwner();
     }
     
     private void populateProperties() {
@@ -764,6 +769,7 @@ public class ScrLangProps extends PDialog {
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
         s.setupKeyStrokes();
+        s.setCore(_core);
         return s;
     }
 

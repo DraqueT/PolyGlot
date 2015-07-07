@@ -72,6 +72,11 @@ public class ScrGenders extends PDialog {
     }
     
     @Override
+    public boolean thisOrChildrenFocused() {
+        return this.isFocusOwner();
+    }
+    
+    @Override
     public void updateAllValues(DictCore _core) {
         // due to modal nature of screen, nothing to update
     }
@@ -255,6 +260,7 @@ public class ScrGenders extends PDialog {
     public static ScrGenders run(DictCore _core) {
         ScrGenders s = new ScrGenders(_core);
         s.setupKeyStrokes();
+        s.setCore(_core);
         return s;
     }
 

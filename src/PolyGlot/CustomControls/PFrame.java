@@ -21,12 +21,15 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
+import PolyGlot.Screens.ScrDictMenu;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
-import javax.swing.AbstractButton;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -46,7 +49,7 @@ import javax.swing.text.DefaultEditorKit;
  *
  * @author Draque
  */
-public abstract class PFrame extends JFrame {
+public abstract class PFrame extends JFrame implements FocusListener, WindowFocusListener {
 
     private final JMenuItem mnuSave = new JMenuItem();
     private final JMenuItem mnuNew = new JMenuItem();
@@ -55,6 +58,7 @@ public abstract class PFrame extends JFrame {
     protected DictCore core;
     private boolean isDisposed = false;
     private boolean ignoreCenter = false;
+    private boolean hasFocus = false;
     protected WindowMode mode = WindowMode.STANDARD;
 
     /**
@@ -100,6 +104,13 @@ public abstract class PFrame extends JFrame {
      * @param _core current dictionary core
      */
     public abstract void updateAllValues(DictCore _core);
+
+    /**
+     * Tests whether given window or any child windows posess focus
+     *
+     * @return true if focus held, false otherwise
+     */
+    public abstract boolean thisOrChildrenFocused();
 
     /**
      * enable cut/copy/paste/select all if running on a Mac, and any other
@@ -195,6 +206,10 @@ public abstract class PFrame extends JFrame {
         return core;
     }
 
+    public void setCore(DictCore _core) {
+        core = _core;
+    }
+
     /**
      * sets menu accelerators and menu item text to reflect this
      */
@@ -245,15 +260,46 @@ public abstract class PFrame extends JFrame {
         }
     }
 
+    @Override
+    public void focusGained(FocusEvent fe) {
+        // Do nothing
+    }
+
+    @Override
+    public void focusLost(FocusEvent fe) {
+        // Do nothing
+    }
+
+    @Override
+    public void windowGainedFocus(WindowEvent e) {
+        hasFocus = true;
+        core.checkProgramFocus();
+    }
+
+    @Override
+    public void windowLostFocus(WindowEvent e) {
+        hasFocus = false;
+        core.checkProgramFocus();
+    }
+    
     public abstract void addBindingToComponent(JComponent c);
 
+    @Override
+    public boolean isFocusOwner() {
+        return hasFocus;
+    }
+    
     // positions on screen once form has already been build/sized
     @Override
     public void setVisible(boolean visible) {
         if (!ignoreCenter) {
             this.setLocationRelativeTo(null);
         }
-
+        
+        if (core == null && !(this instanceof ScrDictMenu)) {
+            InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
+        }
+        addWindowFocusListener(this);
         super.setVisible(visible);
     }
 }

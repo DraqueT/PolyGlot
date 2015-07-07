@@ -49,6 +49,11 @@ public class ScrTranslationFreewrite extends PFrame {
         // Deprecated screens don't need updates
         // TODO: revisit if this window is re-upped
     }
+    
+    @Override
+    public boolean thisOrChildrenFocused() {
+        return this.isFocusOwner();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

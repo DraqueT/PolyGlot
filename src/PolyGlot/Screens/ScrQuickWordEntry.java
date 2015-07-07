@@ -97,6 +97,11 @@ public class ScrQuickWordEntry extends PDialog {
     }
     
     @Override
+    public boolean thisOrChildrenFocused() {
+        return this.isFocusOwner();
+    }
+    
+    @Override
     public void updateAllValues(DictCore _core) {
         core = _core;
         // ensure this is on the UI component stack to avoid read/writelocks...
@@ -513,6 +518,7 @@ public class ScrQuickWordEntry extends PDialog {
         //</editor-fold>
 
         ScrQuickWordEntry ret = new ScrQuickWordEntry(_core, _parent);
+        ret.setCore(_core);
         ret.setModal(true);
         return ret;
     }

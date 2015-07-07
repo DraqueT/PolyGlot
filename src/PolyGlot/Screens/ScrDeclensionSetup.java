@@ -91,6 +91,11 @@ public final class ScrDeclensionSetup extends PDialog {
     }
     
     @Override
+    public boolean thisOrChildrenFocused() {
+        return this.isFocusOwner();
+    }
+    
+    @Override
     public void updateAllValues(DictCore _core) {
         // No values to update due to modal nature of window
     }
