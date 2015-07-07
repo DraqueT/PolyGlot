@@ -29,6 +29,7 @@ import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.CustomControls.TableColumnEditor;
 import PolyGlot.CustomControls.TableColumnRenderer;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
@@ -56,6 +57,8 @@ import javax.swing.table.TableColumn;
 public class ScrLangProps extends PDialog {
     private final DictCore core;
     private boolean curPopulating = false;
+    private static final String defName = "- Language Name -";
+    private static final String defAlpha = "- Alphabetical Order -";
     
     /**
      * Creates new form ScrLangProps
@@ -85,9 +88,11 @@ public class ScrLangProps extends PDialog {
     private void populateProperties() {
         PropertiesManager prop = core.getPropertiesManager();
         
-        txtLangName.setText(prop.getLangName());
+        txtLangName.setText(prop.getLangName().equals("") ?
+                defName : prop.getLangName());
         txtFont.setText(prop.getFontCon().getFamily());
-        txtAlphaOrder.setText(prop.getAlphaPlainText());
+        txtAlphaOrder.setText(prop.getAlphaPlainText().equals("") ?
+                defAlpha : prop.getAlphaPlainText());
         chkDisableProcRegex.setSelected(prop.isDisableProcRegex());
         chkIgnoreCase.setSelected(prop.isIgnoreCase());
         chkLocalMandatory.setSelected(prop.isLocalMandatory());
@@ -96,6 +101,11 @@ public class ScrLangProps extends PDialog {
         chkWordUniqueness.setSelected(prop.isWordUniqueness());
         chkEnforceRTL.setSelected(prop.isEnforceRTL());
         
+        txtAlphaOrder.setForeground(txtAlphaOrder.getText().equals(defAlpha) ?
+                Color.lightGray : Color.black);
+        txtLangName.setForeground(txtLangName.getText().equals(defName) ?
+                Color.lightGray : Color.black);
+                
         populateProcs();
     }
     
@@ -108,7 +118,8 @@ public class ScrLangProps extends PDialog {
         propMan.setAlphaOrder(txtAlphaOrder.getText().trim());
         propMan.setDisableProcRegex(chkDisableProcRegex.isSelected());
         propMan.setIgnoreCase(chkIgnoreCase.isSelected());
-        propMan.setLangName(txtLangName.getText());
+        propMan.setLangName(txtLangName.getText().equals(defName) ?
+                "" : txtLangName.getText());
         propMan.setLocalMandatory(chkLocalMandatory.isSelected());
         propMan.setLocalUniqueness(chkLocalUniqueness.isSelected());
         propMan.setTypesMandatory(chkTypesMandatory.isSelected());
@@ -412,6 +423,14 @@ public class ScrLangProps extends PDialog {
         setTitle("Language Properties");
 
         txtLangName.setToolTipText("Your Conlang's Name");
+        txtLangName.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLangNameFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtLangNameFocusLost(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
@@ -429,6 +448,14 @@ public class ScrLangProps extends PDialog {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         txtAlphaOrder.setToolTipText("List of all characters in conlang in alphabetical order (both upper and lower case)");
+        txtAlphaOrder.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtAlphaOrderFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtAlphaOrderFocusLost(evt);
+            }
+        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
@@ -705,6 +732,34 @@ public class ScrLangProps extends PDialog {
         core.getPropertiesManager().setEnforceRTL(chkEnforceRTL.isSelected());
         testRTLWarning();
     }//GEN-LAST:event_chkEnforceRTLActionPerformed
+
+    private void txtLangNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLangNameFocusGained
+        if (txtLangName.getText().equals(defName)) {
+            txtLangName.setText("");
+            txtLangName.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_txtLangNameFocusGained
+
+    private void txtLangNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLangNameFocusLost
+        if (txtLangName.getText().equals("")) {
+            txtLangName.setText(defName);
+            txtLangName.setForeground(Color.lightGray);
+        }
+    }//GEN-LAST:event_txtLangNameFocusLost
+
+    private void txtAlphaOrderFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAlphaOrderFocusGained
+        if (txtAlphaOrder.getText().equals(defAlpha)) {
+            txtAlphaOrder.setText("");
+            txtAlphaOrder.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_txtAlphaOrderFocusGained
+
+    private void txtAlphaOrderFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAlphaOrderFocusLost
+        if (txtAlphaOrder.getText().equals("")) {
+            txtAlphaOrder.setText(defAlpha);
+            txtAlphaOrder.setForeground(Color.lightGray);
+        }
+    }//GEN-LAST:event_txtAlphaOrderFocusLost
 
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
