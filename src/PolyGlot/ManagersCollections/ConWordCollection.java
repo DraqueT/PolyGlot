@@ -21,7 +21,6 @@ package PolyGlot.ManagersCollections;
 
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
-import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.Nodes.DictNode;
 import PolyGlot.PGTUtil;
@@ -71,6 +70,7 @@ public class ConWordCollection extends DictionaryCollection {
         insWord.setEqual(bufferNode);
         insWord.setId(_id);
 
+        ((ConWord)bufferNode).setParent(this);
         ret = super.insert(_id, bufferNode);
 
         balanceWordCounts(insWord, true);
@@ -89,7 +89,8 @@ public class ConWordCollection extends DictionaryCollection {
      */
     public Integer insert() throws Exception {
         Integer ret;
-
+        
+        ((ConWord)bufferNode).setParent(this);
         ret = super.insert(bufferNode);
 
         balanceWordCounts((ConWord) bufferNode, true);
@@ -155,7 +156,7 @@ public class ConWordCollection extends DictionaryCollection {
      *
      * @param id id of word to modify
      * @param wordVal new conword value
-     * @param wordLoc
+     * @param wordLoc new local word value
      * @throws java.lang.Exception if word not found
      */
     public void extertalBalanceWordCounts(Integer id, String wordVal, String wordLoc) throws Exception {
@@ -167,6 +168,24 @@ public class ConWordCollection extends DictionaryCollection {
 
         balanceWordCounts(oldWord, false);
         balanceWordCounts(newWord, true);
+    }
+    
+    /**
+     * Tests whether a value exists in the dictionary currently
+     * @param word value to search for
+     * @return true if exists, false otherwise
+     */
+    public boolean testWordValueExists(String word) {
+        return allConWords.containsKey(word) && allConWords.get(word) > 0;
+    }
+    
+    /**
+     * Tests whether a value exists in the dictionary currently
+     * @param local value to search for
+     * @return true if exists, false otherwise
+     */
+    public boolean testLocalValueExists(String local) {
+        return allLocalWords.containsKey(local) && allLocalWords.get(local) > 0;
     }
 
     /**
@@ -207,6 +226,7 @@ public class ConWordCollection extends DictionaryCollection {
     @Override
     protected Integer insert(Integer _id, DictNode _buffer) throws Exception {
         ((ConWord) _buffer).setCore(core);
+        ((ConWord)_buffer).setParent(this);
         return super.insert(_id, _buffer);
     }
 

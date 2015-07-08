@@ -204,6 +204,16 @@ public class ScrQuickWordEntry extends PDialog {
         if (!test.getWordType().isEmpty()) {
             PGTools.flashComponent(cmbType, core.getRequiredColor(), false);
             testResults += ("\n" + test.getWordType());
+        } 
+        if (core.getPropertiesManager().isWordUniqueness()
+                && core.getWordCollection().testWordValueExists(txtConWord.getText())) {
+            PGTools.flashComponent(txtConWord, core.getRequiredColor(), true);
+            testResults += ("\nConWords set to enforced unique: this local exists elsewhere.");
+        }
+        if (core.getPropertiesManager().isLocalUniqueness()
+                && core.getWordCollection().testLocalValueExists(txtLocalWord.getText())) {
+            PGTools.flashComponent(txtLocalWord, core.getRequiredColor(), true);
+            testResults += ("\nLocal words set to enforced unique: this work exists elsewhere.");
         }
         
         

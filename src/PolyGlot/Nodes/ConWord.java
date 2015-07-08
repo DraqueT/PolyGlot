@@ -20,7 +20,9 @@
 
 package PolyGlot.Nodes;
 
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.DictCore;
+import PolyGlot.ManagersCollections.ConWordCollection;
 
 /**
  *
@@ -38,6 +40,7 @@ public class ConWord extends DictNode {
     private boolean autoDeclensionOverride;
     private boolean rulesOverride;
     private DictCore core;
+    ConWordCollection parent;
 
     public ConWord() {
         value = "";
@@ -58,6 +61,10 @@ public class ConWord extends DictNode {
     
     public void setRulesOverride(boolean _rulesOverride) {
         rulesOverride = _rulesOverride;
+    }
+    
+    public void setParent(ConWordCollection _parent) {
+        parent = _parent;
     }
         
     /**
@@ -121,8 +128,29 @@ public class ConWord extends DictNode {
         return localWord;
     }
 
-    public void setLocalWord(String localWord) {
+    public void setLocalWord(String _localWord) {
+        if (parent != null) {
+            try {
+                parent.extertalBalanceWordCounts(id, value, _localWord);
+            } catch (Exception e) {
+                InfoBox.error("Word balance error.", "Unable to balance word: " 
+                        + value, null);
+            }
+        }
         this.localWord = localWord.trim();
+    }
+    
+    @Override
+    public void setValue(String _value) {
+        if (parent != null) {
+            try {
+                parent.extertalBalanceWordCounts(id, _value, localWord);
+            } catch (Exception e) {
+                InfoBox.error("Word balance error.", "Unable to balance word: " 
+                        + value, null);
+            }
+        }        
+        super.setValue(_value);
     }
 
     public String getWordType() {

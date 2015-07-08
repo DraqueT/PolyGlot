@@ -721,7 +721,6 @@ public final class ScrLexicon extends PFrame {
         txtConWord.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                balanceWords();
                 saveName();
                 genProc();
                 setWordLegality();
@@ -729,7 +728,6 @@ public final class ScrLexicon extends PFrame {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                balanceWords();
                 saveName();
                 genProc();
                 setWordLegality();
@@ -737,27 +735,9 @@ public final class ScrLexicon extends PFrame {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                balanceWords();
                 saveName();
                 genProc();
                 setWordLegality();
-            }
-        });
-
-        txtLocalWord.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                balanceWords();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                balanceWords();
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                balanceWords();
             }
         });
 
@@ -842,26 +822,6 @@ public final class ScrLexicon extends PFrame {
                     setWordLegality();
                 }
             });
-        }
-    }
-
-    /**
-     * Balances conword and localword values within core's wordcollection
-     */
-    private void balanceWords() {
-        if (lstLexicon.getSelectedValue() == null) {
-            return;
-        }
-
-        Integer id = ((ConWord) lstLexicon.getSelectedValue()).getId();
-        String curCon = txtConWord.getText().equals(defConValue)
-                ? "" : txtConWord.getText();
-        String curLocal = txtLocalWord.getText().equals(defLocalValue)
-                ? "" : txtLocalWord.getText();
-        try {
-            core.getWordCollection().extertalBalanceWordCounts(id, curCon, curLocal);
-        } catch (Exception e) {
-            InfoBox.error("Core Error", "Unable to balance wordcounts.", this);
         }
     }
 

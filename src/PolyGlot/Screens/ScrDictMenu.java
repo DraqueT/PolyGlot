@@ -234,6 +234,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      * @param performTest whether the UI ask for confirmation
      */
     final public void newFile(boolean performTest) {
+        openingFile = true;
         if (performTest && !saveOrCancelTest()) {
             return;
         }
@@ -242,6 +243,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         core.setRootWindow(this);
         updateAllValues(core);
         curFileName = "";
+        openingFile = false;
     }
 
     /**
