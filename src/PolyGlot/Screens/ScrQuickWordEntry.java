@@ -31,6 +31,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -38,8 +40,6 @@ import javax.swing.SwingUtilities;
  */
 public class ScrQuickWordEntry extends PDialog {
 
-    private final KeyListener enterListener;
-    private DictCore core;
     private final String cstSELET = "";
     private final ScrLexicon parent;
 
@@ -55,29 +55,7 @@ public class ScrQuickWordEntry extends PDialog {
 
         setupKeyStrokes();
         initComponents();
-
-        enterListener = new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                // User only wants to enter word if no popups are visible
-                if (e.getKeyCode() == KeyEvent.VK_ENTER
-                        && (!cmbGender.isPopupVisible())
-                        && !cmbType.isPopupVisible()) {
-                    tryRecord();
-                }
-            }
-
-            @Override public void keyReleased(KeyEvent e) {/*DO NOTHING*/}
-            @Override public void keyTyped(KeyEvent e) { /*DO NOTHING*/}
-        };
-
-        txtConWord.setFont(core.getPropertiesManager().getFontCon());
-        txtConWord.addKeyListener(enterListener);
-        txtDefinition.addKeyListener(enterListener);
-        txtLocalWord.addKeyListener(enterListener);
-        txtProc.addKeyListener(enterListener);
-        cmbGender.addKeyListener(enterListener);
-        cmbType.addKeyListener(enterListener);
+        setupListeners();
 
         // conword is always required and is initially selected
         txtConWord.setBackground(core.getRequiredColor());
@@ -94,6 +72,58 @@ public class ScrQuickWordEntry extends PDialog {
         
         populateTypes();
         populateGenders();
+    }
+    
+    /**
+     * Sets up all component listeners
+     */
+    private void setupListeners() {
+        KeyListener enterListener = new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // User only wants to enter word if no popups are visible
+                if (e.getKeyCode() == KeyEvent.VK_ENTER
+                        && (!cmbGender.isPopupVisible())
+                        && !cmbType.isPopupVisible()) {
+                    tryRecord();
+                }
+            }
+
+            @Override public void keyReleased(KeyEvent e) {/*DO NOTHING*/}
+            @Override public void keyTyped(KeyEvent e) { /*DO NOTHING*/}
+        };
+
+        txtConWord.setFont(core.getPropertiesManager().getFontCon());
+        txtConWord.addKeyListener(enterListener);
+        txtConWord.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                setProc();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                setProc();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                setProc();
+            }
+        });
+        txtDefinition.addKeyListener(enterListener);
+        txtLocalWord.addKeyListener(enterListener);
+        txtProc.addKeyListener(enterListener);
+        cmbGender.addKeyListener(enterListener);
+        cmbType.addKeyListener(enterListener);
+    }
+    
+    /**
+     * Sets pronunciation value of word
+     */
+    private void setProc() {
+        txtProc.setText(core.getPronunciationMgr()
+                .getPronunciation(txtConWord.getText()));
     }
     
     @Override
@@ -140,59 +170,46 @@ public class ScrQuickWordEntry extends PDialog {
      */
     private void tryRecord() {
         ConWord word = new ConWord();
-        boolean success = true;
         
-        // conword is always mandatory
-        if (txtConWord.getText().equals("")) {
+        word.setValue(txtConWord.getText());
+        word.setLocalWord(txtLocalWord.getText());
+        word.setPronunciation(txtProc.getText());
+        word.setDefinition(txtDefinition.getText());
+        word.setGender(cmbGender.getSelectedItem().toString());
+        word.setWordType(cmbType.getSelectedItem().toString());
+        
+        ConWord test = core.isWordLegal(word);
+        String testResults = "";
+        
+        if (!test.getValue().isEmpty()) {
             PGTools.flashComponent(txtConWord, core.getRequiredColor(), true);
-            success = false;
+            testResults += test.getValue();
         }
-        
-        // test for mandatory local word
-        if (core.getPropertiesManager().isLocalMandatory()
-                && txtLocalWord.getText().equals("")) {
+        if (!test.getLocalWord().isEmpty()) {
             PGTools.flashComponent(txtLocalWord, core.getRequiredColor(), true);
-            success = false;
+            testResults += ("\n" + test.getLocalWord());
         }
-        
-        // test for mandatory types
-        if (core.getPropertiesManager().isTypesMandatory()
-                && cmbType.getSelectedItem().toString().equals(cstSELET)) {
+        if (!test.getPronunciation().isEmpty()) {
+            PGTools.flashComponent(txtProc, core.getRequiredColor(), true);
+            testResults += ("\n" + test.getPronunciation());
+        }
+        if (!test.getDefinition().isEmpty()) {
+            PGTools.flashComponent(txtDefinition, core.getRequiredColor(), true);
+            testResults += ("\n" + test.getDefinition());
+        }
+        if (!test.getGender().isEmpty()) {
+            PGTools.flashComponent(cmbGender, core.getRequiredColor(), true);
+            testResults += ("\n" + test.getGender());
+        }
+        if (!test.getWordType().isEmpty()) {
             PGTools.flashComponent(cmbType, core.getRequiredColor(), false);
-            success = false;
+            testResults += ("\n" + test.getWordType());
         }
         
-        // test for con word uniqueness
-        if (!txtConWord.getText().equals("")
-                &&core.getPropertiesManager().isWordUniqueness()) {
-            word.setValue(txtConWord.getText());
-            try {
-                if (core.getWordCollection().filteredList(word).hasNext()) {
-                    throw new Exception("Conword \"" + word.getValue() + "\" already exists.");
-                }
-            } catch (Exception e) {
-                InfoBox.error("Quickinsert Error", "Unable to quickinsert: "+ e.getMessage(), this);
-                success = false;
-            }
-            word = new ConWord();
-        }
         
-        // test for local word uniqueness
-        if (!txtLocalWord.getText().equals("")
-                && core.getPropertiesManager().isLocalUniqueness()) {
-            word.setLocalWord(txtLocalWord.getText());
-            try {
-                if (core.getWordCollection().filteredList(word).hasNext()) {
-                    throw new Exception("Local word \"" + word.getValue() + "\" already exists.");
-                }
-            } catch (Exception e) {
-                InfoBox.error("Quickinsert Error", "Unable to quickinsert: "+ e.getMessage(), this);
-                success = false;
-            }
-            word = new ConWord();
-        }
-        
-        if (!success) {
+        if (!testResults.isEmpty()) {
+            InfoBox.warning("Illegal Values", "Word contains illegal values:\n\n" 
+                    + testResults, this);
             return;
         }
         
