@@ -23,6 +23,7 @@ import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Color;
 import java.awt.Window;
@@ -48,9 +49,8 @@ public class ScrTypes extends PDialog {
     private boolean updatingName = false;
     
     public ScrTypes(DictCore _core) {
-        initComponents();
-        
         core = _core;
+        initComponents();
         
         populateTypes();
         populateProperties();
@@ -317,7 +317,7 @@ public class ScrTypes extends PDialog {
         txtName = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtNotes = new javax.swing.JTextArea();
-        txtTypePattern = new javax.swing.JTextField();
+        txtTypePattern = new PTextField(core);
         btnSetup = new javax.swing.JButton();
         btnAutogen = new javax.swing.JButton();
         txtErrorBox = new javax.swing.JTextField();

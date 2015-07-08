@@ -249,11 +249,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     public void open() {
         // only open if save/cancel test is passed
+        openingFile = true;
         if (!saveOrCancelTest()) {
             return;
         }
-        
-        openingFile = true;
 
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Open Dictionary");
@@ -436,9 +435,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             scrThes.updateAllValues(_core);
         }
         
-        //TODO: correct this before release
-        //this.setTitle(title);
-        this.setTitle("CLOSED BETA: POLYGLOT");
+        this.setTitle(title);
     }
 
     @Override

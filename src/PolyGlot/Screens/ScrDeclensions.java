@@ -50,7 +50,6 @@ public class ScrDeclensions extends PDialog {
 
     private final Map<String, JTextField> fieldMap = new HashMap<String, JTextField>();
     private final Map<String, String> labelMap = new HashMap<String, String>();
-    private final DictCore core;
     private ConWord word;
     private Integer typeId;
     private Font conFont;
@@ -189,7 +188,7 @@ public class ScrDeclensions extends PDialog {
                 s.setFormProps();
             }
         });
-
+        s.setCore(_core);
         s.setVisible(true);
         
         return s;
