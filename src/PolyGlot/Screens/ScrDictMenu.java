@@ -104,6 +104,11 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     
     @Override
     public void dispose() {
+        // only exit if save/cancel test is passed
+        if (!saveOrCancelTest()) {
+            return;
+        }
+        
         try {
             core.getOptionsManager().setLastFiles(lastFiles);
             core.getOptionsManager().saveIni();
@@ -286,8 +291,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         // if there's a current dictionary loaded, prompt user to save before creating new
         if (core != null
                 && core.getWordCollection().getNodeIterator().hasNext()) {
+            openingFile = true;
             Integer saveFirst = InfoBox.yesNoCancel("Save First?",
                     "Save current dictionary before performing action?", this);
+            openingFile = false;
 
             if (saveFirst == JOptionPane.YES_OPTION) {
                 boolean saved = saveFile();
