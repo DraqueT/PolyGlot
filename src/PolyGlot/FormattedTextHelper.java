@@ -83,14 +83,18 @@ public class FormattedTextHelper {
                 
                 MutableAttributeSet aset = new SimpleAttributeSet();
                 if (font.equals(PGTUtil.conLangFont)) {
-                    nextNode = "\u202e" + nextNode;
+                    if (core.getPropertiesManager().isEnforceRTL()) {
+                        nextNode = "\u202e" + nextNode;
+                    }
                     StyleConstants.setFontFamily(aset, conFont.getFamily());
-                } else if (!font.equals("")) {
-                    // TODO: In the future, consider whether to leverege this logic to allow arbitrary fonts in grammar section text
-                    nextNode = "\u202c" + nextNode;
-                    StyleConstants.setFontFamily(aset, font);
                 } else {
-                    nextNode = "\u202c" + nextNode;
+                    // TODO: In the future, consider whether to leverege this logic to allow arbitrary fonts in grammar section text
+                    if (core.getPropertiesManager().isEnforceRTL()) {
+                        nextNode = "\u202c" + nextNode;
+                    }
+                    if (!font.equals("")) {
+                        StyleConstants.setFontFamily(aset, font);
+                    }
                 }
                 
                 if (fontSize != -1) {
