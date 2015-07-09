@@ -531,9 +531,11 @@ public final class ScrLexicon extends PFrame {
         isLegal = isLegal && addErrorBoxMessage(txtDefinition, results.getDefinition());
         isLegal = isLegal && addErrorBoxMessage(cmbGender, results.getGender());
         isLegal = isLegal && addErrorBoxMessage(cmbType, results.getWordType());
-
+        
         if (disableElements && !testWord.isRulesOverrride()) {
             setLexiconEnabled(isLegal);
+        } else {
+            setLexiconEnabled(true);
         }
     }
 
@@ -1321,6 +1323,11 @@ public final class ScrLexicon extends PFrame {
         jLabel1.setText("Override Rules");
 
         chkRuleOverride.setToolTipText("Overrides all typically enforced requirements for this word, allowing it to be saved as an exception");
+        chkRuleOverride.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkRuleOverrideActionPerformed(evt);
+            }
+        });
 
         txtDefinition.setColumns(20);
         txtDefinition.setLineWrap(true);
@@ -1616,6 +1623,10 @@ public final class ScrLexicon extends PFrame {
             saveValuesTo(curWord);
         }
     }//GEN-LAST:event_formWindowLostFocus
+
+    private void chkRuleOverrideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRuleOverrideActionPerformed
+        setWordLegality();
+    }//GEN-LAST:event_chkRuleOverrideActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddWord;
