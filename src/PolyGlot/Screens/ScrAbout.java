@@ -29,9 +29,10 @@ import PolyGlot.CustomControls.PDialog;
 public class ScrAbout extends PDialog {
 
     private final DictCore core;
-    
+
     /**
      * Creates new form ScrAbout
+     *
      * @param _core dictionary core
      */
     public ScrAbout(DictCore _core) {
@@ -39,7 +40,7 @@ public class ScrAbout extends PDialog {
         initComponents();
         core = _core;
         setModal(true);
-        
+
         txtAbout.setText("PolyGlot ver. " + core.getVersion() + "\n\nPolyGlot is "
                 + "copyright Draque Thompson 2014-2015. It is licensed under the Creative Commons "
                 + "Attribution-Noncommercial 4.0 International Public License, so it is free "
@@ -165,17 +166,16 @@ public class ScrAbout extends PDialog {
             java.util.logging.Logger.getLogger(ScrAbout.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
-        //</editor-fold>
 
-            ScrAbout s = new ScrAbout(_core);
-           
-            s.setVisible(true);
-            s.setModal(true);
-            
-            return s;
+        //</editor-fold>
+        ScrAbout s = new ScrAbout(_core);
+        s.setCore(_core);
+        s.setVisible(true);
+        s.setModal(true);
+
+        return s;
     }
-    
+
     @Override
     public void updateAllValues(DictCore _core) {
         // No values to update
@@ -185,7 +185,7 @@ public class ScrAbout extends PDialog {
     public boolean thisOrChildrenFocused() {
         return this.isFocusOwner();
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

@@ -137,7 +137,8 @@ public class ConWord extends DictNode {
                         + value, null);
             }
         }
-        this.localWord = localWord.trim();
+        
+        this.localWord = _localWord.trim();
     }
     
     @Override

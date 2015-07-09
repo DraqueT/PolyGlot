@@ -333,19 +333,21 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private boolean doWrite(final String _fileName) {
         final ScrDictMenu parent = this;
         final CountDownLatch latch = new CountDownLatch(1);
+        boolean ret;
 
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        this.setEnabled(false);
-
+        openingFile = true;
         final SwingWorker worker = new SwingWorker() {
             //Runs on the event-dispatching thread.
             @Override
             protected Object doInBackground() throws Exception {
                 try {
                     core.writeFile(_fileName);
-                } catch (IOException | ParserConfigurationException | TransformerException e) {
+                } catch (IOException | ParserConfigurationException | 
+                        TransformerException e) {
                     parent.setCleanSave(false);
-                    InfoBox.error("Save Error", "Unable to save to file: " + curFileName + "\n\n" + e.getMessage(), parent);
+                    InfoBox.error("Save Error", "Unable to save to file: " 
+                            + curFileName + "\n\n" + e.getMessage(), parent);
                 }
 
                 latch.countDown();
@@ -362,10 +364,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         setCursor(Cursor.getDefaultCursor());
 
         if (cleanSave) {
-            return true;
+            InfoBox.info("Success", "Dictionary saved to: " 
+                    + curFileName + ".", parent);
+            ret = true;
+        } else {
+            ret = false;
         }
+        openingFile = false;
         cleanSave = true;
-        return false;
+        return ret;
     }
 
     /**

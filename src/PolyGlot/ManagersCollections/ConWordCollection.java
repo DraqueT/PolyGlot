@@ -438,12 +438,12 @@ public class ConWordCollection extends DictionaryCollection {
 
         String head = ignoreCase ? word.getValue().toLowerCase() : word.getValue();
 
-        if (!matchText.trim().isEmpty() && head.contains(matchText)) {
+        if (matchText.trim().isEmpty() || head.contains(matchText)) {
             ret = true;
         }
         TypeNode type = core.getTypes().findTypeByName(word.getWordType());
 
-        if (type != null) {
+        if (type != null && ! ret) {
             int typeId = type.getId();
             Iterator<DeclensionPair> decIt = core.getDeclensionManager().getAllCombinedIds(typeId).iterator();
 

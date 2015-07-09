@@ -1580,7 +1580,8 @@ public final class ScrLexicon extends PFrame {
             int index = selected == evt.getFirstIndex()
                     ? evt.getLastIndex() : evt.getFirstIndex();
 
-            if (index != -1) {
+            if (index != -1
+                    && index < lstLexicon.getModel().getSize()) {
                 ConWord saveWord = (ConWord) lstLexicon.getModel().getElementAt(index);
                 saveValuesTo(saveWord);
             }

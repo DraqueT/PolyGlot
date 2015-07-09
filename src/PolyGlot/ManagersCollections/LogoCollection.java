@@ -387,7 +387,6 @@ public class LogoCollection extends DictionaryCollection {
     public void loadRadicalRelations() throws Exception {
         Iterator<LogoNode> it = new ArrayList<LogoNode>(nodeMap.values()).iterator();
         String loadLog = "";
-        // TODO: missed this... complete #172 loading log
         while (it.hasNext()) {
             try {
                 LogoNode curNode = it.next();
