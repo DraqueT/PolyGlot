@@ -55,7 +55,6 @@ import javax.swing.table.TableColumn;
  * @author draque
  */
 public class ScrLangProps extends PDialog {
-    private final DictCore core;
     private boolean curPopulating = false;
     private static final String defName = "- Language Name -";
     private static final String defAlpha = "- Alphabetical Order -";
