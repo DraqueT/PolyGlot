@@ -239,6 +239,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      * @param performTest whether the UI ask for confirmation
      */
     final public void newFile(boolean performTest) {
+        boolean localOpening = openingFile;
         openingFile = true;
         if (performTest && !saveOrCancelTest()) {
             return;
@@ -248,7 +249,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         core.setRootWindow(this);
         updateAllValues(core);
         curFileName = "";
-        openingFile = false;
+        openingFile = localOpening;
     }
 
     /**
@@ -256,6 +257,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     public void open() {
         // only open if save/cancel test is passed
+        boolean localOpening = openingFile;
         openingFile = true;
         if (!saveOrCancelTest()) {
             return;
@@ -273,7 +275,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         } else {
             return;
         }
-        openingFile = false;
+        openingFile = localOpening;
 
         newFile(false); // wipe everything before loading new
         setFile(fileName);
@@ -291,10 +293,11 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         // if there's a current dictionary loaded, prompt user to save before creating new
         if (core != null
                 && core.getWordCollection().getNodeIterator().hasNext()) {
+            boolean localOpening = openingFile;
             openingFile = true;
             Integer saveFirst = InfoBox.yesNoCancel("Save First?",
                     "Save current dictionary before performing action?", this);
-            openingFile = false;
+            openingFile = localOpening;
 
             if (saveFirst == JOptionPane.YES_OPTION) {
                 boolean saved = saveFile();
@@ -343,6 +346,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         boolean ret;
 
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        boolean localOpening = openingFile;
         openingFile = true;
         final SwingWorker worker = new SwingWorker() {
             //Runs on the event-dispatching thread.
@@ -354,7 +358,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                         TransformerException e) {
                     parent.setCleanSave(false);
                     InfoBox.error("Save Error", "Unable to save to file: " 
-                            + curFileName + "\n\n" + e.getMessage(), parent);
+                            + curFileName + "\n\n" + e.getMessage(), null);
                 }
 
                 latch.countDown();
@@ -377,7 +381,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         } else {
             ret = false;
         }
-        openingFile = false;
+        openingFile = localOpening;
         cleanSave = true;
         return ret;
     }
