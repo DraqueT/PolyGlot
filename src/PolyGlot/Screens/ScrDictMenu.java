@@ -47,6 +47,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
@@ -74,8 +75,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
     /**
      * Creates new form ScrDictMenu
-     * @param overridePath Path PolyGlot should treat as home directory
-     * (blank if default)
+     *
+     * @param overridePath Path PolyGlot should treat as home directory (blank
+     * if default)
      */
     public ScrDictMenu(String overridePath) {
         initComponents();
@@ -85,13 +87,14 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         populateRecentOpened();
         checkJavaVersion();
         scrLexicon = ScrLexicon.run(core);
+        bindButtonToWindow(scrLexicon, btnLexicon);
 
         // activates macify for menu integration...
         if (System.getProperty("os.name").startsWith("Mac")) {
             activateMacify();
         }
     }
-    
+
     @Override
     public boolean thisOrChildrenFocused() {
         boolean ret = this.isFocusOwner() || openingFile;
@@ -101,19 +104,19 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         ret = ret || (scrThes != null && scrThes.thisOrChildrenFocused());
         return ret;
     }
-    
+
     @Override
     public void dispose() {
         // only exit if save/cancel test is passed
         if (!saveOrCancelTest()) {
             return;
         }
-        
+
         try {
             core.getOptionsManager().setLastFiles(lastFiles);
             core.getOptionsManager().saveIni();
         } catch (IOException e) {
-            InfoBox.error("Ini Save Error", "Unable to save PolyGlot.ini:\n" 
+            InfoBox.error("Ini Save Error", "Unable to save PolyGlot.ini:\n"
                     + e.getLocalizedMessage(), this);
         }
         super.dispose();
@@ -189,7 +192,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     private void populateRecentOpened() {
         mnuRecents.removeAll();
-        
+
         for (final String curFile : lastFiles) {
             Path p = Paths.get(curFile);
             String fileName = p.getFileName().toString();
@@ -206,21 +209,22 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             mnuRecents.add(lastFile);
         }
     }
-    
+
     /**
      * Pushes a recently opened file (if appropriate) into the recent files list
+     *
      * @param file full path of file
      */
     private void pushRecentFile(String file) {
         if (!lastFiles.isEmpty()
-                && lastFiles.get(lastFiles.size() - 1).equals(file)) {            
+                && lastFiles.get(lastFiles.size() - 1).equals(file)) {
             return;
         }
-        
+
         while (lastFiles.size() > PGTUtil.optionsNumLastFiles) {
             lastFiles.remove(0);
         }
-        
+
         lastFiles.add(file);
     }
 
@@ -310,7 +314,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -354,10 +358,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             protected Object doInBackground() throws Exception {
                 try {
                     core.writeFile(_fileName);
-                } catch (IOException | ParserConfigurationException | 
+                } catch (IOException | ParserConfigurationException |
                         TransformerException e) {
                     parent.setCleanSave(false);
-                    InfoBox.error("Save Error", "Unable to save to file: " 
+                    InfoBox.error("Save Error", "Unable to save to file: "
                             + curFileName + "\n\n" + e.getMessage(), null);
                 }
 
@@ -375,7 +379,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         setCursor(Cursor.getDefaultCursor());
 
         if (cleanSave) {
-            InfoBox.info("Success", "Dictionary saved to: " 
+            InfoBox.info("Success", "Dictionary saved to: "
                     + curFileName + ".", parent);
             ret = true;
         } else {
@@ -436,8 +440,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         String langName = core.getPropertiesManager().getLangName().trim();
         if (!langName.isEmpty()) {
             title += (" : " + langName);
-        } 
-        
+        }
+
         if (scrLexicon != null
                 && !scrLexicon.isDisposed()) {
             scrLexicon.updateAllValues(_core);
@@ -454,7 +458,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 && !scrThes.isDisposed()) {
             scrThes.updateAllValues(_core);
         }
-        
+
         this.setTitle(title);
     }
 
@@ -534,7 +538,14 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         w.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent we) {
-                b.setSelected(false);
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        b.setSelected(false);
+                    }
+                };
+                SwingUtilities.invokeLater(runnable);
+
             }
         });
     }
