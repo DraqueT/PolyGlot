@@ -427,6 +427,12 @@ public final class ScrLexicon extends PFrame {
         filter.setGender(filterGend);
         filter.setPronunciation(txtProcSrc.getText().trim());
 
+        // save word before applying filter
+        ConWord curWord = (ConWord)lstLexicon.getSelectedValue();
+        if (curWord != null) {
+            saveValuesTo(curWord);
+        }
+        
         try {
             populateLexicon(core.getWordCollection().filteredList(filter));
         } catch (Exception e) {
