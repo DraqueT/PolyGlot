@@ -489,7 +489,7 @@ public final class ScrLexicon extends PFrame {
         }
 
         if (testWord == null) {
-            setWordLegality(testWord, true);
+            setWordLegality(testWord);
         }
 
         testWord = new ConWord();
@@ -510,7 +510,7 @@ public final class ScrLexicon extends PFrame {
         testWord.setWordType(typeString);
         testWord.setRulesOverride(chkRuleOverride.isSelected());
 
-        setWordLegality(testWord, true);
+        setWordLegality(testWord);
     }
 
     /**
@@ -520,7 +520,7 @@ public final class ScrLexicon extends PFrame {
      * @param results current word
      * @param disableElements whether to disable control elements on fail
      */
-    private void setWordLegality(ConWord testWord, boolean disableElements) {
+    private void setWordLegality(ConWord testWord) {
         if (testWord == null) {
             setLexiconEnabled(true);
             txtErrorBox.setText("");
@@ -535,11 +535,11 @@ public final class ScrLexicon extends PFrame {
         isLegal = isLegal && addErrorBoxMessage(txtConWord, results.getValue());
         isLegal = isLegal && addErrorBoxMessage(txtLocalWord, results.getLocalWord());
         isLegal = isLegal && addErrorBoxMessage(txtProc, results.getPronunciation());
-        isLegal = isLegal && addErrorBoxMessage(txtDefinition, results.getDefinition());
+        isLegal = isLegal && addErrorBoxMessage(txtConWord, results.getDefinition());
         isLegal = isLegal && addErrorBoxMessage(cmbGender, results.getGender());
         isLegal = isLegal && addErrorBoxMessage(cmbType, results.getWordType());
         
-        if (disableElements && !testWord.isRulesOverrride()) {
+        if (!testWord.isRulesOverrride()) {
             setLexiconEnabled(isLegal);
         } else {
             setLexiconEnabled(true);
