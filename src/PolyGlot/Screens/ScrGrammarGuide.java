@@ -39,6 +39,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import javax.sound.sampled.LineUnavailableException;
@@ -69,7 +70,7 @@ import javax.swing.tree.TreePath;
  * @author draque
  */
 public class ScrGrammarGuide extends PFrame {
-    private final String searchText;
+    private final String defSearch;
     private final String defName;
     private final String defTime;
     private SoundRecorder soundRecorder;
@@ -91,7 +92,7 @@ public class ScrGrammarGuide extends PFrame {
      */
     public ScrGrammarGuide(DictCore _core) {
         isUpdating = false;
-        searchText = "Search...";
+        defSearch = "Search...";
         defName = "Name...";
         defTime = "00:00:00";
         core = _core;
@@ -532,14 +533,14 @@ public class ScrGrammarGuide extends PFrame {
 
     private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
         txtSearch.setForeground(Color.black);
-        if (txtSearch.getText().equals(searchText)) {
+        if (txtSearch.getText().equals(defSearch)) {
             txtSearch.setText("");
         }
     }//GEN-LAST:event_txtSearchFocusGained
 
     private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
         if (txtSearch.getText().equals("")) {
-            txtSearch.setText(searchText);
+            txtSearch.setText(defSearch);
             txtSearch.setForeground(Color.gray);
         }
     }//GEN-LAST:event_txtSearchFocusLost
@@ -621,7 +622,7 @@ public class ScrGrammarGuide extends PFrame {
     private void setInitialValues() {
         treChapList.setCellRenderer(new PGTreeCellRenderer());
         treChapList.requestFocus();
-        txtSearch.setText(searchText);
+        txtSearch.setText(defSearch);
         txtSearch.setForeground(Color.gray);
         txtName.setText(defName);
         txtName.setForeground(Color.gray);
@@ -688,6 +689,28 @@ public class ScrGrammarGuide extends PFrame {
      * sets up object listeners
      */
     private void setupListeners() {
+        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    populateFromSearch();
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    populateFromSearch();
+                }
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    populateFromSearch();
+                }
+            }
+        });
         txtName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
@@ -1023,6 +1046,9 @@ public class ScrGrammarGuide extends PFrame {
         return s;
     }
 
+    /**
+     * populates all grammar chapters and sections
+     */
     private void populateSections() {
         List<GrammarChapNode> chapters = core.getGrammarManager().getChapters();
         Iterator<GrammarChapNode> chapIt = chapters.iterator();
@@ -1037,6 +1063,51 @@ public class ScrGrammarGuide extends PFrame {
 
         treeModel.reload(rootNode);
         treChapList.setLargeModel(true);
+    }
+    
+    /**
+     * Populates all grammar chapters and sections that match search value
+     */
+    private void populateFromSearch() {
+        savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
+        
+        if (txtSearch.getText().isEmpty()
+                || txtSearch.getText().equals(defSearch)) {
+            populateSections();
+            return;
+        }
+        
+        List<GrammarChapNode> chapters = core.getGrammarManager().getChapters();
+        Iterator<GrammarChapNode> chapIt = chapters.iterator();
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root Node");
+        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+        treChapList.setModel(treeModel);
+
+        while (chapIt.hasNext()) {
+            GrammarChapNode curChap = chapIt.next();
+            if (!chapMatchSrc(curChap, txtSearch.getText())) {
+                continue;
+            }
+            rootNode.add(curChap);
+        }
+
+        treeModel.reload(rootNode);
+        treChapList.setLargeModel(true);
+    }
+    
+    private boolean chapMatchSrc(GrammarChapNode curChap, String src) {
+        if (curChap.getName().contains(src)) {
+            return true;
+        }
+        
+        Enumeration sections = curChap.children();
+        while (sections.hasMoreElements()) {
+            GrammarSectionNode curSec = (GrammarSectionNode)sections.nextElement();
+            if (curSec.getName().contains(src)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
