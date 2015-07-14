@@ -110,6 +110,7 @@ public class ScrThesaurus extends PFrame {
     public void updateAllValues(DictCore _core) {
         if (core != _core) {
             core = _core;
+            updateThesNotes();
             setupComponents();
         }
     }

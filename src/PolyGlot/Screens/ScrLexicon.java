@@ -216,6 +216,7 @@ public final class ScrLexicon extends PFrame {
                 Platform.runLater(fxSetup);
 
                 ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+                saveValuesTo(curWord);
                 lstLexicon.clearSelection();
                 setupComboBoxesSwing();
                 lstLexicon.setSelectedValue(curWord, true);

@@ -138,6 +138,7 @@ public class ScrGrammarGuide extends PFrame {
     
     @Override
     public void updateAllValues(DictCore _core) {
+        savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
         if (core != _core) {
             core = _core;
             setInitialValues();
