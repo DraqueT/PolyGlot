@@ -354,7 +354,6 @@ public class ConWordCollection extends DictionaryCollection {
                 String definition;
                 String type;
                 String local;
-                //String value;
                 String gender;
                 String proc;
 
@@ -363,14 +362,12 @@ public class ConWordCollection extends DictionaryCollection {
                     definition = curWord.getDefinition().toLowerCase();
                     type = curWord.getWordType().toLowerCase();
                     local = curWord.getLocalWord().toLowerCase();
-                    //value = curWord.getValue().toLowerCase();
                     gender = curWord.getGender().toLowerCase();
                     proc = curWord.getPronunciation().toLowerCase();
                 } else {
                     definition = curWord.getDefinition();
                     type = curWord.getWordType();
                     local = curWord.getLocalWord();
-                    //value = curWord.getValue();
                     gender = curWord.getGender();
                     proc = curWord.getPronunciation();
                 }
@@ -413,7 +410,7 @@ public class ConWordCollection extends DictionaryCollection {
                     continue;
                 }
 
-                retValues.getBufferWord().setEqual(curWord);
+                retValues.setBufferWord(curWord);
                 retValues.insert(curWord.getId());
             } catch (Exception e) {
                 throw new Exception("FILTERING ERROR: " + e.getMessage());

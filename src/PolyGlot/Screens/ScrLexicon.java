@@ -309,7 +309,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Generates and populates pronunciation if apprpriate
+     * Generates and populates pronunciation if appropriate
      */
     private void genProc() {
         if (curPopulating
@@ -323,7 +323,7 @@ public final class ScrLexicon extends PFrame {
 
         try {
             String setText = core.getPronunciationMgr().getPronunciation(txtConWord.getText());
-            txtProc.setText(setText);
+            txtProc.setText(setText.isEmpty() ? defProcValue : setText);
         } catch (Exception e) {
             InfoBox.error("Pronunciation Error", "Could not generate pronunciation: "
                     + e.getLocalizedMessage(), this);
@@ -1083,23 +1083,26 @@ public final class ScrLexicon extends PFrame {
 
         curPopulating = true;
         namePopulating = true;
-
+        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        
         try {
-            ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
-
             if (curWord == null) {
                 return;
             }
 
             saveValuesTo(curWord);
-            populateLexicon();
-            lstLexicon.setSelectedValue(curWord, true);
         } catch (Exception e) {
             InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), this);
         }
 
         curPopulating = false;
+        
+        filterLexicon();
+        
+        curPopulating = true;
+        lstLexicon.setSelectedValue(curWord, true);
         namePopulating = false;
+        curPopulating = false;
     }
 
     /**
