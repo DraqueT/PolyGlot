@@ -374,13 +374,13 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         try {
             latch.await(30, TimeUnit.SECONDS);
         } catch (Exception e) {
-            InfoBox.error("Save Error", "Save attempt timed out.", this);
+            InfoBox.error("Save Error", "Save attempt timed out.", null);
         }
         setCursor(Cursor.getDefaultCursor());
 
         if (cleanSave) {
             InfoBox.info("Success", "Dictionary saved to: "
-                    + curFileName + ".", parent);
+                    + curFileName + ".", null);
             ret = true;
         } else {
             ret = false;
