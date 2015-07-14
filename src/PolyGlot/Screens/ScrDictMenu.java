@@ -202,7 +202,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             lastFile.addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    newFile(true);
                     setFile(curFile);
                 }
             });
@@ -281,9 +280,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         }
         openingFile = localOpening;
 
-        newFile(false); // wipe everything before loading new
+        core = new DictCore();
+        core.setRootWindow(this);
         setFile(fileName);
-        updateAllValues(core);
         pushRecentFile(fileName);
         populateRecentOpened();
     }
@@ -497,6 +496,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
         core = new DictCore();
         core.setRootWindow(this);
+        updateAllValues(core);
 
         try {
             core.readFile(fileName);
