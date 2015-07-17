@@ -388,8 +388,8 @@ public class ConWordCollection extends DictionaryCollection {
 
                 // local word
                 if (!_filter.getLocalWord().trim().equals("")
-                        && !local.contains(
-                                _filter.getLocalWord())) {
+                        && !(local.matches(_filter.getLocalWord())
+                        || local.startsWith(_filter.getLocalWord()))) {
                     continue;
                 }
 
@@ -435,7 +435,9 @@ public class ConWordCollection extends DictionaryCollection {
 
         String head = ignoreCase ? word.getValue().toLowerCase() : word.getValue();
 
-        if (matchText.trim().isEmpty() || head.contains(matchText)) {
+        if (matchText.trim().isEmpty() 
+                || head.matches(matchText) 
+                || head.startsWith(matchText)) {
             ret = true;
         }
         TypeNode type = core.getTypes().findTypeByName(word.getWordType());
@@ -449,7 +451,9 @@ public class ConWordCollection extends DictionaryCollection {
                 String declension = core.getDeclensionManager()
                         .declineWord(typeId, curPair.combinedId, word.getValue());
 
-                if (!declension.trim().isEmpty() && declension.contains(matchText)) {
+                if (!declension.trim().isEmpty() 
+                        && (declension.matches(matchText) 
+                            || declension.startsWith(matchText))) {
                     ret = true;
                 }
             }
