@@ -70,6 +70,7 @@ import javax.swing.tree.TreePath;
  * @author draque
  */
 public class ScrGrammarGuide extends PFrame {
+
     private final String defSearch;
     private final String defName;
     private final String defTime;
@@ -190,7 +191,7 @@ public class ScrGrammarGuide extends PFrame {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
         super.dispose();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -209,7 +210,7 @@ public class ScrGrammarGuide extends PFrame {
         txtFontSize = new javax.swing.JTextField();
         cmbFontColor = new javax.swing.JComboBox();
         btnApply = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        panSection = new javax.swing.JScrollPane();
         txtSection = new javax.swing.JTextPane();
         jPanel4 = new javax.swing.JPanel();
         sldSoundPosition = new javax.swing.JSlider();
@@ -304,7 +305,7 @@ public class ScrGrammarGuide extends PFrame {
         txtSection.setBorder(null);
         txtSection.setToolTipText("Formatted segment text");
         txtSection.setEnabled(false);
-        jScrollPane2.setViewportView(txtSection);
+        panSection.setViewportView(txtSection);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -313,14 +314,14 @@ public class ScrGrammarGuide extends PFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jScrollPane2)
+            .addComponent(panSection)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
+                .addComponent(panSection, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
         );
 
         jPanel4.setMaximumSize(new java.awt.Dimension(32767, 76));
@@ -605,7 +606,7 @@ public class ScrGrammarGuide extends PFrame {
             updateFontSize();
         }
     }//GEN-LAST:event_txtFontSizeKeyPressed
-
+    
     private void updateFontSize() {
         try {
             Integer.parseInt(txtFontSize.getText());
@@ -615,7 +616,7 @@ public class ScrGrammarGuide extends PFrame {
         }
         setFont();
     }
-    
+
     /**
      * Sets up initial values of components
      */
@@ -638,7 +639,7 @@ public class ScrGrammarGuide extends PFrame {
         } catch (FontFormatException | IOException e) {
             InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), this);
         }
-
+        
         cmbFonts.addItem("NatLang Font");
         cmbFonts.addItem(core.getPropertiesManager().getFontCon().getName());
         
@@ -651,9 +652,9 @@ public class ScrGrammarGuide extends PFrame {
         btnDelete.setIcon(getButtonSizeIcon(deleteButton, 21, 21));
         btnDelete.setPressedIcon(getButtonSizeIcon(deleteButtonPressed, 21, 21));
         btnAddSection.setContentAreaFilled(false);
-        btnDelete.setContentAreaFilled(false);    
+        btnDelete.setContentAreaFilled(false);        
     }
-    
+
     /**
      * Sets input font/font of selected text
      */
@@ -668,14 +669,14 @@ public class ScrGrammarGuide extends PFrame {
         } else {
             StyleConstants.setFontFamily(aset, conFont.getFamily());
         }
-
+        
         StyleConstants.setForeground(aset,
                 FormattedTextHelper.textToColor((String) cmbFontColor.getSelectedItem()));
-
+        
         StyleConstants.setFontSize(aset, Integer.parseInt(txtFontSize.getText()));
         
         txtSection.setCharacterAttributes(aset, true);
-
+        
         if (core.getPropertiesManager().isEnforceRTL()) {
             // this ensures that the correct sections are displayed RTL
             savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
@@ -696,14 +697,14 @@ public class ScrGrammarGuide extends PFrame {
                     populateFromSearch();
                 }
             }
-
+            
             @Override
             public void removeUpdate(DocumentEvent e) {
                 if (!isUpdating) {
                     populateFromSearch();
                 }
             }
-
+            
             @Override
             public void insertUpdate(DocumentEvent e) {
                 if (!isUpdating) {
@@ -718,14 +719,14 @@ public class ScrGrammarGuide extends PFrame {
                     updateName();
                 }
             }
-
+            
             @Override
             public void removeUpdate(DocumentEvent e) {
                 if (!isUpdating) {
                     updateName();
                 }
             }
-
+            
             @Override
             public void insertUpdate(DocumentEvent e) {
                 if (!isUpdating) {
@@ -741,7 +742,7 @@ public class ScrGrammarGuide extends PFrame {
                     Object oldNode = oldPath.getPathComponent(oldPath.getPathCount() - 1);
                     savePropsToNode((DefaultMutableTreeNode) oldNode);
                 }
-
+                
                 closeAllPlayRecord();
                 populateProperties();
             }
@@ -750,6 +751,7 @@ public class ScrGrammarGuide extends PFrame {
 
     /**
      * Saves current grammar properties to the node passed in. If null, nothing.
+     *
      * @param node node to save values to
      */
     public void savePropsToNode(DefaultMutableTreeNode node) {
@@ -780,9 +782,10 @@ public class ScrGrammarGuide extends PFrame {
     private ImageIcon getButtonSizeIcon(ImageIcon rawImage) {
         return getButtonSizeIcon(rawImage, 30, 30);
     }
-    
+
     /**
      * converts an icon to a user defined size for buttons
+     *
      * @param rawImage image to convert
      * @param width new width
      * @param height new height
@@ -798,9 +801,9 @@ public class ScrGrammarGuide extends PFrame {
     private void updateName() {
         boolean localUpdating = isUpdating;
         isUpdating = true;
-
+        
         Object selection = treChapList.getLastSelectedPathComponent();
-
+        
         if (selection instanceof GrammarSectionNode) {
             ((GrammarSectionNode) selection).setName(txtName.getText());
         } else if (selection instanceof GrammarChapNode) {
@@ -838,9 +841,9 @@ public class ScrGrammarGuide extends PFrame {
         if (isUpdating) {
             return;
         }
-
+        
         isUpdating = true;
-
+        
         Object selection = treChapList.getLastSelectedPathComponent();
         if (selection instanceof GrammarChapNode) {
             GrammarChapNode chapNode = (GrammarChapNode) selection;
@@ -897,6 +900,13 @@ public class ScrGrammarGuide extends PFrame {
                         + e.getLocalizedMessage(), this);
                 //e.printStackTrace();
             }
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    panSection.getVerticalScrollBar().setValue(0);
+                }
+            });
+            
         } else {
             // if neither is selected, then the whole tree has been deleted by the user
             txtName.setText(defName);
@@ -915,15 +925,15 @@ public class ScrGrammarGuide extends PFrame {
             txtTimer.setText(defTime);
             soundRecorder.setSound(null);
         }
-
+        
         isUpdating = false;
     }
-
+    
     private void deleteNode() {
         Object selection = treChapList.getLastSelectedPathComponent();
         DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-
+        
         if (selection == null) {
             return;
         }
@@ -932,7 +942,7 @@ public class ScrGrammarGuide extends PFrame {
                 != JOptionPane.YES_OPTION) {
             return;
         }
-
+        
         if (selection instanceof GrammarSectionNode) {
             GrammarSectionNode curNode = (GrammarSectionNode) selection;
             GrammarChapNode parent = (GrammarChapNode) curNode.getParent();
@@ -943,17 +953,17 @@ public class ScrGrammarGuide extends PFrame {
             root.remove((GrammarChapNode) selection);
             core.getGrammarManager().removeChapter((GrammarChapNode) selection);
         }
-
+        
         model.reload(root);
     }
-
+    
     private void addChapter() {
         DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
         Object selection = treChapList.getLastSelectedPathComponent();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
         GrammarChapNode newNode = new GrammarChapNode(core.getGrammarManager());
         newNode.setName("NEW CHAPTER");
-
+        
         if (selection instanceof GrammarSectionNode) {
             GrammarChapNode parent = (GrammarChapNode) ((GrammarSectionNode) selection).getParent();
             int index = root.getIndex(parent);
@@ -967,17 +977,17 @@ public class ScrGrammarGuide extends PFrame {
             root.add(newNode);
             core.getGrammarManager().addChapter(newNode);
         }
-
+        
         model.reload();
         treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
         txtName.setText(defName);
         txtName.setForeground(Color.gray);
     }
-
+    
     private void addSection() {
         DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
         Object selection = treChapList.getLastSelectedPathComponent();
-
+        
         if (selection instanceof GrammarSectionNode) {
             GrammarChapNode parent = (GrammarChapNode) ((GrammarSectionNode) selection).getParent();
             int index = parent.getIndex((GrammarSectionNode) selection);
@@ -996,11 +1006,11 @@ public class ScrGrammarGuide extends PFrame {
         } else {
             InfoBox.warning("Section Creation", "Select a chapter in which to create a section.", this);
         }
-
+        
         txtName.setText(defName);
         txtName.setForeground(Color.gray);
     }
-
+    
     private void playPauseAudio() {
         try {
             soundRecorder.playPause();
@@ -1009,7 +1019,7 @@ public class ScrGrammarGuide extends PFrame {
             //e.printStackTrace();
         }
     }
-
+    
     private void recordAudio() {
         try {
             if (soundRecorder.isRecording()) {
@@ -1021,7 +1031,7 @@ public class ScrGrammarGuide extends PFrame {
                         return;
                     }
                 }
-
+                
                 soundRecorder.beginRecording();
             }
         } catch (Exception e) {
@@ -1029,11 +1039,11 @@ public class ScrGrammarGuide extends PFrame {
             //e.printStackTrace();
         }
     }
-
+    
     public static ScrGrammarGuide run(DictCore _core) {
         final ScrGrammarGuide s = new ScrGrammarGuide(_core);
         s.setupKeyStrokes();
-       
+
         // For some reason, adding items to the combobox moves this to the back... this fixes it
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -1042,7 +1052,7 @@ public class ScrGrammarGuide extends PFrame {
                 s.requestFocus();
             }
         });
-
+        
         return s;
     }
 
@@ -1055,16 +1065,16 @@ public class ScrGrammarGuide extends PFrame {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root Node");
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
-
+        
         while (chapIt.hasNext()) {
             GrammarChapNode curChap = chapIt.next();
             rootNode.add(curChap);
         }
-
+        
         treeModel.reload(rootNode);
         treChapList.setLargeModel(true);
     }
-    
+
     /**
      * Populates all grammar chapters and sections that match search value
      */
@@ -1082,7 +1092,7 @@ public class ScrGrammarGuide extends PFrame {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root Node");
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
-
+        
         while (chapIt.hasNext()) {
             GrammarChapNode curChap = chapIt.next();
             if (!chapMatchSrc(curChap, txtSearch.getText())) {
@@ -1090,7 +1100,7 @@ public class ScrGrammarGuide extends PFrame {
             }
             rootNode.add(curChap);
         }
-
+        
         treeModel.reload(rootNode);
         treChapList.setLargeModel(true);
     }
@@ -1102,7 +1112,7 @@ public class ScrGrammarGuide extends PFrame {
         
         Enumeration sections = curChap.children();
         while (sections.hasMoreElements()) {
-            GrammarSectionNode curSec = (GrammarSectionNode)sections.nextElement();
+            GrammarSectionNode curSec = (GrammarSectionNode) sections.nextElement();
             if (curSec.getName().contains(src)) {
                 return true;
             }
@@ -1126,10 +1136,10 @@ public class ScrGrammarGuide extends PFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JScrollPane panSection;
     private javax.swing.JSlider sldSoundPosition;
     private javax.swing.JTree treChapList;
     private javax.swing.JTextField txtFontSize;
