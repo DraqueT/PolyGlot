@@ -86,8 +86,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         lastFiles = core.getOptionsManager().getLastFiles();
         populateRecentOpened();
         checkJavaVersion();
-        scrLexicon = ScrLexicon.run(core);
-        bindButtonToWindow(scrLexicon, btnLexicon);
 
         // activates macify for menu integration...
         if (System.getProperty("os.name").startsWith("Mac")) {

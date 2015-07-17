@@ -40,6 +40,7 @@ import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.text.DefaultEditorKit;
 
@@ -140,13 +141,20 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
      * @param mask the mask to associate the binding with (command or control,
      * for Macs or PC/Linux boxes, respectively.)
      */
-    private void addTextBindings(String UIElement, int mask) {
-        InputMap im = (InputMap) UIManager.get(UIElement);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.selectAllAction);
-        UIManager.put(UIElement, im);
+    private void addTextBindings(final String UIElement, final int mask) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                InputMap im = (InputMap) UIManager.get(UIElement);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.selectAllAction);
+                UIManager.put(UIElement, im);
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
+
     }
 
     /**
@@ -281,21 +289,21 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
         hasFocus = false;
         core.checkProgramFocus();
     }
-    
+
     public abstract void addBindingToComponent(JComponent c);
 
     @Override
     public boolean isFocusOwner() {
         return hasFocus;
     }
-    
+
     // positions on screen once form has already been build/sized
     @Override
     public void setVisible(boolean visible) {
         if (!ignoreCenter) {
             this.setLocationRelativeTo(null);
         }
-        
+
         if (core == null && !(this instanceof ScrDictMenu)) {
             InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
         }
