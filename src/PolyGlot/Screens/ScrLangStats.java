@@ -29,16 +29,14 @@ import PolyGlot.CustomControls.PDialog;
  * @author draque
  */
 public class ScrLangStats extends PDialog {
-    private final DictCore core;
-    
     /**
      * Creates new form scrLangStats
      * @param _core DictCore to build report from
      */
     public ScrLangStats(DictCore _core) {
-        setupKeyStrokes();
-        initComponents();
         core = _core;
+        setupKeyStrokes();
+        initComponents();        
         
         jTextPane1.setContentType("text/html");
         
