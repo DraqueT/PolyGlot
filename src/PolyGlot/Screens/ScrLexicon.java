@@ -81,6 +81,7 @@ import javax.swing.event.DocumentListener;
  * @author draque
  */
 public final class ScrLexicon extends PFrame {
+
     private final List<Window> childFrames = new ArrayList<Window>();
     private TitledPane gridTitlePane = null;
     private final JFXPanel fxPanel;
@@ -133,38 +134,40 @@ public final class ScrLexicon extends PFrame {
             btnDelWord.setToolTipText(btnDelWord.getToolTipText() + " (CTRL -)");
         }
     }
-    
+
     /**
      * Opens quickentry window if not already open
+     *
      * @return quickentry window
      */
     public ScrQuickWordEntry openQuickEntry() {
         ScrQuickWordEntry s = ScrQuickWordEntry.run(core, this);
         childFrames.add(s);
-        
+
         return s;
     }
-    
+
     @Override
     public boolean thisOrChildrenFocused() {
-        boolean ret = this.isFocusOwner();        
+        boolean ret = this.isFocusOwner();
         for (Window w : childFrames) {
             if (w instanceof PFrame) {
-                ret = ret || ((PFrame)w).thisOrChildrenFocused();
+                ret = ret || ((PFrame) w).thisOrChildrenFocused();
             } else if (w instanceof PDialog) {
-                ret = ret || ((PDialog)w).thisOrChildrenFocused();
+                ret = ret || ((PDialog) w).thisOrChildrenFocused();
             }
-        }        
+        }
         return ret;
     }
-    
+
     /**
      * forces refresh of word list
+     *
      * @param wordId id of newly created word
      */
     public void refreshWordList(int wordId) {
         populateLexicon();
-        try{
+        try {
             lstLexicon.setSelectedValue(
                     core.getWordCollection().getNodeById(wordId), true);
         } catch (Exception e) {
@@ -377,6 +380,9 @@ public final class ScrLexicon extends PFrame {
             public void run() {
                 try {
                     Thread.sleep(500); // wait for interrupt from user...
+                    if (txtConWord.getText().isEmpty()) {
+                        return; // prevents freezing scenario with if new word made beore thread continues
+                    }
                     filterLexicon();
                     lstLexicon.setSelectedIndex(0);
                     lstLexicon.ensureIndexIsVisible(0);
@@ -429,11 +435,11 @@ public final class ScrLexicon extends PFrame {
         filter.setPronunciation(txtProcSrc.getText().trim());
 
         // save word before applying filter
-        ConWord curWord = (ConWord)lstLexicon.getSelectedValue();
+        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
         if (curWord != null) {
             saveValuesTo(curWord);
         }
-        
+
         try {
             populateLexicon(core.getWordCollection().filteredList(filter));
         } catch (Exception e) {
@@ -538,7 +544,7 @@ public final class ScrLexicon extends PFrame {
         isLegal = isLegal && addErrorBoxMessage(txtConWord, results.getDefinition());
         isLegal = isLegal && addErrorBoxMessage(cmbGender, results.getGender());
         isLegal = isLegal && addErrorBoxMessage(cmbType, results.getWordType());
-        
+
         if (!testWord.isRulesOverrride()) {
             setLexiconEnabled(isLegal);
         } else {
@@ -693,24 +699,24 @@ public final class ScrLexicon extends PFrame {
 
         childFrames.clear();
     }
-    
+
     public ConWord getCurrentWord() {
-        return (ConWord)lstLexicon.getSelectedValue();
+        return (ConWord) lstLexicon.getSelectedValue();
     }
-    
+
     public void selectWordById(int id) {
         ConWord target = null;
-        
+
         try {
             target = core.getWordCollection().getNodeById(id);
         } catch (Exception e) {
-            InfoBox.error("Word Selection Error", "Unable to select word:\n" 
+            InfoBox.error("Word Selection Error", "Unable to select word:\n"
                     + e.getLocalizedMessage(), this);
         }
-        
+
         if (target == null) {
             return;
-        }        
+        }
         lstLexicon.setSelectedValue(target, true);
     }
 
@@ -1085,7 +1091,7 @@ public final class ScrLexicon extends PFrame {
         curPopulating = true;
         namePopulating = true;
         ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
-        
+
         try {
             if (curWord == null) {
                 return;
@@ -1097,9 +1103,9 @@ public final class ScrLexicon extends PFrame {
         }
 
         curPopulating = false;
-        
+
         filterLexicon();
-        
+
         curPopulating = true;
         lstLexicon.setSelectedValue(curWord, true);
         namePopulating = false;
@@ -1178,7 +1184,7 @@ public final class ScrLexicon extends PFrame {
         curPopulating = false;
 
         setWordLegality();
-        
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -1199,7 +1205,7 @@ public final class ScrLexicon extends PFrame {
         ScrLogoQuickView window = new ScrLogoQuickView(core, curWord);
         window.setupKeyStrokes();
         childFrames.add(window);
-        ((PFrame)window).setCore(core);
+        ((PFrame) window).setCore(core);
         window.setVisible(true);
         final Window parent = this;
         this.setEnabled(false);
@@ -1608,11 +1614,27 @@ public final class ScrLexicon extends PFrame {
     }//GEN-LAST:event_lstLexiconValueChanged
 
     private void btnAddWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddWordActionPerformed
-        addWord();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                clearFilter();
+                addWord();
+                gridTitlePane.setExpanded(false);
+
+            }
+        });
     }//GEN-LAST:event_btnAddWordActionPerformed
 
     private void btnDelWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelWordActionPerformed
-        deleteWord();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                clearFilter();
+                deleteWord();
+                gridTitlePane.setExpanded(false);
+
+            }
+        });
     }//GEN-LAST:event_btnDelWordActionPerformed
 
     private void btnDeclensionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclensionsActionPerformed
