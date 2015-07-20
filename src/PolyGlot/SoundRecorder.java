@@ -141,6 +141,7 @@ public class SoundRecorder {
     
     public void setSound(byte[] _sound) {
         sound = _sound;
+        playPauseBut.setIcon(_sound == null ? playUp : playDown);
     }
 
     /**
