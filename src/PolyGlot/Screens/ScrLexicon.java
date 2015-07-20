@@ -454,6 +454,17 @@ public final class ScrLexicon extends PFrame {
      * Clears lexicon's search/filter
      */
     private void clearFilter() {
+        // if no filter in effect, do nothing
+        if (txtConSrc.getText().isEmpty()
+                && txtDefSrc.getText().isEmpty()
+                && txtLocalSrc.getText().isEmpty()
+                && txtProcSrc.getText().isEmpty()
+                && cmbGenderSrc.getSelectionModel().getSelectedIndex() == 0
+                && cmbTypeSrc.getSelectionModel().getSelectedIndex() == 0) {
+            return;
+        }
+        
+        // only run process if in FX Application thread. Recurse within thread otherwise
         if (!Platform.isFxApplicationThread()) {
             final CountDownLatch latch = new CountDownLatch(1);
             Runnable fxSetup = new Runnable() {
@@ -479,8 +490,17 @@ public final class ScrLexicon extends PFrame {
             txtProcSrc.setText("");
             cmbGenderSrc.getSelectionModel().select(0);
             cmbTypeSrc.getSelectionModel().select(0);
-            populateLexicon();
+            gridTitlePane.setExpanded(false);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    populateLexicon();
+                }
+            });
         }
+        
+        // this is to address an odd timing error... sloppy, but it's somewhere in the Java API
+        try{Thread.sleep(250);}catch(Exception e) {}
     }
 
     /**
@@ -1168,7 +1188,7 @@ public final class ScrLexicon extends PFrame {
         if (curNode != null) {
             saveValuesTo(curNode);
         }
-        clearFilter();
+        
         curPopulating = true;
         core.getWordCollection().clear();
         try {
@@ -1614,13 +1634,11 @@ public final class ScrLexicon extends PFrame {
     }//GEN-LAST:event_lstLexiconValueChanged
 
     private void btnAddWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddWordActionPerformed
+        clearFilter();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                clearFilter();
                 addWord();
-                gridTitlePane.setExpanded(false);
-
             }
         });
     }//GEN-LAST:event_btnAddWordActionPerformed
@@ -1629,10 +1647,9 @@ public final class ScrLexicon extends PFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                clearFilter();
                 deleteWord();
+                filterLexicon();
                 gridTitlePane.setExpanded(false);
-
             }
         });
     }//GEN-LAST:event_btnDelWordActionPerformed
