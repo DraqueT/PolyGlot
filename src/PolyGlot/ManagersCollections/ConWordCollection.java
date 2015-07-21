@@ -99,6 +99,14 @@ public class ConWordCollection extends DictionaryCollection {
 
         return ret;
     }
+    
+    /**
+     * Gets count of conwords in dictionary
+     * @return number of conwords in dictionary
+     */
+    public int getWordCount() {
+        return nodeMap.size();
+    }
 
     /**
      * Tests whether collection contains a particular local word

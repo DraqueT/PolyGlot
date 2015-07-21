@@ -422,7 +422,15 @@ public final class ScrLexicon extends PFrame {
             lstLexicon.setSelectedIndex(0);
             lstLexicon.ensureIndexIsVisible(0);
 
-            return;
+            // refresh lexicon if it was already filtered. Do nothing otherwise
+            if (lstLexicon.getModel().getSize() < core.getWordCollection().getWordCount())
+            {
+                populateLexicon();
+                lstLexicon.setSelectedIndex(0);
+                populateProperties();
+            } else {
+                return;
+            }
         }
 
         ConWord filter = new ConWord();
