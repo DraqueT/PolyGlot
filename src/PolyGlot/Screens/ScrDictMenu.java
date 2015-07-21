@@ -485,8 +485,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         }
 
         core = new DictCore();
-        core.setRootWindow(this);
-        updateAllValues(core);
+        core.setRootWindow(this);        
 
         try {
             core.readFile(fileName);
@@ -497,6 +496,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                     + "\n\n " + e.getMessage());
             //e.printStackTrace();
         }
+        
+        updateAllValues(core);
     }
 
     /**
