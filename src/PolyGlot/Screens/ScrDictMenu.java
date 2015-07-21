@@ -19,7 +19,7 @@
  */
 package PolyGlot.Screens;
 
-import PolyGlot.CustomControls.InfoBox;
+//import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.DictCore;
 import PolyGlot.ExcelExport;
@@ -70,7 +70,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private ScrLogoDetails scrLogos;
     private ScrThesaurus scrThes;
     private boolean cleanSave = true;
-    private boolean openingFile = false;
+    private boolean holdFront = false;
     private final List<String> lastFiles;
 
     /**
@@ -95,7 +95,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
     @Override
     public boolean thisOrChildrenFocused() {
-        boolean ret = this.isFocusOwner() || openingFile;
+        boolean ret = this.isFocusOwner() || holdFront;
         ret = ret || (scrLexicon != null && scrLexicon.thisOrChildrenFocused());
         ret = ret || (scrGrammar != null && scrGrammar.thisOrChildrenFocused());
         ret = ret || (scrLogos != null && scrLogos.thisOrChildrenFocused());
@@ -114,8 +114,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             core.getOptionsManager().setLastFiles(lastFiles);
             core.getOptionsManager().saveIni();
         } catch (IOException e) {
-            InfoBox.error("Ini Save Error", "Unable to save PolyGlot.ini:\n"
-                    + e.getLocalizedMessage(), this);
+            localError("Ini Save Error", "Unable to save PolyGlot.ini:\n"
+                    + e.getLocalizedMessage());
         }
         super.dispose();
         System.exit(0);
@@ -171,7 +171,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
     @Override
     public void handlePrintFile(ApplicationEvent event) {
-        InfoBox.info("Printing", "PolyGlot does not currently support printing.", this);
+        localInfo("Printing", "PolyGlot does not currently support printing.");
     }
 
     @Override
@@ -240,8 +240,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      * @param performTest whether the UI ask for confirmation
      */
     final public void newFile(boolean performTest) {
-        boolean localOpening = openingFile;
-        openingFile = true;
         if (performTest && !saveOrCancelTest()) {
             return;
         }
@@ -250,7 +248,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         core.setRootWindow(this);
         updateAllValues(core);
         curFileName = "";
-        openingFile = localOpening;
     }
 
     /**
@@ -258,8 +255,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     public void open() {
         // only open if save/cancel test is passed
-        boolean localOpening = openingFile;
-        openingFile = true;
         if (!saveOrCancelTest()) {
             return;
         }
@@ -271,12 +266,13 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         String fileName;
         chooser.setCurrentDirectory(new File("."));
 
+        holdFront = true;
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
         } else {
             return;
         }
-        openingFile = localOpening;
+        holdFront = false;
 
         core = new DictCore();
         core.setRootWindow(this);
@@ -294,11 +290,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         // if there's a current dictionary loaded, prompt user to save before creating new
         if (core != null
                 && core.getWordCollection().getNodeIterator().hasNext()) {
-            boolean localOpening = openingFile;
-            openingFile = true;
-            Integer saveFirst = InfoBox.yesNoCancel("Save First?",
-                    "Save current dictionary before performing action?", this);
-            openingFile = localOpening;
+            Integer saveFirst = localYesNoCancel("Save First?",
+                    "Save current dictionary before performing action?");
 
             if (saveFirst == JOptionPane.YES_OPTION) {
                 boolean saved = saveFile();
@@ -347,8 +340,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         boolean ret;
 
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        boolean localOpening = openingFile;
-        openingFile = true;
         final SwingWorker worker = new SwingWorker() {
             //Runs on the event-dispatching thread.
             @Override
@@ -358,8 +349,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 } catch (IOException | ParserConfigurationException |
                         TransformerException e) {
                     parent.setCleanSave(false);
-                    InfoBox.error("Save Error", "Unable to save to file: "
-                            + curFileName + "\n\n" + e.getMessage(), null);
+                    localError("Save Error", "Unable to save to file: "
+                            + curFileName + "\n\n" + e.getMessage());
                 }
 
                 latch.countDown();
@@ -371,18 +362,17 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         try {
             latch.await(30, TimeUnit.SECONDS);
         } catch (Exception e) {
-            InfoBox.error("Save Error", "Save attempt timed out.", null);
+            localError("Save Error", "Save attempt timed out.");
         }
         setCursor(Cursor.getDefaultCursor());
 
         if (cleanSave) {
-            InfoBox.info("Success", "Dictionary saved to: "
-                    + curFileName + ".", null);
+            localInfo("Success", "Dictionary saved to: "
+                    + curFileName + ".");
             ret = true;
         } else {
             ret = false;
         }
-        openingFile = localOpening;
         cleanSave = true;
         return ret;
     }
@@ -401,12 +391,14 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         chooser.setCurrentDirectory(new File("."));
 
         String fileName;
-
+ 
+        holdFront = true;
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
         } else {
             return false;
         }
+        holdFront = false;
 
         // if user has not provided an extension, add one
         if (!fileName.contains(".pgd")) {
@@ -416,8 +408,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         File f = new File(fileName);
 
         if (f.exists()) {
-            Integer overWrite = InfoBox.yesNoCancel("Overwrite Dialog",
-                    "Overwrite existing file? " + fileName, this);
+            Integer overWrite = localYesNoCancel("Overwrite Dialog",
+                    "Overwrite existing file? " + fileName);
 
             if (overWrite == JOptionPane.NO_OPTION) {
                 saveFileAs();
@@ -478,9 +470,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 || javaVersion.startsWith("1.4")
                 || javaVersion.startsWith("1.5")
                 || javaVersion.startsWith("1.6")) {
-            InfoBox.error("Please Upgrade Java", "Java " + javaVersion
+            localError("Please Upgrade Java", "Java " + javaVersion
                     + " must be upgraded to run PolyGlot. Version 1.7 or higher is required.\n\n"
-                    + "Please upgrade at https://java.com/en/download/.", this);
+                    + "Please upgrade at https://java.com/en/download/.");
             System.exit(0);
         }
     }
@@ -501,8 +493,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             curFileName = fileName;
         } catch (Exception e) {
             core = new DictCore(); // don't allow partial loads
-            InfoBox.error("File Read Error", "Could not read file: " + fileName
-                    + "\n\n " + e.getMessage(), this);
+            localError("File Read Error", "Could not read file: " + fileName
+                    + "\n\n " + e.getMessage());
             //e.printStackTrace();
         }
     }
@@ -522,7 +514,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                     ScrUpdateAlert.run(verbose, core);
                 } catch (Exception e) {
                     if (verbose) {
-                        InfoBox.error("Update Problem", "Unable to check for update:\n"
+                        PolyGlot.CustomControls.InfoBox.error("Update Problem",
+                                "Unable to check for update:\n"
                                 + e.getLocalizedMessage(), parent);
                     }
                 }
@@ -559,8 +552,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         try {
             core.getOptionsManager().loadIni();
         } catch (Exception e) {
-            InfoBox.error("Options Load Error", "Unable to load or create options file:\n"
-                    + e.getLocalizedMessage(), this);
+            localError("Options Load Error", "Unable to load or create options file:\n"
+                    + e.getLocalizedMessage());
         }
     }
 
@@ -614,15 +607,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
                 scrLexicon.setVisible(true);
             } catch (Exception e) {
-                InfoBox.error("Open Window Error", "Error Opening Lexicon: "
-                        + e.getLocalizedMessage(), this);
+                localError("Open Window Error", "Error Opening Lexicon: "
+                        + e.getLocalizedMessage());
             }
         } else {
             try {
                 scrLexicon.setVisible(false);
             } catch (Exception e) {
-                InfoBox.error("Close Window Error", "Error Closing Lexicon: "
-                        + e.getLocalizedMessage(), this);
+                localError("Close Window Error", "Error Closing Lexicon: "
+                        + e.getLocalizedMessage());
             }
         }
     }
@@ -644,15 +637,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
                 scrGrammar.setVisible(true);
             } catch (Exception e) {
-                InfoBox.error("Open Window Error", "Error Opening Grammar Guide: "
-                        + e.getLocalizedMessage(), this);
+                localError("Open Window Error", "Error Opening Grammar Guide: "
+                        + e.getLocalizedMessage());
             }
         } else {
             try {
                 scrGrammar.setVisible(false);
             } catch (Exception e) {
-                InfoBox.error("Close Window Error", "Error Closing Grammar Guide: "
-                        + e.getLocalizedMessage(), this);
+                localError("Close Window Error", "Error Closing Grammar Guide: "
+                        + e.getLocalizedMessage());
             }
         }
     }
@@ -668,15 +661,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
                 scrLogos.setVisible(true);
             } catch (Exception e) {
-                InfoBox.error("Open Window Error", "Error Opening Logograph Guide: "
-                        + e.getLocalizedMessage(), this);
+                localError("Open Window Error", "Error Opening Logograph Guide: "
+                        + e.getLocalizedMessage());
             }
         } else {
             try {
                 scrLogos.setVisible(false);
             } catch (Exception e) {
-                InfoBox.error("Close Window Error", "Error Closing Grammar Guide: "
-                        + e.getLocalizedMessage(), this);
+                localError("Close Window Error", "Error Closing Grammar Guide: "
+                        + e.getLocalizedMessage());
             }
         }
     }
@@ -692,15 +685,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
                 scrThes.setVisible(true);
             } catch (Exception e) {
-                InfoBox.error("Open Window Error", "Error Opening Logograph Guide: "
-                        + e.getLocalizedMessage(), this);
+                localError("Open Window Error", "Error Opening Logograph Guide: "
+                        + e.getLocalizedMessage());
             }
         } else {
             try {
                 scrThes.setVisible(false);
             } catch (Exception e) {
-                InfoBox.error("Close Window Error", "Error Closing Grammar Guide: "
-                        + e.getLocalizedMessage(), this);
+                localInfo("Close Window Error", "Error Closing Grammar Guide: "
+                        + e.getLocalizedMessage());
             }
         }
     }
@@ -718,11 +711,13 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
         String fileName;
 
+        holdFront = true;
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
         } else {
             return;
         }
+        holdFront = false;
 
         if (!fileName.contains(".xls")) {
             fileName += ".xls";
@@ -730,9 +725,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
         try {
             ExcelExport.exportExcelDict(fileName, core);
-            InfoBox.info("Export Status", "Dictionary exported to " + fileName + ".", this);
+            localInfo("Export Status", "Dictionary exported to " + fileName + ".");
         } catch (Exception e) {
-            InfoBox.error("Export Problem", e.getLocalizedMessage(), this);
+            localError("Export Problem", e.getLocalizedMessage());
         }
     }
 
@@ -748,16 +743,18 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         chooser.setCurrentDirectory(new File("."));
         chooser.setApproveButtonText("Save");
 
+        holdFront = true;
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
         } else {
             return;
         }
+        holdFront = false;
 
         try {
             IOHandler.exportFont(fileName, curFileName);
         } catch (IOException e) {
-            InfoBox.error("Export Error", "Unable to export font: " + e.getMessage(), this);
+            localError("Export Error", "Unable to export font: " + e.getMessage());
         }
     }
 
@@ -791,12 +788,47 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 java.awt.Desktop.getDesktop().browse(uri);
             } else {
                 // TODO: Implement this for Linux
-                InfoBox.info("Help", "This is not yet implemented for OS: " + OS
-                        + ". Please open readme.html in the application directory", this);
+                localError("Help", "This is not yet implemented for OS: " + OS
+                        + ". Please open readme.html in the application directory");
             }
         } catch (URISyntaxException | IOException e) {
-            InfoBox.info("Missing File", "Unable to open readme.html.", this);
+            localError("Missing File", "Unable to open readme.html.");
         }
+    }
+    
+    
+    /**
+     * Wrapped locally to ensure front position of menu not disturbed
+     * @param infoHead title text
+     * @param infoText message text
+     */
+    private void localInfo(String infoHead, String infoText) {
+        holdFront = true;
+        PolyGlot.CustomControls.InfoBox.info(infoHead, infoText, null);
+        holdFront = false;
+    }
+    
+    /**
+     * Wrapped locally to ensure front position of menu not disturbed
+     * @param infoHead title text
+     * @param infoText message text
+     */
+    private void localError(String infoHead, String infoText) {
+        holdFront = true;
+        PolyGlot.CustomControls.InfoBox.error(infoHead, infoText, null);
+        holdFront = false;
+    }
+    
+    /**
+     * Wrapped locally to ensure front position of menu not disturbed
+     * @param infoHead title text
+     * @param infoText message text
+     */
+    private int localYesNoCancel(String infoHead, String infoText) {
+        holdFront = true;
+        int ret = PolyGlot.CustomControls.InfoBox.yesNoCancel(infoHead, infoText, this);
+        holdFront = false;
+        return ret;
     }
 
     /**
