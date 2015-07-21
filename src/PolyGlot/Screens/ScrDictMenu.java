@@ -1093,11 +1093,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFileActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrExcelImport.run(core);
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuImportFileActionPerformed
 
     private void btnLexiconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLexiconActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         lexHit();
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnLexiconActionPerformed
 
     private void mnuSaveLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveLocalActionPerformed
@@ -1105,45 +1109,61 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     }//GEN-LAST:event_mnuSaveLocalActionPerformed
 
     private void btnQuickEntryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuickEntryActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         if (!btnLexicon.isSelected()) {
             btnLexicon.setSelected(true);
             lexHit();
         }
         quickEntryHit();
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnQuickEntryActionPerformed
 
     private void btnGrammarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrammarActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         grammarHit();
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnGrammarActionPerformed
 
     private void btnTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTypesActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrTypes s = ScrTypes.run(core);
         bindButtonToWindow(s, btnTypes);
         s.setVisible(true);
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnTypesActionPerformed
 
     private void btnGendersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGendersActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrGenders s = ScrGenders.run(core);
         bindButtonToWindow(s, btnGenders);
         s.setVisible(true);
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnGendersActionPerformed
 
     private void btnLangPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLangPropActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrLangProps s = ScrLangProps.run(core);
         bindButtonToWindow(s, btnLangProp);
         s.setVisible(true);
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnLangPropActionPerformed
 
     private void btnLogosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogosActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         logoHit();
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnLogosActionPerformed
 
     private void btnThesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThesActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         thesHit();
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnThesActionPerformed
 
     private void mnuNewLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewLocalActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         newFile(true);
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuNewLocalActionPerformed
 
     private void mnuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveAsActionPerformed
@@ -1151,7 +1171,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     }//GEN-LAST:event_mnuSaveAsActionPerformed
 
     private void mnuOpenLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenLocalActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         open();
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuOpenLocalActionPerformed
 
     private void mnuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExitActionPerformed
@@ -1159,7 +1181,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     }//GEN-LAST:event_mnuExitActionPerformed
 
     private void mnuExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportToExcelActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         exportToExcel();
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuExportToExcelActionPerformed
 
     private void mnuExportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportFontActionPerformed
@@ -1167,11 +1191,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     }//GEN-LAST:event_mnuExportFontActionPerformed
 
     private void mnuLangStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLangStatsActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrLangStats.run(core);
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuLangStatsActionPerformed
 
     private void mnuTransWindowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTransWindowActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrTranslationWindow.run(core, this);
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuTransWindowActionPerformed
 
     private void mnuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutActionPerformed
