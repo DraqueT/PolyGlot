@@ -1192,7 +1192,11 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
     private void mnuLangStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLangStatsActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        ScrLangStats.run(core);
+        if (localYesNoCancel("Continue Operation?", "The statistics report can"
+                + " take a long time to complete, depending on the complexity\n"
+                + "of your conlang. Continue?") == JOptionPane.YES_OPTION) {
+            ScrLangStats.run(core);
+        }
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuLangStatsActionPerformed
 
