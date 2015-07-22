@@ -159,6 +159,7 @@ public class PGTUtil {
     public static final String conLangFont = "PolyGlotConlangGrammarFont";
     public static final String polyGlotIni = "PolyGlot.ini";
     public static final String emptyLogoImage = "/PolyGlot/ImageAssets/EmptyImage.png";
+    public static final String jarArchiveName = "PolyGlot.jar";
     
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to

@@ -19,7 +19,6 @@
  */
 package PolyGlot.Screens;
 
-//import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.DictCore;
 import PolyGlot.ExcelExport;

@@ -122,6 +122,11 @@ public class DictCore {
                     + e.getLocalizedMessage(), rootWindow);
         }
         
+        // in some circumstances (but not others) the name of the jar will be appended... remove
+        if (ret.endsWith(PGTUtil.jarArchiveName)) {
+            ret = ret.replace(PGTUtil.jarArchiveName, "");
+        }
+        
         return ret;
     }
     
