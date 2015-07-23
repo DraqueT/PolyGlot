@@ -61,7 +61,6 @@ public class ScrDeclensionGenSetup extends PDialog {
 
     final String depRulesLabel = "DEPRECATED RULES";
     final int typeId;
-    final DictCore core;
     DefaultListModel decListModel;
     DefaultListModel rulesModel;
     DefaultTableModel transModel;

@@ -69,10 +69,10 @@ public final class ScrDeclensionSetup extends PDialog {
      * @param _typeId ID of the type for which declensions are to be modified
      */
     public ScrDeclensionSetup(DictCore _core, Integer _typeId) {
+        core = _core;
         setupKeyStrokes();
         initComponents();
         try {
-            core = _core;
             myType = _core.getTypes().getNodeById(_typeId);
             this.setTitle("Declensions/Conjugations for type: " + myType.getValue());
         } catch (Exception e) {
