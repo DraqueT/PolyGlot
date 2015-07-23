@@ -42,13 +42,12 @@ public class ScrExcelImport extends PDialog {
      * @param _core feed this the dictCore from the main program
      */
     public ScrExcelImport(DictCore _core) {
+        core = _core;
         setupKeyStrokes();
         initComponents();
         setModal(true);
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        core = _core;
     }
     
     @Override
