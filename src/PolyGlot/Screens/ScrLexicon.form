@@ -30,7 +30,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jLayeredPane1" alignment="0" pref="500" max="32767" attributes="0"/>
+          <Component id="jLayeredPane1" alignment="0" pref="525" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -104,7 +104,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jSplitPane1" alignment="0" pref="484" max="32767" attributes="0"/>
+                  <Component id="jSplitPane1" alignment="0" pref="509" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -165,7 +165,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="chkProcOverride" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jScrollPane2" pref="345" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane2" pref="369" max="32767" attributes="0"/>
                                   <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
