@@ -62,6 +62,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 /**
  * This form displays and allows editing of a chapter/section style grammar text
@@ -123,6 +124,7 @@ public class ScrGrammarGuide extends PFrame {
         setInitialValues();
         setupListeners();
         populateSections();
+        treChapList.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         
         if (System.getProperty("os.name").startsWith("Mac")) {
             btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (⌘ +)");
