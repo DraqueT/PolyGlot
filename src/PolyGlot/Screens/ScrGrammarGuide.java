@@ -1108,7 +1108,7 @@ public class ScrGrammarGuide extends PFrame {
     }
     
     private boolean chapMatchSrc(GrammarChapNode curChap, String src) {
-        if (curChap.getName().contains(src)) {
+        if (curChap.getName().toLowerCase().contains(src.toLowerCase())) {
             return true;
         }
         
