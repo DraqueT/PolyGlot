@@ -58,7 +58,6 @@ public final class ScrDeclensionSetup extends PDialog {
     private Map scrToCoreDeclensions = new HashMap<Integer, Integer>();
     private Map scrDeclensionMap = new HashMap<String, Integer>();
     private TypeNode myType;
-    private DictCore core;
     private boolean curPopulating = false;
     private final DefaultListModel declListModel;
 

@@ -20,7 +20,7 @@
 package PolyGlot;
 
 import PolyGlot.CustomControls.RegexGenException;
-import com.mifmif.common.regex.Generex;
+//import com.mifmif.common.regex.Generex;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;

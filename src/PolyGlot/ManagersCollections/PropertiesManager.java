@@ -134,14 +134,6 @@ public class PropertiesManager {
     }
     
     /**
-     * gets font name for table keeping loading purposes. Does NOT populate from actual font
-     * @return font name if any
-     */
-    public String getFontName() {
-        return fontName;
-    }
-    
-    /**
      * Sets font.
      * @param _fontCon The font being set
      * @param _fontStyle The style of the font (bold, underlined, etc.)
@@ -151,15 +143,6 @@ public class PropertiesManager {
         setFontCon(_fontCon);
         setFontSize(_fontSize);
         setFontStyle(_fontStyle);
-    }
-    
-    // TODO: consider removing- this is a relic from older versions
-    /**
-     * Sets font name for table keeping loading purposes. Does NOT populate from actual font
-     * @param _fontName name to set
-     */
-    public void setFontName(String _fontName) {
-        fontName = _fontName;
     }
     
     /**

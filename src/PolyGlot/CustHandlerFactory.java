@@ -454,7 +454,6 @@ public class CustHandlerFactory {
                     bwordProcOverride = false;
                 } else if (bfontcon) {
                     propertiesManager.setFontCon(new Font(new String(ch, start, length), 0, 0));
-                    propertiesManager.setFontName(new String(ch, start, length));
                     bfontcon = false;
                 } else if (bwordClassNotes) {
                     this.getTypeCollection().getBufferType()
