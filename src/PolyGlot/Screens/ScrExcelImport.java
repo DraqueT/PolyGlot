@@ -400,8 +400,6 @@ public class ScrExcelImport extends PDialog {
         }
     }
 
-    private final DictCore core;
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnCancel;
