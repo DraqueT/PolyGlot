@@ -1323,8 +1323,8 @@ public final class ScrLexicon extends PFrame {
 
         jSplitPane1.setDividerLocation(123);
 
-        jPanel3.setMaximumSize(new java.awt.Dimension(351, 380));
-        jPanel3.setMinimumSize(new java.awt.Dimension(351, 380));
+        jPanel3.setMaximumSize(new java.awt.Dimension(999999, 999999));
+        jPanel3.setMinimumSize(new java.awt.Dimension(51, 80));
         jPanel3.setName(""); // NOI18N
         jPanel3.setPreferredSize(new java.awt.Dimension(351, 380));
 
@@ -1471,6 +1471,7 @@ public final class ScrLexicon extends PFrame {
         lstLexicon.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstLexicon.setToolTipText("List of Conlang Words");
         lstLexicon.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lstLexicon.setMaximumSize(new java.awt.Dimension(99999, 99999));
         lstLexicon.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 lstLexiconFocusGained(evt);
