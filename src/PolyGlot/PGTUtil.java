@@ -20,6 +20,8 @@
 
 package PolyGlot;
 
+import PolyGlot.Screens.*;
+
 /**
  * This contains all the XML markers for saving/loading files
  * @author draque
@@ -146,6 +148,8 @@ public class PGTUtil {
     // constants for PolyGlot options found in PolyGlot.ini
     public static final int optionsNumLastFiles = 5;
     public static final String optionsLastFiles = "LastFiles";
+    public static final String optionsScreenPos = "ScreenPositions";
+    public static final String optionsScreensOpen = "ScreensUp";
     
     // string constants
     public static final String dictFileName = "PGDictionary.xml";
@@ -160,6 +164,12 @@ public class PGTUtil {
     public static final String polyGlotIni = "PolyGlot.ini";
     public static final String emptyLogoImage = "/PolyGlot/ImageAssets/EmptyImage.png";
     public static final String jarArchiveName = "PolyGlot.jar";
+    
+    // screen names when they're required as constants...
+    public static final String scrNameLexicon = ScrLexicon.class.getName();
+    public static final String scrNameGrammar = ScrGrammarGuide.class.getName();
+    public static final String scrNameLogo = ScrLogoDetails.class.getName();
+    public static final String scrNameThes = ScrThesaurus.class.getName();
     
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to

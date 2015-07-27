@@ -22,6 +22,7 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
@@ -61,7 +62,13 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     
     @Override
     public void dispose() {
+        if (!isDisposed) {
+            core.getOptionsManager().setScreenPosition(getClass().getName(),
+                this.getLocation());
+        }
+        
         isDisposed = true;
+        
         super.dispose();
     }
     
@@ -165,7 +172,12 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         if (core == null) {
             InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
         }
-
+        
+        Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());
+        if (lastPos != null) {
+            setLocation(lastPos);
+        }
+        
         super.setVisible(visible);
     }
 }

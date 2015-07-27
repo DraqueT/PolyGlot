@@ -21,6 +21,7 @@ package PolyGlot.ManagersCollections;
 
 import PolyGlot.DictCore;
 import PolyGlot.PGTUtil;
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -28,7 +29,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * This contains, loads and saves the options for PolyGlot
@@ -38,12 +42,58 @@ import java.util.List;
 public class OptionsManager {
 
     private List<String> lastFiles = new ArrayList<String>();
+    private final Map<String, Point> screenPos = new HashMap<String, Point>();
+    private final List<String> screensUp = new ArrayList<String>();
     private final DictCore core;
 
     public OptionsManager(DictCore _core) {
         core = _core;
     }
-
+    
+    /**
+     * Records screen up at time of program closing
+     * @param screen name of screen to be recorded as being up
+     */
+    public void addScreenUp(String screen) {
+        if (!screen.isEmpty() && ! screensUp.contains(screen)) {
+            screensUp.add(screen);
+        }
+    }
+    
+    /**
+     * Retrieve screens up at time of last close
+     * @return list of screens up
+     */
+    public List<String> getLastScreensUp() {
+        return screensUp;
+    }
+    
+    /**
+     * Adds or replaces screen position of a window
+     * @param screen name of window
+     * @param position position of window
+     */
+    public void setScreenPosition(String screen, Point position) {
+        if (screenPos.containsKey(screen)) {
+            screenPos.replace(screen, position);
+        } else {
+            screenPos.put(screen, position);
+        }
+    }
+    
+    /**
+     * Retrieves last screen position of screen
+     * @param screen screen to return position for
+     * @return last position of screen. Null otherwise.
+     */
+    public Point getScreenPosition(String screen) {
+        Point ret = null;
+        if (screenPos.containsKey(screen)) {
+            ret = screenPos.get(screen);
+        }        
+        return ret;
+    }
+    
     /**
      * Retrieves list of last opened files for PolyGlot
      *
@@ -84,10 +134,33 @@ public class OptionsManager {
                 if (bothVal.length != 2) {
                     throw new Exception("PolyGlot.ini corrupt or unreadable.");
                 }
-                
+
                 switch(bothVal[0]) {
                     case PGTUtil.optionsLastFiles:
                         lastFiles.addAll(Arrays.asList(bothVal[1].split(",")));
+                        break;
+                    case PGTUtil.optionsScreensOpen:
+                        for (String screen : bothVal[1].split(",")) {
+                            addScreenUp(screen);
+                        }
+                        break;
+                    case PGTUtil.optionsScreenPos:
+                        for (String curPosSet : bothVal[1].split(",")) {
+                            if (curPosSet.isEmpty()) {
+                                continue;
+                            }
+                            
+                            String[] splitSet = curPosSet.split(":");
+                            
+                            if (splitSet.length != 3) {
+                                throw new Exception("Malformed Screen Position: " 
+                                        + curPosSet);
+                            }
+                            Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
+                            setScreenPosition(splitSet[0], p);     
+                        }
+                        break;
+                    case "\n":
                         break;
                     default:
                         throw new Exception ("Unrecognized value: " + bothVal[0] 
@@ -115,6 +188,22 @@ public class OptionsManager {
                 } else {
                     nextLine += ("," + file);
                 }
+            }
+            
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.optionsScreenPos + "=";
+            
+            for (Entry<String, Point> curPos : screenPos.entrySet()) {
+                nextLine += ("," + curPos.getKey() + ":" + curPos.getValue().x + ":" + curPos.getValue().y);
+            }
+            
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.optionsScreensOpen + "=";
+            
+            for (String screen : screensUp) {
+                nextLine += ("," + screen);
             }
             
             f0.write(nextLine + newLine);

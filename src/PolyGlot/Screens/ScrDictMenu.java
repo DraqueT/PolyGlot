@@ -19,10 +19,12 @@
  */
 package PolyGlot.Screens;
 
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.DictCore;
 import PolyGlot.ExcelExport;
 import PolyGlot.IOHandler;
+import PolyGlot.ManagersCollections.OptionsManager;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.PGTUtil;
 import java.awt.Cursor;
@@ -85,6 +87,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         lastFiles = core.getOptionsManager().getLastFiles();
         populateRecentOpened();
         checkJavaVersion();
+        openLastWindows();
 
         // activates macify for menu integration...
         if (System.getProperty("os.name").startsWith("Mac")) {
@@ -110,6 +113,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         }
 
         try {
+            saveWindowsOpen();
+            core.getOptionsManager().setScreenPosition(getClass().getName(), 
+                    getLocation());
             core.getOptionsManager().setLastFiles(lastFiles);
             core.getOptionsManager().saveIni();
         } catch (IOException e) {
@@ -118,6 +124,57 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         }
         super.dispose();
         System.exit(0);
+    }
+    
+    /**
+     * Records open windows in options manager
+     */
+    private void saveWindowsOpen() {
+        OptionsManager options = core.getOptionsManager();
+        if (scrLexicon != null && !scrLexicon.isDisposed() && scrLexicon.isVisible()) {
+            options.addScreenUp(scrLexicon.getClass().getName());
+            scrLexicon.dispose();
+        }
+        if (scrGrammar != null && !scrGrammar.isDisposed() && scrGrammar.isVisible()) {
+            options.addScreenUp(scrGrammar.getClass().getName());
+            scrGrammar.dispose();
+        }
+        if (scrLogos != null && !scrLogos.isDisposed() && scrLogos.isVisible()) {
+            options.addScreenUp(scrLogos.getClass().getName());
+            scrLogos.dispose();
+        }
+        if (scrThes != null && !scrThes.isDisposed() && scrThes.isVisible()) {
+            options.addScreenUp(scrThes.getClass().getName());
+            scrThes.dispose();
+        }
+    }
+    
+    /**
+     * Opens windows left open when PolyGlot last run, then clears list
+     */
+    private void openLastWindows() {
+        List<String> lastScreensUp = core.getOptionsManager().getLastScreensUp();
+        for (String leftOpen : lastScreensUp) {
+            // switch has to be on constants...
+            if (leftOpen.equals(PGTUtil.scrNameGrammar)) {
+                btnGrammar.setSelected(true);
+                grammarHit();
+            } else if (leftOpen.equals(PGTUtil.scrNameLexicon)) {
+                btnLexicon.setSelected(true);
+                lexHit();
+            } else if (leftOpen.equals(PGTUtil.scrNameLogo)) {
+                btnLogos.setSelected(true);
+                logoHit();
+            } else if (leftOpen.equals(PGTUtil.scrNameThes)) {
+                btnThes.setSelected(true);
+                thesHit();
+            } else {
+                InfoBox.error("Unrecognized Window", 
+                        "Unrecognized window in last session: " + leftOpen, this);
+            }
+            
+        }
+        lastScreensUp.clear();
     }
 
     @Override

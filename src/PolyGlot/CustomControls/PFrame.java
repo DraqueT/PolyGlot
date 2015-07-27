@@ -23,6 +23,7 @@ import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
 import PolyGlot.Screens.ScrDictMenu;
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
@@ -73,7 +74,13 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
 
     @Override
     public void dispose() {
+        if (!isDisposed) {
+            core.getOptionsManager().setScreenPosition(getClass().getName(),
+                this.getLocation());
+        }
+        
         isDisposed = true;
+        
         super.dispose();
     }
 
@@ -300,7 +307,10 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
     // positions on screen once form has already been build/sized
     @Override
     public void setVisible(boolean visible) {
-        if (!ignoreCenter) {
+        Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());
+        if (lastPos != null) {
+            setLocation(lastPos);
+        } else if (!ignoreCenter) {
             this.setLocationRelativeTo(null);
         }
 
