@@ -256,9 +256,13 @@ public class ScrTypes extends PDialog {
             InfoBox.error("Type Creation Error", "Could not create new type: " 
                     + e.getLocalizedMessage(), this);
         }
+        updatingName = true;
         populateTypes();
         lstTypes.setSelectedIndex(0);
-        
+        txtName.setText("");
+        populateProperties();
+        updatingName = false;
+                
         txtName.requestFocus();
     }
     
