@@ -104,6 +104,7 @@ public class CustHandlerFactory {
             case "0.9.9":
             case "0.9.9.1":
             case "1.0":
+            case "1.0.1":
                 ret = CustHandlerFactory.get075orHigherHandler(core);
                 break;
             default:
