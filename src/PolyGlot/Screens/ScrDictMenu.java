@@ -468,7 +468,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                     "Overwrite existing file? " + fileName);
 
             if (overWrite == JOptionPane.NO_OPTION) {
-                saveFileAs();
+                return saveFileAs();
             } else if (overWrite == JOptionPane.CANCEL_OPTION) {
                 return false;
             }
@@ -1224,7 +1224,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     }//GEN-LAST:event_mnuNewLocalActionPerformed
 
     private void mnuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveAsActionPerformed
-        saveFileAs();
+        if (saveFileAs()) {
+            saveFile();
+        }
     }//GEN-LAST:event_mnuSaveAsActionPerformed
 
     private void mnuOpenLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenLocalActionPerformed
