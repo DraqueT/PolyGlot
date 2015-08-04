@@ -120,7 +120,8 @@ public class PTextField extends JTextField {
                 }
 
                 Font testFont = propMan.getFontCon();
-                if (!testFont.getFamily().equals(getFont().getFamily())) {
+                if (testFont != null
+                        && !testFont.getFamily().equals(getFont().getFamily())) {
                     setFont(testFont);
                 }
             }

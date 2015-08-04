@@ -150,6 +150,11 @@ public class PropertiesManager {
      * @return the fontCon
      */
     public Font getFontCon() {
+        // under certain circumstances, this can default to 0...
+        if (fontSize == 0) {
+            fontSize = 12;
+        }
+        
         return font == null? new JTextField().getFont() : font.deriveFont(fontStyle, fontSize);
     }
 
