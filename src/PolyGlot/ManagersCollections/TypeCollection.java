@@ -284,6 +284,10 @@ public class TypeCollection extends DictionaryCollection {
             wordValue = doc.createElement(PGTUtil.wordClassPatternXID);
             wordValue.appendChild(doc.createTextNode(curType.getPattern()));
             wordNode.appendChild(wordValue);
+            
+            wordValue = doc.createElement(PGTUtil.wordClassGlossXID);
+            wordValue.appendChild(doc.createTextNode(curType.getGloss()));
+            wordNode.appendChild(wordValue);
         }
     }
 }

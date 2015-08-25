@@ -27,6 +27,7 @@ package PolyGlot.Nodes;
 public class TypeNode extends DictNode{
     private String notes = "";
     private String regexPattern = "";
+    private String gloss = "";
     private boolean genderMandatory = false;
     private boolean procMandatory = false;
     private boolean defMandatory = false;
@@ -48,6 +49,14 @@ public class TypeNode extends DictNode{
         notes = _notes;
     }
     
+    public void setGloss(String _gloss) {
+        gloss = _gloss;
+    }
+    
+    public String getGloss() {
+        return gloss;
+    }
+    
     @Override
     public void setEqual(DictNode _node) {
         TypeNode set = (TypeNode) _node;
@@ -57,6 +66,7 @@ public class TypeNode extends DictNode{
         this.setDefMandatory(set.isDefMandatory());
         this.setGenderMandatory(set.isGenderMandatory());
         this.setProcMandatory(set.isProcMandatory());
+        this.setGloss(set.getGloss());
     }
 
     /**

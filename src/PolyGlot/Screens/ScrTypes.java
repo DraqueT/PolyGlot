@@ -41,32 +41,33 @@ import javax.swing.event.DocumentListener;
  * @author draque
  */
 public class ScrTypes extends PDialog {
-    private final DictCore core;
+
     private final List<Window> childFrames = new ArrayList<Window>();
     private static final String defName = " -- Type Name --";
     private static final String defNotes = " -- Type Notes --";
     private static final String defPattern = " -- Type Pattern --";
+    private static final String defGloss = " -- Type Gloss --";
     private boolean updatingName = false;
-    
+
     public ScrTypes(DictCore _core) {
         core = _core;
         initComponents();
-        
+
         populateTypes();
         populateProperties();
         setupListeners();
         setModal(true);
     }
-    
+
     @Override
     public void dispose() {
-        TypeNode curType = (TypeNode)lstTypes.getSelectedValue();
+        TypeNode curType = (TypeNode) lstTypes.getSelectedValue();
         if (curType != null) {
             savePropertiesTo(curType);
         }
-        
+
         core.pushUpdate();
-        
+
         if (txtName.getText().equals("")
                 && curType != null) {
             InfoBox.warning("Illegal Type",
@@ -76,17 +77,17 @@ public class ScrTypes extends PDialog {
             super.dispose();
         }
     }
-    
+
     @Override
     public boolean thisOrChildrenFocused() {
         return this.isFocusOwner();
     }
-    
+
     @Override
     public void updateAllValues(DictCore _core) {
         // Due to modal nature of form, no need to update
     }
-    
+
     /**
      * Closes all child windows
      */
@@ -105,7 +106,7 @@ public class ScrTypes extends PDialog {
 
         childFrames.clear();
     }
-    
+
     /**
      * Sets up object listeners
      */
@@ -127,13 +128,13 @@ public class ScrTypes extends PDialog {
             }
         });
     }
-    
+
     /**
      * Updates name value so that display can populate properly
      */
     private void updateName() {
-        TypeNode curNode = (TypeNode)lstTypes.getSelectedValue();
-        
+        TypeNode curNode = (TypeNode) lstTypes.getSelectedValue();
+
         if (txtName.getText().equals("") || txtName.getText().equals(defName)) {
             txtErrorBox.setText("Types must have name populated.");
             txtName.setBackground(core.getRequiredColor());
@@ -143,47 +144,47 @@ public class ScrTypes extends PDialog {
             lstTypes.setEnabled(true);
             txtName.setBackground(new JTextField().getBackground());
         }
-        
+
         if (updatingName || curNode == null) {
             return;
         }
         updatingName = true;
-        curNode.setValue(txtName.getText().equals(defName) ? 
-                "" : txtName.getText());
-        
+        curNode.setValue(txtName.getText().equals(defName)
+                ? "" : txtName.getText());
+
         populateTypes();
         lstTypes.setSelectedValue(curNode, true);
         updatingName = false;
     }
-    
+
     /**
      * Clears all current types and re-populates values, selecting first value
      */
     private void populateTypes() {
         Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
-        
+
         try {
             DefaultListModel listModel = new DefaultListModel();
-            
+
             while (typeIt.hasNext()) {
                 listModel.addElement(typeIt.next());
             }
-            
+
             lstTypes.setModel(listModel);
             lstTypes.setSelectedIndex(0);
             lstTypes.ensureIndexIsVisible(0);
         } catch (Exception e) {
-            InfoBox.error("Type Population Error", "Unable to populate types: " 
+            InfoBox.error("Type Population Error", "Unable to populate types: "
                     + e.getLocalizedMessage(), this);
         }
     }
-    
+
     /**
      * Populates properties of currently selected type, if any
      */
     private void populateProperties() {
-        TypeNode curNode = (TypeNode)lstTypes.getSelectedValue();
-        
+        TypeNode curNode = (TypeNode) lstTypes.getSelectedValue();
+
         if (curNode == null) {
             if (!updatingName) {
                 updatingName = true;
@@ -202,58 +203,65 @@ public class ScrTypes extends PDialog {
         } else {
             if (!updatingName) {
                 updatingName = true;
-                txtName.setText(curNode.getValue().equals("") ?
-                        defName : curNode.getValue());
-                txtName.setForeground(curNode.getValue().equals("") ?
-                        Color.lightGray : Color.black);
+                txtName.setText(curNode.getValue().equals("")
+                        ? defName : curNode.getValue());
+                txtName.setForeground(curNode.getValue().equals("")
+                        ? Color.lightGray : Color.black);
                 updatingName = false;
             }
-            txtNotes.setText(curNode.getNotes().equals("") ?
-                    defNotes : curNode.getNotes());
-            txtNotes.setForeground(curNode.getNotes().equals("") ?
-                        Color.lightGray : Color.black);
-            txtTypePattern.setText(curNode.getPattern().equals("") ?
-                    defPattern : curNode.getPattern());
-            txtTypePattern.setForeground(curNode.getPattern().equals("") ?
-                        Color.lightGray : Color.black);
+            txtNotes.setText(curNode.getNotes().equals("")
+                    ? defNotes : curNode.getNotes());
+            txtNotes.setForeground(curNode.getNotes().equals("")
+                    ? Color.lightGray : Color.black);
+            txtTypePattern.setText(curNode.getPattern().equals("")
+                    ? defPattern : curNode.getPattern());
+            txtTypePattern.setForeground(curNode.getPattern().equals("")
+                    ? Color.lightGray : Color.black);
+            txtGloss.setText(curNode.getGloss().equals("")
+                    ? defGloss : curNode.getGloss());
+            txtGloss.setForeground(curNode.getGloss().equals("")
+                    ? Color.lightGray : Color.black);
             chkDefMand.setSelected(curNode.isDefMandatory());
             chkGendMand.setSelected(curNode.isGenderMandatory());
             chkProcMand.setSelected(curNode.isProcMandatory());
             setPropertiesEnabled(true);
         }
     }
-    
+
     /**
      * Saves properties to given node
+     *
      * @param saveNode node to save to
      */
     private void savePropertiesTo(TypeNode saveNode) {
-        saveNode.setValue(txtName.getText().equals(defName) ?
-                "" : txtName.getText());
-        saveNode.setNotes(txtNotes.getText().equals(defNotes) ?
-                "" : txtNotes.getText());
-        saveNode.setPattern(txtTypePattern.getText().equals(defPattern) ?
-                "" : txtTypePattern.getText());
+        saveNode.setValue(txtName.getText().equals(defName)
+                ? "" : txtName.getText());
+        saveNode.setNotes(txtNotes.getText().equals(defNotes)
+                ? "" : txtNotes.getText());
+        saveNode.setPattern(txtTypePattern.getText().equals(defPattern)
+                ? "" : txtTypePattern.getText());
+        saveNode.setGloss(txtGloss.getText().equals(defGloss)
+                ? "" : txtGloss.getText());
         saveNode.setDefMandatory(chkDefMand.isSelected());
         saveNode.setGenderMandatory(chkGendMand.isSelected());
         saveNode.setProcMandatory(chkProcMand.isSelected());
     }
-    
+
     /**
      * creates blank type, selects value for editing
      */
     private void addType() {
-        TypeNode curType = (TypeNode)lstTypes.getSelectedValue();
-        
+        TypeNode curType = (TypeNode) lstTypes.getSelectedValue();
+
         if (curType != null) {
             savePropertiesTo(curType);
         }
-        
+
         core.getTypes().clear();
         try {
             core.getTypes().insert();
         } catch (Exception e) {
-            InfoBox.error("Type Creation Error", "Could not create new type: " 
+            InfoBox.error("Type Creation Error", "Could not create new type: "
                     + e.getLocalizedMessage(), this);
         }
         updatingName = true;
@@ -262,44 +270,46 @@ public class ScrTypes extends PDialog {
         txtName.setText("");
         populateProperties();
         updatingName = false;
-                
+
         txtName.requestFocus();
+        txtName.setForeground(Color.black);
     }
-    
+
     /**
      * deletes currently selected type
      */
     private void deleteType() {
-        TypeNode curType = (TypeNode)lstTypes.getSelectedValue();
-        
+        TypeNode curType = (TypeNode) lstTypes.getSelectedValue();
+
         if (curType == null) {
             return;
         }
-        
+
         try {
             core.getTypes().deleteNodeById(curType.getId());
         } catch (Exception e) {
             InfoBox.error("Deletion Error", "Unable to delete type." + e.getLocalizedMessage(), this);
         }
-        
+
         populateTypes();
         populateProperties();
     }
-    
+
     /**
      * Sets type properties controls enabled or disables
-     * 
+     *
      * @param enable: whether to enable properties
      */
     private void setPropertiesEnabled(boolean enable) {
         txtName.setEnabled(enable);
         txtNotes.setEnabled(enable);
         txtTypePattern.setEnabled(enable);
+        txtGloss.setEnabled(enable);
         chkDefMand.setEnabled(enable);
         chkGendMand.setEnabled(enable);
         chkProcMand.setEnabled(enable);
     }
-    
+
     public static ScrTypes run(DictCore _core) {
         ScrTypes s = new ScrTypes(_core);
         s.setupKeyStrokes();
@@ -329,6 +339,7 @@ public class ScrTypes extends PDialog {
         chkDefMand = new javax.swing.JCheckBox();
         chkProcMand = new javax.swing.JCheckBox();
         chkGendMand = new javax.swing.JCheckBox();
+        txtGloss = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstTypes = new javax.swing.JList();
@@ -424,6 +435,15 @@ public class ScrTypes extends PDialog {
                 .addContainerGap())
         );
 
+        txtGloss.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtGlossFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtGlossFocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -439,7 +459,8 @@ public class ScrTypes extends PDialog {
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtErrorBox)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(txtGloss))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -447,7 +468,9 @@ public class ScrTypes extends PDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtGloss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtTypePattern, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -495,7 +518,7 @@ public class ScrTypes extends PDialog {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddType)
@@ -512,7 +535,7 @@ public class ScrTypes extends PDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
         );
 
         pack();
@@ -586,7 +609,7 @@ public class ScrTypes extends PDialog {
 
             if (index != -1) {
                 TypeNode curNode = (TypeNode) lstTypes.getModel().getElementAt(index);
-                
+
                 if (curNode != null) {
                     savePropertiesTo(curNode);
                 }
@@ -597,24 +620,38 @@ public class ScrTypes extends PDialog {
     }//GEN-LAST:event_lstTypesValueChanged
 
     private void btnSetupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetupActionPerformed
-        TypeNode curNode = (TypeNode)lstTypes.getSelectedValue();
+        TypeNode curNode = (TypeNode) lstTypes.getSelectedValue();
         if (curNode == null) {
             return;
         }
-        
+
         Window window = ScrDeclensionSetup.run(core, curNode.getId());
         childFrames.add(window);
     }//GEN-LAST:event_btnSetupActionPerformed
 
     private void btnAutogenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAutogenActionPerformed
-        TypeNode curNode = (TypeNode)lstTypes.getSelectedValue();
+        TypeNode curNode = (TypeNode) lstTypes.getSelectedValue();
         if (curNode == null) {
             return;
         }
-        
+
         Window window = ScrDeclensionGenSetup.run(core, curNode.getId());
         childFrames.add(window);
     }//GEN-LAST:event_btnAutogenActionPerformed
+
+    private void txtGlossFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtGlossFocusGained
+        if (txtGloss.getText().equals(defGloss)) {
+            txtGloss.setText("");
+            txtGloss.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_txtGlossFocusGained
+
+    private void txtGlossFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtGlossFocusLost
+        if (txtGloss.getText().equals("")) {
+            txtGloss.setText(defGloss);
+            txtGloss.setForeground(Color.lightGray);
+        }
+    }//GEN-LAST:event_txtGlossFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddType;
@@ -632,6 +669,7 @@ public class ScrTypes extends PDialog {
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JList lstTypes;
     private javax.swing.JTextField txtErrorBox;
+    private javax.swing.JTextField txtGloss;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextArea txtNotes;
     private javax.swing.JTextField txtTypePattern;

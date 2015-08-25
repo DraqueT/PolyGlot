@@ -570,6 +570,7 @@ public class CustHandlerFactory {
             boolean bwordClassName = false;
             boolean bwordClassId = false;
             boolean bwordClassNotes = false;
+            boolean bwordClassGloss = false;
             boolean bpronuncation = false;
             boolean bgenderId = false;
             boolean bgenderNotes = false;
@@ -683,6 +684,8 @@ public class CustHandlerFactory {
                     bwordClassName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordClassNotesXID)) {
                     bwordClassNotes = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassGlossXID)) {
+                    bwordClassGloss = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.pronunciationXID)) {
                     bpronuncation = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
@@ -911,6 +914,8 @@ public class CustHandlerFactory {
                     bwordClassDefMan = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordClassPatternXID)) {
                     bwordClassPattern = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassGlossXID)) {
+                    bwordClassGloss = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.pronunciationXID)) {
                     bpronuncation = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.genderIdXID)) {
@@ -1101,6 +1106,10 @@ public class CustHandlerFactory {
                     TypeNode bufferType = this.getTypeCollection().getBufferType();
                     bufferType.setPattern(bufferType.getPattern()
                             + new String(ch, start, length));
+                } else if (bwordClassGloss) {
+                    TypeNode bufferType = this.getTypeCollection().getBufferType();
+                    bufferType.setGloss(bufferType.getGloss()
+                            +  new String(ch, start, length));
                 } else if (bwordClassId) {
                     wCId = Integer.parseInt(new String(ch, start, length));
                     bwordClassId = false;

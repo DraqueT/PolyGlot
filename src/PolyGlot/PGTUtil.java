@@ -54,6 +54,7 @@ public class PGTUtil {
     public static final String wordClassPlurManXID = "pluralityMandatoryClass";
     public static final String wordClassDefManXID = "definitionMandatoryClass";
     public static final String wordClassPatternXID = "classPattern";
+    public static final String wordClassGlossXID = "classGloss";
     
     // properties for genders
     public static final String genderXID = "gender";
