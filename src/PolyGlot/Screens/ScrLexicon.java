@@ -955,10 +955,10 @@ public final class ScrLexicon extends PFrame {
                         ? defLocalValue : curWord.getLocalWord());
                 txtProc.setText(curWord.getPronunciation().equals("")
                         ? defProcValue : curWord.getPronunciation());
-                cmbGender.setSelectedItem(curWord.getGender().equals("")
-                        ? defGenderValue : core.getGenders().findGenderByName(curWord.getGender()));
-                cmbType.setSelectedItem(curWord.getWordType().equals("")
-                        ? defTypeValue : core.getTypes().findTypeByName(curWord.getWordType()));
+                GenderNode gender = core.getGenders().findGenderByName(curWord.getGender());
+                cmbGender.setSelectedItem(gender == null ? defGenderValue : gender);
+                TypeNode type = core.getTypes().findTypeByName(curWord.getWordType());
+                cmbType.setSelectedItem(type == null ? defTypeValue : type);
                 chkProcOverride.setSelected(curWord.isProcOverride());
                 chkRuleOverride.setSelected(curWord.isRulesOverrride());
                 setPropertiesEnabled(true);
@@ -1154,8 +1154,10 @@ public final class ScrLexicon extends PFrame {
         saveWord.setDefinition(txtDefinition.getText().equals(defDefValue)
                 ? "" : txtDefinition.getText());
         GenderNode curGend = (GenderNode) cmbGender.getSelectedItem();
-        saveWord.setGender(curGend.equals(defGenderValue)
-                ? "" : curGend.getValue());
+        if (curGend != null) {
+            saveWord.setGender(curGend.equals(defGenderValue)
+                   ? "" : curGend.getValue());
+        }
         saveWord.setLocalWord(txtLocalWord.getText().equals(defLocalValue)
                 ? "" : txtLocalWord.getText());
         saveWord.setProcOverride(chkProcOverride.isSelected());
@@ -1163,8 +1165,10 @@ public final class ScrLexicon extends PFrame {
                 ? "" : txtProc.getText());
         saveWord.setRulesOverride(chkRuleOverride.isSelected());
         TypeNode curType = (TypeNode) cmbType.getSelectedItem();
-        saveWord.setWordType(curType.equals(defTypeValue)
-                ? "" : curType.getValue());
+        if (curType != null) {
+            saveWord.setWordType(curType.equals(defTypeValue)
+                    ? "" : curType.getValue());
+        }
     }
 
     private void deleteWord() {

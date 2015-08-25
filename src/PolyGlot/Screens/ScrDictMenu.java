@@ -256,6 +256,11 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             lastFile.addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    // only open if save/cancel test is passed
+                    if (!saveOrCancelTest()) {
+                        return;
+                    }
+                    
                     setFile(curFile);
                 }
             });
