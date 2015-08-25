@@ -39,6 +39,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -72,6 +74,7 @@ import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -91,6 +94,7 @@ public final class ScrLexicon extends PFrame {
     private final GenderNode defGenderValue = new GenderNode();
     private final String defProcValue = "-- Pronunciation --";
     private final String defDefValue = "-- Definition --";
+    private final String defLexValue = "List of Conlang Words";
     private TextField txtConSrc;
     private TextField txtLocalSrc;
     private TextField txtProcSrc;
@@ -791,6 +795,34 @@ public final class ScrLexicon extends PFrame {
                     gridTitlePane.setExpanded(false);
                 }
             }
+        });
+        
+        lstLexicon.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+            }
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                JList theList = (JList) e.getSource();
+                ListModel model = theList.getModel();
+                int index = theList.locationToIndex(e.getPoint());
+                if (index > -1) {
+                    ConWord curWord = (ConWord) model.getElementAt(index);
+                    TypeNode curType = core.getTypes().findTypeByName(curWord.getWordType());
+                    String tip = core.getPronunciationMgr().getPronunciation(curWord.getValue());
+                    if (curType != null) {
+                        tip += " : " + (curType.getGloss().equals("") 
+                                ? curType.getValue() : curType.getGloss());
+                    }
+                    if (!curWord.getDefinition().equals("")) {
+                        tip += " : " + curWord.getDefinition();
+                    }
+                    
+                    theList.setToolTipText(tip);
+                } else {
+                    theList.setToolTipText(defLexValue);
+                }
+            }            
         });
 
         addPropertyListeners(txtConWord, defConValue);
