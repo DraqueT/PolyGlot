@@ -270,7 +270,9 @@ public class ScrDeclensions extends PDialog {
             DeclensionNode findDec = core.getDeclensionManager().getDeclensionByCombinedId(word.getId(), curId);
 
             if (findDec != null) {
-                newField.setText(findDec.getValue());
+                String value = findDec.getValue();
+                newField.setText(value);
+                newField.setToolTipText(core.getPronunciationMgr().getPronunciation(value));
             }
             
             // if the autodeclension override is not set, create a value
@@ -328,7 +330,10 @@ public class ScrDeclensions extends PDialog {
                 firstField = newField;
             }
 
-            newField.setText(curDec.getValue());
+            String value = curDec.getValue();
+            newField.setText(value);
+            newField.setToolTipText(core.getPronunciationMgr()
+                    .getPronunciation(value));
 
             if (conFont != null) {
                 newField.setFont(conFont);
