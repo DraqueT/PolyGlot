@@ -94,6 +94,7 @@ public final class ScrLexicon extends PFrame {
     private final GenderNode defGenderValue = new GenderNode();
     private final String defProcValue = "-- Pronunciation --";
     private final String defDefValue = "-- Definition --";
+    private final String newTypeValue = "-- New Type --";
     private final String defLexValue = "List of Conlang Words";
     private TextField txtConSrc;
     private TextField txtLocalSrc;
@@ -533,7 +534,8 @@ public final class ScrLexicon extends PFrame {
         testWord = new ConWord();
         String genderString = cmbGender.getSelectedItem().equals(defGenderValue)
                 ? "" : ((GenderNode) cmbGender.getSelectedItem()).getValue();
-        String typeString = cmbType.getSelectedItem().equals(defTypeValue)
+        String typeString = (cmbType.getSelectedItem().equals(defTypeValue)
+                    || cmbType.getSelectedItem().equals(newTypeValue))
                 ? "" : ((TypeNode) cmbType.getSelectedItem()).getValue();
 
         if (curPopulating) {
@@ -938,6 +940,7 @@ public final class ScrLexicon extends PFrame {
 
         cmbType.removeAllItems();
         cmbType.addItem(defTypeValue);
+        cmbType.addItem(newTypeValue);
         while (typeIt.hasNext()) {
             TypeNode curNode = typeIt.next();
             cmbType.addItem(curNode);
@@ -1185,10 +1188,10 @@ public final class ScrLexicon extends PFrame {
         saveWord.setValue(txtConWord.getText());
         saveWord.setDefinition(txtDefinition.getText().equals(defDefValue)
                 ? "" : txtDefinition.getText());
-        GenderNode curGend = (GenderNode) cmbGender.getSelectedItem();
+        Object curGend = cmbGender.getSelectedItem();
         if (curGend != null) {
             saveWord.setGender(curGend.equals(defGenderValue)
-                   ? "" : curGend.getValue());
+                   ? "" : ((GenderNode)curGend).getValue());
         }
         saveWord.setLocalWord(txtLocalWord.getText().equals(defLocalValue)
                 ? "" : txtLocalWord.getText());
@@ -1196,10 +1199,10 @@ public final class ScrLexicon extends PFrame {
         saveWord.setPronunciation(txtProc.getText().equals(defProcValue)
                 ? "" : txtProc.getText());
         saveWord.setRulesOverride(chkRuleOverride.isSelected());
-        TypeNode curType = (TypeNode) cmbType.getSelectedItem();
+        Object curType = cmbType.getSelectedItem();
         if (curType != null) {
-            saveWord.setWordType(curType.equals(defTypeValue)
-                    ? "" : curType.getValue());
+            saveWord.setWordType((curType.equals(defTypeValue) || curType.equals(newTypeValue))
+                    ? "" : ((TypeNode)curType).getValue());
         }
     }
 
@@ -1385,6 +1388,11 @@ public final class ScrLexicon extends PFrame {
         });
 
         cmbType.setToolTipText("The word's part of speech");
+        cmbType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTypeActionPerformed(evt);
+            }
+        });
 
         cmbGender.setToolTipText("The word's gender");
 
@@ -1721,6 +1729,19 @@ public final class ScrLexicon extends PFrame {
     private void chkRuleOverrideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRuleOverrideActionPerformed
         setWordLegality();
     }//GEN-LAST:event_chkRuleOverrideActionPerformed
+
+    private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
+        if (cmbType.getSelectedItem() != null
+                && cmbType.getSelectedItem().equals(newTypeValue)) {
+            final TypeNode newType = ScrTypes.newGetType(core);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    cmbType.setSelectedItem(newType == null ? defTypeValue : newType);
+                }
+            });
+        }
+    }//GEN-LAST:event_cmbTypeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddWord;

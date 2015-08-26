@@ -236,6 +236,9 @@
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" value="The word&apos;s part of speech"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbTypeActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="cmbGender">
                       <Properties>

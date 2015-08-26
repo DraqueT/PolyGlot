@@ -33,6 +33,7 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -47,6 +48,7 @@ public class ScrTypes extends PDialog {
     private static final String defNotes = " -- Type Notes --";
     private static final String defPattern = " -- Type Pattern --";
     private static final String defGloss = " -- Type Gloss --";
+    private TypeNode selectionAtClosing = null;
     private boolean updatingName = false;
 
     public ScrTypes(DictCore _core) {
@@ -61,9 +63,15 @@ public class ScrTypes extends PDialog {
 
     @Override
     public void dispose() {
+        // prevent this from running twice
+        if (this.isDisposed()) {
+            return;
+        }
+
         TypeNode curType = (TypeNode) lstTypes.getSelectedValue();
         if (curType != null) {
             savePropertiesTo(curType);
+            selectionAtClosing = curType;
         }
 
         core.pushUpdate();
@@ -315,6 +323,28 @@ public class ScrTypes extends PDialog {
         s.setupKeyStrokes();
         s.setCore(_core);
         return s;
+    }
+
+    /**
+     * Opens window, creates new, blank type, then returns type selected by user
+     *
+     * @param _core dictionary core
+     * @return selected type at time of window close
+     */
+    public static TypeNode newGetType(DictCore _core) {
+        final ScrTypes s = new ScrTypes(_core);
+        s.addType();
+        s.setVisible(true);
+        return s.closedGetSelectedType();
+    }
+
+    /**
+     * returns type currently selected by user, null if none
+     *
+     * @return selected type
+     */
+    public TypeNode closedGetSelectedType() {
+        return selectionAtClosing;
     }
 
     /**
