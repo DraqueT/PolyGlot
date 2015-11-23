@@ -862,16 +862,25 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
                     bgender = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionXID)) {
-                    // dec templates handled differently than actual saved declensions for words
-                    if (declensionMgr.isBufferDecTemp()) {
-                        declensionMgr.insertBuffer();
-                        declensionMgr.clearBuffer();
-                    } else {
-                        Integer relId = declensionMgr.getBufferRelId();
-                        declensionMgr.getBuffer().setCombinedDimId(declensionMgr.getBuffer().getCombinedDimId());
-                        declensionMgr.addDeclensionToWord(relId, declensionMgr.getBuffer().getId(), declensionMgr.getBuffer());
-                        declensionMgr.clearBuffer();
+                    DeclensionNode curBuffer = declensionMgr.getBuffer();
+                    
+                    // old bug set IDs to crazy values... this should clean it up.
+                    // IDs can never be less than 0, and a max of MAX_VALUE can be stored.
+                    // If that's not enough... your language is too damned complex.
+                    if (curBuffer.getId() != Integer.MAX_VALUE 
+                            && curBuffer.getId() > 0)
+                    {
+                        // dec templates handled differently than actual saved declensions for words
+                        if (declensionMgr.isBufferDecTemp()) {
+                            declensionMgr.insertBuffer();
+                        } else {
+                            Integer relId = declensionMgr.getBufferRelId();
+                            curBuffer.setCombinedDimId(curBuffer.getCombinedDimId());
+                            declensionMgr.addDeclensionToWord(relId, curBuffer.getId(), curBuffer);
+                        }
                     }
+                    
+                    declensionMgr.clearBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.localWordXID)) {
                     blocalWord = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.conWordXID)) {
