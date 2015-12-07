@@ -37,7 +37,7 @@ public class PropertiesManager {
     private String overrideProgramPath = "";
     private Font font = null;
     private Integer fontStyle = 0;
-    private Integer fontSize = 0;
+    private Integer fontSize = 12;
     private final Map alphaOrder;
     private String alphaPlainText = "";
     private String langName = "";
@@ -48,7 +48,6 @@ public class PropertiesManager {
     private boolean ignoreCase = false;
     private boolean disableProcRegex = false;
     private boolean enforceRTL = false;
-    private String fontName = "";
     private byte[] cachedFont = null;
     
     /**
@@ -193,10 +192,11 @@ public class PropertiesManager {
     }
 
     /**
+     * Cannot be set to 0 or lower. Will default to 12 if set to 0 or lower.
      * @param _fontSize the fontSize to set
      */
     public void setFontSize(Integer _fontSize) {
-        fontSize = _fontSize;
+        fontSize = _fontSize < 0 ? 12 : _fontSize;
     }
 
     /**
