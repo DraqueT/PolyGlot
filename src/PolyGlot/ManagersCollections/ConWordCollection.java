@@ -397,7 +397,7 @@ public class ConWordCollection extends DictionaryCollection {
                 // local word
                 if (!_filter.getLocalWord().trim().equals("")
                         && !(local.matches(_filter.getLocalWord())
-                        || local.startsWith(_filter.getLocalWord()))) {
+                        || local.contains(_filter.getLocalWord()))) {
                     continue;
                 }
 
