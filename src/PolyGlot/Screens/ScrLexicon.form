@@ -239,6 +239,9 @@
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbTypeActionPerformed"/>
                       </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox()"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="cmbGender">
                       <Properties>
@@ -247,6 +250,9 @@
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" value="The word&apos;s gender"/>
                       </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox()"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtProc">
                       <Properties>

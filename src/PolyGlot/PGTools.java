@@ -30,13 +30,14 @@ import javax.swing.SwingWorker;
 public class PGTools {
 
     /**
-     * Makes given component flash
+     * gets a worker that can make a given component flash
      *
      * @param flashMe component to make flash
      * @param flashColor color to use for flashing
      * @param isBack whether display color is background (rather than foreground)
+     * @return SwingWorker that will make given component flash if run
      */
-    public static void flashComponent(final JComponent flashMe, final Color flashColor, final boolean isBack) {
+    public static SwingWorker getFlashWorker(final JComponent flashMe, final Color flashColor, final boolean isBack) {
         // this will pop out in its own little thread...
         final SwingWorker worker = new SwingWorker() {
             @Override
@@ -52,19 +53,19 @@ public class PGTools {
                         ? Color.white : flashColor;
 
                 try {
-                    for (int i = 0; i < 4; i++) {
+                    for (int i = 0; i < 4; i++) { // TODO: Move to constants
                         if (isBack) {
                             flashMe.setBackground(requiredColor);
                         } else {
                             flashMe.setEnabled(false);
                         }
-                        Thread.sleep(200);
+                        Thread.sleep(200); // TODO: Move to constants
                         if (isBack) {
                             flashMe.setBackground(originColor);
                         } else {
                             flashMe.setEnabled(true);
                         }
-                        Thread.sleep(200);
+                        Thread.sleep(200); // TODO: Move to constants
                     }
                 } catch (Exception e) {
                     Thread.currentThread().interrupt();
@@ -74,6 +75,6 @@ public class PGTools {
             }
         };
 
-        worker.execute();
+        return worker;
     }
 }

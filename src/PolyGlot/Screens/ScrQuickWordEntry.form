@@ -264,6 +264,9 @@
               </StringArray>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox()"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JComboBox" name="cmbGender">
           <Properties>
@@ -276,6 +279,9 @@
               </StringArray>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox()"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtProc">
         </Component>
@@ -298,6 +304,9 @@
                 <Property name="rows" type="int" value="5"/>
                 <Property name="wrapStyleWord" type="boolean" value="true"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextArea()"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

@@ -21,11 +21,15 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.PropertiesManager;
+import PolyGlot.PGTools;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.io.Serializable;
+import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -39,6 +43,7 @@ public class PTextField extends JTextField {
     private DictCore core;
     boolean skipRepaint = false;
     boolean curSetText = false;
+    SwingWorker worker = null;
 
     /**
      * Init for PDialogs
@@ -49,6 +54,18 @@ public class PTextField extends JTextField {
         core = _core;
     }
 
+    /**
+     * makes this component flash. If already flashing, does nothing.
+     * @param _flashColor color to flash
+     * @param isBack whether display color is background (rather than foreground)
+     */
+    public void makeFlash(Color _flashColor, boolean isBack) {
+        if (worker == null || worker.isDone()) {
+            worker = PGTools.getFlashWorker(this, _flashColor, isBack);
+            worker.execute();
+        }
+    }
+    
     /**
      * Init for PFrames
      *
@@ -64,6 +81,12 @@ public class PTextField extends JTextField {
         }
 
         pVis.addChangeListener(new PScrollRepainter());
+    }
+    
+    // Overridden to meet code standards
+    @Override
+    public final BoundedRangeModel getHorizontalVisibility() {
+        return super.getHorizontalVisibility();
     }
 
     class PScrollRepainter implements ChangeListener, Serializable {

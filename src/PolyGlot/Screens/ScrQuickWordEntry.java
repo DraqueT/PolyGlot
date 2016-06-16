@@ -23,9 +23,10 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.GenderNode;
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PTextArea;
 import PolyGlot.CustomControls.PTextField;
-import PolyGlot.PGTools;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -38,7 +39,7 @@ import javax.swing.event.DocumentListener;
  *
  * @author draque
  */
-public class ScrQuickWordEntry extends PDialog {
+public final class ScrQuickWordEntry extends PDialog {
 
     private final String cstSELET = "";
     private final ScrLexicon parent;
@@ -72,6 +73,12 @@ public class ScrQuickWordEntry extends PDialog {
         
         populateTypes();
         populateGenders();
+    }
+    
+    // Overridden to meet coding standards...
+    @Override
+    protected final void setupKeyStrokes() {
+        super.setupKeyStrokes();
     }
     
     /**
@@ -182,37 +189,45 @@ public class ScrQuickWordEntry extends PDialog {
         String testResults = "";
         
         if (!test.getValue().isEmpty()) {
-            PGTools.flashComponent(txtConWord, core.getRequiredColor(), true);
+            //PGTools.flashComponent(txtConWord, core.getRequiredColor(), true);
+            ((PTextField)txtConWord).makeFlash(core.getRequiredColor(), true);
             testResults += test.getValue();
         }
         if (!test.getLocalWord().isEmpty()) {
-            PGTools.flashComponent(txtLocalWord, core.getRequiredColor(), true);
+            //PGTools.flashComponent(txtLocalWord, core.getRequiredColor(), true);
+            ((PTextField)txtLocalWord).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getLocalWord());
         }
         if (!test.getPronunciation().isEmpty()) {
-            PGTools.flashComponent(txtProc, core.getRequiredColor(), true);
+            //PGTools.flashComponent(txtProc, core.getRequiredColor(), true);
+            ((PTextField)txtProc).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getPronunciation());
         }
         if (!test.getDefinition().isEmpty()) {
-            PGTools.flashComponent(txtDefinition, core.getRequiredColor(), true);
+            //PGTools.flashComponent(txtDefinition, core.getRequiredColor(), true);
+            ((PTextArea)txtDefinition).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getDefinition());
         }
         if (!test.getGender().isEmpty()) {
-            PGTools.flashComponent(cmbGender, core.getRequiredColor(), true);
+            ((PComboBox)cmbGender).makeFlash(core.getRequiredColor(), true);
+            //PGTools.flashComponent(cmbGender, core.getRequiredColor(), true);
             testResults += ("\n" + test.getGender());
         }
         if (!test.getWordType().isEmpty()) {
-            PGTools.flashComponent(cmbType, core.getRequiredColor(), false);
+            ((PComboBox)cmbType).makeFlash(core.getRequiredColor(), true);
+            //PGTools.flashComponent(cmbType, core.getRequiredColor(), false);
             testResults += ("\n" + test.getWordType());
         } 
         if (core.getPropertiesManager().isWordUniqueness()
                 && core.getWordCollection().testWordValueExists(txtConWord.getText())) {
-            PGTools.flashComponent(txtConWord, core.getRequiredColor(), true);
+            //PGTools.flashComponent(txtConWord, core.getRequiredColor(), true);
+            ((PTextField)txtConWord).makeFlash(core.getRequiredColor(), true);
             testResults += ("\nConWords set to enforced unique: this local exists elsewhere.");
         }
         if (core.getPropertiesManager().isLocalUniqueness()
                 && core.getWordCollection().testLocalValueExists(txtLocalWord.getText())) {
-            PGTools.flashComponent(txtLocalWord, core.getRequiredColor(), true);
+            //PGTools.flashComponent(txtLocalWord, core.getRequiredColor(), true);
+            ((PTextField)txtLocalWord).makeFlash(core.getRequiredColor(), true);
             testResults += ("\nLocal words set to enforced unique: this work exists elsewhere.");
         }
         
@@ -271,12 +286,12 @@ public class ScrQuickWordEntry extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         txtConWord = new PTextField(core);
         txtLocalWord = new javax.swing.JTextField();
-        cmbType = new javax.swing.JComboBox();
-        cmbGender = new javax.swing.JComboBox();
+        cmbType = new PComboBox();
+        cmbGender = new PComboBox();
         txtProc = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txtDefinition = new javax.swing.JTextArea();
+        txtDefinition = new PTextArea();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
