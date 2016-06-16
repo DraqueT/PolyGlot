@@ -37,9 +37,8 @@ import javax.swing.event.DocumentListener;
  * @author draque
  */
 public class ScrGenders extends PDialog {
-    private final DictCore core;
-    private static final String defName = " -- Gender Name --";
-    private static final String defNotes = " -- Gender Notes --";
+    private final String defName = " -- Gender Name --";
+    private final String defNotes = " -- Gender Notes --";
     private boolean updatingName = false;
     
     public ScrGenders(DictCore _core) {
@@ -51,6 +50,12 @@ public class ScrGenders extends PDialog {
         populateProperties();
         setupListeners();
         setModal(true);
+    }
+    
+    // Overridden for code standards
+    @Override
+    public final void setModal(boolean modal) {
+        super.setModal(modal);
     }
     
     @Override
