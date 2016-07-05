@@ -307,17 +307,19 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
     // positions on screen once form has already been build/sized
     @Override
     public void setVisible(boolean visible) {
-        Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());
-        if (lastPos != null) {
-            setLocation(lastPos);
-        } else if (!ignoreCenter) {
-            this.setLocationRelativeTo(null);
-        }
+        if (core != null) {
+            Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());
+            if (lastPos != null) {
+                setLocation(lastPos);
+            } else if (!ignoreCenter) {
+                this.setLocationRelativeTo(null);
+            }
 
-        if (core == null && !(this instanceof ScrDictMenu)) {
-            InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
+            if (core == null && !(this instanceof ScrDictMenu)) {
+                InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
+            }
+            addWindowFocusListener(this);
         }
-        addWindowFocusListener(this);
         super.setVisible(visible);
     }
 }
