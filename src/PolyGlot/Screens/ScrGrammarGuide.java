@@ -1122,7 +1122,8 @@ public class ScrGrammarGuide extends PFrame {
         Enumeration sections = curChap.children();
         while (sections.hasMoreElements()) {
             GrammarSectionNode curSec = (GrammarSectionNode) sections.nextElement();
-            if (curSec.getName().contains(src)) {
+            if (curSec.getName().toLowerCase().contains(src.toLowerCase()) 
+                    || curSec.getSectionText().toLowerCase().contains(src.toLowerCase())) {
                 return true;
             }
         }
