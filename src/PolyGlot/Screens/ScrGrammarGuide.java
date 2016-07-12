@@ -191,6 +191,13 @@ public class ScrGrammarGuide extends PFrame {
     @Override
     public void dispose() {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
+        
+        // stop playing sound if it exists
+        if (soundRecorder != null && soundRecorder.isPlaying()) {
+            try {
+                soundRecorder.playPause();
+            } catch (LineUnavailableException | IOException e) {}
+        }
         super.dispose();
     }
 
