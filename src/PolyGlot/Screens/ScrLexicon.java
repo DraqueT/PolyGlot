@@ -38,6 +38,8 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -770,24 +772,32 @@ public final class ScrLexicon extends PFrame {
         txtConWord.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                saveName();
                 genProc();
                 setWordLegality();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                saveName();
                 genProc();
                 setWordLegality();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                saveName();
                 genProc();
                 setWordLegality();
             }
+        });
+        txtConWord.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                saveName();
+            }
+            
         });
 
         this.addComponentListener(new ComponentAdapter() {

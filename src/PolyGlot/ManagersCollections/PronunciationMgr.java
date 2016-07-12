@@ -249,6 +249,11 @@ public class PronunciationMgr {
 
                 if (matcher.matches()) {
                     String leadingChars = matcher.group(1);
+                    
+                    // if a user has entered an empty pattern... just continue.
+                    if (leadingChars.equals("")) {
+                        continue;
+                    }
                     List<PronunciationNode> temp
                             = getPronunciationElements(base.substring(leadingChars.length(), base.length()), false);
 
