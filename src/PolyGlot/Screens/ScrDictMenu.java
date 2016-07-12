@@ -114,7 +114,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
         try {
             saveWindowsOpen();
-            core.getOptionsManager().setScreenPosition(getClass().getName(), 
+            core.getOptionsManager().setScreenPosition(getClass().getName(),
                     getLocation());
             core.getOptionsManager().setLastFiles(lastFiles);
             core.getOptionsManager().saveIni();
@@ -125,7 +125,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         super.dispose();
         System.exit(0);
     }
-    
+
     /**
      * Records open windows in options manager
      */
@@ -148,7 +148,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             scrThes.dispose();
         }
     }
-    
+
     /**
      * Opens windows left open when PolyGlot last run, then clears list
      */
@@ -169,10 +169,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 btnThes.setSelected(true);
                 thesHit();
             } else {
-                InfoBox.error("Unrecognized Window", 
+                InfoBox.error("Unrecognized Window",
                         "Unrecognized window in last session: " + leftOpen, this);
             }
-            
+
         }
         lastScreensUp.clear();
     }
@@ -260,7 +260,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                     if (!saveOrCancelTest()) {
                         return;
                     }
-                    
+
                     setFile(curFile);
                 }
             });
@@ -452,7 +452,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         chooser.setCurrentDirectory(new File("."));
 
         String fileName;
- 
+
         holdFront = true;
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
@@ -546,7 +546,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         }
 
         core = new DictCore();
-        core.setRootWindow(this);        
+        core.setRootWindow(this);
 
         try {
             core.readFile(fileName);
@@ -557,7 +557,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                     + "\n\n " + e.getMessage());
             //e.printStackTrace();
         }
-        
+
         updateAllValues(core);
     }
 
@@ -857,10 +857,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             localError("Missing File", "Unable to open readme.html.");
         }
     }
-    
-    
+
     /**
      * Wrapped locally to ensure front position of menu not disturbed
+     *
      * @param infoHead title text
      * @param infoText message text
      */
@@ -869,9 +869,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         PolyGlot.CustomControls.InfoBox.info(infoHead, infoText, null);
         holdFront = false;
     }
-    
+
     /**
      * Wrapped locally to ensure front position of menu not disturbed
+     *
      * @param infoHead title text
      * @param infoText message text
      */
@@ -880,9 +881,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         PolyGlot.CustomControls.InfoBox.error(infoHead, infoText, null);
         holdFront = false;
     }
-    
+
     /**
      * Wrapped locally to ensure front position of menu not disturbed
+     *
      * @param infoHead title text
      * @param infoText message text
      */
@@ -1321,6 +1323,20 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 s.checkForUpdates(false);
                 s.setupKeyStrokes();
                 s.setVisible(true);
+                
+                // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
+                try {
+                    com.sun.javafx.runtime.VersionInfo.getRuntimeVersion();
+
+                    // Test for minimum version of Java (8)
+                    String jVer = System.getProperty("java.version");
+                    if (jVer.startsWith("1.5") || jVer.startsWith("1.6") || jVer.startsWith("1.7")) {
+                        throw new Exception();
+                    }
+                } catch (Exception e) {
+                    InfoBox.error("Unable to start", "Unable to start PolyGlot without JavaFX and Java 8. Please upgrade and restart to continue.", s);
+                    s.dispose();
+                }
             }
         });
     }
