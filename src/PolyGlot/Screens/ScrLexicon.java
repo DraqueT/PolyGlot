@@ -1368,7 +1368,7 @@ public final class ScrLexicon extends PFrame {
             .addGap(0, 19, Short.MAX_VALUE)
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
 
         jSplitPane1.setDividerLocation(123);
 

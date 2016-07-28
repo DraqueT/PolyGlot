@@ -25,6 +25,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -61,6 +64,7 @@ public class SoundRecorder {
     private final Window parentWindow;
     private JButton playPauseBut;
     private JButton recordBut;
+    private MediaPlayer mediaPlayer;
     ImageIcon playUp;
     ImageIcon playDown;
     ImageIcon recUp;
@@ -68,15 +72,22 @@ public class SoundRecorder {
 
     /**
      * Instantiates recorder with default format
+     *
      * @param _parent parent window (for error communication)
      */
     public SoundRecorder(Window _parent) {
         format = getAudioFormat();
         parentWindow = _parent;
+        
+        // JFX used in some instances when initialized in this case
+        // This ensures JFX initialized
+        @SuppressWarnings("unused") 
+        JFXPanel makeCertainJFXStarted = new JFXPanel();
     }
-    
+
     /**
      * Set buttons to be managed by Sound Recorder
+     *
      * @param _playPause play/pause button
      * @param _record record button
      * @param _playUp play button up graphic
@@ -93,13 +104,14 @@ public class SoundRecorder {
         playDown = _playDown;
         recUp = _recUp;
         recDown = _recDown;
-        
+
         playPauseBut.setIcon(playUp);
         recordBut.setIcon(recUp);
     }
 
     /**
      * Instantiates recorder with custom format
+     *
      * @param _format custom format for recorder
      * @param _parent parent window (for error communication)
      */
@@ -111,7 +123,7 @@ public class SoundRecorder {
     public void setTimer(JTextField _timer) {
         timer = _timer;
     }
-    
+
     public void setSlider(JSlider _slider) {
         slider = _slider;
     }
@@ -138,7 +150,7 @@ public class SoundRecorder {
     public byte[] getSound() {
         return sound;
     }
-    
+
     public void setSound(byte[] _sound) {
         sound = _sound;
         playPauseBut.setIcon(_sound == null ? playUp : playDown);
@@ -153,8 +165,11 @@ public class SoundRecorder {
     public void beginRecording() throws LineUnavailableException, Exception {
         sound = null;
         killPlay = true;
-        try{Thread.sleep(timeToDie);} // max amount of time before player kills self
-        catch(Exception e){/*do nothing*/}
+        try {
+            Thread.sleep(timeToDie);
+        } // max amount of time before player kills self
+        catch (Exception e) {/*do nothing*/
+        }
 
         if (soundThread != null
                 && soundThread.isAlive()
@@ -165,7 +180,7 @@ public class SoundRecorder {
                 && soundThread.toString().equals(recordThread)) {
             throw new Exception("Can't begin recording while current recording active.");
         }
-        
+
         timer.setText("00:00:00");
         slider.setValue(0);
 
@@ -195,34 +210,34 @@ public class SoundRecorder {
             @Override
             public void run() {
                 int bytesRecorded = 0;
-                float BPS = (format.getSampleRate() 
+                float BPS = (format.getSampleRate()
                         * format.getSampleSizeInBits()) / 8;
-                
+
                 while (parent.isRecording()) {
                     int count = line.read(buffer, 0, buffer.length);
                     if (count > 0) {
                         out.write(buffer, 0, count);
                     }
-                    
+
                     bytesRecorded += buffer.length;
                     float seconds = bytesRecorded / BPS;
                     timer.setText(getTimerValue(seconds));
                 }
-                
+
                 recordBut.setIcon(recUp);
-                
+
                 try {
                     out.close();
                 } catch (IOException e) {
                     //e.printStackTrace();
-                    InfoBox.error("Recording wrror: ", "Unable to record: " 
+                    InfoBox.error("Recording wrror: ", "Unable to record: "
                             + e.getLocalizedMessage(), parentWindow);
                 }
                 line.close();
-                
+
             }
         });
-        
+
         recordThread = soundThread.toString();
         soundThread.start();
     }
@@ -241,8 +256,11 @@ public class SoundRecorder {
         }
 
         // wait for recording thread to die
-        try{Thread.sleep(timeToDie);} // longest time for thread to die
-        catch (Exception e){/*do nothing*/}
+        try {
+            Thread.sleep(timeToDie);
+        } // longest time for thread to die
+        catch (Exception e) {/*do nothing*/
+        }
 
         out.close();
 
@@ -287,7 +305,7 @@ public class SoundRecorder {
         soundThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try (SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info)){
+                try (SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info)) {
                     sourceLine.open(format);
                     sourceLine.start();
 
@@ -303,7 +321,7 @@ public class SoundRecorder {
                             while (playing == false) { // if paused, wait until unpaused
                                 Thread.sleep(timeToDie);
                                 playPauseBut.setIcon(playUp);
-                                
+
                                 if (killPlay) { // immediately ends playing process
                                     killPlay = false;
                                     playing = false;
@@ -314,9 +332,9 @@ public class SoundRecorder {
                                     return;
                                 }
                             }
-                            
+
                             playPauseBut.setIcon(playDown);
-                            
+
                             if (killPlay) { // immediately ends playing process
                                 killPlay = false;
                                 playing = false;
@@ -346,7 +364,7 @@ public class SoundRecorder {
                     if (slider != null) {
                         slider.setValue(slider.getMaximum());
                     }
-                    
+
                     playing = false;
                     sourceLine.drain();
                     sourceLine.close();
@@ -357,7 +375,7 @@ public class SoundRecorder {
                     InfoBox.error("Play Error", "Unable to play audio: "
                             + e.getLocalizedMessage(), parentWindow);
                 }
-                
+
                 playPauseBut.setIcon(playUp);
             }
         });
@@ -375,25 +393,25 @@ public class SoundRecorder {
      * @return string representation of current play/record position
      */
     private String getTimerValue(int bufferSize, int cycles) {
-        float ticks = (bufferSize * cycles)/((format.getSampleSizeInBits()*format.getSampleRate())/8);
+        float ticks = (bufferSize * cycles) / ((format.getSampleSizeInBits() * format.getSampleRate()) / 8);
         return getTimerValue(ticks);
-        
-        
+
     }
-    
+
     /**
      * Given seconds, returns formatted time
+     *
      * @param ticks number of seconds
      * @return formatted time
      */
     private String getTimerValue(float ticks) {
         String ret = "";
-        
-        int hundredths = (int)(ticks * 100) % 100;
+
+        int hundredths = (int) (ticks * 100) % 100;
         ticks -= ticks % 1;
         int seconds = (int) ticks % 60;
         ticks = (ticks - seconds) / 60;
-        int minutes = (int)ticks % 60;
+        int minutes = (int) ticks % 60;
         // If someone makes a recording over an hour, then they don't get a nice display. XP
 
         ret += minutes >= 10 ? minutes : "0" + minutes;
@@ -401,7 +419,7 @@ public class SoundRecorder {
         ret += seconds >= 10 ? seconds : "0" + seconds;
         ret += ":";
         ret += hundredths >= 10 ? hundredths : "0" + hundredths;
-        
+
         return ret;
     }
 
@@ -434,5 +452,19 @@ public class SoundRecorder {
         if (timer != null) {
             timer.setText("00:00:00");
         }
+    }
+
+    /**
+     * Plays MP3 file back
+     *
+     * @param filePath path to load MP3
+     */
+    public void playMP3(String filePath) {
+        Media hit = new Media(parentWindow.getClass().getResource(filePath).toExternalForm());
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+        mediaPlayer = new MediaPlayer(hit);
+        mediaPlayer.play();
     }
 }

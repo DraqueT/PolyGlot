@@ -164,7 +164,9 @@ public class PGTUtil {
     public static final String conLangFont = "PolyGlotConlangGrammarFont";
     public static final String polyGlotIni = "PolyGlot.ini";
     public static final String emptyLogoImage = "/PolyGlot/ImageAssets/EmptyImage.png";
+    public static final String IPAOtherSounds = "/PolyGlot/ImageAssets/IPA_Other.png";
     public static final String jarArchiveName = "PolyGlot.jar";
+    public static final String ipaSoundsLocation = "/PolyGlot/SoundAssets/";
     
     // screen names when they're required as constants...
     public static final String scrNameLexicon = ScrLexicon.class.getName();
