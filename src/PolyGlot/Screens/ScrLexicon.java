@@ -1226,7 +1226,7 @@ public final class ScrLexicon extends PFrame {
         }
 
         try {
-            core.getWordCollection().deleteNodeById(curWord.getId());
+            core.deleteWordById(curWord.getId());
         } catch (Exception e) {
             InfoBox.error("Deletion Error", "Unable to delete word: "
                     + e.getLocalizedMessage(), this);
