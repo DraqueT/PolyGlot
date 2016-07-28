@@ -112,6 +112,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             return;
         }
 
+        super.dispose();
+        
         try {
             saveWindowsOpen();
             core.getOptionsManager().setScreenPosition(getClass().getName(),
@@ -122,7 +124,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             localError("Ini Save Error", "Unable to save PolyGlot.ini:\n"
                     + e.getLocalizedMessage());
         }
-        super.dispose();
         System.exit(0);
     }
 

@@ -21,6 +21,7 @@ package PolyGlot.ManagersCollections;
 
 import PolyGlot.DictCore;
 import PolyGlot.PGTUtil;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,9 +42,10 @@ import java.util.Map.Entry;
  */
 public class OptionsManager {
 
-    private List<String> lastFiles = new ArrayList<String>();
-    private final Map<String, Point> screenPos = new HashMap<String, Point>();
-    private final List<String> screensUp = new ArrayList<String>();
+    private List<String> lastFiles = new ArrayList<>();
+    private final Map<String, Point> screenPos = new HashMap<>();
+    private final Map<String, Dimension> screenSize = new HashMap<>();
+    private final List<String> screensUp = new ArrayList<>();
     private final DictCore core;
 
     public OptionsManager(DictCore _core) {
@@ -82,6 +84,19 @@ public class OptionsManager {
     }
     
     /**
+     * Adds or replaces screen size of a window
+     * @param screen name of window
+     * @param dimension size of window
+     */
+    public void setScreenSize(String screen, Dimension dimension) {
+        if (screenSize.containsKey(screen)) {
+            screenSize.replace(screen, dimension);
+        } else {
+            screenSize.put(screen, dimension);
+        }
+    }
+    
+    /**
      * Retrieves last screen position of screen
      * @param screen screen to return position for
      * @return last position of screen. Null otherwise.
@@ -90,6 +105,20 @@ public class OptionsManager {
         Point ret = null;
         if (screenPos.containsKey(screen)) {
             ret = screenPos.get(screen);
+        }        
+        return ret;
+    }
+    
+    /**
+     * Retrieves last screen size of screen
+     * @param screen screen to return size for
+     * @return last size of screen (stored in 
+     * a Point). Null otherwise.
+     */
+    public Dimension getScreenSize(String screen) {
+        Dimension ret = null;
+        if (screenSize.containsKey(screen)) {
+            ret = screenSize.get(screen);
         }        
         return ret;
     }
@@ -160,6 +189,22 @@ public class OptionsManager {
                             setScreenPosition(splitSet[0], p);     
                         }
                         break;
+                    case PGTUtil.optionsScreensSize:
+                        for (String curSizeSet : bothVal[1].split(",")) {
+                            if (curSizeSet.isEmpty()) {
+                                continue;
+                            }
+                            
+                            String[] splitSet = curSizeSet.split(":");
+                            
+                            if (splitSet.length != 3) {
+                                throw new Exception("Malformed Screen Size: " 
+                                        + curSizeSet);
+                            }
+                            Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
+                            setScreenSize(splitSet[0], d);
+                        }
+                        break;
                     case "\n":
                         break;
                     default:
@@ -192,10 +237,18 @@ public class OptionsManager {
             
             f0.write(nextLine + newLine);
             
-            nextLine = PGTUtil.optionsScreenPos + "=";
-            
+            nextLine = PGTUtil.optionsScreenPos + "=";            
             for (Entry<String, Point> curPos : screenPos.entrySet()) {
-                nextLine += ("," + curPos.getKey() + ":" + curPos.getValue().x + ":" + curPos.getValue().y);
+                nextLine += ("," + curPos.getKey() + ":" + curPos.getValue().x + ":" 
+                        + curPos.getValue().y);
+            }
+            
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.optionsScreensSize + "=";
+            for (Entry<String, Dimension> curSize : screenSize.entrySet()) {
+                nextLine += ("," + curSize.getKey() + ":" + curSize.getValue().width + ":" 
+                        + curSize.getValue().height);
             }
             
             f0.write(nextLine + newLine);

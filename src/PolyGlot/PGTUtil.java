@@ -150,8 +150,9 @@ public class PGTUtil {
     public static final int optionsNumLastFiles = 5;
     public static final String optionsLastFiles = "LastFiles";
     public static final String optionsScreenPos = "ScreenPositions";
+    public static final String optionsScreensSize = "ScreenSizes";
     public static final String optionsScreensOpen = "ScreensUp";
-    
+        
     // string constants
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";

@@ -22,6 +22,7 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -65,6 +66,8 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         if (!isDisposed) {
             core.getOptionsManager().setScreenPosition(getClass().getName(),
                 this.getLocation());
+            core.getOptionsManager().setScreenSize(getClass().getName(),
+                this.getSize());
         }
         
         isDisposed = true;
@@ -176,6 +179,11 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());
         if (lastPos != null) {
             setLocation(lastPos);
+        }
+        
+        Dimension lastDim = core.getOptionsManager().getScreenSize(getClass().getName());
+        if (lastDim != null) {
+            setSize(lastDim);
         }
         
         super.setVisible(visible);

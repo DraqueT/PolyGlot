@@ -23,6 +23,7 @@ import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
 import PolyGlot.Screens.ScrDictMenu;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -77,6 +78,8 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
         if (!isDisposed) {
             core.getOptionsManager().setScreenPosition(getClass().getName(),
                 this.getLocation());
+            core.getOptionsManager().setScreenSize(getClass().getName(),
+                this.getSize());
         }
         
         isDisposed = true;
@@ -313,6 +316,11 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
                 setLocation(lastPos);
             } else if (!ignoreCenter) {
                 this.setLocationRelativeTo(null);
+            }
+            
+            Dimension lastDim = core.getOptionsManager().getScreenSize(getClass().getName());
+            if (lastDim != null) {
+                setSize(lastDim);
             }
 
             if (core == null && !(this instanceof ScrDictMenu)) {
