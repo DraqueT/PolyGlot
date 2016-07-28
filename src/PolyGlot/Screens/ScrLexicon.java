@@ -780,22 +780,25 @@ public final class ScrLexicon extends PFrame {
             public void removeUpdate(DocumentEvent e) {
                 genProc();
                 setWordLegality();
+                saveName();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
                 genProc();
                 setWordLegality();
+                saveName();
             }
         });
         txtConWord.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
+                // Do nothing
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                saveName();
+                // Do nothing
             }
             
         });
