@@ -56,8 +56,10 @@ import javax.swing.table.TableColumn;
  */
 public class ScrLangProps extends PDialog {
     private boolean curPopulating = false;
-    private static final String defName = "- Language Name -";
-    private static final String defAlpha = "- Alphabetical Order -";
+    private final String defName = "- Language Name -";
+    private final String defAlpha = "- Alphabetical Order -";
+    private final String localName = "- Local Language -";
+    private final String authInfo = "- Author/Copyright Info -";
     
     /**
      * Creates new form ScrLangProps
@@ -70,6 +72,14 @@ public class ScrLangProps extends PDialog {
         txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
         
         setModal(true);
+    }
+    
+    @Override
+    /**
+     * Written this way to eliminate BP violation.
+     */
+    public final void setModal(boolean modal) {
+        super.setModal(modal);
     }
     
     @Override
@@ -97,6 +107,10 @@ public class ScrLangProps extends PDialog {
         txtFont.setText(prop.getFontCon().getFamily());
         txtAlphaOrder.setText(prop.getAlphaPlainText().equals("") ?
                 defAlpha : prop.getAlphaPlainText());
+        txtLocalLanguage.setText(prop.getLocalLangName().equals("") ?
+                localName : prop.getLocalLangName());
+        txtAuthorCopyright.setText(prop.getCopyrightAuthorInfo().equals("") ?
+                authInfo : prop.getCopyrightAuthorInfo());
         chkDisableProcRegex.setSelected(prop.isDisableProcRegex());
         chkIgnoreCase.setSelected(prop.isIgnoreCase());
         chkLocalMandatory.setSelected(prop.isLocalMandatory());
@@ -108,6 +122,10 @@ public class ScrLangProps extends PDialog {
         txtAlphaOrder.setForeground(txtAlphaOrder.getText().equals(defAlpha) ?
                 Color.lightGray : Color.black);
         txtLangName.setForeground(txtLangName.getText().equals(defName) ?
+                Color.lightGray : Color.black);
+        txtLocalLanguage.setForeground(txtLocalLanguage.getText().equals(localName) ?
+                Color.lightGray : Color.black);
+        txtAuthorCopyright.setForeground(txtAuthorCopyright.getText().equals(authInfo) ?
                 Color.lightGray : Color.black);
                 
         populateProcs();
@@ -124,6 +142,10 @@ public class ScrLangProps extends PDialog {
         propMan.setIgnoreCase(chkIgnoreCase.isSelected());
         propMan.setLangName(txtLangName.getText().equals(defName) ?
                 "" : txtLangName.getText());
+        propMan.setCopyrightAuthorInfo(txtAuthorCopyright.getText().equals(authInfo) ?
+                "" : txtAuthorCopyright.getText());
+        propMan.setLocalLangName(txtLocalLanguage.getText().equals(localName) ?
+                "" : txtLocalLanguage.getText());
         propMan.setLocalMandatory(chkLocalMandatory.isSelected());
         propMan.setLocalUniqueness(chkLocalUniqueness.isSelected());
         propMan.setTypesMandatory(chkTypesMandatory.isSelected());
@@ -186,7 +208,7 @@ public class ScrLangProps extends PDialog {
             tblProcs.getCellEditor().stopCellEditing();
         }
 
-        List<PronunciationNode> newPro = new ArrayList<PronunciationNode>();
+        List<PronunciationNode> newPro = new ArrayList<>();
 
         for (int i = 0; i < tblProcs.getRowCount(); i++) {
             PronunciationNode newNode = new PronunciationNode();
@@ -398,7 +420,6 @@ public class ScrLangProps extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txtLangName = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         btnChangeFont = new javax.swing.JButton();
         txtFont = new javax.swing.JTextField();
@@ -422,23 +443,18 @@ public class ScrLangProps extends PDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProcs = new javax.swing.JTable();
         btnDownProc = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        txtLangName = new javax.swing.JTextField();
+        txtLocalLanguage = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtAuthorCopyright = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Language Properties");
 
-        txtLangName.setToolTipText("Your Conlang's Name");
-        txtLangName.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtLangNameFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtLangNameFocusLost(evt);
-            }
-        });
-
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        btnChangeFont.setText("Change Font");
+        btnChangeFont.setText("Conlang Font");
         btnChangeFont.setToolTipText("Change native conlang font");
         btnChangeFont.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -549,7 +565,7 @@ public class ScrLangProps extends PDialog {
                 .addComponent(chkDisableProcRegex)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkEnforceRTL)
-                .addGap(0, 14, Short.MAX_VALUE))
+                .addGap(0, 44, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -687,6 +703,58 @@ public class ScrLangProps extends PDialog {
                 .addContainerGap())
         );
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        txtLangName.setToolTipText("Your Conlang's Name");
+        txtLangName.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLangNameFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtLangNameFocusLost(evt);
+            }
+        });
+
+        txtLocalLanguage.setToolTipText("The natural language you use when writing your conlang");
+        txtLocalLanguage.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLocalLanguageFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtLocalLanguageFocusLost(evt);
+            }
+        });
+
+        txtAuthorCopyright.setColumns(20);
+        txtAuthorCopyright.setLineWrap(true);
+        txtAuthorCopyright.setRows(5);
+        txtAuthorCopyright.setWrapStyleWord(true);
+        jScrollPane3.setViewportView(txtAuthorCopyright);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3)
+                    .addComponent(txtLangName, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtLocalLanguage, javax.swing.GroupLayout.Alignment.LEADING))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtLangName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtLocalLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -694,17 +762,17 @@ public class ScrLangProps extends PDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtLangName))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtLangName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -765,6 +833,20 @@ public class ScrLangProps extends PDialog {
         }
     }//GEN-LAST:event_txtAlphaOrderFocusLost
 
+    private void txtLocalLanguageFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLocalLanguageFocusGained
+        if (txtLocalLanguage.getText().equals(localName)) {
+            txtLocalLanguage.setText("");
+            txtLocalLanguage.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_txtLocalLanguageFocusGained
+
+    private void txtLocalLanguageFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLocalLanguageFocusLost
+        if (txtLocalLanguage.getText().equals("")) {
+            txtLocalLanguage.setText(localName);
+            txtLocalLanguage.setForeground(Color.lightGray);
+        }
+    }//GEN-LAST:event_txtLocalLanguageFocusLost
+
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
         s.setupKeyStrokes();
@@ -790,12 +872,16 @@ public class ScrLangProps extends PDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTable tblProcs;
     private javax.swing.JTextField txtAlphaOrder;
+    private javax.swing.JTextArea txtAuthorCopyright;
     private javax.swing.JTextField txtFont;
     private javax.swing.JTextField txtLangName;
+    private javax.swing.JTextField txtLocalLanguage;
     // End of variables declaration//GEN-END:variables
 }
