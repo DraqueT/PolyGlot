@@ -76,6 +76,8 @@ public class PGTUtil {
     public static final String langPropIgnoreCaseXID = "langPropIgnoreCase";
     public static final String langPropDisableProcRegexXID = "langPropDisableProcRegex";
     public static final String langPropEnforceRTLXID = "langPropEnforceRTL";
+    public static final String langPropAuthCopyrightXID = "langPropAuthorCopyright";
+    public static final String langPropLocalLangNameXID = "langPropLocalLangName";
     
     // declension properties
     public static final String declensionXID = "declensionNode";
@@ -157,6 +159,7 @@ public class PGTUtil {
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";
     public static final String LCDFontLocation = "/PolyGlot/GeneralResources/lcdFont.ttf";
+    public static final String UnicodeFontLocation = "/PolyGlot/GeneralResources/unicode.ttf";
     public static final String logoGraphSavePath = "logoGraphs/";
     public static final String grammarSoundSavePath = "grammarSounds/";
     public static final String emptyFile = "<EMPTY>";

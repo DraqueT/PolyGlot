@@ -595,6 +595,8 @@ public class CustHandlerFactory {
             boolean blangPropWordUniqueness = false;
             boolean blangPropLocalUniqueness = false;
             boolean blangPropEnforceRTL = false;
+            boolean blangPropLocalLangName = false;
+            boolean blangPropAuthCopyright = false;
             boolean bdeclensionMandatory = false;
             boolean bwordClassDefMan = false;
             boolean bwordClassGenderMan = false;
@@ -707,6 +709,10 @@ public class CustHandlerFactory {
                     balphaOrder = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropEnforceRTLXID)) {
                     blangPropEnforceRTL = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropAuthCopyrightXID)) {
+                     blangPropAuthCopyright= true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalLangNameXID)) {
+                     blangPropLocalLangName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordAutoDeclenOverrideXID)) {
                     bwordoverAutoDec = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionXID)) {
@@ -946,6 +952,10 @@ public class CustHandlerFactory {
                     balphaOrder = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropEnforceRTLXID)) {
                     blangPropEnforceRTL = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropAuthCopyrightXID)) {
+                     blangPropAuthCopyright= false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalLangNameXID)) {
+                     blangPropLocalLangName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionIdXID)) {
                     bDecId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionTextXID)) {
@@ -1209,7 +1219,13 @@ public class CustHandlerFactory {
                 } else if (blangPropEnforceRTL) {
                     propertiesManager.setEnforceRTL(new String(ch, start, length).equals("T"));
                     blangPropEnforceRTL = false;
-                } else if (bdimMand) {
+                } else if (blangPropAuthCopyright) {
+                    propertiesManager.setCopyrightAuthorInfo(propertiesManager.getCopyrightAuthorInfo() 
+                            + new String(ch, start, length));
+                } else if (blangPropLocalLangName) {
+                    propertiesManager.setLocalLangName(propertiesManager.getLocalLangName() 
+                            +new String(ch, start, length));
+                }else if (bdimMand) {
                     declensionMgr.getBuffer().getBuffer().setMandatory(new String(ch, start, length).equals("T"));
                     bdimMand = false;
                 } else if (bdimId) {

@@ -41,6 +41,8 @@ public class PropertiesManager {
     private final Map alphaOrder;
     private String alphaPlainText = "";
     private String langName = "";
+    private String localLangName = "";
+    private String copyrightAuthorInfo = "";
     private boolean typesMandatory = false;
     private boolean localMandatory = false;
     private boolean wordUniqueness = false;
@@ -389,5 +391,43 @@ public class PropertiesManager {
         wordValue = doc.createElement(PGTUtil.langPropEnforceRTLXID);
         wordValue.appendChild(doc.createTextNode(isEnforceRTL()? "T" : "F"));
         rootElement.appendChild(wordValue);
+        
+        // store option for Author and copyright info
+        wordValue = doc.createElement(PGTUtil.langPropAuthCopyrightXID);
+        wordValue.appendChild(doc.createTextNode(copyrightAuthorInfo));
+        rootElement.appendChild(wordValue);
+        
+        // store option local language name
+        wordValue = doc.createElement(PGTUtil.langPropLocalLangNameXID);
+        wordValue.appendChild(doc.createTextNode(localLangName));
+        rootElement.appendChild(wordValue);
+    }
+
+    /**
+     * @return the localLangName
+     */
+    public String getLocalLangName() {
+        return localLangName;
+    }
+
+    /**
+     * @param localLangName the localLangName to set
+     */
+    public void setLocalLangName(String localLangName) {
+        this.localLangName = localLangName;
+    }
+
+    /**
+     * @return the copyrightAuthorInfo
+     */
+    public String getCopyrightAuthorInfo() {
+        return copyrightAuthorInfo;
+    }
+
+    /**
+     * @param copyrightAuthorInfo the copyrightAuthorInfo to set
+     */
+    public void setCopyrightAuthorInfo(String copyrightAuthorInfo) {
+        this.copyrightAuthorInfo = copyrightAuthorInfo;
     }
 }
