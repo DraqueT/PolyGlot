@@ -920,6 +920,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         mnuSaveAs = new javax.swing.JMenuItem();
         mnuOpenLocal = new javax.swing.JMenuItem();
         mnuRecents = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuExit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -1030,6 +1031,14 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
         mnuRecents.setText("Recent");
         jMenu1.add(mnuRecents);
+
+        jMenuItem1.setText("Print to PDF");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
         jMenu1.add(jSeparator2);
 
         mnuExit.setText("Exit");
@@ -1285,6 +1294,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         checkForUpdates(true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        ScrPrintToPDF.run(core);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1354,6 +1367,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;

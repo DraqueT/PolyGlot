@@ -36,7 +36,7 @@ public abstract class DictNode implements Comparable<DictNode> {
     protected Integer id = 0;
     
     // used for alphabetic ordering of nodes
-    private Map<Character, Integer> alphaOrder = new HashMap<Character, Integer>();
+    private Map<Character, Integer> alphaOrder = new HashMap<>();
     
     /**
      * Sets a node equal to the argument node
@@ -64,7 +64,11 @@ public abstract class DictNode implements Comparable<DictNode> {
         this.value = conWord.trim();
     }
 
-    // implements compareTo in way that custom alpha sorting may be used
+    /**
+     * implements compareTo in way that custom alpha sorting may be used
+     * @param _compare value to compare to this one
+     * @return 
+     */
     @Override
     public int compareTo(DictNode _compare) {
         final int BEFORE = -1;

@@ -45,13 +45,14 @@ import org.w3c.dom.Element;
 public class ConWordCollection extends DictionaryCollection {
 
     private final DictCore core;
-    Map<String, Integer> allConWords;
-    Map<String, Integer> allLocalWords;
+    Map<String, Integer> allConWords; // TODO: make private?
+    Map<String, Integer> allLocalWords; // TODO: make private?
+    private boolean orderByLocal = false;
 
     public ConWordCollection(DictCore _core) {
         bufferNode = new ConWord();
-        allConWords = new HashMap<String, Integer>();
-        allLocalWords = new HashMap<String, Integer>();
+        allConWords = new HashMap<>();
+        allLocalWords = new HashMap<>();
         core = _core;
     }
 
@@ -264,9 +265,9 @@ public class ConWordCollection extends DictionaryCollection {
      * @return list of matching words
      */
     public List<ConWord> getSuggestedTransWords(String _match) {
-        List<ConWord> localEquals = new ArrayList<ConWord>();
-        List<ConWord> localContains = new ArrayList<ConWord>();
-        List<RankedObject> definitionContains = new ArrayList<RankedObject>();
+        List<ConWord> localEquals = new ArrayList<>();
+        List<ConWord> localContains = new ArrayList<>();
+        List<RankedObject> definitionContains = new ArrayList<>();
         Iterator<Entry<Integer, ConWord>> allWords = nodeMap.entrySet().iterator();
 
         // on empty, return empty list
@@ -309,7 +310,7 @@ public class ConWordCollection extends DictionaryCollection {
         Collections.sort(definitionContains);
 
         // concatinate results
-        ArrayList<ConWord> ret = new ArrayList<ConWord>();
+        ArrayList<ConWord> ret = new ArrayList<>();
         ret.addAll(localEquals);
         ret.addAll(localContains);
 
@@ -497,11 +498,35 @@ public class ConWordCollection extends DictionaryCollection {
      * @return
      */
     public Iterator<ConWord> getNodeIterator() {
-        List<ConWord> retList = new ArrayList<ConWord>(nodeMap.values());
+        List<ConWord> retList = new ArrayList<>(nodeMap.values());
 
         Collections.sort(retList);
 
         return retList.iterator();
+    }
+    
+    /**
+     * gets and returns iterator of all words based on alphabetical order of 
+     * localwords on the entries. Respects default alpha order.
+     * @return 
+     */
+    public Iterator<ConWord> getNodeIteratorLocalOrder() {
+        List<ConWord> retList = new ArrayList<>(nodeMap.values());
+
+        orderByLocal = true;
+        Collections.sort(retList);
+        orderByLocal = false;
+        
+        return retList.iterator();
+    }
+    
+    /**
+     * Used to determine if lists should currently return in local order
+     * (this is almost never used for anything but sorting. There is no setter.)
+     * @return whether to sort by local value
+     */
+    public boolean isLocalOrder() {
+        return orderByLocal;
     }
 
     /**
@@ -528,18 +553,18 @@ public class ConWordCollection extends DictionaryCollection {
     public String buildWordReport() {
         String ret = "";
 
-        Map<String, Integer> wordStart = new HashMap<String, Integer>();
-        Map<String, Integer> wordEnd = new HashMap<String, Integer>();
-        Map<String, Integer> characterCombos2 = new HashMap<String, Integer>();
+        Map<String, Integer> wordStart = new HashMap<>();
+        Map<String, Integer> wordEnd = new HashMap<>();
+        Map<String, Integer> characterCombos2 = new HashMap<>();
         Integer highestCombo2 = 0;
-        Map<String, Integer> characterCombos3 = new HashMap<String, Integer>();
-        Map<String, Integer> typeCountByWord = new HashMap<String, Integer>();
-        Map<String, Integer> phonemeCount = new HashMap<String, Integer>();
-        Map<String, Integer> charCount = new HashMap<String, Integer>();
-        Map<String, Integer> phonemeCombo2 = new HashMap<String, Integer>();
+        Map<String, Integer> characterCombos3 = new HashMap<>();
+        Map<String, Integer> typeCountByWord = new HashMap<>();
+        Map<String, Integer> phonemeCount = new HashMap<>();
+        Map<String, Integer> charCount = new HashMap<>();
+        Map<String, Integer> phonemeCombo2 = new HashMap<>();
         Integer wordCount = nodeMap.size();
 
-        Iterator<ConWord> wordIt = new ArrayList<ConWord>(nodeMap.values()).iterator();
+        Iterator<ConWord> wordIt = new ArrayList<>(nodeMap.values()).iterator();
 
         // Put values into maps to count/record... 
         while (wordIt.hasNext()) {

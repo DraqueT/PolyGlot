@@ -199,4 +199,23 @@ public class ConWord extends DictNode {
     public void setGender(String gender) {
         this.gender = gender;
     }
+    
+    /**
+     * Respects default alpha order and orders by localword (if any) if parent
+     * value set for this.
+     * @param _compare
+     * @return 
+     */
+    @Override
+    public int compareTo(DictNode _compare) {
+        int ret;
+        
+        if (parent != null && parent.isLocalOrder()) {
+            ret = this.getLocalWord().compareToIgnoreCase(((ConWord)_compare).getLocalWord()); // TODO: check to make certain _compare is type conword?
+        } else {
+            ret = super.compareTo(_compare);
+        }
+        
+        return ret;
+    }
 }

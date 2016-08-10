@@ -599,4 +599,16 @@ public class IOHandler {
 
         return ret;
     }
+    
+    //byte[] cachedFont = IOUtils.toByteArray(new FileInputStream(tempFile));
+    
+    /**
+     * Gets Unicode compatible font as byte array
+     * @return byte array of font's file
+     * @throws FileNotFoundException if this throws, something is wrong internally
+     * @throws IOException if this throws, something is wrong internally
+     */
+    public byte[] getUnicodeFontByteArray() throws FileNotFoundException, IOException {
+        return IOUtils.toByteArray(this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation));
+    }
 }

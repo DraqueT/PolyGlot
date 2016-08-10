@@ -729,6 +729,14 @@ public class ScrLangProps extends PDialog {
         txtAuthorCopyright.setLineWrap(true);
         txtAuthorCopyright.setRows(5);
         txtAuthorCopyright.setWrapStyleWord(true);
+        txtAuthorCopyright.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtAuthorCopyrightFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtAuthorCopyrightFocusLost(evt);
+            }
+        });
         jScrollPane3.setViewportView(txtAuthorCopyright);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -846,6 +854,20 @@ public class ScrLangProps extends PDialog {
             txtLocalLanguage.setForeground(Color.lightGray);
         }
     }//GEN-LAST:event_txtLocalLanguageFocusLost
+
+    private void txtAuthorCopyrightFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAuthorCopyrightFocusGained
+        if (txtAuthorCopyright.getText().equals(authInfo)) {
+            txtAuthorCopyright.setText("");
+            txtAuthorCopyright.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_txtAuthorCopyrightFocusGained
+
+    private void txtAuthorCopyrightFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAuthorCopyrightFocusLost
+        if (txtAuthorCopyright.getText().equals("")) {
+            txtAuthorCopyright.setText(authInfo);
+            txtAuthorCopyright.setForeground(Color.lightGray);
+        }
+    }//GEN-LAST:event_txtAuthorCopyrightFocusLost
 
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
