@@ -216,6 +216,7 @@
     <Component class="javax.swing.JToggleButton" name="btnLexicon">
       <Properties>
         <Property name="text" type="java.lang.String" value="Lexicon"/>
+        <Property name="toolTipText" type="java.lang.String" value="Store all of your language&apos;s words here."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLexiconActionPerformed"/>
@@ -224,6 +225,7 @@
     <Component class="javax.swing.JToggleButton" name="btnGrammar">
       <Properties>
         <Property name="text" type="java.lang.String" value="Grammar"/>
+        <Property name="toolTipText" type="java.lang.String" value="A complex chapter book of grammar can be written here. Supports spoken/replayable messages."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGrammarActionPerformed"/>
@@ -231,7 +233,8 @@
     </Component>
     <Component class="javax.swing.JToggleButton" name="btnTypes">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Types"/>
+        <Property name="text" type="java.lang.String" value="Parts of Speech"/>
+        <Property name="toolTipText" type="java.lang.String" value="Define parts of speech and their rules here."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTypesActionPerformed"/>
@@ -240,6 +243,7 @@
     <Component class="javax.swing.JToggleButton" name="btnLangProp">
       <Properties>
         <Property name="text" type="java.lang.String" value="Lang Properties"/>
+        <Property name="toolTipText" type="java.lang.String" value="General properties of your language such as alphabetical order, orthography, and language name are stored here."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLangPropActionPerformed"/>
@@ -248,6 +252,7 @@
     <Component class="javax.swing.JToggleButton" name="btnGenders">
       <Properties>
         <Property name="text" type="java.lang.String" value="Genders"/>
+        <Property name="toolTipText" type="java.lang.String" value="If your language uses genders per word, they can be defined here."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGendersActionPerformed"/>
@@ -256,6 +261,7 @@
     <Component class="javax.swing.JToggleButton" name="btnQuickEntry">
       <Properties>
         <Property name="text" type="java.lang.String" value="Quickentry"/>
+        <Property name="toolTipText" type="java.lang.String" value="This allows you to very quickly add in new words, hitting Enter when done."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnQuickEntryActionPerformed"/>
@@ -264,6 +270,7 @@
     <Component class="javax.swing.JToggleButton" name="btnLogos">
       <Properties>
         <Property name="text" type="java.lang.String" value="Logographs"/>
+        <Property name="toolTipText" type="java.lang.String" value="If your language uses a logographic writing system, you can store images of the logographs here."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLogosActionPerformed"/>
@@ -272,6 +279,7 @@
     <Component class="javax.swing.JToggleButton" name="btnThes">
       <Properties>
         <Property name="text" type="java.lang.String" value="Thesaurus"/>
+        <Property name="toolTipText" type="java.lang.String" value="The thesaurus provides an easy way to give groupings and store lexical references."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnThesActionPerformed"/>

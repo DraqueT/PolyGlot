@@ -940,6 +940,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         setAlwaysOnTop(true);
 
         btnLexicon.setText("Lexicon");
+        btnLexicon.setToolTipText("Store all of your language's words here.");
         btnLexicon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLexiconActionPerformed(evt);
@@ -947,13 +948,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         });
 
         btnGrammar.setText("Grammar");
+        btnGrammar.setToolTipText("A complex chapter book of grammar can be written here. Supports spoken/replayable messages.");
         btnGrammar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGrammarActionPerformed(evt);
             }
         });
 
-        btnTypes.setText("Types");
+        btnTypes.setText("Parts of Speech");
+        btnTypes.setToolTipText("Define parts of speech and their rules here.");
         btnTypes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTypesActionPerformed(evt);
@@ -961,6 +964,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         });
 
         btnLangProp.setText("Lang Properties");
+        btnLangProp.setToolTipText("General properties of your language such as alphabetical order, orthography, and language name are stored here.");
         btnLangProp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLangPropActionPerformed(evt);
@@ -968,6 +972,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         });
 
         btnGenders.setText("Genders");
+        btnGenders.setToolTipText("If your language uses genders per word, they can be defined here.");
         btnGenders.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGendersActionPerformed(evt);
@@ -975,6 +980,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         });
 
         btnQuickEntry.setText("Quickentry");
+        btnQuickEntry.setToolTipText("This allows you to very quickly add in new words, hitting Enter when done.");
         btnQuickEntry.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnQuickEntryActionPerformed(evt);
@@ -982,6 +988,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         });
 
         btnLogos.setText("Logographs");
+        btnLogos.setToolTipText("If your language uses a logographic writing system, you can store images of the logographs here.");
         btnLogos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogosActionPerformed(evt);
@@ -989,6 +996,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         });
 
         btnThes.setText("Thesaurus");
+        btnThes.setToolTipText("The thesaurus provides an easy way to give groupings and store lexical references.");
         btnThes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThesActionPerformed(evt);
