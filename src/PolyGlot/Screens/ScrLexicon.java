@@ -87,7 +87,7 @@ import javax.swing.event.DocumentListener;
  */
 public final class ScrLexicon extends PFrame {
 
-    private final List<Window> childFrames = new ArrayList<Window>();
+    private final List<Window> childFrames = new ArrayList<>();
     private TitledPane gridTitlePane = null;
     private final JFXPanel fxPanel;
     private final String defConValue = "-- ConWord --";
@@ -430,8 +430,7 @@ public final class ScrLexicon extends PFrame {
             lstLexicon.ensureIndexIsVisible(0);
 
             // refresh lexicon if it was already filtered. Do nothing otherwise
-            if (lstLexicon.getModel().getSize() < core.getWordCollection().getWordCount())
-            {
+            if (lstLexicon.getModel().getSize() < core.getWordCollection().getWordCount()) {
                 populateLexicon();
                 lstLexicon.setSelectedIndex(0);
                 populateProperties();
@@ -478,7 +477,7 @@ public final class ScrLexicon extends PFrame {
                 && cmbTypeSrc.getSelectionModel().getSelectedIndex() == 0) {
             return;
         }
-        
+
         // only run process if in FX Application thread. Recurse within thread otherwise
         if (!Platform.isFxApplicationThread()) {
             final CountDownLatch latch = new CountDownLatch(1);
@@ -513,9 +512,12 @@ public final class ScrLexicon extends PFrame {
                 }
             });
         }
-        
+
         // this is to address an odd timing error... sloppy, but it's somewhere in the Java API
-        try{Thread.sleep(250);}catch(Exception e) {}
+        try {
+            Thread.sleep(250);
+        } catch (Exception e) {
+        }
     }
 
     /**
@@ -537,7 +539,7 @@ public final class ScrLexicon extends PFrame {
         String genderString = cmbGender.getSelectedItem().equals(defGenderValue)
                 ? "" : ((GenderNode) cmbGender.getSelectedItem()).getValue();
         String typeString = (cmbType.getSelectedItem().equals(defTypeValue)
-                    || cmbType.getSelectedItem().equals(newTypeValue))
+                || cmbType.getSelectedItem().equals(newTypeValue))
                 ? "" : ((TypeNode) cmbType.getSelectedItem()).getValue();
 
         if (curPopulating) {
@@ -691,6 +693,23 @@ public final class ScrLexicon extends PFrame {
         gridTitlePane.setContent(grid);
         gridTitlePane.setExpanded(false);
 
+        // sets up button to clear filter
+        javafx.scene.control.Button clearButton = new javafx.scene.control.Button("Clear Filter");
+        clearButton.setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
+            @Override
+            public void handle(javafx.event.ActionEvent t) {
+                txtConSrc.setText("");
+                txtLocalSrc.setText("");
+                txtProcSrc.setText("");
+                txtDefSrc.setText("");
+                cmbTypeSrc.getSelectionModel().select(defTypeValue);
+                cmbGenderSrc.getSelectionModel().select(defGenderValue);
+                
+                runFilter();
+            }
+        });
+        grid.add(clearButton, 3, 3);
+
         return gridTitlePane;
     }
 
@@ -800,7 +819,7 @@ public final class ScrLexicon extends PFrame {
             public void focusLost(FocusEvent e) {
                 // Do nothing
             }
-            
+
         });
 
         this.addComponentListener(new ComponentAdapter() {
@@ -811,11 +830,12 @@ public final class ScrLexicon extends PFrame {
                 }
             }
         });
-        
+
         lstLexicon.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
             }
+
             @Override
             public void mouseMoved(MouseEvent e) {
                 JList theList = (JList) e.getSource();
@@ -826,18 +846,18 @@ public final class ScrLexicon extends PFrame {
                     TypeNode curType = core.getTypes().findTypeByName(curWord.getWordType());
                     String tip = core.getPronunciationMgr().getPronunciation(curWord.getValue());
                     if (curType != null) {
-                        tip += " : " + (curType.getGloss().equals("") 
+                        tip += " : " + (curType.getGloss().equals("")
                                 ? curType.getValue() : curType.getGloss());
                     }
                     if (!curWord.getDefinition().equals("")) {
                         tip += " : " + curWord.getDefinition();
                     }
-                    
+
                     theList.setToolTipText(tip);
                 } else {
                     theList.setToolTipText(defLexValue);
                 }
-            }            
+            }
         });
 
         addPropertyListeners(txtConWord, defConValue);
@@ -1204,7 +1224,7 @@ public final class ScrLexicon extends PFrame {
         Object curGend = cmbGender.getSelectedItem();
         if (curGend != null) {
             saveWord.setGender(curGend.equals(defGenderValue)
-                   ? "" : ((GenderNode)curGend).getValue());
+                    ? "" : ((GenderNode) curGend).getValue());
         }
         saveWord.setLocalWord(txtLocalWord.getText().equals(defLocalValue)
                 ? "" : txtLocalWord.getText());
@@ -1215,7 +1235,7 @@ public final class ScrLexicon extends PFrame {
         Object curType = cmbType.getSelectedItem();
         if (curType != null) {
             saveWord.setWordType((curType.equals(defTypeValue) || curType.equals(newTypeValue))
-                    ? "" : ((TypeNode)curType).getValue());
+                    ? "" : ((TypeNode) curType).getValue());
         }
     }
 
@@ -1248,7 +1268,7 @@ public final class ScrLexicon extends PFrame {
         if (curNode != null) {
             saveValuesTo(curNode);
         }
-        
+
         curPopulating = true;
         core.getWordCollection().clear();
         try {
