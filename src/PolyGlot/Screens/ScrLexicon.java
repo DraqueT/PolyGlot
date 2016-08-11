@@ -96,7 +96,7 @@ public final class ScrLexicon extends PFrame {
     private final GenderNode defGenderValue = new GenderNode();
     private final String defProcValue = "-- Pronunciation --";
     private final String defDefValue = "-- Definition --";
-    private final String newTypeValue = "-- New Type --";
+    private final String newTypeValue = "-- Part of Speech --";
     private final String defLexValue = "List of Conlang Words";
     private TextField txtConSrc;
     private TextField txtLocalSrc;

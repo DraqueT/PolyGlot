@@ -33,7 +33,6 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -43,11 +42,11 @@ import javax.swing.event.DocumentListener;
  */
 public class ScrTypes extends PDialog {
 
-    private final List<Window> childFrames = new ArrayList<Window>();
-    private static final String defName = " -- Type Name --";
-    private static final String defNotes = " -- Type Notes --";
-    private static final String defPattern = " -- Type Pattern --";
-    private static final String defGloss = " -- Type Gloss --";
+    private final List<Window> childFrames = new ArrayList<>();
+    private final String defName = " -- Part of Speech Name --";
+    private final String defNotes = " -- Part of Speech Notes --";
+    private final String defPattern = " -- Part of Speech Pattern --";
+    private final String defGloss = " -- Part of Speech Gloss --";
     private TypeNode selectionAtClosing = null;
     private boolean updatingName = false;
 
@@ -59,6 +58,12 @@ public class ScrTypes extends PDialog {
         populateProperties();
         setupListeners();
         setModal(true);
+    }
+    
+    // To avoid BP error
+    @Override
+    public final void setModal(boolean _modal) {
+        super.setModal(_modal);
     }
 
     @Override
@@ -384,6 +389,7 @@ public class ScrTypes extends PDialog {
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jPanel1.setMinimumSize(new java.awt.Dimension(10, 10));
 
+        txtName.setToolTipText("Part of speech name");
         txtName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtNameFocusGained(evt);
@@ -396,6 +402,7 @@ public class ScrTypes extends PDialog {
         txtNotes.setColumns(20);
         txtNotes.setLineWrap(true);
         txtNotes.setRows(5);
+        txtNotes.setToolTipText("Notes on part of speech");
         txtNotes.setWrapStyleWord(true);
         txtNotes.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -407,6 +414,7 @@ public class ScrTypes extends PDialog {
         });
         jScrollPane2.setViewportView(txtNotes);
 
+        txtTypePattern.setToolTipText("Regex pattern to enforce on part of speech");
         txtTypePattern.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtTypePatternFocusGained(evt);
@@ -417,6 +425,7 @@ public class ScrTypes extends PDialog {
         });
 
         btnSetup.setText("Conjugations/Declensions Setup");
+        btnSetup.setToolTipText("Create declension and conjugation dimensins here.");
         btnSetup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSetupActionPerformed(evt);
@@ -424,6 +433,7 @@ public class ScrTypes extends PDialog {
         });
 
         btnAutogen.setText("Conjugations/Declensions Autogeneration");
+        btnAutogen.setToolTipText("Setup rules to automatically generate conjugations and declensions for words of this type here.");
         btnAutogen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAutogenActionPerformed(evt);
@@ -436,10 +446,13 @@ public class ScrTypes extends PDialog {
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         chkDefMand.setText("Definition Mandatory");
+        chkDefMand.setToolTipText("Select to enforce definition text for this par of speech.");
 
         chkProcMand.setText("Pronunciation Mandatory");
+        chkProcMand.setToolTipText("Select to enforce pronunciation text for this par of speech.");
 
         chkGendMand.setText("Gender Mandatory");
+        chkGendMand.setToolTipText("Select to enforce gender selection for this par of speech.");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -465,6 +478,7 @@ public class ScrTypes extends PDialog {
                 .addContainerGap())
         );
 
+        txtGloss.setToolTipText("Part of speech's gloss");
         txtGloss.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtGlossFocusGained(evt);
@@ -516,6 +530,7 @@ public class ScrTypes extends PDialog {
 
         jSplitPane1.setRightComponent(jPanel1);
 
+        lstTypes.setToolTipText("Parts of Speech");
         lstTypes.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstTypesValueChanged(evt);

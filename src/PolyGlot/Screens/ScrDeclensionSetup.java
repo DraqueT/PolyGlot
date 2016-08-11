@@ -55,8 +55,8 @@ import javax.swing.table.TableColumn;
  * @author draque
  */
 public final class ScrDeclensionSetup extends PDialog {
-    private Map scrToCoreDeclensions = new HashMap<Integer, Integer>();
-    private Map scrDeclensionMap = new HashMap<String, Integer>();
+    private Map scrToCoreDeclensions = new HashMap<>();
+    private Map scrDeclensionMap = new HashMap<>();
     private TypeNode myType;
     private boolean curPopulating = false;
     private final DefaultListModel declListModel;
@@ -75,7 +75,7 @@ public final class ScrDeclensionSetup extends PDialog {
             myType = _core.getTypes().getNodeById(_typeId);
             this.setTitle("Declensions/Conjugations for type: " + myType.getValue());
         } catch (Exception e) {
-            InfoBox.error("Type Error", "Type not found, unable to open declensions for type with id: " + _typeId + " " + e.getMessage(), this);
+            InfoBox.error("Part of Speech Error", "Part of Speech not found, unable to open declensions for type with id: " + _typeId + " " + e.getMessage(), this);
             this.dispose();
         }
 
@@ -87,6 +87,16 @@ public final class ScrDeclensionSetup extends PDialog {
         setupListeners();
 
         setupDimTable();
+    }
+    
+    @Override
+    public void setModal(boolean _modal) {
+        super.setModal(_modal);
+    }
+    
+    @Override
+    public final void setTitle(String _title) {
+        super.setTitle(_title);
     }
     
     @Override
@@ -903,8 +913,8 @@ public final class ScrDeclensionSetup extends PDialog {
         DeclensionNode curdec;
 
         // relevant objects should be rebuilt
-        scrDeclensionMap = new HashMap<String, Integer>();
-        scrToCoreDeclensions = new HashMap<Integer, Integer>();
+        scrDeclensionMap = new HashMap<>();
+        scrToCoreDeclensions = new HashMap<>();
 
         declListModel.clear();
 

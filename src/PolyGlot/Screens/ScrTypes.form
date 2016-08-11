@@ -106,6 +106,9 @@
           </Layout>
           <SubComponents>
             <Component class="javax.swing.JTextField" name="txtName">
+              <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="Part of speech name"/>
+              </Properties>
               <Events>
                 <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNameFocusGained"/>
                 <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNameFocusLost"/>
@@ -123,6 +126,7 @@
                     <Property name="columns" type="int" value="20"/>
                     <Property name="lineWrap" type="boolean" value="true"/>
                     <Property name="rows" type="int" value="5"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Notes on part of speech"/>
                     <Property name="wrapStyleWord" type="boolean" value="true"/>
                   </Properties>
                   <Events>
@@ -133,6 +137,9 @@
               </SubComponents>
             </Container>
             <Component class="javax.swing.JTextField" name="txtTypePattern">
+              <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="Regex pattern to enforce on part of speech"/>
+              </Properties>
               <Events>
                 <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtTypePatternFocusGained"/>
                 <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtTypePatternFocusLost"/>
@@ -144,6 +151,7 @@
             <Component class="javax.swing.JButton" name="btnSetup">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Conjugations/Declensions Setup"/>
+                <Property name="toolTipText" type="java.lang.String" value="Create declension and conjugation dimensins here."/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSetupActionPerformed"/>
@@ -152,6 +160,7 @@
             <Component class="javax.swing.JButton" name="btnAutogen">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Conjugations/Declensions Autogeneration"/>
+                <Property name="toolTipText" type="java.lang.String" value="Setup rules to automatically generate conjugations and declensions for words of this type here."/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAutogenActionPerformed"/>
@@ -206,21 +215,27 @@
                 <Component class="javax.swing.JCheckBox" name="chkDefMand">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Definition Mandatory"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to enforce definition text for this par of speech."/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="chkProcMand">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Pronunciation Mandatory"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to enforce pronunciation text for this par of speech."/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="chkGendMand">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Gender Mandatory"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to enforce gender selection for this par of speech."/>
                   </Properties>
                 </Component>
               </SubComponents>
             </Container>
             <Component class="javax.swing.JTextField" name="txtGloss">
+              <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="Part of speech&apos;s gloss"/>
+              </Properties>
               <Events>
                 <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtGlossFocusGained"/>
                 <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtGlossFocusLost"/>
@@ -272,6 +287,7 @@
                     <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
                       <StringArray count="0"/>
                     </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="Parts of Speech"/>
                   </Properties>
                   <Events>
                     <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstTypesValueChanged"/>

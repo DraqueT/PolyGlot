@@ -48,14 +48,14 @@ import javax.swing.SwingUtilities;
  */
 public class ScrDeclensions extends PDialog {
 
-    private final Map<String, JTextField> fieldMap = new HashMap<String, JTextField>();
-    private final Map<String, String> labelMap = new HashMap<String, String>();
+    private final Map<String, JTextField> fieldMap = new HashMap<>();
+    private final Map<String, String> labelMap = new HashMap<>();
     private ConWord word;
     private Integer typeId;
     private Font conFont;
     private Integer numFields = 0;
     private Integer textHeight = 0;
-    private Map<String, DeclensionNode> allWordDeclensions = new HashMap<String, DeclensionNode>();
+    private Map<String, DeclensionNode> allWordDeclensions = new HashMap<>();
     private JTextField firstField;
     private final Integer MAXLABELWIDTH = 300;
 
@@ -65,6 +65,21 @@ public class ScrDeclensions extends PDialog {
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(true);
+    }
+    
+    @Override
+    public final void setModal(boolean _modal) {
+        super.setModal(_modal);
+    }
+    
+    @Override 
+    public final void setDefaultCloseOperation(int _operation) {
+        super.setDefaultCloseOperation(_operation);
+    }
+    
+    @Override 
+    public final void setupKeyStrokes() {
+        super.setupKeyStrokes();
     }
 
     @Override
@@ -203,13 +218,13 @@ public class ScrDeclensions extends PDialog {
     public void setVisible(boolean visible) {
 
         if (typeId == -1) {
-            InfoBox.info("Missing Type", "Word must have a type set, and declensions defined before using this feature.", this);
+            InfoBox.info("Missing Part of Speech", "Word must have a part of Speech set, and declensions defined before using this feature.", this);
             this.dispose();
         } else if ((core.getDeclensionManager().getDeclensionListTemplate(typeId) == null
                     || core.getDeclensionManager().getDeclensionListTemplate(typeId).isEmpty())
                 && core.getDeclensionManager().getDeclensionListWord(word.getId()).isEmpty()) {
-            InfoBox.info("Declensions", "No declensions for type: " + word.getWordType()
-                    + " set. Declensions can be created per type under the Types tab by clicking the Declensions button.", this);
+            InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordType()
+                    + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the Declensions button.", this);
 
             this.dispose();
         } else {
