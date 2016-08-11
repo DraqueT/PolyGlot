@@ -97,8 +97,8 @@ public class LogoCollection extends DictionaryCollection {
     }
     
     public LogoCollection(DictCore _core) {
-        wordToLogo = new HashMap<Integer, ArrayList<Integer>>();
-        logoToWord = new HashMap<Integer, ArrayList<Integer>>();
+        wordToLogo = new HashMap<>();
+        logoToWord = new HashMap<>();
         bufferNode = new LogoNode();
         
         core = _core;
@@ -109,7 +109,7 @@ public class LogoCollection extends DictionaryCollection {
      * @return list of all logographs
      */
     public List<LogoNode> getAllLogos() {
-        List<LogoNode> retList = new ArrayList<LogoNode>(nodeMap.values());
+        List<LogoNode> retList = new ArrayList<>(nodeMap.values());
 
         Collections.sort(retList);
 
@@ -130,7 +130,7 @@ public class LogoCollection extends DictionaryCollection {
             String radical, 
             int strokes, 
             String notes) {
-        List<LogoNode> retList = new ArrayList<LogoNode>();
+        List<LogoNode> retList = new ArrayList<>();
         Iterator<LogoNode> it = getAllLogos().iterator();
         boolean ignoreCase = core.getPropertiesManager().isIgnoreCase();
         
@@ -191,7 +191,7 @@ public class LogoCollection extends DictionaryCollection {
      * @return list of related logographs
      */
     public List<LogoNode> getWordLogos(ConWord conWord) {
-        List<LogoNode> retList = new ArrayList<LogoNode>();
+        List<LogoNode> retList = new ArrayList<>();
         List<Integer> initialList = wordToLogo.get(conWord.getId());
         Iterator<Integer> it = null;
         
@@ -213,7 +213,7 @@ public class LogoCollection extends DictionaryCollection {
      * @return list of related words
      */
     public List<ConWord> getLogoWords(LogoNode logoNode) {
-        List<ConWord> retList = new ArrayList<ConWord>();
+        List<ConWord> retList = new ArrayList<>();
         List<Integer>initialList = logoToWord.get(logoNode.getId());
         Iterator<Integer> it = null;
         
@@ -237,8 +237,8 @@ public class LogoCollection extends DictionaryCollection {
      * @return 
      */
     public List<LogoNode> getRadicals() {
-        List<LogoNode> retList = new ArrayList<LogoNode>();
-        Iterator<LogoNode> it = new ArrayList<LogoNode>(nodeMap.values()).iterator();
+        List<LogoNode> retList = new ArrayList<>();
+        Iterator<LogoNode> it = new ArrayList<>(nodeMap.values()).iterator();
 
         while (it.hasNext()) {
             LogoNode curNode = it.next();
@@ -385,7 +385,7 @@ public class LogoCollection extends DictionaryCollection {
      * @throws java.lang.Exception if problems with loading any radical relations
      */
     public void loadRadicalRelations() throws Exception {
-        Iterator<LogoNode> it = new ArrayList<LogoNode>(nodeMap.values()).iterator();
+        Iterator<LogoNode> it = new ArrayList<>(nodeMap.values()).iterator();
         String loadLog = "";
         while (it.hasNext()) {
             try {

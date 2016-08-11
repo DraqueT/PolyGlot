@@ -67,29 +67,6 @@ import org.w3c.dom.Document;
  * @author draque
  */
 public class IOHandler {
-
-    /**
-     * Gets the dictionary File from the filename of the pgd, whether it's raw
-     * XML or an archive
-     *
-     * @param _filename the filename of the actual file
-     * @return the File object of the dictionary
-     * @throws java.io.IOException
-     */
-    public static InputStream getDictFile(String _filename) throws IOException {
-        InputStream rawFile = new FileInputStream(_filename);
-
-        if (isFileZipArchive(_filename)) {
-            ZipFile zipFile = new ZipFile(_filename);
-
-            ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.dictFileName);
-
-            return zipFile.getInputStream(xmlEntry);
-        }
-
-        return rawFile;
-    }
-
     /**
      * Opens and returns image from URL given (can be file path)
      *
@@ -135,34 +112,38 @@ public class IOHandler {
      */
     public static void setFontFrom(String _path, DictCore core) throws IOException, FontFormatException {
         if (isFileZipArchive(_path)) {
-            ZipFile zipFile = new ZipFile(_path);
+            try (ZipFile zipFile = new ZipFile(_path)) {
+                ZipEntry fontEntry = zipFile.getEntry(PGTUtil.fontFileName);
 
-            ZipEntry fontEntry = zipFile.getEntry(PGTUtil.fontFileName);
+                if (fontEntry != null) {
+                    final File tempFile = File.createTempFile("stream2file", ".tmp");
+                    tempFile.deleteOnExit();
 
-            if (fontEntry != null) {
-                final File tempFile = File.createTempFile("stream2file", ".tmp");
-                tempFile.deleteOnExit();
+                    try (FileOutputStream out = new FileOutputStream(tempFile)) {
+                        try (InputStream inputStream = zipFile.getInputStream(fontEntry)) {
+                            IOUtils.copy(inputStream, out);
+                        }
 
-                FileOutputStream out = new FileOutputStream(tempFile);
-                IOUtils.copy(zipFile.getInputStream(fontEntry), out);
+                        try {
+                            Font conFont = Font.createFont(Font.TRUETYPE_FONT, tempFile);
 
-                try {
-                    Font conFont = Font.createFont(Font.TRUETYPE_FONT, tempFile);
+                            if (conFont == null) {
+                                return;
+                            }
 
-                    if (conFont == null) {
-                        return;
+                            byte[] cachedFont;
+                            try (InputStream inputStream = new FileInputStream(tempFile)) {
+                                cachedFont = IOUtils.toByteArray(inputStream);
+                            }
+                            core.getPropertiesManager().setFontCon(conFont);
+                            core.getPropertiesManager().setCachedFont(cachedFont);
+                        } catch (FontFormatException e) {
+                            throw new FontFormatException("Could not load language font. Possible incompatible font: " + e.getMessage());
+                        } catch (IOException e) {
+                            throw new IOException("Could not load language font. I/O exception: " + e.getMessage());
+                        }
                     }
-
-                    byte[] cachedFont = IOUtils.toByteArray(new FileInputStream(tempFile));
-                    core.getPropertiesManager().setFontCon(conFont);
-                    core.getPropertiesManager().setCachedFont(cachedFont);
-                } catch (FontFormatException e) {
-                    throw new FontFormatException("Could not load language font. Possible incompatible font: " + e.getMessage());
-                } catch (IOException e) {
-                    throw new IOException("Could not load language font. I/O exception: " + e.getMessage());
                 }
-
-                zipFile.close();
             }
         }
     }
@@ -184,8 +165,12 @@ public class IOHandler {
         }
 
         int test;
-        try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
-            test = in.readInt();
+        try (FileInputStream fileStream = new FileInputStream(file)) {
+            try (BufferedInputStream buffer = new BufferedInputStream(fileStream)) {
+                try (DataInputStream in = new DataInputStream(buffer)) {
+                    test = in.readInt();
+                }
+            }
         }
         return test == 0x504b0304;
     }
@@ -197,152 +182,147 @@ public class IOHandler {
         TransformerFactory transformerFactory = TransformerFactory
                 .newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        StringWriter writer = new StringWriter();
-        transformer.transform(new DOMSource(doc), new StreamResult(writer));
+        try (StringWriter writer = new StringWriter()) {
+            transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
-        StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-        sb.append(writer.getBuffer().toString());
+            sb.append(writer.getBuffer().toString());
 
-        // save file to temp location initially.
-        final File f = File.createTempFile(_fileName, null);
-        final ZipOutputStream out;
+            // save file to temp location initially.
+            final File f = File.createTempFile(_fileName, null);
+            try (FileOutputStream fileOutputStream = new FileOutputStream(f)) {
+                try (ZipOutputStream out = new ZipOutputStream(fileOutputStream, Charset.forName("ISO-8859-1"))) {
 
-        if (System.getProperty("java.version").startsWith("1.6")) {
-            out = new ZipOutputStream(new FileOutputStream(f));
-        } else {
-            out = new ZipOutputStream(new FileOutputStream(f), Charset.forName("ISO-8859-1"));
-        }
+                    ZipEntry e = new ZipEntry(PGTUtil.dictFileName);
+                    out.putNextEntry(e);
 
-        ZipEntry e = new ZipEntry(PGTUtil.dictFileName);
-        out.putNextEntry(e);
+                    byte[] data = sb.toString().getBytes("UTF-8");
+                    out.write(data, 0, data.length);
 
-        byte[] data = sb.toString().getBytes("UTF-8");
-        out.write(data, 0, data.length);
+                    out.closeEntry();
 
-        out.closeEntry();
+                    byte[] cachedFont = core.getPropertiesManager().getCachedFont();
 
-        byte[] cachedFont = core.getPropertiesManager().getCachedFont();
-
-        // only search for font if the cached font is null
-        if (cachedFont == null) {
-            // embed font in PGD archive if applicable
-            File fontFile = null;
-            try {
-                fontFile = IOHandler.getFontFile(core.getPropertiesManager().getFontCon());
-            } catch (Exception ex) {
-                writeLog += "\nerror: " + ex.getLocalizedMessage();
-            }
-
-            if (fontFile != null) {
-                try {
-                    core.getPropertiesManager().setCachedFont(IOUtils.toByteArray(new FileInputStream(fontFile)));
-                    byte[] buffer = new byte[1024];
-                    try (FileInputStream fis = new FileInputStream(fontFile)) {
-                        out.putNextEntry(new ZipEntry(PGTUtil.fontFileName));
-                        int length;
-                        
-                        while ((length = fis.read(buffer)) > 0) {
-                            out.write(buffer, 0, length);
+                    // only search for font if the cached font is null
+                    if (cachedFont == null) {
+                        // embed font in PGD archive if applicable
+                        File fontFile = null;
+                        try {
+                            fontFile = IOHandler.getFontFile(core.getPropertiesManager().getFontCon());
+                        } catch (Exception ex) {
+                            writeLog += "\nerror: " + ex.getLocalizedMessage();
                         }
-                        
-                        out.closeEntry();
+
+                        if (fontFile != null) {
+                            try {
+                                try (FileInputStream fontInputStream = new FileInputStream(fontFile)) {
+                                    core.getPropertiesManager().setCachedFont(IOUtils.toByteArray(fontInputStream));
+                                }
+                                byte[] buffer = new byte[1024];
+                                try (FileInputStream fis = new FileInputStream(fontFile)) {
+                                    out.putNextEntry(new ZipEntry(PGTUtil.fontFileName));
+                                    int length;
+
+                                    while ((length = fis.read(buffer)) > 0) {
+                                        out.write(buffer, 0, length);
+                                    }
+
+                                    out.closeEntry();
+                                }
+                            } catch (FileNotFoundException ex) {
+                                writeLog += "\nUnable to write font to archive: " + ex.getMessage();
+                            } catch (IOException ex) {
+                                writeLog += "\nUnable to write font to archive: " + ex.getMessage();
+                            }
+                        }
+                    } else {
+                        try {
+                            out.putNextEntry(new ZipEntry(PGTUtil.fontFileName));
+                            out.write(cachedFont);
+                            out.closeEntry();
+                        } catch (IOException ex) {
+                            writeLog += "\nUnable to write font to archive: " + ex.getMessage();
+                        }
                     }
-                } catch (FileNotFoundException ex) {
-                    writeLog += "\nUnable to write font to archive: " + ex.getMessage();
-                } catch (IOException ex) {
-                    writeLog += "\nUnable to write font to archive: " + ex.getMessage();
+
+                    // write all logograph images to file
+                    Iterator<LogoNode> it = core.getLogoCollection().getAllLogos().iterator();
+                    if (it.hasNext()) {
+                        try {
+                            out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath));
+
+                            while (it.hasNext()) {
+                                try {
+                                    LogoNode curNode = it.next();
+                                    out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath
+                                            + curNode.getId().toString() + ".png"));
+
+                                    ImageIO.write(curNode.getLogoGraph(), "png", out);
+
+                                    out.closeEntry();
+                                } catch (IOException ex) {
+                                    writeLog += "\nUnable to save image: " + ex.getLocalizedMessage();
+                                }
+                            }
+                        } catch (IOException ex) {
+                            writeLog += "\nUnable to save images: " + ex.getLocalizedMessage();
+                        }
+                    }
+
+                    // write all grammar wav recordings to file
+                    Map<Integer, byte[]> grammarSoundMap = core.getGrammarManager().getSoundMap();
+                    Iterator<Entry<Integer, byte[]>> gramSoundIt = grammarSoundMap.entrySet().iterator();
+                    if (gramSoundIt.hasNext()) {
+                        try {
+                            out.putNextEntry(new ZipEntry(PGTUtil.grammarSoundSavePath));
+
+                            while (gramSoundIt.hasNext()) {
+                                Entry<Integer, byte[]> curEntry = gramSoundIt.next();
+                                Integer curId = curEntry.getKey();
+                                byte[] curSound = curEntry.getValue();
+
+                                try {
+                                    out.putNextEntry(new ZipEntry(PGTUtil.grammarSoundSavePath
+                                            + curId.toString() + ".raw"));
+                                    out.write(curSound);
+                                    out.closeEntry();
+                                } catch (IOException ex) {
+                                    writeLog += "\nUnable to save sound: " + ex.getLocalizedMessage();
+                                }
+
+                            }
+                        } catch (IOException ex) {
+                            writeLog += "\nUnable to save sounds: " + ex.getLocalizedMessage();
+                        }
+                    }
+
+                    out.finish();
+                    out.close();
                 }
             }
-        } else {
+
+            // attempt to open file in dummy core. On success, copy file to end
+            // destination, on fail, delete file, and inform user by bubbling error
             try {
-                out.putNextEntry(new ZipEntry(PGTUtil.fontFileName));
-                out.write(cachedFont);
-                out.closeEntry();
-            } catch (IOException ex) {
-                writeLog += "\nUnable to write font to archive: " + ex.getMessage();
-            }
-        }
+                DictCore test = new DictCore();
+                test.readFile(f.getAbsolutePath());
 
-        // write all logograph images to file
-        Iterator<LogoNode> it = core.getLogoCollection().getAllLogos().iterator();
-        if (it.hasNext()) {
+            } catch (Exception ex) {
+                throw new IOException(ex);
+            }
+
             try {
-                out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath));
-
-                while (it.hasNext()) {
-                    try {
-                        LogoNode curNode = it.next();
-                        out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath
-                                + curNode.getId().toString() + ".png"));
-
-                        ImageIO.write(curNode.getLogoGraph(), "png", out);
-
-                        out.closeEntry();
-                    } catch (IOException ex) {
-                        writeLog += "\nUnable to save image: " + ex.getLocalizedMessage();
-                    }
+                if (finalFile.canWrite()) {
+                    java.nio.file.Files.copy(f.toPath(), finalFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                } else {
+                    throw new IOException("Unable to write to file: " + finalFile.toPath());
                 }
             } catch (IOException ex) {
-                writeLog += "\nUnable to save images: " + ex.getLocalizedMessage();
+                throw new IOException("Unable to save file: " + ex.getMessage());
             }
         }
 
-        // write all grammar wav recordings to file
-        Map<Integer, byte[]> grammarSoundMap = core.getGrammarManager().getSoundMap();
-        Iterator<Entry<Integer, byte[]>> gramSoundIt = grammarSoundMap.entrySet().iterator();
-        if (gramSoundIt.hasNext()) {
-            try {            
-                out.putNextEntry(new ZipEntry(PGTUtil.grammarSoundSavePath));
-
-                while (gramSoundIt.hasNext()) {
-                    Entry<Integer, byte[]> curEntry = gramSoundIt.next();
-                    Integer curId = curEntry.getKey();
-                    byte[] curSound = curEntry.getValue();
-
-                    try {
-                        out.putNextEntry(new ZipEntry(PGTUtil.grammarSoundSavePath
-                                + curId.toString() + ".raw"));
-                        out.write(curSound);
-                        out.closeEntry();
-                    } catch (IOException ex) {
-                        writeLog += "\nUnable to save sound: " + ex.getLocalizedMessage();
-                    }
-
-                }
-            } catch (IOException ex) {
-                writeLog += "\nUnable to save sounds: " + ex.getLocalizedMessage();
-            }
-        }
-
-        out.finish();
-        out.close();
-
-        // attempt to open file in dummy core. On success, copy file to end
-        // destination, on fail, delete file, and inform user by bubbling error
-        try {
-            DictCore test = new DictCore();
-            test.readFile(f.getAbsolutePath());
-
-        } catch (Exception ex) {
-            throw new IOException(ex);
-        }
-
-        try {
-            if (System.getProperty("java.version").startsWith("1.6")) {
-                if (finalFile.exists()) {
-                    finalFile.delete();
-                }
-                FileUtils.copyFile(f, finalFile);
-            } else {
-                java.nio.file.Files.copy(f.toPath(), finalFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            }
-            //f.delete();
-        } catch (IOException ex) {
-            //f.delete();
-            throw new IOException("Unable to save file: " + ex.getMessage());
-        }
-        
         if (!writeLog.equals("")) {
             throw new IOException("Problems saving file " + _fileName + writeLog);
         }
@@ -479,8 +459,11 @@ public class IOHandler {
                 LogoNode curNode = it.next();
                 ZipEntry imgEntry = zipFile.getEntry(PGTUtil.logoGraphSavePath
                         + curNode.getId().toString() + ".png");
-                
-                BufferedImage img = ImageIO.read(zipFile.getInputStream(imgEntry));
+
+                BufferedImage img;
+                try (InputStream imageStream = zipFile.getInputStream(imgEntry)) {
+                    img = ImageIO.read(imageStream);
+                }
                 curNode.setLogoGraph(img);
             }
         }
@@ -494,24 +477,26 @@ public class IOHandler {
      * @throws IOException
      */
     public static void exportFont(String exportPath, String dictionaryPath) throws IOException {
-        ZipFile zipFile = new ZipFile(dictionaryPath);
+        try (ZipFile zipFile = new ZipFile(dictionaryPath)) {
+            if (zipFile == null) {
+                throw new IOException("Dictionary must be saved before font can be exported.");
+            }
 
-        if (zipFile == null) {
-            throw new IOException("Dictionary must be saved before font can be exported.");
-        }
+            // ensure export file has the proper extension
+            if (!exportPath.toLowerCase().endsWith(".ttf")) {
+                exportPath += ".ttf";
+            }
 
-        // ensure export file has the proper extension
-        if (!exportPath.toLowerCase().endsWith(".ttf")) {
-            exportPath += ".ttf";
-        }
+            ZipEntry fontEntry = zipFile.getEntry(PGTUtil.fontFileName);
 
-        ZipEntry fontEntry = zipFile.getEntry(PGTUtil.fontFileName);
-
-        if (fontEntry != null) {
-            Path path = Paths.get(exportPath);
-            Files.copy(zipFile.getInputStream(fontEntry), path, StandardCopyOption.REPLACE_EXISTING);
-        } else {
-            throw new IOException("Custom font not found in PGD dictionary file.");
+            if (fontEntry != null) {
+                Path path = Paths.get(exportPath);
+                try (InputStream copyStream = zipFile.getInputStream(fontEntry)) {
+                    Files.copy(copyStream, path, StandardCopyOption.REPLACE_EXISTING);
+                }
+            } else {
+                throw new IOException("Custom font not found in PGD dictionary file.");
+            }
         }
     }
 
@@ -524,56 +509,44 @@ public class IOHandler {
      * @throws Exception on sound load errors
      */
     static void loadGrammarSounds(String fileName, GrammarManager grammarManager) throws Exception {
-        ZipFile zipFile = null;
         String loadLog = "";
 
-        try {
-            if (!isFileZipArchive(fileName)) {
-                return;
-            }
+        try (ZipFile zipFile = new ZipFile(fileName)) {
+            Iterator<GrammarChapNode> chapIt = grammarManager.getChapters().iterator();
 
-            zipFile = new ZipFile(fileName);
-        } catch (Exception e) {
-            // Do nothing: if the file were missing, it would have blown up earlier
-            if (zipFile == null) {
-                return;
-            }
-        }
+            while (chapIt.hasNext()) {
+                GrammarChapNode curChap = chapIt.next();
 
-        Iterator<GrammarChapNode> chapIt = grammarManager.getChapters().iterator();
+                for (int i = 0; i < curChap.getChildCount(); i++) {
+                    GrammarSectionNode curNode = (GrammarSectionNode) curChap.getChildAt(i);
 
-        while (chapIt.hasNext()) {
-            GrammarChapNode curChap = chapIt.next();
+                    if (curNode.getRecordingId() == -1) {
+                        continue;
+                    }
 
-            for (int i = 0; i < curChap.getChildCount(); i++) {
-                GrammarSectionNode curNode = (GrammarSectionNode) curChap.getChildAt(i);
+                    String soundPath = PGTUtil.grammarSoundSavePath
+                            + curNode.getRecordingId().toString() + ".raw";
+                    ZipEntry soundEntry = zipFile.getEntry(soundPath);
 
-                if (curNode.getRecordingId() == -1) {
-                    continue;
+                    byte[] sound = null;
+
+                    try (InputStream soundStream = zipFile.getInputStream(soundEntry)) {
+                        sound = IOUtils.toByteArray(soundStream);
+                    } catch (IOException e) {
+                        loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
+                    } catch (Exception e) {
+                        loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
+                    }
+
+                    if (sound == null) {
+                        continue;
+                    }
+
+                    grammarManager.addChangeRecording(curNode.getRecordingId(), sound);
                 }
-
-                String soundPath = PGTUtil.grammarSoundSavePath
-                        + curNode.getRecordingId().toString() + ".raw";
-                ZipEntry soundEntry = zipFile.getEntry(soundPath);
-
-                byte[] sound = null;
-
-                try {
-                    sound = IOUtils.toByteArray(zipFile.getInputStream(soundEntry));
-                } catch (IOException e) {
-                    loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
-                } catch (Exception e) {
-                    loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
-                }
-
-                if (sound == null) {
-                    continue;
-                }
-
-                grammarManager.addChangeRecording(curNode.getRecordingId(), sound);
             }
         }
-        
+
         if (!loadLog.equals("")) {
             throw new Exception(loadLog);
         }
@@ -589,26 +562,29 @@ public class IOHandler {
      * @throws java.io.IOException if unable to load font
      */
     public Font getLcdFont() throws FontFormatException, IOException {
-        InputStream tmp = this.getClass().getResourceAsStream(PGTUtil.LCDFontLocation);
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        Font ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
+        try (InputStream tmp = this.getClass().getResourceAsStream(PGTUtil.LCDFontLocation)) {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            Font ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
 
-        if (ret != null) {
-            ge.registerFont(ret);
+            if (ret != null) {
+                ge.registerFont(ret);
+            }
+
+            return ret;
         }
-
-        return ret;
     }
-    
-    //byte[] cachedFont = IOUtils.toByteArray(new FileInputStream(tempFile));
-    
+
     /**
      * Gets Unicode compatible font as byte array
+     *
      * @return byte array of font's file
-     * @throws FileNotFoundException if this throws, something is wrong internally
+     * @throws FileNotFoundException if this throws, something is wrong
+     * internally
      * @throws IOException if this throws, something is wrong internally
      */
     public byte[] getUnicodeFontByteArray() throws FileNotFoundException, IOException {
-        return IOUtils.toByteArray(this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation));
+        try (InputStream localStream = this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation)) {
+            return IOUtils.toByteArray(localStream);
+        }
     }
 }

@@ -20,6 +20,7 @@
 package PolyGlot;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,7 +38,9 @@ import org.xml.sax.InputSource;
 public class WebInterface {
 
     /**
-     * Checks for updates to PolyGlot     *
+     * Checks for updates to PolyGlot
+     *
+     *
      * @param curVersion current version from core
      * @return The XML document retrieved from the web
      * @throws java.lang.Exception if something goes wrong along the way.
@@ -49,10 +52,13 @@ public class WebInterface {
 
         try {
             url = new URL("https://dl.dropboxusercontent.com/u/2750499/PolyGlot/update.xml");
-            Scanner s = new Scanner(url.openStream());
 
-            while (s.hasNext()) {
-                xmlText += s.nextLine();
+            try (InputStream is = url.openStream()) {
+                Scanner s = new Scanner(is);
+
+                while (s.hasNext()) {
+                    xmlText += s.nextLine();
+                }
             }
         } catch (MalformedURLException e) {
             throw new MalformedURLException("Server unavailable or not found.");
@@ -65,7 +71,7 @@ public class WebInterface {
             DocumentBuilder builder = factory.newDocumentBuilder();
             InputSource is = new InputSource(new StringReader(xmlText));
             Document doc = builder.parse(is);
-            
+
             ret = doc;
         }
 
