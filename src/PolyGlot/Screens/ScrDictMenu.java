@@ -401,6 +401,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         final CountDownLatch latch = new CountDownLatch(1);
         boolean ret;
 
+        cleanSave = false;
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         final SwingWorker worker = new SwingWorker() {
             //Runs on the event-dispatching thread.
@@ -408,6 +409,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             protected Object doInBackground() throws Exception {
                 try {
                     core.writeFile(_fileName);
+                    cleanSave = true;
                 } catch (IOException | ParserConfigurationException |
                         TransformerException e) {
                     parent.setCleanSave(false);
