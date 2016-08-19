@@ -21,6 +21,10 @@ package PolyGlot;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -108,6 +112,108 @@ public class FormattedTextHelper {
                 }
             }
         }
+    }
+    
+    /**
+     * Returns list of strings representing a chapter section. The paired boolean
+     * is set to true if the segment of text is in the conlang's font
+     * @param savedVal section of text to analyze and return
+     * @param core
+     * @return ordered list of text
+     */
+    public static List<Entry<String, PFontInfo>> getSectionTextFontSpecifec(String savedVal, DictCore core) {
+        String remaining = savedVal;
+        String font = "";
+        List<Entry<String, PFontInfo>> ret = new ArrayList();
+        PFontInfo conFont = new PFontInfo();
+                
+        while (!remaining.isEmpty()) {
+            String nextNode = getNextNode(remaining);
+            conFont.awtFont = core.getPropertiesManager().getFontCon();
+            
+            remaining = remaining.substring(nextNode.length(), remaining.length());
+            
+            if (nextNode.startsWith("<font")) {                
+                font = extractFamily(nextNode);
+                conFont.size = extractSize(nextNode);
+                conFont.awtColor = extractColor(nextNode);
+            } else if (nextNode.startsWith("</font")) {
+                // do nothing. All font changes are prefixed with<font
+            } else {
+                if (font.equals(conFont.awtFont.getFamily()) && core.getPropertiesManager().isEnforceRTL()) {
+                    nextNode = "\u202e" + nextNode;
+                } else if (core.getPropertiesManager().isEnforceRTL()) {
+                    nextNode = "\u202c" + nextNode;
+                }
+                
+                if (!nextNode.equals("")){
+                    conFont.awtFont = font.equals(core.getPropertiesManager().getFontCon().getFamily()) ? 
+                            core.getPropertiesManager().getFontCon() : new JLabel().getFont();
+                    ret.add(new SecEntry(nextNode, conFont));
+                    conFont = new PFontInfo();
+                }
+            }
+        }
+        
+        return ret;
+    }
+    
+    public static com.itextpdf.kernel.color.Color swtColorToItextColor(Color awtc) {
+        com.itextpdf.kernel.color.Color ret = com.itextpdf.kernel.color.Color.BLACK;
+        if (awtc == Color.BLACK) {
+            ret = com.itextpdf.kernel.color.Color.BLACK;
+        } else if (awtc == Color.BLUE) {
+            ret = com.itextpdf.kernel.color.Color.BLUE;
+        } else if (awtc == Color.CYAN) {
+            ret = com.itextpdf.kernel.color.Color.CYAN;
+        }  else if (awtc == Color.DARK_GRAY) {
+            ret = com.itextpdf.kernel.color.Color.DARK_GRAY;
+        } else if (awtc == Color.GRAY) {
+            ret = com.itextpdf.kernel.color.Color.GRAY;
+        } else if (awtc == Color.GREEN) {
+            ret = com.itextpdf.kernel.color.Color.GREEN;
+        } else if (awtc == Color.LIGHT_GRAY) {
+            ret = com.itextpdf.kernel.color.Color.LIGHT_GRAY;
+        } else if (awtc == Color.MAGENTA) {
+            ret = com.itextpdf.kernel.color.Color.MAGENTA;
+        } else if (awtc == Color.ORANGE) {
+            ret = com.itextpdf.kernel.color.Color.ORANGE;
+        } else if (awtc == Color.PINK) {
+            ret = com.itextpdf.kernel.color.Color.PINK;
+        } else if (awtc == Color.RED) {
+            ret = com.itextpdf.kernel.color.Color.RED;
+        } else if (awtc == Color.WHITE) {
+            ret = com.itextpdf.kernel.color.Color.WHITE;
+        } else if (awtc == Color.YELLOW) {
+            ret = com.itextpdf.kernel.color.Color.YELLOW;
+        } else if (awtc == Color.black) {
+            ret = com.itextpdf.kernel.color.Color.BLACK;
+        } else if (awtc == Color.blue) {
+            ret = com.itextpdf.kernel.color.Color.BLUE;
+        } else if (awtc == Color.cyan) {
+            ret = com.itextpdf.kernel.color.Color.CYAN;
+        } else if (awtc == Color.darkGray) {
+            ret = com.itextpdf.kernel.color.Color.DARK_GRAY;
+        } else if (awtc == Color.gray) {
+            ret = com.itextpdf.kernel.color.Color.GRAY;
+        } else if (awtc == Color.green) {
+            ret = com.itextpdf.kernel.color.Color.GREEN;
+        } else if (awtc == Color.lightGray) {
+            ret = com.itextpdf.kernel.color.Color.LIGHT_GRAY;
+        } else if (awtc == Color.magenta) {
+            ret = com.itextpdf.kernel.color.Color.MAGENTA;
+        } else if (awtc == Color.orange) {
+            ret = com.itextpdf.kernel.color.Color.ORANGE;
+        } else if (awtc == Color.pink) {
+            ret = com.itextpdf.kernel.color.Color.PINK;
+        } else if (awtc == Color.red) {
+            ret = com.itextpdf.kernel.color.Color.RED;
+        } else if (awtc == Color.white) {
+            ret = com.itextpdf.kernel.color.Color.WHITE;
+        } else if (awtc == Color.yellow) {
+            ret = com.itextpdf.kernel.color.Color.YELLOW;
+        }
+        return ret;
     }
     
     /**
@@ -336,5 +442,27 @@ public class FormattedTextHelper {
         }
         
         return ret;
+    }
+    
+    static class SecEntry implements Entry {
+        final String key;
+        PFontInfo fontInfo;        
+        public SecEntry(String _key, PFontInfo _fontInfo) {
+            key = _key;
+            fontInfo = _fontInfo;
+        }        
+        @Override
+        public Object getKey() {
+            return key;
+        }
+        @Override
+        public Object getValue() {
+            return fontInfo;
+        }
+        @Override
+        public Object setValue(Object value) {
+            fontInfo = (PFontInfo)value;
+            return fontInfo;
+        }        
     }
 }

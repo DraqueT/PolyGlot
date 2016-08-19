@@ -77,6 +77,8 @@ public class ScrPrintToPDF extends PDialog {
         chkOrtho = new javax.swing.JCheckBox();
         chkGrammar = new javax.swing.JCheckBox();
         chkLogographs = new javax.swing.JCheckBox();
+        chkPageNum = new javax.swing.JCheckBox();
+        chkGloss = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
         txtTitle = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -85,6 +87,7 @@ public class ScrPrintToPDF extends PDialog {
         btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("PDF Print Options");
         setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
@@ -145,6 +148,12 @@ public class ScrPrintToPDF extends PDialog {
         chkLogographs.setToolTipText("Coming soon! (if anyone asks for it)");
         chkLogographs.setEnabled(false);
 
+        chkPageNum.setText("Print Page Number");
+        chkPageNum.setToolTipText("Prints page number on each page of PDF");
+
+        chkGloss.setText("Print Gloss Key");
+        chkGloss.setToolTipText("Prints a key for part of speech glosses");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -152,26 +161,32 @@ public class ScrPrintToPDF extends PDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(chkLocalCon)
                     .addComponent(chkConLocal)
-                    .addComponent(chkOrtho)
                     .addComponent(chkGrammar)
-                    .addComponent(chkLogographs))
+                    .addComponent(chkOrtho)
+                    .addComponent(chkLocalCon)
+                    .addComponent(chkLogographs)
+                    .addComponent(chkPageNum)
+                    .addComponent(chkGloss))
                 .addContainerGap(217, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(chkLocalCon)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(chkConLocal)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(10, 10, 10)
                 .addComponent(chkOrtho)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkConLocal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkLocalCon)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkGrammar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkLogographs)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkPageNum)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkGloss)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -249,8 +264,8 @@ public class ScrPrintToPDF extends PDialog {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         btnPrint.setText("Print");
@@ -274,22 +289,22 @@ public class ScrPrintToPDF extends PDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCancel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPrint)
-                .addContainerGap())
+                .addGap(9, 9, 9))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel)
                     .addComponent(btnPrint))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -339,6 +354,9 @@ public class ScrPrintToPDF extends PDialog {
         export.setPrintOrtho(chkOrtho.isSelected());
         export.setSubTitleText(txtSubtitle.getText());
         export.setTitleText(txtTitle.getText());
+        export.setPrintPageNumber(chkPageNum.isSelected());
+        export.setPrintGlossKey(chkGloss.isSelected());
+        export.setPrintGrammar(chkGrammar.isSelected());
         
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try{
@@ -346,6 +364,7 @@ public class ScrPrintToPDF extends PDialog {
             InfoBox.info("Print Success", "Sucessfully printed to " + txtSavePath.getText(), this);
             this.dispose();
         } catch (Exception e) {
+            e.printStackTrace(); // TODO: Remove obviously
             InfoBox.error("Save Error", "Unable to print to file: " + e.getMessage(), this);
         }
         setCursor(Cursor.getDefaultCursor());
@@ -418,10 +437,12 @@ public class ScrPrintToPDF extends PDialog {
     private javax.swing.JButton btnSelectImagePath;
     private javax.swing.JButton btnSelectSavePath;
     private javax.swing.JCheckBox chkConLocal;
+    private javax.swing.JCheckBox chkGloss;
     private javax.swing.JCheckBox chkGrammar;
     private javax.swing.JCheckBox chkLocalCon;
     private javax.swing.JCheckBox chkLogographs;
     private javax.swing.JCheckBox chkOrtho;
+    private javax.swing.JCheckBox chkPageNum;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
