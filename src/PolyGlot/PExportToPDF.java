@@ -68,7 +68,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-// TODO: add iText licensing to output at bottom of dictionaries
 // TODO: Move all constants to PGTUtil
 /**
  * Given a core dictionary, this class will print it to a PDF file.
@@ -288,7 +287,13 @@ public class PExportToPDF {
             fin.add(new Text("\nPolyGlot Created By Draque Thompson"));
             fin.setFontSize(20); // TODO: INT CONSTANT
             fin.setFontColor(Color.LIGHT_GRAY);
-            document.showTextAligned(fin, 297.5f, 400, document.getPdfDocument().getNumberOfPages(), TextAlignment.CENTER, VerticalAlignment.MIDDLE, 0);
+            document.showTextAligned(fin, 297.5f, 400, document.getPdfDocument()
+                    .getNumberOfPages(), TextAlignment.CENTER, VerticalAlignment.MIDDLE, 0);
+            fin = new Paragraph("iText7 used in the creation of this document. See Polyglot documentation for full license.");            
+            fin.setFontColor(Color.LIGHT_GRAY);
+            fin.setFontSize(8);
+            document.showTextAligned(fin, 297.5f, 100, document.getPdfDocument()
+                    .getNumberOfPages(), TextAlignment.CENTER, VerticalAlignment.MIDDLE, 0);
         } catch (Exception e) {
             // always close document before returning
             document.close();
