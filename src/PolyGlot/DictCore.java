@@ -359,7 +359,6 @@ public class DictCore {
             throws ParserConfigurationException, TransformerException, FileNotFoundException, IOException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-        Element wordValue;
 
         // root elements
         Document doc = docBuilder.newDocument();
@@ -367,9 +366,9 @@ public class DictCore {
         doc.appendChild(rootElement);
 
         // store version of PolyGlot
-        wordValue = doc.createElement(PGTUtil.pgVersionXID);
-        wordValue.appendChild(doc.createTextNode(version));
-        rootElement.appendChild(wordValue);
+        Element header = doc.createElement(PGTUtil.pgVersionXID);
+        header.appendChild(doc.createTextNode(version));
+        rootElement.appendChild(header);
 
         // collect XML representation of all dictionary elements
         propertiesManager.writeXML(doc, rootElement);
@@ -430,8 +429,8 @@ public class DictCore {
             ret.setValue("ConWord value cannot be blank.");
         }
 
-        if (word.getWordType().equals("") && propertiesManager.isTypesMandatory()) {
-            ret.setWordType("Types set to mandatory.");
+        if (word.getWordTypeId() == 0 && propertiesManager.isTypesMandatory()) {
+            ret.typeError = "Types set to mandatory.";
         }
 
         if (word.getLocalWord().equals("") && propertiesManager.isLocalMandatory()) {
@@ -449,20 +448,20 @@ public class DictCore {
                     + "Local words set to enforced unique: this local exists elsewhere.");
         }
 
-        ret.setWordType(ret.getWordType() + (ret.getWordType().equals("") ? "" : "\n")
-                + typeCollection.typeRequirementsMet(word));
+        ret.typeError = ret.getWordTypeDisplay() + (ret.getWordTypeId()== 0 ? "" : "\n")
+                + typeCollection.typeRequirementsMet(word);
 
+        TypeNode wordType = typeCollection.getNodeById(word.getWordTypeId());
+        
         ret.setDefinition(ret.getDefinition() + (ret.getDefinition().equals("") ? "" : "\n")
-                + declensionMgr.declensionRequirementsMet(word, typeCollection.findTypeByName(word.getWordType())));
-
-        TypeNode wordType = typeCollection.findTypeByName(word.getWordType());
-
+                + declensionMgr.declensionRequirementsMet(word, wordType));
+        
         if (wordType != null) {
             String typeRegex = wordType.getPattern();
 
             if (!typeRegex.equals("") && !word.getValue().matches(typeRegex)) {
                 ret.setDefinition(ret.getDefinition() + (ret.getDefinition().equals("") ? "" : "\n")
-                        + "Word does not match enforced pattern for type: " + word.getWordType() + ".");
+                        + "Word does not match enforced pattern for type: " + word.getWordTypeDisplay() + ".");
                 ret.setProcOverride(true);
             }
         }

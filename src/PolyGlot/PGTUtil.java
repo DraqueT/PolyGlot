@@ -34,6 +34,7 @@ public class PGTUtil {
     public static final String localWordXID = "localWord";
     public static final String conWordXID = "conWord";
     public static final String wordTypeXID = "wordType";
+    public static final String WORDTYPEID_XID = "wordTypeId";
     public static final String wordGenderXID = "wordGender";
     public static final String wordIdXID = "wordId";
     public static final String wordPlurXID = "wordPlural"; // LEGACY VALUE

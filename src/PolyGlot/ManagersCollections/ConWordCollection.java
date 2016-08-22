@@ -349,7 +349,6 @@ public class ConWordCollection extends DictionaryCollection {
         // set filter to lowercase if ignoring case
         if (core.getPropertiesManager().isIgnoreCase()) {
             _filter.setDefinition(_filter.getDefinition().toLowerCase());
-            _filter.setWordType(_filter.getWordType().toLowerCase());
             _filter.setLocalWord(_filter.getLocalWord().toLowerCase());
             _filter.setValue(_filter.getValue().toLowerCase());
             _filter.setGender(_filter.getGender().toLowerCase());
@@ -361,7 +360,7 @@ public class ConWordCollection extends DictionaryCollection {
             curWord = curEntry.getValue();
             try {
                 String definition;
-                String type;
+                int type;
                 String local;
                 String gender;
                 String proc;
@@ -369,13 +368,13 @@ public class ConWordCollection extends DictionaryCollection {
                 // if set to ignore case, set up caseless matches, normal otherwise
                 if (core.getPropertiesManager().isIgnoreCase()) {
                     definition = curWord.getDefinition().toLowerCase();
-                    type = curWord.getWordType().toLowerCase();
+                    type = curWord.getWordTypeId();
                     local = curWord.getLocalWord().toLowerCase();
                     gender = curWord.getGender().toLowerCase();
                     proc = curWord.getPronunciation().toLowerCase();
                 } else {
                     definition = curWord.getDefinition();
-                    type = curWord.getWordType();
+                    type = curWord.getWordTypeId();
                     local = curWord.getLocalWord();
                     gender = curWord.getGender();
                     proc = curWord.getPronunciation();
@@ -390,8 +389,8 @@ public class ConWordCollection extends DictionaryCollection {
                 }
 
                 // type (exact match only)
-                if (!_filter.getWordType().trim().equals("")
-                        && !type.equals(_filter.getWordType())) {
+                if (_filter.getWordTypeId() != 0
+                        && type != _filter.getWordTypeId()) {
                     continue;
                 }
 
@@ -449,7 +448,7 @@ public class ConWordCollection extends DictionaryCollection {
                 || head.startsWith(matchText)) {
             ret = true;
         }
-        TypeNode type = core.getTypes().findTypeByName(word.getWordType());
+        TypeNode type = core.getTypes().getNodeById(word.getWordTypeId());
 
         if (type != null && ! ret) {
             int typeId = type.getId();
@@ -558,7 +557,7 @@ public class ConWordCollection extends DictionaryCollection {
         Map<String, Integer> characterCombos2 = new HashMap<>();
         Integer highestCombo2 = 0;
         Map<String, Integer> characterCombos3 = new HashMap<>();
-        Map<String, Integer> typeCountByWord = new HashMap<>();
+        Map<Integer, Integer> typeCountByWord = new HashMap<>();
         Map<String, Integer> phonemeCount = new HashMap<>();
         Map<String, Integer> charCount = new HashMap<>();
         Map<String, Integer> phonemeCombo2 = new HashMap<>();
@@ -571,7 +570,7 @@ public class ConWordCollection extends DictionaryCollection {
             ConWord curWord = wordIt.next();
             final String curValue = curWord.getValue();
             final int curValueLength = curValue.length();
-            final String curType = curWord.getWordType();
+            final int curType = curWord.getWordTypeId();
 
             String beginsWith = curValue.substring(0, 1);
             String endsWith = curValue.substring(curValueLength - 1, curValueLength);
@@ -681,8 +680,8 @@ public class ConWordCollection extends DictionaryCollection {
 
         // build display of type counts
         ret += formatPlain("count of words by type:<br>");
-        for (Entry<String, Integer> curEntry : typeCountByWord.entrySet()) {
-            ret += formatPlain(curEntry.getKey() + " : " + curEntry.getValue() + "<br>");
+        for (Entry<Integer, Integer> curEntry : typeCountByWord.entrySet()) {
+            ret += formatPlain(core.getTypes().getNodeById(curEntry.getKey()).getValue() + " : " + curEntry.getValue() + "<br>");
         }
         ret += formatPlain("<br><br>");
 
@@ -821,8 +820,8 @@ public class ConWordCollection extends DictionaryCollection {
             wordValue.appendChild(doc.createTextNode(curWord.getValue()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.wordTypeXID);
-            wordValue.appendChild(doc.createTextNode(curWord.getWordType()));
+            wordValue = doc.createElement(PGTUtil.WORDTYPEID_XID);
+            wordValue.appendChild(doc.createTextNode(curWord.getWordTypeId().toString()));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.pronunciationXID);

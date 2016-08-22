@@ -313,11 +313,12 @@ public class IOHandler {
             }
 
             try {
-                if (finalFile.canWrite()) {
+                // Unreliable behavior, and does not check true OS write permissions
+                //if (finalFile.canWrite()) {
                     java.nio.file.Files.copy(f.toPath(), finalFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-                } else {
-                    throw new IOException("Unable to write to file: " + finalFile.toPath());
-                }
+                //} else {
+                    //throw new IOException("Unable to write to file: " + finalFile.toPath());
+                //}
             } catch (IOException ex) {
                 throw new IOException("Unable to save file: " + ex.getMessage());
             }

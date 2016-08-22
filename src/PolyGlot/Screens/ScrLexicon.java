@@ -96,7 +96,7 @@ public final class ScrLexicon extends PFrame {
     private final GenderNode defGenderValue = new GenderNode();
     private final String defProcValue = "-- Pronunciation --";
     private final String defDefValue = "-- Definition --";
-    private final String newTypeValue = "-- Part of Speech --";
+    private final String newTypeValue = "-- New Part of Speech --";
     private final String defLexValue = "List of Conlang Words";
     private TextField txtConSrc;
     private TextField txtLocalSrc;
@@ -115,7 +115,7 @@ public final class ScrLexicon extends PFrame {
      * @param _core Dictionary Core
      */
     public ScrLexicon(DictCore _core) {
-        defTypeValue.setValue("-- Type --");
+        defTypeValue.setValue("-- Part of Speech --");
         defGenderValue.setValue("-- Gender --");
 
         core = _core;
@@ -416,15 +416,15 @@ public final class ScrLexicon extends PFrame {
 
         String filterGend = cmbGenderSrc.getValue().equals(defGenderValue)
                 ? "" : ((GenderNode) cmbGenderSrc.getValue()).getValue();
-        String filterType = cmbTypeSrc.getValue().equals(defTypeValue)
-                ? "" : ((TypeNode) cmbTypeSrc.getValue()).getValue();
+        int filterType = cmbTypeSrc.getValue().equals(defTypeValue)
+                ? 0 : ((TypeNode) cmbTypeSrc.getValue()).getId();
 
         if (txtConSrc.getText().equals("")
                 && txtDefSrc.getText().equals("")
                 && txtLocalSrc.getText().equals("")
                 && txtProcSrc.getText().equals("")
                 && filterGend.equals("")
-                && filterType.equals("")) {
+                && filterType == 0) {
             populateLexicon();
             lstLexicon.setSelectedIndex(0);
             lstLexicon.ensureIndexIsVisible(0);
@@ -444,7 +444,7 @@ public final class ScrLexicon extends PFrame {
         filter.setValue(txtConSrc.getText().trim());
         filter.setDefinition(txtDefSrc.getText().trim());
         filter.setLocalWord(txtLocalSrc.getText().trim());
-        filter.setWordType(filterType);
+        filter.setWordTypeId(filterType);
         filter.setGender(filterGend);
         filter.setPronunciation(txtProcSrc.getText().trim());
 
@@ -538,9 +538,9 @@ public final class ScrLexicon extends PFrame {
         testWord = new ConWord();
         String genderString = cmbGender.getSelectedItem().equals(defGenderValue)
                 ? "" : ((GenderNode) cmbGender.getSelectedItem()).getValue();
-        String typeString = (cmbType.getSelectedItem().equals(defTypeValue)
+        int typeId = (cmbType.getSelectedItem().equals(defTypeValue)
                 || cmbType.getSelectedItem().equals(newTypeValue))
-                ? "" : ((TypeNode) cmbType.getSelectedItem()).getValue();
+                ? 0: ((TypeNode) cmbType.getSelectedItem()).getId();
 
         if (curPopulating) {
             return;
@@ -551,7 +551,7 @@ public final class ScrLexicon extends PFrame {
         testWord.setDefinition(txtDefinition.getText().equals(defDefValue) ? "" : txtDefinition.getText());
         testWord.setPronunciation(txtProc.getText().equals(defProcValue) ? "" : txtProc.getText());
         testWord.setGender(genderString);
-        testWord.setWordType(typeString);
+        testWord.setWordTypeId(typeId);
         testWord.setRulesOverride(chkRuleOverride.isSelected());
 
         setWordLegality(testWord);
@@ -581,7 +581,7 @@ public final class ScrLexicon extends PFrame {
         isLegal = isLegal && addErrorBoxMessage(txtProc, results.getPronunciation());
         isLegal = isLegal && addErrorBoxMessage(txtConWord, results.getDefinition());
         isLegal = isLegal && addErrorBoxMessage(cmbGender, results.getGender());
-        isLegal = isLegal && addErrorBoxMessage(cmbType, results.getWordType());
+        isLegal = isLegal && addErrorBoxMessage(cmbType, results.typeError);
 
         if (!testWord.isRulesOverrride()) {
             setLexiconEnabled(isLegal);
@@ -779,6 +779,7 @@ public final class ScrLexicon extends PFrame {
      * Sets up all document listeners
      */
     private void setupListeners() {
+        final Window parent = this;
         gridTitlePane.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -843,7 +844,12 @@ public final class ScrLexicon extends PFrame {
                 int index = theList.locationToIndex(e.getPoint());
                 if (index > -1) {
                     ConWord curWord = (ConWord) model.getElementAt(index);
-                    TypeNode curType = core.getTypes().findTypeByName(curWord.getWordType());
+                    TypeNode curType = null;
+                    try {
+                        curType = core.getTypes().getNodeById(curWord.getWordTypeId());
+                    } catch (Exception ex) {
+                        InfoBox.error("Type error on lookup.", ex.getMessage(), parent);
+                    }
                     String tip = core.getPronunciationMgr().getPronunciation(curWord.getValue());
                     if (curType != null) {
                         tip += " : " + (curType.getGloss().equals("")
@@ -1025,7 +1031,7 @@ public final class ScrLexicon extends PFrame {
                         ? defProcValue : curWord.getPronunciation());
                 GenderNode gender = core.getGenders().findGenderByName(curWord.getGender());
                 cmbGender.setSelectedItem(gender == null ? defGenderValue : gender);
-                TypeNode type = core.getTypes().findTypeByName(curWord.getWordType());
+                TypeNode type = curWord.getWordTypeId() == 0 ? null : core.getTypes().getNodeById(curWord.getWordTypeId());
                 cmbType.setSelectedItem(type == null ? defTypeValue : type);
                 chkProcOverride.setSelected(curWord.isProcOverride());
                 chkRuleOverride.setSelected(curWord.isRulesOverrride());
@@ -1234,8 +1240,8 @@ public final class ScrLexicon extends PFrame {
         saveWord.setRulesOverride(chkRuleOverride.isSelected());
         Object curType = cmbType.getSelectedItem();
         if (curType != null) {
-            saveWord.setWordType((curType.equals(defTypeValue) || curType.equals(newTypeValue))
-                    ? "" : ((TypeNode) curType).getValue());
+            saveWord.setWordTypeId((curType.equals(defTypeValue) || curType.equals(newTypeValue))
+                    ? 0 : ((TypeNode) curType).getId());
         }
     }
 

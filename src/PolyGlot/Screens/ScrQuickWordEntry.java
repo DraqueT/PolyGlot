@@ -183,7 +183,7 @@ public final class ScrQuickWordEntry extends PDialog {
         word.setPronunciation(txtProc.getText());
         word.setDefinition(txtDefinition.getText());
         word.setGender(cmbGender.getSelectedItem().toString());
-        word.setWordType(cmbType.getSelectedItem().toString());
+        word.setWordTypeId(((TypeNode)cmbType.getSelectedItem()).getId());
         
         ConWord test = core.isWordLegal(word);
         String testResults = "";
@@ -213,10 +213,10 @@ public final class ScrQuickWordEntry extends PDialog {
             //PGTools.flashComponent(cmbGender, core.getRequiredColor(), true);
             testResults += ("\n" + test.getGender());
         }
-        if (!test.getWordType().isEmpty()) {
+        if (!test.typeError.isEmpty()) {
             ((PComboBox)cmbType).makeFlash(core.getRequiredColor(), true);
             //PGTools.flashComponent(cmbType, core.getRequiredColor(), false);
-            testResults += ("\n" + test.getWordType());
+            testResults += ("\n" + test.typeError);
         } 
         if (core.getPropertiesManager().isWordUniqueness()
                 && core.getWordCollection().testWordValueExists(txtConWord.getText())) {
@@ -244,7 +244,7 @@ public final class ScrQuickWordEntry extends PDialog {
             word.setLocalWord(txtLocalWord.getText());
             word.setPronunciation(txtProc.getText());
             word.setGender(cmbGender.getSelectedItem().toString());
-            word.setWordType(cmbType.getSelectedItem().toString());
+            word.setWordTypeId(((TypeNode)cmbType.getSelectedItem()).getId());
             
             int wordId = core.getWordCollection().addWord(word);
             blankWord();

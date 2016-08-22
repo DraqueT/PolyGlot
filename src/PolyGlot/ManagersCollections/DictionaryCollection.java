@@ -31,7 +31,7 @@ import java.util.Map;
 public abstract class DictionaryCollection {
 
     protected Map<Character, Integer> alphaOrder;
-    protected final Map nodeMap = new HashMap<Integer, DictNode>();
+    protected final Map nodeMap = new HashMap<>();
     protected DictNode bufferNode;
 
     private int highestNodeId = 1;

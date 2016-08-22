@@ -57,12 +57,12 @@ public class ExcelExport {
     }
     
     private Object[] getWordForm(ConWord conWord, DictCore core) {
-        List<String> ret = new ArrayList<String>();
+        List<String> ret = new ArrayList<>();
         String declensionCell = "";
         
         ret.add(conWord.getValue());
         ret.add(conWord.getLocalWord());
-        ret.add(conWord.getWordType());
+        ret.add(conWord.getWordTypeDisplay());
         ret.add(conWord.getPronunciation());
         ret.add(conWord.getGender());
         

@@ -433,9 +433,13 @@ public class CustHandlerFactory {
                     this.getWordCollection().getBufferWord()
                             .setValue(new String(ch, start, length));
                     bconWord = false;
-                } else if (btype) {
+                } else if (btype) { try {
+                    // At this point, this is legacy.
                     this.getWordCollection().getBufferWord()
-                            .setWordType(new String(ch, start, length));
+                            .setWordTypeId(typeCollection.findByName(new String(ch, start, length)).getId());
+                    } catch (Exception ex) {
+                        throw new SAXException(ex);
+                    }
                     btype = false;
                 } else if (bId) {
                     wId = Integer.parseInt(new String(ch, start, length));
@@ -564,6 +568,7 @@ public class CustHandlerFactory {
             boolean blocalWord = false;
             boolean bconWord = false;
             boolean btype = false;
+            boolean btypeId = false;
             boolean bId = false;
             boolean bdef = false;
             boolean bfontcon = false;
@@ -667,6 +672,8 @@ public class CustHandlerFactory {
                     bconWord = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordTypeXID)) {
                     btype = true;
+                } else if  (qName.equalsIgnoreCase(PGTUtil.WORDTYPEID_XID)) {
+                    btypeId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordIdXID)) {
                     bId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.definitionXID)) {
@@ -906,6 +913,8 @@ public class CustHandlerFactory {
                     bwordPlur = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordTypeXID)) {
                     btype = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORDTYPEID_XID)) {
+                    btypeId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordIdXID)) {
                     bId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordRuleOverrideXID)) {
@@ -1083,10 +1092,16 @@ public class CustHandlerFactory {
                     ConWord bufferWord = this.getWordCollection().getBufferWord();
                     bufferWord.setValue(bufferWord.getValue()
                             + new String(ch, start, length));
-                } else if (btype) {
+                } else if (btype) { // THIS IS NOW ONLY FOR LEGACY PGT FILES. NO LONGER SAVED TO XML
                     ConWord bufferWord = this.getWordCollection().getBufferWord();
-                    bufferWord.setWordType(bufferWord.getWordType()
-                            + new String(ch, start, length));
+                    try {
+                        bufferWord.setWordTypeId(typeCollection.findByName(new String(ch, start, length)).getId());
+                    } catch (Exception ex) {
+                        throw new SAXException(ex);
+                    }
+                } else if (btypeId) {
+                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    bufferWord.setWordTypeId(Integer.parseInt(new String(ch, start, length)));
                 } else if (bId) {
                     wId = Integer.parseInt(new String(ch, start, length));
                 } else if (bdef) {

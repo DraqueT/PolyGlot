@@ -30,8 +30,7 @@ public class TypeNode extends DictNode{
     private String gloss = "";
     private boolean genderMandatory = false;
     private boolean procMandatory = false;
-    private boolean defMandatory = false;
-    
+    private boolean defMandatory = false;    
     
     public void setPattern(String _regexPattern) {
         regexPattern = _regexPattern;

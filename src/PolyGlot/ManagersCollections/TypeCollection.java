@@ -65,7 +65,7 @@ public class TypeCollection extends DictionaryCollection {
     public TypeCollection(DictCore _core) {
         bufferNode = new TypeNode();
         core = _core;
-    }
+}
 
     /**
      * Tests whether type based requirements met for word
@@ -76,20 +76,44 @@ public class TypeCollection extends DictionaryCollection {
     public String typeRequirementsMet(ConWord word) {
         String ret = "";
 
-        TypeNode type = this.findTypeByName(word.getWordType());
+        TypeNode type = this.getNodeById(word.getWordTypeId());
 
         // all requirements met if no type set at all.
         if (type != null) {
             if (type.isDefMandatory() && word.getDefinition().equals("")) {
-                ret = word.getWordType() + " requires a definition.";
+                ret = type.getValue() + " requires a definition.";
             } else if (type.isGenderMandatory() && word.getGender().equals("")) {
-                ret = word.getWordType() + " requires a gender.";
+                ret = type.getValue() + " requires a gender.";
             } else if (type.isProcMandatory() && word.getPronunciation().equals("")) {
-                ret = word.getWordType() + " requires a pronunciation.";
+                ret = type.getValue() + " requires a pronunciation.";
             }
         }
 
         return ret;
+    }
+    
+    /**
+     * This is a method used for finding nodes by name. Only for use when loading
+     * old PolyGlot files. DO NOT rely on names for uniqueness moving forward.
+     * @param name name of part of speech to search for
+     * @return matching part of speech. Throws error otherwise
+     * @throws java.lang.Exception if not found
+     */
+    public TypeNode findByName(String name) throws Exception {
+       TypeNode ret = null;
+       
+       for (Object n : nodeMap.values()) {
+           TypeNode curNode = (TypeNode)n;
+           if (curNode.getValue().toLowerCase().equals(name.toLowerCase())) {
+               ret = curNode;
+               break;
+           }
+       }
+       
+       if (ret == null) {
+           throw new Exception("Unable to find part of speech: " + name);
+       }
+       return ret; 
     }
 
     /**
@@ -108,7 +132,7 @@ public class TypeCollection extends DictionaryCollection {
             while (it.hasNext()) {
                 curEntry = it.next();
 
-                if (curEntry.getValue().getValue().equals(_name)) {
+                if (curEntry.getValue().getValue().toLowerCase().equals(_name.toLowerCase())) {
                     ret = curEntry.getValue();
                     break;
                 }
@@ -168,40 +192,16 @@ public class TypeCollection extends DictionaryCollection {
     }
 
     @Override
-    public TypeNode getNodeById(Integer _id) throws Exception {
-        return (TypeNode) super.getNodeById(_id);
-    }
-
-    @Override
-    /**
-     * Safely modify a type (updates words of this type automatically)
-     *
-     * @param id type id
-     * @param modGender new type
-     * @throws Exception
-     */
-    public void modifyNode(Integer id, DictNode modType) throws Exception {
-        Iterator<ConWord> it;
-        ConWord typeWord = new ConWord();
-
-        typeWord.setGender("");
-        typeWord.setValue("");
-        typeWord.setDefinition("");
-        typeWord.setWordType(getNodeById(id).getValue());
-        typeWord.setLocalWord("");
-        typeWord.setPronunciation("");
-
-        it = core.getWordCollection().filteredList(typeWord);
-
-        while (it.hasNext()) {
-            ConWord modWord = it.next();
-
-            modWord.setWordType(modType.getValue());
-
-            core.getWordCollection().modifyNode(modWord.getId(), modWord);
+    public TypeNode getNodeById(Integer _id) {
+        TypeNode ret = null;
+        
+        try {
+            return (TypeNode) super.getNodeById(_id);
+        } catch (Exception e) {
+            // Do nothing. Lack of ID should resuly in return of null.
         }
-
-        super.modifyNode(id, modType);
+        
+        return ret;
     }
     
     @Override
@@ -215,7 +215,7 @@ public class TypeCollection extends DictionaryCollection {
      * @return
      */
     public Iterator<TypeNode> getNodeIterator() {
-        List<TypeNode> retList = new ArrayList<TypeNode>(nodeMap.values());
+        List<TypeNode> retList = new ArrayList<>(nodeMap.values());
 
         Collections.sort(retList);
 
@@ -237,6 +237,35 @@ public class TypeCollection extends DictionaryCollection {
             }
         }
 
+        return ret;
+    }
+    
+    public boolean nodeExists(int id) {
+        return nodeMap.containsKey(id);
+    }
+    
+    public TypeNode findOrCreate(String name) throws Exception {
+        TypeNode node = new TypeNode();
+        node.setValue(name);
+        return findOrCreate(node);
+    }
+    
+    public TypeNode findOrCreate(TypeNode node) throws Exception {
+        TypeNode ret = null;
+        
+        for (Object n : nodeMap.values()) {
+            TypeNode compNode = (TypeNode)n;
+            if (compNode.getValue().equals(node.getValue())
+                    && compNode.getGloss().equals(node.getGloss())) {
+                ret = compNode;
+                break;
+            }
+        }
+        
+        if (ret == null) {
+            ret = getNodeById(insert(node));
+        }
+        
         return ret;
     }
     

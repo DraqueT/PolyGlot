@@ -68,7 +68,7 @@ public class GenderCollection extends DictionaryCollection{
         genderWord.setGender(delGender.getValue());
         genderWord.setValue("");
         genderWord.setDefinition("");
-        genderWord.setWordType("");
+        genderWord.setWordTypeId(0);
         genderWord.setLocalWord("");
         genderWord.setPronunciation("");
 
@@ -210,7 +210,7 @@ public class GenderCollection extends DictionaryCollection{
         genderWord.setGender(getNodeById(id).getValue());
         genderWord.setValue("");
         genderWord.setDefinition("");
-        genderWord.setWordType("");
+        genderWord.setWordTypeId(0);
         genderWord.setLocalWord("");
         genderWord.setPronunciation("");
 

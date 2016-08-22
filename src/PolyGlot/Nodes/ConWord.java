@@ -32,7 +32,7 @@ public class ConWord extends DictNode {
 
     // so long as the conword is not blank, this can be blank
     private String localWord;
-    private String wordType;
+    private int typeId;
     private String definition;
     private String pronunciation;
     private String gender;
@@ -41,11 +41,13 @@ public class ConWord extends DictNode {
     private boolean rulesOverride;
     private DictCore core;
     ConWordCollection parent;
+    public String typeError = ""; // used only for returning error state
 
     public ConWord() {
         value = "";
         localWord = "";
-        wordType = "";
+        //wordType = "";
+        typeId = 0;
         definition = "";
         pronunciation = "";
         gender = "";
@@ -76,7 +78,8 @@ public class ConWord extends DictNode {
         
         this.setValue(set.getValue());
         this.setLocalWord(set.getLocalWord());
-        this.setWordType(set.getWordType());
+        //this.setWordType(set.getWordType()); // TODO: delete
+        this.setWordTypeId(set.getWordTypeId());
         this.setDefinition(set.getDefinition());
         this.setPronunciation(set.getPronunciation());
         this.setId(set.getId());
@@ -154,12 +157,29 @@ public class ConWord extends DictNode {
         super.setValue(_value);
     }
 
-    public String getWordType() {
-        return wordType;
+    /**
+     * For display purposes only (use Type ID normally)
+     * @return the string value of a word's type
+     */
+    public String getWordTypeDisplay() {
+        String ret = "";
+        
+        if (typeId != 0) {
+            try {
+                ret = core.getTypes().getNodeById(typeId).getValue();
+            } catch (Exception e) {
+                // TODO: How to better handle this? Silent failure will eventually cause problems...
+            }
+        }
+        return ret;
     }
 
-    public void setWordType(String wordType) {
-        this.wordType = wordType.trim();
+    public void setWordTypeId(int _typeId) {
+        typeId = _typeId;
+    }
+    
+    public Integer getWordTypeId() {
+        return typeId;
     }
 
     /**

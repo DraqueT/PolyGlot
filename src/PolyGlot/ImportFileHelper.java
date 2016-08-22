@@ -262,20 +262,20 @@ public class ImportFileHelper {
                             continue;
                         }
 
-                        if (newWord.getWordType().trim().equals("")) {
-                            newWord.setWordType(columns[cellNum].trim());
+                        if (newWord.getWordTypeId() == 0) {
+                            newWord.setWordTypeId(core.getTypes().findOrCreate(columns[cellNum].trim()).getId());
                         } else {
-                            newWord.setWordType(newWord.getWordType() + ", " + columns[cellNum].trim());
+                            newWord.setWordTypeId(core.getTypes().findOrCreate(newWord.getWordTypeDisplay() + ", " + columns[cellNum].trim()).getId());
                         }
                     }
 
                     // add type to list of potential types if applicable and user
                     // specified
-                    if (bCreateTypes && !newWord.getWordType().trim().equals("")
-                            && !core.getTypes().nodeExists(newWord.getWordType())) {
+                    if (bCreateTypes && newWord.getWordTypeId() != 0
+                            && !core.getTypes().nodeExists(newWord.getWordTypeId())) {
                         core.getTypes().clear();
                         TypeNode newType = core.getTypes().getBufferType();
-                        newType.setValue(newWord.getWordType());
+                        newType.setValue(newWord.getWordTypeDisplay());
                         core.getTypes().insert();
                     }
 
@@ -416,20 +416,20 @@ public class ImportFileHelper {
 
             Integer cellNum = cellNumCheckGet(entry);
 
-            if (newWord.getWordType().trim().equals("")) {
-                newWord.setWordType(row.getCell(cellNum) != null ? row.getCell(cellNum).toString() : "");
+            if (newWord.getWordTypeId() == 0) {
+                newWord.setWordTypeId(core.getTypes().findOrCreate(row.getCell(cellNum) != null ? row.getCell(cellNum).toString() : "").getId());
             } else if (row.getCell(cellNum) != null) {
-                newWord.setWordType(newWord.getWordType() + ", " + row.getCell(cellNum).toString());
+                newWord.setWordTypeId(core.getTypes().findOrCreate(newWord.getWordTypeDisplay() + ", " + row.getCell(cellNum).toString()).getId());
             }
         }
 
         // add type to list of potential types if applicable and user
         // specified
-        if (bCreateTypes && !newWord.getWordType().trim().equals("")
-                && !core.getTypes().nodeExists(newWord.getWordType())) {
+        if (bCreateTypes && newWord.getWordTypeId() != 0
+                && !core.getTypes().nodeExists(newWord.getWordTypeId())) {
             core.getTypes().clear();
             TypeNode newType = core.getTypes().getBufferType();
-            newType.setValue(newWord.getWordType());
+            newType.setValue(newWord.getWordTypeDisplay());
             core.getTypes().insert();
         }
 

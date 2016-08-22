@@ -82,7 +82,7 @@ public class PExportToPDF {
     private final String ORTHOGRAPHY = "ORTHOGRAPHY";
     private final String GLOSSKEY = "GLOSSKEY";
     private final String GRAMMAR = "GRAMMAR";
-    private final Map<String, String> glossKey;
+    private final Map<Integer, String> glossKey;
     private final List<Entry<Div, String>> chapList = new ArrayList<>();
     private final List<SecEntry> chapSects = new ArrayList<>();
     private final Map<String, String> chapTitles = new HashMap<>();
@@ -330,7 +330,7 @@ public class PExportToPDF {
      * @return
      */
     private Map getGlossKey() {
-        Map<String, String> ret = new HashMap<>();
+        Map<Integer, String> ret = new HashMap<>();
 
         Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
 
@@ -338,9 +338,9 @@ public class PExportToPDF {
             TypeNode curNode = typeIt.next();
 
             if (curNode.getGloss().equals("")) {
-                ret.put(curNode.getValue(), curNode.getValue());
+                ret.put(curNode.getId(), curNode.getValue());
             } else {
-                ret.put(curNode.getValue(), curNode.getGloss());
+                ret.put(curNode.getId(), curNode.getGloss());
                 setPrintGlossKey(true);
             }
         }
@@ -393,8 +393,8 @@ public class PExportToPDF {
             dictEntry.add(varChunk.setFontSize(defFontSize));
 
             // Add word type (if one exists)
-            if (glossKey.containsKey(curWord.getWordType())) {
-                varChunk = new Text(glossKey.get(curWord.getWordType()));
+            if (glossKey.containsKey(curWord.getWordTypeId())) {
+                varChunk = new Text(glossKey.get(curWord.getWordTypeId()));
                 varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ITALIC));
                 dictEntry.add(varChunk.setFontSize(defFontSize));
                 varChunk = new Text(" - ");
@@ -490,8 +490,8 @@ public class PExportToPDF {
             dictEntry.add(varChunk.setFontSize(defFontSize));
 
             // Add word type (if one exists)
-            if (glossKey.containsKey(curWord.getWordType())) {
-                varChunk = new Text(glossKey.get(curWord.getWordType()));
+            if (glossKey.containsKey(curWord.getWordTypeId())) {
+                varChunk = new Text(glossKey.get(curWord.getWordTypeId()));
                 varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ITALIC));
                 dictEntry.add(varChunk.setFontSize(defFontSize));
                 varChunk = new Text(" - ");

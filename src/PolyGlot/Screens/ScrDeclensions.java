@@ -186,7 +186,7 @@ public class ScrDeclensions extends PDialog {
     }//GEN-LAST:event_btnOkActionPerformed
 
     public static Window run(DictCore _core, ConWord _word) {
-        TypeNode wordType = _core.getTypes().findTypeByName(_word.getWordType());
+        TypeNode wordType = _core.getTypes().getNodeById(_word.getWordTypeId());
         
         final ScrDeclensions s = new ScrDeclensions(_core);
         s.setConWord(_word);
@@ -223,7 +223,7 @@ public class ScrDeclensions extends PDialog {
         } else if ((core.getDeclensionManager().getDeclensionListTemplate(typeId) == null
                     || core.getDeclensionManager().getDeclensionListTemplate(typeId).isEmpty())
                 && core.getDeclensionManager().getDeclensionListWord(word.getId()).isEmpty()) {
-            InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordType()
+            InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the Declensions button.", this);
 
             this.dispose();
