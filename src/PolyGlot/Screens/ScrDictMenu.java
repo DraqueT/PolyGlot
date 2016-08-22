@@ -70,6 +70,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private ScrGrammarGuide scrGrammar;
     private ScrLogoDetails scrLogos;
     private ScrThesaurus scrThes;
+    private ScrIPARefChart scrIPA;
     private boolean cleanSave = true;
     private boolean holdFront = false;
     private final List<String> lastFiles;
@@ -148,6 +149,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             options.addScreenUp(scrThes.getClass().getName());
             scrThes.dispose();
         }
+        if (scrIPA != null && !scrIPA.isDisposed() && scrIPA.isVisible()) {
+            options.addScreenUp(scrIPA.getClass().getName());
+            scrIPA.dispose();
+        }
     }
 
     /**
@@ -169,6 +174,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             } else if (leftOpen.equals(PGTUtil.scrNameThes)) {
                 btnThes.setSelected(true);
                 thesHit();
+            } else if (leftOpen.equals(PGTUtil.scrIPARefChart)) {
+                IPAHit();
             } else {
                 InfoBox.error("Unrecognized Window",
                         "Unrecognized window in last session: " + leftOpen, this);
@@ -738,6 +745,16 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         }
     }
+    
+    private void IPAHit() {
+        if (scrIPA == null || scrIPA.isVisible() == false || scrIPA.isDisposed())
+        {
+            scrIPA = new ScrIPARefChart(core);
+            scrIPA.setVisible(true);
+        } else {
+            scrIPA.toFront();
+        }
+    }
 
     private void thesHit() {
         if (btnThes.isSelected()) {
@@ -750,7 +767,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
                 scrThes.setVisible(true);
             } catch (Exception e) {
-                localError("Open Window Error", "Error Opening Logograph Guide: "
+                localError("Open Window Error", "Error Opening Thesaurus: "
                         + e.getLocalizedMessage());
             }
         } else {
@@ -932,6 +949,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuLangStats = new javax.swing.JMenuItem();
         mnuTransWindow = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        mnuIPAChart = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
         mnuAbout = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
@@ -1103,6 +1122,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         });
         jMenu2.add(mnuTransWindow);
+        jMenu2.add(jSeparator4);
+
+        mnuIPAChart.setText("Interactive IPA Chart");
+        mnuIPAChart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuIPAChartActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnuIPAChart);
 
         jMenuBar1.add(jMenu2);
 
@@ -1308,6 +1336,12 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         ScrPrintToPDF.run(core);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void mnuIPAChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIPAChartActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        IPAHit();
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_mnuIPAChartActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1382,12 +1416,14 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JMenuItem mnuAbout;
     private javax.swing.JMenuItem mnuChkUpdate;
     private javax.swing.JMenuItem mnuExit;
     private javax.swing.JMenuItem mnuExportFont;
     private javax.swing.JMenuItem mnuExportToExcel;
     private javax.swing.JMenu mnuHelp;
+    private javax.swing.JMenuItem mnuIPAChart;
     private javax.swing.JMenuItem mnuImportFile;
     private javax.swing.JMenuItem mnuLangStats;
     private javax.swing.JMenuItem mnuNewLocal;

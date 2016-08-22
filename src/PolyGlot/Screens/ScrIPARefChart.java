@@ -34,8 +34,10 @@ public class ScrIPARefChart extends PFrame {
     
     /**
      * Creates new form ScrIPARefChart
+     * @param _core
      */
-    public ScrIPARefChart() {
+    public ScrIPARefChart(DictCore _core) {
+        core = _core;
         initComponents();
         handler = new IPAHandler(this);
     }
@@ -60,7 +62,7 @@ public class ScrIPARefChart extends PFrame {
         lblOtherSymbols = new javax.swing.JLabel();
         txtIPAChars = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("IPA Pronunciation/Character Guide");
         setResizable(false);
 
@@ -104,7 +106,7 @@ public class ScrIPARefChart extends PFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblPulmonicConsonants)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,6 +210,13 @@ public class ScrIPARefChart extends PFrame {
     private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
         int x=evt.getX();
         int y=evt.getY();
+        try {
+            String ipaChar = handler.playVowelGetChar(x, y);
+            String curText = txtIPAChars.getText();
+            txtIPAChars.setText((curText.equals("") || ipaChar.equals("") ? "" : curText + " ") + ipaChar);
+        } catch(Exception e) {
+            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+        }
         System.out.println(x+","+y);
     }//GEN-LAST:event_jLabel23MouseClicked
 
@@ -239,39 +248,7 @@ public class ScrIPARefChart extends PFrame {
             InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
         }
     }//GEN-LAST:event_lblNonPulmonicConsonantsMouseClicked
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScrIPARefChart.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new ScrIPARefChart().setVisible(true);
-            }
-        });
-    }
-
+    
     @Override
     public void updateAllValues(DictCore _core) {
         // values can't be updated in this window.

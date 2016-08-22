@@ -42,7 +42,7 @@ public class IPAHandler {
 
     public IPAHandler(Window _parent) {
         soundRecorder = new SoundRecorder(_parent);
-        charMap = new HashMap<String, String>();
+        charMap = new HashMap<>();
         setupMap();
     }
 
@@ -246,9 +246,78 @@ public class IPAHandler {
     }
 
     public String playVowelGetChar(int x, int y) throws Exception {
-        String ret = "*";
+        String ret = "";
 
-        // DO STUFF
+        if (y > 67 && y < 102) {
+            if (x > 72 && x < 89) {
+                ret = "i";
+            } else if (x > 101 && x < 118) {
+                ret = "y";
+            } else if (x > 296 && x < 313) {
+                ret = "ɨ";
+            } else if (x > 318 && x < 342) {
+                ret = "ʉ";
+            } else if (x > 513 && x < 544) {
+                ret = "ɯ";
+            } else if (x > 549 && x < 574) {
+                ret = "u";
+            }
+        } else if (y > 112 && y < 148) {
+            if (x > 178 && x < 196) {
+                ret = "ɪ";
+            } else if (x > 202 && x < 225) {
+                ret = "ʏ";
+            } else  if (x > 458 && x < 482) {
+                ret = "ʊ";
+            }
+        } else if (y > 160 && y < 196) {
+            if (x > 147 && x < 171) {
+                ret = "e";
+            } else if (x > 176 && x < 200) {
+                ret = "ø";
+            } else  if (x > 332 && x < 356) {
+                ret = "ɘ";
+            } else if (x > 361 && x < 386) {
+                ret = "ɵ";
+            } else if (x > 517 && x < 540) {
+                ret = "ɤ";
+            } else  if (x > 546 && x < 569) {
+                ret = "o";
+            }
+        } else if (y > 205 && y < 242) {
+            if (x > 363 && x < 388) {
+                ret = "ə";
+            }
+        } else if (y > 250 && y < 286) {
+            if (x > 216 && x < 239) {
+                ret = "ɛ";
+            } else if (x > 244 && x < 276) {
+                ret = "œ";
+            } else  if (x > 371 && x < 393) {
+                ret = "ɜ";
+            } else if (x > 399 && x < 424) {
+                ret = "ɞ";
+            } else if (x > 518 && x < 541) {
+                ret = "ʌ";
+            } else  if (x > 546 && x < 569) {
+                ret = "ɔ";
+            }
+        } else if (y > 308 && y < 343 && x > 247 && x < 279) {
+            ret = "æ";
+        } else if (y > 287 && y < 324 && x > 396 && x < 420) {
+            ret = "ɐ";
+        } else if (y > 343 && y < 379) {
+            if (x > 290 && x < 314) {
+                ret = "a";
+            } else if (x > 319 && x < 348) {
+                ret = "ɶ";
+            } else if (x > 516 && x < 540) {
+                ret = "ɑ";
+            } else if (x > 546 && x < 570) {
+                ret = "ɒ";
+            }
+        }
+        
         playChar(ret);
 
         return ret;
