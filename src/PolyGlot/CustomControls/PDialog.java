@@ -48,7 +48,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     private boolean skipCenter = false;
     private boolean hasFocus = false;
     protected DictCore core;
-    
+        
     /**
      * Returns current running mode of window
      * @return 
@@ -185,6 +185,8 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         if (lastDim != null) {
             setSize(lastDim);
         }
+        
+        this.setAlwaysOnTop(true);
         
         super.setVisible(visible);
     }
