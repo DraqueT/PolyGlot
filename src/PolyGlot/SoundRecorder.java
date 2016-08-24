@@ -19,7 +19,6 @@
  */
 package PolyGlot;
 
-// TODO: This class isn't stream safe. Update eventually with try(STREAM) pattern
 import PolyGlot.CustomControls.InfoBox;
 import java.awt.Window;
 import java.io.ByteArrayInputStream;
