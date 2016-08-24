@@ -31,7 +31,6 @@ import PolyGlot.Nodes.TypeNode;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -74,6 +73,12 @@ public final class ScrQuickWordEntry extends PDialog {
         
         populateTypes();
         populateGenders();
+        setupCustomLabels();
+    }
+    
+    private void setupCustomLabels() {
+        jLabel2.setText(core.conLabel() + " word");
+        jLabel3.setText(core.localLabel() + " word");
     }
     
     // Overridden to meet coding standards...

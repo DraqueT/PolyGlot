@@ -649,7 +649,7 @@ public class ScrGrammarGuide extends PFrame {
             InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), this);
         }
         
-        cmbFonts.addItem("NatLang Font");
+        cmbFonts.addItem(core.localLabel() + " Font");
         cmbFonts.addItem(core.getPropertiesManager().getFontCon().getName());
         
         btnPlayPauseAudio.setText("");

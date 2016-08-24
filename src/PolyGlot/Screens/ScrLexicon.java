@@ -132,7 +132,10 @@ public final class ScrLexicon extends PFrame {
         lstLexicon.setSelectedIndex(0);
         populateProperties();
         setupListeners();
-
+        setCustomLabels();
+    }
+    
+    private void setCustomLabels() {
         if (System.getProperty("os.name").startsWith("Mac")) {
             btnAddWord.setToolTipText(btnAddWord.getToolTipText() + " (⌘ +)");
             btnDelWord.setToolTipText(btnDelWord.getToolTipText() + " (⌘ -)");
@@ -140,6 +143,9 @@ public final class ScrLexicon extends PFrame {
             btnAddWord.setToolTipText(btnAddWord.getToolTipText() + " (CTRL +)");
             btnDelWord.setToolTipText(btnDelWord.getToolTipText() + " (CTRL -)");
         }
+        
+        txtConWord.setToolTipText(core.conLabel() + " word value");
+        txtLocalWord.setToolTipText(core.localLabel() + " word value");
     }
 
     /**

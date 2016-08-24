@@ -56,7 +56,6 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 public class DictCore {
-
     private final String version = "1.1";
     private final ConWordCollection wordCollection = new ConWordCollection(this);
     private final TypeCollection typeCollection = new TypeCollection(this);
@@ -80,6 +79,26 @@ public class DictCore {
         genderCollection.setAlphaOrder(alphaOrder);
         logoCollection.setAlphaOrder(alphaOrder);
         rootWindow = null;
+    }
+    
+    /**
+     * Gets conlang name or CONLANG. Put on core because it's used a lot.
+     * @return either name of conlang or "Conlang"
+     */
+    public String conLabel() {
+        return propertiesManager.getLangName().equals("") ?
+                "Conlang" :
+                propertiesManager.getLangName();
+    }
+    
+    /**
+     * Gets local language name or Local Lang. Put on core because it's used a lot.
+     * @return either name of local language or "Local Lang"
+     */
+    public String localLabel() {
+        return propertiesManager.getLocalLangName().equals("") ?
+                "Local Lang" :
+                propertiesManager.getLocalLangName();
     }
     
     public void setRootWindow(PFrame _rootWindow) {

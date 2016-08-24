@@ -43,8 +43,8 @@ public class ScrPrintToPDF extends PDialog {
         initComponents();
         core = _core;
         
-        //chkConLocal.setText("Print " + conLang + " -> " + localLang + "Dictionary");
-        //chkLocalCon.setText("Print " + localLang + " -> " + conLang + "Dictionary");
+        chkConLocal.setText("Print " + core.conLabel() + " -> " + core.localLabel() + " Dictionary");
+        chkLocalCon.setText("Print " + core.localLabel() + " -> " + core.conLabel() + " Dictionary");
         
         setModal(true);
     }
