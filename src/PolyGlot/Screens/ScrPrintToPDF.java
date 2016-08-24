@@ -43,6 +43,9 @@ public class ScrPrintToPDF extends PDialog {
         initComponents();
         core = _core;
         
+        //chkConLocal.setText("Print " + conLang + " -> " + localLang + "Dictionary");
+        //chkLocalCon.setText("Print " + localLang + " -> " + conLang + "Dictionary");
+        
         setModal(true);
     }
 
@@ -161,20 +164,27 @@ public class ScrPrintToPDF extends PDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(chkConLocal)
-                    .addComponent(chkGrammar)
-                    .addComponent(chkOrtho)
-                    .addComponent(chkLocalCon)
-                    .addComponent(chkLogographs)
-                    .addComponent(chkPageNum)
-                    .addComponent(chkGloss))
-                .addContainerGap(217, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkConLocal)
+                            .addComponent(chkGrammar)
+                            .addComponent(chkOrtho)
+                            .addComponent(chkLocalCon)
+                            .addComponent(chkLogographs))
+                        .addContainerGap(217, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkGloss)
+                            .addComponent(chkPageNum))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(chkOrtho)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkGloss)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkConLocal)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -185,8 +195,6 @@ public class ScrPrintToPDF extends PDialog {
                 .addComponent(chkLogographs)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkPageNum)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkGloss)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 

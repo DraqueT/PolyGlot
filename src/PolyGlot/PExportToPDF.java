@@ -68,7 +68,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-// TODO: Move all constants to PGTUtil
 /**
  * Given a core dictionary, this class will print it to a PDF file.
  *
@@ -86,7 +85,7 @@ public class PExportToPDF {
     private final List<Entry<Div, String>> chapList = new ArrayList<>();
     private final List<SecEntry> chapSects = new ArrayList<>();
     private final Map<String, String> chapTitles = new HashMap<>();
-    private final int offsetSize = 1; // TODO: Move this to the utils class?
+    private final int offsetSize = 1; 
     private final int defFontSize = 8;
     private final int pageNumberY = 10;
     private final int pageNumberX = 550;
@@ -161,7 +160,7 @@ public class PExportToPDF {
 
         try {
             // front page is always built/added before chapter guide
-            document.add(buildFrontPage()); // TODO: author info/copyright information and maybe image?
+            document.add(buildFrontPage());
             if (!forewardText.equals("")) {
                 chapTitles.put(FOREWORD, "Author Foreword");
                 chapList.add(new PEntry(buildForward(FOREWORD), FOREWORD));
@@ -223,7 +222,7 @@ public class PExportToPDF {
             document.add(new Paragraph(
                     new Text("Table of Contents")
                     .setTextAlignment(TextAlignment.CENTER)
-                    .setFontSize(30))); // TODO: constants
+                    .setFontSize(30))); 
             Div ToC = new Div();
             for (Entry curChap : chapList) {
                 Link link = new Link(chapTitles.get((String) curChap.getValue()), 
@@ -237,7 +236,7 @@ public class PExportToPDF {
                     for (SecEntry chapSect : chapSects) {
                         Link secLink = new Link((String)chapSect.getValue(), 
                                 PdfAction.createGoTo(String.valueOf((int)chapSect.getKey())));
-                        secLink.setFontSize(9); // TODO: INT CONSTANT
+                        secLink.setFontSize(9); 
                         subSec.add(secLink).add("\n");
                     }
                     ToC.add(subSec);
@@ -251,8 +250,8 @@ public class PExportToPDF {
             for (Entry curEntry : chapList) {
                 Div curChap = (Div) curEntry.getKey();
                 Text header = new Text((String) chapTitles.get((String) curEntry.getValue())  + "\n")
-                        .setFontSize(20); // TODO: CONSTANT
-                header.setFont(PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD)); // TODO: Clean this up & correct size
+                        .setFontSize(20); 
+                header.setFont(PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD)); 
                 header.setTextAlignment(TextAlignment.CENTER);
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                 // dictionary sections are 2 column style
@@ -285,7 +284,7 @@ public class PExportToPDF {
             Paragraph fin = new Paragraph("Created with PolyGlot: Language Creation Tool Version " + core.getVersion() + "\n");
             fin.add(new Link("Get PolyGlot Here", PdfAction.createURI("https://github.com/DraqueT/PolyGlot/releases")).setUnderline());
             fin.add(new Text("\nPolyGlot Created By Draque Thompson"));
-            fin.setFontSize(20); // TODO: INT CONSTANT
+            fin.setFontSize(20); 
             fin.setFontColor(Color.LIGHT_GRAY);
             document.showTextAligned(fin, 297.5f, 400, document.getPdfDocument()
                     .getNumberOfPages(), TextAlignment.CENTER, VerticalAlignment.MIDDLE, 0);
@@ -303,7 +302,7 @@ public class PExportToPDF {
         // Drop page number information into place
         if (printPageNumber && canvas != null) {
             canvas.beginText();
-            canvas.setFontAndSize(PdfFontFactory.createFont(FontConstants.HELVETICA), 12); // TODO: CONSTANTS
+            canvas.setFontAndSize(PdfFontFactory.createFont(FontConstants.HELVETICA), 12); 
             canvas.moveText(pageNumberX, pageNumberY);
             canvas.showText(Integer.toString(pdf.getNumberOfPages()));
             canvas.endText();
@@ -374,10 +373,10 @@ public class PExportToPDF {
                 curLetter = curWord.getValue().substring(0, 1);
                 Text varChunk = new Text(curLetter);
                 varChunk.setFont(conFont);
-                varChunk.setFontSize(conFontSize + 16); // TODO: int constant
+                varChunk.setFontSize(conFontSize + 16); 
                 dictEntry.add(varChunk);
                 varChunk = new Text(" WORDS:");
-                varChunk.setFontSize(defFontSize + 16); // TODO: int Constant
+                varChunk.setFontSize(defFontSize + 16); 
                 dictEntry.add(varChunk); 
                 dictEntry.add(new Text("\n"));
                 dictEntry.add(new Text("\n"));
@@ -413,7 +412,7 @@ public class PExportToPDF {
             }
 
             if (!curWord.getDefinition().equals("")) {
-                dictEntry.add(new Text(curWord.getDefinition()).setFontSize(defFontSize));
+                dictEntry.add(new Text("\n" + curWord.getDefinition()).setFontSize(defFontSize));
                 dictEntry.add(new Text("\n"));
             }
             
@@ -469,7 +468,7 @@ public class PExportToPDF {
                 }
                 curLetter = curWord.getLocalWord().substring(0, 1);
                 Text varChunk = new Text(curLetter.toUpperCase() + " WORDS:");
-                varChunk.setFontSize(defFontSize + 16); // TODO: int constant
+                varChunk.setFontSize(defFontSize + 16); 
                 dictEntry.add(varChunk);
                 dictEntry.add(new Text("\n"));
                 dictEntry.add(new Text("\n"));
@@ -510,7 +509,7 @@ public class PExportToPDF {
             }
 
             if (!curWord.getDefinition().equals("")) {
-                dictEntry.add(new Text(curWord.getDefinition()).setFontSize(defFontSize));
+                dictEntry.add(new Text("\n" + curWord.getDefinition()).setFontSize(defFontSize));
                 dictEntry.add(new Text("\n"));
             }
             
@@ -583,18 +582,18 @@ public class PExportToPDF {
         for (GrammarChapNode chap : gramList) {
             String chapName = chap.getName();
             ret.add(new Paragraph(chapName).setFont(PdfFontFactory
-                    .createFont(FontConstants.COURIER_BOLD)).setFontSize(20)); // TODO: CONSTANTS
+                    .createFont(FontConstants.COURIER_BOLD)).setFontSize(20)); 
 
-            Div chapDiv = new Div(); // TODO: Set anchor based on chapter name
+            Div chapDiv = new Div();
 
             // hash codes should be unique per chapter, even if titles are identical
             chapDiv.setProperty(Property.DESTINATION, String.valueOf(chapDiv.hashCode()));
             for (int i = 0; i < chap.getChildCount(); i++) {
                 Paragraph newSec = new Paragraph();
-                newSec.setMarginLeft(30); //TODO: INT CONSTANT
+                newSec.setMarginLeft(30); 
                 GrammarSectionNode curSec = (GrammarSectionNode) chap.getChildAt(i);
                 newSec.add(new Text(curSec.getName()).setFont(PdfFontFactory
-                        .createFont(FontConstants.COURIER_OBLIQUE)).setFontSize(18)); // TODO: CONSTANTS
+                        .createFont(FontConstants.COURIER_OBLIQUE)).setFontSize(18)); 
                 newSec.add(new Text("\n"));
                 // populate text ensuring that conlang font is maintained where appropriate
                 for (Entry<String, PFontInfo> e : FormattedTextHelper.getSectionTextFontSpecifec(curSec.getSectionText(), core)) {
@@ -668,9 +667,8 @@ public class PExportToPDF {
             varChunk = new Text(titleText);
         }
 
-        // TODO: remove manual font creation here
         varChunk.setFont(PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD));
-        varChunk.setFontSize(36); // TODO: Address constants
+        varChunk.setFontSize(36);
         ret.add(varChunk);
 
         if (!subTitleText.equals("")) {
@@ -688,7 +686,6 @@ public class PExportToPDF {
             ret.add("\n");
         }
 
-        // TODO: make certain this is left justified and with a large margain to the right and left
         if (!core.getPropertiesManager().getCopyrightAuthorInfo().equals("")) {
             varChunk = new Text(core.getPropertiesManager().getCopyrightAuthorInfo());
             varChunk.setTextAlignment(TextAlignment.LEFT);
@@ -806,13 +803,13 @@ public class PExportToPDF {
             PdfCanvas canvas = new PdfCanvas(page);
             canvas.beginText();
             try {
-                canvas.setFontAndSize(PdfFontFactory.createFont(FontConstants.HELVETICA), 12); // TODO: constants...
+                canvas.setFontAndSize(PdfFontFactory.createFont(FontConstants.HELVETICA), 12); 
             } catch (IOException e) {
                 // can't throw an exception here... built in/guaranteed font, though.
             }
-            canvas.moveText(34, pageNumberY); // TODO: CONSTANT
+            canvas.moveText(34, pageNumberY);
             canvas.showText(language);
-            canvas.moveText(450, 0); // TODO: CONSTANT
+            canvas.moveText(450, 0); 
             canvas.showText(String.format("Page %d of", pageNum));
             canvas.endText();
             canvas.stroke();
