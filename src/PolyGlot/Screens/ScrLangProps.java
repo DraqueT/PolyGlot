@@ -368,12 +368,14 @@ public class ScrLangProps extends PDialog {
      */
     private Font fontDialog() {
         JFontChooser fontChooser = new JFontChooser();
+        setAlwaysOnTop(false);
         Integer result = fontChooser.showDialog(btnChangeFont);
         Font font = null;
-
+        
         if (result == JFontChooser.OK_OPTION) {
             font = fontChooser.getSelectedFont();
         }
+        setAlwaysOnTop(true);
 
         return font;
     }
