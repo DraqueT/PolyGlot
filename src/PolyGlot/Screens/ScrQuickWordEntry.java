@@ -31,6 +31,7 @@ import PolyGlot.Nodes.TypeNode;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -155,7 +156,7 @@ public final class ScrQuickWordEntry extends PDialog {
     private void populateTypes() {
         Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
         cmbType.removeAllItems();
-        cmbType.addItem(cstSELET);
+        cmbType.addItem(new TypeNode());
         while (typeIt.hasNext()) {
             TypeNode curType = typeIt.next();
             cmbType.addItem(curType);
@@ -189,44 +190,37 @@ public final class ScrQuickWordEntry extends PDialog {
         String testResults = "";
         
         if (!test.getValue().isEmpty()) {
-            //PGTools.flashComponent(txtConWord, core.getRequiredColor(), true);
             ((PTextField)txtConWord).makeFlash(core.getRequiredColor(), true);
             testResults += test.getValue();
         }
         if (!test.getLocalWord().isEmpty()) {
-            //PGTools.flashComponent(txtLocalWord, core.getRequiredColor(), true);
             ((PTextField)txtLocalWord).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getLocalWord());
         }
         if (!test.getPronunciation().isEmpty()) {
-            //PGTools.flashComponent(txtProc, core.getRequiredColor(), true);
             ((PTextField)txtProc).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getPronunciation());
         }
         if (!test.getDefinition().isEmpty()) {
-            //PGTools.flashComponent(txtDefinition, core.getRequiredColor(), true);
-            ((PTextArea)txtDefinition).makeFlash(core.getRequiredColor(), true);
+            // errors having to do with type patterns returned in def field.
+            ((PComboBox)cmbType).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getDefinition());
         }
         if (!test.getGender().isEmpty()) {
             ((PComboBox)cmbGender).makeFlash(core.getRequiredColor(), true);
-            //PGTools.flashComponent(cmbGender, core.getRequiredColor(), true);
             testResults += ("\n" + test.getGender());
         }
         if (!test.typeError.isEmpty()) {
             ((PComboBox)cmbType).makeFlash(core.getRequiredColor(), true);
-            //PGTools.flashComponent(cmbType, core.getRequiredColor(), false);
             testResults += ("\n" + test.typeError);
         } 
         if (core.getPropertiesManager().isWordUniqueness()
                 && core.getWordCollection().testWordValueExists(txtConWord.getText())) {
-            //PGTools.flashComponent(txtConWord, core.getRequiredColor(), true);
             ((PTextField)txtConWord).makeFlash(core.getRequiredColor(), true);
             testResults += ("\nConWords set to enforced unique: this local exists elsewhere.");
         }
         if (core.getPropertiesManager().isLocalUniqueness()
                 && core.getWordCollection().testLocalValueExists(txtLocalWord.getText())) {
-            //PGTools.flashComponent(txtLocalWord, core.getRequiredColor(), true);
             ((PTextField)txtLocalWord).makeFlash(core.getRequiredColor(), true);
             testResults += ("\nLocal words set to enforced unique: this work exists elsewhere.");
         }
@@ -285,10 +279,10 @@ public final class ScrQuickWordEntry extends PDialog {
         chkDefinition = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         txtConWord = new PTextField(core);
-        txtLocalWord = new javax.swing.JTextField();
+        txtLocalWord = new PTextField(core, true);
         cmbType = new PComboBox();
         cmbGender = new PComboBox();
-        txtProc = new javax.swing.JTextField();
+        txtProc = new PTextField(core, true);
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDefinition = new PTextArea();
@@ -365,7 +359,7 @@ public final class ScrQuickWordEntry extends PDialog {
                         .addGap(40, 40, 40)
                         .addComponent(chkDefinition))
                     .addComponent(chkProc))
-                .addGap(0, 67, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -414,27 +408,29 @@ public final class ScrQuickWordEntry extends PDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtProc))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtLocalWord)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(49, 49, 49)
-                        .addComponent(cmbGender, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(63, 63, 63)
-                        .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(24, 24, 24)
-                        .addComponent(txtLocalWord))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbGender, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(txtProc, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(32, 32, 32)
+                        .addGap(27, 27, 27)
                         .addComponent(txtConWord)))
                 .addContainerGap())
         );
@@ -560,7 +556,6 @@ public final class ScrQuickWordEntry extends PDialog {
         //</editor-fold>
 
         ScrQuickWordEntry ret = new ScrQuickWordEntry(_core, _parent);
-        ret.setCore(_core);
         ret.setModal(true);
         return ret;
     }

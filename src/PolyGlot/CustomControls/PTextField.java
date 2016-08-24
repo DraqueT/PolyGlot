@@ -43,6 +43,7 @@ public class PTextField extends JTextField {
     private DictCore core;
     boolean skipRepaint = false;
     boolean curSetText = false;
+    boolean overrideFont = false;
     SwingWorker worker = null;
 
     /**
@@ -52,6 +53,11 @@ public class PTextField extends JTextField {
      */
     public PTextField(DictCore _core) {
         core = _core;
+    }
+    
+    public PTextField(DictCore _core, boolean _overideFont) {
+        core = _core;
+        overrideFont = _overideFont;
     }
 
     /**
@@ -143,7 +149,8 @@ public class PTextField extends JTextField {
                 }
 
                 Font testFont = propMan.getFontCon();
-                if (testFont != null
+                if (testFont != null 
+                        && !overrideFont
                         && !testFont.getFamily().equals(getFont().getFamily())) {
                     setFont(testFont);
                 }

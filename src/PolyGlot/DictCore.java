@@ -416,6 +416,7 @@ public class DictCore {
         return declensionMgr;
     }
 
+    // TODO: Move this method into the dictionary collection at some point... it'll need to be instantiated with core, though.
     /**
      * Checks whether word is legal and returns error reason if not
      *
@@ -447,9 +448,6 @@ public class DictCore {
             ret.setLocalWord(ret.getLocalWord() + (ret.getLocalWord().equals("") ? "" : "\n")
                     + "Local words set to enforced unique: this local exists elsewhere.");
         }
-
-        ret.typeError = ret.getWordTypeDisplay() + (ret.getWordTypeId()== 0 ? "" : "\n")
-                + typeCollection.typeRequirementsMet(word);
 
         TypeNode wordType = typeCollection.getNodeById(word.getWordTypeId());
         
