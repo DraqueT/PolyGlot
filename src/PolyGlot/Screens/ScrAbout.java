@@ -27,9 +27,6 @@ import PolyGlot.CustomControls.PDialog;
  * @author draque
  */
 public class ScrAbout extends PDialog {
-
-    private final DictCore core;
-
     /**
      * Creates new form ScrAbout
      *
@@ -51,6 +48,16 @@ public class ScrAbout extends PDialog {
                 + "https://github.com/DraqueT/PolyGlot");
     }
 
+    @Override
+    public final void setupKeyStrokes() {
+        super.setupKeyStrokes();
+    }
+    
+    @Override
+    public final void setModal(boolean _modal) {
+        super.setModal(_modal);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

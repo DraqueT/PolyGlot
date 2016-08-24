@@ -49,6 +49,11 @@ public class ScrLangStats extends PDialog {
     }
     
     @Override
+    public final void setupKeyStrokes() {
+        super.setupKeyStrokes();
+    }
+    
+    @Override
     public void updateAllValues(DictCore _core) {
         // does nothing
     }

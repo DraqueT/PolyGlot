@@ -35,7 +35,7 @@ public class DeclensionNode extends DictNode{
     private String combinedDimId = "";
     private boolean mandatory = false;
     private int highestDimension = 1;
-    private Map<Integer, DeclensionDimension> dimensions = new HashMap<Integer, DeclensionDimension>();
+    private Map<Integer, DeclensionDimension> dimensions = new HashMap<>();
     private DeclensionDimension buffer = new DeclensionDimension(-1);
     
     /**

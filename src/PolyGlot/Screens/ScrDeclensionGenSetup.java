@@ -88,6 +88,17 @@ public class ScrDeclensionGenSetup extends PDialog {
 
         populateCombinedDecl();
     }
+    
+    @Override
+    public final void setupKeyStrokes() {
+        super.setupKeyStrokes();
+    }
+    
+    @Override
+    
+    public final void setModal(boolean _modal) {
+        super.setModal(_modal);
+    }
 
     @Override
     public void dispose() {

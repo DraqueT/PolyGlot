@@ -40,15 +40,15 @@ import javax.swing.text.StyleConstants;
  * @author draque
  */
 public class FormattedTextHelper {
-    private final static String black = "black";
-    private final static String red = "red";
-    private final static String gray = "gray";
-    private final static String green = "green";
-    private final static String yellow = "yellow";
-    private final static String blue = "blue";
-    private final static String color = "color";
-    private final static String face = "face";
-    private final static String size = "size";
+    private final static String BLACK = "black";
+    private final static String RED = "red";
+    private final static String GRAY = "gray";
+    private final static String GREEN = "green";
+    private final static String YELLOW = "yellow";
+    private final static String BLUE = "blue";
+    private final static String COLOR = "color";
+    private final static String FACE = "face";
+    private final static String SIZE = "size";
 
     /**
      * Restores to the JTextPane the formatted text values encoded in the saved
@@ -224,7 +224,7 @@ public class FormattedTextHelper {
     private static Color extractColor(String targetNode) {
         Color ret = Color.black;
         
-        int pos = targetNode.indexOf(color) + 7;
+        int pos = targetNode.indexOf(COLOR) + 7;
         
         if (pos == -1) {
             return ret;
@@ -235,22 +235,22 @@ public class FormattedTextHelper {
         strip = strip.substring(0, pos);
         
         switch (strip) {
-            case black:
+            case BLACK:
                 ret = Color.black;
                 break;
-            case red:
+            case RED:
                 ret = Color.red;
                 break;
-            case blue:
+            case BLUE:
                 ret = Color.blue;
                 break;
-            case gray:
+            case GRAY:
                 ret = Color.gray;
                 break;
-            case yellow:
+            case YELLOW:
                 ret = Color.yellow;
                 break;
-            case green:
+            case GREEN:
                 ret = Color.green;
                 break;
             default:
@@ -269,7 +269,7 @@ public class FormattedTextHelper {
     private static String extractFamily(String targetNode) {
         String ret = "";
         
-        int pos = targetNode.indexOf(face) + 6;
+        int pos = targetNode.indexOf(FACE) + 6;
         
         if (pos == -1) {
             return ret;
@@ -290,7 +290,7 @@ public class FormattedTextHelper {
     private static int extractSize(String targetNode) {
         int ret = -1;
         
-        int pos = targetNode.indexOf(size) + 6;
+        int pos = targetNode.indexOf(SIZE) + 6;
         
         if (pos == -1) {
             return ret;
@@ -396,19 +396,19 @@ public class FormattedTextHelper {
 
         // Java 1.6 can't switch on an enum...
         if (c == Color.black) {
-            ret = black;
+            ret = BLACK;
         } else if (c == Color.red) {
-            ret = red;
+            ret = RED;
         } else if (c == Color.green) {
-            ret = green;
+            ret = GREEN;
         } else if (c == Color.yellow) {
-            ret = yellow;
+            ret = YELLOW;
         } else if (c == Color.blue) {
-            ret = blue;
+            ret = BLUE;
         } else if (c == Color.gray) {
-            ret = gray;
+            ret = GRAY;
         } else {
-            ret = black;
+            ret = BLACK;
         }
 
         return ret;
@@ -418,22 +418,22 @@ public class FormattedTextHelper {
         Color ret;
         
         switch (color) {
-            case black:
+            case BLACK:
                 ret = Color.black;
                 break;
-            case red:
+            case RED:
                 ret = Color.red;
                 break;
-            case green:
+            case GREEN:
                 ret = Color.green;
                 break;
-            case yellow:
+            case YELLOW:
                 ret = Color.yellow;
                 break;
-            case blue:
+            case BLUE:
                 ret = Color.blue;
                 break;
-            case gray:
+            case GRAY:
                 ret = Color.gray;
                 break;
             default:

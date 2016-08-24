@@ -51,8 +51,6 @@ import javax.swing.KeyStroke;
  * @author draque
  */
 public class ScrLogoQuickView extends PFrame {
-
-    private final DictCore core;
     private ScrLogoDetails logoFinder = null;
     private ConWord conWord = null;
 
@@ -100,6 +98,10 @@ public class ScrLogoQuickView extends PFrame {
         }
     }
     
+    @Override
+    public final void setTitle(String _title) {
+        super.setTitle(_title);
+    }
     
     @Override
     public void updateAllValues(DictCore _core) {

@@ -87,7 +87,7 @@ public class PropertiesManager {
     
     
     public PropertiesManager() {
-        alphaOrder = new HashMap<Character, Integer>();
+        alphaOrder = new HashMap<>();
     }
 
     public void setOverrideProgramPath(String override) {

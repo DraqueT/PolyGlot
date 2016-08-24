@@ -32,15 +32,15 @@ import javax.swing.text.Highlighter;
  */
 public class HighlightCaret extends DefaultCaret {
 
-    private static final Highlighter.HighlightPainter unfocusedPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
-    private static final Highlighter.HighlightPainter focusedPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
+    private final Highlighter.HighlightPainter unfocusedPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
+    private final Highlighter.HighlightPainter focusedPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
     private static final long serialVersionUID = 1L;
     private boolean isFocused;
 
     @Override
     protected Highlighter.HighlightPainter getSelectionPainter() {
         setBlinkRate(500); // otherwise is disabled, stopped
-        return isFocused ? focusedPainter/*super.getSelectionPainter()*/ : unfocusedPainter;
+        return isFocused ? focusedPainter : unfocusedPainter;
     }
 
     @Override

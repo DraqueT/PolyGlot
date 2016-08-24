@@ -35,12 +35,12 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class GrammarManager {
-    private final List<GrammarChapNode> chapters = new ArrayList<GrammarChapNode>();
+    private final List<GrammarChapNode> chapters = new ArrayList<>();
     private final Map<Integer, byte[]> soundMap;
     private GrammarChapNode buffer;
     
     public GrammarManager() {
-        soundMap = new HashMap<Integer, byte[]>();
+        soundMap = new HashMap<>();
         buffer = new GrammarChapNode(this);
     }
     

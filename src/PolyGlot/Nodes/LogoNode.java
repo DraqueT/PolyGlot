@@ -40,8 +40,8 @@ public class LogoNode extends DictNode {
     private boolean isRadical = false;
     private String tmpRads = "";
     private String tmpReadingBuffer = "";
-    protected List<LogoNode> radicals = new ArrayList<LogoNode>();
-    protected List<String> readings = new ArrayList<String>();
+    protected List<LogoNode> radicals = new ArrayList<>();
+    protected List<String> readings = new ArrayList<>();
 
     public LogoNode() {
         ImageIcon loadBlank = new ImageIcon(getClass().getResource(PGTUtil.emptyLogoImage));

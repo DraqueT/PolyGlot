@@ -47,16 +47,16 @@ import javax.swing.event.DocumentListener;
 public class ScrTranslationWindow extends PFrame {
     public final ScrDictMenu parent;
     private boolean curPopulating = false;
-    private List<String> localText = new ArrayList<String>();
-    private List<String> transText = new ArrayList<String>();
+    private List<String> localText = new ArrayList<>();
+    private List<String> transText = new ArrayList<>();
     private final DefaultListModel matchListModel;
-    private final Map<Integer, Integer> scrToCoreMap = new HashMap<Integer, Integer>();
-    private final Map<Integer, Integer> transToLocal = new HashMap<Integer, Integer>();
+    private final Map<Integer, Integer> scrToCoreMap = new HashMap<>();
+    private final Map<Integer, Integer> transToLocal = new HashMap<>();
     private boolean curTranslating = false;
-    private final List<PFrame> childFrames = new ArrayList<PFrame>();
+    private final List<PFrame> childFrames = new ArrayList<>();
     
     // list of related indexes, the first being 
-    List<Entry<Integer, Integer>> links = new ArrayList<Entry<Integer, Integer>>();
+    List<Entry<Integer, Integer>> links = new ArrayList<>();
     
     Integer transPosition = 0;
     
@@ -88,6 +88,11 @@ public class ScrTranslationWindow extends PFrame {
     }
     
     @Override
+    public final void setupKeyStrokes() {
+        super.setupKeyStrokes();
+    }
+    
+    @Override
     public boolean thisOrChildrenFocused() {
         return this.isFocusOwner();
     }
@@ -106,8 +111,8 @@ public class ScrTranslationWindow extends PFrame {
     private void startTranslation() {
         txtLocalText.setEditable(false);
         
-        localText = new ArrayList<String>();
-        transText = new ArrayList<String>();
+        localText = new ArrayList<>();
+        transText = new ArrayList<>();
         scrToCoreMap.clear();
         transToLocal.clear();
         
@@ -281,7 +286,7 @@ public class ScrTranslationWindow extends PFrame {
         String userInput = txtLocalText.getText();
         String[] splitInput = userInput.split("\\s");
         
-        localText = new ArrayList<String>();
+        localText = new ArrayList<>();
         
         localText.addAll(Arrays.asList(splitInput));
         

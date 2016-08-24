@@ -32,7 +32,7 @@ public class DeclensionGenRule {
     private String combinationId;
     private String regex = "";
     private String name = "";
-    private List<DeclensionGenTransform> transformations = new ArrayList<DeclensionGenTransform>();
+    private List<DeclensionGenTransform> transformations = new ArrayList<>();
     private DeclensionGenTransform transBuffer = new DeclensionGenTransform();
     
     /**
@@ -107,7 +107,7 @@ public class DeclensionGenRule {
      * wipes all transformations
      */
     public void wipeTransforms() {
-        transformations = new ArrayList<DeclensionGenTransform>();
+        transformations = new ArrayList<>();
     }
     
     public String getName() {

@@ -45,6 +45,11 @@ public class ScrTranslationFreewrite extends PFrame {
     }
     
     @Override
+    public final void setupKeyStrokes() {
+        super.setupKeyStrokes();
+    }
+    
+    @Override
     public void updateAllValues(DictCore _core) {
         // Deprecated screens don't need updates
         // TODO: revisit if this window is re-upped

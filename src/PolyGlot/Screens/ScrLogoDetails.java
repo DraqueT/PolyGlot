@@ -166,6 +166,11 @@ public class ScrLogoDetails extends PFrame {
         setTitle("Logograph Details/Modification");
         mode = WindowMode.SINGLEVALUE;
     }
+    
+    @Override
+    public final void setTitle(String title) {
+        super.setTitle(title);
+    }
 
     @Override
     public void updateAllValues(DictCore _core) {
@@ -425,7 +430,7 @@ public class ScrLogoDetails extends PFrame {
             return;
         }
 
-        List<LogoNode> radList = new ArrayList<LogoNode>();
+        List<LogoNode> radList = new ArrayList<>();
         DefaultListModel radModel = (DefaultListModel) lstRadicals.getModel();
 
         for (int i = 0; i < radModel.getSize(); i++) {
@@ -471,7 +476,7 @@ public class ScrLogoDetails extends PFrame {
             tblReadings.getCellEditor().stopCellEditing();
         }
 
-        List<String> readList = new ArrayList<String>();
+        List<String> readList = new ArrayList<>();
 
         for (int i = 0; i < tblReadings.getModel().getRowCount(); i++) {
             String curReading = (String) ((DefaultTableModel) tblReadings.getModel()).getValueAt(i, 0);

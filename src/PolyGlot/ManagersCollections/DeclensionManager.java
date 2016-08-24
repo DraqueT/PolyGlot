@@ -45,20 +45,20 @@ import org.w3c.dom.Element;
 public class DeclensionManager {
 
     // Integer is ID of related word, list is list of declension nodes
-    private final Map dList = new HashMap<Integer, List<DeclensionNode>>();
+    private final Map<Integer, List<DeclensionNode>> dList = new HashMap<>();
 
     // Integer is ID of related type, list is list of declensions for this type
-    private final Map dTemplates = new HashMap<Integer, List<DeclensionNode>>();
+    private final Map<Integer, List<DeclensionNode>> dTemplates = new HashMap<>();
 
     // If specific combined declensions require additional settings in the future,
     // change the boolean here to an object which will store them
-    private final Map combSettings = new HashMap<String, Boolean>();
+    private final Map<String, Boolean> combSettings = new HashMap<>();
 
     private Integer topId = 0;
     private boolean bufferDecTemp = false;
     private Integer bufferRelId = -1;
     private DeclensionNode buffer = new DeclensionNode(-1);
-    private final List<DeclensionGenRule> generationRules = new ArrayList<DeclensionGenRule>();
+    private final List<DeclensionGenRule> generationRules = new ArrayList<>();
     private DeclensionGenRule ruleBuffer = new DeclensionGenRule();
 
     public boolean isCombinedDeclSurpressed(String _combId) {
@@ -66,7 +66,7 @@ public class DeclensionManager {
             return false;
         }
 
-        return (Boolean) combSettings.get(_combId);
+        return combSettings.get(_combId);
     }
 
     public void setCombinedDeclSurpressed(String _combId, boolean _surpress) {
@@ -84,9 +84,9 @@ public class DeclensionManager {
      * @return list of all deprecated gen rules
      */
     public List<DeclensionGenRule> getAllDepGenerationRules(int typeId) {
-        List<DeclensionGenRule> ret = new ArrayList<DeclensionGenRule>();
+        List<DeclensionGenRule> ret = new ArrayList<>();
         Iterator<DeclensionPair> typeRules = getAllCombinedIds(typeId).iterator();
-        Map<String, Integer> ruleMap = new HashMap<String, Integer>();
+        Map<String, Integer> ruleMap = new HashMap<>();
 
         // creates searchable map of extant combination IDs
         while (typeRules.hasNext()) {
@@ -164,7 +164,7 @@ public class DeclensionManager {
      * @return list of rules
      */
     public List<DeclensionGenRule> getDeclensionRules(int typeId) {
-        List<DeclensionGenRule> ret = new ArrayList<DeclensionGenRule>();
+        List<DeclensionGenRule> ret = new ArrayList<>();
 
         Iterator<DeclensionGenRule> itRules = generationRules.iterator();
 
@@ -401,7 +401,7 @@ public class DeclensionManager {
      * @return list of currently constructed labels and ids
      */
     private List<DeclensionPair> getAllCombinedIds(int depth, String curId, String curLabel, List<DeclensionNode> declensionList) {
-        List<DeclensionPair> ret = new ArrayList<DeclensionPair>();
+        List<DeclensionPair> ret = new ArrayList<>();
 
         // for the specific case that a word with no declension patterns has a deprecated declension
         if (declensionList.isEmpty()) {
@@ -553,7 +553,7 @@ public class DeclensionManager {
             recList = (List) dTemplates.get(node.getId());
             recList.add(node);
         } else {
-            recList = new ArrayList<DeclensionNode>();
+            recList = new ArrayList<>();
             recList.add(node);
             dTemplates.put(typeId, recList);
         }
@@ -569,7 +569,7 @@ public class DeclensionManager {
         if (list.containsKey(typeId)) {
             wordList = (List) list.get(typeId);
         } else {
-            wordList = new ArrayList<DeclensionNode>();
+            wordList = new ArrayList<>();
             list.put(typeId, wordList);
         }
 
@@ -602,7 +602,7 @@ public class DeclensionManager {
         if (list.containsKey(relId)) {
             wordList = (List) list.get(relId);
         } else {
-            wordList = new ArrayList<DeclensionNode>();
+            wordList = new ArrayList<>();
             list.put(relId, wordList);
         }
 
@@ -674,7 +674,7 @@ public class DeclensionManager {
     
     public void deleteDeclension(Integer typeId, Integer declensionId, Map list) {
         if (list.containsKey(typeId)) {
-            List<DeclensionNode> copyTo = new ArrayList<DeclensionNode>();
+            List<DeclensionNode> copyTo = new ArrayList<>();
             Iterator<DeclensionNode> copyFrom = ((List) list.get(typeId)).iterator();
 
             while (copyFrom.hasNext()) {
@@ -698,7 +698,7 @@ public class DeclensionManager {
 
     private void updateDeclension(Integer typeId, Integer declensionId, DeclensionNode declension, Map list) {
         if (list.containsKey(typeId)) {
-            List<DeclensionNode> copyTo = new ArrayList<DeclensionNode>();
+            List<DeclensionNode> copyTo = new ArrayList<>();
             Iterator<DeclensionNode> copyFrom = ((List) list.get(typeId)).iterator();
 
             while (copyFrom.hasNext()) {
@@ -732,7 +732,7 @@ public class DeclensionManager {
     }
 
     private List<DeclensionNode> getDeclensionList(Integer wordId, Map list) {
-        List<DeclensionNode> ret = new ArrayList<DeclensionNode>();
+        List<DeclensionNode> ret = new ArrayList<>();
 
         if (list.containsKey(wordId)) {
             ret = (List<DeclensionNode>) list.get(wordId);
@@ -763,7 +763,7 @@ public class DeclensionManager {
      * @return map of all declensions in a word (empty if none)
      */
     public Map getWordDeclensions(Integer wordId) {
-        Map<String, DeclensionNode> ret = new HashMap<String, DeclensionNode>();
+        Map<String, DeclensionNode> ret = new HashMap<>();
 
         Iterator<DeclensionNode> decs = getDeclensionListWord(wordId).iterator();
 
@@ -919,9 +919,7 @@ public class DeclensionManager {
         Element combinedForms = doc.createElement(PGTUtil.decCombinedFormSectionXID);
         rootElement.appendChild(combinedForms);
 
-        Iterator it = combSettings.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pairs = (Map.Entry) it.next();
+        for (Map.Entry pairs : combSettings.entrySet()) {
             Element curCombForm = doc.createElement(PGTUtil.decCombinedFormXID);
             Element curAttrib;
             

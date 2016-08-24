@@ -30,8 +30,8 @@ import java.util.List;
  * @author draque
  */
 public class ThesNode extends DictNode {
-    private final List<ThesNode> subNodes = new ArrayList<ThesNode>();
-    private final List<ConWord> words = new ArrayList<ConWord>();
+    private final List<ThesNode> subNodes = new ArrayList<>();
+    private final List<ConWord> words = new ArrayList<>();
     final private ThesNode parent;
     private String notes = "";
     private final ThesaurusManager manager;
@@ -82,6 +82,11 @@ public class ThesNode extends DictNode {
         manager = _manager;
     }
     
+    @Override
+    public final void setValue(String _value) {
+        super.setValue(_value);
+    }
+    
     /**
      * gets node's manager
      * @return ThesaurusManager
@@ -122,7 +127,7 @@ public class ThesNode extends DictNode {
      * @return iterator of all words in immediate family
      */
     public Iterator<ConWord> getWords() {
-        List<ConWord> ret = new ArrayList<ConWord>();
+        List<ConWord> ret = new ArrayList<>();
         manager.removeDeadWords(this, words);
         
         

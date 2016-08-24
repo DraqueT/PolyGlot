@@ -42,7 +42,7 @@ public class PronunciationMgr {
         core = _core;
     }
 
-    private List<PronunciationNode> pronunciations = new ArrayList<PronunciationNode>();
+    private List<PronunciationNode> pronunciations = new ArrayList<>();
 
     /**
      * Sets list of pronunciations
@@ -137,7 +137,7 @@ public class PronunciationMgr {
     }
 
     public void deletePronunciation(PronunciationNode remove) {
-        List<PronunciationNode> newProcs = new ArrayList<PronunciationNode>();
+        List<PronunciationNode> newProcs = new ArrayList<>();
 
         for (PronunciationNode curNode : pronunciations) {
             if (curNode.equals(remove)) {
@@ -193,7 +193,7 @@ public class PronunciationMgr {
      * string returned
      */
     private List<PronunciationNode> getPronunciationElements(String base, boolean isFirst) {
-        List<PronunciationNode> ret = new ArrayList<PronunciationNode>();
+        List<PronunciationNode> ret = new ArrayList<>();
         Iterator<PronunciationNode> finder = getPronunciations();
 
         // return blank for empty string

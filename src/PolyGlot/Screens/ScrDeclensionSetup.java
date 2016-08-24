@@ -90,6 +90,11 @@ public final class ScrDeclensionSetup extends PDialog {
     }
     
     @Override
+    public final void setupKeyStrokes() {
+        super.setupKeyStrokes();
+    }
+    
+    @Override
     public void setModal(boolean _modal) {
         super.setModal(_modal);
     }

@@ -364,7 +364,7 @@ public class ScrPrintToPDF extends PDialog {
             InfoBox.info("Print Success", "Sucessfully printed to " + txtSavePath.getText(), this);
             this.dispose();
         } catch (Exception e) {
-            e.printStackTrace(); // TODO: Remove obviously
+            //e.printStackTrace(); 
             InfoBox.error("Save Error", "Unable to print to file: " + e.getMessage(), this);
         }
         setCursor(Cursor.getDefaultCursor());

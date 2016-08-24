@@ -170,7 +170,7 @@ public class GenderCollection extends DictionaryCollection{
      * @return 
      */
     public Iterator<GenderNode> getNodeIterator() {
-        List<GenderNode> retList = new ArrayList<GenderNode>(nodeMap.values());
+        List<GenderNode> retList = new ArrayList<>(nodeMap.values());
 
         Collections.sort(retList);
 
