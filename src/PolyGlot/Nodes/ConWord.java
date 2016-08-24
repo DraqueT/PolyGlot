@@ -56,6 +56,21 @@ public class ConWord extends DictNode {
         autoDeclensionOverride = false;
         rulesOverride = false;
     }
+    
+    /**
+     * Returns simple boolean of whether conword is legal or not
+     * @return 
+     */
+    public boolean isWordLegal() {
+        ConWord checkValue = parent.testWordLegality(this);
+        
+        return checkValue.getValue().equals("") &&
+                checkValue.getDefinition().equals("") &&
+                checkValue.getGender().equals("") &&
+                checkValue.getLocalWord().equals("") &&
+                checkValue.getPronunciation().equals("") &&
+                checkValue.typeError.equals("");
+    }
 
     public boolean isRulesOverrride() {
         return rulesOverride;

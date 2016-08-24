@@ -435,57 +435,6 @@ public class DictCore {
         return declensionMgr;
     }
 
-    // TODO: Move this method into the dictionary collection at some point... it'll need to be instantiated with core, though.
-    /**
-     * Checks whether word is legal and returns error reason if not
-     *
-     * @param word word to check legality of
-     * @return Conword with any illegal entries saved as word values
-     */
-    public ConWord isWordLegal(ConWord word) {
-        ConWord ret = new ConWord();
-
-        if (word.getValue().equals("")) {
-            ret.setValue("ConWord value cannot be blank.");
-        }
-
-        if (word.getWordTypeId() == 0 && propertiesManager.isTypesMandatory()) {
-            ret.typeError = "Types set to mandatory.";
-        }
-
-        if (word.getLocalWord().equals("") && propertiesManager.isLocalMandatory()) {
-            ret.setLocalWord("Local word set to mandatory.");
-        }
-
-        if (propertiesManager.isWordUniqueness() && wordCollection.containsWord(word.getValue())) {
-            ret.setValue(ret.getValue() + (ret.getValue().equals("") ? "" : "\n")
-                    + "ConWords set to enforced unique: this conword exists elsewhere.");
-        }
-
-        if (propertiesManager.isLocalUniqueness() && !word.getLocalWord().equals("")
-                && wordCollection.containsLocalMultiples(word.getLocalWord())) {
-            ret.setLocalWord(ret.getLocalWord() + (ret.getLocalWord().equals("") ? "" : "\n")
-                    + "Local words set to enforced unique: this local exists elsewhere.");
-        }
-
-        TypeNode wordType = typeCollection.getNodeById(word.getWordTypeId());
-        
-        ret.setDefinition(ret.getDefinition() + (ret.getDefinition().equals("") ? "" : "\n")
-                + declensionMgr.declensionRequirementsMet(word, wordType));
-        
-        if (wordType != null) {
-            String typeRegex = wordType.getPattern();
-
-            if (!typeRegex.equals("") && !word.getValue().matches(typeRegex)) {
-                ret.setDefinition(ret.getDefinition() + (ret.getDefinition().equals("") ? "" : "\n")
-                        + "Word does not match enforced pattern for type: " + word.getWordTypeDisplay() + ".");
-                ret.setProcOverride(true);
-            }
-        }
-
-        return ret;
-    }
-
     public TypeCollection getTypes() {
         return typeCollection;
     }

@@ -80,6 +80,75 @@ public class ConWordCollection extends DictionaryCollection {
 
         return ret;
     }
+    
+    /**
+     * Gets all words that are illegal in some way
+     * @return an iterator full of all illegal conwords
+     */
+    public Iterator<ConWord> illegalFilter() {
+        List<ConWord> retList = new ArrayList<>();
+
+        for (Object object : nodeMap.values()) {
+            ConWord curWord = (ConWord)object;
+            
+            if (!curWord.isWordLegal()) {
+                retList.add(curWord);
+            }
+        }
+        
+        Collections.sort(retList);
+        return retList.iterator();
+    }
+    
+    /**
+     * Checks whether word is legal and returns error reason if not
+     *
+     * @param word word to check legality of
+     * @return Conword with any illegal entries saved as word values
+     */
+    public ConWord testWordLegality(ConWord word) {
+        ConWord ret = new ConWord();
+
+        if (word.getValue().equals("")) {
+            ret.setValue("ConWord value cannot be blank.");
+        }
+
+        if (word.getWordTypeId() == 0 && core.getPropertiesManager().isTypesMandatory()) {
+            ret.typeError = "Types set to mandatory.";
+        }
+
+        if (word.getLocalWord().equals("") && core.getPropertiesManager().isLocalMandatory()) {
+            ret.setLocalWord("Local word set to mandatory.");
+        }
+
+        if (core.getPropertiesManager().isWordUniqueness() && core.getWordCollection().containsWord(word.getValue())) {
+            ret.setValue(ret.getValue() + (ret.getValue().equals("") ? "" : "\n")
+                    + "ConWords set to enforced unique: this conword exists elsewhere.");
+        }
+
+        if (core.getPropertiesManager().isLocalUniqueness() && !word.getLocalWord().equals("")
+                && core.getWordCollection().containsLocalMultiples(word.getLocalWord())) {
+            ret.setLocalWord(ret.getLocalWord() + (ret.getLocalWord().equals("") ? "" : "\n")
+                    + "Local words set to enforced unique: this local exists elsewhere.");
+        }
+
+        TypeNode wordType = core.getTypes().getNodeById(word.getWordTypeId());
+        
+        ret.setDefinition(ret.getDefinition() + (ret.getDefinition().equals("") ? "" : "\n")
+                + core.getDeclensionManager().declensionRequirementsMet(word, wordType));
+        
+        if (wordType != null) {
+            String typeRegex = wordType.getPattern();
+
+            if (!typeRegex.equals("") && !word.getValue().matches(typeRegex)) {
+                ret.setDefinition(ret.getDefinition() + (ret.getDefinition().equals("") ? "" : "\n")
+                        + "Word does not match enforced pattern for type: " + word.getWordTypeDisplay() + ".");
+                ret.setProcOverride(true);
+            }
+        }
+
+        return ret;
+    }
 
     /**
      * inserts current buffer to conWord list and generates id; blanks out

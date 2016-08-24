@@ -57,13 +57,16 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -89,6 +92,7 @@ public final class ScrLexicon extends PFrame {
 
     private final List<Window> childFrames = new ArrayList<>();
     private TitledPane gridTitlePane = null;
+    private CheckBox chkFindBad;
     private final JFXPanel fxPanel;
     private final String defConValue = "-- ConWord --";
     private final String defLocalValue = "-- NalLang Word --";
@@ -134,7 +138,7 @@ public final class ScrLexicon extends PFrame {
         setupListeners();
         setCustomLabels();
     }
-    
+
     private void setCustomLabels() {
         if (System.getProperty("os.name").startsWith("Mac")) {
             btnAddWord.setToolTipText(btnAddWord.getToolTipText() + " (⌘ +)");
@@ -143,7 +147,7 @@ public final class ScrLexicon extends PFrame {
             btnAddWord.setToolTipText(btnAddWord.getToolTipText() + " (CTRL +)");
             btnDelWord.setToolTipText(btnDelWord.getToolTipText() + " (CTRL -)");
         }
-        
+
         txtConWord.setToolTipText(core.conLabel() + " word value");
         txtLocalWord.setToolTipText(core.localLabel() + " word value");
     }
@@ -546,7 +550,7 @@ public final class ScrLexicon extends PFrame {
                 ? "" : ((GenderNode) cmbGender.getSelectedItem()).getValue();
         int typeId = (cmbType.getSelectedItem().equals(defTypeValue)
                 || cmbType.getSelectedItem().equals(newTypeValue))
-                ? 0: ((TypeNode) cmbType.getSelectedItem()).getId();
+                ? 0 : ((TypeNode) cmbType.getSelectedItem()).getId();
 
         if (curPopulating) {
             return;
@@ -577,7 +581,7 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        ConWord results = core.isWordLegal(testWord);
+        ConWord results = core.getWordCollection().testWordLegality(testWord);
         boolean isLegal = true;
 
         txtErrorBox.setText("");
@@ -589,7 +593,8 @@ public final class ScrLexicon extends PFrame {
         isLegal = isLegal && addErrorBoxMessage(cmbGender, results.getGender());
         isLegal = isLegal && addErrorBoxMessage(cmbType, results.typeError);
 
-        if (!testWord.isRulesOverrride()) {
+        if (!testWord.isRulesOverrride()
+                && !chkFindBad.isSelected()) { // if looking for illegals, allow free movement
             setLexiconEnabled(isLegal);
         } else {
             setLexiconEnabled(true);
@@ -655,6 +660,7 @@ public final class ScrLexicon extends PFrame {
                 txtProcSrc.setDisable(!enable);
                 cmbGenderSrc.setDisable(!enable);
                 cmbTypeSrc.setDisable(!enable);
+                chkFindBad.setDisable(!enable);
             }
         };
 
@@ -679,6 +685,15 @@ public final class ScrLexicon extends PFrame {
         cmbTypeSrc = new ComboBox();
         cmbGenderSrc = new ComboBox();
         gridTitlePane = new TitledPane();
+        chkFindBad = new CheckBox();
+
+        chkFindBad.setTooltip(new Tooltip("Select to filter on all words with illegal values"));
+        chkFindBad.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
+                applyIllegalFilter();
+            }
+        });
 
         grid.setVgap(4);
         grid.setPadding(new Insets(5, 5, 5, 5));
@@ -695,6 +710,8 @@ public final class ScrLexicon extends PFrame {
         grid.add(txtProcSrc, 3, 1);
         grid.add(new Label("Definition: "), 2, 2);
         grid.add(txtDefSrc, 3, 2);
+        grid.add(new Label("Illegals"), 0, 3);
+        grid.add(chkFindBad, 1, 3);
         gridTitlePane.setText("Search/Filter");
         gridTitlePane.setContent(grid);
         gridTitlePane.setExpanded(false);
@@ -704,19 +721,50 @@ public final class ScrLexicon extends PFrame {
         clearButton.setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent t) {
-                txtConSrc.setText("");
-                txtLocalSrc.setText("");
-                txtProcSrc.setText("");
-                txtDefSrc.setText("");
-                cmbTypeSrc.getSelectionModel().select(defTypeValue);
-                cmbGenderSrc.getSelectionModel().select(defGenderValue);
-                
+                clearFilterInternal();
                 runFilter();
             }
         });
         grid.add(clearButton, 3, 3);
 
         return gridTitlePane;
+    }
+
+    /**
+     * Should only be called from logic within the filter pane
+     * Does not close filter, and is guaranteed running inside fxProcess, so
+     * no latch logic necessary.
+     */
+    private void clearFilterInternal() {
+        txtConSrc.setText("");
+        txtLocalSrc.setText("");
+        txtProcSrc.setText("");
+        txtDefSrc.setText("");
+        cmbTypeSrc.getSelectionModel().select(defTypeValue);
+        cmbGenderSrc.getSelectionModel().select(defGenderValue);
+    }
+
+    /**
+     * Filters on illegel words.
+     * Does NOT respect "override" marker. This is to allow users to easily
+     * see what words are causing uniqueness errors, even if they themselves
+     * are legal via exception.
+     */
+    private void applyIllegalFilter() {
+        clearFilterInternal();
+        
+        txtConSrc.setDisable(chkFindBad.isSelected());
+        txtDefSrc.setDisable(chkFindBad.isSelected());
+        txtLocalSrc.setDisable(chkFindBad.isSelected());
+        txtProcSrc.setDisable(chkFindBad.isSelected());
+        cmbGenderSrc.setDisable(chkFindBad.isSelected());
+        cmbTypeSrc.setDisable(chkFindBad.isSelected());
+        
+        if (chkFindBad.isSelected()) {
+            populateLexicon(core.getWordCollection().illegalFilter());
+        } else {
+            populateLexicon();
+        }
     }
 
     @Override
@@ -1212,12 +1260,16 @@ public final class ScrLexicon extends PFrame {
 
         curPopulating = false;
 
-        filterLexicon();
+        // don't repopulate if looking for illegals
+        if (!chkFindBad.isSelected()) {
+            filterLexicon();
+        }
 
         curPopulating = true;
         lstLexicon.setSelectedValue(curWord, true);
         namePopulating = false;
         curPopulating = false;
+        setWordLegality();
     }
 
     /**
@@ -1730,6 +1782,11 @@ public final class ScrLexicon extends PFrame {
         }
 
         populateProperties();
+        
+        // if looking for illegals, always check legality value of word, otherwise let it slide for user convenience
+        if (chkFindBad.isSelected()) {
+            setWordLegality();
+        }
     }//GEN-LAST:event_lstLexiconValueChanged
 
     private void btnAddWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddWordActionPerformed

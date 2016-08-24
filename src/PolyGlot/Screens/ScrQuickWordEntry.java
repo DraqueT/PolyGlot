@@ -191,7 +191,7 @@ public final class ScrQuickWordEntry extends PDialog {
         word.setGender(cmbGender.getSelectedItem().toString());
         word.setWordTypeId(((TypeNode)cmbType.getSelectedItem()).getId());
         
-        ConWord test = core.isWordLegal(word);
+        ConWord test = core.getWordCollection().testWordLegality(word);
         String testResults = "";
         
         if (!test.getValue().isEmpty()) {
