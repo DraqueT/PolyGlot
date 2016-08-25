@@ -891,7 +891,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     private void localInfo(String infoHead, String infoText) {
         holdFront = true;
-        PolyGlot.CustomControls.InfoBox.info(infoHead, infoText, null);
+        PolyGlot.CustomControls.InfoBox.info(infoHead, infoText, this);
         holdFront = false;
     }
 
@@ -903,7 +903,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     private void localError(String infoHead, String infoText) {
         holdFront = true;
-        PolyGlot.CustomControls.InfoBox.error(infoHead, infoText, null);
+        PolyGlot.CustomControls.InfoBox.error(infoHead, infoText, this);
         holdFront = false;
     }
 

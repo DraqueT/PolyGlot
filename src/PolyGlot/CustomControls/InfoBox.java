@@ -70,19 +70,37 @@ public class InfoBox extends JFrame {
     }
     
     private Integer doYesNoCancel(String title, String message, Window parent) {     
-        return JOptionPane.showOptionDialog(parent, message, title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, optionIcon, null, null);
+        int ret;
+        if (parent == null) {
+            ret = JOptionPane.showOptionDialog(parent, message, title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, optionIcon, null, null);
+        } else {
+            ret = POptionPane.showOptionDialog(parent, message, title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, optionIcon, null, null);
+        }
+        return ret;
     }
     
     private void doError(String title, String message, Window parent) {
-        JOptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);
+        if (parent == null) {
+            JOptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);
+        } else {
+            POptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void doWarning(String title, String message, Window parent) {
-        JOptionPane.showMessageDialog(parent, message, title, JOptionPane.WARNING_MESSAGE);
+        if (parent == null) {
+            JOptionPane.showMessageDialog(parent, message, title, JOptionPane.WARNING_MESSAGE);
+        } else {
+            POptionPane.showMessageDialog(parent, message, title, JOptionPane.WARNING_MESSAGE);
+        }
     }
     
     private void doInfo(String title, String message, Window parent) {
-        JOptionPane.showMessageDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
+        if (parent == null) {
+            JOptionPane.showMessageDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            POptionPane.showMessageDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
+        }        
     }
     
     public InfoBox() {
