@@ -21,9 +21,7 @@ package PolyGlot;
 
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PFrame;
-import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DeclensionNode;
-import PolyGlot.Nodes.TypeNode;
 import PolyGlot.ManagersCollections.GenderCollection;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.ManagersCollections.GrammarManager;
@@ -56,7 +54,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 public class DictCore {
-    private final String version = "1.1";
+    private final String version = "1.2";
     private final ConWordCollection wordCollection = new ConWordCollection(this);
     private final TypeCollection typeCollection = new TypeCollection(this);
     private final GenderCollection genderCollection = new GenderCollection(this);
