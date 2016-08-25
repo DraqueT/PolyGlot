@@ -164,6 +164,7 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="alwaysOnTop" type="boolean" value="true"/>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
@@ -185,19 +186,14 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="btnLangProp" alignment="0" pref="173" max="32767" attributes="0"/>
-                  <Component id="btnGenders" max="32767" attributes="0"/>
-                  <Component id="btnThes" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnLexicon" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnQuickEntry" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnTypes" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnGrammar" alignment="1" max="32767" attributes="0"/>
-                  <Component id="btnLogos" alignment="0" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
+          <Component id="btnLexicon" max="32767" attributes="0"/>
+          <Component id="btnQuickEntry" alignment="0" max="32767" attributes="0"/>
+          <Component id="btnTypes" alignment="0" pref="175" max="32767" attributes="0"/>
+          <Component id="btnGrammar" alignment="0" max="32767" attributes="0"/>
+          <Component id="btnLangProp" alignment="0" max="32767" attributes="0"/>
+          <Component id="btnLogos" alignment="0" max="32767" attributes="0"/>
+          <Component id="btnThes" max="32767" attributes="0"/>
+          <Component id="btnGenders" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -218,6 +214,7 @@
               <Component id="btnThes" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnGenders" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
