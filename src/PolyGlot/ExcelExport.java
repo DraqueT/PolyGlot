@@ -104,8 +104,8 @@ public class ExcelExport {
         Iterator<ConWord> wordIt = core.getWordCollection().getNodeIterator();
         
         Row row  = sheet.createRow(0);
-        row.createCell(0).setCellValue("CON WORD");
-        row.createCell(1).setCellValue("LOCAL WORD");
+        row.createCell(0).setCellValue(core.conLabel().toUpperCase() + " WORD");
+        row.createCell(1).setCellValue(core.localLabel().toUpperCase() + " WORD");
         row.createCell(2).setCellValue("TYPE");
         row.createCell(3).setCellValue("PRONUNCIATION");
         row.createCell(4).setCellValue("GENDER");

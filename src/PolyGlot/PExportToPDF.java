@@ -176,38 +176,22 @@ public class PExportToPDF {
 
             if (printConLocal) {
                 String title = "Dictionary: ";
-                if (core.getPropertiesManager().getLangName().equals("")) {
-                    title += "Conlang ";
-                } else {
-                    title += core.getPropertiesManager().getLangName() + " ";
-                }
+                title += core.conLabel();
 
                 title += "to ";
 
-                if (core.getPropertiesManager().getLocalLangName().equals("")) {
-                    title += "Local";
-                } else {
-                    title += core.getPropertiesManager().getLocalLangName();
-                }
+                title += core.localLabel();
+                
                 chapTitles.put(DICTCON2LOC, title);
                 //chapList.add(new PEntry(buildConToLocalDictionary(DICTCON2LOC), DICTCON2LOC));
                 chapList.add(new PEntry(null, DICTCON2LOC));
             }
             if (printLocalCon) {
                 String title = "Dictionary: ";
-                if (core.getPropertiesManager().getLocalLangName().equals("")) {
-                    title += "Local ";
-                } else {
-                    title += core.getPropertiesManager().getLocalLangName() + " ";
-                }
-
+                title += core.localLabel();
                 title += "to ";
-
-                if (core.getPropertiesManager().getLangName().equals("")) {
-                    title += "Conlang";
-                } else {
-                    title += core.getPropertiesManager().getLangName();
-                }
+                title += core.conLabel();
+                
                 chapTitles.put(DICTLOC2CON, title);
                 chapList.add(new PEntry(null, DICTLOC2CON));
             }

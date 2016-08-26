@@ -79,6 +79,7 @@ public final class ScrQuickWordEntry extends PDialog {
     private void setupCustomLabels() {
         jLabel2.setText(core.conLabel() + " word");
         jLabel3.setText(core.localLabel() + " word");
+        chkLocal.setText(core.localLabel() + " word");
     }
     
     // Overridden to meet coding standards...

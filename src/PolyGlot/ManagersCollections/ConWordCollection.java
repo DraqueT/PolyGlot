@@ -110,7 +110,7 @@ public class ConWordCollection extends DictionaryCollection {
         ConWord ret = new ConWord();
 
         if (word.getValue().equals("")) {
-            ret.setValue("ConWord value cannot be blank.");
+            ret.setValue(core.conLabel() + " word value cannot be blank.");
         }
 
         if (word.getWordTypeId() == 0 && core.getPropertiesManager().isTypesMandatory()) {
@@ -118,18 +118,18 @@ public class ConWordCollection extends DictionaryCollection {
         }
 
         if (word.getLocalWord().equals("") && core.getPropertiesManager().isLocalMandatory()) {
-            ret.setLocalWord("Local word set to mandatory.");
+            ret.setLocalWord(core.localLabel() + " word set to mandatory.");
         }
 
         if (core.getPropertiesManager().isWordUniqueness() && core.getWordCollection().containsWord(word.getValue())) {
             ret.setValue(ret.getValue() + (ret.getValue().equals("") ? "" : "\n")
-                    + "ConWords set to enforced unique: this conword exists elsewhere.");
+                    + core.conLabel() + " words set to enforced unique: this conword exists elsewhere.");
         }
 
         if (core.getPropertiesManager().isLocalUniqueness() && !word.getLocalWord().equals("")
                 && core.getWordCollection().containsLocalMultiples(word.getLocalWord())) {
             ret.setLocalWord(ret.getLocalWord() + (ret.getLocalWord().equals("") ? "" : "\n")
-                    + "Local words set to enforced unique: this local exists elsewhere.");
+                    + core.localLabel() + " words set to enforced unique: this local exists elsewhere.");
         }
 
         TypeNode wordType = core.getTypes().getNodeById(word.getWordTypeId());

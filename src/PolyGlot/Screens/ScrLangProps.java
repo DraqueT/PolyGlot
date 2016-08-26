@@ -71,7 +71,19 @@ public class ScrLangProps extends PDialog {
         populateProperties();
         txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
         
-        setModal(true);
+        setModal(true);        
+    }
+    
+    /**
+     * Sets up custom labeling that can't be modified in generated code
+     */
+    public void setCustomLabels() {
+        chkLocalMandatory.setToolTipText("Check to enforce as mandatory a(n) " 
+                + core.localLabel() + " word on each created lexicon entry.");
+        chkLocalUniqueness.setToolTipText("Check to enforce as mandatory uniqueness in entries on the "
+                + core.localLabel() + " word field.");
+        btnChangeFont.setText(core.conLabel() + " Font");
+        txtFont.setToolTipText(core.conLabel() + " Font");
     }
     
     @Override
