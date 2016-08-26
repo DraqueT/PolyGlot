@@ -193,12 +193,14 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             mnuNewLocal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
             mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
             mnuOpenLocal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
+            mnuPublish.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
         } else {
             // I'm pretty sure all other OSes just use CTRL+ to do stuff
             mnuSaveLocal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
             mnuNewLocal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
             mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
             mnuOpenLocal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
+            mnuPublish.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
         }
     }
 
@@ -944,7 +946,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         mnuSaveAs = new javax.swing.JMenuItem();
         mnuOpenLocal = new javax.swing.JMenuItem();
         mnuRecents = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        mnuPublish = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuExit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -1066,14 +1069,16 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
         mnuRecents.setText("Recent");
         jMenu1.add(mnuRecents);
+        jMenu1.add(jSeparator5);
 
-        jMenuItem1.setText("Print to PDF");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        mnuPublish.setText("Publish to PDF");
+        mnuPublish.setActionCommand("Publish to PDF");
+        mnuPublish.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                mnuPublishActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(mnuPublish);
         jMenu1.add(jSeparator2);
 
         mnuExit.setText("Exit");
@@ -1336,9 +1341,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         checkForUpdates(true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void mnuPublishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPublishActionPerformed
         ScrPrintToPDF.run(core);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_mnuPublishActionPerformed
 
     private void mnuIPAChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIPAChartActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -1415,12 +1420,12 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JMenuItem mnuAbout;
     private javax.swing.JMenuItem mnuChkUpdate;
     private javax.swing.JMenuItem mnuExit;
@@ -1432,6 +1437,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private javax.swing.JMenuItem mnuLangStats;
     private javax.swing.JMenuItem mnuNewLocal;
     private javax.swing.JMenuItem mnuOpenLocal;
+    private javax.swing.JMenuItem mnuPublish;
     private javax.swing.JMenu mnuRecents;
     private javax.swing.JMenuItem mnuSaveAs;
     private javax.swing.JMenuItem mnuSaveLocal;

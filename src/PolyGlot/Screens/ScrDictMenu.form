@@ -46,12 +46,15 @@
                 <Property name="text" type="java.lang.String" value="Recent"/>
               </Properties>
             </Menu>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator5">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuPublish">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Print to PDF"/>
+                <Property name="text" type="java.lang.String" value="Publish to PDF"/>
+                <Property name="actionCommand" type="java.lang.String" value="Publish to PDF"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuPublishActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator2">

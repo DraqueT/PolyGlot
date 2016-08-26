@@ -22,11 +22,13 @@ package PolyGlot.CustomControls;
 import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
 import PolyGlot.Screens.ScrDictMenu;
+import PolyGlot.Screens.ScrPrintToPDF;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -53,7 +55,7 @@ import javax.swing.text.DefaultEditorKit;
  * @author Draque
  */
 public abstract class PFrame extends JFrame implements FocusListener, WindowFocusListener {
-
+    private final JMenuItem mnuPublish = new JMenuItem();
     private final JMenuItem mnuSave = new JMenuItem();
     private final JMenuItem mnuNew = new JMenuItem();
     private final JMenuItem mnuExit = new JMenuItem();
@@ -232,6 +234,14 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
      * sets menu accelerators and menu item text to reflect this
      */
     public void setupAccelerators() {
+        mnuPublish.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ScrPrintToPDF.run(core);
+            }
+        });
+        this.rootPane.add(mnuPublish);
+        
         mnuSave.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -270,11 +280,13 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
             mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
             mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
             mnuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
+            mnuPublish.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.META_DOWN_MASK));
         } else {
             mnuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
             mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
             mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
             mnuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
+            mnuPublish.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK));
         }
     }
 
