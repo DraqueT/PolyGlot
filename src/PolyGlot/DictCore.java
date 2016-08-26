@@ -405,18 +405,6 @@ public class DictCore {
     }
 
     /**
-     * deletes word based on word ID Makes sure to clear all records of word
-     * declension
-     *
-     * @param _id
-     * @throws java.lang.Exception
-     */
-    public void deleteWordById(Integer _id) throws Exception {
-        wordCollection.deleteNodeById(_id);
-        clearAllDeclensionsWord(_id);
-    }
-
-    /**
      * Clears all declensions from word
      *
      * @param wordId ID of word to clear of all declensions

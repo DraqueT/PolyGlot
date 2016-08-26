@@ -267,7 +267,7 @@ public class ConWordCollection extends DictionaryCollection {
     }
 
     /**
-     * WARNING: DO NOT CALL THIS OUTSIDE OF DICT CORE: CLEANUP DONE THERE
+     * Deletes word and balances all dependencies
      *
      * @param _id ID of word to delete
      * @throws Exception
@@ -276,9 +276,9 @@ public class ConWordCollection extends DictionaryCollection {
     public void deleteNodeById(Integer _id) throws Exception {
         ConWord deleteWord = this.getNodeById(_id);
 
-        balanceWordCounts(deleteWord, false);
-
+        balanceWordCounts(deleteWord, false);        
         super.deleteNodeById(_id);
+        core.getDeclensionManager().clearAllDeclensionsWord(_id);
     }
 
     @Override

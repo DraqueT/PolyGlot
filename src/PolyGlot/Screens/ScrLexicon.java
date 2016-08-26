@@ -1313,7 +1313,7 @@ public final class ScrLexicon extends PFrame {
         }
 
         try {
-            core.deleteWordById(curWord.getId());
+            core.getWordCollection().deleteNodeById(curWord.getId());
         } catch (Exception e) {
             InfoBox.error("Deletion Error", "Unable to delete word: "
                     + e.getLocalizedMessage(), this);
