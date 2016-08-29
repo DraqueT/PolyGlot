@@ -39,7 +39,7 @@ public class ScrAbout extends PDialog {
         setModal(true);
 
         txtAbout.setText("PolyGlot ver. " + core.getVersion() + "\n\nPolyGlot is "
-                + "copyright Draque Thompson 2014-2015. It is licensed under the Creative Commons "
+                + "copyright Draque Thompson 2014-2016. It is licensed under the Creative Commons "
                 + "Attribution-Noncommercial 4.0 International Public License, so it is free "
                 + "to distribute, so long as my work is credited and it not used for commercial "
                 + "purposes. Please don't sell this or call it your own, but feel free to "
