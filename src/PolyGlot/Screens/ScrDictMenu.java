@@ -114,7 +114,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         }
 
         super.dispose();
-        
+
         try {
             saveWindowsOpen();
             core.getOptionsManager().setScreenPosition(getClass().getName(),
@@ -752,10 +752,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         }
     }
-    
+
     private void IPAHit() {
-        if (scrIPA == null || scrIPA.isVisible() == false || scrIPA.isDisposed())
-        {
+        if (scrIPA == null || scrIPA.isVisible() == false || scrIPA.isDisposed()) {
             scrIPA = new ScrIPARefChart(core);
             scrIPA.setVisible(true);
         } else {
@@ -1390,18 +1389,20 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 s.checkForUpdates(false);
                 s.setupKeyStrokes();
                 s.setVisible(true);
-                
-                // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
-                try {
-                    com.sun.javafx.runtime.VersionInfo.getRuntimeVersion();
 
-                    // Test for minimum version of Java (8)
-                    String jVer = System.getProperty("java.version");
-                    if (jVer.startsWith("1.5") || jVer.startsWith("1.6") || jVer.startsWith("1.7")) {
-                        throw new Exception();
-                    }
-                } catch (Exception e) {
-                    InfoBox.error("Unable to start", "Unable to start PolyGlot without JavaFX and Java 8. Please upgrade and restart to continue.", s);
+                String problems = "";
+                // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
+                // Test for minimum version of Java (8)
+                String jVer = System.getProperty("java.version");
+                if (jVer.startsWith("1.5") || jVer.startsWith("1.6") || jVer.startsWith("1.7")) {
+                    problems += "Unable to start PolyGlot without Java 8.";
+                }
+                if (System.getProperties().get("javafx.runtime.version").equals("")) {
+                    problems += "\nUnable to load Java FX. Download and install to use PolyGlot.";
+                }
+                
+                if (!problems.equals("")) {
+                    InfoBox.error("Unable to start", problems + "\nPlease upgrade and restart to continue.", s);
                     s.dispose();
                 }
             }
