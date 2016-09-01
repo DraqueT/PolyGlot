@@ -1397,7 +1397,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 if (jVer.startsWith("1.5") || jVer.startsWith("1.6") || jVer.startsWith("1.7")) {
                     problems += "Unable to start PolyGlot without Java 8.";
                 }
-                if (System.getProperties().get("javafx.runtime.version").equals("")) {
+                try {
+                    this.getClass().getClassLoader().loadClass("javafx.embed.swing.JFXPanel");
+                } catch (ClassNotFoundException e) {
                     problems += "\nUnable to load Java FX. Download and install to use PolyGlot.";
                 }
                 
