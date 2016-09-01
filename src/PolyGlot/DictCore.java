@@ -55,21 +55,32 @@ import org.xml.sax.SAXException;
 
 public class DictCore {
     private final String version = "1.2.1";
-    private final ConWordCollection wordCollection = new ConWordCollection(this);
-    private final TypeCollection typeCollection = new TypeCollection(this);
-    private final GenderCollection genderCollection = new GenderCollection(this);
-    private final DeclensionManager declensionMgr = new DeclensionManager();
-    private final PropertiesManager propertiesManager = new PropertiesManager();
-    private final PronunciationMgr pronuncMgr = new PronunciationMgr(this);
-    private final ThesaurusManager thesManager = new ThesaurusManager(this);
-    private final LogoCollection logoCollection = new LogoCollection(this);
-    private final GrammarManager grammarManager = new GrammarManager();
-    private final OptionsManager optionsManager = new OptionsManager(this);
+    private final ConWordCollection wordCollection;
+    private final TypeCollection typeCollection;
+    private final GenderCollection genderCollection;
+    private final DeclensionManager declensionMgr;
+    private final PropertiesManager propertiesManager;
+    private final PronunciationMgr pronuncMgr;
+    private final ThesaurusManager thesManager;
+    private final LogoCollection logoCollection;
+    private final GrammarManager grammarManager;
+    private final OptionsManager optionsManager;
     private PFrame rootWindow;
     private Object clipBoard;
     private boolean curLoading = false;
 
     public DictCore() {
+        wordCollection = new ConWordCollection(this);
+        typeCollection = new TypeCollection(this);
+        genderCollection = new GenderCollection(this);
+        declensionMgr = new DeclensionManager();
+        propertiesManager = new PropertiesManager();
+        pronuncMgr = new PronunciationMgr(this);
+        thesManager = new ThesaurusManager(this);
+        logoCollection = new LogoCollection(this);
+        grammarManager = new GrammarManager();
+        optionsManager = new OptionsManager(this);
+        
         Map alphaOrder = propertiesManager.getAlphaOrder();
 
         wordCollection.setAlphaOrder(alphaOrder);

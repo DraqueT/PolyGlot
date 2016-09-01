@@ -20,8 +20,11 @@
 
 package PolyGlot.ManagersCollections;
 
+import PolyGlot.IOHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +54,14 @@ public class PropertiesManager {
     private boolean disableProcRegex = false;
     private boolean enforceRTL = false;
     private byte[] cachedFont = null;
+    
+    public PropertiesManager() {
+        alphaOrder = new HashMap<>();
+        
+        // set default font to Charis, as it's unicode compatible
+        
+        setFontCon(IOHandler.getCharisUnicodeFont());
+    }
     
     /**
      * Gets the java FX version of an AWT font
@@ -85,11 +96,6 @@ public class PropertiesManager {
         return cachedFont;
     } 
     
-    
-    public PropertiesManager() {
-        alphaOrder = new HashMap<>();
-    }
-
     public void setOverrideProgramPath(String override) {
         if (override.equals(PGTUtil.emptyFile)) {
             overrideProgramPath = "";
@@ -163,7 +169,7 @@ public class PropertiesManager {
      * Sets conlang font and nulls cached font value
      * @param fontCon the fontCon to set
      */
-    public void setFontCon(Font fontCon) {
+    public final void setFontCon(Font fontCon) {
         // null cached font if being set to new font
         if (font != null && !font.getFamily().equals(fontCon.getFamily())) {
             cachedFont = null;

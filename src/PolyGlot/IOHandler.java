@@ -46,6 +46,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 //import org.apache.commons.io.FileUtils;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -553,16 +555,20 @@ public class IOHandler {
         }
     }
 
+    public static Font getLcdFont() throws FontFormatException, IOException {
+        return new IOHandler().getLcdFontInternal();
+    }
+    
     /**
      * Fetches and returns LCD style font NOTE 1: the font returned is very
      * small, use deriveFont() to make it a usable size NOTE 2: this is a
-     * nonstatic method due to an inputstream restriction
+     * non-static method due to an input stream restriction
      *
      * @return LCD display font
      * @throws java.awt.FontFormatException if font corrupted
      * @throws java.io.IOException if unable to load font
      */
-    public Font getLcdFont() throws FontFormatException, IOException {
+    private Font getLcdFontInternal() throws FontFormatException, IOException {
         try (InputStream tmp = this.getClass().getResourceAsStream(PGTUtil.LCDFontLocation)) {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             Font ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
@@ -573,6 +579,45 @@ public class IOHandler {
 
             return ret;
         }
+    }
+    
+    /**
+     * Fetches and returns unicode compatible font NOTE 1: this is a
+     * non-static method due to an input stream restriction NOTE 2: this is the 
+     * default conlang font in PolyGlot
+     *
+     * @return Charis unicode compatible font
+     * @throws java.awt.FontFormatException if font corrupted
+     * @throws java.io.IOException if unable to load font
+     */
+    public static Font getCharisUnicodeFont() {
+        return new IOHandler().getCharisUnicodeFontInternal();
+    }
+    
+    /**
+     * Fetches and returns unicode compatible font NOTE 1: this is a
+     * non-static method due to an input stream restriction NOTE 2: this is the 
+     * default conlang font in PolyGlot
+     *
+     * @return Charis unicode compatible font
+     * @throws java.awt.FontFormatException if font corrupted
+     * @throws java.io.IOException if unable to load font
+     */
+    private Font getCharisUnicodeFontInternal() {
+        Font ret = null;
+        try (InputStream tmp = this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation)) {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
+
+            if (ret != null) {
+                ge.registerFont(ret);
+            }
+
+        } catch (IOException | FontFormatException ex) {
+            // do nothing. This is an internal call, and should really never fail.
+        }
+        
+        return ret;
     }
 
     /**
