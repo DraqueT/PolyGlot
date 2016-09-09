@@ -644,7 +644,7 @@ public class ScrGrammarGuide extends PFrame {
         txtSection.addStyle("default", null); // default style makes word wrap active
 
         try {
-            txtTimer.setFont(new IOHandler().getLcdFont().deriveFont(0, 18f));
+            txtTimer.setFont(IOHandler.getLcdFont().deriveFont(0, 18f));
         } catch (FontFormatException | IOException e) {
             InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), this);
         }
