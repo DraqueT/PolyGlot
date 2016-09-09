@@ -412,36 +412,22 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     private boolean doWrite(final String _fileName) {
         final ScrDictMenu parent = this;
-        final CountDownLatch latch = new CountDownLatch(1);
+        //final CountDownLatch latch = new CountDownLatch(1);
         boolean ret;
 
         cleanSave = false;
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        final SwingWorker worker = new SwingWorker() {
-            //Runs on the event-dispatching thread.
-            @Override
-            protected Object doInBackground() throws Exception {
-                try {
-                    core.writeFile(_fileName);
-                    cleanSave = true;
-                } catch (IOException | ParserConfigurationException |
-                        TransformerException e) {
-                    parent.setCleanSave(false);
-                    localError("Save Error", "Unable to save to file: "
-                            + curFileName + "\n\n" + e.getMessage());
-                }
 
-                latch.countDown();
-                return null;
-            }
-        };
-
-        worker.execute();
         try {
-            latch.await(30, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            localError("Save Error", "Save attempt timed out.");
+            core.writeFile(_fileName);
+            cleanSave = true;
+        } catch (IOException | ParserConfigurationException |
+                TransformerException e) {
+            parent.setCleanSave(false);
+            localError("Save Error", "Unable to save to file: "
+                    + curFileName + "\n\n" + e.getMessage());
         }
+
         setCursor(Cursor.getDefaultCursor());
 
         if (cleanSave) {
@@ -1402,7 +1388,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 } catch (ClassNotFoundException e) {
                     problems += "\nUnable to load Java FX. Download and install to use PolyGlot.";
                 }
-                
+
                 if (!problems.equals("")) {
                     InfoBox.error("Unable to start", problems + "\nPlease upgrade and restart to continue.", s);
                     s.dispose();
