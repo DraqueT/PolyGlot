@@ -121,17 +121,17 @@ public class PExportToPDF {
         targetFile = _targetFile;
         conFontFile = core.getPropertiesManager().getCachedFont();
         unicodeFontFile = new IOHandler().getUnicodeFontByteArray();
-
+        unicodeFont = PdfFontFactory.createFont(unicodeFontFile, PdfEncodings.IDENTITY_H, true);
+        unicodeFont.setSubset(true);
+        
         // Document Exception if unable to read font, IO exception if problem loading font binary
         if (conFontFile == null) {
-            // conFont may never be null
-            conFont = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
+            // If confont not specified, assume that the conlang requires unicode characters
+            conFont = unicodeFont;
         } else {
             conFont = PdfFontFactory.createFont(conFontFile, PdfEncodings.IDENTITY_H, true);
         }
-
-        unicodeFont = PdfFontFactory.createFont(unicodeFontFile, PdfEncodings.IDENTITY_H, true);
-        unicodeFont.setSubset(true);
+        
         conFontSize = core.getPropertiesManager().getFontSize();
         glossKey = getGlossKey();
     }
