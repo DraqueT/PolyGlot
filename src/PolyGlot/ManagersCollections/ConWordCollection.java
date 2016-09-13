@@ -631,6 +631,7 @@ public class ConWordCollection extends DictionaryCollection {
         Map<String, Integer> charCount = new HashMap<>();
         Map<String, Integer> phonemeCombo2 = new HashMap<>();
         Integer wordCount = nodeMap.size();
+        String allChars = core.getPropertiesManager().getAlphaPlainText();
 
         Iterator<ConWord> wordIt = new ArrayList<>(nodeMap.values()).iterator();
 
@@ -640,6 +641,13 @@ public class ConWordCollection extends DictionaryCollection {
             final String curValue = curWord.getValue();
             final int curValueLength = curValue.length();
             final int curType = curWord.getWordTypeId();
+            
+            // make sure we have all the characters in the word (fi they forgot to populate one in their alpha order(
+            for (char c : curValue.toCharArray()) {
+                if (!allChars.contains(String.valueOf(c))) {
+                    allChars += c;
+                }
+            }
 
             String beginsWith = curValue.substring(0, 1);
             String endsWith = curValue.substring(curValueLength - 1, curValueLength);
@@ -750,13 +758,17 @@ public class ConWordCollection extends DictionaryCollection {
         // build display of type counts
         ret += formatPlain("count of words by type:<br>");
         for (Entry<Integer, Integer> curEntry : typeCountByWord.entrySet()) {
-            ret += formatPlain(core.getTypes().getNodeById(curEntry.getKey()).getValue() + " : " + curEntry.getValue() + "<br>");
+            TypeNode type = core.getTypes().getNodeById(curEntry.getKey());
+            
+            if (type != null) {
+                ret += formatPlain(type.getValue() + " : " + curEntry.getValue() + "<br>");
+            }
         }
         ret += formatPlain("<br><br>");
 
         // build display for starts-with statistics
         ret += formatPlain(" Breakdown of words counted starting with letter:<br>");
-        for (char letter : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
+        for (char letter : allChars.toCharArray()) {
             ret += letter + formatPlain(" : "
                     + (wordStart.containsKey("" + letter) ? wordStart.get("" + letter) : formatPlain("0")) + "<br>");
         }
@@ -764,7 +776,7 @@ public class ConWordCollection extends DictionaryCollection {
 
         // build display for ends-with statistics
         ret += formatPlain(" Breakdown of words counted ending with letter:<br>");
-        for (char letter : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
+        for (char letter : allChars.toCharArray()) { 
             ret += letter + formatPlain(" : "
                     + (wordEnd.containsKey("" + letter) ? wordEnd.get("" + letter) : formatPlain("0")) + "<br>");
         }
@@ -772,7 +784,7 @@ public class ConWordCollection extends DictionaryCollection {
 
         // build display for character counts
         ret += formatPlain(" Breakdown of characters counted across all words:<br>");
-        for (char letter : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
+        for (char letter : allChars.toCharArray()) { 
             ret += letter + formatPlain(" : "
                     + (charCount.containsKey("" + letter) ? charCount.get("" + letter) : formatPlain("0")) + "<br>");
         }
@@ -793,13 +805,13 @@ public class ConWordCollection extends DictionaryCollection {
         ret += formatPlain("Heat map of letter combination frequency:<br>");
         ret += "<table border=\"1\">";
         ret += "<tr><td></td>";
-        for (char topRow : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
+        for (char topRow : allChars.toCharArray()) { 
             ret += "<td>" + topRow + "</td>";
         }
         ret += "</tr>";
         for (char y : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
             ret += "<tr><td>" + y + "</td>";
-            for (char x : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
+            for (char x : allChars.toCharArray()) { 
                 String search = "" + x + y;
                 Integer comboValue = (characterCombos2.containsKey(search)
                         ? characterCombos2.get(search) : 0);
