@@ -23,8 +23,6 @@ package PolyGlot.ManagersCollections;
 import PolyGlot.IOHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;

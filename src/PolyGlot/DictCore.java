@@ -32,6 +32,7 @@ import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.ManagersCollections.TypeCollection;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.ManagersCollections.OptionsManager;
+import PolyGlot.ManagersCollections.WordPropertyCollection;
 import PolyGlot.Screens.ScrDictMenu;
 import java.awt.Color;
 import java.awt.FontFormatException;
@@ -65,6 +66,7 @@ public class DictCore {
     private final LogoCollection logoCollection;
     private final GrammarManager grammarManager;
     private final OptionsManager optionsManager;
+    private final WordPropertyCollection wordPropCollection;
     private PFrame rootWindow;
     private Object clipBoard;
     private boolean curLoading = false;
@@ -80,6 +82,7 @@ public class DictCore {
         logoCollection = new LogoCollection(this);
         grammarManager = new GrammarManager();
         optionsManager = new OptionsManager(this);
+        wordPropCollection = new WordPropertyCollection();
         
         Map alphaOrder = propertiesManager.getAlphaOrder();
 
@@ -87,6 +90,7 @@ public class DictCore {
         typeCollection.setAlphaOrder(alphaOrder);
         genderCollection.setAlphaOrder(alphaOrder);
         logoCollection.setAlphaOrder(alphaOrder);
+        wordPropCollection.setAlphaOrder(alphaOrder);
         rootWindow = null;
     }
     
@@ -162,6 +166,10 @@ public class DictCore {
         }
         
         return ret;
+    }
+    
+    public WordPropertyCollection getWordPropertiesCollection() {
+        return wordPropCollection;
     }
     
     /**
