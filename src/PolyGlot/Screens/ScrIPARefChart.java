@@ -24,8 +24,6 @@ import PolyGlot.CustomControls.PFrame;
 import PolyGlot.DictCore;
 import PolyGlot.ExternalCode.TextTransfer;
 import PolyGlot.IPAHandler;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
 import javax.swing.JComponent;
 
 /**
@@ -43,6 +41,12 @@ public class ScrIPARefChart extends PFrame {
         core = _core;
         initComponents();
         handler = new IPAHandler(this);
+        this.setupKeyStrokes();
+    }
+    
+    @Override
+    public final void setupKeyStrokes() {
+        super.setupKeyStrokes();
     }
 
     /**
