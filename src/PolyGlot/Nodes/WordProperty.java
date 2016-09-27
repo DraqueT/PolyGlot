@@ -19,8 +19,10 @@
  */
 package PolyGlot.Nodes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +32,8 @@ import java.util.Map;
  */
 public class WordProperty extends DictNode {
     private final Map<Integer, WordPropValueNode> values = new HashMap<>();
-    int topId = 0;
+    private final List<Integer> applyTypes = new ArrayList<>();
+    private int topId = 0;
     
     @Override
     public void setEqual(DictNode _node) {
@@ -48,9 +51,38 @@ public class WordProperty extends DictNode {
             try {
                 addValue(curNode.name, curNode.getId());
             } catch (Exception ex) {
-                // TODO: Make this bubble properly once setEqual throws (enhancement #291)
+                // TODO: Make this bubble properly once setEqual throws exceptions (enhancement #291)
             }
         }
+    }
+    
+    /**
+     * Adds type id to list of types this property applies to
+     * @param _typeId ID of type
+     */
+    public void addApplyType(int _typeId) {
+        if (!applyTypes.contains(_typeId)) {
+            applyTypes.add(_typeId);
+        }
+    }
+    
+    /**
+     * Removes type id to list of types this property applies to
+     * @param _typeId ID of type
+     */
+    public void deleteApplyType(int _typeId) {
+        if (applyTypes.contains(_typeId)) {
+            applyTypes.remove(_typeId);
+        }
+    }
+    
+    /**
+     * Tests whether a this property applies to a given type
+     * @param _typeId ID of type
+     * @return true if applies
+     */
+    public boolean appliesToType(int _typeId) {
+        return applyTypes.contains(_typeId);
     }
     
     /**

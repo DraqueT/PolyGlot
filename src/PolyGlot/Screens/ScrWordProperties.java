@@ -19,13 +19,19 @@
  */
 package PolyGlot.Screens;
 
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordProperty;
 import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 
@@ -34,6 +40,8 @@ import javax.swing.JComponent;
  * @author draque.thompson
  */
 public class ScrWordProperties extends PFrame {
+    
+    private List<JCheckBox> typeChecks = new ArrayList<>();
 
     public ScrWordProperties(DictCore _core) {
         core = _core;
@@ -42,36 +50,110 @@ public class ScrWordProperties extends PFrame {
         populateTypes();
         populateValues();
     }
-    
+
     @Override
     public final void setupKeyStrokes() {
         super.setupKeyStrokes();
     }
-    
+
     /**
      * Sets up type checkboxes.
      */
     private void populateTypes() {
         Iterator<TypeNode> types = core.getTypes().getNodeIterator();
         pnlTypes.setLayout(new GridLayout(0, 1));
-        
+
         if (types.hasNext()) {
-            // TODO: add "check all" here
+            final JCheckBox checkAll = new JCheckBox();
+            checkAll.setText("All");
+            
+            checkAll.addItemListener(new ItemListener() {
+                final JCheckBox thisBox = checkAll;
+                
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    // TODO: add "check all" here
+                }
+            });
+            
+            pnlTypes.add(checkAll);
+            typeChecks.add(checkAll);
         }
-        
+
         while (types.hasNext()) {
             TypeNode curNode = types.next();
-            JCheckBox checkType = new JCheckBox();
+            final int typeId = curNode.getId();
+            final JCheckBox checkType = new JCheckBox();
             checkType.setText(curNode.getValue());
+
+            checkType.addItemListener(new ItemListener() {
+                final JCheckBox thisBox = checkType;
+                final int thisTypeId = typeId;
+                
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    // TODO: selection event update here
+                }
+            });
+
             pnlTypes.add(checkType);
         }
-        
+
         pnlTypes.setVisible(false);
         pnlTypes.setVisible(true);
     }
-    
+
     private void populateValues() {
-        // TODO: THIS
+        Iterator<WordProperty> it = core.getWordPropertiesCollection().getAllWordProperties();
+        DefaultListModel listModel = new DefaultListModel();
+        
+        while (it.hasNext()) {
+            WordProperty curNode = it.next();
+            listModel.addElement(curNode);
+        }
+        
+        lstProperties.setModel(listModel);
+        lstProperties.setSelectedIndex(0);
+    }
+    
+    private void addWordProperty() {
+        int propId;
+        WordProperty prop;
+        
+        try {
+            propId = core.getWordPropertiesCollection().addNode(new WordProperty());
+            prop = (WordProperty)core.getWordPropertiesCollection().getNodeById(propId);
+        } catch (Exception e) {
+            InfoBox.error("Property Creation Error", "Unable to create new word property: " + e.getLocalizedMessage(), this);
+            return;
+        }        
+        prop.setValue("foo");
+        DefaultListModel listModel = (DefaultListModel)lstProperties.getModel();
+        listModel.addElement(prop);
+        lstProperties.setSelectedValue(prop, true);
+    }
+    
+    private void deleteWordProperty() {
+        WordProperty prop = lstProperties.getSelectedValue();
+        int position = lstProperties.getSelectedIndex();
+        
+        if (prop == null) {
+            return;
+        }
+        
+        try {
+            core.getWordPropertiesCollection().deleteNodeById(prop.getId());
+        } catch (Exception e) {
+            InfoBox.error("Unable to Delete", "Unable to delete property: " + e.getLocalizedMessage(), this);
+        }
+        DefaultListModel listModel = (DefaultListModel)lstProperties.getModel();
+        listModel.removeElement(prop);
+        
+        if (position == 0) {
+            lstProperties.setSelectedIndex(position);
+        } else {
+            lstProperties.setSelectedIndex(position - 1);
+        }
     }
 
     /**
@@ -84,7 +166,7 @@ public class ScrWordProperties extends PFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        lstProperties = new javax.swing.JList<>();
         btnAddProp = new PButton("+");
         btnDelProp = new PButton("-");
         jPanel1 = new javax.swing.JPanel();
@@ -99,7 +181,19 @@ public class ScrWordProperties extends PFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(lstProperties);
+
+        btnAddProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddPropActionPerformed(evt);
+            }
+        });
+
+        btnDelProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelPropActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
@@ -186,9 +280,9 @@ public class ScrWordProperties extends PFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddProp)
-                    .addComponent(btnDelProp)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDelProp, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAddProp)))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -197,6 +291,14 @@ public class ScrWordProperties extends PFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPropActionPerformed
+        addWordProperty();
+    }//GEN-LAST:event_btnAddPropActionPerformed
+
+    private void btnDelPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelPropActionPerformed
+        deleteWordProperty();
+    }//GEN-LAST:event_btnDelPropActionPerformed
 
     static ScrWordProperties run(DictCore _core) {
         return new ScrWordProperties(_core);
@@ -214,7 +316,7 @@ public class ScrWordProperties extends PFrame {
 
     @Override
     public void addBindingToComponent(JComponent c) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        addWordProperty();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -224,12 +326,12 @@ public class ScrWordProperties extends PFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JList<WordProperty> lstProperties;
     private javax.swing.JPanel pnlTypes;
     // End of variables declaration//GEN-END:variables
 }
