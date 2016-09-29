@@ -49,7 +49,7 @@ public class WordProperty extends DictNode {
             WordPropValueNode curNode = it.next();
             
             try {
-                addValue(curNode.name, curNode.getId());
+                addValue(curNode.getValue(), curNode.getId());
             } catch (Exception ex) {
                 // TODO: Make this bubble properly once setEqual throws exceptions (enhancement #291)
             }
@@ -117,24 +117,31 @@ public class WordProperty extends DictNode {
     /**
      * Adds new value, assigning ID automatically.
      * @param name 
+     * @return value created
      * @throws java.lang.Exception if auto-assigned ID fails
      */
-    public void addValue(String name) throws Exception {
-        addValue(name, topId);
+    public WordPropValueNode addValue(String name) throws Exception {
+        WordPropValueNode ret = addValue(name, topId);
         topId++;
+        return ret;
     }
     
     /**
      * Inserts value with ID (only use on file loading)
      * @param name
      * @param id
+     * @return value created
      * @throws Exception if ID already exists
      */
-    public void addValue(String name, int id) throws Exception {
+    public WordPropValueNode addValue(String name, int id) throws Exception {
         if (values.containsKey(id)) {
             throw new Exception("Cannot insert value: " + name + " Id: " + id + " into " + this.value + " (already exists).");
         }
         
-        values.put(id, new WordPropValueNode(id, name));
+        WordPropValueNode ret = new WordPropValueNode();
+        ret.setId(id);
+        ret.setValue(name);
+        values.put(id, ret);
+        return ret;
     }
 }

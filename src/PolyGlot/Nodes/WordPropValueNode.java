@@ -23,22 +23,12 @@ package PolyGlot.Nodes;
  * This represents a single value within a word property
  * @author Draque Thompson
  */
-public class WordPropValueNode {
-
-    protected final int id;
-    public final String name;
-
-    public WordPropValueNode(int _id, String _name) {
-        id = _id;
-        name = _name;
-    }
-
-    public int getId() {
-        return id;
-    }
+public class WordPropValueNode extends DictNode {
 
     @Override
-    public String toString() {
-        return name;
+    public void setEqual(DictNode _node) {
+        this.value = _node.getValue();
+        this.id = _node.getId();
     }
+
 }

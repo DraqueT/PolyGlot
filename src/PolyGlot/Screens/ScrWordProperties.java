@@ -22,8 +22,10 @@ package PolyGlot.Screens;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
+import PolyGlot.CustomControls.PTableModel;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.TypeNode;
+import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
@@ -31,6 +33,7 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.CellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -40,15 +43,16 @@ import javax.swing.JComponent;
  * @author draque.thompson
  */
 public class ScrWordProperties extends PFrame {
-    
-    private List<JCheckBox> typeChecks = new ArrayList<>();
+
+    private final List<JCheckBox> typeChecks = new ArrayList<>();
 
     public ScrWordProperties(DictCore _core) {
         core = _core;
         initComponents();
         setupKeyStrokes();
         populateTypes();
-        populateValues();
+        populateWordProperties();
+        tblValues.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
     }
 
     @Override
@@ -66,16 +70,16 @@ public class ScrWordProperties extends PFrame {
         if (types.hasNext()) {
             final JCheckBox checkAll = new JCheckBox();
             checkAll.setText("All");
-            
+
             checkAll.addItemListener(new ItemListener() {
                 final JCheckBox thisBox = checkAll;
-                
+
                 @Override
                 public void itemStateChanged(ItemEvent e) {
                     // TODO: add "check all" here
                 }
             });
-            
+
             pnlTypes.add(checkAll);
             typeChecks.add(checkAll);
         }
@@ -89,7 +93,7 @@ public class ScrWordProperties extends PFrame {
             checkType.addItemListener(new ItemListener() {
                 final JCheckBox thisBox = checkType;
                 final int thisTypeId = typeId;
-                
+
                 @Override
                 public void itemStateChanged(ItemEvent e) {
                     // TODO: selection event update here
@@ -103,56 +107,129 @@ public class ScrWordProperties extends PFrame {
         pnlTypes.setVisible(true);
     }
 
-    private void populateValues() {
+    private void populateWordProperties() {
         Iterator<WordProperty> it = core.getWordPropertiesCollection().getAllWordProperties();
         DefaultListModel listModel = new DefaultListModel();
-        
+
         while (it.hasNext()) {
             WordProperty curNode = it.next();
             listModel.addElement(curNode);
         }
-        
+
         lstProperties.setModel(listModel);
         lstProperties.setSelectedIndex(0);
     }
-    
+
+    private void populatePropertyValues() {
+        WordProperty curProp = lstProperties.getSelectedValue();
+
+        CellEditor cellEditor = tblValues.getCellEditor(); // TODO: DELETE BLOCK?
+        if (cellEditor != null) {
+            //if (cellEditor.getCellEditorValue() != null) {
+                cellEditor.stopCellEditing();
+            //} else {
+            //    cellEditor.cancelCellEditing();
+            //}
+        }
+
+        if (curProp == null) {
+            enableValues(false);
+        } else {
+            PTableModel tableModel = new PTableModel(new Object[]{"Values"}, 0);
+            enableValues(true);
+
+            txtName.setText(curProp.getValue());
+
+            Iterator<WordPropValueNode> it = curProp.getValues();
+
+            while (it.hasNext()) {
+                tableModel.addRow(new Object[]{it.next()});
+            }
+
+            tblValues.setModel(tableModel);
+        }
+    }
+
+    /**
+     * Enables all values for properties (disable when none selected)
+     *
+     * @param enable
+     */
+    private void enableValues(boolean enable) {
+        txtName.setEnabled(enable);
+        tblValues.setEnabled(enable);
+
+        for (JCheckBox curBox : typeChecks) {
+            curBox.setEnabled(enable);
+        }
+    }
+
     private void addWordProperty() {
         int propId;
         WordProperty prop;
-        
+
         try {
             propId = core.getWordPropertiesCollection().addNode(new WordProperty());
-            prop = (WordProperty)core.getWordPropertiesCollection().getNodeById(propId);
+            prop = (WordProperty) core.getWordPropertiesCollection().getNodeById(propId);
         } catch (Exception e) {
             InfoBox.error("Property Creation Error", "Unable to create new word property: " + e.getLocalizedMessage(), this);
             return;
-        }        
+        }
         prop.setValue("foo");
-        DefaultListModel listModel = (DefaultListModel)lstProperties.getModel();
+        DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
         listModel.addElement(prop);
         lstProperties.setSelectedValue(prop, true);
     }
-    
+
     private void deleteWordProperty() {
         WordProperty prop = lstProperties.getSelectedValue();
         int position = lstProperties.getSelectedIndex();
-        
+
         if (prop == null) {
             return;
         }
-        
+
         try {
             core.getWordPropertiesCollection().deleteNodeById(prop.getId());
         } catch (Exception e) {
             InfoBox.error("Unable to Delete", "Unable to delete property: " + e.getLocalizedMessage(), this);
         }
-        DefaultListModel listModel = (DefaultListModel)lstProperties.getModel();
+        DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
         listModel.removeElement(prop);
-        
+
         if (position == 0) {
             lstProperties.setSelectedIndex(position);
         } else {
             lstProperties.setSelectedIndex(position - 1);
+        }
+    }
+
+    private void addPropertyValue() {
+        PTableModel tableModel = (PTableModel) tblValues.getModel();
+        WordProperty curProp = lstProperties.getSelectedValue();
+
+        if (curProp == null) {
+            return;
+        }
+
+        WordPropValueNode value;
+
+        try {
+            value = curProp.addValue("zoo");
+        } catch (Exception e) {
+            InfoBox.error("Value Add Error", e.getLocalizedMessage(), this);
+            return;
+        }
+
+        tableModel.addRow(new Object[]{value});
+    }
+
+    private void delPropertyValue() {
+        PTableModel tableModel = (PTableModel) tblValues.getModel();
+        int index = tblValues.getSelectedRow();
+
+        if (index >= 0) {
+            tableModel.removeRow(index);
         }
     }
 
@@ -170,17 +247,22 @@ public class ScrWordProperties extends PFrame {
         btnAddProp = new PButton("+");
         btnDelProp = new PButton("-");
         jPanel1 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        txtName = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
-        jButton1 = new PButton("+");
-        jButton2 = new PButton("-");
+        btnAddValue = new PButton("+");
+        btnDelValue = new PButton("-");
         pnlTypes = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblValues = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        lstProperties.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstPropertiesValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(lstProperties);
 
         btnAddProp.addActionListener(new java.awt.event.ActionListener() {
@@ -199,7 +281,17 @@ public class ScrWordProperties extends PFrame {
 
         jLabel1.setText("Values");
 
-        jScrollPane2.setViewportView(jList2);
+        btnAddValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddValueActionPerformed(evt);
+            }
+        });
+
+        btnDelValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelValueActionPerformed(evt);
+            }
+        });
 
         pnlTypes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -212,7 +304,7 @@ public class ScrWordProperties extends PFrame {
             .addGroup(pnlTypesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(172, Short.MAX_VALUE))
         );
         pnlTypesLayout.setVerticalGroup(
             pnlTypesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,21 +314,32 @@ public class ScrWordProperties extends PFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        tblValues.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Value"
+            }
+        ));
+        jScrollPane3.setViewportView(tblValues);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAddValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtName)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(77, 77, 77)
+                                .addComponent(btnDelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlTypes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -249,15 +352,15 @@ public class ScrWordProperties extends PFrame {
                         .addComponent(pnlTypes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)))))
+                            .addComponent(btnAddValue)
+                            .addComponent(btnDelValue)))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -278,7 +381,7 @@ public class ScrWordProperties extends PFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDelProp, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -299,6 +402,18 @@ public class ScrWordProperties extends PFrame {
     private void btnDelPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelPropActionPerformed
         deleteWordProperty();
     }//GEN-LAST:event_btnDelPropActionPerformed
+
+    private void lstPropertiesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPropertiesValueChanged
+        populatePropertyValues();
+    }//GEN-LAST:event_lstPropertiesValueChanged
+
+    private void btnAddValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddValueActionPerformed
+        addPropertyValue();
+    }//GEN-LAST:event_btnAddValueActionPerformed
+
+    private void btnDelValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelValueActionPerformed
+        delPropertyValue();
+    }//GEN-LAST:event_btnDelValueActionPerformed
 
     static ScrWordProperties run(DictCore _core) {
         return new ScrWordProperties(_core);
@@ -321,17 +436,17 @@ public class ScrWordProperties extends PFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddProp;
+    private javax.swing.JButton btnAddValue;
     private javax.swing.JButton btnDelProp;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnDelValue;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList<WordProperty> lstProperties;
     private javax.swing.JPanel pnlTypes;
+    private javax.swing.JTable tblValues;
+    private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
 }
