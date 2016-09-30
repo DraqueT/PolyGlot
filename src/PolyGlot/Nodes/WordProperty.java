@@ -70,7 +70,7 @@ public class WordProperty extends DictNode {
      * Removes type id to list of types this property applies to
      * @param _typeId ID of type
      */
-    public void deleteApplyType(int _typeId) {
+    public void deleteApplyType(Integer _typeId) {
         if (applyTypes.contains(_typeId)) {
             applyTypes.remove(_typeId);
         }

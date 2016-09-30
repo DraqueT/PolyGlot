@@ -27,13 +27,16 @@ import PolyGlot.DictCore;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
-import java.awt.GridLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.swing.Box.Filler;
 import javax.swing.CellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
@@ -55,6 +58,7 @@ public class ScrWordProperties extends PFrame {
         setupKeyStrokes();
         populateTypes();
         populateWordProperties();
+        populatePropertyValues();
         setupComponents();
     }
 
@@ -98,8 +102,11 @@ public class ScrWordProperties extends PFrame {
      */
     private void populateTypes() {
         Iterator<TypeNode> types = core.getTypes().getNodeIterator();
-        pnlTypes.setLayout(new GridLayout(0, 1));
-
+        pnlTypes.setLayout(new GridBagLayout());//(new GridLayout(0, 1));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.weighty = 1;
+        
         if (types.hasNext()) {
             final JCheckBox checkAll = new JCheckBox();
             checkAll.setText("All");
@@ -112,14 +119,21 @@ public class ScrWordProperties extends PFrame {
                     WordProperty prop = lstProperties.getSelectedValue();
                     
                     if (thisBox.isSelected()) {
-                        prop.addApplyType(-1);
+                        prop.addApplyType(-1);                       
                     } else {
                         prop.deleteApplyType(-1);
                     }
+                    setEnabledTypeText();
                 }
             });
-
-            pnlTypes.add(checkAll);
+            
+            checkAll.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+            checkAll.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+            pnlTypes.add(checkAll, gbc);
+            gbc.gridx = 1;
+            gbc.weightx = 9999;
+            pnlTypes.add(new Filler(new Dimension(0,0),new Dimension(9999,9999),new Dimension(9999,9999)), gbc);
+            gbc.gridy = 1;
             typeChecks.put(-1, checkAll);
         }
 
@@ -147,12 +161,36 @@ public class ScrWordProperties extends PFrame {
                 }
             });
             
-            pnlTypes.add(checkType);
+            checkType.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+            checkType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+            gbc.gridx = 0;
+            gbc.weightx = 1;
+            pnlTypes.add(checkType, gbc);
+            gbc.gridx = 1;
+            gbc.weightx = 9999;
+            pnlTypes.add(new Filler(new Dimension(0,0),new Dimension(9999,9999),new Dimension(9999,9999)), gbc);
+            gbc.gridy++;
             typeChecks.put(typeId, checkType);
         }
+        
+        // eatc up space at bottom
+        gbc.weighty = 9999;
+        pnlTypes.add(new Filler(new Dimension(0,0),new Dimension(9999,9999),new Dimension(9999,9999)), gbc);
 
         pnlTypes.setVisible(false);
         pnlTypes.setVisible(true);
+    }
+    
+    private void setEnabledTypeText() {
+        // if "ALL" is selected, disable other choices, as they are redundant
+        if (typeChecks.containsKey(-1)) {
+            JCheckBox all = typeChecks.get(-1);
+            for (JCheckBox check : typeChecks.values()) {
+                check.setEnabled(!all.isSelected());
+            }
+            // "ALL should always be enabled
+            all.setEnabled(true);
+        }
     }
 
     private void populateWordProperties() {
@@ -204,6 +242,7 @@ public class ScrWordProperties extends PFrame {
                 e.getValue().setSelected(curProp.appliesToType(e.getKey()));
             }
 
+            setEnabledTypeText();
             tblValues.setModel(tableModel);
         }
     }
@@ -315,11 +354,11 @@ public class ScrWordProperties extends PFrame {
         btnAddValue = new PButton("+");
         btnDelValue = new PButton("-");
         pnlTypes = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblValues = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Word Classes");
 
         lstProperties.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -358,23 +397,15 @@ public class ScrWordProperties extends PFrame {
 
         pnlTypes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel2.setText("Apply to parts of Speech");
-
         javax.swing.GroupLayout pnlTypesLayout = new javax.swing.GroupLayout(pnlTypes);
         pnlTypes.setLayout(pnlTypesLayout);
         pnlTypesLayout.setHorizontalGroup(
             pnlTypesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTypesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addContainerGap(172, Short.MAX_VALUE))
+            .addGap(0, 301, Short.MAX_VALUE)
         );
         pnlTypesLayout.setVerticalGroup(
             pnlTypesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTypesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         tblValues.setModel(new javax.swing.table.DefaultTableModel(
@@ -503,7 +534,6 @@ public class ScrWordProperties extends PFrame {
     private javax.swing.JButton btnDelProp;
     private javax.swing.JButton btnDelValue;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;

@@ -20,10 +20,14 @@
 package PolyGlot.ManagersCollections;
 
 import PolyGlot.Nodes.WordProperty;
+import PolyGlot.PGTUtil;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -44,4 +48,26 @@ public class WordPropertyCollection extends DictionaryCollection {
         bufferNode = new WordProperty();
     }
     
+    /**
+     * Writes all word properties information to XML document
+     *
+     * @param doc Document to write to
+     * @param rootElement root element of document
+     */
+    public void writeXML(Document doc, Element rootElement) {
+        Element wordProperties = doc.createElement(PGTUtil.ClassesNodeXID);
+        
+        for (WordProperty wordProp : (Collection<WordProperty>)nodeMap.values()) {
+            Element propElement = doc.createElement(PGTUtil.ClassXID);
+            
+            Element propProp = doc.createElement(PGTUtil.ClassIdXID);
+            propProp.appendChild(doc.createTextNode(wordProp.getId().toString()));
+            
+            // TODO: FINISH
+            
+            wordProperties.appendChild(propElement);
+        }
+        
+        doc.appendChild(wordProperties);
+    }
 }

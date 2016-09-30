@@ -149,6 +149,11 @@ public class PGTUtil {
     public static final String grammarSectionRecordingXID = "grammarSectionRecordingXID";
     public static final String grammarSectionTextXID = "grammarSectionText";
     
+    // properties for word classes
+    public static final String ClassesNodeXID = "wordGrammarClassCollection";
+    public static final String ClassXID = "wordGrammarClassNode";
+    public static final String ClassIdXID = "wordGrammarClassID";
+    
     // constants for PolyGlot options found in PolyGlot.ini
     public static final int optionsNumLastFiles = 5;
     public static final String optionsLastFiles = "LastFiles";
