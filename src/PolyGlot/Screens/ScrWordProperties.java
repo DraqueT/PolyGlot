@@ -30,13 +30,16 @@ import PolyGlot.Nodes.WordProperty;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.CellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -44,7 +47,7 @@ import javax.swing.JComponent;
  */
 public class ScrWordProperties extends PFrame {
 
-    private final List<JCheckBox> typeChecks = new ArrayList<>();
+    private final Map<Integer, JCheckBox> typeChecks = new HashMap<>();
 
     public ScrWordProperties(DictCore _core) {
         core = _core;
@@ -52,6 +55,36 @@ public class ScrWordProperties extends PFrame {
         setupKeyStrokes();
         populateTypes();
         populateWordProperties();
+        setupComponents();
+    }
+
+    private void setupComponents() {
+        txtName.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                sync();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                sync();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                sync();
+            }
+
+            public void sync() {
+                WordProperty prop = lstProperties.getSelectedValue();
+
+                if (prop != null) {
+                    prop.setValue(txtName.getText());
+                    lstProperties.repaint();
+                }
+            }
+        });
+
         tblValues.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
     }
 
@@ -76,12 +109,18 @@ public class ScrWordProperties extends PFrame {
 
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    // TODO: add "check all" here
+                    WordProperty prop = lstProperties.getSelectedValue();
+                    
+                    if (thisBox.isSelected()) {
+                        prop.addApplyType(-1);
+                    } else {
+                        prop.deleteApplyType(-1);
+                    }
                 }
             });
 
             pnlTypes.add(checkAll);
-            typeChecks.add(checkAll);
+            typeChecks.put(-1, checkAll);
         }
 
         while (types.hasNext()) {
@@ -96,11 +135,20 @@ public class ScrWordProperties extends PFrame {
 
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    // TODO: selection event update here
+                    WordProperty prop = lstProperties.getSelectedValue();
+                    
+                    if (prop != null) {
+                        if (thisBox.isSelected()) {
+                            prop.addApplyType(typeId);
+                        } else {
+                            prop.deleteApplyType(typeId);
+                        }
+                    }
                 }
             });
-
+            
             pnlTypes.add(checkType);
+            typeChecks.put(typeId, checkType);
         }
 
         pnlTypes.setVisible(false);
@@ -120,30 +168,40 @@ public class ScrWordProperties extends PFrame {
         lstProperties.setSelectedIndex(0);
     }
 
+    /**
+     * Populates all values associated with property
+     */
     private void populatePropertyValues() {
         WordProperty curProp = lstProperties.getSelectedValue();
 
         CellEditor cellEditor = tblValues.getCellEditor(); // TODO: DELETE BLOCK?
         if (cellEditor != null) {
-            //if (cellEditor.getCellEditorValue() != null) {
-                cellEditor.stopCellEditing();
-            //} else {
-            //    cellEditor.cancelCellEditing();
-            //}
+            cellEditor.stopCellEditing();
         }
 
         if (curProp == null) {
+            txtName.setText("");
             enableValues(false);
+            for (JCheckBox checkBox : typeChecks.values()) {
+                checkBox.setSelected(false);
+            }
         } else {
             PTableModel tableModel = new PTableModel(new Object[]{"Values"}, 0);
             enableValues(true);
 
+            // set name
             txtName.setText(curProp.getValue());
 
             Iterator<WordPropValueNode> it = curProp.getValues();
-
+            // add property values
+            
             while (it.hasNext()) {
                 tableModel.addRow(new Object[]{it.next()});
+            }
+            
+            // set checkboxes for types this applies to
+            for (Entry<Integer, JCheckBox> e : typeChecks.entrySet()) {
+                e.getValue().setSelected(curProp.appliesToType(e.getKey()));
             }
 
             tblValues.setModel(tableModel);
@@ -159,7 +217,7 @@ public class ScrWordProperties extends PFrame {
         txtName.setEnabled(enable);
         tblValues.setEnabled(enable);
 
-        for (JCheckBox curBox : typeChecks) {
+        for (JCheckBox curBox : typeChecks.values()) {
             curBox.setEnabled(enable);
         }
     }
@@ -175,7 +233,7 @@ public class ScrWordProperties extends PFrame {
             InfoBox.error("Property Creation Error", "Unable to create new word property: " + e.getLocalizedMessage(), this);
             return;
         }
-        prop.setValue("foo");
+
         DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
         listModel.addElement(prop);
         lstProperties.setSelectedValue(prop, true);
@@ -215,7 +273,7 @@ public class ScrWordProperties extends PFrame {
         WordPropValueNode value;
 
         try {
-            value = curProp.addValue("zoo");
+            value = curProp.addValue("");
         } catch (Exception e) {
             InfoBox.error("Value Add Error", e.getLocalizedMessage(), this);
             return;
@@ -226,6 +284,11 @@ public class ScrWordProperties extends PFrame {
 
     private void delPropertyValue() {
         PTableModel tableModel = (PTableModel) tblValues.getModel();
+
+        if (tblValues.getCellEditor() != null) {
+            tblValues.getCellEditor().stopCellEditing();
+        }
+
         int index = tblValues.getSelectedRow();
 
         if (index >= 0) {

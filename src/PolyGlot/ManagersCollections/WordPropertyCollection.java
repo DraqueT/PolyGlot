@@ -20,7 +20,10 @@
 package PolyGlot.ManagersCollections;
 
 import PolyGlot.Nodes.WordProperty;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -29,7 +32,11 @@ import java.util.Iterator;
 public class WordPropertyCollection extends DictionaryCollection {
     
     public Iterator<WordProperty> getAllWordProperties() {
-        return nodeMap.values().iterator();
+        List<WordProperty> retList = new ArrayList<>(nodeMap.values());
+
+        Collections.sort(retList);
+
+        return retList.iterator();
     }
     
     @Override
