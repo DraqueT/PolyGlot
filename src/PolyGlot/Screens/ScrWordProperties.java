@@ -44,6 +44,10 @@ import javax.swing.JComponent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+// TODO: make correct element autoselect after hitting + for immediate editing
+// TODO: make proper choices when illegal value left in field
+// TODO: make text boxes have default values which don't save/are greyed
+
 /**
  *
  * @author draque.thompson
@@ -90,6 +94,17 @@ public class ScrWordProperties extends PFrame {
         });
 
         tblValues.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+    }
+    /**
+     * Make certain editing finalized before leaving window
+     */
+    @Override
+    public void dispose() {
+        if (tblValues.getCellEditor() != null) {
+            tblValues.getCellEditor().stopCellEditing();
+        }
+        
+        super.dispose();
     }
 
     @Override
@@ -230,11 +245,9 @@ public class ScrWordProperties extends PFrame {
             // set name
             txtName.setText(curProp.getValue());
 
-            Iterator<WordPropValueNode> it = curProp.getValues();
             // add property values
-            
-            while (it.hasNext()) {
-                tableModel.addRow(new Object[]{it.next()});
+            for (WordPropValueNode curValue : curProp.getValues()) {
+                tableModel.addRow(new Object[]{curValue});
             }
             
             // set checkboxes for types this applies to

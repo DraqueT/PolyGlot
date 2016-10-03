@@ -415,6 +415,7 @@ public class DictCore {
         pronuncMgr.writeXML(doc, rootElement);
         logoCollection.writeXML(doc, rootElement);
         grammarManager.writeXML(doc, rootElement);
+        wordPropCollection.writeXML(doc, rootElement);
 
         // write thesaurus entries
         rootElement.appendChild(thesManager.writeToSaveXML(doc));

@@ -24,11 +24,9 @@ package PolyGlot.Nodes;
  * @author Draque Thompson
  */
 public class WordPropValueNode extends DictNode {
-
     @Override
     public void setEqual(DictNode _node) {
         this.value = _node.getValue();
         this.id = _node.getId();
     }
-
 }

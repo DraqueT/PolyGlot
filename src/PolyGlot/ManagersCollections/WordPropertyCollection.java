@@ -19,6 +19,7 @@
  */
 package PolyGlot.ManagersCollections;
 
+import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
 import PolyGlot.PGTUtil;
 import java.util.ArrayList;
@@ -55,19 +56,58 @@ public class WordPropertyCollection extends DictionaryCollection {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
+        // element containing all properties
         Element wordProperties = doc.createElement(PGTUtil.ClassesNodeXID);
         
+        // creates each property
         for (WordProperty wordProp : (Collection<WordProperty>)nodeMap.values()) {
+            // property element
             Element propElement = doc.createElement(PGTUtil.ClassXID);
             
+            // ID element
             Element propProp = doc.createElement(PGTUtil.ClassIdXID);
             propProp.appendChild(doc.createTextNode(wordProp.getId().toString()));
+            propElement.appendChild(propProp);
             
-            // TODO: FINISH
+            // Name element
+            propProp = doc.createElement(PGTUtil.ClassNameXID);
+            propProp.appendChild(doc.createTextNode(wordProp.getValue()));
+            propElement.appendChild(propProp);
             
+            // generates element with all type IDs of types this property applies to
+            String applyTypes = "";
+            for (Integer typeId : wordProp.getApplyTypes()) {
+                if (!applyTypes.equals("")) {
+                    applyTypes += ",";
+                }
+                
+                applyTypes += typeId.toString();
+            }
+            propProp = doc.createElement(PGTUtil.ClassApplyTypesXID);
+            propProp.appendChild(doc.createTextNode(applyTypes));
+            propElement.appendChild(propProp);
+            
+            // element for collection of values of property
+            propProp = doc.createElement(PGTUtil.ClassValuesCollectionXID);
+            for (WordPropValueNode curValue : wordProp.getValues()) {
+                Element valueNode = doc.createElement(PGTUtil.ClassValueNodeXID);
+                
+                Element value = doc.createElement(PGTUtil.ClassValueIdXID);
+                value.appendChild(doc.createTextNode(curValue.getId().toString()));
+                valueNode.appendChild(value);
+                
+                // value string
+                value = doc.createElement(PGTUtil.ClassValueNameXID);
+                value.appendChild(doc.createTextNode(curValue.getValue()));
+                valueNode.appendChild(value);
+                
+                propProp.appendChild(valueNode);
+            }
+            propElement.appendChild(propProp);
+
             wordProperties.appendChild(propElement);
         }
         
-        doc.appendChild(wordProperties);
+        rootElement.appendChild(wordProperties);
     }
 }

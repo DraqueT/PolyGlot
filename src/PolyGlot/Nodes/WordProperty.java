@@ -20,8 +20,8 @@
 package PolyGlot.Nodes;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +34,7 @@ public class WordProperty extends DictNode {
     private final Map<Integer, WordPropValueNode> values = new HashMap<>();
     private final List<Integer> applyTypes = new ArrayList<>();
     private int topId = 0;
+    public WordPropValueNode buffer = new WordPropValueNode();
     
     @Override
     public void setEqual(DictNode _node) {
@@ -44,16 +45,22 @@ public class WordProperty extends DictNode {
         
         this.value = copyProp.getValue();
         
-        Iterator<WordPropValueNode> it = copyProp.getValues();
-        while (it.hasNext()) {
-            WordPropValueNode curNode = it.next();
-            
+        for (WordPropValueNode curNode : copyProp.getValues()) {
             try {
                 addValue(curNode.getValue(), curNode.getId());
             } catch (Exception ex) {
                 // TODO: Make this bubble properly once setEqual throws exceptions (enhancement #291)
             }
         }
+    }
+    
+    /**
+     * inserts current buffer node into list of word property values
+     * @throws java.lang.Exception
+     */
+    public void insert() throws Exception {
+        addValue(buffer.getValue(), buffer.getId());
+        buffer = new WordPropValueNode();
     }
     
     /**
@@ -86,11 +93,19 @@ public class WordProperty extends DictNode {
     }
     
     /**
+     * Gets copy of list of apply types
+     * @return list of int values (ids)
+     */
+    public List<Integer> getApplyTypes() {
+        return new ArrayList<Integer>(applyTypes);
+    }
+    
+    /**
      * Gets iterator of values
      * @return iterator with all values of word property
      */
-    public Iterator<WordPropValueNode> getValues() {
-        return values.values().iterator();
+    public Collection<WordPropValueNode> getValues() {
+        return values.values();
     }
     
     /**

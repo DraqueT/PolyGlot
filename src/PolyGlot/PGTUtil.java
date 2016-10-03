@@ -153,6 +153,12 @@ public class PGTUtil {
     public static final String ClassesNodeXID = "wordGrammarClassCollection";
     public static final String ClassXID = "wordGrammarClassNode";
     public static final String ClassIdXID = "wordGrammarClassID";
+    public static final String ClassNameXID = "wordGrammarClassName";
+    public static final String ClassApplyTypesXID = "wordGrammarApplyTypes";
+    public static final String ClassValuesCollectionXID = "wordGrammarClassValuesCollection";
+    public static final String ClassValueNodeXID = "wordGrammarClassValueNode";
+    public static final String ClassValueNameXID = "wordGrammarClassValueName";
+    public static final String ClassValueIdXID = "wordGrammarClassValueId";
     
     // constants for PolyGlot options found in PolyGlot.ini
     public static final int optionsNumLastFiles = 5;
