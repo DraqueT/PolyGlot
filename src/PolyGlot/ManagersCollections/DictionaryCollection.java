@@ -109,6 +109,10 @@ public abstract class DictionaryCollection {
     public void setAlphaOrder(Map _alphaOrder) {
         alphaOrder = _alphaOrder;
     }
+    
+    public DictNode getBuffer () {
+        return bufferNode;
+    }
 
     /**
      * Inserts buffer node, applying next logical ID to node

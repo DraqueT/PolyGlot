@@ -36,6 +36,10 @@ import org.w3c.dom.Element;
  */
 public class WordPropertyCollection extends DictionaryCollection {
     
+    public WordPropertyCollection() {
+        bufferNode = new WordProperty();
+    }
+    
     public Iterator<WordProperty> getAllWordProperties() {
         List<WordProperty> retList = new ArrayList<>(nodeMap.values());
 
@@ -46,6 +50,14 @@ public class WordPropertyCollection extends DictionaryCollection {
     
     @Override
     public void clear() {
+        bufferNode = new WordProperty();
+    }
+    
+    /**
+     * Inserts and blanks current buffer node
+     */
+    public void insert() throws Exception {
+        this.insert(bufferNode.getId(), bufferNode);
         bufferNode = new WordProperty();
     }
     
