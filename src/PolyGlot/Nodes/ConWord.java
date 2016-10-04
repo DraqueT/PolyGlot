@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2016, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -23,13 +23,16 @@ package PolyGlot.Nodes;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.ConWordCollection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  *
  * @author draque
  */
 public class ConWord extends DictNode {
-
     // so long as the conword is not blank, this can be blank
     private String localWord;
     private int typeId;
@@ -40,13 +43,13 @@ public class ConWord extends DictNode {
     private boolean autoDeclensionOverride;
     private boolean rulesOverride;
     private DictCore core;
-    ConWordCollection parent;
+    private ConWordCollection parent;
+    private final Map<Integer, Integer> classValues = new HashMap<>();
     public String typeError = ""; // used only for returning error state
 
     public ConWord() {
         value = "";
         localWord = "";
-        //wordType = "";
         typeId = 0;
         definition = "";
         pronunciation = "";
@@ -93,7 +96,6 @@ public class ConWord extends DictNode {
         
         this.setValue(set.getValue());
         this.setLocalWord(set.getLocalWord());
-        //this.setWordType(set.getWordType()); // TODO: delete
         this.setWordTypeId(set.getWordTypeId());
         this.setDefinition(set.getDefinition());
         this.setPronunciation(set.getPronunciation());
@@ -233,6 +235,38 @@ public class ConWord extends DictNode {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+    
+    /**
+     * Sets a the class of a word to a given value. If the class does not exist yet for the word, it is created.
+     * @param classId ID of class to set value for
+     * @param valueId ID of value to set the class to
+     */
+    public void setClassValue(int classId, int valueId) {
+        if (classValues.containsKey(classId)) {
+            classValues.remove(classId);
+        }
+        
+        classValues.put(classId, valueId);
+    }
+    
+    /**
+     * Gets sets of entries representing classes the word contains and their values
+     * Note: THIS IS NOT COMPREHENSIVE! If no value has been set for a word, it will
+     * not be returned at all.
+     * @return entries of <class id, value id>
+     */
+    public Iterator<Entry<Integer, Integer>> getClassValues() {
+        return classValues.entrySet().iterator();
+    }
+    
+    /**
+     * Gets value of a class for a word by class' id
+     * @param classId ID of class to get value of
+     * @return id of value assigned to class. -1 if not set.
+     */
+    public Integer getClassValue(int classId) {
+        return classValues.containsKey(classId) ? classValues.get(classId) : -1;
     }
     
     /**

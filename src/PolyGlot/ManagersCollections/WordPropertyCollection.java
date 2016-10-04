@@ -25,7 +25,6 @@ import PolyGlot.PGTUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -40,12 +39,12 @@ public class WordPropertyCollection extends DictionaryCollection {
         bufferNode = new WordProperty();
     }
     
-    public Iterator<WordProperty> getAllWordProperties() {
+    public List<WordProperty> getAllWordProperties() {
         List<WordProperty> retList = new ArrayList<>(nodeMap.values());
 
         Collections.sort(retList);
 
-        return retList.iterator();
+        return retList;
     }
     
     @Override
@@ -55,10 +54,13 @@ public class WordPropertyCollection extends DictionaryCollection {
     
     /**
      * Inserts and blanks current buffer node
+     * @return inserted Id
+     * @throws java.lang.Exception
      */
-    public void insert() throws Exception {
-        this.insert(bufferNode.getId(), bufferNode);
+    public int insert() throws Exception {
+        int ret = this.insert(bufferNode.getId(), bufferNode);
         bufferNode = new WordProperty();
+        return ret;
     }
     
     /**

@@ -662,6 +662,7 @@ public class CustHandlerFactory {
             int wCId;
             int wGId;
             String combinedDecId = "";
+            String tmpString; // used mostly for converting deprecated values (as they no longer have placeholder points)
 
             DeclensionManager declensionMgr = core.getDeclensionManager();
             GenderCollection genderCollection = core.getGenders();
@@ -712,6 +713,7 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.pronunciationXID)) {
                     bpronuncation = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
+                    tmpString = ""; // temp value to store deprecated field
                     bgender = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.genderIdXID)) {
                     bgenderId = true;
@@ -901,6 +903,46 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuideXID)) {
                     pronuncMgr.addPronunciation(proBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
+                    // this uses a slow, heuristic method because it's a one time process
+                    // that is replacing the existing, inexact method with an ID based one
+                    WordProperty writeProp = null;
+                    // find gender property
+                    for (WordProperty prop : core.getWordPropertiesCollection().getAllWordProperties()) {
+                        if (prop.getValue().equals("Gender")) {
+                            writeProp = prop;
+                            break;
+                        }
+                    }
+                    
+                    try {
+                        // create gender if doesn't exist
+                        if (writeProp == null) {
+                            core.getWordPropertiesCollection().clear();
+                            core.getWordPropertiesCollection().getBuffer().setValue("Gender");
+                            int id = core.getWordPropertiesCollection().insert();
+                            writeProp = (WordProperty)core.getWordPropertiesCollection().getNodeById(id);                       
+                        }
+
+                        WordPropValueNode valueWrite = null;
+
+                        for (WordPropValueNode value : writeProp.getValues()) {
+                            // test against constructed gender string
+                            if (value.getValue().equals(tmpString)) {
+                                valueWrite = value;
+                                break;
+                            }
+                        }
+                        
+                        if (valueWrite == null) {
+                            valueWrite = writeProp.addValue(tmpString);                            
+                        }
+                        // TODO: Add this value to the word...
+                        /*ConWord bufferWord = this.getWordCollection().getBufferWord();
+                        bufferWord.setGender(bufferWord.getGender()
+                                + new String(ch, start, length));*/
+                    } catch (Exception e) {
+                        loadLog += "\nGender class load error: " + e.getLocalizedMessage();
+                    }
                     bgender = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionXID)) {
                     DeclensionNode curBuffer = declensionMgr.getBuffer();
@@ -1202,9 +1244,7 @@ public class CustHandlerFactory {
                     bufferWord.setPronunciation(bufferWord.getPronunciation()
                             + new String(ch, start, length));
                 } else if (bgender) {
-                    ConWord bufferWord = this.getWordCollection().getBufferWord();
-                    bufferWord.setGender(bufferWord.getGender()
-                            + new String(ch, start, length));
+                    tmpString += new String(ch, start, length);
                 } else if (bgenderId) {
                     wGId = Integer.parseInt(new String(ch, start, length));
                     bgenderId = false;

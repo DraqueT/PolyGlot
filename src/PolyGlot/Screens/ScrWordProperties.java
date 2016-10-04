@@ -209,11 +209,9 @@ public class ScrWordProperties extends PFrame {
     }
 
     private void populateWordProperties() {
-        Iterator<WordProperty> it = core.getWordPropertiesCollection().getAllWordProperties();
         DefaultListModel listModel = new DefaultListModel();
 
-        while (it.hasNext()) {
-            WordProperty curNode = it.next();
+        for (WordProperty curNode : core.getWordPropertiesCollection().getAllWordProperties()) {
             listModel.addElement(curNode);
         }
 
