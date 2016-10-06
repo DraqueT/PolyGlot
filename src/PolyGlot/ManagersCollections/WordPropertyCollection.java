@@ -58,8 +58,30 @@ public class WordPropertyCollection extends DictionaryCollection {
      * @throws java.lang.Exception
      */
     public int insert() throws Exception {
-        int ret = this.insert(bufferNode.getId(), bufferNode);
+        int ret;
+        
+        if (bufferNode.getId() > 0) {
+            ret = this.insert(bufferNode.getId(), bufferNode);
+        } else {
+            ret = super.insert(bufferNode);
+        }
+        
         bufferNode = new WordProperty();
+        return ret;
+    }
+    
+    public List<WordProperty> getClassProps(int classId) {
+        List<WordProperty> ret = new ArrayList<>();
+        
+        for (WordProperty curProp : (ArrayList<WordProperty>) 
+                new ArrayList<>(nodeMap.values())) {
+            if (curProp.appliesToType(classId) 
+                    || curProp.appliesToType(-1)) { // -1 is class "all"
+                ret.add(curProp);
+            }
+        }
+        
+        Collections.sort(ret);
         return ret;
     }
     

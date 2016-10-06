@@ -97,7 +97,7 @@ public class WordProperty extends DictNode {
      * @return list of int values (ids)
      */
     public List<Integer> getApplyTypes() {
-        return new ArrayList<Integer>(applyTypes);
+        return new ArrayList<>(applyTypes);
     }
     
     /**

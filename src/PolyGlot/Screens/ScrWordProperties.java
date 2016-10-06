@@ -117,7 +117,7 @@ public class ScrWordProperties extends PFrame {
      */
     private void populateTypes() {
         Iterator<TypeNode> types = core.getTypes().getNodeIterator();
-        pnlTypes.setLayout(new GridBagLayout());//(new GridLayout(0, 1));
+        pnlTypes.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.weighty = 1;

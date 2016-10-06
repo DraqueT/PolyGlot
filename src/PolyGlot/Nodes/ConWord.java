@@ -254,7 +254,7 @@ public class ConWord extends DictNode {
      * Gets sets of entries representing classes the word contains and their values
      * Note: THIS IS NOT COMPREHENSIVE! If no value has been set for a word, it will
      * not be returned at all.
-     * @return entries of <class id, value id>
+     * @return list of entries of <class id, value id>
      */
     public Iterator<Entry<Integer, Integer>> getClassValues() {
         return classValues.entrySet().iterator();

@@ -903,45 +903,47 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuideXID)) {
                     pronuncMgr.addPronunciation(proBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
-                    // this uses a slow, heuristic method because it's a one time process
-                    // that is replacing the existing, inexact method with an ID based one
-                    WordProperty writeProp = null;
-                    // find gender property
-                    for (WordProperty prop : core.getWordPropertiesCollection().getAllWordProperties()) {
-                        if (prop.getValue().equals("Gender")) {
-                            writeProp = prop;
-                            break;
-                        }
-                    }
-                    
-                    try {
-                        // create gender if doesn't exist
-                        if (writeProp == null) {
-                            core.getWordPropertiesCollection().clear();
-                            core.getWordPropertiesCollection().getBuffer().setValue("Gender");
-                            int id = core.getWordPropertiesCollection().insert();
-                            writeProp = (WordProperty)core.getWordPropertiesCollection().getNodeById(id);                       
-                        }
-
-                        WordPropValueNode valueWrite = null;
-
-                        for (WordPropValueNode value : writeProp.getValues()) {
-                            // test against constructed gender string
-                            if (value.getValue().equals(tmpString)) {
-                                valueWrite = value;
+                    // only create property if necessary.
+                    if (!tmpString.equals("")) {
+                        // this uses a slow, heuristic method because it's a one time process
+                        // that is replacing the existing, inexact method with an ID based one
+                        WordProperty writeProp = null;
+                        // find gender property
+                        for (WordProperty prop : core.getWordPropertiesCollection().getAllWordProperties()) {
+                            if (prop.getValue().equals("Gender")) {
+                                writeProp = prop;
                                 break;
                             }
                         }
-                        
-                        if (valueWrite == null) {
-                            valueWrite = writeProp.addValue(tmpString);                            
+
+                        try {
+                            // create gender if doesn't exist
+                            if (writeProp == null) {
+                                core.getWordPropertiesCollection().clear();
+                                core.getWordPropertiesCollection().getBuffer().setValue("Gender");
+                                int id = core.getWordPropertiesCollection().insert();
+                                writeProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(id);
+                            }
+
+                            WordPropValueNode valueWrite = null;
+
+                            for (WordPropValueNode value : writeProp.getValues()) {
+                                // test against constructed gender string
+                                if (value.getValue().equals(tmpString)) {
+                                    valueWrite = value;
+                                    break;
+                                }
+                            }
+
+                            if (valueWrite == null) {
+                                valueWrite = writeProp.addValue(tmpString);
+                            }
+
+                            ConWord bufferWord = this.getWordCollection().getBufferWord();
+                            bufferWord.setClassValue(writeProp.getId(), valueWrite.getId());
+                        } catch (Exception e) {
+                            loadLog += "\nGender class load error: " + e.getLocalizedMessage();
                         }
-                        // TODO: Add this value to the word...
-                        /*ConWord bufferWord = this.getWordCollection().getBufferWord();
-                        bufferWord.setGender(bufferWord.getGender()
-                                + new String(ch, start, length));*/
-                    } catch (Exception e) {
-                        loadLog += "\nGender class load error: " + e.getLocalizedMessage();
                     }
                     bgender = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionXID)) {
