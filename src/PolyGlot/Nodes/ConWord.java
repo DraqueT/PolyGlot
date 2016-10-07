@@ -24,9 +24,9 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  *
@@ -239,25 +239,30 @@ public class ConWord extends DictNode {
     
     /**
      * Sets a the class of a word to a given value. If the class does not exist yet for the word, it is created.
+     * If value ID = -1, the class is simply removed and not set to a value at all
      * @param classId ID of class to set value for
      * @param valueId ID of value to set the class to
      */
     public void setClassValue(int classId, int valueId) {
         if (classValues.containsKey(classId)) {
             classValues.remove(classId);
+        } 
+        if (valueId != -1) {
+            classValues.put(classId, valueId);
         }
-        
-        classValues.put(classId, valueId);
     }
     
     /**
      * Gets sets of entries representing classes the word contains and their values
      * Note: THIS IS NOT COMPREHENSIVE! If no value has been set for a word, it will
      * not be returned at all.
+     * 
+     * To get a comprehensive list, look at the WordPropertyCollection values 
+     * associated with the word's type.
      * @return list of entries of <class id, value id>
      */
-    public Iterator<Entry<Integer, Integer>> getClassValues() {
-        return classValues.entrySet().iterator();
+    public Set<Entry<Integer, Integer>> getClassValues() {
+        return classValues.entrySet();
     }
     
     /**

@@ -30,6 +30,7 @@ import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
+import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -38,6 +39,7 @@ import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
@@ -48,8 +50,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -72,11 +77,11 @@ import javafx.scene.layout.GridPane;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -93,6 +98,7 @@ import javax.swing.event.DocumentListener;
 public final class ScrLexicon extends PFrame {
 
     private final List<Window> childFrames = new ArrayList<>();
+    private Map<Integer, JComboBox> classComboMap = new HashMap<>();
     private TitledPane gridTitlePane = null;
     private CheckBox chkFindBad;
     private final JFXPanel fxPanel;
@@ -286,14 +292,37 @@ public final class ScrLexicon extends PFrame {
         am.put(delKey, delAction);
     }
     
+    private void populateClassPanel() {
+        ConWord curWord = (ConWord)lstLexicon.getSelectedValue();
+        
+        for (Entry<Integer, Integer> curProp : curWord.getClassValues()) {
+            if (classComboMap.containsKey(curProp.getKey())) {
+                JComboBox combo = classComboMap.get(curProp.getKey());
+                try {
+                    combo.setSelectedItem(((WordProperty)core.getWordPropertiesCollection()
+                            .getNodeById(curProp.getKey())).getValueById(curProp.getValue()));
+                } catch (Exception e) {
+                    InfoBox.error("Word Class Error", "Unable to retrieve class/value pair " 
+                            + curProp.getKey() + "/" + curProp.getValue(), this);
+                }
+            }
+        }
+    }
+    
     /**
      * Sets up the class panel. Should be run whenever a new word is loaded
      */
     private void setupClassPanel() {
         ConWord curWord = (ConWord)lstLexicon.getSelectedValue();
         
+        // on no word selected, simply blank all classes
+        if (curWord == null) {
+            pnlClasses.removeAll();
+            return;
+        }
+        
         List<WordProperty> propList = core.getWordPropertiesCollection()
-                .getClassProps(curWord.getWordTypeId());
+                .getClassProps(curWord.getWordTypeId()); // TODO: this should populate from the dropbox... or the dropbox should have already populated the actual word. Consider.
         pnlClasses.removeAll();
         pnlClasses.setPreferredSize(new Dimension(999999, 1));
         
@@ -301,14 +330,58 @@ public final class ScrLexicon extends PFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.weighty = 1;
+        gbc.weightx = 1;
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.BOTH;
         
+        // create dropdown for each class that applies to the curren word
         for (WordProperty curProp : propList) {
-            pnlClasses.add(new JLabel(curProp.getValue()));
+            final int classId = curProp.getId();
+            final JComboBox classBox = new JComboBox();
+            DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
+            classBox.setModel(comboModel);
+            comboModel.addElement("");
+            
+            // populate class dropdown
+            for (WordPropValueNode value : curProp.getValues()) {
+                comboModel.addElement(value);
+            }
+            
+            classBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // don't run if populating currently
+                    if (curPopulating) {
+                        return;
+                    }
+                    
+                    ConWord curWord = (ConWord)lstLexicon.getSelectedValue();
+                    
+                    if (classBox.getSelectedItem() instanceof WordPropValueNode) {
+                        WordPropValueNode curValue = (WordPropValueNode)classBox.getSelectedItem();
+                        curWord.setClassValue(classId, curValue.getId());
+                    } else {
+                        // if not an instance of a value, then it's the blank selection: remove class from word
+                        curWord.setClassValue(classId, -1);
+                    }
+                }
+            });
+
+            classBox.setToolTipText(curProp.getValue() + " value");
+            classBox.setPreferredSize(new  Dimension(99999, classBox.getPreferredSize().height));
+            pnlClasses.add(classBox, gbc);
+            classComboMap.put(curProp.getId(), classBox); // dropbox mapped to related class ID.
+        }
+        if (propList.isEmpty()) {
+            // must include at least one item (even a dummy) to resize for some reason
+            pnlClasses.add(new JComboBox(), gbc);
+            pnlClasses.setPreferredSize(new Dimension(9999, 0));
+        } else {
+            pnlClasses.setMaximumSize(new Dimension(99999, 99999));
+            pnlClasses.setPreferredSize(new Dimension(9999,propList.size() * new JComboBox().getPreferredSize().height));
         }
         
-        pnlClasses.setPreferredSize(new Dimension(9999,propList.size() * 15));
-        pnlClasses.setVisible(false);
-        pnlClasses.setVisible(true);
+        pnlClasses.repaint();
     }
 
     /**
@@ -1127,6 +1200,7 @@ public final class ScrLexicon extends PFrame {
                 chkProcOverride.setSelected(curWord.isProcOverride());
                 chkRuleOverride.setSelected(curWord.isRulesOverrride());
                 setupClassPanel();
+                populateClassPanel();
                 setPropertiesEnabled(true);
             }
         } catch (Exception e) {
@@ -1608,14 +1682,11 @@ public final class ScrLexicon extends PFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(btnDeclensions)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
                 .addComponent(btnLogographs))
             .addComponent(pnlClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtConWord)
-                    .addComponent(txtLocalWord)
-                    .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbGender, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
@@ -1629,6 +1700,9 @@ public final class ScrLexicon extends PFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(chkProcOverride, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
+            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(txtLocalWord)
+            .addComponent(txtConWord)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1898,6 +1972,10 @@ public final class ScrLexicon extends PFrame {
                     cmbType.setSelectedItem(newType == null ? defTypeValue : newType);
                 }
             });
+        }
+        
+        if (!curPopulating) {
+            setupClassPanel();
         }
     }//GEN-LAST:event_cmbTypeActionPerformed
 
