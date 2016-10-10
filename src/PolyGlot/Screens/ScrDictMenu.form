@@ -73,14 +73,6 @@
             <Property name="text" type="java.lang.String" value="Tools"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="REMOVE-DEV"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportFile">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Import from File"/>
@@ -198,12 +190,12 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="btnLexicon" max="32767" attributes="0"/>
           <Component id="btnQuickEntry" alignment="0" max="32767" attributes="0"/>
-          <Component id="btnTypes" alignment="0" pref="175" max="32767" attributes="0"/>
+          <Component id="btnTypes" alignment="0" pref="159" max="32767" attributes="0"/>
           <Component id="btnGrammar" alignment="0" max="32767" attributes="0"/>
           <Component id="btnLangProp" alignment="0" max="32767" attributes="0"/>
           <Component id="btnLogos" alignment="0" max="32767" attributes="0"/>
           <Component id="btnThes" max="32767" attributes="0"/>
-          <Component id="btnGenders" alignment="0" max="32767" attributes="0"/>
+          <Component id="btnClasses" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -215,6 +207,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnTypes" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="btnClasses" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="btnGrammar" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnLangProp" min="-2" max="-2" attributes="0"/>
@@ -222,9 +216,7 @@
               <Component id="btnLogos" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnThes" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnGenders" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -266,13 +258,13 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLangPropActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JToggleButton" name="btnGenders">
+    <Component class="javax.swing.JToggleButton" name="btnClasses">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Genders"/>
-        <Property name="toolTipText" type="java.lang.String" value="If your language uses genders per word, they can be defined here."/>
+        <Property name="text" type="java.lang.String" value="Lexical Classes"/>
+        <Property name="toolTipText" type="java.lang.String" value="Class properties parts of speech may have, such as gender"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGendersActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClassesActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JToggleButton" name="btnQuickEntry">

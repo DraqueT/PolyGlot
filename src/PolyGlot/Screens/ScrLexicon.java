@@ -113,7 +113,6 @@ public final class ScrLexicon extends PFrame {
     private TextField txtProcSrc;
     private TextField txtDefSrc;
     private ComboBox cmbTypeSrc;
-    private ComboBox cmbGenderSrc;
     private boolean curPopulating = false;
     private boolean namePopulating = false;
     private boolean forceUpdate = false;
@@ -471,7 +470,6 @@ public final class ScrLexicon extends PFrame {
                 txtDefSrc.setText("");
                 txtLocalSrc.setText("");
                 txtProcSrc.setText("");
-                cmbGenderSrc.getSelectionModel().select(0);
                 cmbTypeSrc.getSelectionModel().select(0);
             }
         };
@@ -523,8 +521,6 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        String filterGend = cmbGenderSrc.getValue().equals(defGenderValue)
-                ? "" : ((GenderNode) cmbGenderSrc.getValue()).getValue();
         int filterType = cmbTypeSrc.getValue().equals(defTypeValue)
                 ? 0 : ((TypeNode) cmbTypeSrc.getValue()).getId();
 
@@ -532,7 +528,6 @@ public final class ScrLexicon extends PFrame {
                 && txtDefSrc.getText().equals("")
                 && txtLocalSrc.getText().equals("")
                 && txtProcSrc.getText().equals("")
-                && filterGend.equals("")
                 && filterType == 0) {
             populateLexicon();
             lstLexicon.setSelectedIndex(0);
@@ -554,7 +549,6 @@ public final class ScrLexicon extends PFrame {
         filter.setDefinition(txtDefSrc.getText().trim());
         filter.setLocalWord(txtLocalSrc.getText().trim());
         filter.setWordTypeId(filterType);
-        filter.setGender(filterGend);
         filter.setPronunciation(txtProcSrc.getText().trim());
 
         // save word before applying filter
@@ -582,7 +576,6 @@ public final class ScrLexicon extends PFrame {
                 && txtDefSrc.getText().isEmpty()
                 && txtLocalSrc.getText().isEmpty()
                 && txtProcSrc.getText().isEmpty()
-                && cmbGenderSrc.getSelectionModel().getSelectedIndex() == 0
                 && cmbTypeSrc.getSelectionModel().getSelectedIndex() == 0) {
             return;
         }
@@ -611,7 +604,6 @@ public final class ScrLexicon extends PFrame {
             txtDefSrc.setText("");
             txtLocalSrc.setText("");
             txtProcSrc.setText("");
-            cmbGenderSrc.getSelectionModel().select(0);
             cmbTypeSrc.getSelectionModel().select(0);
             gridTitlePane.setExpanded(false);
             SwingUtilities.invokeLater(new Runnable() {
@@ -645,8 +637,6 @@ public final class ScrLexicon extends PFrame {
         }
 
         testWord = new ConWord();
-        String genderString = cmbGender.getSelectedItem().equals(defGenderValue)
-                ? "" : ((GenderNode) cmbGender.getSelectedItem()).getValue();
         int typeId = (cmbType.getSelectedItem().equals(defTypeValue)
                 || cmbType.getSelectedItem().equals(newTypeValue))
                 ? 0 : ((TypeNode) cmbType.getSelectedItem()).getId();
@@ -659,7 +649,6 @@ public final class ScrLexicon extends PFrame {
         testWord.setLocalWord(txtLocalWord.getText().equals(defLocalValue) ? "" : txtLocalWord.getText());
         testWord.setDefinition(txtDefinition.getText().equals(defDefValue) ? "" : txtDefinition.getText());
         testWord.setPronunciation(txtProc.getText().equals(defProcValue) ? "" : txtProc.getText());
-        testWord.setGender(genderString);
         testWord.setWordTypeId(typeId);
         testWord.setRulesOverride(chkRuleOverride.isSelected());
 
@@ -689,7 +678,6 @@ public final class ScrLexicon extends PFrame {
         isLegal = isLegal && addErrorBoxMessage(txtLocalWord, results.getLocalWord());
         isLegal = isLegal && addErrorBoxMessage(txtProc, results.getPronunciation());
         isLegal = isLegal && addErrorBoxMessage(txtConWord, results.getDefinition());
-        isLegal = isLegal && addErrorBoxMessage(cmbGender, results.getGender());
         isLegal = isLegal && addErrorBoxMessage(cmbType, results.typeError);
 
         if (!testWord.isRulesOverrride()
@@ -757,7 +745,6 @@ public final class ScrLexicon extends PFrame {
                 txtDefSrc.setDisable(!enable);
                 txtLocalSrc.setDisable(!enable);
                 txtProcSrc.setDisable(!enable);
-                cmbGenderSrc.setDisable(!enable);
                 cmbTypeSrc.setDisable(!enable);
                 chkFindBad.setDisable(!enable);
             }
@@ -782,7 +769,6 @@ public final class ScrLexicon extends PFrame {
         txtDefSrc = new TextField();
         txtDefSrc.setPromptText("Search by Definition...");
         cmbTypeSrc = new ComboBox();
-        cmbGenderSrc = new ComboBox();
         gridTitlePane = new TitledPane();
         chkFindBad = new CheckBox();
 
@@ -803,12 +789,10 @@ public final class ScrLexicon extends PFrame {
         grid.add(new Label("Type: "), 0, 2);
         grid.add(cmbTypeSrc, 1, 2);
         grid.setPadding(new Insets(5, 5, 5, 5));
-        grid.add(new Label("Gender: "), 2, 0);
-        grid.add(cmbGenderSrc, 3, 0);
-        grid.add(new Label("Pronunciation: "), 2, 1);
-        grid.add(txtProcSrc, 3, 1);
-        grid.add(new Label("Definition: "), 2, 2);
-        grid.add(txtDefSrc, 3, 2);
+        grid.add(new Label("Pronunciation: "), 2, 0);
+        grid.add(txtProcSrc, 3, 0);
+        grid.add(new Label("Definition: "), 2, 1);
+        grid.add(txtDefSrc, 3, 1);
         grid.add(new Label("Illegals"), 0, 3);
         grid.add(chkFindBad, 1, 3);
         gridTitlePane.setText("Search/Filter");
@@ -840,7 +824,6 @@ public final class ScrLexicon extends PFrame {
         txtProcSrc.setText("");
         txtDefSrc.setText("");
         cmbTypeSrc.getSelectionModel().select(defTypeValue);
-        cmbGenderSrc.getSelectionModel().select(defGenderValue);
     }
 
     /**
@@ -856,7 +839,6 @@ public final class ScrLexicon extends PFrame {
         txtDefSrc.setDisable(chkFindBad.isSelected());
         txtLocalSrc.setDisable(chkFindBad.isSelected());
         txtProcSrc.setDisable(chkFindBad.isSelected());
-        cmbGenderSrc.setDisable(chkFindBad.isSelected());
         cmbTypeSrc.setDisable(chkFindBad.isSelected());
         
         if (chkFindBad.isSelected()) {
@@ -1033,13 +1015,11 @@ public final class ScrLexicon extends PFrame {
         addPropertyListeners(txtLocalWord, defLocalValue);
         addPropertyListeners(txtProc, defProcValue);
         addPropertyListeners(txtDefinition, defDefValue);
-        addPropertyListeners(cmbGender, defGenderValue.getValue());
         addPropertyListeners(cmbType, defTypeValue.getValue());
         addFilterListeners(txtConSrc);
         addFilterListeners(txtDefSrc);
         addFilterListeners(txtLocalSrc);
         addFilterListeners(txtProcSrc);
-        addFilterListeners(cmbGenderSrc);
         addFilterListeners(cmbTypeSrc);
     }
 
@@ -1138,7 +1118,6 @@ public final class ScrLexicon extends PFrame {
      */
     private void setupComboBoxesSwing() {
         Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
-        Iterator<GenderNode> gendIt = core.getGenders().getNodeIterator();
 
         cmbType.removeAllItems();
         cmbType.addItem(defTypeValue);
@@ -1146,13 +1125,6 @@ public final class ScrLexicon extends PFrame {
         while (typeIt.hasNext()) {
             TypeNode curNode = typeIt.next();
             cmbType.addItem(curNode);
-        }
-
-        cmbGender.removeAllItems();
-        cmbGender.addItem(defGenderValue);
-        while (gendIt.hasNext()) {
-            GenderNode curNode = gendIt.next();
-            cmbGender.addItem(curNode);
         }
     }
 
@@ -1175,7 +1147,6 @@ public final class ScrLexicon extends PFrame {
                 txtDefinition.setText(defDefValue);
                 txtLocalWord.setText(defLocalValue);
                 txtProc.setText(defProcValue);
-                cmbGender.setSelectedItem(defGenderValue);
                 cmbType.setSelectedItem(defTypeValue);
                 chkProcOverride.setSelected(false);
                 chkRuleOverride.setSelected(false);
@@ -1223,7 +1194,6 @@ public final class ScrLexicon extends PFrame {
                 txtDefinition.setEnabled(enable);
                 txtLocalWord.setEnabled(enable);
                 txtProc.setEnabled(enable);
-                cmbGender.setEnabled(enable);
                 cmbType.setEnabled(enable);
                 chkProcOverride.setEnabled(enable);
                 chkRuleOverride.setEnabled(enable);
@@ -1239,7 +1209,6 @@ public final class ScrLexicon extends PFrame {
      */
     private void setupComboBoxesFX() {
         Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
-        Iterator<GenderNode> gendIt = core.getGenders().getNodeIterator();
 
         cmbTypeSrc.getItems().clear();
         cmbTypeSrc.getItems().add(defTypeValue);
@@ -1247,14 +1216,6 @@ public final class ScrLexicon extends PFrame {
         while (typeIt.hasNext()) {
             TypeNode curNode = typeIt.next();
             cmbTypeSrc.getItems().add(curNode);
-        }
-
-        cmbGenderSrc.getItems().clear();
-        cmbGenderSrc.getItems().add(defGenderValue);
-        cmbGenderSrc.getSelectionModel().selectFirst();
-        while (gendIt.hasNext()) {
-            GenderNode curNode = gendIt.next();
-            cmbGenderSrc.getItems().add(curNode);
         }
     }
 
@@ -1295,7 +1256,6 @@ public final class ScrLexicon extends PFrame {
         setGreyFields(txtDefinition, defDefValue);
         setGreyFields(txtLocalWord, defLocalValue);
         setGreyFields(txtProc, defProcValue);
-        setGreyFields(cmbGender, defGenderValue.getValue());
         setGreyFields(cmbType, defTypeValue.getValue());
     }
 
@@ -1395,11 +1355,6 @@ public final class ScrLexicon extends PFrame {
         saveWord.setValue(txtConWord.getText());
         saveWord.setDefinition(txtDefinition.getText().equals(defDefValue)
                 ? "" : txtDefinition.getText());
-        Object curGend = cmbGender.getSelectedItem();
-        if (curGend != null) {
-            saveWord.setGender(curGend.equals(defGenderValue)
-                    ? "" : ((GenderNode) curGend).getValue());
-        }
         saveWord.setLocalWord(txtLocalWord.getText().equals(defLocalValue)
                 ? "" : txtLocalWord.getText());
         saveWord.setProcOverride(chkProcOverride.isSelected());

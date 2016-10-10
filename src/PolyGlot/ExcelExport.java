@@ -22,8 +22,9 @@ package PolyGlot;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.Nodes.DeclensionNode;
-import PolyGlot.Nodes.GenderNode;
 import PolyGlot.Nodes.TypeNode;
+import PolyGlot.Nodes.WordPropValueNode;
+import PolyGlot.Nodes.WordProperty;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -91,13 +92,16 @@ public class ExcelExport {
         HSSFSheet sheet;
         CellStyle localStyle = workbook.createCellStyle();
         CellStyle conStyle = workbook.createCellStyle();
+        CellStyle boldHeader = workbook.createCellStyle();
         Font conFont = workbook.createFont();
+        Font boldFont = workbook.createFont();
         conFont.setFontName(core.getPropertiesManager().getFontCon().getFontName());
-        
-        localStyle.setWrapText(true);
-        
+        boldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        localStyle.setWrapText(true);        
         conStyle.setWrapText(true);
         conStyle.setFont(conFont);
+        boldHeader.setWrapText(true);
+        boldHeader.setFont(boldFont);
         
         // record words on sheet 1        
         sheet = workbook.createSheet("Lexicon");
@@ -108,7 +112,7 @@ public class ExcelExport {
         row.createCell(1).setCellValue(core.localLabel().toUpperCase() + " WORD");
         row.createCell(2).setCellValue("TYPE");
         row.createCell(3).setCellValue("PRONUNCIATION");
-        row.createCell(4).setCellValue("GENDER");
+        row.createCell(4).setCellValue("CLASS(ES)");
         row.createCell(5).setCellValue("DECLENSIONS");
         row.createCell(6).setCellValue("DEFINITIONS");
         
@@ -146,23 +150,36 @@ public class ExcelExport {
             cell.setCellStyle(localStyle);
         }
         
-        // record genders on sheet 3
-        sheet = workbook.createSheet("Genders");
-        Iterator<GenderNode> genderIt = core.getGenders().getNodeIterator();
-        
-        row = sheet.createRow(0);
-        row.createCell(0).setCellValue("GENDER");
-        row.createCell(1).setCellValue("NOTES");
-        
-        for (Integer i = 1; genderIt.hasNext(); i++) {
-            GenderNode curNode = genderIt.next();
-            row = sheet.createRow(i);
+        // record word classes on sheet 3
+        sheet = workbook.createSheet("Lexical Classes");
+        int propertyColumn = 0;
+        for (WordProperty curProp 
+                : core.getWordPropertiesCollection().getAllWordProperties()) {            
+            // get row, if not exist, create
+            row = sheet.getRow(0);
+            if (row == null) {
+                row = sheet.createRow(0);
+            }
             
-            Cell cell = row.createCell(0);
-            cell.setCellValue(curNode.getValue());
-            cell = row.createCell(1);
-            cell.setCellValue(curNode.getNotes());
-            cell.setCellStyle(localStyle);
+            Cell cell = row.createCell(propertyColumn);
+            cell.setCellValue(curProp.getValue());            
+            cell.setCellStyle(boldHeader);
+            
+            int rowIndex = 1;
+            for (WordPropValueNode curVal : curProp.getValues()) {
+                row = sheet.getRow(rowIndex);
+                if (row == null) {
+                    row = sheet.createRow(rowIndex);
+                }
+                
+                cell = row.createCell(propertyColumn);
+                cell.setCellStyle(localStyle);
+                cell.setCellValue(curVal.getValue());
+                
+                rowIndex++;
+            }
+            
+            propertyColumn++;
         }
         
         // record pronunciations on sheet 4

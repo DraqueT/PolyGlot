@@ -920,7 +920,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         btnGrammar = new javax.swing.JToggleButton();
         btnTypes = new javax.swing.JToggleButton();
         btnLangProp = new javax.swing.JToggleButton();
-        btnGenders = new javax.swing.JToggleButton();
+        btnClasses = new javax.swing.JToggleButton();
         btnQuickEntry = new javax.swing.JToggleButton();
         btnLogos = new javax.swing.JToggleButton();
         btnThes = new javax.swing.JToggleButton();
@@ -936,7 +936,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuExit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         mnuImportFile = new javax.swing.JMenuItem();
         mnuExportToExcel = new javax.swing.JMenuItem();
         mnuExportFont = new javax.swing.JMenuItem();
@@ -987,11 +986,11 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         });
 
-        btnGenders.setText("Genders");
-        btnGenders.setToolTipText("If your language uses genders per word, they can be defined here.");
-        btnGenders.addActionListener(new java.awt.event.ActionListener() {
+        btnClasses.setText("Lexical Classes");
+        btnClasses.setToolTipText("Class properties parts of speech may have, such as gender");
+        btnClasses.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGendersActionPerformed(evt);
+                btnClassesActionPerformed(evt);
             }
         });
 
@@ -1077,14 +1076,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Tools");
-
-        jMenuItem1.setText("REMOVE-DEV");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem1);
 
         mnuImportFile.setText("Import from File");
         mnuImportFile.addActionListener(new java.awt.event.ActionListener() {
@@ -1175,12 +1166,12 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnLexicon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnQuickEntry, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnTypes, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+            .addComponent(btnTypes, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
             .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLangProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnThes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnGenders, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1191,6 +1182,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTypes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnClasses)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGrammar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnLangProp)
@@ -1198,19 +1191,11 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 .addComponent(btnLogos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnThes)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnGenders)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void mnuImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFileActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        ScrExcelImport.run(core);
-        setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_mnuImportFileActionPerformed
 
     private void btnLexiconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLexiconActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -1246,13 +1231,13 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnTypesActionPerformed
 
-    private void btnGendersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGendersActionPerformed
+    private void btnClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClassesActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        ScrGenders s = ScrGenders.run(core);
-        bindButtonToWindow(s, btnGenders);
+        ScrWordProperties s = new ScrWordProperties(core);
+        bindButtonToWindow(s, btnClasses);
         s.setVisible(true);
         setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_btnGendersActionPerformed
+    }//GEN-LAST:event_btnClassesActionPerformed
 
     private void btnLangPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLangPropActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -1296,32 +1281,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         dispose();
     }//GEN-LAST:event_mnuExitActionPerformed
 
-    private void mnuExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportToExcelActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        exportToExcel();
-        setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_mnuExportToExcelActionPerformed
-
-    private void mnuExportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportFontActionPerformed
-        exportFont();
-    }//GEN-LAST:event_mnuExportFontActionPerformed
-
-    private void mnuLangStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLangStatsActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        if (localYesNoCancel("Continue Operation?", "The statistics report can"
-                + " take a long time to complete, depending on the complexity\n"
-                + "of your conlang. Continue?") == JOptionPane.YES_OPTION) {
-            ScrLangStats.run(core);
-        }
-        setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_mnuLangStatsActionPerformed
-
-    private void mnuTransWindowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTransWindowActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        ScrTranslationWindow.run(core, this);
-        setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_mnuTransWindowActionPerformed
-
     private void mnuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutActionPerformed
         openHelp();
     }//GEN-LAST:event_mnuAboutActionPerformed
@@ -1344,9 +1303,37 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuIPAChartActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        ScrWordProperties.run(core).setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void mnuTransWindowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTransWindowActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        ScrTranslationWindow.run(core, this);
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_mnuTransWindowActionPerformed
+
+    private void mnuLangStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLangStatsActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        if (localYesNoCancel("Continue Operation?", "The statistics report can"
+            + " take a long time to complete, depending on the complexity\n"
+            + "of your conlang. Continue?") == JOptionPane.YES_OPTION) {
+        ScrLangStats.run(core);
+        }
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_mnuLangStatsActionPerformed
+
+    private void mnuExportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportFontActionPerformed
+        exportFont();
+    }//GEN-LAST:event_mnuExportFontActionPerformed
+
+    private void mnuExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportToExcelActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        exportToExcel();
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_mnuExportToExcelActionPerformed
+
+    private void mnuImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFileActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        ScrExcelImport.run(core);
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_mnuImportFileActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1410,7 +1397,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton btnGenders;
+    private javax.swing.JToggleButton btnClasses;
     private javax.swing.JToggleButton btnGrammar;
     private javax.swing.JToggleButton btnLangProp;
     private javax.swing.JToggleButton btnLexicon;
@@ -1421,7 +1408,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;

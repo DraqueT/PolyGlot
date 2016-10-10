@@ -38,7 +38,6 @@ public class ConWord extends DictNode {
     private int typeId;
     private String definition;
     private String pronunciation;
-    private String gender;
     private boolean procOverride;
     private boolean autoDeclensionOverride;
     private boolean rulesOverride;
@@ -69,7 +68,7 @@ public class ConWord extends DictNode {
         
         return checkValue.getValue().equals("") &&
                 checkValue.getDefinition().equals("") &&
-                checkValue.getGender().equals("") &&
+                checkValue.getGender().equals("") && // TODO: replace with classes
                 checkValue.getLocalWord().equals("") &&
                 checkValue.getPronunciation().equals("") &&
                 checkValue.typeError.equals("");
@@ -100,7 +99,7 @@ public class ConWord extends DictNode {
         this.setDefinition(set.getDefinition());
         this.setPronunciation(set.getPronunciation());
         this.setId(set.getId());
-        this.setGender(set.getGender());
+        this.setGender(set.getGender()); // TODO: replace this with something setting all classes equal
         this.setProcOverride(set.isProcOverride());
         this.setOverrideAutoDeclen(set.isOverrideAutoDeclen());
     }
@@ -227,14 +226,6 @@ public class ConWord extends DictNode {
 
     public void setPronunciation(String pronunciation) {
         this.pronunciation = pronunciation;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
     }
     
     /**
