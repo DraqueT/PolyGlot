@@ -356,12 +356,11 @@ public class ScrWordProperties extends PFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstProperties = new javax.swing.JList<>();
+        lstProperties = new javax.swing.JList<WordProperty>();
         btnAddProp = new PButton("+");
         btnDelProp = new PButton("-");
         jPanel1 = new javax.swing.JPanel();
         txtName = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         btnAddValue = new PButton("+");
         btnDelValue = new PButton("-");
         pnlTypes = new javax.swing.JPanel();
@@ -391,8 +390,6 @@ public class ScrWordProperties extends PFrame {
         });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-
-        jLabel1.setText("Values");
 
         btnAddValue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -424,7 +421,7 @@ public class ScrWordProperties extends PFrame {
 
             },
             new String [] {
-                "Value"
+                "Values"
             }
         ));
         jScrollPane3.setViewportView(tblValues);
@@ -440,7 +437,6 @@ public class ScrWordProperties extends PFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(77, 77, 77)
                                 .addComponent(btnDelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -459,8 +455,6 @@ public class ScrWordProperties extends PFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -544,7 +538,6 @@ public class ScrWordProperties extends PFrame {
     private javax.swing.JButton btnAddValue;
     private javax.swing.JButton btnDelProp;
     private javax.swing.JButton btnDelValue;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;

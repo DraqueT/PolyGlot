@@ -22,7 +22,6 @@ package PolyGlot;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.Nodes.DeclensionNode;
-import PolyGlot.ManagersCollections.GenderCollection;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.ManagersCollections.GrammarManager;
 import PolyGlot.ManagersCollections.PronunciationMgr;
@@ -58,7 +57,6 @@ public class DictCore {
     private final String version = "1.2.2";
     private final ConWordCollection wordCollection;
     private final TypeCollection typeCollection;
-    private final GenderCollection genderCollection;
     private final DeclensionManager declensionMgr;
     private final PropertiesManager propertiesManager;
     private final PronunciationMgr pronuncMgr;
@@ -74,7 +72,6 @@ public class DictCore {
     public DictCore() {
         wordCollection = new ConWordCollection(this);
         typeCollection = new TypeCollection(this);
-        genderCollection = new GenderCollection(this);
         declensionMgr = new DeclensionManager();
         propertiesManager = new PropertiesManager();
         pronuncMgr = new PronunciationMgr(this);
@@ -88,7 +85,6 @@ public class DictCore {
 
         wordCollection.setAlphaOrder(alphaOrder);
         typeCollection.setAlphaOrder(alphaOrder);
-        genderCollection.setAlphaOrder(alphaOrder);
         logoCollection.setAlphaOrder(alphaOrder);
         wordPropCollection.setAlphaOrder(alphaOrder);
         rootWindow = null;
@@ -408,7 +404,6 @@ public class DictCore {
 
         // collect XML representation of all dictionary elements
         propertiesManager.writeXML(doc, rootElement);
-        genderCollection.writeXML(doc, rootElement);
         typeCollection.writeXML(doc, rootElement);
         wordCollection.writeXML(doc, rootElement);
         declensionMgr.writeXML(doc, rootElement);
@@ -443,10 +438,6 @@ public class DictCore {
 
     public TypeCollection getTypes() {
         return typeCollection;
-    }
-
-    public GenderCollection getGenders() {
-        return genderCollection;
     }
 
     public PronunciationMgr getPronunciationMgr() {

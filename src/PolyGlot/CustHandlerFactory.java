@@ -26,9 +26,7 @@ import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.Nodes.LogoNode;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.ThesNode;
-import PolyGlot.Nodes.GenderNode;
 import PolyGlot.Nodes.TypeNode;
-import PolyGlot.ManagersCollections.GenderCollection;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.ManagersCollections.GrammarManager;
 import PolyGlot.ManagersCollections.PronunciationMgr;
@@ -169,7 +167,7 @@ public class CustHandlerFactory {
             int wGId;
 
             DeclensionManager declensionMgr = core.getDeclensionManager();
-            GenderCollection genderCollection = core.getGenders();
+            //GenderCollection genderCollection = core.getGenders();
             PronunciationMgr pronuncMgr = core.getPronunciationMgr();
             PropertiesManager propertiesManager = core.getPropertiesManager();
 
@@ -301,7 +299,7 @@ public class CustHandlerFactory {
                     }
                 } else if (qName.equalsIgnoreCase(PGTUtil.genderXID)) {
                     try {
-                        genderCollection.insert(wGId);
+                        //genderCollection.insert(wGId);
                     } catch (Exception e) {
                         throw new SAXException();
                     }
@@ -494,12 +492,12 @@ public class CustHandlerFactory {
                     wGId = Integer.parseInt(new String(ch, start, length));
                     bgenderId = false;
                 } else if (bgenderName) {
-                    genderCollection.getGenderBuffer().setValue(
-                            new String(ch, start, length));
+                    //genderCollection.getGenderBuffer().setValue(
+                      //      new String(ch, start, length));
                     bgenderName = false;
                 } else if (bgenderNotes) {
-                    genderCollection.getGenderBuffer().setNotes(
-                            new String(ch, start, length));
+                    //genderCollection.getGenderBuffer().setNotes(
+                      //      new String(ch, start, length));
                     bgenderNotes = false;
                 } else if (blangName) {
                     propertiesManager.setLangName(new String(ch, start, length));
@@ -665,7 +663,6 @@ public class CustHandlerFactory {
             String tmpString; // used mostly for converting deprecated values (as they no longer have placeholder points)
 
             DeclensionManager declensionMgr = core.getDeclensionManager();
-            GenderCollection genderCollection = core.getGenders();
             PronunciationMgr pronuncMgr = core.getPronunciationMgr();
             PropertiesManager propertiesManager = core.getPropertiesManager();
             ThesaurusManager thesMgr = core.getThesManager();
@@ -895,11 +892,12 @@ public class CustHandlerFactory {
                         throw new SAXException();
                     }
                 } else if (qName.equalsIgnoreCase(PGTUtil.genderXID)) {
-                    try {
+                    // Deprecated
+                    /*try {
                         genderCollection.insert(wGId);
                     } catch (Exception e) {
                         throw new SAXException();
-                    }
+                    }*/
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuideXID)) {
                     pronuncMgr.addPronunciation(proBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
@@ -941,6 +939,9 @@ public class CustHandlerFactory {
 
                             ConWord bufferWord = this.getWordCollection().getBufferWord();
                             bufferWord.setClassValue(writeProp.getId(), valueWrite.getId());
+                            
+                            // when pulling from legacy gender system, apply to all words initially
+                            writeProp.addApplyType(-1);
                         } catch (Exception e) {
                             loadLog += "\nGender class load error: " + e.getLocalizedMessage();
                         }
@@ -1251,13 +1252,15 @@ public class CustHandlerFactory {
                     wGId = Integer.parseInt(new String(ch, start, length));
                     bgenderId = false;
                 } else if (bgenderName) {
-                    GenderNode genderBuffer = genderCollection.getGenderBuffer();
-                    genderBuffer.setValue(genderBuffer.getValue()
-                            + new String(ch, start, length));
+                    // Deprecated
+                    //GenderNode genderBuffer = genderCollection.getGenderBuffer();
+                    //genderBuffer.setValue(genderBuffer.getValue()
+                    //        + new String(ch, start, length));
                 } else if (bgenderNotes) {
-                    GenderNode genderBuffer = genderCollection.getGenderBuffer();
-                    genderBuffer.setNotes(genderBuffer.getNotes()
-                            + new String(ch, start, length));
+                    // Deprecated
+                    //GenderNode genderBuffer = genderCollection.getGenderBuffer();
+                    //genderBuffer.setNotes(genderBuffer.getNotes()
+                    //        + new String(ch, start, length));
                 } else if (blangName) {
                     propertiesManager.setLangName(propertiesManager.getLangName()
                             + new String(ch, start, length));

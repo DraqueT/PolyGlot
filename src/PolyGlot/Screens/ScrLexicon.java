@@ -21,7 +21,6 @@ package PolyGlot.Screens;
 
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
-import PolyGlot.Nodes.GenderNode;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PComboBox;
@@ -98,14 +97,13 @@ import javax.swing.event.DocumentListener;
 public final class ScrLexicon extends PFrame {
 
     private final List<Window> childFrames = new ArrayList<>();
-    private Map<Integer, JComboBox> classComboMap = new HashMap<>();
+    private final Map<Integer, JComboBox> classComboMap = new HashMap<>();
     private TitledPane gridTitlePane = null;
     private CheckBox chkFindBad;
     private final JFXPanel fxPanel;
     private final String defConValue = "-- ConWord --";
     private final String defLocalValue = "-- NalLang Word --";
     private final TypeNode defTypeValue = new TypeNode();
-    private final GenderNode defGenderValue = new GenderNode();
     private final String defProcValue = "-- Pronunciation --";
     private final String defDefValue = "-- Definition --";
     private final String newTypeValue = "-- New Part of Speech --";
@@ -128,7 +126,6 @@ public final class ScrLexicon extends PFrame {
      */
     public ScrLexicon(DictCore _core) {
         defTypeValue.setValue("-- Part of Speech --");
-        defGenderValue.setValue("-- Gender --");
 
         core = _core;
         fxPanel = new JFXPanel();
@@ -312,7 +309,7 @@ public final class ScrLexicon extends PFrame {
     /**
      * Sets up the class panel. Should be run whenever a new word is loaded
      */
-    private void setupClassPanel() {
+    private void setupClassPanel(int setTypeId) {
         ConWord curWord = (ConWord)lstLexicon.getSelectedValue();
         
         // on no word selected, simply blank all classes
@@ -322,7 +319,7 @@ public final class ScrLexicon extends PFrame {
         }
         
         List<WordProperty> propList = core.getWordPropertiesCollection()
-                .getClassProps(curWord.getWordTypeId()); // TODO: this should populate from the dropbox... or the dropbox should have already populated the actual word. Consider.
+                .getClassProps(setTypeId);
         pnlClasses.removeAll();
         pnlClasses.setPreferredSize(new Dimension(999999, 1));
         
@@ -334,13 +331,16 @@ public final class ScrLexicon extends PFrame {
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.BOTH;
         
+        // empty map of all class information before filling it again
+        classComboMap.clear();
+
         // create dropdown for each class that applies to the curren word
         for (WordProperty curProp : propList) {
             final int classId = curProp.getId();
             final JComboBox classBox = new JComboBox();
             DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
             classBox.setModel(comboModel);
-            comboModel.addElement("");
+            comboModel.addElement("-- " + curProp.getValue() + " --");
             
             // populate class dropdown
             for (WordPropValueNode value : curProp.getValues()) {
@@ -361,7 +361,7 @@ public final class ScrLexicon extends PFrame {
                         WordPropValueNode curValue = (WordPropValueNode)classBox.getSelectedItem();
                         curWord.setClassValue(classId, curValue.getId());
                     } else {
-                        // if not an instance of a value, then it's the blank selection: remove class from word
+                        // if not an instance of a value, then it's the default selection: remove class from word
                         curWord.setClassValue(classId, -1);
                     }
                 }
@@ -463,7 +463,6 @@ public final class ScrLexicon extends PFrame {
         txtDefinition.setText(defDefValue);
         txtLocalWord.setText(defLocalValue);
         txtProc.setText(defProcValue);
-        cmbGender.setSelectedIndex(0);
         cmbType.setSelectedIndex(0);
         Runnable fxSetup = new Runnable() {
             @Override
@@ -1193,13 +1192,11 @@ public final class ScrLexicon extends PFrame {
                         ? defLocalValue : curWord.getLocalWord());
                 txtProc.setText(curWord.getPronunciation().equals("")
                         ? defProcValue : curWord.getPronunciation());
-                GenderNode gender = core.getGenders().findGenderByName(curWord.getGender());
-                cmbGender.setSelectedItem(gender == null ? defGenderValue : gender);
                 TypeNode type = curWord.getWordTypeId() == 0 ? null : core.getTypes().getNodeById(curWord.getWordTypeId());
                 cmbType.setSelectedItem(type == null ? defTypeValue : type);
                 chkProcOverride.setSelected(curWord.isProcOverride());
                 chkRuleOverride.setSelected(curWord.isRulesOverrride());
-                setupClassPanel();
+                setupClassPanel(curWord.getWordTypeId());
                 populateClassPanel();
                 setPropertiesEnabled(true);
             }
@@ -1525,7 +1522,6 @@ public final class ScrLexicon extends PFrame {
         txtConWord = new PTextField(this);
         txtLocalWord = new javax.swing.JTextField();
         cmbType = new PComboBox();
-        cmbGender = new PComboBox();
         txtProc = new javax.swing.JTextField();
         chkProcOverride = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
@@ -1605,8 +1601,6 @@ public final class ScrLexicon extends PFrame {
             }
         });
 
-        cmbGender.setToolTipText("The word's gender");
-
         txtProc.setToolTipText("The word's pronunciation");
         txtProc.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -1682,51 +1676,49 @@ public final class ScrLexicon extends PFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(btnDeclensions)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 160, Short.MAX_VALUE)
                 .addComponent(btnLogographs))
             .addComponent(pnlClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(txtLocalWord)
+            .addComponent(txtConWord)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbGender, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(txtProc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkProcOverride, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(chkRuleOverride)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(txtProc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkProcOverride, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(txtLocalWord)
-            .addComponent(txtConWord)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtConWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtLocalWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlClasses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(txtConWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtLocalWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlClasses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(chkProcOverride))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(chkRuleOverride))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1781,7 +1773,7 @@ public final class ScrLexicon extends PFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddWord)
@@ -1799,11 +1791,8 @@ public final class ScrLexicon extends PFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
         );
-
-        jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DRAG_LAYER);
-        jLayeredPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -1825,6 +1814,8 @@ public final class ScrLexicon extends PFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
+        jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DRAG_LAYER);
+        jLayeredPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1834,7 +1825,7 @@ public final class ScrLexicon extends PFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
         );
 
         pack();
@@ -1963,8 +1954,10 @@ public final class ScrLexicon extends PFrame {
     }//GEN-LAST:event_chkRuleOverrideActionPerformed
 
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
-        if (cmbType.getSelectedItem() != null
-                && cmbType.getSelectedItem().equals(newTypeValue)) {
+        final Object typeObject = cmbType.getSelectedItem();
+        
+        if (typeObject != null
+                && typeObject.equals(newTypeValue)) {
             final TypeNode newType = ScrTypes.newGetType(core);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -1975,7 +1968,12 @@ public final class ScrLexicon extends PFrame {
         }
         
         if (!curPopulating) {
-            setupClassPanel();
+            if (typeObject == null
+                || typeObject.equals(newTypeValue)) {
+                setupClassPanel(0);
+            } else {
+                setupClassPanel(((TypeNode)typeObject).getId());
+            }            
         }
     }//GEN-LAST:event_cmbTypeActionPerformed
 
@@ -1986,7 +1984,6 @@ public final class ScrLexicon extends PFrame {
     private javax.swing.JButton btnLogographs;
     private javax.swing.JCheckBox chkProcOverride;
     private javax.swing.JCheckBox chkRuleOverride;
-    private javax.swing.JComboBox cmbGender;
     private javax.swing.JComboBox cmbType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLayeredPane jLayeredPane1;
