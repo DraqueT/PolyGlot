@@ -1190,8 +1190,8 @@ public class CustHandlerFactory {
                     ConWord bufferWord = this.getWordCollection().getBufferWord();
                     try {
                         bufferWord.setWordTypeId(typeCollection.findByName(new String(ch, start, length)).getId());
-                    } catch (Exception ex) {
-                        throw new SAXException(ex);
+                    } catch (Exception e) {
+                        loadLog += "\nWord type load error: " + e.getLocalizedMessage();
                     }
                 } else if (btypeId) {
                     ConWord bufferWord = this.getWordCollection().getBufferWord();
