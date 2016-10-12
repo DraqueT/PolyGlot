@@ -54,6 +54,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 public class DictCore {
+
     private final String version = "1.2.2";
     private final ConWordCollection wordCollection;
     private final TypeCollection typeCollection;
@@ -80,7 +81,7 @@ public class DictCore {
         grammarManager = new GrammarManager();
         optionsManager = new OptionsManager(this);
         wordPropCollection = new WordPropertyCollection();
-        
+
         Map alphaOrder = propertiesManager.getAlphaOrder();
 
         wordCollection.setAlphaOrder(alphaOrder);
@@ -89,43 +90,47 @@ public class DictCore {
         wordPropCollection.setAlphaOrder(alphaOrder);
         rootWindow = null;
     }
-    
+
     /**
      * Gets conlang name or CONLANG. Put on core because it's used a lot.
+     *
      * @return either name of conlang or "Conlang"
      */
     public String conLabel() {
-        return propertiesManager.getLangName().equals("") ?
-                "Conlang" :
-                propertiesManager.getLangName();
+        return propertiesManager.getLangName().equals("")
+                ? "Conlang"
+                : propertiesManager.getLangName();
     }
-    
+
     /**
-     * Gets local language name or Local Lang. Put on core because it's used a lot.
+     * Gets local language name or Local Lang. Put on core because it's used a
+     * lot.
+     *
      * @return either name of local language or "Local Lang"
      */
     public String localLabel() {
-        return propertiesManager.getLocalLangName().equals("") ?
-                "Local Lang" :
-                propertiesManager.getLocalLangName();
+        return propertiesManager.getLocalLangName().equals("")
+                ? "Local Lang"
+                : propertiesManager.getLocalLangName();
     }
-    
+
     public void setRootWindow(PFrame _rootWindow) {
         rootWindow = _rootWindow;
     }
-    
+
     public OptionsManager getOptionsManager() {
         return optionsManager;
     }
-    
+
     /**
      * Returns whether core is currently loading a file
+     *
      * @return true if currently loading
      */
     public boolean isCurLoading() {
         return curLoading;
     }
-    
+
     /**
      * Checks whether PolyGlot has focus, and sets main menu to always on top
      * ONLY if so
@@ -141,78 +146,82 @@ public class DictCore {
             rootWindow.toBack();
         }*/
     }
-    
+
     /**
      * Retrieves working directory of PolyGlot
+     *
      * @return current working directory
      */
     public String getWorkingDirectory() {
         String ret = propertiesManager.getOverrideProgramPath();
-        
+
         try {
             ret = ret.isEmpty() ? DictCore.class.getProtectionDomain().getCodeSource().getLocation().toURI().g‌​etPath() : ret;
         } catch (URISyntaxException e) {
-            InfoBox.error("PATH ERROR", "Unable to resolve root path of PolyGlot:\n" 
+            InfoBox.error("PATH ERROR", "Unable to resolve root path of PolyGlot:\n"
                     + e.getLocalizedMessage(), rootWindow);
         }
-        
+
         // in some circumstances (but not others) the name of the jar will be appended... remove
         if (ret.endsWith(PGTUtil.jarArchiveName)) {
             ret = ret.replace(PGTUtil.jarArchiveName, "");
         }
-        
+
         return ret;
     }
-    
+
     public WordPropertyCollection getWordPropertiesCollection() {
         return wordPropCollection;
     }
-    
+
     /**
      * Clipboard can be used to hold any object
+     *
      * @param c object to hold
      */
     public void setClipBoard(Object c) {
         clipBoard = c;
     }
-    
+
     /**
      * Retrieves object held in clipboard, even if null, regardless of type
+     *
      * @return contents of clipboard
      */
     public Object getClipBoard() {
         return clipBoard;
     }
-    
+
     /**
      * Pushes save signal to main interface menu
      */
     public void coreSave() {
-        ((ScrDictMenu)rootWindow).saveFile();
+        ((ScrDictMenu) rootWindow).saveFile();
     }
-    
+
     /**
      * Pushes save signal to main interface menu
      */
     public void coreOpen() {
-        ((ScrDictMenu)rootWindow).open();
+        ((ScrDictMenu) rootWindow).open();
     }
-    
+
     /**
      * Pushes save signal to main interface menu
+     *
      * @param performTest whether to prompt user to save
      */
     public void coreNew(boolean performTest) {
-        ((ScrDictMenu)rootWindow).newFile(performTest);
+        ((ScrDictMenu) rootWindow).newFile(performTest);
     }
-    
+
     /**
-     * Pushes signal to all forms to update their values from the core.
-     * Cascades through windows and their children.
+     * Pushes signal to all forms to update their values from the core. Cascades
+     * through windows and their children.
      */
     public void pushUpdate() {
-        StackTraceElement stack [] = Thread.currentThread().getStackTrace();
-        
+        StackTraceElement stack[] = Thread.currentThread().getStackTrace();
+
         // prevent recursion (exclude check of top method, obviously)
         for (int i = (stack.length - 1); i > 1; i--) {
             StackTraceElement element = stack[i];
@@ -220,10 +229,10 @@ public class DictCore {
                 return;
             }
         }
-        
+
         if (rootWindow == null) {
             InfoBox.warning("Bad Update", "This warning inicates that a root"
-                    + " window was null at the time of an update push.", 
+                    + " window was null at the time of an update push.",
                     rootWindow);
         } else {
             rootWindow.updateAllValues(this);
@@ -303,16 +312,18 @@ public class DictCore {
      * Reads from given file
      *
      * @param _fileName filename to read from
-     * @throws Exception detailing any loading problems
+     * @throws java.io.IOException for unrecoverable errors
+     * @throws IllegalStateException for recoverable errors
      */
-    public void readFile(String _fileName) throws Exception {
+    public void readFile(String _fileName) throws IOException, IllegalStateException {
         curLoading = true;
-        String loadLog = "";
+        String errorLog = "";
+        String warningLog = "";
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
             CustHandler handler;
-                
+
             // TODO: Consider how this might be cleaned up and put back into IOHandler. 
             // Had to be this way to maintain stream safety.
             if (IOHandler.isFileZipArchive(_fileName)) {
@@ -320,11 +331,15 @@ public class DictCore {
                     ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.dictFileName);
                     try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
                         handler = CustHandlerFactory.getCustHandler(ioStream, this);
+                    } catch (Exception e) {
+                        throw new IOException(e.getLocalizedMessage());
                     }
                 }
             } else {
                 try (InputStream ioStream = new FileInputStream(_fileName)) {
                     handler = CustHandlerFactory.getCustHandler(ioStream, this);
+                } catch (Exception e) {
+                    throw new IOException(e.getLocalizedMessage());
                 }
             }
             handler.setWordCollection(wordCollection);
@@ -344,38 +359,45 @@ public class DictCore {
                     saxParser.parse(ioStream, handler);
                 }
             }
+
+            errorLog += handler.getErrorLog();
+            warningLog += handler.getWarningLog();
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            throw new Exception(e.getMessage());
+            throw new IOException(e.getMessage());
         }
 
         try {
             IOHandler.setFontFrom(_fileName, this);
         } catch (IOException | FontFormatException e) {
-            loadLog += e.getLocalizedMessage() + "\n";
+            warningLog += e.getLocalizedMessage() + "\n";
         }
 
         try {
             IOHandler.loadGrammarSounds(_fileName, grammarManager);
         } catch (Exception e) {
-            loadLog += e.getLocalizedMessage() + "\n";
+            warningLog += e.getLocalizedMessage() + "\n";
         }
 
         try {
             logoCollection.loadRadicalRelations();
         } catch (Exception e) {
-            loadLog += e.getLocalizedMessage() + "\n";
+            warningLog += e.getLocalizedMessage() + "\n";
         }
 
         try {
             IOHandler.loadImages(logoCollection, _fileName);
         } catch (Exception e) {
-            loadLog += e.getLocalizedMessage() + "\n";
+            warningLog += e.getLocalizedMessage() + "\n";
         }
-        
+
         curLoading = false;
 
-        if (!loadLog.equals("")) {
-            throw new Exception("Problems lodaing file:\n");
+        if (!errorLog.trim().equals("")) {
+            throw new IOException(errorLog);
+        }
+
+        if (!warningLog.trim().equals("")) {
+            throw new IllegalStateException(warningLog);
         }
     }
 

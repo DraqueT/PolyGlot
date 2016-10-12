@@ -310,7 +310,7 @@ public class IOHandler {
                 DictCore test = new DictCore();
                 test.readFile(f.getAbsolutePath());
 
-            } catch (Exception ex) {
+            } catch (IOException | IllegalStateException ex) {
                 throw new IOException(ex);
             }
 

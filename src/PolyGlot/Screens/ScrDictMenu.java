@@ -551,11 +551,13 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         try {
             core.readFile(fileName);
             curFileName = fileName;
-        } catch (Exception e) {
+        } catch (IOException e) {
             core = new DictCore(); // don't allow partial loads
             localError("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage());
-            //e.printStackTrace();
+        } catch (IllegalStateException e) {
+            InfoBox.warning("File Read Problems", "Problems reading file:\n" 
+                    + e.getLocalizedMessage(), this);
         }
 
         updateAllValues(core);

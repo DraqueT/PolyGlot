@@ -32,7 +32,25 @@ public class CustHandler extends DefaultHandler{
 
 	ConWordCollection wordCollection;
 	TypeCollection typeCollection;
+        protected String errorLog = "";
+        protected String warningLog = "";
 	
+        public void setErrorLog(String _errorLog) {
+            errorLog = _errorLog;
+        }
+        
+        public String getErrorLog() {
+            return errorLog;
+        }
+        
+        public void setWarningLog(String _warning) {
+            warningLog = _warning;
+        }
+        
+        public String getWarningLog() {
+            return warningLog;
+        }
+        
 	public ConWordCollection getWordCollection() {
 		return wordCollection;
 	}
