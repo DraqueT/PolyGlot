@@ -36,6 +36,11 @@ public class WordProperty extends DictNode {
     private int topId = 0;
     public WordPropValueNode buffer = new WordPropValueNode();
     
+    public WordProperty() {
+        // default to apply to all
+        applyTypes.add(-1);
+    }
+    
     @Override
     public void setEqual(DictNode _node) {
         if (!(_node instanceof WordProperty)) {
@@ -65,6 +70,7 @@ public class WordProperty extends DictNode {
     
     /**
      * Adds type id to list of types this property applies to
+     * -1 means "apply to all"
      * @param _typeId ID of type
      */
     public void addApplyType(int _typeId) {

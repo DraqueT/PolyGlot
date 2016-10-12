@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -65,7 +66,21 @@ public class ExcelExport {
         ret.add(conWord.getLocalWord());
         ret.add(conWord.getWordTypeDisplay());
         ret.add(conWord.getPronunciation());
-        ret.add(conWord.getGender());
+        
+        String classes = "";
+        for (Entry<Integer, Integer> curEntry : conWord.getClassValues()) {
+            if (!classes.equals("")) {
+                classes += ", ";
+            }
+            try {
+                WordProperty prop = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                WordPropValueNode value = prop.getValueById(curEntry.getValue());
+                classes += value.getValue();
+            } catch (Exception e) {
+                classes = "ERROR: UNABLE TO PULL CLASS";
+            }
+        }
+        ret.add(classes);
         
         List<DeclensionNode> declensions = core.getDeclensionManager().getDeclensionListWord(conWord.getId());
         

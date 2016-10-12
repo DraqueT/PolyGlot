@@ -20,8 +20,9 @@
 package PolyGlot;
 
 import PolyGlot.Nodes.ConWord;
-import PolyGlot.Nodes.GenderNode;
 import PolyGlot.Nodes.TypeNode;
+import PolyGlot.Nodes.WordPropValueNode;
+import PolyGlot.Nodes.WordProperty;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +32,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -42,7 +44,7 @@ public class ImportFileHelper {
     private String iConWord;
     private String iLocalWord;
     private String iType;
-    private String iGender;
+    private String iClass;
     private String iDefinition;
     private String iPronunciation;
     private String delimiter;
@@ -55,13 +57,13 @@ public class ImportFileHelper {
     }
 
     public void setOptions(String _iConWord, String _iLocalWord, String _iType,
-            String _iGender, String _iDefinition, String _iPronunciation,
+            String _iClass, String _iDefinition, String _iPronunciation,
             String _delimiter, boolean _bFirstLineLabels, boolean _bCreateTypes,
             boolean _bCreateGenders) {
         iConWord = _iConWord;
         iLocalWord = _iLocalWord;
         iType = _iType;
-        iGender = _iGender;
+        iClass = _iClass;
         iDefinition = _iDefinition;
         iPronunciation = _iPronunciation;
         bFirstLineLabels = _bFirstLineLabels;
@@ -177,7 +179,7 @@ public class ImportFileHelper {
                     }
 
                     // add gender
-                    columnList = Arrays.asList(iGender.split(","));
+                    columnList = Arrays.asList(iClass.split(","));
                     for (String entry : columnList) {
                         if (entry == null || entry.equals("")) {
                             continue;
@@ -190,20 +192,48 @@ public class ImportFileHelper {
                             continue;
                         }
 
-                        if (newWord.getGender().trim().equals("")) {
-                            newWord.setGender(columns[cellNum].trim());
-                        } else {
-                            newWord.setGender(newWord.getGender() + ", " + columns[cellNum].trim());
+                        // TODO: Update manual explaining how this works: classes pulled in as CLASS0, CLASS1, CLASS3, etc. and may be renamed
+                        String className = "CLASS" + cellNum.toString(); // guarantee unique name for user to rename later (based on column)
+                        WordProperty wordProp = null;
+
+                        // find class
+                        for (WordProperty findProp : core.getWordPropertiesCollection().getAllWordProperties()) {
+                            if (findProp.getValue().equals(className)) {
+                                wordProp = findProp;
+                                break;
+                            }
                         }
-                    }
-                    // add gender to list of potential genders if applicable and user
-                    // specified
-                    if (bCreateGenders && !newWord.getGender().trim().equals("")
-                            && !core.getGenders().nodeExists(newWord.getGender())) {
-                        GenderNode newGender = new GenderNode();
-                        newGender.setValue(newWord.getGender());
-                        core.getGenders().clear();
-                        core.getGenders().addNode(newGender);
+
+                        // create class if doesn't yet exist
+                        if (wordProp == null) {
+                            wordProp = new WordProperty();
+                            wordProp.setValue(className);
+                            int propId = core.getWordPropertiesCollection().addNode(wordProp);
+                            try {
+                                wordProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(propId);
+                            } catch (Exception e) {
+                                throw new Exception("Problem pulling word class for word: " + newWord.getValue());
+                            }
+                        }
+
+                        // find class value
+                        WordPropValueNode wordVal = null;
+                        for (WordPropValueNode findVal : wordProp.getValues()) {
+                            if (findVal.getValue().equals(columns[cellNum].trim())) {
+                                wordVal = findVal;
+                                break;
+                            }
+                        }
+
+                        // create class value if doesn't exist yet
+                        if (wordVal == null) {
+                            wordVal = new WordPropValueNode();
+                            wordVal.setValue(columns[cellNum].trim());
+                            wordVal = wordProp.addValue(columns[cellNum].trim());
+                        }
+
+                        // add class value to word
+                        newWord.setClassValue(wordProp.getId(), wordVal.getId());
                     }
 
                     // add local word
@@ -351,7 +381,7 @@ public class ImportFileHelper {
         }
 
         // add gender
-        columnList = Arrays.asList(iGender.split(","));
+        columnList = Arrays.asList(iClass.split(","));
         for (String entry : columnList) {
             if (entry == null || entry.equals("")) {
                 continue;
@@ -359,20 +389,53 @@ public class ImportFileHelper {
 
             Integer cellNum = cellNumCheckGet(entry);
 
-            if (newWord.getGender().trim().equals("")) {
-                newWord.setGender(row.getCell(cellNum) != null ? row.getCell(cellNum).toString() : "");
-            } else if (row.getCell(cellNum) != null) {
-                newWord.setGender(newWord.getGender() + ", " + row.getCell(cellNum).toString());
+            // TODO: Update manual explaining how this works: classes pulled in as CLASS0, CLASS1, CLASS3, etc. and may be renamed
+            String className = "CLASS" + cellNum.toString(); // guarantee unique name for user to rename later (based on column)
+            WordProperty wordProp = null;
+
+            // find class
+            for (WordProperty findProp : core.getWordPropertiesCollection().getAllWordProperties()) {
+                if (findProp.getValue().equals(className)) {
+                    wordProp = findProp;
+                    break;
+                }
             }
-        }
-        // add gender to list of potential genders if applicable and user
-        // specified
-        if (bCreateGenders && !newWord.getGender().trim().equals("")
-                && !core.getGenders().nodeExists(newWord.getGender())) {
-            GenderNode newGender = new GenderNode();
-            newGender.setValue(newWord.getGender());
-            core.getGenders().clear();
-            core.getGenders().addNode(newGender);
+
+            // create class if doesn't yet exist
+            if (wordProp == null) {
+                wordProp = new WordProperty();
+                wordProp.setValue(className);
+                int propId = core.getWordPropertiesCollection().addNode(wordProp);
+                try {
+                    wordProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(propId);
+                } catch (Exception e) {
+                    throw new Exception("Problem pulling word class for word: " + newWord.getValue());
+                }
+            }
+
+            // find class value
+            Cell curCell = row.getCell(cellNum);
+            WordPropValueNode wordVal = null;
+            if (curCell != null) { // null = empty cell in many occasions, skip if this is the case
+                for (WordPropValueNode findVal : wordProp.getValues()) {
+                    if (findVal.getValue().equals(curCell.toString().trim())) {
+                        wordVal = findVal;
+                        break;
+                    }
+                }
+            } else {
+                continue;
+            }
+
+            // create class value if doesn't exist yet
+            if (wordVal == null) {
+                wordVal = new WordPropValueNode();
+                wordVal.setValue(row.getCell(cellNum).toString().trim());
+                wordVal = wordProp.addValue(row.getCell(cellNum).toString().trim());
+            }
+
+            // add class value to word
+            newWord.setClassValue(wordProp.getId(), wordVal.getId());
         }
 
         // add local word

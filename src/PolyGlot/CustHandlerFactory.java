@@ -485,9 +485,9 @@ public class CustHandlerFactory {
                             new String(ch, start, length).equals("T"));
                     bwordRuleOverride = false;
                 } else if (bgender) {
-                    wordCollection.getBufferWord().setGender(
-                            new String(ch, start, length));
-                    bgender = false;
+                    //wordCollection.getBufferWord().setGender( // deprecated
+                    //        new String(ch, start, length));
+                    //bgender = false;
                 } else if (bgenderId) {
                     wGId = Integer.parseInt(new String(ch, start, length));
                     bgenderId = false;

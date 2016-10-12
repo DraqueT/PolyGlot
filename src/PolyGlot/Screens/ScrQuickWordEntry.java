@@ -21,19 +21,34 @@ package PolyGlot.Screens;
 
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
-import PolyGlot.Nodes.GenderNode;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextArea;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
+import PolyGlot.Nodes.WordPropValueNode;
+import PolyGlot.Nodes.WordProperty;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 
 /**
  *
@@ -41,7 +56,7 @@ import javax.swing.event.DocumentListener;
  */
 public final class ScrQuickWordEntry extends PDialog {
 
-    private final String cstSELET = "";
+    private final Map<Integer, JComboBox> classComboMap = new HashMap<>();
     private final ScrLexicon parent;
 
     /**
@@ -70,24 +85,16 @@ public final class ScrQuickWordEntry extends PDialog {
             cmbType.setForeground(core.getRequiredColor());
             chkType.setEnabled(false);
         }
-        
+
         populateTypes();
-        populateGenders();
-        setupCustomLabels();
     }
-    
-    private void setupCustomLabels() {
-        jLabel2.setText(core.conLabel() + " word");
-        jLabel3.setText(core.localLabel() + " word");
-        chkLocal.setText(core.localLabel() + " word");
-    }
-    
+
     // Overridden to meet coding standards...
     @Override
     protected final void setupKeyStrokes() {
         super.setupKeyStrokes();
     }
-    
+
     /**
      * Sets up all component listeners
      */
@@ -97,14 +104,26 @@ public final class ScrQuickWordEntry extends PDialog {
             public void keyPressed(KeyEvent e) {
                 // User only wants to enter word if no popups are visible
                 if (e.getKeyCode() == KeyEvent.VK_ENTER
-                        && (!cmbGender.isPopupVisible())
                         && !cmbType.isPopupVisible()) {
+                    // tests all class comboboxes
+                    for (JComboBox curBox : classComboMap.values()) {
+                        if (curBox.isPopupVisible()) {
+                            return;
+                        }
+                    }
                     tryRecord();
                 }
             }
 
-            @Override public void keyReleased(KeyEvent e) {/*DO NOTHING*/}
-            @Override public void keyTyped(KeyEvent e) { /*DO NOTHING*/}
+            @Override
+            public void keyReleased(KeyEvent e) {
+                /*DO NOTHING*/
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                /*DO NOTHING*/
+            }
         };
 
         txtConWord.setFont(core.getPropertiesManager().getFontCon());
@@ -125,26 +144,63 @@ public final class ScrQuickWordEntry extends PDialog {
                 setProc();
             }
         });
+        setupDefText(txtConWord, "-- " + core.conLabel() + " word --");        
         txtDefinition.addKeyListener(enterListener);
+        setupDefText(txtDefinition, "-- Definition --");
         txtLocalWord.addKeyListener(enterListener);
+        setupDefText(txtLocalWord, "-- " + core.localLabel() + " word --");
         txtProc.addKeyListener(enterListener);
-        cmbGender.addKeyListener(enterListener);
+        setupDefText(txtProc, "-- Pronunciation --");
         cmbType.addKeyListener(enterListener);
+    }
+
+    /**
+     * Sets up default text for text fields
+     * @param target
+     * @param label 
+     */
+    private void setupDefText(JTextComponent _target, String label) {
+        final JTextComponent target = _target;
+        final String defLabel = label;
+        
+        target.setText(label);
+        target.setForeground(Color.lightGray);        
+        target.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (target.getText().equals(defLabel)) {
+                    target.setText("");
+                    target.setForeground(Color.black);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (target.getText().equals("")) {
+                    target.setText(defLabel);
+                    target.setForeground(Color.lightGray);
+                }
+            }
+        });
     }
     
     /**
      * Sets pronunciation value of word
      */
     private void setProc() {
-        txtProc.setText(core.getPronunciationMgr()
-                .getPronunciation(txtConWord.getText()));
+        String proc = core.getPronunciationMgr()
+                .getPronunciation(txtConWord.getText());
+        
+        if (proc != "") {
+            txtProc.setText(proc);
+        }
     }
-    
+
     @Override
     public boolean thisOrChildrenFocused() {
         return this.isFocusOwner();
     }
-    
+
     @Override
     public void updateAllValues(DictCore _core) {
         core = _core;
@@ -153,121 +209,199 @@ public final class ScrQuickWordEntry extends PDialog {
             @Override
             public void run() {
                 populateTypes();
-                populateGenders();
             }
         };
         SwingUtilities.invokeLater(runnable);
     }
-    
+
     private void populateTypes() {
         Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
         cmbType.removeAllItems();
-        cmbType.addItem(new TypeNode());
+        final String defLabel =  "-- Part of Speech --";
+        cmbType.addItem(defLabel);
+        
         while (typeIt.hasNext()) {
             TypeNode curType = typeIt.next();
             cmbType.addItem(curType);
         }
     }
 
-    private void populateGenders() {
-        Iterator<GenderNode> gendIt = core.getGenders().getNodeIterator();
-        cmbGender.removeAllItems();
-        cmbGender.addItem(cstSELET);
-        while (gendIt.hasNext()) {
-            GenderNode curGen = gendIt.next();
-            cmbGender.addItem(curGen);
-        }
-    }
-    
     /**
      * records a word if appropriate, flashes required fields otherwise
      */
     private void tryRecord() {
         ConWord word = new ConWord();
-        
+
         word.setValue(txtConWord.getText());
         word.setLocalWord(txtLocalWord.getText());
         word.setPronunciation(txtProc.getText());
         word.setDefinition(txtDefinition.getText());
-        word.setGender(cmbGender.getSelectedItem().toString());
-        word.setWordTypeId(((TypeNode)cmbType.getSelectedItem()).getId());
         
+        if (cmbType.getSelectedItem() instanceof TypeNode) {
+            word.setWordTypeId(((TypeNode) cmbType.getSelectedItem()).getId());
+        }
+
+        // set class values
+        for (Entry<Integer, JComboBox> curEntry : classComboMap.entrySet()) {
+            if (curEntry.getValue().getSelectedItem() instanceof WordPropValueNode) {
+                WordPropValueNode curValue = (WordPropValueNode) curEntry.getValue().getSelectedItem();
+                word.setClassValue(curEntry.getKey(), curValue.getId());
+            }
+        }
+
         ConWord test = core.getWordCollection().testWordLegality(word);
         String testResults = "";
-        
+
         if (!test.getValue().isEmpty()) {
-            ((PTextField)txtConWord).makeFlash(core.getRequiredColor(), true);
+            ((PTextField) txtConWord).makeFlash(core.getRequiredColor(), true);
             testResults += test.getValue();
         }
         if (!test.getLocalWord().isEmpty()) {
-            ((PTextField)txtLocalWord).makeFlash(core.getRequiredColor(), true);
+            ((PTextField) txtLocalWord).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getLocalWord());
         }
         if (!test.getPronunciation().isEmpty()) {
-            ((PTextField)txtProc).makeFlash(core.getRequiredColor(), true);
+            ((PTextField) txtProc).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getPronunciation());
         }
         if (!test.getDefinition().isEmpty()) {
             // errors having to do with type patterns returned in def field.
-            ((PComboBox)cmbType).makeFlash(core.getRequiredColor(), true);
+            ((PComboBox) cmbType).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getDefinition());
         }
-        if (!test.getGender().isEmpty()) {
+        /*if (!test.getGender().isEmpty()) {
             ((PComboBox)cmbGender).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getGender());
-        }
+        }*/ // TODO: replace with relevant code for class values eventually
         if (!test.typeError.isEmpty()) {
-            ((PComboBox)cmbType).makeFlash(core.getRequiredColor(), true);
+            ((PComboBox) cmbType).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.typeError);
-        } 
+        }
         if (core.getPropertiesManager().isWordUniqueness()
                 && core.getWordCollection().testWordValueExists(txtConWord.getText())) {
-            ((PTextField)txtConWord).makeFlash(core.getRequiredColor(), true);
+            ((PTextField) txtConWord).makeFlash(core.getRequiredColor(), true);
             testResults += ("\nConWords set to enforced unique: this local exists elsewhere.");
         }
         if (core.getPropertiesManager().isLocalUniqueness()
                 && core.getWordCollection().testLocalValueExists(txtLocalWord.getText())) {
-            ((PTextField)txtLocalWord).makeFlash(core.getRequiredColor(), true);
+            ((PTextField) txtLocalWord).makeFlash(core.getRequiredColor(), true);
             testResults += ("\nLocal words set to enforced unique: this work exists elsewhere.");
         }
-        
-        
+
         if (!testResults.isEmpty()) {
-            InfoBox.warning("Illegal Values", "Word contains illegal values:\n\n" 
+            InfoBox.warning("Illegal Values", "Word contains illegal values:\n\n"
                     + testResults, this);
             return;
         }
-        
+
         try {
-            word.setValue(txtConWord.getText());
-            word.setDefinition(txtDefinition.getText());
-            word.setLocalWord(txtLocalWord.getText());
-            word.setPronunciation(txtProc.getText());
-            word.setGender(cmbGender.getSelectedItem().toString());
-            word.setWordTypeId(((TypeNode)cmbType.getSelectedItem()).getId());
-            
             int wordId = core.getWordCollection().addWord(word);
             blankWord();
             txtConWord.requestFocus();
-            
+
             parent.refreshWordList(wordId);
         } catch (Exception e) {
             InfoBox.error("Word Error", "Unable to insert word: " + e.getMessage(), this);
         }
     }
-    
+
     /**
      * blanks out current conword fields
      */
     private void blankWord() {
         txtConWord.setText("");
+        txtConWord.requestFocus();
         txtDefinition.setText("");
+        txtDefinition.requestFocus();
         txtLocalWord.setText("");
+        txtLocalWord.requestFocus();
         txtProc.setText("");
-        cmbGender.setSelectedIndex(0);
+        txtProc.requestFocus();
+        setupClassPanel(-1);
         cmbType.setSelectedIndex(0);
     }
-    
+
+    /**
+     * Sets up the class panel. Should be run whenever a new word is loaded
+     *
+     * @param setTypeId ID of class to set panel up for, -1 if no class selected
+     */
+    private void setupClassPanel(int setTypeId) {
+        List<WordProperty> propList = core.getWordPropertiesCollection()
+                .getClassProps(setTypeId);
+        pnlClasses.removeAll();
+        pnlClasses.setPreferredSize(new Dimension(999999, 1));
+
+        pnlClasses.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.weighty = 1;
+        gbc.weightx = 1;
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+
+        // empty map of all class information before filling it again
+        classComboMap.clear();
+
+        // create dropdown for each class that applies to the curren word
+        for (WordProperty curProp : propList) {
+            final JComboBox classBox = new JComboBox();
+            DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
+            classBox.setModel(comboModel);
+            comboModel.addElement("-- " + curProp.getValue() + " --");
+
+            // populate class dropdown
+            for (WordPropValueNode value : curProp.getValues()) {
+                comboModel.addElement(value);
+            }
+
+            classBox.setEnabled(chkClasses.isSelected());
+            classBox.addKeyListener(new KeyListener() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    // User only wants to enter word if no popups are visible
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER
+                            && !cmbType.isPopupVisible()) {
+                        // tests all class comboboxes
+                        for (JComboBox curBox : classComboMap.values()) {
+                            if (curBox.isPopupVisible()) {
+                                return;
+                            }
+                        }
+                        tryRecord();
+                    }
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    /*DO NOTHING*/
+                }
+
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    /*DO NOTHING*/
+                }
+            });
+
+            classBox.setToolTipText(curProp.getValue() + " value");
+            classBox.setPreferredSize(new Dimension(99999, classBox.getPreferredSize().height));
+            pnlClasses.add(classBox, gbc);
+            classComboMap.put(curProp.getId(), classBox); // dropbox mapped to related class ID.
+        }
+        if (propList.isEmpty()) {
+            // must include at least one item (even a dummy) to resize for some reason
+            JComboBox blank = new JComboBox();
+            blank.setEnabled(false);
+            pnlClasses.add(blank, gbc);
+            pnlClasses.setPreferredSize(new Dimension(9999, 0));
+        } else {
+            pnlClasses.setMaximumSize(new Dimension(99999, 99999));
+            pnlClasses.setPreferredSize(new Dimension(9999, propList.size() * new JComboBox().getPreferredSize().height));
+        }
+
+        pnlClasses.repaint();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -280,30 +414,27 @@ public final class ScrQuickWordEntry extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         chkLocal = new javax.swing.JCheckBox();
         chkType = new javax.swing.JCheckBox();
-        chkGender = new javax.swing.JCheckBox();
         chkProc = new javax.swing.JCheckBox();
         chkDefinition = new javax.swing.JCheckBox();
+        chkClasses = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         txtConWord = new PTextField(core);
         txtLocalWord = new PTextField(core, true);
         cmbType = new PComboBox();
-        cmbGender = new PComboBox();
         txtProc = new PTextField(core, true);
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDefinition = new PTextArea();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        pnlClasses = new javax.swing.JPanel();
         btnDone = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Word Quickentry");
+        setMinimumSize(new java.awt.Dimension(335, 406));
+        setPreferredSize(new java.awt.Dimension(335, 406));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel1.setMinimumSize(new java.awt.Dimension(265, 57));
 
         chkLocal.setSelected(true);
         chkLocal.setText("Local Word");
@@ -315,20 +446,11 @@ public final class ScrQuickWordEntry extends PDialog {
         });
 
         chkType.setSelected(true);
-        chkType.setText("Type");
+        chkType.setText("Part of Speech");
         chkType.setToolTipText("Enable/Disable Type Entry");
         chkType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkTypeActionPerformed(evt);
-            }
-        });
-
-        chkGender.setSelected(true);
-        chkGender.setText("Gender");
-        chkGender.setToolTipText("Enable/Disable Gender Entry");
-        chkGender.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkGenderActionPerformed(evt);
             }
         });
 
@@ -350,21 +472,30 @@ public final class ScrQuickWordEntry extends PDialog {
             }
         });
 
+        chkClasses.setSelected(true);
+        chkClasses.setText("Classes");
+        chkClasses.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkClassesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(chkLocal)
-                    .addComponent(chkType))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(chkGender)
-                        .addGap(40, 40, 40)
-                        .addComponent(chkDefinition))
-                    .addComponent(chkProc))
+                        .addComponent(chkType)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkClasses))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(chkLocal)
+                        .addGap(18, 18, 18)
+                        .addComponent(chkProc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(chkDefinition)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -372,22 +503,23 @@ public final class ScrQuickWordEntry extends PDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkLocal)
-                    .addComponent(chkGender)
-                    .addComponent(chkDefinition))
+                    .addComponent(chkDefinition)
+                    .addComponent(chkProc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkType)
-                    .addComponent(chkProc))
+                    .addComponent(chkClasses))
                 .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         cmbType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        cmbGender.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel1.setText("Definition");
+        cmbType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTypeActionPerformed(evt);
+            }
+        });
 
         txtDefinition.setColumns(20);
         txtDefinition.setLineWrap(true);
@@ -395,80 +527,43 @@ public final class ScrQuickWordEntry extends PDialog {
         txtDefinition.setWrapStyleWord(true);
         jScrollPane1.setViewportView(txtDefinition);
 
-        jLabel2.setText("Con Word");
-
-        jLabel3.setText("Local Word");
-
-        jLabel4.setText("Type");
-
-        jLabel5.setText("Gender");
-
-        jLabel6.setText("Pronunciation");
+        javax.swing.GroupLayout pnlClassesLayout = new javax.swing.GroupLayout(pnlClasses);
+        pnlClasses.setLayout(pnlClassesLayout);
+        pnlClassesLayout.setHorizontalGroup(
+            pnlClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        pnlClassesLayout.setVerticalGroup(
+            pnlClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addGap(22, 22, 22)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtLocalWord)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbGender, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(txtProc, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(27, 27, 27)
-                        .addComponent(txtConWord)))
-                .addContainerGap())
+            .addComponent(pnlClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(txtConWord)
+            .addComponent(txtProc)
+            .addComponent(jScrollPane1)
+            .addComponent(txtLocalWord, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(txtConWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtLocalWord, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel5))
+                .addComponent(txtConWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(txtLocalWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlClasses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -488,14 +583,12 @@ public final class ScrQuickWordEntry extends PDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(btnDone))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -520,10 +613,6 @@ public final class ScrQuickWordEntry extends PDialog {
         txtLocalWord.setEnabled(chkLocal.isSelected());
     }//GEN-LAST:event_chkLocalActionPerformed
 
-    private void chkGenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkGenderActionPerformed
-        cmbGender.setEnabled(chkGender.isSelected());
-    }//GEN-LAST:event_chkGenderActionPerformed
-
     private void chkDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDefinitionActionPerformed
         txtDefinition.setEnabled(chkDefinition.isSelected());
     }//GEN-LAST:event_chkDefinitionActionPerformed
@@ -535,6 +624,26 @@ public final class ScrQuickWordEntry extends PDialog {
     private void chkProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkProcActionPerformed
         txtProc.setEnabled(chkProc.isSelected());
     }//GEN-LAST:event_chkProcActionPerformed
+
+    private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (cmbType.getSelectedItem() != null
+                        && cmbType.getSelectedItem() instanceof TypeNode) {
+                    setupClassPanel(((TypeNode) cmbType.getSelectedItem()).getId());
+                } else {
+                    setupClassPanel(0);
+                }
+            }
+        });
+    }//GEN-LAST:event_cmbTypeActionPerformed
+
+    private void chkClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkClassesActionPerformed
+        for (JComboBox curBox : classComboMap.values()) {
+            curBox.setEnabled(chkClasses.isSelected());
+        }
+    }//GEN-LAST:event_chkClassesActionPerformed
 
     /**
      * @param _core Dictionary Core
@@ -558,9 +667,8 @@ public final class ScrQuickWordEntry extends PDialog {
             InfoBox.error("Window Error", "Unable to open quick word entry screen: " + ex.getLocalizedMessage(), _parent);
         }
         //</editor-fold>
-        
-        //</editor-fold>
 
+        //</editor-fold>
         ScrQuickWordEntry ret = new ScrQuickWordEntry(_core, _parent);
         ret.setModal(true);
         return ret;
@@ -568,23 +676,17 @@ public final class ScrQuickWordEntry extends PDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDone;
+    private javax.swing.JCheckBox chkClasses;
     private javax.swing.JCheckBox chkDefinition;
-    private javax.swing.JCheckBox chkGender;
     private javax.swing.JCheckBox chkLocal;
     private javax.swing.JCheckBox chkProc;
     private javax.swing.JCheckBox chkType;
-    private javax.swing.JComboBox cmbGender;
     private javax.swing.JComboBox cmbType;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel pnlClasses;
     private javax.swing.JTextField txtConWord;
     private javax.swing.JTextArea txtDefinition;
     private javax.swing.JTextField txtLocalWord;

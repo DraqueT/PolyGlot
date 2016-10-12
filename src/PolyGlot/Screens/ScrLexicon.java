@@ -307,6 +307,7 @@ public final class ScrLexicon extends PFrame {
     
     /**
      * Sets up the class panel. Should be run whenever a new word is loaded
+     * @param setTypeId ID of class to set panel up for
      */
     private void setupClassPanel(int setTypeId) {
         ConWord curWord = (ConWord)lstLexicon.getSelectedValue();

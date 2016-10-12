@@ -420,7 +420,7 @@ public class ConWordCollection extends DictionaryCollection {
             _filter.setDefinition(_filter.getDefinition().toLowerCase());
             _filter.setLocalWord(_filter.getLocalWord().toLowerCase());
             _filter.setValue(_filter.getValue().toLowerCase());
-            _filter.setGender(_filter.getGender().toLowerCase());
+            //_filter.setGender(_filter.getGender().toLowerCase()); // TODO: replace with class filtering
             _filter.setPronunciation(_filter.getPronunciation().toLowerCase());
         }
 
@@ -439,13 +439,13 @@ public class ConWordCollection extends DictionaryCollection {
                     definition = curWord.getDefinition().toLowerCase();
                     type = curWord.getWordTypeId();
                     local = curWord.getLocalWord().toLowerCase();
-                    gender = curWord.getGender().toLowerCase();
+                    //gender = curWord.getGender().toLowerCase(); // TODO: replace with class filtering
                     proc = curWord.getPronunciation().toLowerCase();
                 } else {
                     definition = curWord.getDefinition();
                     type = curWord.getWordTypeId();
                     local = curWord.getLocalWord();
-                    gender = curWord.getGender();
+                    //gender = curWord.getGender(); // TODO: replace with class filtering
                     proc = curWord.getPronunciation();
                 }
 
@@ -475,11 +475,12 @@ public class ConWordCollection extends DictionaryCollection {
                     continue;
                 }
 
+                // TODO: replace with class filtering
                 // gender (exact match only)
-                if (!_filter.getGender().trim().equals("")
+                /*if (!_filter.getGender().trim().equals("")
                         && !gender.equals(_filter.getGender())) {
                     continue;
-                }
+                }*/
 
                 // pronunciation
                 if (!_filter.getPronunciation().trim().equals("")
@@ -908,10 +909,6 @@ public class ConWordCollection extends DictionaryCollection {
             wordValue = doc.createElement(PGTUtil.pronunciationXID);
             wordValue
                     .appendChild(doc.createTextNode(curWord.getPronunciation()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(PGTUtil.wordGenderXID);
-            wordValue.appendChild(doc.createTextNode(curWord.getGender()));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.definitionXID);
