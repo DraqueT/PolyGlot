@@ -42,7 +42,7 @@ public abstract class DictNode implements Comparable<DictNode> {
      * Sets a node equal to the argument node
      * @param _node Node to set all values equal to.
      */
-    abstract public void setEqual(DictNode _node);
+    abstract public void setEqual(DictNode _node) throws ClassCastException;
     
     public void setId(Integer _id) {
         id = _id;

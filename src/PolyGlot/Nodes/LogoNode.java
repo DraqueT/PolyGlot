@@ -271,7 +271,11 @@ public class LogoNode extends DictNode {
     /**
      * Sets node equal to node passed in
      */
-    public void setEqual(DictNode _node) {
+    public void setEqual(DictNode _node) throws ClassCastException {
+        if (!(_node instanceof LogoNode)) {
+            throw new ClassCastException("Object not of type LogoNode");
+        }
+        
         LogoNode setNode = (LogoNode) _node;
         radicals = setNode.radicals;
         readings = setNode.readings;

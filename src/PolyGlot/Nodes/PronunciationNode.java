@@ -24,7 +24,7 @@ package PolyGlot.Nodes;
  *
  * @author draque
  */
-public class PronunciationNode extends DictNode{
+public class PronunciationNode extends DictNode {
     private String pronunciation = "";
     
     public String getPronunciation() {
@@ -41,7 +41,11 @@ public class PronunciationNode extends DictNode{
     }
     
     @Override
-    public void setEqual(DictNode _node) {
+    public void setEqual(DictNode _node) throws ClassCastException {
+        if (!(_node instanceof PronunciationNode)) {
+            throw new ClassCastException("Object not of type PronunciationNode");
+        }
+        
         PronunciationNode node = (PronunciationNode) _node;
         
         this.setPronunciation(node.getPronunciation());

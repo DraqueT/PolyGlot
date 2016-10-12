@@ -89,7 +89,11 @@ public class ConWord extends DictNode {
      * @param _set sets all non ID values equal to that of parameter
      */
     @Override
-    public void setEqual(DictNode _set) {
+    public void setEqual(DictNode _set) throws ClassCastException {
+        if (!(_set instanceof ConWord)) {
+            throw new ClassCastException("Object not of type ConWord");
+        }
+                
         ConWord set = (ConWord) _set;
         
         this.setValue(set.getValue());

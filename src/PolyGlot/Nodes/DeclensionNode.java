@@ -150,7 +150,11 @@ public class DeclensionNode extends DictNode{
     }
     
     @Override
-    public void setEqual(DictNode _node) {
+    public void setEqual(DictNode _node) throws ClassCastException {
+        if (!(_node instanceof DeclensionNode)) {
+            throw new ClassCastException("Object not of type DeclensionNode");
+        }
+        
         DeclensionNode node = (DeclensionNode) _node;
         
         this.setNotes(node.getNotes());

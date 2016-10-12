@@ -25,7 +25,11 @@ package PolyGlot.Nodes;
  */
 public class WordPropValueNode extends DictNode {
     @Override
-    public void setEqual(DictNode _node) {
+    public void setEqual(DictNode _node) throws ClassCastException {
+        if (!(_node instanceof WordPropValueNode)) {
+            throw new ClassCastException("Object not of type WordPropValueNode");
+        }
+        
         this.value = _node.getValue();
         this.id = _node.getId();
     }

@@ -100,8 +100,8 @@ public class ThesNode extends DictNode {
      * @param _node NOTHING
      */
     @Override
-    public void setEqual(DictNode _node) {
-        // DO NOT IMPLEMENT
+    public void setEqual(DictNode _node) throws ClassCastException {
+        throw new ClassCastException("setEqual should never be called on ThesNode instances.");
     }
         
     /**

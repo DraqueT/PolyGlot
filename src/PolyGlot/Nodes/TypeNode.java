@@ -57,7 +57,11 @@ public class TypeNode extends DictNode{
     }
     
     @Override
-    public void setEqual(DictNode _node) {
+    public void setEqual(DictNode _node) throws ClassCastException {
+        if (!(_node instanceof TypeNode)) {
+            throw new ClassCastException("Object not of type TypeNode");
+        }
+        
         TypeNode set = (TypeNode) _node;
         
         this.setId(set.getId());

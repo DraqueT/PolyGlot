@@ -42,9 +42,9 @@ public class WordProperty extends DictNode {
     }
     
     @Override
-    public void setEqual(DictNode _node) {
+    public void setEqual(DictNode _node) throws ClassCastException {
         if (!(_node instanceof WordProperty)) {
-            // TODO: All nodes should throw exceptions if told to be set equal to the wrong type (enhancement #291)
+            throw new ClassCastException("Object not of type WordPropValueNode");
         }
         WordProperty copyProp = (WordProperty)_node;
         
@@ -54,7 +54,8 @@ public class WordProperty extends DictNode {
             try {
                 addValue(curNode.getValue(), curNode.getId());
             } catch (Exception ex) {
-                // TODO: Make this bubble properly once setEqual throws exceptions (enhancement #291)
+                throw new ClassCastException("Problem setting class value: " 
+                        + ex.getLocalizedMessage());
             }
         }
     }
