@@ -404,6 +404,7 @@ public final class ScrLexicon extends PFrame {
                 setupComboBoxesFX();
                 setFonts();
                 latch.countDown();
+                fxPanel.repaint();
             }
         };
         Platform.setImplicitExit(false);
