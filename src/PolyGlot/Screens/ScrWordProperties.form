@@ -50,7 +50,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <Component id="jScrollPane1" pref="335" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="362" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="btnDelProp" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -79,6 +79,7 @@
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
               <StringArray count="0"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Properties (such as gender) of words in your language"/>
           </Properties>
           <Events>
             <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstPropertiesValueChanged"/>
@@ -90,6 +91,9 @@
       </SubComponents>
     </Container>
     <Component class="javax.swing.JButton" name="btnAddProp">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Add new property"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddPropActionPerformed"/>
       </Events>
@@ -98,6 +102,9 @@
       </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btnDelProp">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Delete selected property"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDelPropActionPerformed"/>
       </Events>
@@ -118,12 +125,12 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="btnAddValue" alignment="0" min="-2" pref="40" max="-2" attributes="0"/>
-                      <Component id="txtName" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="txtName" alignment="1" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
                                   <Component id="btnDelValue" min="-2" pref="40" max="-2" attributes="0"/>
@@ -143,10 +150,6 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="pnlTypes" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
                           <Component id="txtName" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jScrollPane3" pref="0" max="32767" attributes="0"/>
@@ -156,6 +159,7 @@
                               <Component id="btnDelValue" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                      <Component id="pnlTypes" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -163,8 +167,14 @@
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JTextField" name="txtName">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Name of property"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnAddValue">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Add new value"/>
+          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddValueActionPerformed"/>
           </Events>
@@ -173,6 +183,9 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnDelValue">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Delete selected value"/>
+          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDelValueActionPerformed"/>
           </Events>
@@ -187,6 +200,7 @@
                 <LineBorder/>
               </Border>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Parts of speech this property applies to"/>
           </Properties>
 
           <Layout>
@@ -216,6 +230,7 @@
                     <Column editable="true" title="Values" type="java.lang.Object"/>
                   </Table>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Values the selected property might take (such as &quot;female&quot; for gender)"/>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
@@ -237,6 +252,7 @@
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>
         <Property name="text" type="java.lang.String" value="OK"/>
+        <Property name="toolTipText" type="java.lang.String" value="Exit window"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
