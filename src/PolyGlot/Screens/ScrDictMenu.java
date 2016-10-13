@@ -600,7 +600,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                     }
                 };
                 SwingUtilities.invokeLater(runnable);
-
             }
         });
     }

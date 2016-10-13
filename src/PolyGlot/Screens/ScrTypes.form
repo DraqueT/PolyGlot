@@ -24,12 +24,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jSplitPane1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jSplitPane1" pref="490" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jSplitPane1" alignment="0" pref="405" max="32767" attributes="0"/>
+          <Component id="jSplitPane1" alignment="0" pref="409" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -62,20 +62,24 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="txtName" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPane2" max="32767" attributes="0"/>
                           <Component id="txtTypePattern" max="32767" attributes="0"/>
                           <Component id="btnSetup" alignment="0" max="32767" attributes="0"/>
-                          <Component id="btnAutogen" alignment="0" pref="331" max="32767" attributes="0"/>
+                          <Component id="btnAutogen" alignment="0" pref="330" max="32767" attributes="0"/>
+                          <Component id="txtGloss" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtErrorBox" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtErrorBox" max="32767" attributes="0"/>
                                   <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="txtGloss" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -86,8 +90,8 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="txtName" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="119" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtGloss" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtTypePattern" min="-2" max="-2" attributes="0"/>
@@ -100,6 +104,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtErrorBox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -241,6 +246,14 @@
                 <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtGlossFocusLost"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JButton" name="jButton1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="OK"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel2">
@@ -264,7 +277,7 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jScrollPane1" pref="366" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="392" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnAddType" alignment="3" min="-2" max="-2" attributes="0"/>

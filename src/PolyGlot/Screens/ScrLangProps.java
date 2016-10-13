@@ -34,6 +34,7 @@ import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -462,6 +463,7 @@ public class ScrLangProps extends PDialog {
         txtLocalLanguage = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtAuthorCopyright = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Language Properties");
@@ -579,7 +581,7 @@ public class ScrLangProps extends PDialog {
                 .addComponent(chkDisableProcRegex)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkEnforceRTL)
-                .addGap(0, 44, Short.MAX_VALUE))
+                .addGap(0, 26, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -777,6 +779,13 @@ public class ScrLangProps extends PDialog {
                 .addContainerGap())
         );
 
+        jButton1.setText("OK");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -787,6 +796,9 @@ public class ScrLangProps extends PDialog {
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -795,7 +807,8 @@ public class ScrLangProps extends PDialog {
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1))
         );
 
         pack();
@@ -883,6 +896,11 @@ public class ScrLangProps extends PDialog {
         }
     }//GEN-LAST:event_txtAuthorCopyrightFocusLost
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
         s.setupKeyStrokes();
@@ -902,6 +920,7 @@ public class ScrLangProps extends PDialog {
     private javax.swing.JCheckBox chkLocalUniqueness;
     private javax.swing.JCheckBox chkTypesMandatory;
     private javax.swing.JCheckBox chkWordUniqueness;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
