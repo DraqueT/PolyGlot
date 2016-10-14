@@ -44,7 +44,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -191,7 +190,7 @@ public final class ScrQuickWordEntry extends PDialog {
         String proc = core.getPronunciationMgr()
                 .getPronunciation(txtConWord.getText());
         
-        if (proc != "") {
+        if (!proc.equals("")) {
             txtProc.setText(proc);
         }
     }
@@ -431,7 +430,6 @@ public final class ScrQuickWordEntry extends PDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Word Quickentry");
         setMinimumSize(new java.awt.Dimension(335, 406));
-        setPreferredSize(new java.awt.Dimension(335, 406));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jPanel1.setMinimumSize(new java.awt.Dimension(265, 57));
