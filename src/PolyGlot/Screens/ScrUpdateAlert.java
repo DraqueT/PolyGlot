@@ -23,6 +23,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.DictCore;
 import PolyGlot.WebInterface;
+import java.awt.Dimension;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,7 +43,7 @@ import org.w3c.dom.Node;
  */
 public class ScrUpdateAlert extends PDialog {
 
-    private final Map<String, String> buttonMap = new HashMap<String, String>();
+    private final Map<String, String> buttonMap = new HashMap<>();
 
     /**
      * Creates new form ScrUpdateAlert
@@ -54,7 +55,7 @@ public class ScrUpdateAlert extends PDialog {
     public ScrUpdateAlert(boolean verbose, DictCore _core) throws Exception {
         setupKeyStrokes();
         initComponents();
-        setCore(_core);
+        core = _core;
         
         jTextPane1.setContentType("text/html");
 
@@ -96,8 +97,9 @@ public class ScrUpdateAlert extends PDialog {
 
             jPanel1.add(newButton);
 
-            newButton.setLocation(0, this.getSize().height - 30);
-            this.setSize(this.getHeight(), this.getHeight() + newButton.getHeight());
+            int height = this.getSize().height;
+            newButton.setLocation(0, height - 30);
+            this.setSize(height, height + newButton.getHeight());
         }
 
         this.setTitle("PolyGlot " + ver.getTextContent() + " available");
@@ -106,8 +108,8 @@ public class ScrUpdateAlert extends PDialog {
 
         if (ver.getTextContent().equals(core.getVersion())) {
             if (verbose) {
-                InfoBox.info("Update Status", "You're all up to date and on the newest version: "
-                        + core.getVersion() + ".", this);
+                InfoBox.info("Update Status", "You're up to date and on the newest version: "
+                        + core.getVersion() + ".", null);
             }
 
             this.setVisible(false);
@@ -115,6 +117,26 @@ public class ScrUpdateAlert extends PDialog {
         } else {
             setVisible(true);
         }
+    }
+    
+    @Override
+    public final Dimension getSize() {
+        return super.getSize();
+    }
+    
+    @Override
+    public final void setTitle(String _title) {
+        super.setTitle(_title);
+    }
+    
+    @Override
+    public final void setupKeyStrokes() {
+        super.setupKeyStrokes();
+    }
+    
+    @Override
+    public final void setSize(int _width, int height) {
+        super.setSize(_width, height);
     }
     
     @Override
@@ -126,7 +148,17 @@ public class ScrUpdateAlert extends PDialog {
     public boolean thisOrChildrenFocused() {
         return this.isFocusOwner();
     }
+    
+    @Override
+    public final void dispose() {
+        super.dispose();
+    }
 
+    @Override
+    public final void setVisible(boolean _visible) {
+        super.setVisible(_visible);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
