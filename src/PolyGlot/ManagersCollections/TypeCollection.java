@@ -282,39 +282,39 @@ public class TypeCollection extends DictionaryCollection {
         while (typeLoop.hasNext()) {
             TypeNode curType = typeLoop.next();
 
-            wordNode = doc.createElement(PGTUtil.wordClassXID);
+            wordNode = doc.createElement(PGTUtil.typeXID);
             rootElement.appendChild(wordNode);
 
-            wordValue = doc.createElement(PGTUtil.wordClassIdXID);
+            wordValue = doc.createElement(PGTUtil.typeIdXID);
             Integer wordId = curType.getId();
             wordValue.appendChild(doc.createTextNode(wordId.toString()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.wordClassNameXID);
+            wordValue = doc.createElement(PGTUtil.typeNameXID);
             wordValue.appendChild(doc.createTextNode(curType.getValue()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.wordClassNotesXID);
+            wordValue = doc.createElement(PGTUtil.typeNotesXID);
             wordValue.appendChild(doc.createTextNode(curType.getNotes()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.wordClassDefManXID);
+            wordValue = doc.createElement(PGTUtil.typeDefManXID);
             wordValue.appendChild(doc.createTextNode(curType.isDefMandatory() ? "T" : "F"));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.wordClassGenderManXID);
+            wordValue = doc.createElement(PGTUtil.typeGenderManXID);
             wordValue.appendChild(doc.createTextNode(curType.isGenderMandatory() ? "T" : "F"));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.wordClassProcManXID);
+            wordValue = doc.createElement(PGTUtil.typeProcManXID);
             wordValue.appendChild(doc.createTextNode(curType.isProcMandatory() ? "T" : "F"));
             wordNode.appendChild(wordValue);
             
-            wordValue = doc.createElement(PGTUtil.wordClassPatternXID);
+            wordValue = doc.createElement(PGTUtil.typePatternXID);
             wordValue.appendChild(doc.createTextNode(curType.getPattern()));
             wordNode.appendChild(wordValue);
             
-            wordValue = doc.createElement(PGTUtil.wordClassGlossXID);
+            wordValue = doc.createElement(PGTUtil.typeGlossXID);
             wordValue.appendChild(doc.createTextNode(curType.getGloss()));
             wordNode.appendChild(wordValue);
         }

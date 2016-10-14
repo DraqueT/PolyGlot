@@ -33,29 +33,30 @@ public class PGTUtil {
     public static final String wordXID = "word";
     public static final String localWordXID = "localWord";
     public static final String conWordXID = "conWord";
-    public static final String wordTypeXID = "wordType";
-    public static final String WORDTYPEID_XID = "wordTypeId";
-    public static final String wordGenderXID = "wordGender";
+    public static final String wordTypeXID = "wordType"; // LEGACY VALUE
+    public static final String wordTypeIdXID = "wordTypeId";
+    public static final String wordGenderXID = "wordGender"; // LEGACY VALUE
     public static final String wordIdXID = "wordId";
     public static final String wordPlurXID = "wordPlural"; // LEGACY VALUE
     public static final String wordProcOverrideXID = "wordProcOverride";
-    public static final String definitionXID = "definition";
+    public static final String wordDefXID = "definition";
     public static final String wordAutoDeclenOverrideXID = "autoDeclOverride";
-    public static final String pronunciationXID = "pronunciation";
+    public static final String wordProcXID = "pronunciation";
     public static final String wordRuleOverrideXID = "wordRuleOverride";
-    
+    public static final String wordClassCollectionXID = "wordClassCollection";
+    public static final String wordClassAndValueXID = "wordClassification";
+        
     // properties for types/parts of speech
-    // TODO: rename the objects (NOT THEIR VALUES) to match modern standards
-    public static final String wordClassXID = "class";
-    public static final String wordClassNameXID = "className";
-    public static final String wordClassIdXID = "classId";
-    public static final String wordClassNotesXID = "classNotes";
-    public static final String wordClassGenderManXID = "genderMandatoryClass";
-    public static final String wordClassProcManXID = "pronunciationMandatoryClass";
-    public static final String wordClassPlurManXID = "pluralityMandatoryClass";
-    public static final String wordClassDefManXID = "definitionMandatoryClass";
-    public static final String wordClassPatternXID = "classPattern";
-    public static final String wordClassGlossXID = "classGloss";
+    public static final String typeXID = "class";
+    public static final String typeNameXID = "className";
+    public static final String typeIdXID = "classId";
+    public static final String typeNotesXID = "classNotes";
+    public static final String typeGenderManXID = "genderMandatoryClass";
+    public static final String typeProcManXID = "pronunciationMandatoryClass";
+    public static final String typePlurManXID = "pluralityMandatoryClass";
+    public static final String typeDefManXID = "definitionMandatoryClass";
+    public static final String typePatternXID = "classPattern";
+    public static final String typeGlossXID = "classGloss";
     
     // properties for genders
     public static final String genderXID = "gender";
