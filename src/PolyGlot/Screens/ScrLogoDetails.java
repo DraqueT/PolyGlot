@@ -156,7 +156,7 @@ public class ScrLogoDetails extends PFrame {
 
             populateLogographs(list.iterator());
         } catch (Exception e) {
-            InfoBox.error("Logograph Error", "Unable to load logograph: " + e.getMessage(), this);
+            InfoBox.error("Logograph Error", "Unable to load logograph: " + e.getMessage(), null);
         }
 
         setSingleLogoMode(true);
