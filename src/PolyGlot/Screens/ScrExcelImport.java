@@ -94,7 +94,7 @@ public class ScrExcelImport extends PDialog {
         txtType = new javax.swing.JTextField();
         txtDefinition = new javax.swing.JTextField();
         txtPronunciation = new javax.swing.JTextField();
-        txtGender = new javax.swing.JTextField();
+        txtClass = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel11 = new javax.swing.JLabel();
@@ -145,8 +145,8 @@ public class ScrExcelImport extends PDialog {
         jLabel7.setText("Pronunciation");
         jLabel7.setToolTipText("Word pronunciation");
 
-        jLabel8.setText("Gender");
-        jLabel8.setToolTipText("Word gender");
+        jLabel8.setText("Classes");
+        jLabel8.setToolTipText("Word Classes");
 
         jLabel9.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
         jLabel9.setText("COLUMN #");
@@ -161,7 +161,7 @@ public class ScrExcelImport extends PDialog {
 
         txtPronunciation.setToolTipText("Column number of pronuncation");
 
-        txtGender.setToolTipText("Column number of gender");
+        txtClass.setToolTipText("Column number(s) for word class values (for example, gender)");
 
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
@@ -202,7 +202,7 @@ public class ScrExcelImport extends PDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtGender, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                                .addComponent(txtClass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                                 .addComponent(txtPronunciation, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtDefinition, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtType, javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,7 +252,7 @@ public class ScrExcelImport extends PDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
-                            .addComponent(txtGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtClass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtDelimiter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -388,9 +388,9 @@ public class ScrExcelImport extends PDialog {
             String delimiter = txtDelimiter.getText().equals("") ?
                     "," : txtDelimiter.getText();
             reader.setOptions(txtConWord.getText(), txtLocalWord.getText(),
-                    txtType.getText(), txtGender.getText(),
+                    txtType.getText(), txtClass.getText(),
                     txtDefinition.getText(), txtPronunciation.getText(), delimiter,
-                    chkFirstLabels.isSelected(), true, true);
+                    chkFirstLabels.isSelected(), true);
             reader.importFile(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
             // if everything has completed without error, close the window
             dispose();
@@ -426,12 +426,12 @@ public class ScrExcelImport extends PDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField txtClass;
     private javax.swing.JTextField txtConWord;
     private javax.swing.JTextField txtDefinition;
     private javax.swing.JTextField txtDelimiter;
     private javax.swing.JTextField txtExcelSheet;
     private javax.swing.JTextField txtFileName;
-    private javax.swing.JTextField txtGender;
     private javax.swing.JTextField txtLocalWord;
     private javax.swing.JTextField txtPronunciation;
     private javax.swing.JTextField txtType;

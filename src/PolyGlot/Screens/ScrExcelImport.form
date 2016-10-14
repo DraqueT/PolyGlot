@@ -122,7 +122,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="txtGender" alignment="0" pref="50" max="32767" attributes="0"/>
+                                  <Component id="txtClass" alignment="0" pref="50" max="32767" attributes="0"/>
                                   <Component id="txtPronunciation" alignment="0" max="32767" attributes="0"/>
                                   <Component id="txtDefinition" alignment="0" max="32767" attributes="0"/>
                                   <Component id="txtType" alignment="0" max="32767" attributes="0"/>
@@ -186,7 +186,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtGender" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtClass" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -256,8 +256,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Gender"/>
-            <Property name="toolTipText" type="java.lang.String" value="Word gender"/>
+            <Property name="text" type="java.lang.String" value="Classes"/>
+            <Property name="toolTipText" type="java.lang.String" value="Word Classes"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel9">
@@ -293,9 +293,9 @@
             <Property name="toolTipText" type="java.lang.String" value="Column number of pronuncation"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtGender">
+        <Component class="javax.swing.JTextField" name="txtClass">
           <Properties>
-            <Property name="toolTipText" type="java.lang.String" value="Column number of gender"/>
+            <Property name="toolTipText" type="java.lang.String" value="Column number(s) for word class values (for example, gender)"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">

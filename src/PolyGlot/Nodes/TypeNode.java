@@ -28,7 +28,6 @@ public class TypeNode extends DictNode{
     private String notes = "";
     private String regexPattern = "";
     private String gloss = "";
-    private boolean genderMandatory = false;
     private boolean procMandatory = false;
     private boolean defMandatory = false;    
     
@@ -67,23 +66,8 @@ public class TypeNode extends DictNode{
         this.setId(set.getId());
         this.setValue(set.getValue());
         this.setDefMandatory(set.isDefMandatory());
-        this.setGenderMandatory(set.isGenderMandatory());
         this.setProcMandatory(set.isProcMandatory());
         this.setGloss(set.getGloss());
-    }
-
-    /**
-     * @return the genderMandatory
-     */
-    public boolean isGenderMandatory() {
-        return genderMandatory;
-    }
-
-    /**
-     * @param genderMandatory the genderMandatory to set
-     */
-    public void setGenderMandatory(boolean genderMandatory) {
-        this.genderMandatory = genderMandatory;
     }
 
     /**

@@ -211,7 +211,6 @@ public class ScrTypes extends PDialog {
             txtTypePattern.setText("");
             txtTypePattern.setForeground(Color.lightGray);
             chkDefMand.setSelected(false);
-            chkGendMand.setSelected(false);
             chkProcMand.setSelected(false);
             setPropertiesEnabled(false);
         } else {
@@ -236,7 +235,6 @@ public class ScrTypes extends PDialog {
             txtGloss.setForeground(curNode.getGloss().equals("")
                     ? Color.lightGray : Color.black);
             chkDefMand.setSelected(curNode.isDefMandatory());
-            chkGendMand.setSelected(curNode.isGenderMandatory());
             chkProcMand.setSelected(curNode.isProcMandatory());
             setPropertiesEnabled(true);
         }
@@ -257,7 +255,6 @@ public class ScrTypes extends PDialog {
         saveNode.setGloss(txtGloss.getText().equals(defGloss)
                 ? "" : txtGloss.getText());
         saveNode.setDefMandatory(chkDefMand.isSelected());
-        saveNode.setGenderMandatory(chkGendMand.isSelected());
         saveNode.setProcMandatory(chkProcMand.isSelected());
     }
 
@@ -320,7 +317,6 @@ public class ScrTypes extends PDialog {
         txtTypePattern.setEnabled(enable);
         txtGloss.setEnabled(enable);
         chkDefMand.setEnabled(enable);
-        chkGendMand.setEnabled(enable);
         chkProcMand.setEnabled(enable);
     }
 
@@ -374,7 +370,6 @@ public class ScrTypes extends PDialog {
         jPanel3 = new javax.swing.JPanel();
         chkDefMand = new javax.swing.JCheckBox();
         chkProcMand = new javax.swing.JCheckBox();
-        chkGendMand = new javax.swing.JCheckBox();
         txtGloss = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -453,9 +448,6 @@ public class ScrTypes extends PDialog {
         chkProcMand.setText("Pronunciation Mandatory");
         chkProcMand.setToolTipText("Select to enforce pronunciation text for this par of speech.");
 
-        chkGendMand.setText("Gender Mandatory");
-        chkGendMand.setToolTipText("Select to enforce gender selection for this par of speech.");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -463,21 +455,18 @@ public class ScrTypes extends PDialog {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(chkDefMand)
                     .addComponent(chkProcMand)
-                    .addComponent(chkGendMand))
+                    .addComponent(chkDefMand))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(chkGendMand)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addComponent(chkProcMand)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkDefMand)
-                .addContainerGap())
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         txtGloss.setToolTipText("Part of speech's gloss");
@@ -593,7 +582,7 @@ public class ScrTypes extends PDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+            .addComponent(jSplitPane1)
         );
 
         pack();
@@ -722,7 +711,6 @@ public class ScrTypes extends PDialog {
     private javax.swing.JButton btnDelType;
     private javax.swing.JButton btnSetup;
     private javax.swing.JCheckBox chkDefMand;
-    private javax.swing.JCheckBox chkGendMand;
     private javax.swing.JCheckBox chkProcMand;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;

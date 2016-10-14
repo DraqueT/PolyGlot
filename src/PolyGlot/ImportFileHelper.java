@@ -49,7 +49,6 @@ public class ImportFileHelper {
     private String iPronunciation;
     private String delimiter;
     private boolean bFirstLineLabels;
-    private boolean bCreateGenders;
     private boolean bCreateTypes;
 
     public ImportFileHelper(DictCore _core) {
@@ -58,8 +57,7 @@ public class ImportFileHelper {
 
     public void setOptions(String _iConWord, String _iLocalWord, String _iType,
             String _iClass, String _iDefinition, String _iPronunciation,
-            String _delimiter, boolean _bFirstLineLabels, boolean _bCreateTypes,
-            boolean _bCreateGenders) {
+            String _delimiter, boolean _bFirstLineLabels, boolean _bCreateTypes) {
         iConWord = _iConWord;
         iLocalWord = _iLocalWord;
         iType = _iType;
@@ -68,7 +66,6 @@ public class ImportFileHelper {
         iPronunciation = _iPronunciation;
         bFirstLineLabels = _bFirstLineLabels;
         bCreateTypes = _bCreateTypes;
-        bCreateGenders = _bCreateGenders;
         delimiter = _delimiter;
     }
 
@@ -178,7 +175,7 @@ public class ImportFileHelper {
                         }
                     }
 
-                    // add gender
+                    // add classes
                     columnList = Arrays.asList(iClass.split(","));
                     for (String entry : columnList) {
                         if (entry == null || entry.equals("")) {
@@ -380,7 +377,7 @@ public class ImportFileHelper {
             }
         }
 
-        // add gender
+        // add classes
         columnList = Arrays.asList(iClass.split(","));
         for (String entry : columnList) {
             if (entry == null || entry.equals("")) {

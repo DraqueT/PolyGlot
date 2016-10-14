@@ -29,7 +29,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jSplitPane1" alignment="0" pref="409" max="32767" attributes="0"/>
+          <Component id="jSplitPane1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -194,9 +194,8 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="chkProcMand" min="-2" max="-2" attributes="0"/>
                               <Component id="chkDefMand" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="chkProcMand" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="chkGendMand" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -205,13 +204,11 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="chkGendMand" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="chkProcMand" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="chkDefMand" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace pref="30" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -227,12 +224,6 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Pronunciation Mandatory"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select to enforce pronunciation text for this par of speech."/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JCheckBox" name="chkGendMand">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Gender Mandatory"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select to enforce gender selection for this par of speech."/>
                   </Properties>
                 </Component>
               </SubComponents>

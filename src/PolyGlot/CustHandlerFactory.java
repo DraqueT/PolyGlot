@@ -869,7 +869,7 @@ public class CustHandlerFactory {
                     typeCollection.getBufferType().setProcMandatory(new String(ch, start, length).equals("T"));
                     bwordClassProcMan = false;
                 } else if (bwordClassGenderMan) {
-                    typeCollection.getBufferType().setGenderMandatory(new String(ch, start, length).equals("T"));
+                    //typeCollection.getBufferType().setGenderMandatory(new String(ch, start, length).equals("T")); // Deprecated
                     bwordClassGenderMan = false;
                 } else if (bwordClassDefMan) {
                     typeCollection.getBufferType().setDefMandatory(new String(ch, start, length).equals("T"));

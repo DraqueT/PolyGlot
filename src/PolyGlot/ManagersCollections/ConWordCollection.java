@@ -435,7 +435,6 @@ public class ConWordCollection extends DictionaryCollection {
                 String definition;
                 int type;
                 String local;
-                String gender;
                 String proc;
 
                 // if set to ignore case, set up caseless matches, normal otherwise

@@ -302,10 +302,6 @@ public class TypeCollection extends DictionaryCollection {
             wordValue.appendChild(doc.createTextNode(curType.isDefMandatory() ? "T" : "F"));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.typeGenderManXID);
-            wordValue.appendChild(doc.createTextNode(curType.isGenderMandatory() ? "T" : "F"));
-            wordNode.appendChild(wordValue);
-
             wordValue = doc.createElement(PGTUtil.typeProcManXID);
             wordValue.appendChild(doc.createTextNode(curType.isProcMandatory() ? "T" : "F"));
             wordNode.appendChild(wordValue);
