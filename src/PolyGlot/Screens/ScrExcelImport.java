@@ -26,7 +26,6 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PDialog;
 import java.io.File;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
@@ -46,8 +45,16 @@ public class ScrExcelImport extends PDialog {
         setupKeyStrokes();
         initComponents();
         setModal(true);
-
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public final void setupKeyStrokes() {
+        super.setupKeyStrokes();
+    }
+    
+    @Override
+    public final void setModal(boolean _modal) {
+        super.setModal(_modal);
     }
     
     @Override
