@@ -75,7 +75,9 @@ public final class ScrDeclensionSetup extends PDialog {
             myType = _core.getTypes().getNodeById(_typeId);
             this.setTitle("Declensions/Conjugations for type: " + myType.getValue());
         } catch (Exception e) {
-            InfoBox.error("Part of Speech Error", "Part of Speech not found, unable to open declensions for type with id: " + _typeId + " " + e.getMessage(), this);
+            InfoBox.error("Part of Speech Error", 
+                    "Part of Speech not found, unable to open declensions for type with id: " 
+                            + _typeId + " " + e.getMessage(), null);
             this.dispose();
         }
 
