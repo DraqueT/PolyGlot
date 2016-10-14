@@ -39,6 +39,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -131,7 +132,7 @@ public class ScrDeclensionGenSetup extends PDialog {
 
         for (DeclensionGenRule curRule : typeRules) {
             try {
-                "TESTVAL".replaceAll(curRule.getRegex(), "");
+                Pattern.compile(curRule.getRegex());
             } catch (Exception e) {
                 userMessage += "\nProblem with word match regex in rule " + curRule.getName() + ": " + e.getMessage();
                 ret = false;
@@ -139,11 +140,11 @@ public class ScrDeclensionGenSetup extends PDialog {
 
             for (DeclensionGenTransform curTransform : curRule.getTransforms()) {
                 try {
-                    if (curTransform.replaceText.contains("$&")) {
+                    if (curTransform.regex.contains("$&")) {
                         throw new Exception("Java regex does not regognize the regex pattern \"$&\"");
                     }
 
-                    "TESTVAL".replaceAll(curTransform.regex, curTransform.replaceText);
+                    Pattern.compile(curTransform.regex);
                 } catch (Exception e) {
                     userMessage += "\nProblem with regular expression under declension \'"
                             + core.getDeclensionManager().getCombNameFromCombId(typeId, curRule.getCombinationId())
