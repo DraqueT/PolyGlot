@@ -229,7 +229,7 @@ public class CustHandlerFactory {
 
                 // test to see whether this is the first node in a word
                 if (qName.equalsIgnoreCase(PGTUtil.wordXID)) {
-                    this.getWordCollection().clear();
+                    core.getWordCollection().clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuideXID)) {
                     proBuffer = new PronunciationNode();
                 } else if (qName.equalsIgnoreCase(PGTUtil.localWordXID)) {
@@ -425,13 +425,13 @@ public class CustHandlerFactory {
 
                 // save word to word collection
                 if (qName.equalsIgnoreCase(PGTUtil.wordXID)) {
-                    ConWord curWord = this.getWordCollection()
+                    ConWord curWord = core.getWordCollection()
                             .getBufferWord();
 
                     try {
                         // if word is valid, save. Throw error otherwise
                         if (curWord.checkValid()) {
-                            this.getWordCollection().insert(wId);
+                            core.getWordCollection().insert(wId);
                         } else {
                             throw new Exception("Word ("
                                     + curWord.getLocalWord() + " : "
@@ -444,7 +444,7 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.typeXID)) {
                     // insertion for word types is much simpler
                     try {
-                        this.getTypeCollection().insert(wCId);
+                        core.getTypes().insert(wCId);
                     } catch (Exception e) {
                         throw new SAXException();
                     }
@@ -494,7 +494,7 @@ public class CustHandlerFactory {
                                 valueWrite = writeProp.addValue(tmpString);
                             }
 
-                            ConWord bufferWord = this.getWordCollection().getBufferWord();
+                            ConWord bufferWord = core.getWordCollection().getBufferWord();
                             bufferWord.setClassValue(writeProp.getId(), valueWrite.getId());
                             
                             // when pulling from legacy gender system, apply to all words initially
@@ -738,27 +738,27 @@ public class CustHandlerFactory {
                     throws SAXException {
 
                 if (blocalWord) {
-                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    ConWord bufferWord = core.getWordCollection().getBufferWord();
                     bufferWord.setLocalWord(bufferWord.getLocalWord()
                             + new String(ch, start, length));
                 } else if (bconWord) {
-                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    ConWord bufferWord = core.getWordCollection().getBufferWord();
                     bufferWord.setValue(bufferWord.getValue()
                             + new String(ch, start, length));
                 } else if (btype) { // THIS IS NOW ONLY FOR LEGACY PGT FILES. NO LONGER SAVED TO XML
-                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    ConWord bufferWord = core.getWordCollection().getBufferWord();
                     try {
-                        bufferWord.setWordTypeId(typeCollection.findByName(new String(ch, start, length)).getId());
+                        bufferWord.setWordTypeId(core.getTypes().findByName(new String(ch, start, length)).getId());
                     } catch (Exception e) {
                         warningLog += "\nWord type load error: " + e.getLocalizedMessage();
                     }
                 } else if (btypeId) {
-                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    ConWord bufferWord = core.getWordCollection().getBufferWord();
                     bufferWord.setWordTypeId(Integer.parseInt(new String(ch, start, length)));
                 } else if (bId) {
                     wId = Integer.parseInt(new String(ch, start, length));
                 } else if (bdef) {
-                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    ConWord bufferWord = core.getWordCollection().getBufferWord();
                     bufferWord.setDefinition(bufferWord.getDefinition()
                             + new String(ch, start, length));
                 } else if (bwordPlur) {
@@ -768,46 +768,46 @@ public class CustHandlerFactory {
                     declensionMgr.setBufferDecNotes("Plural");
                     bwordPlur = false;
                 } else if (bwordProcOverride) {
-                    this.getWordCollection().getBufferWord()
+                    core.getWordCollection().getBufferWord()
                             .setProcOverride(new String(ch, start, length).equals("T"));
                     bwordProcOverride = false;
                 } else if (bwordRuleOverride) {
-                    wordCollection.getBufferWord()
+                    core.getWordCollection().getBufferWord()
                             .setRulesOverride(new String(ch, start, length).equals("T"));
                     bwordRuleOverride = false;
                 } else if (bclassVal) {
                     String[] classValIds = new String(ch, start, length).split(",");
                     int classId = Integer.parseInt(classValIds[0]);
                     int valId = Integer.parseInt(classValIds[1]);
-                    wordCollection.getBufferWord().setClassValue(classId, valId);
+                    core.getWordCollection().getBufferWord().setClassValue(classId, valId);
                 } else if (bwordoverAutoDec) {
-                    this.getWordCollection().getBufferWord()
+                    core.getWordCollection().getBufferWord()
                             .setOverrideAutoDeclen(new String(ch, start, length).equals("T"));
                     bwordoverAutoDec = false;
                 } else if (bfontcon) {
                     propertiesManager.setFontCon(new Font(new String(ch, start, length), 0, 0));
                     bfontcon = false;
                 } else if (bwordClassNotes) {
-                    TypeNode bufferType = this.getTypeCollection().getBufferType();
+                    TypeNode bufferType = core.getTypes().getBufferType();
                     bufferType.setNotes(bufferType.getNotes()
                             + new String(ch, start, length));
                 } else if (bwordClassName) {
-                    TypeNode bufferType = this.getTypeCollection().getBufferType();
+                    TypeNode bufferType = core.getTypes().getBufferType();
                     bufferType.setValue(bufferType.getValue()
                             + new String(ch, start, length));
                 } else if (bwordClassPattern) {
-                    TypeNode bufferType = this.getTypeCollection().getBufferType();
+                    TypeNode bufferType = core.getTypes().getBufferType();
                     bufferType.setPattern(bufferType.getPattern()
                             + new String(ch, start, length));
                 } else if (bwordClassGloss) {
-                    TypeNode bufferType = this.getTypeCollection().getBufferType();
+                    TypeNode bufferType = core.getTypes().getBufferType();
                     bufferType.setGloss(bufferType.getGloss()
                             + new String(ch, start, length));
                 } else if (bwordClassId) {
                     wCId = Integer.parseInt(new String(ch, start, length));
                     bwordClassId = false;
                 } else if (bpronuncation) {
-                    ConWord bufferWord = this.getWordCollection().getBufferWord();
+                    ConWord bufferWord = core.getWordCollection().getBufferWord();
                     bufferWord.setPronunciation(bufferWord.getPronunciation()
                             + new String(ch, start, length));
                 } else if (bgender) {
@@ -866,13 +866,13 @@ public class CustHandlerFactory {
                     propertiesManager.setProAutoPop((new String(ch, start, length).equalsIgnoreCase("T")));
                     bproAutoPop = false;
                 }*/ else if (bwordClassProcMan) {
-                    typeCollection.getBufferType().setProcMandatory(new String(ch, start, length).equals("T"));
+                    core.getTypes().getBufferType().setProcMandatory(new String(ch, start, length).equals("T"));
                     bwordClassProcMan = false;
                 } else if (bwordClassGenderMan) {
                     //typeCollection.getBufferType().setGenderMandatory(new String(ch, start, length).equals("T")); // Deprecated
                     bwordClassGenderMan = false;
                 } else if (bwordClassDefMan) {
-                    typeCollection.getBufferType().setDefMandatory(new String(ch, start, length).equals("T"));
+                    core.getTypes().getBufferType().setDefMandatory(new String(ch, start, length).equals("T"));
                     bwordClassDefMan = false;
                 } else if (bdeclensionMandatory) {
                     declensionMgr.setBufferDecMandatory(new String(ch, start, length).equals("T"));

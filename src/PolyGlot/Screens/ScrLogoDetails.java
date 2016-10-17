@@ -618,7 +618,6 @@ public class ScrLogoDetails extends PFrame {
         curPopulating = true;
         lstLogos.setModel(logoModel);
 
-        // TODO: consider reworking selection
         lstLogos.setSelectedIndex(0);
         curPopulating = false;
     }

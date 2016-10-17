@@ -35,19 +35,13 @@ import PolyGlot.ManagersCollections.WordPropertyCollection;
 import PolyGlot.Screens.ScrDictMenu;
 import java.awt.Color;
 import java.awt.FontFormatException;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -320,45 +314,8 @@ public class DictCore {
         String errorLog = "";
         String warningLog = "";
         try {
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser saxParser = factory.newSAXParser();
-            CustHandler handler;
-
-            // TODO: Consider how this might be cleaned up and put back into IOHandler. 
-            // Had to be this way to maintain stream safety.
-            if (IOHandler.isFileZipArchive(_fileName)) {
-                try (ZipFile zipFile = new ZipFile(_fileName)) {
-                    ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.dictFileName);
-                    try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
-                        handler = CustHandlerFactory.getCustHandler(ioStream, this);
-                    } catch (Exception e) {
-                        throw new IOException(e.getLocalizedMessage());
-                    }
-                }
-            } else {
-                try (InputStream ioStream = new FileInputStream(_fileName)) {
-                    handler = CustHandlerFactory.getCustHandler(ioStream, this);
-                } catch (Exception e) {
-                    throw new IOException(e.getLocalizedMessage());
-                }
-            }
-            handler.setWordCollection(wordCollection);
-            handler.setTypeCollection(typeCollection);
-
-            // TODO: Consider how this might be cleaned up and put back into IOHandler. 
-            // Had to be this way to maintain stream safety.
-            if (IOHandler.isFileZipArchive(_fileName)) {
-                try (ZipFile zipFile = new ZipFile(_fileName)) {
-                    ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.dictFileName);
-                    try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
-                        saxParser.parse(ioStream, handler);
-                    }
-                }
-            } else {
-                try (InputStream ioStream = new FileInputStream(_fileName)) {
-                    saxParser.parse(ioStream, handler);
-                }
-            }
+            CustHandler handler = IOHandler.getHandlerFromFile(_fileName, this);
+            IOHandler.parseHandler(_fileName, handler);
 
             errorLog += handler.getErrorLog();
             warningLog += handler.getWarningLog();

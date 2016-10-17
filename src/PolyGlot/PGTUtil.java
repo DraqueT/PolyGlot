@@ -192,6 +192,9 @@ public class PGTUtil {
     public static final String scrNameThes = ScrThesaurus.class.getName();
     public static final String scrIPARefChart = ScrIPARefChart.class.getName();
     
+    public static final Integer numMenuFlashes = 4;
+    public static final Integer menuFlashSleep = 200;
+    
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to
      * STANDARD

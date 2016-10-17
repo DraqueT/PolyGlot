@@ -20,20 +20,14 @@
 package PolyGlot.ManagersCollections;
 
 import PolyGlot.DictCore;
-import PolyGlot.PGTUtil;
+import PolyGlot.IOHandler;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * This contains, loads and saves the options for PolyGlot
@@ -50,6 +44,22 @@ public class OptionsManager {
 
     public OptionsManager(DictCore _core) {
         core = _core;
+    }
+    
+    /**
+     * returns map of all screen positions
+     * @return actual map object (modifying WILL change persistent values)
+     */
+    public Map<String, Point> getScreenPositions() {
+        return screenPos;
+    }
+    
+    /**
+     * returns map of all screen sizes
+     * @return actual map object (modifying WILL change persistent values)
+     */
+    public Map<String, Dimension> getScreenSizes() {
+        return screenSize;
     }
     
     /**
@@ -136,7 +146,6 @@ public class OptionsManager {
         lastFiles = _lastFiles;
     }
 
-    // TODO: move these to IO? What good way would there be to do that? Consider.
     /**
      * Loads all option data from ini file, if none, ignore. One will be created
      * on exit.
@@ -144,75 +153,7 @@ public class OptionsManager {
      * @throws IOException on failure to open existing file
      */
     public void loadIni() throws Exception {
-        File f = new File(core.getWorkingDirectory() + PGTUtil.polyGlotIni);
-        if(!f.exists() || f.isDirectory()) {
-            return;
-        }
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(
-                core.getWorkingDirectory() + PGTUtil.polyGlotIni))) {
-            for (String line; (line = br.readLine()) != null;) {
-                String[] bothVal = line.split("=");
-                
-                // if no value set, move on
-                if (bothVal.length == 1) {
-                    continue;
-                }
-                
-                // if multiple values, something has gone wrong
-                if (bothVal.length != 2) {
-                    throw new Exception("PolyGlot.ini corrupt or unreadable.");
-                }
-
-                switch(bothVal[0]) {
-                    case PGTUtil.optionsLastFiles:
-                        lastFiles.addAll(Arrays.asList(bothVal[1].split(",")));
-                        break;
-                    case PGTUtil.optionsScreensOpen:
-                        for (String screen : bothVal[1].split(",")) {
-                            addScreenUp(screen);
-                        }
-                        break;
-                    case PGTUtil.optionsScreenPos:
-                        for (String curPosSet : bothVal[1].split(",")) {
-                            if (curPosSet.isEmpty()) {
-                                continue;
-                            }
-                            
-                            String[] splitSet = curPosSet.split(":");
-                            
-                            if (splitSet.length != 3) {
-                                throw new Exception("Malformed Screen Position: " 
-                                        + curPosSet);
-                            }
-                            Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
-                            setScreenPosition(splitSet[0], p);     
-                        }
-                        break;
-                    case PGTUtil.optionsScreensSize:
-                        for (String curSizeSet : bothVal[1].split(",")) {
-                            if (curSizeSet.isEmpty()) {
-                                continue;
-                            }
-                            
-                            String[] splitSet = curSizeSet.split(":");
-                            
-                            if (splitSet.length != 3) {
-                                throw new Exception("Malformed Screen Size: " 
-                                        + curSizeSet);
-                            }
-                            Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
-                            setScreenSize(splitSet[0], d);
-                        }
-                        break;
-                    case "\n":
-                        break;
-                    default:
-                        throw new Exception ("Unrecognized value: " + bothVal[0] 
-                                + " in PolyGlot.ini.");
-                }
-            }
-        }
+        IOHandler.loadOptionsIni(core);
     }
 
     /**
@@ -221,45 +162,6 @@ public class OptionsManager {
      * @throws IOException on failure to write
      */
     public void saveIni() throws IOException {
-        try (FileWriter f0 = new FileWriter(core.getWorkingDirectory() 
-                + PGTUtil.polyGlotIni)) {
-            String newLine = System.getProperty("line.separator");
-            String nextLine;
-            
-            nextLine = PGTUtil.optionsLastFiles + "=";
-            for (String file : lastFiles) {
-                if (nextLine.endsWith("=")) {
-                    nextLine += file;
-                } else {
-                    nextLine += ("," + file);
-                }
-            }
-            
-            f0.write(nextLine + newLine);
-            
-            nextLine = PGTUtil.optionsScreenPos + "=";            
-            for (Entry<String, Point> curPos : screenPos.entrySet()) {
-                nextLine += ("," + curPos.getKey() + ":" + curPos.getValue().x + ":" 
-                        + curPos.getValue().y);
-            }
-            
-            f0.write(nextLine + newLine);
-            
-            nextLine = PGTUtil.optionsScreensSize + "=";
-            for (Entry<String, Dimension> curSize : screenSize.entrySet()) {
-                nextLine += ("," + curSize.getKey() + ":" + curSize.getValue().width + ":" 
-                        + curSize.getValue().height);
-            }
-            
-            f0.write(nextLine + newLine);
-            
-            nextLine = PGTUtil.optionsScreensOpen + "=";
-            
-            for (String screen : screensUp) {
-                nextLine += ("," + screen);
-            }
-            
-            f0.write(nextLine + newLine);
-        }
+        IOHandler.saveOptionsIni(core);
     }
 }

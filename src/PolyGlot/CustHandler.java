@@ -20,8 +20,6 @@
 
 package PolyGlot;
 
-import PolyGlot.ManagersCollections.TypeCollection;
-import PolyGlot.ManagersCollections.ConWordCollection;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -29,9 +27,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author draque
  */
 public class CustHandler extends DefaultHandler{
-
-	ConWordCollection wordCollection;
-	TypeCollection typeCollection;
         protected String errorLog = "";
         protected String warningLog = "";
 	
@@ -50,20 +45,4 @@ public class CustHandler extends DefaultHandler{
         public String getWarningLog() {
             return warningLog;
         }
-        
-	public ConWordCollection getWordCollection() {
-		return wordCollection;
-	}
-
-	public void setWordCollection(ConWordCollection wordCollection) {
-		this.wordCollection = wordCollection;
-	}
-
-	public TypeCollection getTypeCollection() {
-		return typeCollection;
-	}
-
-	public void setTypeCollection(TypeCollection typeCollection) {
-		this.typeCollection = typeCollection;
-	}
 }

@@ -192,7 +192,6 @@ public class ScrLangProps extends PDialog {
         column.setCellEditor(new TableColumnEditor(defaultFont));
         column.setCellRenderer(new TableColumnRenderer(defaultFont));
 
-        // TODO: analyze whether I can drop this
         // disable tab/arrow selection
         InputMap procInput = tblProcs.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "none");

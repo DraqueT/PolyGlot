@@ -281,7 +281,7 @@ public class ConWord extends DictNode {
         int ret;
         
         if (parent != null && parent.isLocalOrder()) {
-            ret = this.getLocalWord().compareToIgnoreCase(((ConWord)_compare).getLocalWord()); // TODO: check to make certain _compare is type conword?
+            ret = this.getLocalWord().compareToIgnoreCase(((ConWord)_compare).getLocalWord());
         } else {
             ret = super.compareTo(_compare);
         }

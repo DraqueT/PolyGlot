@@ -53,19 +53,19 @@ public class PGTools {
                         ? Color.white : flashColor;
 
                 try {
-                    for (int i = 0; i < 4; i++) { // TODO: Move to constants
+                    for (int i = 0; i < PGTUtil.numMenuFlashes; i++) {
                         if (isBack) {
                             flashMe.setBackground(requiredColor);
                         } else {
                             flashMe.setEnabled(false);
                         }
-                        Thread.sleep(200); // TODO: Move to constants
+                        Thread.sleep(PGTUtil.menuFlashSleep);
                         if (isBack) {
                             flashMe.setBackground(originColor);
                         } else {
                             flashMe.setEnabled(true);
                         }
-                        Thread.sleep(200); // TODO: Move to constants
+                        Thread.sleep(PGTUtil.menuFlashSleep);
                     }
                 } catch (Exception e) {
                     Thread.currentThread().interrupt();

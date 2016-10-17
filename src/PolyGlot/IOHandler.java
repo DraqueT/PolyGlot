@@ -25,16 +25,21 @@ import PolyGlot.ManagersCollections.LogoCollection;
 import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.GrammarChapNode;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -43,18 +48,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-//import org.apache.commons.io.FileUtils;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -62,6 +68,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.poi.util.IOUtils;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
  * This class handles file IO for PolyGlot
@@ -69,6 +76,7 @@ import org.w3c.dom.Document;
  * @author draque
  */
 public class IOHandler {
+
     /**
      * Opens and returns image from URL given (can be file path)
      *
@@ -146,6 +154,143 @@ public class IOHandler {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Given file name, returns appropriate cust handler
+     *
+     * @param _fileName full path of target file to read
+     * @param _core dictionary core
+     * @return cushandler class
+     * @throws java.io.IOException on read problem
+     */
+    public static CustHandler getHandlerFromFile(String _fileName, DictCore _core) throws IOException {
+        CustHandler ret = null;
+
+        if (IOHandler.isFileZipArchive(_fileName)) {
+            try (ZipFile zipFile = new ZipFile(_fileName)) {
+                ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.dictFileName);
+                try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
+                    ret = CustHandlerFactory.getCustHandler(ioStream, _core);
+                } catch (Exception e) {
+                    throw new IOException(e.getLocalizedMessage());
+                }
+            }
+        } else {
+            try (InputStream ioStream = new FileInputStream(_fileName)) {
+                ret = CustHandlerFactory.getCustHandler(ioStream, _core);
+            } catch (Exception e) {
+                throw new IOException(e.getLocalizedMessage());
+            }
+        }
+
+        return ret;
+    }
+    
+    /**
+     * Loads all option data from ini file, if none, ignore. One will be created
+     * on exit.
+     *
+     * @param core dictionary core
+     * @throws IOException on failure to open existing file
+     */
+    public static void loadOptionsIni(DictCore core) throws Exception {        
+        File f = new File(core.getWorkingDirectory() + PGTUtil.polyGlotIni);
+        if(!f.exists() || f.isDirectory()) {
+            return;
+        }
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(
+                core.getWorkingDirectory() + PGTUtil.polyGlotIni))) {
+            for (String line; (line = br.readLine()) != null;) {
+                String[] bothVal = line.split("=");
+                
+                // if no value set, move on
+                if (bothVal.length == 1) {
+                    continue;
+                }
+                
+                // if multiple values, something has gone wrong
+                if (bothVal.length != 2) {
+                    throw new Exception("PolyGlot.ini corrupt or unreadable.");
+                }
+
+                switch(bothVal[0]) {
+                    case PGTUtil.optionsLastFiles:
+                        core.getOptionsManager().getLastFiles().addAll(Arrays.asList(bothVal[1].split(",")));
+                        break;
+                    case PGTUtil.optionsScreensOpen:
+                        for (String screen : bothVal[1].split(",")) {
+                            core.getOptionsManager().addScreenUp(screen);
+                        }
+                        break;
+                    case PGTUtil.optionsScreenPos:
+                        for (String curPosSet : bothVal[1].split(",")) {
+                            if (curPosSet.isEmpty()) {
+                                continue;
+                            }
+                            
+                            String[] splitSet = curPosSet.split(":");
+                            
+                            if (splitSet.length != 3) {
+                                throw new Exception("Malformed Screen Position: " 
+                                        + curPosSet);
+                            }
+                            Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
+                            core.getOptionsManager().setScreenPosition(splitSet[0], p);     
+                        }
+                        break;
+                    case PGTUtil.optionsScreensSize:
+                        for (String curSizeSet : bothVal[1].split(",")) {
+                            if (curSizeSet.isEmpty()) {
+                                continue;
+                            }
+                            
+                            String[] splitSet = curSizeSet.split(":");
+                            
+                            if (splitSet.length != 3) {
+                                throw new Exception("Malformed Screen Size: " 
+                                        + curSizeSet);
+                            }
+                            Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
+                            core.getOptionsManager().setScreenSize(splitSet[0], d);
+                        }
+                        break;
+                    case "\n":
+                        break;
+                    default:
+                        throw new Exception ("Unrecognized value: " + bothVal[0] 
+                                + " in PolyGlot.ini.");
+                }
+            }
+        }
+    }
+
+    /**
+     * Given handler class, parses XML document within file (archive or not)
+     * @param _fileName full path of target file
+     * @param _handler custom handler to consume XML document
+     * @throws IOException on read error
+     * @throws ParserConfigurationException on parser factory config error
+     * @throws SAXException on XML interpretation error
+     */
+    public static void parseHandler(String _fileName, CustHandler _handler) 
+            throws IOException, ParserConfigurationException, SAXException {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser saxParser = factory.newSAXParser();
+
+        if (IOHandler.isFileZipArchive(_fileName)) {
+            try (ZipFile zipFile = new ZipFile(_fileName)) {
+                ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.dictFileName);
+                try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
+                    saxParser.parse(ioStream, _handler);
+                }
+            }
+        } else {
+            try (InputStream ioStream = new FileInputStream(_fileName)) {
+                saxParser.parse(ioStream, _handler);
             }
         }
     }
@@ -317,9 +462,9 @@ public class IOHandler {
             try {
                 // Unreliable behavior, and does not check true OS write permissions
                 //if (finalFile.canWrite()) {
-                    java.nio.file.Files.copy(f.toPath(), finalFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                java.nio.file.Files.copy(f.toPath(), finalFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                 //} else {
-                    //throw new IOException("Unable to write to file: " + finalFile.toPath());
+                //throw new IOException("Unable to write to file: " + finalFile.toPath());
                 //}
             } catch (IOException ex) {
                 throw new IOException("Unable to save file: " + ex.getMessage());
@@ -558,7 +703,7 @@ public class IOHandler {
     public static Font getLcdFont() throws FontFormatException, IOException {
         return new IOHandler().getLcdFontInternal();
     }
-    
+
     /**
      * Fetches and returns LCD style font NOTE 1: the font returned is very
      * small, use deriveFont() to make it a usable size NOTE 2: this is a
@@ -580,24 +725,22 @@ public class IOHandler {
             return ret;
         }
     }
-    
+
     /**
-     * Fetches and returns unicode compatible font NOTE 1: this is a
-     * non-static method due to an input stream restriction NOTE 2: this is the 
-     * default conlang font in PolyGlot
+     * Fetches and returns unicode compatible font NOTE 1: this is a non-static
+     * method due to an input stream restriction NOTE 2: this is the default
+     * conlang font in PolyGlot
      *
      * @return Charis unicode compatible font
-     * @throws java.awt.FontFormatException if font corrupted
-     * @throws java.io.IOException if unable to load font
      */
     public static Font getCharisUnicodeFont() {
         return new IOHandler().getCharisUnicodeFontInternal();
     }
-    
+
     /**
-     * Fetches and returns unicode compatible font NOTE 1: this is a
-     * non-static method due to an input stream restriction NOTE 2: this is the 
-     * default conlang font in PolyGlot
+     * Fetches and returns unicode compatible font NOTE 1: this is a non-static
+     * method due to an input stream restriction NOTE 2: this is the default
+     * conlang font in PolyGlot
      *
      * @return Charis unicode compatible font
      * @throws java.awt.FontFormatException if font corrupted
@@ -616,8 +759,52 @@ public class IOHandler {
         } catch (IOException | FontFormatException ex) {
             // do nothing. This is an internal call, and should really never fail.
         }
-        
+
         return ret;
+    }
+    
+    public static void saveOptionsIni(DictCore core) throws IOException {
+        
+        try (FileWriter f0 = new FileWriter(core.getWorkingDirectory() 
+                + PGTUtil.polyGlotIni)) {
+            String newLine = System.getProperty("line.separator");
+            String nextLine;
+            
+            nextLine = PGTUtil.optionsLastFiles + "=";
+            for (String file : core.getOptionsManager().getLastFiles()) {
+                if (nextLine.endsWith("=")) {
+                    nextLine += file;
+                } else {
+                    nextLine += ("," + file);
+                }
+            }
+            
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.optionsScreenPos + "=";            
+            for (Entry<String, Point> curPos : core.getOptionsManager().getScreenPositions().entrySet()) {
+                nextLine += ("," + curPos.getKey() + ":" + curPos.getValue().x + ":" 
+                        + curPos.getValue().y);
+            }
+            
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.optionsScreensSize + "=";
+            for (Entry<String, Dimension> curSize : core.getOptionsManager().getScreenSizes().entrySet()) {
+                nextLine += ("," + curSize.getKey() + ":" + curSize.getValue().width + ":" 
+                        + curSize.getValue().height);
+            }
+            
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.optionsScreensOpen + "=";
+            
+            for (String screen : core.getOptionsManager().getLastScreensUp()) {
+                nextLine += ("," + screen);
+            }
+            
+            f0.write(nextLine + newLine);
+        }
     }
 
     /**

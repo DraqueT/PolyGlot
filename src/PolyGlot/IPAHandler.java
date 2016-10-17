@@ -511,8 +511,11 @@ public class IPAHandler {
         }
     }
 
-    private void playProc(String soundName) {
-        // TODO: HANDLE UNRECOGNIZE FILE SIGNATURE ERROR BUBBLE BETTER
-        soundRecorder.playMP3(PGTUtil.ipaSoundsLocation + soundName);
+    private void playProc(String soundName) throws Exception {
+        try {
+            soundRecorder.playMP3(PGTUtil.ipaSoundsLocation + soundName);
+        } catch (Exception e) {
+            throw new Exception("Possible file signature error: " + e.getLocalizedMessage());
+        }
     }
 }

@@ -1200,7 +1200,9 @@ public final class ScrLexicon extends PFrame {
                 chkProcOverride.setEnabled(enable);
                 chkRuleOverride.setEnabled(enable);
                 jLabel1.setEnabled(enable);
-                // TODO: Make sure to hit all class properties here
+                for (JComboBox comboBox : classComboMap.values()) {
+                    comboBox.setEnabled(enable);
+                }
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -1425,6 +1427,9 @@ public final class ScrLexicon extends PFrame {
         SwingUtilities.invokeLater(runnable);
     }
 
+    /**
+     * Open quickview on logographs for currently selected word
+     */
     private void viewQuickLogographs() {
         ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
 
@@ -1432,11 +1437,10 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        // TODO: put this into a run method like all the other windows have...
         ScrLogoQuickView window = new ScrLogoQuickView(core, curWord);
         window.setupKeyStrokes();
         childFrames.add(window);
-        ((PFrame) window).setCore(core);
+        window.setCore(core);
         window.setVisible(true);
         final Window parent = this;
         this.setEnabled(false);
