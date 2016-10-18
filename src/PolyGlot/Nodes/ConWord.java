@@ -23,6 +23,7 @@ package PolyGlot.Nodes;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.ConWordCollection;
+import PolyGlot.PGTUtil;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -175,7 +176,7 @@ public class ConWord extends DictNode {
                         + value, null);
             }
         }        
-        super.setValue(_value);
+        super.setValue(_value.replace(PGTUtil.RTLMarker, "").replace(PGTUtil.LTRMarker, ""));
     }
 
     /**

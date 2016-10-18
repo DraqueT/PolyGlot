@@ -88,13 +88,13 @@ public class FormattedTextHelper {
                 MutableAttributeSet aset = new SimpleAttributeSet();
                 if (font.equals(PGTUtil.conLangFont)) {
                     if (core.getPropertiesManager().isEnforceRTL()) {
-                        nextNode = "\u202e" + nextNode;
+                        nextNode = PGTUtil.RTLMarker + nextNode;
                     }
                     StyleConstants.setFontFamily(aset, conFont.getFamily());
                 } else {
                     // TODO: In the future, consider whether to leverege this logic to allow arbitrary fonts in grammar section text
                     if (core.getPropertiesManager().isEnforceRTL()) {
-                        nextNode = "\u202c" + nextNode;
+                        nextNode = PGTUtil.LTRMarker + nextNode;
                     }
                     if (!font.equals("")) {
                         StyleConstants.setFontFamily(aset, font);
@@ -141,9 +141,9 @@ public class FormattedTextHelper {
                 // do nothing. All font changes are prefixed with<font
             } else {
                 if (font.equals(conFont.awtFont.getFamily()) && core.getPropertiesManager().isEnforceRTL()) {
-                    nextNode = "\u202e" + nextNode;
+                    nextNode = PGTUtil.RTLMarker + nextNode;
                 } else if (core.getPropertiesManager().isEnforceRTL()) {
-                    nextNode = "\u202c" + nextNode;
+                    nextNode = PGTUtil.LTRMarker + nextNode;
                 }
                 
                 if (!nextNode.equals("")){
@@ -348,7 +348,7 @@ public class FormattedTextHelper {
      */
     public static String storageFormat(JTextPane pane) throws BadLocationException {
         String ret = storeFormatRecurse(pane.getDocument().getDefaultRootElement(), pane);
-        return ret.replace("\u202e", "").replace("\u202c", "");
+        return ret.replace(PGTUtil.RTLMarker, "").replace(PGTUtil.LTRMarker, "");
     }
 
     /**

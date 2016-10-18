@@ -888,15 +888,15 @@ public class ScrLogoDetails extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        fltRelatedWord = new PTextField(this);
+        fltRelatedWord = new PTextField(this, core);
         fltStrokes = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        fltReading = new PTextField(this);
+        fltReading = new PTextField(this, core);
         fltNotes = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        fltRadical = new PTextField(this);
+        fltRadical = new PTextField(this, core);
         jScrollPane1 = new javax.swing.JScrollPane();
         lstLogos = new javax.swing.JList();
         btnAddLogo = new PButton("+");
@@ -915,7 +915,7 @@ public class ScrLogoDetails extends PFrame {
         btnDelRad = new PButton("-");
         chkIsRad = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
-        txtName = new PTextField(this);
+        txtName = new PTextField(this, core);
         jLabel12 = new javax.swing.JLabel();
         txtStrokes = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
@@ -1027,7 +1027,6 @@ public class ScrLogoDetails extends PFrame {
 
         btnAddLogo.setToolTipText("New logograph");
         btnAddLogo.setPreferredSize(new java.awt.Dimension(40, 29));
-        btnAddLogo.setSize(new java.awt.Dimension(30, 29));
         btnAddLogo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddLogoActionPerformed(evt);
@@ -1075,7 +1074,6 @@ public class ScrLogoDetails extends PFrame {
 
         btnAddReading.setToolTipText("Add reading");
         btnAddReading.setPreferredSize(new java.awt.Dimension(40, 29));
-        btnAddReading.setSize(new java.awt.Dimension(40, 29));
         btnAddReading.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddReadingActionPerformed(evt);
@@ -1084,7 +1082,6 @@ public class ScrLogoDetails extends PFrame {
 
         btnDelReading.setToolTipText("Remove selected reading");
         btnDelReading.setPreferredSize(new java.awt.Dimension(40, 29));
-        btnDelReading.setSize(new java.awt.Dimension(40, 29));
         btnDelReading.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDelReadingActionPerformed(evt);

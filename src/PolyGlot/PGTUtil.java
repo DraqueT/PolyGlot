@@ -184,6 +184,8 @@ public class PGTUtil {
     public static final String IPAOtherSounds = "/PolyGlot/ImageAssets/IPA_Other.png";
     public static final String jarArchiveName = "PolyGlot.jar";
     public static final String ipaSoundsLocation = "/PolyGlot/SoundAssets/";
+    public static final String RTLMarker = "\u202e";
+    public static final String LTRMarker = "\u202c";
     
     // screen names when they're required as constants...
     public static final String scrNameLexicon = ScrLexicon.class.getName();
@@ -192,8 +194,10 @@ public class PGTUtil {
     public static final String scrNameThes = ScrThesaurus.class.getName();
     public static final String scrIPARefChart = ScrIPARefChart.class.getName();
     
+    // int constants...
     public static final Integer numMenuFlashes = 4;
     public static final Integer menuFlashSleep = 200;
+    
     
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to

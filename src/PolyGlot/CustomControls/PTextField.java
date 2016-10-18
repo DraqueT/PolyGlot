@@ -76,8 +76,9 @@ public class PTextField extends JTextField {
      * Init for PFrames
      *
      * @param _parent
+     * @param _core
      */
-    public PTextField(PFrame _parent) {
+    public PTextField(PFrame _parent, DictCore _core) {
         parent = _parent;
         DefaultBoundedRangeModel pVis = (DefaultBoundedRangeModel) this.getHorizontalVisibility();
 
@@ -87,6 +88,7 @@ public class PTextField extends JTextField {
         }
 
         pVis.addChangeListener(new PScrollRepainter());
+        core = _core;
     }
     
     // Overridden to meet code standards
@@ -142,11 +144,11 @@ public class PTextField extends JTextField {
             PropertiesManager propMan = core.getPropertiesManager();
             skipRepaint = true;
             if (!curSetText) {
-                if (propMan.isEnforceRTL()) {
+                /*if (propMan.isEnforceRTL()) {
                     prefixRTL();
                 } else {
                     defixRTL();
-                }
+                }*/
 
                 Font testFont = propMan.getFontCon();
                 if (testFont != null 
@@ -219,6 +221,7 @@ public class PTextField extends JTextField {
 
     @Override
     public String getText() {
-        return super.getText().replaceAll("\u202e", "");
+        String ret = super.getText().replaceAll("\u202e", "");
+        return core.getPropertiesManager().isEnforceRTL() ? "\u202e" + ret : ret;
     }
 }

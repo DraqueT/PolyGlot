@@ -59,6 +59,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -668,7 +669,7 @@ public class ScrGrammarGuide extends PFrame {
      * Sets input font/font of selected text
      */
     private void setFont() {
-        Font natFont = this.getFont();
+        Font natFont = IOHandler.getCharisUnicodeFont();
         Font conFont = core.getPropertiesManager().getFontCon();
         SimpleAttributeSet aset = new SimpleAttributeSet();
 
@@ -686,6 +687,22 @@ public class ScrGrammarGuide extends PFrame {
         
         txtSection.setCharacterAttributes(aset, true);
         
+        int caretStart = txtSection.getSelectionStart();
+        int caretEnd = txtSection.getSelectionEnd();
+        
+        // logic for ensuring LTR enforcement if no text is currently selected
+        if (caretStart == caretEnd 
+                && core.getPropertiesManager().isEnforceRTL()) {
+            StyledDocument doc = txtSection.getStyledDocument();
+            try {
+                doc.insertString(caretStart, " ", aset);
+                caretEnd++;
+            } catch (Exception e) {
+                InfoBox.warning("Font Error", "Problem setting font: "
+                        + e.getLocalizedMessage(), this);
+            }
+        }
+        
         if (core.getPropertiesManager().isEnforceRTL()) {
             // this ensures that the correct sections are displayed RTL
             savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
@@ -693,6 +710,8 @@ public class ScrGrammarGuide extends PFrame {
         }
         
         txtSection.requestFocus();
+        txtSection.setSelectionStart(caretStart);
+        txtSection.setSelectionEnd(caretEnd);
     }
 
     /**
