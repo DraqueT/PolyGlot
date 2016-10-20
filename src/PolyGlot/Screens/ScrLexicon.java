@@ -560,7 +560,7 @@ public final class ScrLexicon extends PFrame {
         }
 
         try {
-            populateLexicon(core.getWordCollection().filteredList(filter));
+            populateLexicon(core.getWordCollection().filteredList(filter).iterator());
         } catch (Exception e) {
             InfoBox.error("Filter Error", "Unable to apply filter.\n\n" + e.getMessage(), this);
         }
@@ -1276,7 +1276,7 @@ public final class ScrLexicon extends PFrame {
      * populates lexicon list with all words from core
      */
     private void populateLexicon() {
-        populateLexicon(core.getWordCollection().getNodeIterator());
+        populateLexicon(core.getWordCollection().getWordNodes().iterator());
     }
 
     /**

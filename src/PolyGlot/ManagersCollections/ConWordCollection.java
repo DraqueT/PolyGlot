@@ -45,8 +45,8 @@ import org.w3c.dom.Element;
 public class ConWordCollection extends DictionaryCollection {
 
     private final DictCore core;
-    Map<String, Integer> allConWords; // TODO: make private?
-    Map<String, Integer> allLocalWords; // TODO: make private?
+    private final Map<String, Integer> allConWords;
+    private final Map<String, Integer> allLocalWords;
     private boolean orderByLocal = false;
 
     public ConWordCollection(DictCore _core) {
@@ -318,11 +318,9 @@ public class ConWordCollection extends DictionaryCollection {
      * @throws java.lang.Exception
      */
     public void recalcAllProcs() throws Exception {
-        Iterator<ConWord> it = this.getNodeIterator();
+        List<ConWord> words = this.getWordNodes();
 
-        while (it.hasNext()) {
-            ConWord curWord = it.next();
-
+        for (ConWord curWord : words) {
             // only runs if word's pronunciation not overridden
             if (!curWord.isProcOverride()) {
                 curWord.setPronunciation(core.getPronunciationMgr().getPronunciation(curWord.getValue()));
@@ -407,10 +405,10 @@ public class ConWordCollection extends DictionaryCollection {
      * but also their conjugations/declensions
      *
      * @param _filter A conword object containing filter values
-     * @return an iterator of conwords which match the given search
+     * @return an list of conwords which match the given search
      * @throws Exception on filtering error
      */
-    public Iterator<ConWord> filteredList(ConWord _filter) throws Exception {
+    public List<ConWord> filteredList(ConWord _filter) throws Exception {
         ConWordCollection retValues = new ConWordCollection(core);
         retValues.setAlphaOrder(alphaOrder);
 
@@ -498,7 +496,7 @@ public class ConWordCollection extends DictionaryCollection {
 
         }
 
-        return retValues.getNodeIterator();
+        return retValues.getWordNodes();
     }
 
     /**
@@ -568,12 +566,12 @@ public class ConWordCollection extends DictionaryCollection {
      *
      * @return
      */
-    public Iterator<ConWord> getNodeIterator() {
+    public List<ConWord> getWordNodes() {
         List<ConWord> retList = new ArrayList<>(nodeMap.values());
 
         Collections.sort(retList);
 
-        return retList.iterator();
+        return retList;
     }
 
     /**
@@ -882,14 +880,11 @@ public class ConWordCollection extends DictionaryCollection {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Iterator<ConWord> wordLoop = getNodeIterator();
+        List<ConWord> wordLoop = getWordNodes();
         Element wordNode;
         Element wordValue;
-        ConWord curWord;
-
-        while (wordLoop.hasNext()) {
-            curWord = wordLoop.next();
-
+                
+        for (ConWord curWord : wordLoop) {
             wordNode = doc.createElement(PGTUtil.wordXID);
             rootElement.appendChild(wordNode);
 

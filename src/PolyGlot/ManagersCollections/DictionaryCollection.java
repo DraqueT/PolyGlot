@@ -21,8 +21,12 @@
 package PolyGlot.ManagersCollections;
 
 import PolyGlot.Nodes.DictNode;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  *
@@ -150,5 +154,27 @@ public abstract class DictionaryCollection {
         highestNodeId = _id > highestNodeId ? _id : highestNodeId;
 
         return _id;
+    }
+    
+    /**
+     * Returns randomly selected nodes from the collection
+     * @param numRandom number of nodes to select
+     * @return Either the number of nodes requested, or the total number in the collection (if not enough)
+     */
+    public List<DictNode> getRandomNodes(int numRandom) {
+        List<DictNode> ret = new ArrayList<>();
+        List<DictNode> allValues = new ArrayList(nodeMap.values());
+        
+        // randommize order...
+        Collections.shuffle(allValues, new Random(System.nanoTime()));
+        
+        // can't return more than exist in the collection
+        numRandom = numRandom > allValues.size() ? allValues.size() : numRandom;
+        // select from list to return
+        for (int i = 0; i < numRandom; i++) {
+            ret.add(allValues.get(i));
+        }
+        
+        return ret;
     }
 }

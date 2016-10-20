@@ -120,7 +120,7 @@ public class ExcelExport {
         
         // record words on sheet 1        
         sheet = workbook.createSheet("Lexicon");
-        Iterator<ConWord> wordIt = core.getWordCollection().getNodeIterator();
+        Iterator<ConWord> wordIt = core.getWordCollection().getWordNodes().iterator();
         
         Row row  = sheet.createRow(0);
         row.createCell(0).setCellValue(core.conLabel().toUpperCase() + " WORD");

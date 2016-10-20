@@ -340,7 +340,7 @@ public class PExportToPDF {
     private void buildConToLocalDictionary(String anchorPoint) throws IOException {
         String curLetter = "";
         Div curLetterSec = new Div();
-        Iterator<ConWord> allWords = core.getWordCollection().getNodeIterator();
+        Iterator<ConWord> allWords = core.getWordCollection().getWordNodes().iterator();
         curLetterSec.add(new Paragraph(new Text("\n")));
         curLetterSec.setProperty(Property.DESTINATION, anchorPoint);
 
