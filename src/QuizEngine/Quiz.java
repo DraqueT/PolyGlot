@@ -39,7 +39,7 @@ public class Quiz extends DictionaryCollection {
     
     @Override
     public void clear() {
-        bufferNode = new QuizQuestion(core.getPropertiesManager().isIgnoreCase());
+        bufferNode = new QuizQuestion(core);
     }
     
     /**

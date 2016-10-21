@@ -19,6 +19,7 @@
  */
 package QuizEngine;
 
+import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DictNode;
 import java.util.ArrayList;
@@ -34,14 +35,18 @@ import java.util.Set;
  * @author draque.thompson
  */
 public class QuizQuestion extends DictNode {
-    public QuizQuestion(boolean _ignoreCase) {
-        ignoreCase = _ignoreCase;
+    /**
+     * Constructor for quiz questions
+     * @param _core The core of your dictionary
+     */
+    public QuizQuestion(DictCore _core) {
+        core = _core;
     }
     
     private final List<DictNode> multipleChoices = new ArrayList<>();
     private DictNode answer;
     private QuestionType type;
-    private final boolean ignoreCase;
+    private final DictCore core;
     
     /**
      * Adds a choice to the multiple choice selection
@@ -60,16 +65,6 @@ public class QuizQuestion extends DictNode {
     }
     
     /**
-     * Gets question based on all values
-     * @return string form question.
-     */
-    public String getQuestion() throws Exception {
-        // TODO: THIS
-        // base question construction on question type and poentially answer object
-        throw new Exception("NOT IMPLEMENTED YET");
-    }
-    
-    /**
      * Gets potential answers (if any) in randomized order
      * @return 
      */
@@ -79,30 +74,60 @@ public class QuizQuestion extends DictNode {
         return multipleChoices;
     }
     
+    /**
+     * DO NOT CALL THIS.
+     * @return A BIG OL' DUMP.
+     * @throws ClassCastException EVERY DAMN TIME, FOOL.
+     */
     @Override
+    public String getValue() {
+        throw new UnsupportedOperationException("USE GETQUESTIONVALUE() METHOD"); 
+    }
+    
     /**
      * Returns constructed string question value UNLESS there is an override value
      * set. Then ignores construction and uses override. Never includes text that 
      * might be written in the ConLang's font.
+     * @return String form of posed question.
+     * @throws java.lang.Exception
      */
-    public String getValue() {
+    public String getQuestionValue() throws Exception {
         String ret;
         
         if (value.equals("")) {
             ret = value;
         } else {
             if (answer instanceof ConWord) {
+                ConWord ansWord = (ConWord)answer;
                 ret = "What is this word's ";
-                
+                String qEnd = "";
                 switch (type) {
                     case Local:
+                        qEnd += core.localLabel() + " equivalent?";
+                        break;
                     case PoS:
+                        qEnd += "part of speech?";
                     case Proc:
+                        qEnd += "pronunciation?";
                     case Def:
+                        qEnd += "definition?";
                     case Classes:
-                        for ()
+                        for (Entry<Integer, Integer> curEntry : ansWord.getClassValues()) {
+                            if (!qEnd.equals("")) {
+                                qEnd += "/";
+                            }
+                            
+                            try {
+                                qEnd += core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                            } catch (Exception e) {
+                                throw new Exception("Question building error: " + e.getLocalizedMessage());
+                            }
+                        }
+                        
+                        qEnd += " classification?";
                         break;
                 }
+                ret += qEnd;
             } else {
                 ret = "UNSUPPORTED TYPE: " + answer.getClass().getName();
             }
@@ -124,6 +149,7 @@ public class QuizQuestion extends DictNode {
             if (answer instanceof ConWord) {
                 ConWord propWord = (ConWord)proposed;
                 ConWord ansWord = (ConWord)answer;
+                boolean ignoreCase = core.getPropertiesManager().isIgnoreCase();
                 switch (type) {
                     case Local:                        
                         if (ignoreCase) {
@@ -188,9 +214,14 @@ public class QuizQuestion extends DictNode {
         answer = _answer;
     }
     
+    /**
+     * DO NOT CALL THIS.
+     * @param _node WILL THROW ERROR
+     * @throws ClassCastException EVERY DAMN TIME, FOOL.
+     */
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("SetEqual() not supported on QuezQuestion. Do not call.");
     }
  
     public enum QuestionType {

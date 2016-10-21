@@ -128,7 +128,7 @@ public class QuizFactory {
         for (int i = 0; i < numQuestions; i++) {
             ConWord curWord = wordList.get(i);
             QuizQuestion.QuestionType questionType = quizOn.get(randGen.nextInt(quizOn.size()));
-            QuizQuestion question = new QuizQuestion(core.getPropertiesManager().isIgnoreCase());
+            QuizQuestion question = new QuizQuestion(core);
 
             switch (questionType) {
                 case Local:
