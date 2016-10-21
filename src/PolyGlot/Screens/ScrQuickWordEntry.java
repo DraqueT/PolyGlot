@@ -143,14 +143,10 @@ public final class ScrQuickWordEntry extends PDialog {
                 setProc();
             }
         });
-        setupDefText(txtConWord, "-- " + core.conLabel() + " word --");        
-        txtDefinition.addKeyListener(enterListener);
-        setupDefText(txtDefinition, "-- Definition --");
+        
+        setupDefText(txtDefinition, "-- Definition --"); // TODO: update this when PTextArea implemented
         txtLocalWord.addKeyListener(enterListener);
-        setupDefText(txtLocalWord, "-- " + core.localLabel() + " word --");
         txtProc.addKeyListener(enterListener);
-        setupDefText(txtProc, "-- Pronunciation --");
-        cmbType.addKeyListener(enterListener);
     }
 
     /**
@@ -417,10 +413,10 @@ public final class ScrQuickWordEntry extends PDialog {
         chkDefinition = new javax.swing.JCheckBox();
         chkClasses = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
-        txtConWord = new PTextField(core);
-        txtLocalWord = new PTextField(core, true);
+        txtConWord = new PTextField(core, false, "-- " + core.conLabel() + " word --");
+        txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " word --");
         cmbType = new PComboBox();
-        txtProc = new PTextField(core, true);
+        txtProc = new PTextField(core, true, "-- Pronunciation --");
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDefinition = new PTextArea();
         pnlClasses = new javax.swing.JPanel();

@@ -25,6 +25,8 @@ import PolyGlot.PGTools;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.Serializable;
 import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
@@ -38,27 +40,90 @@ import javax.swing.event.ChangeListener;
  * @author draque
  */
 public class PTextField extends JTextField {
-
-    private PFrame parent;
-    private DictCore core;
+    private final DictCore core;
     boolean skipRepaint = false;
     boolean curSetText = false;
     boolean overrideFont = false;
-    SwingWorker worker = null;
+    private SwingWorker worker = null;
+    private final String defText;
 
     /**
      * Init for PDialogs
      *
-     * @param _core
+     * @param _core dictionary core
+     * @param _overideFont whether to override font (default to no)
+     * @param _defText default text that will display in grey if otherwise empty
      */
-    public PTextField(DictCore _core) {
-        core = _core;
-    }
-    
-    public PTextField(DictCore _core, boolean _overideFont) {
+    public PTextField(DictCore _core, boolean _overideFont, String _defText) {
+        // remove change listener to add custom one
+        DefaultBoundedRangeModel pVis = (DefaultBoundedRangeModel) this.getHorizontalVisibility();
+        for (ChangeListener chlist : pVis.getChangeListeners()) {
+            pVis.removeChangeListener(chlist);
+        }
+        pVis.addChangeListener(new PScrollRepainter());
+        
         core = _core;
         overrideFont = _overideFont;
+        defText = _defText;
+        setupListeners();
+        setText(defText);
+        setForeground(Color.lightGray);
     }
+        
+    @Override
+    public final void setForeground(Color _color) {
+        super.setForeground(_color);
+    }
+    
+    /**
+     * gets default value string of text
+     * @return default text
+     */
+    public String getDefaultValue() {
+        return defText;
+    }
+    
+    /**
+     * Tests whether the current text value is the default value
+     * @return 
+     */
+    public boolean isDefaultText() {
+        // account for RtL languages
+        String curText = super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
+        return curText.equals(defText);
+    }
+    
+    /**
+     * sets text to default value
+     */
+    public void setDefault() {
+        setText(defText);
+    }
+    
+    private void setupListeners() {
+        this.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (getSuperText().equals(defText)) {
+                    setText("");
+                    setForeground(Color.black);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (getSuperText().equals("")) {
+                    setText(defText);
+                    setForeground(Color.lightGray);
+                }
+            }
+        });
+    }
+    
+    /**
+     * Sets default text that will appear in grey if box is otherwise empty
+     * @param _defText
+     */
 
     /**
      * makes this component flash. If already flashing, does nothing.
@@ -70,25 +135,6 @@ public class PTextField extends JTextField {
             worker = PGTools.getFlashWorker(this, _flashColor, isBack);
             worker.execute();
         }
-    }
-    
-    /**
-     * Init for PFrames
-     *
-     * @param _parent
-     * @param _core
-     */
-    public PTextField(PFrame _parent, DictCore _core) {
-        parent = _parent;
-        DefaultBoundedRangeModel pVis = (DefaultBoundedRangeModel) this.getHorizontalVisibility();
-
-        // remove change listener to add custom one
-        for (ChangeListener chlist : pVis.getChangeListeners()) {
-            pVis.removeChangeListener(chlist);
-        }
-
-        pVis.addChangeListener(new PScrollRepainter());
-        core = _core;
     }
     
     // Overridden to meet code standards
@@ -118,37 +164,17 @@ public class PTextField extends JTextField {
         setText('\u202e' + getText());
     }
 
-    private void defixRTL() {
-        if (!super.getText().startsWith("\u202e")) {
-            return;
-        }
-
-        setText(getText());
-    }
-
     @Override
     public void repaint() {
-        if (skipRepaint) {
+        // core is initially null. Skip for now.
+        if (skipRepaint || core == null) {
             return;
         }
 
         try {
-            if (parent != null) {
-                core = parent.getCore();
-            }
-            if (core == null) {
-                //InfoBox.error("RENDERING ERROR", "Unable to render text.", parent);
-                return;
-            }
-
             PropertiesManager propMan = core.getPropertiesManager();
             skipRepaint = true;
             if (!curSetText) {
-                /*if (propMan.isEnforceRTL()) {
-                    prefixRTL();
-                } else {
-                    defixRTL();
-                }*/
 
                 Font testFont = propMan.getFontCon();
                 if (testFont != null 
@@ -168,18 +194,10 @@ public class PTextField extends JTextField {
 
     @Override
     public void paint(Graphics g) {
-        if (skipRepaint) {
+        if (skipRepaint || core == null) {
             return;
         }
-
-        if (parent != null) {
-            core = parent.getCore();
-        }
-        if (core == null) {
-            //InfoBox.error("RENDERING ERROR", "Unable to render text.", parent);
-            return;
-        }
-
+        
         try {
             PropertiesManager propMan = core.getPropertiesManager();
             skipRepaint = true;
@@ -207,21 +225,48 @@ public class PTextField extends JTextField {
     }
 
     @Override
-    public void setText(String t
-    ) {
+    public final void setText(String t) {
         curSetText = true;
         try {
-            super.setText(t);
+            if (t.equals("") && !this.hasFocus()) {
+                super.setText(defText);
+            } else {
+                super.setText(t);
+            }
         } catch (Exception e) {
             InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), null);
+        }
+        
+        if (isDefaultText()) {
+            setForeground(Color.lightGray);
+        } else {
+            setForeground(Color.black);
         }
 
         curSetText = false;
     }
 
+    /**
+     * Gets text from super with minimal processing
+     * @return super's text
+     */
+    private String getSuperText() {
+        return super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
+    }
+    
     @Override
+    /**
+     * Make certain only to return appropriate text and never default text
+     */
     public String getText() {
-        String ret = super.getText().replaceAll("\u202e", "");
-        return core.getPropertiesManager().isEnforceRTL() ? "\u202e" + ret : ret;
+        String ret = super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
+        
+        if (ret.equals(defText)) {
+            ret = "";
+        } else {
+            ret = core.getPropertiesManager().isEnforceRTL() ? "\u202e" + ret : ret;
+        }
+        
+        return ret;
     }
 }

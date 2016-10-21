@@ -217,22 +217,17 @@
                       <Properties>
                         <Property name="toolTipText" type="java.lang.String" value="Constructed language word value"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtConWordFocusGained"/>
-                        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtConWordFocusLost"/>
-                      </Events>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(this, core)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, false, &quot;-- ConWord --&quot;)"/>
                       </AuxValues>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtLocalWord">
                       <Properties>
                         <Property name="toolTipText" type="java.lang.String" value="Synonym for conword in local natural language"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtLocalWordFocusGained"/>
-                        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtLocalWordFocusLost"/>
-                      </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- &quot; + core.localLabel() + &quot; Word --&quot;)"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="cmbType">
                       <Properties>
@@ -252,10 +247,9 @@
                       <Properties>
                         <Property name="toolTipText" type="java.lang.String" value="The word&apos;s pronunciation"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtProcFocusGained"/>
-                        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtProcFocusLost"/>
-                      </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Pronunciation --&quot;)"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="chkProcOverride">
                       <Properties>

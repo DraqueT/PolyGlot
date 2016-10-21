@@ -101,10 +101,7 @@ public final class ScrLexicon extends PFrame {
     private TitledPane gridTitlePane = null;
     private CheckBox chkFindBad;
     private final JFXPanel fxPanel;
-    private final String defConValue = "-- ConWord --";
-    private final String defLocalValue = "-- NalLang Word --";
     private final TypeNode defTypeValue = new TypeNode();
-    private final String defProcValue = "-- Pronunciation --";
     private final String defDefValue = "-- Definition --";
     private final String newTypeValue = "-- New Part of Speech --";
     private final String defLexValue = "List of Conlang Words";
@@ -445,7 +442,7 @@ public final class ScrLexicon extends PFrame {
 
         try {
             String setText = core.getPronunciationMgr().getPronunciation(txtConWord.getText());
-            txtProc.setText(setText.isEmpty() ? defProcValue : setText);
+            txtProc.setText(setText.isEmpty() ? ((PTextField)txtProc).getDefaultValue() : setText);
         } catch (Exception e) {
             InfoBox.error("Pronunciation Error", "Could not generate pronunciation: "
                     + e.getLocalizedMessage(), this);
@@ -460,10 +457,7 @@ public final class ScrLexicon extends PFrame {
     private void setDefaultValues() {
         chkProcOverride.setSelected(false);
         chkRuleOverride.setSelected(false);
-        txtConWord.setText(defConValue);
         txtDefinition.setText(defDefValue);
-        txtLocalWord.setText(defLocalValue);
-        txtProc.setText(defProcValue);
         cmbType.setSelectedIndex(0);
         Runnable fxSetup = new Runnable() {
             @Override
@@ -647,10 +641,10 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        testWord.setValue(txtConWord.getText().equals(defConValue) ? "" : txtConWord.getText());
-        testWord.setLocalWord(txtLocalWord.getText().equals(defLocalValue) ? "" : txtLocalWord.getText());
+        testWord.setValue(((PTextField)txtConWord).isDefaultText() ? "" : txtConWord.getText());
+        testWord.setLocalWord(((PTextField)txtLocalWord).isDefaultText() ? "" : txtLocalWord.getText());
         testWord.setDefinition(txtDefinition.getText().equals(defDefValue) ? "" : txtDefinition.getText());
-        testWord.setPronunciation(txtProc.getText().equals(defProcValue) ? "" : txtProc.getText());
+        testWord.setPronunciation(((PTextField)txtProc).isDefaultText() ? "" : txtProc.getText());
         testWord.setWordTypeId(typeId);
         testWord.setRulesOverride(chkRuleOverride.isSelected());
 
@@ -1013,9 +1007,6 @@ public final class ScrLexicon extends PFrame {
             }
         });
 
-        addPropertyListeners(txtConWord, defConValue);
-        addPropertyListeners(txtLocalWord, defLocalValue);
-        addPropertyListeners(txtProc, defProcValue);
         addPropertyListeners(txtDefinition, defDefValue);
         addPropertyListeners(cmbType, defTypeValue.getValue());
         addFilterListeners(txtConSrc);
@@ -1143,12 +1134,12 @@ public final class ScrLexicon extends PFrame {
             if (curWord == null) {
                 if (!namePopulating) {
                     namePopulating = true;
-                    txtConWord.setText(defConValue);
+                    ((PTextField)txtConWord).setDefault();
                     namePopulating = false;
                 }
                 txtDefinition.setText(defDefValue);
-                txtLocalWord.setText(defLocalValue);
-                txtProc.setText(defProcValue);
+                ((PTextField)txtLocalWord).setDefault();
+                ((PTextField)txtProc).setDefault();
                 cmbType.setSelectedItem(defTypeValue);
                 chkProcOverride.setSelected(false);
                 chkRuleOverride.setSelected(false);
@@ -1162,9 +1153,9 @@ public final class ScrLexicon extends PFrame {
                 txtDefinition.setText(curWord.getDefinition().equals("")
                         ? defDefValue : curWord.getDefinition());
                 txtLocalWord.setText(curWord.getLocalWord().equals("")
-                        ? defLocalValue : curWord.getLocalWord());
+                        ? ((PTextField)txtLocalWord).getDefaultValue() : curWord.getLocalWord());
                 txtProc.setText(curWord.getPronunciation().equals("")
-                        ? defProcValue : curWord.getPronunciation());
+                        ? ((PTextField)txtProc).getDefaultValue() : curWord.getPronunciation());
                 TypeNode type = curWord.getWordTypeId() == 0 ? null : core.getTypes().getNodeById(curWord.getWordTypeId());
                 cmbType.setSelectedItem(type == null ? defTypeValue : type);
                 chkProcOverride.setSelected(curWord.isProcOverride());
@@ -1252,14 +1243,12 @@ public final class ScrLexicon extends PFrame {
         }
     }
 
+    // TODO: DELETE THIS BLOCK WHEN I PTEXTAREA UPDATE COMPLETE
     /**
      * Sets all fields to grey/black as appropriate
      */
     private void setAllGreyProps() {
-        setGreyFields(txtConWord, defConValue);
         setGreyFields(txtDefinition, defDefValue);
-        setGreyFields(txtLocalWord, defLocalValue);
-        setGreyFields(txtProc, defProcValue);
         setGreyFields(cmbType, defTypeValue.getValue());
     }
 
@@ -1352,17 +1341,17 @@ public final class ScrLexicon extends PFrame {
      * @param saveWord word to save current values to
      */
     private void saveValuesTo(ConWord saveWord) {
-        if (txtConWord.getText().equals(defConValue)) {
+        if (((PTextField)txtConWord).isDefaultText()) {
             return;
         }
 
         saveWord.setValue(txtConWord.getText());
         saveWord.setDefinition(txtDefinition.getText().equals(defDefValue)
                 ? "" : txtDefinition.getText());
-        saveWord.setLocalWord(txtLocalWord.getText().equals(defLocalValue)
+        saveWord.setLocalWord(((PTextField)txtLocalWord).isDefaultText()
                 ? "" : txtLocalWord.getText());
         saveWord.setProcOverride(chkProcOverride.isSelected());
-        saveWord.setPronunciation(txtProc.getText().equals(defProcValue)
+        saveWord.setPronunciation(((PTextField)txtProc).isDefaultText()
                 ? "" : txtProc.getText());
         saveWord.setRulesOverride(chkRuleOverride.isSelected());
         Object curType = cmbType.getSelectedItem();
@@ -1480,10 +1469,10 @@ public final class ScrLexicon extends PFrame {
         jPanel2 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
-        txtConWord = new PTextField(this, core);
-        txtLocalWord = new javax.swing.JTextField();
+        txtConWord = new PTextField(core, false, "-- ConWord --");
+        txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Word --");
         cmbType = new PComboBox();
-        txtProc = new javax.swing.JTextField();
+        txtProc = new PTextField(core, true, "-- Pronunciation --");
         chkProcOverride = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         chkRuleOverride = new javax.swing.JCheckBox();
@@ -1536,24 +1525,8 @@ public final class ScrLexicon extends PFrame {
         jPanel3.setPreferredSize(new java.awt.Dimension(351, 380));
 
         txtConWord.setToolTipText("Constructed language word value");
-        txtConWord.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtConWordFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtConWordFocusLost(evt);
-            }
-        });
 
         txtLocalWord.setToolTipText("Synonym for conword in local natural language");
-        txtLocalWord.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtLocalWordFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtLocalWordFocusLost(evt);
-            }
-        });
 
         cmbType.setToolTipText("The word's part of speech");
         cmbType.addActionListener(new java.awt.event.ActionListener() {
@@ -1563,14 +1536,6 @@ public final class ScrLexicon extends PFrame {
         });
 
         txtProc.setToolTipText("The word's pronunciation");
-        txtProc.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtProcFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtProcFocusLost(evt);
-            }
-        });
 
         chkProcOverride.setToolTipText("Select this to override auto pronunciation generation for this word.");
 
@@ -1792,42 +1757,6 @@ public final class ScrLexicon extends PFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtConWordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConWordFocusGained
-        if (txtConWord.getText().equals(defConValue)) {
-            txtConWord.setText("");
-        }
-    }//GEN-LAST:event_txtConWordFocusGained
-
-    private void txtConWordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConWordFocusLost
-        if (txtConWord.getText().equals("")) {
-            txtConWord.setText(defConValue);
-        }
-    }//GEN-LAST:event_txtConWordFocusLost
-
-    private void txtLocalWordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLocalWordFocusGained
-        if (txtLocalWord.getText().equals(defLocalValue)) {
-            txtLocalWord.setText("");
-        }
-    }//GEN-LAST:event_txtLocalWordFocusGained
-
-    private void txtLocalWordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLocalWordFocusLost
-        if (txtLocalWord.getText().equals("")) {
-            txtLocalWord.setText(defLocalValue);
-        }
-    }//GEN-LAST:event_txtLocalWordFocusLost
-
-    private void txtProcFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProcFocusGained
-        if (txtProc.getText().equals(defProcValue)) {
-            txtProc.setText("");
-        }
-    }//GEN-LAST:event_txtProcFocusGained
-
-    private void txtProcFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProcFocusLost
-        if (txtProc.getText().equals("")) {
-            txtProc.setText(defProcValue);
-        }
-    }//GEN-LAST:event_txtProcFocusLost
 
     private void txtDefinitionFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDefinitionFocusGained
         if (txtDefinition.getText().equals(defDefValue)) {

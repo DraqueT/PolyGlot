@@ -74,12 +74,10 @@ public class ScrLogoDetails extends PFrame {
      */
     public ScrLogoDetails(DictCore _core) {
         setNimbus();
-        initComponents();
-
         core = _core;
-
+        
+        initComponents();
         setupFonts();
-
         populateLogographs();
         populateLogoProps();
         setupListeners();
@@ -888,15 +886,15 @@ public class ScrLogoDetails extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        fltRelatedWord = new PTextField(this, core);
+        fltRelatedWord = new PTextField(core, false, "-- Related Word --");
         fltStrokes = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        fltReading = new PTextField(this, core);
+        fltReading = new PTextField(core, false, "-- Reading --");
         fltNotes = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        fltRadical = new PTextField(this, core);
+        fltRadical = new PTextField(core, false, "-- Radical --");
         jScrollPane1 = new javax.swing.JScrollPane();
         lstLogos = new javax.swing.JList();
         btnAddLogo = new PButton("+");
@@ -915,7 +913,7 @@ public class ScrLogoDetails extends PFrame {
         btnDelRad = new PButton("-");
         chkIsRad = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
-        txtName = new PTextField(this, core);
+        txtName = new PTextField(core, false, "-- Name --");
         jLabel12 = new javax.swing.JLabel();
         txtStrokes = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();

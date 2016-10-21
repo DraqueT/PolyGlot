@@ -57,10 +57,7 @@ import javax.swing.table.TableColumn;
  */
 public class ScrLangProps extends PDialog {
     private boolean curPopulating = false;
-    private final String defName = "- Language Name -";
-    private final String defAlpha = "- Alphabetical Order -";
-    private final String localName = "- Local Language -";
-    private final String authInfo = "- Author/Copyright Info -";
+    private final String authInfo = "- Author/Copyright Info -"; // TODO: eliminate with PTextArea code
     
     /**
      * Creates new form ScrLangProps
@@ -115,13 +112,10 @@ public class ScrLangProps extends PDialog {
     private void populateProperties() {
         PropertiesManager prop = core.getPropertiesManager();
         
-        txtLangName.setText(prop.getLangName().equals("") ?
-                defName : prop.getLangName());
+        txtLangName.setText(prop.getLangName());
         txtFont.setText(prop.getFontCon().getFamily());
-        txtAlphaOrder.setText(prop.getAlphaPlainText().equals("") ?
-                defAlpha : prop.getAlphaPlainText());
-        txtLocalLanguage.setText(prop.getLocalLangName().equals("") ?
-                localName : prop.getLocalLangName());
+        txtAlphaOrder.setText(prop.getAlphaPlainText());
+        txtLocalLanguage.setText(prop.getLocalLangName());
         txtAuthorCopyright.setText(prop.getCopyrightAuthorInfo().equals("") ?
                 authInfo : prop.getCopyrightAuthorInfo());
         chkDisableProcRegex.setSelected(prop.isDisableProcRegex());
@@ -132,12 +126,6 @@ public class ScrLangProps extends PDialog {
         chkWordUniqueness.setSelected(prop.isWordUniqueness());
         chkEnforceRTL.setSelected(prop.isEnforceRTL());
         
-        txtAlphaOrder.setForeground(txtAlphaOrder.getText().equals(defAlpha) ?
-                Color.lightGray : Color.black);
-        txtLangName.setForeground(txtLangName.getText().equals(defName) ?
-                Color.lightGray : Color.black);
-        txtLocalLanguage.setForeground(txtLocalLanguage.getText().equals(localName) ?
-                Color.lightGray : Color.black);
         txtAuthorCopyright.setForeground(txtAuthorCopyright.getText().equals(authInfo) ?
                 Color.lightGray : Color.black);
                 
@@ -153,12 +141,10 @@ public class ScrLangProps extends PDialog {
         propMan.setAlphaOrder(txtAlphaOrder.getText().trim());
         propMan.setDisableProcRegex(chkDisableProcRegex.isSelected());
         propMan.setIgnoreCase(chkIgnoreCase.isSelected());
-        propMan.setLangName(txtLangName.getText().equals(defName) ?
-                "" : txtLangName.getText());
+        propMan.setLangName(txtLangName.getText());
         propMan.setCopyrightAuthorInfo(txtAuthorCopyright.getText().equals(authInfo) ?
                 "" : txtAuthorCopyright.getText());
-        propMan.setLocalLangName(txtLocalLanguage.getText().equals(localName) ?
-                "" : txtLocalLanguage.getText());
+        propMan.setLocalLangName(txtLocalLanguage.getText());
         propMan.setLocalMandatory(chkLocalMandatory.isSelected());
         propMan.setLocalUniqueness(chkLocalUniqueness.isSelected());
         propMan.setTypesMandatory(chkTypesMandatory.isSelected());
@@ -438,7 +424,7 @@ public class ScrLangProps extends PDialog {
         btnChangeFont = new javax.swing.JButton();
         txtFont = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
-        txtAlphaOrder = new PTextField(core);
+        txtAlphaOrder = new PTextField(core, false, "-- Alphabetical Order --");
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
@@ -458,8 +444,8 @@ public class ScrLangProps extends PDialog {
         tblProcs = new javax.swing.JTable();
         btnDownProc = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
-        txtLangName = new javax.swing.JTextField();
-        txtLocalLanguage = new javax.swing.JTextField();
+        txtLangName = new PTextField(core, true, "-- Language Name --");
+        txtLocalLanguage = new PTextField(core, true, "-- Local Language --");
         jScrollPane3 = new javax.swing.JScrollPane();
         txtAuthorCopyright = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
@@ -483,14 +469,6 @@ public class ScrLangProps extends PDialog {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         txtAlphaOrder.setToolTipText("List of all characters in conlang in alphabetical order (both upper and lower case)");
-        txtAlphaOrder.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtAlphaOrderFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtAlphaOrderFocusLost(evt);
-            }
-        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
@@ -721,24 +699,8 @@ public class ScrLangProps extends PDialog {
         jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         txtLangName.setToolTipText("Your Conlang's Name");
-        txtLangName.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtLangNameFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtLangNameFocusLost(evt);
-            }
-        });
 
         txtLocalLanguage.setToolTipText("The natural language you use when writing your conlang");
-        txtLocalLanguage.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtLocalLanguageFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtLocalLanguageFocusLost(evt);
-            }
-        });
 
         txtAuthorCopyright.setColumns(20);
         txtAuthorCopyright.setLineWrap(true);
@@ -838,48 +800,6 @@ public class ScrLangProps extends PDialog {
         core.getPropertiesManager().setEnforceRTL(chkEnforceRTL.isSelected());
         testRTLWarning();
     }//GEN-LAST:event_chkEnforceRTLActionPerformed
-
-    private void txtLangNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLangNameFocusGained
-        if (txtLangName.getText().equals(defName)) {
-            txtLangName.setText("");
-            txtLangName.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_txtLangNameFocusGained
-
-    private void txtLangNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLangNameFocusLost
-        if (txtLangName.getText().equals("")) {
-            txtLangName.setText(defName);
-            txtLangName.setForeground(Color.lightGray);
-        }
-    }//GEN-LAST:event_txtLangNameFocusLost
-
-    private void txtAlphaOrderFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAlphaOrderFocusGained
-        if (txtAlphaOrder.getText().equals(defAlpha)) {
-            txtAlphaOrder.setText("");
-            txtAlphaOrder.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_txtAlphaOrderFocusGained
-
-    private void txtAlphaOrderFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAlphaOrderFocusLost
-        if (txtAlphaOrder.getText().equals("")) {
-            txtAlphaOrder.setText(defAlpha);
-            txtAlphaOrder.setForeground(Color.lightGray);
-        }
-    }//GEN-LAST:event_txtAlphaOrderFocusLost
-
-    private void txtLocalLanguageFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLocalLanguageFocusGained
-        if (txtLocalLanguage.getText().equals(localName)) {
-            txtLocalLanguage.setText("");
-            txtLocalLanguage.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_txtLocalLanguageFocusGained
-
-    private void txtLocalLanguageFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLocalLanguageFocusLost
-        if (txtLocalLanguage.getText().equals("")) {
-            txtLocalLanguage.setText(localName);
-            txtLocalLanguage.setForeground(Color.lightGray);
-        }
-    }//GEN-LAST:event_txtLocalLanguageFocusLost
 
     private void txtAuthorCopyrightFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAuthorCopyrightFocusGained
         if (txtAuthorCopyright.getText().equals(authInfo)) {

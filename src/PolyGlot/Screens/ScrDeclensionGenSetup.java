@@ -775,7 +775,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         jLabel4 = new javax.swing.JLabel();
         txtRuleName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtRuleRegex = new PTextField(core);
+        txtRuleRegex = new PTextField(core, false, "");
         chkDisableWordform = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();

@@ -363,7 +363,7 @@ public class ScrTypes extends PDialog {
         txtName = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtNotes = new javax.swing.JTextArea();
-        txtTypePattern = new PTextField(core);
+        txtTypePattern = new PTextField(core, false, "-- Type Pattern --");
         btnSetup = new javax.swing.JButton();
         btnAutogen = new javax.swing.JButton();
         txtErrorBox = new javax.swing.JTextField();
