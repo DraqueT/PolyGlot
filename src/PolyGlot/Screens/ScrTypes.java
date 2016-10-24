@@ -370,7 +370,7 @@ public class ScrTypes extends PDialog {
         jPanel3 = new javax.swing.JPanel();
         chkDefMand = new javax.swing.JCheckBox();
         chkProcMand = new javax.swing.JCheckBox();
-        txtGloss = new javax.swing.JTextField();
+        txtGloss = new PTextField(core, true, "-- Part of Speech Gloss --");
         jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();

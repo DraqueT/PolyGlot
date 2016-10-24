@@ -62,8 +62,12 @@ public class PropertiesManager {
         setFontCon(charisUnicode);
     }
     
+    /**
+     * Gets unicode charis font. Defaults/hard coded to size 12
+     * @return 
+     */
     public Font getCharisUnicodeFont() {
-        return charisUnicode;
+        return charisUnicode.deriveFont(0, 12);
     }
     
     /**

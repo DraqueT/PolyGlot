@@ -20,7 +20,6 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
-import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.PGTools;
 import java.awt.Color;
@@ -69,6 +68,16 @@ public class PTextField extends JTextField {
         setupListeners();
         setText(defText);
         setForeground(Color.lightGray);
+        if (!overrideFont) {
+            setFont(core.getPropertiesManager().getFontCon());
+        } else {
+            setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        }
+    }
+    
+    @Override
+    public final void setFont(Font _font) {
+        super.setFont(_font);
     }
         
     @Override
@@ -163,36 +172,6 @@ public class PTextField extends JTextField {
         }
 
         setText('\u202e' + getText());
-    }
-
-    @Override
-    public void repaint() {
-        // core is initially null. Skip for now.
-        if (skipRepaint || core == null) {
-            return;
-        }
-
-        try {
-            PropertiesManager propMan = core.getPropertiesManager();
-            skipRepaint = true;
-            if (!curSetText) {
-
-                Font testFont = propMan.getFontCon();
-                if (testFont != null 
-                        && !overrideFont
-                        && !testFont.getFamily().equals(getFont().getFamily())) {
-                    setFont(testFont);
-                } else {
-                    //setFont(IOHandler.getCharisUnicodeFont());
-                }
-            }
-            skipRepaint = false;
-        } catch (Exception e) {
-            InfoBox.error("Repaint error", "Could not repaint component: " + e.getLocalizedMessage(), null);
-            skipRepaint = false;
-        }
-
-        super.repaint();
     }
 
     @Override
