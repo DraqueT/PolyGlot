@@ -36,6 +36,7 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import PolyGlot.CustomControls.PTextArea;
 
 /**
  *
@@ -44,10 +45,6 @@ import javax.swing.event.DocumentListener;
 public class ScrTypes extends PDialog {
 
     private final List<Window> childFrames = new ArrayList<>();
-    private final String defName = " -- Part of Speech Name --";
-    private final String defNotes = " -- Part of Speech Notes --";
-    private final String defPattern = " -- Part of Speech Pattern --";
-    private final String defGloss = " -- Part of Speech Gloss --";
     private TypeNode selectionAtClosing = null;
     private boolean updatingName = false;
 
@@ -149,7 +146,7 @@ public class ScrTypes extends PDialog {
     private void updateName() {
         TypeNode curNode = (TypeNode) lstTypes.getSelectedValue();
 
-        if (txtName.getText().equals("") || txtName.getText().equals(defName)) {
+        if (((PTextField)txtName).isDefaultText() || txtName.getText().equals("")) {
             txtErrorBox.setText("Types must have name populated.");
             txtName.setBackground(core.getRequiredColor());
             lstTypes.setEnabled(false);
@@ -163,7 +160,7 @@ public class ScrTypes extends PDialog {
             return;
         }
         updatingName = true;
-        curNode.setValue(txtName.getText().equals(defName)
+        curNode.setValue(((PTextField)txtName).isDefaultText()
                 ? "" : txtName.getText());
 
         populateTypes();
@@ -217,21 +214,21 @@ public class ScrTypes extends PDialog {
             if (!updatingName) {
                 updatingName = true;
                 txtName.setText(curNode.getValue().equals("")
-                        ? defName : curNode.getValue());
+                        ? ((PTextField)txtName).getDefaultValue() : curNode.getValue());
                 txtName.setForeground(curNode.getValue().equals("")
                         ? Color.lightGray : Color.black);
                 updatingName = false;
             }
             txtNotes.setText(curNode.getNotes().equals("")
-                    ? defNotes : curNode.getNotes());
+                    ? ((PTextArea)txtNotes).getDefaultValue() : curNode.getNotes());
             txtNotes.setForeground(curNode.getNotes().equals("")
                     ? Color.lightGray : Color.black);
             txtTypePattern.setText(curNode.getPattern().equals("")
-                    ? defPattern : curNode.getPattern());
+                    ? ((PTextField)txtTypePattern).getDefaultValue() : curNode.getPattern());
             txtTypePattern.setForeground(curNode.getPattern().equals("")
                     ? Color.lightGray : Color.black);
             txtGloss.setText(curNode.getGloss().equals("")
-                    ? defGloss : curNode.getGloss());
+                    ? ((PTextField)txtGloss).getDefaultValue() : curNode.getGloss());
             txtGloss.setForeground(curNode.getGloss().equals("")
                     ? Color.lightGray : Color.black);
             chkDefMand.setSelected(curNode.isDefMandatory());
@@ -360,9 +357,9 @@ public class ScrTypes extends PDialog {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
-        txtName = new javax.swing.JTextField();
+        txtName = new PTextField(core, true, "-- Part of Speech Name --");
         jScrollPane2 = new javax.swing.JScrollPane();
-        txtNotes = new javax.swing.JTextArea();
+        txtNotes = new PTextArea(core, true, "-- Part of Speech Notes --");
         txtTypePattern = new PTextField(core, false, "-- Type Pattern --");
         btnSetup = new javax.swing.JButton();
         btnAutogen = new javax.swing.JButton();

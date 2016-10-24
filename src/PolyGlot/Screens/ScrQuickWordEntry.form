@@ -246,7 +246,7 @@
                 <Property name="wrapStyleWord" type="boolean" value="true"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextArea()"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextArea(core, true, &quot;-- Definition --&quot;)"/>
               </AuxValues>
             </Component>
           </SubComponents>

@@ -19,8 +19,12 @@
  */
 package PolyGlot.CustomControls;
 
+import PolyGlot.DictCore;
 import PolyGlot.PGTools;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
@@ -29,7 +33,54 @@ import javax.swing.SwingWorker;
  * @author draque
  */
 public class PTextArea extends JTextArea{
-    SwingWorker worker = null;
+    private SwingWorker worker = null;
+    private final String defText;
+    private final DictCore core;
+    private final boolean overrideFont;
+    
+    public PTextArea(DictCore _core, boolean _overideFont, String _defText) {
+        core = _core;
+        defText = _defText;
+        overrideFont = _overideFont;
+        
+        setupListeners();
+        setText(defText);
+        setForeground(Color.lightGray);
+        if (!overrideFont) {
+            setFont(core.getPropertiesManager().getFontCon());
+        } else {
+            setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        }
+    }
+    
+    @Override
+    public final void setFont(Font _font) {
+        super.setFont(_font);
+    }
+        
+    @Override
+    public final void setForeground(Color _color) {
+        super.setForeground(_color);
+    }
+    
+    @Override
+    public final void setText(String t) {
+        try {
+            if (t.equals("") && !this.hasFocus()) {
+                super.setText(defText);
+            } else {
+                super.setText(t);
+            }
+        } catch (Exception e) {
+            InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), null);
+        }
+        
+        if (isDefaultText()) {
+            setForeground(Color.lightGray);
+        } else {
+            setForeground(Color.black);
+        }
+    }
     
     /**
      * makes this component flash. If already flashing, does nothing.
@@ -41,5 +92,71 @@ public class PTextArea extends JTextArea{
             worker = PGTools.getFlashWorker(this, _flashColor, isBack);
             worker.execute();
         }
+    }
+    
+    /**
+     * gets default value string of text
+     * @return default text
+     */
+    public String getDefaultValue() {
+        return defText;
+    }
+    
+    /**
+     * Tests whether the current text value is the default value
+     * @return 
+     */
+    public boolean isDefaultText() {
+        // account for RtL languages
+        String curText = super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
+        return curText.equals(defText);
+    }
+    
+    /**
+     * sets text to default value
+     */
+    public void setDefault() {
+        setText(defText);
+    }
+    
+    private void setupListeners() {
+        this.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (getSuperText().equals(defText)) {
+                    setText("");
+                    setForeground(Color.black);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (getSuperText().equals("")) {
+                    setText(defText);
+                    setForeground(Color.lightGray);
+                }
+            }
+        });
+    }
+    
+    @Override
+    public String getText() {
+        String ret = super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
+        
+        if (ret.equals(defText)) {
+            ret = "";
+        } else {
+            ret = core.getPropertiesManager().isEnforceRTL() ? "\u202e" + ret : ret;
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Allows super method to be called in listeners
+     * @return 
+     */
+    private String getSuperText() {
+        return super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
     }
 }

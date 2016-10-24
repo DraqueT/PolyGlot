@@ -131,11 +131,6 @@ public class PTextField extends JTextField {
     }
     
     /**
-     * Sets default text that will appear in grey if box is otherwise empty
-     * @param _defText
-     */
-
-    /**
      * makes this component flash. If already flashing, does nothing.
      * @param _flashColor color to flash
      * @param isBack whether display color is background (rather than foreground)

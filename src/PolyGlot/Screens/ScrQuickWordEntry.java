@@ -29,12 +29,9 @@ import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -47,7 +44,6 @@ import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.JTextComponent;
 
 /**
  *
@@ -143,42 +139,11 @@ public final class ScrQuickWordEntry extends PDialog {
                 setProc();
             }
         });
-        
-        setupDefText(txtDefinition, "-- Definition --"); // TODO: update this when PTextArea implemented
+
         txtLocalWord.addKeyListener(enterListener);
         txtProc.addKeyListener(enterListener);
     }
-
-    /**
-     * Sets up default text for text fields
-     * @param target
-     * @param label 
-     */
-    private void setupDefText(JTextComponent _target, String label) {
-        final JTextComponent target = _target;
-        final String defLabel = label;
         
-        target.setText(label);
-        target.setForeground(Color.lightGray);        
-        target.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (target.getText().equals(defLabel)) {
-                    target.setText("");
-                    target.setForeground(Color.black);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (target.getText().equals("")) {
-                    target.setText(defLabel);
-                    target.setForeground(Color.lightGray);
-                }
-            }
-        });
-    }
-    
     /**
      * Sets pronunciation value of word
      */
@@ -418,7 +383,7 @@ public final class ScrQuickWordEntry extends PDialog {
         cmbType = new PComboBox();
         txtProc = new PTextField(core, true, "-- Pronunciation --");
         jScrollPane1 = new javax.swing.JScrollPane();
-        txtDefinition = new PTextArea();
+        txtDefinition = new PTextArea(core, true, "-- Definition --");
         pnlClasses = new javax.swing.JPanel();
         btnDone = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
