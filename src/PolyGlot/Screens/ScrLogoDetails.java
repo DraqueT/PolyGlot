@@ -27,8 +27,8 @@ import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.PGTUtil.WindowMode;
-import PolyGlot.CustomControls.TableColumnEditor;
-import PolyGlot.CustomControls.TableColumnRenderer;
+import PolyGlot.CustomControls.PCellEditor;
+import PolyGlot.CustomControls.PCellRenderer;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -687,8 +687,8 @@ public class ScrLogoDetails extends PFrame {
         // Readings font must be set each time the table is rebuilt
         Font setFont = core.getPropertiesManager().getFontCon();
         TableColumn column = tblReadings.getColumnModel().getColumn(0);
-        column.setCellEditor(new TableColumnEditor(setFont));
-        column.setCellRenderer(new TableColumnRenderer(setFont));
+        column.setCellEditor(new PCellEditor(setFont));
+        column.setCellRenderer(new PCellRenderer(setFont));
 
         while (procIt.hasNext()) {
             Object[] newRow = {procIt.next()};

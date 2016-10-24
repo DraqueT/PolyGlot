@@ -27,8 +27,8 @@ import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.ManagersCollections.PropertiesManager;
-import PolyGlot.CustomControls.TableColumnEditor;
-import PolyGlot.CustomControls.TableColumnRenderer;
+import PolyGlot.CustomControls.PCellEditor;
+import PolyGlot.CustomControls.PCellRenderer;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
@@ -171,12 +171,12 @@ public class ScrLangProps extends PDialog {
         Font conFont = core.getPropertiesManager().getFontCon();
 
         TableColumn column = tblProcs.getColumnModel().getColumn(0);
-        column.setCellEditor(new TableColumnEditor(conFont));
-        column.setCellRenderer(new TableColumnRenderer(conFont));
+        column.setCellEditor(new PCellEditor(conFont));
+        column.setCellRenderer(new PCellRenderer(conFont));
 
         column = tblProcs.getColumnModel().getColumn(1);
-        column.setCellEditor(new TableColumnEditor(defaultFont));
-        column.setCellRenderer(new TableColumnRenderer(defaultFont));
+        column.setCellEditor(new PCellEditor(defaultFont));
+        column.setCellRenderer(new PCellRenderer(defaultFont));
 
         // disable tab/arrow selection
         InputMap procInput = tblProcs.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -266,12 +266,12 @@ public class ScrLangProps extends PDialog {
         };
 
         // set saving properties for first column editor
-        TableColumnEditor editor = (TableColumnEditor) tblProcs.getCellEditor(procTableModel.getRowCount() - 1, 0);
+        PCellEditor editor = (PCellEditor) tblProcs.getCellEditor(procTableModel.getRowCount() - 1, 0);
         editor.setDocuListener(docuListener);
         editor.setInitialValue(base);
 
         // set saving properties for second column editor
-        editor = (TableColumnEditor) tblProcs.getCellEditor(procTableModel.getRowCount() - 1, 1);
+        editor = (PCellEditor) tblProcs.getCellEditor(procTableModel.getRowCount() - 1, 1);
         editor.setDocuListener(docuListener);
         editor.setInitialValue(proc);
 
@@ -389,8 +389,8 @@ public class ScrLangProps extends PDialog {
         txtFont.setText(conFont.getFamily());
 
         TableColumn column = tblProcs.getColumnModel().getColumn(0);
-        column.setCellEditor(new TableColumnEditor(conFont));
-        column.setCellRenderer(new TableColumnRenderer(conFont));
+        column.setCellEditor(new PCellEditor(conFont));
+        column.setCellRenderer(new PCellRenderer(conFont));
         populateProcs();
         testRTLWarning();
     }

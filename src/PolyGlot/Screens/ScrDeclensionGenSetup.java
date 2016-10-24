@@ -27,8 +27,8 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextField;
-import PolyGlot.CustomControls.TableColumnEditor;
-import PolyGlot.CustomControls.TableColumnRenderer;
+import PolyGlot.CustomControls.PCellEditor;
+import PolyGlot.CustomControls.PCellRenderer;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Font;
@@ -275,12 +275,12 @@ public class ScrDeclensionGenSetup extends PDialog {
         tblTransforms.setModel(transModel);
 
         TableColumn column = tblTransforms.getColumnModel().getColumn(0);
-        column.setCellEditor(new TableColumnEditor(setFont));
-        column.setCellRenderer(new TableColumnRenderer(setFont));
+        column.setCellEditor(new PCellEditor(setFont));
+        column.setCellRenderer(new PCellRenderer(setFont));
 
         column = tblTransforms.getColumnModel().getColumn(1);
-        column.setCellEditor(new TableColumnEditor(setFont));
-        column.setCellRenderer(new TableColumnRenderer(setFont));
+        column.setCellEditor(new PCellEditor(setFont));
+        column.setCellRenderer(new PCellRenderer(setFont));
 
         // do nothing if nothing selected in rule list
         if (curRule == null) {
