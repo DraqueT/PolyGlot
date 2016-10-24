@@ -1231,7 +1231,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
     private void btnClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClassesActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        ScrWordProperties s = new ScrWordProperties(core);
+        ScrWordClasses s = new ScrWordClasses(core);
         bindButtonToWindow(s, btnClasses);
         s.setVisible(true);
         setCursor(Cursor.getDefaultCursor());

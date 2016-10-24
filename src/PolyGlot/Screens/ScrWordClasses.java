@@ -24,17 +24,15 @@ import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTableModel;
+import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
 import PolyGlot.IOHandler;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
@@ -57,12 +55,11 @@ import javax.swing.table.TableColumn;
  *
  * @author draque.thompson
  */
-public class ScrWordProperties extends PDialog {
+public class ScrWordClasses extends PDialog {
 
     private final Map<Integer, JCheckBox> typeChecks = new HashMap<>();
-    private final String defName = "-- Name --";
 
-    public ScrWordProperties(DictCore _core) {
+    public ScrWordClasses(DictCore _core) {
         core = _core;
         initComponents();
         setupKeyStrokes();
@@ -98,31 +95,12 @@ public class ScrWordProperties extends PDialog {
             public void sync() {
                 WordProperty prop = lstProperties.getSelectedValue();
 
-                if (prop != null && !txtName.getText().equals(defName)) {
+                if (prop != null && !((PTextField)txtName).isDefaultText()) {
                     prop.setValue(txtName.getText());
                     lstProperties.repaint();
                 }
             }
         });
-        txtName.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (txtName.getText().equals(defName)) {
-                    txtName.setText("");
-                    txtName.setForeground(Color.black);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (txtName.getText().equals("")) {
-                    txtName.setText(defName);
-                    txtName.setForeground(Color.lightGray);
-                }
-            }
-        });
-        txtName.setText(defName);
-        txtName.setForeground(Color.lightGray);
 
         tblValues.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         TableColumn column = tblValues.getColumnModel().getColumn(0);
@@ -267,7 +245,7 @@ public class ScrWordProperties extends PDialog {
         }
 
         if (curProp == null) {
-            txtName.setText(defName);
+            ((PTextField)txtName).setDefault();
             enableValues(false);
             for (JCheckBox checkBox : typeChecks.values()) {
                 checkBox.setSelected(false);
@@ -397,7 +375,7 @@ public class ScrWordProperties extends PDialog {
         btnAddProp = new PButton("+");
         btnDelProp = new PButton("-");
         jPanel1 = new javax.swing.JPanel();
-        txtName = new javax.swing.JTextField();
+        txtName = new PTextField(core, true, "-- Name --");
         btnAddValue = new PButton("+");
         btnDelValue = new PButton("-");
         pnlTypes = new javax.swing.JPanel();
@@ -578,8 +556,8 @@ public class ScrWordProperties extends PDialog {
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    static ScrWordProperties run(DictCore _core) {
-        return new ScrWordProperties(_core);
+    static ScrWordClasses run(DictCore _core) {
+        return new ScrWordClasses(_core);
     }
 
     @Override
