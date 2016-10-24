@@ -26,7 +26,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.TableBooleanEditor;
-import PolyGlot.CustomControls.TableColumnEditor;
+import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
@@ -175,7 +175,7 @@ public final class ScrDeclensionSetup extends PDialog {
         }
 
         TableColumn column = tblDimensions.getColumnModel().getColumn(0);
-        column.setCellEditor(new TableColumnEditor(new JLabel().getFont()));
+        column.setCellEditor(new PCellEditor(new JLabel().getFont()));
 
         column = tblDimensions.getColumnModel().getColumn(1);
         column.setCellEditor(new TableBooleanEditor());
@@ -342,7 +342,7 @@ public final class ScrDeclensionSetup extends PDialog {
         };
 
         // set saving properties for first column editor
-        TableColumnEditor editor1 = (TableColumnEditor) tblDimensions.getCellEditor(model.getRowCount() - 1, 0);
+        PCellEditor editor1 = (PCellEditor) tblDimensions.getCellEditor(model.getRowCount() - 1, 0);
         editor1.setDocuListener(docuListener);
         
         ActionListener actListener = new ActionListener() {

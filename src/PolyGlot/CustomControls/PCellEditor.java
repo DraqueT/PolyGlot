@@ -34,7 +34,7 @@ import javax.swing.table.TableCellEditor;
  *
  * @author draque
  */
-public class TableColumnEditor extends AbstractCellEditor implements TableCellEditor {
+public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
 
     private final JComponent component = new JTextField();
     Font myFont;
@@ -46,7 +46,7 @@ public class TableColumnEditor extends AbstractCellEditor implements TableCellEd
         ((JTextField) component).getDocument().addDocumentListener(docListener);
     }
     
-    public TableColumnEditor(Font _myFont) {
+    public PCellEditor(Font _myFont) {
         myFont = _myFont;
         JTextField setupText = (JTextField) component;
         

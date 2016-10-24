@@ -52,7 +52,6 @@ public class ScrTranslationFreewrite extends PFrame {
     @Override
     public void updateAllValues(DictCore _core) {
         // Deprecated screens don't need updates
-        // TODO: revisit if this window is re-upped
     }
     
     @Override

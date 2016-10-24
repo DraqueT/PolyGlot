@@ -32,7 +32,7 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author draque
  */
-public class TableColumnRenderer implements TableCellRenderer {
+public class PCellRenderer implements TableCellRenderer {
 
     Font myFont;
     DocumentListener docListener;
@@ -60,7 +60,7 @@ public class TableColumnRenderer implements TableCellRenderer {
         docListener = _listener;
     }
 
-    public TableColumnRenderer(Font _myFont) {
+    public PCellRenderer(Font _myFont) {
         myFont = _myFont;
     }
 }

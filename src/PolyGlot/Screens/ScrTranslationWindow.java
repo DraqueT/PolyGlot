@@ -100,7 +100,6 @@ public class ScrTranslationWindow extends PFrame {
     @Override
     public void updateAllValues(DictCore _core) {
         // Deprecated screens don't need updates
-        // TODO: revisit if this window is re-upped
     }
     
     @Override
@@ -644,7 +643,6 @@ public class ScrTranslationWindow extends PFrame {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnCreateNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateNewActionPerformed
-        // TODO: DISABLED THIS, ADDRESS WHEN REWORKING
         InfoBox.warning("Disabled Feature", 
                 "This feature has been disabled until a later version of PolyGlot.", 
                 this);

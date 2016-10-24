@@ -20,9 +20,12 @@ package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PCellEditor;
+import PolyGlot.CustomControls.PCellRenderer;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTableModel;
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
@@ -45,10 +48,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.TableColumn;
 
 // TODO: make correct element autoselect after hitting + for immediate editing
 // TODO: make proper choices when illegal value left in field
-// TODO: make text boxes have default values which don't save/are greyed
 
 /**
  *
@@ -122,6 +125,9 @@ public class ScrWordProperties extends PDialog {
         txtName.setForeground(Color.lightGray);
 
         tblValues.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        TableColumn column = tblValues.getColumnModel().getColumn(0);
+        column.setCellEditor(new PCellEditor(IOHandler.getCharisUnicodeFont()));
+        column.setCellRenderer(new PCellRenderer(IOHandler.getCharisUnicodeFont()));
     }
     /**
      * Make certain editing finalized before leaving window
