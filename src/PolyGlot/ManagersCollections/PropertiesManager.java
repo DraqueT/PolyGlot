@@ -52,13 +52,18 @@ public class PropertiesManager {
     private boolean disableProcRegex = false;
     private boolean enforceRTL = false;
     private byte[] cachedFont = null;
+    private final Font charisUnicode;
     
     public PropertiesManager() {
         alphaOrder = new HashMap<>();
         
         // set default font to Charis, as it's unicode compatible
-        
-        setFontCon(IOHandler.getCharisUnicodeFont());
+        charisUnicode = IOHandler.getCharisUnicodeFontInitial();
+        setFontCon(charisUnicode);
+    }
+    
+    public Font getCharisUnicodeFont() {
+        return charisUnicode;
     }
     
     /**

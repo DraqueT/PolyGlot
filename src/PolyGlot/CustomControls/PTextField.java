@@ -20,6 +20,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.PGTools;
 import java.awt.Color;
@@ -181,6 +182,8 @@ public class PTextField extends JTextField {
                         && !overrideFont
                         && !testFont.getFamily().equals(getFont().getFamily())) {
                     setFont(testFont);
+                } else {
+                    //setFont(IOHandler.getCharisUnicodeFont());
                 }
             }
             skipRepaint = false;

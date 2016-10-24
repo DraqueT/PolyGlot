@@ -31,6 +31,7 @@ import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
@@ -104,8 +105,9 @@ public class ScrWordClasses extends PDialog {
 
         tblValues.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         TableColumn column = tblValues.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(IOHandler.getCharisUnicodeFont()));
-        column.setCellRenderer(new PCellRenderer(IOHandler.getCharisUnicodeFont()));
+        Font defFont = core.getPropertiesManager().getCharisUnicodeFont();
+        column.setCellEditor(new PCellEditor(defFont));
+        column.setCellRenderer(new PCellRenderer(defFont));
     }
     /**
      * Make certain editing finalized before leaving window

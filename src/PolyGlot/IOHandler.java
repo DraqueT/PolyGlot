@@ -733,7 +733,7 @@ public class IOHandler {
      *
      * @return Charis unicode compatible font
      */
-    public static Font getCharisUnicodeFont() {
+    public static Font getCharisUnicodeFontInitial() {
         return new IOHandler().getCharisUnicodeFontInternal();
     }
 
