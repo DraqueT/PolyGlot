@@ -72,6 +72,7 @@ public class ConWordCollection extends DictionaryCollection {
         insWord.setId(_id);
 
         ((ConWord) bufferNode).setParent(this);
+        ((ConWord) bufferNode).setCore(core);
         ret = super.insert(_id, bufferNode);
 
         balanceWordCounts(insWord, true);
@@ -162,6 +163,7 @@ public class ConWordCollection extends DictionaryCollection {
         Integer ret;
 
         ((ConWord) bufferNode).setParent(this);
+        ((ConWord) bufferNode).setCore(core);
         ret = super.insert(bufferNode);
 
         balanceWordCounts((ConWord) bufferNode, true);

@@ -226,8 +226,22 @@ public class ConWord extends DictNode {
         this.definition = definition;
     }
 
+    /**
+     * If pronunciation override is not selected, fetches generated pronunciation
+     * for this word. If generated pronunciation is blank, returns saved value.
+     * @return pronunciation of word
+     */
     public String getPronunciation() {
-        return pronunciation;
+        String ret = pronunciation;
+        
+        if (!autoDeclensionOverride && core != null) {
+            String gen = core.getPronunciationMgr().getPronunciation(value);
+            if (!gen.equals("")) {
+                ret = gen;
+            }
+        }
+        
+        return ret;
     }
 
     public void setPronunciation(String pronunciation) {
