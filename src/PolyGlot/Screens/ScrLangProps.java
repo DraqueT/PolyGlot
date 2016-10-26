@@ -29,7 +29,7 @@ import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
-import java.awt.Color;
+import PolyGlot.CustomControls.PTextArea;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
@@ -57,7 +57,6 @@ import javax.swing.table.TableColumn;
  */
 public class ScrLangProps extends PDialog {
     private boolean curPopulating = false;
-    private final String authInfo = "- Author/Copyright Info -"; // TODO: eliminate with PTextArea code
     
     /**
      * Creates new form ScrLangProps
@@ -116,8 +115,7 @@ public class ScrLangProps extends PDialog {
         txtFont.setText(prop.getFontCon().getFamily());
         txtAlphaOrder.setText(prop.getAlphaPlainText());
         txtLocalLanguage.setText(prop.getLocalLangName());
-        txtAuthorCopyright.setText(prop.getCopyrightAuthorInfo().equals("") ?
-                authInfo : prop.getCopyrightAuthorInfo());
+        txtAuthorCopyright.setText(prop.getCopyrightAuthorInfo());
         chkDisableProcRegex.setSelected(prop.isDisableProcRegex());
         chkIgnoreCase.setSelected(prop.isIgnoreCase());
         chkLocalMandatory.setSelected(prop.isLocalMandatory());
@@ -125,9 +123,6 @@ public class ScrLangProps extends PDialog {
         chkTypesMandatory.setSelected(prop.isTypesMandatory());
         chkWordUniqueness.setSelected(prop.isWordUniqueness());
         chkEnforceRTL.setSelected(prop.isEnforceRTL());
-        
-        txtAuthorCopyright.setForeground(txtAuthorCopyright.getText().equals(authInfo) ?
-                Color.lightGray : Color.black);
                 
         populateProcs();
     }
@@ -142,8 +137,7 @@ public class ScrLangProps extends PDialog {
         propMan.setDisableProcRegex(chkDisableProcRegex.isSelected());
         propMan.setIgnoreCase(chkIgnoreCase.isSelected());
         propMan.setLangName(txtLangName.getText());
-        propMan.setCopyrightAuthorInfo(txtAuthorCopyright.getText().equals(authInfo) ?
-                "" : txtAuthorCopyright.getText());
+        propMan.setCopyrightAuthorInfo(txtAuthorCopyright.getText());
         propMan.setLocalLangName(txtLocalLanguage.getText());
         propMan.setLocalMandatory(chkLocalMandatory.isSelected());
         propMan.setLocalUniqueness(chkLocalUniqueness.isSelected());
@@ -447,7 +441,7 @@ public class ScrLangProps extends PDialog {
         txtLangName = new PTextField(core, true, "-- Language Name --");
         txtLocalLanguage = new PTextField(core, true, "-- Local Language --");
         jScrollPane3 = new javax.swing.JScrollPane();
-        txtAuthorCopyright = new javax.swing.JTextArea();
+        txtAuthorCopyright = new PTextArea(core, true, "-- Author/Copyright Information --");
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -706,14 +700,6 @@ public class ScrLangProps extends PDialog {
         txtAuthorCopyright.setLineWrap(true);
         txtAuthorCopyright.setRows(5);
         txtAuthorCopyright.setWrapStyleWord(true);
-        txtAuthorCopyright.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtAuthorCopyrightFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtAuthorCopyrightFocusLost(evt);
-            }
-        });
         jScrollPane3.setViewportView(txtAuthorCopyright);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -800,20 +786,6 @@ public class ScrLangProps extends PDialog {
         core.getPropertiesManager().setEnforceRTL(chkEnforceRTL.isSelected());
         testRTLWarning();
     }//GEN-LAST:event_chkEnforceRTLActionPerformed
-
-    private void txtAuthorCopyrightFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAuthorCopyrightFocusGained
-        if (txtAuthorCopyright.getText().equals(authInfo)) {
-            txtAuthorCopyright.setText("");
-            txtAuthorCopyright.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_txtAuthorCopyrightFocusGained
-
-    private void txtAuthorCopyrightFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAuthorCopyrightFocusLost
-        if (txtAuthorCopyright.getText().equals("")) {
-            txtAuthorCopyright.setText(authInfo);
-            txtAuthorCopyright.setForeground(Color.lightGray);
-        }
-    }//GEN-LAST:event_txtAuthorCopyrightFocusLost
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));

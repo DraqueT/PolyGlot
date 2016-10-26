@@ -114,10 +114,6 @@
               <Properties>
                 <Property name="toolTipText" type="java.lang.String" value="Part of speech name"/>
               </Properties>
-              <Events>
-                <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNameFocusGained"/>
-                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNameFocusLost"/>
-              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Part of Speech Name --&quot;)"/>
               </AuxValues>
@@ -137,10 +133,6 @@
                     <Property name="toolTipText" type="java.lang.String" value="Notes on part of speech"/>
                     <Property name="wrapStyleWord" type="boolean" value="true"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNotesFocusGained"/>
-                    <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNotesFocusLost"/>
-                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextArea(core, true, &quot;-- Part of Speech Notes --&quot;)"/>
                   </AuxValues>
@@ -151,10 +143,6 @@
               <Properties>
                 <Property name="toolTipText" type="java.lang.String" value="Regex pattern to enforce on part of speech"/>
               </Properties>
-              <Events>
-                <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtTypePatternFocusGained"/>
-                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtTypePatternFocusLost"/>
-              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, false, &quot;-- Type Pattern --&quot;)"/>
               </AuxValues>
@@ -238,10 +226,6 @@
               <Properties>
                 <Property name="toolTipText" type="java.lang.String" value="Part of speech&apos;s gloss"/>
               </Properties>
-              <Events>
-                <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtGlossFocusGained"/>
-                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtGlossFocusLost"/>
-              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Part of Speech Gloss --&quot;)"/>
               </AuxValues>

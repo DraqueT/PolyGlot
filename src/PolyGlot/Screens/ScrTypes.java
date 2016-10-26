@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque
+ * Copyright (c) 2015-2016, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -243,13 +243,13 @@ public class ScrTypes extends PDialog {
      * @param saveNode node to save to
      */
     private void savePropertiesTo(TypeNode saveNode) {
-        saveNode.setValue(txtName.getText().equals(defName)
+        saveNode.setValue(((PTextField)txtName).isDefaultText()
                 ? "" : txtName.getText());
-        saveNode.setNotes(txtNotes.getText().equals(defNotes)
+        saveNode.setNotes(((PTextArea)txtNotes).isDefaultText()
                 ? "" : txtNotes.getText());
-        saveNode.setPattern(txtTypePattern.getText().equals(defPattern)
+        saveNode.setPattern(((PTextField)txtTypePattern).isDefaultText()
                 ? "" : txtTypePattern.getText());
-        saveNode.setGloss(txtGloss.getText().equals(defGloss)
+        saveNode.setGloss(((PTextField)txtGloss).isDefaultText()
                 ? "" : txtGloss.getText());
         saveNode.setDefMandatory(chkDefMand.isSelected());
         saveNode.setProcMandatory(chkProcMand.isSelected());
@@ -384,39 +384,15 @@ public class ScrTypes extends PDialog {
         jPanel1.setMinimumSize(new java.awt.Dimension(10, 10));
 
         txtName.setToolTipText("Part of speech name");
-        txtName.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtNameFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtNameFocusLost(evt);
-            }
-        });
 
         txtNotes.setColumns(20);
         txtNotes.setLineWrap(true);
         txtNotes.setRows(5);
         txtNotes.setToolTipText("Notes on part of speech");
         txtNotes.setWrapStyleWord(true);
-        txtNotes.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtNotesFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtNotesFocusLost(evt);
-            }
-        });
         jScrollPane2.setViewportView(txtNotes);
 
         txtTypePattern.setToolTipText("Regex pattern to enforce on part of speech");
-        txtTypePattern.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtTypePatternFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtTypePatternFocusLost(evt);
-            }
-        });
 
         btnSetup.setText("Conjugations/Declensions Setup");
         btnSetup.setToolTipText("Create declension and conjugation dimensins here.");
@@ -467,14 +443,6 @@ public class ScrTypes extends PDialog {
         );
 
         txtGloss.setToolTipText("Part of speech's gloss");
-        txtGloss.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtGlossFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtGlossFocusLost(evt);
-            }
-        });
 
         jButton1.setText("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -585,52 +553,6 @@ public class ScrTypes extends PDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameFocusLost
-        if (txtName.getText().equals("")) {
-            updatingName = true;
-            txtName.setText(defName);
-            updatingName = false;
-            txtName.setForeground(Color.lightGray);
-        }
-    }//GEN-LAST:event_txtNameFocusLost
-
-    private void txtNotesFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNotesFocusLost
-        if (txtNotes.getText().equals("")) {
-            txtNotes.setText(defNotes);
-            txtNotes.setForeground(Color.lightGray);
-        }
-    }//GEN-LAST:event_txtNotesFocusLost
-
-    private void txtTypePatternFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTypePatternFocusLost
-        if (txtTypePattern.getText().equals("")) {
-            txtTypePattern.setText(defPattern);
-            txtTypePattern.setForeground(Color.lightGray);
-        }
-    }//GEN-LAST:event_txtTypePatternFocusLost
-
-    private void txtNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameFocusGained
-        if (txtName.getText().equals(defName)) {
-            updatingName = true;
-            txtName.setText("");
-            updatingName = false;
-            txtName.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_txtNameFocusGained
-
-    private void txtNotesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNotesFocusGained
-        if (txtNotes.getText().equals(defNotes)) {
-            txtNotes.setText("");
-            txtNotes.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_txtNotesFocusGained
-
-    private void txtTypePatternFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTypePatternFocusGained
-        if (txtTypePattern.getText().equals(defPattern)) {
-            txtTypePattern.setText("");
-            txtTypePattern.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_txtTypePatternFocusGained
-
     private void btnDelTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelTypeActionPerformed
         deleteType();
     }//GEN-LAST:event_btnDelTypeActionPerformed
@@ -682,20 +604,6 @@ public class ScrTypes extends PDialog {
         Window window = ScrDeclensionGenSetup.run(core, curNode.getId());
         childFrames.add(window);
     }//GEN-LAST:event_btnAutogenActionPerformed
-
-    private void txtGlossFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtGlossFocusGained
-        if (txtGloss.getText().equals(defGloss)) {
-            txtGloss.setText("");
-            txtGloss.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_txtGlossFocusGained
-
-    private void txtGlossFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtGlossFocusLost
-        if (txtGloss.getText().equals("")) {
-            txtGloss.setText(defGloss);
-            txtGloss.setForeground(Color.lightGray);
-        }
-    }//GEN-LAST:event_txtGlossFocusLost
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));

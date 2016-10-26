@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque
+ * Copyright (c) 2015-2016, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -201,6 +201,14 @@ public class PTextField extends JTextField {
         }
     }
 
+    /**
+     * Returns true if currently setting text (useful in constructed listeners)
+     * @return 
+     */
+    public boolean isSettingText() {
+        return curSetText;
+    }
+    
     @Override
     public final void setText(String t) {
         curSetText = true;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque
+ * Copyright (c) 2015-2016, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -30,6 +30,7 @@ import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PGDocument;
 import PolyGlot.CustomControls.PGTreeCellRenderer;
+import PolyGlot.CustomControls.PTextField;
 import PolyGlot.SoundRecorder;
 import java.awt.Color;
 import java.awt.Font;
@@ -72,9 +73,6 @@ import javax.swing.tree.TreeSelectionModel;
  * @author draque
  */
 public class ScrGrammarGuide extends PFrame {
-
-    private final String defSearch;
-    private final String defName;
     private final String defTime;
     private SoundRecorder soundRecorder;
     private boolean isUpdating;
@@ -95,8 +93,6 @@ public class ScrGrammarGuide extends PFrame {
      */
     public ScrGrammarGuide(DictCore _core) {
         isUpdating = false;
-        defSearch = "Search...";
-        defName = "Name...";
         defTime = "00:00:00";
         core = _core;
         playButtonUp = getButtonSizeIcon(
@@ -213,7 +209,7 @@ public class ScrGrammarGuide extends PFrame {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
-        txtName = new javax.swing.JTextField();
+        txtName = new PTextField(core, true, "-- Name --");
         jPanel3 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         cmbFonts = new javax.swing.JComboBox();
@@ -232,7 +228,7 @@ public class ScrGrammarGuide extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         treChapList = new javax.swing.JTree();
-        txtSearch = new javax.swing.JTextField();
+        txtSearch = new PTextField(core, true, "-- Search --");
         jLabel1 = new javax.swing.JLabel();
         btnAddSection = new PButton("+");
         btnDelete = new PButton("-");
@@ -247,14 +243,6 @@ public class ScrGrammarGuide extends PFrame {
 
         txtName.setToolTipText("Name of chapter/section");
         txtName.setEnabled(false);
-        txtName.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtNameFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtNameFocusLost(evt);
-            }
-        });
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -453,15 +441,6 @@ public class ScrGrammarGuide extends PFrame {
         treChapList.setToolTipText("Chapter Guide");
         jScrollPane1.setViewportView(treChapList);
 
-        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtSearchFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtSearchFocusLost(evt);
-            }
-        });
-
         jLabel1.setText("Sections");
 
         btnAddSection.setToolTipText("Add a new section to a chapter");
@@ -542,20 +521,6 @@ public class ScrGrammarGuide extends PFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
-        txtSearch.setForeground(Color.black);
-        if (txtSearch.getText().equals(defSearch)) {
-            txtSearch.setText("");
-        }
-    }//GEN-LAST:event_txtSearchFocusGained
-
-    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
-        if (txtSearch.getText().equals("")) {
-            txtSearch.setText(defSearch);
-            txtSearch.setForeground(Color.gray);
-        }
-    }//GEN-LAST:event_txtSearchFocusLost
-
     private void btnRecordAudioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecordAudioActionPerformed
         recordAudio();
     }//GEN-LAST:event_btnRecordAudioActionPerformed
@@ -563,24 +528,6 @@ public class ScrGrammarGuide extends PFrame {
     private void btnPlayPauseAudioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayPauseAudioActionPerformed
         playPauseAudio();
     }//GEN-LAST:event_btnPlayPauseAudioActionPerformed
-
-    private void txtNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameFocusGained
-        if (txtName.getText().equals(defName)
-                && !isUpdating) {
-            txtName.setForeground(Color.black);
-            txtName.setText("");
-        }
-    }//GEN-LAST:event_txtNameFocusGained
-
-    private void txtNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameFocusLost
-        if (txtName.getText().isEmpty()
-                && !isUpdating) {
-            isUpdating = true;
-            txtName.setForeground(Color.gray);
-            txtName.setText(defName);
-            isUpdating = false;
-        }
-    }//GEN-LAST:event_txtNameFocusLost
 
     private void btnAddChapterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddChapterActionPerformed
         addChapter();
@@ -633,10 +580,6 @@ public class ScrGrammarGuide extends PFrame {
     private void setInitialValues() {
         treChapList.setCellRenderer(new PGTreeCellRenderer());
         treChapList.requestFocus();
-        txtSearch.setText(defSearch);
-        txtSearch.setForeground(Color.gray);
-        txtName.setText(defName);
-        txtName.setForeground(Color.gray);
         soundRecorder.setTimer(txtTimer);
         soundRecorder.setSlider(sldSoundPosition);
         txtSection.setDocument(new PGDocument(core.getPropertiesManager().getFontCon()));
@@ -889,11 +832,6 @@ public class ScrGrammarGuide extends PFrame {
             sldSoundPosition.setEnabled(false);
             txtTimer.setText(defTime);
             soundRecorder.setSound(null);
-            if (txtName.getText().equals(defName)) {
-                txtName.setForeground(Color.gray);
-            } else {
-                txtName.setForeground(Color.black);
-            }
         } else if (selection instanceof GrammarSectionNode) {
             GrammarSectionNode secNode = (GrammarSectionNode) selection;
             txtName.setText(secNode.getName());
@@ -908,11 +846,6 @@ public class ScrGrammarGuide extends PFrame {
             sldSoundPosition.setValue(0);
             sldSoundPosition.setEnabled(true);
             txtTimer.setText(defTime);
-            if (txtName.getText().equals(defName)) {
-                txtName.setForeground(Color.gray);
-            } else {
-                txtName.setForeground(Color.black);
-            }
             try {
                 soundRecorder.setSound(secNode.getRecording());
             } catch (Exception e) {
@@ -937,10 +870,10 @@ public class ScrGrammarGuide extends PFrame {
             
         } else {
             // if neither is selected, then the whole tree has been deleted by the user
-            txtName.setText(defName);
+            txtName.setText("");
             txtName.setForeground(Color.gray);
             txtName.setEnabled(false);
-            txtSection.setText(defName);
+            txtSection.setText("");
             txtSection.setEnabled(false);
             btnApply.setEnabled(false);
             txtFontSize.setEnabled(false);
@@ -1008,7 +941,7 @@ public class ScrGrammarGuide extends PFrame {
         
         model.reload();
         treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
-        txtName.setText(defName);
+        txtName.setText("");
         txtName.setForeground(Color.gray);
     }
     
@@ -1035,7 +968,7 @@ public class ScrGrammarGuide extends PFrame {
             InfoBox.warning("Section Creation", "Select a chapter in which to create a section.", this);
         }
         
-        txtName.setText(defName);
+        txtName.setText("");
         txtName.setForeground(Color.gray);
     }
     
@@ -1110,7 +1043,7 @@ public class ScrGrammarGuide extends PFrame {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
         
         if (txtSearch.getText().isEmpty()
-                || txtSearch.getText().equals(defSearch)) {
+                || ((PTextField)txtSearch).isDefaultText()) {
             populateSections();
             return;
         }
