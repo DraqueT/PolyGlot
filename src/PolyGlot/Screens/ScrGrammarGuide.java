@@ -1048,11 +1048,24 @@ public class ScrGrammarGuide extends PFrame {
             return;
         }
         
-        List<GrammarChapNode> chapters = core.getGrammarManager().getChapters();
-        Iterator<GrammarChapNode> chapIt = chapters.iterator();
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root Node");
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
+        for (GrammarChapNode curChap : core.getGrammarManager().getChapters()) {
+            GrammarChapNode srcChap = new GrammarChapNode(core.getGrammarManager());
+            
+            for (GrammarSectionNode : (Enumeration<GrammarSectionNode>)curChap.children()) {
+                
+            }
+            
+            if (srcChap.children().hasMoreElements()) {
+                
+            }
+        }
+        
+        List<GrammarChapNode> chapters = core.getGrammarManager().getChapters();
+        Iterator<GrammarChapNode> chapIt = chapters.iterator();
+        
         
         while (chapIt.hasNext()) {
             GrammarChapNode curChap = chapIt.next();
