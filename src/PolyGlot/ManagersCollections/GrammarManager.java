@@ -70,7 +70,7 @@ public class GrammarManager {
     public List<GrammarChapNode> getChapters() {
         return chapters;
     }
-    
+
     /**
      * Adds new chapter to index
      * @param newChap new chapter to add

@@ -20,6 +20,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.ManagersCollections.GrammarManager;
+import java.util.Enumeration;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -37,6 +38,12 @@ public class GrammarSectionNode extends DefaultMutableTreeNode {
         sectionText = "";
         recordingId = -1;
         manager = _manager;
+    }
+    
+    
+    @Override
+    public Enumeration children() {
+        return super.children();
     }
     
     public void setName(String _name) {

@@ -41,8 +41,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -73,6 +71,7 @@ import javax.swing.tree.TreeSelectionModel;
  * @author draque
  */
 public class ScrGrammarGuide extends PFrame {
+
     private final String defTime;
     private SoundRecorder soundRecorder;
     private boolean isUpdating;
@@ -111,18 +110,23 @@ public class ScrGrammarGuide extends PFrame {
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/add_button_pressed.png")));
         deleteButtonPressed = getButtonSizeIcon(
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button_pressed.png")));
-        
+
         initComponents();
-        txtSection.setCaret(new HighlightCaret());
         
+        DefaultMutableTreeNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
+        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+        treChapList.setModel(treeModel);
+        
+        txtSection.setCaret(new HighlightCaret());
+
         soundRecorder = new SoundRecorder(this);
         soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
-        
+
         setInitialValues();
         setupListeners();
         populateSections();
         treChapList.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        
+
         if (System.getProperty("os.name").startsWith("Mac")) {
             btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (⌘ +)");
             btnDelete.setToolTipText(btnDelete.getToolTipText() + " (⌘ -)");
@@ -131,12 +135,12 @@ public class ScrGrammarGuide extends PFrame {
             btnDelete.setToolTipText(btnDelete.getToolTipText() + " (CTRL -)");
         }
     }
-    
+
     @Override
     public boolean thisOrChildrenFocused() {
         return this.isFocusOwner();
     }
-    
+
     @Override
     public void updateAllValues(DictCore _core) {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
@@ -145,16 +149,16 @@ public class ScrGrammarGuide extends PFrame {
             setInitialValues();
             populateSections();
         }
-        
+
         populateProperties();
     }
-    
+
     @Override
     public void setupKeyStrokes() {
         addBindingsToPanelComponents(this.getRootPane());
         super.setupKeyStrokes();
     }
-    
+
     @Override
     public void addBindingToComponent(JComponent c) {
         Action addAction = new AbstractAction() {
@@ -184,16 +188,17 @@ public class ScrGrammarGuide extends PFrame {
         am.put(addKey, addAction);
         am.put(delKey, delAction);
     }
-    
+
     @Override
     public void dispose() {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
-        
+
         // stop playing sound if it exists
         if (soundRecorder != null && soundRecorder.isPlaying()) {
             try {
                 soundRecorder.playPause();
-            } catch (LineUnavailableException | IOException e) {}
+            } catch (LineUnavailableException | IOException e) {
+            }
         }
         super.dispose();
     }
@@ -563,7 +568,7 @@ public class ScrGrammarGuide extends PFrame {
             updateFontSize();
         }
     }//GEN-LAST:event_txtFontSizeKeyPressed
-    
+
     private void updateFontSize() {
         try {
             Integer.parseInt(txtFontSize.getText());
@@ -592,10 +597,10 @@ public class ScrGrammarGuide extends PFrame {
         } catch (FontFormatException | IOException e) {
             InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), this);
         }
-        
+
         cmbFonts.addItem(core.localLabel() + " Font");
         cmbFonts.addItem(core.getPropertiesManager().getFontCon().getName());
-        
+
         btnPlayPauseAudio.setText("");
         btnRecordAudio.setText("");
         btnAddSection.setText("");
@@ -605,7 +610,7 @@ public class ScrGrammarGuide extends PFrame {
         btnDelete.setIcon(getButtonSizeIcon(deleteButton, 21, 21));
         btnDelete.setPressedIcon(getButtonSizeIcon(deleteButtonPressed, 21, 21));
         btnAddSection.setContentAreaFilled(false);
-        btnDelete.setContentAreaFilled(false);        
+        btnDelete.setContentAreaFilled(false);
     }
 
     /**
@@ -622,19 +627,19 @@ public class ScrGrammarGuide extends PFrame {
         } else {
             StyleConstants.setFontFamily(aset, conFont.getFamily());
         }
-        
+
         StyleConstants.setForeground(aset,
                 FormattedTextHelper.textToColor((String) cmbFontColor.getSelectedItem()));
-        
+
         StyleConstants.setFontSize(aset, Integer.parseInt(txtFontSize.getText()));
-        
+
         txtSection.setCharacterAttributes(aset, true);
-        
+
         int caretStart = txtSection.getSelectionStart();
         int caretEnd = txtSection.getSelectionEnd();
-        
+
         // logic for ensuring LTR enforcement if no text is currently selected
-        if (caretStart == caretEnd 
+        if (caretStart == caretEnd
                 && core.getPropertiesManager().isEnforceRTL()) {
             StyledDocument doc = txtSection.getStyledDocument();
             try {
@@ -645,13 +650,13 @@ public class ScrGrammarGuide extends PFrame {
                         + e.getLocalizedMessage(), this);
             }
         }
-        
+
         if (core.getPropertiesManager().isEnforceRTL()) {
             // this ensures that the correct sections are displayed RTL
             savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
             populateProperties();
         }
-        
+
         txtSection.requestFocus();
         txtSection.setSelectionStart(caretStart);
         txtSection.setSelectionEnd(caretEnd);
@@ -668,14 +673,14 @@ public class ScrGrammarGuide extends PFrame {
                     populateFromSearch();
                 }
             }
-            
+
             @Override
             public void removeUpdate(DocumentEvent e) {
                 if (!isUpdating) {
                     populateFromSearch();
                 }
             }
-            
+
             @Override
             public void insertUpdate(DocumentEvent e) {
                 if (!isUpdating) {
@@ -690,14 +695,14 @@ public class ScrGrammarGuide extends PFrame {
                     updateName();
                 }
             }
-            
+
             @Override
             public void removeUpdate(DocumentEvent e) {
                 if (!isUpdating) {
                     updateName();
                 }
             }
-            
+
             @Override
             public void insertUpdate(DocumentEvent e) {
                 if (!isUpdating) {
@@ -713,7 +718,7 @@ public class ScrGrammarGuide extends PFrame {
                     Object oldNode = oldPath.getPathComponent(oldPath.getPathCount() - 1);
                     savePropsToNode((DefaultMutableTreeNode) oldNode);
                 }
-                
+
                 closeAllPlayRecord();
                 populateProperties();
             }
@@ -772,15 +777,15 @@ public class ScrGrammarGuide extends PFrame {
     private void updateName() {
         boolean localUpdating = isUpdating;
         isUpdating = true;
-        
+
         Object selection = treChapList.getLastSelectedPathComponent();
-        
+
         if (selection instanceof GrammarSectionNode) {
             ((GrammarSectionNode) selection).setName(txtName.getText());
         } else if (selection instanceof GrammarChapNode) {
             ((GrammarChapNode) selection).setName(txtName.getText());
         }
-        
+
         treChapList.repaint();
         isUpdating = localUpdating;
     }
@@ -812,9 +817,9 @@ public class ScrGrammarGuide extends PFrame {
         if (isUpdating) {
             return;
         }
-        
+
         isUpdating = true;
-        
+
         Object selection = treChapList.getLastSelectedPathComponent();
         if (selection instanceof GrammarChapNode) {
             GrammarChapNode chapNode = (GrammarChapNode) selection;
@@ -867,7 +872,7 @@ public class ScrGrammarGuide extends PFrame {
                     panSection.getVerticalScrollBar().setValue(0);
                 }
             });
-            
+
         } else {
             // if neither is selected, then the whole tree has been deleted by the user
             txtName.setText("");
@@ -886,45 +891,45 @@ public class ScrGrammarGuide extends PFrame {
             txtTimer.setText(defTime);
             soundRecorder.setSound(null);
         }
-        
+
         isUpdating = false;
     }
-    
+
     private void deleteNode() {
         Object selection = treChapList.getLastSelectedPathComponent();
         DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-        
+
         if (selection == null) {
             return;
         }
-        
+
         if (InfoBox.yesNoCancel("Confirmation", "Really delete? This cannot be undone.", this)
                 != JOptionPane.YES_OPTION) {
             return;
         }
-        
+
         if (selection instanceof GrammarSectionNode) {
             GrammarSectionNode curNode = (GrammarSectionNode) selection;
             GrammarChapNode parent = (GrammarChapNode) curNode.getParent();
-            parent.remove(curNode);
+            parent.doRemove(curNode);
             treChapList.expandPath(new TreePath(model.getPathToRoot(parent)));
             treChapList.setSelectionPath(new TreePath(model.getPathToRoot(parent)));
         } else if (selection instanceof GrammarChapNode) {
-            root.remove((GrammarChapNode) selection);
+            ((GrammarChapNode)root).doRemove((GrammarChapNode) selection);
             core.getGrammarManager().removeChapter((GrammarChapNode) selection);
         }
-        
+
         model.reload(root);
     }
-    
+
     private void addChapter() {
         DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
         Object selection = treChapList.getLastSelectedPathComponent();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
         GrammarChapNode newNode = new GrammarChapNode(core.getGrammarManager());
         newNode.setName("NEW CHAPTER");
-        
+
         if (selection instanceof GrammarSectionNode) {
             GrammarChapNode parent = (GrammarChapNode) ((GrammarSectionNode) selection).getParent();
             int index = root.getIndex(parent);
@@ -938,17 +943,17 @@ public class ScrGrammarGuide extends PFrame {
             root.add(newNode);
             core.getGrammarManager().addChapter(newNode);
         }
-        
+
         model.reload();
         treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
         txtName.setText("");
         txtName.setForeground(Color.gray);
     }
-    
+
     private void addSection() {
         DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
         Object selection = treChapList.getLastSelectedPathComponent();
-        
+
         if (selection instanceof GrammarSectionNode) {
             GrammarChapNode parent = (GrammarChapNode) ((GrammarSectionNode) selection).getParent();
             int index = parent.getIndex((GrammarSectionNode) selection);
@@ -967,11 +972,11 @@ public class ScrGrammarGuide extends PFrame {
         } else {
             InfoBox.warning("Section Creation", "Select a chapter in which to create a section.", this);
         }
-        
+
         txtName.setText("");
         txtName.setForeground(Color.gray);
     }
-    
+
     private void playPauseAudio() {
         try {
             soundRecorder.playPause();
@@ -980,7 +985,7 @@ public class ScrGrammarGuide extends PFrame {
             //e.printStackTrace();
         }
     }
-    
+
     private void recordAudio() {
         try {
             if (soundRecorder.isRecording()) {
@@ -992,7 +997,7 @@ public class ScrGrammarGuide extends PFrame {
                         return;
                     }
                 }
-                
+
                 soundRecorder.beginRecording();
             }
         } catch (Exception e) {
@@ -1000,7 +1005,7 @@ public class ScrGrammarGuide extends PFrame {
             //e.printStackTrace();
         }
     }
-    
+
     public static ScrGrammarGuide run(DictCore _core) {
         final ScrGrammarGuide s = new ScrGrammarGuide(_core);
         s.setupKeyStrokes();
@@ -1013,7 +1018,7 @@ public class ScrGrammarGuide extends PFrame {
                 s.requestFocus();
             }
         });
-        
+
         return s;
     }
 
@@ -1021,17 +1026,14 @@ public class ScrGrammarGuide extends PFrame {
      * populates all grammar chapters and sections
      */
     private void populateSections() {
-        List<GrammarChapNode> chapters = core.getGrammarManager().getChapters();
-        Iterator<GrammarChapNode> chapIt = chapters.iterator();
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root Node");
+        DefaultMutableTreeNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
-        
-        while (chapIt.hasNext()) {
-            GrammarChapNode curChap = chapIt.next();
+
+        for (GrammarChapNode curChap : core.getGrammarManager().getChapters()) {
             rootNode.add(curChap);
         }
-        
+
         treeModel.reload(rootNode);
         treChapList.setLargeModel(true);
     }
@@ -1041,58 +1043,30 @@ public class ScrGrammarGuide extends PFrame {
      */
     private void populateFromSearch() {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
-        
-        if (txtSearch.getText().isEmpty()
-                || ((PTextField)txtSearch).isDefaultText()) {
+        GrammarChapNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
+
+        if (((PTextField)txtSearch).isDefaultText() || txtSearch.getText().equals("")) {
             populateSections();
             return;
         }
         
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root Node");
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
         for (GrammarChapNode curChap : core.getGrammarManager().getChapters()) {
             GrammarChapNode srcChap = new GrammarChapNode(core.getGrammarManager());
-            
-            for (GrammarSectionNode : (Enumeration<GrammarSectionNode>)curChap.children()) {
-                
+            srcChap.setName(curChap.getName() + "TEST");
+
+            Enumeration sections = curChap.children(txtSearch.getText());
+            while (sections.hasMoreElements()) {
+                GrammarSectionNode curSec = (GrammarSectionNode) sections.nextElement();
+                srcChap.add(curSec);                
             }
-            
+
             if (srcChap.children().hasMoreElements()) {
-                
+                rootNode.add(srcChap);
             }
         }
-        
-        List<GrammarChapNode> chapters = core.getGrammarManager().getChapters();
-        Iterator<GrammarChapNode> chapIt = chapters.iterator();
-        
-        
-        while (chapIt.hasNext()) {
-            GrammarChapNode curChap = chapIt.next();
-            if (!chapMatchSrc(curChap, txtSearch.getText())) {
-                continue;
-            }
-            rootNode.add(curChap);
-        }
-        
         treeModel.reload(rootNode);
-        treChapList.setLargeModel(true);
-    }
-    
-    private boolean chapMatchSrc(GrammarChapNode curChap, String src) {
-        if (curChap.getName().toLowerCase().contains(src.toLowerCase())) {
-            return true;
-        }
-        
-        Enumeration sections = curChap.children();
-        while (sections.hasMoreElements()) {
-            GrammarSectionNode curSec = (GrammarSectionNode) sections.nextElement();
-            if (curSec.getName().toLowerCase().contains(src.toLowerCase()) 
-                    || curSec.getSectionText().toLowerCase().contains(src.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

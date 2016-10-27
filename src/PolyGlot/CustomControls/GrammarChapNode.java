@@ -20,38 +20,105 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.ManagersCollections.GrammarManager;
+import java.util.Enumeration;
+import java.util.Vector;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 
 /**
  * This node represents a chapter within the grammar recording section of
  * PolyGlot
+ *
  * @author draque
  */
+@SuppressWarnings( "deprecation" )
 public class GrammarChapNode extends DefaultMutableTreeNode {
+
     private String name = "";
     private GrammarSectionNode buffer;
     private final GrammarManager parentManager;
-    
+
     public GrammarChapNode(GrammarManager _parentManager) {
         parentManager = _parentManager;
         buffer = new GrammarSectionNode(parentManager);
     }
-    
+
+    public GrammarChapNode(String name, GrammarManager _parentManager) {
+        super(name);
+        parentManager = _parentManager;
+    }
+
     public void setName(String _name) {
         name = _name;
     }
+
     public String getName() {
         return name;
     }
+
+    public Enumeration children(String _filter) {
+        return internalChildren(_filter);
+    }
     
+    @Override
+    /**
+     * Overriden to prevent unwanted removals
+     */
+    public void remove(MutableTreeNode node) {
+        // do nothing (preserves tree)
+    }
+
+    /**
+     * Actual removal code
+     * @param node node to remove
+     */
+    public void doRemove(MutableTreeNode node) {
+        super.remove(node);
+    }
+    
+    private Enumeration internalChildren(String filter) {
+        Enumeration ret;
+        if (filter.equals("") || children == null) {
+            ret = super.children();
+        } else if (children.elementAt(0) instanceof GrammarSectionNode) {
+            Vector<GrammarSectionNode> v = new Vector<>();
+
+            for (Object curObject : children.toArray()) {
+                GrammarSectionNode curNode = (GrammarSectionNode)curObject;
+                if (curNode.getName().toLowerCase().contains(filter.toLowerCase())
+                        || curNode.getSectionText().toLowerCase().contains(filter.toLowerCase())) {
+                    v.add(curNode);
+                }
+            }
+
+            ret = v.elements();
+        } else if (children.elementAt(0) instanceof GrammarChapNode) {
+            Vector<GrammarChapNode> v = new Vector<>();
+            
+            for (GrammarChapNode curNode : (GrammarChapNode[]) children.toArray()) {
+                if (curNode.getName().toLowerCase().contains(filter.toLowerCase())) {
+                    v.add(curNode);
+                }
+            }
+            
+            ret = v.elements();
+        } else {
+            // return null if unknown child. Error will bubble above this.
+            ret = null;
+        }
+        
+        return ret;
+    }
+
     /**
      * fetches section buffer
+     *
      * @return section buffer
      */
     public GrammarSectionNode getBuffer() {
         return buffer;
     }
-    
+
     /**
      * inserts current section buffer to sections and clears it
      */
@@ -59,14 +126,14 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
         this.add(buffer);
         clear();
     }
-    
+
     /**
      * clears current buffer
      */
     public void clear() {
         buffer = new GrammarSectionNode(parentManager);
     }
-    
+
     @Override
     public String toString() {
         return name;
