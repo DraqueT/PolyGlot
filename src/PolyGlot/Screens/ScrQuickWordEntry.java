@@ -142,6 +142,7 @@ public final class ScrQuickWordEntry extends PDialog {
 
         txtLocalWord.addKeyListener(enterListener);
         txtProc.addKeyListener(enterListener);
+        cmbType.addKeyListener(enterListener);
     }
         
     /**
