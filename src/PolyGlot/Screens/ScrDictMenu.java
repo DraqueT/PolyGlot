@@ -66,7 +66,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private ScrLexicon scrLexicon;
     private ScrGrammarGuide scrGrammar;
     private ScrLogoDetails scrLogos;
-    private ScrThesaurus scrThes;
+    private ScrFamilies scrFam;
     private ScrIPARefChart scrIPA;
     private boolean cleanSave = true;
     private boolean holdFront = false;
@@ -99,7 +99,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         ret = ret || (scrLexicon != null && scrLexicon.thisOrChildrenFocused());
         ret = ret || (scrGrammar != null && scrGrammar.thisOrChildrenFocused());
         ret = ret || (scrLogos != null && scrLogos.thisOrChildrenFocused());
-        ret = ret || (scrThes != null && scrThes.thisOrChildrenFocused());
+        ret = ret || (scrFam != null && scrFam.thisOrChildrenFocused());
         return ret;
     }
 
@@ -142,9 +142,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             options.addScreenUp(scrLogos.getClass().getName());
             scrLogos.dispose();
         }
-        if (scrThes != null && !scrThes.isDisposed() && scrThes.isVisible()) {
-            options.addScreenUp(scrThes.getClass().getName());
-            scrThes.dispose();
+        if (scrFam != null && !scrFam.isDisposed() && scrFam.isVisible()) {
+            options.addScreenUp(scrFam.getClass().getName());
+            scrFam.dispose();
         }
         if (scrIPA != null && !scrIPA.isDisposed() && scrIPA.isVisible()) {
             options.addScreenUp(scrIPA.getClass().getName());
@@ -168,9 +168,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             } else if (leftOpen.equals(PGTUtil.scrNameLogo)) {
                 btnLogos.setSelected(true);
                 logoHit();
-            } else if (leftOpen.equals(PGTUtil.scrNameThes)) {
-                btnThes.setSelected(true);
-                thesHit();
+            } else if (leftOpen.equals(PGTUtil.scrNameFam)) {
+                btnFam.setSelected(true);
+                famHit();
             } else if (leftOpen.equals(PGTUtil.scrIPARefChart)) {
                 IPAHit();
             } else {
@@ -504,9 +504,9 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 && !scrLogos.isDisposed()) {
             scrLogos.updateAllValues(_core);
         }
-        if (scrThes != null
-                && !scrThes.isDisposed()) {
-            scrThes.updateAllValues(_core);
+        if (scrFam != null
+                && !scrFam.isDisposed()) {
+            scrFam.updateAllValues(_core);
         }
 
         this.setTitle(title);
@@ -746,23 +746,23 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         }
     }
 
-    private void thesHit() {
-        if (btnThes.isSelected()) {
+    private void famHit() {
+        if (btnFam.isSelected()) {
             try {
-                if (scrThes == null
-                        || scrThes.isDisposed()) {
-                    scrThes = ScrThesaurus.run(core, this);
-                    bindButtonToWindow(scrThes, btnThes);
+                if (scrFam == null
+                        || scrFam.isDisposed()) {
+                    scrFam = ScrFamilies.run(core, this);
+                    bindButtonToWindow(scrFam, btnFam);
                 }
 
-                scrThes.setVisible(true);
+                scrFam.setVisible(true);
             } catch (Exception e) {
-                localError("Open Window Error", "Error Opening Thesaurus: "
+                localError("Open Window Error", "Error Opening Families: "
                         + e.getLocalizedMessage());
             }
         } else {
             try {
-                scrThes.setVisible(false);
+                scrFam.setVisible(false);
             } catch (Exception e) {
                 localInfo("Close Window Error", "Error Closing Grammar Guide: "
                         + e.getLocalizedMessage());
@@ -921,7 +921,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         btnClasses = new javax.swing.JToggleButton();
         btnQuickEntry = new javax.swing.JToggleButton();
         btnLogos = new javax.swing.JToggleButton();
-        btnThes = new javax.swing.JToggleButton();
+        btnFam = new javax.swing.JToggleButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnuNewLocal = new javax.swing.JMenuItem();
@@ -1008,11 +1008,11 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         });
 
-        btnThes.setText("Thesaurus");
-        btnThes.setToolTipText("The thesaurus provides an easy way to give groupings and store lexical references.");
-        btnThes.addActionListener(new java.awt.event.ActionListener() {
+        btnFam.setText("Lexical Families");
+        btnFam.setToolTipText("This is a place to store families of related words in a nested, searchable tre structure.");
+        btnFam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnThesActionPerformed(evt);
+                btnFamActionPerformed(evt);
             }
         });
 
@@ -1168,7 +1168,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLangProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnThes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnFam, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -1188,7 +1188,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnLogos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnThes)
+                .addComponent(btnFam)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1251,11 +1251,11 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnLogosActionPerformed
 
-    private void btnThesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThesActionPerformed
+    private void btnFamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFamActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        thesHit();
+        famHit();
         setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_btnThesActionPerformed
+    }//GEN-LAST:event_btnFamActionPerformed
 
     private void mnuNewLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewLocalActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -1396,12 +1396,12 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnClasses;
+    private javax.swing.JToggleButton btnFam;
     private javax.swing.JToggleButton btnGrammar;
     private javax.swing.JToggleButton btnLangProp;
     private javax.swing.JToggleButton btnLexicon;
     private javax.swing.JToggleButton btnLogos;
     private javax.swing.JToggleButton btnQuickEntry;
-    private javax.swing.JToggleButton btnThes;
     private javax.swing.JToggleButton btnTypes;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

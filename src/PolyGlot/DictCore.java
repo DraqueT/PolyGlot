@@ -26,7 +26,7 @@ import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.ManagersCollections.GrammarManager;
 import PolyGlot.ManagersCollections.PronunciationMgr;
 import PolyGlot.ManagersCollections.LogoCollection;
-import PolyGlot.ManagersCollections.ThesaurusManager;
+import PolyGlot.ManagersCollections.FamilyManager;
 import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.ManagersCollections.TypeCollection;
 import PolyGlot.ManagersCollections.ConWordCollection;
@@ -55,7 +55,7 @@ public class DictCore {
     private final DeclensionManager declensionMgr;
     private final PropertiesManager propertiesManager;
     private final PronunciationMgr pronuncMgr;
-    private final ThesaurusManager thesManager;
+    private final FamilyManager famManager;
     private final LogoCollection logoCollection;
     private final GrammarManager grammarManager;
     private final OptionsManager optionsManager;
@@ -70,7 +70,7 @@ public class DictCore {
         declensionMgr = new DeclensionManager();
         propertiesManager = new PropertiesManager();
         pronuncMgr = new PronunciationMgr(this);
-        thesManager = new ThesaurusManager(this);
+        famManager = new FamilyManager(this);
         logoCollection = new LogoCollection(this);
         grammarManager = new GrammarManager();
         optionsManager = new OptionsManager(this);
@@ -243,12 +243,12 @@ public class DictCore {
     }
 
     /**
-     * gets thesaurus manager
+     * gets family manager
      *
-     * @return ThesaurusManager object from core
+     * @return FamilyManager object from core
      */
-    public ThesaurusManager getThesManager() {
-        return thesManager;
+    public FamilyManager getFamManager() {
+        return famManager;
     }
 
     public LogoCollection getLogoCollection() {
@@ -391,8 +391,8 @@ public class DictCore {
         grammarManager.writeXML(doc, rootElement);
         wordPropCollection.writeXML(doc, rootElement);
 
-        // write thesaurus entries
-        rootElement.appendChild(thesManager.writeToSaveXML(doc));
+        // write family entries
+        rootElement.appendChild(famManager.writeToSaveXML(doc));
 
         // have IOHandler write constructed document to file
         IOHandler.writeFile(_fileName, doc, this);

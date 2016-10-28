@@ -19,42 +19,42 @@
  */
 package PolyGlot.CustomControls;
 
-import PolyGlot.Nodes.ThesNode;
+import PolyGlot.Nodes.FamNode;
 import java.util.Iterator;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
 /**
- * This overrides the typical tree node to link it directly to thesaurus nodes
+ * This overrides the typical tree node to link it directly to family nodes
  *
  * @author draque
  */
-public class ThesTreeNode extends DefaultMutableTreeNode {
+public class FamTreeNode extends DefaultMutableTreeNode {
 
-    ThesNode thesNode;
+    FamNode famNode;
 
     /**
-     * constructs any child ThesTreeNode
+     * constructs any child FamTreeNode
      *
      * @param parent
      */
-    public ThesTreeNode(ThesNode parent) {
-        thesNode = new ThesNode(parent, parent.getManager());
+    public FamTreeNode(FamNode parent) {
+        famNode = new FamNode(parent, parent.getManager());
     }
 
     /**
      * constructor allows for root creation without parent
      */
-    public ThesTreeNode() {
+    public FamTreeNode() {
     }
 
     /**
-     * Sets node to ThesNode value and test to object's value
+     * Sets node to FamNode value and test to object's value
      *
      * @param _node node to set from
      */
-    public void setNode(ThesNode _node) {
-        thesNode = _node;
+    public void setNode(FamNode _node) {
+        famNode = _node;
         setUserObject(_node.getValue());
     }
 
@@ -63,29 +63,25 @@ public class ThesTreeNode extends DefaultMutableTreeNode {
      *
      * @param _myRoot
      */
-    public void setAsRootNode(ThesNode _myRoot) {
+    public void setAsRootNode(FamNode _myRoot) {
         setNode(_myRoot);
 
-        Iterator<ThesNode> thesIt = _myRoot.getNodes();
-
-        while (thesIt.hasNext()) {
-            ThesNode curNode = thesIt.next();
-
-            ThesTreeNode treeNode = new ThesTreeNode(_myRoot);
+        for (FamNode curNode : _myRoot.getNodes()) {
+            FamTreeNode treeNode = new FamTreeNode(_myRoot);
             treeNode.setAsRootNode(curNode);
 
             add(treeNode);
         }
     }
 
-    public ThesNode getNode() {
-        return thesNode;
+    public FamNode getNode() {
+        return famNode;
     }
 
     @Override
     public void setUserObject(Object userObject) {
         if (userObject instanceof String) {
-            thesNode.setValue((String) userObject);
+            famNode.setValue((String) userObject);
         }
         super.setUserObject(userObject);
     }
@@ -93,11 +89,11 @@ public class ThesTreeNode extends DefaultMutableTreeNode {
     @Override
     public void insert(MutableTreeNode child, int index) {
         // only modify node if new. ID = 0 indicates loading from existing tree
-        if (((ThesTreeNode) child).getNode().getId() == 1) {
-            thesNode.addNode(((ThesTreeNode) child).getNode());
+        if (((FamTreeNode) child).getNode().getId() == 1) {
+            famNode.addNode(((FamTreeNode) child).getNode());
             
             // once read, this is no longer a new node
-            ((ThesTreeNode) child).getNode().setId(0);
+            ((FamTreeNode) child).getNode().setId(0);
         }
 
         super.insert(child, index);
@@ -110,7 +106,7 @@ public class ThesTreeNode extends DefaultMutableTreeNode {
      */
     public void removeFromParent() {
         // if this is the root node, return
-        thesNode.removeFromParent();
+        famNode.removeFromParent();
 
         // handled elsewhere. This method is now just for internal cleanup.
         //super.removeFromParent();

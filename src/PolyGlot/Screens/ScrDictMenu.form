@@ -194,7 +194,7 @@
           <Component id="btnGrammar" alignment="0" max="32767" attributes="0"/>
           <Component id="btnLangProp" alignment="0" max="32767" attributes="0"/>
           <Component id="btnLogos" alignment="0" max="32767" attributes="0"/>
-          <Component id="btnThes" max="32767" attributes="0"/>
+          <Component id="btnFam" max="32767" attributes="0"/>
           <Component id="btnClasses" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
@@ -215,7 +215,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnLogos" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnThes" min="-2" max="-2" attributes="0"/>
+              <Component id="btnFam" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -285,13 +285,13 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLogosActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JToggleButton" name="btnThes">
+    <Component class="javax.swing.JToggleButton" name="btnFam">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Thesaurus"/>
-        <Property name="toolTipText" type="java.lang.String" value="The thesaurus provides an easy way to give groupings and store lexical references."/>
+        <Property name="text" type="java.lang.String" value="Lexical Families"/>
+        <Property name="toolTipText" type="java.lang.String" value="This is a place to store families of related words in a nested, searchable tre structure."/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnThesActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFamActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

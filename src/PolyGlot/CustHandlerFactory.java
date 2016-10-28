@@ -25,12 +25,12 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.Nodes.LogoNode;
 import PolyGlot.Nodes.DeclensionNode;
-import PolyGlot.Nodes.ThesNode;
+import PolyGlot.Nodes.FamNode;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.ManagersCollections.GrammarManager;
 import PolyGlot.ManagersCollections.PronunciationMgr;
-import PolyGlot.ManagersCollections.ThesaurusManager;
+import PolyGlot.ManagersCollections.FamilyManager;
 import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.GrammarChapNode;
@@ -174,9 +174,9 @@ public class CustHandlerFactory {
             boolean bdimId = false;
             boolean bdimMand = false;
             boolean bdimName = false;
-            boolean bthesName = false;
-            boolean bthesNotes = false;
-            boolean bthesWord = false;
+            boolean bfamName = false;
+            boolean bfamNotes = false;
+            boolean bfamWord = false;
             boolean bignoreCase = false;
             boolean bdisableProcRegex = false;
             boolean bwordoverAutoDec = false;
@@ -221,7 +221,7 @@ public class CustHandlerFactory {
             DeclensionManager declensionMgr = core.getDeclensionManager();
             PronunciationMgr pronuncMgr = core.getPronunciationMgr();
             PropertiesManager propertiesManager = core.getPropertiesManager();
-            ThesaurusManager thesMgr = core.getThesManager();
+            FamilyManager famMgr = core.getFamManager();
 
             @Override
             public void startElement(String uri, String localName,
@@ -344,14 +344,14 @@ public class CustHandlerFactory {
                     bdimName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionComDimIdXID)) {
                     bDecCombId = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.thesNameXID)) {
-                    bthesName = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.thesNodeXID)) {
-                    thesMgr.buildNewBuffer();
-                } else if (qName.equalsIgnoreCase(PGTUtil.thesNotesXID)) {
-                    bthesNotes = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.thesWordXID)) {
-                    bthesWord = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.famNameXID)) {
+                    bfamName = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.famNodeXID)) {
+                    famMgr.buildNewBuffer();
+                } else if (qName.equalsIgnoreCase(PGTUtil.famNotesXID)) {
+                    bfamNotes = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.famWordXID)) {
+                    bfamWord = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropIgnoreCaseXID)) {
                     bignoreCase = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropDisableProcRegexXID)) {
@@ -631,14 +631,14 @@ public class CustHandlerFactory {
                     bdimMand = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.dimensionNameXID)) {
                     bdimName = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.thesNameXID)) {
-                    bthesName = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.thesNodeXID)) {
-                    thesMgr.bufferDone();
-                } else if (qName.equalsIgnoreCase(PGTUtil.thesNotesXID)) {
-                    bthesNotes = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.thesWordXID)) {
-                    bthesWord = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.famNameXID)) {
+                    bfamName = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.famNodeXID)) {
+                    famMgr.bufferDone();
+                } else if (qName.equalsIgnoreCase(PGTUtil.famNotesXID)) {
+                    bfamNotes = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.famWordXID)) {
+                    bfamWord = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropIgnoreCaseXID)) {
                     bignoreCase = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropDisableProcRegexXID)) {
@@ -909,21 +909,21 @@ public class CustHandlerFactory {
                     DeclensionDimension dimBuffer = declensionMgr.getBuffer().getBuffer();
                     dimBuffer.setValue(dimBuffer.getValue()
                             + new String(ch, start, length));
-                } else if (bthesName) {
-                    ThesNode thesBuffer = thesMgr.getBuffer();
-                    thesBuffer.setValue(thesBuffer.getValue()
+                } else if (bfamName) {
+                    FamNode famBuffer = famMgr.getBuffer();
+                    famBuffer.setValue(famBuffer.getValue()
                             + new String(ch, start, length));
-                } else if (bthesNotes) {
-                    thesMgr.getBuffer().setNotes(new String(ch, start, length));
-                    bthesNotes = false;
-                } else if (bthesWord) {
+                } else if (bfamNotes) {
+                    famMgr.getBuffer().setNotes(new String(ch, start, length));
+                    bfamNotes = false;
+                } else if (bfamWord) {
                     try {
-                        thesMgr.getBuffer().addWord(core.getWordCollection().getNodeById(
+                        famMgr.getBuffer().addWord(core.getWordCollection().getNodeById(
                                 Integer.parseInt(new String(ch, start, length))));
                     } catch (Exception e) {
-                        warningLog += "\nThesaurus load error: " + e.getLocalizedMessage();
+                        warningLog += "\nFamily load error: " + e.getLocalizedMessage();
                     }
-                    bthesWord = false;
+                    bfamWord = false;
                 } else if (bignoreCase) {
                     core.getPropertiesManager().setIgnoreCase(new String(ch, start, length).equals("T"));
                     bignoreCase = false;

@@ -26,10 +26,10 @@ import java.awt.Component;
  *
  * @author draque
  */
-public class ThesComponent extends Component{
+public class FamComponent extends Component{
     private final ConWord word;
     
-    public ThesComponent(ConWord _word) {
+    public FamComponent(ConWord _word) {
         word = _word;
     }
     

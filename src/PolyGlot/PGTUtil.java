@@ -102,11 +102,11 @@ public class PGTUtil {
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";
     
-    // thesaurus properties
-    public static final String thesNodeXID = "thesNode";
-    public static final String thesNotesXID = "thesNotes";
-    public static final String thesNameXID = "thesName";
-    public static final String thesWordXID = "thesWord";
+    // family properties
+    public static final String famNodeXID = "thesNode";
+    public static final String famNotesXID = "thesNotes";
+    public static final String famNameXID = "thesName";
+    public static final String famWordXID = "thesWord";
     
     // autodeclansion generation properties
     public static final String decGenRuleXID = "decGenRule";
@@ -191,7 +191,7 @@ public class PGTUtil {
     public static final String scrNameLexicon = ScrLexicon.class.getName();
     public static final String scrNameGrammar = ScrGrammarGuide.class.getName();
     public static final String scrNameLogo = ScrLogoDetails.class.getName();
-    public static final String scrNameThes = ScrThesaurus.class.getName();
+    public static final String scrNameFam = ScrFamilies.class.getName();
     public static final String scrIPARefChart = ScrIPARefChart.class.getName();
     
     // int constants...

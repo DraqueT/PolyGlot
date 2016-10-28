@@ -19,7 +19,7 @@
  */
 package PolyGlot.Nodes;
 
-import PolyGlot.ManagersCollections.ThesaurusManager;
+import PolyGlot.ManagersCollections.FamilyManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -29,12 +29,12 @@ import java.util.List;
  *
  * @author draque
  */
-public class ThesNode extends DictNode {
-    private final List<ThesNode> subNodes = new ArrayList<>();
+public class FamNode extends DictNode {
+    private final List<FamNode> subNodes = new ArrayList<>();
     private final List<ConWord> words = new ArrayList<>();
-    final private ThesNode parent;
+    final private FamNode parent;
     private String notes = "";
-    private final ThesaurusManager manager;
+    private final FamilyManager manager;
 
     /**
      * sets notes
@@ -46,9 +46,9 @@ public class ThesNode extends DictNode {
     
     /**
      * Gets node's parent
-     * @return ThesNode representing node's parent. null if root
+     * @return FamNode representing node's parent. null if root
      */
-    public ThesNode getParent() {
+    public FamNode getParent() {
         return parent;
     }
     
@@ -65,7 +65,7 @@ public class ThesNode extends DictNode {
      * @param _parent node's parent (null if root)
      * @param _manager a link to the parent manager
      */    
-    public ThesNode(ThesNode _parent, ThesaurusManager _manager) {
+    public FamNode(FamNode _parent, FamilyManager _manager) {
         parent = _parent;
         manager = _manager;
     }
@@ -76,7 +76,7 @@ public class ThesNode extends DictNode {
      * @param _value node's string value
      * @param _manager A link to the parent manager
      */
-    public ThesNode(ThesNode _parent, String _value, ThesaurusManager _manager) {
+    public FamNode(FamNode _parent, String _value, FamilyManager _manager) {
         parent = _parent;
         this.setValue(_value);
         manager = _manager;
@@ -89,19 +89,19 @@ public class ThesNode extends DictNode {
     
     /**
      * gets node's manager
-     * @return ThesaurusManager
+     * @return Family Manager
      */
-    public ThesaurusManager getManager() {
+    public FamilyManager getManager() {
         return manager;
     }
     
     /**
-     * NOT IMPLEMENTED IN THESAURUSNODE
+     * NOT IMPLEMENTED IN FAMILYNODE
      * @param _node NOTHING
      */
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
-        throw new ClassCastException("setEqual should never be called on ThesNode instances.");
+        throw new ClassCastException("setEqual should never be called on FamNode instances.");
     }
         
     /**
@@ -164,10 +164,10 @@ public class ThesNode extends DictNode {
         
         List<ConWord> ret = new ArrayList(words);
         
-        Iterator<ThesNode> subIt = subNodes.iterator();
+        Iterator<FamNode> subIt = subNodes.iterator();
         
         while (subIt.hasNext()) {
-            ThesNode curNode = subIt.next();
+            FamNode curNode = subIt.next();
             
             Iterator<ConWord> wordIt = curNode.getWordsIncludeSubsInternal()
                     .iterator();
@@ -189,13 +189,13 @@ public class ThesNode extends DictNode {
      * gets all subnodes
      * @return alphabetically sorted iterator of all subnodes
      */
-    public Iterator<ThesNode> getNodes() {
+    public List<FamNode> getNodes() {
         Collections.sort(subNodes);
         
-        return subNodes.iterator();
+        return subNodes;
     }
     
-    public void addNode(ThesNode _node) {
+    public void addNode(FamNode _node) {
         subNodes.add(_node);
     }
     
@@ -217,7 +217,7 @@ public class ThesNode extends DictNode {
      * removes given child from this parent node
      * @param _child 
      */
-    public void removeChild(ThesNode _child) {
+    public void removeChild(FamNode _child) {
         subNodes.remove(_child);
     }
 }
