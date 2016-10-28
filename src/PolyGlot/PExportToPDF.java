@@ -21,6 +21,7 @@ package PolyGlot;
 
 import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.CustomControls.GrammarSectionNode;
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.PEntry;
@@ -69,6 +70,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Given a core dictionary, this class will print it to a PDF file.
@@ -95,7 +98,7 @@ public class PExportToPDF {
     private final DictCore core;
     private final String targetFile;
     private Document document;
-    private final byte[] conFontFile;
+    private byte[] conFontFile;
     private final byte[] unicodeFontFile;
     private final PdfFont conFont;
     private final PdfFont unicodeFont;
@@ -126,6 +129,14 @@ public class PExportToPDF {
         unicodeFont = PdfFontFactory.createFont(unicodeFontFile, PdfEncodings.IDENTITY_H, true);
         unicodeFont.setSubset(true);
 
+        if (conFontFile == null) {
+            try {
+                conFontFile = IOHandler.getFontFileArray(core.getPropertiesManager().getFontCon());
+            } catch (Exception ex) {
+                InfoBox.warning("Font Exception", "Unable to find font: check that text appears correctly.", null);
+            }
+        }
+        
         // Document Exception if unable to read font, IO exception if problem loading font binary
         if (conFontFile == null) {
             // If confont not specified, assume that the conlang requires unicode characters

@@ -476,6 +476,10 @@ public class IOHandler {
         }
     }
 
+    public static byte[] getFontFileArray(Font font) throws Exception {
+        return Files.readAllBytes(getFontFile(font).toPath());
+    }
+    
     /**
      * gets the file of the current conlang font from the user's system
      *
