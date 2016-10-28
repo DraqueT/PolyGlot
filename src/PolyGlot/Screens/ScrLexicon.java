@@ -941,19 +941,24 @@ public final class ScrLexicon extends PFrame {
                 saveName();
             }
         });
-        txtConWord.addFocusListener(new FocusListener() {
+        
+        txtLocalWord.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void focusGained(FocusEvent e) {
-                // Do nothing
+            public void changedUpdate(DocumentEvent e) {
+                setWordLegality();
             }
 
             @Override
-            public void focusLost(FocusEvent e) {
-                // Do nothing
+            public void removeUpdate(DocumentEvent e) {
+                setWordLegality();
             }
 
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                setWordLegality();
+            }
         });
-
+        
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
