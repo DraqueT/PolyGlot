@@ -21,6 +21,8 @@ package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PTextArea;
+import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
 import PolyGlot.PExportToPDF;
 import java.awt.Cursor;
@@ -28,7 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-// TODO: rename buttons to useful object names and move all logic into methods from button actions
+
 /**
  *
  * @author draque.thompson
@@ -40,8 +42,8 @@ public class ScrPrintToPDF extends PDialog {
      * @param _core Dictionary core
      */
     private ScrPrintToPDF(DictCore _core) {
-        initComponents();
         core = _core;
+        initComponents();        
         
         chkConLocal.setText("Print " + core.conLabel() + " -> " + core.localLabel() + " Dictionary");
         chkLocalCon.setText("Print " + core.localLabel() + " -> " + core.conLabel() + " Dictionary");
@@ -64,15 +66,12 @@ public class ScrPrintToPDF extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        txtSavePath = new javax.swing.JTextField();
+        txtSavePath = new PTextField(core, true, "-- Save to File --");
         btnSelectSavePath = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        txtImageLocation = new javax.swing.JTextField();
+        txtImageLocation = new PTextField(core, true, "-- Cover Image --");
         btnSelectImagePath = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txtForeword = new javax.swing.JTextArea();
+        txtForeword = new PTextArea(core, true, "-- Foreword Text --");
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         chkLocalCon = new javax.swing.JCheckBox();
@@ -82,10 +81,8 @@ public class ScrPrintToPDF extends PDialog {
         chkLogographs = new javax.swing.JCheckBox();
         chkPageNum = new javax.swing.JCheckBox();
         chkGloss = new javax.swing.JCheckBox();
-        jLabel5 = new javax.swing.JLabel();
-        txtTitle = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        txtSubtitle = new javax.swing.JTextField();
+        txtTitle = new PTextField(core, true, "-- Title --");
+        txtSubtitle = new PTextField(core, true, "-- Title --");
         btnPrint = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
@@ -94,8 +91,6 @@ public class ScrPrintToPDF extends PDialog {
         setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-
-        jLabel1.setText("Save As");
 
         txtSavePath.setEditable(false);
         txtSavePath.setBackground(new java.awt.Color(204, 204, 204));
@@ -108,8 +103,6 @@ public class ScrPrintToPDF extends PDialog {
             }
         });
 
-        jLabel2.setText("Cover Image");
-
         txtImageLocation.setEditable(false);
         txtImageLocation.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -120,9 +113,6 @@ public class ScrPrintToPDF extends PDialog {
                 btnSelectImagePathActionPerformed(evt);
             }
         });
-
-        jLabel3.setText("Foreword Text");
-        jLabel3.setToolTipText("");
 
         txtForeword.setColumns(20);
         txtForeword.setLineWrap(true);
@@ -171,7 +161,7 @@ public class ScrPrintToPDF extends PDialog {
                             .addComponent(chkOrtho)
                             .addComponent(chkLocalCon)
                             .addComponent(chkLogographs))
-                        .addContainerGap(217, Short.MAX_VALUE))
+                        .addContainerGap(137, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkGloss)
@@ -195,14 +185,10 @@ public class ScrPrintToPDF extends PDialog {
                 .addComponent(chkLogographs)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkPageNum)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jLabel5.setText("Title");
-
         txtTitle.setToolTipText("The title of your document");
-
-        jLabel6.setText("Subtitle");
 
         txtSubtitle.setToolTipText("The subtitle of your document (if any)");
 
@@ -216,32 +202,18 @@ public class ScrPrintToPDF extends PDialog {
                     .addComponent(jScrollPane1)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
+                        .addComponent(txtImageLocation)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtSavePath)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSelectSavePath))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtImageLocation)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSelectImagePath))))
+                        .addComponent(btnSelectImagePath))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5))
+                        .addComponent(jLabel4)
+                        .addGap(0, 266, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtSavePath)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTitle)
-                            .addComponent(txtSubtitle)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(btnSelectSavePath))
+                    .addComponent(txtTitle)
+                    .addComponent(txtSubtitle, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -249,27 +221,19 @@ public class ScrPrintToPDF extends PDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
                     .addComponent(txtSavePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSelectSavePath))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
                     .addComponent(txtImageLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSelectImagePath))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtSubtitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
+                .addComponent(txtSubtitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -311,8 +275,7 @@ public class ScrPrintToPDF extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel)
-                    .addComponent(btnPrint))
-                .addContainerGap())
+                    .addComponent(btnPrint)))
         );
 
         pack();
@@ -451,12 +414,7 @@ public class ScrPrintToPDF extends PDialog {
     private javax.swing.JCheckBox chkLogographs;
     private javax.swing.JCheckBox chkOrtho;
     private javax.swing.JCheckBox chkPageNum;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

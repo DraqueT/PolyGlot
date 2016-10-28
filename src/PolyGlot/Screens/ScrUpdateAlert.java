@@ -75,6 +75,7 @@ public class ScrUpdateAlert extends PDialog {
             buttonMap.put(nameNode.getTextContent(), linkNode.getTextContent());
 
             JButton newButton = new JButton();
+            newButton.setPreferredSize(new Dimension(9999, 30));
             newButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
