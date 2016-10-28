@@ -21,6 +21,7 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.PropertiesManager;
+import PolyGlot.PGTUtil;
 import PolyGlot.PGTools;
 import java.awt.Color;
 import java.awt.Font;
@@ -99,7 +100,7 @@ public class PTextField extends JTextField {
      */
     public boolean isDefaultText() {
         // account for RtL languages
-        String curText = super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
+        String curText = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
         return curText.equals(defText);
     }
     
@@ -162,11 +163,11 @@ public class PTextField extends JTextField {
      * Prefixes the RTL character if not prefixed already
      */
     private void prefixRTL() {
-        if (super.getText().startsWith("\u202e")) {
+        if (super.getText().startsWith(PGTUtil.RTLMarker)) {
             return;
         }
 
-        setText('\u202e' + getText());
+        setText(PGTUtil.RTLMarker + getText());
     }
 
     @Override
@@ -180,7 +181,8 @@ public class PTextField extends JTextField {
             skipRepaint = true;
             if (propMan != null
                     && !curSetText
-                    && propMan.isEnforceRTL()) {
+                    && propMan.isEnforceRTL()
+                    && !overrideFont) {
                 prefixRTL();
             }
             skipRepaint = false;
@@ -236,7 +238,7 @@ public class PTextField extends JTextField {
      * @return super's text
      */
     private String getSuperText() {
-        return super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
+        return super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
     }
     
     @Override
@@ -244,12 +246,12 @@ public class PTextField extends JTextField {
      * Make certain only to return appropriate text and never default text
      */
     public String getText() {
-        String ret = super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
+        String ret = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
         
         if (ret.equals(defText)) {
             ret = "";
         } else {
-            ret = core.getPropertiesManager().isEnforceRTL() ? "\u202e" + ret : ret;
+            ret = (core.getPropertiesManager().isEnforceRTL() && !overrideFont) ? PGTUtil.RTLMarker + ret : ret;
         }
         
         return ret;
