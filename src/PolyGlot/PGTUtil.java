@@ -206,4 +206,22 @@ public class PGTUtil {
     public enum WindowMode {
         STANDARD, SINGLEVALUE, SELECTLIST
     }
+    
+    /**
+     * Encapsulates a string in RTL characters, setting back to LTR after
+     * @param encapsulate string to encapsulate
+     * @return encapsulated string
+     */
+    public static String encapsulateRTL(String encapsulate) {
+        return RTLMarker + encapsulate + LTRMarker;
+    }
+    
+    /**
+     * Strips string of RTL and LTR markers
+     * @param strip string to strip
+     * @return stripped string
+     */
+    public static String stripRTL(String strip) {
+        return strip.replace(RTLMarker, "").replace(LTRMarker, "");
+    }
 }

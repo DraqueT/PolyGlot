@@ -367,7 +367,12 @@ public class PExportToPDF {
                 dictEntry.add(new Text("\n"));
             }
 
-            Text varChunk = new Text(curWord.getValue());
+            String wordVal = PGTUtil.stripRTL(curWord.getValue());
+            if (core.getPropertiesManager().isEnforceRTL()) {
+                // PDFs do not respect RTL character
+                wordVal = new StringBuilder(wordVal).reverse().toString();
+            }
+            Text varChunk = new Text(wordVal);
             varChunk.setFont(conFont);
             varChunk.setFontSize(conFontSize + offsetSize);
             dictEntry.add(varChunk);
@@ -402,7 +407,7 @@ public class PExportToPDF {
                 for (Entry<Integer, Integer> curEntry : curWord.getClassValues()) {
                     WordProperty prop;
                     WordPropValueNode value;
-                    
+
                     try {
                         prop = (WordProperty) core.getWordPropertiesCollection()
                                 .getNodeById(curEntry.getKey());
@@ -415,7 +420,7 @@ public class PExportToPDF {
                     if (!wordClasses.equals("")) {
                         wordClasses += ", ";
                     }
-                    
+
                     wordClasses += value.getValue();
                 }
                 varChunk = new Text(wordClasses);
@@ -452,7 +457,7 @@ public class PExportToPDF {
                 curLetterSec.add(ls);
             }
         }
-        
+
         // add last letter section
         document.add(curLetterSec);
     }
@@ -498,7 +503,12 @@ public class PExportToPDF {
             dictEntry.add(new Text(curWord.getLocalWord() + "\n")
                     .setFontSize(defFontSize + offsetSize));
 
-            varChunk = new Text(curWord.getValue());
+            String wordVal = PGTUtil.stripRTL(curWord.getValue());
+            if (core.getPropertiesManager().isEnforceRTL()) {
+                // PDF Does not respect RTL characters...
+                wordVal = new StringBuilder(wordVal).reverse().toString();
+            }
+            varChunk = new Text(wordVal);
             varChunk.setFont(conFont);
             varChunk.setFontSize(conFontSize - offsetSize);
             dictEntry.add(varChunk);
@@ -526,14 +536,14 @@ public class PExportToPDF {
                 varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
-            
+
             // adds values 
             if (!curWord.getClassValues().isEmpty()) {
                 String wordClasses = "";
                 for (Entry<Integer, Integer> curEntry : curWord.getClassValues()) {
                     WordProperty prop;
                     WordPropValueNode value;
-                    
+
                     try {
                         prop = (WordProperty) core.getWordPropertiesCollection()
                                 .getNodeById(curEntry.getKey());
@@ -546,7 +556,7 @@ public class PExportToPDF {
                     if (!wordClasses.equals("")) {
                         wordClasses += ", ";
                     }
-                    
+
                     wordClasses += value.getValue();
                 }
                 varChunk = new Text(wordClasses);
@@ -574,7 +584,7 @@ public class PExportToPDF {
                 curLetterSec.add(ls);
             }
         }
-        
+
         // add last letter section
         document.add(curLetterSec);
     }
@@ -651,12 +661,19 @@ public class PExportToPDF {
                 // populate text ensuring that conlang font is maintained where appropriate
                 for (Entry<String, PFontInfo> e : FormattedTextHelper.getSectionTextFontSpecifec(curSec.getSectionText(), core)) {
                     PFontInfo info = e.getValue();
+                    String text = PGTUtil.stripRTL(e.getKey());
+                    if (core.getPropertiesManager().isEnforceRTL()
+                            && info.awtFont.equals(core.getPropertiesManager().getFontCon())) {
+                        // PDF does not respect RTL characters
+                        text = new StringBuilder(text).reverse().toString();
+                    }
                     if (info.awtFont.equals(core.getPropertiesManager().getFontCon())) {
-                        newSec.add(new Text(e.getKey()).setFont(conFont) // TODO: Maybe actually build font here if I give more freedom in the grammar section
+
+                        newSec.add(new Text(text).setFont(conFont) // TODO: Maybe actually build font here if I give more freedom in the grammar section
                                 .setFontSize(conFontSize).setFontColor( // TODO: not setting size here. Later Rev (due to different size standards HTML vs Pt)
                                 FormattedTextHelper.swtColorToItextColor(info.awtColor)));
                     } else {
-                        newSec.add(new Text(e.getKey()).setFont(unicodeFont) // TODO: Maybe actually build font here if I give more freedom in the grammar section
+                        newSec.add(new Text(text).setFont(unicodeFont) // TODO: Maybe actually build font here if I give more freedom in the grammar section
                                 .setFontColor( // TODO: not setting size here. Later Rev (due to different size standards HTML vs Pt)
                                         FormattedTextHelper.swtColorToItextColor(info.awtColor)));
                     }
