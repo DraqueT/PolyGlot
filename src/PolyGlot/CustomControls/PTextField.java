@@ -225,8 +225,14 @@ public class PTextField extends JTextField {
         }
         
         if (isDefaultText()) {
+            if (!overrideFont) {
+                setFont(core.getPropertiesManager().getCharisUnicodeFont());
+            }
             setForeground(Color.lightGray);
         } else {
+            if (!overrideFont) {
+                setFont(core.getPropertiesManager().getFontCon());
+            }
             setForeground(Color.black);
         }
 
