@@ -24,7 +24,7 @@ import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDialog;
-import PolyGlot.CustomControls.PTextArea;
+import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
@@ -383,9 +383,9 @@ public final class ScrQuickWordEntry extends PDialog {
         txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " word --");
         cmbType = new PComboBox();
         txtProc = new PTextField(core, true, "-- Pronunciation --");
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtDefinition = new PTextArea(core, true, "-- Definition --");
         pnlClasses = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtDefinition = new PTextPane(core, true, "-- Notes --");
         btnDone = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
 
@@ -481,12 +481,6 @@ public final class ScrQuickWordEntry extends PDialog {
             }
         });
 
-        txtDefinition.setColumns(20);
-        txtDefinition.setLineWrap(true);
-        txtDefinition.setRows(5);
-        txtDefinition.setWrapStyleWord(true);
-        jScrollPane1.setViewportView(txtDefinition);
-
         javax.swing.GroupLayout pnlClassesLayout = new javax.swing.GroupLayout(pnlClasses);
         pnlClasses.setLayout(pnlClassesLayout);
         pnlClassesLayout.setHorizontalGroup(
@@ -498,16 +492,21 @@ public final class ScrQuickWordEntry extends PDialog {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        jScrollPane2.setViewportView(txtDefinition);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(cmbType, 0, 408, Short.MAX_VALUE)
             .addComponent(txtConWord)
             .addComponent(txtProc)
-            .addComponent(jScrollPane1)
             .addComponent(txtLocalWord, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -523,7 +522,7 @@ public final class ScrQuickWordEntry extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -645,10 +644,10 @@ public final class ScrQuickWordEntry extends PDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel pnlClasses;
     private javax.swing.JTextField txtConWord;
-    private javax.swing.JTextArea txtDefinition;
+    private javax.swing.JTextPane txtDefinition;
     private javax.swing.JTextField txtLocalWord;
     private javax.swing.JTextField txtProc;
     // End of variables declaration//GEN-END:variables

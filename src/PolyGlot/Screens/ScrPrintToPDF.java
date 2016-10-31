@@ -21,7 +21,7 @@ package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PDialog;
-import PolyGlot.CustomControls.PTextArea;
+import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
 import PolyGlot.PExportToPDF;
@@ -70,8 +70,6 @@ public class ScrPrintToPDF extends PDialog {
         btnSelectSavePath = new javax.swing.JButton();
         txtImageLocation = new PTextField(core, true, "-- Cover Image --");
         btnSelectImagePath = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtForeword = new PTextArea(core, true, "-- Foreword Text --");
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         chkLocalCon = new javax.swing.JCheckBox();
@@ -83,6 +81,8 @@ public class ScrPrintToPDF extends PDialog {
         chkGloss = new javax.swing.JCheckBox();
         txtTitle = new PTextField(core, true, "-- Title --");
         txtSubtitle = new PTextField(core, true, "-- Title --");
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtForeword = new PTextPane(core, true, "-- Author Foreword --");
         btnPrint = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
@@ -113,13 +113,6 @@ public class ScrPrintToPDF extends PDialog {
                 btnSelectImagePathActionPerformed(evt);
             }
         });
-
-        txtForeword.setColumns(20);
-        txtForeword.setLineWrap(true);
-        txtForeword.setRows(5);
-        txtForeword.setToolTipText("Foreword text for your document (if any)");
-        txtForeword.setWrapStyleWord(true);
-        jScrollPane1.setViewportView(txtForeword);
 
         jLabel4.setText("Print Options");
 
@@ -192,6 +185,8 @@ public class ScrPrintToPDF extends PDialog {
 
         txtSubtitle.setToolTipText("The subtitle of your document (if any)");
 
+        jScrollPane2.setViewportView(txtForeword);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -199,7 +194,7 @@ public class ScrPrintToPDF extends PDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtImageLocation)
@@ -232,7 +227,7 @@ public class ScrPrintToPDF extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtSubtitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -417,8 +412,8 @@ public class ScrPrintToPDF extends PDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea txtForeword;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextPane txtForeword;
     private javax.swing.JTextField txtImageLocation;
     private javax.swing.JTextField txtSavePath;
     private javax.swing.JTextField txtSubtitle;

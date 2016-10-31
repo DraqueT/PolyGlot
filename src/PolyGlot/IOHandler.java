@@ -416,6 +416,9 @@ public class IOHandler {
                             writeLog += "\nUnable to save images: " + ex.getLocalizedMessage();
                         }
                     }
+                    
+                    // Write all general images in image repository to file
+                    
 
                     // write all grammar wav recordings to file
                     Map<Integer, byte[]> grammarSoundMap = core.getGrammarManager().getSoundMap();

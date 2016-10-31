@@ -27,7 +27,7 @@ import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.TableBooleanEditor;
 import PolyGlot.CustomControls.PCellEditor;
-import PolyGlot.CustomControls.PTextArea;
+import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Cursor;
@@ -88,6 +88,8 @@ public final class ScrDeclensionSetup extends PDialog {
         setModal(true);
 
         populateDeclensionList();
+        populateDeclensionProps();
+        populateDimensions();
         setupListeners();
 
         setupDimTable();
@@ -246,26 +248,35 @@ public final class ScrDeclensionSetup extends PDialog {
         txtDeclensionNotes.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
+                boolean isSelected = txtDeclensionNotes.isFocusOwner();
                 Cursor cursor = txtDeclensionNotes.getCursor();
                 saveDeclension();
-                txtDeclensionNotes.requestFocus();
-                txtDeclensionNotes.setCursor(cursor);
+                if (isSelected) {
+                    txtDeclensionNotes.requestFocus();
+                    txtDeclensionNotes.setCursor(cursor);
+                }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
+                boolean isSelected = txtDeclensionNotes.isFocusOwner();
                 Cursor cursor = txtDeclensionNotes.getCursor();
                 saveDeclension();
-                txtDeclensionNotes.requestFocus();
-                txtDeclensionNotes.setCursor(cursor);
+                if (isSelected) {
+                    txtDeclensionNotes.requestFocus();
+                    txtDeclensionNotes.setCursor(cursor);
+                }
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
+                boolean isSelected = txtDeclensionNotes.isFocusOwner();
                 Cursor cursor = txtDeclensionNotes.getCursor();
                 saveDeclension();
-                txtDeclensionNotes.requestFocus();
-                txtDeclensionNotes.setCursor(cursor);
+                if (isSelected) {
+                    txtDeclensionNotes.requestFocus();
+                    txtDeclensionNotes.setCursor(cursor);
+                }
             }
         });
     }
@@ -441,14 +452,14 @@ public final class ScrDeclensionSetup extends PDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         lstDeclensionList = new javax.swing.JList();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtDeclensionNotes = new PTextArea(core, true, "-- Conjugation Notes --");
         txtDeclensionName = new PTextField(core, true, "-- Name --");//PTextField(core, true, "-- Name --");
         jLabel3 = new javax.swing.JLabel();
         btnAddDimension = new PButton("+");
         btnDelDimension = new PButton("-");
         sclDimensions = new javax.swing.JScrollPane();
         tblDimensions = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtDeclensionNotes = new PTextPane(core, true, "-- Notes --");
         btnDeleteDeclension = new PButton("-");
         btnAddDeclension = new PButton("+");
         jButton1 = new javax.swing.JButton();
@@ -466,14 +477,6 @@ public final class ScrDeclensionSetup extends PDialog {
         jScrollPane1.setViewportView(lstDeclensionList);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-
-        txtDeclensionNotes.setColumns(20);
-        txtDeclensionNotes.setLineWrap(true);
-        txtDeclensionNotes.setRows(5);
-        txtDeclensionNotes.setWrapStyleWord(true);
-        txtDeclensionNotes.setEnabled(false);
-        txtDeclensionNotes.setMinimumSize(new java.awt.Dimension(0, 0));
-        jScrollPane2.setViewportView(txtDeclensionNotes);
 
         txtDeclensionName.setEnabled(false);
         txtDeclensionName.setMinimumSize(new java.awt.Dimension(0, 0));
@@ -524,6 +527,8 @@ public final class ScrDeclensionSetup extends PDialog {
             tblDimensions.getColumnModel().getColumn(1).setPreferredWidth(10);
         }
 
+        jScrollPane3.setViewportView(txtDeclensionNotes);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -533,16 +538,16 @@ public final class ScrDeclensionSetup extends PDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addGap(0, 161, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtDeclensionName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3)
+                            .addComponent(txtDeclensionName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(btnAddDimension, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
                                 .addComponent(btnDelDimension, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(sclDimensions, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(sclDimensions, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
@@ -558,8 +563,8 @@ public final class ScrDeclensionSetup extends PDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDelDimension)
                     .addComponent(btnAddDimension))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -951,6 +956,8 @@ public final class ScrDeclensionSetup extends PDialog {
             if (curdecId != null
                     && curdecId.equals(curdec.getId())) {
                 setIndex = i;
+            } else {
+                setIndex = 0;
             }
         }
 
@@ -970,11 +977,11 @@ public final class ScrDeclensionSetup extends PDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList lstDeclensionList;
     private javax.swing.JScrollPane sclDimensions;
     private javax.swing.JTable tblDimensions;
     private javax.swing.JTextField txtDeclensionName;
-    private javax.swing.JTextArea txtDeclensionNotes;
+    private javax.swing.JTextPane txtDeclensionNotes;
     // End of variables declaration//GEN-END:variables
 }

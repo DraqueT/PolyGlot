@@ -28,6 +28,7 @@ import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTextField;
+import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
@@ -41,8 +42,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -102,7 +101,6 @@ public final class ScrLexicon extends PFrame {
     private CheckBox chkFindBad;
     private final JFXPanel fxPanel;
     private final TypeNode defTypeValue = new TypeNode();
-    private final String defDefValue = "-- Definition --";
     private final String newTypeValue = "-- New Part of Speech --";
     private final String defLexValue = "List of Conlang Words";
     private TextField txtConSrc;
@@ -457,7 +455,6 @@ public final class ScrLexicon extends PFrame {
     private void setDefaultValues() {
         chkProcOverride.setSelected(false);
         chkRuleOverride.setSelected(false);
-        txtDefinition.setText(defDefValue);
         cmbType.setSelectedIndex(0);
         Runnable fxSetup = new Runnable() {
             @Override
@@ -643,7 +640,7 @@ public final class ScrLexicon extends PFrame {
 
         testWord.setValue(((PTextField)txtConWord).isDefaultText() ? "" : txtConWord.getText());
         testWord.setLocalWord(((PTextField)txtLocalWord).isDefaultText() ? "" : txtLocalWord.getText());
-        testWord.setDefinition(txtDefinition.getText().equals(defDefValue) ? "" : txtDefinition.getText());
+        testWord.setDefinition(txtDefinition.getText());
         testWord.setPronunciation(((PTextField)txtProc).isDefaultText() ? "" : txtProc.getText());
         testWord.setWordTypeId(typeId);
         testWord.setRulesOverride(chkRuleOverride.isSelected());
@@ -1012,7 +1009,6 @@ public final class ScrLexicon extends PFrame {
             }
         });
 
-        addPropertyListeners(txtDefinition, defDefValue);
         addPropertyListeners(cmbType, defTypeValue.getValue());
         addFilterListeners(txtConSrc);
         addFilterListeners(txtDefSrc);
@@ -1028,49 +1024,7 @@ public final class ScrLexicon extends PFrame {
      * @param defValue default string value
      */
     private void addPropertyListeners(JComponent field, final String defValue) {
-        if (field instanceof JTextField) {
-            final JTextField txtField = (JTextField) field;
-            txtField.getDocument().addDocumentListener(new DocumentListener() {
-                @Override
-                public void changedUpdate(DocumentEvent e) {
-                    setGreyFields(txtField, defValue);
-                    setWordLegality();
-                }
-
-                @Override
-                public void removeUpdate(DocumentEvent e) {
-                    setGreyFields(txtField, defValue);
-                    setWordLegality();
-                }
-
-                @Override
-                public void insertUpdate(DocumentEvent e) {
-                    setGreyFields(txtField, defValue);
-                    setWordLegality();
-                }
-            });
-        } else if (field instanceof JTextArea) {
-            final JTextArea txtArea = (JTextArea) field;
-            txtArea.getDocument().addDocumentListener(new DocumentListener() {
-                @Override
-                public void changedUpdate(DocumentEvent e) {
-                    setGreyFields(txtArea, defValue);
-                    setWordLegality();
-                }
-
-                @Override
-                public void removeUpdate(DocumentEvent e) {
-                    setGreyFields(txtArea, defValue);
-                    setWordLegality();
-                }
-
-                @Override
-                public void insertUpdate(DocumentEvent e) {
-                    setGreyFields(txtArea, defValue);
-                    setWordLegality();
-                }
-            });
-        } else if (field instanceof JComboBox) {
+        if (field instanceof JComboBox) {
             final JComboBox cmbField = (JComboBox) field;
             cmbField.addActionListener(new java.awt.event.ActionListener() {
                 @Override
@@ -1142,7 +1096,6 @@ public final class ScrLexicon extends PFrame {
                     ((PTextField)txtConWord).setDefault();
                     namePopulating = false;
                 }
-                txtDefinition.setText(defDefValue);
                 ((PTextField)txtLocalWord).setDefault();
                 ((PTextField)txtProc).setDefault();
                 cmbType.setSelectedItem(defTypeValue);
@@ -1155,8 +1108,7 @@ public final class ScrLexicon extends PFrame {
                     txtConWord.setText(curWord.getValue());
                     namePopulating = false;
                 }
-                txtDefinition.setText(curWord.getDefinition().equals("")
-                        ? defDefValue : curWord.getDefinition());
+                txtDefinition.setText(curWord.getDefinition());
                 txtLocalWord.setText(curWord.getLocalWord().equals("")
                         ? ((PTextField)txtLocalWord).getDefaultValue() : curWord.getLocalWord());
                 txtProc.setText(curWord.getPronunciation().equals("")
@@ -1196,6 +1148,8 @@ public final class ScrLexicon extends PFrame {
                 chkProcOverride.setEnabled(enable);
                 chkRuleOverride.setEnabled(enable);
                 jLabel1.setEnabled(enable);
+                btnDeclensions.setEnabled(enable);
+                btnLogographs.setEnabled(enable);
                 for (JComboBox comboBox : classComboMap.values()) {
                     comboBox.setEnabled(enable);
                 }
@@ -1223,21 +1177,7 @@ public final class ScrLexicon extends PFrame {
      * Sets appropriate fields grey
      */
     private void setGreyFields(JComponent comp, String defValue) {
-        if (comp instanceof JTextField) {
-            JTextField compTxt = (JTextField) comp;
-            if (compTxt.getText().equals(defValue)) {
-                compTxt.setForeground(Color.LIGHT_GRAY);
-            } else {
-                compTxt.setForeground(Color.black);
-            }
-        } else if (comp instanceof JTextArea) {
-            JTextArea compTxt = (JTextArea) comp;
-            if (compTxt.getText().equals(defValue)) {
-                compTxt.setForeground(Color.LIGHT_GRAY);
-            } else {
-                compTxt.setForeground(Color.black);
-            }
-        } else if (comp instanceof JComboBox) {
+    if (comp instanceof JComboBox) {
             JComboBox compCmb = (JComboBox) comp;
             if (compCmb.getSelectedItem() != null
                     && compCmb.getSelectedItem().toString().equals(defValue)) {
@@ -1253,7 +1193,6 @@ public final class ScrLexicon extends PFrame {
      * Sets all fields to grey/black as appropriate
      */
     private void setAllGreyProps() {
-        setGreyFields(txtDefinition, defDefValue);
         setGreyFields(cmbType, defTypeValue.getValue());
     }
 
@@ -1351,8 +1290,7 @@ public final class ScrLexicon extends PFrame {
         }
 
         saveWord.setValue(txtConWord.getText());
-        saveWord.setDefinition(txtDefinition.getText().equals(defDefValue)
-                ? "" : txtDefinition.getText());
+        saveWord.setDefinition(txtDefinition.getText());
         saveWord.setLocalWord(((PTextField)txtLocalWord).isDefaultText()
                 ? "" : txtLocalWord.getText());
         saveWord.setProcOverride(chkProcOverride.isSelected());
@@ -1481,13 +1419,13 @@ public final class ScrLexicon extends PFrame {
         chkProcOverride = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         chkRuleOverride = new javax.swing.JCheckBox();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtDefinition = new javax.swing.JTextArea();
         btnDeclensions = new javax.swing.JButton();
         btnLogographs = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtErrorBox = new javax.swing.JTextPane();
         pnlClasses = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        txtDefinition = new PTextPane(core, true, "-- Definition --");
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         lstLexicon = new PList(this);
@@ -1553,22 +1491,6 @@ public final class ScrLexicon extends PFrame {
             }
         });
 
-        txtDefinition.setColumns(20);
-        txtDefinition.setLineWrap(true);
-        txtDefinition.setRows(5);
-        txtDefinition.setToolTipText("The word's full definition");
-        txtDefinition.setWrapStyleWord(true);
-        txtDefinition.setMinimumSize(new java.awt.Dimension(40, 22));
-        txtDefinition.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtDefinitionFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtDefinitionFocusLost(evt);
-            }
-        });
-        jScrollPane2.setViewportView(txtDefinition);
-
         btnDeclensions.setText("Declensions");
         btnDeclensions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1601,13 +1523,16 @@ public final class ScrLexicon extends PFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        txtDefinition.setToolTipText("The long form definition of a word");
+        jScrollPane4.setViewportView(txtDefinition);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(btnDeclensions)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 160, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 195, Short.MAX_VALUE)
                 .addComponent(btnLogographs))
             .addComponent(pnlClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1615,7 +1540,6 @@ public final class ScrLexicon extends PFrame {
             .addComponent(txtConWord)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(txtProc)
@@ -1625,7 +1549,8 @@ public final class ScrLexicon extends PFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(chkRuleOverride)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -1649,7 +1574,7 @@ public final class ScrLexicon extends PFrame {
                     .addComponent(jLabel1)
                     .addComponent(chkRuleOverride))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1722,11 +1647,8 @@ public final class ScrLexicon extends PFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+            .addComponent(jSplitPane1)
         );
-
-        jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DRAG_LAYER);
-        jLayeredPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -1748,6 +1670,8 @@ public final class ScrLexicon extends PFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
+        jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DRAG_LAYER);
+        jLayeredPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1757,24 +1681,11 @@ public final class ScrLexicon extends PFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtDefinitionFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDefinitionFocusGained
-        if (txtDefinition.getText().equals(defDefValue)) {
-            txtDefinition.setText("");
-        }
-    }//GEN-LAST:event_txtDefinitionFocusGained
-
-    private void txtDefinitionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDefinitionFocusLost
-        if (txtDefinition.getText().equals("")) {
-            txtDefinition.setText(defDefValue);
-            setGreyFields(txtDefinition, defDefValue);
-        }
-    }//GEN-LAST:event_txtDefinitionFocusLost
 
     private void lstLexiconValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLexiconValueChanged
         if (evt.getValueIsAdjusting()
@@ -1888,13 +1799,13 @@ public final class ScrLexicon extends PFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JList lstLexicon;
     private javax.swing.JPanel pnlClasses;
     private javax.swing.JTextField txtConWord;
-    private javax.swing.JTextArea txtDefinition;
+    private javax.swing.JTextPane txtDefinition;
     private javax.swing.JTextPane txtErrorBox;
     private javax.swing.JTextField txtLocalWord;
     private javax.swing.JTextField txtProc;

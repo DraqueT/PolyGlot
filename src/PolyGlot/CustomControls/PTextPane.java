@@ -20,28 +20,37 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import PolyGlot.PGTUtil;
 import PolyGlot.PGTools;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import javax.swing.JTextArea;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
 
 /**
  *
  * @author draque
  */
-public class PTextArea extends JTextArea{
+public class PTextPane extends JTextPane {
     private SwingWorker worker = null;
     private final String defText;
     private final DictCore core;
     private final boolean overrideFont;
     
-    public PTextArea(DictCore _core, boolean _overideFont, String _defText) {
+    public PTextPane(DictCore _core, boolean _overideFont, String _defText) {
         core = _core;
         defText = _defText;
         overrideFont = _overideFont;
+        this.setContentType("text/html");
+        setupRightClickMenu();
         
         setupListeners();
         setText(defText);
@@ -102,13 +111,54 @@ public class PTextArea extends JTextArea{
         return defText;
     }
     
+    @Override
+    public String getToolTipText() {
+        return super.getToolTipText() + " (right click to insert images)";
+    }
+    
+    private void setupRightClickMenu() {
+        final JPopupMenu ruleMenu = new JPopupMenu();
+        final JMenuItem insertImage = new JMenuItem("Insert Image");
+        insertImage.setToolTipText("Insert Image into Text");
+        insertImage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                addImage();
+            }
+        });
+        
+        ruleMenu.add(insertImage);
+        
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    insertImage.setEnabled(true);
+                    ruleMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    insertImage.setEnabled(true);
+                    ruleMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
+    }
+    
+    private void addImage(){
+        
+    }
+    
     /**
      * Tests whether the current text value is the default value
      * @return 
      */
     public boolean isDefaultText() {
         // account for RtL languages
-        String curText = super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
+        String curText = getNakedText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
         return curText.equals(defText);
     }
     
@@ -120,10 +170,10 @@ public class PTextArea extends JTextArea{
     }
     
     private void setupListeners() {
-        this.addFocusListener(new FocusListener() {
+        FocusListener listener = new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (getSuperText().equals(defText)) {
+                if (getNakedText().equals(defText)) {
                     setText("");
                     setForeground(Color.black);
                 }
@@ -131,22 +181,38 @@ public class PTextArea extends JTextArea{
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (getSuperText().equals("")) {
+                if (getNakedText().equals("")) {
                     setText(defText);
                     setForeground(Color.lightGray);
                 }
             }
-        });
+        };
+        
+        this.addFocusListener(listener);
+    }
+    
+    /**
+     * Gets plain text that appears in body and nothing else
+     * @return 
+     */
+    private String getNakedText() {
+        String ret = getSuperText();
+        if (getContentType().equals("text/html")) {
+            int start = ret.indexOf("<body>") + 7;
+            int end = ret.indexOf("</body>");
+            ret = ret.substring(start, end);
+        }
+        return ret.trim();
     }
     
     @Override
     public String getText() {
-        String ret = super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
+        String ret = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
         
         if (ret.equals(defText)) {
             ret = "";
         } else {
-            ret = core.getPropertiesManager().isEnforceRTL() ? "\u202e" + ret : ret;
+            ret = core.getPropertiesManager().isEnforceRTL() ? PGTUtil.RTLMarker + ret : ret;
         }
         
         return ret;
@@ -157,6 +223,6 @@ public class PTextArea extends JTextArea{
      * @return 
      */
     private String getSuperText() {
-        return super.getText().replaceAll("\u202e", "").replaceAll("\u202c", "");
+        return super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
     }
 }

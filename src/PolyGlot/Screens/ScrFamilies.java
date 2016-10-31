@@ -25,7 +25,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PGTreeCellRenderer;
-import PolyGlot.CustomControls.PTextArea;
+import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.FamTreeNode;
 import java.awt.Toolkit;
@@ -206,6 +206,7 @@ public class ScrFamilies extends PFrame {
         ConWord curWord = parent.getCurrentWord();
 
         if (curWord == null) {
+            InfoBox.info("No Word Selected", "To add a word, select it in the Lexicon window, then press the Add Word button again.", this);
             return;
         }
 
@@ -404,6 +405,7 @@ public class ScrFamilies extends PFrame {
             public void valueChanged(TreeSelectionEvent e) {
                 if (treFam.getLastSelectedPathComponent() != null) {
                     updateAllProps();
+                    setEnabledMenuItems();
                 }
             }
         });
@@ -419,6 +421,16 @@ public class ScrFamilies extends PFrame {
             }
         });
     }
+    
+    private void setEnabledMenuItems() {
+        boolean enable = treFam.getLastSelectedPathComponent() != null;
+        
+        chkInclSubFam.setEnabled(enable);
+        txtFamName.setEnabled(enable);
+        txtNotes.setEnabled(enable);
+        btnAddWord.setEnabled(enable);
+        btnDelWord.setEnabled(enable && lstWords.getSelectedValue() != null);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -432,8 +444,6 @@ public class ScrFamilies extends PFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         treFam = new javax.swing.JTree();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtNotes = new PTextArea(core, true, "-- Notes --");
         chkInclSubFam = new javax.swing.JCheckBox();
         jScrollPane3 = new javax.swing.JScrollPane();
         lstWords = new javax.swing.JList();
@@ -441,6 +451,8 @@ public class ScrFamilies extends PFrame {
         btnAddWord = new PButton("+");
         btnDelWord = new PButton("-");
         txtFamName = new PTextField(core, true, "-- Name --");
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtNotes = new PTextPane(core, true, "-- Notes --");
         btnAddFamily = new PButton("+");
         btnDelFamily = new PButton("-");
 
@@ -453,14 +465,9 @@ public class ScrFamilies extends PFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        txtNotes.setColumns(20);
-        txtNotes.setLineWrap(true);
-        txtNotes.setRows(5);
-        txtNotes.setWrapStyleWord(true);
-        jScrollPane2.setViewportView(txtNotes);
-
         chkInclSubFam.setText("Include Subfamilies");
         chkInclSubFam.setToolTipText("Include all words from subfamilies in list disables remove (-) button");
+        chkInclSubFam.setEnabled(false);
         chkInclSubFam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkInclSubFamActionPerformed(evt);
@@ -478,6 +485,7 @@ public class ScrFamilies extends PFrame {
         jLabel1.setText("Words in family");
 
         btnAddWord.setToolTipText("Add word selected in lexicon to family");
+        btnAddWord.setEnabled(false);
         btnAddWord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddWordActionPerformed(evt);
@@ -485,6 +493,7 @@ public class ScrFamilies extends PFrame {
         });
 
         btnDelWord.setToolTipText("Remove word selected in list from family");
+        btnDelWord.setEnabled(false);
         btnDelWord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDelWordActionPerformed(evt);
@@ -492,6 +501,10 @@ public class ScrFamilies extends PFrame {
         });
 
         txtFamName.setToolTipText("A family's name");
+        txtFamName.setEnabled(false);
+
+        txtNotes.setEnabled(false);
+        jScrollPane2.setViewportView(txtNotes);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -504,18 +517,18 @@ public class ScrFamilies extends PFrame {
                         .addComponent(btnAddWord, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnDelWord, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(txtFamName, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(chkInclSubFam)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 19, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(txtFamName)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -531,8 +544,9 @@ public class ScrFamilies extends PFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAddWord)
                     .addComponent(btnDelWord))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         btnAddFamily.setToolTipText("Add Family Node");
@@ -603,6 +617,7 @@ public class ScrFamilies extends PFrame {
     private void lstWordsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstWordsValueChanged
         if (!curUpdating) {
             updateLexSelection();
+            setEnabledMenuItems();
         }
     }//GEN-LAST:event_lstWordsValueChanged
 
@@ -662,6 +677,6 @@ public class ScrFamilies extends PFrame {
     private javax.swing.JList lstWords;
     private javax.swing.JTree treFam;
     private javax.swing.JTextField txtFamName;
-    private javax.swing.JTextArea txtNotes;
+    private javax.swing.JTextPane txtNotes;
     // End of variables declaration//GEN-END:variables
 }

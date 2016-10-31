@@ -37,7 +37,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
@@ -186,7 +185,16 @@ public class ScrDeclensionGenSetup extends PDialog {
         ScrDeclensionGenSetup s = new ScrDeclensionGenSetup(_core, _typeId);
         s.setModal(true);
 
-        s.setVisible(true);
+        List<DeclensionPair> decs = _core.getDeclensionManager().getAllCombinedIds(_typeId);
+        
+        if (decs.isEmpty()) {
+            InfoBox.warning("No Declensions Exist", "Please set up some conjucations/declensions for \"" 
+                    + _core.getTypes().getNodeById(_typeId).getValue() + "\" before setting up automatic patterns.", s);
+            s.dispose();
+        } else {
+            s.setVisible(true);
+        }
+        
         return s;
     }
 
@@ -302,11 +310,10 @@ public class ScrDeclensionGenSetup extends PDialog {
      * populates constructed declension list
      */
     private void populateCombinedDecl() {
-        Iterator<DeclensionPair> it = core.getDeclensionManager().getAllCombinedIds(typeId).iterator();
-        while (it.hasNext()) {
-            DeclensionPair curNode = it.next();
-
-            decListModel.addElement(curNode);
+        List<DeclensionPair> decs = core.getDeclensionManager().getAllCombinedIds(typeId);
+ 
+        for (DeclensionPair curPair : decs) {
+            decListModel.addElement(curPair);
         }
 
         if (!depRulesList.isEmpty()) {

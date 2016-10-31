@@ -29,7 +29,7 @@ import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
-import PolyGlot.CustomControls.PTextArea;
+import PolyGlot.CustomControls.PTextPane;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
@@ -440,8 +440,8 @@ public class ScrLangProps extends PDialog {
         jPanel5 = new javax.swing.JPanel();
         txtLangName = new PTextField(core, true, "-- Language Name --");
         txtLocalLanguage = new PTextField(core, true, "-- Local Language --");
-        jScrollPane3 = new javax.swing.JScrollPane();
-        txtAuthorCopyright = new PTextArea(core, true, "-- Author/Copyright Information --");
+        jScrollPane4 = new javax.swing.JScrollPane();
+        txtAuthorCopyright = new PTextPane(core, true, "-- Author/Copyright Info --");
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -552,7 +552,7 @@ public class ScrLangProps extends PDialog {
                 .addComponent(chkDisableProcRegex)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkEnforceRTL)
-                .addGap(0, 25, Short.MAX_VALUE))
+                .addGap(0, 45, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -696,11 +696,7 @@ public class ScrLangProps extends PDialog {
 
         txtLocalLanguage.setToolTipText("The natural language you use when writing your conlang");
 
-        txtAuthorCopyright.setColumns(20);
-        txtAuthorCopyright.setLineWrap(true);
-        txtAuthorCopyright.setRows(5);
-        txtAuthorCopyright.setWrapStyleWord(true);
-        jScrollPane3.setViewportView(txtAuthorCopyright);
+        jScrollPane4.setViewportView(txtAuthorCopyright);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -709,8 +705,8 @@ public class ScrLangProps extends PDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-                    .addComponent(txtLangName, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4)
+                    .addComponent(txtLangName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
                     .addComponent(txtLocalLanguage, javax.swing.GroupLayout.Alignment.LEADING))
                 .addContainerGap())
         );
@@ -721,9 +717,9 @@ public class ScrLangProps extends PDialog {
                 .addComponent(txtLangName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtLocalLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jButton1.setText("OK");
@@ -821,11 +817,11 @@ public class ScrLangProps extends PDialog {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTable tblProcs;
     private javax.swing.JTextField txtAlphaOrder;
-    private javax.swing.JTextArea txtAuthorCopyright;
+    private javax.swing.JTextPane txtAuthorCopyright;
     private javax.swing.JTextField txtFont;
     private javax.swing.JTextField txtLangName;
     private javax.swing.JTextField txtLocalLanguage;

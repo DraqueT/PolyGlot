@@ -36,7 +36,7 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import PolyGlot.CustomControls.PTextArea;
+import PolyGlot.CustomControls.PTextPane;
 
 /**
  *
@@ -220,7 +220,7 @@ public class ScrTypes extends PDialog {
                 updatingName = false;
             }
             txtNotes.setText(curNode.getNotes().equals("")
-                    ? ((PTextArea)txtNotes).getDefaultValue() : curNode.getNotes());
+                    ? ((PTextPane)txtNotes).getDefaultValue() : curNode.getNotes());
             txtNotes.setForeground(curNode.getNotes().equals("")
                     ? Color.lightGray : Color.black);
             txtTypePattern.setText(curNode.getPattern().equals("")
@@ -245,7 +245,7 @@ public class ScrTypes extends PDialog {
     private void savePropertiesTo(TypeNode saveNode) {
         saveNode.setValue(((PTextField)txtName).isDefaultText()
                 ? "" : txtName.getText());
-        saveNode.setNotes(((PTextArea)txtNotes).isDefaultText()
+        saveNode.setNotes(((PTextPane)txtNotes).isDefaultText()
                 ? "" : txtNotes.getText());
         saveNode.setPattern(((PTextField)txtTypePattern).isDefaultText()
                 ? "" : txtTypePattern.getText());
@@ -315,6 +315,8 @@ public class ScrTypes extends PDialog {
         txtGloss.setEnabled(enable);
         chkDefMand.setEnabled(enable);
         chkProcMand.setEnabled(enable);
+        btnSetup.setEnabled(enable);
+        btnAutogen.setEnabled(enable);
     }
 
     public static ScrTypes run(DictCore _core) {
@@ -358,8 +360,6 @@ public class ScrTypes extends PDialog {
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         txtName = new PTextField(core, true, "-- Part of Speech Name --");
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtNotes = new PTextArea(core, true, "-- Part of Speech Notes --");
         txtTypePattern = new PTextField(core, false, "-- Type Pattern --");
         btnSetup = new javax.swing.JButton();
         btnAutogen = new javax.swing.JButton();
@@ -369,6 +369,8 @@ public class ScrTypes extends PDialog {
         chkProcMand = new javax.swing.JCheckBox();
         txtGloss = new PTextField(core, true, "-- Part of Speech Gloss --");
         jButton1 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtNotes = new PTextPane(core, true, "-- Notes --");
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstTypes = new javax.swing.JList();
@@ -385,17 +387,11 @@ public class ScrTypes extends PDialog {
 
         txtName.setToolTipText("Part of speech name");
 
-        txtNotes.setColumns(20);
-        txtNotes.setLineWrap(true);
-        txtNotes.setRows(5);
-        txtNotes.setToolTipText("Notes on part of speech");
-        txtNotes.setWrapStyleWord(true);
-        jScrollPane2.setViewportView(txtNotes);
-
         txtTypePattern.setToolTipText("Regex pattern to enforce on part of speech");
 
         btnSetup.setText("Conjugations/Declensions Setup");
         btnSetup.setToolTipText("Create declension and conjugation dimensins here.");
+        btnSetup.setEnabled(false);
         btnSetup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSetupActionPerformed(evt);
@@ -404,6 +400,7 @@ public class ScrTypes extends PDialog {
 
         btnAutogen.setText("Conjugations/Declensions Autogeneration");
         btnAutogen.setToolTipText("Setup rules to automatically generate conjugations and declensions for words of this type here.");
+        btnAutogen.setEnabled(false);
         btnAutogen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAutogenActionPerformed(evt);
@@ -451,34 +448,38 @@ public class ScrTypes extends PDialog {
             }
         });
 
+        jScrollPane3.setViewportView(txtNotes);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtName)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jButton1))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addComponent(txtTypePattern)
-                    .addComponent(btnSetup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAutogen, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-                    .addComponent(txtGloss)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnSetup, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAutogen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTypePattern, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtGloss, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtErrorBox)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtName))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtGloss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -530,7 +531,7 @@ public class ScrTypes extends PDialog {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddType)
@@ -543,7 +544,7 @@ public class ScrTypes extends PDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+            .addComponent(jSplitPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -622,13 +623,13 @@ public class ScrTypes extends PDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JList lstTypes;
     private javax.swing.JTextField txtErrorBox;
     private javax.swing.JTextField txtGloss;
     private javax.swing.JTextField txtName;
-    private javax.swing.JTextArea txtNotes;
+    private javax.swing.JTextPane txtNotes;
     private javax.swing.JTextField txtTypePattern;
     // End of variables declaration//GEN-END:variables
 }
