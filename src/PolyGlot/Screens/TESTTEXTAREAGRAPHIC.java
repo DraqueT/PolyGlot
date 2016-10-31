@@ -55,7 +55,7 @@ public class TESTTEXTAREAGRAPHIC extends javax.swing.JFrame {
             Logger.getLogger(ImageCollection.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        jTextPane1.setText("<img src=\"http://d.facdn.net/art/tanraak/1454909822/1454909762.tanraak_1.jpg\">");
+        jTextPane1.setText("<img src=\"\">");
     }
 
     /**
@@ -68,7 +68,7 @@ public class TESTTEXTAREAGRAPHIC extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new PTextPane(core, true, "_--SATEASF--");
+        jTextPane1 = new PolyGlot.CustomControls.PTextPane(core, true, "_--SATEASF--");
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -86,10 +86,11 @@ public class TESTTEXTAREAGRAPHIC extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 388, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addGap(172, 172, 172)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
