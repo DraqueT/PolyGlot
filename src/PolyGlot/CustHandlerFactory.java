@@ -551,6 +551,13 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordClassAndValueXID)) {
                     bclassVal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordDefXID)) {
+                    // finalize loading of def (if it contains archived HTML elements
+                    ConWord curWord = core.getWordCollection().getBufferWord();
+                    try {
+                        curWord.setDefinition(WebInterface.unarchiveHTML(curWord.getDefinition(), core));
+                    } catch (Exception e) {
+                        warningLog += "\nWord image load error: " + e.getLocalizedMessage();
+                    }
                     bdef = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.fontConXID)) {
                     bfontcon = false;
@@ -559,6 +566,12 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.typeNameXID)) {
                     bwordClassName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.typeNotesXID)) {
+                    TypeNode node = core.getTypes().getBufferType();
+                    try {
+                        node.setNotes(WebInterface.unarchiveHTML(node.getNotes(), core));
+                    } catch (Exception e) {
+                        warningLog += "\nProblem loading part of speech note image: " + e.getLocalizedMessage();
+                    }
                     bwordClassNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.typePlurManXID)) {
                     bwordClassPlurMan = false;
@@ -601,6 +614,11 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionTextXID)) {
                     bDecText = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionNotesXID)) {
+                    try {
+                        declensionMgr.setBufferDecNotes(WebInterface.unarchiveHTML(declensionMgr.getBufferDecNotes(), core));
+                    } catch (Exception e) {
+                        warningLog += "\nProblem loading declension notes image: " + e.getLocalizedMessage();
+                    }
                     bDecNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionIsTemplateXID)) {
                     bDecIsTemp = false;
@@ -636,6 +654,12 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.famNodeXID)) {
                     famMgr.bufferDone();
                 } else if (qName.equalsIgnoreCase(PGTUtil.famNotesXID)) {
+                    FamNode node = core.getFamManager().getBuffer();
+                    try {
+                        node.setNotes(WebInterface.unarchiveHTML(node.getNotes(), core));
+                    } catch (Exception e) {
+                        warningLog += "\nProblem loading family note image: " + e.getLocalizedMessage();
+                    }
                     bfamNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.famWordXID)) {
                     bfamWord = false;
@@ -668,6 +692,12 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.logoStrokesXID)) {
                     blogoStrokes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.logoNotesXID)) {
+                    LogoNode node = core.getLogoCollection().getBufferNode();
+                    try {
+                        node.setNotes(WebInterface.unarchiveHTML(node.getNotes(), core));
+                    } catch (Exception e) {
+                        warningLog += "\nProblem loading logograph note image: " + e.getLocalizedMessage();
+                    }
                     blogoNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.logoIsRadicalXID)) {
                     blogoRadical = false;

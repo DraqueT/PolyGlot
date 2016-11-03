@@ -25,6 +25,7 @@ import PolyGlot.DictCore;
 import PolyGlot.Nodes.DictNode;
 import PolyGlot.PGTUtil;
 import PolyGlot.Nodes.TypeNode;
+import PolyGlot.WebInterface;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -295,7 +296,7 @@ public class TypeCollection extends DictionaryCollection {
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.typeNotesXID);
-            wordValue.appendChild(doc.createTextNode(curType.getNotes()));
+            wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(curType.getNotes())));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.typeDefManXID);

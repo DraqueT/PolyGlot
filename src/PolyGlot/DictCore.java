@@ -30,6 +30,7 @@ import PolyGlot.ManagersCollections.FamilyManager;
 import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.ManagersCollections.TypeCollection;
 import PolyGlot.ManagersCollections.ConWordCollection;
+import PolyGlot.ManagersCollections.ImageCollection;
 import PolyGlot.ManagersCollections.OptionsManager;
 import PolyGlot.ManagersCollections.WordPropertyCollection;
 import PolyGlot.Screens.ScrDictMenu;
@@ -60,6 +61,7 @@ public class DictCore {
     private final GrammarManager grammarManager;
     private final OptionsManager optionsManager;
     private final WordPropertyCollection wordPropCollection;
+    private final ImageCollection imageCollection;
     private PFrame rootWindow;
     private Object clipBoard;
     private boolean curLoading = false;
@@ -75,6 +77,7 @@ public class DictCore {
         grammarManager = new GrammarManager();
         optionsManager = new OptionsManager(this);
         wordPropCollection = new WordPropertyCollection();
+        imageCollection = new ImageCollection();
 
         Map alphaOrder = propertiesManager.getAlphaOrder();
 
@@ -114,6 +117,10 @@ public class DictCore {
 
     public OptionsManager getOptionsManager() {
         return optionsManager;
+    }
+    
+    public ImageCollection getImageCollection() {
+        return imageCollection;
     }
 
     /**
@@ -313,6 +320,14 @@ public class DictCore {
         curLoading = true;
         String errorLog = "";
         String warningLog = "";
+        
+        // load image assets first to allow referencing as dictionary loads
+        try {
+            IOHandler.loadImageAssets(imageCollection, _fileName);
+        } catch (Exception e) {
+            throw new IOException("Image loading error: " + e.getLocalizedMessage());
+        }
+        
         try {
             CustHandler handler = IOHandler.getHandlerFromFile(_fileName, this);
             IOHandler.parseHandler(_fileName, handler);
@@ -342,7 +357,7 @@ public class DictCore {
         }
 
         try {
-            IOHandler.loadImages(logoCollection, _fileName);
+            IOHandler.loadLogographs(logoCollection, _fileName);
         } catch (Exception e) {
             warningLog += e.getLocalizedMessage() + "\n";
         }

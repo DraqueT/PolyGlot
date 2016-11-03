@@ -27,6 +27,7 @@ import PolyGlot.PGTUtil;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.RankedObject;
+import PolyGlot.WebInterface;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -913,7 +914,7 @@ public class ConWordCollection extends DictionaryCollection {
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.wordDefXID);
-            wordValue.appendChild(doc.createTextNode(curWord.getDefinition()));
+            wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(curWord.getDefinition())));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.wordProcOverrideXID);

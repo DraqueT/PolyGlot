@@ -23,6 +23,7 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.LogoNode;
 import PolyGlot.PGTUtil;
+import PolyGlot.WebInterface;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -284,7 +285,7 @@ public class LogoCollection extends DictionaryCollection {
             logoGraph.appendChild(node);
             
             node = doc.createElement(PGTUtil.logoNotesXID);
-            node.appendChild(doc.createTextNode(curNode.getNotes()));
+            node.appendChild(doc.createTextNode(WebInterface.archiveHTML(curNode.getNotes())));
             logoGraph.appendChild(node);
             
             node = doc.createElement(PGTUtil.logoRadicalListXID);

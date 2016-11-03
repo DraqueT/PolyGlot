@@ -174,6 +174,7 @@ public class PGTUtil {
     public static final String LCDFontLocation = "/PolyGlot/GeneralResources/lcdFont.ttf";
     public static final String UnicodeFontLocation = "/PolyGlot/GeneralResources/unicode.ttf";
     public static final String logoGraphSavePath = "logoGraphs/";
+    public static final String imagesSavePath = "images/";
     public static final String grammarSoundSavePath = "grammarSounds/";
     public static final String emptyFile = "<EMPTY>";
     public static final String tempFile = "xxTEMPPGTFILExx";

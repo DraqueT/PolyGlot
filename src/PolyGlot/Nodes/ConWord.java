@@ -219,6 +219,14 @@ public class ConWord extends DictNode {
     }
 
     public String getDefinition() {
+        String ret = definition;
+        
+        try {
+            
+        } catch (Exception e) {
+            ret = "ERROR LOADING IMAGE(S) " +ret;
+        }
+        
         return definition;
     }
 

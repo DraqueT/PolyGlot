@@ -33,23 +33,35 @@ public class ImageNode extends DictNode {
     private BufferedImage image = null;
     private File tmpFile = null;
     
-    
+    /**
+     * Sets image equal to.
+     * Only sets equal the buffered image and the id. Nothing else.
+     * @param _node
+     * @throws ClassCastException 
+     */
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
-        throw new UnsupportedOperationException("Image nodes should never be set equal to one another.");
+        if (!(_node instanceof ImageNode)) {
+            throw new ClassCastException("Cannot convert type: " 
+                    + _node.getClass().getName() + " to type ImageNode.");
+        }
+        ImageNode tmpNode = (ImageNode)_node;
+        
+        image = tmpNode.getImage();
+        id = tmpNode.getId();
     }
 
     /**
-     * @return the logoGraph
+     * @return the image
      */
-    public BufferedImage getLogoGraph() {
+    public BufferedImage getImage() {
         return image;
     }
 
     /**
-     * @param _image the logoGraph to set
+     * @param _image the image to set
      */
-    public void setLogoGraph(BufferedImage _image) {
+    public void setImage(BufferedImage _image) {
         image = _image;
     }
     
@@ -66,7 +78,7 @@ public class ImageNode extends DictNode {
         
         // create tmp file if none exists
         if (tmpFile == null || !tmpFile.exists()) {
-            tmpFile = File.createTempFile("polyGlotImage", ".png");
+            tmpFile = File.createTempFile(id.toString() + "_polyGlotImage", ".png");
             ImageIO.write(image, "PNG", new FileOutputStream(tmpFile));
         }
         

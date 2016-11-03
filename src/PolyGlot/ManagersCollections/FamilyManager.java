@@ -23,6 +23,7 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.PGTUtil;
 import PolyGlot.Nodes.FamNode;
+import PolyGlot.WebInterface;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -146,7 +147,7 @@ public class FamilyManager {
         
         // save notes
         property = doc.createElement(PGTUtil.famNotesXID);
-        property.appendChild(doc.createTextNode(curNode.getNotes()));
+        property.appendChild(doc.createTextNode(WebInterface.archiveHTML(curNode.getNotes())));
         curElement.appendChild(property);
         
         // save words

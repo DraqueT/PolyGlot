@@ -24,12 +24,15 @@ import PolyGlot.ManagersCollections.GrammarManager;
 import PolyGlot.ManagersCollections.LogoCollection;
 import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.GrammarChapNode;
+import PolyGlot.ManagersCollections.ImageCollection;
+import PolyGlot.Nodes.ImageNode;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -49,7 +52,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
@@ -187,6 +192,39 @@ public class IOHandler {
         }
 
         return ret;
+    }
+    
+    /**
+     * Opens an image via GUI and returns as buffered image
+     * @param parent parent window of operation
+     * @return buffered image selected by user
+     * @throws IOException on file read error
+     */
+    public static BufferedImage openImage(Window parent) throws IOException {
+        BufferedImage ret =  null;
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Select Image");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "jpeg", "tiff", "bmp", "png");
+        chooser.setFileFilter(filter);
+        String fileName;
+        chooser.setCurrentDirectory(new File("."));
+        
+        if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
+            fileName = chooser.getSelectedFile().getAbsolutePath();
+            ret = ImageIO.read(new File(fileName));
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * returns name of file sans path
+     * @param fullPath full path to file
+     * @return string of filename
+     */
+    public static String getFilenameFromPath(String fullPath) {
+        File file = new File(fullPath);
+        return file.getName();
     }
     
     /**
@@ -394,14 +432,12 @@ public class IOHandler {
                     }
 
                     // write all logograph images to file
-                    Iterator<LogoNode> it = core.getLogoCollection().getAllLogos().iterator();
-                    if (it.hasNext()) {
+                    List<LogoNode> logoNodes = core.getLogoCollection().getAllLogos();
+                    if (!logoNodes.isEmpty()) {
                         try {
                             out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath));
-
-                            while (it.hasNext()) {
+                            for (LogoNode curNode : logoNodes) {
                                 try {
-                                    LogoNode curNode = it.next();
                                     out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath
                                             + curNode.getId().toString() + ".png"));
 
@@ -409,16 +445,35 @@ public class IOHandler {
 
                                     out.closeEntry();
                                 } catch (IOException ex) {
-                                    writeLog += "\nUnable to save image: " + ex.getLocalizedMessage();
+                                    writeLog += "\nUnable to save logograph: " + ex.getLocalizedMessage();
                                 }
                             }
                         } catch (IOException ex) {
-                            writeLog += "\nUnable to save images: " + ex.getLocalizedMessage();
+                            writeLog += "\nUnable to save Logographs: " + ex.getLocalizedMessage();
                         }
                     }
                     
                     // Write all general images in image repository to file
-                    
+                    List<ImageNode> imageNodes = core.getImageCollection().getAllImages();
+                    if (!imageNodes.isEmpty()) {
+                        try {
+                            out.putNextEntry(new ZipEntry(PGTUtil.imagesSavePath));
+                            for (ImageNode curNode : imageNodes) {
+                                try {
+                                    out.putNextEntry(new ZipEntry(PGTUtil.imagesSavePath
+                                            + curNode.getId().toString() + ".png"));
+
+                                    ImageIO.write(curNode.getImage(), "png", out);
+
+                                    out.closeEntry();
+                                } catch (IOException ex) {
+                                    writeLog += "\nUnable to save image: " + ex.getLocalizedMessage();
+                                }
+                            }
+                        } catch (IOException ex) {
+                            writeLog += "\nUnable to save Images: " + ex.getLocalizedMessage();
+                        }
+                    }
 
                     // write all grammar wav recordings to file
                     Map<Integer, byte[]> grammarSoundMap = core.getGrammarManager().getSoundMap();
@@ -597,13 +652,58 @@ public class IOHandler {
     }
 
     /**
+     * Loads image assets from file. Does not load logographs due to legacy
+     * coding/logic
+     * @param imageCollection from dictCore to populate
+     * @param fileName of file containing assets
+     * @throws java.io.IOException
+     */
+    public static void loadImageAssets(ImageCollection imageCollection, 
+            String fileName) throws IOException, Exception {
+        try (ZipFile zipFile = new ZipFile(fileName)) {
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            ZipEntry entry;
+            while (entries.hasMoreElements()) { // find images directory (zip paths are linear, only simulating tree structure)
+                entry = entries.nextElement();
+                if (!entry.getName().equals(PGTUtil.imagesSavePath)) {
+                    continue;
+                }
+                break;
+            }
+            
+            while (entries.hasMoreElements()) {
+                entry = entries.nextElement();
+                
+                if (entry.isDirectory()) { // kills process after last image found
+                    break;
+                }
+                
+                BufferedImage img;
+                try (InputStream imageStream = zipFile.getInputStream(entry)) {
+                    String name = entry.getName().replace(".png", "")
+                            .replace(PGTUtil.imagesSavePath, "");
+                    int imageId = Integer.parseInt(name);
+                    img = ImageIO.read(imageStream);
+                    ImageNode imageNode = new ImageNode();
+                    imageNode.setId(imageId);
+                    imageNode.setImage(img);
+                    imageCollection.getBuffer().setEqual(imageNode);
+                    imageCollection.insert(imageId);
+                }
+            }
+        }
+    }
+    
+    /**
      * loads all images into their logographs from archive
+     * and images into the generalized image collection
      *
      * @param logoCollection logocollection from dictionary core
      * @param fileName name/path of archive
      * @throws java.lang.Exception
      */
-    public static void loadImages(LogoCollection logoCollection, String fileName) throws Exception {
+    public static void loadLogographs(LogoCollection logoCollection,
+            String fileName) throws Exception {
         if (!isFileZipArchive(fileName)) {
             return;
         }

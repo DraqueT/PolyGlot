@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import PolyGlot.Nodes.ImageNode;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -29,6 +30,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class handles all web communication to and from PolyGlot
@@ -76,5 +79,68 @@ public class WebInterface {
         }
 
         return ret;
+    }
+    
+    /**
+     * Gets only the text from a PTextPane's html
+     * @param text
+     * @return 
+     */
+    public static String getTextFromHtml(String text) {
+        return text.replaceAll("<[^>]+>", "").trim();
+    }
+    
+    /**
+     * Takes archived HTML and translates it into display HTML.
+     * - Replaces archival image references to temp image refs
+     * @param html archived html
+     * @param core
+     * @return unarchived html
+     * @throws java.lang.Exception
+     */
+    public static String unarchiveHTML(String html, DictCore core) throws Exception {
+        // pattern for finding archived images
+        Pattern pattern = Pattern.compile("(<img src=\"[^>,_]+\">)");
+        Matcher matcher = pattern.matcher(html);
+        
+        while (matcher.find()) {
+            String regPath = matcher.group(1);
+            regPath = regPath.replace("<img src=\"", "");
+            regPath = regPath.replace("\"", "");
+            regPath = regPath.replace(">", "");
+            try {
+                int imageId = Integer.parseInt(regPath);
+                ImageNode image = (ImageNode)core.getImageCollection().getNodeById(imageId);
+                html = html.replace("<img src=\""+ regPath + "\">", "<img src=\"file:///"+ image.getImagePath() + "\">");
+            } catch (Exception e) {
+                throw new Exception("problem loading image : " + e.getLocalizedMessage());
+            }
+        }
+        
+        return html;
+    }
+    
+    /**
+     * Takes display HTML and translates it into archival HTML.
+     * - Replaces actual image references with static, id based refs
+     * @param html unarchived html
+     * @return archivable html
+     */
+    public static String archiveHTML(String html) {
+        // pattern for finding unarchived images
+        Pattern pattern = Pattern.compile("(<img src=\"[^>,_]+_[^>]+\">)");
+        Matcher matcher = pattern.matcher(html);
+        
+        while (matcher.find()) {
+            String regPath = matcher.group(1);
+            regPath = regPath.replace("<img src=\"file:///", "");
+            regPath = regPath.replace("\"", "");
+            regPath = regPath.replace(">", "");
+            String fileName = IOHandler.getFilenameFromPath(regPath);
+            String arcPath = fileName.replaceFirst("_.*", "");
+            html = html.replace("file:///" + regPath, arcPath);
+        }
+        
+        return html;
     }
 }

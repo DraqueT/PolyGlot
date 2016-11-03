@@ -27,6 +27,7 @@ import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.PGTUtil;
 import PolyGlot.Nodes.TypeNode;
+import PolyGlot.WebInterface;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -806,7 +807,7 @@ public class DeclensionManager {
                 wordNode.appendChild(wordValue);
 
                 wordValue = doc.createElement(PGTUtil.declensionNotesXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getNotes()));
+                wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(curNode.getNotes())));
                 wordNode.appendChild(wordValue);
 
                 wordValue = doc.createElement(PGTUtil.declensionIsTemplateXID);

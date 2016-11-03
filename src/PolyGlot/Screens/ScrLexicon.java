@@ -32,6 +32,7 @@ import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
+import PolyGlot.WebInterface;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -999,7 +1000,7 @@ public final class ScrLexicon extends PFrame {
                                 ? curType.getValue() : curType.getGloss());
                     }
                     if (!curWord.getDefinition().equals("")) {
-                        tip += " : " + curWord.getDefinition();
+                        tip += " : " + WebInterface.getTextFromHtml(curWord.getDefinition());
                     }
 
                     theList.setToolTipText(tip);

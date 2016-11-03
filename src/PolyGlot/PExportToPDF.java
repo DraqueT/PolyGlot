@@ -128,16 +128,8 @@ public class PExportToPDF {
         unicodeFontFile = new IOHandler().getUnicodeFontByteArray();
         unicodeFont = PdfFontFactory.createFont(unicodeFontFile, PdfEncodings.IDENTITY_H, true);
         unicodeFont.setSubset(true);
-
-        if (conFontFile == null) {
-            try {
-                conFontFile = IOHandler.getFontFileArray(core.getPropertiesManager().getFontCon());
-            } catch (Exception ex) {
-                InfoBox.warning("Font Exception", "Unable to find font: check that text appears correctly.", null);
-            }
-        }
         
-        // Document Exception if unable to read font, IO exception if problem loading font binary
+        // If font file still null, no custom font was loaded.
         if (conFontFile == null) {
             // If confont not specified, assume that the conlang requires unicode characters
             conFont = unicodeFont;
@@ -443,8 +435,9 @@ public class PExportToPDF {
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
 
-            if (!curWord.getDefinition().equals("")) {
-                dictEntry.add(new Text("\n" + curWord.getDefinition()).setFontSize(defFontSize));
+            String curDef = WebInterface.getTextFromHtml(curWord.getDefinition());
+            if (!curDef.equals("")) {
+                dictEntry.add(new Text("\n" + curDef).setFontSize(defFontSize));
                 dictEntry.add(new Text("\n"));
             }
 
@@ -579,8 +572,10 @@ public class PExportToPDF {
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
 
-            if (!curWord.getDefinition().equals("")) {
-                dictEntry.add(new Text("\n" + curWord.getDefinition()).setFontSize(defFontSize));
+            String curDef = WebInterface.getTextFromHtml(curWord.getDefinition());
+            if (!curDef.equals("")) {
+                dictEntry.add(new Text("\n" 
+                        + curDef).setFontSize(defFontSize));
                 dictEntry.add(new Text("\n"));
             }
 

@@ -20,10 +20,14 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import PolyGlot.ExternalCode.TextTransfer;
+import PolyGlot.Nodes.ImageNode;
 import PolyGlot.PGTUtil;
 import PolyGlot.PGTools;
+import PolyGlot.WebInterface;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -40,18 +44,19 @@ import javax.swing.SwingWorker;
  * @author draque
  */
 public class PTextPane extends JTextPane {
+
     private SwingWorker worker = null;
     private final String defText;
     private final DictCore core;
     private final boolean overrideFont;
-    
+
     public PTextPane(DictCore _core, boolean _overideFont, String _defText) {
         core = _core;
         defText = _defText;
         overrideFont = _overideFont;
         this.setContentType("text/html");
         setupRightClickMenu();
-        
+
         setupListeners();
         setText(defText);
         setForeground(Color.lightGray);
@@ -61,17 +66,17 @@ public class PTextPane extends JTextPane {
             setFont(core.getPropertiesManager().getCharisUnicodeFont());
         }
     }
-    
+
     @Override
     public final void setFont(Font _font) {
         super.setFont(_font);
     }
-        
+
     @Override
     public final void setForeground(Color _color) {
         super.setForeground(_color);
     }
-    
+
     @Override
     public final void setText(String t) {
         try {
@@ -83,18 +88,20 @@ public class PTextPane extends JTextPane {
         } catch (Exception e) {
             InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), null);
         }
-        
+
         if (isDefaultText()) {
             setForeground(Color.lightGray);
         } else {
             setForeground(Color.black);
         }
     }
-    
+
     /**
      * makes this component flash. If already flashing, does nothing.
+     *
      * @param _flashColor color to flash
-     * @param isBack whether display color is background (rather than foreground)
+     * @param isBack whether display color is background (rather than
+     * foreground)
      */
     public void makeFlash(Color _flashColor, boolean isBack) {
         if (worker == null || worker.isDone()) {
@@ -102,33 +109,48 @@ public class PTextPane extends JTextPane {
             worker.execute();
         }
     }
-    
+
     /**
      * gets default value string of text
+     *
      * @return default text
      */
     public String getDefaultValue() {
         return defText;
     }
-    
+
     @Override
     public String getToolTipText() {
-        return super.getToolTipText() + " (right click to insert images)";
+        String ret = super.getToolTipText();
+        
+        if (ret != null) {
+            ret += " (right click to insert images)";
+        }
+        
+        return ret;
     }
-    
+
     private void setupRightClickMenu() {
         final JPopupMenu ruleMenu = new JPopupMenu();
         final JMenuItem insertImage = new JMenuItem("Insert Image");
+        final PTextPane parentPane = this;
+
         insertImage.setToolTipText("Insert Image into Text");
         insertImage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                addImage();
+                try {
+                    addImage(core.getImageCollection()
+                            .openNewImage((Window)parentPane.getTopLevelAncestor()));
+                } catch (Exception e) {
+                    InfoBox.error("Image Import Error", "Unable to import image: " 
+                            + e.getLocalizedMessage(), null);
+                }
             }
         });
-        
+
         ruleMenu.add(insertImage);
-        
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -147,28 +169,43 @@ public class PTextPane extends JTextPane {
             }
         });
     }
-    
-    private void addImage(){
+
+    private void addImage(ImageNode image) throws Exception {
+        final String placeHold = "-POLYGLOTIMAGE-";
         
+        if (isDefaultText()) {
+            super.setText("");
+        }
+        
+        TextTransfer test = new TextTransfer();
+
+        test.cacheClipboard();
+        test.setClipboardContents(placeHold);
+
+        paste();
+        String newText = getRawHTML();
+        setText(newText.replace(placeHold, "<img src=\"file:///" + image.getImagePath() + "\">"));
+        test.restoreClipboard();
     }
-    
+
     /**
      * Tests whether the current text value is the default value
-     * @return 
+     *
+     * @return
      */
     public boolean isDefaultText() {
         // account for RtL languages
         String curText = getNakedText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
-        return curText.equals(defText);
+        return curText.contains(defText);
     }
-    
+
     /**
      * sets text to default value
      */
     public void setDefault() {
         setText(defText);
     }
-    
+
     private void setupListeners() {
         FocusListener listener = new FocusListener() {
             @Override
@@ -187,40 +224,52 @@ public class PTextPane extends JTextPane {
                 }
             }
         };
-        
+
         this.addFocusListener(listener);
     }
-    
+
     /**
-     * Gets plain text that appears in body and nothing else
-     * @return 
+     * Gets raw html content of panel without any postprocessing
+     *
+     * @return
      */
-    private String getNakedText() {
-        String ret = getSuperText();
+    public String getRawHTML() {
+        return super.getText();
+    }
+
+    /**
+     * Gets plain text that appears in body (but not HTML) and nothing else
+     *
+     * @return
+     */
+    public String getNakedText() {
+        /*String ret = getSuperText();
         if (getContentType().equals("text/html")) {
             int start = ret.indexOf("<body>") + 7;
             int end = ret.indexOf("</body>");
             ret = ret.substring(start, end);
         }
-        return ret.trim();
+        return ret.trim();*/
+        return WebInterface.getTextFromHtml(getSuperText()).trim();
     }
-    
+
     @Override
     public String getText() {
         String ret = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
-        
+
         if (ret.equals(defText)) {
             ret = "";
         } else {
             ret = core.getPropertiesManager().isEnforceRTL() ? PGTUtil.RTLMarker + ret : ret;
         }
-        
+
         return ret;
     }
-    
+
     /**
      * Allows super method to be called in listeners
-     * @return 
+     *
+     * @return
      */
     private String getSuperText() {
         return super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
