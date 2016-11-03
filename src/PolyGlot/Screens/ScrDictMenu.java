@@ -362,7 +362,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private boolean saveOrCancelTest() {
         // if there's a current dictionary loaded, prompt user to save before creating new
         if (core != null
-                && core.getWordCollection().getWordNodes().isEmpty()) {
+                && !core.getWordCollection().getWordNodes().isEmpty()) {
             Integer saveFirst = localYesNoCancel("Save First?",
                     "Save current dictionary before performing action?");
 
