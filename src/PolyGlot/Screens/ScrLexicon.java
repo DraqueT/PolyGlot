@@ -82,7 +82,6 @@ import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListModel;
@@ -1286,7 +1285,7 @@ public final class ScrLexicon extends PFrame {
      * @param saveWord word to save current values to
      */
     private void saveValuesTo(ConWord saveWord) {
-        if (((PTextField)txtConWord).isDefaultText()) {
+        if (((PTextField)txtConWord).isDefaultText() || saveWord == null) {
             return;
         }
 
