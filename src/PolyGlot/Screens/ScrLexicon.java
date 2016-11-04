@@ -1098,6 +1098,7 @@ public final class ScrLexicon extends PFrame {
                 }
                 ((PTextField)txtLocalWord).setDefault();
                 ((PTextField)txtProc).setDefault();
+                ((PTextPane)txtDefinition).setDefault();
                 cmbType.setSelectedItem(defTypeValue);
                 chkProcOverride.setSelected(false);
                 chkRuleOverride.setSelected(false);
