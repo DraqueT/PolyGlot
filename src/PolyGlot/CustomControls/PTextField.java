@@ -73,7 +73,7 @@ public class PTextField extends JTextField {
         overrideFont = _overideFont;
         defText = _defText;
         setupListeners();
-        setText(defText);
+        
         setForeground(Color.lightGray);
         setupRightClickMenu();
         if (!overrideFont) {
@@ -81,6 +81,7 @@ public class PTextField extends JTextField {
         } else {
             setFont(core.getPropertiesManager().getCharisUnicodeFont());
         }
+        setText(defText);
     }
     
     @Override
