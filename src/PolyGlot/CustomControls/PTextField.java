@@ -26,11 +26,17 @@ import PolyGlot.PGTools;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.Serializable;
 import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
@@ -69,6 +75,7 @@ public class PTextField extends JTextField {
         setupListeners();
         setText(defText);
         setForeground(Color.lightGray);
+        setupRightClickMenu();
         if (!overrideFont) {
             setFont(core.getPropertiesManager().getFontCon());
         } else {
@@ -261,5 +268,70 @@ public class PTextField extends JTextField {
         }
         
         return ret;
+    }
+    
+    private void setupRightClickMenu() {
+        final JPopupMenu ruleMenu = new JPopupMenu();
+        final JMenuItem cut = new JMenuItem("Cut");
+        final JMenuItem copy = new JMenuItem("Copy");
+        final JMenuItem paste = new JMenuItem("Paste");
+        final PTextField parentField = this;
+
+        cut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                cut();
+            }
+        });
+        copy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                copy();
+            }
+        });
+        paste.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if(isDefaultText()) { //removes default text if appropriate
+                    superSetText("");
+                }
+                paste();
+                setText(getText()); // ensures text is not left grey
+            }
+        });
+        
+        ruleMenu.add(cut);
+        ruleMenu.add(copy);
+        ruleMenu.add(paste);
+        
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() && parentField.isEnabled()) {
+                    cut.setEnabled(true);
+                    copy.setEnabled(true);
+                    paste.setEnabled(true);
+                    ruleMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger() && parentField.isEnabled()) {
+                    cut.setEnabled(true);
+                    copy.setEnabled(true);
+                    paste.setEnabled(true);
+                    ruleMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
+    }
+    
+    /**
+     * Exposes super's set text to menu items
+     * @param text 
+     */
+    private void superSetText(String text) {
+        super.setText(text);
     }
 }

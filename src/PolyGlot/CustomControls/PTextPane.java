@@ -129,10 +129,21 @@ public class PTextPane extends JTextPane {
         
         return ret;
     }
+    
+    /**
+     * Exposes super's set text to menu items
+     * @param text 
+     */
+    private void superSetText(String text) {
+        super.setText(text);
+    }
 
     private void setupRightClickMenu() {
         final JPopupMenu ruleMenu = new JPopupMenu();
         final JMenuItem insertImage = new JMenuItem("Insert Image");
+        final JMenuItem cut = new JMenuItem("Cut");
+        final JMenuItem copy = new JMenuItem("Copy");
+        final JMenuItem paste = new JMenuItem("Paste");
         final PTextPane parentPane = this;
 
         insertImage.setToolTipText("Insert Image into Text");
@@ -148,22 +159,53 @@ public class PTextPane extends JTextPane {
                 }
             }
         });
+        cut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                cut();
+            }
+        });
+        copy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                copy();
+            }
+        });
+        paste.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if(isDefaultText()) { //removes default text if appropriate
+                    superSetText("");
+                }
+                paste();
+                setText(getText()); // ensures text is not left grey
+            }
+        });
 
         ruleMenu.add(insertImage);
+        ruleMenu.add(cut);
+        ruleMenu.add(copy);
+        ruleMenu.add(paste);
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.isPopupTrigger()) {
+                if (e.isPopupTrigger() && parentPane.isEnabled()) {
                     insertImage.setEnabled(true);
+                    cut.setEnabled(true);
+                    copy.setEnabled(true);
+                    paste.setEnabled(true);
                     ruleMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (e.isPopupTrigger()) {
+                if (e.isPopupTrigger() && parentPane.isEnabled()) {
                     insertImage.setEnabled(true);
+                    cut.setEnabled(true);
+                    copy.setEnabled(true);
+                    paste.setEnabled(true);
                     ruleMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
