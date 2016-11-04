@@ -19,7 +19,11 @@
  */
 package PolyGlot.Screens;
 
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.DictCore;
+import PolyGlot.Nodes.ConWord;
+import QuizEngine.Quiz;
+import QuizEngine.QuizFactory;
 
 /**
  *
@@ -37,6 +41,33 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         chkLocalQuiz.setText(core.localLabel() + " Equivalent");
     }
 
+    private void takeQuiz() {
+        // TODO: Make filtering work
+        ConWord filter = null;
+        QuizFactory factory = new QuizFactory(core);
+        int numQuestions;
+        
+        try {
+            numQuestions = Integer.parseInt(txtNumQuestions.getText());
+        } catch (Exception e) {
+            InfoBox.error("Integer Value Required", "Number of questions must be an integer value.", this);
+            return;
+        }
+        
+        try {
+            Quiz genQuiz = factory.generateLexicalQuiz(numQuestions, 
+                    chkMultiChoice.isSelected(), 
+                    chkLocalQuiz.isSelected(), 
+                    chkTypeQuiz.isSelected(), 
+                    chkProcQuiz.isSelected(), 
+                    chkDefQuiz.isSelected(), 
+                    chkClassQuiz.isSelected(), 
+                    filter);
+        } catch (Exception e) {
+            InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), this);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,7 +89,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         btnClearFilter = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtNumQuestions = new javax.swing.JTextField();
         chkMultiChoice = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -71,8 +102,18 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnQuiz.setText("Take Quiz");
+        btnQuiz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuizActionPerformed(evt);
+            }
+        });
 
         btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -128,7 +169,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
 
         jLabel2.setText("Quiz Length");
 
-        jTextField1.setToolTipText("Number of questions in quiz");
+        txtNumQuestions.setToolTipText("Number of questions in quiz");
 
         chkMultiChoice.setSelected(true);
         chkMultiChoice.setText("Multiple Choice");
@@ -178,7 +219,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
                 .addComponent(chkProcQuiz)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkDefQuiz)
-                .addGap(0, 22, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -195,7 +236,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtNumQuestions, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(3, 3, 3)
                                 .addComponent(chkMultiChoice)))
@@ -209,7 +250,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNumQuestions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkMultiChoice)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -234,7 +275,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnQuiz)
@@ -244,6 +285,14 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuizActionPerformed
+        takeQuiz();
+    }//GEN-LAST:event_btnQuizActionPerformed
 
     // TODO: DELETE
     /**
@@ -300,9 +349,9 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField txtFilterConWord;
     private javax.swing.JTextField txtFilterLocalWord;
     private javax.swing.JTextField txtFilterProc;
+    private javax.swing.JTextField txtNumQuestions;
     // End of variables declaration//GEN-END:variables
 }
