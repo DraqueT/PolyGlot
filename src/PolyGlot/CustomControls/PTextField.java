@@ -72,8 +72,7 @@ public class PTextField extends JTextField {
         core = _core;
         overrideFont = _overideFont;
         defText = _defText;
-        setupListeners();
-        
+        setupListeners();        
         setForeground(Color.lightGray);
         setupRightClickMenu();
         if (!overrideFont) {
