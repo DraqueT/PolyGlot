@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -142,5 +144,43 @@ public class WebInterface {
         }
         
         return html;
+    }
+    
+    /**
+     * This cycles through the body of HTML and generates an ordered list of objects
+     * representing all of the items in the HTML. Consumers are responsible for
+     * identifying objects.
+     * @param html HTML to extract from
+     * @param core dictionary core
+     * @return 
+     * @throws java.io.IOException 
+     */
+    public static List<Object> getElementsHTMLBody(String html, DictCore core) throws IOException {
+        List<Object> ret = new ArrayList<>();
+        String body = html.replaceAll(".*<body>", "");
+        body = body.replaceAll("</body>.*", "");
+        Pattern pattern = Pattern.compile("([^<]+|<[^>]+>)");//("(<[^>]+>)");
+        Matcher matcher = pattern.matcher(body);
+        
+        // loops on unincumbered text and tags.
+        while (matcher.find()) {
+            String token = matcher.group(1);
+            if (token.startsWith("<")) {
+                if (token.contains("<img src=\"")) {
+                    String path = token.replace("<img src=\"file:///", "").replace("\">", "");
+                    ret.add(IOHandler.getImage(path));
+                } else {
+                    // do nothing with unrecognized elements - might be upgraded later.
+                }
+            } else {
+                // this is plaintext
+                String add = token.trim();
+                if (!add.equals("")) {
+                    ret.add(add + " ");
+                }
+            }
+        }
+        
+        return ret;
     }
 }

@@ -196,7 +196,7 @@ public class PTextPane extends JTextPane {
     public boolean isDefaultText() {
         // account for RtL languages
         String curText = getNakedText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
-        return curText.contains(defText);
+        return curText.equals("");
     }
 
     /**
@@ -210,7 +210,7 @@ public class PTextPane extends JTextPane {
         FocusListener listener = new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (getNakedText().equals(defText)) {
+                if (isDefaultText()) {
                     setText("");
                     setForeground(Color.black);
                 }
@@ -243,21 +243,21 @@ public class PTextPane extends JTextPane {
      * @return
      */
     public String getNakedText() {
-        /*String ret = getSuperText();
-        if (getContentType().equals("text/html")) {
-            int start = ret.indexOf("<body>") + 7;
-            int end = ret.indexOf("</body>");
-            ret = ret.substring(start, end);
+        String ret;  
+        ret = WebInterface.getTextFromHtml(getSuperText()).trim();
+  
+        if (ret.equals(defText)) {
+            ret = "";
         }
-        return ret.trim();*/
-        return WebInterface.getTextFromHtml(getSuperText()).trim();
+        
+        return ret;
     }
 
     @Override
     public String getText() {
         String ret = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
 
-        if (ret.equals(defText)) {
+        if (isDefaultText()) {
             ret = "";
         } else {
             ret = core.getPropertiesManager().isEnforceRTL() ? PGTUtil.RTLMarker + ret : ret;

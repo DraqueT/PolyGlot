@@ -313,7 +313,7 @@ public class ScrPrintToPDF extends PDialog {
         }
         
         export.setCoverImagePath(txtImageLocation.getText());
-        export.setForewardText(txtForeword.getText());
+        export.setForewardText(((PTextPane)txtForeword).getNakedText());
         export.setPrintConLocal(rootPaneCheckingEnabled);
         export.setPrintConLocal(chkConLocal.isSelected());
         export.setPrintLocalCon(chkLocalCon.isSelected());

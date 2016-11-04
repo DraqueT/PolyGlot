@@ -21,7 +21,6 @@ package PolyGlot;
 
 import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.CustomControls.GrammarSectionNode;
-import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.PEntry;
@@ -62,6 +61,7 @@ import com.itextpdf.layout.property.Property;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 import com.itextpdf.layout.renderer.DocumentRenderer;
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,8 +70,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Given a core dictionary, this class will print it to a PDF file.
@@ -98,7 +96,7 @@ public class PExportToPDF {
     private final DictCore core;
     private final String targetFile;
     private Document document;
-    private byte[] conFontFile;
+    private final byte[] conFontFile;
     private final byte[] unicodeFontFile;
     private final PdfFont conFont;
     private final PdfFont unicodeFont;
@@ -435,9 +433,21 @@ public class PExportToPDF {
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
 
-            String curDef = WebInterface.getTextFromHtml(curWord.getDefinition());
-            if (!curDef.equals("")) {
-                dictEntry.add(new Text("\n" + curDef).setFontSize(defFontSize));
+            List<Object> defList = WebInterface.getElementsHTMLBody(curWord.getDefinition(), core);
+            if(!defList.isEmpty()) {
+                dictEntry.add(new Text("\n"));
+                for (Object o : defList) {
+                    if (o instanceof String) {
+                        dictEntry.add(new Text((String)o).setFontSize(defFontSize));
+                    } else if (o instanceof BufferedImage) {
+                        // must convert buffered image to bytes because WHY DOES iTEXT 7 NOT DO THIS ITSELF.
+                        byte[] bytes = IOHandler.getBufferedImageByteArray((BufferedImage)o);
+                        Image pdfImage = new Image(ImageDataFactory.create(bytes));
+                        dictEntry.add(pdfImage);
+                    } else {
+                        // Do nothing: May be expanded for further logic later
+                    }
+                }
                 dictEntry.add(new Text("\n"));
             }
 
@@ -572,10 +582,21 @@ public class PExportToPDF {
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
 
-            String curDef = WebInterface.getTextFromHtml(curWord.getDefinition());
-            if (!curDef.equals("")) {
-                dictEntry.add(new Text("\n" 
-                        + curDef).setFontSize(defFontSize));
+            List<Object> defList = WebInterface.getElementsHTMLBody(curWord.getDefinition(), core);
+            if(!defList.isEmpty()) {
+                dictEntry.add(new Text("\n"));
+                for (Object o : defList) {
+                    if (o instanceof String) {
+                        dictEntry.add(new Text((String)o).setFontSize(defFontSize));
+                    } else if (o instanceof BufferedImage) {
+                        // must convert buffered image to bytes because WHY DOES iTEXT 7 NOT DO THIS ITSELF.
+                        byte[] bytes = IOHandler.getBufferedImageByteArray((BufferedImage)o);
+                        Image pdfImage = new Image(ImageDataFactory.create(bytes));
+                        dictEntry.add(pdfImage);
+                    } else {
+                        // Do nothing: May be expanded for further logic later
+                    }
+                }
                 dictEntry.add(new Text("\n"));
             }
 

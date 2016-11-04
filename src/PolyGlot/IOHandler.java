@@ -36,6 +36,7 @@ import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -692,6 +693,24 @@ public class IOHandler {
                 }
             }
         }
+    }
+    
+    /**
+     * Encapsulates image loading to keep IO within IOHandler class
+     * @param fileName path of image
+     * @return buffered image loaded
+     * @throws IOException on file read error
+     */
+    public BufferedImage fetchImageFromLocation(String fileName) throws IOException {
+        try (InputStream imageStream = new FileInputStream(fileName)) {
+            return ImageIO.read(imageStream);
+        }
+    }
+    
+    public static byte[] getBufferedImageByteArray(BufferedImage bufferedImage) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "png", baos);
+        return baos.toByteArray();
     }
     
     /**
