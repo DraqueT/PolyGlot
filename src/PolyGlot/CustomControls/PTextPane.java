@@ -20,7 +20,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
-import PolyGlot.ExternalCode.TextTransfer;
+import PolyGlot.ClipboardHandler;
 import PolyGlot.Nodes.ImageNode;
 import PolyGlot.PGTUtil;
 import PolyGlot.PGTools;
@@ -34,6 +34,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
@@ -82,7 +83,20 @@ public class PTextPane extends JTextPane {
      */
     @Override
     public void paste() {
-        
+        // might handle more types in the future
+        if (ClipboardHandler.isClipboardImage()) {
+            try {
+                BufferedImage image = (BufferedImage) ClipboardHandler.getClipboardImage();
+                ImageNode imageNode = core.getImageCollection().getFromBufferedImage(image);
+                addImage(imageNode);
+            } catch (Exception e) {
+                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), null);
+            }
+        } else if (ClipboardHandler.isClipboardString()) {
+            super.paste();
+        } else {
+            super.paste();
+        }
     }
 
     @Override
@@ -227,7 +241,7 @@ public class PTextPane extends JTextPane {
             super.setText("");
         }
         
-        TextTransfer test = new TextTransfer();
+        ClipboardHandler test = new ClipboardHandler();
 
         test.cacheClipboard();
         test.setClipboardContents(placeHold);

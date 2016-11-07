@@ -22,6 +22,7 @@ package PolyGlot.ManagersCollections;
 import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ImageNode;
 import java.awt.Window;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,5 +77,20 @@ public class ImageCollection extends DictionaryCollection {
         super.insert(_id, bufferNode);
 
         bufferNode = new ImageNode();
+    }
+    
+    /**
+     * Takes a buffered image, and returns a node containing it, having inserted
+     * the node with ID to persist on save
+     * @param _image Image to get node of.
+     * @return populated Image node
+     * @throws java.lang.Exception
+     */
+    public ImageNode getFromBufferedImage(BufferedImage _image) throws Exception {
+        ImageNode ret = new ImageNode();
+        ret.setImage(_image);
+        insert(ret);
+        
+        return ret;
     }
 }

@@ -17,8 +17,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package PolyGlot.ExternalCode;
+package PolyGlot;
 
+import java.awt.Image;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
@@ -26,9 +27,9 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.Toolkit;
-import java.io.*;
+import java.io.IOException;
 
-public final class TextTransfer implements ClipboardOwner {
+public final class ClipboardHandler implements ClipboardOwner {
     private Transferable cachedContents;
     /**
      * Empty implementation of the ClipboardOwner interface.
@@ -58,24 +59,63 @@ public final class TextTransfer implements ClipboardOwner {
      *
      * @return any text found on the Clipboard; if none found, return an empty
      * String.
+     * @throws java.lang.Exception
      */
-    public String getClipboardContents() {
+    public String getClipboardText() throws Exception {
         String result = "";
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        //odd: the Object param of getContents is not currently used
         Transferable contents = clipboard.getContents(null);
-        boolean hasTransferableText
-                = (contents != null)
-                && contents.isDataFlavorSupported(DataFlavor.stringFlavor);
-        if (hasTransferableText) {
+
+        if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             try {
                 result = (String) contents.getTransferData(DataFlavor.stringFlavor);
-            } catch (UnsupportedFlavorException | IOException ex) {
-                System.out.println(ex);
-                ex.printStackTrace();
+            } catch (UnsupportedFlavorException | IOException e) {
+                throw new Exception("Clipboard error: " + e.getLocalizedMessage());
             }
         }
         return result;
+    }
+    
+    /**
+     * Tests whether the contents of clipboard is an image
+     * @return true if image
+     */
+    public static boolean isClipboardImage() {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable contents = clipboard.getContents(null);
+        return contents.isDataFlavorSupported(DataFlavor.imageFlavor);
+    }
+    
+    /**
+     * Tests whether the contents of clipboard is text
+     * @return true if image
+     */
+    public static boolean isClipboardString() {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable contents = clipboard.getContents(null);
+        return contents.isDataFlavorSupported(DataFlavor.stringFlavor);
+    }
+    
+    /**
+     * Gets any image contained in clipboard
+     * @return image if one present, null otherwise
+     * @throws java.lang.Exception
+     */
+    public static Image getClipboardImage() throws Exception {
+        Image ret = null;
+        
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable contents = clipboard.getContents(null);
+        
+        if (contents != null && contents.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+            try {
+                ret = (Image)contents.getTransferData(DataFlavor.imageFlavor);
+            } catch (UnsupportedFlavorException | IOException e) {
+                throw new Exception("Clipboard error: " + e.getLocalizedMessage());
+            }
+        }
+        
+        return ret;
     }
     
     public void cacheClipboard() throws Exception {

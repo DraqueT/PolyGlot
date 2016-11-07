@@ -76,6 +76,10 @@ public class ImageNode extends DictNode {
             throw new IOException("Image not instantiated. Cannot generate path.");
         }
         
+        if (id == -1) {
+            throw new IOException("Image not inserted into image collection (id = -1). Cannot generate path.");
+        }
+        
         // create tmp file if none exists
         if (tmpFile == null || !tmpFile.exists()) {
             tmpFile = File.createTempFile(id.toString() + "_polyGlotImage", ".png");

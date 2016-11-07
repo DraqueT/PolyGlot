@@ -22,7 +22,7 @@ package PolyGlot.Screens;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.DictCore;
-import PolyGlot.ExternalCode.TextTransfer;
+import PolyGlot.ClipboardHandler;
 import PolyGlot.IPAHandler;
 import javax.swing.JComponent;
 
@@ -207,7 +207,7 @@ public class ScrIPARefChart extends PFrame {
         int y=evt.getY();
         try {
             String ipaChar = handler.playOtherGetChar(x, y);
-            new TextTransfer().setClipboardContents(ipaChar);
+            new ClipboardHandler().setClipboardContents(ipaChar);
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.equals("") ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
@@ -220,7 +220,7 @@ public class ScrIPARefChart extends PFrame {
         int y=evt.getY();
         try {
             String ipaChar = handler.playVowelGetChar(x, y);
-            new TextTransfer().setClipboardContents(ipaChar);
+            new ClipboardHandler().setClipboardContents(ipaChar);
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.equals("") || ipaChar.equals("") ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
@@ -234,7 +234,7 @@ public class ScrIPARefChart extends PFrame {
         int y=evt.getY();
         try {
             String ipaChar = handler.playPulConsGetChar(x, y);
-            new TextTransfer().setClipboardContents(ipaChar);
+            new ClipboardHandler().setClipboardContents(ipaChar);
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.equals("") || ipaChar.equals("") ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
@@ -253,7 +253,7 @@ public class ScrIPARefChart extends PFrame {
                 return;
             }
             
-            new TextTransfer().setClipboardContents(ipaChar);
+            new ClipboardHandler().setClipboardContents(ipaChar);
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.equals("") ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
