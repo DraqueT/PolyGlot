@@ -148,7 +148,7 @@ public class ExcelExport {
         
         // record types on sheet 2
         sheet = workbook.createSheet("Types");
-        Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
+        Iterator<TypeNode> typeIt = core.getTypes().getNodes().iterator();
         
         row = sheet.createRow(0);
         row.createCell(0).setCellValue("TYPE");

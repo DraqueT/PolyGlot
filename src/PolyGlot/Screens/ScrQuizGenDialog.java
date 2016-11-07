@@ -40,6 +40,10 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         core = _core;
         chkLocalQuiz.setText(core.localLabel() + " Equivalent");
     }
+    
+    private void populateDropdowns() {
+        core.getTypes().getNodes()
+    }
 
     private void takeQuiz() {
         // TODO: Make filtering work
@@ -82,10 +86,10 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        txtFilterConWord = new javax.swing.JTextField();
-        txtFilterLocalWord = new javax.swing.JTextField();
+        txtFilterConWord = new PTextField(core, false, "-- " + core.conLabel() " Filter --");
+        txtFilterLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Filter --");
         cmbFilterType = new javax.swing.JComboBox<>();
-        txtFilterProc = new javax.swing.JTextField();
+        txtFilterProc = new PTextField(core, true, "-- Pronunciation Filter --");
         btnClearFilter = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -117,13 +121,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        txtFilterConWord.setText("jTextField1");
-
-        txtFilterLocalWord.setText("jTextField2");
-
         cmbFilterType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        txtFilterProc.setText("jTextField3");
 
         btnClearFilter.setText("Clear Filter");
 
@@ -275,7 +273,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnQuiz)

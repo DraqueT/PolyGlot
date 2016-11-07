@@ -317,11 +317,7 @@ public class PExportToPDF {
     private Map getGlossKey() {
         Map<Integer, String> ret = new HashMap<>();
 
-        Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
-
-        while (typeIt.hasNext()) {
-            TypeNode curNode = typeIt.next();
-
+        for (TypeNode curNode : core.getTypes().getNodes()) {
             if (curNode.getGloss().equals("")) {
                 ret.put(curNode.getId(), curNode.getValue());
             } else {
@@ -729,11 +725,8 @@ public class PExportToPDF {
         table.addCell(new Paragraph("Part of Speech").setFont(PdfFontFactory.createFont(FontConstants.COURIER_BOLD)));
         table.addCell(new Paragraph("Gloss").setFont(PdfFontFactory.createFont(FontConstants.COURIER_BOLD)));
 
-        Iterator<TypeNode> glossIt = core.getTypes().getNodeIterator();
 
-        while (glossIt.hasNext()) {
-            TypeNode curType = glossIt.next();
-
+        for (TypeNode curType : core.getTypes().getNodes()) {
             table.addCell(curType.getValue());
             table.addCell(curType.getGloss());
         }

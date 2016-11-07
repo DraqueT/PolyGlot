@@ -35,7 +35,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -176,13 +175,11 @@ public final class ScrQuickWordEntry extends PDialog {
     }
 
     private void populateTypes() {
-        Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
         cmbType.removeAllItems();
         final String defLabel =  "-- Part of Speech --";
         cmbType.addItem(defLabel);
         
-        while (typeIt.hasNext()) {
-            TypeNode curType = typeIt.next();
+        for (TypeNode curType : core.getTypes().getNodes()) {
             cmbType.addItem(curType);
         }
     }

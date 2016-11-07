@@ -26,7 +26,6 @@ import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTableModel;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
-import PolyGlot.IOHandler;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
@@ -130,7 +129,7 @@ public class ScrWordClasses extends PDialog {
      * Sets up type checkboxes.
      */
     private void populateTypes() {
-        Iterator<TypeNode> types = core.getTypes().getNodeIterator();
+        Iterator<TypeNode> types = core.getTypes().getNodes().iterator();
         pnlTypes.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHWEST;

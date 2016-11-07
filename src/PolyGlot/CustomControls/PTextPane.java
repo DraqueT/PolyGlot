@@ -76,6 +76,14 @@ public class PTextPane extends JTextPane {
     public final void setForeground(Color _color) {
         super.setForeground(_color);
     }
+    
+    /**
+     * Captures images in override, passes everything else on to super.
+     */
+    @Override
+    public void paste() {
+        
+    }
 
     @Override
     public final void setText(String t) {

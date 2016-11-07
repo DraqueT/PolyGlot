@@ -1069,13 +1069,10 @@ public final class ScrLexicon extends PFrame {
      * Sets up comboboxes based on core values
      */
     private void setupComboBoxesSwing() {
-        Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
-
         cmbType.removeAllItems();
         cmbType.addItem(defTypeValue);
         cmbType.addItem(newTypeValue);
-        while (typeIt.hasNext()) {
-            TypeNode curNode = typeIt.next();
+        for (TypeNode curNode : core.getTypes().getNodes()) {
             cmbType.addItem(curNode);
         }
     }
@@ -1163,13 +1160,10 @@ public final class ScrLexicon extends PFrame {
      * Sets up FX combo boxes (must be run in JavaFX thread)
      */
     private void setupComboBoxesFX() {
-        Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
-
         cmbTypeSrc.getItems().clear();
         cmbTypeSrc.getItems().add(defTypeValue);
         cmbTypeSrc.getSelectionModel().selectFirst();
-        while (typeIt.hasNext()) {
-            TypeNode curNode = typeIt.next();
+        for (TypeNode curNode : core.getTypes().getNodes()) {
             cmbTypeSrc.getItems().add(curNode);
         }
     }

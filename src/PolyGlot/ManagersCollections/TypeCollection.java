@@ -215,12 +215,12 @@ public class TypeCollection extends DictionaryCollection {
      *
      * @return
      */
-    public Iterator<TypeNode> getNodeIterator() {
+    public List<TypeNode> getNodes() {
         List<TypeNode> retList = new ArrayList<>(nodeMap.values());
 
         Collections.sort(retList);
 
-        return retList.iterator();
+        return retList;
     }
 
     public boolean nodeExists(String findType) {
@@ -276,13 +276,10 @@ public class TypeCollection extends DictionaryCollection {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Iterator<TypeNode> typeLoop = getNodeIterator();
         Element wordNode;
         Element wordValue;
         
-        while (typeLoop.hasNext()) {
-            TypeNode curType = typeLoop.next();
-
+        for (TypeNode curType : getNodes()) {
             wordNode = doc.createElement(PGTUtil.typeXID);
             rootElement.appendChild(wordNode);
 

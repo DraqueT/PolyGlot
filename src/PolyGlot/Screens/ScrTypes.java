@@ -172,13 +172,11 @@ public class ScrTypes extends PDialog {
      * Clears all current types and re-populates values, selecting first value
      */
     private void populateTypes() {
-        Iterator<TypeNode> typeIt = core.getTypes().getNodeIterator();
-
         try {
             DefaultListModel listModel = new DefaultListModel();
 
-            while (typeIt.hasNext()) {
-                listModel.addElement(typeIt.next());
+            for (TypeNode typeIt : core.getTypes().getNodes()) {
+                listModel.addElement(typeIt);
             }
 
             lstTypes.setModel(listModel);
