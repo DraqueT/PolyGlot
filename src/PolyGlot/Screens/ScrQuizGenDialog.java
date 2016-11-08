@@ -20,10 +20,13 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
+import PolyGlot.Nodes.TypeNode;
 import QuizEngine.Quiz;
 import QuizEngine.QuizFactory;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -39,15 +42,20 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         initComponents();
         core = _core;
         chkLocalQuiz.setText(core.localLabel() + " Equivalent");
+        populateDropdowns();
     }
     
     private void populateDropdowns() {
-        core.getTypes().getNodes()
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        for (TypeNode curNode : core.getTypes().getNodes()) {
+            model.addElement(curNode);
+        }
+        
+        cmbFilterType.setModel(model);
     }
 
     private void takeQuiz() {
-        // TODO: Make filtering work
-        ConWord filter = null;
+        ConWord filter = new ConWord();
         QuizFactory factory = new QuizFactory(core);
         int numQuestions;
         
@@ -57,6 +65,11 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
             InfoBox.error("Integer Value Required", "Number of questions must be an integer value.", this);
             return;
         }
+        
+        filter.setValue(txtFilterConWord.getText());
+        filter.setLocalWord(txtFilterLocalWord.getText());
+        filter.setPronunciation(txtFilterProc.getText());
+        filter.setWordTypeId(((TypeNode)cmbFilterType.getSelectedItem()).getId());
         
         try {
             Quiz genQuiz = factory.generateLexicalQuiz(numQuestions, 
@@ -86,9 +99,9 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        txtFilterConWord = new PTextField(core, false, "-- " + core.conLabel() " Filter --");
+        txtFilterConWord = new PTextField(core, false, "-- " + core.conLabel() + " Filter --");
         txtFilterLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Filter --");
-        cmbFilterType = new javax.swing.JComboBox<>();
+        cmbFilterType = new javax.swing.JComboBox<String>();
         txtFilterProc = new PTextField(core, true, "-- Pronunciation Filter --");
         btnClearFilter = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -121,7 +134,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        cmbFilterType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbFilterType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnClearFilter.setText("Clear Filter");
 
