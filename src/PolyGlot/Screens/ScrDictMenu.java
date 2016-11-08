@@ -39,7 +39,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
@@ -63,11 +65,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 // implementation of ApplicationListener is part of macify
 
     private String curFileName = "";
-    private ScrLexicon scrLexicon;
-    private ScrGrammarGuide scrGrammar;
-    private ScrLogoDetails scrLogos;
-    private ScrFamilies scrFam;
-    private ScrIPARefChart scrIPA;
+    private final Map<String, PFrame> children = new HashMap<>();
     private boolean cleanSave = true;
     private boolean holdFront = false;
     private final List<String> lastFiles;
@@ -96,10 +94,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     @Override
     public boolean thisOrChildrenFocused() {
         boolean ret = this.isFocusOwner() || holdFront;
-        ret = ret || (scrLexicon != null && scrLexicon.thisOrChildrenFocused());
-        ret = ret || (scrGrammar != null && scrGrammar.thisOrChildrenFocused());
-        ret = ret || (scrLogos != null && scrLogos.thisOrChildrenFocused());
-        ret = ret || (scrFam != null && scrFam.thisOrChildrenFocused());
+        for (PFrame child : children.values()) {
+            ret = ret || child.thisOrChildrenFocused();
+        }
+
         return ret;
     }
 
@@ -130,25 +128,11 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     private void saveWindowsOpen() {
         OptionsManager options = core.getOptionsManager();
-        if (scrLexicon != null && !scrLexicon.isDisposed() && scrLexicon.isVisible()) {
-            options.addScreenUp(scrLexicon.getClass().getName());
-            scrLexicon.dispose();
-        }
-        if (scrGrammar != null && !scrGrammar.isDisposed() && scrGrammar.isVisible()) {
-            options.addScreenUp(scrGrammar.getClass().getName());
-            scrGrammar.dispose();
-        }
-        if (scrLogos != null && !scrLogos.isDisposed() && scrLogos.isVisible()) {
-            options.addScreenUp(scrLogos.getClass().getName());
-            scrLogos.dispose();
-        }
-        if (scrFam != null && !scrFam.isDisposed() && scrFam.isVisible()) {
-            options.addScreenUp(scrFam.getClass().getName());
-            scrFam.dispose();
-        }
-        if (scrIPA != null && !scrIPA.isDisposed() && scrIPA.isVisible()) {
-            options.addScreenUp(scrIPA.getClass().getName());
-            scrIPA.dispose();
+        for (PFrame child : children.values()) {
+            if (!child.isDisposed() && child.isVisible()) {
+                options.addScreenUp(child.getClass().getName());
+                child.dispose();
+            }
         }
     }
 
@@ -492,21 +476,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             title += (" : " + langName);
         }
 
-        if (scrLexicon != null
-                && !scrLexicon.isDisposed()) {
-            scrLexicon.updateAllValues(_core);
-        }
-        if (scrGrammar != null
-                && !scrGrammar.isDisposed()) {
-            scrGrammar.updateAllValues(_core);
-        }
-        if (scrLogos != null
-                && !scrLogos.isDisposed()) {
-            scrLogos.updateAllValues(_core);
-        }
-        if (scrFam != null
-                && !scrFam.isDisposed()) {
-            scrFam.updateAllValues(_core);
+        for (PFrame child : children.values()) {
+            if (!child.isDisposed()) {
+                child.updateAllValues(_core);
+            }
         }
 
         this.setTitle(title);
@@ -556,7 +529,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             localError("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage());
         } catch (IllegalStateException e) {
-            InfoBox.warning("File Read Problems", "Problems reading file:\n" 
+            InfoBox.warning("File Read Problems", "Problems reading file:\n"
                     + e.getLocalizedMessage(), this);
         }
 
@@ -627,14 +600,14 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      * lexicon is not visible)
      */
     public ConWord getCurrentWord() {
-        ConWord ret;
+        ConWord ret = null;
 
-        if (scrLexicon == null
-                || !scrLexicon.isVisible()
-                || scrLexicon.isDisposed()) {
-            ret = null;
-        } else {
-            ret = scrLexicon.getCurrentWord();
+        if (children.containsKey(ScrLexicon.class.getName())) {
+            ScrLexicon scrLexicon = (ScrLexicon) children.get(ScrLexicon.class.getName());
+
+            if (scrLexicon.isVisible() && !scrLexicon.isDisposed()) {
+                ret = scrLexicon.getCurrentWord();
+            }
         }
 
         return ret;
@@ -646,7 +619,13 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      * @param id
      */
     public void selectWordById(int id) {
-        scrLexicon.selectWordById(id);
+        if (children.containsKey(ScrLexicon.class.getName())) {
+            ScrLexicon scrLexicon = (ScrLexicon) children.get(ScrLexicon.class.getName());
+
+            if (scrLexicon.isVisible() && !scrLexicon.isDisposed()) {
+                scrLexicon.selectWordById(id);
+            }
+        }
     }
 
     @Override
@@ -662,20 +641,28 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private void lexHit() {
         if (btnLexicon.isSelected()) {
             try {
-                if (scrLexicon == null
-                        || scrLexicon.isDisposed()) {
-                    scrLexicon = ScrLexicon.run(core);
-                    bindButtonToWindow(scrLexicon, btnLexicon);
-                }
+                if (children.containsKey(ScrLexicon.class.getName())) {
+                    ScrLexicon scrLexicon = (ScrLexicon) children.get(ScrLexicon.class.getName());
 
-                scrLexicon.setVisible(true);
+                    if (scrLexicon.isDisposed()) {
+                        scrLexicon = ScrLexicon.run(core);
+                        bindButtonToWindow(scrLexicon, btnLexicon);
+                        children.replace(ScrLexicon.class.getName(), scrLexicon);
+                    }
+
+                    scrLexicon.setVisible(true);
+                } else {
+                    ScrLexicon scrLexicon = ScrLexicon.run(core);
+                    children.put(ScrLexicon.class.getName(), scrLexicon);
+                    scrLexicon.setVisible(true);
+                }
             } catch (Exception e) {
                 localError("Open Window Error", "Error Opening Lexicon: "
                         + e.getLocalizedMessage());
             }
         } else {
             try {
-                scrLexicon.setVisible(false);
+                children.get(ScrLexicon.class.getName()).setVisible(false);
             } catch (Exception e) {
                 localError("Close Window Error", "Error Closing Lexicon: "
                         + e.getLocalizedMessage());
@@ -684,7 +671,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     }
 
     public void quickEntryHit() {
-        ScrQuickWordEntry s = scrLexicon.openQuickEntry();
+        ScrQuickWordEntry s = ((ScrLexicon) children.get(ScrLexicon.class.getName())).openQuickEntry();
         bindButtonToWindow(s, btnQuickEntry);
         s.setVisible(true);
     }
@@ -692,20 +679,22 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     public void grammarHit() {
         if (btnGrammar.isSelected()) {
             try {
-                if (scrGrammar == null
-                        || scrGrammar.isDisposed()) {
-                    scrGrammar = ScrGrammarGuide.run(core);
-                    bindButtonToWindow(scrGrammar, btnGrammar);
-                }
+                ScrGrammarGuide guide = ScrGrammarGuide.run(core);
+                bindButtonToWindow(guide, btnGrammar);
 
-                scrGrammar.setVisible(true);
+                if (!children.containsKey(ScrGrammarGuide.class.getName())) {
+                    children.put(ScrGrammarGuide.class.getName(), guide);
+                } else if (children.get(ScrGrammarGuide.class.getName()).isDisposed()) {
+                    children.replace(ScrGrammarGuide.class.getName(), guide);
+                }
+                guide.setVisible(true);
             } catch (Exception e) {
                 localError("Open Window Error", "Error Opening Grammar Guide: "
                         + e.getLocalizedMessage());
             }
         } else {
             try {
-                scrGrammar.setVisible(false);
+                children.get(ScrGrammarGuide.class.getName()).setVisible(false);
             } catch (Exception e) {
                 localError("Close Window Error", "Error Closing Grammar Guide: "
                         + e.getLocalizedMessage());
@@ -716,20 +705,28 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private void logoHit() {
         if (btnLogos.isSelected()) {
             try {
-                if (scrLogos == null
-                        || scrLogos.isDisposed()) {
-                    scrLogos = ScrLogoDetails.run(core);
-                    bindButtonToWindow(scrLogos, btnLogos);
+                PFrame logos;
+                if (!children.containsKey(ScrLogoDetails.class.getName())) {
+                    logos = ScrLogoDetails.run(core);
+                    children.put(ScrLogoDetails.class.getName(), logos);
+                    bindButtonToWindow(logos, btnLogos);
+                } else {
+                    logos = children.get(ScrLogoDetails.class.getName());
+                    if (logos.isDisposed()) {
+                        logos = ScrLogoDetails.run(core);
+                        children.replace(ScrLogoDetails.class.getName(), logos);
+                        bindButtonToWindow(logos, btnLogos);
+                    }
                 }
 
-                scrLogos.setVisible(true);
+                logos.setVisible(true);
             } catch (Exception e) {
                 localError("Open Window Error", "Error Opening Logograph Guide: "
                         + e.getLocalizedMessage());
             }
         } else {
             try {
-                scrLogos.setVisible(false);
+                children.get(ScrLogoDetails.class.getName()).setVisible(false);
             } catch (Exception e) {
                 localError("Close Window Error", "Error Closing Grammar Guide: "
                         + e.getLocalizedMessage());
@@ -738,31 +735,48 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     }
 
     private void IPAHit() {
-        if (scrIPA == null || scrIPA.isVisible() == false || scrIPA.isDisposed()) {
-            scrIPA = new ScrIPARefChart(core);
-            scrIPA.setVisible(true);
+        PFrame ipa;
+        String className = ScrIPARefChart.class.getName();
+        if (children.containsKey(className)) {
+            ipa = children.get(className);
+
+            if (ipa.isDisposed()) {
+                ipa = new ScrIPARefChart(core);
+                children.replace(className, ipa);
+            }
         } else {
-            scrIPA.toFront();
+            ipa = new ScrIPARefChart(core);
+            children.put(className, ipa);
         }
+
+        ipa.setVisible(true);
+        ipa.toFront();
     }
 
     private void famHit() {
+        String className = ScrFamilies.class.getName();
+        
         if (btnFam.isSelected()) {
-            try {
-                if (scrFam == null
-                        || scrFam.isDisposed()) {
-                    scrFam = ScrFamilies.run(core, this);
-                    bindButtonToWindow(scrFam, btnFam);
-                }
+            PFrame fam;
+            if (children.containsKey(className)) {
+                fam = children.get(className);
 
-                scrFam.setVisible(true);
-            } catch (Exception e) {
-                localError("Open Window Error", "Error Opening Families: "
-                        + e.getLocalizedMessage());
+                if (fam.isDisposed()) {
+                    fam = new ScrFamilies(core, this);
+                    children.replace(className, fam);
+                    bindButtonToWindow(fam, btnFam);
+                }
+            } else {
+                fam = new ScrFamilies(core, this);
+                children.put(className, fam);
+                bindButtonToWindow(fam, btnFam);
             }
+
+            fam.setVisible(true);
+            fam.toFront();
         } else {
             try {
-                scrFam.setVisible(false);
+                children.get(className).setVisible(false);
             } catch (Exception e) {
                 localInfo("Close Window Error", "Error Closing Grammar Guide: "
                         + e.getLocalizedMessage());
