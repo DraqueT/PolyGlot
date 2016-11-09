@@ -139,7 +139,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     /**
      * Opens windows left open when PolyGlot last run, then clears list
      */
-    private void openLastWindows() {
+    private void openLastWindows() { // TODO: There HAS to be a better way to do this...
         List<String> lastScreensUp = core.getOptionsManager().getLastScreensUp();
         for (String leftOpen : lastScreensUp) {
             // switch has to be on constants...
@@ -157,6 +157,12 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 famHit();
             } else if (leftOpen.equals(PGTUtil.scrIPARefChart)) {
                 IPAHit();
+            } else if (leftOpen.equals(PGTUtil.scrIPARefChart)) {
+                IPAHit();
+            } else if (leftOpen.equals(PGTUtil.scrIPARefChart)) {
+                IPAHit();
+            } else if (leftOpen.equals(ScrQuizGenDialog.class.getName())) {
+                quizHit();
             } else {
                 InfoBox.error("Unrecognized Window",
                         "Unrecognized window in last session: " + leftOpen, this);
@@ -783,6 +789,22 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         }
     }
+    
+    private void quizHit() {
+        String className = ScrQuizGenDialog.class.getName();
+        if (children.containsKey(className) && !children.get(className).isDisposed()) {
+            PFrame p = children.get(className);
+            p.setVisible(true);
+            p.toFront();
+        } else {
+            PFrame p = ScrQuizGenDialog.run(core);
+            if (children.containsKey(className)) {
+                children.replace(className, p);
+            } else {
+                children.put(className, p);
+            }
+        }
+    }
 
     /**
      * Export dictionary to excel file
@@ -947,7 +969,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         mnuPublish = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuExit = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        mnuTools = new javax.swing.JMenu();
         mnuImportFile = new javax.swing.JMenuItem();
         mnuExportToExcel = new javax.swing.JMenuItem();
         mnuExportFont = new javax.swing.JMenuItem();
@@ -956,6 +978,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         mnuTransWindow = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         mnuIPAChart = new javax.swing.JMenuItem();
+        mnuQuiz = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
         mnuAbout = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
@@ -1087,7 +1110,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Tools");
+        mnuTools.setText("Tools");
 
         mnuImportFile.setText("Import from File");
         mnuImportFile.addActionListener(new java.awt.event.ActionListener() {
@@ -1095,7 +1118,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 mnuImportFileActionPerformed(evt);
             }
         });
-        jMenu2.add(mnuImportFile);
+        mnuTools.add(mnuImportFile);
 
         mnuExportToExcel.setText("Export to Excel");
         mnuExportToExcel.addActionListener(new java.awt.event.ActionListener() {
@@ -1103,7 +1126,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 mnuExportToExcelActionPerformed(evt);
             }
         });
-        jMenu2.add(mnuExportToExcel);
+        mnuTools.add(mnuExportToExcel);
 
         mnuExportFont.setText("Export Font");
         mnuExportFont.addActionListener(new java.awt.event.ActionListener() {
@@ -1111,8 +1134,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 mnuExportFontActionPerformed(evt);
             }
         });
-        jMenu2.add(mnuExportFont);
-        jMenu2.add(jSeparator1);
+        mnuTools.add(mnuExportFont);
+        mnuTools.add(jSeparator1);
 
         mnuLangStats.setText("Language Statistics");
         mnuLangStats.addActionListener(new java.awt.event.ActionListener() {
@@ -1120,7 +1143,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 mnuLangStatsActionPerformed(evt);
             }
         });
-        jMenu2.add(mnuLangStats);
+        mnuTools.add(mnuLangStats);
 
         mnuTransWindow.setText("Translation Window");
         mnuTransWindow.addActionListener(new java.awt.event.ActionListener() {
@@ -1128,8 +1151,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 mnuTransWindowActionPerformed(evt);
             }
         });
-        jMenu2.add(mnuTransWindow);
-        jMenu2.add(jSeparator4);
+        mnuTools.add(mnuTransWindow);
+        mnuTools.add(jSeparator4);
 
         mnuIPAChart.setText("Interactive IPA Chart");
         mnuIPAChart.addActionListener(new java.awt.event.ActionListener() {
@@ -1137,9 +1160,17 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 mnuIPAChartActionPerformed(evt);
             }
         });
-        jMenu2.add(mnuIPAChart);
+        mnuTools.add(mnuIPAChart);
 
-        jMenuBar1.add(jMenu2);
+        mnuQuiz.setText("<QUIZ>");
+        mnuQuiz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuQuizActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuQuiz);
+
+        jMenuBar1.add(mnuTools);
 
         mnuHelp.setText("Help");
 
@@ -1347,6 +1378,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuImportFileActionPerformed
 
+    private void mnuQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuQuizActionPerformed
+        quizHit();
+    }//GEN-LAST:event_mnuQuizActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1418,7 +1453,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private javax.swing.JToggleButton btnQuickEntry;
     private javax.swing.JToggleButton btnTypes;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPopupMenu.Separator jSeparator1;
@@ -1438,9 +1472,11 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private javax.swing.JMenuItem mnuNewLocal;
     private javax.swing.JMenuItem mnuOpenLocal;
     private javax.swing.JMenuItem mnuPublish;
+    private javax.swing.JMenuItem mnuQuiz;
     private javax.swing.JMenu mnuRecents;
     private javax.swing.JMenuItem mnuSaveAs;
     private javax.swing.JMenuItem mnuSaveLocal;
+    private javax.swing.JMenu mnuTools;
     private javax.swing.JMenuItem mnuTransWindow;
     // End of variables declaration//GEN-END:variables
 }

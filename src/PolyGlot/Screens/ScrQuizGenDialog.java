@@ -20,6 +20,7 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
@@ -27,20 +28,21 @@ import PolyGlot.Nodes.TypeNode;
 import QuizEngine.Quiz;
 import QuizEngine.QuizFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
 
 /**
  *
  * @author draque.thompson
  */
-public class ScrQuizGenDialog extends javax.swing.JFrame {
-    private final DictCore core;
+public class ScrQuizGenDialog extends PFrame {
+
     /**
      * Creates new form scrQuizGenDialog
      * @param _core
      */
     public ScrQuizGenDialog(DictCore _core) {
-        initComponents();
         core = _core;
+        initComponents();        
         chkLocalQuiz.setText(core.localLabel() + " Equivalent");
         populateDropdowns();
     }
@@ -101,7 +103,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         txtFilterConWord = new PTextField(core, false, "-- " + core.conLabel() + " Filter --");
         txtFilterLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Filter --");
-        cmbFilterType = new javax.swing.JComboBox<String>();
+        cmbFilterType = new javax.swing.JComboBox<>();
         txtFilterProc = new PTextField(core, true, "-- Pronunciation Filter --");
         btnClearFilter = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -116,7 +118,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         chkProcQuiz = new javax.swing.JCheckBox();
         chkDefQuiz = new javax.swing.JCheckBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnQuiz.setText("Take Quiz");
         btnQuiz.addActionListener(new java.awt.event.ActionListener() {
@@ -134,7 +136,7 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        cmbFilterType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbFilterType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnClearFilter.setText("Clear Filter");
 
@@ -305,16 +307,11 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
         takeQuiz();
     }//GEN-LAST:event_btnQuizActionPerformed
 
-    // TODO: DELETE
     /**
-     * @param args the command line arguments
+     * @param core
+     * @return 
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    public static ScrQuizGenDialog run(final DictCore core) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -322,24 +319,28 @@ public class ScrQuizGenDialog extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScrQuizGenDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScrQuizGenDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScrQuizGenDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ScrQuizGenDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ScrQuizGenDialog(new DictCore()).setVisible(true);
-            }
-        });
+        ScrQuizGenDialog s = new ScrQuizGenDialog(core);
+        s.setVisible(true);
+        return s;
+    }
+    @Override
+    public void updateAllValues(DictCore _core) {
+        // does nothing for this window
+    }
+
+    @Override
+    public boolean thisOrChildrenFocused() {
+        // TODO: THIS
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        // no bindings to add to this window at this time.
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
