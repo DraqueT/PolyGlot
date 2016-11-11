@@ -162,8 +162,23 @@ public abstract class DictionaryCollection {
      * @return Either the number of nodes requested, or the total number in the collection (if not enough)
      */
     public List<DictNode> getRandomNodes(int numRandom) {
+        return getRandomNodes(numRandom, 0);
+    }
+    
+    /**
+     * Returns randomly selected nodes from the collection, excluding a selected value
+     * @param numRandom number of nodes to select
+     * @param exclude ID of element to exclude
+     * @return Either the number of nodes requested, or the total number in the collection (if not enough)
+     */
+    public List<DictNode> getRandomNodes(int numRandom, Integer exclude) {
         List<DictNode> ret = new ArrayList<>();
         List<DictNode> allValues = new ArrayList(nodeMap.values());
+        
+        
+        if (nodeMap.containsKey(exclude)) {
+            allValues.remove((DictNode)nodeMap.get(exclude));
+        }
         
         // randommize order...
         Collections.shuffle(allValues, new Random(System.nanoTime()));

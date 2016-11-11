@@ -19,6 +19,8 @@
  */
 package PolyGlot.ManagersCollections;
 
+import PolyGlot.Nodes.ConWord;
+import PolyGlot.Nodes.PEntry;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
 import PolyGlot.PGTUtil;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -34,7 +37,6 @@ import org.w3c.dom.Element;
  * @author Draque
  */
 public class WordPropertyCollection extends DictionaryCollection {
-
     public WordPropertyCollection() {
         bufferNode = new WordProperty();
     }
@@ -145,5 +147,74 @@ public class WordPropertyCollection extends DictionaryCollection {
         }
 
         rootElement.appendChild(wordProperties);
+    }
+    
+    /**
+     * Gets random assortment of word class combinations based. Number of combinations
+     * limited by parameters and by number of combinations available
+     * @param numRandom number of entries to return
+     * @return randomly generated combinations of word classes
+     */
+    public List<List<PEntry<Integer, Integer>>> getRandomPropertyCombinations(int numRandom) {
+        return getRandomPropertyCombinations(numRandom, 0, 0);
+    }
+    
+    /**
+     * Gets random assortment of word class combinations based. Number of combinations
+     * limited by parameters and by number of combinations available. a value can 
+     * be excluded
+     * @param numRandom number of entries to return
+     * @param excludeWord word with class properties to exclude (quiz generation purposes)
+     * @return randomly generated combinations of word classes
+     */
+    public List<List<PEntry<Integer, Integer>>> getRandomPropertyCombinations(int numRandom, ConWord excludeWord) {
+        List<List<PEntry<Integer, Integer>>> ret = new ArrayList<>();
+        
+        for (int i = 0; i < numRandom; i++) {
+            List<PEntry<Integer, Integer>> valueList = new ArrayList<>();
+            
+            for (Object obj : nodeMap.values()) {
+                WordProperty curProp = (WordProperty)obj;
+                List values = new ArrayList(curProp.getValues());
+                values.add(null);
+                Collections.shuffle(values);
+                WordPropValueNode val = (WordPropValueNode)values.get(0);
+                
+                // null value means select nothing for this (not all words must have all class entries)
+                if (val == null) {
+                    continue;
+                }
+                
+                valueList.add(new PEntry(curProp.getId(), val.getId()));
+            }
+            
+            logic to exclude value combo in excludeword goes here. dont get fooled by ORDER, which doesnt matter
+            
+            ret.add(valueList);
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * returns true if the class/value ids given match up to existing values
+     * returns false otherwise
+     * @param classId ID of word class to test
+     * @param valId ID of value within word class to test
+     * @return true if pair exists
+     */
+    public boolean isValid(Integer classId, Integer valId) {
+        boolean ret = true;
+        
+        if (!nodeMap.containsKey(classId)) {
+            ret = false;
+        } else {
+            WordProperty prop = (WordProperty)nodeMap.get(classId);
+            if (!prop.isValid(valId)) {
+                ret = false;
+            }
+        }
+        
+        return ret;
     }
 }

@@ -49,6 +49,7 @@ public class ScrQuizGenDialog extends PFrame {
     
     private void populateDropdowns() {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
+        model.addElement("-- Part of Speech --");
         for (TypeNode curNode : core.getTypes().getNodes()) {
             model.addElement(curNode);
         }
@@ -71,7 +72,9 @@ public class ScrQuizGenDialog extends PFrame {
         filter.setValue(txtFilterConWord.getText());
         filter.setLocalWord(txtFilterLocalWord.getText());
         filter.setPronunciation(txtFilterProc.getText());
-        filter.setWordTypeId(((TypeNode)cmbFilterType.getSelectedItem()).getId());
+        if (cmbFilterType.getSelectedItem() instanceof TypeNode) {
+            filter.setWordTypeId(((TypeNode)cmbFilterType.getSelectedItem()).getId());
+        }
         
         try {
             Quiz genQuiz = factory.generateLexicalQuiz(numQuestions, 

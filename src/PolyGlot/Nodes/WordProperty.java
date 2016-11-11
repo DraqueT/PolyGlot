@@ -41,6 +41,15 @@ public class WordProperty extends DictNode {
         applyTypes.add(-1);
     }
     
+    /**
+     * Returns true if existing value ID is passed, false otherwise
+     * @param valId value id to check
+     * @return existance of value id
+     */
+    public boolean isValid(Integer valId) {
+        return values.containsKey(valId);
+    }
+    
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
         if (!(_node instanceof WordProperty)) {

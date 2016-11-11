@@ -22,9 +22,15 @@ package QuizEngine;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DictNode;
+import PolyGlot.Nodes.PEntry;
+import PolyGlot.Nodes.TypeNode;
+import PolyGlot.Nodes.WordPropValueNode;
+import PolyGlot.Nodes.WordProperty;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 /**
@@ -132,19 +138,59 @@ public class QuizFactory {
 
             switch (questionType) {
                 case Local:
-                    for (DictNode node : core.getWordCollection().getRandomNodes(numChoices - 1)) {
+                case Proc:
+                case Def:
+                    for (DictNode node : core.getWordCollection().getRandomNodes(numChoices - 1, curWord.getId())) {
                         question.addChoice(node);
                     }
                     question.addChoice(curWord);
                     question.setAnswer(curWord);
                     break;
                 case PoS:
-                    break;
-                case Proc:
-                    break;
-                case Def:
+                    for (DictNode node : core.getTypes().getRandomNodes(numChoices - 1, curWord.getWordTypeId())) {
+                        question.addChoice(node);
+                    }
+                    TypeNode typeAnswer = core.getTypes().getNodeById(curWord.getWordTypeId());
+                    question.addChoice(typeAnswer);
+                    question.setAnswer(typeAnswer);
                     break;
                 case Classes:
+                    for (List<PEntry<Integer, Integer>> curCombo 
+                            : core.getWordPropertiesCollection()
+                                    .getRandomPropertyCombinations(numChoices, curWord)) {
+                        WordPropValueNode choiceNode = new WordPropValueNode();
+                                
+                        for (PEntry<Integer, Integer> curEntry: curCombo) {
+                            WordProperty wordProp = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                            WordPropValueNode valueNode = wordProp.getValueById(curEntry.getValue());
+                            
+                            if (!choiceNode.getValue().equals("")) {
+                                choiceNode.setValue(choiceNode.getValue() + ", ");
+                            }
+                            
+                            choiceNode.setValue(choiceNode.getValue() + valueNode.getValue());
+                        }
+                        
+                        question.addChoice(choiceNode);
+                    }
+                    
+                    WordPropValueNode valAnswer = new WordPropValueNode();
+                    Iterator<Entry<Integer, Integer>> propIt = curWord.getClassValues().iterator();
+                    
+                    while (propIt.hasNext()) {
+                        Entry<Integer, Integer> curEntry = propIt.next();
+                        WordProperty curProp = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                        WordPropValueNode curVal = curProp.getValueById(curEntry.getValue());
+                        
+                        if (!valAnswer.getValue().equals("")) {
+                            valAnswer.setValue(valAnswer.getValue() + ", ");
+                        }
+                        
+                        valAnswer.setValue(valAnswer.getValue() + curVal.getValue());
+                    }
+                    question.addChoice(valAnswer);
+                    question.setAnswer(valAnswer);
+                    
                     break;
                 default:
                     throw new Exception("Unhandled question type.");

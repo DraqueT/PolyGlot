@@ -43,7 +43,7 @@ public class QuizQuestion extends DictNode {
         core = _core;
     }
     
-    private final List<DictNode> multipleChoices = new ArrayList<>();
+    protected List<DictNode> multipleChoices = new ArrayList<>();
     private DictNode answer;
     private QuestionType type;
     private final DictCore core;
@@ -221,7 +221,9 @@ public class QuizQuestion extends DictNode {
      */
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
-        throw new UnsupportedOperationException("SetEqual() not supported on QuezQuestion. Do not call.");
+        multipleChoices = ((QuizQuestion)_node).multipleChoices;
+        answer = ((QuizQuestion)_node).getAnswer();
+        type = ((QuizQuestion)_node).getType();
     }
  
     public enum QuestionType {

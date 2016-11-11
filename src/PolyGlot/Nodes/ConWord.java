@@ -25,6 +25,7 @@ import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.PGTUtil;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -218,15 +219,7 @@ public class ConWord extends DictNode {
         return ret;
     }
 
-    public String getDefinition() {
-        String ret = definition;
-        
-        try {
-            
-        } catch (Exception e) {
-            ret = "ERROR LOADING IMAGE(S) " +ret;
-        }
-        
+    public String getDefinition() {      
         return definition;
     }
 
@@ -276,11 +269,27 @@ public class ConWord extends DictNode {
      * Note: THIS IS NOT COMPREHENSIVE! If no value has been set for a word, it will
      * not be returned at all.
      * 
+     * Out of date values will be checked/wiped if the related properties or
+     * property values have been deleted from the language file.
+     * 
      * To get a comprehensive list, look at the WordPropertyCollection values 
      * associated with the word's type.
      * @return list of entries of <class id, value id>
      */
     public Set<Entry<Integer, Integer>> getClassValues() {
+        // verify validity before returning each: otherwise remove
+        
+        Iterator<Entry<Integer, Integer>> classIt = classValues.entrySet().iterator();
+        
+        while (classIt.hasNext()) {
+            Entry<Integer, Integer> curEntry = classIt.next();
+            
+            if (!core.getWordPropertiesCollection().isValid(curEntry.getKey(), 
+                    curEntry.getValue())) {
+                classValues.remove(curEntry.getKey());
+            }
+        }
+        
         return classValues.entrySet();
     }
     
