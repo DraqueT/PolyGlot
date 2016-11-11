@@ -19,6 +19,7 @@
  */
 package PolyGlot.Screens;
 
+import PolyGlot.ClipboardHandler;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
@@ -35,7 +36,10 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -51,6 +55,8 @@ import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -76,7 +82,7 @@ public class ScrLogoDetails extends PFrame {
     public ScrLogoDetails(DictCore _core) {
         setNimbus();
         core = _core;
-        
+
         initComponents();
         setupFonts();
         populateLogographs();
@@ -91,7 +97,7 @@ public class ScrLogoDetails extends PFrame {
             btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (CTRL -)");
         }
     }
-    
+
     @Override
     public boolean thisOrChildrenFocused() {
         boolean ret = this.isFocusOwner();
@@ -165,7 +171,7 @@ public class ScrLogoDetails extends PFrame {
         setTitle("Logograph Details/Modification");
         mode = WindowMode.SINGLEVALUE;
     }
-    
+
     @Override
     public final void setTitle(String title) {
         super.setTitle(title);
@@ -335,6 +341,57 @@ public class ScrLogoDetails extends PFrame {
                 runFilter();
             }
         });
+
+        final JPopupMenu ruleMenu = new JPopupMenu();
+        final JMenuItem pasteImage = new JMenuItem("Paste Image");
+        pasteImage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                pasteLogograph();
+            }
+        });
+        ruleMenu.add(pasteImage);
+
+        lblLogo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() && txtName.isEnabled()) {
+                    pasteImage.setEnabled(true);
+                    ruleMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger() && txtName.isEnabled()) {
+                    pasteImage.setEnabled(true);
+                    ruleMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
+    }
+
+    private void pasteLogograph() {
+        if (ClipboardHandler.isClipboardImage()) {
+            try {
+                LogoNode curNode = (LogoNode) lstLogos.getSelectedValue();
+                
+                if (curNode == null) {
+                    return;
+                }
+                
+                BufferedImage image = (BufferedImage) ClipboardHandler.getClipboardImage();                
+                curNode.setLogoGraph(image);
+                saveReadings(lstLogos.getSelectedIndex());
+                saveRads(lstLogos.getSelectedIndex());
+                populateLogoProps();
+            } catch (Exception e) {
+                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), this);
+            }
+        } else {
+            InfoBox.warning("Image Format Incompatibility",
+                    "The contents of the clipboard is not an image, or is an unrecognized format", this);
+        }
     }
 
     private void updateStrokes() {
@@ -493,6 +550,7 @@ public class ScrLogoDetails extends PFrame {
      */
     private void setSingleLogoMode(boolean set) {
         btnAddLogo.setEnabled(!set);
+        btnClipboard.setEnabled(!set);
         btnDelLogo.setEnabled(!set);
         fltNotes.setEnabled(!set);
         fltRadical.setEnabled(!set);
@@ -648,8 +706,8 @@ public class ScrLogoDetails extends PFrame {
             tblReadings.setModel(new DefaultTableModel(new Object[]{"Readings"}, 0));
             lstRelWords.setModel(new DefaultListModel());
             chkIsRad.setSelected(false);
-            picLogo.setIcon(new ImageIcon(new LogoNode().getLogoGraph().getScaledInstance(
-                    picLogo.getWidth(), picLogo.getHeight(), Image.SCALE_SMOOTH)));
+            lblLogo.setIcon(new ImageIcon(new LogoNode().getLogoGraph().getScaledInstance(
+                    lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH)));
             populateRelatedWords();
 
             curPopulating = false;
@@ -671,10 +729,11 @@ public class ScrLogoDetails extends PFrame {
             try {
                 LogoNode radNode = (LogoNode) radIt.next();
                 radModel.addElement(radNode);
-            } catch (Exception e) { /*do nothing*/
-
+            } catch (Exception e) {
+                /*do nothing*/
             }
         }
+        
         lstRadicals.setModel(radModel);
 
         // Populate readings
@@ -698,8 +757,8 @@ public class ScrLogoDetails extends PFrame {
         tblReadings.setModel(procModel);
 
         // set logograph picture
-        picLogo.setIcon(new ImageIcon(curNode.getLogoGraph().getScaledInstance(
-                picLogo.getWidth(), picLogo.getHeight(), Image.SCALE_SMOOTH)));
+        lblLogo.setIcon(new ImageIcon(curNode.getLogoGraph().getScaledInstance(
+                lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH)));
 
         populateRelatedWords();
 
@@ -896,7 +955,7 @@ public class ScrLogoDetails extends PFrame {
         btnAddLogo = new PButton("+");
         btnDelLogo = new PButton("-");
         jPanel2 = new javax.swing.JPanel();
-        picLogo = new javax.swing.JLabel();
+        lblLogo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstRelWords = new javax.swing.JList();
         jLabel8 = new javax.swing.JLabel();
@@ -916,6 +975,7 @@ public class ScrLogoDetails extends PFrame {
         tblReadings = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Notes --");
+        btnClipboard = new javax.swing.JButton();
         jTextField5 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
 
@@ -1006,9 +1066,9 @@ public class ScrLogoDetails extends PFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        picLogo.setText("jLabel6");
-        picLogo.setToolTipText("Logograph image");
-        picLogo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        lblLogo.setText("jLabel6");
+        lblLogo.setToolTipText("Logograph image");
+        lblLogo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         lstRelWords.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -1081,8 +1141,9 @@ public class ScrLogoDetails extends PFrame {
 
         txtStrokes.setToolTipText("Number of strokes to write logograph");
 
+        btnLoadImage.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnLoadImage.setText("Load Image");
-        btnLoadImage.setToolTipText("Load image for logograph");
+        btnLoadImage.setToolTipText("Load image for logograph from file");
         btnLoadImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoadImageActionPerformed(evt);
@@ -1106,6 +1167,15 @@ public class ScrLogoDetails extends PFrame {
 
         jScrollPane3.setViewportView(txtNotes);
 
+        btnClipboard.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnClipboard.setText("Clipboard");
+        btnClipboard.setToolTipText("Copy logograph image from clipboard");
+        btnClipboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClipboardActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -1114,28 +1184,29 @@ public class ScrLogoDetails extends PFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnLoadImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(127, 127, 127))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                            .addComponent(jLabel12)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtStrokes, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(chkIsRad))
-                                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(btnLoadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnClipboard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(118, 118, 118))
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel12)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtStrokes, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(chkIsRad))
+                                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(62, 62, 62))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(picLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -1160,29 +1231,29 @@ public class ScrLogoDetails extends PFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(picLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAddReading, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDelReading, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAddRad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDelRad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(btnDelRad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnLoadImage)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnLoadImage)
+                            .addComponent(btnClipboard))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1345,6 +1416,10 @@ public class ScrLogoDetails extends PFrame {
                 remove(lstRadicals.getSelectedIndex());
     }//GEN-LAST:event_btnDelRadActionPerformed
 
+    private void btnClipboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClipboardActionPerformed
+        pasteLogograph();
+    }//GEN-LAST:event_btnClipboardActionPerformed
+
     /**
      * Sets window to word fetch mode, which alters the title and eliminates the
      * ability of users to modify logographs.
@@ -1357,6 +1432,7 @@ public class ScrLogoDetails extends PFrame {
         }
 
         btnAddLogo.setEnabled(!fetch);
+        btnClipboard.setEnabled(!fetch);
         btnAddRad.setEnabled(!fetch);
         btnAddReading.setEnabled(!fetch);
         btnDelLogo.setEnabled(!fetch);
@@ -1389,6 +1465,7 @@ public class ScrLogoDetails extends PFrame {
     private javax.swing.JButton btnAddLogo;
     private javax.swing.JButton btnAddRad;
     private javax.swing.JButton btnAddReading;
+    private javax.swing.JButton btnClipboard;
     private javax.swing.JButton btnDelLogo;
     private javax.swing.JButton btnDelRad;
     private javax.swing.JButton btnDelReading;
@@ -1412,10 +1489,10 @@ public class ScrLogoDetails extends PFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JLabel lblLogo;
     private javax.swing.JList lstLogos;
     private javax.swing.JList lstRadicals;
     private javax.swing.JList lstRelWords;
-    private javax.swing.JLabel picLogo;
     private javax.swing.JTable tblReadings;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextPane txtNotes;
