@@ -246,9 +246,9 @@ public class PTextPane extends JTextPane {
         test.cacheClipboard();
         test.setClipboardContents(placeHold);
 
-        paste();
+        super.paste();
         String newText = getRawHTML();
-        setText(newText.replace(placeHold, "<img src=\"file:///" + image.getImagePath() + "\">"));
+        setText(newText.replaceAll(placeHold, "<img src=\"file:///" + image.getImagePath() + "\">"));
         test.restoreClipboard();
     }
 
@@ -258,9 +258,10 @@ public class PTextPane extends JTextPane {
      * @return
      */
     public boolean isDefaultText() {
-        // account for RtL languages
-        String curText = getNakedText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
-        return curText.equals("");
+        String body = super.getText();
+        body = body.substring(0, body.indexOf("</body>"));
+        body = body.substring(body.indexOf("<body>") + 6, body.length());
+        return body.trim().equals(defText);
     }
 
     /**
