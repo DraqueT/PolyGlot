@@ -263,6 +263,18 @@ public class PTextPane extends JTextPane {
         body = body.substring(body.indexOf("<body>") + 6, body.length());
         return body.trim().equals(defText);
     }
+    
+    /**
+     * Returns true if object's body is empty (accounts for HTML elements within
+     * body)
+     * @return 
+     */
+    public boolean isEmpty() {
+        String body = super.getText();
+        body = body.substring(0, body.indexOf("</body>"));
+        body = body.substring(body.indexOf("<body>") + 6, body.length());
+        return body.trim().equals("");
+    }
 
     /**
      * sets text to default value
@@ -283,7 +295,7 @@ public class PTextPane extends JTextPane {
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (getNakedText().equals("")) {
+                if (isEmpty()) {
                     setText(defText);
                     setForeground(Color.lightGray);
                 }
