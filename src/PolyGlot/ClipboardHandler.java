@@ -120,7 +120,9 @@ public final class ClipboardHandler implements ClipboardOwner {
     
     public void cacheClipboard() throws Exception {
         try {
-            cachedContents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+            Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
+            cachedContents = clip.getContents(null);
+            
         } catch (Exception e) {
             throw new Exception("System busy, unable to perform action: " + e.getLocalizedMessage());
         }

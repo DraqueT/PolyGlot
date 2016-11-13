@@ -156,7 +156,7 @@ public class WordPropertyCollection extends DictionaryCollection {
      * @return randomly generated combinations of word classes
      */
     public List<List<PEntry<Integer, Integer>>> getRandomPropertyCombinations(int numRandom) {
-        return getRandomPropertyCombinations(numRandom, 0, 0);
+        return getRandomPropertyCombinations(numRandom, null);
     }
     
     /**
@@ -170,7 +170,7 @@ public class WordPropertyCollection extends DictionaryCollection {
     public List<List<PEntry<Integer, Integer>>> getRandomPropertyCombinations(int numRandom, ConWord excludeWord) {
         List<List<PEntry<Integer, Integer>>> ret = new ArrayList<>();
         
-        for (int i = 0; i < numRandom; i++) {
+        /*for (int i = 0; i < numRandom; i++) {
             List<PEntry<Integer, Integer>> valueList = new ArrayList<>();
             
             for (Object obj : nodeMap.values()) {
@@ -191,7 +191,7 @@ public class WordPropertyCollection extends DictionaryCollection {
             logic to exclude value combo in excludeword goes here. dont get fooled by ORDER, which doesnt matter
             
             ret.add(valueList);
-        }
+        }*/
         
         return ret;
     }
