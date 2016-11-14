@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -169,7 +170,12 @@ public class WordPropertyCollection extends DictionaryCollection {
      */
     public List<List<PEntry<Integer, Integer>>> getRandomPropertyCombinations(int numRandom, ConWord excludeWord) {
         List<List<PEntry<Integer, Integer>>> ret = new ArrayList<>();
+        List<WordProperty> properties = new ArrayList(nodeMap.entrySet());
+        Collections.shuffle(properties, new Random(System.nanoTime()));
         
+        // create list of all possible combinations excluding that of the excludeWord 
+        // unless list has already been created. Select from this list.
+        // create method to clear cache of list
         /*for (int i = 0; i < numRandom; i++) {
             List<PEntry<Integer, Integer>> valueList = new ArrayList<>();
             
