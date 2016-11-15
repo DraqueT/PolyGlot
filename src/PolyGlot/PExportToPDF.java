@@ -70,6 +70,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * Given a core dictionary, this class will print it to a PDF file.
@@ -381,7 +382,7 @@ public class PExportToPDF {
             // Add word type (if one exists)
             if (glossKey.containsKey(curWord.getWordTypeId())) {
                 varChunk = new Text(glossKey.get(curWord.getWordTypeId()));
-                varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ITALIC));
+                varChunk.setFont(unicodeFont);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
                 varChunk = new Text(" - ");
                 varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
@@ -421,11 +422,11 @@ public class PExportToPDF {
                     wordClasses += value.getValue();
                 }
                 varChunk = new Text(wordClasses);
-                varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ITALIC));
+                varChunk.setFont(unicodeFont);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
 
                 varChunk = new Text(" - ");
-                varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
+                varChunk.setFont(unicodeFont);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
 
@@ -434,7 +435,9 @@ public class PExportToPDF {
                 dictEntry.add(new Text("\n"));
                 for (Object o : defList) {
                     if (o instanceof String) {
-                        dictEntry.add(new Text((String)o).setFontSize(defFontSize));
+                        // text is HTML, and not true unicode... escape HTML to correct
+                        String cleanedText = StringEscapeUtils.unescapeHtml4((String)o);
+                        dictEntry.add(new Text(cleanedText).setFontSize(defFontSize).setFont(unicodeFont));
                     } else if (o instanceof BufferedImage) {
                         // must convert buffered image to bytes because WHY DOES iTEXT 7 NOT DO THIS ITSELF.
                         byte[] bytes = IOHandler.getBufferedImageByteArray((BufferedImage)o);
@@ -530,7 +533,7 @@ public class PExportToPDF {
             // Add word type (if one exists)
             if (glossKey.containsKey(curWord.getWordTypeId())) {
                 varChunk = new Text(glossKey.get(curWord.getWordTypeId()));
-                varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ITALIC));
+                varChunk.setFont(unicodeFont);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
                 varChunk = new Text(" - ");
                 varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
@@ -570,7 +573,7 @@ public class PExportToPDF {
                     wordClasses += value.getValue();
                 }
                 varChunk = new Text(wordClasses);
-                varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ITALIC));
+                varChunk.setFont(unicodeFont);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
 
                 varChunk = new Text(" - ");
@@ -583,7 +586,8 @@ public class PExportToPDF {
                 dictEntry.add(new Text("\n"));
                 for (Object o : defList) {
                     if (o instanceof String) {
-                        dictEntry.add(new Text((String)o).setFontSize(defFontSize));
+                        String cleanedText = StringEscapeUtils.unescapeHtml4((String)o);
+                        dictEntry.add(new Text(cleanedText).setFontSize(defFontSize).setFont(unicodeFont));
                     } else if (o instanceof BufferedImage) {
                         // must convert buffered image to bytes because WHY DOES iTEXT 7 NOT DO THIS ITSELF.
                         byte[] bytes = IOHandler.getBufferedImageByteArray((BufferedImage)o);
@@ -757,7 +761,7 @@ public class PExportToPDF {
             varChunk = new Text(titleText);
         }
 
-        varChunk.setFont(PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD));
+        varChunk.setFont(unicodeFont);
         varChunk.setFontSize(36);
         ret.add(varChunk);
 
