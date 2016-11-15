@@ -440,7 +440,9 @@ public final class ScrLexicon extends PFrame {
 
         try {
             String setText = core.getPronunciationMgr().getPronunciation(txtConWord.getText());
-            txtProc.setText(setText.isEmpty() ? ((PTextField)txtProc).getDefaultValue() : setText);
+            if (!setText.isEmpty()) {
+                txtProc.setText(setText);
+            }
         } catch (Exception e) {
             InfoBox.error("Pronunciation Error", "Could not generate pronunciation: "
                     + e.getLocalizedMessage(), this);
