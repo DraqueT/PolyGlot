@@ -173,8 +173,12 @@ public class PTextPane extends JTextPane {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    addImage(core.getImageCollection()
-                            .openNewImage((Window)parentPane.getTopLevelAncestor()));
+                    ImageNode image = core.getImageCollection()
+                            .openNewImage((Window)parentPane.getTopLevelAncestor());
+                    if (image != null) {
+                        // null node means user cancelled process
+                        addImage(image);
+                    }                    
                 } catch (Exception e) {
                     InfoBox.error("Image Import Error", "Unable to import image: " 
                             + e.getLocalizedMessage(), null);
@@ -248,7 +252,9 @@ public class PTextPane extends JTextPane {
 
         super.paste();
         String newText = getRawHTML();
-        setText(newText.replaceAll(placeHold, "<img src=\"file:///" + image.getImagePath() + "\">"));
+        String imagePath = image.getImagePath();
+        imagePath = "<img src=\"file:///" + imagePath + "\">";
+        setText(newText.replace(placeHold, imagePath));
         test.restoreClipboard();
     }
 
@@ -284,25 +290,28 @@ public class PTextPane extends JTextPane {
     }
 
     private void setupListeners() {
-        FocusListener listener = new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (isDefaultText()) {
-                    setText("");
-                    setForeground(Color.black);
+        // if blank, this field is being used for something more complex: no listeners
+        if (!defText.equals("")) {
+            FocusListener listener = new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    if (isDefaultText()) {
+                        setText("");
+                        setForeground(Color.black);
+                    }
                 }
-            }
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (isEmpty()) {
-                    setText(defText);
-                    setForeground(Color.lightGray);
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if (isEmpty() && !defText.equals("")) {
+                        setText(defText);
+                        setForeground(Color.lightGray);
+                    }
                 }
-            }
-        };
-
-        this.addFocusListener(listener);
+            };
+            
+            this.addFocusListener(listener);
+        }
     }
 
     /**

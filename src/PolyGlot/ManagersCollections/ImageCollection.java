@@ -51,15 +51,21 @@ public class ImageCollection extends DictionaryCollection {
     
     /**
      * Pulls in new image from user selected file
+     * Returns null if user cancels process
      * @param parent parent form
      * @return ImageNode inserted into collection with populated image
      * @throws IOException on file read error
      */
     public ImageNode openNewImage(Window parent) throws IOException, Exception {
-        ImageNode image = new ImageNode();
+        ImageNode image = null;
         try {
-            image.setImage(IOHandler.openImage(parent));
-            insert(image);
+            BufferedImage buffImg = IOHandler.openImage(parent);
+            
+            if (buffImg != null) {
+                image = new ImageNode();
+                image.setImage(buffImg);
+                insert(image);
+            }
         } catch (IOException e) {
             throw new IOException("Problem loading image: " + e.getLocalizedMessage());
         }

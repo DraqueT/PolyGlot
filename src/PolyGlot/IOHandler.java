@@ -197,6 +197,7 @@ public class IOHandler {
     
     /**
      * Opens an image via GUI and returns as buffered image
+     * Returns null if user cancels.
      * @param parent parent window of operation
      * @return buffered image selected by user
      * @throws IOException on file read error
