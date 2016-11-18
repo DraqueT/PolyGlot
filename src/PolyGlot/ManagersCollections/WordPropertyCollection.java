@@ -38,6 +38,8 @@ import org.w3c.dom.Element;
  * @author Draque
  */
 public class WordPropertyCollection extends DictionaryCollection {
+    private List<List<Entry<Integer, Integer>>> comboCache = null;
+    
     public WordPropertyCollection() {
         bufferNode = new WordProperty();
     }
@@ -170,36 +172,77 @@ public class WordPropertyCollection extends DictionaryCollection {
      */
     public List<List<PEntry<Integer, Integer>>> getRandomPropertyCombinations(int numRandom, ConWord excludeWord) {
         List<List<PEntry<Integer, Integer>>> ret = new ArrayList<>();
-        List<WordProperty> properties = new ArrayList(nodeMap.entrySet());
-        Collections.shuffle(properties, new Random(System.nanoTime()));
+        int offset = 0;
         
-        // create list of all possible combinations excluding that of the excludeWord 
-        // unless list has already been created. Select from this list.
-        // create method to clear cache of list
-        /*for (int i = 0; i < numRandom; i++) {
-            List<PEntry<Integer, Integer>> valueList = new ArrayList<>();
-            
-            for (Object obj : nodeMap.values()) {
-                WordProperty curProp = (WordProperty)obj;
-                List values = new ArrayList(curProp.getValues());
-                values.add(null);
-                Collections.shuffle(values);
-                WordPropValueNode val = (WordPropValueNode)values.get(0);
-                
-                // null value means select nothing for this (not all words must have all class entries)
-                if (val == null) {
+        if (comboCache != null && comboCache.size() > 0) {
+            for (int i = 0; (i - offset) < numRandom && i + offset < comboCache.size(); i++) {
+                if (propCombEqual(comboCache.get(i + offset), new ArrayList(excludeWord.getClassValues()))) {
+                    offset++;
                     continue;
                 }
-                
-                valueList.add(new PEntry(curProp.getId(), val.getId()));
             }
-            
-            logic to exclude value combo in excludeword goes here. dont get fooled by ORDER, which doesnt matter
-            
-            ret.add(valueList);
-        }*/
+        }
         
         return ret;
+    }
+    
+    
+    private boolean propCombEqual(List<Entry<Integer, Integer>> a, List<Entry<Integer, Integer>> b) {
+        boolean ret = true;
+        
+        if (a.size() == b.size()) {
+            for (Entry aEntry : a) {
+                boolean aRet = false;
+
+                for (Entry bEntry : b) {
+                    if (aEntry.equals(bEntry)) {
+                        aRet = true;
+                        break;
+                    }
+                }
+                
+                ret = ret && aRet;
+            }
+        } else {
+            ret = false;
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * builds cache of every word property combination
+     */
+    public void buildComboCache() {
+        comboCache = new ArrayList<>();
+        
+        buildComboCacheInternal(0, new ArrayList(nodeMap.values()),
+                new ArrayList<Entry<Integer, Integer>>());
+    }
+    
+    private void buildComboCacheInternal(int depth, List<WordProperty> props, List<Entry<Integer, Integer>> curList) {
+        WordProperty curProp = props.get(depth);
+            
+        for (WordPropValueNode curVal : curProp.getValues()) {
+            ArrayList<Entry<Integer, Integer>> newList = new ArrayList(curList);
+            newList.add(new PEntry(curProp.getId(), curVal.getId()));
+            
+            // if at max depth, cease recursion
+            if (depth == props.size() - 1) {
+                comboCache.add(newList);
+            } else {
+                buildComboCacheInternal(depth + 1, props, newList);
+            }
+        }
+    }
+    
+    /**
+     * Call this after done with any functionality that uses the combo cache.
+     * This must be cleared manually, as there is no predictive way to know that
+     * the cache is finished with
+     */
+    public void clearComboCache() {
+        comboCache = null;
     }
     
     /**

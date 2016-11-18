@@ -130,6 +130,9 @@ public class QuizFactory {
         // make certain the number of questions never exceeds the number of words available
         numQuestions = wordList.size() < numQuestions ? wordList.size() : numQuestions;
         Random randGen = new Random();
+        
+        // make certain word properties have all combos built before making quiz
+        core.getWordPropertiesCollection().buildComboCache();
 
         for (int i = 0; i < numQuestions; i++) {
             ConWord curWord = wordList.get(i);
@@ -198,6 +201,9 @@ public class QuizFactory {
 
             ret.addNode(question);
         }
+        
+        // clear combo cache from memory after done
+        core.getWordPropertiesCollection().clearComboCache();
 
         return ret;
     }

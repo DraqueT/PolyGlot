@@ -52,4 +52,8 @@ public final class PEntry<K, V> implements Map.Entry<K, V> {
         this.value = value;
         return old;
     }
+    
+    public boolean equals(PEntry test) {
+        return this.key.equals(test.getKey()) && this.value.equals(test.getValue());
+    }
 }
