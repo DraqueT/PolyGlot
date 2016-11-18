@@ -19,11 +19,15 @@
  */
 package PolyGlot;
 
+import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PGrammarPane;
+import PolyGlot.Nodes.ImageNode;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
@@ -82,6 +86,16 @@ public class FormattedTextHelper {
                 }
             } else if (nextNode.startsWith("</font")) {
                 // do nothing
+            } else if (nextNode.startsWith("<img src=")) {
+                String idString = nextNode.replace("<img src=\"", "").replace("\">", "");
+                Integer id = Integer.parseInt(idString);
+                try {
+                    ImageNode imageNode = (ImageNode)core.getImageCollection().getNodeById(id);
+                    ((PGrammarPane)pane).addImage(imageNode);
+                } catch (Exception e) {
+                    InfoBox.error("Image Load Error", "Unable to load image: " 
+                            + e.getLocalizedMessage(), null);
+                }                
             } else {
                 Document doc = pane.getDocument();
                 
@@ -346,7 +360,7 @@ public class FormattedTextHelper {
      * @return encoded values of pane
      * @throws BadLocationException if unable to create string format
      */
-    public static String storageFormat(JTextPane pane) throws BadLocationException {
+    public static String storageFormat(JTextPane pane) throws BadLocationException, Exception {
         String ret = storeFormatRecurse(pane.getDocument().getDefaultRootElement(), pane);
         return ret.replace(PGTUtil.RTLMarker, "").replace(PGTUtil.LTRMarker, "");
     }
@@ -358,23 +372,34 @@ public class FormattedTextHelper {
      * @return string format value of current node and its children
      * @throws BadLocationException if unable to create string format
      */
-    private static String storeFormatRecurse(Element e, JTextPane pane) throws BadLocationException {
+    private static String storeFormatRecurse(Element e, JTextPane pane) throws BadLocationException, Exception {
         String ret = "";
         int ec = e.getElementCount();
 
         if (ec == 0) {
-            int start = e.getStartOffset();
-            int len = e.getEndOffset() - start;
-            if (start < pane.getDocument().getLength()) {
-                AttributeSet a = e.getAttributes();
-                String font = StyleConstants.getFontFamily(a);
-                String fontColor = colorToText(StyleConstants.getForeground(a));
-                int fontSize = StyleConstants.getFontSize(a);
-                ret += "<font face=\"" + font + "\""
-                        + "size=\"" + fontSize + "\""
-                        + "color=\"" + fontColor + "\"" + ">";
-                ret += pane.getDocument().getText(start, len);
-                ret += "</font>";
+            // if more media addable in the future, this is where to process it...
+            // hard coded values because they're hard coded in Java. Eh.
+            if (e.getAttributes().getAttribute("$ename") != null
+                    && e.getAttributes().getAttribute("$ename").equals("icon")) {
+                if (e.getAttributes().getAttribute(PGTUtil.ImageIdAttribute) == null) {
+                    throw new Exception("ID For image not stored. Unable to store section.");
+                }
+                
+                ret += "<img src=\"" + e.getAttributes().getAttribute(PGTUtil.ImageIdAttribute) + "\">";
+            } else {
+                int start = e.getStartOffset();
+                int len = e.getEndOffset() - start;
+                if (start < pane.getDocument().getLength()) {
+                    AttributeSet a = e.getAttributes();
+                    String font = StyleConstants.getFontFamily(a);
+                    String fontColor = colorToText(StyleConstants.getForeground(a));
+                    int fontSize = StyleConstants.getFontSize(a);
+                    ret += "<font face=\"" + font + "\""
+                            + "size=\"" + fontSize + "\""
+                            + "color=\"" + fontColor + "\"" + ">";
+                    ret += pane.getDocument().getText(start, len);
+                    ret += "</font>";
+                }
             }
         } else {
             for (int i = 0; i < ec; i++) {

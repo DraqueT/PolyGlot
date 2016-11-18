@@ -22,6 +22,7 @@ package PolyGlot.CustomControls;
 import java.awt.Font;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.AbstractDocument.LeafElement;
 import javax.swing.text.StyleConstants;
 
 /**
@@ -54,6 +55,16 @@ public class PGDocument extends DefaultStyledDocument {
         }
         
         return ret;
+    }
+    
+    public void testInsert(int start) {
+        LeafElement a = (LeafElement)this.createLeafElement(getDefaultRootElement(), null, BUFFER_SIZE_DEFAULT, BUFFER_SIZE_DEFAULT);
+        try {
+            
+            a.getDocument().insertString(start, "<img src=\"" + "https://www.topatoco.com/images/three-five.png" + "\">", null);
+        } catch (Exception e) {
+            
+        }
     }
 }
 

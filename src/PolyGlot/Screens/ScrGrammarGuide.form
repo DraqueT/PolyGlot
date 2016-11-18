@@ -214,6 +214,9 @@
                         <Property name="toolTipText" type="java.lang.String" value="Formatted segment text"/>
                         <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PGrammarPane(core)"/>
+                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>

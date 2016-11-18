@@ -238,6 +238,11 @@ public class PTextPane extends JTextPane {
         });
     }
 
+    /**
+     * Adds image to text at point of current carat
+     * @param image
+     * @throws Exception 
+     */
     private void addImage(ImageNode image) throws Exception {
         final String placeHold = "-POLYGLOTIMAGE-";
         

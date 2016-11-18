@@ -30,6 +30,7 @@ import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PGDocument;
 import PolyGlot.CustomControls.PGTreeCellRenderer;
+import PolyGlot.CustomControls.PGrammarPane;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.SoundRecorder;
 import java.awt.Color;
@@ -222,7 +223,7 @@ public class ScrGrammarGuide extends PFrame {
         cmbFontColor = new javax.swing.JComboBox();
         btnApply = new javax.swing.JButton();
         panSection = new javax.swing.JScrollPane();
-        txtSection = new javax.swing.JTextPane();
+        txtSection = new PGrammarPane(core);
         jPanel4 = new javax.swing.JPanel();
         sldSoundPosition = new javax.swing.JSlider();
         jToolBar2 = new javax.swing.JToolBar();
@@ -737,7 +738,7 @@ public class ScrGrammarGuide extends PFrame {
             secNode.setRecording(soundRecorder.getSound());
             try {
                 secNode.setSectionText(FormattedTextHelper.storageFormat(txtSection));
-            } catch (BadLocationException e) {
+            } catch (Exception e) {
                 //e.printStackTrace();
                 InfoBox.error("Section Save Error", "Unable to save section text: "
                         + e.getLocalizedMessage(), this);
