@@ -24,8 +24,10 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.PGTUtil;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -97,6 +99,7 @@ public class ConWord extends DictNode {
         }
                 
         ConWord set = (ConWord) _set;
+        set.setCore(core);
         
         this.setValue(set.getValue());
         this.setLocalWord(set.getLocalWord());
@@ -104,7 +107,8 @@ public class ConWord extends DictNode {
         this.setDefinition(set.getDefinition());
         this.setPronunciation(set.getPronunciation());
         this.setId(set.getId());
-        for (Entry<Integer, Integer> curEntry : set.getClassValues()) {
+        List<Entry<Integer, Integer>> precLock = new ArrayList<>(set.getClassValues());
+        for (Entry<Integer, Integer> curEntry : precLock) {
             this.setClassValue(curEntry.getKey(), curEntry.getValue());
         }
         this.setProcOverride(set.isProcOverride());
@@ -279,7 +283,7 @@ public class ConWord extends DictNode {
     public Set<Entry<Integer, Integer>> getClassValues() {
         // verify validity before returning each: otherwise remove
         
-        Iterator<Entry<Integer, Integer>> classIt = classValues.entrySet().iterator();
+        Iterator<Entry<Integer, Integer>> classIt = new ArrayList<>(classValues.entrySet()).iterator();
         
         while (classIt.hasNext()) {
             Entry<Integer, Integer> curEntry = classIt.next();

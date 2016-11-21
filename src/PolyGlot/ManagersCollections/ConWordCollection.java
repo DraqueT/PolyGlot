@@ -69,6 +69,7 @@ public class ConWordCollection extends DictionaryCollection {
         Integer ret;
 
         ConWord insWord = new ConWord();
+        insWord.setCore(core);
         insWord.setEqual(bufferNode);
         insWord.setId(_id);
 

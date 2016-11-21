@@ -27,7 +27,6 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;

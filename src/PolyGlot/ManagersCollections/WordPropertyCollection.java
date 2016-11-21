@@ -38,7 +38,7 @@ import org.w3c.dom.Element;
  * @author Draque
  */
 public class WordPropertyCollection extends DictionaryCollection {
-    private List<List<Entry<Integer, Integer>>> comboCache = null;
+    private List<List<PEntry<Integer, Integer>>> comboCache = null;
     
     public WordPropertyCollection() {
         bufferNode = new WordProperty();
@@ -174,12 +174,17 @@ public class WordPropertyCollection extends DictionaryCollection {
         List<List<PEntry<Integer, Integer>>> ret = new ArrayList<>();
         int offset = 0;
         
+        Collections.shuffle(comboCache, new Random(System.nanoTime()));
+        
+        
         if (comboCache != null && comboCache.size() > 0) {
             for (int i = 0; (i - offset) < numRandom && i + offset < comboCache.size(); i++) {
                 if (propCombEqual(comboCache.get(i + offset), new ArrayList(excludeWord.getClassValues()))) {
                     offset++;
                     continue;
                 }
+                
+                ret.add(comboCache.get(i + offset));
             }
         }
         
@@ -187,7 +192,7 @@ public class WordPropertyCollection extends DictionaryCollection {
     }
     
     
-    private boolean propCombEqual(List<Entry<Integer, Integer>> a, List<Entry<Integer, Integer>> b) {
+    private boolean propCombEqual(List<PEntry<Integer, Integer>> a, List<Entry<Integer, Integer>> b) {
         boolean ret = true;
         
         if (a.size() == b.size()) {
@@ -217,14 +222,14 @@ public class WordPropertyCollection extends DictionaryCollection {
         comboCache = new ArrayList<>();
         
         buildComboCacheInternal(0, new ArrayList(nodeMap.values()),
-                new ArrayList<Entry<Integer, Integer>>());
+                new ArrayList<PEntry<Integer, Integer>>());
     }
     
-    private void buildComboCacheInternal(int depth, List<WordProperty> props, List<Entry<Integer, Integer>> curList) {
+    private void buildComboCacheInternal(int depth, List<WordProperty> props, List<PEntry<Integer, Integer>> curList) {
         WordProperty curProp = props.get(depth);
             
         for (WordPropValueNode curVal : curProp.getValues()) {
-            ArrayList<Entry<Integer, Integer>> newList = new ArrayList(curList);
+            ArrayList<PEntry<Integer, Integer>> newList = new ArrayList(curList);
             newList.add(new PEntry(curProp.getId(), curVal.getId()));
             
             // if at max depth, cease recursion

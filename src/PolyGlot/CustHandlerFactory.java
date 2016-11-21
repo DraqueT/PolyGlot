@@ -440,22 +440,18 @@ public class CustHandlerFactory {
                                     + ") is a malformed entry.");
                         }
                     } catch (Exception e) {
-                        throw new SAXException();
+                        e.printStackTrace();
+                        throw new SAXException("Word insertion error: " + e.getLocalizedMessage());
                     }
                 } else if (qName.equalsIgnoreCase(PGTUtil.typeXID)) {
                     // insertion for word types is much simpler
                     try {
                         core.getTypes().insert(wCId);
                     } catch (Exception e) {
-                        throw new SAXException();
+                        throw new SAXException("Type insertion error: " + e.getLocalizedMessage());
                     }
                 } else if (qName.equalsIgnoreCase(PGTUtil.genderXID)) {
                     // Deprecated
-                    /*try {
-                        genderCollection.insert(wGId);
-                    } catch (Exception e) {
-                        throw new SAXException();
-                    }*/
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuideXID)) {
                     pronuncMgr.addPronunciation(proBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
