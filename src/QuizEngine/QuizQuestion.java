@@ -83,8 +83,7 @@ public class QuizQuestion extends DictNode {
      * @return 
      */
     public List<DictNode> getChoices() {
-        long seed = System.nanoTime();
-        Collections.shuffle(multipleChoices, new Random(seed));
+        Collections.shuffle(multipleChoices, new Random(System.nanoTime()));
         return multipleChoices;
     }
     

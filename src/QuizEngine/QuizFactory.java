@@ -202,7 +202,8 @@ public class QuizFactory {
                 default:
                     throw new Exception("Unhandled question type.");
             }
-
+            
+            question.setType(questionType);
             ret.addNode(question);
         }
         
