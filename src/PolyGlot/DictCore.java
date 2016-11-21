@@ -398,13 +398,13 @@ public class DictCore {
 
         // collect XML representation of all dictionary elements
         propertiesManager.writeXML(doc, rootElement);
+        wordPropCollection.writeXML(doc, rootElement);
         typeCollection.writeXML(doc, rootElement);
         wordCollection.writeXML(doc, rootElement);
         declensionMgr.writeXML(doc, rootElement);
         pronuncMgr.writeXML(doc, rootElement);
         logoCollection.writeXML(doc, rootElement);
         grammarManager.writeXML(doc, rootElement);
-        wordPropCollection.writeXML(doc, rootElement);
 
         // write family entries
         rootElement.appendChild(famManager.writeToSaveXML(doc));

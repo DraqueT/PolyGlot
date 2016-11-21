@@ -174,6 +174,9 @@ public class WordPropertyCollection extends DictionaryCollection {
         List<List<PEntry<Integer, Integer>>> ret = new ArrayList<>();
         int offset = 0;
         
+        Collections.shuffle(comboCache, new Random(System.nanoTime()));
+        
+        
         if (comboCache != null && comboCache.size() > 0) {
             for (int i = 0; (i - offset) < numRandom && i + offset < comboCache.size(); i++) {
                 if (propCombEqual(comboCache.get(i + offset), new ArrayList(excludeWord.getClassValues()))) {
