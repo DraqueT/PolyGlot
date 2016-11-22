@@ -138,6 +138,8 @@ public class QuizFactory {
             ConWord curWord = wordList.get(i);
             QuizQuestion.QuestionType questionType = quizOn.get(randGen.nextInt(quizOn.size()));
             QuizQuestion question = new QuizQuestion(core);
+            question.setType(questionType);
+            question.setSource(curWord);
 
             switch (questionType) {
                 case Local:
@@ -148,6 +150,7 @@ public class QuizFactory {
                     }
                     question.addChoice(curWord);
                     question.setAnswer(curWord);
+                    question.setSource(curWord);
                     break;
                 case PoS:
                     for (DictNode node : core.getTypes().getRandomNodes(numChoices - 1, curWord.getWordTypeId())) {
@@ -156,6 +159,7 @@ public class QuizFactory {
                     TypeNode typeAnswer = core.getTypes().getNodeById(curWord.getWordTypeId());
                     question.addChoice(typeAnswer);
                     question.setAnswer(typeAnswer);
+                    question.setSource(curWord);
                     break;
                 case Classes:
                     for (List<PEntry<Integer, Integer>> curCombo 
@@ -193,7 +197,7 @@ public class QuizFactory {
                     }
                     question.addChoice(valAnswer);
                     question.setAnswer(valAnswer);
-                    
+                    question.setSource(curWord);
                     break;
                 default:
                     throw new Exception("Unhandled question type.");

@@ -19,7 +19,19 @@
  */
 package PolyGlot.Screens;
 
+import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PLabel;
+import PolyGlot.CustomControls.PRadioButton;
+import PolyGlot.DictCore;
+import PolyGlot.Nodes.ConWord;
+import PolyGlot.Nodes.DictNode;
 import QuizEngine.Quiz;
+import QuizEngine.QuizQuestion;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import javax.swing.JRadioButton;
 
 /**
  *
@@ -27,14 +39,65 @@ import QuizEngine.Quiz;
  */
 public class ScrQuizScreen extends javax.swing.JFrame {
     private final Quiz quiz;
+    private final DictCore core;
+    private final PLabel lblQNode = new PLabel("", PLabel.CENTER);
 
     /**
      * Creates new form ScrQuizScreen
      * @param _quiz
+     * @param _core
      */
-    public ScrQuizScreen(Quiz _quiz) {
+    public ScrQuizScreen(Quiz _quiz, DictCore _core) {
+        core = _core;
         initComponents();
         quiz = _quiz;
+        
+        lblQNode.setResize(true);
+        lblQNode.setMinimumSize(new Dimension(1,1));
+        jPanel3.setLayout(new BorderLayout());
+        jPanel3.add(lblQNode);
+
+        if (!quiz.hasNext()) {
+            InfoBox.error("Empty Quiz", "Quiz has no questions. If generated, filter.", null);
+        }
+        
+        nextQuestion();
+    }
+       
+    /**
+     * Moves display to next question
+     */
+    private void nextQuestion() {
+        QuizQuestion question = quiz.next();
+        try {
+            lblQuestion.setText(question.getQuestionValue());
+            switch (question.getType()) {
+                case Local:
+                case PoS:
+                case Proc:
+                case Def:
+                case Classes:
+                    ConWord sourceWord = (ConWord)question.getSource();
+                    lblQNode.setFont(core.getPropertiesManager().getFontCon());
+                    lblQNode.setText(sourceWord.getValue());
+                    break;
+                default:
+                    throw new Exception("Unhandled qustion type: " + question.getType());
+            }
+            
+            pnlChoices.removeAll();
+            pnlChoices.setLayout(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            for (DictNode curNode : question.getChoices()) {
+                PRadioButton choice = new PRadioButton();
+                choice.setValue(curNode);
+                grpAnswerSelection.add(choice);
+                pnlChoices.add(choice, gbc);
+            }
+        } catch (Exception e) {
+            InfoBox.error("Population Error", "Problem populating question: " 
+                    + e.getLocalizedMessage(), this);
+        }
     }
 
     /**
@@ -46,17 +109,75 @@ public class ScrQuizScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        grpAnswerSelection = new javax.swing.ButtonGroup();
+        pnlChoices = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        lblQuestion = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        pnlChoices.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        pnlChoices.setMinimumSize(new java.awt.Dimension(10, 10));
+        pnlChoices.setName(""); // NOI18N
+
+        javax.swing.GroupLayout pnlChoicesLayout = new javax.swing.GroupLayout(pnlChoices);
+        pnlChoices.setLayout(pnlChoicesLayout);
+        pnlChoicesLayout.setHorizontalGroup(
+            pnlChoicesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        pnlChoicesLayout.setVerticalGroup(
+            pnlChoicesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 82, Short.MAX_VALUE)
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel2.setMinimumSize(new java.awt.Dimension(10, 10));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 496, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 211, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlChoices, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlChoices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -64,8 +185,10 @@ public class ScrQuizScreen extends javax.swing.JFrame {
 
     /**
      * @param quiz
+     * @param core
+     * @return 
      */
-    public static void run(final Quiz quiz) {
+    public static ScrQuizScreen run(Quiz quiz, DictCore core) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -88,16 +211,16 @@ public class ScrQuizScreen extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ScrQuizScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new ScrQuizScreen(quiz).setVisible(true);
-            }
-        });
+        ScrQuizScreen s = new ScrQuizScreen(quiz, core);
+        s.setVisible(true);
+        return s;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup grpAnswerSelection;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblQuestion;
+    private javax.swing.JPanel pnlChoices;
     // End of variables declaration//GEN-END:variables
 }

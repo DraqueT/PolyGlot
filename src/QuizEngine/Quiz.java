@@ -23,6 +23,7 @@ import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.DictionaryCollection;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -32,6 +33,8 @@ import java.util.Random;
  */
 public class Quiz extends DictionaryCollection {
     private final DictCore core;
+    Iterator<QuizQuestion> quizIt = null;
+    QuizQuestion curQuestion;
     
     public Quiz(DictCore _core) {
         core = _core;
@@ -51,5 +54,37 @@ public class Quiz extends DictionaryCollection {
         List questions = Arrays.asList(nodeMap.values().toArray());
         Collections.shuffle(questions, new Random(seed));
         return questions;
-    }    
+    }
+    
+    public int getQuizLength() {
+        return nodeMap.size();
+    }
+    
+    /**
+     * Tests whether more questions exist in quiz
+     * @return true if more questions
+     */
+    public boolean hasNext() {
+        if (quizIt == null) {
+            quizIt = nodeMap.values().iterator();
+        }
+        
+        return quizIt.hasNext();
+    }
+    
+    /**
+     * Gets next quiz question (if one exists)
+     * Will throw exception if no next question.
+     * 
+     * @return next quiz question
+     */
+    public QuizQuestion next() {
+        if (quizIt == null) {
+            quizIt = nodeMap.values().iterator();
+        }
+        
+        curQuestion = quizIt.next();
+        
+        return curQuestion;
+    }
 }

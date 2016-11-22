@@ -38,8 +38,9 @@ import org.w3c.dom.Element;
  * @author Draque
  */
 public class WordPropertyCollection extends DictionaryCollection {
+
     private List<List<PEntry<Integer, Integer>>> comboCache = null;
-    
+
     public WordPropertyCollection() {
         bufferNode = new WordProperty();
     }
@@ -151,50 +152,52 @@ public class WordPropertyCollection extends DictionaryCollection {
 
         rootElement.appendChild(wordProperties);
     }
-    
+
     /**
-     * Gets random assortment of word class combinations based. Number of combinations
-     * limited by parameters and by number of combinations available
+     * Gets random assortment of word class combinations based. Number of
+     * combinations limited by parameters and by number of combinations
+     * available
+     *
      * @param numRandom number of entries to return
      * @return randomly generated combinations of word classes
      */
     public List<List<PEntry<Integer, Integer>>> getRandomPropertyCombinations(int numRandom) {
         return getRandomPropertyCombinations(numRandom, null);
     }
-    
+
     /**
-     * Gets random assortment of word class combinations based. Number of combinations
-     * limited by parameters and by number of combinations available. a value can 
-     * be excluded
+     * Gets random assortment of word class combinations based. Number of
+     * combinations limited by parameters and by number of combinations
+     * available. a value can be excluded
+     *
      * @param numRandom number of entries to return
-     * @param excludeWord word with class properties to exclude (quiz generation purposes)
+     * @param excludeWord word with class properties to exclude (quiz generation
+     * purposes)
      * @return randomly generated combinations of word classes
      */
     public List<List<PEntry<Integer, Integer>>> getRandomPropertyCombinations(int numRandom, ConWord excludeWord) {
         List<List<PEntry<Integer, Integer>>> ret = new ArrayList<>();
         int offset = 0;
-        
+
         Collections.shuffle(comboCache, new Random(System.nanoTime()));
-        
-        
+
         if (comboCache != null && comboCache.size() > 0) {
             for (int i = 0; (i - offset) < numRandom && i + offset < comboCache.size(); i++) {
                 if (propCombEqual(comboCache.get(i + offset), new ArrayList(excludeWord.getClassValues()))) {
                     offset++;
                     continue;
                 }
-                
+
                 ret.add(comboCache.get(i + offset));
             }
         }
-        
+
         return ret;
     }
-    
-    
+
     private boolean propCombEqual(List<PEntry<Integer, Integer>> a, List<Entry<Integer, Integer>> b) {
         boolean ret = true;
-        
+
         if (a.size() == b.size()) {
             for (Entry aEntry : a) {
                 boolean aRet = false;
@@ -205,33 +208,35 @@ public class WordPropertyCollection extends DictionaryCollection {
                         break;
                     }
                 }
-                
+
                 ret = ret && aRet;
             }
         } else {
             ret = false;
         }
-        
+
         return ret;
     }
-    
+
     /**
      * builds cache of every word property combination
      */
     public void buildComboCache() {
         comboCache = new ArrayList<>();
-        
-        buildComboCacheInternal(0, new ArrayList(nodeMap.values()),
-                new ArrayList<PEntry<Integer, Integer>>());
+
+        if (!nodeMap.isEmpty()) {
+            buildComboCacheInternal(0, new ArrayList(nodeMap.values()),
+                    new ArrayList<PEntry<Integer, Integer>>());
+        }
     }
-    
+
     private void buildComboCacheInternal(int depth, List<WordProperty> props, List<PEntry<Integer, Integer>> curList) {
         WordProperty curProp = props.get(depth);
-            
+
         for (WordPropValueNode curVal : curProp.getValues()) {
             ArrayList<PEntry<Integer, Integer>> newList = new ArrayList(curList);
             newList.add(new PEntry(curProp.getId(), curVal.getId()));
-            
+
             // if at max depth, cease recursion
             if (depth == props.size() - 1) {
                 comboCache.add(newList);
@@ -240,7 +245,7 @@ public class WordPropertyCollection extends DictionaryCollection {
             }
         }
     }
-    
+
     /**
      * Call this after done with any functionality that uses the combo cache.
      * This must be cleared manually, as there is no predictive way to know that
@@ -249,26 +254,27 @@ public class WordPropertyCollection extends DictionaryCollection {
     public void clearComboCache() {
         comboCache = null;
     }
-    
+
     /**
      * returns true if the class/value ids given match up to existing values
      * returns false otherwise
+     *
      * @param classId ID of word class to test
      * @param valId ID of value within word class to test
      * @return true if pair exists
      */
     public boolean isValid(Integer classId, Integer valId) {
         boolean ret = true;
-        
+
         if (!nodeMap.containsKey(classId)) {
             ret = false;
         } else {
-            WordProperty prop = (WordProperty)nodeMap.get(classId);
+            WordProperty prop = (WordProperty) nodeMap.get(classId);
             if (!prop.isValid(valId)) {
                 ret = false;
             }
         }
-        
+
         return ret;
     }
 }

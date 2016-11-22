@@ -85,6 +85,8 @@ public class ScrQuizGenDialog extends PFrame {
                     chkDefQuiz.isSelected(), 
                     chkClassQuiz.isSelected(), 
                     filter);
+            
+            ScrQuizScreen.run(genQuiz, core);
         } catch (Exception e) {
             InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), this);
         }

@@ -35,6 +35,12 @@ import java.util.Set;
  * @author draque.thompson
  */
 public class QuizQuestion extends DictNode {
+    protected List<DictNode> multipleChoices = new ArrayList<>();
+    private DictNode answer;
+    private QuestionType type;
+    private final DictCore core;
+    private DictNode source;
+    
     /**
      * Constructor for quiz questions
      * @param _core The core of your dictionary
@@ -43,10 +49,18 @@ public class QuizQuestion extends DictNode {
         core = _core;
     }
     
-    protected List<DictNode> multipleChoices = new ArrayList<>();
-    private DictNode answer;
-    private QuestionType type;
-    private final DictCore core;
+    /**
+     * DO NOT CALL THIS.
+     * @param _node WILL THROW ERROR
+     * @throws ClassCastException EVERY DAMN TIME, FOOL.
+     */
+    @Override
+    public void setEqual(DictNode _node) throws ClassCastException {
+        multipleChoices = ((QuizQuestion)_node).multipleChoices;
+        answer = ((QuizQuestion)_node).getAnswer();
+        type = ((QuizQuestion)_node).getType();
+        source = ((QuizQuestion)_node).source;
+    }
     
     /**
      * Adds a choice to the multiple choice selection
@@ -94,11 +108,11 @@ public class QuizQuestion extends DictNode {
     public String getQuestionValue() throws Exception {
         String ret;
         
-        if (value.equals("")) {
+        if (!value.equals("")) {
             ret = value;
         } else {
-            if (answer instanceof ConWord) {
-                ConWord ansWord = (ConWord)answer;
+            if (source instanceof ConWord) {
+                ConWord ansWord = (ConWord)source;
                 ret = "What is this word's ";
                 String qEnd = "";
                 switch (type) {
@@ -107,10 +121,13 @@ public class QuizQuestion extends DictNode {
                         break;
                     case PoS:
                         qEnd += "part of speech?";
+                        break;
                     case Proc:
                         qEnd += "pronunciation?";
+                        break;
                     case Def:
                         qEnd += "definition?";
+                        break;
                     case Classes:
                         for (Entry<Integer, Integer> curEntry : ansWord.getClassValues()) {
                             if (!qEnd.equals("")) {
@@ -126,6 +143,8 @@ public class QuizQuestion extends DictNode {
                         
                         qEnd += " classification?";
                         break;
+                    default:
+                        throw  new Exception("Unhandled type: " + type);
                 }
                 ret += qEnd;
             } else {
@@ -215,15 +234,17 @@ public class QuizQuestion extends DictNode {
     }
     
     /**
-     * DO NOT CALL THIS.
-     * @param _node WILL THROW ERROR
-     * @throws ClassCastException EVERY DAMN TIME, FOOL.
+     * @return the source
      */
-    @Override
-    public void setEqual(DictNode _node) throws ClassCastException {
-        multipleChoices = ((QuizQuestion)_node).multipleChoices;
-        answer = ((QuizQuestion)_node).getAnswer();
-        type = ((QuizQuestion)_node).getType();
+    public DictNode getSource() {
+        return source;
+    }
+
+    /**
+     * @param source the source to set
+     */
+    public void setSource(DictNode source) {
+        this.source = source;
     }
  
     public enum QuestionType {
