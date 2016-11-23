@@ -489,7 +489,8 @@ public final class ScrLexicon extends PFrame {
             public void run() {
                 try {
                     Thread.sleep(500); // wait for interrupt from user...
-                    if (txtConWord.getText().isEmpty()) {
+                    if (txtConWord.getText().isEmpty() 
+                            && lstLexicon.getSelectedIndex() != -1) {
                         return; // prevents freezing scenario with if new word made beore thread continues
                     }
                     filterLexicon();
