@@ -407,6 +407,8 @@ public class CustHandlerFactory {
                     bclassNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassIdXID)) {
                     bclassId = true;
+                    // the buffer should not default to "apply to all."
+                    ((WordProperty)core.getWordPropertiesCollection().getBuffer()).deleteApplyType(-1);
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassNameXID)) {
                     bclassName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassApplyTypesXID)) {
@@ -440,7 +442,6 @@ public class CustHandlerFactory {
                                     + ") is a malformed entry.");
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
                         throw new SAXException("Word insertion error: " + e.getLocalizedMessage());
                     }
                 } else if (qName.equalsIgnoreCase(PGTUtil.typeXID)) {
