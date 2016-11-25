@@ -20,6 +20,7 @@
 
 package PolyGlot.ManagersCollections;
 
+import PolyGlot.CustomControls.PAlphaMap;
 import PolyGlot.Nodes.DictNode;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +35,7 @@ import java.util.Random;
  */
 public abstract class DictionaryCollection {
 
-    protected Map<Character, Integer> alphaOrder;
+    protected PAlphaMap alphaOrder;
     protected final Map nodeMap = new HashMap<>();
     protected DictNode bufferNode;
 
@@ -110,7 +111,7 @@ public abstract class DictionaryCollection {
         nodeMap.remove(_id);
     }
 
-    public void setAlphaOrder(Map _alphaOrder) {
+    public void setAlphaOrder(PAlphaMap _alphaOrder) {
         alphaOrder = _alphaOrder;
     }
     

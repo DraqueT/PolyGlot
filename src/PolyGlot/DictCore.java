@@ -20,6 +20,7 @@
 package PolyGlot;
 
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PAlphaMap;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.ManagersCollections.PropertiesManager;
@@ -39,7 +40,6 @@ import java.awt.FontFormatException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -79,7 +79,7 @@ public class DictCore {
         wordPropCollection = new WordPropertyCollection();
         imageCollection = new ImageCollection();
 
-        Map alphaOrder = propertiesManager.getAlphaOrder();
+        PAlphaMap alphaOrder = propertiesManager.getAlphaOrder();
 
         wordCollection.setAlphaOrder(alphaOrder);
         typeCollection.setAlphaOrder(alphaOrder);

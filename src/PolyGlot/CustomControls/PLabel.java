@@ -123,16 +123,4 @@ public class PLabel extends JLabel {
     public void setMAX_FONT_SIZE(int MAX_FONT_SIZE) {
         this.MAX_FONT_SIZE = MAX_FONT_SIZE;
     }
-    
-     public static void main(String[] args) throws Exception {
-        PLabel label=new PLabel("Some text");
-        JFrame frame=new JFrame("Resize label font");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
- 
-        frame.getContentPane().add(label);
- 
-        frame.setSize(300,300);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
 }

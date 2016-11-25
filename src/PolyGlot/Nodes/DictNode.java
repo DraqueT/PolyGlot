@@ -21,8 +21,7 @@
 // This is the type which all nodes and storage types extend.
 package PolyGlot.Nodes;
 
-import java.util.HashMap;
-import java.util.Map;
+import PolyGlot.CustomControls.PAlphaMap;
 
 /**
  *
@@ -36,7 +35,8 @@ public abstract class DictNode implements Comparable<DictNode> {
     protected Integer id = 0;
     
     // used for alphabetic ordering of nodes
-    private Map<Character, Integer> alphaOrder = new HashMap<>();
+    //private Map<Character, Integer> alphaOrder = new HashMap<>();
+    private PAlphaMap<String, Integer> alphaOrder = new PAlphaMap<>();
     
     /**
      * Sets a node equal to the argument node
@@ -52,7 +52,7 @@ public abstract class DictNode implements Comparable<DictNode> {
         return id;
     }
     
-    public void setAlphaOrder(Map _alphaOrder) {
+    public void setAlphaOrder(PAlphaMap _alphaOrder) {
         alphaOrder = _alphaOrder;
     }
     
@@ -76,42 +76,75 @@ public abstract class DictNode implements Comparable<DictNode> {
         final int AFTER = 1;
         final String comp = _compare.getValue();
         final String me = this.getValue();
+        int ret;
         
         if (comp.equals(me)) {
-            return EQUAL;
-        }
-        
-        if (comp.equals("")) {
-            return AFTER;
-        }
-        if (me.equals("")) {
-            return BEFORE;
-        }
-        
-        Character compChar = comp.charAt(0);
-        Character meChar = me.charAt(0);
-
-        // if no settings,or missing settings for given character, just use default
-        if (alphaOrder.isEmpty() || !alphaOrder.containsKey(meChar) || !alphaOrder.containsKey(compChar)) {
-            return this.getValue().compareToIgnoreCase(_compare.getValue());
-        }
-        
-        if(compChar.equals(meChar)) {
-            ConWord compChild = new ConWord();
-            ConWord thisChild = new ConWord();
-            
-            compChild.setAlphaOrder(alphaOrder);
-            thisChild.setAlphaOrder(alphaOrder);
-            
-            compChild.setValue(_compare.getValue().substring(1));
-            thisChild.setValue(this.getValue().substring(1));
-            
-            return thisChild.compareTo(compChild);
-        } else if (alphaOrder.get(comp.charAt(0)) > alphaOrder.get(me.charAt(0))) {
-            return BEFORE;
+            ret = EQUAL;
+        } else if (comp.equals("")) {
+            ret = AFTER;
+        } else if (me.equals("")) {
+            ret = BEFORE;
         } else {
-            return AFTER;
-        }    
+            Character compChar = comp.charAt(0);
+            Character meChar = me.charAt(0);
+
+            if (alphaOrder.isEmpty()) {
+                // if no settings,or missing settings for given character, just use default
+                ret = this.getValue().compareToIgnoreCase(_compare.getValue());
+            } else if(compChar.equals(meChar)) {
+                // just cycle through identical letters (looks sloppy, but goes fast)
+                ConWord compChild = new ConWord();
+                ConWord thisChild = new ConWord();
+
+                compChild.setAlphaOrder(alphaOrder);
+                thisChild.setAlphaOrder(alphaOrder);
+
+                compChild.setValue(_compare.getValue().substring(1));
+                thisChild.setValue(this.getValue().substring(1));
+
+                ret = thisChild.compareTo(compChild);
+            } else {
+                // compare values based on largest front facing clusters found in alphabet order
+                int longest = alphaOrder.getLongestEntry();
+                int meLen = me.length();
+                int compLen = comp.length();
+                int meAlpha = -1;
+                int compAlpha = -1;
+                
+                for (int i = meLen > longest ? longest : meLen; i >= 0; i--) {
+                    String mePrefix = me.substring(0, i);
+                    
+                    if (alphaOrder.containsKey(mePrefix)) {
+                        meAlpha = (int)alphaOrder.get(mePrefix);
+                        break;
+                    }
+                }
+                
+                if (meAlpha == -1) {
+                    // no prefixed pattern found for this value: default to system alpha order
+                    ret = this.getValue().compareToIgnoreCase(_compare.getValue());
+                } else {
+                    for (int i = compLen > longest ? longest : compLen; i >= 0; i--) {
+                        String compPrefix = comp.substring(0, i);
+                        
+                        if (alphaOrder.containsKey(compPrefix)) {
+                            compAlpha = (int)alphaOrder.get(compPrefix);
+                            break;
+                        }
+                    }
+                    
+                    if (compAlpha == -1) {
+                        ret = this.getValue().compareToIgnoreCase(_compare.getValue());
+                    } else if (compAlpha > meAlpha) {
+                        ret = BEFORE;
+                    } else {
+                        ret = AFTER;
+                    }
+                }
+            }
+        }
+        
+        return ret;
     }
     
     @Override
