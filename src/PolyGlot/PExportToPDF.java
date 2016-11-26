@@ -22,6 +22,7 @@ package PolyGlot;
 import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.Nodes.ConWord;
+import PolyGlot.Nodes.ImageNode;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.PEntry;
 import PolyGlot.Nodes.PronunciationNode;
@@ -127,7 +128,7 @@ public class PExportToPDF {
         unicodeFontFile = new IOHandler().getUnicodeFontByteArray();
         unicodeFont = PdfFontFactory.createFont(unicodeFontFile, PdfEncodings.IDENTITY_H, true);
         unicodeFont.setSubset(true);
-        
+
         // If font file still null, no custom font was loaded.
         if (conFontFile == null) {
             // If confont not specified, assume that the conlang requires unicode characters
@@ -431,16 +432,16 @@ public class PExportToPDF {
             }
 
             List<Object> defList = WebInterface.getElementsHTMLBody(curWord.getDefinition(), core);
-            if(!defList.isEmpty()) {
+            if (!defList.isEmpty()) {
                 dictEntry.add(new Text("\n"));
                 for (Object o : defList) {
                     if (o instanceof String) {
                         // text is HTML, and not true unicode... escape HTML to correct
-                        String cleanedText = StringEscapeUtils.unescapeHtml4((String)o);
+                        String cleanedText = StringEscapeUtils.unescapeHtml4((String) o);
                         dictEntry.add(new Text(cleanedText).setFontSize(defFontSize).setFont(unicodeFont));
                     } else if (o instanceof BufferedImage) {
                         // must convert buffered image to bytes because WHY DOES iTEXT 7 NOT DO THIS ITSELF.
-                        byte[] bytes = IOHandler.getBufferedImageByteArray((BufferedImage)o);
+                        byte[] bytes = IOHandler.getBufferedImageByteArray((BufferedImage) o);
                         Image pdfImage = new Image(ImageDataFactory.create(bytes));
                         dictEntry.add(pdfImage);
                     } else {
@@ -582,15 +583,15 @@ public class PExportToPDF {
             }
 
             List<Object> defList = WebInterface.getElementsHTMLBody(curWord.getDefinition(), core);
-            if(!defList.isEmpty()) {
+            if (!defList.isEmpty()) {
                 dictEntry.add(new Text("\n"));
                 for (Object o : defList) {
                     if (o instanceof String) {
-                        String cleanedText = StringEscapeUtils.unescapeHtml4((String)o);
+                        String cleanedText = StringEscapeUtils.unescapeHtml4((String) o);
                         dictEntry.add(new Text(cleanedText).setFontSize(defFontSize).setFont(unicodeFont));
                     } else if (o instanceof BufferedImage) {
                         // must convert buffered image to bytes because WHY DOES iTEXT 7 NOT DO THIS ITSELF.
-                        byte[] bytes = IOHandler.getBufferedImageByteArray((BufferedImage)o);
+                        byte[] bytes = IOHandler.getBufferedImageByteArray((BufferedImage) o);
                         Image pdfImage = new Image(ImageDataFactory.create(bytes));
                         dictEntry.add(pdfImage);
                     } else {
@@ -686,23 +687,38 @@ public class PExportToPDF {
                         .createFont(FontConstants.COURIER_OBLIQUE)).setFontSize(18));
                 newSec.add(new Text("\n"));
                 // populate text ensuring that conlang font is maintained where appropriate
-                for (Entry<String, PFontInfo> e : FormattedTextHelper.getSectionTextFontSpecifec(curSec.getSectionText(), core)) {
-                    PFontInfo info = e.getValue();
-                    String text = PGTUtil.stripRTL(e.getKey());
-                    if (core.getPropertiesManager().isEnforceRTL()
-                            && info.awtFont.equals(core.getPropertiesManager().getFontCon())) {
-                        // PDF does not respect RTL characters
-                        text = new StringBuilder(text).reverse().toString();
-                    }
-                    if (info.awtFont.equals(core.getPropertiesManager().getFontCon())) {
+                for (Entry<String, PFontInfo> entry : FormattedTextHelper.getSectionTextFontSpecifec(curSec.getSectionText(), core)) {
+                    PFontInfo info = entry.getValue();
+                    String text = PGTUtil.stripRTL(entry.getKey());
 
-                        newSec.add(new Text(text).setFont(conFont) // TODO: Maybe actually build font here if I give more freedom in the grammar section
-                                .setFontSize(conFontSize).setFontColor( // TODO: not setting size here. Later Rev (due to different size standards HTML vs Pt)
-                                FormattedTextHelper.swtColorToItextColor(info.awtColor)));
+                    if (text.startsWith("<img src")) {
+                        try {
+                            text = text.replace("<img src=\"", "").replace("\">", "");
+                            int imgId = Integer.parseInt(text);
+                            ImageNode imageNode = (ImageNode)core.getImageCollection().getNodeById(imgId);
+                            byte[] bytes = IOHandler.getBufferedImageByteArray(imageNode.getImage());
+                            Image pdfImage = new Image(ImageDataFactory.create(bytes));
+                            newSec.add(pdfImage);
+                        } catch (Exception e) {
+                            throw new IOException("Unable to open image in grammar section.");
+                        }
                     } else {
-                        newSec.add(new Text(text).setFont(unicodeFont) // TODO: Maybe actually build font here if I give more freedom in the grammar section
-                                .setFontColor( // TODO: not setting size here. Later Rev (due to different size standards HTML vs Pt)
-                                        FormattedTextHelper.swtColorToItextColor(info.awtColor)));
+                        if (core.getPropertiesManager().isEnforceRTL()
+                                && info.awtFont.equals(core.getPropertiesManager().getFontCon())) {
+                            // PDF does not respect RTL characters
+                            text = new StringBuilder(text).reverse().toString();
+                        }
+
+                        if (info.awtFont.equals(core.getPropertiesManager().getFontCon())) {
+
+                            newSec.add(new Text(text).setFont(conFont) // TODO: Maybe actually build font here if I give more freedom in the grammar section
+                                    .setFontSize(conFontSize).setFontColor( // TODO: not setting size here. Later Rev (due to different size standards HTML vs Pt)
+                                            FormattedTextHelper.swtColorToItextColor(info.awtColor)));
+                        } else {
+                            newSec.add(new Text(text).setFont(unicodeFont) // TODO: Maybe actually build font here if I give more freedom in the grammar section
+                                    .setFontColor( // TODO: not setting size here. Later Rev (due to different size standards HTML vs Pt)
+                                            FormattedTextHelper.swtColorToItextColor(info.awtColor)));
+                        }
                     }
                 }
                 newSec.setFixedLeading(21f);
@@ -728,7 +744,6 @@ public class PExportToPDF {
         Table table = new Table(2);
         table.addCell(new Paragraph("Part of Speech").setFont(PdfFontFactory.createFont(FontConstants.COURIER_BOLD)));
         table.addCell(new Paragraph("Gloss").setFont(PdfFontFactory.createFont(FontConstants.COURIER_BOLD)));
-
 
         for (TypeNode curType : core.getTypes().getNodes()) {
             table.addCell(curType.getValue());
