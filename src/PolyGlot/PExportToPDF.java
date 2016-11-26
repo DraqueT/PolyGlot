@@ -700,7 +700,7 @@ public class PExportToPDF {
                             Image pdfImage = new Image(ImageDataFactory.create(bytes));
                             newSec.add(pdfImage);
                         } catch (Exception e) {
-                            throw new IOException("Unable to open image in grammar section.");
+                            throw new IOException("Unable to open image in grammar section:" +e.getLocalizedMessage());
                         }
                     } else {
                         if (core.getPropertiesManager().isEnforceRTL()
