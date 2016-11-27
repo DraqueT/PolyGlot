@@ -1074,10 +1074,10 @@ public final class ScrLexicon extends PFrame {
     private void setupComboBoxesSwing() {
         cmbType.removeAllItems();
         cmbType.addItem(defTypeValue);
-        cmbType.addItem(newTypeValue);
         for (TypeNode curNode : core.getTypes().getNodes()) {
             cmbType.addItem(curNode);
         }
+        cmbType.addItem(newTypeValue);
     }
 
     /**
