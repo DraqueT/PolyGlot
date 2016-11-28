@@ -17,7 +17,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package QuizEngine;
+package PolyGlot.QuizEngine;
 
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
@@ -83,7 +83,8 @@ public class QuizQuestion extends DictNode {
      * @return 
      */
     public List<DictNode> getChoices() {
-        Collections.shuffle(multipleChoices, new Random(System.nanoTime()));
+        long seed = System.nanoTime();
+        Collections.shuffle(multipleChoices, new Random(seed));
         return multipleChoices;
     }
     
@@ -115,6 +116,9 @@ public class QuizQuestion extends DictNode {
                 ret = "What is this word's ";
                 String qEnd = "";
                 switch (type) {
+                    case ConEquiv:
+                        qEnd += core.conLabel() + " equivalent?";
+                        break;
                     case Local:
                         qEnd += core.localLabel() + " equivalent?";
                         break;
@@ -247,6 +251,6 @@ public class QuizQuestion extends DictNode {
     }
  
     public enum QuestionType {
-        Local, PoS, Proc, Def, Classes
+        Local, PoS, Proc, Def, Classes, ConEquiv
     }
 }

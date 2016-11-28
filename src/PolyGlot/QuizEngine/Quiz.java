@@ -17,7 +17,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package QuizEngine;
+package PolyGlot.QuizEngine;
 
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.DictionaryCollection;

@@ -19,7 +19,10 @@
  */
 package PolyGlot.CustomControls;
 
+import PolyGlot.DictCore;
+import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DictNode;
+import PolyGlot.QuizEngine.QuizQuestion.QuestionType;
 import javax.swing.JRadioButton;
 
 /**
@@ -28,7 +31,13 @@ import javax.swing.JRadioButton;
  */
 public class PRadioButton extends JRadioButton {
     private DictNode value = null;
+    private QuestionType type;
+    private final DictCore core;
 
+    public PRadioButton(DictCore _core) {
+        core = _core;
+    }
+    
     /**
      * @return the value
      */
@@ -45,14 +54,44 @@ public class PRadioButton extends JRadioButton {
     
     @Override
     public String getText() {
-        String ret;
+        String ret = super.getText();
         
-        if (value == null || value.getValue().equals("")) {
-            ret = super.getText();
-        } else {
-            ret = value.getValue();
+        if (!(type == null || value == null)) {
+            switch (type) {
+                case ConEquiv:
+                    setFont(core.getPropertiesManager().getFontCon());
+                case PoS:
+                case Classes:
+                    ret = value.getValue();
+                    break;
+                case Local:
+                    ret = ((ConWord)value).getLocalWord();
+                    break;
+                case Proc:
+                    ret = ((ConWord)value).getPronunciation();
+                    break;
+                case Def:
+                    ret = ((ConWord)value).getDefinition();
+                    break;
+                default:
+                    ret = "UNHANDLED TYPE";
+            }
         }
         
         return ret;
+    }
+
+    /**
+     * @return the type
+     */
+    public QuestionType getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(QuestionType type) {
+        this.type = type;
     }
 }

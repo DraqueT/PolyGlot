@@ -81,21 +81,29 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanel3" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
+                                  <Component id="chkLocalQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkTypeQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkClassQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkProcQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkDefQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkConlangQuiz" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jPanel3" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
                                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="txtNumQuestions" min="-2" pref="39" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                                      <Component id="chkMultiChoice" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="jLabel3" alignment="0" min="-2" pref="56" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -114,10 +122,29 @@
                           <Component id="txtNumQuestions" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="chkMultiChoice" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jPanel3" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Component id="jPanel3" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="chkLocalQuiz" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="chkTypeQuiz" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="chkClassQuiz" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="chkProcQuiz" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="chkDefQuiz" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="chkConlangQuiz" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -233,12 +260,6 @@
                 <Property name="toolTipText" type="java.lang.String" value="Number of questions in quiz"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="chkMultiChoice">
-              <Properties>
-                <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" value="Multiple Choice"/>
-              </Properties>
-            </Component>
             <Container class="javax.swing.JPanel" name="jPanel3">
               <Properties>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -247,75 +268,57 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel3" min="-2" pref="56" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="chkLocalQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="chkTypeQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="chkClassQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="chkProcQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="chkDefQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                      </Group>
+                      <EmptySpace min="0" pref="118" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="chkLocalQuiz" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="chkTypeQuiz" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="chkClassQuiz" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="chkProcQuiz" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="chkDefQuiz" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
+                      <EmptySpace min="0" pref="131" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
-              <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel3">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Quiz On:"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JCheckBox" name="chkLocalQuiz">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="-UPDATE VIA CODE-"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JCheckBox" name="chkTypeQuiz">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Part of Speech"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JCheckBox" name="chkClassQuiz">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Word Class"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JCheckBox" name="chkProcQuiz">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Pronunciation"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JCheckBox" name="chkDefQuiz">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Definition"/>
-                  </Properties>
-                </Component>
-              </SubComponents>
             </Container>
+            <Component class="javax.swing.JLabel" name="jLabel3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Quiz On:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkDefQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Definition"/>
+                <Property name="toolTipText" type="java.lang.String" value="Definitions of conlang words"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkProcQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Pronunciation"/>
+                <Property name="toolTipText" type="java.lang.String" value="Pronunciation of conlang words"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkClassQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Word Class"/>
+                <Property name="toolTipText" type="java.lang.String" value="Classes of words (such as male/female)"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkTypeQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Part of Speech"/>
+                <Property name="toolTipText" type="java.lang.String" value="Part of speech for words"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkLocalQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="-UPDATE VIA CODE-"/>
+                <Property name="toolTipText" type="java.lang.String" value="Conlang equivlent of local language words"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkConlangQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="-UPDATE VIA CODE-"/>
+                <Property name="toolTipText" type="java.lang.String" value="The conlang equivalent of local language words"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>

@@ -17,7 +17,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package QuizEngine;
+package PolyGlot.QuizEngine;
 
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
@@ -83,10 +83,9 @@ public class QuizFactory {
      * This randomly creates a quiz based on words from your language
      *
      * @param filter a filter conword, which quiz words must match
+     * @param conFromDef
      * @param numQuestions number of question in the quiz (will be less if
      * filter too restrictive)
-     * @param multipleChoice generates multiple choice questions if set. User
-     * must fill in answers otherwise.
      * @param quizLocal whether to quiz on local word values of quiz words
      * @param partOfSpeech whether to quiz on part of speech
      * @param proc whether to quiz on pronunciation
@@ -96,7 +95,7 @@ public class QuizFactory {
      * @return a constructed quiz based on given parameters
      * @throws java.lang.Exception
      */
-    public Quiz generateLexicalQuiz(int numQuestions, boolean multipleChoice,
+    public Quiz generateLexicalQuiz(int numQuestions, boolean conFromDef,
             boolean quizLocal, boolean partOfSpeech, boolean proc, boolean def,
             boolean wordClass, ConWord filter) throws Exception {
         Quiz ret = new Quiz(core);
@@ -117,6 +116,9 @@ public class QuizFactory {
         }
         if (wordClass) {
             quizOn.add(QuizQuestion.QuestionType.Classes);
+        }
+        if (conFromDef) {
+            quizOn.add(QuizQuestion.QuestionType.ConEquiv);
         }
 
         if (filter == null) {
@@ -145,6 +147,7 @@ public class QuizFactory {
                 case Local:
                 case Proc:
                 case Def:
+                case ConEquiv:
                     for (DictNode node : core.getWordCollection().getRandomNodes(numChoices - 1, curWord.getId())) {
                         question.addChoice(node);
                     }
@@ -164,7 +167,7 @@ public class QuizFactory {
                 case Classes:
                     for (List<PEntry<Integer, Integer>> curCombo 
                             : core.getWordPropertiesCollection()
-                                    .getRandomPropertyCombinations(numChoices, curWord)) {
+                                    .getRandomPropertyCombinations(numChoices - 1, curWord)) {
                         WordPropValueNode choiceNode = new WordPropValueNode();
                                 
                         for (PEntry<Integer, Integer> curEntry: curCombo) {
@@ -202,8 +205,7 @@ public class QuizFactory {
                 default:
                     throw new Exception("Unhandled question type.");
             }
-            
-            question.setType(questionType);
+
             ret.addNode(question);
         }
         

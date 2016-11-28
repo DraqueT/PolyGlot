@@ -25,13 +25,12 @@ import PolyGlot.CustomControls.PRadioButton;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DictNode;
-import QuizEngine.Quiz;
-import QuizEngine.QuizQuestion;
+import PolyGlot.QuizEngine.Quiz;
+import PolyGlot.QuizEngine.QuizQuestion;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import javax.swing.JRadioButton;
 
 /**
  *
@@ -77,10 +76,18 @@ public class ScrQuizScreen extends javax.swing.JFrame {
                 case Proc:
                 case Def:
                 case Classes:
+                {
                     ConWord sourceWord = (ConWord)question.getSource();
                     lblQNode.setFont(core.getPropertiesManager().getFontCon());
                     lblQNode.setText(sourceWord.getValue());
                     break;
+                }
+                case ConEquiv:
+                {
+                    ConWord sourceWord = (ConWord)question.getSource();
+                    lblQNode.setText(sourceWord.getLocalWord());
+                    break;
+                }
                 default:
                     throw new Exception("Unhandled qustion type: " + question.getType());
             }
@@ -89,8 +96,9 @@ public class ScrQuizScreen extends javax.swing.JFrame {
             pnlChoices.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
             for (DictNode curNode : question.getChoices()) {
-                PRadioButton choice = new PRadioButton();
+                PRadioButton choice = new PRadioButton(core);
                 choice.setValue(curNode);
+                choice.setType(question.getType());
                 grpAnswerSelection.add(choice);
                 pnlChoices.add(choice, gbc);
             }
@@ -112,10 +120,13 @@ public class ScrQuizScreen extends javax.swing.JFrame {
         grpAnswerSelection = new javax.swing.ButtonGroup();
         pnlChoices = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        lblQuestion = new javax.swing.JLabel();
+        lblQuestion = new javax.swing.JLabel("", PLabel.CENTER);
         jPanel3 = new javax.swing.JPanel();
+        btnForward = new javax.swing.JButton();
+        btnBackward = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("PolyGlot Quiz");
 
         pnlChoices.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         pnlChoices.setMinimumSize(new java.awt.Dimension(10, 10));
@@ -129,7 +140,7 @@ public class ScrQuizScreen extends javax.swing.JFrame {
         );
         pnlChoicesLayout.setVerticalGroup(
             pnlChoicesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 82, Short.MAX_VALUE)
+            .addGap(0, 53, Short.MAX_VALUE)
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -165,19 +176,31 @@ public class ScrQuizScreen extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnForward.setText("jButton1");
+
+        btnBackward.setText("jButton2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlChoices, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(btnBackward)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnForward))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlChoices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pnlChoices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnForward)
+                    .addComponent(btnBackward)))
         );
 
         pack();
@@ -201,14 +224,8 @@ public class ScrQuizScreen extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScrQuizScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScrQuizScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScrQuizScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScrQuizScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException e) {
+            InfoBox.error("Error Opening Quiz", e.getLocalizedMessage(), null);
         }
         //</editor-fold>
         ScrQuizScreen s = new ScrQuizScreen(quiz, core);
@@ -217,6 +234,8 @@ public class ScrQuizScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBackward;
+    private javax.swing.JButton btnForward;
     private javax.swing.ButtonGroup grpAnswerSelection;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

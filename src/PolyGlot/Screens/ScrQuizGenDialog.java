@@ -25,8 +25,8 @@ import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.TypeNode;
-import QuizEngine.Quiz;
-import QuizEngine.QuizFactory;
+import PolyGlot.QuizEngine.Quiz;
+import PolyGlot.QuizEngine.QuizFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 
@@ -44,6 +44,7 @@ public class ScrQuizGenDialog extends PFrame {
         core = _core;
         initComponents();        
         chkLocalQuiz.setText(core.localLabel() + " Equivalent");
+        chkConlangQuiz.setText(core.conLabel() + " Equivalent");
         populateDropdowns();
     }
     
@@ -78,7 +79,7 @@ public class ScrQuizGenDialog extends PFrame {
         
         try {
             Quiz genQuiz = factory.generateLexicalQuiz(numQuestions, 
-                    chkMultiChoice.isSelected(), 
+                    chkConlangQuiz.isSelected(), 
                     chkLocalQuiz.isSelected(), 
                     chkTypeQuiz.isSelected(), 
                     chkProcQuiz.isSelected(), 
@@ -114,14 +115,14 @@ public class ScrQuizGenDialog extends PFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtNumQuestions = new javax.swing.JTextField();
-        chkMultiChoice = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        chkLocalQuiz = new javax.swing.JCheckBox();
-        chkTypeQuiz = new javax.swing.JCheckBox();
-        chkClassQuiz = new javax.swing.JCheckBox();
-        chkProcQuiz = new javax.swing.JCheckBox();
         chkDefQuiz = new javax.swing.JCheckBox();
+        chkProcQuiz = new javax.swing.JCheckBox();
+        chkClassQuiz = new javax.swing.JCheckBox();
+        chkTypeQuiz = new javax.swing.JCheckBox();
+        chkLocalQuiz = new javax.swing.JCheckBox();
+        chkConlangQuiz = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -189,56 +190,38 @@ public class ScrQuizGenDialog extends PFrame {
 
         txtNumQuestions.setToolTipText("Number of questions in quiz");
 
-        chkMultiChoice.setSelected(true);
-        chkMultiChoice.setText("Multiple Choice");
-
         jPanel3.setToolTipText("");
-
-        jLabel3.setText("Quiz On:");
-
-        chkLocalQuiz.setText("-UPDATE VIA CODE-");
-
-        chkTypeQuiz.setText("Part of Speech");
-
-        chkClassQuiz.setText("Word Class");
-
-        chkProcQuiz.setText("Pronunciation");
-
-        chkDefQuiz.setText("Definition");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(chkLocalQuiz)
-                    .addComponent(chkTypeQuiz)
-                    .addComponent(chkClassQuiz)
-                    .addComponent(chkProcQuiz)
-                    .addComponent(chkDefQuiz))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 118, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkLocalQuiz)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkTypeQuiz)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkClassQuiz)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkProcQuiz)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkDefQuiz)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGap(0, 131, Short.MAX_VALUE)
         );
+
+        jLabel3.setText("Quiz On:");
+
+        chkDefQuiz.setText("Definition");
+        chkDefQuiz.setToolTipText("Definitions of conlang words");
+
+        chkProcQuiz.setText("Pronunciation");
+        chkProcQuiz.setToolTipText("Pronunciation of conlang words");
+
+        chkClassQuiz.setText("Word Class");
+        chkClassQuiz.setToolTipText("Classes of words (such as male/female)");
+
+        chkTypeQuiz.setText("Part of Speech");
+        chkTypeQuiz.setToolTipText("Part of speech for words");
+
+        chkLocalQuiz.setText("-UPDATE VIA CODE-");
+        chkLocalQuiz.setToolTipText("Conlang equivlent of local language words");
+
+        chkConlangQuiz.setText("-UPDATE VIA CODE-");
+        chkConlangQuiz.setToolTipText("The conlang equivalent of local language words");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -248,16 +231,23 @@ public class ScrQuizGenDialog extends PFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(chkLocalQuiz)
+                            .addComponent(chkTypeQuiz)
+                            .addComponent(chkClassQuiz)
+                            .addComponent(chkProcQuiz)
+                            .addComponent(chkDefQuiz)
+                            .addComponent(chkConlangQuiz))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtNumQuestions, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(chkMultiChoice)))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -270,10 +260,26 @@ public class ScrQuizGenDialog extends PFrame {
                     .addComponent(jLabel2)
                     .addComponent(txtNumQuestions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkMultiChoice)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jLabel3)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkLocalQuiz)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkTypeQuiz)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkClassQuiz)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkProcQuiz)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkDefQuiz)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkConlangQuiz)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jTabbedPane1.addTab("Vocab Quiz", jPanel1);
@@ -353,9 +359,9 @@ public class ScrQuizGenDialog extends PFrame {
     private javax.swing.JButton btnClearFilter;
     private javax.swing.JButton btnQuiz;
     private javax.swing.JCheckBox chkClassQuiz;
+    private javax.swing.JCheckBox chkConlangQuiz;
     private javax.swing.JCheckBox chkDefQuiz;
     private javax.swing.JCheckBox chkLocalQuiz;
-    private javax.swing.JCheckBox chkMultiChoice;
     private javax.swing.JCheckBox chkProcQuiz;
     private javax.swing.JCheckBox chkTypeQuiz;
     private javax.swing.JComboBox<String> cmbFilterType;
