@@ -21,9 +21,9 @@ package PolyGlot.QuizEngine;
 
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.DictionaryCollection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -33,8 +33,22 @@ import java.util.Random;
  */
 public class Quiz extends DictionaryCollection {
     private final DictCore core;
-    Iterator<QuizQuestion> quizIt = null;
+    List<QuizQuestion> quizList = null;
+    int quizPos = 0;
     QuizQuestion curQuestion;
+    
+    public int getLength() {
+        return quizList.size();
+    }
+    
+    /**
+     * Gets current position within quiz.
+     * Index begins at 0.
+     * @return current position
+     */
+    public int getCurQuestion() {
+        return quizPos;
+    }
     
     public Quiz(DictCore _core) {
         core = _core;
@@ -65,25 +79,27 @@ public class Quiz extends DictionaryCollection {
      * @return true if more questions
      */
     public boolean hasNext() {
-        if (quizIt == null) {
-            quizIt = nodeMap.values().iterator();
+        if (quizList == null) {
+            quizList = new ArrayList(nodeMap.values());
         }
         
-        return quizIt.hasNext();
+        return quizList.size() < quizPos;
     }
     
     /**
      * Gets next quiz question (if one exists)
-     * Will throw exception if no next question.
+     * Will throw out of bounds exception if no
+     * next question.
      * 
      * @return next quiz question
      */
     public QuizQuestion next() {
-        if (quizIt == null) {
-            quizIt = nodeMap.values().iterator();
+        if (quizList == null) {
+            quizList = new ArrayList(nodeMap.values());
         }
         
-        curQuestion = quizIt.next();
+        curQuestion = quizList.get(quizPos);
+        quizPos++;
         
         return curQuestion;
     }
