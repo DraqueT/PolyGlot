@@ -103,4 +103,19 @@ public class Quiz extends DictionaryCollection {
         
         return curQuestion;
     }
+    
+    /**
+     * Gets previous question. Throws null exception if quizList not initialized.
+     * Throws out of bounds exception if called while on first question
+     * @return 
+     */
+    public QuizQuestion prev() {
+        if (quizPos == 0) {
+            throw new IndexOutOfBoundsException("You can't call this when on the first entry.");
+        }
+        
+        quizPos--;
+        
+        return quizList.get(quizPos);
+    }
 }

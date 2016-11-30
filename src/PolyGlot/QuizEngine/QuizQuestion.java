@@ -40,6 +40,7 @@ public class QuizQuestion extends DictNode {
     private QuestionType type;
     private final DictCore core;
     private DictNode source;
+    private Answered answered= Answered.Unanswered;
     
     /**
      * Constructor for quiz questions
@@ -249,8 +250,26 @@ public class QuizQuestion extends DictNode {
     public void setSource(DictNode source) {
         this.source = source;
     }
+
+    /**
+     * @return the answered
+     */
+    public Answered getAnswered() {
+        return answered;
+    }
+
+    /**
+     * @param answered the answered to set
+     */
+    public void setAnswered(Answered answered) {
+        this.answered = answered;
+    }
  
     public enum QuestionType {
         Local, PoS, Proc, Def, Classes, ConEquiv
+    }
+    
+    public enum Answered {
+        Unanswered, Correct, Incorrect
     }
 }
