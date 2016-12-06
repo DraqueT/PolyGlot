@@ -26,7 +26,6 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
@@ -61,7 +60,7 @@ public class PLabel extends JLabel {
         });
     }
 
-    protected void adaptLabelFont(JLabel l) {
+    public void adaptLabelFont(JLabel l) {
         if (g == null || resize == false) {
             return;
         }

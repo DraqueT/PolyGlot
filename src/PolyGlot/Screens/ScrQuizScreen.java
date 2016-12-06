@@ -20,6 +20,7 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PRadioButton;
 import PolyGlot.DictCore;
@@ -28,21 +29,29 @@ import PolyGlot.Nodes.DictNode;
 import PolyGlot.QuizEngine.Quiz;
 import PolyGlot.QuizEngine.QuizQuestion;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Objects;
+import javax.swing.JComponent;
 
 /**
  *
  * @author draque.thompson
  */
-public class ScrQuizScreen extends javax.swing.JFrame {
+public class ScrQuizScreen extends PFrame {
     private final Quiz quiz;
-    private final DictCore core;
     private final PLabel lblQNode = new PLabel("", PLabel.CENTER);
+    private QuizQuestion curQuestion;
 
     /**
      * Creates new form ScrQuizScreen
+     *
      * @param _quiz
      * @param _core
      */
@@ -50,24 +59,37 @@ public class ScrQuizScreen extends javax.swing.JFrame {
         core = _core;
         initComponents();
         quiz = _quiz;
-        
+
         lblQNode.setResize(true);
-        lblQNode.setMinimumSize(new Dimension(1,1));
+        lblQNode.setMinimumSize(new Dimension(1, 1));
         jPanel3.setLayout(new BorderLayout());
         jPanel3.add(lblQNode);
 
         if (!quiz.hasNext()) {
             InfoBox.error("Empty Quiz", "Quiz has no questions. If generated, filter.", null);
         }
-        
+
         nextQuestion();
     }
-       
+
+    private void nextQuestion() {
+        setQuestion(quiz.next());
+    }
+
+    private void backQuestion() {
+        setQuestion(quiz.prev());
+    }
+
+    private void finishQuiz() {
+        // TODO: THIS
+    }
+
     /**
      * Moves display to next question
      */
-    private void nextQuestion() {
-        QuizQuestion question = quiz.next();
+    private void setQuestion(QuizQuestion question) {
+        curQuestion = question;
+
         try {
             lblQuestion.setText(question.getQuestionValue());
             switch (question.getType()) {
@@ -75,37 +97,127 @@ public class ScrQuizScreen extends javax.swing.JFrame {
                 case PoS:
                 case Proc:
                 case Def:
-                case Classes:
-                {
-                    ConWord sourceWord = (ConWord)question.getSource();
+                case Classes: {
+                    ConWord sourceWord = (ConWord) question.getSource();
                     lblQNode.setFont(core.getPropertiesManager().getFontCon());
                     lblQNode.setText(sourceWord.getValue());
                     break;
                 }
-                case ConEquiv:
-                {
-                    ConWord sourceWord = (ConWord)question.getSource();
+                case ConEquiv: {
+                    ConWord sourceWord = (ConWord) question.getSource();
+                    lblQNode.setFont(core.getPropertiesManager().getCharisUnicodeFont());
                     lblQNode.setText(sourceWord.getLocalWord());
                     break;
                 }
                 default:
                     throw new Exception("Unhandled qustion type: " + question.getType());
             }
-            
+
+            // force firing of resize code
+            ((PLabel) lblQNode).adaptLabelFont(lblQNode);
+
             pnlChoices.removeAll();
             pnlChoices.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
             for (DictNode curNode : question.getChoices()) {
-                PRadioButton choice = new PRadioButton(core);
+                final PRadioButton choice = new PRadioButton(core);
                 choice.setValue(curNode);
                 choice.setType(question.getType());
+                choice.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        QuizQuestion question = getCurQuestion();
+
+                        if (choice.getValue().getId().equals(question.getAnswer().getId())) {
+                            question.setAnswered(QuizQuestion.Answered.Correct);
+                        } else {
+                            question.setAnswered(QuizQuestion.Answered.Incorrect);
+                            question.setAnswer(choice.getValue());
+                        }
+                        setupScreen();
+                    }
+                });
                 grpAnswerSelection.add(choice);
                 pnlChoices.add(choice, gbc);
+
+                // if question is answered already, set answer
+                if (question.getAnswered() == QuizQuestion.Answered.Correct
+                        || question.getAnswered() == QuizQuestion.Answered.Incorrect) {
+                    for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
+                        PRadioButton radio = (PRadioButton) curComp;
+                        if (Objects.equals(radio.getValue().getId(), question.getAnswer().getId())) {
+                            grpAnswerSelection.setSelected(radio.getModel(), true);
+                        }
+
+                        curComp.setEnabled(false);
+                    }
+                }
             }
         } catch (Exception e) {
-            InfoBox.error("Population Error", "Problem populating question: " 
+            InfoBox.error("Population Error", "Problem populating question: "
                     + e.getLocalizedMessage(), this);
         }
+
+        setupScreen();
+    }
+
+    /**
+     * Exposes current question to listener methods
+     *
+     * @return current question
+     */
+    private QuizQuestion getCurQuestion() {
+        return curQuestion;
+    }
+
+    /**
+     * Run this each time something changes that makes the screen need to be
+     * revised
+     */
+    private void setupScreen() {
+        // set up screen visually
+        if (quiz.getCurQuestion() > 0) {
+            btnBackward.setEnabled(true);
+        } else {
+            btnBackward.setEnabled(false);
+        }
+
+        if (quiz.getCurQuestion() >= quiz.getLength() - 1) {
+            btnForward.setText("Finish");
+        } else {
+            btnForward.setText("Next");
+        }
+
+        switch (curQuestion.getAnswered()) {
+            case Unanswered:
+                for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
+                    curComp.setEnabled(true);
+                }
+
+                lblAnsStat.setText("");
+                break;
+            case Correct:
+                for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
+                    curComp.setEnabled(false);
+                }
+
+                lblAnsStat.setText("CORRECT");
+                lblAnsStat.setForeground(Color.green);
+                break;
+            case Incorrect:
+                for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
+                    curComp.setEnabled(false);
+                }
+
+                lblAnsStat.setText("INCORRECT");
+                lblAnsStat.setForeground(Color.red);
+                break;
+            default:
+                InfoBox.error("Unhandled Answer Type", "Answer type "
+                        + curQuestion.getAnswered() + " is not handled.", this);
+        }
+
+        pnlChoices.repaint();
     }
 
     /**
@@ -124,6 +236,7 @@ public class ScrQuizScreen extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         btnForward = new javax.swing.JButton();
         btnBackward = new javax.swing.JButton();
+        lblAnsStat = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PolyGlot Quiz");
@@ -154,7 +267,7 @@ public class ScrQuizScreen extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 211, Short.MAX_VALUE)
+            .addGap(0, 209, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -176,9 +289,23 @@ public class ScrQuizScreen extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnForward.setText("jButton1");
+        btnForward.setText("Next");
+        btnForward.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnForwardActionPerformed(evt);
+            }
+        });
 
-        btnBackward.setText("jButton2");
+        btnBackward.setText("Previous");
+        btnBackward.setActionCommand("Previous");
+        btnBackward.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackwardActionPerformed(evt);
+            }
+        });
+
+        lblAnsStat.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblAnsStat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -188,7 +315,9 @@ public class ScrQuizScreen extends javax.swing.JFrame {
             .addComponent(pnlChoices, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(btnBackward)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblAnsStat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnForward))
         );
         layout.setVerticalGroup(
@@ -198,18 +327,33 @@ public class ScrQuizScreen extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlChoices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnForward)
-                    .addComponent(btnBackward)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblAnsStat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnForward)
+                        .addComponent(btnBackward)))
+                .addGap(2, 2, 2))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackwardActionPerformed
+        backQuestion();
+    }//GEN-LAST:event_btnBackwardActionPerformed
+
+    private void btnForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
+        if (quiz.getCurQuestion() >= quiz.getLength() - 1) {
+            finishQuiz();
+        } else {
+            nextQuestion();
+        }
+    }//GEN-LAST:event_btnForwardActionPerformed
+
     /**
      * @param quiz
      * @param core
-     * @return 
+     * @return
      */
     public static ScrQuizScreen run(Quiz quiz, DictCore core) {
         /* Set the Nimbus look and feel */
@@ -239,7 +383,25 @@ public class ScrQuizScreen extends javax.swing.JFrame {
     private javax.swing.ButtonGroup grpAnswerSelection;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblAnsStat;
     private javax.swing.JLabel lblQuestion;
     private javax.swing.JPanel pnlChoices;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void updateAllValues(DictCore _core) {
+        core = _core;
+        setupScreen();
+    }
+
+    @Override
+    public boolean thisOrChildrenFocused() {
+        // TODO: Make this apply to quiz screen
+        return this.hasFocus();
+    }
+
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        // does nothing
+    }
 }

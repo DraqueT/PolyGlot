@@ -40,7 +40,7 @@ public class QuizQuestion extends DictNode {
     private QuestionType type;
     private final DictCore core;
     private DictNode source;
-    private Answered answered= Answered.Unanswered;
+    private Answered answered = Answered.Unanswered;
     
     /**
      * Constructor for quiz questions
@@ -252,7 +252,7 @@ public class QuizQuestion extends DictNode {
     }
 
     /**
-     * @return the answered
+     * @return the answered status (not, correct, incorrect)
      */
     public Answered getAnswered() {
         return answered;

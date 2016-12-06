@@ -34,7 +34,7 @@ import java.util.Random;
 public class Quiz extends DictionaryCollection {
     private final DictCore core;
     List<QuizQuestion> quizList = null;
-    int quizPos = 0;
+    int quizPos = -1; // start at -1 because initial next() call bumps to 0
     QuizQuestion curQuestion;
     
     public int getLength() {
@@ -83,7 +83,7 @@ public class Quiz extends DictionaryCollection {
             quizList = new ArrayList(nodeMap.values());
         }
         
-        return quizList.size() < quizPos;
+        return quizList.size() > quizPos;
     }
     
     /**
@@ -98,8 +98,8 @@ public class Quiz extends DictionaryCollection {
             quizList = new ArrayList(nodeMap.values());
         }
         
-        curQuestion = quizList.get(quizPos);
-        quizPos++;
+        quizPos++;        
+        curQuestion = quizList.get(quizPos);        
         
         return curQuestion;
     }

@@ -165,9 +165,11 @@ public class QuizFactory {
                     question.setSource(curWord);
                     break;
                 case Classes:
+                    int curId = 0;
                     for (List<PEntry<Integer, Integer>> curCombo 
                             : core.getWordPropertiesCollection()
                                     .getRandomPropertyCombinations(numChoices - 1, curWord)) {
+                        curId++;
                         WordPropValueNode choiceNode = new WordPropValueNode();
                                 
                         for (PEntry<Integer, Integer> curEntry: curCombo) {
@@ -181,6 +183,7 @@ public class QuizFactory {
                             choiceNode.setValue(choiceNode.getValue() + valueNode.getValue());
                         }
                         
+                        choiceNode.setId(curId);
                         question.addChoice(choiceNode);
                     }
                     
@@ -198,6 +201,7 @@ public class QuizFactory {
                         
                         valAnswer.setValue(valAnswer.getValue() + curVal.getValue());
                     }
+                    valAnswer.setId(0);
                     question.addChoice(valAnswer);
                     question.setAnswer(valAnswer);
                     question.setSource(curWord);

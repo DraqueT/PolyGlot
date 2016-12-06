@@ -89,6 +89,7 @@ public class ScrQuizGenDialog extends PFrame {
             
             ScrQuizScreen.run(genQuiz, core);
         } catch (Exception e) {
+            e.printStackTrace();
             InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), this);
         }
     }
