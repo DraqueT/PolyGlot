@@ -39,6 +39,7 @@ import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.Objects;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -81,7 +82,32 @@ public class ScrQuizScreen extends PFrame {
     }
 
     private void finishQuiz() {
-        // TODO: THIS
+        int numRight = quiz.getNumCorrect();
+        int quizLen = quiz.getLength();
+        
+        if (numRight == quizLen) {
+            InfoBox.info("Quiz Complete", "Perfect score! " + numRight 
+                    + " out of " + quizLen + "correct!", this);
+            dispose();
+        } else {
+            int retake = JOptionPane.showConfirmDialog(this, numRight 
+                    + " out of " + quizLen + " correct. Retake?" , "Quiz Complete", JOptionPane.YES_NO_OPTION);
+            
+            if (retake == JOptionPane.YES_OPTION) {
+                int trim = JOptionPane.showConfirmDialog(this,"Quiz only on incorrectly answered questions?",
+                        "Trim Quiz?", JOptionPane.YES_NO_OPTION);
+                
+                if (trim == JOptionPane.YES_OPTION) {
+                    quiz.trimQuiz();
+                } else {
+                    quiz.resetQuiz();
+                }
+                
+                nextQuestion();
+            } else {
+                dispose();
+            }
+        }
     }
 
     /**
@@ -90,6 +116,8 @@ public class ScrQuizScreen extends PFrame {
     private void setQuestion(QuizQuestion question) {
         curQuestion = question;
 
+        lblQNum.setText((quiz.getCurQuestion() + 1) + "/" + quiz.getLength());
+        
         try {
             lblQuestion.setText(question.getQuestionValue());
             switch (question.getType()) {
@@ -123,6 +151,8 @@ public class ScrQuizScreen extends PFrame {
                 final PRadioButton choice = new PRadioButton(core);
                 choice.setValue(curNode);
                 choice.setType(question.getType());
+                
+                // on button selection, record user choice and right/wrong status
                 choice.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -130,13 +160,15 @@ public class ScrQuizScreen extends PFrame {
 
                         if (choice.getValue().getId().equals(question.getAnswer().getId())) {
                             question.setAnswered(QuizQuestion.Answered.Correct);
+                            question.setUserAnswer(question.getAnswer());
                         } else {
                             question.setAnswered(QuizQuestion.Answered.Incorrect);
-                            question.setAnswer(choice.getValue());
+                            question.setUserAnswer(choice.getValue());
                         }
                         setupScreen();
                     }
                 });
+                
                 grpAnswerSelection.add(choice);
                 pnlChoices.add(choice, gbc);
 
@@ -145,7 +177,7 @@ public class ScrQuizScreen extends PFrame {
                         || question.getAnswered() == QuizQuestion.Answered.Incorrect) {
                     for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
                         PRadioButton radio = (PRadioButton) curComp;
-                        if (Objects.equals(radio.getValue().getId(), question.getAnswer().getId())) {
+                        if (Objects.equals(radio.getValue().getId(), question.getUserAnswer().getId())) {
                             grpAnswerSelection.setSelected(radio.getModel(), true);
                         }
 
@@ -154,6 +186,7 @@ public class ScrQuizScreen extends PFrame {
                 }
             }
         } catch (Exception e) {
+            //e.printStackTrace();
             InfoBox.error("Population Error", "Problem populating question: "
                     + e.getLocalizedMessage(), this);
         }
@@ -202,7 +235,7 @@ public class ScrQuizScreen extends PFrame {
                 }
 
                 lblAnsStat.setText("CORRECT");
-                lblAnsStat.setForeground(Color.green);
+                lblAnsStat.setForeground(new Color(15, 175, 15));
                 break;
             case Incorrect:
                 for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
@@ -237,6 +270,8 @@ public class ScrQuizScreen extends PFrame {
         btnForward = new javax.swing.JButton();
         btnBackward = new javax.swing.JButton();
         lblAnsStat = new javax.swing.JLabel();
+        lblQNum = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PolyGlot Quiz");
@@ -263,7 +298,7 @@ public class ScrQuizScreen extends PFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 496, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -276,7 +311,7 @@ public class ScrQuizScreen extends PFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -316,7 +351,11 @@ public class ScrQuizScreen extends PFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(btnBackward)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblQNum, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblAnsStat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnForward))
         );
@@ -331,7 +370,9 @@ public class ScrQuizScreen extends PFrame {
                     .addComponent(lblAnsStat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnForward)
-                        .addComponent(btnBackward)))
+                        .addComponent(btnBackward)
+                        .addComponent(lblQNum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)))
                 .addGap(2, 2, 2))
         );
 
@@ -381,9 +422,11 @@ public class ScrQuizScreen extends PFrame {
     private javax.swing.JButton btnBackward;
     private javax.swing.JButton btnForward;
     private javax.swing.ButtonGroup grpAnswerSelection;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblAnsStat;
+    private javax.swing.JLabel lblQNum;
     private javax.swing.JLabel lblQuestion;
     private javax.swing.JPanel pnlChoices;
     // End of variables declaration//GEN-END:variables
@@ -396,7 +439,6 @@ public class ScrQuizScreen extends PFrame {
 
     @Override
     public boolean thisOrChildrenFocused() {
-        // TODO: Make this apply to quiz screen
         return this.hasFocus();
     }
 

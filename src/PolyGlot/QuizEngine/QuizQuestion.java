@@ -40,6 +40,7 @@ public class QuizQuestion extends DictNode {
     private QuestionType type;
     private final DictCore core;
     private DictNode source;
+    private DictNode userAnswer;
     private Answered answered = Answered.Unanswered;
     
     /**
@@ -48,6 +49,8 @@ public class QuizQuestion extends DictNode {
      */
     public QuizQuestion(DictCore _core) {
         core = _core;
+        userAnswer = new ConWord();
+        userAnswer.setId(-1);
     }
     
     /**
@@ -263,6 +266,20 @@ public class QuizQuestion extends DictNode {
      */
     public void setAnswered(Answered answered) {
         this.answered = answered;
+    }
+
+    /**
+     * @return the userAnwer
+     */
+    public DictNode getUserAnswer() {
+        return userAnswer;
+    }
+
+    /**
+     * @param userAnswer the userAnwer to set
+     */
+    public void setUserAnswer(DictNode userAnswer) {
+        this.userAnswer = userAnswer;
     }
  
     public enum QuestionType {

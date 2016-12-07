@@ -209,11 +209,17 @@
               </Layout>
               <SubComponents>
                 <Component class="javax.swing.JTextField" name="txtFilterConWord">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter by conword here"/>
+                  </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, false, &quot;-- &quot; + core.conLabel() + &quot; Filter --&quot;)"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtFilterLocalWord">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter by local word here"/>
+                  </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- &quot; + core.localLabel() + &quot; Filter --&quot;)"/>
                   </AuxValues>
@@ -228,12 +234,16 @@
                         <StringItem index="3" value="Item 4"/>
                       </StringArray>
                     </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter by part of speech here"/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtFilterProc">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter by pronunciation here"/>
+                  </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Pronunciation Filter --&quot;)"/>
                   </AuxValues>
@@ -241,7 +251,11 @@
                 <Component class="javax.swing.JButton" name="btnClearFilter">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Filter"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Clear the filter"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClearFilterActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel1">
                   <Properties>
@@ -257,7 +271,8 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtNumQuestions">
               <Properties>
-                <Property name="toolTipText" type="java.lang.String" value="Number of questions in quiz"/>
+                <Property name="text" type="java.lang.String" value="10"/>
+                <Property name="toolTipText" type="java.lang.String" value="Number of questions in quiz (defaults to 10)"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel3">
@@ -300,12 +315,18 @@
                 <Property name="text" type="java.lang.String" value="Word Class"/>
                 <Property name="toolTipText" type="java.lang.String" value="Classes of words (such as male/female)"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkClassQuizActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkTypeQuiz">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Part of Speech"/>
                 <Property name="toolTipText" type="java.lang.String" value="Part of speech for words"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkTypeQuizActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkLocalQuiz">
               <Properties>

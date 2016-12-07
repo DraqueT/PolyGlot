@@ -202,6 +202,12 @@ public class QuizFactory {
                         valAnswer.setValue(valAnswer.getValue() + curVal.getValue());
                     }
                     valAnswer.setId(0);
+                    
+                    // handle case of words with no class
+                    if (valAnswer.getValue().equals("")) {
+                        valAnswer.setValue("No Class");
+                    }
+                    
                     question.addChoice(valAnswer);
                     question.setAnswer(valAnswer);
                     question.setSource(curWord);

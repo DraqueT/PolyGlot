@@ -88,10 +88,18 @@ public class ScrQuizGenDialog extends PFrame {
                     filter);
             
             ScrQuizScreen.run(genQuiz, core);
+            dispose();
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), this);
         }
+    }
+    
+    private void clearFilter() {
+        txtFilterConWord.setText("");
+        txtFilterLocalWord.setText("");
+        txtFilterProc.setText("");
+        cmbFilterType.setSelectedIndex(0);
     }
     
     /**
@@ -143,9 +151,22 @@ public class ScrQuizGenDialog extends PFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        txtFilterConWord.setToolTipText("Filter by conword here");
+
+        txtFilterLocalWord.setToolTipText("Filter by local word here");
+
         cmbFilterType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbFilterType.setToolTipText("Filter by part of speech here");
+
+        txtFilterProc.setToolTipText("Filter by pronunciation here");
 
         btnClearFilter.setText("Clear Filter");
+        btnClearFilter.setToolTipText("Clear the filter");
+        btnClearFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearFilterActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Vocabulary Filter");
 
@@ -189,7 +210,8 @@ public class ScrQuizGenDialog extends PFrame {
 
         jLabel2.setText("Quiz Length");
 
-        txtNumQuestions.setToolTipText("Number of questions in quiz");
+        txtNumQuestions.setText("10");
+        txtNumQuestions.setToolTipText("Number of questions in quiz (defaults to 10)");
 
         jPanel3.setToolTipText("");
 
@@ -214,9 +236,19 @@ public class ScrQuizGenDialog extends PFrame {
 
         chkClassQuiz.setText("Word Class");
         chkClassQuiz.setToolTipText("Classes of words (such as male/female)");
+        chkClassQuiz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkClassQuizActionPerformed(evt);
+            }
+        });
 
         chkTypeQuiz.setText("Part of Speech");
         chkTypeQuiz.setToolTipText("Part of speech for words");
+        chkTypeQuiz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkTypeQuizActionPerformed(evt);
+            }
+        });
 
         chkLocalQuiz.setText("-UPDATE VIA CODE-");
         chkLocalQuiz.setToolTipText("Conlang equivlent of local language words");
@@ -319,6 +351,28 @@ public class ScrQuizGenDialog extends PFrame {
         takeQuiz();
     }//GEN-LAST:event_btnQuizActionPerformed
 
+    private void chkClassQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkClassQuizActionPerformed
+        // do not allow self to be checked if no classes exist
+        if (core.getWordPropertiesCollection().getAllWordProperties().isEmpty()
+                && chkClassQuiz.isSelected()) {
+            InfoBox.warning("No Classes Exist", "No word classes exist.", this);
+            chkClassQuiz.setSelected(false);
+        }            
+    }//GEN-LAST:event_chkClassQuizActionPerformed
+
+    private void btnClearFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFilterActionPerformed
+        clearFilter();
+    }//GEN-LAST:event_btnClearFilterActionPerformed
+
+    private void chkTypeQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkTypeQuizActionPerformed
+        // do not allow self to be checked if no PoS exist
+        if (core.getTypes().getNodes().isEmpty()
+                && chkTypeQuiz.isSelected()) {
+            InfoBox.warning("No PoS Exist", "No parts of speech exist.", this);
+            chkTypeQuiz.setSelected(false);
+        }
+    }//GEN-LAST:event_chkTypeQuizActionPerformed
+
     /**
      * @param core
      * @return 
@@ -346,8 +400,7 @@ public class ScrQuizGenDialog extends PFrame {
 
     @Override
     public boolean thisOrChildrenFocused() {
-        // TODO: THIS
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.isFocused();
     }
 
     @Override

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 /**
@@ -72,6 +73,56 @@ public class Quiz extends DictionaryCollection {
     
     public int getQuizLength() {
         return nodeMap.size();
+    }
+    
+    /**
+     * Gets number of correctly answered questions (even if quiz is not completed)
+     * @return number of correct answers
+     */
+    public int getNumCorrect() {
+        int ret = 0;
+        
+        for (Object o : nodeMap.values().toArray()) {
+            QuizQuestion question = (QuizQuestion)o;
+            if (question.getAnswered() == QuizQuestion.Answered.Correct) {
+                ret++;
+            }
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Sets test back to non-taken, original status.
+     */
+    public void resetQuiz() {
+        for (Object o : nodeMap.values().toArray()) {
+            QuizQuestion question = (QuizQuestion)o;
+            question.setAnswered(QuizQuestion.Answered.Unanswered);
+            question.setUserAnswer(null);
+        }
+        
+        curQuestion = null;
+        quizPos = -1;
+        quizList = null;
+    }
+    
+    public void trimQuiz() {
+        for (Object o : nodeMap.entrySet().toArray()) {
+            Entry<Integer, QuizQuestion> e = (Entry<Integer, QuizQuestion>)o;
+            QuizQuestion question = e.getValue();
+            
+            if (question.getAnswered() == QuizQuestion.Answered.Correct) {
+                nodeMap.remove(e.getKey());
+            } else {
+                question.setAnswered(QuizQuestion.Answered.Unanswered);
+                question.setUserAnswer(null);
+            }            
+        }
+        
+        curQuestion = null;
+        quizPos = -1;
+        quizList = null;
     }
     
     /**
