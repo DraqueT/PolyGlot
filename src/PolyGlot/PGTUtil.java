@@ -45,7 +45,7 @@ public class PGTUtil {
     public static final String wordRuleOverrideXID = "wordRuleOverride";
     public static final String wordClassCollectionXID = "wordClassCollection";
     public static final String wordClassAndValueXID = "wordClassification";
-        
+
     // properties for types/parts of speech
     public static final String typeXID = "class";
     public static final String typeNameXID = "className";
@@ -57,13 +57,13 @@ public class PGTUtil {
     public static final String typeDefManXID = "definitionMandatoryClass";
     public static final String typePatternXID = "classPattern";
     public static final String typeGlossXID = "classGloss";
-    
+
     // properties for genders
     public static final String genderXID = "gender";
     public static final String genderNameXID = "genderName";
     public static final String genderIdXID = "genderId";
-    public static final String genderNotesXID = "genderNotes";    
-    
+    public static final String genderNotesXID = "genderNotes";
+
     // language properties
     public static final String fontConXID = "fontCon";
     public static final String fontLocalXID = "fontLocal";
@@ -80,7 +80,7 @@ public class PGTUtil {
     public static final String langPropEnforceRTLXID = "langPropEnforceRTL";
     public static final String langPropAuthCopyrightXID = "langPropAuthorCopyright";
     public static final String langPropLocalLangNameXID = "langPropLocalLangName";
-    
+
     // declension properties
     public static final String declensionXID = "declensionNode";
     public static final String declensionIdXID = "declensionId";
@@ -90,42 +90,42 @@ public class PGTUtil {
     public static final String declensionIsTemplateXID = "declensionTemplate";
     public static final String declensionRelatedIdXID = "declensionRelatedId";
     public static final String declensionMandatoryXID = "declensionMandatory";
-    
+
     // dimensional declension properties
     public static final String dimensionNodeXID = "dimensionNode";
     public static final String dimensionIdXID = "dimensionId";
     public static final String dimensionMandXID = "dimensionMand";
     public static final String dimensionNameXID = "dimensionName";
-    
+
     // pronunciation properties
     public static final String proGuideXID = "proGuide";
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";
-    
+
     // family properties
     public static final String famNodeXID = "thesNode";
     public static final String famNotesXID = "thesNotes";
     public static final String famNameXID = "thesName";
     public static final String famWordXID = "thesWord";
-    
+
     // autodeclansion generation properties
     public static final String decGenRuleXID = "decGenRule";
     public static final String decGenRuleTypeXID = "decGenRuleTypeId";
     public static final String decGenRuleCombXID = "decGenRuleComb";
     public static final String decGenRuleRegexXID = "decGenRuleRegex";
     public static final String decGenRuleNameXID = "decGenRuleName";
-    
+
     // autodeclension transform properties
     public static final String decGenTransXID = "decGenTrans";
     public static final String decGenTransRegexXID = "decGenTransRegex";
     public static final String decGenTransReplaceXID = "decGenTransReplace";
-    
+
     // constructed declension dimension properties
     public static final String decCombinedFormSectionXID = "decCombinedFormSection";
     public static final String decCombinedFormXID = "decCombinedForm";
     public static final String decCombinedIdXID = "decCombinedId";
     public static final String decCombinedSurpressXID = "decCombinedSurpress";
-    
+
     // properties for logographs
     public static final String logoRootNoteXID = "logoRootNode";
     public static final String logoGraphsCollectionXID = "logoGraphsCollection";
@@ -139,9 +139,9 @@ public class PGTUtil {
     public static final String logoGraphNodeXID = "LogoGraphNode";
     public static final String logoWordRelationXID = "LogoWordRelation";
     public static final String logoRelationsCollectionXID = "LogoRelationsCollection";
-    
+
     // properties for the grammar dictioary
-    public static final String grammarSectionXID = "grammarCollection";        
+    public static final String grammarSectionXID = "grammarCollection";
     public static final String grammarChapterNodeXID = "grammarChapterNode";
     public static final String grammarChapterNameXID = "grammarChapterName";
     public static final String grammarSectionsListXID = "grammarSectionsList";
@@ -149,7 +149,7 @@ public class PGTUtil {
     public static final String grammarSectionNameXID = "grammarSectionName";
     public static final String grammarSectionRecordingXID = "grammarSectionRecordingXID";
     public static final String grammarSectionTextXID = "grammarSectionText";
-    
+
     // properties for word classes
     public static final String ClassesNodeXID = "wordGrammarClassCollection";
     public static final String ClassXID = "wordGrammarClassNode";
@@ -160,14 +160,14 @@ public class PGTUtil {
     public static final String ClassValueNodeXID = "wordGrammarClassValueNode";
     public static final String ClassValueNameXID = "wordGrammarClassValueName";
     public static final String ClassValueIdXID = "wordGrammarClassValueId";
-    
+
     // constants for PolyGlot options found in PolyGlot.ini
     public static final int optionsNumLastFiles = 5;
     public static final String optionsLastFiles = "LastFiles";
     public static final String optionsScreenPos = "ScreenPositions";
     public static final String optionsScreensSize = "ScreenSizes";
     public static final String optionsScreensOpen = "ScreensUp";
-        
+
     // string constants
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";
@@ -188,18 +188,18 @@ public class PGTUtil {
     public static final String RTLMarker = "\u202e";
     public static final String LTRMarker = "\u202c";
     public static final String ImageIdAttribute = "imageIDAttribute";
-    
+
     // screen names when they're required as constants...
     public static final String scrNameLexicon = ScrLexicon.class.getName();
     public static final String scrNameGrammar = ScrGrammarGuide.class.getName();
     public static final String scrNameLogo = ScrLogoDetails.class.getName();
     public static final String scrNameFam = ScrFamilies.class.getName();
     public static final String scrIPARefChart = ScrIPARefChart.class.getName();
-    
+
     // int constants...
     public static final Integer numMenuFlashes = 4;
     public static final Integer menuFlashSleep = 200;
-    
+
     
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to
@@ -208,7 +208,7 @@ public class PGTUtil {
     public enum WindowMode {
         STANDARD, SINGLEVALUE, SELECTLIST
     }
-    
+
     /**
      * Encapsulates a string in RTL characters, setting back to LTR after
      * @param encapsulate string to encapsulate
@@ -217,7 +217,7 @@ public class PGTUtil {
     public static String encapsulateRTL(String encapsulate) {
         return RTLMarker + encapsulate + LTRMarker;
     }
-    
+
     /**
      * Strips string of RTL and LTR markers
      * @param strip string to strip
