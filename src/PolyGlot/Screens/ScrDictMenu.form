@@ -107,6 +107,15 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuLangStatsActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Quiz Generator"/>
+                <Property name="toolTipText" type="java.lang.String" value="Generate customized flashcard quizzes to help increase fluency."/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuQuizActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuTransWindow">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Translation Window"/>
@@ -123,14 +132,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuIPAChartActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuQuiz">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="&lt;QUIZ&gt;"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuQuizActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>

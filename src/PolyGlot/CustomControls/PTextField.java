@@ -52,7 +52,7 @@ public class PTextField extends JTextField {
     boolean curSetText = false;
     boolean overrideFont = false;
     private SwingWorker worker = null;
-    private final String defText;
+    private String defText;
 
     /**
      * Init for PDialogs
@@ -99,6 +99,10 @@ public class PTextField extends JTextField {
      */
     public String getDefaultValue() {
         return defText;
+    }
+    
+    public void setDefaultValue(String _default) {
+        defText = _default;
     }
     
     /**

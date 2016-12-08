@@ -975,10 +975,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         mnuExportFont = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuLangStats = new javax.swing.JMenuItem();
+        mnuQuiz = new javax.swing.JMenuItem();
         mnuTransWindow = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         mnuIPAChart = new javax.swing.JMenuItem();
-        mnuQuiz = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
         mnuAbout = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
@@ -1145,6 +1145,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         });
         mnuTools.add(mnuLangStats);
 
+        mnuQuiz.setText("Quiz Generator");
+        mnuQuiz.setToolTipText("Generate customized flashcard quizzes to help increase fluency.");
+        mnuQuiz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuQuizActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuQuiz);
+
         mnuTransWindow.setText("Translation Window");
         mnuTransWindow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1161,14 +1170,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         });
         mnuTools.add(mnuIPAChart);
-
-        mnuQuiz.setText("<QUIZ>");
-        mnuQuiz.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuQuizActionPerformed(evt);
-            }
-        });
-        mnuTools.add(mnuQuiz);
 
         jMenuBar1.add(mnuTools);
 
