@@ -195,6 +195,7 @@ public class PGTUtil {
     public static final String scrNameLogo = ScrLogoDetails.class.getName();
     public static final String scrNameFam = ScrFamilies.class.getName();
     public static final String scrIPARefChart = ScrIPARefChart.class.getName();
+    public static final String scrQuizGenDialog = ScrQuizGenDialog.class.getName();
     
     // int constants...
     public static final Integer numMenuFlashes = 4;

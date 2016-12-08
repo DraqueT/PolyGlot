@@ -189,7 +189,6 @@ public class ImportFileHelper {
                             continue;
                         }
 
-                        // TODO: Update manual explaining how this works: classes pulled in as CLASS0, CLASS1, CLASS3, etc. and may be renamed
                         String className = "CLASS" + cellNum.toString(); // guarantee unique name for user to rename later (based on column)
                         WordProperty wordProp = null;
 

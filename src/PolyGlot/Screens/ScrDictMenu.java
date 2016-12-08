@@ -139,7 +139,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     /**
      * Opens windows left open when PolyGlot last run, then clears list
      */
-    private void openLastWindows() { // TODO: There HAS to be a better way to do this...
+    private void openLastWindows() { // TODO: figure out why 
         List<String> lastScreensUp = core.getOptionsManager().getLastScreensUp();
         for (String leftOpen : lastScreensUp) {
             // switch has to be on constants...
@@ -161,7 +161,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 IPAHit();
             } else if (leftOpen.equals(PGTUtil.scrIPARefChart)) {
                 IPAHit();
-            } else if (leftOpen.equals(ScrQuizGenDialog.class.getName())) {
+            } else if (leftOpen.equals(PGTUtil.scrQuizGenDialog)) {
                 quizHit();
             } else {
                 InfoBox.error("Unrecognized Window",

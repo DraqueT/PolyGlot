@@ -195,7 +195,8 @@ public class ConWord extends DictNode {
             try {
                 ret = core.getTypes().getNodeById(typeId).getValue();
             } catch (Exception e) {
-                // TODO: How to better handle this? Silent failure will eventually cause problems...
+                // If a type no longer exists, set the type ID to 0, then continue
+                typeId = 0;
             }
         }
         return ret;
