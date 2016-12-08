@@ -659,6 +659,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                     scrLexicon.setVisible(true);
                 } else {
                     ScrLexicon scrLexicon = ScrLexicon.run(core);
+                    bindButtonToWindow(scrLexicon, btnLexicon);
                     children.put(ScrLexicon.class.getName(), scrLexicon);
                     scrLexicon.setVisible(true);
                 }

@@ -242,6 +242,7 @@ public final class ScrLexicon extends PFrame {
                 curPopulating = localPopulating;
                 forceUpdate = false;
                 populateProperties();
+                txtConWord.setFont(core.getPropertiesManager().getFontCon());
             }
         };
         SwingUtilities.invokeLater(runnable);
