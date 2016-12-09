@@ -52,10 +52,10 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="lblAnsStat" max="32767" attributes="0"/>
+                  <Component id="btnBackward" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblQNum" alignment="0" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnForward" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnBackward" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblQNum" alignment="0" max="32767" attributes="0"/>
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -72,6 +72,7 @@
             <BevelBorder bevelType="1"/>
           </Border>
         </Property>
+        <Property name="autoscrolls" type="boolean" value="true"/>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[10, 10]"/>
         </Property>
@@ -159,7 +160,6 @@
     <Component class="javax.swing.JButton" name="btnBackward">
       <Properties>
         <Property name="text" type="java.lang.String" value="Previous"/>
-        <Property name="actionCommand" type="java.lang.String" value="Previous"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackwardActionPerformed"/>

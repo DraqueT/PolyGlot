@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -148,6 +149,10 @@ public class ScrQuizScreen extends PFrame {
             pnlChoices.removeAll();
             pnlChoices.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridy = 0;
+            gbc.anchor = GridBagConstraints.NORTHWEST;
+            gbc.weightx = 9999;
+
             for (DictNode curNode : question.getChoices()) {
                 final PRadioButton choice = new PRadioButton(core);
                 choice.setValue(curNode);
@@ -170,8 +175,10 @@ public class ScrQuizScreen extends PFrame {
                     }
                 });
                 
+                choice.setHorizontalAlignment(SwingConstants.LEFT);
                 grpAnswerSelection.add(choice);
                 pnlChoices.add(choice, gbc);
+                gbc.gridy++;
 
                 // if question is answered already, set answer
                 if (question.getAnswered() == QuizQuestion.Answered.Correct
@@ -291,6 +298,7 @@ public class ScrQuizScreen extends PFrame {
         setTitle("PolyGlot Quiz");
 
         pnlChoices.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        pnlChoices.setAutoscrolls(true);
         pnlChoices.setMinimumSize(new java.awt.Dimension(10, 10));
         pnlChoices.setName(""); // NOI18N
 
@@ -346,7 +354,6 @@ public class ScrQuizScreen extends PFrame {
         });
 
         btnBackward.setText("Previous");
-        btnBackward.setActionCommand("Previous");
         btnBackward.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackwardActionPerformed(evt);
@@ -382,10 +389,10 @@ public class ScrQuizScreen extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblAnsStat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnBackward)
+                    .addComponent(lblQNum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnForward)
-                        .addComponent(btnBackward)
-                        .addComponent(lblQNum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1)))
                 .addGap(2, 2, 2))
         );
