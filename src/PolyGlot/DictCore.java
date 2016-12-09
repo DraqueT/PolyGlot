@@ -50,7 +50,7 @@ import org.xml.sax.SAXException;
 
 public class DictCore {
 
-    private final String version = "1.3";
+    private final String version = "1.4";
     private final ConWordCollection wordCollection;
     private final TypeCollection typeCollection;
     private final DeclensionManager declensionMgr;
