@@ -139,7 +139,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     /**
      * Opens windows left open when PolyGlot last run, then clears list
      */
-    private void openLastWindows() { // TODO: There HAS to be a better way to do this...
+    private void openLastWindows() { // TODO: figure out why 
         List<String> lastScreensUp = core.getOptionsManager().getLastScreensUp();
         for (String leftOpen : lastScreensUp) {
             // switch has to be on constants...
@@ -161,7 +161,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 IPAHit();
             } else if (leftOpen.equals(PGTUtil.scrIPARefChart)) {
                 IPAHit();
-            } else if (leftOpen.equals(ScrQuizGenDialog.class.getName())) {
+            } else if (leftOpen.equals(PGTUtil.scrQuizGenDialog)) {
                 quizHit();
             } else {
                 InfoBox.error("Unrecognized Window",
@@ -659,6 +659,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                     scrLexicon.setVisible(true);
                 } else {
                     ScrLexicon scrLexicon = ScrLexicon.run(core);
+                    bindButtonToWindow(scrLexicon, btnLexicon);
                     children.put(ScrLexicon.class.getName(), scrLexicon);
                     scrLexicon.setVisible(true);
                 }
@@ -975,10 +976,10 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         mnuExportFont = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuLangStats = new javax.swing.JMenuItem();
+        mnuQuiz = new javax.swing.JMenuItem();
         mnuTransWindow = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         mnuIPAChart = new javax.swing.JMenuItem();
-        mnuQuiz = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
         mnuAbout = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
@@ -1145,6 +1146,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         });
         mnuTools.add(mnuLangStats);
 
+        mnuQuiz.setText("Quiz Generator");
+        mnuQuiz.setToolTipText("Generate customized flashcard quizzes to help increase fluency.");
+        mnuQuiz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuQuizActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuQuiz);
+
         mnuTransWindow.setText("Translation Window");
         mnuTransWindow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1161,14 +1171,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             }
         });
         mnuTools.add(mnuIPAChart);
-
-        mnuQuiz.setText("<QUIZ>");
-        mnuQuiz.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuQuizActionPerformed(evt);
-            }
-        });
-        mnuTools.add(mnuQuiz);
 
         jMenuBar1.add(mnuTools);
 

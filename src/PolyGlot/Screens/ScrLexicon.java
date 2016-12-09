@@ -242,6 +242,7 @@ public final class ScrLexicon extends PFrame {
                 curPopulating = localPopulating;
                 forceUpdate = false;
                 populateProperties();
+                txtConWord.setFont(core.getPropertiesManager().getFontCon());
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -470,8 +471,6 @@ public final class ScrLexicon extends PFrame {
         };
         Platform.setImplicitExit(false);
         Platform.runLater(fxSetup);
-
-        setAllGreyProps();
     }
 
     /**
@@ -1127,8 +1126,6 @@ public final class ScrLexicon extends PFrame {
             //e.printStackTrace();
         }
 
-        setAllGreyProps();
-
         curPopulating = localPopulating;
     }
 
@@ -1184,14 +1181,6 @@ public final class ScrLexicon extends PFrame {
                 compCmb.setForeground(Color.black);
             }
         }
-    }
-
-    // TODO: DELETE THIS BLOCK WHEN I PTEXTAREA UPDATE COMPLETE
-    /**
-     * Sets all fields to grey/black as appropriate
-     */
-    private void setAllGreyProps() {
-        setGreyFields(cmbType, defTypeValue.getValue());
     }
 
     /**

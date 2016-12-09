@@ -21,6 +21,7 @@ package PolyGlot;
 
 import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.CustomControls.GrammarSectionNode;
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.ImageNode;
 import PolyGlot.Nodes.TypeNode;
@@ -113,6 +114,7 @@ public class PExportToPDF {
     private String forewardText = "";
     private String titleText = "";
     private String subTitleText = "";
+    private String log = "";
 
     /**
      * Exports language to presentable PDF
@@ -128,7 +130,7 @@ public class PExportToPDF {
         unicodeFontFile = new IOHandler().getUnicodeFontByteArray();
         unicodeFont = PdfFontFactory.createFont(unicodeFontFile, PdfEncodings.IDENTITY_H, true);
         unicodeFont.setSubset(true);
-
+        
         // If font file still null, no custom font was loaded.
         if (conFontFile == null) {
             // If confont not specified, assume that the conlang requires unicode characters
@@ -303,10 +305,16 @@ public class PExportToPDF {
         } catch (Exception e) {
             // Do nothing. These throw null errors if they haven't been written
             // to, and there is no good way to test beforehand. IsFlushed() doesn't
-            // work.
+            // work, and is on the iText team's bugfix list currently.
         }
 
         document.close();
+        
+        // inform user of errors
+        if (!log.equals("")) {
+            InfoBox.warning("PDF Generation Errors", "Problems with PDF generation:\n"
+                    + log, null);
+        }
     }
 
     /**
@@ -412,7 +420,7 @@ public class PExportToPDF {
                                 .getNodeById(curEntry.getKey());
                         value = prop.getValueById(curEntry.getValue());
                     } catch (Exception e) {
-                        // TODO: put logging in here or something... 
+                        log += "\nProblem printing classes for word: " + curWord.getValue();
                         continue;
                     }
 
@@ -563,7 +571,7 @@ public class PExportToPDF {
                                 .getNodeById(curEntry.getKey());
                         value = prop.getValueById(curEntry.getValue());
                     } catch (Exception e) {
-                        // TODO: put logging in here or something... 
+                        log += "\nProblem printing classes for word: " + curWord.getValue();
                         continue;
                     }
 
@@ -700,7 +708,7 @@ public class PExportToPDF {
                             Image pdfImage = new Image(ImageDataFactory.create(bytes));
                             newSec.add(pdfImage);
                         } catch (Exception e) {
-                            throw new IOException("Unable to open image in grammar section:" +e.getLocalizedMessage());
+                            log += "\nUnable to include images from grammar section: " + curSec.getName();
                         }
                     } else {
                         if (core.getPropertiesManager().isEnforceRTL()
@@ -911,11 +919,7 @@ public class PExportToPDF {
             int pageNum = docEvent.getDocument().getPageNumber(page);
             PdfCanvas canvas = new PdfCanvas(page);
             canvas.beginText();
-            try {
-                canvas.setFontAndSize(PdfFontFactory.createFont(FontConstants.HELVETICA), 12);
-            } catch (IOException e) {
-                // can't throw an exception here... built in/guaranteed font, though.
-            }
+            canvas.setFontAndSize(unicodeFont, 12);
             canvas.moveText(34, pageNumberY);
             canvas.showText(language);
             canvas.moveText(450, 0);

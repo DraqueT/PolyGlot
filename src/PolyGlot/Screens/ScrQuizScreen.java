@@ -49,6 +49,7 @@ public class ScrQuizScreen extends PFrame {
     private final Quiz quiz;
     private final PLabel lblQNode = new PLabel("", PLabel.CENTER);
     private QuizQuestion curQuestion;
+    private final Color correctGreen = new Color(15, 175, 15);
 
     /**
      * Creates new form ScrQuizScreen
@@ -225,21 +226,34 @@ public class ScrQuizScreen extends PFrame {
             case Unanswered:
                 for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
                     curComp.setEnabled(true);
+                    curComp.setForeground(Color.black);
                 }
 
                 lblAnsStat.setText("");
                 break;
             case Correct:
                 for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
-                    curComp.setEnabled(false);
+                    int ansId = ((PRadioButton)curComp).getValue().getId();
+                    curComp.setEnabled(false);                    
+                    
+                    if (ansId == curQuestion.getAnswer().getId()) {
+                        curComp.setForeground(correctGreen);
+                    }
                 }
 
                 lblAnsStat.setText("CORRECT");
-                lblAnsStat.setForeground(new Color(15, 175, 15));
+                lblAnsStat.setForeground(correctGreen);
                 break;
             case Incorrect:
                 for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
+                    int ansId = ((PRadioButton)curComp).getValue().getId();
                     curComp.setEnabled(false);
+                    
+                    if (ansId == curQuestion.getAnswer().getId()) {
+                        curComp.setForeground(correctGreen);
+                    } else if (ansId == curQuestion.getUserAnswer().getId()) {
+                        curComp.setForeground(Color.red);
+                    }
                 }
 
                 lblAnsStat.setText("INCORRECT");
