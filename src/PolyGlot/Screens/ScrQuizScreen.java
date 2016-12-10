@@ -41,12 +41,14 @@ import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 /**
  *
  * @author draque.thompson
  */
 public class ScrQuizScreen extends PFrame {
+
     private final Quiz quiz;
     private final PLabel lblQNode = new PLabel("", PLabel.CENTER);
     private QuizQuestion curQuestion;
@@ -63,16 +65,25 @@ public class ScrQuizScreen extends PFrame {
         initComponents();
         quiz = _quiz;
 
+        this.repaint();
         lblQNode.setResize(true);
         lblQNode.setMinimumSize(new Dimension(1, 1));
         jPanel3.setLayout(new BorderLayout());
-        jPanel3.add(lblQNode);
 
         if (!quiz.hasNext()) {
             InfoBox.error("Empty Quiz", "Quiz has no questions. If generated, filter.", null);
         }
 
         nextQuestion();
+
+        // due to initilization process, this forces resize of tet in PLabel at appropriate time
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                jPanel3.add(lblQNode);
+                jPanel3.repaint();
+            }
+        });
     }
 
     private void nextQuestion() {
@@ -86,25 +97,25 @@ public class ScrQuizScreen extends PFrame {
     private void finishQuiz() {
         int numRight = quiz.getNumCorrect();
         int quizLen = quiz.getLength();
-        
+
         if (numRight == quizLen) {
-            InfoBox.info("Quiz Complete", "Perfect score! " + numRight 
+            InfoBox.info("Quiz Complete", "Perfect score! " + numRight
                     + " out of " + quizLen + "correct!", this);
             dispose();
         } else {
-            int retake = JOptionPane.showConfirmDialog(this, numRight 
-                    + " out of " + quizLen + " correct. Retake?" , "Quiz Complete", JOptionPane.YES_NO_OPTION);
-            
+            int retake = JOptionPane.showConfirmDialog(this, numRight
+                    + " out of " + quizLen + " correct. Retake?", "Quiz Complete", JOptionPane.YES_NO_OPTION);
+
             if (retake == JOptionPane.YES_OPTION) {
-                int trim = JOptionPane.showConfirmDialog(this,"Quiz only on incorrectly answered questions?",
+                int trim = JOptionPane.showConfirmDialog(this, "Quiz only on incorrectly answered questions?",
                         "Trim Quiz?", JOptionPane.YES_NO_OPTION);
-                
+
                 if (trim == JOptionPane.YES_OPTION) {
                     quiz.trimQuiz();
                 } else {
                     quiz.resetQuiz();
                 }
-                
+
                 nextQuestion();
             } else {
                 dispose();
@@ -119,7 +130,7 @@ public class ScrQuizScreen extends PFrame {
         curQuestion = question;
 
         lblQNum.setText((quiz.getCurQuestion() + 1) + "/" + quiz.getLength());
-        
+
         try {
             lblQuestion.setText(question.getQuestionValue());
             switch (question.getType()) {
@@ -157,7 +168,7 @@ public class ScrQuizScreen extends PFrame {
                 final PRadioButton choice = new PRadioButton(core);
                 choice.setValue(curNode);
                 choice.setType(question.getType());
-                
+
                 // on button selection, record user choice and right/wrong status
                 choice.addActionListener(new ActionListener() {
                     @Override
@@ -174,7 +185,7 @@ public class ScrQuizScreen extends PFrame {
                         setupScreen();
                     }
                 });
-                
+
                 choice.setHorizontalAlignment(SwingConstants.LEFT);
                 grpAnswerSelection.add(choice);
                 pnlChoices.add(choice, gbc);
@@ -240,9 +251,9 @@ public class ScrQuizScreen extends PFrame {
                 break;
             case Correct:
                 for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
-                    int ansId = ((PRadioButton)curComp).getValue().getId();
-                    curComp.setEnabled(false);                    
-                    
+                    int ansId = ((PRadioButton) curComp).getValue().getId();
+                    curComp.setEnabled(false);
+
                     if (ansId == curQuestion.getAnswer().getId()) {
                         curComp.setForeground(correctGreen);
                     }
@@ -253,9 +264,9 @@ public class ScrQuizScreen extends PFrame {
                 break;
             case Incorrect:
                 for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
-                    int ansId = ((PRadioButton)curComp).getValue().getId();
+                    int ansId = ((PRadioButton) curComp).getValue().getId();
                     curComp.setEnabled(false);
-                    
+
                     if (ansId == curQuestion.getAnswer().getId()) {
                         curComp.setForeground(correctGreen);
                     } else if (ansId == curQuestion.getUserAnswer().getId()) {
