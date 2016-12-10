@@ -987,7 +987,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         jMenuItem8 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setAlwaysOnTop(true);
         setResizable(false);
 
         btnLexicon.setText("Lexicon");
