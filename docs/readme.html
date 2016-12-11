@@ -28,7 +28,7 @@
         <!-- Static navbar -->
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="container">
-                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 1.3</a> </div>
+                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 1.4</a> </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="https://github.com/DraqueT/PolyGlot">Githib Page</a><br>
@@ -50,7 +50,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2 centered"> <img src="assets/PolyGlot%20Logo.png" alt="PolyGlot">
-                        <h1>Version 1.3</h1>
+                        <h1>Version 1.4</h1>
                         <!-- POLYGLOT STUFF START -->
                         <div style="text-align: left;"><a href="#WELCOMEOVERVIEW">i.
                                 Overview/Welcome</a><br>
@@ -67,6 +67,7 @@
                             &nbsp;&nbsp;&nbsp; <a href="#-SavingOpeningNew">- Saving</a><br>
                             &nbsp;&nbsp;&nbsp; <a href="#-_Language_Properties">- Language
                                 Properties</a><br>
+                            &nbsp;&nbsp;&nbsp; <a href="#-_Images">- Images in Text</a><br>
                             &nbsp;&nbsp;&nbsp; <a href="#-_Family_Window">- Family Window</a><br>
                             &nbsp;&nbsp;&nbsp; <a href="#-_Accessing_the_Help_File">- Accessing
                                 the Help File</a><br>
@@ -101,26 +102,22 @@
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1><br>As always, there
                         have been some upgrades/improvements to PolyGlot that are beneath the
                         surface, helping to keep it running with fewer bugs and more
-                        reliability, but here are the ones that you’ll be interested in. The
-                        new class system is the last original piece of PolyGlot (around since v
-                        0.6) that absolutely had to be replaced. It was a limiting system that
-                        was applied to all words, regardless of type. I have added a class
-                        system that allows as many classes with as many possible values as you
-                        care to add. And they can be specifically linked with parts of speech,
-                        so the menu won’t be cluttered up with a “gender” value if you’re
-                        creating a particle or verb. Unless your language genders those! <br><br>And
-                        for anyone who had been hoping to contribute to PolyGlot, I’ve vastly
-                        cleaned up the repository. If you pull using netbeans, you should be
-                        able to compile with zero modifications.<br><br>
+                        reliability, but here are the ones that you’ll be interested in.<br><br>
+                        I've added the ability to insert images into text boxes with a simple right click. You can either 
+                        browse for the files, or copy/paste them in. They'll save along with the text, and if you publish 
+                        to PDF, they'll appear properly. This was a highly requested feature, and I hope you like!<br><br>
+                        
+                        There is a whole new Quizzing engine that's been added to PolyGlot. By loading it up and telling 
+                        it what you would like to be quizzed on, it can generate a variety of types of flash cards, which 
+                        is enormously useful for increasing general fluency. Give it a try and see if it doesn't speed up 
+                        your vocab memorization times!
+                        <br><br>
                         <div align ="left"><ul>
-                            <li>This manual is updated to look quite a bit nicer (pretty hard on the eyes before!)</li>
-                            <li>Gender functionality removed from PolyGlot (replaced)</li>
-                            <li>Class system implemented in PolyGlot (takes care of gender and many other possibilities)</li>
-                            <li>Cleaned up the GitHub repository</li>
-                            <li>Fonts now default to Charis, a Unicode compatible font</li>
-                            <li>Renamed everything having to do with the "Thesaurus" to "Family." (actual thesaurus will come later)</li>
-                            <li>Standardized a lot of menus and cleaned up the look of PolyGlot quite a bit</li>
-                            <li>As always, a ton of bugs squashed.</li>
+                            <li>All text fields now image compatible</li>
+                            <li>Quizzing engine added</li>
+                            <li>Publish to PDF compatible with text field images</li>
+                            <li>Right click to copy/paste in text fields added</li>
+                            <li>Main menu is no longer always on top (HIGHLY REQUESTED)</li>
                             </ul></div>
                         <p>
                             <a name="INSTALLATION"></a>
@@ -281,6 +278,20 @@
                         The Definition Mandatory checkbox tells PolyGlot that definitions are
                         mandatory for this type.
                         </p>
+                        
+                        <p><a name="-_Images"></a><h1>Images in Text</h1>
+                        PolyGlot supports dropping images into text boxes, as this can be very helpful 
+                        in communicating complex concepts, or providing graphical examples. These images 
+                        are supported by the Publish to PDF functionality as well.<br><br>
+                        
+                        <img alt="" src="assets/Image1.png"><br>
+                        To insert an image, simply right click in the text field, and either browse for
+                        the image, or simply copy/paste it in!<br><br>
+                        
+                        <img alt="" src="assets/Image2.png"><br>
+                        The image will appear in the text box and save in your language file.
+                        </p>
+                        
 
                         <p><a name="-_ConjugationsDeclensions"></a><h1>Conjugations/Declensions</h1>
                         <br>
