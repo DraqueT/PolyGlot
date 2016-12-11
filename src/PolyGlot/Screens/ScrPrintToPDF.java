@@ -29,6 +29,7 @@ import java.awt.Cursor;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -300,6 +301,11 @@ public class ScrPrintToPDF extends PDialog {
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         if (txtSavePath.getText().equals("")) {
             InfoBox.warning("File not Specified", "Please specify a file to save to.", this);
+            return;
+        }
+        
+        if (new File(txtSavePath.getText()).exists()
+                && JOptionPane.showConfirmDialog(this, "File already exists. Overwrite?", "Overwite Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
             return;
         }
         
