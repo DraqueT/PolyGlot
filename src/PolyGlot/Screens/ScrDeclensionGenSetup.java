@@ -727,11 +727,17 @@ public class ScrDeclensionGenSetup extends PDialog {
             return;
         }
 
-        DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
+        //DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
         DefaultListModel lstModel = (DefaultListModel) lstRules.getModel();
-
-        lstModel.remove(index);
-        lstModel.add(index - 1, curRule);
+        DeclensionGenRule curRule = (DeclensionGenRule) lstModel.getElementAt(index);
+        DeclensionGenRule prevRule = (DeclensionGenRule) lstModel.getElementAt(index - 1);
+        int curIndex = curRule.getIndex();
+        curRule.setIndex(prevRule.getIndex());
+        prevRule.setIndex(curIndex);
+        populateRules();
+        
+        //lstModel.remove(index);
+        //lstModel.add(index - 1, curRule);
 
         lstRules.setSelectedIndex(index - 1);
     }
@@ -746,11 +752,14 @@ public class ScrDeclensionGenSetup extends PDialog {
             return;
         }
 
-        DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
         DefaultListModel lstModel = (DefaultListModel) lstRules.getModel();
+        DeclensionGenRule curRule = (DeclensionGenRule)lstModel.get(index);
+        DeclensionGenRule nextRule = (DeclensionGenRule)lstModel.get(index + 1);
 
-        lstModel.remove(index);
-        lstModel.add(index + 1, curRule);
+        int curIndex = curRule.getIndex();
+        curRule.setIndex(nextRule.getIndex());
+        nextRule.setIndex(curIndex);
+        populateRules();
 
         lstRules.setSelectedIndex(index + 1);
     }

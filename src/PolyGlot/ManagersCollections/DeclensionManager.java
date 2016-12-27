@@ -30,6 +30,7 @@ import PolyGlot.Nodes.TypeNode;
 import PolyGlot.WebInterface;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -86,23 +87,32 @@ public class DeclensionManager {
      */
     public List<DeclensionGenRule> getAllDepGenerationRules(int typeId) {
         List<DeclensionGenRule> ret = new ArrayList<>();
-        Iterator<DeclensionPair> typeRules = getAllCombinedIds(typeId).iterator();
+        List<DeclensionPair> typeRules = getAllCombinedIds(typeId);
         Map<String, Integer> ruleMap = new HashMap<>();
 
         // creates searchable map of extant combination IDs
-        while (typeRules.hasNext()) {
-            DeclensionPair curPair = typeRules.next();
+        for (DeclensionPair curPair : typeRules) {
             ruleMap.put(curPair.combinedId, 0);
         }
 
         // adds to return value only if rule matches ID, and is orphaned
+        int missingId = 0; //used for missing index values (index system bolton)
         for (DeclensionGenRule curRule : generationRules) {
+            if (curRule.getIndex() == 0 || curRule.getIndex() == missingId) {
+                missingId++;
+                curRule.setIndex(missingId);
+            } else {
+                missingId = curRule.getIndex();
+            }
+            
             if (curRule.getTypeId() == typeId
                     && !ruleMap.containsKey(curRule.getCombinationId())) {
                 ret.add(curRule);
             }
         }
 
+        Collections.sort(ret);
+        
         return ret;
     }
 
@@ -167,16 +177,24 @@ public class DeclensionManager {
     public List<DeclensionGenRule> getDeclensionRules(int typeId) {
         List<DeclensionGenRule> ret = new ArrayList<>();
 
-        Iterator<DeclensionGenRule> itRules = generationRules.iterator();
+        List<DeclensionGenRule> itRules = generationRules;
 
-        while (itRules.hasNext()) {
-            DeclensionGenRule curRule = itRules.next();
+        int missingId = 0; //used for missing index values (index system bolton)
+        for(DeclensionGenRule curRule : itRules) {
+            if (curRule.getIndex() == 0 || curRule.getIndex() == missingId) {
+                missingId++;
+                curRule.setIndex(missingId);
+            } else {
+                missingId = curRule.getIndex();
+            }
 
             if (curRule.getTypeId() == typeId) {
                 ret.add(curRule);
             }
         }
 
+        Collections.sort(ret);
+        
         return ret;
     }
 
@@ -899,6 +917,10 @@ public class DeclensionManager {
 
             wordValue = doc.createElement(PGTUtil.decGenRuleTypeXID);
             wordValue.appendChild(doc.createTextNode(Integer.toString(curRule.getTypeId())));
+            ruleNode.appendChild(wordValue);
+            
+            wordValue = doc.createElement(PGTUtil.decGenRuleIndexXID);
+            wordValue.appendChild(doc.createTextNode(Integer.toString(curRule.getIndex())));
             ruleNode.appendChild(wordValue);
 
             List<DeclensionGenTransform> transIt = curRule.getTransforms();

@@ -185,6 +185,7 @@ public class CustHandlerFactory {
             boolean bdecGenRuleName = false;
             boolean bdecGenRuleRegex = false;
             boolean bdecGenRuleType = false;
+            boolean bdecGenRuleIndex = false;
             boolean bdecGenTransRegex = false;
             boolean bdecGenTransRep = false;
             boolean bcombinedFormId = false;
@@ -369,6 +370,8 @@ public class CustHandlerFactory {
                     bdecGenTransRegex = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decGenTransReplaceXID)) {
                     bdecGenTransRep = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleIndexXID)) {
+                    bdecGenRuleIndex = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decCombinedIdXID)) {
                     bcombinedFormId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decCombinedSurpressXID)) {
@@ -681,6 +684,8 @@ public class CustHandlerFactory {
                     bdecGenTransRegex = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decGenTransReplaceXID)) {
                     bdecGenTransRep = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleIndexXID)) {
+                    bdecGenRuleIndex = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decCombinedIdXID)) {
                     bcombinedFormId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decCombinedSurpressXID)) {
@@ -978,6 +983,9 @@ public class CustHandlerFactory {
                 } else if (bdecGenTransRep) {
                     DeclensionGenTransform transBuffer = core.getDeclensionManager().getRuleBuffer().getTransBuffer();
                     transBuffer.replaceText += new String(ch, start, length);
+                } else if (bdecGenRuleIndex) {
+                    core.getDeclensionManager().getRuleBuffer().setIndex(Integer.parseInt(new String(ch, start, length)));
+                    bdecGenRuleIndex = false;
                 } else if (bcombinedFormId) {
                     combinedDecId += new String(ch, start, length);
                 } else if (bcombinedFormSurpress) {

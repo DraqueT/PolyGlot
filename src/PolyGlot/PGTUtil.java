@@ -114,6 +114,7 @@ public class PGTUtil {
     public static final String decGenRuleCombXID = "decGenRuleComb";
     public static final String decGenRuleRegexXID = "decGenRuleRegex";
     public static final String decGenRuleNameXID = "decGenRuleName";
+    public static final String decGenRuleIndexXID = "decGenRuleIndex";
 
     // autodeclension transform properties
     public static final String decGenTransXID = "decGenTrans";

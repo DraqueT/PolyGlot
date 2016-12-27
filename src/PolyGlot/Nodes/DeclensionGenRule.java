@@ -27,8 +27,9 @@ import java.util.List;
  * associated with the rule
  * @author draque
  */
-public class DeclensionGenRule {
+public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
     private int typeId;
+    private int index;
     private String combinationId;
     private String regex = "";
     private String name = "";
@@ -145,5 +146,38 @@ public class DeclensionGenRule {
     @Override
     public String toString() {
         return name;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+    
+    /**
+     * organizes by index number
+     * @param _compare node to compare
+     * @return 
+     */
+    @Override
+    public int compareTo(DeclensionGenRule _compare) {
+        final int BEFORE = -1;
+        final int EQUAL = 0;
+        final int AFTER = 1;
+        int compIndex = _compare.getIndex();
+        int ret;
+        
+        
+        if (index > compIndex) {
+            ret = AFTER;
+        } else if (index == compIndex) {
+            ret = EQUAL;
+        } else {
+            ret = BEFORE;
+        }
+        
+        return ret;
     }
 }
