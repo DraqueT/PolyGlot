@@ -56,7 +56,7 @@ public class WebInterface {
         URL url;
 
         try {
-            url = new URL("https://dl.dropboxusercontent.com/u/2750499/PolyGlot/update.xml");
+            url = new URL("https://drive.google.com/uc?export=download&id=0B2RMQ7sRXResN3VwLTAwTFE0ZlE");
 
             try (InputStream is = url.openStream()) {
                 Scanner s = new Scanner(is);
