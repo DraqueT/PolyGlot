@@ -36,6 +36,7 @@ import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -46,7 +47,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -892,8 +895,9 @@ public class IOHandler {
     
     public static void saveOptionsIni(DictCore core) throws IOException {
         
-        try (FileWriter f0 = new FileWriter(core.getWorkingDirectory() 
-                + PGTUtil.polyGlotIni)) {
+        try (Writer f0 = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(core.getWorkingDirectory() 
+                        + PGTUtil.polyGlotIni), "UTF-8"))) {
             String newLine = System.getProperty("line.separator");
             String nextLine;
             
