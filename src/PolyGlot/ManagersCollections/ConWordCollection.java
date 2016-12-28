@@ -919,15 +919,15 @@ public class ConWordCollection extends DictionaryCollection {
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.wordProcOverrideXID);
-            wordValue.appendChild(doc.createTextNode(curWord.isProcOverride() ? "T" : "F"));
+            wordValue.appendChild(doc.createTextNode(curWord.isProcOverride() ? PGTUtil.True : PGTUtil.False));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.wordAutoDeclenOverrideXID);
-            wordValue.appendChild(doc.createTextNode(curWord.isOverrideAutoDeclen() ? "T" : "F"));
+            wordValue.appendChild(doc.createTextNode(curWord.isOverrideAutoDeclen() ? PGTUtil.True : PGTUtil.False));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.wordRuleOverrideXID);
-            wordValue.appendChild(doc.createTextNode(curWord.isRulesOverrride() ? "T" : "F"));
+            wordValue.appendChild(doc.createTextNode(curWord.isRulesOverrride() ? PGTUtil.True : PGTUtil.False));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.wordClassCollectionXID);

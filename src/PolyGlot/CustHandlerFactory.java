@@ -818,11 +818,11 @@ public class CustHandlerFactory {
                     bwordPlur = false;
                 } else if (bwordProcOverride) {
                     core.getWordCollection().getBufferWord()
-                            .setProcOverride(new String(ch, start, length).equals("T"));
+                            .setProcOverride(new String(ch, start, length).equals(PGTUtil.True));
                     bwordProcOverride = false;
                 } else if (bwordRuleOverride) {
                     core.getWordCollection().getBufferWord()
-                            .setRulesOverride(new String(ch, start, length).equals("T"));
+                            .setRulesOverride(new String(ch, start, length).equals(PGTUtil.True));
                     bwordRuleOverride = false;
                 } else if (bclassVal) {
                     String[] classValIds = new String(ch, start, length).split(",");
@@ -841,7 +841,7 @@ public class CustHandlerFactory {
                     }
                 } else if (bwordoverAutoDec) {
                     core.getWordCollection().getBufferWord()
-                            .setOverrideAutoDeclen(new String(ch, start, length).equals("T"));
+                            .setOverrideAutoDeclen(new String(ch, start, length).equals(PGTUtil.True));
                     bwordoverAutoDec = false;
                 } else if (bfontcon) {
                     propertiesManager.setFontCon(new Font(new String(ch, start, length), 0, 0));
@@ -922,34 +922,34 @@ public class CustHandlerFactory {
                             + new String(ch, start, length));
                 } /*else if (bproAutoPop) {
                     // Removed as of 1.0
-                    propertiesManager.setProAutoPop((new String(ch, start, length).equalsIgnoreCase("T")));
+                    propertiesManager.setProAutoPop((new String(ch, start, length).equalsIgnoreCase(PGTUtil.True)));
                     bproAutoPop = false;
                 }*/ else if (bwordClassProcMan) {
-                    core.getTypes().getBufferType().setProcMandatory(new String(ch, start, length).equals("T"));
+                    core.getTypes().getBufferType().setProcMandatory(new String(ch, start, length).equals(PGTUtil.True));
                     bwordClassProcMan = false;
                 } else if (bwordClassGenderMan) {
-                    //typeCollection.getBufferType().setGenderMandatory(new String(ch, start, length).equals("T")); // Deprecated
+                    //typeCollection.getBufferType().setGenderMandatory(new String(ch, start, length).equals(PGTUtil.True)); // Deprecated
                     bwordClassGenderMan = false;
                 } else if (bwordClassDefMan) {
-                    core.getTypes().getBufferType().setDefMandatory(new String(ch, start, length).equals("T"));
+                    core.getTypes().getBufferType().setDefMandatory(new String(ch, start, length).equals(PGTUtil.True));
                     bwordClassDefMan = false;
                 } else if (bdeclensionMandatory) {
-                    declensionMgr.setBufferDecMandatory(new String(ch, start, length).equals("T"));
+                    declensionMgr.setBufferDecMandatory(new String(ch, start, length).equals(PGTUtil.True));
                     bdeclensionMandatory = false;
                 } else if (blangPropLocalUniqueness) {
-                    propertiesManager.setLocalUniqueness(new String(ch, start, length).equals("T"));
+                    propertiesManager.setLocalUniqueness(new String(ch, start, length).equals(PGTUtil.True));
                     blangPropLocalUniqueness = false;
                 } else if (blangPropWordUniqueness) {
-                    propertiesManager.setWordUniqueness(new String(ch, start, length).equals("T"));
+                    propertiesManager.setWordUniqueness(new String(ch, start, length).equals(PGTUtil.True));
                     blangPropWordUniqueness = false;
                 } else if (blangPropLocalMandatory) {
-                    propertiesManager.setLocalMandatory(new String(ch, start, length).equals("T"));
+                    propertiesManager.setLocalMandatory(new String(ch, start, length).equals(PGTUtil.True));
                     blangPropLocalMandatory = false;
                 } else if (blangPropTypeMandatory) {
-                    propertiesManager.setTypesMandatory(new String(ch, start, length).equals("T"));
+                    propertiesManager.setTypesMandatory(new String(ch, start, length).equals(PGTUtil.True));
                     blangPropTypeMandatory = false;
                 } else if (blangPropEnforceRTL) {
-                    propertiesManager.setEnforceRTL(new String(ch, start, length).equals("T"));
+                    propertiesManager.setEnforceRTL(new String(ch, start, length).equals(PGTUtil.True));
                     blangPropEnforceRTL = false;
                 } else if (blangPropAuthCopyright) {
                     propertiesManager.setCopyrightAuthorInfo(propertiesManager.getCopyrightAuthorInfo()
@@ -958,7 +958,7 @@ public class CustHandlerFactory {
                     propertiesManager.setLocalLangName(propertiesManager.getLocalLangName()
                             + new String(ch, start, length));
                 } else if (bdimMand) {
-                    declensionMgr.getBuffer().getBuffer().setMandatory(new String(ch, start, length).equals("T"));
+                    declensionMgr.getBuffer().getBuffer().setMandatory(new String(ch, start, length).equals(PGTUtil.True));
                     bdimMand = false;
                 } else if (bdimId) {
                     declensionMgr.getBuffer().getBuffer().setId(Integer.parseInt(new String(ch, start, length)));
@@ -983,10 +983,10 @@ public class CustHandlerFactory {
                     }
                     bfamWord = false;
                 } else if (bignoreCase) {
-                    core.getPropertiesManager().setIgnoreCase(new String(ch, start, length).equals("T"));
+                    core.getPropertiesManager().setIgnoreCase(new String(ch, start, length).equals(PGTUtil.True));
                     bignoreCase = false;
                 } else if (bdisableProcRegex) {
-                    core.getPropertiesManager().setDisableProcRegex(new String(ch, start, length).equals("T"));
+                    core.getPropertiesManager().setDisableProcRegex(new String(ch, start, length).equals(PGTUtil.True));
                     bdisableProcRegex = false;
                 } else if (bdecGenRuleComb) {
                     core.getDeclensionManager().getRuleBuffer().setCombinationId(new String(ch, start, length));
@@ -1015,7 +1015,7 @@ public class CustHandlerFactory {
                     combinedDecId += new String(ch, start, length);
                 } else if (bcombinedFormSurpress) {
                     core.getDeclensionManager().setCombinedDeclSurpressed(combinedDecId,
-                            new String(ch, start, length).equals("T"));
+                            new String(ch, start, length).equals(PGTUtil.True));
                 } else if (blogoStrokes) {
                     try {
                         core.getLogoCollection().getBufferNode().setStrokes(Integer.parseInt(new String(ch, start, length)));
@@ -1027,7 +1027,7 @@ public class CustHandlerFactory {
                     curNode.setNotes(curNode.getNotes() + new String(ch, start, length));
                 } else if (blogoRadical) {
                     core.getLogoCollection().getBufferNode().setRadical(
-                            new String(ch, start, length).equals("T"));
+                            new String(ch, start, length).equals(PGTUtil.True));
                 } else if (blogoRadicalList) {
                     core.getLogoCollection().getBufferNode().setTmpRadEntries(new String(ch, start, length));
                 } else if (blogoReading) {
@@ -1074,7 +1074,7 @@ public class CustHandlerFactory {
                     }
                 } else if (bclassFreeText) {
                     String freeText = new String(ch, start, length);                    
-                    if (freeText.equals("Y")) {
+                    if (freeText.equals(PGTUtil.True)) {
                         ((WordProperty) core.getWordPropertiesCollection().getBuffer()).setFreeText(true);
                     } else {
                         ((WordProperty) core.getWordPropertiesCollection().getBuffer()).setFreeText(false);

@@ -192,6 +192,8 @@ public class PGTUtil {
     public static final String RTLMarker = "\u202e";
     public static final String LTRMarker = "\u202c";
     public static final String ImageIdAttribute = "imageIDAttribute";
+    public static final String True = "T";
+    public static final String False = "F";
 
     // screen names when they're required as constants...
     public static final String scrNameLexicon = ScrLexicon.class.getName();

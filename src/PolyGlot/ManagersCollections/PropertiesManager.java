@@ -396,37 +396,37 @@ public class PropertiesManager {
 
         // store option for mandatory Types
         wordValue = doc.createElement(PGTUtil.langPropTypeMandatoryXID);
-        wordValue.appendChild(doc.createTextNode(isTypesMandatory() ? "T" : "F"));
+        wordValue.appendChild(doc.createTextNode(isTypesMandatory() ? PGTUtil.True : PGTUtil.False));
         rootElement.appendChild(wordValue);
 
         // store option for mandatory Local word
         wordValue = doc.createElement(PGTUtil.langPropLocalMandatoryXID);
-        wordValue.appendChild(doc.createTextNode(isLocalMandatory() ? "T" : "F"));
+        wordValue.appendChild(doc.createTextNode(isLocalMandatory() ? PGTUtil.True : PGTUtil.False));
         rootElement.appendChild(wordValue);
 
         // store option for unique local word
         wordValue = doc.createElement(PGTUtil.langPropLocalUniquenessXID);
-        wordValue.appendChild(doc.createTextNode(isLocalUniqueness() ? "T" : "F"));
+        wordValue.appendChild(doc.createTextNode(isLocalUniqueness() ? PGTUtil.True : PGTUtil.False));
         rootElement.appendChild(wordValue);
 
         // store option for unique conwords
         wordValue = doc.createElement(PGTUtil.langPropWordUniquenessXID);
-        wordValue.appendChild(doc.createTextNode(isWordUniqueness() ? "T" : "F"));
+        wordValue.appendChild(doc.createTextNode(isWordUniqueness() ? PGTUtil.True : PGTUtil.False));
         rootElement.appendChild(wordValue);
 
         // store option for ignoring case
         wordValue = doc.createElement(PGTUtil.langPropIgnoreCaseXID);
-        wordValue.appendChild(doc.createTextNode(isIgnoreCase() ? "T" : "F"));
+        wordValue.appendChild(doc.createTextNode(isIgnoreCase() ? PGTUtil.True : PGTUtil.False));
         rootElement.appendChild(wordValue);
 
         // store option for disabling regex or pronunciations
         wordValue = doc.createElement(PGTUtil.langPropDisableProcRegexXID);
-        wordValue.appendChild(doc.createTextNode(isDisableProcRegex() ? "T" : "F"));
+        wordValue.appendChild(doc.createTextNode(isDisableProcRegex() ? PGTUtil.True : PGTUtil.False));
         rootElement.appendChild(wordValue);
 
         // store option for enforcing RTL in conlang
         wordValue = doc.createElement(PGTUtil.langPropEnforceRTLXID);
-        wordValue.appendChild(doc.createTextNode(isEnforceRTL() ? "T" : "F"));
+        wordValue.appendChild(doc.createTextNode(isEnforceRTL() ? PGTUtil.True : PGTUtil.False));
         rootElement.appendChild(wordValue);
 
         // store option for Author and copyright info

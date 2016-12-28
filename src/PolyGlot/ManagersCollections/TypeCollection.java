@@ -297,11 +297,11 @@ public class TypeCollection extends DictionaryCollection {
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.typeDefManXID);
-            wordValue.appendChild(doc.createTextNode(curType.isDefMandatory() ? "T" : "F"));
+            wordValue.appendChild(doc.createTextNode(curType.isDefMandatory() ? PGTUtil.True : PGTUtil.False));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.typeProcManXID);
-            wordValue.appendChild(doc.createTextNode(curType.isProcMandatory() ? "T" : "F"));
+            wordValue.appendChild(doc.createTextNode(curType.isProcMandatory() ? PGTUtil.True : PGTUtil.False));
             wordNode.appendChild(wordValue);
             
             wordValue = doc.createElement(PGTUtil.typePatternXID);

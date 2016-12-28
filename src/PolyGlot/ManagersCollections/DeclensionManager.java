@@ -837,7 +837,7 @@ public class DeclensionManager {
                 wordNode.appendChild(wordValue);
 
                 wordValue = doc.createElement(PGTUtil.declensionMandatoryXID);
-                wordValue.appendChild(doc.createTextNode(curNode.isMandatory() ? "T" : "F"));
+                wordValue.appendChild(doc.createTextNode(curNode.isMandatory() ? PGTUtil.True : PGTUtil.False));
                 wordNode.appendChild(wordValue);
 
                 Iterator<DeclensionDimension> dimIt = curNode.getDimensions().iterator();
@@ -855,7 +855,7 @@ public class DeclensionManager {
                     wordValue.appendChild(dimNode);
 
                     dimNode = doc.createElement(PGTUtil.dimensionMandXID);
-                    dimNode.appendChild(doc.createTextNode(curDim.isMandatory() ? "T" : "F"));
+                    dimNode.appendChild(doc.createTextNode(curDim.isMandatory() ? PGTUtil.True : PGTUtil.False));
                     wordValue.appendChild(dimNode);
 
                     wordNode.appendChild(wordValue);
@@ -952,7 +952,7 @@ public class DeclensionManager {
             curCombForm.appendChild(curAttrib);
             
             curAttrib = doc.createElement(PGTUtil.decCombinedSurpressXID);
-            curAttrib.appendChild(doc.createTextNode((Boolean)pairs.getValue()?"T":"F"));
+            curAttrib.appendChild(doc.createTextNode((Boolean)pairs.getValue() ? PGTUtil.True : PGTUtil.False));
             curCombForm.appendChild(curAttrib);
             
             combinedForms.appendChild(curCombForm);

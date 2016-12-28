@@ -118,7 +118,7 @@ public class WordPropertyCollection extends DictionaryCollection {
             
             // Is Text Override
             propProp = doc.createElement(PGTUtil.ClassIsFreetextXID);
-            propProp.appendChild(doc.createTextNode(wordProp.isFreeText() ? "Y" : "N"));
+            propProp.appendChild(doc.createTextNode(wordProp.isFreeText() ? PGTUtil.True : PGTUtil.False));
             propElement.appendChild(propProp);
 
             // generates element with all type IDs of types this property applies to

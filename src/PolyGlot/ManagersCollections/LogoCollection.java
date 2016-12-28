@@ -281,7 +281,7 @@ public class LogoCollection extends DictionaryCollection {
             logoGraph.appendChild(node);
             
             node = doc.createElement(PGTUtil.logoIsRadicalXID);
-            node.appendChild(doc.createTextNode(curNode.isRadical()?"T":"F"));
+            node.appendChild(doc.createTextNode(curNode.isRadical()? PGTUtil.True :PGTUtil.False));
             logoGraph.appendChild(node);
             
             node = doc.createElement(PGTUtil.logoNotesXID);
