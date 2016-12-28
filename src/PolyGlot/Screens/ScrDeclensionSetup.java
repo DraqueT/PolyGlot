@@ -35,8 +35,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
@@ -91,8 +93,6 @@ public final class ScrDeclensionSetup extends PDialog {
         populateDeclensionProps();
         populateDimensions();
         setupListeners();
-
-        setupDimTable();
     }
     
     @Override
@@ -330,13 +330,11 @@ public final class ScrDeclensionSetup extends PDialog {
             return;
         }
 
-        Iterator<DeclensionDimension> dimIt = curDec.getDimensions().iterator();
+        List<DeclensionDimension> dimensionList = new ArrayList(curDec.getDimensions());
 
         setupDimTable();
 
-        while (dimIt.hasNext()) {
-            DeclensionDimension curNode = dimIt.next();
-
+        for (DeclensionDimension curNode : dimensionList) {
             addDemensionWithValues(curNode.getValue(), curNode.isMandatory(), curNode.getId());
         }
     }
