@@ -257,6 +257,8 @@ public class ScrWordClasses extends PDialog {
 
             // set name
             txtName.setText(curProp.getValue());
+            
+            chkFreeText.setSelected(curProp.isFreeText());
 
             // add property values
             for (WordPropValueNode curValue : curProp.getValues()) {
@@ -268,6 +270,7 @@ public class ScrWordClasses extends PDialog {
                 e.getValue().setSelected(curProp.appliesToType(e.getKey()));
             }
 
+            setFreeTextEnabled();
             setEnabledTypeText();
             tblValues.setModel(tableModel);
         }
@@ -281,6 +284,7 @@ public class ScrWordClasses extends PDialog {
     private void enableValues(boolean enable) {
         txtName.setEnabled(enable);
         tblValues.setEnabled(enable);
+        chkFreeText.setEnabled(enable);
 
         for (JCheckBox curBox : typeChecks.values()) {
             curBox.setEnabled(enable);
@@ -382,6 +386,7 @@ public class ScrWordClasses extends PDialog {
         pnlTypes = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblValues = new javax.swing.JTable();
+        chkFreeText = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -452,6 +457,14 @@ public class ScrWordClasses extends PDialog {
         tblValues.setToolTipText("Values the selected property might take (such as \"female\" for gender)");
         jScrollPane3.setViewportView(tblValues);
 
+        chkFreeText.setText("Free Text Value");
+        chkFreeText.setToolTipText("Check to make this class value a freely editable text field, rather than a dropdown with preset values.");
+        chkFreeText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkFreeTextActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -461,12 +474,14 @@ public class ScrWordClasses extends PDialog {
                     .addComponent(btnAddValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(77, 77, 77)
-                                .addComponent(btnDelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkFreeText)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(77, 77, 77)
+                                    .addComponent(btnDelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlTypes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -477,7 +492,9 @@ public class ScrWordClasses extends PDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkFreeText)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -557,6 +574,19 @@ public class ScrWordClasses extends PDialog {
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void chkFreeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFreeTextActionPerformed
+        WordProperty prop = lstProperties.getSelectedValue();
+        prop.setFreeText(chkFreeText.isSelected());
+        setFreeTextEnabled();
+    }//GEN-LAST:event_chkFreeTextActionPerformed
+
+    private void setFreeTextEnabled() {
+        boolean enable = !chkFreeText.isSelected();
+        tblValues.setEnabled(enable);
+        btnAddValue.setEnabled(enable);
+        btnDelValue.setEnabled(enable);
+    }
+    
     static ScrWordClasses run(DictCore _core) {
         return new ScrWordClasses(_core);
     }
@@ -576,6 +606,7 @@ public class ScrWordClasses extends PDialog {
     private javax.swing.JButton btnAddValue;
     private javax.swing.JButton btnDelProp;
     private javax.swing.JButton btnDelValue;
+    private javax.swing.JCheckBox chkFreeText;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

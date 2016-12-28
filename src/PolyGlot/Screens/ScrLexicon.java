@@ -96,7 +96,7 @@ import javax.swing.event.DocumentListener;
 public final class ScrLexicon extends PFrame {
 
     private final List<Window> childFrames = new ArrayList<>();
-    private final Map<Integer, JComboBox> classComboMap = new HashMap<>();
+    private final Map<Integer, JComponent> classPropMap = new HashMap<>();
     private TitledPane gridTitlePane = null;
     private CheckBox chkFindBad;
     private final JFXPanel fxPanel;
@@ -283,42 +283,67 @@ public final class ScrLexicon extends PFrame {
         am.put(addKey, addAction);
         am.put(delKey, delAction);
     }
-    
+
     private void populateClassPanel() {
-        ConWord curWord = (ConWord)lstLexicon.getSelectedValue();
-        
+        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+
         for (Entry<Integer, Integer> curProp : curWord.getClassValues()) {
-            if (classComboMap.containsKey(curProp.getKey())) {
-                JComboBox combo = classComboMap.get(curProp.getKey());
+            if (classPropMap.containsKey(curProp.getKey())) {
+                JComponent component = classPropMap.get(curProp.getKey());
+
                 try {
-                    combo.setSelectedItem(((WordProperty)core.getWordPropertiesCollection()
-                            .getNodeById(curProp.getKey())).getValueById(curProp.getValue()));
+                    if (component instanceof JComboBox) {
+                        JComboBox combo = (JComboBox) component;
+                        combo.setSelectedItem(((WordProperty) core.getWordPropertiesCollection()
+                                .getNodeById(curProp.getKey())).getValueById(curProp.getValue()));
+                    } else if (component instanceof PTextField) {
+                        // class property has since been turned into a dropdown field: do nothing
+                    }
                 } catch (Exception e) {
-                    InfoBox.error("Word Class Error", "Unable to retrieve class/value pair " 
+                    InfoBox.error("Word Class Error", "Unable to retrieve class/value pair "
+                            + curProp.getKey() + "/" + curProp.getValue(), this);
+                }
+            }
+        }
+        
+        for (Entry<Integer, String> curProp : curWord.getAllClassTextValues()) {
+            if (classPropMap.containsKey(curProp.getKey())) {
+                JComponent component = classPropMap.get(curProp.getKey());
+
+                try {
+                    if (component instanceof JComboBox) {
+                        // class property has since been turned into a free text field: do nothing
+                    } else if (component instanceof PTextField) {
+                        PTextField textField = (PTextField)component;
+                        textField.setText(curProp.getValue());
+                    }
+                } catch (Exception e) {
+                    InfoBox.error("Word Class Error", "Unable to retrieve class/value pair "
                             + curProp.getKey() + "/" + curProp.getValue(), this);
                 }
             }
         }
     }
-    
+
     /**
      * Sets up the class panel. Should be run whenever a new word is loaded
+     *
      * @param setTypeId ID of class to set panel up for
      */
     private void setupClassPanel(int setTypeId) {
-        ConWord curWord = (ConWord)lstLexicon.getSelectedValue();
-        
+        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+
         // on no word selected, simply blank all classes
         if (curWord == null) {
             pnlClasses.removeAll();
             return;
         }
-        
+
         List<WordProperty> propList = core.getWordPropertiesCollection()
                 .getClassProps(setTypeId);
         pnlClasses.removeAll();
         pnlClasses.setPreferredSize(new Dimension(999999, 1));
-        
+
         pnlClasses.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -326,57 +351,94 @@ public final class ScrLexicon extends PFrame {
         gbc.weightx = 1;
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.BOTH;
-        
+
         // empty map of all class information before filling it again
-        classComboMap.clear();
+        classPropMap.clear();
 
         // create dropdown for each class that applies to the curren word
         for (WordProperty curProp : propList) {
             final int classId = curProp.getId();
-            final JComboBox classBox = new JComboBox();
-            DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
-            classBox.setModel(comboModel);
-            comboModel.addElement("-- " + curProp.getValue() + " --");
-            
-            // populate class dropdown
-            for (WordPropValueNode value : curProp.getValues()) {
-                comboModel.addElement(value);
-            }
-            
-            classBox.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // don't run if populating currently
-                    if (curPopulating) {
-                        return;
-                    }
-                    
-                    ConWord curWord = (ConWord)lstLexicon.getSelectedValue();
-                    
-                    if (classBox.getSelectedItem() instanceof WordPropValueNode) {
-                        WordPropValueNode curValue = (WordPropValueNode)classBox.getSelectedItem();
-                        curWord.setClassValue(classId, curValue.getId());
-                    } else {
-                        // if not an instance of a value, then it's the default selection: remove class from word
-                        curWord.setClassValue(classId, -1);
-                    }
-                }
-            });
 
-            classBox.setToolTipText(curProp.getValue() + " value");
-            classBox.setPreferredSize(new  Dimension(99999, classBox.getPreferredSize().height));
-            pnlClasses.add(classBox, gbc);
-            classComboMap.put(curProp.getId(), classBox); // dropbox mapped to related class ID.
+            if (curProp.isFreeText()) {
+                final PTextField classText = new PTextField(core, false, "--" + curProp.getValue() + "--");
+                classText.setToolTipText(curProp.getValue() + " value");
+
+                classText.getDocument().addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        updateWord();
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        updateWord();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+                        updateWord();
+                    }
+
+                    public void updateWord() {
+                        if (curPopulating) {
+                            return;
+                        }
+
+                        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+                        curWord.setClassTextValue(classId, classText.getText());
+                    }
+                });
+                pnlClasses.add(classText, gbc);
+                classPropMap.put(curProp.getId(), classText); // text box mapped to related class ID.
+            } else {
+                final JComboBox classBox = new JComboBox();
+                DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
+                classBox.setModel(comboModel);
+                comboModel.addElement("-- " + curProp.getValue() + " --");
+
+                // populate class dropdown
+                for (WordPropValueNode value : curProp.getValues()) {
+                    comboModel.addElement(value);
+                }
+
+                classBox.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // don't run if populating currently
+                        if (curPopulating) {
+                            return;
+                        }
+
+                        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+
+                        if (classBox.getSelectedItem() instanceof WordPropValueNode) {
+                            WordPropValueNode curValue = (WordPropValueNode) classBox.getSelectedItem();
+                            curWord.setClassValue(classId, curValue.getId());
+                        } else {
+                            // if not an instance of a value, then it's the default selection: remove class from word
+                            curWord.setClassValue(classId, -1);
+                        }
+                    }
+                });
+
+                classBox.setToolTipText(curProp.getValue() + " value");
+                classBox.setPreferredSize(new Dimension(99999, classBox.getPreferredSize().height));
+                pnlClasses.add(classBox, gbc);
+                classPropMap.put(curProp.getId(), classBox); // dropbox mapped to related class ID.
+            }
         }
+
         if (propList.isEmpty()) {
             // must include at least one item (even a dummy) to resize for some reason
-            pnlClasses.add(new JComboBox(), gbc);
+            JComboBox dummy = new JComboBox();
+            dummy.setEnabled(false);
+            pnlClasses.add(dummy, gbc);
             pnlClasses.setPreferredSize(new Dimension(9999, 0));
         } else {
             pnlClasses.setMaximumSize(new Dimension(99999, 99999));
-            pnlClasses.setPreferredSize(new Dimension(9999,propList.size() * new JComboBox().getPreferredSize().height));
+            pnlClasses.setPreferredSize(new Dimension(9999, propList.size() * new JComboBox().getPreferredSize().height));
         }
-        
+
         pnlClasses.repaint();
     }
 
@@ -488,7 +550,7 @@ public final class ScrLexicon extends PFrame {
             public void run() {
                 try {
                     Thread.sleep(500); // wait for interrupt from user...
-                    if (txtConWord.getText().isEmpty() 
+                    if (txtConWord.getText().isEmpty()
                             && lstLexicon.getSelectedIndex() != -1) {
                         return; // prevents freezing scenario with if new word made beore thread continues
                     }
@@ -640,10 +702,10 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        testWord.setValue(((PTextField)txtConWord).isDefaultText() ? "" : txtConWord.getText());
-        testWord.setLocalWord(((PTextField)txtLocalWord).isDefaultText() ? "" : txtLocalWord.getText());
+        testWord.setValue(((PTextField) txtConWord).isDefaultText() ? "" : txtConWord.getText());
+        testWord.setLocalWord(((PTextField) txtLocalWord).isDefaultText() ? "" : txtLocalWord.getText());
         testWord.setDefinition(txtDefinition.getText());
-        testWord.setPronunciation(((PTextField)txtProc).isDefaultText() ? "" : txtProc.getText());
+        testWord.setPronunciation(((PTextField) txtProc).isDefaultText() ? "" : txtProc.getText());
         testWord.setWordTypeId(typeId);
         testWord.setRulesOverride(chkRuleOverride.isSelected());
 
@@ -809,9 +871,9 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Should only be called from logic within the filter pane
-     * Does not close filter, and is guaranteed running inside fxProcess, so
-     * no latch logic necessary.
+     * Should only be called from logic within the filter pane Does not close
+     * filter, and is guaranteed running inside fxProcess, so no latch logic
+     * necessary.
      */
     private void clearFilterInternal() {
         txtConSrc.setText("");
@@ -822,20 +884,19 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Filters on illegel words.
-     * Does NOT respect "override" marker. This is to allow users to easily
-     * see what words are causing uniqueness errors, even if they themselves
-     * are legal via exception.
+     * Filters on illegel words. Does NOT respect "override" marker. This is to
+     * allow users to easily see what words are causing uniqueness errors, even
+     * if they themselves are legal via exception.
      */
     private void applyIllegalFilter() {
         clearFilterInternal();
-        
+
         txtConSrc.setDisable(chkFindBad.isSelected());
         txtDefSrc.setDisable(chkFindBad.isSelected());
         txtLocalSrc.setDisable(chkFindBad.isSelected());
         txtProcSrc.setDisable(chkFindBad.isSelected());
         cmbTypeSrc.setDisable(chkFindBad.isSelected());
-        
+
         if (chkFindBad.isSelected()) {
             populateLexicon(core.getWordCollection().illegalFilter());
         } else {
@@ -940,7 +1001,7 @@ public final class ScrLexicon extends PFrame {
                 saveName();
             }
         });
-        
+
         txtLocalWord.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
@@ -957,7 +1018,7 @@ public final class ScrLexicon extends PFrame {
                 setWordLegality();
             }
         });
-        
+
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -992,8 +1053,7 @@ public final class ScrLexicon extends PFrame {
                     if (tip.equals("")) {
                         tip = curWord.getLocalWord();
                     }
-                    if (tip.equals(""))
-                    {
+                    if (tip.equals("")) {
                         tip = curWord.getValue();
                     }
                     if (curType != null) {
@@ -1092,12 +1152,12 @@ public final class ScrLexicon extends PFrame {
             if (curWord == null) {
                 if (!namePopulating) {
                     namePopulating = true;
-                    ((PTextField)txtConWord).setDefault();
+                    ((PTextField) txtConWord).setDefault();
                     namePopulating = false;
                 }
-                ((PTextField)txtLocalWord).setDefault();
-                ((PTextField)txtProc).setDefault();
-                ((PTextPane)txtDefinition).setDefault();
+                ((PTextField) txtLocalWord).setDefault();
+                ((PTextField) txtProc).setDefault();
+                ((PTextPane) txtDefinition).setDefault();
                 cmbType.setSelectedItem(defTypeValue);
                 chkProcOverride.setSelected(false);
                 chkRuleOverride.setSelected(false);
@@ -1110,9 +1170,9 @@ public final class ScrLexicon extends PFrame {
                 }
                 txtDefinition.setText(curWord.getDefinition());
                 txtLocalWord.setText(curWord.getLocalWord().equals("")
-                        ? ((PTextField)txtLocalWord).getDefaultValue() : curWord.getLocalWord());
+                        ? ((PTextField) txtLocalWord).getDefaultValue() : curWord.getLocalWord());
                 txtProc.setText(curWord.getPronunciation().equals("")
-                        ? ((PTextField)txtProc).getDefaultValue() : curWord.getPronunciation());
+                        ? ((PTextField) txtProc).getDefaultValue() : curWord.getPronunciation());
                 TypeNode type = curWord.getWordTypeId() == 0 ? null : core.getTypes().getNodeById(curWord.getWordTypeId());
                 cmbType.setSelectedItem(type == null ? defTypeValue : type);
                 chkProcOverride.setSelected(curWord.isProcOverride());
@@ -1148,8 +1208,8 @@ public final class ScrLexicon extends PFrame {
                 jLabel1.setEnabled(enable);
                 btnDeclensions.setEnabled(enable);
                 btnLogographs.setEnabled(enable);
-                for (JComboBox comboBox : classComboMap.values()) {
-                    comboBox.setEnabled(enable);
+                for (JComponent classComp : classPropMap.values()) {
+                    classComp.setEnabled(enable);
                 }
             }
         };
@@ -1172,7 +1232,7 @@ public final class ScrLexicon extends PFrame {
      * Sets appropriate fields grey
      */
     private void setGreyFields(JComponent comp, String defValue) {
-    if (comp instanceof JComboBox) {
+        if (comp instanceof JComboBox) {
             JComboBox compCmb = (JComboBox) comp;
             if (compCmb.getSelectedItem() != null
                     && compCmb.getSelectedItem().toString().equals(defValue)) {
@@ -1272,16 +1332,16 @@ public final class ScrLexicon extends PFrame {
      * @param saveWord word to save current values to
      */
     private void saveValuesTo(ConWord saveWord) {
-        if (((PTextField)txtConWord).isDefaultText() || saveWord == null) {
+        if (((PTextField) txtConWord).isDefaultText() || saveWord == null) {
             return;
         }
 
         saveWord.setValue(txtConWord.getText());
         saveWord.setDefinition(txtDefinition.getText());
-        saveWord.setLocalWord(((PTextField)txtLocalWord).isDefaultText()
+        saveWord.setLocalWord(((PTextField) txtLocalWord).isDefaultText()
                 ? "" : txtLocalWord.getText());
         saveWord.setProcOverride(chkProcOverride.isSelected());
-        saveWord.setPronunciation(((PTextField)txtProc).isDefaultText()
+        saveWord.setPronunciation(((PTextField) txtProc).isDefaultText()
                 ? "" : txtProc.getText());
         saveWord.setRulesOverride(chkRuleOverride.isSelected());
         Object curType = cmbType.getSelectedItem();
@@ -1696,7 +1756,7 @@ public final class ScrLexicon extends PFrame {
         }
 
         populateProperties();
-        
+
         // if looking for illegals, always check legality value of word, otherwise let it slide for user convenience
         if (chkFindBad.isSelected()) {
             setWordLegality();
@@ -1749,7 +1809,7 @@ public final class ScrLexicon extends PFrame {
 
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
         final Object typeObject = cmbType.getSelectedItem();
-        
+
         if (typeObject != null
                 && typeObject.equals(newTypeValue)) {
             final TypeNode newType = ScrTypes.newGetType(core);
@@ -1760,14 +1820,14 @@ public final class ScrLexicon extends PFrame {
                 }
             });
         }
-        
+
         if (!curPopulating) {
             if (typeObject == null
-                || typeObject.equals(newTypeValue)) {
+                    || typeObject.equals(newTypeValue)) {
                 setupClassPanel(0);
             } else {
-                setupClassPanel(((TypeNode)typeObject).getId());
-            }            
+                setupClassPanel(((TypeNode) typeObject).getId());
+            }
         }
     }//GEN-LAST:event_cmbTypeActionPerformed
 

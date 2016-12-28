@@ -115,6 +115,11 @@ public class WordPropertyCollection extends DictionaryCollection {
             propProp = doc.createElement(PGTUtil.ClassNameXID);
             propProp.appendChild(doc.createTextNode(wordProp.getValue()));
             propElement.appendChild(propProp);
+            
+            // Is Text Override
+            propProp = doc.createElement(PGTUtil.ClassIsFreetextXID);
+            propProp.appendChild(doc.createTextNode(wordProp.isFreeText() ? "Y" : "N"));
+            propElement.appendChild(propProp);
 
             // generates element with all type IDs of types this property applies to
             String applyTypes = "";

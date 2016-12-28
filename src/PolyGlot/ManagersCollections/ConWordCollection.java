@@ -937,6 +937,14 @@ public class ConWordCollection extends DictionaryCollection {
                 wordValue.appendChild(classVal);
             }
             wordNode.appendChild(wordValue);
+            
+            wordValue = doc.createElement(PGTUtil.wordClassTextValueCollectionXID);
+            for (Entry<Integer, String> entry : curWord.getAllClassTextValues()) {
+                Element classVal = doc.createElement(PGTUtil.wordClassTextValueXID);
+                classVal.appendChild(doc.createTextNode(entry.getKey() + "," + entry.getValue()));
+                wordValue.appendChild(classVal);
+            }            
+            wordNode.appendChild(wordValue);
         }
     }
 }

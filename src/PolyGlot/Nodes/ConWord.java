@@ -48,6 +48,7 @@ public class ConWord extends DictNode {
     private DictCore core;
     private ConWordCollection parent;
     private final Map<Integer, Integer> classValues = new HashMap<>();
+    private final Map<Integer, String> classTextValues = new HashMap<>();
     public String typeError = ""; // used only for returning error state
 
     public ConWord() {
@@ -87,6 +88,38 @@ public class ConWord extends DictNode {
     
     public void setParent(ConWordCollection _parent) {
         parent = _parent;
+    }
+    
+    /**
+     * Gets value of particular class (presuming freetext status)
+     * @param classId id of class to retrieve value of
+     * @return String's value for the given class. Blank string if not found/set.
+     */
+    public String getClassTextValue(int classId) {
+        String ret = "";
+        
+        if (classTextValues.containsKey(classId)) {
+            ret = classTextValues.get(classId);
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Set's a world's class value (of class specified) to the given value
+     * @param classId ID of class to set on word
+     * @param classValue new value to set class to
+     */
+    public void setClassTextValue(int classId, String classValue) {
+        if (classTextValues.containsKey(classId)) {
+            classTextValues.replace(classId, classValue);
+        } else {
+            classTextValues.put(classId, classValue);
+        }
+    }
+    
+    public Set<Entry<Integer, String>> getAllClassTextValues() {
+        return classTextValues.entrySet();
     }
         
     /**

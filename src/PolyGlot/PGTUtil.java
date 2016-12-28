@@ -45,6 +45,8 @@ public class PGTUtil {
     public static final String wordRuleOverrideXID = "wordRuleOverride";
     public static final String wordClassCollectionXID = "wordClassCollection";
     public static final String wordClassAndValueXID = "wordClassification";
+    public static final String wordClassTextValueCollectionXID = "wordClassTextValueCollection";
+    public static final String wordClassTextValueXID = "wordClassTextValue";
 
     // properties for types/parts of speech
     public static final String typeXID = "class";
@@ -157,6 +159,7 @@ public class PGTUtil {
     public static final String ClassIdXID = "wordGrammarClassID";
     public static final String ClassNameXID = "wordGrammarClassName";
     public static final String ClassApplyTypesXID = "wordGrammarApplyTypes";
+    public static final String ClassIsFreetextXID = "wordGrammarIsFreeTextField";
     public static final String ClassValuesCollectionXID = "wordGrammarClassValuesCollection";
     public static final String ClassValueNodeXID = "wordGrammarClassValueNode";
     public static final String ClassValueNameXID = "wordGrammarClassValueName";

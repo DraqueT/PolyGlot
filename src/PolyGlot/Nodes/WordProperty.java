@@ -33,6 +33,7 @@ import java.util.Map;
 public class WordProperty extends DictNode {
     private final Map<Integer, WordPropValueNode> values = new HashMap<>();
     private final List<Integer> applyTypes = new ArrayList<>();
+    private boolean freeText = false;
     private int topId = 0;
     public WordPropValueNode buffer = new WordPropValueNode();
     
@@ -174,5 +175,25 @@ public class WordProperty extends DictNode {
         ret.setValue(name);
         values.put(id, ret);
         return ret;
+    }
+
+    /**
+     * Whether or not this represents a free text field, rather than a multi-
+     * selection with predefined values
+     * 
+     * @return Whether the property is a freetext property
+     */
+    public boolean isFreeText() {
+        return freeText;
+    }
+
+    /**
+     * Sets whether or not this represents a free text field, rather than a
+     * multi-selection with predefined values
+     * 
+     * @param freeText freetext value
+     */
+    public void setFreeText(boolean freeText) {
+        this.freeText = freeText;
     }
 }

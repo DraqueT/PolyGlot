@@ -126,6 +126,8 @@ public class CustHandlerFactory {
         return new CustHandler() {
 
             PronunciationNode proBuffer;
+            int ruleIdBuffer = 0;
+            String ruleValBuffer = "";
             boolean blocalWord = false;
             boolean bconWord = false;
             boolean btype = false;
@@ -135,6 +137,7 @@ public class CustHandlerFactory {
             boolean bfontcon = false;
             boolean bfontlocal = false;
             boolean bwordClassName = false;
+            boolean bwordClassTextVal = false;
             boolean bwordClassId = false;
             boolean bwordClassNotes = false;
             boolean bwordClassGloss = false;
@@ -210,6 +213,7 @@ public class CustHandlerFactory {
             boolean bclassId = false;
             boolean bclassName = false;
             boolean bclassApplyTypes = false;
+            boolean bclassFreeText = false;
             boolean bclassValueNode = false;
             boolean bclassValueId = false;
             boolean bclassValueName = false;
@@ -255,6 +259,8 @@ public class CustHandlerFactory {
                     bwordRuleOverride = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordClassAndValueXID)) {
                     bclassVal = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassTextValueXID)){
+                    bwordClassTextVal = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.fontConXID)) {
                     bfontcon = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.fontLocalXID)) {
@@ -417,6 +423,8 @@ public class CustHandlerFactory {
                     bclassName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassApplyTypesXID)) {
                     bclassApplyTypes = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.ClassIsFreetextXID)) {
+                    bclassFreeText = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassValueNodeXID)) {
                     bclassValueNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassValueIdXID)) {
@@ -551,6 +559,11 @@ public class CustHandlerFactory {
                     bwordRuleOverride = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordClassAndValueXID)) {
                     bclassVal = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordClassTextValueXID)){
+                    core.getWordCollection().getBufferWord().setClassTextValue(ruleIdBuffer, ruleValBuffer);
+                    ruleIdBuffer = 0;
+                    ruleValBuffer = "";
+                    bwordClassTextVal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordDefXID)) {
                     // finalize loading of def (if it contains archived HTML elements
                     ConWord curWord = core.getWordCollection().getBufferWord();
@@ -753,6 +766,8 @@ public class CustHandlerFactory {
                     bclassName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassApplyTypesXID)) {
                     bclassApplyTypes = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.ClassIsFreetextXID)) {
+                    bclassFreeText = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassValueNodeXID)) {
                     try {
                         ((WordProperty) core.getWordPropertiesCollection().getBuffer()).insert();
@@ -814,6 +829,16 @@ public class CustHandlerFactory {
                     int classId = Integer.parseInt(classValIds[0]);
                     int valId = Integer.parseInt(classValIds[1]);
                     core.getWordCollection().getBufferWord().setClassValue(classId, valId);
+                } else if (bwordClassTextVal) {
+                    if (ruleIdBuffer == 0) {
+                        String[] classValIds = new String(ch, start, length).split(",");
+                        ruleIdBuffer = Integer.parseInt(classValIds[0]);
+                        for (int i = 1; i < classValIds.length; i++) {
+                            ruleValBuffer += classValIds[i];
+                        }
+                    } else {
+                        ruleValBuffer += new String(ch, start, length);
+                    }
                 } else if (bwordoverAutoDec) {
                     core.getWordCollection().getBufferWord()
                             .setOverrideAutoDeclen(new String(ch, start, length).equals("T"));
@@ -1046,6 +1071,13 @@ public class CustHandlerFactory {
                     for (String curType : types.split(",")) {
                         int typeId = Integer.parseInt(curType);
                         buffer.addApplyType(typeId);
+                    }
+                } else if (bclassFreeText) {
+                    String freeText = new String(ch, start, length);                    
+                    if (freeText.equals("Y")) {
+                        ((WordProperty) core.getWordPropertiesCollection().getBuffer()).setFreeText(true);
+                    } else {
+                        ((WordProperty) core.getWordPropertiesCollection().getBuffer()).setFreeText(false);
                     }
                 } else if (bclassValueId) {
                     ((WordProperty) core.getWordPropertiesCollection().getBuffer()).buffer.setId(Integer.parseInt(new String(ch, start, length)));
