@@ -137,15 +137,7 @@ public class DictCore {
      * ONLY if so
      */
     public void checkProgramFocus() {
-        // TODO: FIX THIS- causes PolyGlot to go nuts in Windows (flashing re/deselects
-        /*
-        boolean top = rootWindow.thisOrChildrenFocused();
-        
-        rootWindow.setAlwaysOnTop(top);
-        
-        if (!top) {
-            rootWindow.toBack();
-        }*/
+        // currently does nothing. Previously used for assisting program focus.
     }
 
     /**
