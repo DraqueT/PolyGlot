@@ -426,7 +426,7 @@ public class ConWordCollection extends DictionaryCollection {
             _filter.setDefinition(_filter.getDefinition().toLowerCase());
             _filter.setLocalWord(_filter.getLocalWord().toLowerCase());
             _filter.setValue(_filter.getValue().toLowerCase());
-            //_filter.setGender(_filter.getGender().toLowerCase()); // TODO: replace with class filtering
+            //_filter.setGender(_filter.getGender().toLowerCase()); // replace with class filtering
             _filter.setPronunciation(_filter.getPronunciation().toLowerCase());
         }
 
@@ -444,13 +444,13 @@ public class ConWordCollection extends DictionaryCollection {
                     definition = curWord.getDefinition().toLowerCase();
                     type = curWord.getWordTypeId();
                     local = curWord.getLocalWord().toLowerCase();
-                    //gender = curWord.getGender().toLowerCase(); // TODO: replace with class filtering
+                    //gender = curWord.getGender().toLowerCase(); // replace with class filtering
                     proc = curWord.getPronunciation().toLowerCase();
                 } else {
                     definition = curWord.getDefinition();
                     type = curWord.getWordTypeId();
                     local = curWord.getLocalWord();
-                    //gender = curWord.getGender(); // TODO: replace with class filtering
+                    //gender = curWord.getGender(); // replace with class filtering
                     proc = curWord.getPronunciation();
                 }
 
@@ -480,7 +480,7 @@ public class ConWordCollection extends DictionaryCollection {
                     continue;
                 }
 
-                // TODO: replace with class filtering
+                // replace with class filtering
                 // gender (exact match only)
                 /*if (!_filter.getGender().trim().equals("")
                         && !gender.equals(_filter.getGender())) {

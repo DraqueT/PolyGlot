@@ -72,7 +72,6 @@ public class ConWord extends DictNode {
         
         return checkValue.getValue().equals("") &&
                 checkValue.getDefinition().equals("") &&
-                //checkValue.getGender().equals("") && // TODO: replace with classes
                 checkValue.getLocalWord().equals("") &&
                 checkValue.getPronunciation().equals("") &&
                 checkValue.typeError.equals("");

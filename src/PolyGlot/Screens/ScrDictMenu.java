@@ -139,7 +139,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     /**
      * Opens windows left open when PolyGlot last run, then clears list
      */
-    private void openLastWindows() { // TODO: figure out why 
+    private void openLastWindows() {
         List<String> lastScreensUp = core.getOptionsManager().getLastScreensUp();
         for (String leftOpen : lastScreensUp) {
             // switch has to be on constants...

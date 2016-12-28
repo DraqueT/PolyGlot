@@ -83,9 +83,7 @@ public class TypeCollection extends DictionaryCollection {
         if (type != null) {
             if (type.isDefMandatory() && word.getDefinition().equals("")) {
                 ret = type.getValue() + " requires a definition.";
-            } /*else if (type.isGenderMandatory() && word.getGender().equals("")) { // TODO: Replace with class requirements
-                ret = type.getValue() + " requires a gender.";
-            }*/ else if (type.isProcMandatory() && word.getPronunciation().equals("")) {
+            } else if (type.isProcMandatory() && word.getPronunciation().equals("")) {
                 ret = type.getValue() + " requires a pronunciation.";
             }
         }
