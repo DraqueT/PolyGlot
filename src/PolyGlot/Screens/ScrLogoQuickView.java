@@ -23,7 +23,7 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.LogoNode;
-import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.PGTUtil.WindowMode;
 import java.awt.Dimension;
@@ -309,8 +309,8 @@ public class ScrLogoQuickView extends PFrame {
         btnDetails = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstLogos = new javax.swing.JList();
-        btnAdd = new PButton("+");
-        btnDel = new PButton("-");
+        btnAdd = new PAddRemoveButton("+");
+        btnDel = new PAddRemoveButton("-");
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);

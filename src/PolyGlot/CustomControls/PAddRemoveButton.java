@@ -33,7 +33,7 @@ import javax.swing.Icon;
  * changed easily and in one place.
  * @author draque
  */
-public class PButton extends JButton {
+public class PAddRemoveButton extends JButton {
     @Override
     public final void setText(String text){super.setText(text);}
     @Override
@@ -62,7 +62,7 @@ public class PButton extends JButton {
     @Override
     public final void setPressedIcon(Icon icon) {super.setPressedIcon(icon);}
             
-    public PButton(String arg) {        
+    public PAddRemoveButton(String arg) {        
         super();
         
         setText("");

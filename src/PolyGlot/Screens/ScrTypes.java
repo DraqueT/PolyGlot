@@ -21,7 +21,7 @@ package PolyGlot.Screens;
 
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
@@ -372,8 +372,8 @@ public class ScrTypes extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstTypes = new javax.swing.JList();
-        btnAddType = new PButton("+");
-        btnDelType = new PButton("-");
+        btnAddType = new PAddRemoveButton("+");
+        btnDelType = new PAddRemoveButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Types/Parts of Speech");

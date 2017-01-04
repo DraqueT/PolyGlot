@@ -19,7 +19,7 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
 import PolyGlot.CustomControls.PDialog;
@@ -377,12 +377,12 @@ public class ScrWordClasses extends PDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         lstProperties = new javax.swing.JList<>();
-        btnAddProp = new PButton("+");
-        btnDelProp = new PButton("-");
+        btnAddProp = new PAddRemoveButton("+");
+        btnDelProp = new PAddRemoveButton("-");
         jPanel1 = new javax.swing.JPanel();
         txtName = new PTextField(core, true, "-- Name --");
-        btnAddValue = new PButton("+");
-        btnDelValue = new PButton("-");
+        btnAddValue = new PAddRemoveButton("+");
+        btnDelValue = new PAddRemoveButton("-");
         pnlTypes = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblValues = new javax.swing.JTable();

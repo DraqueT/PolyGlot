@@ -23,7 +23,7 @@ import PolyGlot.DeclensionDimension;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.TableBooleanEditor;
 import PolyGlot.CustomControls.PCellEditor;
@@ -452,14 +452,14 @@ public final class ScrDeclensionSetup extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         txtDeclensionName = new PTextField(core, true, "-- Name --");//PTextField(core, true, "-- Name --");
         jLabel3 = new javax.swing.JLabel();
-        btnAddDimension = new PButton("+");
-        btnDelDimension = new PButton("-");
+        btnAddDimension = new PAddRemoveButton("+");
+        btnDelDimension = new PAddRemoveButton("-");
         sclDimensions = new javax.swing.JScrollPane();
         tblDimensions = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtDeclensionNotes = new PTextPane(core, true, "-- Notes --");
-        btnDeleteDeclension = new PButton("-");
-        btnAddDeclension = new PButton("+");
+        btnDeleteDeclension = new PAddRemoveButton("-");
+        btnAddDeclension = new PAddRemoveButton("+");
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);

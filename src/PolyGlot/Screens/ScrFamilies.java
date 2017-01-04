@@ -22,7 +22,7 @@ package PolyGlot.Screens;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PGTreeCellRenderer;
 import PolyGlot.CustomControls.PTextPane;
@@ -448,13 +448,13 @@ public class ScrFamilies extends PFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         lstWords = new javax.swing.JList();
         jLabel1 = new javax.swing.JLabel();
-        btnAddWord = new PButton("+");
-        btnDelWord = new PButton("-");
+        btnAddWord = new PAddRemoveButton("+");
+        btnDelWord = new PAddRemoveButton("-");
         txtFamName = new PTextField(core, true, "-- Name --");
         jScrollPane2 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Notes --");
-        btnAddFamily = new PButton("+");
-        btnDelFamily = new PButton("-");
+        btnAddFamily = new PAddRemoveButton("+");
+        btnDelFamily = new PAddRemoveButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lexical Families");

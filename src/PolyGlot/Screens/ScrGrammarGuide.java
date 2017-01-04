@@ -26,7 +26,7 @@ import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.HighlightCaret;
 import PolyGlot.IOHandler;
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PGDocument;
 import PolyGlot.CustomControls.PGTreeCellRenderer;
@@ -236,8 +236,8 @@ public class ScrGrammarGuide extends PFrame {
         treChapList = new javax.swing.JTree();
         txtSearch = new PTextField(core, true, "-- Search --");
         jLabel1 = new javax.swing.JLabel();
-        btnAddSection = new PButton("+");
-        btnDelete = new PButton("-");
+        btnAddSection = new PAddRemoveButton("+");
+        btnDelete = new PAddRemoveButton("-");
         btnAddChapter = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);

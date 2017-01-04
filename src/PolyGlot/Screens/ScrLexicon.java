@@ -22,7 +22,7 @@ package PolyGlot.Screens;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PFrame;
@@ -1476,8 +1476,8 @@ public final class ScrLexicon extends PFrame {
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         lstLexicon = new PList(this);
-        btnAddWord = new PButton("+");
-        btnDelWord = new PButton("-");
+        btnAddWord = new PAddRemoveButton("+");
+        btnDelWord = new PAddRemoveButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lexicon");
