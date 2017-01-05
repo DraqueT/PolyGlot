@@ -21,6 +21,7 @@
 package PolyGlot;
 
 import PolyGlot.Screens.*;
+import java.awt.Color;
 
 /**
  * This contains all the XML markers for saving/loading files
@@ -177,6 +178,7 @@ public class PGTUtil {
     public static final String fontFileName = "conLangFont";
     public static final String LCDFontLocation = "/PolyGlot/GeneralResources/lcdFont.ttf";
     public static final String UnicodeFontLocation = "/PolyGlot/GeneralResources/unicode.ttf";
+    public static final String ButtonFontLocation = "/PolyGlot/GeneralResources/buttonFont.ttf";
     public static final String logoGraphSavePath = "logoGraphs/";
     public static final String imagesSavePath = "images/";
     public static final String grammarSoundSavePath = "grammarSounds/";
@@ -206,8 +208,15 @@ public class PGTUtil {
     // int constants...
     public static final Integer numMenuFlashes = 4;
     public static final Integer menuFlashSleep = 200;
-
     
+    // color constants
+    public static final Color colorDisabledBG = Color.decode("#b0b0b0");
+    public static final Color colorEnabledBG = Color.decode("#b9b9ff");
+    public static final Color colorSelectedBG = Color.decode("#9999f1");
+    public static final Color colorDisabledForeground = Color.decode("#808080");
+    //public static final Color colorEnabledForeground = Color.decode("000000"); <- should be object's getForeground()
+    public static final Color colorMouseoverBorder = Color.decode("#909090");
+        
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to
      * STANDARD

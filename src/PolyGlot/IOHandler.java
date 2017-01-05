@@ -44,7 +44,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
@@ -873,8 +872,6 @@ public class IOHandler {
      * conlang font in PolyGlot
      *
      * @return Charis unicode compatible font
-     * @throws java.awt.FontFormatException if font corrupted
-     * @throws java.io.IOException if unable to load font
      */
     private Font getCharisUnicodeFontInternal() {
         Font ret = null;
@@ -887,9 +884,42 @@ public class IOHandler {
             }
 
         } catch (IOException | FontFormatException ex) {
-            // do nothing. This is an internal call, and should really never fail.
+            // TODO: This should throw an error. Refactor to address this here and elsewhere.
         }
 
+        return ret;
+    }
+    
+    /**
+     * Fetches and returns default button font
+     *
+     * @return Font to default buttons to
+     * @throws java.io.IOException if unable to load font
+     */
+    public static Font getButtonFont() throws IOException {
+        return new IOHandler().getButtonFontInternal();
+    }    
+    
+    /**
+     * Fetches and returns default button font
+     * nonstatic 
+     *
+     * @return Font to default buttons to
+     * @throws java.io.IOException if unable to load font
+     */
+    private Font getButtonFontInternal() throws IOException {
+        Font ret = null;
+        try (InputStream tmp = this.getClass().getResourceAsStream(PGTUtil.ButtonFontLocation)) {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
+            ret = ret.deriveFont(new Float(14)); // default to size 12 font
+            if (ret != null) {
+                ge.registerFont(ret);
+            }
+        } catch (Exception e) {
+            throw new IOException("Unable to load button font.");
+        }
+        
         return ret;
     }
     

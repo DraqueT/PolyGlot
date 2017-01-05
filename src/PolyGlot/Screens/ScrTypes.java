@@ -37,6 +37,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import PolyGlot.CustomControls.PTextPane;
+import java.awt.Component;
 
 /**
  *
@@ -97,6 +98,10 @@ public class ScrTypes extends PDialog {
     @Override
     public void updateAllValues(DictCore _core) {
         // Due to modal nature of form, no need to update
+    }
+    
+    public Component getWindow() {
+        return jSplitPane1;
     }
 
     /**

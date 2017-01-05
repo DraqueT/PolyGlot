@@ -224,7 +224,7 @@ public class DictCore {
         }
 
         if (rootWindow == null) {
-            InfoBox.warning("Bad Update", "This warning inicates that a root"
+            InfoBox.warning("Bad Update", "This warning indicates that a root"
                     + " window was null at the time of an update push.",
                     rootWindow);
         } else {

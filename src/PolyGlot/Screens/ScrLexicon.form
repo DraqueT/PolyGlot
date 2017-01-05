@@ -276,6 +276,9 @@
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeclensionsActionPerformed"/>
                       </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="btnLogographs">
                       <Properties>

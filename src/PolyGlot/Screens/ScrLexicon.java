@@ -22,7 +22,7 @@ package PolyGlot.Screens;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PAddRemoveButton;
+import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PFrame;
@@ -81,6 +81,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
 import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -136,6 +137,10 @@ public final class ScrLexicon extends PFrame {
         populateProperties();
         setupListeners();
         setCustomLabels();
+    }
+    
+    public JLayeredPane getWindow() {
+        return jLayeredPane1;
     }
 
     private void setCustomLabels() {
@@ -1466,7 +1471,7 @@ public final class ScrLexicon extends PFrame {
         chkProcOverride = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         chkRuleOverride = new javax.swing.JCheckBox();
-        btnDeclensions = new javax.swing.JButton();
+        btnDeclensions = new PButton(core);
         btnLogographs = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtErrorBox = new javax.swing.JTextPane();
@@ -1476,8 +1481,8 @@ public final class ScrLexicon extends PFrame {
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         lstLexicon = new PList(this);
-        btnAddWord = new PAddRemoveButton("+");
-        btnDelWord = new PAddRemoveButton("-");
+        btnAddWord = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelWord = new PolyGlot.CustomControls.PAddRemoveButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lexicon");
@@ -1697,6 +1702,9 @@ public final class ScrLexicon extends PFrame {
             .addComponent(jSplitPane1)
         );
 
+        jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DRAG_LAYER);
+        jLayeredPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
         jLayeredPane1Layout.setHorizontalGroup(
@@ -1717,8 +1725,6 @@ public final class ScrLexicon extends PFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DRAG_LAYER);
-        jLayeredPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

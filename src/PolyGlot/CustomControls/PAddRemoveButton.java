@@ -21,7 +21,6 @@ package PolyGlot.CustomControls;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.border.Border;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -33,7 +32,7 @@ import javax.swing.Icon;
  * changed easily and in one place.
  * @author draque
  */
-public class PAddRemoveButton extends JButton {
+public class PAddRemoveButton extends PButton {
     @Override
     public final void setText(String text){super.setText(text);}
     @Override
@@ -78,7 +77,8 @@ public class PAddRemoveButton extends JButton {
         setRequestFocusEnabled(false);
         setContentAreaFilled(false);
         
-        switch (arg) {
+        // TODO: revisit this
+        /*switch (arg) {
             case "-":
                 setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH)));
                 setPressedIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button_pressed.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH)));
@@ -87,6 +87,7 @@ public class PAddRemoveButton extends JButton {
                 setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/add_button.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH))); 
                 setPressedIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/add_button_pressed.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH)));
                 break;
-        }
+        }*/
+        setText(arg);
     }    
 }
