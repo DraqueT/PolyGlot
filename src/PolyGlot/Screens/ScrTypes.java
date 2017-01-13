@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, draque
+ * Copyright (c) 2015-2017, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -23,6 +23,7 @@ import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Color;
@@ -38,12 +39,13 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import PolyGlot.CustomControls.PTextPane;
 import java.awt.Component;
+import javax.swing.JComponent;
 
 /**
  *
  * @author draque
  */
-public class ScrTypes extends PDialog {
+public class ScrTypes extends PFrame {
 
     private final List<Window> childFrames = new ArrayList<>();
     private TypeNode selectionAtClosing = null;
@@ -56,13 +58,6 @@ public class ScrTypes extends PDialog {
         populateTypes();
         populateProperties();
         setupListeners();
-        setModal(true);
-    }
-    
-    // To avoid BP error
-    @Override
-    public final void setModal(boolean _modal) {
-        super.setModal(_modal);
     }
 
     @Override
@@ -78,13 +73,7 @@ public class ScrTypes extends PDialog {
             selectionAtClosing = curType;
         }
 
-        core.pushUpdate();
-
-        if (txtName.getText().equals("")
-                && curType != null) {
-            InfoBox.warning("Illegal Type",
-                    "Currently selected type is illegal. Please correct or delete.", this);
-        } else {
+        if (canClose()) {
             killAllChildren();
             super.dispose();
         }
@@ -635,4 +624,24 @@ public class ScrTypes extends PDialog {
     private javax.swing.JTextPane txtNotes;
     private javax.swing.JTextField txtTypePattern;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public boolean canClose() {
+        boolean ret = true;
+        TypeNode curType = (TypeNode) lstTypes.getSelectedValue();
+
+        if (txtName.getText().equals("")
+                && curType != null) {
+            InfoBox.warning("Illegal Type",
+                    "Currently selected type is illegal. Please correct or delete.", this);
+            ret = false;
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

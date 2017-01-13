@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -653,6 +653,28 @@ public class IOHandler {
         }
 
         return ret;
+    }
+    
+    /**
+     * Returns the default path of PolyGlot's running directory
+     * NOTE: If the path is overridden, in the properties manager, use that.
+     * This returns only what the OS tells PolyGlot it is running under (not 
+     * always trustworthy)
+     * @return default path
+     */
+    public static File getBaseProgramPath() {
+        return new File(".");
+    }
+    
+    /**
+     * Tests whether a file at a particular location exists. Wrapped to avoid
+     * IO code outside this file
+     * @param fullPath path of file to test
+     * @return true if file exists, false otherwise
+     */
+    public static boolean fileExists(String fullPath) {
+        File f = new File(fullPath);
+        return f.exists();
     }
 
     /**

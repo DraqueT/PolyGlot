@@ -1,3 +1,4 @@
+// TODO: DELETE THIS
 /*
  * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
@@ -25,6 +26,7 @@ import PolyGlot.DictCore;
 import PolyGlot.CustomControls.HighlightCaret;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PFrame;
+import java.awt.Component;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +47,10 @@ import javax.swing.event.DocumentListener;
  * @author draque
  */
 public class ScrTranslationWindow extends PFrame {
+    @Override
+    public Component getWindow() {
+        return this.getRootPane();
+    }
     public final ScrDictMenu parent;
     private boolean curPopulating = false;
     private List<String> localText = new ArrayList<>();

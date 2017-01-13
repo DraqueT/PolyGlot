@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque.thompson
+ * Copyright (c) 2016-2017, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -27,6 +27,7 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.QuizEngine.Quiz;
 import PolyGlot.QuizEngine.QuizFactory;
+import java.awt.Component;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 
@@ -425,6 +426,11 @@ public class ScrQuizGenDialog extends PFrame {
     @Override
     public void addBindingToComponent(JComponent c) {
         // no bindings to add to this window at this time.
+    }
+    
+    @Override
+    public Component getWindow() {
+        return this.getRootPane();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

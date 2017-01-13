@@ -378,11 +378,11 @@ public final class ScrQuickWordEntry extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, "-- " + core.conLabel() + " word --");
         txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " word --");
-        cmbType = new PComboBox();
+        cmbType = new PComboBox(core);
         txtProc = new PTextField(core, true, "-- Pronunciation --");
         pnlClasses = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        txtDefinition = new PTextPane(core, true, "-- Notes --");
+        txtDefinition = new PolyGlot.CustomControls.PTextPane(core, true, "-- Notes --");
         btnDone = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Draque Thompson
+ * Copyright (c) 2015-2017, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -23,6 +23,7 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PFrame;
@@ -34,6 +35,7 @@ import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
 import PolyGlot.WebInterface;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -81,7 +83,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLayeredPane;
 import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -139,7 +140,8 @@ public final class ScrLexicon extends PFrame {
         setCustomLabels();
     }
     
-    public JLayeredPane getWindow() {
+    @Override
+    public Component getWindow() {
         return jLayeredPane1;
     }
 
@@ -196,6 +198,24 @@ public final class ScrLexicon extends PFrame {
                     + e.getLocalizedMessage(), this);
             //e.printStackTrace();
         }
+    }
+    
+    /**
+     * Returns false & explains why if currently selected word is illegal
+     * @return if currently selected word is illegal
+     */
+    @Override
+    public boolean canClose() {
+        boolean ret = true;
+        
+        // error box only populated with word has illegal values
+        if (!txtErrorBox.getText().equals("")) {
+            ret = false;
+            InfoBox.warning("Illegal word.", "Please correct or delete currently selected word " 
+                    + "or select the rule override before exiting lexicon.", this);
+        }
+        
+        return ret;
     }
 
     @Override
@@ -458,6 +478,8 @@ public final class ScrLexicon extends PFrame {
 
         jPanel1.setLayout(new GridBagLayout());
         jPanel1.add(fxPanel, c);
+        jPanel1.setBackground(Color.white);
+        fxPanel.setBackground(Color.white);
 
         final CountDownLatch latch = new CountDownLatch(1);
         Runnable fxSetup = new Runnable() {
@@ -478,6 +500,8 @@ public final class ScrLexicon extends PFrame {
         } catch (Exception e) {
             InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), this);
         }
+        
+        fxPanel.repaint();
     }
 
     private void initFX(JFXPanel fxPanel) {
@@ -1210,7 +1234,6 @@ public final class ScrLexicon extends PFrame {
                 cmbType.setEnabled(enable);
                 chkProcOverride.setEnabled(enable);
                 chkRuleOverride.setEnabled(enable);
-                jLabel1.setEnabled(enable);
                 btnDeclensions.setEnabled(enable);
                 btnLogographs.setEnabled(enable);
                 for (JComponent classComp : classPropMap.values()) {
@@ -1466,13 +1489,12 @@ public final class ScrLexicon extends PFrame {
         jPanel3 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, "-- ConWord --");
         txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Word --");
-        cmbType = new PComboBox();
+        cmbType = new PComboBox(core);
         txtProc = new PTextField(core, true, "-- Pronunciation --");
-        chkProcOverride = new javax.swing.JCheckBox();
-        jLabel1 = new javax.swing.JLabel();
-        chkRuleOverride = new javax.swing.JCheckBox();
+        chkProcOverride = new PCheckBox(core);
+        chkRuleOverride = new PCheckBox(core);
         btnDeclensions = new PButton(core);
-        btnLogographs = new javax.swing.JButton();
+        btnLogographs = new PButton(core);
         jScrollPane1 = new javax.swing.JScrollPane();
         txtErrorBox = new javax.swing.JTextPane();
         pnlClasses = new javax.swing.JPanel();
@@ -1486,6 +1508,8 @@ public final class ScrLexicon extends PFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lexicon");
+        setBackground(new java.awt.Color(255, 255, 255));
+        setEnabled(false);
         setMinimumSize(new java.awt.Dimension(500, 450));
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
@@ -1495,9 +1519,12 @@ public final class ScrLexicon extends PFrame {
             }
         });
 
+        jLayeredPane1.setBackground(new java.awt.Color(255, 255, 255));
         jLayeredPane1.setMinimumSize(new java.awt.Dimension(351, 350));
         jLayeredPane1.setName(""); // NOI18N
         jLayeredPane1.setPreferredSize(new java.awt.Dimension(351, 380));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -1510,10 +1537,12 @@ public final class ScrLexicon extends PFrame {
             .addGap(0, 19, Short.MAX_VALUE)
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
+        jSplitPane1.setBackground(new java.awt.Color(255, 255, 255));
         jSplitPane1.setDividerLocation(123);
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setMaximumSize(new java.awt.Dimension(999999, 999999));
         jPanel3.setMinimumSize(new java.awt.Dimension(20, 20));
         jPanel3.setName(""); // NOI18N
@@ -1534,8 +1563,7 @@ public final class ScrLexicon extends PFrame {
 
         chkProcOverride.setToolTipText("Select this to override auto pronunciation generation for this word.");
 
-        jLabel1.setText("Override Rules");
-
+        chkRuleOverride.setText("Override Rules");
         chkRuleOverride.setToolTipText("Overrides all typically enforced requirements for this word, allowing it to be saved as an exception");
         chkRuleOverride.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1584,26 +1612,21 @@ public final class ScrLexicon extends PFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(btnDeclensions)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 195, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 242, Short.MAX_VALUE)
                 .addComponent(btnLogographs))
             .addComponent(pnlClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(txtLocalWord)
             .addComponent(txtConWord)
+            .addComponent(txtLocalWord)
+            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(txtProc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkProcOverride, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkRuleOverride)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
+                .addComponent(txtProc)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkProcOverride, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jScrollPane4)
+            .addComponent(jScrollPane1)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(chkRuleOverride)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1622,11 +1645,9 @@ public final class ScrLexicon extends PFrame {
                         .addComponent(txtProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(chkProcOverride))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(chkRuleOverride))
+                .addComponent(chkRuleOverride)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1637,6 +1658,8 @@ public final class ScrLexicon extends PFrame {
         );
 
         jSplitPane1.setRightComponent(jPanel3);
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
         lstLexicon.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstLexicon.setToolTipText("List of Conlang Words");
@@ -1681,7 +1704,7 @@ public final class ScrLexicon extends PFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddWord)
@@ -1695,7 +1718,7 @@ public final class ScrLexicon extends PFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1709,21 +1732,15 @@ public final class ScrLexicon extends PFrame {
         jLayeredPane1.setLayout(jLayeredPane1Layout);
         jLayeredPane1Layout.setHorizontalGroup(
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jLayeredPane1Layout.setVerticalGroup(
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1845,7 +1862,6 @@ public final class ScrLexicon extends PFrame {
     private javax.swing.JCheckBox chkProcOverride;
     private javax.swing.JCheckBox chkRuleOverride;
     private javax.swing.JComboBox cmbType;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

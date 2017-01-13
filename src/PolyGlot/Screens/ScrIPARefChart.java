@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque
+ * Copyright (c) 2016-2017, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -24,6 +24,7 @@ import PolyGlot.CustomControls.PFrame;
 import PolyGlot.DictCore;
 import PolyGlot.ClipboardHandler;
 import PolyGlot.IPAHandler;
+import java.awt.Component;
 import javax.swing.JComponent;
 
 /**
@@ -275,6 +276,11 @@ public class ScrIPARefChart extends PFrame {
     @Override
     public void addBindingToComponent(JComponent c) {
         // nothing to bind in this window
+    }
+    
+    @Override
+    public Component getWindow() {
+        return this.getRootPane();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

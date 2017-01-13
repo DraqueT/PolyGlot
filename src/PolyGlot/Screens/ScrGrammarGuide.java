@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, draque
+ * Copyright (c) 2015-2017, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -34,6 +34,7 @@ import PolyGlot.CustomControls.PGrammarPane;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.SoundRecorder;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Image;
@@ -1068,6 +1069,11 @@ public class ScrGrammarGuide extends PFrame {
             }
         }
         treeModel.reload(rootNode);
+    }
+    
+    @Override
+    public Component getWindow() {
+        return jSplitPane1;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

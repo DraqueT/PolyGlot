@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 - 2015, Draque Thompson - draquemail@gmail.com
+ * Copyright (c) 2014 - 2017, Draque Thompson - draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -74,6 +74,14 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
     public WindowMode getMode() {
         return mode;
     }
+    
+    /**
+     * Returns whether target window can close. 
+     * In implementation, all cases where false is returned should also
+     * generate a pop-up explaining to the user why it cannot close.
+     * @return true if can close. False otherwise.
+     */
+    public abstract boolean canClose();
 
     @Override
     public void dispose() {
@@ -342,4 +350,51 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
         }
         super.setVisible(visible);
     }
+    
+    /**
+     * Smoothly resizes window with animation
+     * @param width new width of element
+     * @param height new height of element
+     * @param wait whether to wait on animation finishing before continuing
+     * @throws java.lang.InterruptedException
+     */    
+    public void setSizeSmooth(final int width, final int height, boolean wait) throws InterruptedException {
+        // TODO: move these to the util class? Consider.
+        final int numFrames = 40; // total number of frames to animate
+        final int msDelay = 10; // ms delay between frames
+        final int initialX = this.getWidth();
+        final int initialY = this.getHeight();
+        
+        Thread resize = new Thread() {
+            @Override
+            public void run() {
+                float xDif = width - initialX;
+                float yDif = height - initialY;
+
+                for (int i = 0; i < numFrames; i ++) {
+                    float newX = initialX + (xDif/numFrames) * (i + 1);
+                    float newY = initialY + (yDif/numFrames) * (i + 1);
+
+                    PFrame.super.setSize((int) newX, (int)newY);
+                    try {
+                        Thread.sleep(msDelay); // sleep for animation frame length
+                    } catch (Exception e) {
+                        // if this fails, simlply fall out of loop and set size
+                        break;
+                    }
+                }
+
+                PFrame.super.setSize(width, height);
+            }
+        };
+        
+        synchronized (resize) {
+            if (wait) {
+                resize.start();
+                resize.wait();
+            }
+        }
+    }
+    
+    public abstract Component getWindow();
 }

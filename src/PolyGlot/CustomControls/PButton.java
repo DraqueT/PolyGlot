@@ -49,16 +49,18 @@ public class PButton extends JButton implements MouseListener {
     
     public PButton(DictCore _core) {
         try {
+            // sets default font if given DictCore
             setFont(IOHandler.getButtonFont());
         } catch (Exception e) {
             InfoBox.error("FONT ERROR", e.getLocalizedMessage(), null);
         }
+        
+        setupListeners();
     }
     
     @Override
     public final void setFont(Font _font) {
         super.setFont(_font);
-        setupListeners();
     }
     
     private void setupListeners() {
@@ -72,7 +74,6 @@ public class PButton extends JButton implements MouseListener {
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
         boolean enabled = isEnabled();
         Color bgColor;
         Color fontColor;
@@ -94,12 +95,12 @@ public class PButton extends JButton implements MouseListener {
 
         g.setColor(bgColor);
         
-        g.fillRect(1, 1, getWidth()-1, getHeight()-1);
+        g.fillRect(2, 2, getWidth() - 4, getHeight() - 4);
 
         // draw black border on mouseover if button enabled
         if (mouseEntered && enabled) {
             g.setColor(PGTUtil.colorMouseoverBorder);
-            g.drawRect(0, 0, getWidth(), getHeight());
+            g.drawRect(1, 1, getWidth() - 3, getHeight() - 3);
         }
         
         g.setColor(fontColor);
@@ -110,7 +111,7 @@ public class PButton extends JButton implements MouseListener {
         Rectangle2D rec = fm.getStringBounds(getText(), g);
         int stringW = (int) Math.round(rec.getWidth());
         int stringH = (int) Math.round(rec.getHeight());
-        g.drawChars(text, 0, text.length, (getWidth()/2) - (stringW/2), getHeight()/2 + stringH/2);
+        g.drawChars(text, 0, text.length, (getWidth()/2) - (stringW/2), getHeight()/2 + stringH/4);
     }
 
     @Override

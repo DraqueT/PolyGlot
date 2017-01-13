@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -22,9 +22,11 @@ package PolyGlot;
 
 import PolyGlot.Screens.*;
 import java.awt.Color;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
- * This contains all the XML markers for saving/loading files
+ * This contains various constant vales in PolyGlot
  * @author draque
  */
 public class PGTUtil {
@@ -198,25 +200,79 @@ public class PGTUtil {
     public static final String False = "F";
 
     // screen names when they're required as constants...
-    public static final String scrNameLexicon = ScrLexicon.class.getName();
-    public static final String scrNameGrammar = ScrGrammarGuide.class.getName();
-    public static final String scrNameLogo = ScrLogoDetails.class.getName();
-    public static final String scrNameFam = ScrFamilies.class.getName();
-    public static final String scrIPARefChart = ScrIPARefChart.class.getName();
-    public static final String scrQuizGenDialog = ScrQuizGenDialog.class.getName();
+    public static final String scrNameLexicon;
+    public static final String scrNameGrammar;
+    public static final String scrNameLogo;
+    public static final String scrNameFam;
+    public static final String scrIPARefChart;
+    public static final String scrQuizGenDialog;
     
     // int constants...
     public static final Integer numMenuFlashes = 4;
     public static final Integer menuFlashSleep = 200;
     
     // color constants
-    public static final Color colorDisabledBG = Color.decode("#b0b0b0");
-    public static final Color colorEnabledBG = Color.decode("#b9b9ff");
-    public static final Color colorSelectedBG = Color.decode("#9999f1");
-    public static final Color colorDisabledForeground = Color.decode("#808080");
-    //public static final Color colorEnabledForeground = Color.decode("000000"); <- should be object's getForeground()
-    public static final Color colorMouseoverBorder = Color.decode("#909090");
+    public static final Color colorDisabledBG;
+    public static final Color colorEnabledBG;
+    public static final Color colorSelectedBG;
+    public static final Color colorDisabledForeground;
+    public static final Color colorMouseoverBorder;
         
+    // Images for standard features in PolyGlot (to avoid multiple reloads)
+    public static final Image directionButtonNorth;
+    public static final Image directionButtonEast;
+    public static final Image directionButtonSouth;
+    public static final Image directionButtonWest;
+    public static final Image directionButtonNorthPressed;
+    public static final Image directionButtonEastPressed;
+    public static final Image directionButtonSouthPressed;
+    public static final Image directionButtonWestPressed;
+    public static final Image directionButtonNorthDisabled;
+    public static final Image directionButtonEastDisabled;
+    public static final Image directionButtonSouthDisabled;
+    public static final Image directionButtonWestDisabled;
+    public static final Image sliderBottom;
+    public static final Image sliderMiddleHoriz;
+    public static final Image sliderTop;
+    public static final Image sliderWest;
+    public static final Image sliderMiddleVert;
+    public static final Image sliderEast;
+    
+    // one time set for calculate static values
+    static {
+        directionButtonNorth = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonUp.png")).getImage();
+        directionButtonEast = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonEast.png")).getImage();
+        directionButtonSouth = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonDown.png")).getImage();
+        directionButtonWest = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonWest.png")).getImage();
+        directionButtonNorthPressed = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonUpPressed.png")).getImage();
+        directionButtonEastPressed = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonEastPressed.png")).getImage();
+        directionButtonSouthPressed = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonDownPressed.png")).getImage();
+        directionButtonWestPressed = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonWestPressed.png")).getImage();
+        directionButtonNorthDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonUpDisabled.png")).getImage();
+        directionButtonEastDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonEastDisabled.png")).getImage();
+        directionButtonSouthDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonDownDisabled.png")).getImage();
+        directionButtonWestDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonWestDisabled.png")).getImage();
+        sliderBottom = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slidebottom.png")).getImage();
+        sliderMiddleHoriz = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slidecenterHoriz.png")).getImage();
+        sliderTop = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slidetop.png")).getImage();
+        sliderWest = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideWest.png")).getImage();
+        sliderMiddleVert = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slidecenter.png")).getImage();
+        sliderEast = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideEast.png")).getImage();
+        
+        colorDisabledBG = Color.decode("#b0b0b0");
+        colorEnabledBG = Color.decode("#b9b9ff");
+        colorSelectedBG = Color.decode("#9999f1");
+        colorDisabledForeground = Color.decode("#808080");
+        colorMouseoverBorder = Color.decode("#909090");
+        
+        scrNameLexicon = ScrLexicon.class.getName();
+        scrNameGrammar = ScrGrammarGuide.class.getName();
+        scrNameLogo = ScrLogoDetails.class.getName();
+        scrNameFam = ScrFamilies.class.getName();
+        scrIPARefChart = ScrIPARefChart.class.getName();
+        scrQuizGenDialog = ScrQuizGenDialog.class.getName();
+    }
+    
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to
      * STANDARD

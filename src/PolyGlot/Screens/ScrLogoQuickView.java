@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -26,6 +26,7 @@ import PolyGlot.Nodes.LogoNode;
 import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.PGTUtil.WindowMode;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -464,6 +465,11 @@ public class ScrLogoQuickView extends PFrame {
                 break;
             }
         }
+    }
+    
+    @Override
+    public Component getWindow() {
+        return this.getRootPane();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

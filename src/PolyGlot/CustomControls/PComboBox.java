@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque
+ * Copyright (c) 2016 - 2017, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,8 +19,17 @@
  */
 package PolyGlot.CustomControls;
 
+import PolyGlot.DictCore;
+import PolyGlot.PGTUtil;
 import PolyGlot.PGTools;
 import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import javax.swing.JComboBox;
 import javax.swing.SwingWorker;
 
@@ -28,8 +37,18 @@ import javax.swing.SwingWorker;
  *
  * @author draque
  */
-public class PComboBox extends JComboBox{
-    SwingWorker worker = null;
+public class PComboBox extends JComboBox implements MouseListener {
+    private SwingWorker worker = null;
+    private boolean mouseOver = false;
+    private final DictCore core;
+    
+    public PComboBox(DictCore _core) {
+        core = _core;
+        setupListeners();
+        
+        // default font to Charis
+        super.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+    }
 
     /**
      * makes this component flash. If already flashing, does nothing.
@@ -41,5 +60,80 @@ public class PComboBox extends JComboBox{
             worker = PGTools.getFlashWorker(this, _flashColor, isBack);
             worker.execute();
         }
+    }
+    
+    private void setupListeners() {
+        addMouseListener(this);
+    }
+    
+    @Override
+    public void paintComponent(Graphics g) {
+        boolean enabled = this.isEnabled();
+        
+        // turn on anti-alias mode
+        Graphics2D antiAlias = (Graphics2D) g;
+        antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+        if (enabled) {
+            antiAlias.setColor(Color.white);
+        } else {
+            antiAlias.setColor(Color.decode("#e0e0e4"));
+        }
+        
+        antiAlias.fillRoundRect(1, 1, getWidth(), getHeight() - 2, 5, 5);
+        
+        if (enabled) {
+            antiAlias.setColor(PGTUtil.colorEnabledBG);
+        } else {
+            antiAlias.setColor(Color.decode("#d0d0d0"));
+        }
+        antiAlias.fillRect(getWidth() - 20, 1, 20, getHeight() - 1);
+        
+        if (mouseOver && enabled) {
+            antiAlias.setColor(Color.black);
+        } else 
+        {
+            antiAlias.setColor(Color.lightGray);
+        }
+        antiAlias.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 5, 5);
+        
+        if (enabled) {
+            antiAlias.setColor(Color.black);
+        } else {
+            antiAlias.setColor(Color.decode("#909090"));
+        }
+        
+        String text = getSelectedItem().toString();
+        FontMetrics fm = antiAlias.getFontMetrics(getFont());
+        Rectangle2D rec = fm.getStringBounds(text, antiAlias);
+        int stringW = (int) Math.round(rec.getWidth());
+        int stringH = (int) Math.round(rec.getHeight());
+        antiAlias.drawChars(text.toCharArray(), 0, text.length(), (getWidth()/2) 
+                - (stringW/2), (getHeight() - 4)/2 + stringH/2);
+    }
+    
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        mouseOver = true;
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        mouseOver = false;
+    }
+    
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // do nothing
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // do nothing
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // do nothing
     }
 }

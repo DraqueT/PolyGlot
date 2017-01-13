@@ -23,6 +23,7 @@ import PolyGlot.CustomControls.PAlphaMap;
 import PolyGlot.IOHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Font;
+import java.io.File;
 import java.util.Arrays;
 import javax.swing.JTextField;
 import org.w3c.dom.Document;
@@ -67,6 +68,22 @@ public class PropertiesManager {
      */
     public Font getCharisUnicodeFont() {
         return charisUnicode.deriveFont(0, 12);
+    }
+    
+    /**
+     * Gets PolyGlot's cannonical directory, regardless of what the OS returns
+     * @return working directory
+     */
+    public File getCannonicalDirectory() {
+        File ret;
+        
+        if (overrideProgramPath.equals("")) {
+            ret = IOHandler.getBaseProgramPath();
+        } else {
+            ret = new File(overrideProgramPath);
+        }
+        
+        return ret;
     }
 
     /**

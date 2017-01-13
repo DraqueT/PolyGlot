@@ -28,6 +28,7 @@ import PolyGlot.CustomControls.PGTreeCellRenderer;
 import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.FamTreeNode;
+import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -679,4 +680,9 @@ public class ScrFamilies extends PFrame {
     private javax.swing.JTextField txtFamName;
     private javax.swing.JTextPane txtNotes;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public Component getWindow() {
+        return this.getRootPane();
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -31,6 +31,7 @@ import PolyGlot.PGTUtil.WindowMode;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
 import PolyGlot.CustomControls.PTextPane;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -1490,6 +1491,11 @@ public class ScrLogoDetails extends PFrame {
         });
 
         return s;
+    }
+    
+    @Override
+    public Component getWindow() {
+        return this.getRootPane();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

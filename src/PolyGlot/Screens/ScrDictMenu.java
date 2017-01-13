@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque
+ * Copyright (c) 2015-2017, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -27,6 +27,7 @@ import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.OptionsManager;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.PGTUtil;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -518,7 +519,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     }
 
     private void setFile(String fileName) {
-        // some wrappers communicate emty files like this
+        // some wrappers communicate empty files like this
         if (fileName.equals(PGTUtil.emptyFile)
                 || fileName.isEmpty()) {
             return;
@@ -1480,4 +1481,15 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private javax.swing.JMenu mnuTools;
     private javax.swing.JMenuItem mnuTransWindow;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public Component getWindow() {
+        // this is going away. No need to implement anything new on the window.
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean canClose() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

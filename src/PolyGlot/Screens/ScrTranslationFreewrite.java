@@ -1,3 +1,4 @@
+// TODO: DELETE THIS
 /*
  * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
@@ -22,6 +23,7 @@ package PolyGlot.Screens;
 
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.PFrame;
+import java.awt.Component;
 import javax.swing.JComponent;
 
 /**
@@ -29,7 +31,10 @@ import javax.swing.JComponent;
  * @author draque
  */
 public class ScrTranslationFreewrite extends PFrame {
-    
+    @Override
+    public Component getWindow() {
+        return this.getRootPane();
+    }
     /**
      * Creates new form ScrTranslationFreewrite
      * @param _core Dictionary Core

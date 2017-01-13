@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque thompson
+ * Copyright (c) 2015 - 2017, draque thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,8 +19,8 @@
  */
 package PolyGlot.CustomControls;
 
-import java.awt.Image;
-import javax.swing.ImageIcon;
+// import java.awt.Image;
+// import javax.swing.ImageIcon;
 import javax.swing.border.Border;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -77,7 +77,7 @@ public class PAddRemoveButton extends PButton {
         setRequestFocusEnabled(false);
         setContentAreaFilled(false);
         
-        // TODO: revisit this
+        // TODO: revisit this - Also, this should have loaded a single time in the Util file. Wasteful to reload it each time.
         /*switch (arg) {
             case "-":
                 setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH)));

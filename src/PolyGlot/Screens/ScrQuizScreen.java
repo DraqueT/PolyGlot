@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque.thompson
+ * Copyright (c) 2016-2017, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -65,7 +65,7 @@ public class ScrQuizScreen extends PFrame {
         initComponents();
         quiz = _quiz;
 
-        this.repaint();
+        super.repaint();
         lblQNode.setResize(true);
         lblQNode.setMinimumSize(new Dimension(1, 1));
         jPanel3.setLayout(new BorderLayout());
@@ -477,5 +477,10 @@ public class ScrQuizScreen extends PFrame {
     @Override
     public void addBindingToComponent(JComponent c) {
         // does nothing
+    }
+    
+    @Override
+    public Component getWindow() {
+        return this.getRootPane();
     }
 }
