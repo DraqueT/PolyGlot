@@ -19,6 +19,7 @@
  */
 package PolyGlot.CustomControls;
 
+import PolyGlot.DictCore;
 import java.awt.Font;
 import javax.swing.JList;
 
@@ -27,20 +28,34 @@ import javax.swing.JList;
  * @author draque
  */
 public class PList extends JList {
-    private final PFrame parent;
+    private DictCore core;
+    private final boolean isConFont;
+    boolean ignoreRepaint = false;
     
-    public PList(PFrame _parent) {
-        parent = _parent;
+    public PList(DictCore _core, boolean _isConFont) {        
+        core = _core;
+        isConFont = _isConFont;
+    }
+    
+    public void setCore(DictCore _core) {
+        core = _core;
     }
 
     @Override
     public void repaint() {
-        if (parent != null) {
-            Font testFont = parent.getCore().getPropertiesManager().getFontCon();
-            
-            if (!testFont.getFamily().equals(getFont().getFamily())) {
+        if (ignoreRepaint) {
+            return;
+        }
+        
+        if (core != null) { // initial paint happens before initilization complete
+            Font testFont = core.getPropertiesManager().getFontCon();
+            ignoreRepaint = true;
+            if (isConFont) {
                 setFont(testFont);
+            } else {
+                setFont(core.getPropertiesManager().getCharisUnicodeFont());
             }
+            ignoreRepaint = false;
         }
         
         super.repaint(); 

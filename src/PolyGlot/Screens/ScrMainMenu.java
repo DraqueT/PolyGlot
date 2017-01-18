@@ -25,6 +25,7 @@ import PolyGlot.CustomControls.PFrame;
 import PolyGlot.DictCore;
 import PolyGlot.ExcelExport;
 import PolyGlot.IOHandler;
+import PolyGlot.Nodes.ConWord;
 import PolyGlot.PGTUtil;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -38,6 +39,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -81,6 +84,32 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         }
         UIManager.put("ScrollBarUI", "PolyGlot.CustomControls.PScrollBarUI");
         UIManager.put("SplitPaneUI", "PolyGlot.CustomControls.PSplitPaneUI");
+    }
+    
+    @Override
+    public void dispose() {
+        // only exit if save/cancel test is passed and current window is legal to close
+        if (!saveOrCancelTest() || (curWindow != null && !curWindow.canClose())) {
+            return;
+        }
+
+        if (curWindow != null && !curWindow.isDisposed()) {
+            // make certain that all actions necessary for saving information are complete
+            curWindow.dispose();
+        }
+        
+        super.dispose();
+
+        core.getOptionsManager().setScreenPosition(getClass().getName(),
+                getLocation());
+        core.getOptionsManager().setLastFiles(lastFiles);
+        try {
+            core.getOptionsManager().saveIni();
+        } catch (IOException ex) {
+            InfoBox.warning("INI Save Error", "Unable to save settings file on exit.", this);
+        }
+
+        System.exit(0);
     }
     
     // MACIFY RELATED CODE ->    
@@ -594,6 +623,39 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private void quizHit() {
         ScrQuizGenDialog.run(core);
     }
+    
+    /**
+     * Sets selection on lexicon by word id
+     *
+     * @param id
+     */
+    public void selectWordById(int id) {
+        if (curWindow instanceof ScrLexicon) {
+            ScrLexicon scrLexicon = (ScrLexicon) curWindow;
+            scrLexicon.selectWordById(id);
+        } else {
+            InfoBox.warning("Open Lexicon", "Please open the Lexicon and select a word to use this feature.", this);
+        }
+    }
+    
+    /**
+     * Retrieves currently selected word (if any) from ScrLexicon
+     *
+     * @return current word selected in scrLexicon, null otherwise (or if
+     * lexicon is not visible)
+     */
+    public ConWord getCurrentWord() {
+        ConWord ret = null;
+
+        if (curWindow instanceof ScrLexicon) {
+            ScrLexicon scrLexicon = (ScrLexicon) curWindow;
+            ret = scrLexicon.getCurrentWord();
+        } else {
+            InfoBox.warning("Open Lexicon", "Please open the Lexicon and select a word to use this feature.", this);
+        }
+
+        return ret;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -628,6 +690,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         mnuExportToExcel = new javax.swing.JMenuItem();
         mnuExportFont = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem1 = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
         mnuQuiz = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
@@ -638,7 +701,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenuItem8 = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel1.setBackground(new java.awt.Color(102, 204, 255));
@@ -658,12 +721,32 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         });
 
         btnClasses.setText("Lexical Classes");
+        btnClasses.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClassesActionPerformed(evt);
+            }
+        });
 
         btnGrammar.setText("Grammar");
+        btnGrammar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGrammarActionPerformed(evt);
+            }
+        });
 
         btnLogos.setText("Logographs");
+        btnLogos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogosActionPerformed(evt);
+            }
+        });
 
         btnProp.setText("Lang Properties");
+        btnProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPropActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -675,9 +758,9 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                     .addComponent(btnLexicon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnLogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnLogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -796,6 +879,14 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         });
         mnuTools.add(mnuExportFont);
         mnuTools.add(jSeparator1);
+
+        jMenuItem1.setText("Lexical Families");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        mnuTools.add(jMenuItem1);
 
         mnuLangStats.setText("Language Statistics");
         mnuLangStats.addActionListener(new java.awt.event.ActionListener() {
@@ -962,6 +1053,41 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         checkForUpdates(true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
+    private void btnClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClassesActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        ScrWordClasses s = new ScrWordClasses(core);
+        changeScreen(s, s.getWindow());
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_btnClassesActionPerformed
+
+    private void btnGrammarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrammarActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        ScrGrammarGuide s = new ScrGrammarGuide(core);
+        changeScreen(s, s.getWindow());
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_btnGrammarActionPerformed
+
+    private void btnLogosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogosActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        ScrLogoDetails s = new ScrLogoDetails(core);
+        changeScreen(s, s.getWindow());
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_btnLogosActionPerformed
+
+    private void btnPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        ScrLangProps s = new ScrLangProps(core);
+        changeScreen(s, s.getWindow());
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_btnPropActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        ScrFamilies s = new ScrFamilies(core, this);
+        s.setVisible(true);
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1031,6 +1157,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private javax.swing.JButton btnProp;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -1060,7 +1187,9 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
     @Override
     public void updateAllValues(DictCore _core) {
-        // currently no child windows
+        if (curWindow != null) {
+            curWindow.updateAllValues(_core);
+        }
     }
 
     @Override

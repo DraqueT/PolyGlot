@@ -25,10 +25,14 @@ import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PAddRemoveButton;
+import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
+import PolyGlot.CustomControls.PCheckBox;
+import PolyGlot.CustomControls.PList;
+import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Font;
@@ -85,6 +89,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         setupListeners();
         setObjectProperties();
         setModal(true);
+        super.getRootPane().getContentPane().setBackground(Color.white);
 
         populateCombinedDecl();
     }
@@ -776,34 +781,42 @@ public class ScrDeclensionGenSetup extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstCombinedDec = new javax.swing.JList();
+        lstCombinedDec = new PList(core, false);
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstRules = new javax.swing.JList();
+        lstRules = new PList(core, false);
         jLabel3 = new javax.swing.JLabel();
-        btnAddRule = new PAddRemoveButton("+");
-        btnDeleteRule = new PAddRemoveButton("-");
+        btnAddRule = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDeleteRule = new PolyGlot.CustomControls.PAddRemoveButton("-");
         sclTransforms = new javax.swing.JScrollPane();
         tblTransforms = new javax.swing.JTable();
-        btnAddTransform = new PAddRemoveButton("+");
-        btnDeleteTransform = new PAddRemoveButton("-");
+        btnAddTransform = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDeleteTransform = new PolyGlot.CustomControls.PAddRemoveButton("-");
         txtRuleName = new PTextField(core, true, "-- Name --");
         txtRuleRegex = new PTextField(core, false, "-- Filter Regex --");
-        chkDisableWordform = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        chkDisableWordform = new PCheckBox(core);
+        jButton1 = new PButton(core);
+        jButton1.setFont(core.getPropertiesManager().getCharisUnicodeFont())
+        ;
+        jButton2 = new PButton(core);
+        jButton2.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        jButton3 = new PButton(core);
+        jButton3.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        jButton4 = new PButton(core);
+        jButton4.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        jButton5 = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Conjugation/Declension Autogeneration Setup");
         setMinimumSize(new java.awt.Dimension(568, 532));
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         jLabel1.setText("Conjugation/Declensions");
+
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
 
         lstCombinedDec.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -819,9 +832,12 @@ public class ScrDeclensionGenSetup extends PDialog {
         });
         jScrollPane1.setViewportView(lstCombinedDec);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         jLabel2.setText("Rules");
+
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
 
         lstRules.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };

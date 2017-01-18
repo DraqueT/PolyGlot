@@ -68,6 +68,7 @@ public class PComboBox extends JComboBox implements MouseListener {
     
     @Override
     public void paintComponent(Graphics g) {
+        final int buttonWidth = 20;
         boolean enabled = this.isEnabled();
         
         // turn on anti-alias mode
@@ -87,7 +88,7 @@ public class PComboBox extends JComboBox implements MouseListener {
         } else {
             antiAlias.setColor(Color.decode("#d0d0d0"));
         }
-        antiAlias.fillRect(getWidth() - 20, 1, 20, getHeight() - 1);
+        antiAlias.fillRect(getWidth() - buttonWidth, 1, buttonWidth, getHeight() - 1);
         
         if (mouseOver && enabled) {
             antiAlias.setColor(Color.black);
@@ -108,8 +109,8 @@ public class PComboBox extends JComboBox implements MouseListener {
         Rectangle2D rec = fm.getStringBounds(text, antiAlias);
         int stringW = (int) Math.round(rec.getWidth());
         int stringH = (int) Math.round(rec.getHeight());
-        antiAlias.drawChars(text.toCharArray(), 0, text.length(), (getWidth()/2) 
-                - (stringW/2), (getHeight() - 4)/2 + stringH/2);
+        antiAlias.drawChars(text.toCharArray(), 0, text.length(), ((getWidth() - buttonWidth)/2) 
+                - (stringW/2), (getHeight() - 9)/2 + stringH/2);
     }
     
     @Override

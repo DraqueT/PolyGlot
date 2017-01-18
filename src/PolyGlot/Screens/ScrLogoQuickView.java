@@ -24,8 +24,11 @@ import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.LogoNode;
 import PolyGlot.CustomControls.PAddRemoveButton;
+import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
+import PolyGlot.CustomControls.PList;
 import PolyGlot.PGTUtil.WindowMode;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -56,22 +59,35 @@ public class ScrLogoQuickView extends PFrame {
     private ScrLogoDetails logoFinder = null;
     private ConWord conWord = null;
 
-    @Override
-    public void dispose() {
-        if (logoFinder != null 
-                && !logoFinder.isDisposed()) {
-            logoFinder.dispose();
+    /**
+     * opens window to show all logographs, or all radicals
+     *
+     * @param _core dictionary core
+     * @param showRadicalsOnly set true to limit to only radicals
+     */
+    public ScrLogoQuickView(DictCore _core, boolean showRadicalsOnly) {
+        super.setupKeyStrokes();
+        initComponents();
+        super.getRootPane().getContentPane().setBackground(Color.white);
+
+        core = _core;
+        setupFonts();
+        setupResize();
+
+        btnAdd.setVisible(!showRadicalsOnly);
+        btnDel.setVisible(!showRadicalsOnly);
+        btnDetails.setVisible(!showRadicalsOnly);
+
+        if (showRadicalsOnly) {
+            populateLogos(core.getLogoCollection().getRadicals());
+            this.setTitle("Logographic Radicals");
+        } else {
+            populateLogos(core.getLogoCollection().getAllLogos());
         }
-        super.dispose();
+
+        mode = WindowMode.SELECTLIST;
     }
     
-    @Override
-    public boolean thisOrChildrenFocused() {
-        boolean ret = this.isFocusOwner();
-        ret = ret || (logoFinder != null && logoFinder.thisOrChildrenFocused());
-        return ret;
-    }
-
     /**
      * Opens window populated with all logographs for a word
      *
@@ -80,6 +96,7 @@ public class ScrLogoQuickView extends PFrame {
      */
     public ScrLogoQuickView(DictCore _core, ConWord _conWord) {
         initComponents();
+        super.getRootPane().getContentPane().setBackground(Color.white);
         
         conWord = _conWord;
         core = _core;
@@ -98,6 +115,22 @@ public class ScrLogoQuickView extends PFrame {
             btnAdd.setToolTipText(btnAdd.getToolTipText() + " (CTRL +)");
             btnDel.setToolTipText(btnDel.getToolTipText() + " (CTRL -)");
         }
+    }
+    
+    @Override
+    public void dispose() {
+        if (logoFinder != null 
+                && !logoFinder.isDisposed()) {
+            logoFinder.dispose();
+        }
+        super.dispose();
+    }
+    
+    @Override
+    public boolean thisOrChildrenFocused() {
+        boolean ret = this.isFocusOwner();
+        ret = ret || (logoFinder != null && logoFinder.thisOrChildrenFocused());
+        return ret;
     }
     
     @Override
@@ -153,36 +186,6 @@ public class ScrLogoQuickView extends PFrame {
         am.put(addKey, addAction);
         am.put(delKey, delAction);
     }
-
-    /**
-     * opens window to show all logographs, or all radicals
-     *
-     * @param _core dictionary core
-     * @param showRadicalsOnly set true to limit to only radicals
-     */
-    public ScrLogoQuickView(DictCore _core, boolean showRadicalsOnly) {
-        super.setupKeyStrokes();
-        initComponents();
-
-        core = _core;
-        setupFonts();
-        setupResize();
-
-        btnAdd.setVisible(!showRadicalsOnly);
-        btnDel.setVisible(!showRadicalsOnly);
-        btnDetails.setVisible(!showRadicalsOnly);
-
-        if (showRadicalsOnly) {
-            populateLogos(core.getLogoCollection().getRadicals());
-            this.setTitle("Logographic Radicals");
-        } else {
-            populateLogos(core.getLogoCollection().getAllLogos());
-        }
-
-        mode = WindowMode.SELECTLIST;
-    }
-    
-    
 
     /**
      * Sets up fonts based on core properties
@@ -307,16 +310,16 @@ public class ScrLogoQuickView extends PFrame {
     private void initComponents() {
 
         lblLogoPic = new javax.swing.JLabel();
-        btnDetails = new javax.swing.JButton();
+        btnDetails = new PButton(core);
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstLogos = new javax.swing.JList();
-        btnAdd = new PAddRemoveButton("+");
-        btnDel = new PAddRemoveButton("-");
-        jButton1 = new javax.swing.JButton();
+        lstLogos = new PList(core, true);
+        btnAdd = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDel = new PolyGlot.CustomControls.PAddRemoveButton("-");
+        jButton1 = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        lblLogoPic.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        lblLogoPic.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         btnDetails.setText("Details/Edit");
         btnDetails.addActionListener(new java.awt.event.ActionListener() {
@@ -372,7 +375,7 @@ public class ScrLogoQuickView extends PFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblLogoPic, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                    .addComponent(lblLogoPic, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnDetails)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -382,18 +385,18 @@ public class ScrLogoQuickView extends PFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnAdd))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblLogoPic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnAdd)
-                        .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnDetails)
-                        .addComponent(jButton1)))
-                .addContainerGap())
+                        .addComponent(jButton1))))
         );
 
         pack();
@@ -470,6 +473,11 @@ public class ScrLogoQuickView extends PFrame {
     @Override
     public Component getWindow() {
         return this.getRootPane();
+    }
+    
+    @Override
+    public boolean canClose() {
+        return true;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

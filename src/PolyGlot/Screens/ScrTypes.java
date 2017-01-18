@@ -21,14 +21,14 @@ package PolyGlot.Screens;
 
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PAddRemoveButton;
-import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PFrame;
+import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Color;
 import java.awt.Window;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -89,6 +89,7 @@ public class ScrTypes extends PFrame {
         // Due to modal nature of form, no need to update
     }
     
+    @Override
     public Component getWindow() {
         return jSplitPane1;
     }
@@ -353,28 +354,31 @@ public class ScrTypes extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         txtName = new PTextField(core, true, "-- Part of Speech Name --");
         txtTypePattern = new PTextField(core, false, "-- Type Pattern --");
-        btnSetup = new javax.swing.JButton();
-        btnAutogen = new javax.swing.JButton();
+        btnSetup = new PButton(core);
+        btnAutogen = new PButton(core);
         txtErrorBox = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        chkDefMand = new javax.swing.JCheckBox();
-        chkProcMand = new javax.swing.JCheckBox();
+        chkDefMand = new PCheckBox(core);
+        chkProcMand = new PCheckBox(core);
         txtGloss = new PTextField(core, true, "-- Part of Speech Gloss --");
-        jButton1 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        txtNotes = new PTextPane(core, true, "-- Notes --");
+        txtNotes = new PolyGlot.CustomControls.PTextPane(core, true, "-- Notes --");
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstTypes = new javax.swing.JList();
-        btnAddType = new PAddRemoveButton("+");
-        btnDelType = new PAddRemoveButton("-");
+        lstTypes = new PList(core, false);
+        btnAddType = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelType = new PolyGlot.CustomControls.PAddRemoveButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Types/Parts of Speech");
+        setBackground(new java.awt.Color(255, 255, 255));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        jSplitPane1.setBackground(new java.awt.Color(255, 255, 255));
         jSplitPane1.setDividerLocation(140);
+        jSplitPane1.setForeground(new java.awt.Color(255, 255, 255));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setMinimumSize(new java.awt.Dimension(10, 10));
 
         txtName.setToolTipText("Part of speech name");
@@ -402,7 +406,8 @@ public class ScrTypes extends PFrame {
         txtErrorBox.setForeground(new java.awt.Color(255, 0, 0));
         txtErrorBox.setEnabled(false);
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         chkDefMand.setText("Definition Mandatory");
         chkDefMand.setToolTipText("Select to enforce definition text for this par of speech.");
@@ -428,17 +433,10 @@ public class ScrTypes extends PFrame {
                 .addComponent(chkProcMand)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkDefMand)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         txtGloss.setToolTipText("Part of speech's gloss");
-
-        jButton1.setText("OK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         jScrollPane3.setViewportView(txtNotes);
 
@@ -446,32 +444,21 @@ public class ScrTypes extends PFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSetup, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAutogen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTypePattern, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtGloss, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtErrorBox)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtName))
+            .addComponent(txtName)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(txtGloss, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(txtTypePattern, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(btnSetup, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnAutogen, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+            .addComponent(txtErrorBox, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtGloss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -483,12 +470,12 @@ public class ScrTypes extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1))
+                .addComponent(txtErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jSplitPane1.setRightComponent(jPanel1);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         lstTypes.setToolTipText("Parts of Speech");
         lstTypes.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -523,7 +510,7 @@ public class ScrTypes extends PFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddType)
@@ -598,11 +585,6 @@ public class ScrTypes extends PFrame {
         childFrames.add(window);
     }//GEN-LAST:event_btnAutogenActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddType;
     private javax.swing.JButton btnAutogen;
@@ -610,7 +592,6 @@ public class ScrTypes extends PFrame {
     private javax.swing.JButton btnSetup;
     private javax.swing.JCheckBox chkDefMand;
     private javax.swing.JCheckBox chkProcMand;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

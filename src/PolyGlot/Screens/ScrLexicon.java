@@ -261,9 +261,10 @@ public final class ScrLexicon extends PFrame {
 
                 ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
                 saveValuesTo(curWord);
+                ((PList)lstLexicon).setCore(core);
                 lstLexicon.clearSelection();
-                setupComboBoxesSwing();
                 lstLexicon.setSelectedValue(curWord, true);
+                setupComboBoxesSwing();
                 curPopulating = localPopulating;
                 forceUpdate = false;
                 populateProperties();
@@ -1502,7 +1503,7 @@ public final class ScrLexicon extends PFrame {
         txtDefinition = new PTextPane(core, true, "-- Definition --");
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        lstLexicon = new PList(this);
+        lstLexicon = new PList(core, true);
         btnAddWord = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelWord = new PolyGlot.CustomControls.PAddRemoveButton("-");
 

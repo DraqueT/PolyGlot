@@ -19,12 +19,13 @@
  */
 package PolyGlot.CustomControls;
 
-// import java.awt.Image;
-// import javax.swing.ImageIcon;
 import javax.swing.border.Border;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Image;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 /**
  * This class overrides the button class in Java to create better graphical
@@ -32,7 +33,7 @@ import javax.swing.Icon;
  * changed easily and in one place.
  * @author draque
  */
-public class PAddRemoveButton extends PButton {
+public class PAddRemoveButton extends JButton {
     @Override
     public final void setText(String text){super.setText(text);}
     @Override
@@ -61,6 +62,11 @@ public class PAddRemoveButton extends PButton {
     @Override
     public final void setPressedIcon(Icon icon) {super.setPressedIcon(icon);}
             
+    @Override
+    public String getText() {
+        return "";
+    }
+    
     public PAddRemoveButton(String arg) {        
         super();
         
@@ -78,7 +84,7 @@ public class PAddRemoveButton extends PButton {
         setContentAreaFilled(false);
         
         // TODO: revisit this - Also, this should have loaded a single time in the Util file. Wasteful to reload it each time.
-        /*switch (arg) {
+        switch (arg) {
             case "-":
                 setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH)));
                 setPressedIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button_pressed.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH)));
@@ -87,7 +93,7 @@ public class PAddRemoveButton extends PButton {
                 setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/add_button.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH))); 
                 setPressedIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/add_button_pressed.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH)));
                 break;
-        }*/
+        }
         setText(arg);
     }    
 }

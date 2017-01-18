@@ -770,18 +770,18 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 fam = children.get(className);
 
                 if (fam.isDisposed()) {
-                    fam = new ScrFamilies(core, this);
-                    children.replace(className, fam);
-                    bindButtonToWindow(fam, btnFam);
+                    //fam = new ScrFamilies(core, this);
+                    //children.replace(className, fam);
+                    //bindButtonToWindow(fam, btnFam);
                 }
             } else {
-                fam = new ScrFamilies(core, this);
-                children.put(className, fam);
-                bindButtonToWindow(fam, btnFam);
+                //fam = new ScrFamilies(core, this);
+                //children.put(className, fam);
+                //bindButtonToWindow(fam, btnFam);
             }
 
-            fam.setVisible(true);
-            fam.toFront();
+            //fam.setVisible(true);
+            //fam.toFront();
         } else {
             try {
                 children.get(className).setVisible(false);
@@ -1350,7 +1350,8 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
     private void mnuTransWindowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTransWindowActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        ScrTranslationWindow.run(core, this);
+        //ScrTranslationWindow.run(core, this);
+        InfoBox.warning("Deprecated", "Does nothing.", this);
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuTransWindowActionPerformed
 

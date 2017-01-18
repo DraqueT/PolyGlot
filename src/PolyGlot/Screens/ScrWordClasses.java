@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque.thompson
+ * Copyright (c) 2016 - 2017, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,23 +19,25 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
-import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PCheckBox;
+import PolyGlot.CustomControls.PFrame;
+import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTableModel;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -44,6 +46,7 @@ import javax.swing.Box.Filler;
 import javax.swing.CellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumn;
@@ -55,7 +58,7 @@ import javax.swing.table.TableColumn;
  *
  * @author draque.thompson
  */
-public class ScrWordClasses extends PDialog {
+public class ScrWordClasses extends PFrame {
 
     private final Map<Integer, JCheckBox> typeChecks = new HashMap<>();
 
@@ -67,12 +70,7 @@ public class ScrWordClasses extends PDialog {
         populateWordProperties();
         populatePropertyValues();
         setupComponents();
-        setModal(true);
-    }
-    
-    @Override
-    public final void setModal(boolean _modal) {
-        super.setModal(_modal);
+        super.setPreferredSize(new Dimension(584, 377));
     }
 
     private void setupComponents() {
@@ -107,6 +105,8 @@ public class ScrWordClasses extends PDialog {
         Font defFont = core.getPropertiesManager().getCharisUnicodeFont();
         column.setCellEditor(new PCellEditor(defFont));
         column.setCellRenderer(new PCellRenderer(defFont));
+        jScrollPane3.getViewport().setBackground(Color.white);// colors the BG of the table white
+        this.setBackground(Color.white);
     }
     /**
      * Make certain editing finalized before leaving window
@@ -285,7 +285,9 @@ public class ScrWordClasses extends PDialog {
         txtName.setEnabled(enable);
         tblValues.setEnabled(enable);
         chkFreeText.setEnabled(enable);
-
+        btnAddValue.setEnabled(enable);
+        btnDelValue.setEnabled(enable);
+        
         for (JCheckBox curBox : typeChecks.values()) {
             curBox.setEnabled(enable);
         }
@@ -375,50 +377,32 @@ public class ScrWordClasses extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        lstProperties = new javax.swing.JList<>();
-        btnAddProp = new PAddRemoveButton("+");
-        btnDelProp = new PAddRemoveButton("-");
         jPanel1 = new javax.swing.JPanel();
         txtName = new PTextField(core, true, "-- Name --");
-        btnAddValue = new PAddRemoveButton("+");
-        btnDelValue = new PAddRemoveButton("-");
+        btnAddValue = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelValue = new PolyGlot.CustomControls.PAddRemoveButton("-");
         pnlTypes = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblValues = new javax.swing.JTable();
-        chkFreeText = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
+        chkFreeText = new PCheckBox(core);
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstProperties = new PList(core, false);
+        btnAddProp = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelProp = new PolyGlot.CustomControls.PAddRemoveButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Word Classes");
+        setBackground(new java.awt.Color(255, 255, 255));
 
-        lstProperties.setToolTipText("Properties (such as gender) of words in your language");
-        lstProperties.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lstPropertiesValueChanged(evt);
-            }
-        });
-        jScrollPane1.setViewportView(lstProperties);
-
-        btnAddProp.setToolTipText("Add new property");
-        btnAddProp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddPropActionPerformed(evt);
-            }
-        });
-
-        btnDelProp.setToolTipText("Delete selected property");
-        btnDelProp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDelPropActionPerformed(evt);
-            }
-        });
-
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel1.setToolTipText("");
 
         txtName.setToolTipText("Name of property");
 
         btnAddValue.setToolTipText("Add new value");
+        btnAddValue.setEnabled(false);
         btnAddValue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddValueActionPerformed(evt);
@@ -426,12 +410,14 @@ public class ScrWordClasses extends PDialog {
         });
 
         btnDelValue.setToolTipText("Delete selected value");
+        btnDelValue.setEnabled(false);
         btnDelValue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDelValueActionPerformed(evt);
             }
         });
 
+        pnlTypes.setBackground(new java.awt.Color(255, 255, 255));
         pnlTypes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         pnlTypes.setToolTipText("Parts of speech this property applies to");
 
@@ -439,12 +425,14 @@ public class ScrWordClasses extends PDialog {
         pnlTypes.setLayout(pnlTypesLayout);
         pnlTypesLayout.setHorizontalGroup(
             pnlTypesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 301, Short.MAX_VALUE)
+            .addGap(0, 303, Short.MAX_VALUE)
         );
         pnlTypesLayout.setVerticalGroup(
             pnlTypesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        jScrollPane3.setBackground(new java.awt.Color(255, 255, 255));
 
         tblValues.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -455,6 +443,7 @@ public class ScrWordClasses extends PDialog {
             }
         ));
         tblValues.setToolTipText("Values the selected property might take (such as \"female\" for gender)");
+        tblValues.setGridColor(new java.awt.Color(255, 255, 255));
         jScrollPane3.setViewportView(tblValues);
 
         chkFreeText.setText("Free Text Value");
@@ -470,17 +459,17 @@ public class ScrWordClasses extends PDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAddValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAddValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(47, 47, 47)
+                        .addComponent(btnDelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkFreeText)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(77, 77, 77)
-                                    .addComponent(btnDelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlTypes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -490,6 +479,7 @@ public class ScrWordClasses extends PDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlTypes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -497,53 +487,73 @@ public class ScrWordClasses extends PDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAddValue)
-                            .addComponent(btnDelValue)))
-                    .addComponent(pnlTypes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnAddValue, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnDelValue, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addContainerGap())
         );
 
-        jButton1.setText("OK");
-        jButton1.setToolTipText("Exit window");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
+
+        lstProperties.setToolTipText("Properties (such as gender) of words in your language");
+        lstProperties.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstPropertiesValueChanged(evt);
             }
         });
+        jScrollPane1.setViewportView(lstProperties);
+
+        btnAddProp.setBackground(new java.awt.Color(255, 255, 255));
+        btnAddProp.setToolTipText("Add new property");
+        btnAddProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddPropActionPerformed(evt);
+            }
+        });
+
+        btnDelProp.setBackground(new java.awt.Color(255, 255, 255));
+        btnDelProp.setToolTipText("Delete selected property");
+        btnDelProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelPropActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(btnAddProp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addComponent(btnDelProp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAddProp, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnDelProp, javax.swing.GroupLayout.Alignment.TRAILING)))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAddProp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnDelProp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1))))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnDelProp, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnAddProp)))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -568,11 +578,6 @@ public class ScrWordClasses extends PDialog {
     private void btnDelValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelValueActionPerformed
         delPropertyValue();
     }//GEN-LAST:event_btnDelValueActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void chkFreeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFreeTextActionPerformed
         WordProperty prop = lstProperties.getSelectedValue();
@@ -607,8 +612,8 @@ public class ScrWordClasses extends PDialog {
     private javax.swing.JButton btnDelProp;
     private javax.swing.JButton btnDelValue;
     private javax.swing.JCheckBox chkFreeText;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList<WordProperty> lstProperties;
@@ -616,4 +621,19 @@ public class ScrWordClasses extends PDialog {
     private javax.swing.JTable tblValues;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public boolean canClose() {
+        return true;
+    }
+
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        // none to add
+    }
+
+    @Override
+    public Component getWindow() {
+        return this.getRootPane();
+    }
 }

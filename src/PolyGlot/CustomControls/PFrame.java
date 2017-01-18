@@ -21,7 +21,7 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
-import PolyGlot.Screens.ScrDictMenu;
+import PolyGlot.Screens.ScrMainMenu;
 import PolyGlot.Screens.ScrPrintToPDF;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -343,7 +343,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
                 setSize(lastDim);
             }
 
-            if (core == null && !(this instanceof ScrDictMenu)) {
+            if (core == null && !(this instanceof ScrMainMenu)) {
                 InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
             }
             addWindowFocusListener(this);

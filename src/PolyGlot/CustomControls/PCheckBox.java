@@ -23,6 +23,8 @@ import PolyGlot.DictCore;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
@@ -49,23 +51,54 @@ public class PCheckBox extends JCheckBox implements MouseListener {
         this.addMouseListener(this);
     }
     
-    // TODO: this whole thing, obviously
+    // TODO: this whole thing, obviously. Cover all combinations of checked/unchecked and enabled/disabled
     @Override
     public void paint(Graphics g) {
-        if (this.isSelected()) {
-            g.setColor(Color.red);
-        } else {
-            g.setColor(Color.blue);
-        }        
-        g.fillRect(4, 4, getHeight() - 8, getHeight() - 8);
+        Color selected;
+        Color backGround;
+        Color outLine;
+        Color hover = Color.black;
+        int rounding = 3;
+        int thisHeight = this.getHeight();
         
-        g.setColor(Color.black);
+        if (this.isEnabled()) {
+            selected = Color.BLACK;
+            backGround = Color.white;
+            outLine = Color.BLACK;
+        } else {
+            selected = Color.gray;
+            backGround = Color.lightGray;
+            outLine = Color.gray;
+        }
+        
+        ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);;
+        
+        if (this.isEnabled() && mouseOver) {
+            g.setColor(hover);
+            g.drawRoundRect(3, 3, thisHeight - 6, thisHeight - 6, rounding, rounding);
+        }
+        
+        if (this.isEnabled() && clicked) {
+            backGround = Color.lightGray;
+        }
+        
+        g.setColor(outLine);
+        g.drawRoundRect(4, 4, thisHeight - 8, thisHeight - 8, rounding, rounding);
+        
+        g.setColor(backGround);
+        g.drawRoundRect(5, 5, thisHeight - 10, thisHeight - 10, rounding, rounding);
+        
+        g.setColor(selected);
+        
+        if (this.isSelected()) {
+            g.fillRect(7, 7, thisHeight - 14, thisHeight - 14);
+        }
         
         char[] text = getText().toCharArray();
         FontMetrics fm = g.getFontMetrics(getFont());
         Rectangle2D rec = fm.getStringBounds(getText(), g);
         int stringH = (int) Math.round(rec.getHeight());
-        g.drawChars(text, 0, text.length, getHeight(), getHeight()/2 + stringH/3);
+        g.drawChars(text, 0, text.length, thisHeight, thisHeight/2 + stringH/3);
     }
 
     

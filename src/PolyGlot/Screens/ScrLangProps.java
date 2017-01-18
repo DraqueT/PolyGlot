@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque
+ * Copyright (c) 2015-2017, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -21,20 +21,20 @@ package PolyGlot.Screens;
 
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PButton;
 import PolyGlot.JFontChooser;
-import PolyGlot.CustomControls.PAddRemoveButton;
-import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
-import PolyGlot.CustomControls.PTextPane;
+import PolyGlot.CustomControls.PCheckBox;
+import PolyGlot.CustomControls.PFrame;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -55,7 +55,7 @@ import javax.swing.table.TableColumn;
  *
  * @author draque
  */
-public class ScrLangProps extends PDialog {
+public class ScrLangProps extends PFrame {
     private boolean curPopulating = false;
     
     /**
@@ -67,8 +67,8 @@ public class ScrLangProps extends PDialog {
         initComponents();
         populateProperties();
         txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
-        
-        setModal(true);        
+        btnUpProc.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        btnDownProc.setFont(core.getPropertiesManager().getCharisUnicodeFont().deriveFont(14));
     }
     
     /**
@@ -81,14 +81,6 @@ public class ScrLangProps extends PDialog {
                 + core.localLabel() + " word field.");
         btnChangeFont.setText(core.conLabel() + " Font");
         txtFont.setToolTipText(core.conLabel() + " Font");
-    }
-    
-    @Override
-    /**
-     * Written this way to eliminate BP violation.
-     */
-    public final void setModal(boolean modal) {
-        super.setModal(modal);
     }
     
     @Override
@@ -404,6 +396,21 @@ public class ScrLangProps extends PDialog {
                     + " conlang font.", this);
         }
     }
+    
+    @Override
+    public boolean canClose() {
+        return true;
+    }
+
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        // none to add
+    }
+
+    @Override
+    public Component getWindow() {
+        return this.getRootPane();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -415,38 +422,39 @@ public class ScrLangProps extends PDialog {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        btnChangeFont = new javax.swing.JButton();
+        btnChangeFont = new PButton(core);
         txtFont = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         txtAlphaOrder = new PTextField(core, false, "-- Alphabetical Order --");
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
-        chkTypesMandatory = new javax.swing.JCheckBox();
-        chkLocalMandatory = new javax.swing.JCheckBox();
-        chkWordUniqueness = new javax.swing.JCheckBox();
-        chkLocalUniqueness = new javax.swing.JCheckBox();
-        chkIgnoreCase = new javax.swing.JCheckBox();
-        chkDisableProcRegex = new javax.swing.JCheckBox();
-        chkEnforceRTL = new javax.swing.JCheckBox();
+        chkTypesMandatory = new PCheckBox(core);
+        chkLocalMandatory = new PCheckBox(core);
+        chkWordUniqueness = new PCheckBox(core);
+        chkLocalUniqueness = new PCheckBox(core);
+        chkIgnoreCase = new PCheckBox(core);
+        chkDisableProcRegex = new PCheckBox(core);
+        chkEnforceRTL = new PCheckBox(core);
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        btnAddProc = new PAddRemoveButton("+");
-        jButton3 = new PAddRemoveButton("-");
-        btnUpProc = new javax.swing.JButton();
+        btnAddProc = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        jButton3 = new PolyGlot.CustomControls.PAddRemoveButton("-");
+        btnUpProc = new PButton(core);
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProcs = new javax.swing.JTable();
-        btnDownProc = new javax.swing.JButton();
+        btnDownProc = new PButton(core);
         jPanel5 = new javax.swing.JPanel();
         txtLangName = new PTextField(core, true, "-- Language Name --");
         txtLocalLanguage = new PTextField(core, true, "-- Local Language --");
         jScrollPane4 = new javax.swing.JScrollPane();
-        txtAuthorCopyright = new PTextPane(core, true, "-- Author/Copyright Info --");
-        jButton1 = new javax.swing.JButton();
+        txtAuthorCopyright = new PolyGlot.CustomControls.PTextPane(core, true, "-- Author/Copyright Info --");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Language Properties");
+        setBackground(new java.awt.Color(255, 255, 255));
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         btnChangeFont.setText("Conlang Font");
@@ -460,6 +468,7 @@ public class ScrLangProps extends PDialog {
         txtFont.setToolTipText("Conlang Font");
         txtFont.setEnabled(false);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         txtAlphaOrder.setToolTipText("List of all characters in conlang in alphabetical order (both upper and lower case)");
@@ -496,6 +505,7 @@ public class ScrLangProps extends PDialog {
                 .addContainerGap())
         );
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         chkTypesMandatory.setText("Types Mandatory");
@@ -552,9 +562,10 @@ public class ScrLangProps extends PDialog {
                 .addComponent(chkDisableProcRegex)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkEnforceRTL)
-                .addGap(0, 45, Short.MAX_VALUE))
+                .addGap(0, 74, Short.MAX_VALUE))
         );
 
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel4.setMinimumSize(new java.awt.Dimension(10, 10));
 
@@ -624,7 +635,7 @@ public class ScrLangProps extends PDialog {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addContainerGap(91, Short.MAX_VALUE))
+                        .addContainerGap(174, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -690,25 +701,23 @@ public class ScrLangProps extends PDialog {
                 .addContainerGap())
         );
 
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         txtLangName.setToolTipText("Your Conlang's Name");
 
         txtLocalLanguage.setToolTipText("The natural language you use when writing your conlang");
 
+        jScrollPane4.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane4.setViewportView(txtAuthorCopyright);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane4)
-                    .addComponent(txtLangName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-                    .addComponent(txtLocalLanguage, javax.swing.GroupLayout.Alignment.LEADING))
-                .addContainerGap())
+            .addComponent(jScrollPane4)
+            .addComponent(txtLangName)
+            .addComponent(txtLocalLanguage, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -718,40 +727,23 @@ public class ScrLangProps extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtLocalLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
-        jButton1.setText("OK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -783,11 +775,6 @@ public class ScrLangProps extends PDialog {
         testRTLWarning();
     }//GEN-LAST:event_chkEnforceRTLActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
         s.setupKeyStrokes();
@@ -807,7 +794,6 @@ public class ScrLangProps extends PDialog {
     private javax.swing.JCheckBox chkLocalUniqueness;
     private javax.swing.JCheckBox chkTypesMandatory;
     private javax.swing.JCheckBox chkWordUniqueness;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

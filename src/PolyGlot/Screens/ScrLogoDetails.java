@@ -24,13 +24,16 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.LogoNode;
-import PolyGlot.CustomControls.PAddRemoveButton;
+import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.PGTUtil.WindowMode;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
+import PolyGlot.CustomControls.PCheckBox;
+import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTextPane;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Image;
@@ -81,22 +84,55 @@ public class ScrLogoDetails extends PFrame {
      * @param _core
      */
     public ScrLogoDetails(DictCore _core) {
+        createNew(_core, -1);
+    }
+
+    /**
+     * Opens logo window with particular logograph selected
+     *
+     * @param _core
+     * @param logoId
+     */
+    public ScrLogoDetails(DictCore _core, int logoId) {
+        createNew(_core, logoId);
+    }
+    
+    private void createNew(DictCore _core, int logoId) {
         setNimbus();
         core = _core;
-
         initComponents();
         setupFonts();
-        populateLogographs();
+            
+        if (logoId == -1) {
+            mode = WindowMode.STANDARD;
+            populateLogographs();
+
+            if (System.getProperty("os.name").startsWith("Mac")) {
+                btnAddLogo.setToolTipText(btnAddLogo.getToolTipText() + " (⌘ +)");
+                btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (⌘ -)");
+            } else {
+                btnAddLogo.setToolTipText(btnAddLogo.getToolTipText() + " (CTRL +)");
+                btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (CTRL -)");
+            }
+        } else {
+            try {
+                singleModeLogo = (LogoNode) core.getLogoCollection().getNodeById(logoId);
+                List<LogoNode> list = new ArrayList();
+                list.add(singleModeLogo);
+
+                populateLogographs(list.iterator());
+            } catch (Exception e) {
+                InfoBox.error("Logograph Error", "Unable to load logograph: " + e.getMessage(), null);
+            }
+
+            setSingleLogoMode(true);
+            setTitle("Logograph Details/Modification");
+            mode = WindowMode.SINGLEVALUE;
+        }
+        
         populateLogoProps();
         setupListeners();
-
-        if (System.getProperty("os.name").startsWith("Mac")) {
-            btnAddLogo.setToolTipText(btnAddLogo.getToolTipText() + " (⌘ +)");
-            btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (⌘ -)");
-        } else {
-            btnAddLogo.setToolTipText(btnAddLogo.getToolTipText() + " (CTRL +)");
-            btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (CTRL -)");
-        }
+        super.getRootPane().getContentPane().setBackground(Color.white);
     }
 
     @Override
@@ -140,37 +176,6 @@ public class ScrLogoDetails extends PFrame {
         ActionMap am = c.getActionMap();
         am.put(addKey, addAction);
         am.put(delKey, delAction);
-    }
-
-    /**
-     * Opens logo window with particular logograph selected
-     *
-     * @param _core
-     * @param logoId
-     */
-    public ScrLogoDetails(DictCore _core, int logoId) {
-        setNimbus();
-        initComponents();
-
-        core = _core;
-        setupFonts();
-
-        try {
-            singleModeLogo = (LogoNode) core.getLogoCollection().getNodeById(logoId);
-            List<LogoNode> list = new ArrayList();
-            list.add(singleModeLogo);
-
-            populateLogographs(list.iterator());
-        } catch (Exception e) {
-            InfoBox.error("Logograph Error", "Unable to load logograph: " + e.getMessage(), null);
-        }
-
-        setSingleLogoMode(true);
-        populateLogoProps();
-        setupListeners();
-
-        setTitle("Logograph Details/Modification");
-        mode = WindowMode.SINGLEVALUE;
     }
 
     @Override
@@ -371,10 +376,11 @@ public class ScrLogoDetails extends PFrame {
             }
         });
     }
-    
+
     /**
      * Enables or disables controls for logograph
-     * @param enable 
+     *
+     * @param enable
      */
     private void setEnableControls(boolean enable) {
         btnLoadImage.setEnabled(enable);
@@ -395,12 +401,12 @@ public class ScrLogoDetails extends PFrame {
         if (ClipboardHandler.isClipboardImage()) {
             try {
                 LogoNode curNode = (LogoNode) lstLogos.getSelectedValue();
-                
+
                 if (curNode == null) {
                     return;
                 }
-                
-                BufferedImage image = (BufferedImage) ClipboardHandler.getClipboardImage();                
+
+                BufferedImage image = (BufferedImage) ClipboardHandler.getClipboardImage();
                 curNode.setLogoGraph(image);
                 saveReadings(lstLogos.getSelectedIndex());
                 saveRads(lstLogos.getSelectedIndex());
@@ -754,7 +760,7 @@ public class ScrLogoDetails extends PFrame {
                 /*do nothing*/
             }
         }
-        
+
         lstRadicals.setModel(radModel);
 
         // Populate readings
@@ -973,39 +979,40 @@ public class ScrLogoDetails extends PFrame {
         fltNotes = new PTextField(core, true, "-- Notes --");
         fltRadical = new PTextField(core, false, "-- Radical --");
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstLogos = new javax.swing.JList();
-        btnAddLogo = new PAddRemoveButton("+");
-        btnDelLogo = new PAddRemoveButton("-");
+        lstLogos = new PList(core, true);
+        btnAddLogo = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelLogo = new PolyGlot.CustomControls.PAddRemoveButton("-");
         jPanel2 = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstRelWords = new javax.swing.JList();
+        lstRelWords = new PList(core, true);
         jLabel8 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        lstRadicals = new javax.swing.JList();
+        lstRadicals = new PList(core, true);
         jLabel10 = new javax.swing.JLabel();
-        btnAddReading = new PAddRemoveButton("+");
-        btnDelReading = new PAddRemoveButton("-");
-        btnAddRad = new PAddRemoveButton("+");
-        btnDelRad = new PAddRemoveButton("-");
-        chkIsRad = new javax.swing.JCheckBox();
+        btnAddReading = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelReading = new PolyGlot.CustomControls.PAddRemoveButton("-");
+        btnAddRad = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelRad = new PolyGlot.CustomControls.PAddRemoveButton("-");
+        chkIsRad = new PCheckBox(core);
         txtName = new PTextField(core, false, "-- Name --");
         jLabel12 = new javax.swing.JLabel();
         txtStrokes = new javax.swing.JTextField();
-        btnLoadImage = new javax.swing.JButton();
+        btnLoadImage = new PButton(core);
         jScrollPane6 = new javax.swing.JScrollPane();
         tblReadings = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Notes --");
-        btnClipboard = new javax.swing.JButton();
+        btnClipboard = new PButton(core);
         jTextField5 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Logograph Details");
+        setBackground(new java.awt.Color(255, 255, 255));
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        jPanel1.setSize(new java.awt.Dimension(317, 139));
 
         fltRelatedWord.setToolTipText("Filter on related words");
 
@@ -1057,6 +1064,8 @@ public class ScrLogoDetails extends PFrame {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
+
         lstLogos.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -1086,6 +1095,7 @@ public class ScrLogoDetails extends PFrame {
             }
         });
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         lblLogo.setText("jLabel6");
@@ -1095,8 +1105,8 @@ public class ScrLogoDetails extends PFrame {
         lblLogo.setMinimumSize(new java.awt.Dimension(49, 49));
         lblLogo.setName(""); // NOI18N
         lblLogo.setPreferredSize(new java.awt.Dimension(49, 49));
-        lblLogo.setSize(new java.awt.Dimension(49, 49));
 
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setMinimumSize(new java.awt.Dimension(0, 0));
 
         lstRelWords.setModel(new javax.swing.AbstractListModel() {
@@ -1111,6 +1121,7 @@ public class ScrLogoDetails extends PFrame {
         jLabel8.setText("Radicals");
         jLabel8.setMinimumSize(new java.awt.Dimension(0, 14));
 
+        jScrollPane4.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane4.setPreferredSize(new java.awt.Dimension(0, 130));
 
         lstRadicals.setModel(new javax.swing.AbstractListModel() {
@@ -1163,6 +1174,7 @@ public class ScrLogoDetails extends PFrame {
 
         chkIsRad.setText("Is Radical");
         chkIsRad.setToolTipText("Whether logograph is a radical which other logographs can be constructed from");
+        chkIsRad.setEnabled(false);
         chkIsRad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkIsRadActionPerformed(evt);
@@ -1492,10 +1504,15 @@ public class ScrLogoDetails extends PFrame {
 
         return s;
     }
-    
+
     @Override
     public Component getWindow() {
         return this.getRootPane();
+    }
+
+    @Override
+    public boolean canClose() {
+        return true;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

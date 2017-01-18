@@ -411,7 +411,7 @@
                             <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstLexiconValueChanged"/>
                           </Events>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(this)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(core, true)"/>
                           </AuxValues>
                         </Component>
                       </SubComponents>

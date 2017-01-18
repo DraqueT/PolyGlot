@@ -19,8 +19,10 @@
  */
 package PolyGlot.Screens;
 
+import PolyGlot.CustomControls.PButton;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.PDialog;
+import java.awt.Color;
 
 /**
  *
@@ -37,6 +39,7 @@ public class ScrAbout extends PDialog {
         initComponents();
         core = _core;
         setModal(true);
+        super.getRootPane().getContentPane().setBackground(Color.white);
 
         txtAbout.setText("PolyGlot ver. " + core.getVersion() + "\n\nPolyGlot is "
                 + "copyright Draque Thompson 2014-2016. It is licensed under the Creative Commons "
@@ -72,13 +75,15 @@ public class ScrAbout extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAbout = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        jButton1 = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About PolyGlot");
+        setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/PolyGlot About.png"))); // NOI18N
 
@@ -93,8 +98,9 @@ public class ScrAbout extends PDialog {
             .addComponent(jLabel1)
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
@@ -113,7 +119,7 @@ public class ScrAbout extends PDialog {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
         );
 
         jButton1.setLabel("Close");
@@ -132,12 +138,12 @@ public class ScrAbout extends PDialog {
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(172, 172, 172)
-                        .addComponent(jButton1)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 2, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(185, 185, 185)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -19,6 +19,7 @@
  */
 package PolyGlot.CustomControls;
 
+import PolyGlot.PGTUtil;
 import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -51,13 +52,13 @@ public class PGTreeCellRenderer extends DefaultTreeCellRenderer {
                 && !expanded) {
             setIcon((Icon) UIManager.get("Tree.closedIcon"));
         } else if (node instanceof GrammarSectionNode) {
-            setIcon((Icon) new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/treeNode.png")));
+            setIcon((Icon) new ImageIcon(getClass().getResource(PGTUtil.treeNodeImage)));
         } else if (expanded) {
             setIcon((Icon) UIManager.get("Tree.openIcon"));
         } else if (!expanded && !leaf) {
             setIcon((Icon) UIManager.get("Tree.closedIcon"));
         } else {
-            setIcon((Icon) new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/treeNode.png")));
+            setIcon((Icon) new ImageIcon(getClass().getResource(PGTUtil.treeNodeImage)));
         }
         
         return this;

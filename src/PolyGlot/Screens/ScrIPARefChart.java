@@ -282,6 +282,11 @@ public class ScrIPARefChart extends PFrame {
     public Component getWindow() {
         return this.getRootPane();
     }
+    
+    @Override
+    public boolean canClose() {
+        return true;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel23;

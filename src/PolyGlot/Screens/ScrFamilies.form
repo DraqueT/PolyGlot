@@ -76,6 +76,9 @@
               <TreeModel code=""/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTree(core)"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

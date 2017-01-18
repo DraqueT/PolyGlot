@@ -22,12 +22,10 @@ package PolyGlot.Screens;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PFrame;
-import PolyGlot.CustomControls.PGTreeCellRenderer;
-import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.FamTreeNode;
+import PolyGlot.PTree;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -58,7 +56,7 @@ import javax.swing.tree.TreePath;
 public class ScrFamilies extends PFrame {
 
     private boolean curUpdating = false;
-    private final ScrDictMenu parent;
+    private final ScrMainMenu parent;
 
     /**
      * Creates new form ScrFamilies
@@ -66,7 +64,7 @@ public class ScrFamilies extends PFrame {
      * @param _core dictionary core
      * @param _parent parent window
      */
-    public ScrFamilies(DictCore _core, ScrDictMenu _parent) {
+    public ScrFamilies(DictCore _core, ScrMainMenu _parent) {
         core = _core;
         parent = _parent;
         initComponents();
@@ -96,7 +94,6 @@ public class ScrFamilies extends PFrame {
         FamTreeNode root = new FamTreeNode();
         root.setAsRootNode(core.getFamManager().getRoot());
         TreeModel newModel = new DefaultTreeModel(root);
-        treFam.setCellRenderer(new PGTreeCellRenderer());
         treFam.setModel(newModel);
         treFam.setRootVisible(false);
         lstWords.setModel(new DefaultListModel());
@@ -206,15 +203,12 @@ public class ScrFamilies extends PFrame {
     private void addWord() {
         ConWord curWord = parent.getCurrentWord();
 
-        if (curWord == null) {
-            InfoBox.info("No Word Selected", "To add a word, select it in the Lexicon window, then press the Add Word button again.", this);
-            return;
+        if (curWord != null) {
+            ((FamTreeNode) treFam.getLastSelectedPathComponent())
+                    .getNode().addWord(curWord);
+
+            updateWordsProp();
         }
-
-        ((FamTreeNode) treFam.getLastSelectedPathComponent())
-                .getNode().addWord(curWord);
-
-        updateWordsProp();
     }
 
     /**
@@ -443,19 +437,19 @@ public class ScrFamilies extends PFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        treFam = new javax.swing.JTree();
+        treFam = new PTree(core);
         jPanel1 = new javax.swing.JPanel();
         chkInclSubFam = new javax.swing.JCheckBox();
         jScrollPane3 = new javax.swing.JScrollPane();
         lstWords = new javax.swing.JList();
         jLabel1 = new javax.swing.JLabel();
-        btnAddWord = new PAddRemoveButton("+");
-        btnDelWord = new PAddRemoveButton("-");
+        btnAddWord = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelWord = new PolyGlot.CustomControls.PAddRemoveButton("-");
         txtFamName = new PTextField(core, true, "-- Name --");
         jScrollPane2 = new javax.swing.JScrollPane();
-        txtNotes = new PTextPane(core, true, "-- Notes --");
-        btnAddFamily = new PAddRemoveButton("+");
-        btnDelFamily = new PAddRemoveButton("-");
+        txtNotes = new PolyGlot.CustomControls.PTextPane(core, true, "-- Notes --");
+        btnAddFamily = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelFamily = new PolyGlot.CustomControls.PAddRemoveButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lexical Families");
@@ -635,7 +629,7 @@ public class ScrFamilies extends PFrame {
      * @param parent the parent calling window
      * @return an instantiated copy of itself
      */
-    public static ScrFamilies run(final DictCore _core, ScrDictMenu parent) {
+    public static ScrFamilies run(final DictCore _core, ScrMainMenu parent) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -663,6 +657,16 @@ public class ScrFamilies extends PFrame {
 
         return s;
     }
+    
+    @Override
+    public Component getWindow() {
+        return this.getRootPane();
+    }
+    
+    @Override
+    public boolean canClose() {
+        return true;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFamily;
@@ -680,9 +684,4 @@ public class ScrFamilies extends PFrame {
     private javax.swing.JTextField txtFamName;
     private javax.swing.JTextPane txtNotes;
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    public Component getWindow() {
-        return this.getRootPane();
-    }
 }

@@ -34,7 +34,7 @@ import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.ManagersCollections.ImageCollection;
 import PolyGlot.ManagersCollections.OptionsManager;
 import PolyGlot.ManagersCollections.WordPropertyCollection;
-import PolyGlot.Screens.ScrDictMenu;
+import PolyGlot.Screens.ScrMainMenu;
 import java.awt.Color;
 import java.awt.FontFormatException;
 import java.io.FileNotFoundException;
@@ -189,14 +189,14 @@ public class DictCore {
      * Pushes save signal to main interface menu
      */
     public void coreSave() {
-        ((ScrDictMenu) rootWindow).saveFile();
+        ((ScrMainMenu) rootWindow).saveFile();
     }
 
     /**
      * Pushes save signal to main interface menu
      */
     public void coreOpen() {
-        ((ScrDictMenu) rootWindow).open();
+        ((ScrMainMenu) rootWindow).open();
     }
 
     /**
@@ -205,7 +205,7 @@ public class DictCore {
      * @param performTest whether to prompt user to save
      */
     public void coreNew(boolean performTest) {
-        ((ScrDictMenu) rootWindow).newFile(performTest);
+        ((ScrMainMenu) rootWindow).newFile(performTest);
     }
 
     /**

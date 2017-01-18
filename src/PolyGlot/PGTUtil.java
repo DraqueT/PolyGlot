@@ -191,6 +191,7 @@ public class PGTUtil {
     public static final String polyGlotIni = "PolyGlot.ini";
     public static final String emptyLogoImage = "/PolyGlot/ImageAssets/EmptyImage.png";
     public static final String IPAOtherSounds = "/PolyGlot/ImageAssets/IPA_Other.png";
+    public static final String treeNodeImage = "/PolyGlot/ImageAssets/treeNode.png";
     public static final String jarArchiveName = "PolyGlot.jar";
     public static final String ipaSoundsLocation = "/PolyGlot/SoundAssets/";
     public static final String RTLMarker = "\u202e";

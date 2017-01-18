@@ -24,14 +24,18 @@ import PolyGlot.IOHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import javax.swing.JButton;
 
@@ -44,23 +48,18 @@ public class PButton extends JButton implements MouseListener {
     private boolean mousePressed = false;
     
     public PButton() {
+        super();
         setupListeners();
     }
     
     public PButton(DictCore _core) {
         try {
-            // sets default font if given DictCore
-            setFont(IOHandler.getButtonFont());
+            super.setFont(IOHandler.getButtonFont());
         } catch (Exception e) {
             InfoBox.error("FONT ERROR", e.getLocalizedMessage(), null);
         }
         
         setupListeners();
-    }
-    
-    @Override
-    public final void setFont(Font _font) {
-        super.setFont(_font);
     }
     
     private void setupListeners() {
@@ -77,6 +76,8 @@ public class PButton extends JButton implements MouseListener {
         boolean enabled = isEnabled();
         Color bgColor;
         Color fontColor;
+        final int thisHeight = getHeight();
+        final int thisWidth = getWidth();
         
         if (!enabled) {
             bgColor = PGTUtil.colorDisabledBG;
@@ -95,12 +96,12 @@ public class PButton extends JButton implements MouseListener {
 
         g.setColor(bgColor);
         
-        g.fillRect(2, 2, getWidth() - 4, getHeight() - 4);
+        g.fillRect(2, 2, thisWidth - 4, thisHeight - 4);
 
         // draw black border on mouseover if button enabled
         if (mouseEntered && enabled) {
             g.setColor(PGTUtil.colorMouseoverBorder);
-            g.drawRect(1, 1, getWidth() - 3, getHeight() - 3);
+            g.drawRect(1, 1, thisWidth - 3, thisHeight - 3);
         }
         
         g.setColor(fontColor);
@@ -111,7 +112,12 @@ public class PButton extends JButton implements MouseListener {
         Rectangle2D rec = fm.getStringBounds(getText(), g);
         int stringW = (int) Math.round(rec.getWidth());
         int stringH = (int) Math.round(rec.getHeight());
-        g.drawChars(text, 0, text.length, (getWidth()/2) - (stringW/2), getHeight()/2 + stringH/4);
+        g.drawChars(text, 0, text.length, (thisWidth/2) - (stringW/2), thisHeight/2 + stringH/4);
+        
+        Icon icon = this.getIcon();
+        if (icon != null) {
+            icon.paintIcon(this, g, (thisWidth -icon.getIconWidth())/2, (thisHeight - icon.getIconHeight())/2);
+        }
     }
 
     @Override

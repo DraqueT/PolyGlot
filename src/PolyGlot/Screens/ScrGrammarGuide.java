@@ -26,12 +26,13 @@ import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.HighlightCaret;
 import PolyGlot.IOHandler;
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PAddRemoveButton;
+import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PGDocument;
-import PolyGlot.CustomControls.PGTreeCellRenderer;
 import PolyGlot.CustomControls.PGrammarPane;
 import PolyGlot.CustomControls.PTextField;
+import PolyGlot.PTree;
 import PolyGlot.SoundRecorder;
 import java.awt.Color;
 import java.awt.Component;
@@ -49,6 +50,7 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
@@ -96,6 +98,7 @@ public class ScrGrammarGuide extends PFrame {
         isUpdating = false;
         defTime = "00:00:00";
         core = _core;
+        
         playButtonUp = getButtonSizeIcon(
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/play_OFF_BIG.png")));
         playButtonDown = getButtonSizeIcon(
@@ -112,8 +115,10 @@ public class ScrGrammarGuide extends PFrame {
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/add_button_pressed.png")));
         deleteButtonPressed = getButtonSizeIcon(
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button_pressed.png")));
-
+        
         initComponents();
+        
+        setupRecordButtons();
         
         DefaultMutableTreeNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
@@ -136,6 +141,24 @@ public class ScrGrammarGuide extends PFrame {
             btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (CTRL +)");
             btnDelete.setToolTipText(btnDelete.getToolTipText() + " (CTRL -)");
         }
+    }
+    
+    private void setupRecordButtons() {
+        btnPlayPauseAudio.setBorder(null);
+        btnPlayPauseAudio.setBorderPainted(false);
+        btnPlayPauseAudio.setFocusPainted(false);
+        btnPlayPauseAudio.setFocusTraversalKeysEnabled(false);
+        btnPlayPauseAudio.setFocusable(false);
+        btnPlayPauseAudio.setRequestFocusEnabled(false);
+        btnPlayPauseAudio.setContentAreaFilled(false);
+        
+        btnRecordAudio.setBorder(null);
+        btnRecordAudio.setBorderPainted(false);
+        btnRecordAudio.setFocusPainted(false);
+        btnRecordAudio.setFocusTraversalKeysEnabled(false);
+        btnRecordAudio.setFocusable(false);
+        btnRecordAudio.setRequestFocusEnabled(false);
+        btnRecordAudio.setContentAreaFilled(false);
     }
 
     @Override
@@ -200,6 +223,8 @@ public class ScrGrammarGuide extends PFrame {
             try {
                 soundRecorder.playPause();
             } catch (LineUnavailableException | IOException e) {
+                // ignore any sound errors here. We're killing the screen, and no
+                // process can be orphaned in doing so.
             }
         }
         super.dispose();
@@ -219,38 +244,41 @@ public class ScrGrammarGuide extends PFrame {
         txtName = new PTextField(core, true, "-- Name --");
         jPanel3 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        cmbFonts = new javax.swing.JComboBox();
+        cmbFonts = new PComboBox(core);
         txtFontSize = new javax.swing.JTextField();
-        cmbFontColor = new javax.swing.JComboBox();
-        btnApply = new javax.swing.JButton();
+        cmbFontColor = new PComboBox(core);
+        btnApply = new PButton(core);
         panSection = new javax.swing.JScrollPane();
         txtSection = new PGrammarPane(core);
         jPanel4 = new javax.swing.JPanel();
         sldSoundPosition = new javax.swing.JSlider();
         jToolBar2 = new javax.swing.JToolBar();
-        jLabel2 = new javax.swing.JLabel();
+        btnRecordAudio = new JButton();
+        btnPlayPauseAudio = new JButton();
+        jPanel5 = new javax.swing.JPanel();
         txtTimer = new javax.swing.JTextField();
-        btnRecordAudio = new javax.swing.JButton();
-        btnPlayPauseAudio = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        treChapList = new javax.swing.JTree();
+        treChapList = new PTree(core);
         txtSearch = new PTextField(core, true, "-- Search --");
         jLabel1 = new javax.swing.JLabel();
-        btnAddSection = new PAddRemoveButton("+");
-        btnDelete = new PAddRemoveButton("-");
-        btnAddChapter = new javax.swing.JButton();
+        btnAddSection = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelete = new PolyGlot.CustomControls.PAddRemoveButton("-");
+        btnAddChapter = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Grammar Guide");
 
+        jSplitPane1.setBackground(new java.awt.Color(255, 255, 255));
         jSplitPane1.setDividerLocation(170);
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         txtName.setToolTipText("Name of chapter/section");
         txtName.setEnabled(false);
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jToolBar1.setFloatable(false);
@@ -326,9 +354,10 @@ public class ScrGrammarGuide extends PFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panSection, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
+                .addComponent(panSection, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE))
         );
 
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setMaximumSize(new java.awt.Dimension(32767, 76));
         jPanel4.setMinimumSize(new java.awt.Dimension(100, 76));
 
@@ -339,16 +368,6 @@ public class ScrGrammarGuide extends PFrame {
 
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
-
-        jLabel2.setText("Spoken Example  ");
-        jToolBar2.add(jLabel2);
-
-        txtTimer.setEditable(false);
-        txtTimer.setBackground(new java.awt.Color(0, 0, 0));
-        txtTimer.setForeground(new java.awt.Color(51, 255, 51));
-        txtTimer.setText("00:00:00");
-        txtTimer.setToolTipText("Recording/play time");
-        txtTimer.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         btnRecordAudio.setText("Record");
         btnRecordAudio.setToolTipText("Records spoken example of grammar (erases any current example)");
@@ -385,6 +404,30 @@ public class ScrGrammarGuide extends PFrame {
             }
         });
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        txtTimer.setEditable(false);
+        txtTimer.setBackground(new java.awt.Color(0, 0, 0));
+        txtTimer.setForeground(new java.awt.Color(51, 255, 51));
+        txtTimer.setText("00:00:00");
+        txtTimer.setToolTipText("Recording/play time");
+        txtTimer.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(txtTimer, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(txtTimer, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -393,15 +436,15 @@ public class ScrGrammarGuide extends PFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(sldSoundPosition, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE))
+                        .addComponent(sldSoundPosition, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnPlayPauseAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(8, 8, 8)
                         .addComponent(btnRecordAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtTimer, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -410,13 +453,16 @@ public class ScrGrammarGuide extends PFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBar2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPlayPauseAudio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRecordAudio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTimer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sldSoundPosition, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(17, 17, 17))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnRecordAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPlayPauseAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addComponent(sldSoundPosition, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -426,7 +472,7 @@ public class ScrGrammarGuide extends PFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(350, Short.MAX_VALUE))
+                .addContainerGap(351, Short.MAX_VALUE))
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -443,6 +489,8 @@ public class ScrGrammarGuide extends PFrame {
 
         jSplitPane1.setRightComponent(jPanel2);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("JTree");
         treChapList.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         treChapList.setToolTipText("Chapter Guide");
@@ -450,6 +498,7 @@ public class ScrGrammarGuide extends PFrame {
 
         jLabel1.setText("Sections");
 
+        btnAddSection.setText("+");
         btnAddSection.setToolTipText("Add a new section to a chapter");
         btnAddSection.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnAddSection.setMaximumSize(new java.awt.Dimension(40, 29));
@@ -461,6 +510,7 @@ public class ScrGrammarGuide extends PFrame {
             }
         });
 
+        btnDelete.setText("-");
         btnDelete.setToolTipText("Delete current chapter/node");
         btnDelete.setMaximumSize(new java.awt.Dimension(40, 29));
         btnDelete.setMinimumSize(new java.awt.Dimension(40, 29));
@@ -504,7 +554,7 @@ public class ScrGrammarGuide extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddSection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -585,7 +635,6 @@ public class ScrGrammarGuide extends PFrame {
      * Sets up initial values of components
      */
     private void setInitialValues() {
-        treChapList.setCellRenderer(new PGTreeCellRenderer());
         treChapList.requestFocus();
         soundRecorder.setTimer(txtTimer);
         soundRecorder.setSlider(sldSoundPosition);
@@ -1075,6 +1124,11 @@ public class ScrGrammarGuide extends PFrame {
     public Component getWindow() {
         return jSplitPane1;
     }
+    
+    @Override
+    public boolean canClose() {
+        return true;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddChapter;
@@ -1086,11 +1140,11 @@ public class ScrGrammarGuide extends PFrame {
     private javax.swing.JComboBox cmbFontColor;
     private javax.swing.JComboBox cmbFonts;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JToolBar jToolBar1;
