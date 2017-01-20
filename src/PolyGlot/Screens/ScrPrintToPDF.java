@@ -20,6 +20,8 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.CustomControls.PTextField;
@@ -68,29 +70,30 @@ public class ScrPrintToPDF extends PDialog {
 
         jPanel1 = new javax.swing.JPanel();
         txtSavePath = new PTextField(core, true, "-- Save to File --");
-        btnSelectSavePath = new javax.swing.JButton();
+        btnSelectSavePath = new PButton(core);
         txtImageLocation = new PTextField(core, true, "-- Cover Image --");
-        btnSelectImagePath = new javax.swing.JButton();
+        btnSelectImagePath = new PButton(core);
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        chkLocalCon = new javax.swing.JCheckBox();
-        chkConLocal = new javax.swing.JCheckBox();
-        chkOrtho = new javax.swing.JCheckBox();
-        chkGrammar = new javax.swing.JCheckBox();
-        chkLogographs = new javax.swing.JCheckBox();
-        chkPageNum = new javax.swing.JCheckBox();
-        chkGloss = new javax.swing.JCheckBox();
+        chkLocalCon = new PCheckBox(core);
+        chkConLocal = new PCheckBox(core);
+        chkOrtho = new PCheckBox(core);
+        chkGrammar = new PCheckBox(core);
+        chkLogographs = new PCheckBox(core);
+        chkPageNum = new PCheckBox(core);
+        chkGloss = new PCheckBox(core);
         txtTitle = new PTextField(core, true, "-- Title --");
         txtSubtitle = new PTextField(core, true, "-- Title --");
         jScrollPane2 = new javax.swing.JScrollPane();
-        txtForeword = new PTextPane(core, true, "-- Author Foreword --");
-        btnPrint = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
+        txtForeword = new PolyGlot.CustomControls.PTextPane(core, true, "-- Author Foreword --");
+        btnPrint = new PButton(core);
+        btnCancel = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PDF Print Options");
         setResizable(false);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         txtSavePath.setEditable(false);
@@ -117,6 +120,7 @@ public class ScrPrintToPDF extends PDialog {
 
         jLabel4.setText("Print Options");
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         chkLocalCon.setText("Print Local -> Conlang Dictionary");

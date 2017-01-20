@@ -130,8 +130,11 @@ public class ScrWordClasses extends PFrame {
      */
     private void populateTypes() {
         Iterator<TypeNode> types = core.getTypes().getNodes().iterator();
-        pnlTypes.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        
+        pnlTypes.removeAll();
+        pnlTypes.setLayout(new GridBagLayout());
+        
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.weighty = 1;
         
@@ -170,8 +173,8 @@ public class ScrWordClasses extends PFrame {
             TypeNode curNode = types.next();
             final int typeId = curNode.getId();
             final JCheckBox checkType = new JCheckBox();
+            
             checkType.setText(curNode.getValue());
-
             checkType.addItemListener(new ItemListener() {
                 final JCheckBox thisBox = checkType;
                 final int thisTypeId = typeId;
@@ -203,7 +206,7 @@ public class ScrWordClasses extends PFrame {
             typeChecks.put(typeId, checkType);
         }
         
-        // eatc up space at bottom
+        // eats up space at bottom
         gbc.weighty = 999;
         pnlTypes.add(new Filler(new Dimension(0,0),new Dimension(999,999),new Dimension(9999,9999)), gbc);
 
@@ -598,7 +601,10 @@ public class ScrWordClasses extends PFrame {
 
     @Override
     public void updateAllValues(DictCore _core) {
-        // This doesn't currently need to do anything
+        core = _core;
+        populateTypes();
+        populateWordProperties();
+        populatePropertyValues();        
     }
 
     @Override

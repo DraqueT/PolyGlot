@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -20,9 +20,11 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.DictCore;
 import PolyGlot.WebInterface;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -58,6 +60,8 @@ public class ScrUpdateAlert extends PDialog {
         core = _core;
         
         jTextPane1.setContentType("text/html");
+        jPanel1.setBackground(Color.white);
+        super.getRootPane().getContentPane().setBackground(Color.white);
 
         Document doc = WebInterface.checkForUpdates(core.getVersion());
         final Window parent = this;
@@ -74,8 +78,7 @@ public class ScrUpdateAlert extends PDialog {
 
             buttonMap.put(nameNode.getTextContent(), linkNode.getTextContent());
 
-            JButton newButton = new JButton();
-            newButton.setPreferredSize(new Dimension(9999, 30));
+            PButton newButton = new PButton(core);
             newButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -94,7 +97,7 @@ public class ScrUpdateAlert extends PDialog {
             });
 
             newButton.setText(nameNode.getTextContent());
-            newButton.setSize(jTextPane1.getSize().width, 30);
+            newButton.setSize(358, 30);
 
             jPanel1.add(newButton);
 
@@ -237,7 +240,7 @@ public class ScrUpdateAlert extends PDialog {
         }
 
         ScrUpdateAlert s = new ScrUpdateAlert(verbose, core);
-        s.setModal(true);
+        s.setModal(false);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -51,6 +51,9 @@
   <SubComponents>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
             <BevelBorder bevelType="1"/>
@@ -135,6 +138,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSelectSavePathActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtImageLocation">
           <Properties>
@@ -155,6 +161,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSelectImagePathActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
@@ -163,6 +172,9 @@
         </Component>
         <Container class="javax.swing.JPanel" name="jPanel2">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder/>
@@ -225,24 +237,36 @@
                 <Property name="text" type="java.lang.String" value="Print Local -&gt; Conlang Dictionary"/>
                 <Property name="toolTipText" type="java.lang.String" value="Select to include a dictionary with lookup by native words"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkConLocal">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Print Conlang -&gt; Local Dictionary"/>
                 <Property name="toolTipText" type="java.lang.String" value="Select to include a dictionary with lookup by constructed words"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkOrtho">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Print Orthography"/>
                 <Property name="toolTipText" type="java.lang.String" value="Include character and pronunciation guides"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkGrammar">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Print Grammar"/>
                 <Property name="toolTipText" type="java.lang.String" value="Include text from the grammar section of your library"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkLogographs">
               <Properties>
@@ -250,18 +274,27 @@
                 <Property name="toolTipText" type="java.lang.String" value="Coming soon! (if anyone asks for it)"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkPageNum">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Print Page Number"/>
                 <Property name="toolTipText" type="java.lang.String" value="Prints page number on each page of PDF"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkGloss">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Print Gloss Key"/>
                 <Property name="toolTipText" type="java.lang.String" value="Prints a key for part of speech glosses"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -305,6 +338,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPrintActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btnCancel">
       <Properties>
@@ -314,6 +350,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

@@ -68,7 +68,7 @@
                   <Group type="102" attributes="0">
                       <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="421" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="423" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -88,8 +88,8 @@
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
-            <BevelBorder bevelType="1"/>
+          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+            <LineBorder/>
           </Border>
         </Property>
       </Properties>
@@ -257,8 +257,8 @@
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
-            <BevelBorder bevelType="1"/>
+          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+            <LineBorder/>
           </Border>
         </Property>
       </Properties>
@@ -302,7 +302,7 @@
                                   <Component id="btnClipboard" min="-2" pref="97" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="btnAddReading" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="15" max="32767" attributes="0"/>
+                                  <EmptySpace pref="17" max="32767" attributes="0"/>
                                   <Component id="btnDelReading" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>

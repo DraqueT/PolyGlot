@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -20,7 +20,6 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.Nodes.FamNode;
-import java.util.Iterator;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 

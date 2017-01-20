@@ -24,18 +24,14 @@ import PolyGlot.IOHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 import javax.swing.JButton;
 
@@ -82,7 +78,7 @@ public class PButton extends JButton implements MouseListener {
         if (!enabled) {
             bgColor = PGTUtil.colorDisabledBG;
             fontColor = PGTUtil.colorDisabledForeground;
-        } else if (mousePressed) {
+        } else if (mousePressed && mouseEntered) {
             bgColor = PGTUtil.colorSelectedBG;
             fontColor = getForeground();
         } else {

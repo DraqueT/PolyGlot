@@ -20,6 +20,7 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PRadioButton;
@@ -304,8 +305,8 @@ public class ScrQuizScreen extends PFrame {
         jPanel2 = new javax.swing.JPanel();
         lblQuestion = new javax.swing.JLabel("", PLabel.CENTER);
         jPanel3 = new javax.swing.JPanel();
-        btnForward = new javax.swing.JButton();
-        btnBackward = new javax.swing.JButton();
+        btnForward = new PButton(core);
+        btnBackward = new PButton(core);
         lblAnsStat = new javax.swing.JLabel();
         lblQNum = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -313,6 +314,7 @@ public class ScrQuizScreen extends PFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PolyGlot Quiz");
 
+        pnlChoices.setBackground(new java.awt.Color(255, 255, 255));
         pnlChoices.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         pnlChoices.setAutoscrolls(true);
         pnlChoices.setMinimumSize(new java.awt.Dimension(10, 10));
@@ -329,8 +331,11 @@ public class ScrQuizScreen extends PFrame {
             .addGap(0, 53, Short.MAX_VALUE)
         );
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel2.setMinimumSize(new java.awt.Dimension(10, 10));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

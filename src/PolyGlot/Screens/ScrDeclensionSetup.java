@@ -23,11 +23,11 @@ import PolyGlot.DeclensionDimension;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PAddRemoveButton;
+import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.TableBooleanEditor;
 import PolyGlot.CustomControls.PCellEditor;
-import PolyGlot.CustomControls.PTextPane;
+import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Cursor;
@@ -448,21 +448,23 @@ public final class ScrDeclensionSetup extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstDeclensionList = new javax.swing.JList();
+        lstDeclensionList = new PList(core, false);
         jPanel2 = new javax.swing.JPanel();
         txtDeclensionName = new PTextField(core, true, "-- Name --");//PTextField(core, true, "-- Name --");
         jLabel3 = new javax.swing.JLabel();
-        btnAddDimension = new PAddRemoveButton("+");
-        btnDelDimension = new PAddRemoveButton("-");
+        btnAddDimension = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelDimension = new PolyGlot.CustomControls.PAddRemoveButton("-");
         sclDimensions = new javax.swing.JScrollPane();
         tblDimensions = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        txtDeclensionNotes = new PTextPane(core, true, "-- Notes --");
-        btnDeleteDeclension = new PAddRemoveButton("-");
-        btnAddDeclension = new PAddRemoveButton("+");
-        jButton1 = new javax.swing.JButton();
+        txtDeclensionNotes = new PolyGlot.CustomControls.PTextPane(core, true, "-- Notes --");
+        btnDeleteDeclension = new PolyGlot.CustomControls.PAddRemoveButton("-");
+        btnAddDeclension = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        jButton1 = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setText("Conjugations");
 
@@ -474,6 +476,7 @@ public final class ScrDeclensionSetup extends PDialog {
         });
         jScrollPane1.setViewportView(lstDeclensionList);
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         txtDeclensionName.setEnabled(false);

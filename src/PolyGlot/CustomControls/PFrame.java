@@ -23,6 +23,7 @@ import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
 import PolyGlot.Screens.ScrMainMenu;
 import PolyGlot.Screens.ScrPrintToPDF;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -348,6 +349,8 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
             }
             addWindowFocusListener(this);
         }
+        
+        super.getRootPane().getContentPane().setBackground(Color.white);
         super.setVisible(visible);
     }
     

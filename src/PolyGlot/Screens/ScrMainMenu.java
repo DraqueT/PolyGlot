@@ -30,6 +30,8 @@ import PolyGlot.PGTUtil;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Window;
 import java.io.File;
@@ -39,9 +41,10 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
@@ -50,6 +53,7 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.apache.poi.ss.usermodel.Font;
 import org.simplericity.macify.eawt.Application;
 import org.simplericity.macify.eawt.ApplicationEvent;
 import org.simplericity.macify.eawt.ApplicationListener;
@@ -65,6 +69,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private PFrame curWindow = null;
     private final List<String> lastFiles;
     private String curFileName = "";
+    private Image backGround;
     /**
      * Creates new form ScrMainMenu
      * @param overridePath Path PolyGlot should treat as home directory (blank
@@ -72,6 +77,14 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
      */
     public ScrMainMenu(String overridePath) {
         initComponents();
+        
+        try {
+            backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
+            jLabel1.setFont(IOHandler.getButtonFont().deriveFont(40f));
+        } catch (Exception e) {
+            InfoBox.error("Resource Error", "Unable to load internal resource: " + e.getLocalizedMessage(), this);
+        }
+        
         newFile(true);
         setOverrideProgramPath(overridePath);
         lastFiles = core.getOptionsManager().getLastFiles();
@@ -403,6 +416,9 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         core.setRootWindow(this);
         updateAllValues(core);
         curFileName = "";
+        
+        genTitle();
+        updateAllValues(core);
     }
     
     /**
@@ -425,7 +441,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         // resize screen
         if (curWindow != null) {
             // set size before disposing so that it will be properly saved to options
-            curWindow.setSize(jPanel2.getSize());
+            curWindow.getWindow().setSize(jPanel2.getSize());
             curWindow.dispose();
         }
         
@@ -457,6 +473,25 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         );
         
         curWindow = newScreen;
+        
+        genTitle();
+    }
+    
+    public void genTitle() {
+        String title = "PolyGlot";
+        
+        if (curWindow != null && !curWindow.getTitle().equals("")) {
+            title += "-" + curWindow.getTitle();
+            String langName = core.getPropertiesManager().getLangName();
+            
+            if (!langName.equals("")) {
+                title += " : " + langName;
+            } else if (!curFileName.equals("")) {
+                title += " : " + curFileName;
+            }
+        }
+        
+        setTitle(title);
     }
     
     private void viewAbout() {
@@ -487,6 +522,8 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             pushRecentFile(fileName);
             populateRecentOpened();
         }
+        
+        genTitle();
     }
     
     /**
@@ -673,7 +710,20 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         btnGrammar = new PButton(core);
         btnLogos = new PButton(core);
         btnProp = new PButton(core);
-        jPanel2 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backGround != null && curWindow == null) {
+                    g.drawImage(backGround, 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+        jButton1 = new PButton(core);
+        jButton2 = new PButton(core);
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnuNewLocal = new javax.swing.JMenuItem();
@@ -702,6 +752,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         jMenuItem8 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("PolyGlot Language Construction Toolkit");
         setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel1.setBackground(new java.awt.Color(102, 204, 255));
@@ -778,20 +829,66 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 .addComponent(btnLogos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnProp)
-                .addContainerGap(254, Short.MAX_VALUE))
+                .addContainerGap(213, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        jButton1.setText("OPEN LANGUAGE");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("OPEN MANUAL");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Welcome to PolyGlot");
+
+        jLabel2.setText("From here, you can open an existing language file, open the PolyGlot manual, or");
+
+        jLabel3.setText("simply begin work on the blank file currently loaded!");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 426, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(89, 89, 89)
+                        .addComponent(jButton1)
+                        .addGap(95, 95, 95)
+                        .addComponent(jButton2))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(125, 125, 125)
+                        .addComponent(jLabel3))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addGap(40, 40, 40)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
+                .addGap(118, 118, 118))
         );
 
         jMenuBar1.setOpaque(false);
@@ -995,6 +1092,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         open();
         setCursor(Cursor.getDefaultCursor());
+        updateAllValues(core);
     }//GEN-LAST:event_mnuOpenLocalActionPerformed
 
     private void mnuPublishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPublishActionPerformed
@@ -1088,6 +1186,14 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        mnuOpenLocalActionPerformed(evt);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        mnuAboutActionPerformed(evt);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1155,6 +1261,11 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private javax.swing.JButton btnLogos;
     private javax.swing.JButton btnPos;
     private javax.swing.JButton btnProp;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;

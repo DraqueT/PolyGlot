@@ -30,6 +30,7 @@ import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PTextPane;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
@@ -39,6 +40,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -65,6 +67,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
@@ -139,7 +142,7 @@ public final class ScrLexicon extends PFrame {
         setupListeners();
         setCustomLabels();
     }
-    
+
     @Override
     public Component getWindow() {
         return jLayeredPane1;
@@ -199,22 +202,23 @@ public final class ScrLexicon extends PFrame {
             //e.printStackTrace();
         }
     }
-    
+
     /**
      * Returns false & explains why if currently selected word is illegal
+     *
      * @return if currently selected word is illegal
      */
     @Override
     public boolean canClose() {
         boolean ret = true;
-        
+
         // error box only populated with word has illegal values
         if (!txtErrorBox.getText().equals("")) {
             ret = false;
-            InfoBox.warning("Illegal word.", "Please correct or delete currently selected word " 
+            InfoBox.warning("Illegal word.", "Please correct or delete currently selected word "
                     + "or select the rule override before exiting lexicon.", this);
         }
-        
+
         return ret;
     }
 
@@ -261,7 +265,7 @@ public final class ScrLexicon extends PFrame {
 
                 ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
                 saveValuesTo(curWord);
-                ((PList)lstLexicon).setCore(core);
+                ((PList) lstLexicon).setCore(core);
                 lstLexicon.clearSelection();
                 lstLexicon.setSelectedValue(curWord, true);
                 setupComboBoxesSwing();
@@ -331,7 +335,7 @@ public final class ScrLexicon extends PFrame {
                 }
             }
         }
-        
+
         for (Entry<Integer, String> curProp : curWord.getAllClassTextValues()) {
             if (classPropMap.containsKey(curProp.getKey())) {
                 JComponent component = classPropMap.get(curProp.getKey());
@@ -340,7 +344,7 @@ public final class ScrLexicon extends PFrame {
                     if (component instanceof JComboBox) {
                         // class property has since been turned into a free text field: do nothing
                     } else if (component instanceof PTextField) {
-                        PTextField textField = (PTextField)component;
+                        PTextField textField = (PTextField) component;
                         textField.setText(curProp.getValue());
                     }
                 } catch (Exception e) {
@@ -477,11 +481,10 @@ public final class ScrLexicon extends PFrame {
         c.gridheight = GridBagConstraints.RELATIVE;
         c.gridwidth = GridBagConstraints.RELATIVE;
 
-        jPanel1.setLayout(new GridBagLayout());
+        jPanel1.setLayout(new GridLayout());
         jPanel1.add(fxPanel, c);
         jPanel1.setBackground(Color.white);
         fxPanel.setBackground(Color.white);
-
         final CountDownLatch latch = new CountDownLatch(1);
         Runnable fxSetup = new Runnable() {
             @Override
@@ -490,7 +493,6 @@ public final class ScrLexicon extends PFrame {
                 setupComboBoxesFX();
                 setFonts();
                 latch.countDown();
-                fxPanel.repaint();
             }
         };
         Platform.setImplicitExit(false);
@@ -501,8 +503,6 @@ public final class ScrLexicon extends PFrame {
         } catch (Exception e) {
             InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), this);
         }
-        
-        fxPanel.repaint();
     }
 
     private void initFX(JFXPanel fxPanel) {
@@ -847,17 +847,26 @@ public final class ScrLexicon extends PFrame {
      */
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
+        javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new IOHandler().getCharisInputStream(), 12);
+        
+        grid.setPrefWidth(9999999);
         txtConSrc = new TextField();
         txtConSrc.setPromptText("Search ConWord...");
+        txtConSrc.setFont(font);
         txtLocalSrc = new TextField();
         txtLocalSrc.setPromptText("Search NatLang Word...");
+        txtLocalSrc.setFont(font);
         txtProcSrc = new TextField();
         txtProcSrc.setPromptText("Search by Pronunciation...");
+        txtProcSrc.setFont(font);
         txtDefSrc = new TextField();
         txtDefSrc.setPromptText("Search by Definition...");
+        txtDefSrc.setFont(font);
         cmbTypeSrc = new ComboBox();
         gridTitlePane = new TitledPane();
+        gridTitlePane.setFont(font);
         chkFindBad = new CheckBox();
+        chkFindBad.setFont(font);
 
         chkFindBad.setTooltip(new Tooltip("Select to filter on all words with illegal values"));
         chkFindBad.selectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -866,6 +875,8 @@ public final class ScrLexicon extends PFrame {
                 applyIllegalFilter();
             }
         });
+        //Label label;
+        //label.setAlignment(Pos.RIGHT);
 
         grid.setVgap(4);
         grid.setPadding(new Insets(5, 5, 5, 5));
@@ -876,12 +887,13 @@ public final class ScrLexicon extends PFrame {
         grid.add(new Label("Type: "), 0, 2);
         grid.add(cmbTypeSrc, 1, 2);
         grid.setPadding(new Insets(5, 5, 5, 5));
-        grid.add(new Label("Pronunciation: "), 2, 0);
-        grid.add(txtProcSrc, 3, 0);
-        grid.add(new Label("Definition: "), 2, 1);
-        grid.add(txtDefSrc, 3, 1);
-        grid.add(new Label("Illegals"), 0, 3);
-        grid.add(chkFindBad, 1, 3);
+        grid.add(new Label("            "), 2, 0); // adds spacing
+        grid.add(new Label("Pronunciation: "), 3, 0);
+        grid.add(txtProcSrc, 4, 0);
+        grid.add(new Label("Definition: "), 3, 1);
+        grid.add(txtDefSrc, 4, 1);
+        grid.add(new Label("Illegals"), 3, 2);
+        grid.add(chkFindBad, 4, 2);
         gridTitlePane.setText("Search/Filter");
         gridTitlePane.setContent(grid);
         gridTitlePane.setExpanded(false);
@@ -895,7 +907,7 @@ public final class ScrLexicon extends PFrame {
                 runFilter();
             }
         });
-        grid.add(clearButton, 3, 3);
+        grid.add(clearButton, 4, 3);
 
         return gridTitlePane;
     }
@@ -1611,51 +1623,52 @@ public final class ScrLexicon extends PFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(btnDeclensions)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 242, Short.MAX_VALUE)
-                .addComponent(btnLogographs))
             .addComponent(pnlClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(txtConWord)
-            .addComponent(txtLocalWord)
-            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(txtProc)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkProcOverride, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jScrollPane4)
-            .addComponent(jScrollPane1)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(chkRuleOverride)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 323, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(btnDeclensions)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLogographs))
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(txtProc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkProcOverride, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtLocalWord)
+                    .addComponent(txtConWord, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane4))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(txtConWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtLocalWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlClasses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(txtConWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtLocalWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlClasses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chkProcOverride))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkRuleOverride)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDeclensions)
-                    .addComponent(btnLogographs))
-                .addContainerGap())
+                    .addComponent(btnLogographs)))
         );
 
         jSplitPane1.setRightComponent(jPanel3);
@@ -1705,7 +1718,7 @@ public final class ScrLexicon extends PFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddWord)
@@ -1723,7 +1736,7 @@ public final class ScrLexicon extends PFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
 
         jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DRAG_LAYER);
@@ -1752,7 +1765,7 @@ public final class ScrLexicon extends PFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
         );
 
         pack();

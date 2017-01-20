@@ -82,14 +82,14 @@ public class PScrollBarUI extends BasicScrollBarUI {
             
             int increaseHeight = increase.getHeight() - 4; // why -4 to make this look right? Weird.
             int decreaseHeight = decrease.getHeight() - 4;
-            int slideTopHeight = slideTop.getHeight(null);
-            int slideBotHeight = slideBottom.getHeight(null);            
+            int slideTopHeight = slideTop.getHeight(scrollbar);
+            int slideBotHeight = slideBottom.getHeight(scrollbar);            
             
-            antiAlias.drawImage(slideTop, 0, increaseHeight, trackBounds.width, slideTopHeight, null);
+            antiAlias.drawImage(slideTop, 0, increaseHeight, trackBounds.width, slideTopHeight, scrollbar);
             antiAlias.drawImage(slideCenter, 0, increaseHeight + slideTopHeight, trackBounds.width, 
-                    trackBounds.height - (increaseHeight + slideTopHeight + slideBotHeight), null);
+                    trackBounds.height - (increaseHeight + slideTopHeight + slideBotHeight), scrollbar);
             antiAlias.drawImage(slideBottom, 0, trackBounds.height - (decreaseHeight + slideBotHeight), 
-                    trackBounds.width, slideBotHeight, null);
+                    trackBounds.width, slideBotHeight, scrollbar);
         } else {
             try {
                 slideTop = PGTUtil.sliderEast;
@@ -101,14 +101,14 @@ public class PScrollBarUI extends BasicScrollBarUI {
             }
             int increaseWidth = increase.getWidth() - 20; // Why 20 here??? Won't render in the right spot otherwise...
             int decreaseWidth = decrease.getWidth() - 20;
-            int slideTopWidth = slideTop.getWidth(null);
-            int slideBotWidth = slideBottom.getWidth(null);
+            int slideTopWidth = slideTop.getWidth(scrollbar);
+            int slideBotWidth = slideBottom.getWidth(scrollbar);
             
-            antiAlias.drawImage(slideBottom, decreaseWidth, 0, slideBotWidth, trackBounds.height, null);
+            antiAlias.drawImage(slideBottom, decreaseWidth, 0, slideBotWidth, trackBounds.height, scrollbar);
             antiAlias.drawImage(slideCenter, increaseWidth + slideTopWidth, 0, 
-                    trackBounds.width - (increaseWidth + slideTopWidth + slideBotWidth), trackBounds.height, null);
+                    trackBounds.width - (increaseWidth + slideTopWidth + slideBotWidth), trackBounds.height, scrollbar);
             antiAlias.drawImage(slideTop, trackBounds.width - (slideTopWidth + increaseWidth), 0, 
-                    slideTopWidth, trackBounds.height, null);
+                    slideTopWidth, trackBounds.height, scrollbar);
         }
         
         g.translate( -trackBounds.x, -trackBounds.y );

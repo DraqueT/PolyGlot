@@ -50,7 +50,7 @@ import org.xml.sax.SAXException;
 
 public class DictCore {
 
-    private final String version = "1.4";
+    private final String version = "2.0";
     private final ConWordCollection wordCollection;
     private final TypeCollection typeCollection;
     private final DeclensionManager declensionMgr;
@@ -313,6 +313,11 @@ public class DictCore {
         String errorLog = "";
         String warningLog = "";
         
+        // inform user if file is not an archive
+        if (!IOHandler.isFileZipArchive(_fileName)) {
+            throw new IOException("File " + _fileName + " is not a valid PolyGlot archive.");
+        }
+
         // load image assets first to allow referencing as dictionary loads
         try {
             IOHandler.loadImageAssets(imageCollection, _fileName);

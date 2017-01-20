@@ -112,6 +112,7 @@ public class CustHandlerFactory {
             case "1.2.2":
             case "1.3":
             case "1.4":
+            case "2.0":
                 ret = CustHandlerFactory.get075orHigherHandler(core);
                 break;
             default:
@@ -972,8 +973,8 @@ public class CustHandlerFactory {
                     famBuffer.setValue(famBuffer.getValue()
                             + new String(ch, start, length));
                 } else if (bfamNotes) {
-                    famMgr.getBuffer().setNotes(new String(ch, start, length));
-                    bfamNotes = false;
+                    FamNode node = famMgr.getBuffer();
+                    node.setNotes(node.getNotes() + new String(ch, start, length));
                 } else if (bfamWord) {
                     try {
                         famMgr.getBuffer().addWord(core.getWordCollection().getNodeById(

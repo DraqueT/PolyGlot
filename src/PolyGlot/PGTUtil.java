@@ -249,7 +249,7 @@ public class PGTUtil {
         directionButtonEastPressed = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonEastPressed.png")).getImage();
         directionButtonSouthPressed = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonDownPressed.png")).getImage();
         directionButtonWestPressed = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonWestPressed.png")).getImage();
-        directionButtonNorthDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonUpDisabled.png")).getImage();
+        directionButtonNorthDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonUpDisabled.png")).getImage();        
         directionButtonEastDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonEastDisabled.png")).getImage();
         directionButtonSouthDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonDownDisabled.png")).getImage();
         directionButtonWestDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonWestDisabled.png")).getImage();

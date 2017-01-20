@@ -30,6 +30,7 @@ import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
 import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PFrame;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Rectangle;
@@ -69,6 +70,7 @@ public class ScrLangProps extends PFrame {
         txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
         btnUpProc.setFont(core.getPropertiesManager().getCharisUnicodeFont());
         btnDownProc.setFont(core.getPropertiesManager().getCharisUnicodeFont().deriveFont(14));
+        super.getRootPane().getContentPane().setBackground(Color.white);
     }
     
     /**

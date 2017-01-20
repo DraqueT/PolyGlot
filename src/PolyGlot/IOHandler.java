@@ -913,6 +913,19 @@ public class IOHandler {
     }
     
     /**
+     * For getting Font based on javafx's needs
+     * NOTE 1: this is a non-static
+     * method due to an input stream restriction NOTE 2: this is the default
+     * conlang font in PolyGlot
+     * NOTE 2: this is the default
+     * conlang font in PolyGlot
+     * @return 
+     */
+    public InputStream getCharisInputStream() {
+        return this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation);
+    }
+    
+    /**
      * Fetches and returns default button font
      *
      * @return Font to default buttons to

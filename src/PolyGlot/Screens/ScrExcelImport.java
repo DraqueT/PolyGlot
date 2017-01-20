@@ -23,6 +23,8 @@ package PolyGlot.Screens;
 import PolyGlot.DictCore;
 import PolyGlot.ImportFileHelper;
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PDialog;
 import java.io.File;
 import javax.swing.JFileChooser;
@@ -78,9 +80,9 @@ public class ScrExcelImport extends PDialog {
 
         txtFileName = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        btnBrowse = new javax.swing.JButton();
+        btnBrowse = new PButton(core);
         jPanel1 = new javax.swing.JPanel();
-        chkFirstLabels = new javax.swing.JCheckBox();
+        chkFirstLabels = new PCheckBox(core);
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -101,8 +103,8 @@ public class ScrExcelImport extends PDialog {
         txtExcelSheet = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         txtDelimiter = new javax.swing.JTextField();
-        btnImport = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
+        btnImport = new PButton(core);
+        btnCancel = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import From External Format");
@@ -121,6 +123,7 @@ public class ScrExcelImport extends PDialog {
             }
         });
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setName(""); // NOI18N
 

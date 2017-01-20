@@ -69,8 +69,11 @@
                       <Component id="txtName" min="-2" pref="218" max="-2" attributes="0"/>
                       <EmptySpace pref="351" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
                   <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jPanel3" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">

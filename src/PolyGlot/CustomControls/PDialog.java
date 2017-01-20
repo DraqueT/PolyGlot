@@ -22,6 +22,7 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import PolyGlot.PGTUtil.WindowMode;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -187,6 +188,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         }
         
         this.setAlwaysOnTop(true);
+        super.getRootPane().getContentPane().setBackground(Color.white);
         
         super.setVisible(visible);
     }

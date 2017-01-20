@@ -72,7 +72,12 @@ public class ScrIPARefChart extends PFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("IPA Pronunciation/Character Guide");
+        setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
+
+        jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/IPA_Vowels.png"))); // NOI18N
         jLabel23.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -100,6 +105,8 @@ public class ScrIPARefChart extends PFrame {
 
         jTabbedPane1.addTab("Vowels", jPanel1);
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
         lblPulmonicConsonants.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/IPA_Pulmonic_Consonants.png"))); // NOI18N
         lblPulmonicConsonants.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -126,6 +133,8 @@ public class ScrIPARefChart extends PFrame {
 
         jTabbedPane1.addTab("Pulmonic consonants", jPanel2);
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
         lblNonPulmonicConsonants.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/IPA_NonPulmonicConsonants.png"))); // NOI18N
         lblNonPulmonicConsonants.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -151,6 +160,8 @@ public class ScrIPARefChart extends PFrame {
         );
 
         jTabbedPane1.addTab("Non-pulmonic consonants", jPanel3);
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
         lblOtherSymbols.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/IPA_Other.png"))); // NOI18N
         lblOtherSymbols.addMouseListener(new java.awt.event.MouseAdapter() {

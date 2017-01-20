@@ -86,7 +86,9 @@ public class ScrTypes extends PFrame {
 
     @Override
     public void updateAllValues(DictCore _core) {
-        // Due to modal nature of form, no need to update
+        core = _core;
+        populateTypes();
+        populateProperties();
     }
     
     @Override
@@ -379,7 +381,6 @@ public class ScrTypes extends PFrame {
         jSplitPane1.setForeground(new java.awt.Color(255, 255, 255));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setMinimumSize(new java.awt.Dimension(10, 10));
 
         txtName.setToolTipText("Part of speech name");
 
@@ -444,14 +445,17 @@ public class ScrTypes extends PFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtName)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(txtGloss, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(txtTypePattern, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(btnSetup, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnAutogen, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
-            .addComponent(txtErrorBox, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtErrorBox, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAutogen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+                    .addComponent(btnSetup, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtTypePattern, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtGloss, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtName))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

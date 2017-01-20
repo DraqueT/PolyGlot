@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -25,6 +25,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.FamTreeNode;
+import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.PTree;
 import java.awt.Component;
 import java.awt.Toolkit;
@@ -157,17 +158,13 @@ public class ScrFamilies extends PFrame {
         }
 
         FamTreeNode newNode = new FamTreeNode(curNode.getNode());
-        newNode.setUserObject("NEW FAMILY");
+        newNode.setUserObject("");
 
         // set ID = 1 to indicate new node
         newNode.getNode().setId(1);
 
         ((DefaultTreeModel) treFam.getModel()).insertNodeInto(newNode, curNode, 0);
-
-        if (treFam.getLastSelectedPathComponent() == null) {
-            treFam.setSelectionPath(new TreePath(newNode.getPath()));
-        }
-
+        treFam.setSelectionPath(new TreePath(newNode.getPath()));
         treFam.expandRow(treFam.getSelectionRows()[0]);
     }
 
@@ -439,7 +436,7 @@ public class ScrFamilies extends PFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         treFam = new PTree(core);
         jPanel1 = new javax.swing.JPanel();
-        chkInclSubFam = new javax.swing.JCheckBox();
+        chkInclSubFam = new PCheckBox(core);
         jScrollPane3 = new javax.swing.JScrollPane();
         lstWords = new javax.swing.JList();
         jLabel1 = new javax.swing.JLabel();
@@ -458,7 +455,8 @@ public class ScrFamilies extends PFrame {
         treFam.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane1.setViewportView(treFam);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         chkInclSubFam.setText("Include Subfamilies");
         chkInclSubFam.setToolTipText("Include all words from subfamilies in list disables remove (-) button");
@@ -514,7 +512,7 @@ public class ScrFamilies extends PFrame {
                         .addComponent(btnDelWord, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(chkInclSubFam)
-                        .addGap(0, 19, Short.MAX_VALUE))
+                        .addGap(0, 21, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2)
@@ -534,7 +532,7 @@ public class ScrFamilies extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAddWord)

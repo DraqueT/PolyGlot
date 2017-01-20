@@ -463,13 +463,20 @@ public class ScrLogoDetails extends PFrame {
 
     private void updateName() {
         LogoNode curNode = (LogoNode) lstLogos.getSelectedValue();
-
+        boolean localPopulating = curPopulating;
+        
         if (curNode == null || curPopulating) {
             return;
         }
-
+        
+        curPopulating = true;
+        
         curNode.setValue(txtName.getText());
+        populateLogographs();
+        lstLogos.setSelectedValue(curNode, true);
         lstLogos.updateUI();
+        
+        curPopulating = localPopulating;
     }
 
     private void updateIsRadical() {
@@ -936,7 +943,7 @@ public class ScrLogoDetails extends PFrame {
 
     private void addLogo() {
         LogoNode newNode = new LogoNode();
-        newNode.setValue("NEW LOGOGRAPH");
+        newNode.setValue("");
 
         curPopulating = true;
         // save table/list values before continuing
@@ -1012,7 +1019,7 @@ public class ScrLogoDetails extends PFrame {
         setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         fltRelatedWord.setToolTipText("Filter on related words");
 
@@ -1096,7 +1103,7 @@ public class ScrLogoDetails extends PFrame {
         });
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         lblLogo.setText("jLabel6");
         lblLogo.setToolTipText("Logograph image");
@@ -1260,7 +1267,7 @@ public class ScrLogoDetails extends PFrame {
                                 .addComponent(btnClipboard, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnAddReading, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                                 .addComponent(btnDelReading, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1357,7 +1364,7 @@ public class ScrLogoDetails extends PFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

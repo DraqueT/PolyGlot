@@ -84,9 +84,12 @@
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
-            <BevelBorder bevelType="1"/>
+          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+            <LineBorder/>
           </Border>
         </Property>
       </Properties>
@@ -104,7 +107,7 @@
                       </Group>
                       <Group type="102" attributes="0">
                           <Component id="chkInclSubFam" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="19" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="21" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -131,7 +134,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane3" pref="188" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" pref="190" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="btnAddWord" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -154,6 +157,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkInclSubFamActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+          </AuxValues>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane3">
           <AuxValues>

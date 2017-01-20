@@ -20,6 +20,9 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PButton;
+import PolyGlot.CustomControls.PCheckBox;
+import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
@@ -121,26 +124,25 @@ public class ScrQuizGenDialog extends PFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnQuiz = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
+        btnQuiz = new PButton(core);
+        btnCancel = new PButton(core);
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         txtFilterConWord = new PTextField(core, false, "-- " + core.conLabel() + " Filter --");
         txtFilterLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Filter --");
-        cmbFilterType = new javax.swing.JComboBox<>();
+        cmbFilterType = new PComboBox(core);
         txtFilterProc = new PTextField(core, true, "-- Pronunciation Filter --");
-        btnClearFilter = new javax.swing.JButton();
+        btnClearFilter = new PButton(core);
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtNumQuestions = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        chkDefQuiz = new javax.swing.JCheckBox();
-        chkProcQuiz = new javax.swing.JCheckBox();
-        chkClassQuiz = new javax.swing.JCheckBox();
-        chkTypeQuiz = new javax.swing.JCheckBox();
-        chkLocalQuiz = new javax.swing.JCheckBox();
-        chkConlangQuiz = new javax.swing.JCheckBox();
+        chkDefQuiz = new PCheckBox(core);
+        chkProcQuiz = new PCheckBox(core);
+        chkClassQuiz = new PCheckBox(core);
+        chkTypeQuiz = new PCheckBox(core);
+        chkLocalQuiz = new PCheckBox(core);
+        chkConlangQuiz = new PCheckBox(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Quiz Generator");
@@ -160,8 +162,9 @@ public class ScrQuizGenDialog extends PFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtFilterConWord.setToolTipText("Filter by conword here");
@@ -198,7 +201,7 @@ public class ScrQuizGenDialog extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 27, Short.MAX_VALUE)
+                        .addGap(0, 29, Short.MAX_VALUE)
                         .addComponent(btnClearFilter))
                     .addComponent(txtFilterProc))
                 .addContainerGap())
@@ -225,19 +228,6 @@ public class ScrQuizGenDialog extends PFrame {
 
         txtNumQuestions.setText("10");
         txtNumQuestions.setToolTipText("Number of questions in quiz (defaults to 10)");
-
-        jPanel3.setToolTipText("");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
 
         jLabel3.setText("Quiz On:");
 
@@ -277,25 +267,18 @@ public class ScrQuizGenDialog extends PFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkLocalQuiz)
+                    .addComponent(chkTypeQuiz)
+                    .addComponent(chkClassQuiz)
+                    .addComponent(chkProcQuiz)
+                    .addComponent(chkDefQuiz)
+                    .addComponent(chkConlangQuiz)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkLocalQuiz)
-                            .addComponent(chkTypeQuiz)
-                            .addComponent(chkClassQuiz)
-                            .addComponent(chkProcQuiz)
-                            .addComponent(chkDefQuiz)
-                            .addComponent(chkConlangQuiz))
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtNumQuestions, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(txtNumQuestions, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(132, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -307,25 +290,19 @@ public class ScrQuizGenDialog extends PFrame {
                     .addComponent(txtNumQuestions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkLocalQuiz)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkTypeQuiz)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkClassQuiz)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkProcQuiz)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkDefQuiz)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkConlangQuiz)
-                        .addContainerGap(26, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkLocalQuiz)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkTypeQuiz)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkClassQuiz)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkProcQuiz)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkDefQuiz)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkConlangQuiz)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -356,7 +333,7 @@ public class ScrQuizGenDialog extends PFrame {
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(43, Short.MAX_VALUE)))
+                    .addContainerGap(45, Short.MAX_VALUE)))
         );
 
         pack();
@@ -454,7 +431,6 @@ public class ScrQuizGenDialog extends PFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JTextField txtFilterConWord;
     private javax.swing.JTextField txtFilterLocalWord;
     private javax.swing.JTextField txtFilterProc;
