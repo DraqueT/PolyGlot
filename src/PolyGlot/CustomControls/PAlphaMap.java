@@ -39,14 +39,14 @@ public class PAlphaMap<String,Integer> extends HashMap {
      * @return 
      */
     @Override
-    public PAlphaMap put(Object key, Object orderVal) {
+    public Object put(Object key, Object orderVal) {
         java.lang.String sKey = (java.lang.String)key;
         int keyLen = sKey.length();
         if (keyLen > longestEntry) {
             longestEntry = keyLen;
         }
         
-        return (PAlphaMap)super.put(key, orderVal);
+        return super.put(key, orderVal);
     }
     
     public int getLongestEntry() {
