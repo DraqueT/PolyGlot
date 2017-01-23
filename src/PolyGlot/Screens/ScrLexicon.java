@@ -533,7 +533,9 @@ public final class ScrLexicon extends PFrame {
 
         try {
             String setText = core.getPronunciationMgr().getPronunciation(txtConWord.getText());
-            if (!setText.isEmpty()) {
+            
+            // avoid setting text if it comes back empty (unless word itself is now blank)
+            if (!setText.isEmpty() || txtConWord.getText().isEmpty()) {
                 txtProc.setText(setText);
             }
         } catch (Exception e) {
