@@ -129,6 +129,10 @@ public class ConWord extends DictNode {
         if (!(_set instanceof ConWord)) {
             throw new ClassCastException("Object not of type ConWord");
         }
+        
+        if (core == null) {
+            throw new ClassCastException("Core must be initialized in conword to use method SetEqual");
+        }
                 
         ConWord set = (ConWord) _set;
         set.setCore(core);
@@ -139,13 +143,53 @@ public class ConWord extends DictNode {
         this.setDefinition(set.getDefinition());
         this.setPronunciation(set.getPronunciation());
         this.setId(set.getId());
-        List<Entry<Integer, Integer>> precLock = new ArrayList<>(set.getClassValues());
+        List<Entry<Integer, Integer>> precLock = new ArrayList<>(set.getClassValues()); // avoid read/write collisions
         for (Entry<Integer, Integer> curEntry : precLock) {
             this.setClassValue(curEntry.getKey(), curEntry.getValue());
+        }
+        List<Entry<Integer, String>> textLock = new ArrayList<>(set.getClassTextValues()); // avoid read/write collisions
+        for (Entry<Integer, String> curEntry : textLock) {
+            this.setClassTextValue(curEntry.getKey(), curEntry.getValue());
         }
         this.setProcOverride(set.isProcOverride());
         this.setOverrideAutoDeclen(set.isOverrideAutoDeclen());
     }
+    
+    public DictCore getCore() {
+        return core;
+    }
+    
+    /**
+     * Gets all freetext class values
+     * Purges values which no longer exist
+     * @return set of values with their IDs
+     */
+    public Set<Entry<Integer, String>> getClassTextValues() {
+        Iterator<Entry<Integer, String>> classIt = new ArrayList<>(classTextValues.entrySet()).iterator();
+        
+        while (classIt.hasNext()) {
+            Entry<Integer, String> curEntry = classIt.next();
+            if (!core.getWordPropertiesCollection().exists(curEntry.getKey())) {
+                classTextValues.remove(curEntry.getKey());
+            }
+        }
+        
+        return classTextValues.entrySet();
+    }
+    
+    
+    /*
+        while (classIt.hasNext()) {
+            Entry<Integer, Integer> curEntry = classIt.next();
+            
+            if (!core.getWordPropertiesCollection().isValid(curEntry.getKey(), 
+                    curEntry.getValue())) {
+                classValues.remove(curEntry.getKey());
+            }
+        }
+        
+        return classValues.entrySet();
+    */
     
     public void setCore(DictCore _core) {
         core = _core;

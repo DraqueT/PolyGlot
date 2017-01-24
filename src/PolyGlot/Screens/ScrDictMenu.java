@@ -652,17 +652,17 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                     ScrLexicon scrLexicon = (ScrLexicon) children.get(ScrLexicon.class.getName());
 
                     if (scrLexicon.isDisposed()) {
-                        scrLexicon = ScrLexicon.run(core);
-                        bindButtonToWindow(scrLexicon, btnLexicon);
-                        children.replace(ScrLexicon.class.getName(), scrLexicon);
+                        //scrLexicon = ScrLexicon.run(core);
+                        //bindButtonToWindow(scrLexicon, btnLexicon);
+                        //children.replace(ScrLexicon.class.getName(), scrLexicon);
                     }
 
                     scrLexicon.setVisible(true);
                 } else {
-                    ScrLexicon scrLexicon = ScrLexicon.run(core);
-                    bindButtonToWindow(scrLexicon, btnLexicon);
-                    children.put(ScrLexicon.class.getName(), scrLexicon);
-                    scrLexicon.setVisible(true);
+                    //ScrLexicon scrLexicon = ScrLexicon.run(core);
+                    //bindButtonToWindow(scrLexicon, btnLexicon);
+                    //children.put(ScrLexicon.class.getName(), scrLexicon);
+                    //scrLexicon.setVisible(true);
                 }
             } catch (Exception e) {
                 localError("Open Window Error", "Error Opening Lexicon: "

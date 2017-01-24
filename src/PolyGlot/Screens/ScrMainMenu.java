@@ -43,8 +43,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
@@ -53,7 +51,6 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import org.apache.poi.ss.usermodel.Font;
 import org.simplericity.macify.eawt.Application;
 import org.simplericity.macify.eawt.ApplicationEvent;
 import org.simplericity.macify.eawt.ApplicationListener;
@@ -82,10 +79,10 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
             jLabel1.setFont(IOHandler.getButtonFont().deriveFont(40f));
         } catch (Exception e) {
-            InfoBox.error("Resource Error", "Unable to load internal resource: " + e.getLocalizedMessage(), this);
+            InfoBox.error("Resource Error", "Unable to load internal resource: " + e.getLocalizedMessage(), null);
         }
         
-        newFile(true);
+        newFile(false);
         setOverrideProgramPath(overridePath);
         lastFiles = core.getOptionsManager().getLastFiles();
         populateRecentOpened();
@@ -419,6 +416,11 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         
         genTitle();
         updateAllValues(core);
+        
+        if (curWindow == null && performTest) {
+            ScrLexicon lex = ScrLexicon.run(core, this);
+            changeScreen(lex, lex.getWindow());
+        }
     }
     
     /**
@@ -521,6 +523,10 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             setFile(fileName);
             pushRecentFile(fileName);
             populateRecentOpened();
+            if (curWindow == null) {
+                ScrLexicon lex = ScrLexicon.run(core, this);
+                changeScreen(lex, lex.getWindow());
+            }
         }
         
         genTitle();
@@ -829,7 +835,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 .addComponent(btnLogos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnProp)
-                .addContainerGap(213, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -878,7 +884,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(78, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1063,7 +1069,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLexiconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLexiconActionPerformed
-        ScrLexicon lex = ScrLexicon.run(core);
+        ScrLexicon lex = ScrLexicon.run(core, this);
         changeScreen(lex, lex.getWindow());
     }//GEN-LAST:event_btnLexiconActionPerformed
 

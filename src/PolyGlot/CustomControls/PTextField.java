@@ -38,6 +38,7 @@ import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -47,6 +48,7 @@ import javax.swing.event.ChangeListener;
  * @author draque
  */
 public class PTextField extends JTextField {
+
     private final DictCore core;
     boolean skipRepaint = false;
     boolean curSetText = false;
@@ -68,11 +70,11 @@ public class PTextField extends JTextField {
             pVis.removeChangeListener(chlist);
         }
         pVis.addChangeListener(new PScrollRepainter());
-        
+
         core = _core;
         overrideFont = _overideFont;
         defText = _defText;
-        setupListeners();        
+        setupListeners();
         setForeground(Color.lightGray);
         setupRightClickMenu();
         if (!overrideFont) {
@@ -82,70 +84,86 @@ public class PTextField extends JTextField {
         }
         setText(defText);
     }
-    
+
     @Override
     public final void setFont(Font _font) {
         super.setFont(_font);
     }
-        
+
     @Override
     public final void setForeground(Color _color) {
         super.setForeground(_color);
     }
-    
+
     /**
      * gets default value string of text
+     *
      * @return default text
      */
     public String getDefaultValue() {
         return defText;
     }
-    
+
     public void setDefaultValue(String _default) {
         defText = _default;
     }
-    
+
     /**
      * Tests whether the current text value is the default value
-     * @return 
+     *
+     * @return
      */
     public boolean isDefaultText() {
         // account for RtL languages
         String curText = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
         return curText.equals(defText);
     }
-    
+
     /**
      * sets text to default value
      */
     public void setDefault() {
         setText(defText);
     }
-    
+
     private void setupListeners() {
         this.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (getSuperText().equals(defText)) {
-                    setText("");
-                    setForeground(Color.black);
-                }
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (getSuperText().equals(defText)) {
+                            setText("");
+                            setForeground(Color.black);
+                        }
+                    }
+                };
+                SwingUtilities.invokeLater(runnable);
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (getSuperText().equals("")) {
-                    setText(defText);
-                    setForeground(Color.lightGray);
-                }
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (getSuperText().equals("")) {
+                            setText(defText);
+                            setForeground(Color.lightGray);
+                        }
+                    }
+                };
+                SwingUtilities.invokeLater(runnable);
             }
         });
     }
-    
+
     /**
      * makes this component flash. If already flashing, does nothing.
+     *
      * @param _flashColor color to flash
-     * @param isBack whether display color is background (rather than foreground)
+     * @param isBack whether display color is background (rather than
+     * foreground)
      */
     public void makeFlash(Color _flashColor, boolean isBack) {
         if (worker == null || worker.isDone()) {
@@ -153,7 +171,7 @@ public class PTextField extends JTextField {
             worker.execute();
         }
     }
-    
+
     // Overridden to meet code standards
     @Override
     public final BoundedRangeModel getHorizontalVisibility() {
@@ -186,7 +204,7 @@ public class PTextField extends JTextField {
         if (skipRepaint || core == null) {
             return;
         }
-        
+
         try {
             PropertiesManager propMan = core.getPropertiesManager();
             skipRepaint = true;
@@ -216,12 +234,13 @@ public class PTextField extends JTextField {
 
     /**
      * Returns true if currently setting text (useful in constructed listeners)
-     * @return 
+     *
+     * @return
      */
     public boolean isSettingText() {
         return curSetText;
     }
-    
+
     @Override
     public final void setText(String t) {
         curSetText = true;
@@ -232,9 +251,10 @@ public class PTextField extends JTextField {
                 super.setText(t);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), null);
         }
-        
+
         if (isDefaultText()) {
             if (!overrideFont) {
                 setFont(core.getPropertiesManager().getCharisUnicodeFont());
@@ -252,28 +272,29 @@ public class PTextField extends JTextField {
 
     /**
      * Gets text from super with minimal processing
+     *
      * @return super's text
      */
     private String getSuperText() {
         return super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
     }
-    
+
     @Override
     /**
      * Make certain only to return appropriate text and never default text
      */
     public String getText() {
         String ret = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
-        
+
         if (ret.equals(defText)) {
             ret = "";
         } else {
             ret = (core.getPropertiesManager().isEnforceRTL() && !overrideFont) ? PGTUtil.RTLMarker + ret : ret;
         }
-        
+
         return ret;
     }
-    
+
     private void setupRightClickMenu() {
         final JPopupMenu ruleMenu = new JPopupMenu();
         final JMenuItem cut = new JMenuItem("Cut");
@@ -296,18 +317,18 @@ public class PTextField extends JTextField {
         paste.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if(isDefaultText()) { //removes default text if appropriate
+                if (isDefaultText()) { //removes default text if appropriate
                     superSetText("");
                 }
                 paste();
                 setText(getText()); // ensures text is not left grey
             }
         });
-        
+
         ruleMenu.add(cut);
         ruleMenu.add(copy);
         ruleMenu.add(paste);
-        
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -330,10 +351,11 @@ public class PTextField extends JTextField {
             }
         });
     }
-    
+
     /**
      * Exposes super's set text to menu items
-     * @param text 
+     *
+     * @param text
      */
     private void superSetText(String text) {
         super.setText(text);

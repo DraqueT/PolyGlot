@@ -56,6 +56,7 @@ import javax.swing.text.DefaultEditorKit;
  * @author Draque
  */
 public abstract class PFrame extends JFrame implements FocusListener, WindowFocusListener {
+
     private final JMenuItem mnuPublish = new JMenuItem();
     private final JMenuItem mnuSave = new JMenuItem();
     private final JMenuItem mnuNew = new JMenuItem();
@@ -66,6 +67,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
     private boolean ignoreCenter = false;
     private boolean hasFocus = false;
     protected WindowMode mode = WindowMode.STANDARD;
+    private boolean firstVisible = true;
 
     /**
      * Returns current running mode of window
@@ -75,11 +77,12 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
     public WindowMode getMode() {
         return mode;
     }
-    
+
     /**
-     * Returns whether target window can close. 
-     * In implementation, all cases where false is returned should also
-     * generate a pop-up explaining to the user why it cannot close.
+     * Returns whether target window can close. In implementation, all cases
+     * where false is returned should also generate a pop-up explaining to the
+     * user why it cannot close.
+     *
      * @return true if can close. False otherwise.
      */
     public abstract boolean canClose();
@@ -88,13 +91,13 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
     public void dispose() {
         if (!isDisposed) {
             core.getOptionsManager().setScreenPosition(getClass().getName(),
-                this.getLocation());
+                    this.getLocation());
             core.getOptionsManager().setScreenSize(getClass().getName(),
-                this.getSize());
+                    this.getSize());
         }
-        
+
         isDisposed = true;
-        
+
         super.dispose();
     }
 
@@ -175,7 +178,6 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
             }
         };
         SwingUtilities.invokeLater(runnable);
-
     }
 
     /**
@@ -250,7 +252,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
             }
         });
         this.rootPane.add(mnuPublish);
-        
+
         mnuSave.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -331,54 +333,60 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
     // positions on screen once form has already been build/sized
     @Override
     public void setVisible(boolean visible) {
-        if (core != null) {
-            Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());
-            if (lastPos != null) {
-                setLocation(lastPos);
-            } else if (!ignoreCenter) {
-                this.setLocationRelativeTo(null);
-            }
-            
-            Dimension lastDim = core.getOptionsManager().getScreenSize(getClass().getName());
-            if (lastDim != null) {
-                setSize(lastDim);
+        // only run setup stuff the initial visibility setting
+        if (firstVisible) {
+            if (core != null) {
+                Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());
+                if (lastPos != null) {
+                    setLocation(lastPos);
+                } else if (!ignoreCenter) {
+                    this.setLocationRelativeTo(null);
+                }
+
+                Dimension lastDim = core.getOptionsManager().getScreenSize(getClass().getName());
+                if (lastDim != null) {
+                    setSize(lastDim);
+                }
+
+                if (core == null && !(this instanceof ScrMainMenu)) {
+                    InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
+                }
+                addWindowFocusListener(this);
             }
 
-            if (core == null && !(this instanceof ScrMainMenu)) {
-                InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
-            }
-            addWindowFocusListener(this);
+            super.getRootPane().getContentPane().setBackground(Color.white);
+            firstVisible = false;
         }
         
-        super.getRootPane().getContentPane().setBackground(Color.white);
         super.setVisible(visible);
     }
-    
+
     /**
      * Smoothly resizes window with animation
+     *
      * @param width new width of element
      * @param height new height of element
      * @param wait whether to wait on animation finishing before continuing
      * @throws java.lang.InterruptedException
-     */    
+     */
     public void setSizeSmooth(final int width, final int height, boolean wait) throws InterruptedException {
         // TODO: move these to the util class? Consider.
         final int numFrames = 40; // total number of frames to animate
         final int msDelay = 10; // ms delay between frames
         final int initialX = this.getWidth();
         final int initialY = this.getHeight();
-        
+
         Thread resize = new Thread() {
             @Override
             public void run() {
                 float xDif = width - initialX;
                 float yDif = height - initialY;
 
-                for (int i = 0; i < numFrames; i ++) {
-                    float newX = initialX + (xDif/numFrames) * (i + 1);
-                    float newY = initialY + (yDif/numFrames) * (i + 1);
+                for (int i = 0; i < numFrames; i++) {
+                    float newX = initialX + (xDif / numFrames) * (i + 1);
+                    float newY = initialY + (yDif / numFrames) * (i + 1);
 
-                    PFrame.super.setSize((int) newX, (int)newY);
+                    PFrame.super.setSize((int) newX, (int) newY);
                     try {
                         Thread.sleep(msDelay); // sleep for animation frame length
                     } catch (Exception e) {
@@ -390,7 +398,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
                 PFrame.super.setSize(width, height);
             }
         };
-        
+
         synchronized (resize) {
             if (wait) {
                 resize.start();
@@ -398,6 +406,6 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
             }
         }
     }
-    
+
     public abstract Component getWindow();
 }

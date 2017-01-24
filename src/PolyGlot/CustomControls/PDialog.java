@@ -49,6 +49,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     private boolean skipCenter = false;
     private boolean hasFocus = false;
     protected DictCore core;
+    boolean firstVisible = true;
         
     /**
      * Returns current running mode of window
@@ -173,22 +174,25 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     
     @Override
     public void setVisible(boolean visible) {
-        if (core == null) {
-            InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
+        if (firstVisible) {
+            if (core == null) {
+                InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
+            }
+
+            Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());
+            if (lastPos != null) {
+                setLocation(lastPos);
+            }
+
+            Dimension lastDim = core.getOptionsManager().getScreenSize(getClass().getName());
+            if (lastDim != null) {
+                setSize(lastDim);
+            }
+
+            this.setAlwaysOnTop(true);
+            super.getRootPane().getContentPane().setBackground(Color.white);
+            firstVisible = false;
         }
-        
-        Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());
-        if (lastPos != null) {
-            setLocation(lastPos);
-        }
-        
-        Dimension lastDim = core.getOptionsManager().getScreenSize(getClass().getName());
-        if (lastDim != null) {
-            setSize(lastDim);
-        }
-        
-        this.setAlwaysOnTop(true);
-        super.getRootPane().getContentPane().setBackground(Color.white);
         
         super.setVisible(visible);
     }

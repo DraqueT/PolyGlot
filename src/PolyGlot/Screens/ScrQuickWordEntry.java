@@ -22,16 +22,19 @@ package PolyGlot.Screens;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDialog;
-import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -39,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -50,7 +52,7 @@ import javax.swing.event.DocumentListener;
  */
 public final class ScrQuickWordEntry extends PDialog {
 
-    private final Map<Integer, JComboBox> classComboMap = new HashMap<>();
+    private final Map<Integer, Component> classComboMap = new HashMap<>();
     private final ScrLexicon parent;
 
     /**
@@ -100,8 +102,8 @@ public final class ScrQuickWordEntry extends PDialog {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER
                         && !cmbType.isPopupVisible()) {
                     // tests all class comboboxes
-                    for (JComboBox curBox : classComboMap.values()) {
-                        if (curBox.isPopupVisible()) {
+                    for (Component curBox : classComboMap.values()) {
+                        if (curBox instanceof PComboBox && ((PComboBox) curBox).isPopupVisible()) {
                             return;
                         }
                     }
@@ -143,14 +145,14 @@ public final class ScrQuickWordEntry extends PDialog {
         txtProc.addKeyListener(enterListener);
         cmbType.addKeyListener(enterListener);
     }
-        
+
     /**
      * Sets pronunciation value of word
      */
     private void setProc() {
         String proc = core.getPronunciationMgr()
                 .getPronunciation(txtConWord.getText());
-        
+
         if (!proc.equals("")) {
             txtProc.setText(proc);
         }
@@ -176,9 +178,9 @@ public final class ScrQuickWordEntry extends PDialog {
 
     private void populateTypes() {
         cmbType.removeAllItems();
-        final String defLabel =  "-- Part of Speech --";
+        final String defLabel = "-- Part of Speech --";
         cmbType.addItem(defLabel);
-        
+
         for (TypeNode curType : core.getTypes().getNodes()) {
             cmbType.addItem(curType);
         }
@@ -189,21 +191,28 @@ public final class ScrQuickWordEntry extends PDialog {
      */
     private void tryRecord() {
         ConWord word = new ConWord();
+        word.setCore(core);
 
         word.setValue(txtConWord.getText());
         word.setLocalWord(txtLocalWord.getText());
         word.setPronunciation(txtProc.getText());
         word.setDefinition(txtDefinition.getText());
-        
+
         if (cmbType.getSelectedItem() instanceof TypeNode) {
             word.setWordTypeId(((TypeNode) cmbType.getSelectedItem()).getId());
         }
 
         // set class values
-        for (Entry<Integer, JComboBox> curEntry : classComboMap.entrySet()) {
-            if (curEntry.getValue().getSelectedItem() instanceof WordPropValueNode) {
-                WordPropValueNode curValue = (WordPropValueNode) curEntry.getValue().getSelectedItem();
-                word.setClassValue(curEntry.getKey(), curValue.getId());
+        for (Entry<Integer, Component> curEntry : classComboMap.entrySet()) {
+            if (curEntry.getValue() instanceof PComboBox) {
+                PComboBox boxEntry = (PComboBox) curEntry.getValue();
+                if (boxEntry.getSelectedItem() instanceof WordPropValueNode) {
+                    WordPropValueNode curValue = (WordPropValueNode) boxEntry.getSelectedItem();
+                    word.setClassValue(curEntry.getKey(), curValue.getId());
+                }
+            } else if (curEntry.getValue() instanceof PTextField) {
+                PTextField curText = (PTextField) curEntry.getValue();
+                word.setClassTextValue(curEntry.getKey(), curText.getText());
             }
         }
 
@@ -303,61 +312,78 @@ public final class ScrQuickWordEntry extends PDialog {
 
         // create dropdown for each class that applies to the curren word
         for (WordProperty curProp : propList) {
-            final JComboBox classBox = new JComboBox();
-            DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
-            classBox.setModel(comboModel);
-            comboModel.addElement("-- " + curProp.getValue() + " --");
-
-            // populate class dropdown
-            for (WordPropValueNode value : curProp.getValues()) {
-                comboModel.addElement(value);
-            }
-
-            classBox.setEnabled(chkClasses.isSelected());
-            classBox.addKeyListener(new KeyListener() {
-                @Override
-                public void keyPressed(KeyEvent e) {
-                    // User only wants to enter word if no popups are visible
-                    if (e.getKeyCode() == KeyEvent.VK_ENTER
-                            && !cmbType.isPopupVisible()) {
-                        // tests all class comboboxes
-                        for (JComboBox curBox : classComboMap.values()) {
-                            if (curBox.isPopupVisible()) {
-                                return;
-                            }
-                        }
+            if (curProp.isFreeText()) {
+                PTextField textField = new PTextField(core, false, "-- " + curProp.getValue() + " --");
+                textField.setEnabled(chkClasses.isSelected());
+                textField.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
                         tryRecord();
                     }
+                });
+                
+                textField.setToolTipText(curProp.getValue() + " value");
+                textField.setPreferredSize(new Dimension(99999, textField.getPreferredSize().height));
+                pnlClasses.add(textField, gbc);
+                classComboMap.put(curProp.getId(), textField); // dropbox mapped to related class ID.
+            } else {
+                final PComboBox classBox = new PComboBox(core);
+                DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
+                classBox.setModel(comboModel);
+                comboModel.addElement("-- " + curProp.getValue() + " --");
+
+                // populate class dropdown
+                for (WordPropValueNode value : curProp.getValues()) {
+                    comboModel.addElement(value);
                 }
 
-                @Override
-                public void keyReleased(KeyEvent e) {
-                    /*DO NOTHING*/
-                }
+                classBox.setEnabled(chkClasses.isSelected());
+                classBox.addKeyListener(new KeyListener() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        // User only wants to enter word if no popups are visible
+                        if (e.getKeyCode() == KeyEvent.VK_ENTER
+                                && !cmbType.isPopupVisible()) {
+                            // tests all class comboboxes
+                            for (Component curBox : classComboMap.values()) {
+                                if (curBox instanceof PComboBox && ((PComboBox) curBox).isPopupVisible()) {
+                                    return;
+                                }
+                            }
+                            tryRecord();
+                        }
+                    }
 
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    /*DO NOTHING*/
-                }
-            });
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        /*DO NOTHING*/
+                    }
 
-            classBox.setToolTipText(curProp.getValue() + " value");
-            classBox.setPreferredSize(new Dimension(99999, classBox.getPreferredSize().height));
-            pnlClasses.add(classBox, gbc);
-            classComboMap.put(curProp.getId(), classBox); // dropbox mapped to related class ID.
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        /*DO NOTHING*/
+                    }
+                });
+
+                classBox.setToolTipText(curProp.getValue() + " value");
+                classBox.setPreferredSize(new Dimension(99999, classBox.getPreferredSize().height));
+                pnlClasses.add(classBox, gbc);
+                classComboMap.put(curProp.getId(), classBox); // dropbox mapped to related class ID.
+            }
         }
         if (propList.isEmpty()) {
             // must include at least one item (even a dummy) to resize for some reason
-            JComboBox blank = new JComboBox();
+            PComboBox blank = new PComboBox(core);
             blank.setEnabled(false);
             pnlClasses.add(blank, gbc);
             pnlClasses.setPreferredSize(new Dimension(9999, 0));
         } else {
             pnlClasses.setMaximumSize(new Dimension(99999, 99999));
-            pnlClasses.setPreferredSize(new Dimension(9999, propList.size() * new JComboBox().getPreferredSize().height));
+            pnlClasses.setPreferredSize(new Dimension(9999, propList.size() * new PComboBox(core).getPreferredSize().height));
         }
 
         pnlClasses.repaint();
+        setVisible(true);
     }
 
     /**
@@ -383,13 +409,15 @@ public final class ScrQuickWordEntry extends PDialog {
         pnlClasses = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDefinition = new PolyGlot.CustomControls.PTextPane(core, true, "-- Notes --");
-        btnDone = new javax.swing.JButton();
+        btnDone = new PButton(core);
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Word Quickentry");
+        setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(335, 406));
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jPanel1.setMinimumSize(new java.awt.Dimension(265, 57));
 
@@ -469,6 +497,7 @@ public final class ScrQuickWordEntry extends PDialog {
                 .addContainerGap())
         );
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         cmbType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -596,7 +625,7 @@ public final class ScrQuickWordEntry extends PDialog {
     }//GEN-LAST:event_cmbTypeActionPerformed
 
     private void chkClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkClassesActionPerformed
-        for (JComboBox curBox : classComboMap.values()) {
+        for (Component curBox : classComboMap.values()) {
             curBox.setEnabled(chkClasses.isSelected());
         }
     }//GEN-LAST:event_chkClassesActionPerformed
@@ -627,6 +656,7 @@ public final class ScrQuickWordEntry extends PDialog {
         //</editor-fold>
         ScrQuickWordEntry ret = new ScrQuickWordEntry(_core, _parent);
         ret.setModal(true);
+        ret.setVisible(true);
         return ret;
     }
 

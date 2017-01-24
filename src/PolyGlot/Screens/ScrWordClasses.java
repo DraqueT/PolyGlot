@@ -47,6 +47,7 @@ import javax.swing.CellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumn;
@@ -317,7 +318,8 @@ public class ScrWordClasses extends PFrame {
         WordProperty prop = lstProperties.getSelectedValue();
         int position = lstProperties.getSelectedIndex();
 
-        if (prop == null) {
+        if (prop == null || InfoBox.yesNoCancel("Are you sure?", "This will delete the property from all words."
+                + " Values will be irretrevably lost.", this) != JOptionPane.YES_OPTION) {
             return;
         }
 

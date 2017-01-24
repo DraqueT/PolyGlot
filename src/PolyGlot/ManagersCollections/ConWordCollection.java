@@ -52,6 +52,7 @@ public class ConWordCollection extends DictionaryCollection {
 
     public ConWordCollection(DictCore _core) {
         bufferNode = new ConWord();
+        ((ConWord)bufferNode).setCore(_core);
         allConWords = new HashMap<>();
         allLocalWords = new HashMap<>();
         core = _core;
@@ -80,6 +81,7 @@ public class ConWordCollection extends DictionaryCollection {
         balanceWordCounts(insWord, true);
 
         bufferNode = new ConWord();
+        ((ConWord)bufferNode).setCore(core);
 
         return ret;
     }
@@ -171,6 +173,7 @@ public class ConWordCollection extends DictionaryCollection {
         balanceWordCounts((ConWord) bufferNode, true);
 
         bufferNode = new ConWord();
+        ((ConWord)bufferNode).setCore(core);
 
         return ret;
     }
@@ -555,6 +558,7 @@ public class ConWordCollection extends DictionaryCollection {
     @Override
     public void clear() {
         bufferNode = new ConWord();
+        ((ConWord)bufferNode).setCore(core);
     }
 
     public ConWord getBufferWord() {
@@ -563,6 +567,10 @@ public class ConWordCollection extends DictionaryCollection {
 
     public void setBufferWord(ConWord bufferWord) {
         this.bufferNode = bufferWord;
+        
+        if (bufferWord.getCore() == null) {
+            bufferWord.setCore(core);
+        }
     }
 
     /**

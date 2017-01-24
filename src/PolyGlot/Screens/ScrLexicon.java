@@ -41,6 +41,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -67,7 +68,6 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
@@ -117,15 +117,18 @@ public final class ScrLexicon extends PFrame {
     private boolean namePopulating = false;
     private boolean forceUpdate = false;
     private Thread filterThread = null;
+    private final ScrMainMenu menuParent;
 
     /**
      * Creates new form scrLexicon
      *
      * @param _core Dictionary Core
+     * @param _menuParent
      */
-    public ScrLexicon(DictCore _core) {
+    public ScrLexicon(DictCore _core, ScrMainMenu _menuParent) {
         defTypeValue.setValue("-- Part of Speech --");
 
+        menuParent = _menuParent;
         core = _core;
         fxPanel = new JFXPanel();
         initComponents();
@@ -415,9 +418,12 @@ public final class ScrLexicon extends PFrame {
                         }
 
                         ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
-                        curWord.setClassTextValue(classId, classText.getText());
+                        if (curWord != null) {
+                            curWord.setClassTextValue(classId, classText.getText());
+                        }
                     }
                 });
+                
                 pnlClasses.add(classText, gbc);
                 classPropMap.put(curProp.getId(), classText); // text box mapped to related class ID.
             } else {
@@ -456,6 +462,11 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classBox, gbc);
                 classPropMap.put(curProp.getId(), classBox); // dropbox mapped to related class ID.
             }
+            
+            // messy, but gets a full rebuild of screen since this is happening post-initial visibility-pop
+            Dimension dim = menuParent.getSize();
+            menuParent.setSize(dim.width, dim.height + 1);
+            menuParent.setSize(dim.width, dim.height);
         }
 
         if (propList.isEmpty()) {
@@ -1327,8 +1338,8 @@ public final class ScrLexicon extends PFrame {
         curPopulating = localPopulating;
     }
 
-    public static ScrLexicon run(DictCore _core) {
-        final ScrLexicon s = new ScrLexicon(_core);
+    public static ScrLexicon run(DictCore _core, ScrMainMenu _scrMainMenu) {
+        final ScrLexicon s = new ScrLexicon(_core, _scrMainMenu);
         return s;
     }
 
@@ -1520,6 +1531,7 @@ public final class ScrLexicon extends PFrame {
         lstLexicon = new PList(core, true);
         btnAddWord = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelWord = new PolyGlot.CustomControls.PAddRemoveButton("-");
+        jButton1 = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lexicon");
@@ -1669,8 +1681,8 @@ public final class ScrLexicon extends PFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDeclensions)
-                    .addComponent(btnLogographs)))
+                    .addComponent(btnDeclensions, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLogographs, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jSplitPane1.setRightComponent(jPanel3);
@@ -1707,6 +1719,14 @@ public final class ScrLexicon extends PFrame {
             }
         });
 
+        jButton1.setText("Q");
+        jButton1.setToolTipText("Open Quickentry Window");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -1714,17 +1734,21 @@ public final class ScrLexicon extends PFrame {
             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(btnAddWord, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDelWord, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddWord)
-                    .addComponent(btnDelWord))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAddWord)
+                        .addComponent(btnDelWord))
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -1738,7 +1762,7 @@ public final class ScrLexicon extends PFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jSplitPane1)
         );
 
         jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DRAG_LAYER);
@@ -1870,6 +1894,10 @@ public final class ScrLexicon extends PFrame {
         }
     }//GEN-LAST:event_cmbTypeActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        ScrQuickWordEntry.run(core, this);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddWord;
     private javax.swing.JButton btnDeclensions;
@@ -1878,6 +1906,7 @@ public final class ScrLexicon extends PFrame {
     private javax.swing.JCheckBox chkProcOverride;
     private javax.swing.JCheckBox chkRuleOverride;
     private javax.swing.JComboBox cmbType;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
