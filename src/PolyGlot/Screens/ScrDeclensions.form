@@ -41,8 +41,8 @@
               <Component id="scrDeclensions" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnCancel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnOk" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnCancel" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                  <Component id="btnOk" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="chkAutogenOverride" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -59,6 +59,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btnOk">
       <Properties>
@@ -68,12 +71,20 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOkActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
+      </AuxValues>
     </Component>
     <Container class="javax.swing.JScrollPane" name="scrDeclensions">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
         <Container class="javax.swing.JPanel" name="pnlDeclensions">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+          </Properties>
 
           <Layout>
             <DimensionLayout dim="0">

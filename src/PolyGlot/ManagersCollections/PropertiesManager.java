@@ -52,12 +52,18 @@ public class PropertiesManager {
     private boolean enforceRTL = false;
     private byte[] cachedFont = null;
     private final Font charisUnicode;
+    private final Font charisUnicodeBold;
+    private final Font charisUnicodeItalic;
+    private final Font charisUnicodeBoldItalic;
 
-    public PropertiesManager() {
+    public PropertiesManager() throws Exception {
         alphaOrder = new PAlphaMap();
 
         // set default font to Charis, as it's unicode compatible
         charisUnicode = IOHandler.getCharisUnicodeFontInitial();
+        charisUnicodeBold = IOHandler.getCharisUnicodeFontBoldInitial();
+        charisUnicodeItalic = IOHandler.getCharisUnicodeFontItalicInitial();
+        charisUnicodeBoldItalic = IOHandler.getCharisUnicodeFontBoldItalicInitial();
         setFontCon(charisUnicode);
     }
 
@@ -67,7 +73,23 @@ public class PropertiesManager {
      * @return
      */
     public Font getCharisUnicodeFont() {
-        return charisUnicode.deriveFont(0, 12);
+        return getCharisUnicodeFont(PGTUtil.defaultFontSize);
+    }
+    
+    public Font getCharisUnicodeFont(int size) {
+        return charisUnicode.deriveFont(0, size);
+    }
+    
+    public Font getCharisUnicodeFontBold(int size) {
+        return charisUnicodeBold.deriveFont(0, size);
+    }
+    
+    public Font getCharisUnicodeFontItalic(int size) {
+        return charisUnicodeItalic.deriveFont(0, size);
+    }
+    
+    public Font getCharisUnicodeFontBoldItalic(int size) {
+        return charisUnicodeBoldItalic.deriveFont(0, size);
     }
     
     /**

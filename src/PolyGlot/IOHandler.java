@@ -883,9 +883,34 @@ public class IOHandler {
      * conlang font in PolyGlot
      *
      * @return Charis unicode compatible font
+     * @throws java.io.IOException
      */
-    public static Font getCharisUnicodeFontInitial() {
-        return new IOHandler().getCharisUnicodeFontInternal();
+    public static Font getCharisUnicodeFontInitial() throws IOException {
+        return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontLocation);
+    }
+    /**
+     * ditto
+     * @return 
+     * @throws java.io.IOException 
+     */
+    public static Font getCharisUnicodeFontBoldInitial() throws IOException {
+        return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontBoldLocation);
+    }
+    /**
+     * ditto
+     * @return 
+     * @throws java.io.IOException 
+     */
+    public static Font getCharisUnicodeFontItalicInitial() throws IOException {
+        return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontItalicLocation);
+    }
+    /**
+     * ditto
+     * @return 
+     * @throws java.io.IOException 
+     */
+    public static Font getCharisUnicodeFontBoldItalicInitial() throws IOException {
+        return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontBoldItalicLocation);
     }
 
     /**
@@ -895,9 +920,9 @@ public class IOHandler {
      *
      * @return Charis unicode compatible font
      */
-    private Font getCharisUnicodeFontInternal() {
+    private Font getCharisUnicodeFontInternal(String location) throws IOException {
         Font ret = null;
-        try (InputStream tmp = this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation)) {
+        try (InputStream tmp = this.getClass().getResourceAsStream(location)) {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
 
@@ -905,8 +930,9 @@ public class IOHandler {
                 ge.registerFont(ret);
             }
 
-        } catch (IOException | FontFormatException ex) {
-            // TODO: This should throw an error. Refactor to address this here and elsewhere.
+        } catch (IOException | FontFormatException e) {
+            throw new IOException("Unable to load Charis (" + location + "): "
+                    + e.getLocalizedMessage());
         }
 
         return ret;
@@ -1013,6 +1039,20 @@ public class IOHandler {
      */
     public byte[] getUnicodeFontByteArray() throws FileNotFoundException, IOException {
         try (InputStream localStream = this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation)) {
+            return IOUtils.toByteArray(localStream);
+        }
+    }
+    
+    /**
+     * Gets Unicode compatible font as byte array
+     *
+     * @return byte array of font's file
+     * @throws FileNotFoundException if this throws, something is wrong
+     * internally
+     * @throws IOException if this throws, something is wrong internally
+     */
+    public byte[] getUnicodeFontItalicByteArray() throws FileNotFoundException, IOException {
+        try (InputStream localStream = this.getClass().getResourceAsStream(PGTUtil.UnicodeFontItalicLocation)) {
             return IOUtils.toByteArray(localStream);
         }
     }

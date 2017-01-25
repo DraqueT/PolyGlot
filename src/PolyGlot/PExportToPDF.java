@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque.thompson
+ * Copyright (c) 2016-2017, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -101,8 +101,10 @@ public class PExportToPDF {
     private Document document;
     private final byte[] conFontFile;
     private final byte[] unicodeFontFile;
+    private final byte[] unicodeFontItalicFile;
     private final PdfFont conFont;
     private final PdfFont unicodeFont;
+    private final PdfFont unicodeFontItalic;
     private final int conFontSize;
     private boolean printLocalCon = false;
     private boolean printConLocal = false;
@@ -128,8 +130,11 @@ public class PExportToPDF {
         targetFile = _targetFile;
         conFontFile = core.getPropertiesManager().getCachedFont();
         unicodeFontFile = new IOHandler().getUnicodeFontByteArray();
+        unicodeFontItalicFile = new IOHandler().getUnicodeFontItalicByteArray();
         unicodeFont = PdfFontFactory.createFont(unicodeFontFile, PdfEncodings.IDENTITY_H, true);
         unicodeFont.setSubset(true);
+        unicodeFontItalic = PdfFontFactory.createFont(unicodeFontItalicFile, PdfEncodings.IDENTITY_H, true);
+        unicodeFontItalic.setSubset(true);
         
         // If font file still null, no custom font was loaded.
         if (conFontFile == null) {
@@ -420,7 +425,8 @@ public class PExportToPDF {
                                 .getNodeById(curEntry.getKey());
                         value = prop.getValueById(curEntry.getValue());
                     } catch (Exception e) {
-                        log += "\nProblem printing classes for word: " + curWord.getValue();
+                        log += "\nProblem printing classes for word (" + curWord.getValue() 
+                                + "): " + e.getLocalizedMessage();
                         continue;
                     }
 
@@ -437,6 +443,30 @@ public class PExportToPDF {
                 varChunk = new Text(" - ");
                 varChunk.setFont(unicodeFont);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
+            }
+            
+            if (!curWord.getClassTextValues().isEmpty()) {
+                varChunk = null;
+                
+                for (Entry<Integer, String> curEntry : curWord.getClassTextValues()) {
+                    if (varChunk != null) {
+                        dictEntry.add(new Text(", "));
+                    }
+                    try {
+                        WordProperty prop = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                        varChunk = new Text(prop.getValue());
+                        varChunk.setFont(unicodeFontItalic);
+                        dictEntry.add(varChunk);
+                        varChunk = new Text(" : " + curEntry.getValue());
+                        varChunk.setFont(unicodeFont);
+                        dictEntry.add(varChunk);
+                    } catch (Exception e) {
+                        log += "\nProblem printing classes for word (" + curWord.getValue() 
+                                + "): " + e.getLocalizedMessage();
+                    }
+                }
+                
+                dictEntry.add(new Text(" - "));
             }
 
             List<Object> defList = WebInterface.getElementsHTMLBody(curWord.getDefinition(), core);
@@ -588,6 +618,28 @@ public class PExportToPDF {
                 varChunk = new Text(" - ");
                 varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
                 dictEntry.add(varChunk.setFontSize(defFontSize));
+            }
+            
+            if (!curWord.getClassTextValues().isEmpty()) {
+                varChunk = null;
+                
+                for (Entry<Integer, String> curEntry : curWord.getClassTextValues()) {
+                    if (varChunk != null) {
+                        dictEntry.add(new Text(", "));
+                    }
+                    try {
+                        WordProperty prop = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                        varChunk = new Text(prop.getValue());
+                        varChunk.setFont(unicodeFontItalic);
+                        dictEntry.add(varChunk);
+                        varChunk = new Text(" : " + curEntry.getValue());
+                        varChunk.setFont(unicodeFont);
+                        dictEntry.add(varChunk);
+                    } catch (Exception e) {
+                        log += "\nProblem printing classes for word (" + curWord.getValue() 
+                                + "): " + e.getLocalizedMessage();
+                    }
+                }
             }
 
             List<Object> defList = WebInterface.getElementsHTMLBody(curWord.getDefinition(), core);

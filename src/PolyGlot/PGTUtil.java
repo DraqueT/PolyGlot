@@ -179,7 +179,10 @@ public class PGTUtil {
     public static final String dictFileName = "PGDictionary.xml";
     public static final String fontFileName = "conLangFont";
     public static final String LCDFontLocation = "/PolyGlot/GeneralResources/lcdFont.ttf";
-    public static final String UnicodeFontLocation = "/PolyGlot/GeneralResources/unicode.ttf";
+    public static final String UnicodeFontLocation = "/PolyGlot/GeneralResources/CharisSIL-Regular.ttf";
+    public static final String UnicodeFontBoldLocation = "/PolyGlot/GeneralResources/CharisSIL-Bold.ttf";
+    public static final String UnicodeFontItalicLocation = "/PolyGlot/GeneralResources/CharisSIL-Italic.ttf";
+    public static final String UnicodeFontBoldItalicLocation = "/PolyGlot/GeneralResources/CharisSIL-BoldItalic.ttf";
     public static final String ButtonFontLocation = "/PolyGlot/GeneralResources/buttonFont.ttf";
     public static final String logoGraphSavePath = "logoGraphs/";
     public static final String imagesSavePath = "images/";
@@ -211,6 +214,7 @@ public class PGTUtil {
     // int constants...
     public static final Integer numMenuFlashes = 4;
     public static final Integer menuFlashSleep = 200;
+    public static final Integer defaultFontSize = 12;
     
     // color constants
     public static final Color colorDisabledBG;

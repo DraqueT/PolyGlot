@@ -42,6 +42,7 @@ import javax.swing.JButton;
 public class PButton extends JButton implements MouseListener {
     private boolean mouseEntered = false;
     private boolean mousePressed = false;
+    private boolean activeSelected = false;
     
     public PButton() {
         super();
@@ -56,6 +57,22 @@ public class PButton extends JButton implements MouseListener {
         }
         
         setupListeners();
+    }
+    
+    /**
+     * Sets whether button is actively selected (pressed down persistively)
+     * @param _activeSelected 
+     */
+    public void setActiveSelected(boolean _activeSelected) {
+        activeSelected = _activeSelected;
+    }
+    
+    /**
+     * Returns whether button is actively selected (pressed down persistively)
+     * @return 
+     */
+    public boolean getActiveSelected() {
+        return activeSelected;
     }
     
     private void setupListeners() {
@@ -84,6 +101,11 @@ public class PButton extends JButton implements MouseListener {
         } else {
             bgColor = PGTUtil.colorEnabledBG;
             fontColor = getForeground();
+        }
+        
+        if (activeSelected) {
+            g.setColor(Color.black);
+            g.fillRect(0, 0, getWidth(), getHeight());
         }
         
         // turn on anti-alias mode

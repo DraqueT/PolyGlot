@@ -97,6 +97,14 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     }
     
     @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        
+        // always start at default size. Only subwindow sizes should be saved
+        super.setSize(super.getPreferredSize());
+    }
+    
+    @Override
     public void dispose() {
         // only exit if save/cancel test is passed and current window is legal to close
         if (!saveOrCancelTest() || (curWindow != null && !curWindow.canClose())) {
@@ -419,7 +427,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         
         if (curWindow == null && performTest) {
             ScrLexicon lex = ScrLexicon.run(core, this);
-            changeScreen(lex, lex.getWindow());
+            changeScreen(lex, lex.getWindow(), null);
         }
     }
     
@@ -428,7 +436,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
      * @param newScreen new window to display
      * @param display component to be added as main display
      */
-    private void changeScreen(PFrame newScreen, Component display) {
+    private void changeScreen(PFrame newScreen, Component display, PButton button) {
         // simply fail if current window cannot close. Window is responsible
         // for informing user of reason.
         if (curWindow != null && !curWindow.canClose()) {
@@ -476,6 +484,11 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         
         curWindow = newScreen;
         
+        if (button != null) {
+            deselectButtons();
+            button.setActiveSelected(true);
+        }
+                
         genTitle();
     }
     
@@ -525,7 +538,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             populateRecentOpened();
             if (curWindow == null) {
                 ScrLexicon lex = ScrLexicon.run(core, this);
-                changeScreen(lex, lex.getWindow());
+                changeScreen(lex, lex.getWindow(), null);
             }
         }
         
@@ -698,6 +711,15 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         }
 
         return ret;
+    }
+    
+    private void deselectButtons() {
+        ((PButton)btnProp).setActiveSelected(false);
+        ((PButton)btnPos).setActiveSelected(false);
+        ((PButton)btnLogos).setActiveSelected(false);
+        ((PButton)btnLexicon).setActiveSelected(false);
+        ((PButton)btnGrammar).setActiveSelected(false);
+        ((PButton)btnClasses).setActiveSelected(false);
     }
 
     /**
@@ -1070,12 +1092,12 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
     private void btnLexiconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLexiconActionPerformed
         ScrLexicon lex = ScrLexicon.run(core, this);
-        changeScreen(lex, lex.getWindow());
+        changeScreen(lex, lex.getWindow(), (PButton)evt.getSource());
     }//GEN-LAST:event_btnLexiconActionPerformed
 
     private void btnPosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPosActionPerformed
         ScrTypes types = ScrTypes.run(core);
-        changeScreen(types, types.getWindow());
+        changeScreen(types, types.getWindow(), (PButton)evt.getSource());
     }//GEN-LAST:event_btnPosActionPerformed
 
     private void mnuNewLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewLocalActionPerformed
@@ -1160,28 +1182,28 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private void btnClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClassesActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrWordClasses s = new ScrWordClasses(core);
-        changeScreen(s, s.getWindow());
+        changeScreen(s, s.getWindow(), (PButton)evt.getSource());
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnClassesActionPerformed
 
     private void btnGrammarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrammarActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrGrammarGuide s = new ScrGrammarGuide(core);
-        changeScreen(s, s.getWindow());
+        changeScreen(s, s.getWindow(), (PButton)evt.getSource());
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnGrammarActionPerformed
 
     private void btnLogosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogosActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrLogoDetails s = new ScrLogoDetails(core);
-        changeScreen(s, s.getWindow());
+        changeScreen(s, s.getWindow(), (PButton)evt.getSource());
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnLogosActionPerformed
 
     private void btnPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrLangProps s = new ScrLangProps(core);
-        changeScreen(s, s.getWindow());
+        changeScreen(s, s.getWindow(), (PButton)evt.getSource());
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnPropActionPerformed
 

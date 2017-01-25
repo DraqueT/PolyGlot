@@ -51,41 +51,50 @@ import org.xml.sax.SAXException;
 public class DictCore {
 
     private final String version = "2.0";
-    private final ConWordCollection wordCollection;
-    private final TypeCollection typeCollection;
-    private final DeclensionManager declensionMgr;
-    private final PropertiesManager propertiesManager;
-    private final PronunciationMgr pronuncMgr;
-    private final FamilyManager famManager;
-    private final LogoCollection logoCollection;
-    private final GrammarManager grammarManager;
-    private final OptionsManager optionsManager;
-    private final WordPropertyCollection wordPropCollection;
-    private final ImageCollection imageCollection;
+    private ConWordCollection wordCollection;
+    private TypeCollection typeCollection;
+    private DeclensionManager declensionMgr;
+    private PropertiesManager propertiesManager;
+    private PronunciationMgr pronuncMgr;
+    private FamilyManager famManager;
+    private LogoCollection logoCollection;
+    private GrammarManager grammarManager;
+    private OptionsManager optionsManager;
+    private WordPropertyCollection wordPropCollection;
+    private ImageCollection imageCollection;
     private PFrame rootWindow;
     private Object clipBoard;
     private boolean curLoading = false;
 
+    /**
+     * Language core initilization
+     *
+     * @throws Exception on initialize error. Cannot continue. Abort post throw.
+     */
     public DictCore() {
-        wordCollection = new ConWordCollection(this);
-        typeCollection = new TypeCollection(this);
-        declensionMgr = new DeclensionManager();
-        propertiesManager = new PropertiesManager();
-        pronuncMgr = new PronunciationMgr(this);
-        famManager = new FamilyManager(this);
-        logoCollection = new LogoCollection(this);
-        grammarManager = new GrammarManager();
-        optionsManager = new OptionsManager(this);
-        wordPropCollection = new WordPropertyCollection();
-        imageCollection = new ImageCollection();
+        try {
+            wordCollection = new ConWordCollection(this);
+            typeCollection = new TypeCollection(this);
+            declensionMgr = new DeclensionManager();
+            propertiesManager = new PropertiesManager();
+            pronuncMgr = new PronunciationMgr(this);
+            famManager = new FamilyManager(this);
+            logoCollection = new LogoCollection(this);
+            grammarManager = new GrammarManager();
+            optionsManager = new OptionsManager(this);
+            wordPropCollection = new WordPropertyCollection();
+            imageCollection = new ImageCollection();
 
-        PAlphaMap alphaOrder = propertiesManager.getAlphaOrder();
+            PAlphaMap alphaOrder = propertiesManager.getAlphaOrder();
 
-        wordCollection.setAlphaOrder(alphaOrder);
-        typeCollection.setAlphaOrder(alphaOrder);
-        logoCollection.setAlphaOrder(alphaOrder);
-        wordPropCollection.setAlphaOrder(alphaOrder);
-        rootWindow = null;
+            wordCollection.setAlphaOrder(alphaOrder);
+            typeCollection.setAlphaOrder(alphaOrder);
+            logoCollection.setAlphaOrder(alphaOrder);
+            wordPropCollection.setAlphaOrder(alphaOrder);
+            rootWindow = null;
+        } catch (Exception e) {
+            InfoBox.error("CORE ERROR", "Error creating language core: " + e.getLocalizedMessage(), null);
+        }
     }
 
     /**
@@ -118,7 +127,7 @@ public class DictCore {
     public OptionsManager getOptionsManager() {
         return optionsManager;
     }
-    
+
     public ImageCollection getImageCollection() {
         return imageCollection;
     }
@@ -312,7 +321,7 @@ public class DictCore {
         curLoading = true;
         String errorLog = "";
         String warningLog = "";
-        
+
         // inform user if file is not an archive
         if (!IOHandler.isFileZipArchive(_fileName)) {
             throw new IOException("File " + _fileName + " is not a valid PolyGlot archive.");
@@ -324,7 +333,7 @@ public class DictCore {
         } catch (Exception e) {
             throw new IOException("Image loading error: " + e.getLocalizedMessage());
         }
-        
+
         try {
             CustHandler handler = IOHandler.getHandlerFromFile(_fileName, this);
             IOHandler.parseHandler(_fileName, handler);

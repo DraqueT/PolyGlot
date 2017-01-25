@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -24,6 +24,7 @@ import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.CustomControls.PTextField;
@@ -108,8 +109,8 @@ public class ScrDeclensions extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnCancel = new javax.swing.JButton();
-        btnOk = new javax.swing.JButton();
+        btnCancel = new PButton(core);
+        btnOk = new PButton(core);
         scrDeclensions = new javax.swing.JScrollPane();
         pnlDeclensions = new javax.swing.JPanel();
         chkAutogenOverride = new javax.swing.JCheckBox();
@@ -132,6 +133,8 @@ public class ScrDeclensions extends PDialog {
                 btnOkActionPerformed(evt);
             }
         });
+
+        pnlDeclensions.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout pnlDeclensionsLayout = new javax.swing.GroupLayout(pnlDeclensions);
         pnlDeclensions.setLayout(pnlDeclensionsLayout);
@@ -168,8 +171,8 @@ public class ScrDeclensions extends PDialog {
                 .addComponent(scrDeclensions)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancel)
-                    .addComponent(btnOk)
+                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chkAutogenOverride))
                 .addContainerGap())
         );
@@ -385,7 +388,7 @@ public class ScrDeclensions extends PDialog {
             setHeight = numFields * textHeight;
         }        
         
-        pnlDeclensions.setSize(pnlDeclensions.getSize().width, numFields * textHeight);
+        pnlDeclensions.setSize(pnlDeclensions.getSize().width, numFields * textHeight + 10);
         pnlDeclensions.setLayout(new GridLayout(0, 2));
         this.setSize(this.getWidth() + 10, pnlDeclensions.getHeight() + 70);
         

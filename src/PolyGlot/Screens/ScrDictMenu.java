@@ -308,7 +308,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             return;
         }
 
-        core = new DictCore();
+        //core = new DictCore();
         core.setRootWindow(this);
         updateAllValues(core);
         curFileName = "";
@@ -338,7 +338,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
         }
         holdFront = false;
 
-        core = new DictCore();
+        //core = new DictCore();
         core.setRootWindow(this);
         setFile(fileName);
         pushRecentFile(fileName);
@@ -525,14 +525,14 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
             return;
         }
 
-        core = new DictCore();
+        //core = new DictCore();
         core.setRootWindow(this);
 
         try {
             core.readFile(fileName);
             curFileName = fileName;
         } catch (IOException e) {
-            core = new DictCore(); // don't allow partial loads
+            //core = new DictCore(); // don't allow partial loads
             localError("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage());
         } catch (IllegalStateException e) {

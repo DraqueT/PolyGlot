@@ -117,7 +117,21 @@ public class ConWord extends DictNode {
         }
     }
     
-    public Set<Entry<Integer, String>> getAllClassTextValues() {
+    /**
+     * Gets all freetext class values
+     * Purges values which no longer exist
+     * @return set of values with their IDs
+     */
+    public Set<Entry<Integer, String>> getClassTextValues() {
+        Iterator<Entry<Integer, String>> classIt = new ArrayList<>(classTextValues.entrySet()).iterator();
+        
+        while (classIt.hasNext()) {
+            Entry<Integer, String> curEntry = classIt.next();
+            if (!core.getWordPropertiesCollection().exists(curEntry.getKey())) {
+                classTextValues.remove(curEntry.getKey());
+            }
+        }
+        
         return classTextValues.entrySet();
     }
         
@@ -158,25 +172,6 @@ public class ConWord extends DictNode {
     public DictCore getCore() {
         return core;
     }
-    
-    /**
-     * Gets all freetext class values
-     * Purges values which no longer exist
-     * @return set of values with their IDs
-     */
-    public Set<Entry<Integer, String>> getClassTextValues() {
-        Iterator<Entry<Integer, String>> classIt = new ArrayList<>(classTextValues.entrySet()).iterator();
-        
-        while (classIt.hasNext()) {
-            Entry<Integer, String> curEntry = classIt.next();
-            if (!core.getWordPropertiesCollection().exists(curEntry.getKey())) {
-                classTextValues.remove(curEntry.getKey());
-            }
-        }
-        
-        return classTextValues.entrySet();
-    }
-    
     
     /*
         while (classIt.hasNext()) {

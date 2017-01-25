@@ -216,7 +216,7 @@ public final class ScrLexicon extends PFrame {
         boolean ret = true;
 
         // error box only populated with word has illegal values
-        if (!txtErrorBox.getText().equals("")) {
+        if (!txtErrorBox.getText().equals("") && !chkRuleOverride.isSelected()) {
             ret = false;
             InfoBox.warning("Illegal word.", "Please correct or delete currently selected word "
                     + "or select the rule override before exiting lexicon.", this);
@@ -339,7 +339,7 @@ public final class ScrLexicon extends PFrame {
             }
         }
 
-        for (Entry<Integer, String> curProp : curWord.getAllClassTextValues()) {
+        for (Entry<Integer, String> curProp : curWord.getClassTextValues()) {
             if (classPropMap.containsKey(curProp.getKey())) {
                 JComponent component = classPropMap.get(curProp.getKey());
 

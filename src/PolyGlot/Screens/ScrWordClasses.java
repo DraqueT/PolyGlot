@@ -439,6 +439,7 @@ public class ScrWordClasses extends PFrame {
 
         jScrollPane3.setBackground(new java.awt.Color(255, 255, 255));
 
+        tblValues.setBackground(new java.awt.Color(220, 220, 220));
         tblValues.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
