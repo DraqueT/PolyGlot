@@ -104,6 +104,14 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         super.setSize(super.getPreferredSize());
     }
     
+    /**
+     * For the purposes of startup with file
+     */
+    public void openLexicon() {
+        ScrLexicon lex = ScrLexicon.run(core, this);
+        changeScreen(lex, lex.getWindow(), null);
+    }
+    
     @Override
     public void dispose() {
         // only exit if save/cancel test is passed and current window is legal to close
@@ -1255,6 +1263,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 // open file if one is provided via arguments
                 if (args.length > 0) {
                     s.setFile(args[0]);
+                    s.openLexicon();
                 }
 
                 s.checkForUpdates(false);

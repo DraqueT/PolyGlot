@@ -358,6 +358,9 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
             firstVisible = false;
         }
         
+        setupAccelerators();
+        setupKeyStrokes();
+        
         super.setVisible(visible);
     }
 

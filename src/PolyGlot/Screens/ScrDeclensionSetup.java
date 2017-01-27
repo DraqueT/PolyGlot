@@ -85,6 +85,8 @@ public final class ScrDeclensionSetup extends PDialog {
             this.dispose();
         }
 
+        btnClearDep.setToolTipText(btnClearDep.getToolTipText() + myType.getValue());
+        
         declListModel = new DefaultListModel();
         lstDeclensionList.setModel(declListModel);
         setModal(true);
@@ -461,6 +463,7 @@ public final class ScrDeclensionSetup extends PDialog {
         btnDeleteDeclension = new PolyGlot.CustomControls.PAddRemoveButton("-");
         btnAddDeclension = new PolyGlot.CustomControls.PAddRemoveButton("+");
         jButton1 = new PButton(core);
+        btnClearDep = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -590,6 +593,14 @@ public final class ScrDeclensionSetup extends PDialog {
             }
         });
 
+        btnClearDep.setText("Clear Deprecated Values");
+        btnClearDep.setToolTipText("Deletes all deprecated conjugation values from  words of type: ");
+        btnClearDep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearDepActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -607,8 +618,10 @@ public final class ScrDeclensionSetup extends PDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(btnClearDep)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton1))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -631,7 +644,9 @@ public final class ScrDeclensionSetup extends PDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(btnClearDep))))
                 .addContainerGap())
         );
 
@@ -672,6 +687,10 @@ public final class ScrDeclensionSetup extends PDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnClearDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearDepActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnClearDepActionPerformed
 
     public static ScrDeclensionSetup run(final DictCore _core, final Integer _typeId) {
         try {
@@ -970,6 +989,7 @@ public final class ScrDeclensionSetup extends PDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddDeclension;
     private javax.swing.JButton btnAddDimension;
+    private javax.swing.JButton btnClearDep;
     private javax.swing.JButton btnDelDimension;
     private javax.swing.JButton btnDeleteDeclension;
     private javax.swing.JButton jButton1;
