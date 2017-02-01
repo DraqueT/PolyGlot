@@ -21,6 +21,7 @@ package PolyGlot.ManagersCollections;
 
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DeclensionDimension;
+import PolyGlot.DictCore;
 import PolyGlot.Nodes.DeclensionGenRule;
 import PolyGlot.Nodes.DeclensionGenTransform;
 import PolyGlot.Nodes.DeclensionNode;
@@ -45,7 +46,12 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class DeclensionManager {
-
+    private final DictCore core;
+    
+    public DeclensionManager(DictCore _core) {
+        core = _core;
+    }
+    
     // Integer is ID of related word, list is list of declension nodes
     private final Map<Integer, List<DeclensionNode>> dList = new HashMap<>();
 
@@ -256,13 +262,26 @@ public class DeclensionManager {
 
     /**
      * sets all declensions to deprecated state
+     * @param typeId ID of type to deprecate declensions for
      */
-    public void deprecateAllDeclensions() {
+    public void deprecateAllDeclensions(Integer typeId) {
         Iterator<Entry<Integer, List<DeclensionNode>>> decIt = dList.entrySet().iterator();
 
         while (decIt.hasNext()) {
-            List<DeclensionNode> curList = decIt.next().getValue();
-
+            Entry<Integer, List<DeclensionNode>> curEntry = decIt.next();
+            List<DeclensionNode> curList = curEntry.getValue();
+            
+            // only run for declensions of words with particular type
+            try {
+                if (!core.getWordCollection().getNodeById(curEntry.getKey()).getWordTypeId().equals(typeId)) {
+                    continue;
+                }
+            } catch (Exception e) {
+                // if a word isn't found, then the value is orphaned and declension values will be wiped next time the user saves
+                continue;
+            }
+            
+            
             Iterator<DeclensionNode> nodeIt = curList.iterator();
 
             while (nodeIt.hasNext()) {
@@ -793,6 +812,19 @@ public class DeclensionManager {
         }
 
         return ret;
+    }
+    
+    /**
+     * Removes all declensions contained in decMap from word with wordid
+     * @param wordId ID of word to clear values from
+     * @param removeVals values to clear from word
+     */
+    public void removeDeclensionValues(Integer wordId, Collection<DeclensionNode> removeVals) {
+        List<DeclensionNode> wordList = (List<DeclensionNode>) dList.get(wordId);
+        
+        for (DeclensionNode remNode : removeVals) {
+            wordList.remove(remNode);
+        }
     }
 
     /**

@@ -56,9 +56,11 @@ import javax.swing.table.TableColumn;
 /**
  * This is the setup form for word forms (declensions/conjugations and their
  * dimensional values.
+ *
  * @author draque
  */
 public final class ScrDeclensionSetup extends PDialog {
+
     private Map scrToCoreDeclensions = new HashMap<>();
     private Map scrDeclensionMap = new HashMap<>();
     private TypeNode myType;
@@ -79,14 +81,14 @@ public final class ScrDeclensionSetup extends PDialog {
             myType = _core.getTypes().getNodeById(_typeId);
             this.setTitle("Declensions/Conjugations for type: " + myType.getValue());
         } catch (Exception e) {
-            InfoBox.error("Part of Speech Error", 
-                    "Part of Speech not found, unable to open declensions for type with id: " 
-                            + _typeId + " " + e.getMessage(), null);
+            InfoBox.error("Part of Speech Error",
+                    "Part of Speech not found, unable to open declensions for type with id: "
+                    + _typeId + " " + e.getMessage(), null);
             this.dispose();
         }
 
         btnClearDep.setToolTipText(btnClearDep.getToolTipText() + myType.getValue());
-        
+
         declListModel = new DefaultListModel();
         lstDeclensionList.setModel(declListModel);
         setModal(true);
@@ -96,55 +98,56 @@ public final class ScrDeclensionSetup extends PDialog {
         populateDimensions();
         setupListeners();
     }
-    
+
     @Override
     public final void setupKeyStrokes() {
         super.setupKeyStrokes();
     }
-    
+
     @Override
     public void setModal(boolean _modal) {
         super.setModal(_modal);
     }
-    
+
     @Override
     public final void setTitle(String _title) {
         super.setTitle(_title);
     }
-    
+
     @Override
     public boolean thisOrChildrenFocused() {
         return this.isFocusOwner();
     }
-    
+
     @Override
     public void updateAllValues(DictCore _core) {
         // No values to update due to modal nature of window
     }
-    
+
     @Override
     public void dispose() {
         if (canClose()) {
             super.dispose();
         }
     }
-    
+
     /**
-     * Tests whether window can be closed. Displays error to user if it cannot be.
+     * Tests whether window can be closed. Displays error to user if it cannot
+     * be.
+     *
      * @return boolean as to whether it is legal to close the window.
      */
     private boolean canClose() {
         Iterator<DeclensionNode> decIt = core.getDeclensionManager().getDeclensionListTemplate(myType.getId()).iterator();
-        
+
         while (decIt.hasNext()) {
             DeclensionNode curDec = decIt.next();
-            if (curDec.getDimensions().isEmpty())
-            {
+            if (curDec.getDimensions().isEmpty()) {
                 InfoBox.error("Illegal Declension", "Declension \'" + curDec.getValue() + "\' must have at least one dimension.", this);
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -213,7 +216,7 @@ public final class ScrDeclensionSetup extends PDialog {
         txtDeclensionName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                if (((PTextField)txtDeclensionName).isSettingText()) {
+                if (((PTextField) txtDeclensionName).isSettingText()) {
                     return;
                 }
                 Cursor cursor = txtDeclensionName.getCursor();
@@ -225,7 +228,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (((PTextField)txtDeclensionName).isSettingText()) {
+                if (((PTextField) txtDeclensionName).isSettingText()) {
                     return;
                 }
                 Cursor cursor = txtDeclensionName.getCursor();
@@ -237,7 +240,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (((PTextField)txtDeclensionName).isSettingText()) {
+                if (((PTextField) txtDeclensionName).isSettingText()) {
                     return;
                 }
                 Cursor cursor = txtDeclensionName.getCursor();
@@ -306,7 +309,7 @@ public final class ScrDeclensionSetup extends PDialog {
         if (!InfoBox.deletionConfirmation(this)) {
             return;
         }
-        
+
         Integer curRow = tblDimensions.getSelectedRow();
 
         // return if nothing selected
@@ -316,7 +319,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
         Integer nodeId = (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
         DeclensionNode delFrom = core.getDeclensionTemplate(myType.getId(), nodeId);
-        Integer delDimId = (Integer)tblDimensions.getModel().getValueAt(tblDimensions.getSelectedRow(), 2);
+        Integer delDimId = (Integer) tblDimensions.getModel().getValueAt(tblDimensions.getSelectedRow(), 2);
         delFrom.deleteDimension(delDimId);
 
         populateDimensions();
@@ -366,7 +369,7 @@ public final class ScrDeclensionSetup extends PDialog {
         // set saving properties for first column editor
         PCellEditor editor1 = (PCellEditor) tblDimensions.getCellEditor(model.getRowCount() - 1, 0);
         editor1.setDocuListener(docuListener);
-        
+
         ActionListener actListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -421,20 +424,20 @@ public final class ScrDeclensionSetup extends PDialog {
             }
         });
     }
-    
-    
+
     /**
      * confirms with user an action that deprecates all current word forms
+     *
      * @return user choice yes/no
      */
     private boolean confirmDeprecate() {
         boolean ret = false;
-        
+
         if (InfoBox.yesNoCancel("Confirm action", "This action will deprecate all currently filled out \n"
                 + " declensions/conjugations (they won't be lost, but set to a deprecated\nstatus). Continue?", this) == JOptionPane.YES_OPTION) {
             ret = true;
         }
-        
+
         return ret;
     }
 
@@ -689,7 +692,11 @@ public final class ScrDeclensionSetup extends PDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnClearDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearDepActionPerformed
-        // TODO add your handling code here:
+        if (InfoBox.yesNoCancel("Wipe All Deprecated Declensions?", 
+                "Are you sure? This cannot be undone, and will delete the values of all deprecated declensions of the type: "
+                + myType.getValue() + ".", this) == JOptionPane.YES_OPTION) {
+            core.getWordCollection().clearDeprecatedDeclensions(myType.getId());
+        }
     }//GEN-LAST:event_btnClearDepActionPerformed
 
     public static ScrDeclensionSetup run(final DictCore _core, final Integer _typeId) {
@@ -704,29 +711,29 @@ public final class ScrDeclensionSetup extends PDialog {
             java.util.logging.Logger.getLogger(ScrDeclensionSetup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
-        //</editor-fold>
 
+        //</editor-fold>
         ScrDeclensionSetup s = new ScrDeclensionSetup(_core, _typeId);
-        
+
         s.setModal(true);
         s.setVisible(true);
-        
+
         return s;
     }
 
     /**
-     * adds a declension to the list and readies the system to create it in the core on modification
+     * adds a declension to the list and readies the system to create it in the
+     * core on modification
      */
     private void addDeclension() {
         // confirm user is will to deprecate all existing forms
         if (!confirmDeprecate()) {
             return;
         }
-        
+
         // deprecate all existing forms
-        core.getDeclensionManager().deprecateAllDeclensions();
-        
+        core.getDeclensionManager().deprecateAllDeclensions(myType.getId());
+
         if (lstDeclensionList.getModel().getSize() != 0
                 && scrToCoreDeclensions.containsKey((Integer) lstDeclensionList.getSelectedIndex())
                 && (Integer) scrToCoreDeclensions.get((Integer) lstDeclensionList.getSelectedIndex()) == -1) {
@@ -871,10 +878,10 @@ public final class ScrDeclensionSetup extends PDialog {
         if (!confirmDeprecate()) {
             return;
         }
-        
+
         // deprecate all existing forms
-        core.getDeclensionManager().deprecateAllDeclensions();
-        
+        core.getDeclensionManager().deprecateAllDeclensions(myType.getId());
+
         Integer curIndex = lstDeclensionList.getSelectedIndex();
 
         try {

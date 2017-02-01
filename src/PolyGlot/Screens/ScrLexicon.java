@@ -41,7 +41,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -106,7 +105,6 @@ public final class ScrLexicon extends PFrame {
     private CheckBox chkFindBad;
     private final JFXPanel fxPanel;
     private final TypeNode defTypeValue = new TypeNode();
-    private final String newTypeValue = "-- New Part of Speech --";
     private final String defLexValue = "List of Conlang Words";
     private TextField txtConSrc;
     private TextField txtLocalSrc;
@@ -737,8 +735,7 @@ public final class ScrLexicon extends PFrame {
         }
 
         testWord = new ConWord();
-        int typeId = (cmbType.getSelectedItem().equals(defTypeValue)
-                || cmbType.getSelectedItem().equals(newTypeValue))
+        int typeId = cmbType.getSelectedItem().equals(defTypeValue)
                 ? 0 : ((TypeNode) cmbType.getSelectedItem()).getId();
 
         if (curPopulating) {
@@ -1191,7 +1188,6 @@ public final class ScrLexicon extends PFrame {
         for (TypeNode curNode : core.getTypes().getNodes()) {
             cmbType.addItem(curNode);
         }
-        cmbType.addItem(newTypeValue);
     }
 
     /**
@@ -1400,7 +1396,7 @@ public final class ScrLexicon extends PFrame {
         saveWord.setRulesOverride(chkRuleOverride.isSelected());
         Object curType = cmbType.getSelectedItem();
         if (curType != null) {
-            saveWord.setWordTypeId((curType.equals(defTypeValue) || curType.equals(newTypeValue))
+            saveWord.setWordTypeId(curType.equals(defTypeValue)
                     ? 0 : ((TypeNode) curType).getId());
         }
     }
@@ -1598,7 +1594,8 @@ public final class ScrLexicon extends PFrame {
             }
         });
 
-        btnDeclensions.setText("Declensions");
+        btnDeclensions.setText("Conjugations");
+        btnDeclensions.setToolTipText("Edit or view declined/conjugated forms of your words here.");
         btnDeclensions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeclensionsActionPerformed(evt);
@@ -1606,6 +1603,7 @@ public final class ScrLexicon extends PFrame {
         });
 
         btnLogographs.setText("Logographs");
+        btnLogographs.setToolTipText("Jump to logographs associated with this word.");
         btnLogographs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogographsActionPerformed(evt);
@@ -1873,20 +1871,8 @@ public final class ScrLexicon extends PFrame {
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
         final Object typeObject = cmbType.getSelectedItem();
 
-        if (typeObject != null
-                && typeObject.equals(newTypeValue)) {
-            final TypeNode newType = ScrTypes.newGetType(core);
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    cmbType.setSelectedItem(newType == null ? defTypeValue : newType);
-                }
-            });
-        }
-
         if (!curPopulating) {
-            if (typeObject == null
-                    || typeObject.equals(newTypeValue)) {
+            if (typeObject == null) {
                 setupClassPanel(0);
             } else {
                 setupClassPanel(((TypeNode) typeObject).getId());

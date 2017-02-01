@@ -21,6 +21,7 @@ package PolyGlot.ManagersCollections;
 
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
+import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.Nodes.DictNode;
 import PolyGlot.PGTUtil;
@@ -954,5 +955,46 @@ public class ConWordCollection extends DictionaryCollection {
             }            
             wordNode.appendChild(wordValue);
         }
+    }
+
+    /**
+     * Call this to wipe out the values of all deprecated conjugations/declensions
+     * for a particular part of speech in the dictionary
+     * 
+     * @param typeId ID of word type to clear values from
+     */
+    public void clearDeprecatedDeclensions(Integer typeId) {
+        DeclensionManager dm = core.getDeclensionManager();
+        Map<Integer, List<DeclensionPair>> comTypeDecs = new HashMap();
+        
+        // iterates over every word
+        for (Object curNode :nodeMap.values()) {
+            ConWord curWord = (ConWord) curNode;
+            List<DeclensionPair> curDeclensions;
+            
+            // skip words not of given type
+            if (!curWord.getWordTypeId().equals(typeId)) {
+                continue;
+            }
+            
+            // ensure I'm only generating decelnsion patterns for any given part of speech only once
+            if (comTypeDecs.containsKey(curWord.getWordTypeId())) {
+                curDeclensions = comTypeDecs.get(curWord.getWordTypeId());
+            } else {
+                curDeclensions = dm.getAllCombinedIds(curWord.getWordTypeId());
+                comTypeDecs.put(curWord.getWordTypeId(), curDeclensions);
+            }
+                        
+            // retrieves all stored declension values for word
+            Map<String, DeclensionNode> decMap = dm.getWordDeclensions(curWord.getId());        
+
+            // removes all legitimate declensions from map
+            for(DeclensionPair curPair : curDeclensions) {
+                decMap.remove(curPair.combinedId);
+            }
+            
+            // wipe remaining values from word
+            dm.removeDeclensionValues(curWord.getId(), decMap.values());
+        }        
     }
 }

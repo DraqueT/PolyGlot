@@ -67,15 +67,14 @@ public class DictCore {
     private boolean curLoading = false;
 
     /**
-     * Language core initilization
+     * Language core initialization
      *
-     * @throws Exception on initialize error. Cannot continue. Abort post throw.
      */
     public DictCore() {
         try {
             wordCollection = new ConWordCollection(this);
             typeCollection = new TypeCollection(this);
-            declensionMgr = new DeclensionManager();
+            declensionMgr = new DeclensionManager(this);
             propertiesManager = new PropertiesManager();
             pronuncMgr = new PronunciationMgr(this);
             famManager = new FamilyManager(this);

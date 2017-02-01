@@ -273,7 +273,8 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="btnDeclensions">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Declensions"/>
+                        <Property name="text" type="java.lang.String" value="Conjugations"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Edit or view declined/conjugated forms of your words here."/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeclensionsActionPerformed"/>
@@ -285,6 +286,7 @@
                     <Component class="javax.swing.JButton" name="btnLogographs">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Logographs"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Jump to logographs associated with this word."/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLogographsActionPerformed"/>
