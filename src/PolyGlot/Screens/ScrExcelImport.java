@@ -36,13 +36,16 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
  * @author draque
  */
 public class ScrExcelImport extends PDialog {
-
+    private final ScrMainMenu parent;
+    
     /**
      * Creates new form scrExcelImport
      *
      * @param _core feed this the dictCore from the main program
+     * @param _parent main menu form
      */
-    public ScrExcelImport(DictCore _core) {
+    public ScrExcelImport(DictCore _core, ScrMainMenu _parent) {
+        parent = _parent;
         core = _core;
         setupKeyStrokes();
         initComponents();
@@ -340,8 +343,9 @@ public class ScrExcelImport extends PDialog {
     
     /**
      * @param _core the dictionary core
+     * @param _parent main menu form
      */
-    public static void run(DictCore _core) {
+    public static void run(DictCore _core, ScrMainMenu _parent) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -362,7 +366,7 @@ public class ScrExcelImport extends PDialog {
         //</editor-fold>
 
         /* Create and display the form */
-        ScrExcelImport s = new ScrExcelImport(_core);
+        ScrExcelImport s = new ScrExcelImport(_core, _parent);
         
         s.setModal(true);
         s.setVisible(true);
@@ -395,8 +399,12 @@ public class ScrExcelImport extends PDialog {
                     txtDefinition.getText(), txtPronunciation.getText(), delimiter,
                     chkFirstLabels.isSelected(), true);
             reader.importFile(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
-            // if everything has completed without error, close the window
+            parent.updateAllValues(core);
+            InfoBox.info("Success!", txtFileName.getText() + " imported successfully!", this);
+            
+            // if everything has completed without error, close the window and open Lexicon
             dispose();
+            parent.openLexicon();
         } catch (InvalidFormatException e) {
             InfoBox.warning("Unrecognized File Type", e.getLocalizedMessage(), this);
         } catch (NumberFormatException e) {
@@ -407,6 +415,7 @@ public class ScrExcelImport extends PDialog {
                     + ".\n Check to make certain that column mappings are correct "
                     +"(nothing above max cell value) and that the file is not corrupt:\n" 
                     + e.getLocalizedMessage(), this);
+            //e.printStackTrace();
         }
     }
 

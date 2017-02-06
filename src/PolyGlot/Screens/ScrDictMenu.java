@@ -1377,7 +1377,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
 
     private void mnuImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFileActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        ScrExcelImport.run(core);
+        //ScrExcelImport.run(core, );
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuImportFileActionPerformed
 

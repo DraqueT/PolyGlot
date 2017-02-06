@@ -138,7 +138,7 @@ public class ImportFileHelper {
                         Integer cellNum = cellNumCheckGet(entry);
 
                         // fail silently for files that truncate empty trailing fields
-                        if (cellNum > columns.length) {
+                        if (cellNum >= columns.length) {
                             continue;
                         }
 
@@ -164,7 +164,7 @@ public class ImportFileHelper {
                         Integer cellNum = cellNumCheckGet(entry);
 
                         // fail silently for files that truncate empty trailing fields
-                        if (cellNum > columns.length) {
+                        if (cellNum >= columns.length) {
                             continue;
                         }
 
@@ -185,7 +185,7 @@ public class ImportFileHelper {
                         Integer cellNum = cellNumCheckGet(entry);
 
                         // fail silently for files that truncate empty trailing fields
-                        if (cellNum > columns.length) {
+                        if (cellNum >= columns.length) {
                             continue;
                         }
 
@@ -242,7 +242,7 @@ public class ImportFileHelper {
                         Integer cellNum = cellNumCheckGet(entry);
 
                         // fail silently for files that truncate empty trailing fields
-                        if (cellNum > columns.length) {
+                        if (cellNum >= columns.length) {
                             continue;
                         }
 
@@ -263,7 +263,7 @@ public class ImportFileHelper {
                         Integer cellNum = cellNumCheckGet(entry);
 
                         // fail silently for files that truncate empty trailing fields
-                        if (cellNum > columns.length) {
+                        if (cellNum >= columns.length) {
                             continue;
                         }
 
@@ -284,7 +284,7 @@ public class ImportFileHelper {
                         Integer cellNum = cellNumCheckGet(entry);
 
                         // fail silently for files that truncate empty trailing fields
-                        if (cellNum > columns.length) {
+                        if (cellNum >= columns.length) {
                             continue;
                         }
 
