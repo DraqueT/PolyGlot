@@ -15,6 +15,7 @@ namespace PolyGlot_Frontend
         static String extension = ".pgd";
         static String fileDescription = "PolyGlot Language Library";
         static String keyName = "PolyGlot_Lang_Lib";
+        static String exeFilename = "PolyGlot Frontend.exe";
         static String opensWith = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
         // TODO: Edit below to add additional arguments
         static String commandValue = "\"" + opensWith + "\"" + " \"%1\"";
@@ -22,7 +23,8 @@ namespace PolyGlot_Frontend
         static String commandString = "command";
         static String shell = "Shell";
         static String commandFile = "cmd.exe";
-        static String baseArgs = "/C java -jar PolyGlot.jar";
+        static String command = "/C java -jar ";
+        static String baseArgs = "PolyGlot.jar";
 
         static void Main(string[] args)
         {
@@ -72,7 +74,7 @@ namespace PolyGlot_Frontend
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = commandFile;
-            startInfo.Arguments = baseArgs;
+            startInfo.Arguments = command + (System.Reflection.Assembly.GetExecutingAssembly().Location).Replace(exeFilename, "") + baseArgs;
             process.StartInfo = startInfo;
 
             if (args.GetLength(0) > 0)

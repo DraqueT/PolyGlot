@@ -9,3 +9,4 @@ C:\Users\draque.thompson\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\
 C:\Users\draque.thompson\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.pdb
 C:\Users\draque.thompson\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.exe
 C:\Users\draque.thompson\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.pdb
+C:\Users\draque.thompson\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.csprojResolveAssemblyReference.cache
