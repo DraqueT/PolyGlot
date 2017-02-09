@@ -46,6 +46,7 @@ import org.w3c.dom.Element;
  */
 public class ConWordCollection extends DictionaryCollection {
 
+    private final String splitChar = ",";
     private final DictCore core;
     private final Map<String, Integer> allConWords;
     private final Map<String, Integer> allLocalWords;
@@ -53,7 +54,7 @@ public class ConWordCollection extends DictionaryCollection {
 
     public ConWordCollection(DictCore _core) {
         bufferNode = new ConWord();
-        ((ConWord)bufferNode).setCore(_core);
+        ((ConWord) bufferNode).setCore(_core);
         allConWords = new HashMap<>();
         allLocalWords = new HashMap<>();
         core = _core;
@@ -82,7 +83,7 @@ public class ConWordCollection extends DictionaryCollection {
         balanceWordCounts(insWord, true);
 
         bufferNode = new ConWord();
-        ((ConWord)bufferNode).setCore(core);
+        ((ConWord) bufferNode).setCore(core);
 
         return ret;
     }
@@ -174,7 +175,7 @@ public class ConWordCollection extends DictionaryCollection {
         balanceWordCounts((ConWord) bufferNode, true);
 
         bufferNode = new ConWord();
-        ((ConWord)bufferNode).setCore(core);
+        ((ConWord) bufferNode).setCore(core);
 
         return ret;
     }
@@ -430,7 +431,6 @@ public class ConWordCollection extends DictionaryCollection {
             _filter.setDefinition(_filter.getDefinition().toLowerCase());
             _filter.setLocalWord(_filter.getLocalWord().toLowerCase());
             _filter.setValue(_filter.getValue().toLowerCase());
-            //_filter.setGender(_filter.getGender().toLowerCase()); // replace with class filtering
             _filter.setPronunciation(_filter.getPronunciation().toLowerCase());
         }
 
@@ -439,31 +439,36 @@ public class ConWordCollection extends DictionaryCollection {
             curWord = curEntry.getValue();
             try {
                 String definition;
-                int type;
+                int type = curWord.getWordTypeId();
                 String local;
                 String proc;
 
                 // if set to ignore case, set up caseless matches, normal otherwise
                 if (core.getPropertiesManager().isIgnoreCase()) {
                     definition = curWord.getDefinition().toLowerCase();
-                    type = curWord.getWordTypeId();
                     local = curWord.getLocalWord().toLowerCase();
-                    //gender = curWord.getGender().toLowerCase(); // replace with class filtering
                     proc = curWord.getPronunciation().toLowerCase();
                 } else {
                     definition = curWord.getDefinition();
-                    type = curWord.getWordTypeId();
                     local = curWord.getLocalWord();
-                    //gender = curWord.getGender(); // replace with class filtering
                     proc = curWord.getPronunciation();
                 }
 
                 // each filter test split up to minimize compares                
                 // definition
-                if (!_filter.getDefinition().trim().equals("")
-                        && !definition.contains(
-                                _filter.getDefinition())) {
-                    continue;
+                if (!_filter.getDefinition().trim().isEmpty()) {
+                    boolean cont = true;
+
+                    for (String def1 : _filter.getDefinition().split(splitChar)) {
+                        if (definition.contains(def1)) {
+                            cont = false;
+                            break;
+                        }
+                    }
+
+                    if (cont) {
+                        continue;
+                    }
                 }
 
                 // type (exact match only)
@@ -473,27 +478,50 @@ public class ConWordCollection extends DictionaryCollection {
                 }
 
                 // local word
-                if (!_filter.getLocalWord().trim().equals("")
-                        && !(local.matches(_filter.getLocalWord())
-                        || local.contains(_filter.getLocalWord()))) {
-                    continue;
+                if (!_filter.getLocalWord().trim().isEmpty()) {
+                    boolean cont = true;
+
+                    for (String loc1 : _filter.getLocalWord().split(splitChar)) {
+                        if (local.contains(loc1)) {
+                            cont = false;
+                            break;
+                        }
+                    }
+                    if (cont) {
+                        continue;
+                    }
                 }
 
                 // con word
-                if (!matchHeadAndDeclensions(_filter.getValue(), curWord)) {
-                    continue;
+                if (!_filter.getValue().trim().isEmpty())
+                {
+                    boolean cont = true;
+                    
+                    for (String val1 : _filter.getValue().split(splitChar)) {
+                        if (matchHeadAndDeclensions(val1, curWord)) {
+                            cont = false;
+                            break;
+                        }
+                    }
+                    
+                    if (cont) {
+                        continue;
+                    }
                 }
 
-                // replace with class filtering
-                // gender (exact match only)
-                /*if (!_filter.getGender().trim().equals("")
-                        && !gender.equals(_filter.getGender())) {
-                    continue;
-                }*/
                 // pronunciation
-                if (!_filter.getPronunciation().trim().equals("")
-                        && !proc.contains(_filter.getPronunciation())) {
-                    continue;
+                if (!_filter.getPronunciation().trim().isEmpty()) {
+                    boolean cont = true;
+
+                    for (String proc1 : _filter.getPronunciation().split(splitChar)) {
+                        if (proc.contains(proc1)) {
+                            cont = false;
+                        }
+                    }
+
+                    if (cont) {
+                        continue;
+                    }
                 }
 
                 retValues.setBufferWord(curWord);
@@ -501,7 +529,6 @@ public class ConWordCollection extends DictionaryCollection {
             } catch (Exception e) {
                 throw new Exception("FILTERING ERROR: " + e.getMessage());
             }
-
         }
 
         return retValues.getWordNodes();
@@ -559,7 +586,7 @@ public class ConWordCollection extends DictionaryCollection {
     @Override
     public void clear() {
         bufferNode = new ConWord();
-        ((ConWord)bufferNode).setCore(core);
+        ((ConWord) bufferNode).setCore(core);
     }
 
     public ConWord getBufferWord() {
@@ -568,7 +595,7 @@ public class ConWordCollection extends DictionaryCollection {
 
     public void setBufferWord(ConWord bufferWord) {
         this.bufferNode = bufferWord;
-        
+
         if (bufferWord.getCore() == null) {
             bufferWord.setCore(core);
         }
@@ -896,7 +923,7 @@ public class ConWordCollection extends DictionaryCollection {
         List<ConWord> wordLoop = getWordNodes();
         Element wordNode;
         Element wordValue;
-                
+
         for (ConWord curWord : wordLoop) {
             wordNode = doc.createElement(PGTUtil.wordXID);
             rootElement.appendChild(wordNode);
@@ -946,37 +973,38 @@ public class ConWordCollection extends DictionaryCollection {
                 wordValue.appendChild(classVal);
             }
             wordNode.appendChild(wordValue);
-            
+
             wordValue = doc.createElement(PGTUtil.wordClassTextValueCollectionXID);
             for (Entry<Integer, String> entry : curWord.getClassTextValues()) {
                 Element classVal = doc.createElement(PGTUtil.wordClassTextValueXID);
                 classVal.appendChild(doc.createTextNode(entry.getKey() + "," + entry.getValue()));
                 wordValue.appendChild(classVal);
-            }            
+            }
             wordNode.appendChild(wordValue);
         }
     }
 
     /**
-     * Call this to wipe out the values of all deprecated conjugations/declensions
-     * for a particular part of speech in the dictionary
-     * 
+     * Call this to wipe out the values of all deprecated
+     * conjugations/declensions for a particular part of speech in the
+     * dictionary
+     *
      * @param typeId ID of word type to clear values from
      */
     public void clearDeprecatedDeclensions(Integer typeId) {
         DeclensionManager dm = core.getDeclensionManager();
         Map<Integer, List<DeclensionPair>> comTypeDecs = new HashMap();
-        
+
         // iterates over every word
-        for (Object curNode :nodeMap.values()) {
+        for (Object curNode : nodeMap.values()) {
             ConWord curWord = (ConWord) curNode;
             List<DeclensionPair> curDeclensions;
-            
+
             // skip words not of given type
             if (!curWord.getWordTypeId().equals(typeId)) {
                 continue;
             }
-            
+
             // ensure I'm only generating decelnsion patterns for any given part of speech only once
             if (comTypeDecs.containsKey(curWord.getWordTypeId())) {
                 curDeclensions = comTypeDecs.get(curWord.getWordTypeId());
@@ -984,17 +1012,17 @@ public class ConWordCollection extends DictionaryCollection {
                 curDeclensions = dm.getAllCombinedIds(curWord.getWordTypeId());
                 comTypeDecs.put(curWord.getWordTypeId(), curDeclensions);
             }
-                        
+
             // retrieves all stored declension values for word
-            Map<String, DeclensionNode> decMap = dm.getWordDeclensions(curWord.getId());        
+            Map<String, DeclensionNode> decMap = dm.getWordDeclensions(curWord.getId());
 
             // removes all legitimate declensions from map
-            for(DeclensionPair curPair : curDeclensions) {
+            for (DeclensionPair curPair : curDeclensions) {
                 decMap.remove(curPair.combinedId);
             }
-            
+
             // wipe remaining values from word
             dm.removeDeclensionValues(curWord.getId(), decMap.values());
-        }        
+        }
     }
 }
