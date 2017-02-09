@@ -22,6 +22,7 @@ package PolyGlot.Screens;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
+import PolyGlot.CustomControls.PLabel;
 import PolyGlot.DictCore;
 import PolyGlot.ExcelExport;
 import PolyGlot.IOHandler;
@@ -77,7 +78,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         
         try {
             backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
-            jLabel1.setFont(IOHandler.getButtonFont().deriveFont(40f));
+            jLabel1.setFont(IOHandler.getButtonFont().deriveFont(45f));
         } catch (Exception e) {
             InfoBox.error("Resource Error", "Unable to load internal resource: " + e.getLocalizedMessage(), null);
         }
@@ -532,7 +533,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Open Dictionary");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd", "xml");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
         chooser.setFileFilter(filter);
         String fileName;
         chooser.setCurrentDirectory(core.getPropertiesManager().getCannonicalDirectory());
@@ -757,7 +758,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         };
         jButton1 = new PButton(core);
         jButton2 = new PButton(core);
-        jLabel1 = new javax.swing.JLabel();
+        jLabel1 = new PLabel("");
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -854,17 +855,17 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnLexicon)
+                .addComponent(btnLexicon, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnPos)
+                .addComponent(btnPos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnClasses)
+                .addComponent(btnClasses, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnGrammar)
+                .addComponent(btnGrammar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnLogos)
+                .addComponent(btnLogos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnProp)
+                .addComponent(btnProp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -884,43 +885,41 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             }
         });
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Welcome to PolyGlot");
 
-        jLabel2.setText("From here, you can open an existing language file, open the PolyGlot manual, or");
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("From here, you can open an existing language file, open the PolyGlot manual,");
 
-        jLabel3.setText("simply begin work on the blank file currently loaded!");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("or simply begin work on the blank file currently loaded.");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(89, 89, 89)
-                        .addComponent(jButton1)
-                        .addGap(95, 95, 95)
-                        .addComponent(jButton2))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(125, 125, 125)
-                        .addComponent(jLabel3))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(63, 63, 63)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))))
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addGap(101, 101, 101)
+                .addComponent(jButton1)
+                .addGap(95, 95, 95)
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(78, Short.MAX_VALUE)
+                .addContainerGap(97, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(32, 32, 32)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addGap(40, 40, 40)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
@@ -1232,6 +1231,8 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
     /**
      * @param args the command line arguments
+     * args[0] = open file path (blank if none)
+     * args[1] = working directory of PolyGlot (blank if none)
      */
     public static void main(final String args[]) {
         /* Set the Nimbus look and feel */
@@ -1260,16 +1261,16 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 String overridePath = args.length > 1 ? args[1] : "";
                 ScrMainMenu s = new ScrMainMenu(overridePath);
 
+                s.checkForUpdates(false);
+                s.setupKeyStrokes();
+                s.setVisible(true);
+
                 // open file if one is provided via arguments
                 if (args.length > 0) {
                     s.setFile(args[0]);
                     s.openLexicon();
                 }
-
-                s.checkForUpdates(false);
-                s.setupKeyStrokes();
-                s.setVisible(true);
-
+                
                 String problems = "";
                 // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
                 // Test for minimum version of Java (8)

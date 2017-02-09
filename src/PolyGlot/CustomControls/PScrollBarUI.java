@@ -23,7 +23,6 @@ import PolyGlot.PGTUtil;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import javax.swing.JButton;
@@ -41,6 +40,9 @@ public class PScrollBarUI extends BasicScrollBarUI {
     private PArrowButton increase;
     private PArrowButton decrease;
     private boolean vertical;
+    Color highlight = Color.decode("707070");
+    Color shadow = PGTUtil.colorEnabledBG;
+    Color darkShadow = Color.decode("303030");
     
     public static ComponentUI createUI(JComponent c) {
         return new PScrollBarUI(c);
@@ -69,46 +71,18 @@ public class PScrollBarUI extends BasicScrollBarUI {
     protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
         Graphics2D antiAlias = (Graphics2D) g;
         antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Image slideTop;
-        Image slideCenter;
-        Image slideBottom;
-
         g.translate(trackBounds.x, trackBounds.y);
         
-        if (scrollbar.getOrientation() == JScrollBar.VERTICAL) {
-            slideTop = PGTUtil.sliderTop;
-            slideCenter = PGTUtil.sliderMiddleVert;
-            slideBottom = PGTUtil.sliderBottom;
-            
-            int increaseHeight = increase.getHeight() - 4; // why -4 to make this look right? Weird.
-            int decreaseHeight = decrease.getHeight() - 4;
-            int slideTopHeight = slideTop.getHeight(scrollbar);
-            int slideBotHeight = slideBottom.getHeight(scrollbar);            
-            
-            antiAlias.drawImage(slideTop, 0, increaseHeight, trackBounds.width, slideTopHeight, scrollbar);
-            antiAlias.drawImage(slideCenter, 0, increaseHeight + slideTopHeight, trackBounds.width, 
-                    trackBounds.height - (increaseHeight + slideTopHeight + slideBotHeight), scrollbar);
-            antiAlias.drawImage(slideBottom, 0, trackBounds.height - (decreaseHeight + slideBotHeight), 
-                    trackBounds.width, slideBotHeight, scrollbar);
+        if (scrollbar.getOrientation() == JScrollBar.VERTICAL) {           
+            g.setColor(darkShadow);
+            g.fillRect(0, 0, trackBounds.width, trackBounds.height);
+            g.setColor(shadow);
+            g.fillRect(1, 1, trackBounds.width - 2, trackBounds.height - 2);
         } else {
-            try {
-                slideTop = PGTUtil.sliderEast;
-                slideCenter = PGTUtil.sliderMiddleHoriz;
-                slideBottom = PGTUtil.sliderWest;
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-                return;
-            }
-            int increaseWidth = increase.getWidth() - 20; // Why 20 here??? Won't render in the right spot otherwise...
-            int decreaseWidth = decrease.getWidth() - 20;
-            int slideTopWidth = slideTop.getWidth(scrollbar);
-            int slideBotWidth = slideBottom.getWidth(scrollbar);
-            
-            antiAlias.drawImage(slideBottom, decreaseWidth, 0, slideBotWidth, trackBounds.height, scrollbar);
-            antiAlias.drawImage(slideCenter, increaseWidth + slideTopWidth, 0, 
-                    trackBounds.width - (increaseWidth + slideTopWidth + slideBotWidth), trackBounds.height, scrollbar);
-            antiAlias.drawImage(slideTop, trackBounds.width - (slideTopWidth + increaseWidth), 0, 
-                    slideTopWidth, trackBounds.height, scrollbar);
+            g.setColor(darkShadow);
+            g.fillRect(0, 0, trackBounds.width, trackBounds.height);
+            g.setColor(shadow);
+            g.fillRect(1, 1, trackBounds.width - 2, trackBounds.height - 2);
         }
         
         g.translate( -trackBounds.x, -trackBounds.y );
@@ -120,12 +94,27 @@ public class PScrollBarUI extends BasicScrollBarUI {
         antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.translate(thumbBounds.x, thumbBounds.y);
         
-        // TODO: Obviously rework the thumb section with custom graphic
-        g.setColor( Color.red );
-        if (vertical) {            
-            g.fillRect( 4, 9, thumbBounds.width - 8, thumbBounds.height - 18 );
+        
+        if (vertical) {
+            g.setColor(darkShadow);
+            g.fillRect(2, 9, thumbBounds.width - 4, thumbBounds.height - 18);
+            g.setColor(Color.gray);
+            g.fillRect(3, 10, thumbBounds.width - 6, thumbBounds.height - 20);
+            
+            g.setColor(darkShadow);
+            g.drawLine(4, thumbBounds.height/2, thumbBounds.width -5, thumbBounds.height/2);
+            g.drawLine(5, thumbBounds.height/2 + 2, thumbBounds.width - 6, thumbBounds.height/2 + 2);
+            g.drawLine(5, thumbBounds.height/2 - 2, thumbBounds.width - 6, thumbBounds.height/2 - 2);
         } else {
-            g.fillRect( 9, 4, thumbBounds.width - 18, thumbBounds.height - 8 );
+            g.setColor(darkShadow);            
+            g.fillRect(9, 2, thumbBounds.width - 18, thumbBounds.height - 4);
+            g.setColor(Color.gray);
+            g.fillRect(10, 3, thumbBounds.width - 20, thumbBounds.height - 6);
+            
+            g.setColor(darkShadow);
+            g.drawLine(thumbBounds.width/2, 4, thumbBounds.width/2, thumbBounds.height -5);
+            g.drawLine(thumbBounds.width/2 + 2, 5, thumbBounds.width/2 + 2, thumbBounds.height - 6);
+            g.drawLine(thumbBounds.width/2 - 2, 5, thumbBounds.width/2 - 2, thumbBounds.height - 6);
         }
         g.translate( -thumbBounds.x, -thumbBounds.y );
     }

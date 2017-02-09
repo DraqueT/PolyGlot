@@ -73,7 +73,7 @@ import javax.swing.table.TableColumn;
  * @author draque
  */
 public class ScrLogoDetails extends PFrame {
-
+    private boolean selectOnlyMode = false;
     private boolean curPopulating = false;
     private ScrLogoQuickView quickView = null;
     private LogoNode singleModeLogo;
@@ -383,17 +383,18 @@ public class ScrLogoDetails extends PFrame {
      * @param enable
      */
     private void setEnableControls(boolean enable) {
-        btnLoadImage.setEnabled(enable);
-        btnClipboard.setEnabled(enable);
-        tblReadings.setEnabled(enable);
+        btnLoadImage.setEnabled(enable && !selectOnlyMode);
+        btnClipboard.setEnabled(enable && !selectOnlyMode);
+        tblReadings.setEnabled(enable && !selectOnlyMode);
         lstRadicals.setEnabled(enable);
-        btnAddRad.setEnabled(enable);
-        btnDelReading.setEnabled(enable);
-        btnAddReading.setEnabled(enable);
-        btnDelRad.setEnabled(enable);
-        txtName.setEnabled(enable);
-        txtStrokes.setEnabled(enable);
-        txtNotes.setEnabled(enable);
+        btnAddRad.setEnabled(enable && !selectOnlyMode);
+        chkIsRad.setEnabled(enable && !selectOnlyMode);
+        btnDelReading.setEnabled(enable && !selectOnlyMode);
+        btnAddReading.setEnabled(enable && !selectOnlyMode);
+        btnDelRad.setEnabled(enable && !selectOnlyMode);
+        txtName.setEnabled(enable && !selectOnlyMode);
+        txtStrokes.setEnabled(enable && !selectOnlyMode);
+        txtNotes.setEnabled(enable && !selectOnlyMode);
         lstRelWords.setEnabled(enable);
     }
 
@@ -1479,7 +1480,7 @@ public class ScrLogoDetails extends PFrame {
      */
     public void setWordFetchMode(boolean fetch) {
         if (fetch) {
-            setTitle("Ascociate Logograph with Word");
+            setTitle("Ascociate Logograph with Selected Conword");
         }
 
         btnAddLogo.setEnabled(!fetch);
@@ -1495,6 +1496,8 @@ public class ScrLogoDetails extends PFrame {
         txtStrokes.setEnabled(!fetch);
         chkIsRad.setEnabled(!fetch);
         tblReadings.setEnabled(!fetch);
+        
+        selectOnlyMode = fetch;
     }
 
     public static ScrLogoDetails run(DictCore _core) {

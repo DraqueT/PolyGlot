@@ -76,7 +76,6 @@ public class ScrLogoQuickView extends PFrame {
 
         btnAdd.setVisible(!showRadicalsOnly);
         btnDel.setVisible(!showRadicalsOnly);
-        btnDetails.setVisible(!showRadicalsOnly);
 
         if (showRadicalsOnly) {
             populateLogos(core.getLogoCollection().getRadicals());
@@ -310,7 +309,6 @@ public class ScrLogoQuickView extends PFrame {
     private void initComponents() {
 
         lblLogoPic = new javax.swing.JLabel();
-        btnDetails = new PButton(core);
         jScrollPane1 = new javax.swing.JScrollPane();
         lstLogos = new PList(core, true);
         btnAdd = new PolyGlot.CustomControls.PAddRemoveButton("+");
@@ -320,13 +318,6 @@ public class ScrLogoQuickView extends PFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lblLogoPic.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        btnDetails.setText("Details/Edit");
-        btnDetails.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDetailsActionPerformed(evt);
-            }
-        });
 
         lstLogos.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -377,8 +368,7 @@ public class ScrLogoQuickView extends PFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblLogoPic, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnDetails)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton1)))
                 .addContainerGap())
         );
@@ -394,9 +384,7 @@ public class ScrLogoQuickView extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnDetails)
-                        .addComponent(jButton1))))
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)))
         );
 
         pack();
@@ -425,25 +413,6 @@ public class ScrLogoQuickView extends PFrame {
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
         delLogo();
     }//GEN-LAST:event_btnDelActionPerformed
-
-    private void btnDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailsActionPerformed
-        if (logoFinder != null && !logoFinder.isDisposed()
-                && logoFinder.getMode() != WindowMode.SINGLEVALUE) {
-            InfoBox.info("Action currently unavailable.",
-                    "Please close the Associate Logograph window before opening modification window.",
-                    this);
-
-            return;
-        }
-
-        // if neither of these if statements are true, just do nothing, as window is open already.
-        if ((logoFinder == null || logoFinder.isDisposed())
-                && lstLogos.getSelectedIndex() != -1) {
-            logoFinder = new ScrLogoDetails(core, ((LogoNode) lstLogos.getSelectedValue()).getId());
-            logoFinder.setBeside(this);
-            logoFinder.setVisible(true);
-        }
-    }//GEN-LAST:event_btnDetailsActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
@@ -483,7 +452,6 @@ public class ScrLogoQuickView extends PFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDel;
-    private javax.swing.JButton btnDetails;
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblLogoPic;

@@ -41,7 +41,6 @@ public class PComboBox extends JComboBox implements MouseListener {
     private SwingWorker worker = null;
     private boolean mouseOver = false;
     private final DictCore core;
-    
     public PComboBox(DictCore _core) {
         core = _core;
         setupListeners();

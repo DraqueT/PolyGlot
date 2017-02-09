@@ -222,51 +222,12 @@ public class PGTUtil {
     public static final Color colorSelectedBG;
     public static final Color colorDisabledForeground;
     public static final Color colorMouseoverBorder;
-        
-    // Images for standard features in PolyGlot (to avoid multiple reloads)
-    public static final Image directionButtonNorth;
-    public static final Image directionButtonEast;
-    public static final Image directionButtonSouth;
-    public static final Image directionButtonWest;
-    public static final Image directionButtonNorthPressed;
-    public static final Image directionButtonEastPressed;
-    public static final Image directionButtonSouthPressed;
-    public static final Image directionButtonWestPressed;
-    public static final Image directionButtonNorthDisabled;
-    public static final Image directionButtonEastDisabled;
-    public static final Image directionButtonSouthDisabled;
-    public static final Image directionButtonWestDisabled;
-    public static final Image sliderBottom;
-    public static final Image sliderMiddleHoriz;
-    public static final Image sliderTop;
-    public static final Image sliderWest;
-    public static final Image sliderMiddleVert;
-    public static final Image sliderEast;
     
     // one time set for calculate static values
     static {
-        directionButtonNorth = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonUp.png")).getImage();
-        directionButtonEast = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonEast.png")).getImage();
-        directionButtonSouth = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonDown.png")).getImage();
-        directionButtonWest = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonWest.png")).getImage();
-        directionButtonNorthPressed = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonUpPressed.png")).getImage();
-        directionButtonEastPressed = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonEastPressed.png")).getImage();
-        directionButtonSouthPressed = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonDownPressed.png")).getImage();
-        directionButtonWestPressed = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonWestPressed.png")).getImage();
-        directionButtonNorthDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonUpDisabled.png")).getImage();        
-        directionButtonEastDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonEastDisabled.png")).getImage();
-        directionButtonSouthDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonDownDisabled.png")).getImage();
-        directionButtonWestDisabled = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideButtonWestDisabled.png")).getImage();
-        sliderBottom = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slidebottom.png")).getImage();
-        sliderMiddleHoriz = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slidecenterHoriz.png")).getImage();
-        sliderTop = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slidetop.png")).getImage();
-        sliderWest = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideWest.png")).getImage();
-        sliderMiddleVert = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slidecenter.png")).getImage();
-        sliderEast = new ImageIcon(new DictCore().getClass().getResource("/PolyGlot/ImageAssets/slideEast.png")).getImage();
-        
         colorDisabledBG = Color.decode("#b0b0b0");
-        colorEnabledBG = Color.decode("#b9b9ff");
-        colorSelectedBG = Color.decode("#9999f1");
+        colorEnabledBG = Color.decode("#66b2ff");
+        colorSelectedBG = Color.decode("#7979ef");
         colorDisabledForeground = Color.decode("#808080");
         colorMouseoverBorder = Color.decode("#909090");
         
