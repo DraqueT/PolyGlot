@@ -41,6 +41,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
@@ -255,7 +256,7 @@ public class ScrDeclensionGenSetup extends PDialog {
 
         DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
 
-        if (curRule == null) {
+        if (curRule == null || lstRules.getSelectedIndices().length > 1) {
             txtRuleName.setText("");
             txtRuleRegex.setText("");
             populateTransforms();
@@ -286,6 +287,11 @@ public class ScrDeclensionGenSetup extends PDialog {
         transModel.addColumn("Regex");
         transModel.addColumn("Replacement");
         tblTransforms.setModel(transModel);
+        
+        // do not populate if multiple selections
+        if (lstRules.getSelectedIndices().length > 1) {
+            return;
+        }
 
         TableColumn column = tblTransforms.getColumnModel().getColumn(0);
         column.setCellEditor(new PCellEditor(setFont));
@@ -493,7 +499,17 @@ public class ScrDeclensionGenSetup extends PDialog {
      * Copies selected rule (if any) to clipboard
      */
     private void copyRuleToClipboard() {
-        DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
+        List<DeclensionGenRule> rules = new ArrayList<>();
+        
+        for (int i : lstRules.getSelectedIndices()) {
+            DeclensionGenRule copyRule = new DeclensionGenRule();
+            copyRule.setEqual((DeclensionGenRule)lstRules.getModel().getElementAt(i), true);
+            rules.add(copyRule);
+        }
+        
+        core.setClipBoard(rules);
+        
+        /*DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
         
         if (curRule == null) {
             return;
@@ -501,7 +517,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         
         DeclensionGenRule copyRule = new DeclensionGenRule();
         copyRule.setEqual(curRule, true);
-        core.setClipBoard(copyRule);
+        core.setClipBoard(copyRule);*/
     }
 
     /**
@@ -513,18 +529,25 @@ public class ScrDeclensionGenSetup extends PDialog {
         DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
         
         if (fromClipBoard == null
-                || !(fromClipBoard instanceof DeclensionGenRule)
+                || !(fromClipBoard instanceof ArrayList)
+                || ((ArrayList)fromClipBoard).isEmpty()
+                || !(((ArrayList)fromClipBoard).get(0) instanceof DeclensionGenRule)
                 || curPair == null)
         {
             return;
         }
         
-        DeclensionGenRule copyRule = new DeclensionGenRule(typeId, curPair.combinedId);
-        copyRule.setEqual((DeclensionGenRule)fromClipBoard, false);
+        List<DeclensionGenRule> rules = (ArrayList)fromClipBoard;
+        
+        for (DeclensionGenRule curRule : rules) {
+            DeclensionGenRule copyRule = new DeclensionGenRule(typeId, curPair.combinedId);
+            copyRule.setEqual(curRule, false);
+
+            core.getDeclensionManager().addDeclensionGenRule(copyRule);
+            rulesModel.addElement(copyRule);
+            lstRules.setSelectedValue(copyRule, true);
+        }
                 
-        core.getDeclensionManager().addDeclensionGenRule(copyRule);
-        rulesModel.addElement(copyRule);
-        lstRules.setSelectedValue(copyRule, true);
         populateRuleProperties();
         populateTransforms();
         enableTransformEditing(true);                
@@ -536,7 +559,7 @@ public class ScrDeclensionGenSetup extends PDialog {
      * @param saveIndex index of rule to save to
      */
     private void saveTransPairs(int saveIndex) {
-        if (saveIndex == -1) {
+        if (saveIndex == -1 || lstRules.getSelectedIndices().length > 1) {
             return;
         }
 
@@ -623,13 +646,15 @@ public class ScrDeclensionGenSetup extends PDialog {
             return;
         }
 
-        DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
-
-        if (curRule == null) {
+        if ((DeclensionGenRule) lstRules.getSelectedValue() == null) {
             return;
         }
 
-        core.getDeclensionManager().deleteDeclensionGenRule(curRule);
+        for (int i : lstRules.getSelectedIndices()) {
+            lstRules.setSelectedIndex(i);
+            core.getDeclensionManager().deleteDeclensionGenRule((DeclensionGenRule)lstRules.getSelectedValue());
+        }
+        
         populateRules();
         populateRuleProperties();
         populateTransforms();
@@ -726,47 +751,59 @@ public class ScrDeclensionGenSetup extends PDialog {
      * move rule up in list
      */
     private void moveRuleUp() {
-        int index = lstRules.getSelectedIndex();
+        int[] selectedIndicies = lstRules.getSelectedIndices();
 
-        if (index <= 0) {
+        if (lstRules.getSelectedIndex() <= 0) {
             return;
         }
 
-        //DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
         DefaultListModel lstModel = (DefaultListModel) lstRules.getModel();
-        DeclensionGenRule curRule = (DeclensionGenRule) lstModel.getElementAt(index);
-        DeclensionGenRule prevRule = (DeclensionGenRule) lstModel.getElementAt(index - 1);
-        int curIndex = curRule.getIndex();
-        curRule.setIndex(prevRule.getIndex());
-        prevRule.setIndex(curIndex);
+        int lastIndex = 0;
+        DeclensionGenRule top = (DeclensionGenRule) lstModel.getElementAt(selectedIndicies[0] - 1);
+        
+        for (int index : lstRules.getSelectedIndices()) {            
+            DeclensionGenRule curRule = (DeclensionGenRule) lstModel.getElementAt(index);
+            lastIndex = curRule.getIndex();
+            curRule.setIndex(curRule.getIndex() - 1);
+        }
+        top.setIndex(lastIndex);
+        
         populateRules();
         
-        //lstModel.remove(index);
-        //lstModel.add(index - 1, curRule);
-
-        lstRules.setSelectedIndex(index - 1);
+        selectedIndicies[selectedIndicies.length - 1] = selectedIndicies[0] - 1; 
+        lstRules.setSelectedIndices(selectedIndicies);
     }
 
     /**
      * move rule down in list
      */
     private void moveRuleDown() {
-        int index = lstRules.getSelectedIndex();
-
-        if (index == -1 || index == lstRules.getModel().getSize()) {
+        int[] selectedIndicies = lstRules.getSelectedIndices();
+        int firstIndex;
+        
+        // return if nothing selected, or last selection would be placed out of scope
+        if (lstRules.getSelectedIndex() == -1 
+                || selectedIndicies[0] + selectedIndicies.length >= lstRules.getModel().getSize()) {
             return;
         }
 
         DefaultListModel lstModel = (DefaultListModel) lstRules.getModel();
-        DeclensionGenRule curRule = (DeclensionGenRule)lstModel.get(index);
-        DeclensionGenRule nextRule = (DeclensionGenRule)lstModel.get(index + 1);
-
-        int curIndex = curRule.getIndex();
-        curRule.setIndex(nextRule.getIndex());
-        nextRule.setIndex(curIndex);
+        DeclensionGenRule bottom = (DeclensionGenRule) lstModel.getElementAt(selectedIndicies[selectedIndicies.length - 1] + 1);
+        
+        firstIndex = ((DeclensionGenRule) lstModel.getElementAt(selectedIndicies[0])).getIndex();
+        
+        for (int index : lstRules.getSelectedIndices()) {            
+            DeclensionGenRule curRule = (DeclensionGenRule) lstModel.getElementAt(index);
+            curRule.setIndex(curRule.getIndex() + 1);
+        }
+        
+        // move bottom to top
+        bottom.setIndex(firstIndex);
+        
         populateRules();
 
-        lstRules.setSelectedIndex(index + 1);
+        selectedIndicies[0] = selectedIndicies[selectedIndicies.length - 1] + 1;
+        lstRules.setSelectedIndices(selectedIndicies);
     }
 
     /**
@@ -1105,11 +1142,18 @@ public class ScrDeclensionGenSetup extends PDialog {
                 && upDownPress == false) {
             return;
         }
-
+        
         upDownPress = false;
 
         int selected = lstRules.getSelectedIndex();
-        int previous = selected == evt.getFirstIndex() ? evt.getLastIndex() : evt.getFirstIndex();
+        
+        int previous;
+        if (lstRules.getSelectedIndices().length > 1 || !tblTransforms.isEnabled()) {
+            previous = -1;
+        } else {
+            previous = selected == evt.getFirstIndex() ? evt.getLastIndex() : evt.getFirstIndex();
+        }
+         
 
         saveTransPairs(previous);
         populateRuleProperties();

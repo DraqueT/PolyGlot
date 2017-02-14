@@ -201,6 +201,13 @@ public class DeclensionManager {
 
         Collections.sort(ret);
         
+        // ensure that all rules cave continguous IDs before returning
+        int i = 1;
+        for (DeclensionGenRule curRule : ret) {
+            curRule.setIndex(i);
+            i++;
+        }
+        
         return ret;
     }
 
