@@ -33,6 +33,7 @@ import PolyGlot.ManagersCollections.TypeCollection;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.ManagersCollections.ImageCollection;
 import PolyGlot.ManagersCollections.OptionsManager;
+import PolyGlot.ManagersCollections.RomanizationManager;
 import PolyGlot.ManagersCollections.WordPropertyCollection;
 import PolyGlot.Screens.ScrMainMenu;
 import java.awt.Color;
@@ -55,6 +56,7 @@ public class DictCore {
     private DeclensionManager declensionMgr;
     private PropertiesManager propertiesManager;
     private PronunciationMgr pronuncMgr;
+    private RomanizationManager romMgr;
     private FamilyManager famManager;
     private LogoCollection logoCollection;
     private GrammarManager grammarManager;
@@ -76,6 +78,7 @@ public class DictCore {
             declensionMgr = new DeclensionManager(this);
             propertiesManager = new PropertiesManager();
             pronuncMgr = new PronunciationMgr(this);
+            romMgr = new RomanizationManager(this);
             famManager = new FamilyManager(this);
             logoCollection = new LogoCollection(this);
             grammarManager = new GrammarManager();
@@ -407,6 +410,7 @@ public class DictCore {
         wordCollection.writeXML(doc, rootElement);
         declensionMgr.writeXML(doc, rootElement);
         pronuncMgr.writeXML(doc, rootElement);
+        romMgr.writeXML(doc, rootElement);
         logoCollection.writeXML(doc, rootElement);
         grammarManager.writeXML(doc, rootElement);
 
@@ -440,5 +444,9 @@ public class DictCore {
 
     public PronunciationMgr getPronunciationMgr() {
         return pronuncMgr;
+    }
+
+    public RomanizationManager getRomManager() {
+        return romMgr;
     }
 }

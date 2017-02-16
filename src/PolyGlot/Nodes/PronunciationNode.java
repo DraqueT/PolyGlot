@@ -21,7 +21,7 @@
 package PolyGlot.Nodes;
 
 /**
- *
+ * Records orthographic pronunciation values
  * @author draque
  */
 public class PronunciationNode extends DictNode {

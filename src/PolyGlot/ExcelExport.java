@@ -199,7 +199,7 @@ public class ExcelExport {
         
         // record pronunciations on sheet 4
         sheet = workbook.createSheet("Pronunciations");
-        Iterator<PronunciationNode> procIt = core.getPronunciationMgr().getPronunciations();
+        Iterator<PronunciationNode> procIt = core.getPronunciationMgr().getPronunciations().iterator();
         
         row = sheet.createRow(0);
         row.createCell(0).setCellValue("CHARACTER(S)");

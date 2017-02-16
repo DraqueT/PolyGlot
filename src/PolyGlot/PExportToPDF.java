@@ -687,7 +687,7 @@ public class PExportToPDF {
         table.addCell(new Paragraph("Character(s)").setFont(PdfFontFactory.createFont(FontConstants.COURIER_BOLD)));
         table.addCell(new Paragraph("Pronunciation").setFont(PdfFontFactory.createFont(FontConstants.COURIER_BOLD)));
 
-        Iterator<PronunciationNode> orthIt = core.getPronunciationMgr().getPronunciations();
+        Iterator<PronunciationNode> orthIt = core.getPronunciationMgr().getPronunciations().iterator();
 
         while (orthIt.hasNext()) {
             PronunciationNode curNode = orthIt.next();

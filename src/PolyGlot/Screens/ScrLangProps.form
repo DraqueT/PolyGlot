@@ -202,18 +202,30 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="chkTypesMandatory" min="-2" max="-2" attributes="0"/>
-                  <Component id="chkLocalMandatory" min="-2" max="-2" attributes="0"/>
-                  <Component id="chkWordUniqueness" min="-2" max="-2" attributes="0"/>
-                  <Component id="chkLocalUniqueness" min="-2" max="-2" attributes="0"/>
-                  <Component id="chkIgnoreCase" min="-2" max="-2" attributes="0"/>
-                  <Component id="chkDisableProcRegex" min="-2" max="-2" attributes="0"/>
-                  <Component id="chkEnforceRTL" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel2" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="chkTypesMandatory" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkLocalMandatory" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkWordUniqueness" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkLocalUniqueness" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkIgnoreCase" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkDisableProcRegex" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkEnforceRTL" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="chkTypesMandatory" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="chkLocalMandatory" min="-2" max="-2" attributes="0"/>
@@ -227,7 +239,7 @@
                       <Component id="chkDisableProcRegex" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="chkEnforceRTL" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="74" max="32767" attributes="0"/>
+                      <EmptySpace pref="58" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -299,6 +311,12 @@
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
               </AuxValues>
             </Component>
+            <Component class="javax.swing.JLabel" name="jLabel2">
+              <Properties>
+                <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="text" type="java.lang.String" value="Lexical Enfocement"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel4">
@@ -323,17 +341,17 @@
                       <Component id="btnAddProc" min="-2" pref="42" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="174" max="32767" attributes="0"/>
+                              <Component id="jLabel1" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="183" max="32767" attributes="0"/>
                                       <Component id="jButton3" min="-2" pref="40" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
@@ -351,7 +369,6 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -377,7 +394,9 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Pronunciation Guide"/>
+                <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="text" type="java.lang.String" value="Phonemic Orthography"/>
+                <Property name="toolTipText" type="java.lang.String" value="The Pronunciation Guide"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnAddProc">

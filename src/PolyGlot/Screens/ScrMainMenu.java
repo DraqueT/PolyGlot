@@ -729,6 +729,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         ((PButton)btnLexicon).setActiveSelected(false);
         ((PButton)btnGrammar).setActiveSelected(false);
         ((PButton)btnClasses).setActiveSelected(false);
+        ((PButton)btnPhonology).setActiveSelected(false);
     }
 
     /**
@@ -747,6 +748,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         btnGrammar = new PButton(core);
         btnLogos = new PButton(core);
         btnProp = new PButton(core);
+        btnPhonology = new PButton(core);
         jPanel2 = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -795,6 +797,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         jPanel1.setBackground(new java.awt.Color(102, 204, 255));
 
         btnLexicon.setText("Lexicon");
+        btnLexicon.setToolTipText("A customizable dictionary for your language's vocabulary");
         btnLexicon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLexiconActionPerformed(evt);
@@ -802,6 +805,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         });
 
         btnPos.setText("Parts of Speech");
+        btnPos.setToolTipText("Create both parts of speech here, and define how their declension/conjugatino rules work here.");
         btnPos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPosActionPerformed(evt);
@@ -809,6 +813,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         });
 
         btnClasses.setText("Lexical Classes");
+        btnClasses.setToolTipText("Create customizable classes, like gender, or create freetext fieldsfor vocabulary here.");
         btnClasses.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClassesActionPerformed(evt);
@@ -816,6 +821,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         });
 
         btnGrammar.setText("Grammar");
+        btnGrammar.setToolTipText("Define grammar in a chapter/section based fashion, with formatted text, and audio recording/playback here.");
         btnGrammar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGrammarActionPerformed(evt);
@@ -823,6 +829,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         });
 
         btnLogos.setText("Logographs");
+        btnLogos.setToolTipText("Create and maintain a visual dictionary of logographs here.");
         btnLogos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogosActionPerformed(evt);
@@ -830,9 +837,18 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         });
 
         btnProp.setText("Lang Properties");
+        btnProp.setToolTipText("Miscelanious properties associated with your language such as alphabetical order go here.");
         btnProp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPropActionPerformed(evt);
+            }
+        });
+
+        btnPhonology.setText("Phonology");
+        btnPhonology.setToolTipText("Edit language phonology, orthography, etc. here.");
+        btnPhonology.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPhonologyActionPerformed(evt);
             }
         });
 
@@ -848,7 +864,8 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                     .addComponent(btnClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnLogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPhonology, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -865,6 +882,8 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnLogos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnPhonology, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnProp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -872,6 +891,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jButton1.setText("OPEN LANGUAGE");
+        jButton1.setToolTipText("Open an existing language");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -879,6 +899,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         });
 
         jButton2.setText("OPEN MANUAL");
+        jButton2.setToolTipText("Open the PolyGlot manual");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -1229,6 +1250,13 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         mnuAboutActionPerformed(evt);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void btnPhonologyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhonologyActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        ScrPhonology s = new ScrPhonology(core);
+        changeScreen(s, s.getWindow(), (PButton)evt.getSource());
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_btnPhonologyActionPerformed
+
     /**
      * @param args the command line arguments
      * args[0] = open file path (blank if none)
@@ -1297,6 +1325,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private javax.swing.JButton btnGrammar;
     private javax.swing.JButton btnLexicon;
     private javax.swing.JButton btnLogos;
+    private javax.swing.JButton btnPhonology;
     private javax.swing.JButton btnPos;
     private javax.swing.JButton btnProp;
     private javax.swing.JButton jButton1;

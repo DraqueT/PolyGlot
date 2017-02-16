@@ -835,7 +835,7 @@ public class ConWordCollection extends DictionaryCollection {
 
         // build display for phoneme count
         ret += formatPlain(" Breakdown of phonemes counted across all words:<br>");
-        Iterator<PronunciationNode> procLoop = core.getPronunciationMgr().getPronunciations();
+        Iterator<PronunciationNode> procLoop = core.getPronunciationMgr().getPronunciations().iterator();
         while (procLoop.hasNext()) {
             PronunciationNode curNode = procLoop.next();
             ret += formatPlain(curNode.getPronunciation() + " : "
@@ -873,16 +873,16 @@ public class ConWordCollection extends DictionaryCollection {
         ret += formatPlain("Heat map of phoneme combination frequency:<br>");
         ret += "<table border=\"1\">";
         ret += "<tr>" + formatPlain("<td></td>");
-        Iterator<PronunciationNode> procIty = core.getPronunciationMgr().getPronunciations();
+        Iterator<PronunciationNode> procIty = core.getPronunciationMgr().getPronunciations().iterator();
         while (procIty.hasNext()) {
             ret += "<td>" + formatPlain(formatPlain(procIty.next().getPronunciation())) + "</td>";
         }
         ret += "</tr>";
-        procIty = core.getPronunciationMgr().getPronunciations();
+        procIty = core.getPronunciationMgr().getPronunciations().iterator();
         while (procIty.hasNext()) {
             PronunciationNode y = procIty.next();
             ret += "<tr><td>" + formatPlain(y.getPronunciation()) + "</td>";
-            Iterator<PronunciationNode> procItx = core.getPronunciationMgr().getPronunciations();
+            Iterator<PronunciationNode> procItx = core.getPronunciationMgr().getPronunciations().iterator();
             while (procItx.hasNext()) {
                 PronunciationNode x = procItx.next();
                 String search = x.getPronunciation() + " " + y.getPronunciation();

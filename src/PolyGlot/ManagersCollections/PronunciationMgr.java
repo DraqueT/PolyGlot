@@ -58,8 +58,9 @@ public class PronunciationMgr {
      *
      * @return list of PronunciationNodes
      */
-    public Iterator<PronunciationNode> getPronunciations() {
-        return pronunciations.iterator();
+    public List<PronunciationNode> getPronunciations() {
+        // CORRECT FOR FILTERING/CREATION OF COPY OBJECT
+        return pronunciations;
     }
 
     /**
@@ -194,7 +195,7 @@ public class PronunciationMgr {
      */
     private List<PronunciationNode> getPronunciationElements(String base, boolean isFirst) {
         List<PronunciationNode> ret = new ArrayList<>();
-        Iterator<PronunciationNode> finder = getPronunciations();
+        Iterator<PronunciationNode> finder = getPronunciations().iterator();
 
         // return blank for empty string
         if (base.length() == 0 || !finder.hasNext()) {
@@ -276,7 +277,7 @@ public class PronunciationMgr {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Iterator<PronunciationNode> procGuide = getPronunciations();
+        Iterator<PronunciationNode> procGuide = getPronunciations().iterator();
         Element wordNode;
         Element wordValue;
         

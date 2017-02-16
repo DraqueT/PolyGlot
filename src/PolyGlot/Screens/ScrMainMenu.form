@@ -236,6 +236,7 @@
                       <Component id="btnProp" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnLogos" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnGrammar" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnPhonology" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -255,6 +256,8 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnLogos" min="-2" pref="28" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="btnPhonology" min="-2" pref="28" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnProp" min="-2" pref="28" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -265,6 +268,7 @@
         <Component class="javax.swing.JButton" name="btnLexicon">
           <Properties>
             <Property name="text" type="java.lang.String" value="Lexicon"/>
+            <Property name="toolTipText" type="java.lang.String" value="A customizable dictionary for your language&apos;s vocabulary"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLexiconActionPerformed"/>
@@ -276,6 +280,7 @@
         <Component class="javax.swing.JButton" name="btnPos">
           <Properties>
             <Property name="text" type="java.lang.String" value="Parts of Speech"/>
+            <Property name="toolTipText" type="java.lang.String" value="Create both parts of speech here, and define how their declension/conjugatino rules work here."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPosActionPerformed"/>
@@ -287,6 +292,7 @@
         <Component class="javax.swing.JButton" name="btnClasses">
           <Properties>
             <Property name="text" type="java.lang.String" value="Lexical Classes"/>
+            <Property name="toolTipText" type="java.lang.String" value="Create customizable classes, like gender, or create freetext fieldsfor vocabulary here."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClassesActionPerformed"/>
@@ -298,6 +304,7 @@
         <Component class="javax.swing.JButton" name="btnGrammar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Grammar"/>
+            <Property name="toolTipText" type="java.lang.String" value="Define grammar in a chapter/section based fashion, with formatted text, and audio recording/playback here."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGrammarActionPerformed"/>
@@ -309,6 +316,7 @@
         <Component class="javax.swing.JButton" name="btnLogos">
           <Properties>
             <Property name="text" type="java.lang.String" value="Logographs"/>
+            <Property name="toolTipText" type="java.lang.String" value="Create and maintain a visual dictionary of logographs here."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLogosActionPerformed"/>
@@ -320,9 +328,22 @@
         <Component class="javax.swing.JButton" name="btnProp">
           <Properties>
             <Property name="text" type="java.lang.String" value="Lang Properties"/>
+            <Property name="toolTipText" type="java.lang.String" value="Miscelanious properties associated with your language such as alphabetical order go here."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPropActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnPhonology">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Phonology"/>
+            <Property name="toolTipText" type="java.lang.String" value="Edit language phonology, orthography, etc. here."/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPhonologyActionPerformed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
@@ -378,6 +399,7 @@
         <Component class="javax.swing.JButton" name="jButton1">
           <Properties>
             <Property name="text" type="java.lang.String" value="OPEN LANGUAGE"/>
+            <Property name="toolTipText" type="java.lang.String" value="Open an existing language"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
@@ -389,6 +411,7 @@
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
             <Property name="text" type="java.lang.String" value="OPEN MANUAL"/>
+            <Property name="toolTipText" type="java.lang.String" value="Open the PolyGlot manual"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>

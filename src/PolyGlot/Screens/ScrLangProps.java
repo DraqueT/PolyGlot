@@ -213,7 +213,7 @@ public class ScrLangProps extends PFrame {
      * populates pronunciation values
      */
     private void populateProcs() {
-        Iterator<PronunciationNode> popGuide = core.getPronunciationMgr().getPronunciations();
+        Iterator<PronunciationNode> popGuide = core.getPronunciationMgr().getPronunciations().iterator();
 
         // wipe current rows, repopulate from core
         setupProcTable();
@@ -438,6 +438,7 @@ public class ScrLangProps extends PFrame {
         chkIgnoreCase = new PCheckBox(core);
         chkDisableProcRegex = new PCheckBox(core);
         chkEnforceRTL = new PCheckBox(core);
+        jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnAddProc = new PolyGlot.CustomControls.PAddRemoveButton("+");
@@ -536,21 +537,33 @@ public class ScrLangProps extends PFrame {
             }
         });
 
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Lexical Enfocement");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(chkTypesMandatory)
-            .addComponent(chkLocalMandatory)
-            .addComponent(chkWordUniqueness)
-            .addComponent(chkLocalUniqueness)
-            .addComponent(chkIgnoreCase)
-            .addComponent(chkDisableProcRegex)
-            .addComponent(chkEnforceRTL)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkTypesMandatory)
+                    .addComponent(chkLocalMandatory)
+                    .addComponent(chkWordUniqueness)
+                    .addComponent(chkLocalUniqueness)
+                    .addComponent(chkIgnoreCase)
+                    .addComponent(chkDisableProcRegex)
+                    .addComponent(chkEnforceRTL))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkTypesMandatory)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkLocalMandatory)
@@ -564,14 +577,16 @@ public class ScrLangProps extends PFrame {
                 .addComponent(chkDisableProcRegex)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkEnforceRTL)
-                .addGap(0, 74, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel4.setMinimumSize(new java.awt.Dimension(10, 10));
 
-        jLabel1.setText("Pronunciation Guide");
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Phonemic Orthography");
+        jLabel1.setToolTipText("The Pronunciation Guide");
 
         btnAddProc.setToolTipText("Add new pronunciation entry.");
         btnAddProc.addActionListener(new java.awt.event.ActionListener() {
@@ -636,12 +651,12 @@ public class ScrLangProps extends PFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(174, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 183, Short.MAX_VALUE)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -652,7 +667,6 @@ public class ScrLangProps extends PFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -798,6 +812,7 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JCheckBox chkWordUniqueness;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

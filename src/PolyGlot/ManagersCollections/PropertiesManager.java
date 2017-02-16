@@ -48,6 +48,7 @@ public class PropertiesManager {
     private boolean wordUniqueness = false;
     private boolean localUniqueness = false;
     private boolean ignoreCase = false;
+    private boolean enableRomanization = false;
     private boolean disableProcRegex = false;
     private boolean enforceRTL = false;
     private byte[] cachedFont = null;
@@ -505,5 +506,19 @@ public class PropertiesManager {
      */
     public void setCopyrightAuthorInfo(String copyrightAuthorInfo) {
         this.copyrightAuthorInfo = copyrightAuthorInfo;
+    }
+
+    /**
+     * @return the enableRomanization
+     */
+    public boolean isEnableRomanization() {
+        return enableRomanization;
+    }
+
+    /**
+     * @param enableRomanization the enableRomanization to set
+     */
+    public void setEnableRomanization(boolean enableRomanization) {
+        this.enableRomanization = enableRomanization;
     }
 }
