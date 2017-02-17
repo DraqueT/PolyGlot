@@ -106,6 +106,13 @@ public class PGTUtil {
     public static final String proGuideXID = "proGuide";
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";
+    
+    // romanization properties
+    public static final String romGuideXID = "romGuide";
+    public static final String romGuideEnabledXID = "romGuideEnabled";
+    public static final String romGuideNodeXID = "romGuideNode";
+    public static final String romGuideBaseXID = "romGuideBase";
+    public static final String romGuidePhonXID = "romGuidePhon";
 
     // family properties
     public static final String famNodeXID = "thesNode";

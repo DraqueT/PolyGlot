@@ -20,6 +20,7 @@
 
 package PolyGlot.CustomControls;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import javax.swing.BorderFactory;
@@ -47,6 +48,12 @@ public class PCellRenderer implements TableCellRenderer {
         
         if (myFont != null) {
             editor.setFont(myFont);
+        }
+        
+        if (table.isEnabled()) {
+            editor.setForeground(Color.black);
+        } else {
+            editor.setForeground(Color.gray);
         }
         
         editor.getDocument().addDocumentListener(docListener);

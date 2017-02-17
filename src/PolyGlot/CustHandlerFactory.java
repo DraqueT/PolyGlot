@@ -34,6 +34,7 @@ import PolyGlot.ManagersCollections.FamilyManager;
 import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.GrammarChapNode;
+import PolyGlot.ManagersCollections.RomanizationManager;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
 import java.awt.Font;
@@ -127,6 +128,7 @@ public class CustHandlerFactory {
         return new CustHandler() {
 
             PronunciationNode proBuffer;
+            PronunciationNode romBuffer;
             int ruleIdBuffer = 0;
             String ruleValBuffer = "";
             boolean blocalWord = false;
@@ -160,6 +162,8 @@ public class CustHandlerFactory {
             boolean bDecCombId = false;
             boolean bpronBase = false;
             boolean bpronPhon = false;
+            boolean bromBase = false;
+            boolean bromPhon = false;
             boolean bwordPlur = false;
             boolean blangPropTypeMandatory = false;
             boolean blangPropLocalMandatory = false;
@@ -227,6 +231,7 @@ public class CustHandlerFactory {
 
             DeclensionManager declensionMgr = core.getDeclensionManager();
             PronunciationMgr pronuncMgr = core.getPronunciationMgr();
+            RomanizationManager romanizationMgr = core.getRomManager();
             PropertiesManager propertiesManager = core.getPropertiesManager();
             FamilyManager famMgr = core.getFamManager();
 
@@ -234,12 +239,14 @@ public class CustHandlerFactory {
             public void startElement(String uri, String localName,
                     String qName, Attributes attributes)
                     throws SAXException {
-
+MAKE THE ENABLING OF ROMANIZATION WORK
                 // test to see whether this is the first node in a word
                 if (qName.equalsIgnoreCase(PGTUtil.wordXID)) {
                     core.getWordCollection().clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuideXID)) {
                     proBuffer = new PronunciationNode();
+                } else if (qName.equalsIgnoreCase(PGTUtil.romGuideNodeXID)) {
+                    romBuffer = new PronunciationNode();
                 } else if (qName.equalsIgnoreCase(PGTUtil.localWordXID)) {
                     blocalWord = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.conWordXID)) {
@@ -318,6 +325,10 @@ public class CustHandlerFactory {
                     bpronBase = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuidePhonXID)) {
                     bpronPhon = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.romGuideBaseXID)) {
+                    bromBase = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.romGuidePhonXID)) {
+                    bromPhon = true;
                 } /*else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
                     // Removed as of 1.0
                     bproAutoPop = true;
@@ -468,6 +479,8 @@ public class CustHandlerFactory {
                     // Deprecated
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuideXID)) {
                     pronuncMgr.addPronunciation(proBuffer);
+                } else if (qName.equalsIgnoreCase(PGTUtil.romGuideNodeXID)) {
+                    romanizationMgr.addPronunciation(romBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
                     // only create property if necessary.
                     if (!tmpString.equals("")) {
@@ -647,6 +660,10 @@ public class CustHandlerFactory {
                     bpronBase = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuidePhonXID)) {
                     bpronPhon = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.romGuideBaseXID)) {
+                    bromBase = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.romGuidePhonXID)) {
+                    bromPhon = false;
                 } /*else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
                     // Removed as of 1.0
                     bproAutoPop = false;
@@ -920,6 +937,12 @@ public class CustHandlerFactory {
                             + new String(ch, start, length));
                 } else if (bpronPhon) {
                     proBuffer.setPronunciation(proBuffer.getPronunciation()
+                            + new String(ch, start, length));
+                } else if (bromBase) {
+                    romBuffer.setValue(romBuffer.getValue()
+                            + new String(ch, start, length));
+                } else if (bromPhon) {
+                    romBuffer.setPronunciation(romBuffer.getPronunciation()
                             + new String(ch, start, length));
                 } /*else if (bproAutoPop) {
                     // Removed as of 1.0

@@ -22,7 +22,7 @@ package PolyGlot.ManagersCollections;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.PGTUtil;
-import java.util.Iterator;
+import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -30,7 +30,7 @@ import org.w3c.dom.Element;
  * Records romanization values
  * @author draque.thompson
  */
-public class RomanizationManager extends PronunciationMgr{
+public class RomanizationManager extends PronunciationMgr {
     
     private boolean enabled = false;
     
@@ -39,31 +39,33 @@ public class RomanizationManager extends PronunciationMgr{
     }
     
     /**
-     * Writes all pronunciation information to XML document
+     * Writes all romanization information to XML document
      * @param doc Document to write to
      * @param rootElement root element of document
      */
     @Override
     public void writeXML(Document doc, Element rootElement) {
-        Iterator<PronunciationNode> procGuide = getPronunciations().iterator();
-        Element wordNode;
-        Element wordValue;
+        List<PronunciationNode> romGuide = getPronunciations();
         
-        // TODO: THIS
-        // remember enabled value
-        while (procGuide.hasNext()) {
-            PronunciationNode curNode = procGuide.next();
-
-            wordNode = doc.createElement(PGTUtil.proGuideXID);
-            rootElement.appendChild(wordNode);
-
-            wordValue = doc.createElement(PGTUtil.proGuideBaseXID);
-            wordValue.appendChild(doc.createTextNode(curNode.getValue()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(PGTUtil.proGuidePhonXID);
-            wordValue.appendChild(doc.createTextNode(curNode.getPronunciation()));
-            wordNode.appendChild(wordValue);
+        Element guideNode = doc.createElement(PGTUtil.romGuideXID);
+        rootElement.appendChild(guideNode);
+        
+        Element enabledNode = doc.createElement(PGTUtil.romGuideEnabledXID);
+        enabledNode.appendChild(doc.createTextNode(enabled ? PGTUtil.True : PGTUtil.False));
+        guideNode.appendChild(enabledNode);
+        
+        
+        for (PronunciationNode curNode : romGuide) {
+            Element romNode = doc.createElement(PGTUtil.romGuideNodeXID);
+            guideNode.appendChild(romNode);
+            
+            Element valueNode = doc.createElement(PGTUtil.romGuideBaseXID);
+            valueNode.appendChild(doc.createTextNode(curNode.getValue()));
+            romNode.appendChild(valueNode);
+            
+            Element procNode = doc.createElement(PGTUtil.romGuidePhonXID);
+            procNode.appendChild(doc.createTextNode(curNode.getPronunciation()));
+            romNode.appendChild(procNode);
         }
     }
 

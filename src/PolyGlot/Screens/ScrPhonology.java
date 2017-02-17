@@ -69,6 +69,15 @@ public class ScrPhonology extends PFrame {
         getRootPane().setBackground(Color.white);
         chkEnableRom.setSelected(core.getRomManager().isEnabled());
         enableRomanization(chkEnableRom.isSelected());
+        setupButtons();
+    }
+    
+    private void setupButtons() {
+        Font charis = core.getPropertiesManager().getCharisUnicodeFont();
+        btnDownProc.setFont(charis);
+        btnDownRom.setFont(charis);
+        btnUpProc.setFont(charis);
+        btnUpRom.setFont(charis);
     }
     
     @Override
@@ -243,7 +252,7 @@ public class ScrPhonology extends PFrame {
             }
         });
 
-        Font defaultFont = new JLabel().getFont();
+        Font defaultFont = core.getPropertiesManager().getCharisUnicodeFont();
         Font conFont = core.getPropertiesManager().getFontCon();
 
         TableColumn column = tblProcs.getColumnModel().getColumn(0);
@@ -281,7 +290,7 @@ public class ScrPhonology extends PFrame {
             }
         });
 
-        Font defaultFont = new JLabel().getFont();
+        Font defaultFont = core.getPropertiesManager().getCharisUnicodeFont();
         Font conFont = core.getPropertiesManager().getFontCon();
 
         TableColumn column = tblRom.getColumnModel().getColumn(0);
@@ -821,7 +830,7 @@ public class ScrPhonology extends PFrame {
 
     @Override
     public void updateAllValues(DictCore _core) {
-        // does nothing for this window
+        // this must update properly
     }
 
     @Override
