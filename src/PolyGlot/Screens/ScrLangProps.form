@@ -66,11 +66,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="txtFont" max="32767" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="jPanel4" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jPanel3" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -87,11 +83,8 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanel3" max="32767" attributes="0"/>
-                      <Component id="jPanel4" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -138,7 +131,7 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                              <Component id="jScrollPane1" max="32767" attributes="0"/>
+                              <Component id="jScrollPane1" pref="384" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -209,15 +202,25 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="chkTypesMandatory" min="-2" max="-2" attributes="0"/>
-                          <Component id="chkLocalMandatory" min="-2" max="-2" attributes="0"/>
-                          <Component id="chkWordUniqueness" min="-2" max="-2" attributes="0"/>
-                          <Component id="chkLocalUniqueness" min="-2" max="-2" attributes="0"/>
-                          <Component id="chkIgnoreCase" min="-2" max="-2" attributes="0"/>
                           <Component id="chkDisableProcRegex" min="-2" max="-2" attributes="0"/>
-                          <Component id="chkEnforceRTL" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="chkTypesMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkWordUniqueness" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="chkLocalMandatory" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkLocalUniqueness" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="chkEnforceRTL" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkIgnoreCase" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -226,20 +229,20 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="chkTypesMandatory" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="chkLocalMandatory" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="chkWordUniqueness" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="chkLocalUniqueness" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="chkIgnoreCase" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="chkTypesMandatory" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkLocalMandatory" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkIgnoreCase" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="chkWordUniqueness" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkLocalUniqueness" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkEnforceRTL" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="chkDisableProcRegex" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="chkEnforceRTL" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="58" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -247,8 +250,8 @@
           <SubComponents>
             <Component class="javax.swing.JCheckBox" name="chkTypesMandatory">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Types Mandatory"/>
-                <Property name="toolTipText" type="java.lang.String" value="Check to enforce as mandatory a type on each created conword."/>
+                <Property name="text" type="java.lang.String" value="Part of Speech Mandatory"/>
+                <Property name="toolTipText" type="java.lang.String" value="Select to enforce selection of a part of speech on each created word."/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
@@ -257,7 +260,7 @@
             <Component class="javax.swing.JCheckBox" name="chkLocalMandatory">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Local Mandatory"/>
-                <Property name="toolTipText" type="java.lang.String" value="Check to enforce as mandatory a local word on each created word entry."/>
+                <Property name="toolTipText" type="java.lang.String" value="Select to enforce mandatory values for local word equivalents."/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
@@ -266,7 +269,7 @@
             <Component class="javax.swing.JCheckBox" name="chkWordUniqueness">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Word Uniqueness"/>
-                <Property name="toolTipText" type="java.lang.String" value="Check to enforce as mandatory unique constructed words."/>
+                <Property name="toolTipText" type="java.lang.String" value="Select to enforce mandatory uniqueness of each word"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
@@ -275,7 +278,7 @@
             <Component class="javax.swing.JCheckBox" name="chkLocalUniqueness">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Local Uniqueness"/>
-                <Property name="toolTipText" type="java.lang.String" value="Check to enforce as mandatory uniqueness in entries on the Local Word field."/>
+                <Property name="toolTipText" type="java.lang.String" value="Select to enforce mandatory uniqueness for local word equivalents."/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
@@ -284,7 +287,7 @@
             <Component class="javax.swing.JCheckBox" name="chkIgnoreCase">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Ignore Case"/>
-                <Property name="toolTipText" type="java.lang.String" value="Ignore casing through PolyGlot."/>
+                <Property name="toolTipText" type="java.lang.String" value="Ignore character casing through PolyGlot. (only applies to western characters)"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
@@ -292,8 +295,8 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkDisableProcRegex">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Disable Proc Regex"/>
-                <Property name="toolTipText" type="java.lang.String" value="Disable regex features in the pronunciation guide. (this allows for ignoring case properly there)"/>
+                <Property name="text" type="java.lang.String" value="Disable Orthographic Regex"/>
+                <Property name="toolTipText" type="java.lang.String" value="Disable regex features in orthograpy. (this allows for ignoring case properly)"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
@@ -316,158 +319,6 @@
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" value="Lexical Enfocement"/>
               </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
-        <Container class="javax.swing.JPanel" name="jPanel4">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="ff" red="ff" type="rgb"/>
-            </Property>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
-                <EtchetBorder/>
-              </Border>
-            </Property>
-            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[10, 10]"/>
-            </Property>
-          </Properties>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="btnAddProc" min="-2" pref="42" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="jLabel1" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="0" pref="183" max="32767" attributes="0"/>
-                                      <Component id="jButton3" min="-2" pref="40" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="btnDownProc" alignment="1" min="-2" pref="40" max="-2" attributes="0"/>
-                                  <Component id="btnUpProc" alignment="1" min="-2" pref="40" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="btnUpProc" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="btnDownProc" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnAddProc" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton3" alignment="1" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="javax.swing.JLabel" name="jLabel1">
-              <Properties>
-                <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="Phonemic Orthography"/>
-                <Property name="toolTipText" type="java.lang.String" value="The Pronunciation Guide"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnAddProc">
-              <Properties>
-                <Property name="toolTipText" type="java.lang.String" value="Add new pronunciation entry."/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddProcActionPerformed"/>
-              </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PolyGlot.CustomControls.PAddRemoveButton(&quot;+&quot;)"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JButton" name="jButton3">
-              <Properties>
-                <Property name="toolTipText" type="java.lang.String" value="Delete selected pronunciation entry."/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
-              </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PolyGlot.CustomControls.PAddRemoveButton(&quot;-&quot;)"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnUpProc">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="&#x2191;"/>
-                <Property name="toolTipText" type="java.lang.String" value="Move selected entry up one position."/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpProcActionPerformed"/>
-              </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
-              </AuxValues>
-            </Component>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane2">
-              <AuxValues>
-                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-              </AuxValues>
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-              <SubComponents>
-                <Component class="javax.swing.JTable" name="tblProcs">
-                  <Properties>
-                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="2" rowCount="2">
-                        <Column editable="true" title="Character(s)" type="java.lang.String"/>
-                        <Column editable="true" title="Pronunciation" type="java.lang.String"/>
-                      </Table>
-                    </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Add characters (or sets of characters) here with their associated pronunciations."/>
-                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[10, 20]"/>
-                    </Property>
-                    <Property name="rowHeight" type="int" value="30"/>
-                  </Properties>
-                </Component>
-              </SubComponents>
-            </Container>
-            <Component class="javax.swing.JButton" name="btnDownProc">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="&#x2193;"/>
-                <Property name="toolTipText" type="java.lang.String" value="Move selected entry down one position."/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDownProcActionPerformed"/>
-              </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
-              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

@@ -60,7 +60,7 @@ public class PTextField extends JTextField {
      * Init for PDialogs
      *
      * @param _core dictionary core
-     * @param _overideFont whether to override font (default to no)
+     * @param _overideFont true overrides ConFont, false sets to default
      * @param _defText default text that will display in grey if otherwise empty
      */
     public PTextField(DictCore _core, boolean _overideFont, String _defText) {

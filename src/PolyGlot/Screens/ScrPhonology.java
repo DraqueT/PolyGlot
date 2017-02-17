@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -830,7 +829,11 @@ public class ScrPhonology extends PFrame {
 
     @Override
     public void updateAllValues(DictCore _core) {
-        // this must update properly
+        core = _core;
+        populateProcs();
+        populateRoms();
+        chkEnableRom.setSelected(core.getRomManager().isEnabled());
+        enableRomanization(chkEnableRom.isSelected());
     }
 
     @Override

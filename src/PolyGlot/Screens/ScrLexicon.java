@@ -118,6 +118,7 @@ public final class ScrLexicon extends PFrame {
     private boolean forceUpdate = false;
     private Thread filterThread = null;
     private final ScrMainMenu menuParent;
+    private final PTextField txtRom;
 
     /**
      * Creates new form scrLexicon
@@ -131,6 +132,8 @@ public final class ScrLexicon extends PFrame {
         menuParent = _menuParent;
         core = _core;
         fxPanel = new JFXPanel();
+        txtRom = new PTextField(core, true, "-- Romanization --");
+        txtRom.setToolTipText("Romanized representation of word");
         initComponents();
 
         lstLexicon.setModel(new DefaultListModel());
@@ -359,6 +362,34 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
+     * Sets up the romanization field. Should be run after setupClassPanel, as
+     * it utilizes the class pannel space
+     */
+    private void setupRomField() {
+        if (core.getRomManager().isEnabled()) {
+            txtRom.setEditable(false);
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.anchor = GridBagConstraints.NORTHWEST;
+            gbc.weighty = 1;
+            gbc.weightx = 1;
+            gbc.gridx = 0;
+            gbc.fill = GridBagConstraints.BOTH;
+            pnlClasses.add(txtRom, gbc);
+
+            ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+
+            // on no word selected, simply blank all classes
+            if (curWord == null) {
+                pnlClasses.removeAll();
+                return;
+            }
+            
+            txtRom.setText(core.getRomManager().getPronunciation(curWord.getValue()));
+            pnlClasses.repaint();
+        }
+    }
+
+    /**
      * Sets up the class panel. Should be run whenever a new word is loaded
      *
      * @param setTypeId ID of class to set panel up for
@@ -423,7 +454,7 @@ public final class ScrLexicon extends PFrame {
                         }
                     }
                 });
-                
+
                 pnlClasses.add(classText, gbc);
                 classPropMap.put(curProp.getId(), classText); // text box mapped to related class ID.
             } else {
@@ -462,7 +493,7 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classBox, gbc);
                 classPropMap.put(curProp.getId(), classBox); // dropbox mapped to related class ID.
             }
-            
+
             // messy, but gets a full rebuild of screen since this is happening post-initial visibility-pop
             Dimension dim = menuParent.getSize();
             menuParent.setSize(dim.width, dim.height + 1);
@@ -473,6 +504,8 @@ public final class ScrLexicon extends PFrame {
             // must include at least one item (even a dummy) to resize for some reason
             JComboBox dummy = new JComboBox();
             dummy.setEnabled(false);
+            dummy.setSize(1, 0);
+            dummy.setVisible(false);
             pnlClasses.add(dummy, gbc);
             pnlClasses.setPreferredSize(new Dimension(9999, 0));
         } else {
@@ -555,7 +588,7 @@ public final class ScrLexicon extends PFrame {
 
         try {
             String setText = core.getPronunciationMgr().getPronunciation(txtConWord.getText());
-            
+
             // avoid setting text if it comes back empty (unless word itself is now blank)
             if (!setText.isEmpty() || txtConWord.getText().isEmpty()) {
                 txtProc.setText(setText);
@@ -871,7 +904,7 @@ public final class ScrLexicon extends PFrame {
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
         javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new IOHandler().getCharisInputStream(), 12);
-        
+
         grid.setPrefWidth(9999999);
         txtConSrc = new TextField();
         txtConSrc.setPromptText("Search ConWord...");
@@ -1242,6 +1275,7 @@ public final class ScrLexicon extends PFrame {
                 chkProcOverride.setSelected(curWord.isProcOverride());
                 chkRuleOverride.setSelected(curWord.isRulesOverrride());
                 setupClassPanel(curWord.getWordTypeId());
+                setupRomField();
                 populateClassPanel();
                 setPropertiesEnabled(true);
             }
@@ -1653,7 +1687,7 @@ public final class ScrLexicon extends PFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(btnDeclensions)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
                         .addComponent(btnLogographs))
                     .addComponent(jScrollPane1)
                     .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1661,17 +1695,15 @@ public final class ScrLexicon extends PFrame {
                     .addComponent(txtConWord, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane4))
                 .addContainerGap())
-            .addComponent(txtProc)
+            .addComponent(pnlClasses, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(txtProc, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(chkProcOverride)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(chkProcOverride)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(chkRuleOverride)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                .addComponent(chkRuleOverride)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1683,15 +1715,15 @@ public final class ScrLexicon extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlClasses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chkProcOverride))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(chkProcOverride)
+                .addGap(6, 6, 6)
                 .addComponent(txtProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(chkRuleOverride)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1757,7 +1789,7 @@ public final class ScrLexicon extends PFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1773,7 +1805,7 @@ public final class ScrLexicon extends PFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1802,11 +1834,11 @@ public final class ScrLexicon extends PFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
         );
 
         pack();
@@ -1894,6 +1926,8 @@ public final class ScrLexicon extends PFrame {
             } else {
                 setupClassPanel(((TypeNode) typeObject).getId());
             }
+
+            setupRomField();
         }
     }//GEN-LAST:event_cmbTypeActionPerformed
 

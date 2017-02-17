@@ -163,6 +163,7 @@ public class CustHandlerFactory {
             boolean bpronBase = false;
             boolean bpronPhon = false;
             boolean bromBase = false;
+            boolean bromActive = false;
             boolean bromPhon = false;
             boolean bwordPlur = false;
             boolean blangPropTypeMandatory = false;
@@ -239,7 +240,7 @@ public class CustHandlerFactory {
             public void startElement(String uri, String localName,
                     String qName, Attributes attributes)
                     throws SAXException {
-MAKE THE ENABLING OF ROMANIZATION WORK
+
                 // test to see whether this is the first node in a word
                 if (qName.equalsIgnoreCase(PGTUtil.wordXID)) {
                     core.getWordCollection().clear();
@@ -327,6 +328,8 @@ MAKE THE ENABLING OF ROMANIZATION WORK
                     bpronPhon = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.romGuideBaseXID)) {
                     bromBase = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.romGuideEnabledXID)) {
+                    bromActive = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.romGuidePhonXID)) {
                     bromPhon = true;
                 } /*else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
@@ -662,6 +665,8 @@ MAKE THE ENABLING OF ROMANIZATION WORK
                     bpronPhon = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.romGuideBaseXID)) {
                     bromBase = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.romGuideEnabledXID)) {
+                    bromActive = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.romGuidePhonXID)) {
                     bromPhon = false;
                 } /*else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
@@ -941,6 +946,8 @@ MAKE THE ENABLING OF ROMANIZATION WORK
                 } else if (bromBase) {
                     romBuffer.setValue(romBuffer.getValue()
                             + new String(ch, start, length));
+                } else if (bromActive) {
+                    romanizationMgr.setEnabled(new String(ch, start, length).equals(PGTUtil.True));
                 } else if (bromPhon) {
                     romBuffer.setPronunciation(romBuffer.getPronunciation()
                             + new String(ch, start, length));
