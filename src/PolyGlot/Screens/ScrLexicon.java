@@ -406,7 +406,7 @@ public final class ScrLexicon extends PFrame {
         List<WordProperty> propList = core.getWordPropertiesCollection()
                 .getClassProps(setTypeId);
         pnlClasses.removeAll();
-        pnlClasses.setPreferredSize(new Dimension(999999, 1));
+        pnlClasses.setPreferredSize(new Dimension(4000, 1));
 
         pnlClasses.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -489,7 +489,7 @@ public final class ScrLexicon extends PFrame {
                 });
 
                 classBox.setToolTipText(curProp.getValue() + " value");
-                classBox.setPreferredSize(new Dimension(99999, classBox.getPreferredSize().height));
+                classBox.setPreferredSize(new Dimension(4000, classBox.getPreferredSize().height));
                 pnlClasses.add(classBox, gbc);
                 classPropMap.put(curProp.getId(), classBox); // dropbox mapped to related class ID.
             }
@@ -507,10 +507,10 @@ public final class ScrLexicon extends PFrame {
             dummy.setSize(1, 0);
             dummy.setVisible(false);
             pnlClasses.add(dummy, gbc);
-            pnlClasses.setPreferredSize(new Dimension(9999, 0));
+            pnlClasses.setPreferredSize(new Dimension(4000, 0));
         } else {
-            pnlClasses.setMaximumSize(new Dimension(99999, 99999));
-            pnlClasses.setPreferredSize(new Dimension(9999, propList.size() * new JComboBox().getPreferredSize().height));
+            pnlClasses.setMaximumSize(new Dimension(4000, 4000));
+            pnlClasses.setPreferredSize(new Dimension(4000, propList.size() * new JComboBox().getPreferredSize().height));
         }
 
         pnlClasses.repaint();
@@ -905,7 +905,7 @@ public final class ScrLexicon extends PFrame {
         GridPane grid = new GridPane();
         javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new IOHandler().getCharisInputStream(), 12);
 
-        grid.setPrefWidth(9999999);
+        grid.setPrefWidth(4000);
         txtConSrc = new TextField();
         txtConSrc.setPromptText("Search ConWord...");
         txtConSrc.setFont(font);
@@ -1580,6 +1580,7 @@ public final class ScrLexicon extends PFrame {
         setTitle("Lexicon");
         setBackground(new java.awt.Color(255, 255, 255));
         setEnabled(false);
+        setMaximumSize(new java.awt.Dimension(4000, 4000));
         setMinimumSize(new java.awt.Dimension(500, 450));
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
@@ -1590,11 +1591,13 @@ public final class ScrLexicon extends PFrame {
         });
 
         jLayeredPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jLayeredPane1.setMaximumSize(new java.awt.Dimension(4000, 4000));
         jLayeredPane1.setMinimumSize(new java.awt.Dimension(351, 350));
         jLayeredPane1.setName(""); // NOI18N
         jLayeredPane1.setPreferredSize(new java.awt.Dimension(351, 380));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -1608,12 +1611,14 @@ public final class ScrLexicon extends PFrame {
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         jSplitPane1.setBackground(new java.awt.Color(255, 255, 255));
         jSplitPane1.setDividerLocation(123);
+        jSplitPane1.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setMaximumSize(new java.awt.Dimension(999999, 999999));
+        jPanel3.setMaximumSize(new java.awt.Dimension(4000, 4000));
         jPanel3.setMinimumSize(new java.awt.Dimension(20, 20));
         jPanel3.setName(""); // NOI18N
         jPanel3.setPreferredSize(new java.awt.Dimension(351, 380));
@@ -1658,12 +1663,16 @@ public final class ScrLexicon extends PFrame {
             }
         });
 
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(4000, 4000));
+
         txtErrorBox.setEditable(false);
         txtErrorBox.setForeground(new java.awt.Color(255, 0, 0));
         txtErrorBox.setToolTipText("Displays problems with a word that must be corrected before deselecting it.");
         txtErrorBox.setDisabledTextColor(new java.awt.Color(255, 0, 0));
         txtErrorBox.setEnabled(false);
         jScrollPane1.setViewportView(txtErrorBox);
+
+        pnlClasses.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         javax.swing.GroupLayout pnlClassesLayout = new javax.swing.GroupLayout(pnlClasses);
         pnlClasses.setLayout(pnlClassesLayout);
@@ -1675,6 +1684,8 @@ public final class ScrLexicon extends PFrame {
             pnlClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        jScrollPane4.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         txtDefinition.setToolTipText("The long form definition of a word");
         jScrollPane4.setViewportView(txtDefinition);
@@ -1689,11 +1700,11 @@ public final class ScrLexicon extends PFrame {
                         .addComponent(btnDeclensions)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
                         .addComponent(btnLogographs))
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtLocalWord)
                     .addComponent(txtConWord, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane4))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addComponent(pnlClasses, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(txtProc, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1735,11 +1746,14 @@ public final class ScrLexicon extends PFrame {
         jSplitPane1.setRightComponent(jPanel3);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setMaximumSize(new java.awt.Dimension(4000, 4000));
+
+        jScrollPane3.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         lstLexicon.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstLexicon.setToolTipText("List of Conlang Words");
         lstLexicon.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        lstLexicon.setMaximumSize(new java.awt.Dimension(99999, 99999));
+        lstLexicon.setMaximumSize(new java.awt.Dimension(4000, 4000));
         lstLexicon.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 lstLexiconFocusGained(evt);
@@ -1809,7 +1823,7 @@ public final class ScrLexicon extends PFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DRAG_LAYER);
