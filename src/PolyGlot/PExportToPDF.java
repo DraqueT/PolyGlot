@@ -359,6 +359,8 @@ public class PExportToPDF {
         while (allWords.hasNext()) {
             Paragraph dictEntry = new Paragraph();
             ConWord curWord = allWords.next();
+            
+            dictEntry.setMultipliedLeading(0.6f);
 
             // print large characters for alphabet sections
             if (!curLetter.equals(curWord.getValue().substring(0, 1))) {
@@ -468,6 +470,16 @@ public class PExportToPDF {
                 
                 dictEntry.add(new Text(" - "));
             }
+            
+            // write romanization value for word if active and word has one
+            if (core.getRomManager().isEnabled()) {
+                String romStr = core.getRomManager().getPronunciation(curWord.getValue());
+                
+                if (!romStr.isEmpty()) {
+                    dictEntry.add(new Text("\nRoman: ").setFont(unicodeFont));
+                    dictEntry.add(new Text(romStr + "\n").setFont(unicodeFontItalic));
+                }
+            }
 
             List<Object> defList = WebInterface.getElementsHTMLBody(curWord.getDefinition(), core);
             if (!defList.isEmpty()) {
@@ -530,6 +542,8 @@ public class PExportToPDF {
             Paragraph dictEntry = new Paragraph();
             ConWord curWord = allWords.next();
 
+            dictEntry.setMultipliedLeading(0.6f);
+            
             if (curWord.getLocalWord().equals("")) {
                 continue;
             }
@@ -639,6 +653,16 @@ public class PExportToPDF {
                         log += "\nProblem printing classes for word (" + curWord.getValue() 
                                 + "): " + e.getLocalizedMessage();
                     }
+                }
+            }
+            
+            // write romanization value for word if active and word has one
+            if (core.getRomManager().isEnabled()) {
+                String romStr = core.getRomManager().getPronunciation(curWord.getValue());
+                
+                if (!romStr.isEmpty()) {
+                    dictEntry.add(new Text("\nRoman: ").setFont(unicodeFont));
+                    dictEntry.add(new Text(romStr).setFont(unicodeFontItalic));
                 }
             }
 

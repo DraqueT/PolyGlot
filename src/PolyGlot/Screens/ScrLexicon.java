@@ -376,15 +376,7 @@ public final class ScrLexicon extends PFrame {
             gbc.fill = GridBagConstraints.BOTH;
             pnlClasses.add(txtRom, gbc);
 
-            ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
-
-            // on no word selected, simply blank all classes
-            if (curWord == null) {
-                pnlClasses.removeAll();
-                return;
-            }
-            
-            txtRom.setText(core.getRomManager().getPronunciation(curWord.getValue()));
+            genRom();
             pnlClasses.repaint();
         }
     }
@@ -599,6 +591,13 @@ public final class ScrLexicon extends PFrame {
         }
 
         curPopulating = localPopulating;
+    }
+    
+    /**
+     * generates 
+     */
+    private void genRom() {
+        txtRom.setText(core.getRomManager().getPronunciation(txtConWord.getText()));
     }
 
     /**
@@ -1082,12 +1081,14 @@ public final class ScrLexicon extends PFrame {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 genProc();
+                genRom();
                 setWordLegality();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 genProc();
+                genRom();
                 setWordLegality();
                 saveName();
             }
@@ -1095,6 +1096,7 @@ public final class ScrLexicon extends PFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 genProc();
+                genRom();
                 setWordLegality();
                 saveName();
             }
@@ -1300,6 +1302,7 @@ public final class ScrLexicon extends PFrame {
                 txtDefinition.setEnabled(enable);
                 txtLocalWord.setEnabled(enable);
                 txtProc.setEnabled(enable);
+                txtRom.setEnabled(enable);
                 cmbType.setEnabled(enable);
                 chkProcOverride.setEnabled(enable);
                 chkRuleOverride.setEnabled(enable);
