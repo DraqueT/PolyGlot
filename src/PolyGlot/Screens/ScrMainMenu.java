@@ -270,6 +270,11 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         try {
             core.readFile(fileName);
             curFileName = fileName;
+            
+            if (curWindow == null) {
+                ScrLexicon lex = ScrLexicon.run(core, this);
+                changeScreen(lex, lex.getWindow(), null);
+            }
         } catch (IOException e) {
             core = new DictCore(); // don't allow partial loads
             InfoBox.error("File Read Error", "Could not read file: " + fileName
@@ -278,7 +283,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             InfoBox.warning("File Read Problems", "Problems reading file:\n"
                     + e.getLocalizedMessage(), this);
         }
-
+        
         updateAllValues(core);
     }
     
@@ -545,10 +550,6 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             setFile(fileName);
             pushRecentFile(fileName);
             populateRecentOpened();
-            if (curWindow == null) {
-                ScrLexicon lex = ScrLexicon.run(core, this);
-                changeScreen(lex, lex.getWindow(), null);
-            }
         }
         
         genTitle();
