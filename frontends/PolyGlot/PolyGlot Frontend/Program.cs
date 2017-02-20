@@ -31,6 +31,12 @@ namespace PolyGlot_Frontend
             RegistryKey key;
             String keyCommand;
 
+            if (!testJavaInstalled())
+            {
+                MessageBox.Show("Java is not installed. Please download/install the JVM (https://java.com/download) to use PolyGlot.", "Java Required");
+                return;
+            }
+
             // minimize system calls...
             key = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(keyName);
             key = key == null ? null : key.OpenSubKey(shell);
@@ -57,6 +63,17 @@ namespace PolyGlot_Frontend
             }
 
             startPolyGlot(args);
+        }
+
+        //tests whether Java is installed.
+        private static Boolean testJavaInstalled()
+        {
+            RegistryKey rk = Registry.LocalMachine;
+            RegistryKey subKey = rk.OpenSubKey("SOFTWARE\\JavaSoft\\Java Runtime Environment");
+
+            string currentVerion = subKey == null ? "" : subKey.GetValue("CurrentVersion").ToString();
+
+            return !subKey.Equals("");
         }
 
         private static void restartEscalated(string[] args)
