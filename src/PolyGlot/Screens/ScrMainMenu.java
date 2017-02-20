@@ -794,8 +794,10 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PolyGlot Language Construction Toolkit");
         setBackground(new java.awt.Color(255, 255, 255));
+        setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         jPanel1.setBackground(new java.awt.Color(102, 204, 255));
+        jPanel1.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         btnLexicon.setText("Lexicon");
         btnLexicon.setToolTipText("A customizable dictionary for your language's vocabulary");
@@ -890,6 +892,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         jButton1.setText("OPEN LANGUAGE");
         jButton1.setToolTipText("Open an existing language");
