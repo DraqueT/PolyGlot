@@ -22,8 +22,6 @@ package PolyGlot;
 
 import PolyGlot.Screens.*;
 import java.awt.Color;
-import java.awt.Image;
-import javax.swing.ImageIcon;
 
 /**
  * This contains various constant vales in PolyGlot

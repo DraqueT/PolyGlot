@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -24,7 +24,6 @@ import PolyGlot.Nodes.DeclensionGenTransform;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
-import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextField;

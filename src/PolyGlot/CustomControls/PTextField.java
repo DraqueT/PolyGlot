@@ -251,7 +251,7 @@ public class PTextField extends JTextField {
                 super.setText(t);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), null);
         }
 

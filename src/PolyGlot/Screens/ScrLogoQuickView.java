@@ -23,7 +23,6 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.LogoNode;
-import PolyGlot.CustomControls.PAddRemoveButton;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PList;
