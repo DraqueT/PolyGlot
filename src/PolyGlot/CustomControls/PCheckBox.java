@@ -71,6 +71,11 @@ public class PCheckBox extends JCheckBox implements MouseListener {
             outLine = Color.gray;
         }
         
+        if (this.hasFocus()) {
+            g.setColor(Color.lightGray);
+            g.drawRect(0, 0, this.getWidth() - 1, thisHeight - 1);
+        }
+        
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         if (this.isEnabled() && mouseOver) {

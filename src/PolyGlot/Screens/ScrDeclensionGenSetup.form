@@ -140,8 +140,8 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
-                <BevelBorder bevelType="1"/>
+              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                <LineBorder/>
               </Border>
             </Property>
           </Properties>
@@ -179,7 +179,7 @@
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="btnAddTransform" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace pref="15" max="32767" attributes="0"/>
+                                      <EmptySpace pref="17" max="32767" attributes="0"/>
                                       <Component id="btnDeleteTransform" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="sclTransforms" pref="0" max="32767" attributes="0"/>
@@ -234,7 +234,7 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <Component id="jScrollPane2" pref="287" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" pref="289" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">

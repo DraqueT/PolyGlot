@@ -89,7 +89,7 @@ public class PComboBox extends JComboBox implements MouseListener {
         }
         antiAlias.fillRect(getWidth() - buttonWidth, 1, buttonWidth, getHeight() - 1);
         
-        if (mouseOver && enabled) {
+        if ((mouseOver || this.hasFocus()) && enabled) {
             antiAlias.setColor(Color.black);
         } else 
         {

@@ -3,13 +3,17 @@
  ************************************************************/
 package PolyGlot;
 
+import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PButton;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -23,7 +27,6 @@ import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.InputMap;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -108,21 +111,25 @@ public class JFontChooser extends JComponent
     private JPanel fontSizePanel = null;
     private JPanel samplePanel = null;
     private JTextField sampleText = null;
+    private final DictCore core;
 
     /**
      * Constructs a <code>JFontChooser</code> object.
+     * @param _core
      **/
-    public JFontChooser()
+    public JFontChooser(DictCore _core)
     {
-        this(DEFAULT_FONT_SIZE_STRINGS);
+        this(DEFAULT_FONT_SIZE_STRINGS, _core);
     }
 
     /**
      * Constructs a <code>JFontChooser</code> object using the given font size array.
      * @param fontSizeStrings  the array of font size string.
+     * @param _core dictionary core for styling
      **/
-    public JFontChooser(String[] fontSizeStrings)
+    public JFontChooser(String[] fontSizeStrings, DictCore _core)
     {
+        core = _core;
         if (fontSizeStrings == null)
         {
             fontSizeStrings = DEFAULT_FONT_SIZE_STRINGS;
@@ -130,12 +137,14 @@ public class JFontChooser extends JComponent
         this.fontSizeStrings = fontSizeStrings;
 
         JPanel selectPanel = new JPanel();
+        selectPanel.setBackground(Color.white);
         selectPanel.setLayout(new BoxLayout(selectPanel, BoxLayout.X_AXIS));
         selectPanel.add(getFontFamilyPanel());
         selectPanel.add(getFontStylePanel());
         selectPanel.add(getFontSizePanel());
 
         JPanel contentsPanel = new JPanel();
+        contentsPanel.setBackground(Color.white);
         contentsPanel.setLayout(new GridLayout(2, 1));
         contentsPanel.add(selectPanel, BorderLayout.NORTH);
         contentsPanel.add(getSamplePanel(), BorderLayout.CENTER);
@@ -145,7 +154,22 @@ public class JFontChooser extends JComponent
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         this.setSelectedFont(DEFAULT_SELECTED_FONT);
     }
-
+    
+    @Override 
+    public final void setLayout(LayoutManager l) {
+        super.setLayout(l);
+    }
+    
+    @Override 
+    public final Component add(Component comp) {
+        return super.add(comp);
+    }
+    
+    @Override 
+    public final void setBorder(Border b) {
+        super.setBorder(b);
+    }
+ 
     public JTextField getFontFamilyTextField()
     {
         if (fontFamilyTextField == null)
@@ -383,7 +407,7 @@ public class JFontChooser extends JComponent
      * @see #getSelectedFont
      * @see java.awt.Font
      **/
-    public void setSelectedFont(Font font)
+    public final void setSelectedFont(Font font)
     {
         setSelectedFontFamily(font.getFamily());
         setSelectedFontStyle(font.getStyle());
@@ -410,6 +434,7 @@ public class JFontChooser extends JComponent
         JDialog dialog = createDialog(parent);
         dialog.addWindowListener(new WindowAdapter()
         {
+            @Override
             public void windowClosing(WindowEvent e)
             {
                 dialogResultValue = CANCEL_OPTION;
@@ -418,20 +443,20 @@ public class JFontChooser extends JComponent
 
         dialog.setVisible(true);
         dialog.dispose();
-        dialog = null;
 
         return dialogResultValue;
     }
 
     protected class ListSelectionHandler implements ListSelectionListener
     {
-        private JTextComponent textComponent;
+        private final JTextComponent textComponent;
 
         ListSelectionHandler(JTextComponent textComponent)
         {
             this.textComponent = textComponent;
         }
 
+        @Override
         public void valueChanged(ListSelectionEvent e)
         {
             if (e.getValueIsAdjusting() == false)
@@ -454,18 +479,20 @@ public class JFontChooser extends JComponent
 
     protected class TextFieldFocusHandlerForTextSelection extends FocusAdapter
     {
-        private JTextComponent textComponent;
+        private final JTextComponent textComponent;
 
         public TextFieldFocusHandlerForTextSelection(JTextComponent textComponent)
         {
             this.textComponent = textComponent;
         }
 
+        @Override
         public void focusGained(FocusEvent e)
         {
             textComponent.selectAll();
         }
 
+        @Override
         public void focusLost(FocusEvent e)
         {
             textComponent.select(0, 0);
@@ -475,16 +502,17 @@ public class JFontChooser extends JComponent
 
     protected class TextFieldKeyHandlerForListSelectionUpDown extends KeyAdapter
     {
-        private JList targetList;
+        private final JList targetList;
 
         public TextFieldKeyHandlerForListSelectionUpDown(JList list)
         {
             this.targetList = list;
         }
 
+        @Override
         public void keyPressed(KeyEvent e)
         {
-            int i = targetList.getSelectedIndex();
+            int i;
             switch (e.getKeyCode())
             {
                 case KeyEvent.VK_UP:
@@ -519,16 +547,19 @@ public class JFontChooser extends JComponent
             this.targetList = targetList;
         }
 
+        @Override
         public void insertUpdate(DocumentEvent e)
         {
             update(e);
         }
 
+        @Override
         public void removeUpdate(DocumentEvent e)
         {
             update(e);
         }
 
+        @Override
         public void changedUpdate(DocumentEvent e)
         {
             update(e);
@@ -544,7 +575,9 @@ public class JFontChooser extends JComponent
             }
             catch (BadLocationException e)
             {
-                e.printStackTrace();
+                InfoBox.error("Font Selectino Problem", "There was a problem with your font: "
+                        + e.getLocalizedMessage(), null);
+                //e.printStackTrace();
             }
 
             if (newValue.length() > 0)
@@ -569,13 +602,14 @@ public class JFontChooser extends JComponent
 
         public class ListSelector implements Runnable
         {
-            private int index;
+            private final int index;
 
             public ListSelector(int index)
             {
                 this.index = index;
             }
 
+            @Override
             public void run()
             {
                 targetList.setSelectedIndex(this.index);
@@ -586,7 +620,7 @@ public class JFontChooser extends JComponent
     protected class DialogOKAction extends AbstractAction
     {
         protected static final String ACTION_NAME = "OK";
-        private JDialog dialog;
+        private final JDialog dialog;
 
         protected DialogOKAction(JDialog dialog)
         {
@@ -596,17 +630,23 @@ public class JFontChooser extends JComponent
             putValue(Action.NAME, (ACTION_NAME));
         }
 
+        @Override
         public void actionPerformed(ActionEvent e)
         {
             dialogResultValue = OK_OPTION;
             dialog.setVisible(false);
+        }
+        
+        @Override
+        public final void putValue(String key, Object newValue) {
+            super.putValue(key, newValue);
         }
     }
 
     protected class DialogCancelAction extends AbstractAction
     {
         protected static final String ACTION_NAME = "Cancel";
-        private JDialog dialog;
+        private final JDialog dialog;
 
         protected DialogCancelAction(JDialog dialog)
         {
@@ -616,10 +656,16 @@ public class JFontChooser extends JComponent
             putValue(Action.NAME, (ACTION_NAME));
         }
 
+        @Override
         public void actionPerformed(ActionEvent e)
         {
             dialogResultValue = CANCEL_OPTION;
             dialog.setVisible(false);
+        }
+        
+        @Override
+        public final void putValue(String key, Object newValue) {
+            super.putValue(key, newValue);
         }
     }
 
@@ -629,15 +675,19 @@ public class JFontChooser extends JComponent
             : (Frame) SwingUtilities.getAncestorOfClass(Frame.class, parent);
         JDialog dialog = new JDialog(frame, ("Select Font"), true);
 
+        frame.setBackground(Color.white);
         Action okAction = new DialogOKAction(dialog);
         Action cancelAction = new DialogCancelAction(dialog);
 
-        JButton okButton = new JButton(okAction);
+        PButton okButton = new PButton(core);
+        okButton.setAction(okAction);
         okButton.setFont(DEFAULT_FONT);
-        JButton cancelButton = new JButton(cancelAction);
+        PButton cancelButton = new PButton(core);
+        cancelButton.setAction(cancelAction);
         cancelButton.setFont(DEFAULT_FONT);
 
         JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setBackground(Color.white);
         buttonsPanel.setLayout(new GridLayout(2, 1));
         buttonsPanel.add(okButton);
         buttonsPanel.add(cancelButton);
@@ -651,6 +701,7 @@ public class JFontChooser extends JComponent
         inputMap.put(KeyStroke.getKeyStroke("ENTER"), okAction.getValue(Action.DEFAULT));
 
         JPanel dialogEastPanel = new JPanel();
+        dialogEastPanel.setBackground(Color.white);
         dialogEastPanel.setLayout(new BorderLayout());
         dialogEastPanel.add(buttonsPanel, BorderLayout.NORTH);
 
@@ -658,6 +709,7 @@ public class JFontChooser extends JComponent
         dialog.getContentPane().add(dialogEastPanel, BorderLayout.EAST);
         dialog.pack();
         dialog.setLocationRelativeTo(frame);
+        dialog.getRootPane().setBackground(Color.white);
         return dialog;
     }
 
@@ -667,20 +719,23 @@ public class JFontChooser extends JComponent
         getSampleTextField().setFont(font);
     }
 
-    protected JPanel getFontFamilyPanel()
+    protected final JPanel getFontFamilyPanel()
     {
         if (fontNamePanel == null)
         {
             fontNamePanel = new JPanel();
+            fontNamePanel.setBackground(Color.white);
             fontNamePanel.setLayout(new BorderLayout());
             fontNamePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             fontNamePanel.setPreferredSize(new Dimension(180, 130));
 
             JScrollPane scrollPane = new JScrollPane(getFontFamilyList());
+            scrollPane.setBackground(Color.white);
             scrollPane.getVerticalScrollBar().setFocusable(false);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
             JPanel p = new JPanel();
+            p.setBackground(Color.white);
             p.setLayout(new BorderLayout());
             p.add(getFontFamilyTextField(), BorderLayout.NORTH);
             p.add(scrollPane, BorderLayout.CENTER);
@@ -690,6 +745,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontFamilyTextField());
             label.setDisplayedMnemonic('F');
+            label.setFont(core.getPropertiesManager().getCharisUnicodeFont());
 
             fontNamePanel.add(label, BorderLayout.NORTH);
             fontNamePanel.add(p, BorderLayout.CENTER);
@@ -698,20 +754,23 @@ public class JFontChooser extends JComponent
         return fontNamePanel;
     }
 
-    protected JPanel getFontStylePanel()
+    protected final JPanel getFontStylePanel()
     {
         if (fontStylePanel == null)
         {
             fontStylePanel = new JPanel();
+            fontStylePanel.setBackground(Color.white);
             fontStylePanel.setLayout(new BorderLayout());
             fontStylePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             fontStylePanel.setPreferredSize(new Dimension(140, 130));
 
             JScrollPane scrollPane = new JScrollPane(getFontStyleList());
+            scrollPane.setBackground(Color.white);
             scrollPane.getVerticalScrollBar().setFocusable(false);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
             JPanel p = new JPanel();
+            p.setBackground(Color.white);
             p.setLayout(new BorderLayout());
             p.add(getFontStyleTextField(), BorderLayout.NORTH);
             p.add(scrollPane, BorderLayout.CENTER);
@@ -721,6 +780,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontStyleTextField());
             label.setDisplayedMnemonic('Y');
+            label.setFont(core.getPropertiesManager().getCharisUnicodeFont());
 
             fontStylePanel.add(label, BorderLayout.NORTH);
             fontStylePanel.add(p, BorderLayout.CENTER);
@@ -728,20 +788,23 @@ public class JFontChooser extends JComponent
         return fontStylePanel;
     }
 
-    protected JPanel getFontSizePanel()
+    protected final JPanel getFontSizePanel()
     {
         if (fontSizePanel == null)
         {
             fontSizePanel = new JPanel();
+            fontSizePanel.setBackground(Color.white);
             fontSizePanel.setLayout(new BorderLayout());
             fontSizePanel.setPreferredSize(new Dimension(70, 130));
             fontSizePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
             JScrollPane scrollPane = new JScrollPane(getFontSizeList());
+            scrollPane.setBackground(Color.white);
             scrollPane.getVerticalScrollBar().setFocusable(false);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
             JPanel p = new JPanel();
+            p.setBackground(Color.white);
             p.setLayout(new BorderLayout());
             p.add(getFontSizeTextField(), BorderLayout.NORTH);
             p.add(scrollPane, BorderLayout.CENTER);
@@ -751,6 +814,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontSizeTextField());
             label.setDisplayedMnemonic('S');
+            label.setFont(core.getPropertiesManager().getCharisUnicodeFont());
 
             fontSizePanel.add(label, BorderLayout.NORTH);
             fontSizePanel.add(p, BorderLayout.CENTER);
@@ -758,16 +822,17 @@ public class JFontChooser extends JComponent
         return fontSizePanel;
     }
 
-    protected JPanel getSamplePanel()
+    protected final JPanel getSamplePanel()
     {
         if (samplePanel == null)
         {
             Border titledBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), ("Sample"));
+                BorderFactory.createEtchedBorder(), ("Sample"), 0, 0, core.getPropertiesManager().getCharisUnicodeFontItalic(13));
             Border empty = BorderFactory.createEmptyBorder(5, 10, 10, 10);
             Border border = BorderFactory.createCompoundBorder(titledBorder, empty);
 
             samplePanel = new JPanel();
+            samplePanel.setBackground(Color.white);
             samplePanel.setLayout(new BorderLayout());
             samplePanel.setBorder(border);
 
