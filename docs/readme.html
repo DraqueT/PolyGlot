@@ -12,15 +12,15 @@
         
         <link rel="icon" href="favicon.ico">
 
-        <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+        <link rel="shortcut icon" href="favicon.png">
         <title>PolyGlot Help File</title>
 
 
-        <!-- Bootstrap core CSS -->
-        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <!-- Bootstrap core CSS --> 
+        <link type="text/css" href="assets/css/bootstrap.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
-        <link href="assets/css/main.css" rel="stylesheet">
+        <link href="assets/css/main.css" rel="stylesheet" type="text/css">
 
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script><!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries --><!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -59,7 +59,7 @@
                             <a href="#-----_ii_-----">ii. What's New</a><br>
                             <a href="#INSTALLATION">1---- Installation</a><br>
                             <a href="#BASIC_FUNCTIONALITY">2---- Basic Functionality</a><br>
-                            &nbsp;&nbsp;&nbsp; <a href="#-_Word_Types">- Word Types</a><br>
+                            &nbsp;&nbsp;&nbsp; <a href="#-_Word_Types">- Parts of Speech</a><br>
                             &nbsp;&nbsp;&nbsp; <a href="#-_ConjugationsDeclensions">-
                                 Conjugations/Declensions</a><br>
                             &nbsp;&nbsp;&nbsp; <a href="#-_Autogeneration_of">- Autogeneration of
@@ -92,34 +92,49 @@
                         </div>
 
                         <h1><a name="WELCOMEOVERVIEW"></a>WELCOME/OVERVIEW</h1><br>
-                        Welcome to PolyGlot, an <a href="https://github.com/DraqueT/PolyGlot">open
+                        <div align ="left">Welcome to PolyGlot, an <a href="https://github.com/DraqueT/PolyGlot">open
                             source</a>
-                        tool set that helps to build constructed languages (conlangs)! PolyGlot
+                        tool set that helps to build constructed languages! PolyGlot
                         is a project that I have been working on for some time, and it
-                        continues to become more and more capable with each release. If you
+                        continues to become stable and capable with each release. If you
                         have ideas, find bugs, or have any comments at all, please feel free to
-                        email me at <a href="mailto:draquemail@gmail.com">draquemail@gmail.com</a>!
+                        email me at <a href="mailto:draquemail@gmail.com">draquemail@gmail.com</a>!</div>
 
-
-                        <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1><br>As always, there
-                        have been some upgrades/improvements to PolyGlot that are beneath the
-                        surface, helping to keep it running with fewer bugs and more
-                        reliability, but here are the ones that you’ll be interested in.<br><br>
-                        I've added the ability to insert images into text boxes with a simple right click. You can either 
-                        browse for the files, or copy/paste them in. They'll save along with the text, and if you publish 
-                        to PDF, they'll appear properly. This was a highly requested feature, and I hope you like!<br><br>
+                        <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
+                        <div align ="left"><br>The under the hood bug-fixes and 
+                        modifications this time around were massive. There were serious issues with data
+                        persistence corrected, numerous UI failings addressed, and countless minor bugs. In
+                        the process of the UI rewrite, a LOT of very old code was replaced. For every
+                        visible upgrade to PolyGlot this time around, there were a dozen tweaks to behavior
+                        that the end user will hopefully never notice. There's a reason this is being marked
+                        as 2.0.<br><br>
                         
-                        There is a whole new Quizzing engine that's been added to PolyGlot. By loading it up and telling 
-                        it what you would like to be quizzed on, it can generate a variety of types of flash cards, which 
-                        is enormously useful for increasing general fluency. Give it a try and see if it doesn't speed up 
-                        your vocab memorization times!
-                        <br><br>
+                        The biggest improvement to PolyGlot is obviously the UI. This time around it is
+                        completely revamped. Almost all of the changes are based on user requests that I've
+                        gotten over time, and I am hoping that the new design significantly improves workflow
+                        within the system. In addition to this, there are some new features to play with as well!
+                        I have updated the class system to allow for free text classes. These classes are simply
+                        blank text fields added to words in your lexicon (as with the original classes, they can
+                        be assigned to particular parts of speech).
+                        
+                        The Windows frontend should make things much easier for those of you on Microsoft OSes. 
+                        It will associate itself with the PGD filetype, given them a nifty little icon, and 
+                        open them in PolyGlot automatically when they are double clicked.
+                        
+                        A much requested feature was a way to eliminate deprecated wordforms. Although sometimes
+                        these can be useful when revaming a system that includes manual exceptions to rules, it's
+                        often just a pain. In the conjugations/declensions window, I've added a button that will
+                        purge all deprecated wordforms for a given part of speech.<br><br>
+                        </div>
+                        
                         <div align ="left"><ul>
-                            <li>All text fields now image compatible</li>
-                            <li>Quizzing engine added</li>
-                            <li>Publish to PDF compatible with text field images</li>
-                            <li>Right click to copy/paste in text fields added</li>
-                            <li>Main menu is no longer always on top (HIGHLY REQUESTED)</li>
+                            <li>total UI revamp</li>
+                            <li>Created freetext option for classes</li>
+                            <li>Windows Frontend now included</li>
+                            <li>Wipe Deprecated Wordforms option implemented</li>
+                            <li>Split Phonology into its own section</li>
+                            <li>Added Romanization option to Phonology section</li>
+                            <li>Upgraded to iText 7.0.1 for PDF printing</li>
                             </ul></div>
                         <p>
                             <a name="INSTALLATION"></a>
@@ -128,20 +143,19 @@
                         or higher to run. This is available for free at <a href="https://java.com/en/download/index.jsp">https://java.com/en/download/index.jsp</a>.
                         PolyGlot will run on any version of Java newer than Java 1.8, but it is
                         recommended that you have the highest version your operating system
-                        will support.<br>
-                        <br>
-                        If Java is installed, you only need to unzip the contents of the
-                        PolyGlot program to a folder and double click PolyGlot.jar. Most
-                        operating systems should be able to unzip files, but programs such as <a href="http://www.7-zip.org/">7Zip</a> are available online for free. <br>
-                        <br>
-                        As a note, PolyGlot <span style="font-style: italic;">MUST</span> be
+                        will support. NOTE: Most operating systems should be able to unzip files,
+                        but programs such as <a href="http://www.7-zip.org/">7Zip</a> are available online for free.<br>
+                        PolyGlot <span style="font-style: italic;">MUST</span> be
                         unzipped to function correctly. It cannot be run from within the zip
                         file that you've downloaded, and many of its functions will fail in
-                        unpredictable ways if you attempt to do so.<br>
-
+                        unpredictable ways if you attempt to run it directly from the zip file.
+                        <br><br>
+                        WINDOWS:
                         <br>
-
-                        <br>
+                        If Java is installed, you only need to unzip the contents of the
+                        PolyGlot program to a folder and double click the frontend executable file.
+                        This will associate PGT filetypes with the frontend so that double clicking
+                        opens them correctly. <br><br>
                         <span style="font-weight: bold;">NOTE FOR WINDOWS USERS WITH WINRAR</span>:
                         WinRAR tends to associate itself with jar files as archives. This keeps them
                         from executing properly. Follow these instructions to correct the issue.<br>
@@ -154,6 +168,14 @@
                             </ul>
                         </div>
                         After this, simply double click PolyGlot.jar and it should open up for you!
+                        <br><br>
+                        MAC:<br>
+                        TODO: Rewrite this if the Mac frontend is finished in time...
+                        <br><br>
+                        LINUX:<br>
+                        Simply unzip the files where you like and run! For convenience, there is a script
+                        which opens PolyGlot included.
+                        
                         <br><br>
                         <span style="font-weight: bold;">NOTE FOR LINUX USERS</span>: Before
                         using PolyGlot, most users of Linux will have to make the jar file
@@ -177,9 +199,11 @@
                             <a name="BASIC_FUNCTIONALITY"></a><h1>BASIC FUNCTIONALITY</h1>
                         <br>
                         <br>
-                        When you first open PolyGlot, you'll see the Main Menu, a series of
-                        toggle buttons that will open up all of the main tools that you will
-                        use to create and maintain your conlan.<br>
+                        When you first open PolyGlot, you'll see the welcome screen with the 
+                        primary modules listed to the left as buttons. These modules contain the
+                        most basic elements of language creation. Here, you can open an existing 
+                        PolyGlot library or simply click one of the modules and begin to edit a
+                        blank language file.<br>
                         <img alt="" src="assets/MainMenu.png"><br>
                         <br>
                         <br>
@@ -191,18 +215,18 @@
                         most often when editing your wordlist. I have loaded Lodenkur, my own
                         conlang, as an example.<br>
                         <br>
-                        <img style="width: 504px; height: 457px;" alt="" src="assets/Lex1.png"><br>
+                        <img alt="" src="assets/Lex1.png"><br>
                         <br>
                         Adding and removing words is done with the + and - buttons beneath the
                         word list on the left. On the right are all of the word properties.
-                        Below is what the window looks like after creating a new word. As you
-                        can see, the various properties are blank, but labeled until they are
-                        filled in. As a note, there will be nothing to select under -- Types --
-                        or -- Gender -- until you create type and genders to apply to words. (NOTE: Here, gender is an added class for words. Adding classes to word types is covered later in the word class section of this document.)<br>
+                        Below is what the window looks like after creating a new word. Creating 
+                        parts of speech and classes of words (gender, for example) must be done 
+                        before assigning values to these fields. Both are covered elsewhere in 
+                        this document.<br>
 
                         <br>
                         <br>
-                        <img style="width: 504px; height: 457px;" alt="" src="assets/Lex2.png"><br>
+                        <img src="assets/Lex2.png"><br>
                         <br>
                         The current word is illegal, as the ConWord field is completely blank.
                         The reason for the illegality is displayed in the error box, with the
@@ -210,17 +234,17 @@
                         word legality elsewhere, but the ConWord being more than a blank space
                         is one unalterable rule.<br>
                         <br>
-                        The NatLang field is where you put the natural language synonym (if
-                        any) for the word. The type dropbox allows you to give a part of speech
+                        The NatLang field is where you put the natural language synonym(s), if
+                        any, for the word. The part of speech dropbox allows you to give a part of speech
                         to the word.<br>
                         <br>
-                        The pronunciation filed can be filled in manually, but it is more
-                        typical for users to define orthographies which will autopopulate this
-                        field. If you select the checkbox to the right of the pronunciation
-                        field, autogeneration of pronunciation for this word will be
-                        overridden, allowing words with exception pronunciations.<br>
+                        The pronunciation field can be filled in manually, but it is more
+                        typical for users to define phonemic orthographies which will auto-populate this
+                        field. If you select the checkbox beneath the pronunciation
+                        field, pronunciation auto-generation will be
+                        overridden for the currently selected word, allowing words with exceptional pronunciations.<br>
                         <br>
-                        The Override Rules checkbox will tell PolyGlot that you wish to enter a
+                        The Override Lexical Rules checkbox will tell PolyGlot that you wish to enter a
                         word which breaks typical rules, and will unlock the lexicon list, even
                         if the word would otherwise be illegal.<br>
                         <br>
@@ -229,20 +253,19 @@
                         translation.<br>
 
                         <br>
-                        The Declensions and Logographs buttons open windows to functionality
+                        The Conjugations and Logographs buttons open windows to functionality
                         that is described in full later in this document.<br>
                         <br>
+                        <img src="assets/Lex3.png"><br>
                         <br>
                         If you click the Search/Filter bar along the top of the Lexicon window,
-                        a filter menu slides down (shown below). Here, you can filter words by
+                        a filter menu slides down (shown above). Here, you can filter words by
                         any of their main properties. The ConWord filter field will filter not
-                        only on headwords, but also any declensions/conjugations of words.
+                        only on words' base forms, but also any declensions/conjugations of words.
                         Fields are compatible with regex expressions.<br>
                         <br>
-                        <img style="width: 519px; height: 457px;" alt="" src="assets/Lex3.png"><br>
                         <br>
-                        <br>
-                        <a name="-_Word_Types"></a>- Word Types<br>
+                        <a name="-_Word_Types"></a>- Parts of Speech<br>
                         &nbsp;&nbsp; <br>
                         <img style="width: 494px; height: 398px;" alt="" src="assets/Types1.png"><br>
                         Word types are the parts of speech of your language,
