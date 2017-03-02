@@ -260,7 +260,7 @@ public class ConWord extends DictNode {
      * @return the string value of a word's type
      */
     public String getWordTypeDisplay() {
-        String ret = "";
+        String ret = "<TYPE NOT FOUND>";
         
         if (typeId != 0) {
             try {
