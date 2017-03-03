@@ -410,7 +410,7 @@ public class ScrPhonology extends PFrame {
         delNode.setPronunciation(tblRom.getValueAt(curRow, 1).toString());
 
         core.getRomManager().deletePronunciation(delNode);
-        populateProcs();
+        populateRoms();
     }
     
     /**
