@@ -90,7 +90,7 @@ public class ScrTypes extends PFrame {
         populateTypes();
         populateProperties();
     }
-    
+
     @Override
     public Component getWindow() {
         return jSplitPane1;
@@ -143,7 +143,7 @@ public class ScrTypes extends PFrame {
     private void updateName() {
         TypeNode curNode = (TypeNode) lstTypes.getSelectedValue();
 
-        if (((PTextField)txtName).isDefaultText() || txtName.getText().equals("")) {
+        if (((PTextField) txtName).isDefaultText() || txtName.getText().equals("")) {
             txtErrorBox.setText("Types must have name populated.");
             txtName.setBackground(core.getRequiredColor());
             lstTypes.setEnabled(false);
@@ -157,7 +157,7 @@ public class ScrTypes extends PFrame {
             return;
         }
         updatingName = true;
-        curNode.setValue(((PTextField)txtName).isDefaultText()
+        curNode.setValue(((PTextField) txtName).isDefaultText()
                 ? "" : txtName.getText());
 
         populateTypes();
@@ -209,21 +209,21 @@ public class ScrTypes extends PFrame {
             if (!updatingName) {
                 updatingName = true;
                 txtName.setText(curNode.getValue().equals("")
-                        ? ((PTextField)txtName).getDefaultValue() : curNode.getValue());
+                        ? ((PTextField) txtName).getDefaultValue() : curNode.getValue());
                 txtName.setForeground(curNode.getValue().equals("")
                         ? Color.lightGray : Color.black);
                 updatingName = false;
             }
             txtNotes.setText(curNode.getNotes().equals("")
-                    ? ((PTextPane)txtNotes).getDefaultValue() : curNode.getNotes());
+                    ? ((PTextPane) txtNotes).getDefaultValue() : curNode.getNotes());
             txtNotes.setForeground(curNode.getNotes().equals("")
                     ? Color.lightGray : Color.black);
             txtTypePattern.setText(curNode.getPattern().equals("")
-                    ? ((PTextField)txtTypePattern).getDefaultValue() : curNode.getPattern());
+                    ? ((PTextField) txtTypePattern).getDefaultValue() : curNode.getPattern());
             txtTypePattern.setForeground(curNode.getPattern().equals("")
                     ? Color.lightGray : Color.black);
             txtGloss.setText(curNode.getGloss().equals("")
-                    ? ((PTextField)txtGloss).getDefaultValue() : curNode.getGloss());
+                    ? ((PTextField) txtGloss).getDefaultValue() : curNode.getGloss());
             txtGloss.setForeground(curNode.getGloss().equals("")
                     ? Color.lightGray : Color.black);
             chkDefMand.setSelected(curNode.isDefMandatory());
@@ -238,16 +238,18 @@ public class ScrTypes extends PFrame {
      * @param saveNode node to save to
      */
     private void savePropertiesTo(TypeNode saveNode) {
-        saveNode.setValue(((PTextField)txtName).isDefaultText()
-                ? "" : txtName.getText());
-        saveNode.setNotes(((PTextPane)txtNotes).isDefaultText()
-                ? "" : txtNotes.getText());
-        saveNode.setPattern(((PTextField)txtTypePattern).isDefaultText()
-                ? "" : txtTypePattern.getText());
-        saveNode.setGloss(((PTextField)txtGloss).isDefaultText()
-                ? "" : txtGloss.getText());
-        saveNode.setDefMandatory(chkDefMand.isSelected());
-        saveNode.setProcMandatory(chkProcMand.isSelected());
+        if (!updatingName) {
+            saveNode.setValue(((PTextField) txtName).isDefaultText()
+                    ? "" : txtName.getText());
+            saveNode.setNotes(((PTextPane) txtNotes).isDefaultText()
+                    ? "" : txtNotes.getText());
+            saveNode.setPattern(((PTextField) txtTypePattern).isDefaultText()
+                    ? "" : txtTypePattern.getText());
+            saveNode.setGloss(((PTextField) txtGloss).isDefaultText()
+                    ? "" : txtGloss.getText());
+            saveNode.setDefMandatory(chkDefMand.isSelected());
+            saveNode.setProcMandatory(chkProcMand.isSelected());
+        }
     }
 
     /**
@@ -261,13 +263,15 @@ public class ScrTypes extends PFrame {
         }
 
         core.getTypes().clear();
+        
+        updatingName = true;
         try {
             core.getTypes().insert();
         } catch (Exception e) {
             InfoBox.error("Type Creation Error", "Could not create new type: "
                     + e.getLocalizedMessage(), this);
         }
-        updatingName = true;
+        
         populateTypes();
         lstTypes.setSelectedIndex(0);
         txtName.setText("");
@@ -621,7 +625,7 @@ public class ScrTypes extends PFrame {
                     "Currently selected type is illegal. Please correct or delete.", this);
             ret = false;
         }
-        
+
         return ret;
     }
 

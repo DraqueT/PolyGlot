@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -24,7 +24,7 @@ package PolyGlot.Nodes;
  *
  * @author draque
  */
-public class TypeNode extends DictNode{
+public class TypeNode extends DictNode {
     private String notes = "";
     private String regexPattern = "";
     private String gloss = "";
