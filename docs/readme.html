@@ -338,48 +338,48 @@
                         <img alt="" src="assets/conj2.png"><br>
                         <br>
                         <div align ="left">In the types window, I selected "verb," and clicked the
-                        Conjugations/Declensions button. In the window that appeared, I used
-                        the circled + button to add two declension headers. "Tense" and
-                        "speaker Gender."<br></div>
+                            Conjugations/Declensions button. In the window that appeared, I used
+                            the circled + button to add two declension headers. "Tense" and
+                            "speaker Gender."<br></div>
                         <br>
                         <br>
                         <img alt="" src="assets/conj3.png"><br>
                         <div align ="left">Using the indicated + button, I first create three dimensions for the Tense
-                        header, then select "Certainty" and add two dimensions to it.
-                        Note that "mandatory" is selected for the "past" dimension. This means
-                        that all conjugations/declensions for words of the <span style="font-weight: bold;">verb</span> type that include the the past
-                        dimension of the conjugation "tense" will be required on words of type <span style="font-weight: bold;">verb</span>.<br></div>
+                            header, then select "Certainty" and add two dimensions to it.
+                            Note that "mandatory" is selected for the "past" dimension. This means
+                            that all conjugations/declensions for words of the <span style="font-weight: bold;">verb</span> type that include the the past
+                            dimension of the conjugation "tense" will be required on words of type <span style="font-weight: bold;">verb</span>.<br></div>
                         <br>
                         <br>
                         <img alt="" src="assets/Types4.png"><br>
 
                         <br>
                         <div align ="left">Back on the Lexicon window, a word of type <b>verb</b> is selected. This is the type
-                        that conjugations have been created for. From here, click on the
-                        "Conword Declensions" button.<br></div>
+                            that conjugations have been created for. From here, click on the
+                            "Conword Declensions" button.<br></div>
                         <br>
                         <br>
                         <img alt="" src="assets/conj5.png"><br>
                         <div align ="left">Forms for every logical combination of dimensions may be saved here. As you
-                        can see, all forms of verbs for tense, certainty, and positivity
-                        have fields generated, which I've filled in appropriately.
-                        Although it may be tedious to fill out every form for every word, this
-                        is particularly useful for nonstandard conjugations and exception
-                        forms. Word forms typed here will be persisted/modified if
-                        OK is clicked, and any changed will be discarded if Cancel is clicked.<br>
-                        <br></div>
+                            can see, all forms of verbs for tense, certainty, and positivity
+                            have fields generated, which I've filled in appropriately.
+                            Although it may be tedious to fill out every form for every word, this
+                            is particularly useful for nonstandard conjugations and exception
+                            forms. Word forms typed here will be persisted/modified if
+                            OK is clicked, and any changed will be discarded if Cancel is clicked.<br>
+                            <br></div>
                         <img alt="" src="assets/conj6.png"><br>
                         <div align ="left">If a new conjugation/declension is created, or if one is deleted, the
-                        old forms are <span style="font-style: italic;">not</span>
-                        simply deleted. Here, I have removed the conjugation for gender and
-                        returned to the Conjugation/Declension screen for "zerf." The
-                        deprecated forms of the word are displayed below. Once you have
-                        reworked them into their newer, appropriate forms, you can delete them
-                        and click "OK," to remove the deprecated forms from the word. If they
-                        are not deleted, they will persist as you have left them, and will at
-                        no point be discarded without explicit user action.<br></div>
+                            old forms are <span style="font-style: italic;">not</span>
+                            simply deleted. Here, I have removed the conjugation for gender and
+                            returned to the Conjugation/Declension screen for "zerf." The
+                            deprecated forms of the word are displayed below. Once you have
+                            reworked them into their newer, appropriate forms, you can delete them
+                            and click "OK," to remove the deprecated forms from the word. If they
+                            are not deleted, they will persist as you have left them, and will at
+                            no point be discarded without explicit user action.<br></div>
                         <br><br>
-                        
+
                         <img alt="" src="assets/conj7.png">
                         <br><div align ="left">If you don't want to save any of the deprecated values,
                             they can be summarily deleted from all words that are a particular part
@@ -389,706 +389,392 @@
                         </div>
 
                         <a name="-_Autogeneration_of"></a><div align ="left"><h1>Autogeneration of
-                            Conjugations/Declensions</h1><br>
-                        One of the more complex features to
-                        PolyGlot is the Autogeneration system for conjugations and declensions.
-                        This section goes through a basic setup to create a conjugation system.
-                        The dictionary used here as an example is included along with PolyGlot
-                        as the file exampleAutoGen.pgt. For those of you unfamiliar with
-                        regular expressions, links to excellent tutorials exist in the <a href="readme.html#ADDITIONAL_RESOURCES">Additional Resources</a>
-                        section of this document.<br></div>
-                        <br>
-                        <br>
-                        <img alt="" src="assets/Types3.png"><br>
-                        <br>
-                        <div align ="left">Before autogeneration rules can be created, conjugations/declensions
-                        for a type must exist (as explained in <a href="readme.html#-_ConjugationsDeclensions">Conjugations/Declensions</a>).
-                        Once this is done, go to the Types tab, select the part of speech to
-                        create autogeneration rules for, and click the <span style="font-weight: bold;">Conj/Decl Autogeneration</span> button.<br></div>
-
-                        <br>
-                        <br>
-                        <img style="width: 585px; height: 543px;" alt="" src="assets/autoGen2.png"><br>
-                        <br>
-                        Here, there are a number of controls. In the leftmost column, you see
-                        every possible conjugation of the selected word type (verb in this
-                        example case). To create transformation rules click the <span style="font-weight: bold;">+</span>
-                        button beneath the rules column. In the example picture, one rule,
-                        "past" has been created. The rightmost section of the window contains
-                        the rule's properties. The rule's can be set to anything, and is simply
-                        a mnemonic to help you remember what precisely it applies to.&nbsp; The
-                        rule regex dictates which words the rule applies to. In the example, I
-                        have made a wild card, applying it to all verbs, but I could make two
-                        separate rules, with the regex entries "^a.*" and "^!a.*". This would
-                        make one rule for verbs starting with the letter 'a' and one rule for
-                        all words which do <span style="font-style: italic;">not</span> start
-                        with the letter 'a.'<br>
-                        <br>
-                        Beneath this is the Transformations table. Each rule may have as many
-                        transformations as you like. They will be applied (in the order which
-                        they appear) to any word that meets the regex pattern for the rule.
-                        Here, there is only one rule. The regex that it matches is simply the
-                        end of the word, and the replacement text is "ed." The visible setup
-                        will follow these steps when autogenerating past tense conjugation for
-                        a verb:<br>
-
-                        <ol>
-                            <li>Check to see whether the verb matches the regex of the first
-                                rule (the regex for our "past" rule matches all strings, so this is
-                                guaranteed)</li>
-                            <li>In the order which they appear, apply each transformation to the
-                                word.</li>
-
-                            <li>See if the first transformation regex matches any strings in
-                                the
-                                word (the example simply looks for the end of the string, guaranteed to
-                                exist)</li>
-                            <li>If the transformation matches, it replaces matching text within
-                                the word with the replacement string (here, "ed")</li>
-                            <li>The process moves on to apply the next transformation (although
-                                there is only one in the example)</li>
-
-
-                            <li>The process moves on to the next rule (although in the example,
-                                there is only one rule)</li>
-                        </ol>
-                        This process happens for each of the conjugations that you create
-                        autogeneration rules for. Although the rules in this example are very
-                        simplistic, regular expressions can be used to create highly complex
-                        sets of conjugations and declensions, with exceptions, special rules,
-                        and very specific forms.<br>
-                        <br>
-                        To the right of both the rules and the Transformations lists, you will
-                        see up and down arrow buttons. This moves rules and transforms up and
-                        down in terms of priority. Each rule and each transform is applied to a
-                        word in order of precedence, so this can help you to mofdify complex
-                        conjugation/declension procedures.<br>
-                        <br>
-                        <br>
-                        <img style="width: 564px; height: 539px;" alt="" src="assets/autoGen3.png"><br>
-                        <br>
-                        Above is the setup for present tense.<br>
-
-                        <br>
-                        <br>
-                        <img style="width: 564px; height: 539px;" alt="" src="assets/autoGen4.png"><br>
-                        <br>
-                        And here is the setup for future tense.<br>
-                        <br>
-                        <br>
-                        <img style="width: 308px; height: 201px;" alt="" src="assets/ruleCopyPaste.png"><br>
-                        <br>
-                        By right clicking, rules can be copied and pasted in the rules list.<br>
-                        <br>
-                        <br>
-                        <br>
-                        <img style="width: 412px; height: 328px;" alt="" src="assets/Types4.png"><br>
-                        <br>
-
-                        Once these steps are complete, I return to the <span style="font-weight: bold;">Lexicon</span> tab, create a verb, and
-                        click the <span style="font-weight: bold;">Conword Declensions </span>button.<br>
-                        <br>
-                        <br>
-                        <img style="width: 371px; height: 152px;" alt="" src="assets/autoGen6.png"><br>
-                        <br>
-                        Here, all of the forms for the word "walk" have been automatically
-                        generated.<br>
-                        <br>
-                        <br>
-                        <img style="width: 371px; height: 152px;" alt="" src="assets/autoGen7.png"><br>
-                        <br>
-
-                        If you would like to turn off autogeneration for a particular word
-                        which is a unique exception, click the <span style="font-weight: bold;">Autogen
-                            Override</span> check box on the word's Conjugations/Declensions screen.<br>
-
-                        <p>
+                                Conjugations/Declensions</h1><br>
                             One of the more complex features to
                             PolyGlot is the Autogeneration system for conjugations and declensions.
                             This section goes through a basic setup to create a conjugation system.
                             The dictionary used here as an example is included along with PolyGlot
                             as the file exampleAutoGen.pgt. For those of you unfamiliar with
                             regular expressions, links to excellent tutorials exist in the <a href="readme.html#ADDITIONAL_RESOURCES">Additional Resources</a>
-                            section of this document.<br>
-                            <br>
-                            <br>
-                            <img style="width: 494px; height: 398px;" alt="" src="assets/Types3.png"><br>
-                            <br>
-                            Before autogeneration rules can be created, conjugations/declensions
+                            section of this document.<br></div>
+                        <br>
+                        <br>
+                        <img alt="" src="assets/Types3.png"><br>
+                        <br>
+                        <div align ="left">Before autogeneration rules can be created, conjugations/declensions
                             for a type must exist (as explained in <a href="readme.html#-_ConjugationsDeclensions">Conjugations/Declensions</a>).
                             Once this is done, go to the Types tab, select the part of speech to
-                            create autogeneration rules for, and click the <span style="font-weight: bold;">Conj/Decl Autogeneration</span> button.<br>
+                            create autogeneration rules for, and click the <span style="font-weight: bold;">Conj/Decl Autogeneration</span> button.<br></div>
 
-                            <br>
-                            <br>
-                            <img style="width: 585px; height: 543px;" alt="" src="assets/autoGen2.png"><br>
-                            <br>
-                            Here, there are a number of controls. In the leftmost column, you see
+                        <br>
+                        <br>
+                        <img alt="" src="assets/autoGen2.png"><br>
+                        <br>
+                        <div align ="left">A number of controls are presented here. In the leftmost column, you see
                             every possible conjugation of the selected word type (verb in this
-                            example case). To create transformation rules click the <span style="font-weight: bold;">+</span>
+                            example case). The verb selected to create a conjugation rule is past tense
+                            verbs that are certain and positive. Every possible combination of conjugations
+                            is present in this list. A combination can be disabled by clicking the "Disable
+                            Wordform" checkbox.<br>
+
+                            To create transformation rules click the <span style="font-weight: bold;">+</span>
                             button beneath the rules column. In the example picture, one rule,
-                            "past" has been created. The rightmost section of the window contains
-                            the rule's properties. The rule's can be set to anything, and is simply
-                            a mnemonic to help you remember what precisely it applies to.&nbsp; The
-                            rule regex dictates which words the rule applies to. In the example, I
-                            have made a wild card, applying it to all verbs, but I could make two
-                            separate rules, with the regex entries "^a.*" and "^!a.*". This would
-                            make one rule for verbs starting with the letter 'a' and one rule for
-                            all words which do <span style="font-style: italic;">not</span> start
-                            with the letter 'a.'<br>
+                            "Past, Cert, Pos rule" has been created. The rightmost section of the window contains
+                            the rule's properties. Of note is that you may create as many rules as you like
+                            for each conjugation. They will be applied in the order that they appear in the rules
+                            list. Their order can be adjusted using the up and down arrow buttons immediately
+                            to the right of the Rules list.<br>
+
+                            The rule's name can be set to anything, and is just label
+                            to help remember what precisely it applies to. The
+                            rule regex immediately below its name dictates which words the rule applies to.
+                            In the example, I use the regex ".*" which applies to everything. If you used the match
+                            regex ".ru$", the rule would only be aplied to rules ending with "ru". Regex is a
+                            very powerful system, but can be confusing at first. There are links at the end of this
+                            document which lead to helpful guides with it if you are unfamiliar.<br>
+
                             <br>
                             Beneath this is the Transformations table. Each rule may have as many
-                            transformations as you like. They will be applied (in the order which
-                            they appear) to any word that meets the regex pattern for the rule.
-                            Here, there is only one rule. The regex that it matches is simply the
-                            end of the word, and the replacement text is "ed." The visible setup
-                            will follow these steps when autogenerating past tense conjugation for
-                            a verb:<br>
+                            transformations as you like. They will be applied as with the rules themselves,
+                            they are applied in the order which they appear. For conjugations with complex
+                            transformations, this can make things much simpler.
+                            Here, there is only one rule. As you can see, PolyGlot natively applies any 
+                            script directly to the column to allow for natively legible characters (scripts
+                            must be imported as fonts, which is covered elsewhere in this document). The left
+                            column is the Regex value for the transformation. This is the section of the word
+                            that PolyGlot will target to replace. In my example it looks for the character "lo" in 
+                            my script at the end of words. The right column contains the text that will replace 
+                            the text targetted in the left column.
 
-                        <ol>
-                            <li>Check to see whether the verb matches the regex of the first
-                                rule (the regex for our "past" rule matches all strings, so this is
-                                guaranteed)</li>
-                            <li>In the order which they appear, apply each transformation to the
-                                word.</li>
-                            <li>See if the first transformation regex matches any strings in
-                                the
-                                word (the example simply looks for the end of the string, guaranteed to
-                                exist)</li>
-                            <li>If the transformation matches, it replaces matching text within
-                                the word with the replacement string (here, "ed")</li>
-                            <li>The process moves on to apply the next transformation (although
-                                there is only one in the example)</li>
-                            <li>The process moves on to the next rule (although in the example,
-                                there is only one rule)</li>
-                        </ol>
-                        This process happens for each of the conjugations that you create
-                        autogeneration rules for. Although the rules in this example are very
-                        simplistic, regular expressions can be used to create highly complex
-                        sets of conjugations and declensions, with exceptions, special rules,
-                        and very specific forms.<br>
-                        <br>
-                        To the right of both the rules and the Transformations lists, you will
-                        see up and down arrow buttons. This moves rules and transforms up and
-                        down in terms of priority. Each rule and each transform is applied to a
-                        word in order of precedence, so this can help you to mofdify complex
-                        conjugation/declension procedures.<br>
-                        <br>
-                        <br>
-                        <img style="width: 564px; height: 539px;" alt="" src="assets/autoGen3.png"><br>
-                        <br>
-                        Above is the setup for present tense.<br>
+                            Here is the complete logic that this rule will result in when PolyGlot looks to create
+                            conjugations for verbs:
 
+                            <ul>
+                                <li>Is this word a verb? If so, continue.</li>
+                                <li>Create a Past Certain Positive conjugation field for the word</li>
+                                <li>Are rules available which the word matches the rule regex fits? If so, apply those rules to the word</li>
+                                <li>For each rule whhich applies to the word, apply each transformation in the order they appear</li>
+                                <li>For each transformation, target matching regex text and overwrite it with the replacement text</li>
+                                <li>The resulting text is your fully conjugated wordform.</li>
+                            </ul></div>
                         <br>
-                        <br>
-                        <img style="width: 564px; height: 539px;" alt="" src="assets/autoGen4.png"><br>
-                        <br>
-                        And here is the setup for future tense.<br>
-                        <br>
-                        <br>
-                        <img style="width: 308px; height: 201px;" alt="" src="assets/ruleCopyPaste.png"><br>
-                        <br>
-                        By right clicking, rules can be copied and pasted in the rules list.<br>
-                        <br>
-                        <br>
-                        <br>
-                        <img style="width: 412px; height: 328px;" alt="" src="assets/Types4.png"><br>
                         <br>
 
-                        Once these steps are complete, I return to the <span style="font-weight: bold;">Lexicon</span> tab, create a verb, and
-                        click the <span style="font-weight: bold;">Conword Declensions </span>button.<br>
+                        <img alt="" src="assets/ruleCopyPaste.png"><br>
+                        <br>
+                        <div align ="left">By right clicking, rules can be copied and pasted from one conjugation form to another.
+                            Multiple rules can be selected at once to copy or delete.<br>
+                        </div>
                         <br>
                         <br>
-                        <img style="width: 371px; height: 152px;" alt="" src="assets/autoGen6.png"><br>
                         <br>
-                        Here, all of the forms for the word "walk" have been automatically
-                        generated.<br>
-                        <br>
-                        <br>
-                        <img style="width: 371px; height: 152px;" alt="" src="assets/autoGen7.png"><br>
+                        <img alt="" src="assets/Types4.png"><br>
                         <br>
 
-                        If you would like to turn off autogeneration for a particular word
-                        which is a unique exception, click the <span style="font-weight: bold;">Autogen
-                            Override</span> check box on the word's Conjugations/Declensions screen.<br>
+                        <div align ="left">Once these steps are complete, I return to the <span style="font-weight: bold;">Lexicon</span> tab, create a verb, and
+                            click the <span style="font-weight: bold;">Conword Declensions </span>button.<br></div>
+                        <br>
+                        <br>
+                        <img alt="" src="assets/autoGen6.png"><br>
+                        <br>
+                        <div align ="left">Here, all of the forms for the word "walk" have been automatically
+                            generated.<br></div>
+                        <br>
+                        <br>
+                        <img alt="" src="assets/autoGen7.png"><br>
+                        <br>
+
+                        <div align ="left">If you would like to turn off autogeneration for a particular word
+                            which is a unique exception, click the <span style="font-weight: bold;">Autogen
+                                Override</span> check box on the word's Conjugations/Declensions screen.<br></div>
 
                         <a name ="CLASSES"></a><h1>Word Classes</h1><br>
-                        Word class is most familiar as grammatical gender. Classes can be added to words by clicking the Lexical Classes button on the main menu. This functionality replaces the hard coded Gender module in prior versions. As many classes as you like, with as many values as you find necessary may be added to words. If your language used gender, it will automatically be converted to a word class, and you will notice no difference in your language.<br><br>
+                        <div align ="left">
+                            Word class is most familiar as grammatical gender. Classes can be added to words by 
+                            clicking the Lexical Classes button on the main menu. This functionality replaces the 
+                            hard coded Gender module in prior versions. As many classes as you like, with as many 
+                            values as you find necessary may be added to words. If your language used gender, it will 
+                            automatically be converted to a word class, and you will notice no difference in your 
+                            language.<br><br></div>
 
                         <img src="assets/wordClass01.png"><br>
-                        In this example, I have added two classes, gender and distance. To the distance class, I have added three values: touching, visible, and distant. To the right, all of the parts of speech for my language are listed. Only nouns are checked, so the distance class will only be applied to nouns.<br><br>
+                        <div align ="left">
+                            In this example, I have added two classes, gender and distance. To the distance class, 
+                            I have added three values: touching, near, and far. To the right, all of the parts 
+                            of speech for this language are listed. Only nouns are checked, so the distance class will 
+                            only be applied to nouns.<br><br></div>
+                        <img src="assets/wordClass05.png"><br>
+                        <div align ="left">Next, I create another class called "secret word." I'm making a language here
+                            where some words can have secret synonyms that only some people know. I need an extra text field
+                            to store this value in. Notice in the picture above, that the Free Text Field value is selected 
+                            for the secret word class.<br><br></div>
                         <img src="assets/wordClass02.png"><br>
-                        As you can see, the word “run” is a verb, and has no classes attached.<br><br>
-                        <img src="assets/wordClass03.png"><br>
-                        The word “flower,” however is a noun, which I have set both gender and distance to apply to. Both can be seen beneath the part of speech, and appear as soon as it is selected.<br><br>
-                        <img src="assets/wordClass04.png"><br>
-                        When the distance dropdown is selected, all of the values we entered earlier are visible and may be selected for the active word.
+                        <div align ="left">If I create a noun in the Lexicon now, we will see the relevant classes
+                            appear in the word's properties, as seen above. I can change the gender or distance to any
+                            of their class' values, and I can put whatever text I like in the secret word field.<br><br></div>
 
                         <a name="-_Word_Quickentry"></a><h1>Word Quickentry</h1>
                         <br>
-                        The Word Quickentry window allows users
-                        to very quickly add words to their dictionaries. It is designed to be
-                        used entirely with the keyboard without any need to use the mouse until
-                        all entries are complete. To open the quickentry window, click the
-                        Quickentry button in the main menu.<br>
+                        <div align ="left">The Word Quickentry window allows users
+                            to very quickly add words to their dictionaries. It is designed to be
+                            used entirely with the keyboard without any need to use the mouse until
+                            all entries are complete. To open the quickentry window, click the
+                            Q button on the Lexicon between the + and - buttons.<br></div>
                         <br>
                         <br>
-                        <img style="width: 372px; height: 405px;" alt="" src="assets/quickEntry2.png"><br>
+                        <img alt="" src="assets/quickEntry2.png"><br>
                         <br>
-                        Here we see the quickentry screen. All of the basic word properties can
-                        be seen here. The Con Word field is highlighted red, as it is a
-                        required field. If you have your language set to require Local Word or
-                        Type, those fields will be highlighted as well. Each of the fields can
-                        be navigated via the <span style="font-style: italic;">Tab</span> key.
-                        Once all the fields have been completed to your liking, hitting the <span style="font-style: italic;">Enter/Return</span> key will save the word
-                        to your dictionary, blank the fields, and reselect the first field to
-                        begin the process again.<br>
+                        <div align ="left">Here we see the quickentry screen. All of the basic word properties can
+                            be seen here. The Con Word field is highlighted red, as it is a
+                            required field. If you have your language set to require Local Word or
+                            Type, those fields will be highlighted as well. Each of the fields can
+                            be navigated via the <span style="font-style: italic;">Tab</span> key.
+                            Once all the fields have been completed to your liking, hitting the <span style="font-style: italic;">Enter/Return</span> key will save the word
+                            to your dictionary, blank the fields, and reselect the first field to
+                            begin the process again.<br></div>
 
                         <br>
                         <br>
-                        <img style="width: 372px; height: 405px;" alt="" src="assets/quickEntry3.png"><br>
+                        <img alt="" src="assets/quickEntry3.png"><br>
                         <br>
-                        Not all languages will use every field. If your language does not use
-                        one of the fields, you can un-check the field's active box to disable
-                        it. In the example above, the <span style="font-weight: bold;">Gender</span>
-                        has been disabled. This means that the <span style="font-style: italic;">Tab</span> key will skip selecting it, and
-                        speed up your entries.<br>
-                        <br>
-                        Once you are done, simply close the window or hit the Done button.<br>
-                        <br>
-                        As a note, the quickentry window will enforce rules that the user has
-                        set. It will not allow a word that lacks a type if types are set to
-                        mandatory. It will not allow a duplicate Con Word is mandatory
-                        uniqueness is set.<br>
+                        <div align ="left">Not all languages will use every field. If your language does not use
+                            one of the fields, you can un-check the field's active box to disable
+                            it. In the example above, the <span style="font-weight: bold;">Pronunciation</span>
+                            has been disabled. This means that the <span style="font-style: italic;">Tab</span> key will skip selecting it, and
+                            speed up your entries.<br>
+                            <br>
+                            Once you are done, simply close the window or hit the Done button.<br>
+                            <br>
+                            As a note, the quickentry window will enforce rules that the user has
+                            set. It will not allow a word that lacks a type if types are set to
+                            mandatory. It will not allow a duplicate Con Word is mandatory
+                            uniqueness is set.<br></div>
 
                         <a name="-SavingOpeningNew"></a><h1>Saving/Opening/New</h1>
                         <br>
-                        <img style="width: 179px; height: 192px;" alt="" src="assets/file.png"><br>
+                        <img alt="" src="assets/file.png"><br>
                         <br>
-                        Saving, opening, and creating of new dictionaries can be handled
-                        through the File menu. Appropriate key combinations will also achieve
-                        these tasks from anywhere in the program. Recently opened files are
-                        listed here as well.<br>
+                        <div align ="left">Saving, opening, and creating of new dictionaries can be handled
+                            through the File menu. Appropriate key combinations will also achieve
+                            these tasks from anywhere in the program. Recently opened files are
+                            listed here as well.<br></div>
 
                         <a name="-_Language_Properties"></a><h1>Language Properties</h1>
                         <br>
-                        <img style="width: 410px; height: 500px;" alt="" src="assets/prop.png"><br>
-                        This screen allows various properties of the ConLang to be modified.
-                        Below are explanations for each.<br>
-                        <br>
-                        <br>
-                        -Language Name<br>
-                        The name of your constructed language.<br>
-                        <br>
-                        - Local Language
-                        <br>
-                        The natural language that you are using while writing your
-                        dictionary/language rules.<br>
-                        <br>
-                        - Author/Copyright Info<br>
+                        <img alt="" src="assets/prop.png"><br>
+                        <div align ="left">This screen allows various properties of the ConLang to be modified.
+                            Below are explanations for each.<br>
+                            <br>
+                            <br>
+                            -Language Name<br>
+                            The name of your constructed language.<br>
+                            <br>
+                            - Local Language
+                            <br>
+                            The natural language that you are using while writing your
+                            dictionary/language rules.<br>
+                            <br>
+                            - Author/Copyright Info<br>
 
-                        Here you can include any information that you the creator want packaged with
-                        your language, including personal contact information, copyright
-                        information, etc.<br>
-                        <br>
-                        - Conlang Font<br>
-                        Many ConLangs use nonstandard character sets, and it is sometimes
-                        easiest to simply create a font yourself and map these characters to
-                        standard Unicode characters. To load a font, click the Conlang Font
-                        button and select from the list of locally installed fonts. All Conlang
-                        fields will appear in the appropriate font. As a note, if you wish to
-                        send your saved dictionary to a friend who is also using PolyGlot, you
-                        must also send them the font, or they will receive an error message
-                        when they load your dictionary, and see standard characters, rather
-                        than your custom font.<br>
-                        <br>
-                        - Alphabetical Order<br>
-                        This allows you to create a custom
-                        alphabetical order for the
-                        characters used in your language. Simply list the characters in your
-                        alphabetical order in this text box, and PolyGlot will respect it when
-                        reordering words in the dictionary. Any characters not provided here
-                        will be ordered in standard fashion (as decided by your operating
-                        system). Here, I have set the alphabetic order to follow qwerty. This
-                        will order the dictionary and any alphabetically ordered fields with
-                        the order you provide.<br>
-                        <br>
-                        -Pronunciation<br>
-                        <img style="width: 199px; height: 283px;" alt="" src="assets/pron1.png"><br>
+                            Here you can include any information that you the creator want packaged with
+                            your language, including personal contact information, copyright
+                            information, etc.<br>
+                            <br>
+                            - Conlang Font<br>
+                            Many ConLangs use nonstandard character sets, and it is sometimes
+                            easiest to simply create a font yourself and map these characters to
+                            standard Unicode characters. To load a font, click the Conlang Font
+                            button and select from the list of locally installed fonts. All Conlang
+                            fields will appear in the appropriate font. As a note, if you wish to
+                            send your saved dictionary to a friend who is also using PolyGlot, you
+                            must also send them the font, or they will receive an error message
+                            when they load your dictionary, and see standard characters, rather
+                            than your custom font.<br>
+                            <br>
+                            - Alphabetical Order<br>
+                            This allows you to create a custom
+                            alphabetical order for the
+                            characters used in your language. Simply list the characters in your
+                            alphabetical order in this text box, and PolyGlot will respect it when
+                            reordering words in the dictionary. Any characters not provided here
+                            will be ordered in standard fashion (as decided by your operating
+                            system). Here, I have set the alphabetic order to follow qwerty. This
+                            will order the dictionary and any alphabetically ordered fields with
+                            the order you provide.<br></div>
                         <br>
 
-                        The above image shows the Character Pronunciation guide. New rows can
-                        be added with the Add button, and selected columns can be deleted with
-                        the Delete button. The Character(s) row represents one character or a
-                        series of characters that make up a sound or phoneme. The Pronunciation
-                        column represents the sound or phoneme associated with the contents of
-                        the Character(s) column of the same row. This allows PolyGlot to
-                        auto-generate pronunciations for you when you create new words, and can
-                        save a lot of time. Both columns are compatible with regular
-                        expressions (explained below).<br>
                         <br>
-                        Of note is the both upper and lower cases must be entered into the
-                        pronunciation guide unless both the <span style="font-weight: bold;">Ignore
-                            Case</span> option and the <span style="font-weight: bold;">Disable
-                            Proc Regex</span> options are selected.<br>
                         <br>
-                        The order that the sets appear in represents their <span style="font-style: italic;">priority</span>.
-                        Higher position means higher priority. In the example, you can see that
-                        the pair "gh-&gt;j" is higher than both "g-&gt;guh" and "h-&gt;h". This
-                        means that if PolyGlot encounters "gh", it will attempt to create a
-                        valid pronunciation using the "gh-&gt;j" rule before either of the
-                        others. By selecting a row and clicking the up or down arrow to the
-                        right of the guide, you can move a set to higher or lower priorities in
-                        the guide. <br>
+                        <br>
+                        <img src="assets/langProp2.png"><br>
+                        <div align ="left"><br>
+                            The last element of the Properties tab is the language check box
+                            settings. Here, you can tell PolyGlot to enforce rules within your
+                            lexicon. If <span style="font-weight: bold;">Part of Speech Mandatory</span> is
+                            selected, all words must have a type set to be saved. If <span style="font-weight: bold;">Local Mandatory</span> is set, all words
+                            must have a Local Word property set to be saved. If <span style="font-weight: bold;">Word Uniqueness </span>is set, homonyms
+                            within your conlang will be forbidden. If <span style="font-weight: bold;">Local Uniqueness</span>
 
-                        <br>
-                        In addition to the basic functionality, the pronunciation guide is
-                        compatible with regular expressions. For example, if you added the pair
-                        "^th" -&gt; "θ", it would replace "th" <span style="font-style: italic;">only</span>
-                        when it appeared at the beginning of a word. This allows for deep
-                        orthographies to be easily be created. Links in the references section
-                        of this document lead to good regular expression tutorials.<br>
-                        <br>
-                        <span style="font-weight: bold;">WORD OF WARNING:</span> Please be sure
-                        to type in the "Character(s)" field in the exact same way as you are
-                        going to be entering your words. I have encountered users that have
-                        accidentally entered lookalike characters into the left-hand column.
-                        This will mean that you cannot properly use the autopopulate feature.
-                        Keep in mind that just because "<br>
-                        <br>
-                        <br>
-                        <img style="width: 514px; height: 222px;" alt="" src="assets/pron2.png"><br>
-                        <br>
+                            is set, no two constructed words may contain identical text for their
+                            Local Word property. If you create a word that violates any rules that
+                            you have chosen to enforce, PolyGlot will prevent you from selecting
+                            other words until it is corrected, and display an error message telling
+                            you what to do to correct this.<br>
+                            <br>
+                            The <span style="font-weight: bold;">Ignore Case</span> check box will
+                            make all features (excepting the pronunciation options) ignore upper
+                            vs. lower case characters in your dictionary. To disable regex
+                            functionality in the pronunciations (thereby allowing ignore case to
+                            apply to them as well), click the <span style="font-weight: bold;">Disable
+                                Proc Regex</span> option.<br>
+                            <br>
+                            If your language uses Right to Left style writing, select the <span style="font-weight: bold;">Enforce RTL </span>checkbox. This will
+                            make instances of your conlang appear/be written in the correct
+                            direction through the program. <br></div>
 
-                        Back on the Dictionary tab, the pronunciation of our new word has
-                        auto-populated! For more complex languages that use IPA pronunciation
-                        standards, or other symbols, this can save a lot of tedious work.<br>
-                        <br>
-                        <br>
-                        <br>
-                        <img style="width: 197px; height: 221px;" alt="" src="assets/langProp2.png"><br>
-                        <br>
-                        The last element of the Properties tab is the language check box
-                        settings. Here, you can tell PolyGlot to enforce rules within your
-                        lexicon. If <span style="font-weight: bold;">Types Mandatory</span> is
-                        selected, all words must have a type set to be saved. If <span style="font-weight: bold;">Local Mandatory</span> is set, all words
-                        must have a Local Word property set to be saved. If <span style="font-weight: bold;">Word Uniqueness </span>is set, homonyms
-                        within your conlang will be forbidden. If <span style="font-weight: bold;">Local Uniqueness</span>
-
-                        is set, no two constructed words may contain identical text for their
-                        Local Word property. If you create a word that violates any rules that
-                        you have chosen to enforce, PolyGlot will prevent you from selecting
-                        other words until it is corrected, and display an error message telling
-                        you what to do to correct this.<br>
-                        <br>
-                        The <span style="font-weight: bold;">Ignore Case</span> check box will
-                        make all features (excepting the pronunciation options) ignore upper
-                        vs. lower case characters in your dictionary. To disable regex
-                        functionality in the pronunciations (thereby allowing ignore case to
-                        apply to them as well), click the <span style="font-weight: bold;">Disable
-                            Proc Regex</span> option.<br>
-                        <br>
-                        If your language uses Right to Left style writing, select the <span style="font-weight: bold;">Enforce RTL </span>checkbox. This will
-                        make instances of your conlang appear/be written in the correct
-                        direction through the program. <br>
-                        </p>
-
-                        <p>
                             <a name="-_Family_Window"></a><h1>Family Window &nbsp; </h1>
-                        <br>
-                        <img style="width: 211px; height: 156px;" alt="" src="assets/thes1.png"><br>
-                        <br>
-                        The Lexical Family window is primarily a lexical organization tool, but can
-                        be helpful in many ways. To access the window, click the Lexical Families button on the main menu.<br>
-                        <br>
-                        <br>
-                        <img style="width: 380px; height: 503px;" alt="" src="assets/thes2.png"><br>
-                        The Families window gives a hierarchical tree view on the left, with a
-                        name, a list of words in a family, and notes associated with the
-                        family. This tool is particularly useful for keeping track of groupings
-                        of words that derive from one another, or that are in some way
-                        connected, whether through connotation, denotation, etymology, or any
-                        thing else. The nature of a the relationship can be recorded easily in
-                        the Notes field.<br>
-                        <br>
+                            <br>
+                            <img alt="" src="assets/thes1.png"><br>
+                            <br>
+                            <div align ="left">NOTE: The Lexical Families window is currently being 
+                                revamped. In future versions it will likely be replaced entirely. This
+                                section of the manual is unedited from the last version.<br><br>
+                                The Lexical Family window is primarily a lexical organization tool, but can
+                                be helpful in many ways. To access the window, click Lexical Families 
+                                within the Tools menu.<br></div>
+                            <br>
+                            <br>
+                            <img alt="" src="assets/thes2.png"><br>
+                            <div align ="left">The Families window gives a hierarchical tree view on the left, with a
+                                name, a list of words in a family, and notes associated with the
+                                family. This tool is particularly useful for keeping track of groupings
+                                of words that derive from one another, or that are in some way
+                                connected, whether through connotation, denotation, etymology, or any
+                                thing else. The nature of a the relationship can be recorded easily in
+                                the Notes field.<br></div>
+                            <br>
 
-                        <br>
-                        <img style="width: 841px; height: 669px;" alt="" src="assets/thes3.png"><br>
-                        <br>
-                        In this example, I have created two entries in the thesaurus node
-                        ("body" and "death") which represent families of words within Lodenkur.
-                        I have done this by clicking the + button in the lower left-hand corner
-                        of the window and changing the names of the families on the right once
-                        selected. After this, the newly created "body" node was selected on the
-                        left. Words have been added to the list of family words. This has been
-                        done by selecting words in the main window's lexicon, and clicking the
-                        circled + button on the right. Multiple instances of the same word
-                        cannot be added to the same family.<br>
-                        <br>
-                        The words added here are for a living body and an inanimate body. They
-                        are both logically and lexically related, so I have grouped them
-                        together.<br>
-                        <br>
-                        <br>
-                        <img style="width: 352px; height: 474px;" alt="" src="assets/thes4.png"><br>
-                        <br>
-                        Here, I have created a subfamily, "limbs." This was done by selecting
-                        the "body" family, then clicking the + button in the lower left-hand
-                        corner. To this family, the words for "arm" and "leg" have been added
-                        because they are lexically related to one another. The word for "hand"
-                        has been added because it is logically related.<br>
-                        <br>
-                        <br>
-                        <img style="width: 354px; height: 474px;" alt="" src="assets/thes5.png"><br>
+                            <br>
+                            <img style="width: 841px; height: 669px;" alt="" src="assets/thes3.png"><br>
+                            <br>
+                            <div align ="left">In this example, I have created two entries in the thesaurus node
+                                ("body" and "death") which represent families of words within Lodenkur.
+                                I have done this by clicking the + button in the lower left-hand corner
+                                of the window and changing the names of the families on the right once
+                                selected. After this, the newly created "body" node was selected on the
+                                left. Words have been added to the list of family words. This has been
+                                done by selecting words in the main window's lexicon, and clicking the
+                                circled + button on the right. Multiple instances of the same word
+                                cannot be added to the same family.<br>
+                                <br>
+                                The words added here are for a living body and an inanimate body. They
+                                are both logically and lexically related, so I have grouped them
+                                together.<br></div>
+                            <br>
+                            <br>
+                            <img style="width: 352px; height: 474px;" alt="" src="assets/thes4.png"><br>
+                            <br>
+                            <div align ="left">Here, I have created a subfamily, "limbs." This was done by selecting
+                                the "body" family, then clicking the + button in the lower left-hand
+                                corner. To this family, the words for "arm" and "leg" have been added
+                                because they are lexically related to one another. The word for "hand"
+                                has been added because it is logically related.<br></div>
+                            <br>
+                            <br>
+                            <img style="width: 354px; height: 474px;" alt="" src="assets/thes5.png"><br>
 
-                        <br>
-                        There are times when it is useful to see all words in a family,
-                        including those that are in all subfamilies. To do this, click the
-                        "include subfamilies" check box. In the example, all words from within
-                        the "body" and the "limbs" families are included. As a note, words
-                        cannot be deleted from the "Words in family" list while this box is
-                        checked.<br>
-                        <br>
-                        <br>
-                        <img style="width: 841px; height: 669px;" alt="" src="assets/thes6.png"><br>
-                        <br>
-                        Of note is that when a word is selected in the Families Window, it
-                        will be auto-selected in the dictionary lexicon. This can be useful for
-                        vocabularies that have not been wholly committed to memory.<br>
-                        </p>
+                            <br>
+                            <div align ="left">There are times when it is useful to see all words in a family,
+                                including those that are in all subfamilies. To do this, click the
+                                "include subfamilies" check box. In the example, all words from within
+                                the "body" and the "limbs" families are included. As a note, words
+                                cannot be deleted from the "Words in family" list while this box is
+                                checked.<br></div>
+                            <br>
+                            <br>
+                            <img style="width: 841px; height: 669px;" alt="" src="assets/thes6.png"><br>
+                            <br>
+                            <div align ="left">Of note is that when a word is selected in the Families Window, it
+                                will be auto-selected in the dictionary lexicon. This can be useful for
+                                vocabularies that have not been wholly committed to memory.<br></div>
 
-                        <p>
-                            <a name="-_Accessing_the_Help_File"></a><h1>Accessing the Help File</h1>
-                        <br>
-                        <img style="width: 189px; height: 165px;" alt="" src="assets/help1.png"><br>
-                        To access this help file, click Help-&gt;Help<br>
 
-                        <br>
-                        <img style="width: 329px; height: 136px;" alt="" src="assets/help2.png"><br>
-                        After this, you cli* WAIT. YOU'VE CREATED A PARADOX AND DOOMED US ALL!<br>
-                        </p>
-
-                        <p>
-                            <a name="-_Checking_for_Updates"></a><h1>Checking for Updates</h1>
-                        <img style="width: 187px; height: 132px;" alt="" src="assets/update.png"><br>
-                        <br>
-                        PolyGlot will automatically check online for updates at startup,
-                        but
-                        you can also tell it manually to check. To do so, simply click
-                        Help-&gt;Check for Updates. A dialog will then appear telling you
-                        either that you are up to date, or with details on the newest version
-                        and what new features it includes.<br>
-                        </p>
-
-                        <p>
                             <a name="IMPORTING_FROM_EXCEL"></a><h1>Importing/Exporting to/from Excel (or CSV files)</h1>
-                        <br>
-                        <img style="width: 179px; height: 159px;" alt="" src="assets/excelImport2.png"><br>
-                        <br>
-                        As many conlangers use excel sheets and CSV files to store their
-                        languages, this is
-                        one of the most useful features for migrating a language into a
-                        PolyGlot library! If you have a conlang that is currently stored in an
-                        excel file, you can import it via the excel/CSV import tool included in
-                        PolyGlot. To access this tool, click Tools-&gt;Import From File Sheet
-                        in the
-                        menu.<br>
-                        <br>
+                            <br>
 
-                        <br>
-                        <br>
-                        The screen that appears has a number of different fields and options.<br>
-                        <img style="width: 505px; height: 472px;" alt="" src="assets/excelImport.png"><br>
-                        <br>
-                        <br>
-                        - Import File<br>
-                        <br>
-                        This is the Excel/CSV file that you are importing
-                        data
-                        from. Simply click the browse button and select your excel spreadsheet
-                        file here.<br>
-                        <br>
-                        <br>
-                        <br>
-                        - First Row Is Labels<br>
-
-                        <br>
-                        If the first row in your dictionary file is used for
-                        labels, click this. This will tell PolyGlot to skip the first row
-                        before beginning the import.<br>
-                        <br>
-                        <br>
-                        - Column Mapping<br>
-                        <br>
-                        This is the meat and potatoes of the import
-                        tool.
-                        Here, you map columns from your excel sheet to fields in PloyGlot. The
-                        column number (rather than the column title) should be used for
-                        mapping. Remember, in Excel, column numbers begin at 0, rather than 1.
-                        If you have more columns than are provided for in PolyGlot, multiple
-                        columns can be imported to a single PolyGlot field. Simply enter the
-                        column numbers separated by commas.<br>
-                        <br>It's worth noting that for imported word classes (gender, and other 
-                        inherent attributes) will be labeled as CLASS1, CLASS2, CLASS3, etc.
-                        These can be easily renamed to their appropriate values post import
-                        from the main menu by clicking the Lexical Classes button.
-                        <br>
-                        <br>
-                        - Delimiter<br>
-                        &nbsp;&nbsp;&nbsp; The delimiter character is the character used to
-                        separate columns in a CSV file. If you are importing from an excel file
-                        or the CSV file you're using has commas as delimiters, you may ignore
-                        this field.<br>
-
-                        <br>
-                        - Excel Sheet<br>
-                        <br>
-                        &nbsp;&nbsp; If you use multiple sheets for your dictionary, you will
-                        have to import them one at a time. The sheet that you are importing
-                        from is set here. If you do not use multiple sheets, simply leave it to
-                        its default value of 0.<br>
-                        <br>
-                        - Exporting<br>
-                        <br>
-                        <img style="width: 274px; height: 206px;" alt="" src="assets/Excel2.png"><br>
-                        <br>
-                        &nbsp;&nbsp;&nbsp; Exporting from PolyGlot is very simple. Simply click
-                        Tools-&gt; Export to Excel and select a path/filename to export to. An
-                        excel file with separate sheets for vocab, types, word classes, and
-                        pronunciations will be created.
-                        </p>
-
-                        <p>
-                            <a name="TRANSLATION_WINDOW"></a><h1Translation Window</h1>
+                            <div align ="left">As many conlangers use excel sheets and CSV files to store their
+                            languages, this is
+                            one of the most useful features for migrating a language into a
+                            PolyGlot library! If you have a conlang that is currently stored in an
+                            excel or CSV file, you can import it via the excel/CSV import tool included in
+                            PolyGlot. To access this tool, click Tools-&gt;Import From File Sheet
+                            in the
+                            menu.<br>
                             <br>
-                            NOTE: THE TRANSLATION WINDOW IS BEING LEFT IN POLYGLOT BY REQUEST, BUT
-                            IS CONSIDERED DEPRECATED FUNCTIONALITY. NEW FUNCTIONALITY WILL
-                            ENHANCE/REPLACE THIS LATER IN DEVELOPMENT.<br>
-                            <br>
-                            The translation window is a brand new feature in PolyGlot, and very
-                            much in its infancy. I believe that it is currently very useful, but
-                            there is a LOT to be done before it reaches its full potential. At its
-                            core, the window is (and will continue to be) a tool to assist with the
-                            translation of text. Auto-translation tools are currently very poor,
-                            and I think that by combining some of the techniques of
-                            auto-translators with a human being, the process of translating texts
-                            can be massively sped up, while still allowing for a high degree of
-                            accuracy. In the example below, I will walk you through this process
-                            using Lodenkur, my own ConLang.<br>
-
-                            <br>
-                            <img style="width: 439px; height: 278px;" alt="" src="assets/trans1.png"><br>
-                            First, click Tools-&gt;Translation Window<br>
-                            <br>
-                            <br>
-                            <img style="width: 656px; height: 473px;" alt="" src="assets/trans2.png"><br>
-                            The translation window will pop up. Of note here is the <span style="font-weight: bold;">Reset</span> button. It can be clicked at
-                            any time to erase all current work and start a translation from scratch.<br>
-                            <br>
-                            <br>
-                            <img style="width: 509px; height: 265px;" alt="" src="assets/trans3.png"><br>
-                            In the <span style="font-weight: bold;">Text To Translate</span> box,
-                            I type a sentence I wish to translate, then click the <span style="font-weight: bold;">Begin Translation </span>button.<br>
 
                             <br>
                             <br>
-                            <img style="width: 1176px; height: 652px;" alt="" src="assets/trans4.png"><br>
-                            At this point, a number of things happen. First, the right side of the
-                            window will activate. This will populate the word currently being
-                            transliterated to the <span style="font-weight: bold;">Searching On</span>
-                            field, the <span style="font-weight: bold;">Possible Matches</span>
-                            list box will populate, and the <span style="font-weight: bold;">Translation</span>
-                            field will populate with whatever is currently selected in the <span style="font-weight: bold;">Possible Matches</span> list box. At the
-                            same time, the lexicon back on the main interface window will tie
-                            itself to the <span style="font-weight: bold;">Possible Matches</span>
-
-                            list box.<br>
-                            <br>
-                            The first word in the sentence is highlighted, and copied into the <span style="font-weight: bold;">Searching on</span>
-                            text box. Using ranking algorithms, PolyGlot finds a list of words in
-                            descending order that it believes might be synonymous, or related to
-                            the word you are currently looking to translate. When you select a word
-                            from <span style="font-weight: bold;">Possible Matches</span>, it will
-                            make the lexicon (in the main PolyGlot window) jump to the matching
-                            entry, allowing you to make certain it is correct. The word will also
-                            be copied into the <span style="font-weight: bold;">Translation</span>
-                            field.<br>
-                            <br>
-                            If the word you are looking for is not being found, you can edit the <span style="font-weight: bold;">Searching On</span> box, and words will be
-                            searched/ranked in <span style="font-weight: bold;">Possible Matches</span>
-
-                            in real time while you type. If the word has no corollary in your
-                            conlang, you can click the <span style="font-weight: bold;">Create New</span>
-                            button to create a word within your language to fill this gap. If you
-                            would like to use a one off word that you do not wish to save into your
-                            dictionary, the <span style="font-weight: bold;">Translation</span>
-                            text box may be altered to any text you like.<br>
+                            The screen that appears has a number of different fields and options.<br></div>
+                            <img alt="" src="assets/excelImport.png"><br>
                             <br>
                             <br>
-                            <img style="width: 141px; height: 119px;" alt="" src="assets/trans5.png"><br>
-                            From here, you can click the <span style="font-weight: bold;">Use</span>
-                            or the <span style="font-weight: bold;">Skip</span> button to move on
-                            to the next word. <span style="font-weight: bold;">Use</span> will
-                            copy the text within the <span style="font-weight: bold;">Translation</span>
-
-                            field into the <span style="font-weight: bold;">Transliteration Text</span>
-                            box. <span style="font-weight: bold;">Skip</span>
-                            will simply move on to the next word. For languages such as Lodenkur,
-                            where there are no articles, or multiple words that collapse into a
-                            single, unified word within your conlang, this can be very useful.<br>
+                            <div align ="left">- Import File<br>
+                            <br>
+                            This is the Excel/CSV file that you are importing
+                            data
+                            from. Simply click the browse button and select your excel spreadsheet
+                            file here.<br>
                             <br>
                             <br>
-                            <img style="width: 656px; height: 474px;" alt="" src="assets/trans6.png"><br>
-                            After clicking <span style="font-weight: bold;">Use</span>, the
-                            selected translation for "I" is copied into the&nbsp; <span style="font-weight: bold;">Transliterated Text</span> box, and in the <span style="font-weight: bold;">Text To Translate</span>
-
-                            box, the next word is selected. Using these techniques, continue to
-                            translate and/or skip words. Do not worry about word order or
-                            additional necessary grammar for now, that will be addressed in the
-                            final step.<br>
-                            <br>
-                            <br>
-                            <img style="width: 298px; height: 472px;" alt="" src="assets/trans7.png"><br>
-                            Here, PolyGlot has picked up punctuation along with the word, and has
-                            not found the corollary word in Lodenkur as a result. The <span style="font-weight: bold;">Searching On</span> box is edited
-                            appropriately, and the correct word appears in the <span style="font-weight: bold;">Possible Matches</span>
-                            box. Punctuation has been left as searchable and legal for PolyGlot, as
-                            some languages use fonts with letters taking the place of characters
-                            that are typically punctuation marks.<br>
-                            <br>
-                            <br>
-                            <img style="width: 1197px; height: 475px;" alt="" src="assets/trans8.png"><br>
-                            From here, the <span style="font-weight: bold;">Translation Window</span>
-
-                            enters into its last step. The right side of the window deactivates,
-                            and the <span style="font-weight: bold;">Final Translation Text Window</span>
-                            opens. This is a freely editable window where you can manipulate your
-                            text from a simple transliteration, to a true translated form, with
-                            conjugations, declensions and proper grammar.<br>
-                            <br>
-                            <br>
-                            <img style="width: 653px; height: 473px;" alt="" src="assets/trans9.png"><br>
-                            While in this final mode, you can click on any word (or multi-word
-                            text, if you added this via the <span style="font-weight: bold;">Translation</span>
-                            field) in the <span style="font-weight: bold;">Transliterated Text</span>
-                            box, and both that word, and its related word in the <span style="font-weight: bold;">Text To Translate</span> box will be
-                            highlighted. This is very useful when keeping track of which words go
-                            where while you make your final translation.<br>
+                            - First Row Is Labels<br>
 
                             <br>
+                            If the first row in your dictionary file is used for
+                            labels, click this. This will tell PolyGlot to skip the first row
+                            before beginning the import.<br>
                             <br>
-                            <img style="width: 546px; height: 352px;" alt="" src="assets/trans10.png"><br>
-                            And here is the final product! The sentence "I will eat the food,"
-                            translated into Lodenkur. Ready to copy/paste wherever I like, and
-                            bother people who aren't nerdy enough to appreciate conlanging.<br>
-                            </p>
+                            <br>
+                            - Column Mapping<br>
+                            <br>
+                            This is the meat and potatoes of the import
+                            tool.
+                            Here, you map columns from your excel sheet to fields in PloyGlot. The
+                            column number (rather than the column title) should be used for
+                            mapping. Remember, in Excel, column numbers begin at 0, rather than 1.
+                            If you have more columns than are provided for in PolyGlot, multiple
+                            columns can be imported to a single PolyGlot field. Simply enter the
+                            column numbers separated by commas.<br>
+                            <br>It's worth noting that for imported word classes (gender, and other 
+                            inherent attributes) will be labeled as CLASS1, CLASS2, CLASS3, etc.
+                            These can be easily renamed to their appropriate values post import
+                            from the main menu by clicking the Lexical Classes button.
+                            <br>
+                            <br>
+                            - Delimiter<br>
+                            &nbsp;&nbsp;&nbsp; The delimiter character is the character used to
+                            separate columns in a CSV file. If you are importing from an excel file
+                            or the CSV file you're using has commas as delimiters, you may ignore
+                            this field.<br>
 
-                            <p>
-                                <a name="STATISTICS_REPORT"></a><h1>Statistics Report</h1>
                             <br>
-                            As with the Translation Window, I will be using Lodenkur for this
-                            example. An HTML report is generated and displayed. The report
-                            generated from Lodenkur can be viewed <a href="exStats.html">here</a>.
+                            - Excel Sheet<br>
+                            <br>
+                            &nbsp;&nbsp; If you use multiple sheets for your dictionary, you will
+                            have to import them one at a time. The sheet that you are importing
+                            from is set here. If you do not use multiple sheets, simply leave it to
+                            its default value of 0.<br>
+                            <br>
+                            <h2>- Exporting</h2><br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp; Exporting from PolyGlot is very simple. Simply click
+                            Tools-&gt; Export to Excel and select a path/filename to export to. An
+                            excel file with separate sheets for vocab, types, word classes, and
+                            pronunciations will be created.</div>
+
+                            <a name="STATISTICS_REPORT"></a><h1>Statistics Report</h1>
+                            <br>
+                            <div align ="left">To generate a statistics report on your language, click Tools-> Language Statistics
+                            on the main menu. An HTML report will be generated and displayed. 
                             Of note is that this might take a a few moments to run. The report
                             calculates some fairly complex statistics, and has to do a lot of
                             comparison to build the full report. Don't assume the program has
@@ -1112,30 +798,25 @@
                                 words:</span> counts instances of each phoneme as used in all words<br>
                             <span style="font-style: italic;">Heat map of letter combination
                                 frequency:</span> This is a heat map of letter combinations used in
-                            your language. The fewer instances, the bluer a combination tile, the <br>
-                            </p>
+                                your language. The fewer instances, the bluer a combination tile, the <br></div>
 
-                            <p>
+                            
                                 <a name="LOGOGRAPHIC_DICTIONARY"></a><h1>Logographic Dictionary</h1>
                             <br>
-                            The logographic dictionary tool in PolyGlot allows for the creation of
+                            <div align ="left">The logographic dictionary tool in PolyGlot allows for the creation of
                             highly complex character sets. It can handle true logographies, where
                             each symbol is directly correlated with a single word, or systems such
                             as Chinese, which associate multiple readings with a single character,
                             and build more complex characters out of radicals. Once created, these
-                            characters can be tied directly to words in a lexicon.<br>
-                            <br>
-                            <br>
-                            <img style="width: 295px; height: 103px;" alt="" src="assets/logo1.png"><br>
-
-                            <br>
-                            To access the logographic dictionary, click View-&gt;Logographic
-                            Dictionary.<br>
+                            characters can be tied directly to words in a lexicon. It is found on the 
+                            left as one of the main modules in PolyGlot.<br>
+                            NOTE: Images in this section are from earlier versions of PolyGlot, but the
+                            functionality has remained identical.</div>
                             <br>
                             <br>
                             <img style="width: 621px; height: 638px;" alt="" src="assets/logo2.png"><br>
                             <br>
-                            The logograph dictionary if very similar to the Lexicon in PolyGlot.
+                            <div align ="left">The logograph dictionary if very similar to the Lexicon in PolyGlot.
                             The list to the left displays all currently created logographs, and can
                             be added to/deleted from with the <span style="font-weight: bold;">+</span>/<span style="font-weight: bold;">-</span> buttons. The <span style="font-weight: bold;">Name</span> and <span style="font-weight: bold;">Notes</span>
 
@@ -1166,27 +847,27 @@
                             <br>
                             Under <span style="font-weight: bold;">Radicals</span>, clicking the <span style="font-weight: bold;">+</span> button once will bring up the
                             Logograph Radicals selection tool. Once this is open, clicking <span style="font-weight: bold;">+ </span>a second time will result in the
-                            radical being added to the currently selected logograph.<br>
+                            radical being added to the currently selected logograph.<br></div>
 
                             <br>
                             <br>
                             <img style="width: 959px; height: 640px;" alt="" src="assets/logo3.png"><br>
                             <br>
-                            Here, three test logographs have been entered, and using the
+                            <div align ="left">Here, three test logographs have been entered, and using the
                             Logographic Radicals selector (opened the first time <span style="font-weight: bold;">+</span> was clicked), the radicals TEST 1
-                            and TEST 2, which make up TEST 3 have been added to the logograph.<br>
+                            and TEST 2, which make up TEST 3 have been added to the logograph.<br></div>
                             <br>
                             <br>
                             <img style="width: 444px; height: 582px;" alt="" src="assets/logo4.png"><br>
                             <br>
-                            To associate logographs with a word, click on the <span style="font-weight: bold;">Logographs</span> button while the word is
-                            selected in the <span style="font-weight: bold;">Lexicon</span>.<br>
+                            <div align ="left">To associate logographs with a word, click on the <span style="font-weight: bold;">Logographs</span> button while the word is
+                                selected in the <span style="font-weight: bold;">Lexicon</span>.<br></div>
 
                             <br>
                             <br>
                             <img style="width: 955px; height: 640px;" alt="" src="assets/logo5.png"><br>
                             <br>
-                            The <span style="font-weight: bold;">Associated Logographs</span>
+                            <div align ="left">The <span style="font-weight: bold;">Associated Logographs</span>
                             window (left) will appear after the <span style="font-weight: bold;">Logographs</span>
                             button is hit on the <span style="font-weight: bold;">Lexicon</span>.
                             The first time the <span style="font-weight: bold;">+</span> button is
@@ -1202,13 +883,11 @@
                             window, the <span style="font-weight: bold;">Details/Edit</span>
 
                             button can be clicked to open up the logograph editing window for that
-                            single logograph.<br>
-                            </p>
+                            single logograph.<br></div>
 
-                            <p>
                                 <a name="PRINT_PDF"></a><h1>Publishing To PDF</h1>
                             <br>
-                            The Publish to PDF screen presents a series of options that will be
+                            <div align ="left">The Publish to PDF screen presents a series of options that will be
                             applied to a PDF document generated from your language file. The
                             document will be fully formatted and is a clean, presentable way to
                             package your language for distribution.
@@ -1218,11 +897,11 @@
                             distribute anything with it to ensure that the PDF displays correctly
                             on any given computer. As a note, sound files included in the grammar
                             section currently cannot be embedded in the PDF. This is being looked
-                            into for future releases.<br>
+                            into for future releases.<br></div>
                             <br>
 
                             <img src="assets/printPdf1.png"><br>
-                            The window pictured above allows you to publish with various options
+                            <div align ="left">The window pictured above allows you to publish with various options
                             described below.<br>
                             <br>
                             The top option is the location that the PDF document should be
@@ -1277,14 +956,12 @@
                             <br>
                             The Print Page Number option will add a footer to your document which
                             gives current and total page count for the entirety of the document.
-                            <br>
-                            </p>
+                            <br></div>
 
-                            <p>
                                 <a name="IPA_WINDOW"></a><h1>Interactive IPA Window</h1>
                             <br>
                             <img src="assets/IPA1.png"><br>
-                            The International Phonetic Alphabet is a series of characters created
+                            <div align ="left">The International Phonetic Alphabet is a series of characters created
                             with the goal of representing each unique sound that can be part of
                             spoken language. If you’re looking to try out new sounds or find
                             combinations of sounds that build a coherent orthography for a new
@@ -1298,25 +975,23 @@
                             Pulmonic Consonants, Non-Pulmonic Consonants, and Other/Affricates. If
                             you click on any of the characters, PolyGlot will play the associated
                             sound and copy the character into the textbox in the bottom of the
-                            window.
+                            window.</div>
                             <br>
-                            </p>
 
-                            <p>
-
-                            </p>
+                            
                             <a name="QUIZ"></a><h1> Quiz Generation Tool</h1>
                             <br>
-                            The Quiz Generation Tool allows you to create flash-card style quizzes
+                            <div align ="left">The Quiz Generation Tool allows you to create flash-card style quizzes
                             based on the contents of your lexicon. It is a very useful tool for
                             increasing your own fluency and familiarity with your languages, or languages
-                            that you've downloaded.<br>
+                            that you've downloaded.<br>NOTE: This section includes screenshots from prior versions of PolyGlot.
+                            The functionality is identical.<br></div>
 
                             <img alt="" src="assets/Quiz1.png"><br>
-                            To access the quiz generation tool, on the main menu, click Tools->Quiz Generator.<br><br>
+                            <div align ="left">To access the quiz generation tool, on the main menu, click Tools->Quiz Generator.<br><br></div>
 
                             <img alt="" src="assets/Quiz2.png"><br>
-                            Once you are in the Quiz Generation screen, you will see a number of options.
+                            <div align ="left">Once you are in the Quiz Generation screen, you will see a number of options.
                             At the top is a filter, which functions identically to the one found on the 
                             lexicon screen. Using this filter, you can restrict what kinds of words are 
                             randomly selected to be put into the quiz. Below this are the controls for the
@@ -1324,27 +999,27 @@
                             quiz. Below this is a series of check boxes, each representing one of
                             the attributes on a word. Questions generated will quiz based on only the
                             selected attributes. At least one must be selected to generate a quiz.
-                            Once the parameters are complete, click the Take Quiz button to begin.<br><br>
+                            Once the parameters are complete, click the Take Quiz button to begin.<br><br></div>
 
                             <img alt="" src="assets/Quiz3.png"><br>
-                            Once the quiz has been begun, you can move forward and backward through the 
+                            <div align ="left">Once the quiz has been begun, you can move forward and backward through the 
                             questions using the Next and Previous buttons. Skipped questions can be 
                             returned to and answered later. The current question by number is displayed
-                            in the bottom left.<br><br>
+                            in the bottom left.<br><br></div>
 
                             <img alt="" src="assets/Quiz4.png"><br>
-                            Once a question is answered, it cannot be reanswered. It will be marked as
+                            <div align ="left">Once a question is answered, it cannot be reanswered. It will be marked as
                             correct/incorrect at the bottom of the screen, and the correct answer will
                             always be marked in green (incorrect answers marked in red). After you reach 
                             the end of the quiz, the Next button will become a Finish button. You will 
                             be given the option to retake the test, and if you choose to, be given the 
                             further option to trim the test down to only the questions you missed the 
                             first time around. This can be very helpful to reinforce the areas that you 
-                            are currently having trouble with.<br><br>
+                            are currently having trouble with.<br><br><div>
 
 
 
-                            <p>
+      
                                 <a name="LODENKUR_-_an_example_language"></a><h1> Grammar Guide</h1>
                             <br>
                             The Grammar Guide allows you to organize gramatical rules of your
@@ -1484,47 +1159,47 @@
 
                             <!-- POLYGLOT STUFF START END -->
 
-                            </div>
-                            <!-- /col-lg-8 --> </div>
-                            <!-- /row --> </div>
-                            <!-- /container --> </div>
+                        </div>
+                        <!-- /col-lg-8 --> </div>
+                    <!-- /row --> </div>
+                <!-- /container --> </div>
 
-                            <!-- /ww --><!-- +++++ Footer Section +++++ -->
-                            <div id="footer">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <h4>Contact</h4>
-                                            <p> Draquemail@gmail.com</p>
-                                        </div>
-                                        <!-- /col-lg-4 -->
-                                        <div class="col-lg-4">
-                                            <h4>Other Creative Work</h4>
-                                            <p> <a href="http://sulmere.tumblr.com/">Ask Sulmere</a></p>
-                                        </div>
-                                        <!-- /col-lg-4 -->
-                                        <div class="col-lg-4">
-                                            <h4>LEGAL</h4>
-                                            <p>
-                                                THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-                                                IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
-                                                TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-                                                PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-                                                HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-                                                SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-                                                LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-                                                DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-                                                THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-                                                (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-                                                OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+            <!-- /ww --><!-- +++++ Footer Section +++++ -->
+            <div id="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <h4>Contact</h4>
+                            <p> Draquemail@gmail.com</p>
+                        </div>
+                        <!-- /col-lg-4 -->
+                        <div class="col-lg-4">
+                            <h4>Other Creative Work</h4>
+                            <p> <a href="http://sulmere.tumblr.com/">Ask Sulmere</a></p>
+                        </div>
+                        <!-- /col-lg-4 -->
+                        <div class="col-lg-4">
+                            <h4>LEGAL</h4>
+                            <p>
+                                THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+                                IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+                                TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+                                PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+                                HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+                                SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+                                LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+                                DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+                                THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+                                (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+                                OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 
-                                        </div>
-                                        <!-- /col-lg-4 --> </div>
-                                </div>
-                            </div>
+                        </div>
+                        <!-- /col-lg-4 --> </div>
+                </div>
+            </div>
 
-                            <!-- Bootstrap core JavaScript
-                            ================================================== --><!-- Placed at the end of the document so the pages load faster -->
+            <!-- Bootstrap core JavaScript
+            ================================================== --><!-- Placed at the end of the document so the pages load faster -->
 
-                            <script src="assets/js/bootstrap.min.js"></script>
-                            </body></html>
+            <script src="assets/js/bootstrap.min.js"></script>
+    </body></html>
