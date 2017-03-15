@@ -311,7 +311,7 @@ public class ConWord extends DictNode {
     public String getPronunciation() {
         String ret = pronunciation;
         
-        if (!autoDeclensionOverride && core != null) {
+        if (!procOverride && core != null) {
             String gen = core.getPronunciationMgr().getPronunciation(value);
             if (!gen.equals("")) {
                 ret = gen;
