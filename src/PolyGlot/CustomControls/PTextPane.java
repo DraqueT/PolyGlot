@@ -21,6 +21,7 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import PolyGlot.ClipboardHandler;
+import PolyGlot.FormattedTextHelper;
 import PolyGlot.Nodes.ImageNode;
 import PolyGlot.PGTUtil;
 import PolyGlot.PGTools;
@@ -354,7 +355,7 @@ public class PTextPane extends JTextPane {
             ret = core.getPropertiesManager().isEnforceRTL() ? PGTUtil.RTLMarker + ret : ret;
         }
 
-        return ret;
+        return FormattedTextHelper.HTMLLineBreakParse(ret);
     }
 
     /**

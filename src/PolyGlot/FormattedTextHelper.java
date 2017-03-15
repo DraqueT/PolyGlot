@@ -468,6 +468,38 @@ public class FormattedTextHelper {
         return ret;
     }
     
+    
+    /**
+     * Takes html with linebreaks in body and converts the linebreaks to proper
+     * <br> tags
+     * @param html input html to be sanitized
+     * @return linebreak sanitized html
+     */
+    public static String HTMLLineBreakParse(String html) {
+        String findBody = "<body>";
+        String findBodyEnd = "</body>";
+        String preFix = "";
+        String postFix = "";
+        String body = html;
+        
+        if (body.contains(findBody)) {
+            int pos = body.indexOf(findBody);
+            preFix = body.substring(0, pos + findBody.length());
+            body = body.substring(pos + findBody.length());
+        }
+        
+        if (body.contains(findBodyEnd)) {
+            int pos = body.indexOf(findBodyEnd);
+            postFix = body.substring(pos);
+            body = body.substring(0, pos);
+        }
+        
+        body = body.trim();
+        body = body.replace("\n", "<br>");
+        
+        return preFix + body + postFix;
+    }
+    
     static class SecEntry implements Entry {
         final String key;
         PFontInfo fontInfo;        
