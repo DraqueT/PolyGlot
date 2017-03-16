@@ -21,6 +21,7 @@ package PolyGlot.ManagersCollections;
 
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
+import PolyGlot.FormattedTextHelper;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.Nodes.DictNode;
@@ -425,6 +426,8 @@ public class ConWordCollection extends DictionaryCollection {
                 .iterator();
         Entry<Integer, ConWord> curEntry;
         ConWord curWord;
+        // definition search should always ignore case
+        _filter.setDefinition(_filter.getDefinition().toLowerCase());
 
         // set filter to lowercase if ignoring case
         if (core.getPropertiesManager().isIgnoreCase()) {
@@ -438,24 +441,24 @@ public class ConWordCollection extends DictionaryCollection {
             curEntry = filterList.next();
             curWord = curEntry.getValue();
             try {
-                String definition;
+                // definition should always ignore case
+                String definition = FormattedTextHelper.getTextBody(curWord.getDefinition()).toLowerCase();
                 int type = curWord.getWordTypeId();
                 String local;
                 String proc;
 
                 // if set to ignore case, set up caseless matches, normal otherwise
-                if (core.getPropertiesManager().isIgnoreCase()) {
-                    definition = curWord.getDefinition().toLowerCase();
+                if (core.getPropertiesManager().isIgnoreCase()) {                    
                     local = curWord.getLocalWord().toLowerCase();
                     proc = curWord.getPronunciation().toLowerCase();
                 } else {
-                    definition = curWord.getDefinition();
                     local = curWord.getLocalWord();
                     proc = curWord.getPronunciation();
                 }
 
                 // each filter test split up to minimize compares                
                 // definition
+
                 if (!_filter.getDefinition().trim().isEmpty()) {
                     boolean cont = true;
 

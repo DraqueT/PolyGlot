@@ -43,6 +43,8 @@ import javax.swing.text.StyleConstants;
  * @author draque
  */
 public class FormattedTextHelper {
+    private final static String findBody = "<body>";
+    private final static String findBodyEnd = "</body>";
     private final static String BLACK = "black";
     private final static String RED = "red";
     private final static String GRAY = "gray";
@@ -476,8 +478,6 @@ public class FormattedTextHelper {
      * @return linebreak sanitized html
      */
     public static String HTMLLineBreakParse(String html) {
-        String findBody = "<body>";
-        String findBodyEnd = "</body>";
         String preFix = "";
         String postFix = "";
         String body = html;
@@ -498,6 +498,21 @@ public class FormattedTextHelper {
         body = body.replace("\n", "<br>");
         
         return preFix + body + postFix;
+    }
+    
+    /**
+     * Returns text only body from html
+     * @param html full html to reduce
+     * @return only the body of the HTML, stripped of all tags
+     */
+    public static String getTextBody(String html) {
+        String ret = html;
+        
+        if (html.contains(findBody) && html.contains(findBodyEnd)) {
+            ret = html.substring(html.indexOf(findBody) + findBody.length(), html.indexOf(findBodyEnd));
+        }
+        
+        return ret.replaceAll("<.*?>", "");
     }
     
     static class SecEntry implements Entry {
