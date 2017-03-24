@@ -55,7 +55,7 @@ public class PSplitPaneDivider extends BasicSplitPaneDivider {
             g.setColor(Color.darkGray);
             g.drawOval((thisWidth - ball)/2, (thisHeight / 2) - 11, ball, ball);
         } else {
-            // TODO: horizontal ones
+            // If needed, implement horizontal pane splits here.
             g.setColor(Color.red);        
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
         }

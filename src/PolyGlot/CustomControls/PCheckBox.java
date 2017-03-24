@@ -51,7 +51,6 @@ public class PCheckBox extends JCheckBox implements MouseListener {
         this.addMouseListener(this);
     }
     
-    // TODO: this whole thing, obviously. Cover all combinations of checked/unchecked and enabled/disabled
     @Override
     public void paint(Graphics g) {
         Color selected;

@@ -107,7 +107,6 @@ public class FormattedTextHelper {
                     }
                     StyleConstants.setFontFamily(aset, conFont.getFamily());
                 } else {
-                    // TODO: In the future, consider whether to leverege this logic to allow arbitrary fonts in grammar section text
                     if (core.getPropertiesManager().isEnforceRTL()) {
                         nextNode = PGTUtil.LTRMarker + nextNode;
                     }

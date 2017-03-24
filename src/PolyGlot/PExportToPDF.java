@@ -795,11 +795,11 @@ public class PExportToPDF {
 
                         if (info.awtFont.equals(core.getPropertiesManager().getFontCon())) {
 
-                            newSec.add(new Text(text).setFont(conFont) // TODO: Maybe actually build font here if I give more freedom in the grammar section
+                            newSec.add(new Text(text).setFont(conFont)
                                     .setFontSize(conFontSize).setFontColor( // TODO: not setting size here. Later Rev (due to different size standards HTML vs Pt)
                                             FormattedTextHelper.swtColorToItextColor(info.awtColor)));
                         } else {
-                            newSec.add(new Text(text).setFont(unicodeFont) // TODO: Maybe actually build font here if I give more freedom in the grammar section
+                            newSec.add(new Text(text).setFont(unicodeFont)
                                     .setFontColor( // TODO: not setting size here. Later Rev (due to different size standards HTML vs Pt)
                                             FormattedTextHelper.swtColorToItextColor(info.awtColor)));
                         }

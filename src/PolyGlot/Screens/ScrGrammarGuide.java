@@ -88,7 +88,6 @@ public class ScrGrammarGuide extends PFrame {
     private final ImageIcon addButtonPressed;
     private final ImageIcon deleteButtonPressed;
 
-    // TODO: allow import of audio wav files (how to autodetect audio format?)
     /**
      * Creates new form scrGrammarGuide
      *

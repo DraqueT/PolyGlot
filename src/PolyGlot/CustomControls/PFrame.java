@@ -373,7 +373,6 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
      * @throws java.lang.InterruptedException
      */
     public void setSizeSmooth(final int width, final int height, boolean wait) throws InterruptedException {
-        // TODO: move these to the util class? Consider.
         final int numFrames = 40; // total number of frames to animate
         final int msDelay = 10; // ms delay between frames
         final int initialX = this.getWidth();
