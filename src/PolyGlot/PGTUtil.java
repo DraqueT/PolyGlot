@@ -22,6 +22,8 @@ package PolyGlot;
 
 import PolyGlot.Screens.*;
 import java.awt.Color;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
  * This contains various constant vales in PolyGlot
@@ -228,7 +230,13 @@ public class PGTUtil {
     public static final Color colorDisabledForeground;
     public static final Color colorMouseoverBorder;
     
-    // one time set for calculate static values
+    // images and icons that only need to be loaded once
+    public static final ImageIcon addButtonIcon;
+    public static final ImageIcon delButtonIcon;
+    public static final ImageIcon addButtonIconPressed;
+    public static final ImageIcon delButtonIconPressed;
+    
+    // one time set for code driven static values
     static {
         colorDisabledBG = Color.decode("#b0b0b0");
         colorEnabledBG = Color.decode("#66b2ff");
@@ -242,6 +250,19 @@ public class PGTUtil {
         scrNameFam = ScrFamilies.class.getName();
         scrIPARefChart = ScrIPARefChart.class.getName();
         scrQuizGenDialog = ScrQuizGenDialog.class.getName();
+        
+        addButtonIcon = new ImageIcon(new ImageIcon(
+                    PGTUtil.class.getResource("/PolyGlot/ImageAssets/add_button.png"))
+                    .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
+        delButtonIcon = new ImageIcon(new ImageIcon(
+                PGTUtil.class.getResource("/PolyGlot/ImageAssets/delete_button.png"))
+                .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
+        addButtonIconPressed = new ImageIcon(new ImageIcon(
+                PGTUtil.class.getResource("/PolyGlot/ImageAssets/add_button_pressed.png"))
+                .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
+        delButtonIconPressed = new ImageIcon(new ImageIcon(
+                PGTUtil.class.getResource("/PolyGlot/ImageAssets/delete_button_pressed.png"))
+                .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
     }
     
     /**

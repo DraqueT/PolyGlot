@@ -19,6 +19,7 @@
  */
 package PolyGlot.CustomControls;
 
+import PolyGlot.PGTUtil;
 import javax.swing.border.Border;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -83,15 +84,14 @@ public class PAddRemoveButton extends JButton {
         setRequestFocusEnabled(false);
         setContentAreaFilled(false);
         
-        // TODO: revisit this - Also, this should have loaded a single time in the Util file. Wasteful to reload it each time.
         switch (arg) {
             case "-":
-                setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH)));
-                setPressedIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button_pressed.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH)));
+                setIcon(PGTUtil.delButtonIcon);
+                setPressedIcon(PGTUtil.delButtonIconPressed);
                 break;
             case "+":
-                setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/add_button.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH))); 
-                setPressedIcon(new ImageIcon(new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/add_button_pressed.png")).getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH)));
+                setIcon(PGTUtil.addButtonIcon); 
+                setPressedIcon(PGTUtil.addButtonIconPressed);
                 break;
         }
         setText(arg);
