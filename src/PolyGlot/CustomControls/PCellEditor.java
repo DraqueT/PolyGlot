@@ -22,9 +22,15 @@ package PolyGlot.CustomControls;
 
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentListener;
@@ -49,6 +55,8 @@ public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
     public PCellEditor(Font _myFont) {
         myFont = _myFont;
         JTextField setupText = (JTextField) component;
+        
+        setupRightClickMenu(setupText);
         
         setupText.setBorder(BorderFactory.createEmptyBorder());
     }
@@ -99,5 +107,58 @@ public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
         ((JTextField) component).setFont(myFont);
         
         return super.clone();
+    }
+    
+    private void setupRightClickMenu(JTextField editor) {
+        final JPopupMenu ruleMenu = new JPopupMenu();
+        final JMenuItem cut = new JMenuItem("Cut");
+        final JMenuItem copy = new JMenuItem("Copy");
+        final JMenuItem paste = new JMenuItem("Paste");
+        final JTextField parentField = editor;
+
+        cut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                parentField.cut();
+            }
+        });
+        copy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                parentField.copy();
+            }
+        });
+        paste.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                parentField.paste();
+            }
+        });
+
+        ruleMenu.add(cut);
+        ruleMenu.add(copy);
+        ruleMenu.add(paste);
+
+        editor.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() && parentField.isEnabled()) {
+                    cut.setEnabled(true);
+                    copy.setEnabled(true);
+                    paste.setEnabled(true);
+                    ruleMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger() && parentField.isEnabled()) {
+                    cut.setEnabled(true);
+                    copy.setEnabled(true);
+                    paste.setEnabled(true);
+                    ruleMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
     }
 }
