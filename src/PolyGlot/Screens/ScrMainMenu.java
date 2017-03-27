@@ -637,6 +637,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         try {
             IOHandler.exportFont(fileName, curFileName);
+            InfoBox.info("Export Success", "Font exported to: " + fileName, this);
         } catch (IOException e) {
             InfoBox.error("Export Error", "Unable to export font: " + e.getMessage(), this);
         }
