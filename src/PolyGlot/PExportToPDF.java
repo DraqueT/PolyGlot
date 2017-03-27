@@ -486,8 +486,8 @@ public class PExportToPDF {
                 dictEntry.add(new Text("\n"));
                 for (Object o : defList) {
                     if (o instanceof String) {
-                        // text is HTML, and not true unicode... escape HTML to correct
-                        String cleanedText = StringEscapeUtils.unescapeHtml4((String) o);
+                        // remove HTML from text and add newline (each text object in list is a line)
+                        String cleanedText = StringEscapeUtils.unescapeHtml4((String) o) + "\n";
                         dictEntry.add(new Text(cleanedText).setFontSize(defFontSize).setFont(unicodeFont));
                     } else if (o instanceof BufferedImage) {
                         // must convert buffered image to bytes because WHY DOES iTEXT 7 NOT DO THIS ITSELF.
@@ -498,7 +498,6 @@ public class PExportToPDF {
                         // Do nothing: May be expanded for further logic later
                     }
                 }
-                dictEntry.add(new Text("\n"));
             }
 
             if (!curWord.getLocalWord().equals("")) {
@@ -566,9 +565,9 @@ public class PExportToPDF {
 
             Text varChunk;
 
-            dictEntry.add(new Text(curWord.getLocalWord() + "\n")
+            dictEntry.add(new Text(curWord.getLocalWord() + "\n\n")
                     .setFontSize(defFontSize + offsetSize));
-
+            
             String wordVal = PGTUtil.stripRTL(curWord.getValue());
             if (core.getPropertiesManager().isEnforceRTL()) {
                 // PDF Does not respect RTL characters...
@@ -671,7 +670,8 @@ public class PExportToPDF {
                 dictEntry.add(new Text("\n"));
                 for (Object o : defList) {
                     if (o instanceof String) {
-                        String cleanedText = StringEscapeUtils.unescapeHtml4((String) o);
+                        // remove HTML from text and add newline (each text object in list is a line)
+                        String cleanedText = StringEscapeUtils.unescapeHtml4((String) o) + "\n";
                         dictEntry.add(new Text(cleanedText).setFontSize(defFontSize).setFont(unicodeFont));
                     } else if (o instanceof BufferedImage) {
                         // must convert buffered image to bytes because WHY DOES iTEXT 7 NOT DO THIS ITSELF.
@@ -682,7 +682,6 @@ public class PExportToPDF {
                         // Do nothing: May be expanded for further logic later
                     }
                 }
-                dictEntry.add(new Text("\n"));
             }
 
             dictEntry.setKeepTogether(true);
