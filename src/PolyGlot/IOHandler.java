@@ -27,6 +27,7 @@ import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.ManagersCollections.ImageCollection;
 import PolyGlot.Nodes.ImageNode;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -1055,5 +1056,24 @@ public class IOHandler {
         try (InputStream localStream = this.getClass().getResourceAsStream(PGTUtil.UnicodeFontItalicLocation)) {
             return IOUtils.toByteArray(localStream);
         }
+    }
+    
+    /**
+     * Opens an arbitrary file via the local OS's default. If unable to open
+     * for any reason, returns false.
+     * @param path
+     * @return 
+     */
+    public static boolean openFileNativeOS(String path) {
+        boolean ret = true;
+        
+        try {
+            File file = new File(path);
+            Desktop.getDesktop().open(file);            
+        } catch (Exception e) {
+            ret = false;
+        }
+        
+        return ret;        
     }
 }

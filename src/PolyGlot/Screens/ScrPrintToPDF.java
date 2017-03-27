@@ -26,8 +26,10 @@ import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.PExportToPDF;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JFileChooser;
@@ -337,7 +339,17 @@ public class ScrPrintToPDF extends PDialog {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try{
             export.print();
-            InfoBox.info("Print Success", "Sucessfully printed to " + txtSavePath.getText(), this);
+            if (Desktop.isDesktopSupported()) {
+                if (InfoBox.yesNoCancel("Print Success", "PDF successfully printed. Open file now?", this) 
+                        == JOptionPane.YES_OPTION) {
+                    if (!IOHandler.openFileNativeOS(txtSavePath.getText())) {
+                        InfoBox.error("File Error", "Unable to open PDF at location: " + txtSavePath.getText(), this);
+                    }
+                }
+            } else {
+                InfoBox.info("Print Success", "Sucessfully printed to " + txtSavePath.getText(), this);
+            }
+            
             this.dispose();
         } catch (Exception e) {
             //e.printStackTrace(); 
