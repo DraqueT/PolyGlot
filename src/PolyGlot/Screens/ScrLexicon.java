@@ -797,6 +797,7 @@ public final class ScrLexicon extends PFrame {
         testWord.setPronunciation(((PTextField) txtProc).isDefaultText() ? "" : txtProc.getText());
         testWord.setWordTypeId(typeId);
         testWord.setRulesOverride(chkRuleOverride.isSelected());
+        testWord.setCore(core);
 
         setWordLegality(testWord);
     }
