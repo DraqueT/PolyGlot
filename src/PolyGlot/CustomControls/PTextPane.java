@@ -62,10 +62,10 @@ public class PTextPane extends JTextPane {
         setupListeners();
         setText(defText);
         setForeground(Color.lightGray);
-        if (!overrideFont) {
-            setFont(core.getPropertiesManager().getFontCon());
-        } else {
+        if (overrideFont) {
             setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        } else {
+            setFont(core.getPropertiesManager().getFontCon());
         }
     }
 
@@ -282,10 +282,22 @@ public class PTextPane extends JTextPane {
      * @return 
      */
     public boolean isEmpty() {
-        String body = super.getText();
-        body = body.substring(0, body.indexOf("</body>"));
-        body = body.substring(body.indexOf("<body>") + 6, body.length());
-        return body.trim().equals("");
+        boolean ret;
+        
+        // TODO: track down reasons
+        // for unknown reasons, freshly emptied text panes when using enforced 
+        // RTL will throw an out of bounds exception when calling super.getText()
+        // This only happens when they are empty, so gather and return true.
+        try{
+            String body = super.getText();
+            body = body.substring(0, body.indexOf("</body>"));
+            body = body.substring(body.lastIndexOf("<body>") + 6, body.length());
+            ret = body.trim().equals("");
+        } catch (Exception e) {
+            ret = true;
+        }
+        
+        return ret;
     }
 
     /**
@@ -347,12 +359,20 @@ public class PTextPane extends JTextPane {
 
     @Override
     public String getText() {
+        final String bodyS = "<body>";
+        final String bodyE = "</body>";
         String ret = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
 
+        // special logic needed if this is written in the conlang's font and RTL is enforced.
         if (isDefaultText()) {
             ret = "";
-        } else {
-            ret = core.getPropertiesManager().isEnforceRTL() ? PGTUtil.RTLMarker + ret : ret;
+        } else if (core.getPropertiesManager().isEnforceRTL() && !overrideFont
+                && ret.contains(bodyS) && ret.contains(bodyE)) {
+            String body = ret.substring(0, ret.indexOf(bodyE));
+            body = body.substring(body.lastIndexOf(bodyS) + bodyS.length(), body.length());
+            String start = ret.substring(0, ret.indexOf(bodyS) + bodyS.length());
+            String end = ret.substring(ret.indexOf(bodyE));
+            ret = start + PGTUtil.RTLMarker + body.trim() + end;
         }
 
         return FormattedTextHelper.HTMLLineBreakParse(ret);
