@@ -67,6 +67,8 @@ public class PTextPane extends JTextPane {
         } else {
             setFont(core.getPropertiesManager().getFontCon());
         }
+        
+        this.setEditorKit(new PHTMLEditorKit());
     }
 
     @Override
@@ -360,7 +362,7 @@ public class PTextPane extends JTextPane {
     @Override
     public String getText() {
         final String bodyS = "<body>";
-        final String bodyE = "</body>";
+        final String bodyE = "</body>";        
         String ret = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
 
         // special logic needed if this is written in the conlang's font and RTL is enforced.
