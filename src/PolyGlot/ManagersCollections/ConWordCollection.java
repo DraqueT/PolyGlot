@@ -624,8 +624,30 @@ public class ConWordCollection extends DictionaryCollection {
      * @return
      */
     public Iterator<ConWord> getNodeIteratorLocalOrder() {
-        List<ConWord> retList = new ArrayList<>(nodeMap.values());
+        List<ConWord> cycleList = new ArrayList<>(nodeMap.values());
+        List<ConWord> retList = new ArrayList<>();
 
+        // cycle through and create copies of words with multiple local values
+        for(ConWord curWord : cycleList) {
+            String localPre = curWord.getLocalWord();
+            if (localPre.contains(",")) {
+                String[] allLocals = localPre.split(",");
+                
+                // create new temp word for purposes of dictionary creation
+                for (String curLocal : allLocals) {
+                    ConWord ins = new ConWord();
+                    ins.setCore(core);
+                    ins.setEqual(curWord);
+                    ins.setLocalWord(curLocal);
+                    ins.setParent(this);
+                    
+                    retList.add(ins);
+                }
+            } else {
+                retList.add(curWord);
+            }
+        }
+        
         orderByLocal = true;
         Collections.sort(retList);
         orderByLocal = false;
