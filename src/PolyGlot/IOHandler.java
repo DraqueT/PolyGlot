@@ -301,6 +301,9 @@ public class IOHandler {
                             core.getOptionsManager().setScreenSize(splitSet[0], d);
                         }
                         break;
+                    case PGTUtil.optionsAutoResize:
+                        core.getOptionsManager().setAnimateWindows(bothVal[1].equals(PGTUtil.True));
+                        break;
                     case "\n":
                         break;
                     default:
@@ -1025,6 +1028,10 @@ public class IOHandler {
             for (String screen : core.getOptionsManager().getLastScreensUp()) {
                 nextLine += ("," + screen);
             }
+            
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.optionsAutoResize + "=" + (core.getOptionsManager().isAnimateWindows() ? PGTUtil.True : PGTUtil.False);
             
             f0.write(nextLine + newLine);
         }

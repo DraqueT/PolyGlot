@@ -49,7 +49,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     private boolean skipCenter = false;
     private boolean hasFocus = false;
     protected DictCore core;
-    boolean firstVisible = true;
+    protected boolean firstVisible = true;
         
     /**
      * Returns current running mode of window

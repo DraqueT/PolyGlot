@@ -137,6 +137,16 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuIPAChartActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator6">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuOptions">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Options"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuOptionsActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="mnuHelp">

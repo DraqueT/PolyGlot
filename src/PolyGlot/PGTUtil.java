@@ -181,6 +181,7 @@ public class PGTUtil {
     public static final String optionsScreenPos = "ScreenPositions";
     public static final String optionsScreensSize = "ScreenSizes";
     public static final String optionsScreensOpen = "ScreensUp";
+    public static final String optionsAutoResize = "OptionsResize";
 
     // string constants
     public static final String dictFileName = "PGDictionary.xml";

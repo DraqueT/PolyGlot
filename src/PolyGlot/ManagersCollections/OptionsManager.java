@@ -36,6 +36,7 @@ import java.util.Map;
  */
 public class OptionsManager {
 
+    private boolean animateWindows = true;
     private List<String> lastFiles = new ArrayList<>();
     private final Map<String, Point> screenPos = new HashMap<>();
     private final Map<String, Dimension> screenSize = new HashMap<>();
@@ -163,5 +164,19 @@ public class OptionsManager {
      */
     public void saveIni() throws IOException {
         IOHandler.saveOptionsIni(core);
+    }
+
+    /**
+     * @return the animateWindows
+     */
+    public boolean isAnimateWindows() {
+        return animateWindows;
+    }
+
+    /**
+     * @param animateWindows the animateWindows to set
+     */
+    public void setAnimateWindows(boolean animateWindows) {
+        this.animateWindows = animateWindows;
     }
 }

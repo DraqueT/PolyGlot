@@ -469,17 +469,19 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             curWindow.dispose();
         }
         
-        Dimension dim = core.getOptionsManager().getScreenSize(newScreen.getClass().getName());
-        
-        if (dim == null) {
-            dim = newScreen.getPreferredSize();
-        }
-        
-        Insets insets = getInsets();
-        try {
-            this.setSizeSmooth(dim.width + jPanel1.getWidth() + insets.left + insets.right, dim.height + insets.bottom + insets.top, true);
-        } catch (InterruptedException e) {
-            InfoBox.error("Resize Error", "Unable to run resize animation: " + e.getLocalizedMessage(), this);
+        if (core.getOptionsManager().isAnimateWindows()) {
+            Dimension dim = core.getOptionsManager().getScreenSize(newScreen.getClass().getName());
+
+            if (dim == null) {
+                dim = newScreen.getPreferredSize();
+            }
+
+            Insets insets = getInsets();
+            try {
+                this.setSizeSmooth(dim.width + jPanel1.getWidth() + insets.left + insets.right, dim.height + insets.bottom + insets.top, true);
+            } catch (InterruptedException e) {
+                InfoBox.error("Resize Error", "Unable to run resize animation: " + e.getLocalizedMessage(), this);
+            }
         }
         
         // set new screen
@@ -786,6 +788,8 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         mnuQuiz = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         mnuIPAChart = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
+        mnuOptions = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
         mnuAbout = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
@@ -1071,6 +1075,15 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             }
         });
         mnuTools.add(mnuIPAChart);
+        mnuTools.add(jSeparator6);
+
+        mnuOptions.setText("Options");
+        mnuOptions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuOptionsActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuOptions);
 
         jMenuBar1.add(mnuTools);
 
@@ -1262,6 +1275,12 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnPhonologyActionPerformed
 
+    private void mnuOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOptionsActionPerformed
+        ScrOptions s = new ScrOptions(core);
+        s.setLocation(getLocation());
+        s.setVisible(true);
+    }//GEN-LAST:event_mnuOptionsActionPerformed
+
     /**
      * @param args the command line arguments
      * args[0] = open file path (blank if none)
@@ -1314,7 +1333,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 try {
                     this.getClass().getClassLoader().loadClass("javafx.embed.swing.JFXPanel");
                 } catch (ClassNotFoundException e) {
-                    problems += "\nUnable to load Java FX. Download and install to use PolyGlot.";
+                    problems += "\nUnable to load Java FX. Download and install to use PolyGlot (JavaFX not included in some builds of Java 8 for Linux).";
                 }
 
                 if (!problems.equals("")) {
@@ -1349,6 +1368,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JMenuItem mnuAbout;
     private javax.swing.JMenuItem mnuChkUpdate;
     private javax.swing.JMenuItem mnuExit;
@@ -1360,6 +1380,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private javax.swing.JMenuItem mnuLangStats;
     private javax.swing.JMenuItem mnuNewLocal;
     private javax.swing.JMenuItem mnuOpenLocal;
+    private javax.swing.JMenuItem mnuOptions;
     private javax.swing.JMenuItem mnuPublish;
     private javax.swing.JMenuItem mnuQuiz;
     private javax.swing.JMenu mnuRecents;
