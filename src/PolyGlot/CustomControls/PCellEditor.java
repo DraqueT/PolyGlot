@@ -17,7 +17,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package PolyGlot.CustomControls;
 
 import java.awt.Component;
@@ -45,26 +44,27 @@ public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
     private final JComponent component = new JTextField();
     Font myFont;
     DocumentListener docListener;
+    private boolean ignoreListenerSilenceing = false;
 
     public void setDocuListener(DocumentListener _listener) {
         docListener = _listener;
-        
+
         ((JTextField) component).getDocument().addDocumentListener(docListener);
     }
-    
+
     public PCellEditor(Font _myFont) {
         myFont = _myFont;
         JTextField setupText = (JTextField) component;
-        
+
         setupRightClickMenu(setupText);
-        
+
         setupText.setBorder(BorderFactory.createEmptyBorder());
     }
 
     public Component tableColumnEditor(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
         ((JTextField) component).setText((String) value);
         ((JTextField) component).setFont(myFont);
-        
+
         return component;
     }
 
@@ -72,24 +72,38 @@ public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value,
             boolean isSelected, int rowIndex, int vColIndex) {
-        JTextField curComp = (JTextField)component;
-        
-        curComp.getDocument().removeDocumentListener(docListener);
-        curComp.setText((String) value);
-        curComp.getDocument().addDocumentListener(docListener);
-        
+        JTextField curComp = (JTextField) component;
+
+        setValue(curComp, (String) value);
+
         curComp.setFont(myFont);
 
         return component;
     }
-    
+
+    public void setValue(String value) {
+        setValue((JTextField) component, value);
+    }
+
+    private void setValue(JTextField curComp, String value) {
+        if (ignoreListenerSilenceing) {
+            curComp.setText((String) value);
+        } else {
+            curComp.getDocument().removeDocumentListener(docListener);
+            curComp.setText((String) value);
+            curComp.getDocument().addDocumentListener(docListener);
+        }
+    }
+
     /**
-     * Allows user to set initial value (helps avoid unnecessary listener firing later
+     * Allows user to set initial value (helps avoid unnecessary listener firing
+     * later
+     *
      * @param value The value to set.
      */
     public void setInitialValue(String value) {
-        JTextField curComp = (JTextField)component;
-        
+        JTextField curComp = (JTextField) component;
+
         curComp.setText(value);
     }
 
@@ -98,17 +112,17 @@ public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
     @Override
     public Object getCellEditorValue() {
         ((JTextField) component).setFont(myFont);
-        
+
         return ((JTextField) component).getText();
     }
-    
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         ((JTextField) component).setFont(myFont);
-        
+
         return super.clone();
     }
-    
+
     private void setupRightClickMenu(JTextField editor) {
         final JPopupMenu ruleMenu = new JPopupMenu();
         final JMenuItem cut = new JMenuItem("Cut");
@@ -160,5 +174,19 @@ public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
                 }
             }
         });
+    }
+
+    /**
+     * @return the ignoreListenerSilenceing
+     */
+    public boolean isIgnoreListenerSilenceing() {
+        return ignoreListenerSilenceing;
+    }
+
+    /**
+     * @param ignoreListenerSilenceing the ignoreListenerSilenceing to set
+     */
+    public void setIgnoreListenerSilenceing(boolean ignoreListenerSilenceing) {
+        this.ignoreListenerSilenceing = ignoreListenerSilenceing;
     }
 }

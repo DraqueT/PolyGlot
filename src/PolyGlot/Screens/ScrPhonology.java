@@ -25,6 +25,7 @@ import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.DictCore;
+import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.Nodes.PronunciationNode;
 import java.awt.Color;
 import java.awt.Component;
@@ -34,6 +35,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import javafx.application.Platform;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JRootPane;
@@ -51,26 +54,36 @@ import javax.swing.table.TableColumn;
  * @author draque.thompson
  */
 public class ScrPhonology extends PFrame {
-    
+
     private boolean curPopulating = false;
 
     /**
      * Creates new form scrPhonology
+     *
      * @param _core
      */
     public ScrPhonology(DictCore _core) {
-        core = _core;        
+        core = _core;
         initComponents();
-        
+
         populateProcs();
         populateRoms();
-        
+        populateReps();
+
         getRootPane().setBackground(Color.white);
         chkEnableRom.setSelected(core.getRomManager().isEnabled());
         enableRomanization(chkEnableRom.isSelected());
         setupButtons();
     }
-    
+
+    @Override
+    public void dispose() {
+        if (tblRep.getCellEditor() != null) {
+            tblRep.getCellEditor().stopCellEditing();
+        }
+        super.dispose();
+    }
+
     private void setupButtons() {
         Font charis = core.getPropertiesManager().getCharisUnicodeFont();
         btnDownProc.setFont(charis);
@@ -78,12 +91,12 @@ public class ScrPhonology extends PFrame {
         btnUpProc.setFont(charis);
         btnUpRom.setFont(charis);
     }
-    
+
     @Override
     public final JRootPane getRootPane() {
         return super.getRootPane();
     }
-    
+
     private void enableRomanization(boolean enable) {
         tblRom.setEnabled(enable);
         btnAddRom.setEnabled(enable);
@@ -91,13 +104,13 @@ public class ScrPhonology extends PFrame {
         btnDownRom.setEnabled(enable);
         btnUpRom.setEnabled(enable);
     }
-    
+
     /**
      * adds new, blank pronunciation entry
      */
     private void addProc() {
         final int curPosition = tblProcs.getSelectedRow();
-        
+
         core.getPronunciationMgr().addAtPosition(curPosition + 1, new PronunciationNode());
         populateProcs();
 
@@ -111,13 +124,13 @@ public class ScrPhonology extends PFrame {
             }
         });
     }
-    
+
     /**
      * adds new, blank romanization entry
      */
     private void addRom() {
         final int curPosition = tblRom.getSelectedRow();
-        
+
         core.getRomManager().addAtPosition(curPosition + 1, new PronunciationNode());
         populateRoms();
 
@@ -131,7 +144,29 @@ public class ScrPhonology extends PFrame {
             }
         });
     }
-    
+
+    /**
+     * Adds new character replacement entry
+     */
+    private void addRep() {
+        boolean localPopulating = curPopulating;
+        curPopulating = true;
+
+        if (tblRep.getCellEditor() != null && tblRep.getSelectedRow() != -1 && tblRep.getRowCount() > 0) {
+            tblRep.getCellEditor().stopCellEditing();
+        }
+        saveRepTable();
+        
+        core.getPropertiesManager().AddEmptyRep();
+        populateReps();
+        int end = tblRep.getModel().getRowCount();
+        tblRep.getSelectionModel().setSelectionInterval(end, end);
+        tblRep.scrollRectToVisible(new Rectangle(tblRep.getCellRect(end, 0, true)));
+        tblRep.changeSelection(end, 0, false, false);
+
+        curPopulating = localPopulating;
+    }
+
     /**
      * populates pronunciation values
      */
@@ -143,7 +178,7 @@ public class ScrPhonology extends PFrame {
             addProcWithValues(curNode.getValue(), curNode.getPronunciation());
         }
     }
-    
+
     /**
      * populates romanization values
      */
@@ -155,17 +190,71 @@ public class ScrPhonology extends PFrame {
             addRomWithValues(curNode.getValue(), curNode.getPronunciation());
         }
     }
-    
+
+    /**
+     * Populates replacement character/string pairs
+     */
+    private void populateReps() {
+        setupRepTable();
+
+        for (Entry<String, String> entry : core.getPropertiesManager().getAllCharReplacements()) {
+            addRep(entry.getKey(), entry.getValue());
+        }
+    }
+
+    //private void addRep(Entry<String, String> entry) {
+    private void addRep(String key, String value) {
+        boolean populatingLocal = curPopulating;
+        curPopulating = true;
+
+        DefaultTableModel romTableModel = (DefaultTableModel) tblRep.getModel();
+        romTableModel.addRow(new Object[]{key, value});
+
+        // set saving properties for character column editor
+        final int thisRow = romTableModel.getRowCount() - 1;
+        final PCellEditor editChar = (PCellEditor) tblRom.getCellEditor(thisRow, 0);
+
+        editChar.setInitialValue(key);
+
+        // set saving properties for value column editor
+        PCellEditor editor = (PCellEditor) tblRom.getCellEditor(romTableModel.getRowCount() - 1, 1);
+        editor.setInitialValue(value);
+
+        curPopulating = populatingLocal;
+    }
+
+    /**
+     * Tests whether the replacement table contains duplicates
+     *
+     * @param checkRow row to be checked
+     * @return true if dups, false otherwise
+     */
+    private boolean checkRepRepeats(String value) {
+        boolean ret = false;
+
+        if (!value.equals("")) {
+            for (int i = 0; i < tblRep.getRowCount(); i++) {
+                if (value.equals((String) tblRep.getModel().getValueAt(i, 0))) {
+                    ret = true;
+                    break;
+                }
+            }
+        }
+        
+        return ret;
+    }
+
     /**
      * Adds pronunciation with values existing
-     * @param base base characters 
+     *
+     * @param base base characters
      * @param proc pronunciation
      */
     private void addProcWithValues(String base, String proc) {
         boolean populatingLocal = curPopulating;
         curPopulating = true;
 
-        DefaultTableModel procTableModel = (DefaultTableModel)tblProcs.getModel();
+        DefaultTableModel procTableModel = (DefaultTableModel) tblProcs.getModel();
         procTableModel.addRow(new Object[]{base, proc});
 
         // document listener to be fed into editor/renderers for cells...
@@ -192,21 +281,22 @@ public class ScrPhonology extends PFrame {
         // set saving properties for second column editor
         editor = (PCellEditor) tblProcs.getCellEditor(procTableModel.getRowCount() - 1, 1);
         editor.setDocuListener(docuListener);
-        editor.setInitialValue(proc);
+        editor.setInitialValue(proc);        
 
         curPopulating = populatingLocal;
     }
-    
+
     /**
      * Adds romanization with values existing
-     * @param base base characters 
+     *
+     * @param base base characters
      * @param proc pronunciation
      */
     private void addRomWithValues(String base, String proc) {
         boolean populatingLocal = curPopulating;
         curPopulating = true;
 
-        DefaultTableModel romTableModel = (DefaultTableModel)tblRom.getModel();
+        DefaultTableModel romTableModel = (DefaultTableModel) tblRom.getModel();
         romTableModel.addRow(new Object[]{base, proc});
 
         // document listener to be fed into editor/renderers for cells...
@@ -215,10 +305,12 @@ public class ScrPhonology extends PFrame {
             public void changedUpdate(DocumentEvent e) {
                 saveRomGuide();
             }
+
             @Override
             public void removeUpdate(DocumentEvent e) {
                 saveRomGuide();
             }
+
             @Override
             public void insertUpdate(DocumentEvent e) {
                 saveRomGuide();
@@ -237,7 +329,7 @@ public class ScrPhonology extends PFrame {
 
         curPopulating = populatingLocal;
     }
-    
+
     private void setupProcTable() {
         DefaultTableModel procTableModel = new DefaultTableModel();
         procTableModel.addColumn("Character(s)");
@@ -275,7 +367,100 @@ public class ScrPhonology extends PFrame {
         procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
         procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.SHIFT_DOWN_MASK), "none");
     }
-    
+
+    private void setupRepTable() {
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("Character");
+        tableModel.addColumn("Replacement");
+
+        tblRep.setModel(tableModel); // TODO: find way to make rom display RTL order when appropriate Maybe something on my custom cell editor
+        tableModel.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                saveRepTable();
+            }
+        });
+
+        Font defaultFont = core.getPropertiesManager().getCharisUnicodeFont();
+        Font conFont = core.getPropertiesManager().getFontCon();
+
+        TableColumn column = tblRep.getColumnModel().getColumn(0);
+        final PCellEditor editChar = new PCellEditor(defaultFont);
+        editChar.setIgnoreListenerSilenceing(true);
+        editChar.setDocuListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                doSave(e);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                doSave(e);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                doSave(e);
+            }
+
+            private void doSave(DocumentEvent e) {
+                final String value = editChar.getCellEditorValue().toString();
+
+                if (curPopulating) {
+                } else if (value.length() > 1) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            editChar.setIgnoreListenerSilenceing(false);
+                            editChar.setValue(value.substring(0, 1));
+                            editChar.setIgnoreListenerSilenceing(true);
+                            InfoBox.warning("Single Character Only", "Replacement characters can only be 1 character long.", null);
+                        }
+                    });
+                } else {
+                    saveRepTable();
+                }
+            }
+        });        
+        column.setCellEditor(editChar);
+        column.setCellRenderer(new PCellRenderer(defaultFont));
+
+        column = tblRep.getColumnModel().getColumn(1);
+        PCellEditor valueEdit = new PCellEditor(conFont);
+        valueEdit.setIgnoreListenerSilenceing(true);
+        valueEdit.setDocuListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveRepTable();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveRepTable();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveRepTable();
+            }
+        });
+        column.setCellEditor(valueEdit);
+        column.setCellRenderer(new PCellRenderer(conFont));
+
+        // disable tab/arrow selection
+        InputMap procInput = tblRom.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "none");
+        procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK), "none");
+        procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "none");
+        procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.SHIFT_DOWN_MASK), "none");
+        procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "none");
+        procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.SHIFT_DOWN_MASK), "none");
+        procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "none");
+        procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.SHIFT_DOWN_MASK), "none");
+        procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
+        procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.SHIFT_DOWN_MASK), "none");
+    }
+
     private void setupRomTable() {
         DefaultTableModel romTableModel = new DefaultTableModel();
         romTableModel.addColumn("Character(s)");
@@ -313,7 +498,7 @@ public class ScrPhonology extends PFrame {
         procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
         procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.SHIFT_DOWN_MASK), "none");
     }
-    
+
     /**
      * Saves pronunciation guide to core
      */
@@ -332,7 +517,7 @@ public class ScrPhonology extends PFrame {
 
         for (int i = 0; i < tblProcs.getRowCount(); i++) {
             PronunciationNode newNode = new PronunciationNode();
-            
+
             newNode.setValue((String) tblProcs.getModel().getValueAt(i, 0));
             newNode.setPronunciation((String) tblProcs.getModel().getValueAt(i, 1));
 
@@ -342,7 +527,36 @@ public class ScrPhonology extends PFrame {
         core.getPronunciationMgr().setPronunciations(newPro);
         curPopulating = localPopulating;
     }
-    
+
+    private void saveRepTable() {
+        if (curPopulating) {
+            return;
+        }
+
+        boolean localPopulating = curPopulating;
+        curPopulating = true;
+        PropertiesManager propMan = core.getPropertiesManager();
+
+        if (tblRep.getCellEditor() != null && tblRep.getSelectedRow() != -1 && tblRep.getRowCount() > 0) {
+            tblRep.getCellEditor().stopCellEditing();
+        }
+
+        propMan.clearCharacterReplacement();
+
+        for (int i = 0; i < tblRep.getRowCount(); i++) {
+            String repChar = tblRep.getValueAt(i, 0).toString();
+            String value = tblRep.getValueAt(i, 1).toString();
+
+            if (repChar.equals("")) {
+                continue;
+            }
+
+            propMan.addCharacterReplacement(repChar, value);
+        }
+
+        curPopulating = localPopulating;
+    }
+
     /**
      * Saves pronunciation guide to core
      */
@@ -350,7 +564,7 @@ public class ScrPhonology extends PFrame {
         if (curPopulating) {
             return;
         }
-        
+
         boolean localPopulating = curPopulating;
         curPopulating = true;
 
@@ -362,7 +576,7 @@ public class ScrPhonology extends PFrame {
 
         for (int i = 0; i < tblRom.getRowCount(); i++) {
             PronunciationNode newNode = new PronunciationNode();
-            
+
             newNode.setValue((String) tblRom.getModel().getValueAt(i, 0));
             newNode.setPronunciation((String) tblRom.getModel().getValueAt(i, 1));
 
@@ -372,7 +586,7 @@ public class ScrPhonology extends PFrame {
         core.getRomManager().setPronunciations(newRom);
         curPopulating = localPopulating;
     }
-    
+
     /**
      * delete currently selected pronunciation (with confirmation)
      */
@@ -392,7 +606,22 @@ public class ScrPhonology extends PFrame {
         core.getPronunciationMgr().deletePronunciation(delNode);
         populateProcs();
     }
-    
+
+    /**
+     * Deletes currently selected replacement character
+     */
+    private void deleteRep() {
+        int curRow = tblRep.getSelectedRow();
+
+        if (curRow == -1
+                || !InfoBox.deletionConfirmation(this)) {
+            return;
+        }
+
+        ((DefaultTableModel) tblRep.getModel()).removeRow(curRow);
+        saveRepTable();
+    }
+
     /**
      * delete currently selected pronunciation (with confirmation)
      */
@@ -412,7 +641,7 @@ public class ScrPhonology extends PFrame {
         core.getRomManager().deletePronunciation(delNode);
         populateRoms();
     }
-    
+
     /**
      * moves selected pronunciation down one priority slot
      */
@@ -433,7 +662,7 @@ public class ScrPhonology extends PFrame {
             tblProcs.setRowSelectionInterval(curRow, curRow);
         }
     }
-    
+
     /**
      * moves selected pronunciation down one priority slot
      */
@@ -475,7 +704,7 @@ public class ScrPhonology extends PFrame {
             tblProcs.setRowSelectionInterval(curRow, curRow);
         }
     }
-    
+
     /**
      * moves selected pronunciation up one priority slot
      */
@@ -496,7 +725,7 @@ public class ScrPhonology extends PFrame {
             tblRom.setRowSelectionInterval(curRow, curRow);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -506,15 +735,6 @@ public class ScrPhonology extends PFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSplitPane1 = new javax.swing.JSplitPane();
-        pnlOrthography = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        btnAddProc = new PolyGlot.CustomControls.PAddRemoveButton("+");
-        btnDelProc = new PolyGlot.CustomControls.PAddRemoveButton("-");
-        btnUpProc = new PButton(core);
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tblProcs = new javax.swing.JTable();
-        btnDownProc = new PButton(core);
         pnlRomanization = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         btnAddRom = new PolyGlot.CustomControls.PAddRemoveButton("+");
@@ -524,113 +744,23 @@ public class ScrPhonology extends PFrame {
         tblRom = new javax.swing.JTable();
         btnDownRom = new PButton(core);
         chkEnableRom = new javax.swing.JCheckBox();
+        pnlOrthography = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        btnAddProc = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelProc = new PolyGlot.CustomControls.PAddRemoveButton("-");
+        btnUpProc = new PButton(core);
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblProcs = new javax.swing.JTable();
+        btnDownProc = new PButton(core);
+        jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblRep = new javax.swing.JTable();
+        btnAddCharRep = new PolyGlot.CustomControls.PAddRemoveButton("+");
+        btnDelCharRep = new PolyGlot.CustomControls.PAddRemoveButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-
-        jSplitPane1.setBackground(new java.awt.Color(255, 255, 255));
-        jSplitPane1.setDividerLocation(255);
-
-        pnlOrthography.setBackground(new java.awt.Color(255, 255, 255));
-        pnlOrthography.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        pnlOrthography.setMinimumSize(new java.awt.Dimension(10, 10));
-
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Phonemic Orthography");
-        jLabel1.setToolTipText("The Pronunciation Guide");
-
-        btnAddProc.setToolTipText("Add new pronunciation entry.");
-        btnAddProc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddProcActionPerformed(evt);
-            }
-        });
-
-        btnDelProc.setToolTipText("Delete selected pronunciation entry.");
-        btnDelProc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDelProcActionPerformed(evt);
-            }
-        });
-
-        btnUpProc.setText("↑");
-        btnUpProc.setToolTipText("Move selected entry up one position.");
-        btnUpProc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpProcActionPerformed(evt);
-            }
-        });
-
-        tblProcs.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Character(s)", "Pronunciation"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        tblProcs.setToolTipText("Add characters (or sets of characters) here with their associated pronunciations.");
-        tblProcs.setMinimumSize(new java.awt.Dimension(10, 20));
-        tblProcs.setRowHeight(30);
-        jScrollPane2.setViewportView(tblProcs);
-
-        btnDownProc.setText("↓");
-        btnDownProc.setToolTipText("Move selected entry down one position.");
-        btnDownProc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDownProcActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlOrthographyLayout = new javax.swing.GroupLayout(pnlOrthography);
-        pnlOrthography.setLayout(pnlOrthographyLayout);
-        pnlOrthographyLayout.setHorizontalGroup(
-            pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlOrthographyLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlOrthographyLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnDelProc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnDownProc, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpProc, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(pnlOrthographyLayout.createSequentialGroup()
-                .addComponent(btnAddProc, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        pnlOrthographyLayout.setVerticalGroup(
-            pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlOrthographyLayout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlOrthographyLayout.createSequentialGroup()
-                        .addComponent(btnUpProc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 282, Short.MAX_VALUE)
-                        .addComponent(btnDownProc)
-                        .addGap(12, 12, 12))
-                    .addGroup(pnlOrthographyLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAddProc, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnDelProc, javax.swing.GroupLayout.Alignment.TRAILING)))
-        );
-
-        jSplitPane1.setLeftComponent(pnlOrthography);
 
         pnlRomanization.setBackground(new java.awt.Color(255, 255, 255));
         pnlRomanization.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -704,9 +834,6 @@ public class ScrPhonology extends PFrame {
         pnlRomanizationLayout.setHorizontalGroup(
             pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlRomanizationLayout.createSequentialGroup()
-                .addComponent(btnAddRom, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(pnlRomanizationLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlRomanizationLayout.createSequentialGroup()
@@ -715,12 +842,13 @@ public class ScrPhonology extends PFrame {
                     .addGroup(pnlRomanizationLayout.createSequentialGroup()
                         .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRomanizationLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnAddRom, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnDelRom, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(pnlRomanizationLayout.createSequentialGroup()
                                 .addComponent(chkEnableRom)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(0, 26, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnDownRom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -736,7 +864,7 @@ public class ScrPhonology extends PFrame {
                     .addComponent(chkEnableRom))
                 .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlRomanizationLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 282, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnDownRom)
                         .addGap(12, 12, 12))
                     .addGroup(pnlRomanizationLayout.createSequentialGroup()
@@ -744,21 +872,184 @@ public class ScrPhonology extends PFrame {
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAddRom, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAddRom)
                     .addComponent(btnDelRom, javax.swing.GroupLayout.Alignment.TRAILING)))
         );
 
-        jSplitPane1.setRightComponent(pnlRomanization);
+        pnlOrthography.setBackground(new java.awt.Color(255, 255, 255));
+        pnlOrthography.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pnlOrthography.setMinimumSize(new java.awt.Dimension(10, 10));
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Phonemic Orthography");
+        jLabel1.setToolTipText("The Pronunciation Guide");
+
+        btnAddProc.setToolTipText("Add new pronunciation entry.");
+        btnAddProc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddProcActionPerformed(evt);
+            }
+        });
+
+        btnDelProc.setToolTipText("Delete selected pronunciation entry.");
+        btnDelProc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelProcActionPerformed(evt);
+            }
+        });
+
+        btnUpProc.setText("↑");
+        btnUpProc.setToolTipText("Move selected entry up one position.");
+        btnUpProc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpProcActionPerformed(evt);
+            }
+        });
+
+        tblProcs.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Character(s)", "Pronunciation"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tblProcs.setToolTipText("Add characters (or sets of characters) here with their associated pronunciations.");
+        tblProcs.setMinimumSize(new java.awt.Dimension(10, 20));
+        tblProcs.setRowHeight(30);
+        jScrollPane2.setViewportView(tblProcs);
+
+        btnDownProc.setText("↓");
+        btnDownProc.setToolTipText("Move selected entry down one position.");
+        btnDownProc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownProcActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlOrthographyLayout = new javax.swing.GroupLayout(pnlOrthography);
+        pnlOrthography.setLayout(pnlOrthographyLayout);
+        pnlOrthographyLayout.setHorizontalGroup(
+            pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlOrthographyLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlOrthographyLayout.createSequentialGroup()
+                        .addComponent(btnAddProc, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDelProc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDownProc, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpProc, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+        );
+        pnlOrthographyLayout.setVerticalGroup(
+            pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlOrthographyLayout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlOrthographyLayout.createSequentialGroup()
+                        .addComponent(btnUpProc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 275, Short.MAX_VALUE)
+                        .addComponent(btnDownProc)
+                        .addGap(12, 12, 12))
+                    .addGroup(pnlOrthographyLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAddProc)
+                    .addComponent(btnDelProc, javax.swing.GroupLayout.Alignment.TRAILING)))
+        );
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Character Replacement");
+
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(0, 0));
+        jScrollPane1.setName(""); // NOI18N
+
+        tblRep.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null}
+            },
+            new String [] {
+                "Character", "Replacement"
+            }
+        ));
+        tblRep.setMinimumSize(new java.awt.Dimension(0, 0));
+        tblRep.setRowHeight(30);
+        jScrollPane1.setViewportView(tblRep);
+
+        btnAddCharRep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddCharRepActionPerformed(evt);
+            }
+        });
+
+        btnDelCharRep.setMaximumSize(new java.awt.Dimension(80, 80));
+        btnDelCharRep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelCharRepActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAddCharRep, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDelCharRep, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddCharRep, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelCharRep, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlOrthography, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlRomanization, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(pnlOrthography, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlRomanization, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -801,9 +1092,19 @@ public class ScrPhonology extends PFrame {
         enableRomanization(chkEnableRom.isSelected());
     }//GEN-LAST:event_chkEnableRomActionPerformed
 
+    private void btnAddCharRepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCharRepActionPerformed
+        addRep();
+    }//GEN-LAST:event_btnAddCharRepActionPerformed
+
+    private void btnDelCharRepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelCharRepActionPerformed
+        deleteRep();
+    }//GEN-LAST:event_btnDelCharRepActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddCharRep;
     private javax.swing.JButton btnAddProc;
     private javax.swing.JButton btnAddRom;
+    private javax.swing.JButton btnDelCharRep;
     private javax.swing.JButton btnDelProc;
     private javax.swing.JButton btnDelRom;
     private javax.swing.JButton btnDownProc;
@@ -813,12 +1114,15 @@ public class ScrPhonology extends PFrame {
     private javax.swing.JCheckBox chkEnableRom;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JPanel pnlOrthography;
     private javax.swing.JPanel pnlRomanization;
     private javax.swing.JTable tblProcs;
+    private javax.swing.JTable tblRep;
     private javax.swing.JTable tblRom;
     // End of variables declaration//GEN-END:variables
 
@@ -832,6 +1136,7 @@ public class ScrPhonology extends PFrame {
         core = _core;
         populateProcs();
         populateRoms();
+        populateReps();
         chkEnableRom.setSelected(core.getRomManager().isEnabled());
         enableRomanization(chkEnableRom.isSelected());
     }

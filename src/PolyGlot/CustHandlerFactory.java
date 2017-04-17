@@ -129,6 +129,8 @@ public class CustHandlerFactory {
 
             PronunciationNode proBuffer;
             PronunciationNode romBuffer;
+            String charRepCharBuffer = "";
+            String charRepValBuffer = "";
             int ruleIdBuffer = 0;
             String ruleValBuffer = "";
             boolean blocalWord = false;
@@ -223,6 +225,8 @@ public class CustHandlerFactory {
             boolean bclassValueNode = false;
             boolean bclassValueId = false;
             boolean bclassValueName = false;
+            boolean bcharRepChar = false;
+            boolean bcharRepValue = false;
 
             int wId;
             int wCId;
@@ -446,6 +450,10 @@ public class CustHandlerFactory {
                     bclassValueId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassValueNameXID)) {
                     bclassValueName = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropCharRepCharacterXID)) {
+                    bcharRepChar = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropCharRepValueXID)) {
+                    bcharRepValue = true;
                 }
             }
 
@@ -802,6 +810,14 @@ public class CustHandlerFactory {
                     bclassValueId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassValueNameXID)) {
                     bclassValueName = false;
+                }  else if (qName.equalsIgnoreCase(PGTUtil.langPropCharRepNodeXID)) {
+                    core.getPropertiesManager().addCharacterReplacement(charRepCharBuffer, charRepValBuffer);
+                    charRepCharBuffer = "";
+                    charRepValBuffer = "";
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropCharRepCharacterXID)) {
+                    bcharRepChar = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropCharRepValueXID)) {
+                    bcharRepValue = false;
                 }
             }
 
@@ -1115,6 +1131,11 @@ public class CustHandlerFactory {
                 } else if (bclassValueName) {
                     WordPropValueNode value = ((WordProperty) core.getWordPropertiesCollection().getBuffer()).buffer;
                     value.setValue(value.getValue() + new String(ch, start, length));
+                } else if (bcharRepChar) {
+                    // can only pull single character, so no need to concatinate
+                    charRepCharBuffer = new String(ch, start, length);
+                } else if (bcharRepValue) {
+                    charRepValBuffer += new String(ch, start, length);
                 }
             }
         };

@@ -24,7 +24,11 @@ import PolyGlot.IOHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Font;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.JTextField;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -56,6 +60,7 @@ public class PropertiesManager {
     private final Font charisUnicodeBold;
     private final Font charisUnicodeItalic;
     private final Font charisUnicodeBoldItalic;
+    private final Map<String, String> charRep = new HashMap<>();
 
     public PropertiesManager() throws Exception {
         alphaOrder = new PAlphaMap();
@@ -67,7 +72,60 @@ public class PropertiesManager {
         charisUnicodeBoldItalic = IOHandler.getCharisUnicodeFontBoldItalicInitial();
         setFontCon(charisUnicode);
     }
+    
+    
+    
+    /**
+     * Gets replacement string for given character. Returns blank otherwise.
+     * @param repChar character (string in case I decide to use this for something more complex) to be replaced
+     * @return replacement string. empty if none exists.
+     */
+    public String getCharacterReplacement(String repChar) {
+        String ret;
+        
+        if (!charRep.isEmpty() && charRep.containsKey(repChar)) {
+            ret = charRep.get(repChar);
+        } else {
+            ret = "";
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Adds character/replacement set
+     * @param character character to look for/be replaced in text
+     * @param _replacement the string to replace the character with
+     */
+    public void addCharacterReplacement(String character, String _replacement) {
+        String replacement = PGTUtil.stripRTL(_replacement);
+        
+        if (charRep.containsKey(character)) {
+            charRep.replace(character, replacement);
+        } else {
+            charRep.put(character, replacement);
+        }
+    }
+    
+    /**
+     * Clears all character replacements
+     */
+    public void clearCharacterReplacement() {
+        charRep.clear();
+    }
+    
+    /**
+     * Gets all character replacement pairs
+     * @return iterator of map entries with two strings apiece
+     */
+    public ArrayList<Entry<String, String>> getAllCharReplacements() {
+        return new ArrayList<>(charRep.entrySet());
+    }
 
+    public void AddEmptyRep() {
+        charRep.put("", "");
+    }
+    
     /**
      * Gets unicode charis font. Defaults/hard coded to size 12
      *
@@ -477,6 +535,23 @@ public class PropertiesManager {
         // store option local language name
         wordValue = doc.createElement(PGTUtil.langPropLocalLangNameXID);
         wordValue.appendChild(doc.createTextNode(localLangName));
+        rootElement.appendChild(wordValue);
+        
+        // store all replacement pairs
+        wordValue = doc.createElement(PGTUtil.langPropCharRepContainerXID);
+        for (Entry<String, String> pair : getAllCharReplacements()) {
+            Element node = doc.createElement(PGTUtil.langPropCharRepNodeXID);
+            
+            Element val = doc.createElement(PGTUtil.langPropCharRepCharacterXID);
+            val.appendChild(doc.createTextNode(pair.getKey()));
+            node.appendChild(val);
+            
+            val = doc.createElement(PGTUtil.langPropCharRepValueXID);
+            val.appendChild(doc.createTextNode(pair.getValue()));
+            node.appendChild(val);
+            
+            wordValue.appendChild(node);
+        }
         rootElement.appendChild(wordValue);
     }
 

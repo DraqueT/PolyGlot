@@ -852,8 +852,8 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             }
         });
 
-        btnPhonology.setText("Phonology");
-        btnPhonology.setToolTipText("Edit language phonology, orthography, etc. here.");
+        btnPhonology.setText("Phonology & Text");
+        btnPhonology.setToolTipText("Edit language phonology, orthography, etc. This is also where typographical replacement is set.");
         btnPhonology.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPhonologyActionPerformed(evt);
@@ -936,7 +936,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 .addGap(95, 95, 95)
                 .addComponent(jButton2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );

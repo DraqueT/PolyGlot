@@ -201,11 +201,6 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value=" Apply "/>
                         <Property name="toolTipText" type="java.lang.String" value="Switches currently selected text to current font style"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
-                            <EtchetBorder/>
-                          </Border>
-                        </Property>
                         <Property name="enabled" type="boolean" value="false"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -229,9 +224,6 @@
                   <SubComponents>
                     <Component class="javax.swing.JTextPane" name="txtSection">
                       <Properties>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="null"/>
-                        </Property>
                         <Property name="toolTipText" type="java.lang.String" value="Formatted segment text"/>
                         <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
@@ -326,9 +318,6 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Record"/>
                     <Property name="toolTipText" type="java.lang.String" value="Records spoken example of grammar (erases any current example)"/>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="null"/>
-                    </Property>
                     <Property name="borderPainted" type="boolean" value="false"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
@@ -355,9 +344,6 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Play"/>
                     <Property name="toolTipText" type="java.lang.String" value="Plays spoken example of grammar, if it exists."/>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="null"/>
-                    </Property>
                     <Property name="borderPainted" type="boolean" value="false"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>

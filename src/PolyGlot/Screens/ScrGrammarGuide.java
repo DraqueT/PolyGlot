@@ -19,6 +19,7 @@
  */
 package PolyGlot.Screens;
 
+import PolyGlot.ClipboardHandler;
 import PolyGlot.DictCore;
 import PolyGlot.FormattedTextHelper;
 import PolyGlot.CustomControls.GrammarChapNode;
@@ -42,6 +43,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.Enumeration;
 import javax.sound.sampled.LineUnavailableException;
@@ -97,7 +99,7 @@ public class ScrGrammarGuide extends PFrame {
         isUpdating = false;
         defTime = "00:00:00";
         core = _core;
-        
+
         playButtonUp = getButtonSizeIcon(
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/play_OFF_BIG.png")));
         playButtonDown = getButtonSizeIcon(
@@ -114,15 +116,15 @@ public class ScrGrammarGuide extends PFrame {
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/add_button_pressed.png")));
         deleteButtonPressed = getButtonSizeIcon(
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button_pressed.png")));
-        
+
         initComponents();
-        
+
         setupRecordButtons();
-        
+
         DefaultMutableTreeNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
-        
+
         txtSection.setCaret(new HighlightCaret());
 
         soundRecorder = new SoundRecorder(this);
@@ -141,7 +143,7 @@ public class ScrGrammarGuide extends PFrame {
             btnDelete.setToolTipText(btnDelete.getToolTipText() + " (CTRL -)");
         }
     }
-    
+
     private void setupRecordButtons() {
         btnPlayPauseAudio.setBorder(null);
         btnPlayPauseAudio.setBorderPainted(false);
@@ -150,7 +152,7 @@ public class ScrGrammarGuide extends PFrame {
         btnPlayPauseAudio.setFocusable(false);
         btnPlayPauseAudio.setRequestFocusEnabled(false);
         btnPlayPauseAudio.setContentAreaFilled(false);
-        
+
         btnRecordAudio.setBorder(null);
         btnRecordAudio.setBorderPainted(false);
         btnRecordAudio.setFocusPainted(false);
@@ -775,6 +777,41 @@ public class ScrGrammarGuide extends PFrame {
                 populateProperties();
             }
         });
+        // add listener for character replacement logic
+        txtSection.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                Character c = e.getKeyChar();
+                String repString = core.getPropertiesManager().getCharacterReplacement(c.toString());
+                
+                // only run replacement logic if currently set to Conlang font
+                if (!repString.equals("") 
+                        && cmbFonts.getSelectedItem().equals(core.getPropertiesManager().getFontCon().getName())) {
+                    try {
+                        e.consume();
+                        ClipboardHandler cb = new ClipboardHandler();
+                        cb.cacheClipboard();
+                        cb.setClipboardContents(repString);
+                        txtSection.paste();
+                        cb.restoreClipboard();
+                    } catch (Exception ex) {
+                        InfoBox.error("Character Replacement Error",
+                                "Clipboard threw error during character replacement process:"
+                                + ex.getLocalizedMessage(), null);
+                    }
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // do nothing
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // do nothing
+            }
+        });
     }
 
     /**
@@ -968,7 +1005,7 @@ public class ScrGrammarGuide extends PFrame {
             treChapList.expandPath(new TreePath(model.getPathToRoot(parent)));
             treChapList.setSelectionPath(new TreePath(model.getPathToRoot(parent)));
         } else if (selection instanceof GrammarChapNode) {
-            ((GrammarChapNode)root).doRemove((GrammarChapNode) selection);
+            ((GrammarChapNode) root).doRemove((GrammarChapNode) selection);
             core.getGrammarManager().removeChapter((GrammarChapNode) selection);
         }
 
@@ -1097,11 +1134,11 @@ public class ScrGrammarGuide extends PFrame {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
         GrammarChapNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
 
-        if (((PTextField)txtSearch).isDefaultText() || txtSearch.getText().equals("")) {
+        if (((PTextField) txtSearch).isDefaultText() || txtSearch.getText().equals("")) {
             populateSections();
             return;
         }
-        
+
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
         for (GrammarChapNode curChap : core.getGrammarManager().getChapters()) {
@@ -1111,7 +1148,7 @@ public class ScrGrammarGuide extends PFrame {
             Enumeration sections = curChap.children(txtSearch.getText());
             while (sections.hasMoreElements()) {
                 GrammarSectionNode curSec = (GrammarSectionNode) sections.nextElement();
-                srcChap.add(curSec);                
+                srcChap.add(curSec);
             }
 
             if (srcChap.children().hasMoreElements()) {
@@ -1120,12 +1157,12 @@ public class ScrGrammarGuide extends PFrame {
         }
         treeModel.reload(rootNode);
     }
-    
+
     @Override
     public Component getWindow() {
         return jSplitPane1;
     }
-    
+
     @Override
     public boolean canClose() {
         return true;

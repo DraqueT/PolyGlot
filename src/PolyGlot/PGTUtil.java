@@ -85,6 +85,12 @@ public class PGTUtil {
     public static final String langPropEnforceRTLXID = "langPropEnforceRTL";
     public static final String langPropAuthCopyrightXID = "langPropAuthorCopyright";
     public static final String langPropLocalLangNameXID = "langPropLocalLangName";
+    
+    // character replacement pair values
+    public static final String langPropCharRepContainerXID = "langPropCharRep";
+    public static final String langPropCharRepNodeXID = "langPropCharRepNode";
+    public static final String langPropCharRepCharacterXID = "langPropCharRepCharacter";
+    public static final String langPropCharRepValueXID = "langPropCharRepValue";
 
     // declension properties
     public static final String declensionXID = "declensionNode";
