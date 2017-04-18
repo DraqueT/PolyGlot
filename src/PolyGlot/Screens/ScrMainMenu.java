@@ -28,6 +28,7 @@ import PolyGlot.ExcelExport;
 import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.PGTUtil;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -95,6 +96,9 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         }
         UIManager.put("ScrollBarUI", "PolyGlot.CustomControls.PScrollBarUI");
         UIManager.put("SplitPaneUI", "PolyGlot.CustomControls.PSplitPaneUI");
+        UIManager.put("OptionPane.background", Color.white);
+        UIManager.put("Panel.background", Color.white);
+        UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
     }
     
     @Override
