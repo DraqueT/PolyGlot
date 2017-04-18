@@ -32,6 +32,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Insets;
@@ -75,6 +76,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
      * if default)
      */
     public ScrMainMenu(String overridePath) {
+        super();
         initComponents();
         
         try {
@@ -473,7 +475,8 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             curWindow.dispose();
         }
         
-        if (core.getOptionsManager().isAnimateWindows()) {
+        // only resize if animation is enabled and the window isn't maximized
+        if (core.getOptionsManager().isAnimateWindows() && getFrameState() != Frame.MAXIMIZED_BOTH) {
             Dimension dim = core.getOptionsManager().getScreenSize(newScreen.getClass().getName());
 
             if (dim == null) {

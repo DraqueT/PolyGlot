@@ -26,6 +26,7 @@ import PolyGlot.Screens.ScrPrintToPDF;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -35,6 +36,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowStateListener;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -67,7 +69,44 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
     private boolean ignoreCenter = false;
     private boolean hasFocus = false;
     protected WindowMode mode = WindowMode.STANDARD;
+    protected int frameState = -1;
     private boolean firstVisible = true;
+
+    public PFrame() {
+        this.addWindowStateListener(new WindowStateListener() {
+            @Override
+            public void windowStateChanged(WindowEvent evt) {
+                setWindowState(evt);
+            }
+        });
+    }
+
+    @Override
+    public final void addWindowStateListener(WindowStateListener listener) {
+        super.addWindowStateListener(listener);
+    }
+
+    /**
+     * Gets frame state of frame
+     * @return -1 for none set, otherwise Frame.ICONIFIED or Frame.MAXIMIZED_BOTH
+     */
+    public Integer getFrameState() {
+        return frameState;
+    }
+    
+    /**
+     * Used to set frame state of window
+     * @param e 
+     */
+    private void setWindowState(WindowEvent e) {
+        if ((e.getNewState() & Frame.ICONIFIED) == Frame.ICONIFIED) {
+            frameState = Frame.ICONIFIED;
+        } else if ((e.getNewState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) {
+            frameState = Frame.MAXIMIZED_BOTH;
+        } else {
+            frameState = -1;
+        }
+    }
 
     /**
      * Returns current running mode of window
@@ -357,10 +396,10 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
             super.getRootPane().getContentPane().setBackground(Color.white);
             firstVisible = false;
         }
-        
+
         setupAccelerators();
         setupKeyStrokes();
-        
+
         super.setVisible(visible);
     }
 
