@@ -104,8 +104,8 @@ public class ScrWordClasses extends PFrame {
         tblValues.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         TableColumn column = tblValues.getColumnModel().getColumn(0);
         Font defFont = core.getPropertiesManager().getCharisUnicodeFont();
-        column.setCellEditor(new PCellEditor(defFont));
-        column.setCellRenderer(new PCellRenderer(defFont));
+        column.setCellEditor(new PCellEditor(defFont, 0.0));
+        column.setCellRenderer(new PCellRenderer(defFont, 0.0));
         jScrollPane3.getViewport().setBackground(Color.white);// colors the BG of the table white
         this.setBackground(Color.white);
     }

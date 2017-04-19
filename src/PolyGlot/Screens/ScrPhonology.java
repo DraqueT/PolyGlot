@@ -36,7 +36,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import javafx.application.Platform;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JRootPane;
@@ -345,14 +344,15 @@ public class ScrPhonology extends PFrame {
 
         Font defaultFont = core.getPropertiesManager().getCharisUnicodeFont();
         Font conFont = core.getPropertiesManager().getFontCon();
+        Double kern = core.getPropertiesManager().getKerningSpace();
 
         TableColumn column = tblProcs.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(conFont));
-        column.setCellRenderer(new PCellRenderer(conFont));
+        column.setCellEditor(new PCellEditor(conFont, kern));
+        column.setCellRenderer(new PCellRenderer(conFont, kern));
 
         column = tblProcs.getColumnModel().getColumn(1);
-        column.setCellEditor(new PCellEditor(defaultFont));
-        column.setCellRenderer(new PCellRenderer(defaultFont));
+        column.setCellEditor(new PCellEditor(defaultFont,0.0));
+        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0));
 
         // disable tab/arrow selection
         InputMap procInput = tblProcs.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -385,7 +385,7 @@ public class ScrPhonology extends PFrame {
         Font conFont = core.getPropertiesManager().getFontCon();
 
         TableColumn column = tblRep.getColumnModel().getColumn(0);
-        final PCellEditor editChar = new PCellEditor(defaultFont);
+        final PCellEditor editChar = new PCellEditor(defaultFont, 0.0);
         editChar.setIgnoreListenerSilenceing(true);
         editChar.setDocuListener(new DocumentListener() {
             @Override
@@ -423,10 +423,10 @@ public class ScrPhonology extends PFrame {
             }
         });        
         column.setCellEditor(editChar);
-        column.setCellRenderer(new PCellRenderer(defaultFont));
+        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0));
 
         column = tblRep.getColumnModel().getColumn(1);
-        PCellEditor valueEdit = new PCellEditor(conFont);
+        PCellEditor valueEdit = new PCellEditor(conFont, core.getPropertiesManager().getKerningSpace());
         valueEdit.setIgnoreListenerSilenceing(true);
         valueEdit.setDocuListener(new DocumentListener() {
             @Override
@@ -445,7 +445,7 @@ public class ScrPhonology extends PFrame {
             }
         });
         column.setCellEditor(valueEdit);
-        column.setCellRenderer(new PCellRenderer(conFont));
+        column.setCellRenderer(new PCellRenderer(conFont, core.getPropertiesManager().getKerningSpace()));
 
         // disable tab/arrow selection
         InputMap procInput = tblRom.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -476,14 +476,15 @@ public class ScrPhonology extends PFrame {
 
         Font defaultFont = core.getPropertiesManager().getCharisUnicodeFont();
         Font conFont = core.getPropertiesManager().getFontCon();
+        Double kern = core.getPropertiesManager().getKerningSpace();
 
         TableColumn column = tblRom.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(conFont));
-        column.setCellRenderer(new PCellRenderer(conFont));
+        column.setCellEditor(new PCellEditor(conFont, kern));
+        column.setCellRenderer(new PCellRenderer(conFont, kern));
 
         column = tblRom.getColumnModel().getColumn(1);
-        column.setCellEditor(new PCellEditor(defaultFont));
-        column.setCellRenderer(new PCellRenderer(defaultFont));
+        column.setCellEditor(new PCellEditor(defaultFont, 0.0));
+        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0));
 
         // disable tab/arrow selection
         InputMap procInput = tblRom.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);

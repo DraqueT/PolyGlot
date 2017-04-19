@@ -37,6 +37,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowStateListener;
+import java.util.concurrent.TimeUnit;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -137,7 +138,16 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
 
         isDisposed = true;
 
-        super.dispose();
+        try {
+            super.dispose();
+        } catch (IllegalStateException e) {
+            try {
+                TimeUnit.MICROSECONDS.sleep(250);
+                super.dispose();
+            } catch (IllegalStateException|InterruptedException ex) {
+                InfoBox.error("Closing Error", "Window failed to close: " + ex.getLocalizedMessage(), this);
+            }
+        }
     }
 
     /**

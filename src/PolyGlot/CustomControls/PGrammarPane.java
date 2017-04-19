@@ -21,6 +21,7 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.ClipboardHandler;
 import PolyGlot.DictCore;
+import PolyGlot.ExternalCode.GlyphVectorEditorKit;
 import PolyGlot.Nodes.ImageNode;
 import PolyGlot.PGTUtil;
 import java.awt.Window;
@@ -55,6 +56,7 @@ public class PGrammarPane extends JTextPane {
     public PGrammarPane(DictCore _core) {
         core = _core;
         setupRightClickMenu();
+        setEditorKit(new GlyphVectorEditorKit());
     }
 
     private void setupRightClickMenu() {

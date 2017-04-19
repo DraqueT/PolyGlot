@@ -281,6 +281,7 @@ public class ScrDeclensionGenSetup extends PDialog {
     private void populateTransforms() {
         DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
         Font setFont = core.getPropertiesManager().getFontCon();
+        Double kern = core.getPropertiesManager().getKerningSpace();
 
         transModel = new DefaultTableModel();
         transModel.addColumn("Regex");
@@ -293,12 +294,12 @@ public class ScrDeclensionGenSetup extends PDialog {
         }
 
         TableColumn column = tblTransforms.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(setFont));
-        column.setCellRenderer(new PCellRenderer(setFont));
+        column.setCellEditor(new PCellEditor(setFont, kern));
+        column.setCellRenderer(new PCellRenderer(setFont, kern));
 
         column = tblTransforms.getColumnModel().getColumn(1);
-        column.setCellEditor(new PCellEditor(setFont));
-        column.setCellRenderer(new PCellRenderer(setFont));
+        column.setCellEditor(new PCellEditor(setFont, kern));
+        column.setCellRenderer(new PCellRenderer(setFont, kern));
 
         // do nothing if nothing selected in rule list
         if (curRule == null) {

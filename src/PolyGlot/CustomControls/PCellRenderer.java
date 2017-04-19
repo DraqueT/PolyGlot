@@ -23,6 +23,8 @@ package PolyGlot.CustomControls;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.font.TextAttribute;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -67,7 +69,9 @@ public class PCellRenderer implements TableCellRenderer {
         docListener = _listener;
     }
 
-    public PCellRenderer(Font _myFont) {
-        myFont = _myFont;
+    public PCellRenderer(Font _myFont, Double kernVal) {
+        Map attr = _myFont.getAttributes();
+        attr.put(TextAttribute.TRACKING, kernVal);
+        myFont = _myFont.deriveFont(attr);
     }
 }

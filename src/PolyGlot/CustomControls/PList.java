@@ -21,6 +21,8 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import java.awt.Font;
+import java.awt.font.TextAttribute;
+import java.util.Map;
 import javax.swing.JList;
 
 /**
@@ -51,6 +53,9 @@ public class PList extends JList {
             Font testFont = core.getPropertiesManager().getFontCon();
             ignoreRepaint = true;
             if (isConFont) {
+                Map attr = testFont.getAttributes();
+                attr.put(TextAttribute.TRACKING, core.getPropertiesManager().getKerningSpace());
+                testFont = testFont.deriveFont(attr);
                 setFont(testFont);
             } else {
                 setFont(core.getPropertiesManager().getCharisUnicodeFont());

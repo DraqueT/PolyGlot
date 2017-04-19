@@ -61,6 +61,7 @@ public class PropertiesManager {
     private final Font charisUnicodeItalic;
     private final Font charisUnicodeBoldItalic;
     private final Map<String, String> charRep = new HashMap<>();
+    private Double kerningSpace = 0.0;
 
     public PropertiesManager() throws Exception {
         alphaOrder = new PAlphaMap();
@@ -70,10 +71,8 @@ public class PropertiesManager {
         charisUnicodeBold = IOHandler.getCharisUnicodeFontBoldInitial();
         charisUnicodeItalic = IOHandler.getCharisUnicodeFontItalicInitial();
         charisUnicodeBoldItalic = IOHandler.getCharisUnicodeFontBoldItalicInitial();
-        setFontCon(charisUnicode);
-    }
-    
-    
+        setFontCon(charisUnicode);        
+    }   
     
     /**
      * Gets replacement string for given character. Returns blank otherwise.
@@ -537,6 +536,11 @@ public class PropertiesManager {
         wordValue.appendChild(doc.createTextNode(localLangName));
         rootElement.appendChild(wordValue);
         
+        // store kerning value (default 0)
+        wordValue = doc.createElement(PGTUtil.langPropKerningVal);
+        wordValue.appendChild(doc.createTextNode(kerningSpace.toString()));
+        rootElement.appendChild(wordValue);
+        
         // store all replacement pairs
         wordValue = doc.createElement(PGTUtil.langPropCharRepContainerXID);
         for (Entry<String, String> pair : getAllCharReplacements()) {
@@ -595,5 +599,19 @@ public class PropertiesManager {
      */
     public void setEnableRomanization(boolean enableRomanization) {
         this.enableRomanization = enableRomanization;
+    }
+
+    /**
+     * @return the kerningSpace
+     */
+    public Double getKerningSpace() {
+        return kerningSpace;
+    }
+
+    /**
+     * @param kerningSpace the kerningSpace to set
+     */
+    public void setKerningSpace(Double kerningSpace) {
+        this.kerningSpace = kerningSpace;
     }
 }

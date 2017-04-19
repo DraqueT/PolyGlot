@@ -85,6 +85,7 @@ public class PGTUtil {
     public static final String langPropEnforceRTLXID = "langPropEnforceRTL";
     public static final String langPropAuthCopyrightXID = "langPropAuthorCopyright";
     public static final String langPropLocalLangNameXID = "langPropLocalLangName";
+    public static final String langPropKerningVal = "langPropKerningValue";
     
     // character replacement pair values
     public static final String langPropCharRepContainerXID = "langPropCharRep";

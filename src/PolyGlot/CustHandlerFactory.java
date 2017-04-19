@@ -91,7 +91,7 @@ public class CustHandlerFactory {
             case "0.7":
                 throw new Exception("Version " + versionNumber 
                         + " no longer supported. Load/save with older version of"
-                        + "PolyGlot (1.2 or lower) to upconvert.");
+                        + "PolyGlot (0.7.5 through 1.2) to upconvert.");
             case "0.7.5":
             case "0.7.6":
             case "0.7.6.1":
@@ -227,7 +227,8 @@ public class CustHandlerFactory {
             boolean bclassValueName = false;
             boolean bcharRepChar = false;
             boolean bcharRepValue = false;
-
+            boolean bKerningValue = false;
+            
             int wId;
             int wCId;
             int wGId;
@@ -454,6 +455,8 @@ public class CustHandlerFactory {
                     bcharRepChar = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropCharRepValueXID)) {
                     bcharRepValue = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropKerningVal)) {
+                    bKerningValue = true;
                 }
             }
 
@@ -818,6 +821,8 @@ public class CustHandlerFactory {
                     bcharRepChar = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropCharRepValueXID)) {
                     bcharRepValue = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropKerningVal)) {
+                    bKerningValue = false;
                 }
             }
 
@@ -1136,6 +1141,12 @@ public class CustHandlerFactory {
                     charRepCharBuffer = new String(ch, start, length);
                 } else if (bcharRepValue) {
                     charRepValBuffer += new String(ch, start, length);
+                } else if (bKerningValue) {
+                    try {
+                        core.getPropertiesManager().setKerningSpace(Double.parseDouble(new String(ch, start, length)));
+                    } catch (Exception e) {
+                        warningLog += "\nProblem loading kerning value: " + e.getLocalizedMessage();
+                    }
                 }
             }
         };

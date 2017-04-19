@@ -25,6 +25,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.font.TextAttribute;
+import java.util.Map;
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -52,8 +54,11 @@ public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
         ((JTextField) component).getDocument().addDocumentListener(docListener);
     }
 
-    public PCellEditor(Font _myFont) {
-        myFont = _myFont;
+    public PCellEditor(Font _myFont, Double kernVal) {
+        Map attr = _myFont.getAttributes();
+        attr.put(TextAttribute.TRACKING, kernVal);
+        myFont = _myFont.deriveFont(attr);
+
         JTextField setupText = (JTextField) component;
 
         setupRightClickMenu(setupText);

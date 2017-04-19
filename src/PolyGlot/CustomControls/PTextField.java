@@ -35,7 +35,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.font.TextAttribute;
 import java.io.Serializable;
+import java.util.Map;
 import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JMenuItem;
@@ -90,7 +92,16 @@ public class PTextField extends JTextField {
 
     @Override
     public final void setFont(Font _font) {
-        super.setFont(_font);
+        Font setFont = _font;
+        
+        // if conlang font and core exists, set font kerning
+        if (core != null && !overrideFont) {
+            Map attr = _font.getAttributes();
+            attr.put(TextAttribute.TRACKING, core.getPropertiesManager().getKerningSpace());
+            setFont = _font.deriveFont(attr);
+        }
+        
+        super.setFont(setFont);
     }
 
     @Override

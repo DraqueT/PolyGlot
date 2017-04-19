@@ -33,6 +33,7 @@ import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PGDocument;
 import PolyGlot.CustomControls.PGrammarPane;
 import PolyGlot.CustomControls.PTextField;
+import PolyGlot.ExternalCode.GlyphVectorPainter;
 import PolyGlot.PTree;
 import PolyGlot.SoundRecorder;
 import java.awt.Color;
@@ -679,6 +680,7 @@ public class ScrGrammarGuide extends PFrame {
         if (cmbFonts.getSelectedIndex() == 0) {
             StyleConstants.setFontFamily(aset, natFont.getFamily());
         } else {
+            aset.addAttribute(GlyphVectorPainter.KEY_KERNING, new Float(core.getPropertiesManager().getKerningSpace()*10));
             StyleConstants.setFontFamily(aset, conFont.getFamily());
         }
 
