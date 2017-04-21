@@ -26,6 +26,7 @@ import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextField;
+import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
@@ -68,6 +69,7 @@ public final class ScrQuickWordEntry extends PDialog {
         setupKeyStrokes();
         initComponents();
         setupListeners();
+        blankWord();
 
         // conword is always required and is initially selected
         txtConWord.setBackground(core.getRequiredColor());
@@ -100,7 +102,8 @@ public final class ScrQuickWordEntry extends PDialog {
             public void keyPressed(KeyEvent e) {
                 // User only wants to enter word if no popups are visible
                 if (e.getKeyCode() == KeyEvent.VK_ENTER
-                        && !cmbType.isPopupVisible()) {
+                        && !cmbType.isPopupVisible()
+                        && !e.isShiftDown()) {
                     // tests all class comboboxes
                     for (Component curBox : classComboMap.values()) {
                         if (curBox instanceof PComboBox && ((PComboBox) curBox).isPopupVisible()) {
@@ -144,6 +147,7 @@ public final class ScrQuickWordEntry extends PDialog {
         txtLocalWord.addKeyListener(enterListener);
         txtProc.addKeyListener(enterListener);
         cmbType.addKeyListener(enterListener);
+        txtDefinition.addKeyListener(enterListener);
     }
 
     /**
@@ -276,9 +280,9 @@ public final class ScrQuickWordEntry extends PDialog {
      * blanks out current conword fields
      */
     private void blankWord() {
-        txtConWord.setText("");
+        ((PTextField)txtConWord).setDefault();
         txtConWord.requestFocus();
-        txtDefinition.setText("");
+        ((PTextPane)txtDefinition).setDefault();
         txtDefinition.requestFocus();
         txtLocalWord.setText("");
         txtLocalWord.requestFocus();
@@ -408,7 +412,7 @@ public final class ScrQuickWordEntry extends PDialog {
         txtProc = new PTextField(core, true, "-- Pronunciation --");
         pnlClasses = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        txtDefinition = new PolyGlot.CustomControls.PTextPane(core, true, "-- Notes --");
+        txtDefinition = new PTextPane(core, true, "-- Definition --");
         btnDone = new PButton(core);
         jLabel7 = new javax.swing.JLabel();
 
@@ -552,8 +556,8 @@ public final class ScrQuickWordEntry extends PDialog {
                 .addContainerGap())
         );
 
-        btnDone.setText("Done");
-        btnDone.setToolTipText("Exit quickentry window");
+        btnDone.setText("Close Window");
+        btnDone.setToolTipText("Exit quickentry window (this does NOT save the word)");
         btnDone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDoneActionPerformed(evt);
@@ -571,7 +575,7 @@ public final class ScrQuickWordEntry extends PDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addComponent(btnDone))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );

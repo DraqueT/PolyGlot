@@ -34,7 +34,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="37" max="32767" attributes="0"/>
+              <EmptySpace pref="77" max="32767" attributes="0"/>
               <Component id="btnDone" min="-2" max="-2" attributes="0"/>
           </Group>
           <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
@@ -268,7 +268,7 @@
           <SubComponents>
             <Component class="javax.swing.JTextPane" name="txtDefinition">
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PolyGlot.CustomControls.PTextPane(core, true, &quot;-- Notes --&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextPane(core, true, &quot;-- Definition --&quot;)"/>
               </AuxValues>
             </Component>
           </SubComponents>
@@ -277,8 +277,8 @@
     </Container>
     <Component class="javax.swing.JButton" name="btnDone">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Done"/>
-        <Property name="toolTipText" type="java.lang.String" value="Exit quickentry window"/>
+        <Property name="text" type="java.lang.String" value="Close Window"/>
+        <Property name="toolTipText" type="java.lang.String" value="Exit quickentry window (this does NOT save the word)"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDoneActionPerformed"/>
