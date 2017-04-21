@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque.thompson
+ * Copyright (c) 2016 - 2017, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -20,6 +20,7 @@
 package PolyGlot.CustomControls;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
@@ -48,13 +49,15 @@ import javax.swing.UIManager;
 
 /**
  * Much code pulled up from JOptionPane so that I could make that damned thing
- * set to always on top if I wanted to. No other easy way to do it that I could find.
+ * set to always on top if I wanted to. No other easy way to do it that I could
+ * find.
+ *
  * @author draque.thompson
  */
 public class POptionPane extends JOptionPane {
-    
+
     public POptionPane(Object message, int messageType, int optionType,
-                       Icon icon, Object[] options, Object initialValue) {
+            Icon icon, Object[] options, Object initialValue) {
         super(message, messageType, optionType, icon, options, initialValue);
     }
 
@@ -74,8 +77,11 @@ public class POptionPane extends JOptionPane {
         JDialog dialog = pane.createDialog(parentComponent, title, style);
         dialog.setAlwaysOnTop(true);
         dialog.setModal(true);
-        
+
+        setAllWhite(pane);
+
         pane.selectInitialValue();
+        
         dialog.setVisible(true);
         dialog.dispose();
 
@@ -98,62 +104,62 @@ public class POptionPane extends JOptionPane {
         }
         return CLOSED_OPTION;
     }
-    
-    private static int styleFromMessageType(int messageType) {
-        switch (messageType) {
-        case ERROR_MESSAGE:
-            return JRootPane.ERROR_DIALOG;
-        case QUESTION_MESSAGE:
-            return JRootPane.QUESTION_DIALOG;
-        case WARNING_MESSAGE:
-            return JRootPane.WARNING_DIALOG;
-        case INFORMATION_MESSAGE:
-            return JRootPane.INFORMATION_DIALOG;
-        case PLAIN_MESSAGE:
-        default:
-            return JRootPane.PLAIN_DIALOG;
+
+    private static void setAllWhite(Container c) {
+        Component[] comp = c.getComponents();
+
+        for (Component curComp : comp) {
+            curComp.setBackground(Color.white);
+            setAllWhite((Container) curComp);
         }
     }
-    
-    private JDialog createDialog(final Component parentComponent, String title,
-            int style)
+
+    private static int styleFromMessageType(int messageType) {
+        switch (messageType) {
+            case ERROR_MESSAGE:
+                return JRootPane.ERROR_DIALOG;
+            case QUESTION_MESSAGE:
+                return JRootPane.QUESTION_DIALOG;
+            case WARNING_MESSAGE:
+                return JRootPane.WARNING_DIALOG;
+            case INFORMATION_MESSAGE:
+                return JRootPane.INFORMATION_DIALOG;
+            case PLAIN_MESSAGE:
+            default:
+                return JRootPane.PLAIN_DIALOG;
+        }
+    }
+
+    private JDialog createDialog(final Component parentComponent, String title, int style)
             throws HeadlessException {
 
         final JDialog dialog;
-        final boolean onTop = ((Window)parentComponent).isAlwaysOnTop();
-        //((Window)parentComponent).setAlwaysOnTop(false);
 
         Window window = POptionPane.getWindowForComponent(parentComponent);
+
         if (window instanceof Frame) {
-            dialog = new JDialog((Frame)window, title, true) {
-                @Override 
-                public void dispose() {
-                    //((Window)parentComponent).setAlwaysOnTop(onTop);
-                }
-            };
+            dialog = new JDialog((Frame) window, title, true);
         } else {
-            dialog = new JDialog((Dialog)window, title, true) {
-                @Override 
-                public void dispose() {
-                    //((Window)parentComponent).setAlwaysOnTop(onTop);
-                }
-            };
+            dialog = new JDialog((Dialog) window, title, true);
         }
+
         dialog.setAlwaysOnTop(true);
-        //dialog.setModal(true);
         initDialog(dialog, style, parentComponent);
+
         return dialog;
     }
-    
+
     static Window getWindowForComponent(Component parentComponent)
-        throws HeadlessException {
-        if (parentComponent == null)
+            throws HeadlessException {
+        if (parentComponent == null) {
             return getRootFrame();
-        if (parentComponent instanceof Frame || parentComponent instanceof Dialog)
-            return (Window)parentComponent;
+        }
+        if (parentComponent instanceof Frame || parentComponent instanceof Dialog) {
+            return (Window) parentComponent;
+        }
         return POptionPane.getWindowForComponent(parentComponent.getParent());
     }
-    
+
     private void initDialog(final JDialog dialog, int style, Component parentComponent) {
         dialog.setComponentOrientation(this.getComponentOrientation());
         Container contentPane = dialog.getContentPane();
@@ -162,8 +168,8 @@ public class POptionPane extends JOptionPane {
         contentPane.add(this, BorderLayout.CENTER);
         dialog.setResizable(false);
         if (JDialog.isDefaultLookAndFeelDecorated()) {
-            boolean supportsWindowDecorations =
-              UIManager.getLookAndFeel().getSupportsWindowDecorations();
+            boolean supportsWindowDecorations
+                    = UIManager.getLookAndFeel().getSupportsWindowDecorations();
             if (supportsWindowDecorations) {
                 dialog.setUndecorated(true);
                 getRootPane().setWindowDecorationStyle(style);
@@ -178,10 +184,10 @@ public class POptionPane extends JOptionPane {
                 // Let the defaultCloseOperation handle the closing
                 // if the user closed the window without selecting a button
                 // (newValue = null in that case).  Otherwise, close the dialog.
-                if (dialog.isVisible() && event.getSource() == POptionPane.this &&
-                        (event.getPropertyName().equals(VALUE_PROPERTY)) &&
-                        event.getNewValue() != null &&
-                        event.getNewValue() != JOptionPane.UNINITIALIZED_VALUE) {
+                if (dialog.isVisible() && event.getSource() == POptionPane.this
+                        && (event.getPropertyName().equals(VALUE_PROPERTY))
+                        && event.getNewValue() != null
+                        && event.getNewValue() != JOptionPane.UNINITIALIZED_VALUE) {
                     dialog.setVisible(false);
                 }
             }
@@ -189,6 +195,7 @@ public class POptionPane extends JOptionPane {
 
         WindowAdapter adapter = new WindowAdapter() {
             private boolean gotFocus = false;
+
             @Override
             public void windowClosing(WindowEvent we) {
                 setValue(null);
@@ -220,17 +227,5 @@ public class POptionPane extends JOptionPane {
         });
 
         addPropertyChangeListener(listener);
-    }
-    
-    public static void showMessageDialog(Component parentComponent,
-        Object message, String title, int messageType, Icon icon)
-        throws HeadlessException {
-        showOptionDialog(parentComponent, message, title, DEFAULT_OPTION,
-                         messageType, icon, null, null);
-    }
-    public static void showMessageDialog(Component parentComponent,
-        Object message, String title, int messageType)
-        throws HeadlessException {
-        showMessageDialog(parentComponent, message, title, messageType, null);
     }
 }

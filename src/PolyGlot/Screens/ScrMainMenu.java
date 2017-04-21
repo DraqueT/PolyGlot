@@ -312,7 +312,8 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 if (!saved) {
                     return false;
                 }
-            } else if (saveFirst == JOptionPane.CANCEL_OPTION) {
+            } else if (saveFirst == JOptionPane.CANCEL_OPTION
+                    || saveFirst == JOptionPane.DEFAULT_OPTION) {
                 return false;
             }
         }

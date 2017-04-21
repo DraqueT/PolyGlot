@@ -30,6 +30,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.DEFAULT_OPTION;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
@@ -38,9 +39,23 @@ public class InfoBox extends JFrame {
     private final Icon optionIcon = UIManager.getIcon("FileView.computerIcon");
     private static final PButton yes;
     private static final PButton no;
+    private static final PButton ok;
     private static final PButton cancel;
 
     static {
+        ok = new PButton() {
+            @Override
+            public boolean equals(Object value) {
+                return Integer.class == value.getClass()
+                        && value.equals(JOptionPane.OK_OPTION);
+            }
+
+            @Override
+            public int hashCode() {
+                int hash = 7;
+                return hash;
+            }
+        };
         yes = new PButton() {
             @Override
             public boolean equals(Object value) {
@@ -82,12 +97,21 @@ public class InfoBox extends JFrame {
             }
         };
 
+        ok.setText("OK");
+        ok.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
+                // set the value of the option pane
+                pane.setValue(JOptionPane.OK_OPTION);
+            }
+        });
+        
         yes.setText("Yes");
         yes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
-                // set the value of the option pane
                 pane.setValue(JOptionPane.YES_OPTION);
             }
         });
@@ -97,17 +121,15 @@ public class InfoBox extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
-                // set the value of the option pane
                 pane.setValue(JOptionPane.NO_OPTION);
             }
         });
 
-        cancel.setText("Cancal");
+        cancel.setText("Cancel");
         cancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
-                // set the value of the option pane
                 pane.setValue(JOptionPane.CANCEL_OPTION);
             }
         });
@@ -152,36 +174,28 @@ public class InfoBox extends JFrame {
         int ret;
         PButton[] option = {yes, no, cancel};
 
-        if (parent == null) {
-            ret = JOptionPane.showOptionDialog(parent, message, title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, optionIcon, option, null);
-        } else {
-            ret = POptionPane.showOptionDialog(parent, message, title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, optionIcon, option, null);
-        }
+        ret = POptionPane.showOptionDialog(parent, message, title, 
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, 
+                optionIcon, option, null);
+
         return ret;
     }
 
     private void doError(String title, String message, Window parent) {
-        if (parent == null) {
-            JOptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);
-
-        } else {
-            POptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);
-        }
+        Object[] option = {ok};        
+        POptionPane.showOptionDialog(parent, message, title, DEFAULT_OPTION,
+                         JOptionPane.ERROR_MESSAGE, null, option, null);
     }
 
     private void doWarning(String title, String message, Window parent) {
-        if (parent == null) {
-            JOptionPane.showMessageDialog(parent, message, title, JOptionPane.WARNING_MESSAGE);
-        } else {
-            POptionPane.showMessageDialog(parent, message, title, JOptionPane.WARNING_MESSAGE);
-        }
+        Object[] option = {ok};        
+        POptionPane.showOptionDialog(parent, message, title, DEFAULT_OPTION,
+                         JOptionPane.WARNING_MESSAGE, null, option, null);
     }
 
     private void doInfo(String title, String message, Window parent) {
-        if (parent == null) {
-            JOptionPane.showMessageDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            POptionPane.showMessageDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
-        }
+        Object[] option = {ok};        
+        POptionPane.showOptionDialog(parent, message, title, DEFAULT_OPTION,
+                         JOptionPane.INFORMATION_MESSAGE, null, option, null);
     }
 }
