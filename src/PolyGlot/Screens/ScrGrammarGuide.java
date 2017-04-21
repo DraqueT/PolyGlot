@@ -1145,7 +1145,7 @@ public class ScrGrammarGuide extends PFrame {
         treChapList.setModel(treeModel);
         for (GrammarChapNode curChap : core.getGrammarManager().getChapters()) {
             GrammarChapNode srcChap = new GrammarChapNode(core.getGrammarManager());
-            srcChap.setName(curChap.getName() + "TEST");
+            srcChap.setName(curChap.getName());
 
             Enumeration sections = curChap.children(txtSearch.getText());
             while (sections.hasMoreElements()) {
