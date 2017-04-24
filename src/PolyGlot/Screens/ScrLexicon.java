@@ -454,7 +454,7 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classText, gbc);
                 classPropMap.put(curProp.getId(), classText); // text box mapped to related class ID.
             } else {
-                final JComboBox classBox = new JComboBox();
+                final JComboBox classBox = new PComboBox(core);
                 DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
                 classBox.setModel(comboModel);
                 comboModel.addElement("-- " + curProp.getValue() + " --");
@@ -487,7 +487,7 @@ public final class ScrLexicon extends PFrame {
                 classBox.setToolTipText(curProp.getValue() + " value");
                 classBox.setPreferredSize(new Dimension(4000, classBox.getPreferredSize().height));
                 pnlClasses.add(classBox, gbc);
-                classPropMap.put(curProp.getId(), classBox); // dropbox mapped to related class ID.
+                classPropMap.put(curProp.getId(), classBox); // combobox mapped to related class ID.
             }
 
             // messy, but gets a full rebuild of screen since this is happening post-initial visibility-pop
