@@ -108,6 +108,7 @@ public class POptionPane extends JOptionPane {
     private static void setAllWhite(Container c) {
         Component[] comp = c.getComponents();
 
+        c.setBackground(Color.white);
         for (Component curComp : comp) {
             curComp.setBackground(Color.white);
             setAllWhite((Container) curComp);
