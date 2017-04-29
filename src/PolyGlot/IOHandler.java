@@ -197,33 +197,35 @@ public class IOHandler {
 
         return ret;
     }
-    
+
     /**
-     * Opens an image via GUI and returns as buffered image
-     * Returns null if user cancels.
+     * Opens an image via GUI and returns as buffered image Returns null if user
+     * cancels.
+     *
      * @param parent parent window of operation
      * @return buffered image selected by user
      * @throws IOException on file read error
      */
     public static BufferedImage openImage(Window parent) throws IOException {
-        BufferedImage ret =  null;
+        BufferedImage ret = null;
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Select Image");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "jpeg", "tiff", "bmp", "png");
         chooser.setFileFilter(filter);
         String fileName;
         chooser.setCurrentDirectory(new File("."));
-        
+
         if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
             ret = ImageIO.read(new File(fileName));
         }
-        
+
         return ret;
     }
-    
+
     /**
      * returns name of file sans path
+     *
      * @param fullPath full path to file
      * @return string of filename
      */
@@ -231,7 +233,7 @@ public class IOHandler {
         File file = new File(fullPath);
         return file.getName();
     }
-    
+
     /**
      * Loads all option data from ini file, if none, ignore. One will be created
      * on exit.
@@ -239,28 +241,28 @@ public class IOHandler {
      * @param core dictionary core
      * @throws IOException on failure to open existing file
      */
-    public static void loadOptionsIni(DictCore core) throws Exception {        
+    public static void loadOptionsIni(DictCore core) throws Exception {
         File f = new File(core.getWorkingDirectory() + PGTUtil.polyGlotIni);
-        if(!f.exists() || f.isDirectory()) {
+        if (!f.exists() || f.isDirectory()) {
             return;
         }
-        
+
         try (BufferedReader br = new BufferedReader(new FileReader(
                 core.getWorkingDirectory() + PGTUtil.polyGlotIni))) {
             for (String line; (line = br.readLine()) != null;) {
                 String[] bothVal = line.split("=");
-                
+
                 // if no value set, move on
                 if (bothVal.length == 1) {
                     continue;
                 }
-                
+
                 // if multiple values, something has gone wrong
                 if (bothVal.length != 2) {
                     throw new Exception("PolyGlot.ini corrupt or unreadable.");
                 }
 
-                switch(bothVal[0]) {
+                switch (bothVal[0]) {
                     case PGTUtil.optionsLastFiles:
                         core.getOptionsManager().getLastFiles().addAll(Arrays.asList(bothVal[1].split(",")));
                         break;
@@ -274,15 +276,15 @@ public class IOHandler {
                             if (curPosSet.isEmpty()) {
                                 continue;
                             }
-                            
+
                             String[] splitSet = curPosSet.split(":");
-                            
+
                             if (splitSet.length != 3) {
-                                throw new Exception("Malformed Screen Position: " 
+                                throw new Exception("Malformed Screen Position: "
                                         + curPosSet);
                             }
                             Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
-                            core.getOptionsManager().setScreenPosition(splitSet[0], p);     
+                            core.getOptionsManager().setScreenPosition(splitSet[0], p);
                         }
                         break;
                     case PGTUtil.optionsScreensSize:
@@ -290,11 +292,11 @@ public class IOHandler {
                             if (curSizeSet.isEmpty()) {
                                 continue;
                             }
-                            
+
                             String[] splitSet = curSizeSet.split(":");
-                            
+
                             if (splitSet.length != 3) {
-                                throw new Exception("Malformed Screen Size: " 
+                                throw new Exception("Malformed Screen Size: "
                                         + curSizeSet);
                             }
                             Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
@@ -307,7 +309,7 @@ public class IOHandler {
                     case "\n":
                         break;
                     default:
-                        throw new Exception ("Unrecognized value: " + bothVal[0] 
+                        throw new Exception("Unrecognized value: " + bothVal[0]
                                 + " in PolyGlot.ini.");
                 }
             }
@@ -316,13 +318,14 @@ public class IOHandler {
 
     /**
      * Given handler class, parses XML document within file (archive or not)
+     *
      * @param _fileName full path of target file
      * @param _handler custom handler to consume XML document
      * @throws IOException on read error
      * @throws ParserConfigurationException on parser factory config error
      * @throws SAXException on XML interpretation error
      */
-    public static void parseHandler(String _fileName, CustHandler _handler) 
+    public static void parseHandler(String _fileName, CustHandler _handler)
             throws IOException, ParserConfigurationException, SAXException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxParser = factory.newSAXParser();
@@ -371,10 +374,14 @@ public class IOHandler {
     public static void writeFile(String _fileName, Document doc, DictCore core) throws IOException, TransformerException {
         File finalFile = new File(_fileName);
         String writeLog = "";
-
-        TransformerFactory transformerFactory = TransformerFactory
-                .newInstance();
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
+
+        // The below has unreliable behavior in some situations, but is still better than nothing.
+        if (!finalFile.canWrite()) {
+            throw new IOException("Unable to write file to this location. PolyGlot does not have write permission (try saving elsewhere). Target: " + finalFile.toPath());
+        }
+
         try (StringWriter writer = new StringWriter()) {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
@@ -460,7 +467,7 @@ public class IOHandler {
                             writeLog += "\nUnable to save Logographs: " + ex.getLocalizedMessage();
                         }
                     }
-                    
+
                     // Write all general images in image repository to file
                     List<ImageNode> imageNodes = core.getImageCollection().getAllImages();
                     if (!imageNodes.isEmpty()) {
@@ -526,12 +533,7 @@ public class IOHandler {
             }
 
             try {
-                // Unreliable behavior, and does not check true OS write permissions
-                //if (finalFile.canWrite()) {
                 java.nio.file.Files.copy(f.toPath(), finalFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-                //} else {
-                //throw new IOException("Unable to write to file: " + finalFile.toPath());
-                //}
             } catch (IOException ex) {
                 throw new IOException("Unable to save file: " + ex.getMessage());
             }
@@ -545,7 +547,7 @@ public class IOHandler {
     public static byte[] getFontFileArray(Font font) throws Exception {
         return Files.readAllBytes(getFontFile(font).toPath());
     }
-    
+
     /**
      * gets the file of the current conlang font from the user's system
      *
@@ -658,21 +660,23 @@ public class IOHandler {
 
         return ret;
     }
-    
+
     /**
-     * Returns the default path of PolyGlot's running directory
-     * NOTE: If the path is overridden, in the properties manager, use that.
-     * This returns only what the OS tells PolyGlot it is running under (not 
-     * always trustworthy)
+     * Returns the default path of PolyGlot's running directory NOTE: If the
+     * path is overridden, in the properties manager, use that. This returns
+     * only what the OS tells PolyGlot it is running under (not always
+     * trustworthy)
+     *
      * @return default path
      */
     public static File getBaseProgramPath() {
         return new File(".");
     }
-    
+
     /**
-     * Tests whether a file at a particular location exists. Wrapped to avoid
-     * IO code outside this file
+     * Tests whether a file at a particular location exists. Wrapped to avoid IO
+     * code outside this file
+     *
      * @param fullPath path of file to test
      * @return true if file exists, false otherwise
      */
@@ -684,11 +688,12 @@ public class IOHandler {
     /**
      * Loads image assets from file. Does not load logographs due to legacy
      * coding/logic
+     *
      * @param imageCollection from dictCore to populate
      * @param fileName of file containing assets
      * @throws java.io.IOException
      */
-    public static void loadImageAssets(ImageCollection imageCollection, 
+    public static void loadImageAssets(ImageCollection imageCollection,
             String fileName) throws IOException, Exception {
         try (ZipFile zipFile = new ZipFile(fileName)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -700,14 +705,14 @@ public class IOHandler {
                 }
                 break;
             }
-            
+
             while (entries.hasMoreElements()) {
                 entry = entries.nextElement();
-                
+
                 if (entry.isDirectory()) { // kills process after last image found
                     break;
                 }
-                
+
                 BufferedImage img;
                 try (InputStream imageStream = zipFile.getInputStream(entry)) {
                     String name = entry.getName().replace(".png", "")
@@ -723,9 +728,10 @@ public class IOHandler {
             }
         }
     }
-    
+
     /**
      * Encapsulates image loading to keep IO within IOHandler class
+     *
      * @param fileName path of image
      * @return buffered image loaded
      * @throws IOException on file read error
@@ -735,16 +741,16 @@ public class IOHandler {
             return ImageIO.read(imageStream);
         }
     }
-    
+
     public static byte[] getBufferedImageByteArray(BufferedImage bufferedImage) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(bufferedImage, "png", baos);
         return baos.toByteArray();
     }
-    
+
     /**
-     * loads all images into their logographs from archive
-     * and images into the generalized image collection
+     * loads all images into their logographs from archive and images into the
+     * generalized image collection
      *
      * @param logoCollection logocollection from dictionary core
      * @param fileName name/path of archive
@@ -892,26 +898,32 @@ public class IOHandler {
     public static Font getCharisUnicodeFontInitial() throws IOException {
         return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontLocation);
     }
+
     /**
      * ditto
-     * @return 
-     * @throws java.io.IOException 
+     *
+     * @return
+     * @throws java.io.IOException
      */
     public static Font getCharisUnicodeFontBoldInitial() throws IOException {
         return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontBoldLocation);
     }
+
     /**
      * ditto
-     * @return 
-     * @throws java.io.IOException 
+     *
+     * @return
+     * @throws java.io.IOException
      */
     public static Font getCharisUnicodeFontItalicInitial() throws IOException {
         return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontItalicLocation);
     }
+
     /**
      * ditto
-     * @return 
-     * @throws java.io.IOException 
+     *
+     * @return
+     * @throws java.io.IOException
      */
     public static Font getCharisUnicodeFontBoldItalicInitial() throws IOException {
         return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontBoldItalicLocation);
@@ -941,20 +953,19 @@ public class IOHandler {
 
         return ret;
     }
-    
+
     /**
-     * For getting Font based on javafx's needs
-     * NOTE 1: this is a non-static
+     * For getting Font based on javafx's needs NOTE 1: this is a non-static
      * method due to an input stream restriction NOTE 2: this is the default
-     * conlang font in PolyGlot
-     * NOTE 2: this is the default
-     * conlang font in PolyGlot
-     * @return 
+     * conlang font in PolyGlot NOTE 2: this is the default conlang font in
+     * PolyGlot
+     *
+     * @return
      */
     public InputStream getCharisInputStream() {
         return this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation);
     }
-    
+
     /**
      * Fetches and returns default button font
      *
@@ -963,11 +974,10 @@ public class IOHandler {
      */
     public static Font getButtonFont() throws IOException {
         return new IOHandler().getButtonFontInternal();
-    }    
-    
+    }
+
     /**
-     * Fetches and returns default button font
-     * nonstatic 
+     * Fetches and returns default button font nonstatic
      *
      * @return Font to default buttons to
      * @throws java.io.IOException if unable to load font
@@ -984,18 +994,39 @@ public class IOHandler {
         } catch (Exception e) {
             throw new IOException("Unable to load button font.");
         }
-        
+
         return ret;
     }
-    
+
+    /**
+     * Tests whether the path can be written to
+     *
+     * @param path
+     * @return
+     */
+    private static boolean testCanWrite(String path) {
+        return new File(path).canWrite();
+    }
+
+    /**
+     * Saves ini file with polyglot options
+     *
+     * @param core
+     * @throws IOException on failure or lack of permission to write
+     */
     public static void saveOptionsIni(DictCore core) throws IOException {
-        
+
         try (Writer f0 = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(core.getWorkingDirectory() 
+                new FileOutputStream(core.getWorkingDirectory()
                         + PGTUtil.polyGlotIni), "UTF-8"))) {
             String newLine = System.getProperty("line.separator");
             String nextLine;
-            
+
+            if (!testCanWrite(core.getWorkingDirectory() + PGTUtil.polyGlotIni)) {
+                throw new IOException("Unable to save settings. Polyglot does not have permission to write to folder: "
+                        + core.getWorkingDirectory() + ". This is most common when running from Program Files in Windows.");
+            }
+
             nextLine = PGTUtil.optionsLastFiles + "=";
             for (String file : core.getOptionsManager().getLastFiles()) {
                 if (nextLine.endsWith("=")) {
@@ -1004,35 +1035,35 @@ public class IOHandler {
                     nextLine += ("," + file);
                 }
             }
-            
+
             f0.write(nextLine + newLine);
-            
-            nextLine = PGTUtil.optionsScreenPos + "=";            
+
+            nextLine = PGTUtil.optionsScreenPos + "=";
             for (Entry<String, Point> curPos : core.getOptionsManager().getScreenPositions().entrySet()) {
-                nextLine += ("," + curPos.getKey() + ":" + curPos.getValue().x + ":" 
+                nextLine += ("," + curPos.getKey() + ":" + curPos.getValue().x + ":"
                         + curPos.getValue().y);
             }
-            
+
             f0.write(nextLine + newLine);
-            
+
             nextLine = PGTUtil.optionsScreensSize + "=";
             for (Entry<String, Dimension> curSize : core.getOptionsManager().getScreenSizes().entrySet()) {
-                nextLine += ("," + curSize.getKey() + ":" + curSize.getValue().width + ":" 
+                nextLine += ("," + curSize.getKey() + ":" + curSize.getValue().width + ":"
                         + curSize.getValue().height);
             }
-            
+
             f0.write(nextLine + newLine);
-            
+
             nextLine = PGTUtil.optionsScreensOpen + "=";
-            
+
             for (String screen : core.getOptionsManager().getLastScreensUp()) {
                 nextLine += ("," + screen);
             }
-            
+
             f0.write(nextLine + newLine);
-            
+
             nextLine = PGTUtil.optionsAutoResize + "=" + (core.getOptionsManager().isAnimateWindows() ? PGTUtil.True : PGTUtil.False);
-            
+
             f0.write(nextLine + newLine);
         }
     }
@@ -1050,7 +1081,7 @@ public class IOHandler {
             return IOUtils.toByteArray(localStream);
         }
     }
-    
+
     /**
      * Gets Unicode compatible font as byte array
      *
@@ -1064,23 +1095,24 @@ public class IOHandler {
             return IOUtils.toByteArray(localStream);
         }
     }
-    
+
     /**
-     * Opens an arbitrary file via the local OS's default. If unable to open
-     * for any reason, returns false.
+     * Opens an arbitrary file via the local OS's default. If unable to open for
+     * any reason, returns false.
+     *
      * @param path
-     * @return 
+     * @return
      */
     public static boolean openFileNativeOS(String path) {
         boolean ret = true;
-        
+
         try {
             File file = new File(path);
-            Desktop.getDesktop().open(file);            
+            Desktop.getDesktop().open(file);
         } catch (Exception e) {
             ret = false;
         }
-        
-        return ret;        
+
+        return ret;
     }
 }
