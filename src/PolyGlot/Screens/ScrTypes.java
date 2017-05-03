@@ -50,6 +50,7 @@ public class ScrTypes extends PFrame {
     private final List<Window> childFrames = new ArrayList<>();
     private TypeNode selectionAtClosing = null;
     private boolean updatingName = false;
+    private boolean ignoreUpdate = false;
 
     public ScrTypes(DictCore _core) {
         core = _core;
@@ -86,9 +87,11 @@ public class ScrTypes extends PFrame {
 
     @Override
     public void updateAllValues(DictCore _core) {
-        core = _core;
-        populateTypes();
-        populateProperties();
+        if (!ignoreUpdate) {
+            core = _core;
+            populateTypes();
+            populateProperties();
+        }
     }
 
     @Override
@@ -136,12 +139,28 @@ public class ScrTypes extends PFrame {
             }
         });
     }
+    
+    /**
+     * Sets whether objects with listeners should ignore
+     * @param listenValue 
+     */
+    private void setListeningActive(boolean listenValue) {
+        if (listenValue) {
+            ((PTextField)txtName).startListening();
+        } else {
+            ((PTextField)txtName).stopListening();
+        }
+    }
 
     /**
      * Updates name value so that display can populate properly
      */
     private void updateName() {
         TypeNode curNode = (TypeNode) lstTypes.getSelectedValue();
+        
+        if (ignoreUpdate) {
+            return;
+        }
 
         if (((PTextField) txtName).isDefaultText() || txtName.getText().equals("")) {
             txtErrorBox.setText("Types must have name populated.");
@@ -292,14 +311,21 @@ public class ScrTypes extends PFrame {
             return;
         }
 
+        ignoreUpdate = true;
+        setListeningActive(false);
+        
         try {
             core.getTypes().deleteNodeById(curType.getId());
         } catch (Exception e) {
             InfoBox.error("Deletion Error", "Unable to delete type." + e.getLocalizedMessage(), this);
         }
-
+        
+        
         populateTypes();
         populateProperties();
+        
+        setListeningActive(true);
+        ignoreUpdate = false;
     }
 
     /**
@@ -554,7 +580,8 @@ public class ScrTypes extends PFrame {
 
     private void lstTypesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstTypesValueChanged
         if (evt.getValueIsAdjusting()
-                || updatingName) {
+                || updatingName
+                || ignoreUpdate) {
             return;
         }
 

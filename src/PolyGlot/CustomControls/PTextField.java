@@ -47,6 +47,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.EventListenerList;
 
 /**
  *
@@ -60,6 +61,7 @@ public class PTextField extends JTextField {
     boolean overrideFont = false;
     private SwingWorker worker = null;
     private String defText;
+    private EventListenerList tmpListenerList = null;
 
     /**
      * Init for PDialogs
@@ -344,6 +346,27 @@ public class PTextField extends JTextField {
         return ret;
     }
 
+    /**
+     * Stops current listeners from listening (can only be called once before 
+     * needing to be told to listen once again
+     */
+    public void stopListening() {
+        if (tmpListenerList == null) {
+            tmpListenerList = listenerList;
+            listenerList = new EventListenerList();
+        }
+    }
+    
+    /**
+     * Turns listeners on again (can only be called when not listening
+     */
+    public void startListening() {
+        if (tmpListenerList != null) {
+            listenerList = tmpListenerList;
+            tmpListenerList = null;
+        }
+    }
+    
     private void setupRightClickMenu() {
         final JPopupMenu ruleMenu = new JPopupMenu();
         final JMenuItem cut = new JMenuItem("Cut");
