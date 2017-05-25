@@ -377,10 +377,10 @@ public class IOHandler {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
 
-        // The below has unreliable behavior in some situations, but is still better than nothing.
-        if (!finalFile.canWrite()) {
-            throw new IOException("Unable to write file to this location. PolyGlot does not have write permission (try saving elsewhere). Target: " + finalFile.toPath());
-        }
+        // The below is unacceptably buggy. Reenable if Java addresses in future versions. ugh.
+        //if (!finalFile.canWrite()) {
+            //throw new IOException("Unable to write file to this location. PolyGlot does not have write permission (try saving elsewhere). Target: " + finalFile.toPath());
+        //}
 
         try (StringWriter writer = new StringWriter()) {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
