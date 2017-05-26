@@ -235,7 +235,7 @@ public class ConWord extends DictNode {
                 parent.extertalBalanceWordCounts(id, value, _localWord);
             } catch (Exception e) {
                 InfoBox.error("Word balance error.", "Unable to balance word: " 
-                        + value, null);
+                        + value, core.getRootWindow());
             }
         }
         
@@ -249,7 +249,7 @@ public class ConWord extends DictNode {
                 parent.extertalBalanceWordCounts(id, _value, localWord);
             } catch (Exception e) {
                 InfoBox.error("Word balance error.", "Unable to balance word: " 
-                        + value, null);
+                        + value, core.getRootWindow());
             }
         }        
         super.setValue(_value.replace(PGTUtil.RTLMarker, "").replace(PGTUtil.LTRMarker, ""));

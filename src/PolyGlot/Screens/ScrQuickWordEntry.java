@@ -261,7 +261,7 @@ public final class ScrQuickWordEntry extends PDialog {
 
         if (!testResults.isEmpty()) {
             InfoBox.warning("Illegal Values", "Word contains illegal values:\n\n"
-                    + testResults, this);
+                    + testResults, core.getRootWindow());
             return;
         }
 
@@ -272,7 +272,7 @@ public final class ScrQuickWordEntry extends PDialog {
 
             parent.refreshWordList(wordId);
         } catch (Exception e) {
-            InfoBox.error("Word Error", "Unable to insert word: " + e.getMessage(), this);
+            InfoBox.error("Word Error", "Unable to insert word: " + e.getMessage(), core.getRootWindow());
         }
     }
 
@@ -653,7 +653,7 @@ public final class ScrQuickWordEntry extends PDialog {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            InfoBox.error("Window Error", "Unable to open quick word entry screen: " + ex.getLocalizedMessage(), _parent);
+            InfoBox.error("Window Error", "Unable to open quick word entry screen: " + ex.getLocalizedMessage(), _core.getRootWindow());
         }
         //</editor-fold>
 

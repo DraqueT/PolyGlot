@@ -72,7 +72,7 @@ public class ScrLangStats extends PDialog {
         {
             InfoBox.error("Missing Properties", "In order to report correctly, all "
                     + "characters must be ordered in the alphabetical order property "
-                    + "box under Language Properties.", s);
+                    + "box under Language Properties.", _core.getRootWindow());
         }
         
         s.setVisible(true);

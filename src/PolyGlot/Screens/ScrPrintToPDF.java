@@ -306,7 +306,7 @@ public class ScrPrintToPDF extends PDialog {
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         if (txtSavePath.getText().equals("")) {
-            InfoBox.warning("File not Specified", "Please specify a file to save to.", this);
+            InfoBox.warning("File not Specified", "Please specify a file to save to.", core.getRootWindow());
             return;
         }
         
@@ -320,7 +320,7 @@ public class ScrPrintToPDF extends PDialog {
         try {
             export = new PExportToPDF(core, txtSavePath.getText());
         } catch (IOException e) {
-            InfoBox.error("Save Error", "Unable to initialize export object: " + e.getMessage(), this);
+            InfoBox.error("Save Error", "Unable to initialize export object: " + e.getMessage(), core.getRootWindow());
             return;
         }
         
@@ -340,20 +340,20 @@ public class ScrPrintToPDF extends PDialog {
         try{
             export.print();
             if (Desktop.isDesktopSupported()) {
-                if (InfoBox.yesNoCancel("Print Success", "PDF successfully printed. Open file now?", this) 
+                if (InfoBox.yesNoCancel("Print Success", "PDF successfully printed. Open file now?", core.getRootWindow()) 
                         == JOptionPane.YES_OPTION) {
                     if (!IOHandler.openFileNativeOS(txtSavePath.getText())) {
-                        InfoBox.error("File Error", "Unable to open PDF at location: " + txtSavePath.getText(), this);
+                        InfoBox.error("File Error", "Unable to open PDF at location: " + txtSavePath.getText(), core.getRootWindow());
                     }
                 }
             } else {
-                InfoBox.info("Print Success", "Sucessfully printed to " + txtSavePath.getText(), this);
+                InfoBox.info("Print Success", "Sucessfully printed to " + txtSavePath.getText(), core.getRootWindow());
             }
             
             this.dispose();
         } catch (Exception e) {
             //e.printStackTrace(); 
-            InfoBox.error("Save Error", "Unable to print to file: " + e.getMessage(), this);
+            InfoBox.error("Save Error", "Unable to print to file: " + e.getMessage(), core.getRootWindow());
         }
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnPrintActionPerformed

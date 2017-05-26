@@ -202,7 +202,7 @@ public class ScrLangProps extends PFrame {
                 || conFont.getFamily().equals(stdFont.getFamily()))) {
             InfoBox.warning("RTL Font Warning", "Enforcing RTL with default font"
                     + " is not recommended. For best results, please set distinct"
-                    + " conlang font.", this);
+                    + " conlang font.", core.getRootWindow());
         }
     }
 

@@ -305,7 +305,7 @@ public class ScrWordClasses extends PFrame {
             propId = core.getWordPropertiesCollection().addNode(new WordProperty());
             prop = (WordProperty) core.getWordPropertiesCollection().getNodeById(propId);
         } catch (Exception e) {
-            InfoBox.error("Property Creation Error", "Unable to create new word property: " + e.getLocalizedMessage(), this);
+            InfoBox.error("Property Creation Error", "Unable to create new word property: " + e.getLocalizedMessage(), core.getRootWindow());
             return;
         }
 
@@ -319,14 +319,14 @@ public class ScrWordClasses extends PFrame {
         int position = lstProperties.getSelectedIndex();
 
         if (prop == null || InfoBox.yesNoCancel("Are you sure?", "This will delete the property from all words."
-                + " Values will be irretrevably lost.", this) != JOptionPane.YES_OPTION) {
+                + " Values will be irretrevably lost.", core.getRootWindow()) != JOptionPane.YES_OPTION) {
             return;
         }
 
         try {
             core.getWordPropertiesCollection().deleteNodeById(prop.getId());
         } catch (Exception e) {
-            InfoBox.error("Unable to Delete", "Unable to delete property: " + e.getLocalizedMessage(), this);
+            InfoBox.error("Unable to Delete", "Unable to delete property: " + e.getLocalizedMessage(), core.getRootWindow());
         }
         DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
         listModel.removeElement(prop);
@@ -351,7 +351,7 @@ public class ScrWordClasses extends PFrame {
         try {
             value = curProp.addValue("");
         } catch (Exception e) {
-            InfoBox.error("Value Add Error", e.getLocalizedMessage(), this);
+            InfoBox.error("Value Add Error", e.getLocalizedMessage(), core.getRootWindow());
             return;
         }
 

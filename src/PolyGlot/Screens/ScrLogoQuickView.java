@@ -261,7 +261,7 @@ public class ScrLogoQuickView extends PFrame {
                 && logoFinder.getMode() == WindowMode.SINGLEVALUE) {
             InfoBox.info("Action currently unavailable.",
                     "Please close Logograph Details/Modification window before adding logographs.",
-                    this);
+                    core.getRootWindow());
 
             return;
         }

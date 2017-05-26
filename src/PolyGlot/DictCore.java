@@ -241,6 +241,14 @@ public class DictCore {
             rootWindow.updateAllValues(this);
         }
     }
+    
+    /**
+     * Returns root window of PolyGlot
+     * @return 
+     */
+    public PFrame getRootWindow() {
+        return rootWindow;
+    }
 
     /**
      * Gets proper color for fields marked as required

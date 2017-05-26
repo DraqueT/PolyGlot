@@ -414,7 +414,7 @@ public class ScrPhonology extends PFrame {
                             editChar.setIgnoreListenerSilenceing(false);
                             editChar.setValue(value.substring(0, 1));
                             editChar.setIgnoreListenerSilenceing(true);
-                            InfoBox.warning("Single Character Only", "Replacement characters can only be 1 character long.", null);
+                            InfoBox.warning("Single Character Only", "Replacement characters can only be 1 character long.", core.getRootWindow());
                         }
                     });
                 } else {
@@ -595,7 +595,7 @@ public class ScrPhonology extends PFrame {
         Integer curRow = tblProcs.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(this)) {
+                || !InfoBox.deletionConfirmation(core.getRootWindow())) {
             return;
         }
 
@@ -615,7 +615,7 @@ public class ScrPhonology extends PFrame {
         int curRow = tblRep.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(this)) {
+                || !InfoBox.deletionConfirmation(core.getRootWindow())) {
             return;
         }
 
@@ -631,7 +631,7 @@ public class ScrPhonology extends PFrame {
         Integer curRow = tblRom.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(this)) {
+                || !InfoBox.deletionConfirmation(core.getRootWindow())) {
             return;
         }
 

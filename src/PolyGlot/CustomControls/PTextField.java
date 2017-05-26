@@ -191,7 +191,7 @@ public class PTextField extends JTextField {
                         } catch (Exception ex) {
                             InfoBox.error("Character Replacement Error",
                                     "Clipboard threw error during character replacement process:"
-                                    + ex.getLocalizedMessage(), null);
+                                    + ex.getLocalizedMessage(), core.getRootWindow());
                         }
                     }
                 }
@@ -267,7 +267,7 @@ public class PTextField extends JTextField {
             }
             skipRepaint = false;
         } catch (Exception e) {
-            InfoBox.error("Repaint error", "Could not repaint component: " + e.getLocalizedMessage(), null);
+            InfoBox.error("Repaint error", "Could not repaint component: " + e.getLocalizedMessage(), core.getRootWindow());
             skipRepaint = false;
         }
 
@@ -303,7 +303,7 @@ public class PTextField extends JTextField {
             }
         } catch (Exception e) {
             //e.printStackTrace();
-            InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), null);
+            InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), core.getRootWindow());
         }
 
         if (isDefaultText()) {

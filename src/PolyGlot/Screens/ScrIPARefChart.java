@@ -223,7 +223,7 @@ public class ScrIPARefChart extends PFrame {
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.equals("") ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            InfoBox.error("IPA Error", e.getLocalizedMessage(), core.getRootWindow());
         }
     }//GEN-LAST:event_lblOtherSymbolsMouseClicked
 
@@ -236,7 +236,7 @@ public class ScrIPARefChart extends PFrame {
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.equals("") || ipaChar.equals("") ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            InfoBox.error("IPA Error", e.getLocalizedMessage(), core.getRootWindow());
         }
         System.out.println(x+","+y);
     }//GEN-LAST:event_jLabel23MouseClicked
@@ -250,7 +250,7 @@ public class ScrIPARefChart extends PFrame {
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.equals("") || ipaChar.equals("") ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            InfoBox.error("IPA Error", e.getLocalizedMessage(), core.getRootWindow());
         }
     }//GEN-LAST:event_lblPulmonicConsonantsMouseClicked
 
@@ -269,7 +269,7 @@ public class ScrIPARefChart extends PFrame {
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.equals("") ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            InfoBox.error("IPA Error", e.getLocalizedMessage(), core.getRootWindow());
         }
     }//GEN-LAST:event_lblNonPulmonicConsonantsMouseClicked
     

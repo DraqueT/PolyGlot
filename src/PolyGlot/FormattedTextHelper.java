@@ -95,7 +95,7 @@ public class FormattedTextHelper {
                     ((PGrammarPane)pane).addImage(imageNode);
                 } catch (Exception e) {
                     InfoBox.error("Image Load Error", "Unable to load image: " 
-                            + e.getLocalizedMessage(), null);
+                            + e.getLocalizedMessage(), core.getRootWindow());
                 }                
             } else {
                 Document doc = pane.getDocument();

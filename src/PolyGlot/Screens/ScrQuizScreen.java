@@ -72,7 +72,7 @@ public class ScrQuizScreen extends PFrame {
         jPanel3.setLayout(new BorderLayout());
 
         if (!quiz.hasNext()) {
-            InfoBox.error("Empty Quiz", "Quiz has no questions. If generated, filter.", null);
+            InfoBox.error("Empty Quiz", "Quiz has no questions. If generated, filter.", core.getRootWindow());
         }
 
         nextQuestion();
@@ -101,7 +101,7 @@ public class ScrQuizScreen extends PFrame {
 
         if (numRight == quizLen) {
             InfoBox.info("Quiz Complete", "Perfect score! " + numRight
-                    + " out of " + quizLen + "correct!", this);
+                    + " out of " + quizLen + "correct!", core.getRootWindow());
             dispose();
         } else {
             int retake = JOptionPane.showConfirmDialog(this, numRight
@@ -208,7 +208,7 @@ public class ScrQuizScreen extends PFrame {
         } catch (Exception e) {
             //e.printStackTrace();
             InfoBox.error("Population Error", "Problem populating question: "
-                    + e.getLocalizedMessage(), this);
+                    + e.getLocalizedMessage(), core.getRootWindow());
         }
 
         setupScreen();
@@ -280,7 +280,7 @@ public class ScrQuizScreen extends PFrame {
                 break;
             default:
                 InfoBox.error("Unhandled Answer Type", "Answer type "
-                        + curQuestion.getAnswered() + " is not handled.", this);
+                        + curQuestion.getAnswered() + " is not handled.", core.getRootWindow());
         }
 
         pnlChoices.repaint();
@@ -452,7 +452,7 @@ public class ScrQuizScreen extends PFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException e) {
-            InfoBox.error("Error Opening Quiz", e.getLocalizedMessage(), null);
+            InfoBox.error("Error Opening Quiz", e.getLocalizedMessage(), core.getRootWindow());
         }
         //</editor-fold>
         ScrQuizScreen s = new ScrQuizScreen(quiz, core);

@@ -221,13 +221,13 @@ public class ScrDeclensions extends PDialog {
     public void setVisible(boolean visible) {
 
         if (typeId == -1) {
-            InfoBox.info("Missing Part of Speech", "Word must have a part of Speech set, and declensions defined before using this feature.", this);
+            InfoBox.info("Missing Part of Speech", "Word must have a part of Speech set, and declensions defined before using this feature.", core.getRootWindow());
             this.dispose();
         } else if ((core.getDeclensionManager().getDeclensionListTemplate(typeId) == null
                     || core.getDeclensionManager().getDeclensionListTemplate(typeId).isEmpty())
                 && core.getDeclensionManager().getDeclensionListWord(word.getId()).isEmpty()) {
             InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
-                    + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the Declensions button.", this);
+                    + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the Declensions button.", core.getRootWindow());
 
             this.dispose();
         } else {

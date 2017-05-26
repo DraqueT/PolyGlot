@@ -91,7 +91,7 @@ public class ScrUpdateAlert extends PDialog {
                         uri.normalize();
                         java.awt.Desktop.getDesktop().browse(uri);
                     } catch (IOException | URISyntaxException ex) {
-                        InfoBox.error("Browser Error", "Unable to open page: " + link, parent);
+                        InfoBox.error("Browser Error", "Unable to open page: " + link, core.getRootWindow());
                     }
                 }
             });
@@ -113,7 +113,7 @@ public class ScrUpdateAlert extends PDialog {
         if (ver.getTextContent().equals(core.getVersion())) {
             if (verbose) {
                 InfoBox.info("Update Status", "You're up to date and on the newest version: "
-                        + core.getVersion() + ".", null);
+                        + core.getVersion() + ".", core.getRootWindow());
             }
 
             this.setVisible(false);

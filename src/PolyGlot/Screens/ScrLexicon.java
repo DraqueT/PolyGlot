@@ -205,7 +205,7 @@ public final class ScrLexicon extends PFrame {
                     core.getWordCollection().getNodeById(wordId), true);
         } catch (Exception e) {
             InfoBox.error("Refresh Error", "Unable to refresh lexicon: "
-                    + e.getLocalizedMessage(), this);
+                    + e.getLocalizedMessage(), core.getRootWindow());
             //e.printStackTrace();
         }
     }
@@ -223,7 +223,7 @@ public final class ScrLexicon extends PFrame {
         if (!txtErrorBox.getText().equals("") && !chkRuleOverride.isSelected()) {
             ret = false;
             InfoBox.warning("Illegal word.", "Please correct or delete currently selected word "
-                    + "or select the rule override before exiting lexicon.", this);
+                    + "or select the rule override before exiting lexicon.", core.getRootWindow());
         }
 
         return ret;
@@ -339,7 +339,7 @@ public final class ScrLexicon extends PFrame {
                     }
                 } catch (Exception e) {
                     InfoBox.error("Word Class Error", "Unable to retrieve class/value pair "
-                            + curProp.getKey() + "/" + curProp.getValue(), this);
+                            + curProp.getKey() + "/" + curProp.getValue(), core.getRootWindow());
                 }
             }
         }
@@ -357,7 +357,7 @@ public final class ScrLexicon extends PFrame {
                     }
                 } catch (Exception e) {
                     InfoBox.error("Word Class Error", "Unable to retrieve class/value pair "
-                            + curProp.getKey() + "/" + curProp.getValue(), this);
+                            + curProp.getKey() + "/" + curProp.getValue(), core.getRootWindow());
                 }
             }
         }
@@ -552,7 +552,7 @@ public final class ScrLexicon extends PFrame {
         try {
             latch.await();
         } catch (Exception e) {
-            InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), this);
+            InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), core.getRootWindow());
         }
     }
 
@@ -591,7 +591,7 @@ public final class ScrLexicon extends PFrame {
             }
         } catch (Exception e) {
             InfoBox.error("Pronunciation Error", "Could not generate pronunciation: "
-                    + e.getLocalizedMessage(), this);
+                    + e.getLocalizedMessage(), core.getRootWindow());
         }
 
         curPopulating = localPopulating;
@@ -707,7 +707,7 @@ public final class ScrLexicon extends PFrame {
         try {
             populateLexicon(core.getWordCollection().filteredList(filter).iterator());
         } catch (Exception e) {
-            InfoBox.error("Filter Error", "Unable to apply filter.\n\n" + e.getMessage(), this);
+            InfoBox.error("Filter Error", "Unable to apply filter.\n\n" + e.getMessage(), core.getRootWindow());
         }
 
         lstLexicon.setSelectedIndex(0);
@@ -744,7 +744,7 @@ public final class ScrLexicon extends PFrame {
                 latch.await(); // do not continue until filter cleared
             } catch (Exception e) {
                 InfoBox.error("JavaFX Problem", "Unable to clear filter: "
-                        + e.getLocalizedMessage(), this);
+                        + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else {
             txtConSrc.setText("");
@@ -1013,7 +1013,7 @@ public final class ScrLexicon extends PFrame {
         if (!txtErrorBox.getText().equals("")
                 && !chkRuleOverride.isSelected()) {
             InfoBox.warning("Illegal Word",
-                    "Currently selected word is illegal. Please correct, or mark rule override.", this);
+                    "Currently selected word is illegal. Please correct, or mark rule override.", core.getRootWindow());
             canClose = false;
         }
 
@@ -1059,7 +1059,7 @@ public final class ScrLexicon extends PFrame {
             target = core.getWordCollection().getNodeById(id);
         } catch (Exception e) {
             InfoBox.error("Word Selection Error", "Unable to select word:\n"
-                    + e.getLocalizedMessage(), this);
+                    + e.getLocalizedMessage(), core.getRootWindow());
         }
 
         if (target == null) {
@@ -1149,7 +1149,7 @@ public final class ScrLexicon extends PFrame {
                     try {
                         curType = core.getTypes().getNodeById(curWord.getWordTypeId());
                     } catch (Exception ex) {
-                        InfoBox.error("Type error on lookup.", ex.getMessage(), parent);
+                        InfoBox.error("Type error on lookup.", ex.getMessage(), core.getRootWindow());
                     }
                     String tip = core.getPronunciationMgr().getPronunciation(curWord.getValue());
                     if (tip.equals("")) {
@@ -1287,7 +1287,7 @@ public final class ScrLexicon extends PFrame {
                 setPropertiesEnabled(true);
             }
         } catch (Exception e) {
-            InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), this);
+            InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), core.getRootWindow());
             //e.printStackTrace();
         }
 
@@ -1382,7 +1382,7 @@ public final class ScrLexicon extends PFrame {
 
             lstLexicon.setModel(listModel);
         } catch (Exception e) {
-            InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), this);
+            InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), core.getRootWindow());
             //e.printStackTrace();
         }
 
@@ -1414,7 +1414,7 @@ public final class ScrLexicon extends PFrame {
 
             saveValuesTo(curWord);
         } catch (Exception e) {
-            InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), this);
+            InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), core.getRootWindow());
         }
 
         curPopulating = false;
@@ -1469,7 +1469,7 @@ public final class ScrLexicon extends PFrame {
             core.getWordCollection().deleteNodeById(curWord.getId());
         } catch (Exception e) {
             InfoBox.error("Deletion Error", "Unable to delete word: "
-                    + e.getLocalizedMessage(), this);
+                    + e.getLocalizedMessage(), core.getRootWindow());
         }
 
         clearFilter();
@@ -1496,7 +1496,7 @@ public final class ScrLexicon extends PFrame {
             populateProperties();
         } catch (Exception e) {
             InfoBox.error("Creation Error", "Unable to create word: "
-                    + e.getLocalizedMessage(), this);
+                    + e.getLocalizedMessage(), core.getRootWindow());
         }
         curPopulating = false;
 

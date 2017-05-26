@@ -79,7 +79,7 @@ public class ScrQuizGenDialog extends PFrame {
         try {
             numQuestions = Integer.parseInt(txtNumQuestions.getText());
         } catch (Exception e) {
-            InfoBox.error("Integer Value Required", "Number of questions must be an integer value.", this);
+            InfoBox.error("Integer Value Required", "Number of questions must be an integer value.", core.getRootWindow());
             return;
         }
         
@@ -104,7 +104,7 @@ public class ScrQuizGenDialog extends PFrame {
             dispose();
         } catch (Exception e) {
             //e.printStackTrace();
-            InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), this);
+            InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), core.getRootWindow());
         }
     }
     
@@ -351,7 +351,7 @@ public class ScrQuizGenDialog extends PFrame {
         // do not allow self to be checked if no classes exist
         if (core.getWordPropertiesCollection().getAllWordProperties().isEmpty()
                 && chkClassQuiz.isSelected()) {
-            InfoBox.warning("No Classes Exist", "No word classes exist.", this);
+            InfoBox.warning("No Classes Exist", "No word classes exist.", core.getRootWindow());
             chkClassQuiz.setSelected(false);
         }            
     }//GEN-LAST:event_chkClassQuizActionPerformed
@@ -364,7 +364,7 @@ public class ScrQuizGenDialog extends PFrame {
         // do not allow self to be checked if no PoS exist
         if (core.getTypes().getNodes().isEmpty()
                 && chkTypeQuiz.isSelected()) {
-            InfoBox.warning("No PoS Exist", "No parts of speech exist.", this);
+            InfoBox.warning("No PoS Exist", "No parts of speech exist.", core.getRootWindow());
             chkTypeQuiz.setSelected(false);
         }
     }//GEN-LAST:event_chkTypeQuizActionPerformed

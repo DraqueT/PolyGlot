@@ -181,7 +181,7 @@ public class ScrFamilies extends PFrame {
             return;
         }
 
-        if (!InfoBox.deletionConfirmation(this)) {
+        if (!InfoBox.deletionConfirmation(core.getRootWindow())) {
             return;
         }
 
@@ -214,7 +214,7 @@ public class ScrFamilies extends PFrame {
      */
     private void removeWord() {
         if (chkInclSubFam.isSelected()) {
-            InfoBox.info("Alert", "Words may only be removed when \"Include Subfamilies\" box is unchecked.", this);
+            InfoBox.info("Alert", "Words may only be removed when \"Include Subfamilies\" box is unchecked.", core.getRootWindow());
             return;
         }
 
@@ -636,7 +636,7 @@ public class ScrFamilies extends PFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            InfoBox.error("Window Error", "Unable to open families: " + ex.getLocalizedMessage(), parent);
+            InfoBox.error("Window Error", "Unable to open families: " + ex.getLocalizedMessage(), _core.getRootWindow());
         }
 
         // set the leaf icon to be a folder, since all nodes are for containing words

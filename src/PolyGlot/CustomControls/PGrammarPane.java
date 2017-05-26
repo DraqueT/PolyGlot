@@ -80,7 +80,7 @@ public class PGrammarPane extends JTextPane {
                     }
                 } catch (Exception e) {
                     InfoBox.error("Image Import Error", "Unable to import image: "
-                            + e.getLocalizedMessage(), null);
+                            + e.getLocalizedMessage(), core.getRootWindow());
                 }
             }
         });
@@ -143,7 +143,7 @@ public class PGrammarPane extends JTextPane {
             inputAttributes.removeAttributes(inputAttributes);
         } catch (Exception e) {
             InfoBox.error("Image Insertion Error", "Unable to insert image: "
-                    + e.getLocalizedMessage(), null);
+                    + e.getLocalizedMessage(), core.getRootWindow());
         }
     }
 
@@ -159,7 +159,7 @@ public class PGrammarPane extends JTextPane {
                 ImageNode imageNode = core.getImageCollection().getFromBufferedImage(image);
                 addImage(imageNode);
             } catch (Exception e) {
-                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), null);
+                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else if (ClipboardHandler.isClipboardString()) {
             super.paste();

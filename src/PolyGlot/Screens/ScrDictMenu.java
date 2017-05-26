@@ -166,7 +166,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                 quizHit();
             } else {
                 InfoBox.error("Unrecognized Window",
-                        "Unrecognized window in last session: " + leftOpen, this);
+                        "Unrecognized window in last session: " + leftOpen, core.getRootWindow());
             }
 
         }
@@ -537,7 +537,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                     + "\n\n " + e.getMessage());
         } catch (IllegalStateException e) {
             InfoBox.warning("File Read Problems", "Problems reading file:\n"
-                    + e.getLocalizedMessage(), this);
+                    + e.getLocalizedMessage(), core.getRootWindow());
         }
 
         updateAllValues(core);
@@ -549,8 +549,6 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      * @param verbose Set this to have messages post to user.
      */
     private void checkForUpdates(final boolean verbose) {
-        final Window parent = this;
-
         Thread check = new Thread() {
             @Override
             public void run() {
@@ -560,7 +558,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
                     if (verbose) {
                         PolyGlot.CustomControls.InfoBox.error("Update Problem",
                                 "Unable to check for update:\n"
-                                + e.getLocalizedMessage(), parent);
+                                + e.getLocalizedMessage(), core.getRootWindow());
                     }
                 }
             }
@@ -914,7 +912,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     private void localInfo(String infoHead, String infoText) {
         holdFront = true;
-        PolyGlot.CustomControls.InfoBox.info(infoHead, infoText, this);
+        PolyGlot.CustomControls.InfoBox.info(infoHead, infoText, core.getRootWindow());
         holdFront = false;
     }
 
@@ -926,7 +924,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     private void localError(String infoHead, String infoText) {
         holdFront = true;
-        PolyGlot.CustomControls.InfoBox.error(infoHead, infoText, this);
+        PolyGlot.CustomControls.InfoBox.error(infoHead, infoText, core.getRootWindow());
         holdFront = false;
     }
 
@@ -938,7 +936,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
      */
     private int localYesNoCancel(String infoHead, String infoText) {
         holdFront = true;
-        int ret = PolyGlot.CustomControls.InfoBox.yesNoCancel(infoHead, infoText, this);
+        int ret = PolyGlot.CustomControls.InfoBox.yesNoCancel(infoHead, infoText, core.getRootWindow());
         holdFront = false;
         return ret;
     }
@@ -1351,7 +1349,7 @@ public class ScrDictMenu extends PFrame implements ApplicationListener {
     private void mnuTransWindowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTransWindowActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         //ScrTranslationWindow.run(core, this);
-        InfoBox.warning("Deprecated", "Does nothing.", this);
+        InfoBox.warning("Deprecated", "Does nothing.", core.getRootWindow());
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuTransWindowActionPerformed
 

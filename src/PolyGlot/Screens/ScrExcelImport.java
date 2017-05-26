@@ -386,7 +386,7 @@ public class ScrExcelImport extends PDialog {
         File file = new File(txtFileName.getText());
 
         if (!file.exists()) {
-            InfoBox.error("File Error", "File does not exist: " + txtFileName.getText(), this);
+            InfoBox.error("File Error", "File does not exist: " + txtFileName.getText(), core.getRootWindow());
             return;
         }
 
@@ -400,21 +400,21 @@ public class ScrExcelImport extends PDialog {
                     chkFirstLabels.isSelected(), true);
             reader.importFile(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
             parent.updateAllValues(core);
-            InfoBox.info("Success!", txtFileName.getText() + " imported successfully!", this);
+            InfoBox.info("Success!", txtFileName.getText() + " imported successfully!", core.getRootWindow());
             
             // if everything has completed without error, close the window and open Lexicon
             dispose();
             parent.openLexicon();
         } catch (InvalidFormatException e) {
-            InfoBox.warning("Unrecognized File Type", e.getLocalizedMessage(), this);
+            InfoBox.warning("Unrecognized File Type", e.getLocalizedMessage(), core.getRootWindow());
         } catch (NumberFormatException e) {
             InfoBox.error("Import Error", "All column fields and sheet field must contain "
-                    +"numeric values only:\n" + e.getLocalizedMessage(), this);
+                    +"numeric values only:\n" + e.getLocalizedMessage(), core.getRootWindow());
         } catch (Exception e) {
             InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
                     + ".\n Check to make certain that column mappings are correct "
                     +"(nothing above max cell value) and that the file is not corrupt:\n" 
-                    + e.getLocalizedMessage(), this);
+                    + e.getLocalizedMessage(), core.getRootWindow());
             //e.printStackTrace();
         }
     }

@@ -576,7 +576,7 @@ public class JFontChooser extends JComponent
             catch (BadLocationException e)
             {
                 InfoBox.error("Font Selectino Problem", "There was a problem with your font: "
-                        + e.getLocalizedMessage(), null);
+                        + e.getLocalizedMessage(), core.getRootWindow());
                 //e.printStackTrace();
             }
 

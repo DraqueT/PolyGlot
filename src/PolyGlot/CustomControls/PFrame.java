@@ -149,7 +149,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
                 TimeUnit.MICROSECONDS.sleep(250);
                 super.dispose();
             } catch (IllegalStateException|InterruptedException ex) {
-                InfoBox.error("Closing Error", "Window failed to close: " + ex.getLocalizedMessage(), this);
+                InfoBox.error("Closing Error", "Window failed to close: " + ex.getLocalizedMessage(), core.getRootWindow());
             }
         }
     }
@@ -402,7 +402,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
                 }
 
                 if (core == null && !(this instanceof ScrMainMenu)) {
-                    InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", this);
+                    InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", core.getRootWindow());
                 }
                 addWindowFocusListener(this);
             }

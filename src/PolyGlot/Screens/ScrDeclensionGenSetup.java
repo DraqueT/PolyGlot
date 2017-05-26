@@ -160,7 +160,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         }
 
         if (!ret) {
-            InfoBox.error("Unable to Close With Error", userMessage, this);
+            InfoBox.error("Unable to Close With Error", userMessage, core.getRootWindow());
         }
 
         return ret;
@@ -194,7 +194,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         
         if (decs.isEmpty()) {
             InfoBox.warning("No Declensions Exist", "Please set up some conjucations/declensions for \"" 
-                    + _core.getTypes().getNodeById(_typeId).getValue() + "\" before setting up automatic patterns.", s);
+                    + _core.getTypes().getNodeById(_typeId).getValue() + "\" before setting up automatic patterns.", _core.getRootWindow());
             s.dispose();
         } else {
             s.setVisible(true);
@@ -642,7 +642,7 @@ public class ScrDeclensionGenSetup extends PDialog {
      * deletes currently selected rule
      */
     private void deleteRule() {
-        if (!InfoBox.deletionConfirmation(this)) {
+        if (!InfoBox.deletionConfirmation(core.getRootWindow())) {
             return;
         }
 
@@ -675,7 +675,7 @@ public class ScrDeclensionGenSetup extends PDialog {
      * deletes currently selected transform from currently selected rule
      */
     private void deleteTransform() {
-        if (!InfoBox.deletionConfirmation(this)) {
+        if (!InfoBox.deletionConfirmation(core.getRootWindow())) {
             return;
         }
 

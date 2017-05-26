@@ -318,7 +318,7 @@ public class PExportToPDF {
         // inform user of errors
         if (!log.equals("")) {
             InfoBox.warning("PDF Generation Errors", "Problems with PDF generation:\n"
-                    + log, null);
+                    + log, core.getRootWindow());
         }
     }
 
