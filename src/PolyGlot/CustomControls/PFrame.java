@@ -27,6 +27,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -37,6 +38,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowStateListener;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
@@ -72,6 +75,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
     protected WindowMode mode = WindowMode.STANDARD;
     protected int frameState = -1;
     private boolean firstVisible = true;
+    private boolean curResizing;
 
     public PFrame() {
         this.addWindowStateListener(new WindowStateListener() {
@@ -412,6 +416,31 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
 
         super.setVisible(visible);
     }
+    
+    @Override
+    public void paint(Graphics g) {
+        if (!curResizing) {
+            super.paint(g);
+        }
+    }
+    
+    @Override
+    public void paintComponents(Graphics g) {
+        if (!curResizing) {
+            super.paintComponents(g);
+        }
+    }
+    
+    @Override
+    public void repaint() {
+        if (!curResizing) {
+            super.repaint();
+        }
+    }
+    
+    public void setCurResizing(boolean _resizing) {
+        curResizing = _resizing;
+    }
 
     /**
      * Smoothly resizes window with animation
@@ -422,40 +451,36 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
      * @throws java.lang.InterruptedException
      */
     public void setSizeSmooth(final int width, final int height, boolean wait) throws InterruptedException {
-        final int numFrames = 40; // total number of frames to animate
-        final int msDelay = 10; // ms delay between frames
+        final int numFrames = 20; // total number of frames to animate
+        final int msDelay = 20; // ms delay between frames
         final int initialX = this.getWidth();
         final int initialY = this.getHeight();
-
-        Thread resize = new Thread() {
+        final float xDif = width - initialX;
+        final float yDif = height - initialY;        
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+              
+        setCurResizing(true);
+        
+        executorService.scheduleAtFixedRate(new Runnable() {
+            int framesRun = 0;
+            
             @Override
             public void run() {
-                float xDif = width - initialX;
-                float yDif = height - initialY;
-
-                for (int i = 0; i < numFrames; i++) {
-                    float newX = initialX + (xDif / numFrames) * (i + 1);
-                    float newY = initialY + (yDif / numFrames) * (i + 1);
-
-                    PFrame.super.setSize((int) newX, (int) newY);
-                    try {
-                        Thread.sleep(msDelay); // sleep for animation frame length
-                    } catch (Exception e) {
-                        // if this fails, simlply fall out of loop and set size
-                        break;
-                    }
+                if (framesRun >= numFrames) {
+                    PFrame.super.setSize(width, height);
+                    setCurResizing(false);
+                    repaint();
+                    executorService.shutdown();
+                    return;
                 }
-
-                PFrame.super.setSize(width, height);
+                
+                float newX = initialX + (xDif / numFrames) * (framesRun + 1);
+                float newY = initialY + (yDif / numFrames) * (framesRun + 1);
+                PFrame.super.setSize((int) newX, (int) newY);
+                
+                framesRun++;
             }
-        };
-
-        synchronized (resize) {
-            if (wait) {
-                resize.start();
-                resize.wait();
-            }
-        }
+        }, 0, msDelay, TimeUnit.MILLISECONDS);
     }
 
     public abstract Component getWindow();
