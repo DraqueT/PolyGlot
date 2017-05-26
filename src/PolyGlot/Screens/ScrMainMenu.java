@@ -101,13 +101,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         UIManager.put("OptionPane.background", Color.white);
         UIManager.put("Panel.background", Color.white);
         UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
-    }
-    
-    @Override
-    public void setVisible(boolean visible) {
-        super.setVisible(visible);
         
-        // always start at default size. Only subwindow sizes should be saved
         super.setSize(super.getPreferredSize());
     }
     
