@@ -619,8 +619,9 @@ public class ScrPhonology extends PFrame {
             return;
         }
 
-        ((DefaultTableModel) tblRep.getModel()).removeRow(curRow);
-        saveRepTable();
+        core.getPropertiesManager().delCharacterReplacement(
+                tblRep.getValueAt(curRow, 0).toString());
+        populateReps();
     }
 
     /**

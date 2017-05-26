@@ -107,6 +107,16 @@ public class PropertiesManager {
     }
     
     /**
+     * Deletes replacement value for a character
+     * @param character character for replacement values to be wiped for
+     */
+    public void delCharacterReplacement(String character) {
+        if (charRep.containsKey(character)) {
+            charRep.remove(character);
+        }
+    }
+    
+    /**
      * Clears all character replacements
      */
     public void clearCharacterReplacement() {
