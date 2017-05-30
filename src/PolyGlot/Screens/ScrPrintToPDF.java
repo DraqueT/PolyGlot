@@ -125,15 +125,19 @@ public class ScrPrintToPDF extends PDialog {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        chkLocalCon.setSelected(true);
         chkLocalCon.setText("Print Local -> Conlang Dictionary");
         chkLocalCon.setToolTipText("Select to include a dictionary with lookup by native words");
 
+        chkConLocal.setSelected(true);
         chkConLocal.setText("Print Conlang -> Local Dictionary");
         chkConLocal.setToolTipText("Select to include a dictionary with lookup by constructed words");
 
+        chkOrtho.setSelected(true);
         chkOrtho.setText("Print Orthography");
         chkOrtho.setToolTipText("Include character and pronunciation guides");
 
+        chkGrammar.setSelected(true);
         chkGrammar.setText("Print Grammar");
         chkGrammar.setToolTipText("Include text from the grammar section of your library");
 
@@ -141,9 +145,11 @@ public class ScrPrintToPDF extends PDialog {
         chkLogographs.setToolTipText("Coming soon! (if anyone asks for it)");
         chkLogographs.setEnabled(false);
 
+        chkPageNum.setSelected(true);
         chkPageNum.setText("Print Page Number");
         chkPageNum.setToolTipText("Prints page number on each page of PDF");
 
+        chkGloss.setSelected(true);
         chkGloss.setText("Print Gloss Key");
         chkGloss.setToolTipText("Prints a key for part of speech glosses");
 

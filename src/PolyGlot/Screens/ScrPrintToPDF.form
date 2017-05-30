@@ -234,6 +234,7 @@
           <SubComponents>
             <Component class="javax.swing.JCheckBox" name="chkLocalCon">
               <Properties>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Print Local -&gt; Conlang Dictionary"/>
                 <Property name="toolTipText" type="java.lang.String" value="Select to include a dictionary with lookup by native words"/>
               </Properties>
@@ -243,6 +244,7 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkConLocal">
               <Properties>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Print Conlang -&gt; Local Dictionary"/>
                 <Property name="toolTipText" type="java.lang.String" value="Select to include a dictionary with lookup by constructed words"/>
               </Properties>
@@ -252,6 +254,7 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkOrtho">
               <Properties>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Print Orthography"/>
                 <Property name="toolTipText" type="java.lang.String" value="Include character and pronunciation guides"/>
               </Properties>
@@ -261,6 +264,7 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkGrammar">
               <Properties>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Print Grammar"/>
                 <Property name="toolTipText" type="java.lang.String" value="Include text from the grammar section of your library"/>
               </Properties>
@@ -280,6 +284,7 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkPageNum">
               <Properties>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Print Page Number"/>
                 <Property name="toolTipText" type="java.lang.String" value="Prints page number on each page of PDF"/>
               </Properties>
@@ -289,6 +294,7 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkGloss">
               <Properties>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Print Gloss Key"/>
                 <Property name="toolTipText" type="java.lang.String" value="Prints a key for part of speech glosses"/>
               </Properties>
