@@ -468,6 +468,9 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             // set size before disposing so that it will be properly saved to options
             curWindow.getWindow().setSize(jPanel2.getSize());
             curWindow.dispose();
+                        
+            // after disposing, update new window in case old wrote anything to the core
+            newScreen.updateAllValues(core);
         }
         
         // only resize if animation is enabled and the window isn't maximized
