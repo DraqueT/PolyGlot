@@ -424,6 +424,7 @@
                     <Column editable="true" title="Replacement" type="java.lang.Object"/>
                   </Table>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Character replacement entries. Character you type on the left, character(s) to replace it with on the right."/>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 0]"/>
                 </Property>
@@ -433,6 +434,9 @@
           </SubComponents>
         </Container>
         <Component class="javax.swing.JButton" name="btnAddCharRep">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Add new character replacement entry"/>
+          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddCharRepActionPerformed"/>
           </Events>
@@ -442,6 +446,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnDelCharRep">
           <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Delete currently selected character replacement entry"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[80, 80]"/>
             </Property>

@@ -992,16 +992,19 @@ public class ScrPhonology extends PFrame {
                 "Character", "Replacement"
             }
         ));
+        tblRep.setToolTipText("Character replacement entries. Character you type on the left, character(s) to replace it with on the right.");
         tblRep.setMinimumSize(new java.awt.Dimension(0, 0));
         tblRep.setRowHeight(30);
         jScrollPane1.setViewportView(tblRep);
 
+        btnAddCharRep.setToolTipText("Add new character replacement entry");
         btnAddCharRep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddCharRepActionPerformed(evt);
             }
         });
 
+        btnDelCharRep.setToolTipText("Delete currently selected character replacement entry");
         btnDelCharRep.setMaximumSize(new java.awt.Dimension(80, 80));
         btnDelCharRep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1016,7 +1019,7 @@ public class ScrPhonology extends PFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAddCharRep, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
