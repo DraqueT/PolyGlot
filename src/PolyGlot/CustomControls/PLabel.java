@@ -19,6 +19,7 @@
  */
 package PolyGlot.CustomControls;
 
+import PolyGlot.DictCore;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -36,20 +37,25 @@ import javax.swing.JLabel;
  *
  * @author draque.thompson
  */
-public class PLabel extends JLabel {
+public final class PLabel extends JLabel {
 
     public int MIN_FONT_SIZE = 3;
     public int MAX_FONT_SIZE = 240;
     Graphics g;
     boolean resize = false;
+    private final DictCore core;
 
-    public PLabel(String text) {
+    public PLabel(String text, DictCore _core) {
         super(text);
+        core = _core;
+        setFont(getFont().deriveFont((float)core.getOptionsManager().getMenuFontSize()));
         init();
     }
     
-    public PLabel(String text, int alignment) {
+    public PLabel(String text, int alignment, DictCore _core) {
         super(text, alignment);
+        core = _core;
+        setFont(getFont().deriveFont((float)core.getOptionsManager().getMenuFontSize()));
         init();
     }
 

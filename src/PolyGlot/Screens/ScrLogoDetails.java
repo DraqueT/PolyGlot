@@ -31,14 +31,15 @@ import PolyGlot.PGTUtil.WindowMode;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
 import PolyGlot.CustomControls.PCheckBox;
+import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PList;
+import PolyGlot.CustomControls.PTable;
 import PolyGlot.CustomControls.PTextPane;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -84,6 +85,7 @@ public class ScrLogoDetails extends PFrame {
      * @param _core
      */
     public ScrLogoDetails(DictCore _core) {
+        core = _core;
         createNew(_core, -1);
     }
 
@@ -94,6 +96,7 @@ public class ScrLogoDetails extends PFrame {
      * @param logoId
      */
     public ScrLogoDetails(DictCore _core, int logoId) {
+        core = _core;
         createNew(_core, logoId);
     }
     
@@ -437,7 +440,7 @@ public class ScrLogoDetails extends PFrame {
         try {
             int strokes = Integer.parseInt(txtStrokes.getText());
             curNode.setStrokes(strokes);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             // run later to avoid update conflicts
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override
@@ -653,7 +656,7 @@ public class ScrLogoDetails extends PFrame {
         if (!fltStrokes.getText().equals("")) {
             try {
                 Integer.parseInt(fltStrokes.getText());
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 // run later to avoid update conflicts
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     @Override
@@ -780,8 +783,8 @@ public class ScrLogoDetails extends PFrame {
         Font setFont = core.getPropertiesManager().getFontCon();
         Double kern = core.getPropertiesManager().getKerningSpace();
         TableColumn column = tblReadings.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(setFont, kern));
-        column.setCellRenderer(new PCellRenderer(setFont, kern));
+        column.setCellEditor(new PCellEditor(setFont, kern, core));
+        column.setCellRenderer(new PCellRenderer(setFont, kern, core));
 
         while (procIt.hasNext()) {
             Object[] newRow = {procIt.next()};
@@ -980,7 +983,7 @@ public class ScrLogoDetails extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         fltRelatedWord = new PTextField(core, false, "-- Related Word --");
         fltStrokes = new PTextField(core, true, "-- Strokes --");
-        jLabel3 = new javax.swing.JLabel();
+        jLabel3 = new PLabel("", core);
         fltReading = new PTextField(core, false, "-- Reading --");
         fltNotes = new PTextField(core, true, "-- Notes --");
         fltRadical = new PTextField(core, false, "-- Radical --");
@@ -992,26 +995,26 @@ public class ScrLogoDetails extends PFrame {
         lblLogo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstRelWords = new PList(core, true);
-        jLabel8 = new javax.swing.JLabel();
+        jLabel8 = new PLabel("", core);
         jScrollPane4 = new javax.swing.JScrollPane();
         lstRadicals = new PList(core, true);
-        jLabel10 = new javax.swing.JLabel();
+        jLabel10 = new PLabel("", core);
         btnAddReading = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelReading = new PolyGlot.CustomControls.PAddRemoveButton("-");
         btnAddRad = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelRad = new PolyGlot.CustomControls.PAddRemoveButton("-");
         chkIsRad = new PCheckBox(core);
         txtName = new PTextField(core, false, "-- Name --");
-        jLabel12 = new javax.swing.JLabel();
+        jLabel12 = new PLabel("", core);
         txtStrokes = new javax.swing.JTextField();
         btnLoadImage = new PButton(core);
         jScrollPane6 = new javax.swing.JScrollPane();
-        tblReadings = new javax.swing.JTable();
+        tblReadings = new PTable(core);
         jScrollPane3 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Notes --");
         btnClipboard = new PButton(core);
         jTextField5 = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        jLabel6 = new PLabel("", core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Logograph Details");
@@ -1070,8 +1073,6 @@ public class ScrLogoDetails extends PFrame {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
-
         lstLogos.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -1112,7 +1113,6 @@ public class ScrLogoDetails extends PFrame {
         lblLogo.setName(""); // NOI18N
         lblLogo.setPreferredSize(new java.awt.Dimension(49, 49));
 
-        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setMinimumSize(new java.awt.Dimension(0, 0));
 
         lstRelWords.setModel(new javax.swing.AbstractListModel() {
@@ -1127,7 +1127,6 @@ public class ScrLogoDetails extends PFrame {
         jLabel8.setText("Radicals");
         jLabel8.setMinimumSize(new java.awt.Dimension(0, 14));
 
-        jScrollPane4.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane4.setPreferredSize(new java.awt.Dimension(0, 130));
 
         lstRadicals.setModel(new javax.swing.AbstractListModel() {

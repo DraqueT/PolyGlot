@@ -22,33 +22,51 @@ package PolyGlot.Screens;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PLabel;
+import PolyGlot.CustomControls.PTextFieldFilter;
 import PolyGlot.DictCore;
+import PolyGlot.ManagersCollections.OptionsManager;
+import javax.swing.text.PlainDocument;
 
 /**
  *
  * @author draque.thompson
  */
-public class ScrOptions extends PDialog {
+public final class ScrOptions extends PDialog {
 
     /**
      * Creates new form ScrOptions
+     *
      * @param _core
      */
     public ScrOptions(DictCore _core) {
         core = _core;
+        setupKeyStrokes();
         firstVisible = false;
         initComponents();
         setOptions();
     }
-    
+
     @Override
     public void dispose() {
-        core.getOptionsManager().setAnimateWindows(chkResize.isSelected());
+        Double fontSize = Double.parseDouble(txtTextFontSize.getText());
+        OptionsManager options = core.getOptionsManager();
+        options.setAnimateWindows(chkResize.isSelected());
+        options.setMenuFontSize(fontSize);
+        ((ScrMainMenu)core.getRootWindow()).changeToLexicon();
+
         super.dispose();
     }
+
     
+
     private void setOptions() {
+        ((PlainDocument) txtTextFontSize.getDocument())
+                .setDocumentFilter(new PTextFieldFilter(
+                        core, PTextFieldFilter.FilterType.Double));
+
         chkResize.setSelected(core.getOptionsManager().isAnimateWindows());
+        txtTextFontSize.setText(Double.toString(core.getOptionsManager().getMenuFontSize()));
     }
 
     /**
@@ -62,6 +80,8 @@ public class ScrOptions extends PDialog {
 
         jPanel1 = new javax.swing.JPanel();
         chkResize = new PCheckBox(core);
+        jLabel1 = new PLabel("", core);
+        txtTextFontSize = new javax.swing.JTextField();
         btnOk = new PButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -75,13 +95,20 @@ public class ScrOptions extends PDialog {
         chkResize.setText("Auto Resize Window");
         chkResize.setToolTipText("Resize window to last size of given module automatically");
 
+        jLabel1.setText("Default Font Size");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(chkResize)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(chkResize)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTextFontSize)))
                 .addContainerGap(188, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -89,7 +116,11 @@ public class ScrOptions extends PDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(chkResize)
-                .addContainerGap(217, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtTextFontSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(179, Short.MAX_VALUE))
         );
 
         btnOk.setText("OK");
@@ -135,6 +166,8 @@ public class ScrOptions extends PDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;
     private javax.swing.JCheckBox chkResize;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField txtTextFontSize;
     // End of variables declaration//GEN-END:variables
 }

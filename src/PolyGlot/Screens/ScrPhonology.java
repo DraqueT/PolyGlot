@@ -24,6 +24,7 @@ import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
 import PolyGlot.CustomControls.PFrame;
+import PolyGlot.CustomControls.PLabel;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.Nodes.PronunciationNode;
@@ -347,12 +348,12 @@ public class ScrPhonology extends PFrame {
         Double kern = core.getPropertiesManager().getKerningSpace();
 
         TableColumn column = tblProcs.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(conFont, kern));
-        column.setCellRenderer(new PCellRenderer(conFont, kern));
+        column.setCellEditor(new PCellEditor(conFont, kern, core));
+        column.setCellRenderer(new PCellRenderer(conFont, kern, core));
 
         column = tblProcs.getColumnModel().getColumn(1);
-        column.setCellEditor(new PCellEditor(defaultFont,0.0));
-        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0));
+        column.setCellEditor(new PCellEditor(defaultFont,0.0, core));
+        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0, core));
 
         // disable tab/arrow selection
         InputMap procInput = tblProcs.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -385,7 +386,7 @@ public class ScrPhonology extends PFrame {
         Font conFont = core.getPropertiesManager().getFontCon();
 
         TableColumn column = tblRep.getColumnModel().getColumn(0);
-        final PCellEditor editChar = new PCellEditor(defaultFont, 0.0);
+        final PCellEditor editChar = new PCellEditor(defaultFont, 0.0, core);
         editChar.setIgnoreListenerSilenceing(true);
         editChar.setDocuListener(new DocumentListener() {
             @Override
@@ -423,10 +424,10 @@ public class ScrPhonology extends PFrame {
             }
         });        
         column.setCellEditor(editChar);
-        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0));
+        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0, core));
 
         column = tblRep.getColumnModel().getColumn(1);
-        PCellEditor valueEdit = new PCellEditor(conFont, core.getPropertiesManager().getKerningSpace());
+        PCellEditor valueEdit = new PCellEditor(conFont, core.getPropertiesManager().getKerningSpace(), core);
         valueEdit.setIgnoreListenerSilenceing(true);
         valueEdit.setDocuListener(new DocumentListener() {
             @Override
@@ -445,7 +446,7 @@ public class ScrPhonology extends PFrame {
             }
         });
         column.setCellEditor(valueEdit);
-        column.setCellRenderer(new PCellRenderer(conFont, core.getPropertiesManager().getKerningSpace()));
+        column.setCellRenderer(new PCellRenderer(conFont, core.getPropertiesManager().getKerningSpace(), core));
 
         // disable tab/arrow selection
         InputMap procInput = tblRom.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -479,12 +480,12 @@ public class ScrPhonology extends PFrame {
         Double kern = core.getPropertiesManager().getKerningSpace();
 
         TableColumn column = tblRom.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(conFont, kern));
-        column.setCellRenderer(new PCellRenderer(conFont, kern));
+        column.setCellEditor(new PCellEditor(conFont, kern, core));
+        column.setCellRenderer(new PCellRenderer(conFont, kern, core));
 
         column = tblRom.getColumnModel().getColumn(1);
-        column.setCellEditor(new PCellEditor(defaultFont, 0.0));
-        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0));
+        column.setCellEditor(new PCellEditor(defaultFont, 0.0, core));
+        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0, core));
 
         // disable tab/arrow selection
         InputMap procInput = tblRom.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -738,7 +739,7 @@ public class ScrPhonology extends PFrame {
     private void initComponents() {
 
         pnlRomanization = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabel2 = new PLabel("", core);
         btnAddRom = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelRom = new PolyGlot.CustomControls.PAddRemoveButton("-");
         btnUpRom = new PButton(core);
@@ -747,7 +748,7 @@ public class ScrPhonology extends PFrame {
         btnDownRom = new PButton(core);
         chkEnableRom = new javax.swing.JCheckBox();
         pnlOrthography = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel1 = new PLabel("", core);
         btnAddProc = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelProc = new PolyGlot.CustomControls.PAddRemoveButton("-");
         btnUpProc = new PButton(core);
@@ -755,7 +756,7 @@ public class ScrPhonology extends PFrame {
         tblProcs = new javax.swing.JTable();
         btnDownProc = new PButton(core);
         jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        jLabel3 = new PLabel("", core);
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRep = new javax.swing.JTable();
         btnAddCharRep = new PolyGlot.CustomControls.PAddRemoveButton("+");

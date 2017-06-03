@@ -20,6 +20,7 @@
 
 package PolyGlot.CustomControls;
 
+import PolyGlot.DictCore;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -36,9 +37,9 @@ import javax.swing.table.TableCellRenderer;
  * @author draque
  */
 public class PCellRenderer implements TableCellRenderer {
-
-    Font myFont;
-    DocumentListener docListener;
+    private Font myFont;
+    private DocumentListener docListener;
+    private final DictCore core;
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -49,7 +50,7 @@ public class PCellRenderer implements TableCellRenderer {
         }
         
         if (myFont != null) {
-            editor.setFont(myFont);
+            editor.setFont(myFont.deriveFont((float)core.getOptionsManager().getMenuFontSize()));
         }
         
         if (table.isEnabled()) {
@@ -69,7 +70,8 @@ public class PCellRenderer implements TableCellRenderer {
         docListener = _listener;
     }
 
-    public PCellRenderer(Font _myFont, Double kernVal) {
+    public PCellRenderer(Font _myFont, Double kernVal, DictCore _core) {
+        core = _core;
         Map attr = _myFont.getAttributes();
         attr.put(TextAttribute.TRACKING, kernVal);
         myFont = _myFont.deriveFont(attr);

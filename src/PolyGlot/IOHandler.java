@@ -306,6 +306,9 @@ public class IOHandler {
                     case PGTUtil.optionsAutoResize:
                         core.getOptionsManager().setAnimateWindows(bothVal[1].equals(PGTUtil.True));
                         break;
+                    case PGTUtil.optionsMenuFontSize:
+                        core.getOptionsManager().setMenuFontSize(Double.parseDouble(bothVal[1]));
+                        break;
                     case "\n":
                         break;
                     default:
@@ -1035,7 +1038,6 @@ public class IOHandler {
                     nextLine += ("," + file);
                 }
             }
-
             f0.write(nextLine + newLine);
 
             nextLine = PGTUtil.optionsScreenPos + "=";
@@ -1043,7 +1045,6 @@ public class IOHandler {
                 nextLine += ("," + curPos.getKey() + ":" + curPos.getValue().x + ":"
                         + curPos.getValue().y);
             }
-
             f0.write(nextLine + newLine);
 
             nextLine = PGTUtil.optionsScreensSize + "=";
@@ -1053,17 +1054,17 @@ public class IOHandler {
             }
 
             f0.write(nextLine + newLine);
-
             nextLine = PGTUtil.optionsScreensOpen + "=";
 
             for (String screen : core.getOptionsManager().getLastScreensUp()) {
                 nextLine += ("," + screen);
             }
-
             f0.write(nextLine + newLine);
 
             nextLine = PGTUtil.optionsAutoResize + "=" + (core.getOptionsManager().isAnimateWindows() ? PGTUtil.True : PGTUtil.False);
-
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.optionsMenuFontSize + "=" + Double.toString(core.getOptionsManager().getMenuFontSize());
             f0.write(nextLine + newLine);
         }
     }

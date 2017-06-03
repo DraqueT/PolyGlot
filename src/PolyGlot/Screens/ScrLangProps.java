@@ -27,6 +27,7 @@ import PolyGlot.CustomControls.PTextField;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PFrame;
+import PolyGlot.CustomControls.PLabel;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -245,10 +246,10 @@ public class ScrLangProps extends PFrame {
         chkIgnoreCase = new PCheckBox(core);
         chkDisableProcRegex = new PCheckBox(core);
         chkEnforceRTL = new PCheckBox(core);
-        jLabel2 = new javax.swing.JLabel();
+        jLabel2 = new PLabel("", core);
         jPanel4 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jLabel1 = new PLabel("", core);
+        jLabel3 = new PLabel("", core);
         txtKerning = new javax.swing.JFormattedTextField(decimalFormat);
         jPanel5 = new javax.swing.JPanel();
         txtLangName = new PTextField(core, true, "-- Language Name --");
@@ -466,7 +467,6 @@ public class ScrLangProps extends PFrame {
 
         txtLocalLanguage.setToolTipText("The natural language you use when writing your conlang");
 
-        jScrollPane4.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane4.setViewportView(txtAuthorCopyright);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);

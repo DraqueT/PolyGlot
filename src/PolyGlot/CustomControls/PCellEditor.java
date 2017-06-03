@@ -19,6 +19,7 @@
  */
 package PolyGlot.CustomControls;
 
+import PolyGlot.DictCore;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -47,6 +48,7 @@ public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
     Font myFont;
     DocumentListener docListener;
     private boolean ignoreListenerSilenceing = false;
+    private final DictCore core;
 
     public void setDocuListener(DocumentListener _listener) {
         docListener = _listener;
@@ -54,9 +56,11 @@ public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
         ((JTextField) component).getDocument().addDocumentListener(docListener);
     }
 
-    public PCellEditor(Font _myFont, Double kernVal) {
+    public PCellEditor(Font _myFont, Double kernVal, DictCore _core) {
+        core = _core;
         Map attr = _myFont.getAttributes();
         attr.put(TextAttribute.TRACKING, kernVal);
+        attr.put(TextAttribute.SIZE, (float)core.getOptionsManager().getMenuFontSize());
         myFont = _myFont.deriveFont(attr);
 
         JTextField setupText = (JTextField) component;

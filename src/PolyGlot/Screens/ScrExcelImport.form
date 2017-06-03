@@ -78,6 +78,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Import File"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btnBrowse">
       <Properties>
@@ -232,24 +235,36 @@
             </Property>
             <Property name="text" type="java.lang.String" value="CONLANG"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="text" type="java.lang.String" value="ConWord"/>
             <Property name="toolTipText" type="java.lang.String" value="Constructed Language Word"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
             <Property name="text" type="java.lang.String" value="Local Word"/>
             <Property name="toolTipText" type="java.lang.String" value="Synonym in local language"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
             <Property name="text" type="java.lang.String" value="Type"/>
             <Property name="toolTipText" type="java.lang.String" value="Part of speech"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
@@ -262,6 +277,9 @@
             <Property name="text" type="java.lang.String" value="Pronunciation"/>
             <Property name="toolTipText" type="java.lang.String" value="Word pronunciation"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
@@ -329,6 +347,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Excel Sheet"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtExcelSheet">
           <Properties>
@@ -340,6 +361,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Delimiter"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtDelimiter">
           <Properties>

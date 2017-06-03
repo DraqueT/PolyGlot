@@ -22,6 +22,7 @@ package PolyGlot.Screens;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PLabel;
 import PolyGlot.DictCore;
 import PolyGlot.WebInterface;
 import java.awt.Color;
@@ -175,7 +176,7 @@ public class ScrUpdateAlert extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        txtVersion = new javax.swing.JLabel();
+        txtVersion = new PLabel("", core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);

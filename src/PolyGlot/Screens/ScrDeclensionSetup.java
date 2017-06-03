@@ -27,7 +27,9 @@ import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.TableBooleanEditor;
 import PolyGlot.CustomControls.PCellEditor;
+import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PList;
+import PolyGlot.CustomControls.PTable;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Cursor;
@@ -184,7 +186,8 @@ public final class ScrDeclensionSetup extends PDialog {
         }
 
         TableColumn column = tblDimensions.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(new JLabel().getFont(), 0.0));
+        column.setCellEditor(new PCellEditor(new JLabel().getFont()
+                .deriveFont((float)core.getOptionsManager().getMenuFontSize()), 0.0, core));
 
         column = tblDimensions.getColumnModel().getColumn(1);
         column.setCellEditor(new TableBooleanEditor());
@@ -452,16 +455,16 @@ public final class ScrDeclensionSetup extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel1 = new PLabel("", core);
         jScrollPane1 = new javax.swing.JScrollPane();
         lstDeclensionList = new PList(core, false);
         jPanel2 = new javax.swing.JPanel();
         txtDeclensionName = new PTextField(core, true, "-- Name --");//PTextField(core, true, "-- Name --");
-        jLabel3 = new javax.swing.JLabel();
+        jLabel3 = new PLabel("", core);
         btnAddDimension = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelDimension = new PolyGlot.CustomControls.PAddRemoveButton("-");
         sclDimensions = new javax.swing.JScrollPane();
-        tblDimensions = new javax.swing.JTable();
+        tblDimensions = new PTable(core);
         jScrollPane3 = new javax.swing.JScrollPane();
         txtDeclensionNotes = new PolyGlot.CustomControls.PTextPane(core, true, "-- Notes --");
         btnDeleteDeclension = new PolyGlot.CustomControls.PAddRemoveButton("-");
@@ -553,7 +556,7 @@ public final class ScrDeclensionSetup extends PDialog {
                             .addComponent(txtDeclensionName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(btnAddDimension, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnDelDimension, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(sclDimensions, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addContainerGap())))

@@ -32,6 +32,7 @@ import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PGDocument;
 import PolyGlot.CustomControls.PGrammarPane;
+import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.ExternalCode.GlyphVectorPainter;
 import PolyGlot.PTree;
@@ -263,7 +264,7 @@ public class ScrGrammarGuide extends PFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         treChapList = new PTree(core);
         txtSearch = new PTextField(core, true, "-- Search --");
-        jLabel1 = new javax.swing.JLabel();
+        jLabel1 = new PLabel("", core);
         btnAddSection = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelete = new PolyGlot.CustomControls.PAddRemoveButton("-");
         btnAddChapter = new PButton(core);
@@ -325,7 +326,6 @@ public class ScrGrammarGuide extends PFrame {
 
         btnApply.setText(" Apply ");
         btnApply.setToolTipText("Switches currently selected text to current font style");
-        btnApply.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnApply.setEnabled(false);
         btnApply.setFocusable(false);
         btnApply.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -337,7 +337,6 @@ public class ScrGrammarGuide extends PFrame {
         });
         jToolBar1.add(btnApply);
 
-        txtSection.setBorder(null);
         txtSection.setToolTipText("Formatted segment text");
         txtSection.setEnabled(false);
         panSection.setViewportView(txtSection);
@@ -373,7 +372,6 @@ public class ScrGrammarGuide extends PFrame {
 
         btnRecordAudio.setText("Record");
         btnRecordAudio.setToolTipText("Records spoken example of grammar (erases any current example)");
-        btnRecordAudio.setBorder(null);
         btnRecordAudio.setBorderPainted(false);
         btnRecordAudio.setEnabled(false);
         btnRecordAudio.setFocusable(false);
@@ -390,7 +388,6 @@ public class ScrGrammarGuide extends PFrame {
 
         btnPlayPauseAudio.setText("Play");
         btnPlayPauseAudio.setToolTipText("Plays spoken example of grammar, if it exists.");
-        btnPlayPauseAudio.setBorder(null);
         btnPlayPauseAudio.setBorderPainted(false);
         btnPlayPauseAudio.setEnabled(false);
         btnPlayPauseAudio.setFocusable(false);

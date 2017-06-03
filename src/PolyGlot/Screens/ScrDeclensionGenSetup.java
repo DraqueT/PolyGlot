@@ -30,7 +30,9 @@ import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
 import PolyGlot.CustomControls.PCheckBox;
+import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PList;
+import PolyGlot.CustomControls.PTable;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -294,12 +296,12 @@ public class ScrDeclensionGenSetup extends PDialog {
         }
 
         TableColumn column = tblTransforms.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(setFont, kern));
-        column.setCellRenderer(new PCellRenderer(setFont, kern));
+        column.setCellEditor(new PCellEditor(setFont, kern, core));
+        column.setCellRenderer(new PCellRenderer(setFont, kern, core));
 
         column = tblTransforms.getColumnModel().getColumn(1);
-        column.setCellEditor(new PCellEditor(setFont, kern));
-        column.setCellRenderer(new PCellRenderer(setFont, kern));
+        column.setCellEditor(new PCellEditor(setFont, kern, core));
+        column.setCellRenderer(new PCellRenderer(setFont, kern, core));
 
         // do nothing if nothing selected in rule list
         if (curRule == null) {
@@ -816,18 +818,18 @@ public class ScrDeclensionGenSetup extends PDialog {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel1 = new PLabel("", core);
         jScrollPane1 = new javax.swing.JScrollPane();
         lstCombinedDec = new PList(core, false);
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabel2 = new PLabel("", core);
         jScrollPane2 = new javax.swing.JScrollPane();
         lstRules = new PList(core, false);
-        jLabel3 = new javax.swing.JLabel();
+        jLabel3 = new PLabel("", core);
         btnAddRule = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDeleteRule = new PolyGlot.CustomControls.PAddRemoveButton("-");
         sclTransforms = new javax.swing.JScrollPane();
-        tblTransforms = new javax.swing.JTable();
+        tblTransforms = new PTable(core);
         btnAddTransform = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDeleteTransform = new PolyGlot.CustomControls.PAddRemoveButton("-");
         txtRuleName = new PTextField(core, true, "-- Name --");
@@ -853,8 +855,6 @@ public class ScrDeclensionGenSetup extends PDialog {
 
         jLabel1.setText("Conjugation/Declensions");
 
-        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
-
         lstCombinedDec.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -873,8 +873,6 @@ public class ScrDeclensionGenSetup extends PDialog {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel2.setText("Rules");
-
-        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
 
         lstRules.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };

@@ -67,7 +67,8 @@ public class PTextPane extends JTextPane {
         setText(defText);
         setForeground(Color.lightGray);
         if (overrideFont) {
-            setFont(core.getPropertiesManager().getCharisUnicodeFont());
+            setFont(core.getPropertiesManager().getCharisUnicodeFont()
+                    .deriveFont((float)core.getOptionsManager().getMenuFontSize()));
         } else {
             setFont(core.getPropertiesManager().getFontCon());
         }

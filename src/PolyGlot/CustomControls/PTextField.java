@@ -87,7 +87,7 @@ public class PTextField extends JTextField {
         if (!overrideFont) {
             setFont(core.getPropertiesManager().getFontCon());
         } else {
-            setFont(core.getPropertiesManager().getCharisUnicodeFont());
+            setFont(core.getPropertiesManager().getCharisUnicodeFont().deriveFont((float)core.getOptionsManager().getMenuFontSize()));
         }
         setText(defText);
     }

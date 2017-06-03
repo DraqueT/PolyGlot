@@ -76,7 +76,7 @@ public class DictCore {
             wordCollection = new ConWordCollection(this);
             typeCollection = new TypeCollection(this);
             declensionMgr = new DeclensionManager(this);
-            propertiesManager = new PropertiesManager();
+            propertiesManager = new PropertiesManager(this);
             pronuncMgr = new PronunciationMgr(this);
             romMgr = new RomanizationManager(this);
             famManager = new FamilyManager(this);

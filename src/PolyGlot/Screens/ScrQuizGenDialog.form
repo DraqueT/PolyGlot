@@ -261,6 +261,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Vocabulary Filter"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -268,6 +271,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Quiz Length"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtNumQuestions">
           <Properties>
@@ -279,6 +285,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Quiz On:"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JCheckBox" name="chkDefQuiz">
           <Properties>

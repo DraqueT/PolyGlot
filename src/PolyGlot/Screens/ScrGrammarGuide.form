@@ -500,6 +500,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Sections"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnAddSection">
               <Properties>

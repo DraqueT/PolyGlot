@@ -109,6 +109,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Conjugations"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">
           <AuxValues>
@@ -161,7 +164,7 @@
                                   <Component id="txtDeclensionName" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="btnAddDimension" min="-2" pref="40" max="-2" attributes="0"/>
-                                      <EmptySpace pref="152" max="32767" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                       <Component id="btnDelDimension" min="-2" pref="40" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="sclDimensions" alignment="0" pref="0" max="32767" attributes="0"/>
@@ -209,6 +212,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Dimensions"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnAddDimension">
               <Properties>
@@ -272,6 +278,9 @@
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTable(core)"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>

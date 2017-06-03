@@ -21,13 +21,16 @@ package PolyGlot.ManagersCollections;
 
 import PolyGlot.DictCore;
 import PolyGlot.IOHandler;
+import PolyGlot.PGTUtil;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.UIManager;
 
 /**
  * This contains, loads and saves the options for PolyGlot
@@ -41,10 +44,32 @@ public class OptionsManager {
     private final Map<String, Point> screenPos = new HashMap<>();
     private final Map<String, Dimension> screenSize = new HashMap<>();
     private final List<String> screensUp = new ArrayList<>();
+    private Double menuFontSize = 0.0;
     private final DictCore core;
 
     public OptionsManager(DictCore _core) {
         core = _core;
+    }
+    
+    public double getMenuFontSize() {
+        return menuFontSize == 0.0 ? PGTUtil.defaultFontSize : menuFontSize;
+    }
+    
+    public void setMenuFontSize(double _size) {
+        menuFontSize = _size;
+        setDefaultJavaFontSize(_size);
+    }
+    
+    private void setDefaultJavaFontSize(double size) {
+        java.util.Enumeration keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Font newFont = UIManager.getFont(key);
+            
+            if (newFont != null) {
+                UIManager.put(key, newFont.deriveFont((float)size));
+            }
+        }
     }
     
     /**

@@ -23,6 +23,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
@@ -75,7 +76,7 @@ public class ScrPrintToPDF extends PDialog {
         btnSelectSavePath = new PButton(core);
         txtImageLocation = new PTextField(core, true, "-- Cover Image --");
         btnSelectImagePath = new PButton(core);
-        jLabel4 = new javax.swing.JLabel();
+        jLabel4 = new PLabel("", core);
         jPanel2 = new javax.swing.JPanel();
         chkLocalCon = new PCheckBox(core);
         chkConLocal = new PCheckBox(core);

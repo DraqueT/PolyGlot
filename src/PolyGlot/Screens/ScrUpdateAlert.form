@@ -95,6 +95,9 @@
             <Property name="text" type="java.lang.String" value="--"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

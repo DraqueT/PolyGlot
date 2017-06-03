@@ -36,7 +36,6 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -77,12 +76,13 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
      */
     public ScrMainMenu(String overridePath) {
         super();
+        core = new DictCore(); // needed for initialization
         initComponents();
         
         try {
             backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
             jLabel1.setFont(IOHandler.getButtonFont().deriveFont(45f));
-        } catch (Exception e) {
+        } catch (IOException e) {
             InfoBox.error("Resource Error", "Unable to load internal resource: " + e.getLocalizedMessage(), core.getRootWindow());
         }
         
@@ -263,7 +263,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 || fileName.isEmpty()) {
             return;
         }
-
+        
         core = new DictCore();
         core.setRootWindow(this);
 
@@ -363,6 +363,13 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         }
 
         return cleanSave;
+    }
+    
+    /**
+     * Changes window to lexicon (or refreshes if currently selected.
+     */
+    public void changeToLexicon() {
+        btnLexicon.doClick();
     }
     
     /**
@@ -767,7 +774,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         };
         jButton1 = new PButton(core);
         jButton2 = new PButton(core);
-        jLabel1 = new PLabel("");
+        jLabel1 = new PLabel("", core);
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -1244,6 +1251,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
     private void btnLogosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogosActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        
         ScrLogoDetails s = new ScrLogoDetails(core);
         changeScreen(s, s.getWindow(), (PButton)evt.getSource());
         setCursor(Cursor.getDefaultCursor());

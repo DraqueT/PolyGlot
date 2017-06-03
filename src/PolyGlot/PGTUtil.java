@@ -189,6 +189,7 @@ public class PGTUtil {
     public static final String optionsScreensSize = "ScreenSizes";
     public static final String optionsScreensOpen = "ScreensUp";
     public static final String optionsAutoResize = "OptionsResize";
+    public static final String optionsMenuFontSize = "OptionsMenuFontSize";
 
     // string constants
     public static final String dictFileName = "PGDictionary.xml";
@@ -229,7 +230,7 @@ public class PGTUtil {
     // int constants...
     public static final Integer numMenuFlashes = 4;
     public static final Integer menuFlashSleep = 200;
-    public static final Integer defaultFontSize = 12;
+    public static final Double defaultFontSize = 12.0;
     
     // color constants
     public static final Color colorDisabledBG;

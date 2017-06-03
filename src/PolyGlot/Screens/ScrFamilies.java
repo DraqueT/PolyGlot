@@ -26,6 +26,7 @@ import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.FamTreeNode;
 import PolyGlot.CustomControls.PCheckBox;
+import PolyGlot.CustomControls.PLabel;
 import PolyGlot.PTree;
 import java.awt.Component;
 import java.awt.Toolkit;
@@ -439,7 +440,7 @@ public class ScrFamilies extends PFrame {
         chkInclSubFam = new PCheckBox(core);
         jScrollPane3 = new javax.swing.JScrollPane();
         lstWords = new javax.swing.JList();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel1 = new PLabel("", core);
         btnAddWord = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelWord = new PolyGlot.CustomControls.PAddRemoveButton("-");
         txtFamName = new PTextField(core, true, "-- Name --");

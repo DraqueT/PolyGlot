@@ -26,6 +26,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PDialog;
+import PolyGlot.CustomControls.PLabel;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -82,16 +83,16 @@ public class ScrExcelImport extends PDialog {
     private void initComponents() {
 
         txtFileName = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel1 = new PLabel("", core);
         btnBrowse = new PButton(core);
         jPanel1 = new javax.swing.JPanel();
         chkFirstLabels = new PCheckBox(core);
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jLabel2 = new PLabel("", core);
+        jLabel3 = new PLabel("", core);
+        jLabel4 = new PLabel("", core);
+        jLabel5 = new PLabel("", core);
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        jLabel7 = new PLabel("", core);
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtConWord = new javax.swing.JTextField();
@@ -102,9 +103,9 @@ public class ScrExcelImport extends PDialog {
         txtClass = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jLabel11 = new javax.swing.JLabel();
+        jLabel11 = new PLabel("", core);
         txtExcelSheet = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
+        jLabel10 = new PLabel("", core);
         txtDelimiter = new javax.swing.JTextField();
         btnImport = new PButton(core);
         btnCancel = new PButton(core);

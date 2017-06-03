@@ -20,6 +20,7 @@
 package PolyGlot.ManagersCollections;
 
 import PolyGlot.CustomControls.PAlphaMap;
+import PolyGlot.DictCore;
 import PolyGlot.IOHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Font;
@@ -41,7 +42,7 @@ public class PropertiesManager {
     private String overrideProgramPath = "";
     private Font font = null;
     private Integer fontStyle = 0;
-    private Integer fontSize = 12;
+    private Integer conFontSize = 12;
     private final PAlphaMap alphaOrder;
     private String alphaPlainText = "";
     private String langName = "";
@@ -61,17 +62,18 @@ public class PropertiesManager {
     private final Font charisUnicodeItalic;
     private final Font charisUnicodeBoldItalic;
     private final Map<String, String> charRep = new HashMap<>();
+    private final DictCore core;
     private Double kerningSpace = 0.0;
 
-    public PropertiesManager() throws Exception {
+    public PropertiesManager(DictCore _core) throws Exception {
         alphaOrder = new PAlphaMap();
+        core = _core;
 
         // set default font to Charis, as it's unicode compatible
         charisUnicode = IOHandler.getCharisUnicodeFontInitial();
         charisUnicodeBold = IOHandler.getCharisUnicodeFontBoldInitial();
         charisUnicodeItalic = IOHandler.getCharisUnicodeFontItalicInitial();
-        charisUnicodeBoldItalic = IOHandler.getCharisUnicodeFontBoldItalicInitial();
-        setFontCon(charisUnicode);        
+        charisUnicodeBoldItalic = IOHandler.getCharisUnicodeFontBoldItalicInitial();       
     }   
     
     /**
@@ -141,11 +143,11 @@ public class PropertiesManager {
      * @return
      */
     public Font getCharisUnicodeFont() {
-        return getCharisUnicodeFont(PGTUtil.defaultFontSize);
+        return getCharisUnicodeFont(core.getOptionsManager().getMenuFontSize());
     }
     
-    public Font getCharisUnicodeFont(int size) {
-        return charisUnicode.deriveFont(0, size);
+    public Font getCharisUnicodeFont(double size) {
+        return charisUnicode.deriveFont(0, (float)size);
     }
     
     public Font getCharisUnicodeFontBold(int size) {
@@ -188,7 +190,7 @@ public class PropertiesManager {
             ret = (new javafx.scene.control.TextField()).getFont();
         } else {
             java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
-            ret = javafx.scene.text.Font.font(font.getFamily(), fontSize);
+            ret = javafx.scene.text.Font.font(font.getFamily(), conFontSize);
         }
 
         return ret;
@@ -278,11 +280,11 @@ public class PropertiesManager {
      */
     public Font getFontCon() {
         // under certain circumstances, this can default to 0...
-        if (fontSize == 0) {
-            fontSize = 12;
+        if (conFontSize == 0) {
+            conFontSize = 12;
         }
 
-        return font == null ? new JTextField().getFont() : font.deriveFont(fontStyle, fontSize);
+        return font == null ? charisUnicode.deriveFont((float)core.getOptionsManager().getMenuFontSize()) : font.deriveFont(fontStyle, conFontSize);
     }
 
     /**
@@ -317,7 +319,7 @@ public class PropertiesManager {
      * @return the fontSize
      */
     public Integer getFontSize() {
-        return fontSize;
+        return conFontSize;
     }
 
     /**
@@ -326,7 +328,7 @@ public class PropertiesManager {
      * @param _fontSize the fontSize to set
      */
     public void setFontSize(Integer _fontSize) {
-        fontSize = _fontSize < 0 ? 12 : _fontSize;
+        conFontSize = _fontSize < 0 ? 12 : _fontSize;
     }
 
     /**

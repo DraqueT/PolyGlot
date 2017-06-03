@@ -128,6 +128,9 @@
             <Property name="text" type="java.lang.String" value="Romanization"/>
             <Property name="toolTipText" type="java.lang.String" value="The Pronunciation Guide"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnAddRom">
           <Properties>
@@ -278,6 +281,9 @@
             <Property name="text" type="java.lang.String" value="Phonemic Orthography"/>
             <Property name="toolTipText" type="java.lang.String" value="The Pronunciation Guide"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnAddProc">
           <Properties>
@@ -402,6 +408,9 @@
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Character Replacement"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+          </AuxValues>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">
           <Properties>

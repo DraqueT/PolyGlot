@@ -51,7 +51,7 @@ import javax.swing.SwingUtilities;
 public class ScrQuizScreen extends PFrame {
 
     private final Quiz quiz;
-    private final PLabel lblQNode = new PLabel("", PLabel.CENTER);
+    private final PLabel lblQNode = new PLabel("", PLabel.CENTER, core);
     private QuizQuestion curQuestion;
     private final Color correctGreen = new Color(15, 175, 15);
 
@@ -303,13 +303,13 @@ public class ScrQuizScreen extends PFrame {
         grpAnswerSelection = new javax.swing.ButtonGroup();
         pnlChoices = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        lblQuestion = new javax.swing.JLabel("", PLabel.CENTER);
+        lblQuestion = new PLabel("", PLabel.CENTER, core);
         jPanel3 = new javax.swing.JPanel();
         btnForward = new PButton(core);
         btnBackward = new PButton(core);
         lblAnsStat = new javax.swing.JLabel();
-        lblQNum = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lblQNum = new PLabel("", core);
+        jLabel1 = new PLabel("", core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PolyGlot Quiz");
