@@ -50,6 +50,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 public class DictCore {
+
     private final String version = "2.0";
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
@@ -241,10 +242,11 @@ public class DictCore {
             rootWindow.updateAllValues(this);
         }
     }
-    
+
     /**
      * Returns root window of PolyGlot
-     * @return 
+     *
+     * @return
      */
     public PFrame getRootWindow() {
         return rootWindow;
@@ -306,17 +308,21 @@ public class DictCore {
     /**
      * Builds a report on the conlang. Potentially very computationally
      * expensive.
-     *
-     * @return String formatted report
      */
-    public String buildLanguageReport() {
-        String ret = ConWordCollection.formatPlain("<center>---LANGUAGE STAT REPORT---</center><br><br>");
+    public void buildLanguageReport() {
+        String ret = "";
 
+        // TODO: move this into the wordCollection.buildWordReport() method
         ret += propertiesManager.buildPropertiesReport();
 
         ret += wordCollection.buildWordReport();
 
-        return ret;
+        try {
+            java.awt.Desktop.getDesktop().browse(IOHandler.createTmpURL(ret));
+        } catch (IOException | URISyntaxException e) {
+            InfoBox.error("Statistics Error", "Unable to generate/display language statistics: " 
+                    + e.getLocalizedMessage(), getRootWindow());
+        }
     }
 
     /**
