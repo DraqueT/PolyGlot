@@ -50,6 +50,8 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -119,6 +121,49 @@ public class IOHandler {
         }
 
         return getImage(fileName);
+    }
+
+    /**
+     * Creates a temporary file with the contents handed in the arguments and
+     * returns its URL location.
+     *
+     * @param contents Contents to put in file.
+     * @return
+     * @throws java.io.IOException
+     * @throws java.net.URISyntaxException
+     */
+    public static URI createTmpURL(String contents) throws IOException, URISyntaxException {
+        File tmpFile = File.createTempFile("POLYGLOT", ".html");
+        Files.write(tmpFile.toPath(), contents.getBytes());
+        tmpFile.deleteOnExit();
+        URI ret = createURIFromFullPath(tmpFile.getAbsolutePath());
+
+        return ret;
+    }
+
+    public static URI createURIFromFullPath(String path) throws URISyntaxException, IOException {
+        String OS = System.getProperty("os.name");
+        URI uri;
+
+        if (OS.startsWith("Windows")) {
+            String relLocation = path;
+            relLocation = "file:///" + relLocation;
+            relLocation = relLocation.replaceAll(" ", "%20");
+            relLocation = relLocation.replaceAll("\\\\", "/");
+            uri = new URI(relLocation);
+        } else if (OS.startsWith("Mac")) {
+            String relLocation;
+            relLocation = path;
+            relLocation = "file://" + relLocation;
+            relLocation = relLocation.replaceAll(" ", "%20");
+            uri = new URI(relLocation);
+        } else {
+            // TODO: Implement this for Linux
+            throw new IOException("This is not yet implemented for OS: " + OS
+                    + ". Please open readme.html in the application directory");
+        }
+        
+        return uri;
     }
 
     /**
@@ -382,9 +427,8 @@ public class IOHandler {
 
         // The below is unacceptably buggy. Reenable if Java addresses in future versions. ugh.
         //if (!finalFile.canWrite()) {
-            //throw new IOException("Unable to write file to this location. PolyGlot does not have write permission (try saving elsewhere). Target: " + finalFile.toPath());
+        //throw new IOException("Unable to write file to this location. PolyGlot does not have write permission (try saving elsewhere). Target: " + finalFile.toPath());
         //}
-
         try (StringWriter writer = new StringWriter()) {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
@@ -1063,7 +1107,7 @@ public class IOHandler {
 
             nextLine = PGTUtil.optionsAutoResize + "=" + (core.getOptionsManager().isAnimateWindows() ? PGTUtil.True : PGTUtil.False);
             f0.write(nextLine + newLine);
-            
+
             nextLine = PGTUtil.optionsMenuFontSize + "=" + Double.toString(core.getOptionsManager().getMenuFontSize());
             f0.write(nextLine + newLine);
         }

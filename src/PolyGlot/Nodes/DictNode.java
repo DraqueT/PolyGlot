@@ -88,12 +88,9 @@ public abstract class DictNode implements Comparable<DictNode> {
         } else if (me.equals("")) {
             ret = BEFORE;
         } else {
-            //Character compChar = comp.charAt(0);
-            //Character meChar = me.charAt(0);
-
             if (alphaOrder.isEmpty()) {
-                // if no settings,or missing settings for given character, just use default
-                ret = this.getValue().compareToIgnoreCase(_compare.getValue());
+                // if no settings,or missing settings for given character, comparison always goes before
+                ret = BEFORE;
             } else {
                 // compare values based on largest front facing clusters found in alphabet order
                 int longest = alphaOrder.getLongestEntry();

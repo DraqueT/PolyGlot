@@ -28,6 +28,8 @@ import PolyGlot.Nodes.DictNode;
 import PolyGlot.PGTUtil;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.Nodes.TypeNode;
+import PolyGlot.PGoogleBarChart;
+import PolyGlot.PGooglePieChart;
 import PolyGlot.RankedObject;
 import PolyGlot.WebInterface;
 import java.awt.Font;
@@ -687,7 +689,20 @@ public class ConWordCollection extends DictionaryCollection {
      * @return
      */
     public String buildWordReport() {
-        String ret = "";
+        PGooglePieChart typesPie = new PGooglePieChart("Word Counts by Part of Speech");
+        PGoogleBarChart charStatBar = new PGoogleBarChart("Words Starting with Letter");
+        
+        // TODO: DELETE BELOW
+        charStatBar.addVal(new String[]{"Galaxy", "Distance", "Brightness", "Dumbness"}, new Double[]{});
+        charStatBar.addVal(new String[]{"Canis Major Dwarf"}, new Double[]{8000.0, 23.3, 1.0});
+        charStatBar.addVal(new String[]{"Sagittarius Dwarf"}, new Double[]{24000.0, 4.5, 1.});
+        charStatBar.addVal(new String[]{"Ursa Major II Dwarf"}, new Double[]{30000.0, 14.3, 1.});
+        charStatBar.addVal(new String[]{"Lg. Magellanic Cloud"}, new Double[]{50000.0, 0.9, 1.0});
+        charStatBar.addVal(new String[]{"Bootes I"}, new Double[]{60000.0, 13.1, 10.0});
+        
+        String ret = "<!doctype html>\n"
+                + "<html>"
+                + "<meta charset=utf-8>\n";
 
         Map<String, Integer> wordStart = new HashMap<>();
         Map<String, Integer> wordEnd = new HashMap<>();
@@ -710,7 +725,7 @@ public class ConWordCollection extends DictionaryCollection {
             final int curValueLength = curValue.length();
             final int curType = curWord.getWordTypeId();
 
-            // make sure we have all the characters in the word (fi they forgot to populate one in their alpha order(
+            // make sure we have all the characters in the word (if they forgot to populate one in their alpha order(
             for (char c : curValue.toCharArray()) {
                 if (!allChars.contains(String.valueOf(c))) {
                     allChars += c;
@@ -820,24 +835,45 @@ public class ConWordCollection extends DictionaryCollection {
                 typeCountByWord.put(curType, 1);
             }
         }
-
-        ret += formatPlain("Count of words in conlang lexicon: " + wordCount + "<br><br>");
-
-        // build display of type counts
-        ret += formatPlain("count of words by type:<br>");
+        
+        // build pie chart of type counts
         for (Entry<Integer, Integer> curEntry : typeCountByWord.entrySet()) {
             TypeNode type = core.getTypes().getNodeById(curEntry.getKey());
 
             if (type != null) {
-                ret += formatPlain(type.getValue() + " : " + curEntry.getValue() + "<br>");
+                String[] label = {type.getValue()};
+                Double[] value = {(double)curEntry.getValue()};
+                typesPie.addVal(label, value);
             }
         }
-        ret += formatPlain("<br><br>");
+        
+        ret += "  <head>\n"
+                + "    <script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>\n"
+                + "    <script type=\"text/javascript\">\n"
+                + "      google.charts.load('current', {'packages':['corechart']});\n"
+                + "      google.charts.load('current', {'packages':['corechart', 'bar']});\n"
+                + "      google.charts.setOnLoadCallback(" + typesPie.getFunctionName() + ");\n"
+                + "      google.charts.setOnLoadCallback(" + charStatBar.getFunctionName() + ");\n"
+                + "\n";
+        
+        ret += typesPie.getBuildHTML();
+        ret += charStatBar.getBuildHTML();
+                
+        ret += "    </script>\n"
+                + "  </head>\n"
+                + "  <body>\n"
+                + "    <center>---LANGUAGE STAT REPORT---</center><br><br>";
 
+        ret += formatPlain("Count of words in conlang lexicon: " + wordCount + "<br><br>");
+
+        ret += typesPie.getDisplayHTML();
+
+        ret += charStatBar.getDisplayHTML();
         // build display for starts-with statistics
+        
         ret += formatPlain(" Breakdown of words counted starting with letter:<br>");
         for (char letter : allChars.toCharArray()) {
-            ret += letter + formatPlain(" : "
+            ret += formatCon(Character.toString(letter), core) + formatPlain(" : "
                     + (wordStart.containsKey("" + letter) ? wordStart.get("" + letter) : formatPlain("0")) + "<br>");
         }
         ret += formatPlain("<br><br>");
@@ -845,7 +881,7 @@ public class ConWordCollection extends DictionaryCollection {
         // build display for ends-with statistics
         ret += formatPlain(" Breakdown of words counted ending with letter:<br>");
         for (char letter : allChars.toCharArray()) {
-            ret += letter + formatPlain(" : "
+            ret += formatCon(Character.toString(letter), core) + formatPlain(" : "
                     + (wordEnd.containsKey("" + letter) ? wordEnd.get("" + letter) : formatPlain("0")) + "<br>");
         }
         ret += formatPlain("<br><br>");
@@ -874,20 +910,21 @@ public class ConWordCollection extends DictionaryCollection {
         ret += "<table border=\"1\">";
         ret += "<tr><td></td>";
         for (char topRow : allChars.toCharArray()) {
-            ret += "<td>" + topRow + "</td>";
+            ret += "<td>" + formatCon(Character.toString(topRow), core) + "</td>";
         }
         ret += "</tr>";
         for (char y : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
-            ret += "<tr><td>" + y + "</td>";
+            ret += "<tr><td>" + formatCon(Character.toString(y), core) + "</td>";
             for (char x : allChars.toCharArray()) {
                 String search = "" + x + y;
                 Integer comboValue = (characterCombos2.containsKey(search)
                         ? characterCombos2.get(search) : 0);
 
-                Integer red = (255 / highestCombo2) * comboValue;
-                Integer blue = 255 - red;
-                ret += "<td bgcolor=rgb(" + red + "," + blue + "," + blue + ")>"
-                        + x + y + formatPlain(":"
+                int red = (255 / highestCombo2) * comboValue;
+                int blue = 255 - red;
+                ret += "<td bgcolor=\"#" + Integer.toHexString(red) 
+                        + Integer.toHexString(blue) + Integer.toHexString(blue) +"\")>"
+                        + formatCon(Character.toString(x) + Character.toString(y), core) + formatPlain(":"
                                 + comboValue.toString()) + "</td>";
             }
             ret += "</tr>";
@@ -916,7 +953,8 @@ public class ConWordCollection extends DictionaryCollection {
 
                 Integer red = (255 / highestCombo2) * comboValue;
                 Integer blue = 255 - red;
-                ret += "<td bgcolor=rgb(" + red + "," + blue + "," + blue + ")>"
+                ret += "<td bgcolor=\"#" + Integer.toHexString(red) 
+                        + Integer.toHexString(blue) + Integer.toHexString(blue) + "\")>"
                         + formatPlain(x.getPronunciation() + y.getPronunciation() + ":"
                                 + comboValue.toString()) + "</td>";
             }
@@ -936,6 +974,18 @@ public class ConWordCollection extends DictionaryCollection {
     public static String formatPlain(String toPlain) {
         String defaultFont = "face=\"" + Font.SANS_SERIF + "\"";
         return "<font " + defaultFont + ">" + toPlain + "</font>";
+    }
+    
+    /**
+     * Formats in HTML to a conlang font
+     *
+     * @param toCon text to make confont
+     * @param core
+     * @return text in plain tag
+     */
+    public static String formatCon(String toCon, DictCore core) {
+        String defaultFont = "face=\"" + core.getPropertiesManager().getFontCon().getFamily() + "\"";
+        return "<font " + defaultFont + ">" + toCon + "</font>";
     }
 
     /**

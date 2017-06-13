@@ -60,17 +60,21 @@ import org.simplericity.macify.eawt.DefaultApplication;
 
 /**
  * Primary window for PolyGlot interface. Main running class that instantiates
- * core and handles other windows/UI. Depends on DictCore for all heavy logical 
+ * core and handles other windows/UI. Depends on DictCore for all heavy logical
  * lifting behind the scenes.
+ *
  * @author draque.thompson
  */
 public class ScrMainMenu extends PFrame implements ApplicationListener {
+
     private PFrame curWindow = null;
     private final List<String> lastFiles;
     private String curFileName = "";
     private Image backGround;
+
     /**
      * Creates new form ScrMainMenu
+     *
      * @param overridePath Path PolyGlot should treat as home directory (blank
      * if default)
      */
@@ -78,14 +82,14 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         super();
         core = new DictCore(); // needed for initialization
         initComponents();
-        
+
         try {
             backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
             jLabel1.setFont(IOHandler.getButtonFont().deriveFont(45f));
         } catch (IOException e) {
             InfoBox.error("Resource Error", "Unable to load internal resource: " + e.getLocalizedMessage(), core.getRootWindow());
         }
-        
+
         newFile(false);
         setOverrideProgramPath(overridePath);
         lastFiles = core.getOptionsManager().getLastFiles();
@@ -101,10 +105,10 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         UIManager.put("OptionPane.background", Color.white);
         UIManager.put("Panel.background", Color.white);
         UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
-        
+
         super.setSize(super.getPreferredSize());
     }
-    
+
     /**
      * For the purposes of startup with file
      */
@@ -112,7 +116,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         ScrLexicon lex = ScrLexicon.run(core, this);
         changeScreen(lex, lex.getWindow(), null);
     }
-    
+
     @Override
     public void dispose() {
         // only exit if save/cancel test is passed and current window is legal to close
@@ -124,7 +128,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             // make certain that all actions necessary for saving information are complete
             curWindow.dispose();
         }
-        
+
         super.dispose();
 
         core.getOptionsManager().setScreenPosition(getClass().getName(),
@@ -138,7 +142,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         System.exit(0);
     }
-    
+
     // MACIFY RELATED CODE ->    
     private void activateMacify() {
         Application application = new DefaultApplication();
@@ -185,7 +189,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         setVisible(true);
     }
     // <- MACIFY RELATED CODE
-    
+
     /**
      * Checks to make certain Java is a high enough version. Informs user and
      * quits otherwise.
@@ -206,7 +210,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             System.exit(0);
         }
     }
-    
+
     /**
      * Populates recently opened files menu
      */
@@ -236,7 +240,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             mnuRecents.add(lastFile);
         }
     }
-    
+
     /**
      * Pushes a recently opened file (if appropriate) into the recent files list
      *
@@ -256,21 +260,21 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         lastFiles.add(file);
     }
-    
+
     private void setFile(String fileName) {
         // some wrappers communicate empty files like this
         if (fileName.equals(PGTUtil.emptyFile)
                 || fileName.isEmpty()) {
             return;
         }
-        
+
         core = new DictCore();
         core.setRootWindow(this);
 
         try {
             core.readFile(fileName);
             curFileName = fileName;
-            
+
             if (curWindow == null) {
                 ScrLexicon lex = ScrLexicon.run(core, this);
                 changeScreen(lex, lex.getWindow(), null);
@@ -283,10 +287,10 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             InfoBox.warning("File Read Problems", "Problems reading file:\n"
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
-        
+
         updateAllValues(core);
     }
-    
+
     /**
      * Gives user option to save file, returns continue/don't continue
      *
@@ -296,7 +300,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         // if there's a current dictionary loaded, prompt user to save before creating new
         if (core != null
                 && !core.getWordCollection().getWordNodes().isEmpty()) {
-            Integer saveFirst = InfoBox.yesNoCancel("Save First?", 
+            Integer saveFirst = InfoBox.yesNoCancel("Save First?",
                     "Save current dictionary before performing action?", core.getRootWindow());
 
             if (saveFirst == JOptionPane.YES_OPTION) {
@@ -314,7 +318,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         return true;
     }
-    
+
     /**
      * save file, open save as dialog if no file name already
      *
@@ -334,7 +338,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         populateRecentOpened();
         return doWrite(curFileName);
     }
-    
+
     /**
      * Writes the file by calling the core
      *
@@ -343,14 +347,14 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
      */
     private boolean doWrite(final String _fileName) {
         boolean cleanSave = false;
-        
+
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         try {
             core.writeFile(_fileName);
             cleanSave = true;
-        } catch (IOException | ParserConfigurationException |
-                TransformerException e) {
+        } catch (IOException | ParserConfigurationException
+                | TransformerException e) {
             InfoBox.error("Save Error", "Unable to save to file: "
                     + curFileName + "\n\n" + e.getMessage(), core.getRootWindow());
         }
@@ -364,14 +368,14 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         return cleanSave;
     }
-    
+
     /**
      * Changes window to lexicon (or refreshes if currently selected.
      */
     public void changeToLexicon() {
         btnLexicon.doClick();
     }
-    
+
     /**
      * saves file as particular filename
      *
@@ -412,7 +416,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         curFileName = fileName;
         return true;
     }
-    
+
     /**
      * Provided for cases where the java is run from an odd source folder (such
      * as under an app file in OSX)
@@ -428,7 +432,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
     }
-    
+
     /**
      * Creates new, blank language file
      *
@@ -443,18 +447,19 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         core.setRootWindow(this);
         updateAllValues(core);
         curFileName = "";
-        
+
         genTitle();
         updateAllValues(core);
-        
+
         if (curWindow == null && performTest) {
             ScrLexicon lex = ScrLexicon.run(core, this);
             changeScreen(lex, lex.getWindow(), null);
         }
     }
-    
+
     /**
      * Performs all actions necessary for changing the viewed panel
+     *
      * @param newScreen new window to display
      * @param display component to be added as main display
      */
@@ -469,17 +474,17 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         // blank the menu
         jPanel2.removeAll();
         this.repaint();
-        
+
         // resize screen
         if (curWindow != null) {
             // set size before disposing so that it will be properly saved to options
             curWindow.getWindow().setSize(jPanel2.getSize());
             curWindow.dispose();
-                        
+
             // after disposing, update new window in case old wrote anything to the core
             newScreen.updateAllValues(core);
         }
-        
+
         // only resize if animation is enabled and the window isn't maximized
         if (core.getOptionsManager().isAnimateWindows() && getFrameState() != Frame.MAXIMIZED_BOTH) {
             Dimension dim = core.getOptionsManager().getScreenSize(newScreen.getClass().getName());
@@ -495,52 +500,52 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 InfoBox.error("Resize Error", "Unable to run resize animation: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         }
-        
+
         // set new screen
         GroupLayout layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING, 
-                    javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING, 
-                    javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        
+
         curWindow = newScreen;
-        
+
         if (button != null) {
             deselectButtons();
             button.setActiveSelected(true);
         }
-                
+
         genTitle();
     }
-    
+
     public void genTitle() {
         String title = "PolyGlot";
-        
+
         if (curWindow != null && !curWindow.getTitle().equals("")) {
             title += "-" + curWindow.getTitle();
             String langName = core.getPropertiesManager().getLangName();
-            
+
             if (!langName.equals("")) {
                 title += " : " + langName;
             } else if (!curFileName.equals("")) {
                 title += " : " + curFileName;
             }
         }
-        
+
         setTitle(title);
     }
-    
+
     private void viewAbout() {
         ScrAbout.run(core);
     }
-    
+
     /**
      * opens dictionary file
      */
@@ -565,10 +570,10 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             pushRecentFile(fileName);
             populateRecentOpened();
         }
-        
+
         genTitle();
     }
-    
+
     /**
      * checks web for updates to PolyGlot
      *
@@ -592,7 +597,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         check.start();
     }
-    
+
     /**
      * Export dictionary to excel file
      */
@@ -623,7 +628,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             InfoBox.info("Export Problem", e.getLocalizedMessage(), core.getRootWindow());
         }
     }
-    
+
     /**
      * Prompts user for a location and exports font within PGD to given path
      */
@@ -631,9 +636,9 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         JFileChooser chooser = new JFileChooser();
         String fileName;
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf");
-        
-        chooser.setDialogTitle("Export Font");        
-        chooser.setFileFilter(filter);        
+
+        chooser.setDialogTitle("Export Font");
+        chooser.setFileFilter(filter);
         chooser.setCurrentDirectory(new File("."));
         chooser.setApproveButtonText("Save");
 
@@ -642,7 +647,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         } else {
             return;
         }
-        
+
         if (!fileName.contains(".")) {
             fileName += ".ttf";
         }
@@ -654,13 +659,13 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             InfoBox.error("Export Error", "Unable to export font: " + e.getMessage(), core.getRootWindow());
         }
     }
-    
+
     private void ipaHit() {
         PFrame ipa = new ScrIPARefChart(core);
         ipa.setVisible(true);
         ipa.toFront();
     }
-    
+
     private void openHelp() {
         URI uri;
         try {
@@ -698,11 +703,11 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             InfoBox.error("Missing File", "Unable to open readme.html.", core.getRootWindow());
         }
     }
-    
+
     private void quizHit() {
         ScrQuizGenDialog.run(core);
     }
-    
+
     /**
      * Sets selection on lexicon by word id
      *
@@ -716,7 +721,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             InfoBox.warning("Open Lexicon", "Please open the Lexicon and select a word to use this feature.", core.getRootWindow());
         }
     }
-    
+
     /**
      * Retrieves currently selected word (if any) from ScrLexicon
      *
@@ -735,15 +740,15 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         return ret;
     }
-    
+
     private void deselectButtons() {
-        ((PButton)btnProp).setActiveSelected(false);
-        ((PButton)btnPos).setActiveSelected(false);
-        ((PButton)btnLogos).setActiveSelected(false);
-        ((PButton)btnLexicon).setActiveSelected(false);
-        ((PButton)btnGrammar).setActiveSelected(false);
-        ((PButton)btnClasses).setActiveSelected(false);
-        ((PButton)btnPhonology).setActiveSelected(false);
+        ((PButton) btnProp).setActiveSelected(false);
+        ((PButton) btnPos).setActiveSelected(false);
+        ((PButton) btnLogos).setActiveSelected(false);
+        ((PButton) btnLexicon).setActiveSelected(false);
+        ((PButton) btnGrammar).setActiveSelected(false);
+        ((PButton) btnClasses).setActiveSelected(false);
+        ((PButton) btnPhonology).setActiveSelected(false);
     }
 
     /**
@@ -1148,12 +1153,12 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
     private void btnLexiconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLexiconActionPerformed
         ScrLexicon lex = ScrLexicon.run(core, this);
-        changeScreen(lex, lex.getWindow(), (PButton)evt.getSource());
+        changeScreen(lex, lex.getWindow(), (PButton) evt.getSource());
     }//GEN-LAST:event_btnLexiconActionPerformed
 
     private void btnPosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPosActionPerformed
         ScrTypes types = ScrTypes.run(core);
-        changeScreen(types, types.getWindow(), (PButton)evt.getSource());
+        changeScreen(types, types.getWindow(), (PButton) evt.getSource());
     }//GEN-LAST:event_btnPosActionPerformed
 
     private void mnuNewLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewLocalActionPerformed
@@ -1206,9 +1211,9 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private void mnuLangStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLangStatsActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         if (InfoBox.yesNoCancel("Continue Operation?", "The statistics report can"
-            + " take a long time to complete, depending on the complexity\n"
-            + "of your conlang. Continue?", core.getRootWindow()) == JOptionPane.YES_OPTION) {
-        ScrLangStats.run(core);
+                + " take a long time to complete, depending on the complexity\n"
+                + "of your conlang. Continue?", core.getRootWindow()) == JOptionPane.YES_OPTION) {
+            core.buildLanguageReport();
         }
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuLangStatsActionPerformed
@@ -1238,29 +1243,29 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private void btnClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClassesActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrWordClasses s = new ScrWordClasses(core);
-        changeScreen(s, s.getWindow(), (PButton)evt.getSource());
+        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnClassesActionPerformed
 
     private void btnGrammarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrammarActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrGrammarGuide s = new ScrGrammarGuide(core);
-        changeScreen(s, s.getWindow(), (PButton)evt.getSource());
+        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnGrammarActionPerformed
 
     private void btnLogosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogosActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        
+
         ScrLogoDetails s = new ScrLogoDetails(core);
-        changeScreen(s, s.getWindow(), (PButton)evt.getSource());
+        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnLogosActionPerformed
 
     private void btnPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrLangProps s = new ScrLangProps(core);
-        changeScreen(s, s.getWindow(), (PButton)evt.getSource());
+        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnPropActionPerformed
 
@@ -1282,7 +1287,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private void btnPhonologyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhonologyActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrPhonology s = new ScrPhonology(core);
-        changeScreen(s, s.getWindow(), (PButton)evt.getSource());
+        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnPhonologyActionPerformed
 
@@ -1293,9 +1298,8 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     }//GEN-LAST:event_mnuOptionsActionPerformed
 
     /**
-     * @param args the command line arguments
-     * args[0] = open file path (blank if none)
-     * args[1] = working directory of PolyGlot (blank if none)
+     * @param args the command line arguments args[0] = open file path (blank if
+     * none) args[1] = working directory of PolyGlot (blank if none)
      */
     public static void main(final String args[]) {
         /* Set the Nimbus look and feel */
@@ -1314,7 +1318,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             java.util.logging.Logger.getLogger(ScrMainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */
@@ -1333,7 +1337,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                     s.setFile(args[0]);
                     s.openLexicon();
                 }
-                
+
                 String problems = "";
                 // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
                 // Test for minimum version of Java (8)
@@ -1422,12 +1426,14 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     public Component getWindow() {
         throw new UnsupportedOperationException("The main window never returns a value here. Do not call this.");
     }
-    
+
     /**
-     * For now, always returns true... shouldn't ever be any upstream window, regardless.
-     * @return 
+     * For now, always returns true... shouldn't ever be any upstream window,
+     * regardless.
+     *
+     * @return
      */
-    @Override 
+    @Override
     public boolean canClose() {
         return true;
     }
