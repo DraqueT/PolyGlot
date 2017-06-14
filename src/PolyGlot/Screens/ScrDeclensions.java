@@ -290,7 +290,11 @@ public class ScrDeclensions extends PDialog {
             if (findDec != null) {
                 String value = findDec.getValue();
                 newField.setText(value);
-                newField.setToolTipText(core.getPronunciationMgr().getPronunciation(value));
+                try {
+                    newField.setToolTipText(core.getPronunciationMgr().getPronunciation(value));
+                } catch (Exception e) {
+                    newField.setToolTipText("Regex error: " + e.getLocalizedMessage());
+                }
             }
             
             // if the autodeclension override is not set, create a value
@@ -350,8 +354,12 @@ public class ScrDeclensions extends PDialog {
 
             String value = curDec.getValue();
             newField.setText(value);
-            newField.setToolTipText(core.getPronunciationMgr()
-                    .getPronunciation(value));
+            try {
+                newField.setToolTipText(core.getPronunciationMgr()
+                        .getPronunciation(value));
+            } catch (Exception e) {
+                newField.setToolTipText("Regex error: " + e.getLocalizedMessage());
+            }
 
             if (conFont != null) {
                 newField.setFont(conFont);

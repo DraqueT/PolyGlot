@@ -154,8 +154,15 @@ public final class ScrQuickWordEntry extends PDialog {
      * Sets pronunciation value of word
      */
     private void setProc() {
-        String proc = core.getPronunciationMgr()
+        String proc = "";
+        
+        try {
+            core.getPronunciationMgr()
                 .getPronunciation(txtConWord.getText());
+        } catch (Exception e) {
+            InfoBox.error("Regex Error", "Unable to generate pronunciation: " 
+                    + e.getLocalizedMessage(), parent);
+        }
 
         if (!proc.equals("")) {
             txtProc.setText(proc);
@@ -231,9 +238,13 @@ public final class ScrQuickWordEntry extends PDialog {
             ((PTextField) txtLocalWord).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getLocalWord());
         }
-        if (!test.getPronunciation().isEmpty()) {
-            ((PTextField) txtProc).makeFlash(core.getRequiredColor(), true);
-            testResults += ("\n" + test.getPronunciation());
+        try {
+            if (!test.getPronunciation().isEmpty()) {
+                ((PTextField) txtProc).makeFlash(core.getRequiredColor(), true);
+                testResults += ("\n" + test.getPronunciation());
+            }
+        } catch (Exception e) {
+            // do nothing. The user will be informed of this elsewhere.
         }
         if (!test.getDefinition().isEmpty()) {
             // errors having to do with type patterns returned in def field.

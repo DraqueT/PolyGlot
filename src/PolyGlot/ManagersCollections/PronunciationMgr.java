@@ -161,8 +161,9 @@ public class PronunciationMgr {
      * @param base word to find pronunciation of
      * @return pronunciation string. If no perfect match found, empty string
      * returned
+     * @throws java.lang.Exception on malformed regex statements encountered
      */
-    public String getPronunciation(String base) {
+    public String getPronunciation(String base) throws Exception {
         String ret = "";
 
         Iterator<PronunciationNode> procCycle = getPronunciationElements(base, true).iterator();
@@ -180,8 +181,9 @@ public class PronunciationMgr {
      * @param base word to find pronunciation elements of
      * @return elements of pronunciation for word. Empty if no perfect match
      * found
+     * @throws java.lang.Exception if malformed regex expression encountered
      */
-    public List<PronunciationNode> getPronunciationElements(String base) {
+    public List<PronunciationNode> getPronunciationElements(String base) throws Exception {
         return getPronunciationElements(base, true);
     }
     
@@ -193,7 +195,7 @@ public class PronunciationMgr {
      * @return pronunciation object list. If no perfect match found, empty
      * string returned
      */
-    private List<PronunciationNode> getPronunciationElements(String base, boolean isFirst) {
+    private List<PronunciationNode> getPronunciationElements(String base, boolean isFirst) throws Exception {
         List<PronunciationNode> ret = new ArrayList<>();
         Iterator<PronunciationNode> finder = getPronunciations().iterator();
 
@@ -237,6 +239,9 @@ public class PronunciationMgr {
                 if (pattern.startsWith("^") && !isFirst) {
                     continue;
                 }
+                
+                // original pattern
+                String origPattern = pattern;
 
                 // make pattern a starting pattern if not already, if it is already, allow it to accept following strings
                 if (!pattern.startsWith("^")) {
@@ -258,11 +263,19 @@ public class PronunciationMgr {
                     List<PronunciationNode> temp
                             = getPronunciationElements(base.substring(leadingChars.length(), base.length()), false);
 
-                    // if lengths are equal, success! return. If unequal and no further match found-failure
-                    if (leadingChars.length() == base.length() || !temp.isEmpty()) {
-                        ret.add(curNode);
-                        ret.addAll(temp);
-                        break;
+                    try {
+                        if (leadingChars.length() == base.length() || !temp.isEmpty()) {
+                            PronunciationNode finalNode = new PronunciationNode();
+                            finalNode.setEqual(curNode);
+                            finalNode.setPronunciation(leadingChars.replaceAll(origPattern, curNode.getPronunciation()));
+                            ret.add(finalNode);
+                            ret.addAll(temp);
+                            break;
+                        }
+                    } catch (IndexOutOfBoundsException e) {
+                        throw new Exception("The pronunciation pair " + curNode.getValue() + "->"
+                                + curNode.getPronunciation() + " is generating a regex error. Please correct."
+                                + "\nError: " + e.getLocalizedMessage() + e.getClass().getName());
                     }
                 }
             }

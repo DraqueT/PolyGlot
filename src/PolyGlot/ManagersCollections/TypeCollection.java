@@ -81,9 +81,17 @@ public class TypeCollection extends DictionaryCollection {
 
         // all requirements met if no type set at all.
         if (type != null) {
+            String procVal;
+            
+            try {
+                procVal = word.getPronunciation();
+            } catch (Exception e) {
+                procVal = "<ERROR>";
+            }
+            
             if (type.isDefMandatory() && word.getDefinition().equals("")) {
                 ret = type.getValue() + " requires a definition.";
-            } else if (type.isProcMandatory() && word.getPronunciation().equals("")) {
+            } else if (type.isProcMandatory() && procVal.equals("")) {
                 ret = type.getValue() + " requires a pronunciation.";
             }
         }

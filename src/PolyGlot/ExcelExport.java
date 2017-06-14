@@ -65,7 +65,11 @@ public class ExcelExport {
         ret.add(conWord.getValue());
         ret.add(conWord.getLocalWord());
         ret.add(conWord.getWordTypeDisplay());
-        ret.add(conWord.getPronunciation());
+        try {
+            ret.add(conWord.getPronunciation());
+        } catch (Exception e) {
+            ret.add("<ERROR>");
+        }
         
         String classes = "";
         for (Entry<Integer, Integer> curEntry : conWord.getClassValues()) {

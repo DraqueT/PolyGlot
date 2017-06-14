@@ -68,7 +68,11 @@ public class PRadioButton extends JRadioButton {
                     ret = ((ConWord)value).getLocalWord();
                     break;
                 case Proc:
-                    ret = ((ConWord)value).getPronunciation();
+                    try {
+                        ret = ((ConWord)value).getPronunciation();
+                    } catch (Exception e) {
+                        ret = "<ERROR>";
+                    }
                     break;
                 case Def:
                     ret = ((ConWord)value).getDefinition();

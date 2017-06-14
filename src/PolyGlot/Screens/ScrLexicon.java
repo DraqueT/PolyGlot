@@ -120,6 +120,7 @@ public final class ScrLexicon extends PFrame {
     private Thread filterThread = null;
     private final ScrMainMenu menuParent;
     private final PTextField txtRom;
+    private boolean enableProcGen = true;
 
     /**
      * Creates new form scrLexicon
@@ -551,7 +552,7 @@ public final class ScrLexicon extends PFrame {
 
         try {
             latch.await();
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), core.getRootWindow());
         }
     }
@@ -601,7 +602,24 @@ public final class ScrLexicon extends PFrame {
      * generates 
      */
     private void genRom() {
-        txtRom.setText(core.getRomManager().getPronunciation(txtConWord.getText()));
+        if (enableProcGen) {
+            try {
+                txtRom.setText(core.getRomManager().getPronunciation(txtConWord.getText()));
+            } catch (Exception e) {
+                setProcError(e.getLocalizedMessage());
+            }
+        }
+    }
+    
+    /**
+     * Sets the pronunciation generation to be disabled. This prevents endless
+     * error messages from popping.
+     * @param message error message to display to user
+     */
+    private void setProcError(String message) {
+        InfoBox.error("Regex Error", "Generation of pronunciation and romanization "
+                + "temporarily disabled. Please correct regex error: " + message, menuParent);
+        enableProcGen = false;
     }
 
     /**
@@ -742,7 +760,7 @@ public final class ScrLexicon extends PFrame {
 
             try {
                 latch.await(); // do not continue until filter cleared
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
                 InfoBox.error("JavaFX Problem", "Unable to clear filter: "
                         + e.getLocalizedMessage(), core.getRootWindow());
             }
@@ -764,7 +782,7 @@ public final class ScrLexicon extends PFrame {
         // this is to address an odd timing error... sloppy, but it's somewhere in the Java API
         try {
             Thread.sleep(250);
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
         }
     }
 
@@ -820,10 +838,21 @@ public final class ScrLexicon extends PFrame {
         boolean isLegal = true;
 
         txtErrorBox.setText("");
+        
+        String procLegality = "";
+        
+        if (enableProcGen) {
+            try {
+                procLegality = results.getPronunciation();
+            } catch (Exception e) {
+                setProcError(e.getLocalizedMessage());
+                procLegality = e.getLocalizedMessage();
+            }
+        }
 
         isLegal = isLegal && addErrorBoxMessage(txtConWord, results.getValue());
         isLegal = isLegal && addErrorBoxMessage(txtLocalWord, results.getLocalWord());
-        isLegal = isLegal && addErrorBoxMessage(txtProc, results.getPronunciation());
+        isLegal = isLegal && addErrorBoxMessage(txtProc, procLegality);
         isLegal = isLegal && addErrorBoxMessage(txtConWord, results.getDefinition());
         isLegal = isLegal && addErrorBoxMessage(cmbType, results.typeError);
 
@@ -1151,9 +1180,16 @@ public final class ScrLexicon extends PFrame {
                     } catch (Exception ex) {
                         InfoBox.error("Type error on lookup.", ex.getMessage(), core.getRootWindow());
                     }
-                    String tip = core.getPronunciationMgr().getPronunciation(curWord.getValue());
-                    if (tip.equals("")) {
-                        tip = curWord.getPronunciation();
+                    String tip = "";
+                    if (enableProcGen) {
+                        try {
+                            tip = core.getPronunciationMgr().getPronunciation(curWord.getValue());
+                            if (tip.equals("")) {
+                                tip = curWord.getPronunciation();
+                            }
+                        } catch (Exception ex) {
+                            setProcError(ex.getLocalizedMessage());
+                        }
                     }
                     if (tip.equals("")) {
                         tip = curWord.getLocalWord();
@@ -1275,8 +1311,10 @@ public final class ScrLexicon extends PFrame {
                 txtDefinition.setText(curWord.getDefinition());
                 txtLocalWord.setText(curWord.getLocalWord().equals("")
                         ? ((PTextField) txtLocalWord).getDefaultValue() : curWord.getLocalWord());
-                txtProc.setText(curWord.getPronunciation().equals("")
-                        ? ((PTextField) txtProc).getDefaultValue() : curWord.getPronunciation());
+                if (enableProcGen) {
+                    txtProc.setText(curWord.getPronunciation().equals("")
+                            ? ((PTextField) txtProc).getDefaultValue() : curWord.getPronunciation());
+                }
                 TypeNode type = curWord.getWordTypeId() == 0 ? null : core.getTypes().getNodeById(curWord.getWordTypeId());
                 cmbType.setSelectedItem(type == null ? defTypeValue : type);
                 chkProcOverride.setSelected(curWord.isProcOverride());
@@ -1286,6 +1324,8 @@ public final class ScrLexicon extends PFrame {
                 populateClassPanel();
                 setPropertiesEnabled(true);
             }
+        } catch (IllegalArgumentException e) {
+            setProcError(e.getLocalizedMessage());
         } catch (Exception e) {
             InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), core.getRootWindow());
             //e.printStackTrace();

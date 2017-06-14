@@ -69,11 +69,19 @@ public class ConWord extends DictNode {
      */
     public boolean isWordLegal() {
         ConWord checkValue = parent.testWordLegality(this);
+        String checkProc;
+        
+        // catches pronunciations which lead to regex errors
+        try {
+            checkProc = checkValue.getPronunciation();
+        } catch (Exception e) {
+            checkProc = "Regex error: " + e.getLocalizedMessage();
+        }
         
         return checkValue.getValue().equals("") &&
                 checkValue.getDefinition().equals("") &&
                 checkValue.getLocalWord().equals("") &&
-                checkValue.getPronunciation().equals("") &&
+                checkProc.equals("") &&
                 checkValue.typeError.equals("");
     }
 
@@ -155,7 +163,11 @@ public class ConWord extends DictNode {
         this.setLocalWord(set.getLocalWord());
         this.setWordTypeId(set.getWordTypeId());
         this.setDefinition(set.getDefinition());
-        this.setPronunciation(set.getPronunciation());
+        try {
+            this.setPronunciation(set.getPronunciation());
+        } catch (Exception e) {
+            this.setPronunciation("<ERROR>");
+        }
         this.setId(set.getId());
         List<Entry<Integer, Integer>> precLock = new ArrayList<>(set.getClassValues()); // avoid read/write collisions
         for (Entry<Integer, Integer> curEntry : precLock) {
@@ -307,8 +319,9 @@ public class ConWord extends DictNode {
      * If pronunciation override is not selected, fetches generated pronunciation
      * for this word. If generated pronunciation is blank, returns saved value.
      * @return pronunciation of word
+     * @throws java.lang.Exception when regex error encountered
      */
-    public String getPronunciation() {
+    public String getPronunciation() throws Exception {
         String ret = pronunciation;
         
         if (!procOverride && core != null) {

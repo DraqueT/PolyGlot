@@ -753,9 +753,17 @@ public class ConWordCollection extends DictionaryCollection {
                 wordEnd.put(endsWith, 1);
             }
 
+            List<PronunciationNode> phonArray;
+            
             // capture and record all phonemes in word and phoneme combinations
-            List<PronunciationNode> phonArray = core.getPronunciationMgr()
-                    .getPronunciationElements(curValue);
+            try {
+                phonArray = core.getPronunciationMgr()
+                        .getPronunciationElements(curValue);
+            } catch (Exception e) {
+                // do nothing. This is just a report, users will be made aware
+                // of illegal pronunciation values elsewhere
+                phonArray = new ArrayList<>();
+            }
 
             for (int i = 0; i < phonArray.size(); i++) {
                 if (phonemeCount.containsKey(phonArray.get(i).getPronunciation())) {
@@ -1020,10 +1028,14 @@ public class ConWordCollection extends DictionaryCollection {
             wordValue.appendChild(doc.createTextNode(curWord.getWordTypeId().toString()));
             wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.wordProcXID);
-            wordValue
-                    .appendChild(doc.createTextNode(curWord.getPronunciation()));
-            wordNode.appendChild(wordValue);
+            try {
+                wordValue = doc.createElement(PGTUtil.wordProcXID);
+                wordValue
+                        .appendChild(doc.createTextNode(curWord.getPronunciation()));
+                wordNode.appendChild(wordValue);
+            } catch (Exception e) {
+                // Do nothing. Users are made aware of this issue elsewhere.
+            }
 
             wordValue = doc.createElement(PGTUtil.wordDefXID);
             wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(curWord.getDefinition())));

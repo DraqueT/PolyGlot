@@ -911,8 +911,14 @@ public class CustHandlerFactory {
                     bwordClassId = false;
                 } else if (bpronuncation) {
                     ConWord bufferWord = core.getWordCollection().getBufferWord();
+                    try {
                     bufferWord.setPronunciation(bufferWord.getPronunciation()
                             + new String(ch, start, length));
+                    } catch (Exception e) {
+                        // Don't bother raising an exception. This is regenerated
+                        // each time the word is accessed if the error pops
+                        // users will be informed at that, more obvious point.
+                    }
                 } else if (bgender) {
                     tmpString += new String(ch, start, length);
                 } else if (bgenderId) {

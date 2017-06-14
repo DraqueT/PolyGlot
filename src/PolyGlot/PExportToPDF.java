@@ -288,7 +288,7 @@ public class PExportToPDF {
             fin.setFontSize(8);
             document.showTextAligned(fin, 297.5f, 100, document.getPdfDocument()
                     .getNumberOfPages(), TextAlignment.CENTER, VerticalAlignment.MIDDLE, 0);
-        } catch (Exception e) {
+        } catch (IOException e) {
             // always close document before returning
             document.close();
             throw new Exception(e.getMessage());
@@ -405,14 +405,19 @@ public class PExportToPDF {
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
 
-            if (!curWord.getPronunciation().equals("")) {
-                varChunk = new Text("/" + curWord.getPronunciation() + "/");
-                varChunk.setFont(unicodeFont);
-                varChunk.setFontSize(defFontSize);
-                dictEntry.add(varChunk);
-                varChunk = new Text(" - ");
-                varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
-                dictEntry.add(varChunk.setFontSize(defFontSize));
+            try {
+                if (!curWord.getPronunciation().equals("")) {
+                    varChunk = new Text("/" + curWord.getPronunciation() + "/");
+                    varChunk.setFont(unicodeFont);
+                    varChunk.setFontSize(defFontSize);
+                    dictEntry.add(varChunk);
+                    varChunk = new Text(" - ");
+                    varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
+                    dictEntry.add(varChunk.setFontSize(defFontSize));
+                }
+            } catch (Exception e) {
+                // do nothing. On Print, simply continue without printing this
+                // word's pronunciation.
             }
 
             // adds values 
@@ -473,7 +478,13 @@ public class PExportToPDF {
             
             // write romanization value for word if active and word has one
             if (core.getRomManager().isEnabled()) {
-                String romStr = core.getRomManager().getPronunciation(curWord.getValue());
+                String romStr;
+                
+                try {
+                    romStr = core.getRomManager().getPronunciation(curWord.getValue());
+                } catch(Exception e) {
+                    romStr = "<ERROR>";
+                }
                 
                 if (!romStr.isEmpty()) {
                     dictEntry.add(new Text("\nRoman: ").setFont(unicodeFont));
@@ -592,14 +603,19 @@ public class PExportToPDF {
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
 
-            if (!curWord.getPronunciation().equals("")) {
-                varChunk = new Text("/" + curWord.getPronunciation() + "/");
-                varChunk.setFont(unicodeFont);
-                varChunk.setFontSize(defFontSize);
-                dictEntry.add(varChunk);
-                varChunk = new Text(" - ");
-                varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
-                dictEntry.add(varChunk.setFontSize(defFontSize));
+            try {
+                if (!curWord.getPronunciation().equals("")) {
+                    varChunk = new Text("/" + curWord.getPronunciation() + "/");
+                    varChunk.setFont(unicodeFont);
+                    varChunk.setFontSize(defFontSize);
+                    dictEntry.add(varChunk);
+                    varChunk = new Text(" - ");
+                    varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
+                    dictEntry.add(varChunk.setFontSize(defFontSize));
+                }
+            } catch (Exception e) {
+                // do nothing. On Print, simply continue without printing this
+                // word's pronunciation.
             }
 
             // adds values 
@@ -657,7 +673,13 @@ public class PExportToPDF {
             
             // write romanization value for word if active and word has one
             if (core.getRomManager().isEnabled()) {
-                String romStr = core.getRomManager().getPronunciation(curWord.getValue());
+                String romStr;
+                
+                try {
+                    romStr = core.getRomManager().getPronunciation(curWord.getValue());
+                } catch(Exception e) {
+                    romStr = "<ERROR>";
+                }
                 
                 if (!romStr.isEmpty()) {
                     dictEntry.add(new Text("\nRoman: ").setFont(unicodeFont));
