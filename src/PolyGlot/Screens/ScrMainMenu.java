@@ -51,6 +51,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.ToolTipUI;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.simplericity.macify.eawt.Application;
@@ -81,6 +82,14 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     public ScrMainMenu(String overridePath) {
         super();
         core = new DictCore(); // needed for initialization
+        
+        UIManager.put("ScrollBarUI", "PolyGlot.CustomControls.PScrollBarUI");
+        UIManager.put("SplitPaneUI", "PolyGlot.CustomControls.PSplitPaneUI");
+        UIManager.put("OptionPane.background", Color.white);
+        UIManager.put("Panel.background", Color.white);
+        UIManager.put("ToolTipUI", "PolyGlot.CustomControls.PToolTipUI");
+        UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
+        
         initComponents();
 
         try {
@@ -100,12 +109,8 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         if (System.getProperty("os.name").startsWith("Mac")) {
             activateMacify();
         }
-        UIManager.put("ScrollBarUI", "PolyGlot.CustomControls.PScrollBarUI");
-        UIManager.put("SplitPaneUI", "PolyGlot.CustomControls.PSplitPaneUI");
-        UIManager.put("OptionPane.background", Color.white);
-        UIManager.put("Panel.background", Color.white);
-        UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
-
+        
+ToolTipUI t;
         super.setSize(super.getPreferredSize());
     }
 
@@ -828,7 +833,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         });
 
         btnPos.setText("Parts of Speech");
-        btnPos.setToolTipText("Create both parts of speech here, and define how their declension/conjugatino rules work here.");
+        btnPos.setToolTipText("Create both parts of speech here, and define how their declension/conjugation rules work here.");
         btnPos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPosActionPerformed(evt);
