@@ -103,6 +103,7 @@ public class ScrPhonology extends PFrame {
         btnDelRom.setEnabled(enable);
         btnDownRom.setEnabled(enable);
         btnUpRom.setEnabled(enable);
+        chkRomRecurse.setEnabled(enable);
     }
 
     /**
@@ -177,6 +178,8 @@ public class ScrPhonology extends PFrame {
         for (PronunciationNode curNode : core.getPronunciationMgr().getPronunciations()) {
             addProcWithValues(curNode.getValue(), curNode.getPronunciation());
         }
+        
+        chkPhonRecurse.setSelected(core.getPronunciationMgr().isRecurse());
     }
 
     /**
@@ -189,6 +192,8 @@ public class ScrPhonology extends PFrame {
         for (PronunciationNode curNode : core.getRomManager().getPronunciations()) {
             addRomWithValues(curNode.getValue(), curNode.getPronunciation());
         }
+        
+        chkRomRecurse.setSelected(core.getRomManager().isRecurse());
     }
 
     /**
@@ -747,6 +752,7 @@ public class ScrPhonology extends PFrame {
         tblRom = new javax.swing.JTable();
         btnDownRom = new PButton(core);
         chkEnableRom = new javax.swing.JCheckBox();
+        chkRomRecurse = new javax.swing.JCheckBox();
         pnlOrthography = new javax.swing.JPanel();
         jLabel1 = new PLabel("", core);
         btnAddProc = new PolyGlot.CustomControls.PAddRemoveButton("+");
@@ -755,6 +761,7 @@ public class ScrPhonology extends PFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProcs = new javax.swing.JTable();
         btnDownProc = new PButton(core);
+        chkPhonRecurse = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new PLabel("", core);
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -832,6 +839,14 @@ public class ScrPhonology extends PFrame {
             }
         });
 
+        chkRomRecurse.setText("Recurse Patterns");
+        chkRomRecurse.setEnabled(false);
+        chkRomRecurse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkRomRecurseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlRomanizationLayout = new javax.swing.GroupLayout(pnlRomanization);
         pnlRomanization.setLayout(pnlRomanizationLayout);
         pnlRomanizationLayout.setHorizontalGroup(
@@ -850,7 +865,9 @@ public class ScrPhonology extends PFrame {
                                 .addComponent(btnDelRom, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(pnlRomanizationLayout.createSequentialGroup()
-                                .addComponent(chkEnableRom)
+                                .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(chkEnableRom)
+                                    .addComponent(chkRomRecurse))
                                 .addGap(0, 26, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -860,20 +877,21 @@ public class ScrPhonology extends PFrame {
         pnlRomanizationLayout.setVerticalGroup(
             pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlRomanizationLayout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnUpRom)
-                    .addComponent(chkEnableRom))
                 .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlRomanizationLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnDownRom)
-                        .addGap(12, 12, 12))
-                    .addGroup(pnlRomanizationLayout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnUpRom)
+                            .addComponent(chkEnableRom))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(pnlRomanizationLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnDownRom)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkRomRecurse)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAddRom)
                     .addComponent(btnDelRom, javax.swing.GroupLayout.Alignment.TRAILING)))
@@ -939,15 +957,24 @@ public class ScrPhonology extends PFrame {
             }
         });
 
+        chkPhonRecurse.setText("Recurse Patterns");
+        chkPhonRecurse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPhonRecurseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlOrthographyLayout = new javax.swing.GroupLayout(pnlOrthography);
         pnlOrthography.setLayout(pnlOrthographyLayout);
         pnlOrthographyLayout.setHorizontalGroup(
             pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlOrthographyLayout.createSequentialGroup()
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlOrthographyLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlOrthographyLayout.createSequentialGroup()
+                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(chkPhonRecurse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(pnlOrthographyLayout.createSequentialGroup()
                         .addComponent(btnAddProc, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnDelProc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -955,25 +982,25 @@ public class ScrPhonology extends PFrame {
                 .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDownProc, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpProc, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
         );
         pnlOrthographyLayout.setVerticalGroup(
             pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlOrthographyLayout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pnlOrthographyLayout.createSequentialGroup()
                         .addComponent(btnUpProc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 275, Short.MAX_VALUE)
-                        .addComponent(btnDownProc)
-                        .addGap(12, 12, 12))
-                    .addGroup(pnlOrthographyLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGap(257, 257, 257)
+                        .addComponent(btnDownProc))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkPhonRecurse)
+                .addGap(1, 1, 1)
                 .addGroup(pnlOrthographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAddProc)
-                    .addComponent(btnDelProc, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(btnDelProc, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -993,7 +1020,7 @@ public class ScrPhonology extends PFrame {
                 "Character", "Replacement"
             }
         ));
-        tblRep.setToolTipText("Character replacement entries. Character you type on the left, character(s) to replace it with on the right.");
+        tblRep.setToolTipText("Active typing character replacement entries. Character you type on the left, character(s) to replace it with on the right.");
         tblRep.setMinimumSize(new java.awt.Dimension(0, 0));
         tblRep.setRowHeight(30);
         jScrollPane1.setViewportView(tblRep);
@@ -1033,7 +1060,7 @@ public class ScrPhonology extends PFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddCharRep, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1106,6 +1133,14 @@ public class ScrPhonology extends PFrame {
         deleteRep();
     }//GEN-LAST:event_btnDelCharRepActionPerformed
 
+    private void chkPhonRecurseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPhonRecurseActionPerformed
+        core.getPronunciationMgr().setRecurse(chkPhonRecurse.isSelected());
+    }//GEN-LAST:event_chkPhonRecurseActionPerformed
+
+    private void chkRomRecurseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRomRecurseActionPerformed
+        core.getRomManager().setRecurse(chkRomRecurse.isSelected());
+    }//GEN-LAST:event_chkRomRecurseActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddCharRep;
     private javax.swing.JButton btnAddProc;
@@ -1118,6 +1153,8 @@ public class ScrPhonology extends PFrame {
     private javax.swing.JButton btnUpProc;
     private javax.swing.JButton btnUpRom;
     private javax.swing.JCheckBox chkEnableRom;
+    private javax.swing.JCheckBox chkPhonRecurse;
+    private javax.swing.JCheckBox chkRomRecurse;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -37,6 +37,7 @@ import org.w3c.dom.Element;
 public class PronunciationMgr {
 
     private final DictCore core;
+    protected boolean recurse = false;
 
     public PronunciationMgr(DictCore _core) {
         core = _core;
@@ -186,7 +187,7 @@ public class PronunciationMgr {
     public List<PronunciationNode> getPronunciationElements(String base) throws Exception {
         return getPronunciationElements(base, true);
     }
-    
+
     /**
      * returns pronunciation objects of a given word
      *
@@ -204,12 +205,23 @@ public class PronunciationMgr {
             return ret;
         }
 
-        while (finder.hasNext()) {
-            PronunciationNode curNode = finder.next();
-            String pattern = curNode.getValue();
-
-            // split logic here to use either string comparison or regex matching
-            if (core.getPropertiesManager().isDisableProcRegex()) {
+        // split logic here to use recursion, string comparison, or regex matching
+        if (recurse) {
+            // when using recursion, only a single node can be returned, inherently.
+            String retStr = base;
+            PronunciationNode retNode = new PronunciationNode();
+            
+            while (finder.hasNext()) {
+                PronunciationNode curNode = finder.next();
+                retStr = retStr.replaceAll(curNode.getValue(), curNode.getPronunciation());
+            }
+            
+            retNode.setPronunciation(retStr);
+            ret.add(retNode);
+        } else if (core.getPropertiesManager().isDisableProcRegex()) {
+            while (finder.hasNext()) {
+                PronunciationNode curNode = finder.next();
+                String pattern = curNode.getValue();
                 // do not overstep string
                 if (pattern.length() > base.length()) {
                     continue;
@@ -217,12 +229,12 @@ public class PronunciationMgr {
 
                 // capture string to compare based on pattern length
                 String comp = base.substring(0, curNode.getValue().length());
-                
+
                 if (core.getPropertiesManager().isIgnoreCase()) {
                     comp = comp.toLowerCase();
                     pattern = pattern.toLowerCase();
                 }
-                
+
                 if (comp.equals(pattern)) {
                     List<PronunciationNode> temp
                             = getPronunciationElements(base.substring(pattern.length(), base.length()), false);
@@ -234,12 +246,16 @@ public class PronunciationMgr {
                         break;
                     }
                 }
-            } else {
+            }
+        } else {
+            while (finder.hasNext()) {
+            PronunciationNode curNode = finder.next();
+            String pattern = curNode.getValue();
                 // skip if set as starting characters, but later in word
                 if (pattern.startsWith("^") && !isFirst) {
                     continue;
                 }
-                
+
                 // original pattern
                 String origPattern = pattern;
 
@@ -255,7 +271,7 @@ public class PronunciationMgr {
 
                 if (matcher.matches()) {
                     String leadingChars = matcher.group(1);
-                    
+
                     // if a user has entered an empty pattern... just continue.
                     if (leadingChars.equals("")) {
                         continue;
@@ -283,9 +299,10 @@ public class PronunciationMgr {
 
         return ret;
     }
-    
+
     /**
      * Writes all pronunciation information to XML document
+     *
      * @param doc Document to write to
      * @param rootElement root element of document
      */
@@ -294,6 +311,11 @@ public class PronunciationMgr {
         Element wordNode;
         Element wordValue;
         
+        wordNode = doc.createElement(PGTUtil.proGuideRecurseXID);
+        wordNode.appendChild(doc.createTextNode(recurse ?
+                PGTUtil.True : PGTUtil.False));
+        rootElement.appendChild(wordNode);
+
         while (procGuide.hasNext()) {
             PronunciationNode curNode = procGuide.next();
 
@@ -308,5 +330,19 @@ public class PronunciationMgr {
             wordValue.appendChild(doc.createTextNode(curNode.getPronunciation()));
             wordNode.appendChild(wordValue);
         }
+    }
+
+    /**
+     * @return the recurse
+     */
+    public boolean isRecurse() {
+        return recurse;
+    }
+
+    /**
+     * @param recurse the recurse to set
+     */
+    public void setRecurse(boolean recurse) {
+        this.recurse = recurse;
     }
 }

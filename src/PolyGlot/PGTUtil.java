@@ -113,6 +113,7 @@ public class PGTUtil {
     public static final String proGuideXID = "proGuide";
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";
+    public static final String proGuideRecurseXID = "proGuideRecurse";
     
     // romanization properties
     public static final String romGuideXID = "romGuide";
@@ -120,6 +121,7 @@ public class PGTUtil {
     public static final String romGuideNodeXID = "romGuideNode";
     public static final String romGuideBaseXID = "romGuideBase";
     public static final String romGuidePhonXID = "romGuidePhon";
+    public static final String romGuideRecurseXID = "romGuideRecurse";
 
     // family properties
     public static final String famNodeXID = "thesNode";

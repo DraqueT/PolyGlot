@@ -228,6 +228,8 @@ public class CustHandlerFactory {
             boolean bcharRepChar = false;
             boolean bcharRepValue = false;
             boolean bKerningValue = false;
+            boolean bromRecurse = false;
+            boolean bprocRecurse = false;
             
             int wId;
             int wCId;
@@ -337,10 +339,7 @@ public class CustHandlerFactory {
                     bromActive = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.romGuidePhonXID)) {
                     bromPhon = true;
-                } /*else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
-                    // Removed as of 1.0
-                    bproAutoPop = true;
-                }*/ else if (qName.equalsIgnoreCase(PGTUtil.wordProcOverrideXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordProcOverrideXID)) {
                     bwordProcOverride = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.typePlurManXID)) {
                     bwordClassPlurMan = true;
@@ -457,6 +456,10 @@ public class CustHandlerFactory {
                     bcharRepValue = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropKerningVal)) {
                     bKerningValue = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuideRecurseXID)) {
+                    bprocRecurse = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.romGuideRecurseXID)) {
+                    bromRecurse = true;
                 }
             }
 
@@ -680,10 +683,7 @@ public class CustHandlerFactory {
                     bromActive = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.romGuidePhonXID)) {
                     bromPhon = false;
-                } /*else if (qName.equalsIgnoreCase(PGTUtil.proAutoPopXID)) {
-                    // Removed as of 1.0
-                    bproAutoPop = false;
-                }*/ else if (qName.equalsIgnoreCase(PGTUtil.dimensionNodeXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionNodeXID)) {
                     try {
                         declensionMgr.getBuffer().insertBuffer();
                         declensionMgr.getBuffer().clearBuffer();
@@ -823,6 +823,10 @@ public class CustHandlerFactory {
                     bcharRepValue = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropKerningVal)) {
                     bKerningValue = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.proGuideRecurseXID)) {
+                    bprocRecurse = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.romGuideRecurseXID)) {
+                    bromRecurse = false;
                 }
             }
 
@@ -1077,7 +1081,7 @@ public class CustHandlerFactory {
                 } else if (blogoStrokes) {
                     try {
                         core.getLogoCollection().getBufferNode().setStrokes(Integer.parseInt(new String(ch, start, length)));
-                    } catch (Exception e) {
+                    } catch (NumberFormatException e) {
                         warningLog += "\nLogograph load error: " + e.getLocalizedMessage();
                     }
                 } else if (blogoNotes) {
@@ -1097,7 +1101,7 @@ public class CustHandlerFactory {
                 } else if (blogoId) {
                     try {
                         core.getLogoCollection().getBufferNode().setId(Integer.parseInt(new String(ch, start, length)));
-                    } catch (Exception e) {
+                    } catch (NumberFormatException e) {
                         warningLog += "\nLogograph load error: " + e.getLocalizedMessage();
                     }
                 } else if (blogoWordRelation) {
@@ -1150,9 +1154,15 @@ public class CustHandlerFactory {
                 } else if (bKerningValue) {
                     try {
                         core.getPropertiesManager().setKerningSpace(Double.parseDouble(new String(ch, start, length)));
-                    } catch (Exception e) {
+                    } catch (NumberFormatException e) {
                         warningLog += "\nProblem loading kerning value: " + e.getLocalizedMessage();
                     }
+                } else if (bprocRecurse) {
+                    core.getPronunciationMgr().setRecurse(
+                            new String(ch, start, length).equals(PGTUtil.True));
+                } else if (bromRecurse) {
+                    core.getRomManager().setRecurse(
+                            new String(ch, start, length).equals(PGTUtil.True));
                 }
             }
         };

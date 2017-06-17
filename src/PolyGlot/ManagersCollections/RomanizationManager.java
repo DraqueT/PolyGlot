@@ -54,6 +54,9 @@ public class RomanizationManager extends PronunciationMgr {
         enabledNode.appendChild(doc.createTextNode(enabled ? PGTUtil.True : PGTUtil.False));
         guideNode.appendChild(enabledNode);
         
+        enabledNode = doc.createElement(PGTUtil.romGuideRecurseXID);
+        enabledNode.appendChild(doc.createTextNode(recurse ? PGTUtil.True : PGTUtil.False));
+        guideNode.appendChild(enabledNode);
         
         for (PronunciationNode curNode : romGuide) {
             Element romNode = doc.createElement(PGTUtil.romGuideNodeXID);
@@ -77,7 +80,7 @@ public class RomanizationManager extends PronunciationMgr {
     }
 
     /**
-     * @param enabled the enabled to set
+     * @param enabled the enabled status to set
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
