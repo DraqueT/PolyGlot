@@ -130,6 +130,7 @@ public final class ScrLexicon extends PFrame {
      */
     public ScrLexicon(DictCore _core, ScrMainMenu _menuParent) {
         defTypeValue.setValue("-- Part of Speech --");
+        defTypeValue.setId(-1);
 
         menuParent = _menuParent;
         core = _core;
@@ -281,7 +282,6 @@ public final class ScrLexicon extends PFrame {
                 curPopulating = localPopulating;
                 forceUpdate = false;
                 populateProperties();
-                txtConWord.setFont(core.getPropertiesManager().getFontCon());
             }
         };
         SwingUtilities.invokeLater(runnable);

@@ -17,7 +17,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package PolyGlot.Nodes;
 
 /**
@@ -25,44 +24,59 @@ package PolyGlot.Nodes;
  * @author draque
  */
 public class TypeNode extends DictNode {
+
     private String notes = "";
     private String regexPattern = "";
     private String gloss = "";
     private boolean procMandatory = false;
-    private boolean defMandatory = false;    
-    
+    private boolean defMandatory = false;
+
     public void setPattern(String _regexPattern) {
         regexPattern = _regexPattern;
     }
-    
+
     public String getPattern() {
         return regexPattern;
     }
-    
-    public String getNotes(){
+
+    public String getNotes() {
         return notes;
     }
-    
-    public void setNotes(String _notes){
+
+    public void setNotes(String _notes) {
         notes = _notes;
     }
-    
+
     public void setGloss(String _gloss) {
         gloss = _gloss;
     }
-    
+
     public String getGloss() {
         return gloss;
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        boolean ret = false;
+
+        if (o != null) {
+            ret = o instanceof TypeNode;
+            if (ret) {
+                ret = ((TypeNode) o).getId().equals(this.id);
+            }
+        }
+
+        return ret;
+    }
+
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
         if (!(_node instanceof TypeNode)) {
             throw new ClassCastException("Object not of type TypeNode");
         }
-        
+
         TypeNode set = (TypeNode) _node;
-        
+
         this.setId(set.getId());
         this.setValue(set.getValue());
         this.setDefMandatory(set.isDefMandatory());
@@ -97,5 +111,5 @@ public class TypeNode extends DictNode {
     public void setDefMandatory(boolean defMandatory) {
         this.defMandatory = defMandatory;
     }
-    
+
 }
