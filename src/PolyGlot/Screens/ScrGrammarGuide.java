@@ -35,7 +35,7 @@ import PolyGlot.CustomControls.PGrammarPane;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.ExternalCode.GlyphVectorPainter;
-import PolyGlot.PTree;
+import PolyGlot.CustomControls.PTree;
 import PolyGlot.SoundRecorder;
 import java.awt.Color;
 import java.awt.Component;

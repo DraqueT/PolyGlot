@@ -17,9 +17,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package PolyGlot;
+package PolyGlot.CustomControls;
 
-import PolyGlot.CustomControls.PGTreeCellRenderer;
+import PolyGlot.DictCore;
 import javax.swing.JTree;
 
 /**

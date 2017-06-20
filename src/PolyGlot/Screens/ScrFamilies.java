@@ -27,7 +27,7 @@ import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.FamTreeNode;
 import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PLabel;
-import PolyGlot.PTree;
+import PolyGlot.CustomControls.PTree;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
