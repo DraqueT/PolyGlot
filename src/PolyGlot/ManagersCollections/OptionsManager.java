@@ -39,7 +39,7 @@ import javax.swing.UIManager;
  */
 public class OptionsManager {
 
-    private boolean animateWindows = true;
+    private boolean animateWindows = false;
     private List<String> lastFiles = new ArrayList<>();
     private final Map<String, Point> screenPos = new HashMap<>();
     private final Map<String, Dimension> screenSize = new HashMap<>();
