@@ -315,7 +315,7 @@ public class DictCore {
         // TODO: move this into the wordCollection.buildWordReport() method
         ret += propertiesManager.buildPropertiesReport();
 
-        ret += wordCollection.buildWordReport();
+        ret += PLanguageStats.buildWordReport(this);
 
         try {
             java.awt.Desktop.getDesktop().browse(IOHandler.createTmpURL(ret));

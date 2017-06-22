@@ -28,7 +28,39 @@ import java.util.Map.Entry;
  */
 public class PGoogleBarChart extends PGoogleChart {
 
+    /**
+     * @return the leftYAxisLabel
+     */
+    public String getLeftYAxisLabel() {
+        return leftYAxisLabel;
+    }
+
+    /**
+     * @param leftYAxisLabel the leftYAxisLabel to set
+     */
+    public void setLeftYAxisLabel(String leftYAxisLabel) {
+        this.leftYAxisLabel = leftYAxisLabel;
+    }
+
+    /**
+     * @return the rightYAxisLabel
+     */
+    public String getRightYAxisLabel() {
+        return rightYAxisLabel;
+    }
+
+    /**
+     * @param rightYAxisLabel the rightYAxisLabel to set
+     */
+    public void setRightYAxisLabel(String rightYAxisLabel) {
+        this.rightYAxisLabel = rightYAxisLabel;
+    }
+
     private String subCaption = "";
+    private String leftYAxisLabel = "";
+    private String rightYAxisLabel = "";
+    private String[] labels = {};
+    private String conFontName = "";
 
     public PGoogleBarChart(String _caption) {
         super(_caption);
@@ -63,6 +95,16 @@ public class PGoogleBarChart extends PGoogleChart {
                 + "        var " + chartDiv + " = document.getElementById('" + this.getFunctionName() + "');\n"
                 + "\n"
                 + "        var " + data + " = google.visualization.arrayToDataTable([\n";
+        
+        // labels
+        ret += "[";
+        for (String label : labels) {
+            ret += "'" + label + "',";
+        }
+        ret = ret.substring(0, ret.length()-1); // remove trailing comma
+        ret += "],";
+        
+        // values
         for (Entry<String, List<Double>> e : chartVals.entrySet()) {
             ret += "[";
             
@@ -71,7 +113,7 @@ public class PGoogleBarChart extends PGoogleChart {
             }
             
             for(Double dub : e.getValue()) {
-                ret += "'" + dub.toString() + "',";
+                ret += dub.toString() + ",";
             }
             
             // remove trailing comma
@@ -86,7 +128,12 @@ public class PGoogleBarChart extends PGoogleChart {
         ret += "        ]);\n"
                 + "\n"
                 + "        var " + materialOptions + " = {\n"
-                + "          width: 900,\n"
+                + "          hAxis: {\n"
+                + "            textStyle: {\n"
+                + "              fontName: '" + conFontName + "'\n"
+                + "            }\n"
+                + "          },\n"
+                + "          width: 1300,\n"
                 + "          chart: {\n"
                 + "            title: '" + caption + "',\n"
                 + "            subtitle: '" + subCaption + "'\n"
@@ -97,8 +144,8 @@ public class PGoogleBarChart extends PGoogleChart {
                 + "          },\n"
                 + "          axes: {\n"
                 + "            y: {\n"
-                + "              distance: {label: 'parsecs'}, // Left y-axis.\n"
-                + "              brightness: {side: 'right', label: 'apparent magnitude'} // Right y-axis.\n"
+                + "              distance: {label: '" + getLeftYAxisLabel() + "'}, // Left y-axis.\n"
+                + "              brightness: {side: 'right', label: '" + getRightYAxisLabel() + "'} // Right y-axis.\n"
                 + "            }\n"
                 + "          }\n"
                 + "        };\n"
@@ -131,5 +178,26 @@ public class PGoogleBarChart extends PGoogleChart {
      */
     public void setSubCaption(String subCaption) {
         this.subCaption = subCaption;
+    }
+
+    /**
+     * @param labels the labels to set
+     */
+    public void setLabels(String[] labels) {
+        this.labels = labels;
+    }
+
+    /**
+     * @return the conFontName
+     */
+    public String getConFontName() {
+        return conFontName;
+    }
+
+    /**
+     * @param conFontName the conFontName to set
+     */
+    public void setConFontName(String conFontName) {
+        this.conFontName = conFontName;
     }
 }
