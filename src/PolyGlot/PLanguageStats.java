@@ -199,7 +199,7 @@ public class PLanguageStats {
         // build bar chart of characters
         charStatBar.setLeftYAxisLabel("Starting With");
         charStatBar.setRightYAxisLabel("Total Count");
-        charStatBar.setLabels(new String[]{"Character Statistics", "Words Starting With", "Overall Count"});
+        charStatBar.setLabels(new String[]{"Words Starting With", "Overall Count"});
         charStatBar.setConFontName(core.getPropertiesManager().getFontCon().getFamily());
         for (char c : alphabet.toCharArray()) {
             String character = Character.toString(c);
@@ -239,55 +239,20 @@ public class PLanguageStats {
         ret += typesPie.getDisplayHTML();
 
         ret += charStatBar.getDisplayHTML();
-        // build display for starts-with statistics
-
-        // Commenting for now... will just delete entirely later if people don't ask for it back again.
-        /*ret += formatPlain(" Breakdown of words counted starting with letter:<br>");
-        for (char letter : alphabet.toCharArray()) {
-            ret += formatCon(Character.toString(letter), core) + formatPlain(" : "
-                    + (wordStart.containsKey("" + letter) ? wordStart.get("" + letter) : formatPlain("0")) + "<br>");
-        }
-        ret += formatPlain("<br><br>");
-
-        // build display for ends-with statistics
-        ret += formatPlain(" Breakdown of words counted ending with letter:<br>");
-        for (char letter : allChars.toCharArray()) {
-            ret += formatCon(Character.toString(letter), core) + formatPlain(" : "
-                    + (wordEnd.containsKey("" + letter) ? wordEnd.get("" + letter) : formatPlain("0")) + "<br>");
-        }
-        ret += formatPlain("<br><br>");
-
-        // build display for character counts
-        ret += formatPlain(" Breakdown of characters counted across all words:<br>");
-        for (char letter : allChars.toCharArray()) {
-            ret += letter + formatPlain(" : "
-                    + (charCount.containsKey("" + letter) ? charCount.get("" + letter) : formatPlain("0")) + "<br>");
-        }
-        ret += formatPlain("<br><br>");*/
-        // build display for phoneme count if no pronunciation recursion
-        if (!core.getPronunciationMgr().isRecurse()) {
-            ret += formatPlain(" Breakdown of phonemes counted across all words:<br>");
-            Iterator<PronunciationNode> procLoop = core.getPronunciationMgr().getPronunciations().iterator();
-            while (procLoop.hasNext()) {
-                PronunciationNode curNode = procLoop.next();
-                ret += formatPlain(curNode.getPronunciation() + " : "
-                        + (phonemeCount.containsKey(curNode.getPronunciation())
-                        ? phonemeCount.get(curNode.getPronunciation()) : formatPlain("0")) + "<br>");
-            }
-            ret += formatPlain("<br><br>");
-        }
-
+        
         // buid grid of 2 letter combos
+        char[] alphaGrid = core.getPropertiesManager().getAlphaPlainText().toCharArray();
         ret += formatPlain("Heat map of letter combination frequency:<br>");
         ret += "<table border=\"1\">";
         ret += "<tr><td></td>";
-        for (char topRow : allChars.toCharArray()) {
+        for (char topRow : alphaGrid) {
             ret += "<td>" + formatCon(Character.toString(topRow), core) + "</td>";
         }
         ret += "</tr>";
-        for (char y : core.getPropertiesManager().getAlphaPlainText().toCharArray()) {
+
+        for (char y : alphaGrid) {
             ret += "<tr><td>" + formatCon(Character.toString(y), core) + "</td>";
-            for (char x : allChars.toCharArray()) {
+            for (char x : alphaGrid) {
                 String search = "" + x + y;
                 Integer comboValue = (characterCombos2.containsKey(search)
                         ? characterCombos2.get(search) : 0);
@@ -334,6 +299,17 @@ public class PLanguageStats {
                 ret += "</tr>";
             }
             ret += "</table>";
+            
+            // build display for phoneme count if no pronunciation recursion
+            ret += formatPlain(" Breakdown of phonemes counted across all words:<br>");
+            Iterator<PronunciationNode> procLoop = core.getPronunciationMgr().getPronunciations().iterator();
+            while (procLoop.hasNext()) {
+                PronunciationNode curNode = procLoop.next();
+                ret += formatPlain(curNode.getPronunciation() + " : "
+                        + (phonemeCount.containsKey(curNode.getPronunciation())
+                        ? phonemeCount.get(curNode.getPronunciation()) : formatPlain("0")) + "<br>");
+            }
+            ret += formatPlain("<br><br>");
         }
 
         return ret;

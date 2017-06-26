@@ -27,7 +27,7 @@ import java.util.Map.Entry;
  * @author DThompson
  */
 public class PGoogleBarChart extends PGoogleChart {
-
+    
     /**
      * @return the leftYAxisLabel
      */
@@ -56,7 +56,6 @@ public class PGoogleBarChart extends PGoogleChart {
         this.rightYAxisLabel = rightYAxisLabel;
     }
 
-    private String subCaption = "";
     private String leftYAxisLabel = "";
     private String rightYAxisLabel = "";
     private String[] labels = {};
@@ -94,69 +93,67 @@ public class PGoogleBarChart extends PGoogleChart {
                 + "\n"
                 + "        var " + chartDiv + " = document.getElementById('" + this.getFunctionName() + "');\n"
                 + "\n"
-                + "        var " + data + " = google.visualization.arrayToDataTable([\n";
+                + "        var " + data;
         
-        // labels
-        ret += "[";
+        ret += " = new google.visualization.DataTable();\n"
+                + "        " + data + ".addColumn('string', 'MyData');\n"
+                + "        " + data + ".addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});\n";
+        
         for (String label : labels) {
-            ret += "'" + label + "',";
+            ret += "        " + data + ".addColumn('number', '" + label + "');\n";
         }
-        ret = ret.substring(0, ret.length()-1); // remove trailing comma
-        ret += "],";
         
-        // values
+        ret += "        " + data + ".addRows([\n";
+        
         for (Entry<String, List<Double>> e : chartVals.entrySet()) {
-            ret += "[";
+            String dataSet = "";
             
-            for(String entLabel : e.getKey().split("-")) {
-                ret += "'" + entLabel + "',";
+            for (double datum : e.getValue()) {
+                dataSet += Integer.toString((int)datum) + ",";
             }
+            dataSet = dataSet.substring(0, dataSet.length()-1); // remove trailing comma...
             
-            for(Double dub : e.getValue()) {
-                ret += dub.toString() + ",";
-            }
-            
-            // remove trailing comma
-            ret = ret.substring(0, ret.length()-1);
-            
-            ret += "],";
-
+            ret += "          ['" + e.getKey() + "', createCustomHTMLContent('" + e.getKey() + "'," + dataSet + ")," + dataSet + "],\n";
         }
-        
-        ret = ret.substring(0, ret.length()-1) + '\n';
-        
-        ret += "        ]);\n"
+        ret = ret.substring(0, ret.length()-2); // remove trailing comma and \n...
+        ret += "\n        ]);\n"
                 + "\n"
                 + "        var " + materialOptions + " = {\n"
+                + "          width: 1300,\n"
+                + "          title: '" + caption + "',\n"
                 + "          hAxis: {\n"
                 + "            textStyle: {\n"
                 + "              fontName: '" + conFontName + "'\n"
                 + "            }\n"
                 + "          },\n"
-                + "          width: 1300,\n"
-                + "          chart: {\n"
-                + "            title: '" + caption + "',\n"
-                + "            subtitle: '" + subCaption + "'\n"
-                + "          },\n"
+                
+                
                 + "          series: {\n"
-                + "            0: { axis: 'distance' }, // Bind series 0 to an axis named 'distance'.\n"
-                + "            1: { axis: 'brightness' } // Bind series 1 to an axis named 'brightness'.\n"
+                + "            0: {targetAxisIndex : 0},\n"
+                + "            1: {targetAxisIndex : 1}\n"
                 + "          },\n"
-                + "          axes: {\n"
-                + "            y: {\n"
-                + "              distance: {label: '" + getLeftYAxisLabel() + "'}, // Left y-axis.\n"
-                + "              brightness: {side: 'right', label: '" + getRightYAxisLabel() + "'} // Right y-axis.\n"
-                + "            }\n"
-                + "          }\n"
+                + "          vAxes: {\n"
+                + "            // Adds titles to each axis.\n"
+                + "            0: {title: '" + getLeftYAxisLabel() + "'}, // Left y-axis.\n"
+                + "            1: {title: '" + getRightYAxisLabel() + "'} // Right y-axis.\n"
+                + "          },\n"
+                + "          focusTarget: 'category',\n"
+                + "          tooltip: { isHtml: true }\n"
                 + "        };\n"
                 + "\n"
                 + "        function drawMaterialChart() {\n"
-                + "          var " + materialChart + " = new google.charts.Bar(" + chartDiv + ");\n"
-                + "          " + materialChart + ".draw(" + data + ", google.charts.Bar.convertOptions(" + materialOptions + "));\n"
+                + "          var " + materialChart + " = new google.visualization.ColumnChart(document.getElementById('" + getFunctionName() + "'));\n"
+                + "          " + materialChart + ".draw(" + data + ", " + materialOptions + ");\n"
                 + "        }\n"
                 + "\n"
                 + "        drawMaterialChart();\n"
-                + "    };";
+                + "    };\n\n"
+                + "    function createCustomHTMLContent(label, val1, val2) {\n"
+                + "      return \'<div style=\"padding:5px 5px 5px 5px;\">\'+\n"
+                + "        \'Character: \' + '<span STYLE=\"font-family: \\'" + conFontName + "\\'\">' + label + '</span>' +\n"
+                + "        '<br/>Starting: ' + val1 + '<br/>Count: ' + val2 +\n"
+                + "        \'</td>\'\n"
+                + "    }\n";
 
         return ret;
     }
@@ -164,20 +161,6 @@ public class PGoogleBarChart extends PGoogleChart {
     @Override
     public String getDisplayHTML() {
         return "<div id=\"" + this.getFunctionName() + "\" style=\"width: 800px; height: 500px;\"></div>";
-    }
-
-    /**
-     * @return the subCaption
-     */
-    public String getSubCaption() {
-        return subCaption;
-    }
-
-    /**
-     * @param subCaption the subCaption to set
-     */
-    public void setSubCaption(String subCaption) {
-        this.subCaption = subCaption;
     }
 
     /**
