@@ -109,8 +109,8 @@ public abstract class DictNode implements Comparable<DictNode> {
                 }
 
                 if (meAlpha == -1) {
-                    // no prefixed pattern found for this value: default to system alpha order
-                    ret = this.getValue().compareToIgnoreCase(_compare.getValue());
+                    // no prefixed pattern found for this value: default placing comparison before
+                    ret = BEFORE;
                 } else {
                     int preLen = 0;
 
@@ -125,8 +125,8 @@ public abstract class DictNode implements Comparable<DictNode> {
                     }
 
                     if (compAlpha == -1) { 
-                        // no prefixed pattern found for comp value: default to system alpha order
-                        ret = this.getValue().compareToIgnoreCase(_compare.getValue());
+                        // no prefixed pattern found for comp value: default placing comparison after
+                        ret = AFTER;
                     } else if (compAlpha > meAlpha) {
                         ret = BEFORE;
                     } else if (compAlpha < meAlpha) {
