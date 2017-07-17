@@ -30,7 +30,6 @@ public abstract class DictNode implements Comparable<DictNode> {
 
     // this represents the primary string value of the node, whether it is
     // a word, a declension type, etc.
-
     protected String value = "";
 
     protected Integer id = 0;
@@ -81,68 +80,73 @@ public abstract class DictNode implements Comparable<DictNode> {
         final String me = this.getValue();
         int ret;
 
-        if (comp.equals(me)) {
-            ret = EQUAL;
-        } else if (comp.equals("")) {
-            ret = AFTER;
-        } else if (me.equals("")) {
-            ret = BEFORE;
+        // if no alpha order established whatsoever, use default
+        if (this.alphaOrder.isEmpty()) {
+            ret = me.compareTo(comp);
         } else {
-            if (alphaOrder.isEmpty()) {
-                // if no settings,or missing settings for given character, comparison always goes before
+            if (comp.equals(me)) {
+                ret = EQUAL;
+            } else if (comp.equals("")) {
+                ret = AFTER;
+            } else if (me.equals("")) {
                 ret = BEFORE;
             } else {
-                // compare values based on largest front facing clusters found in alphabet order
-                int longest = alphaOrder.getLongestEntry();
-                int meLen = me.length();
-                int compLen = comp.length();
-                int meAlpha = -1;
-                int compAlpha = -1;
-
-                for (int i = meLen > longest ? longest : meLen; i >= 0; i--) {
-                    String mePrefix = me.substring(0, i);
-
-                    if (alphaOrder.containsKey(mePrefix)) {
-                        meAlpha = (int) alphaOrder.get(mePrefix);
-                        break;
-                    }
-                }
-
-                if (meAlpha == -1) {
-                    // no prefixed pattern found for this value: default placing comparison before
+                if (alphaOrder.isEmpty()) {
+                    // if no settings,or missing settings for given character, comparison always goes before
                     ret = BEFORE;
                 } else {
-                    int preLen = 0;
+                    // compare values based on largest front facing clusters found in alphabet order
+                    int longest = alphaOrder.getLongestEntry();
+                    int meLen = me.length();
+                    int compLen = comp.length();
+                    int meAlpha = -1;
+                    int compAlpha = -1;
 
-                    for (int i = compLen > longest ? longest : compLen; i >= 0; i--) {
-                        String compPrefix = comp.substring(0, i);
+                    for (int i = meLen > longest ? longest : meLen; i >= 0; i--) {
+                        String mePrefix = me.substring(0, i);
 
-                        if (alphaOrder.containsKey(compPrefix)) {
-                            compAlpha = (int) alphaOrder.get(compPrefix);
-                            preLen = compPrefix.length(); // record length for substring truncation if current patterns are equal
+                        if (alphaOrder.containsKey(mePrefix)) {
+                            meAlpha = (int) alphaOrder.get(mePrefix);
                             break;
                         }
                     }
 
-                    if (compAlpha == -1) { 
-                        // no prefixed pattern found for comp value: default placing comparison after
-                        ret = AFTER;
-                    } else if (compAlpha > meAlpha) {
+                    if (meAlpha == -1) {
+                        // no prefixed pattern found for this value: default placing comparison before
                         ret = BEFORE;
-                    } else if (compAlpha < meAlpha) {
-                        ret = AFTER;
                     } else {
-                        // two patterns are the same. Truncate and check subpatterns
-                        ConWord compChild = new ConWord();
-                        ConWord thisChild = new ConWord();
+                        int preLen = 0;
 
-                        compChild.setAlphaOrder(alphaOrder);
-                        thisChild.setAlphaOrder(alphaOrder);
+                        for (int i = compLen > longest ? longest : compLen; i >= 0; i--) {
+                            String compPrefix = comp.substring(0, i);
 
-                        compChild.setValue(_compare.getValue().substring(preLen));
-                        thisChild.setValue(this.getValue().substring(preLen));
+                            if (alphaOrder.containsKey(compPrefix)) {
+                                compAlpha = (int) alphaOrder.get(compPrefix);
+                                preLen = compPrefix.length(); // record length for substring truncation if current patterns are equal
+                                break;
+                            }
+                        }
 
-                        ret = thisChild.compareTo(compChild);
+                        if (compAlpha == -1) {
+                            // no prefixed pattern found for comp value: default placing comparison after
+                            ret = AFTER;
+                        } else if (compAlpha > meAlpha) {
+                            ret = BEFORE;
+                        } else if (compAlpha < meAlpha) {
+                            ret = AFTER;
+                        } else {
+                            // two patterns are the same. Truncate and check subpatterns
+                            ConWord compChild = new ConWord();
+                            ConWord thisChild = new ConWord();
+
+                            compChild.setAlphaOrder(alphaOrder);
+                            thisChild.setAlphaOrder(alphaOrder);
+
+                            compChild.setValue(_compare.getValue().substring(preLen));
+                            thisChild.setValue(this.getValue().substring(preLen));
+
+                            ret = thisChild.compareTo(compChild);
+                        }
                     }
                 }
             }
