@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque.thompson
+ * Copyright (c) 2016=2017, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -141,7 +142,7 @@ public class PGrammarPane extends JTextPane {
             inputAttributes.addAttribute(PGTUtil.ImageIdAttribute, image.getId());
             replaceSelection(" ", false);
             inputAttributes.removeAttributes(inputAttributes);
-        } catch (Exception e) {
+        } catch (IOException e) {
             InfoBox.error("Image Insertion Error", "Unable to insert image: "
                     + e.getLocalizedMessage(), core.getRootWindow());
         }

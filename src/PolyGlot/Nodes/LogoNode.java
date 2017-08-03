@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -257,7 +257,7 @@ public class LogoNode extends DictNode {
             try {
                 int nodeId = Integer.parseInt(radId);
                 addRadical((LogoNode) nodeMap.get(nodeId));
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 loadLog += "\nlogograph error: " + e.getLocalizedMessage();
             }
         }

@@ -698,7 +698,7 @@ public class ScrGrammarGuide extends PFrame {
             try {
                 doc.insertString(caretStart, " ", aset);
                 caretEnd++;
-            } catch (Exception e) {
+            } catch (BadLocationException e) {
                 InfoBox.warning("Font Error", "Problem setting font: "
                         + e.getLocalizedMessage(), core.getRootWindow());
             }

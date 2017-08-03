@@ -283,7 +283,7 @@ public class DeclensionManager {
                 if (!core.getWordCollection().getNodeById(curEntry.getKey()).getWordTypeId().equals(typeId)) {
                     continue;
                 }
-            } catch (Exception e) {
+            } catch (ConWordCollection.WordNotExistsException e) {
                 // if a word isn't found, then the value is orphaned and declension values will be wiped next time the user saves
                 continue;
             }

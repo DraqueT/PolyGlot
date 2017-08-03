@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque.thompson
+ * Copyright (c) 2016-2017, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -20,6 +20,7 @@
 package PolyGlot.QuizEngine;
 
 import PolyGlot.DictCore;
+import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DictNode;
 import java.util.ArrayList;
@@ -143,7 +144,7 @@ public class QuizQuestion extends DictNode {
                             
                             try {
                                 qEnd += core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
-                            } catch (Exception e) {
+                            } catch (DictionaryCollection.NodeNotExistsException e) {
                                 throw new Exception("Question building error: " + e.getLocalizedMessage());
                             }
                         }

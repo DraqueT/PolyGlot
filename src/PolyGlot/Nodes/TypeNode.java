@@ -23,6 +23,7 @@ package PolyGlot.Nodes;
  *
  * @author draque
  */
+@SuppressWarnings("EqualsAndHashcode")
 public class TypeNode extends DictNode {
 
     private String notes = "";

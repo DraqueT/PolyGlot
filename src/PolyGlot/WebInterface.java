@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ImageNode;
 import java.io.IOException;
 import java.io.InputStream;
@@ -114,7 +115,7 @@ public class WebInterface {
                 int imageId = Integer.parseInt(regPath);
                 ImageNode image = (ImageNode)core.getImageCollection().getNodeById(imageId);
                 html = html.replace("<img src=\""+ regPath + "\">", "<img src=\"file:///"+ image.getImagePath() + "\">");
-            } catch (Exception e) {
+            } catch (DictionaryCollection.NodeNotExistsException | IOException | NumberFormatException e) {
                 throw new Exception("problem loading image : " + e.getLocalizedMessage());
             }
         }

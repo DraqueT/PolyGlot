@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque.thompson
+ * Copyright (c) 2016-2017, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -123,7 +124,7 @@ public final class ClipboardHandler implements ClipboardOwner {
             Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
             cachedContents = clip.getContents(null);
             
-        } catch (Exception e) {
+        } catch (HeadlessException e) {
             throw new Exception("System busy, unable to perform action: " + e.getLocalizedMessage());
         }
     }

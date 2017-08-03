@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque
+ * Copyright (c) 2015-2017, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -21,6 +21,7 @@ package PolyGlot;
 
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PGrammarPane;
+import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ImageNode;
 import java.awt.Color;
 import java.awt.Font;
@@ -93,7 +94,7 @@ public class FormattedTextHelper {
                 try {
                     ImageNode imageNode = (ImageNode)core.getImageCollection().getNodeById(id);
                     ((PGrammarPane)pane).addImage(imageNode);
-                } catch (Exception e) {
+                } catch (DictionaryCollection.NodeNotExistsException e) {
                     InfoBox.error("Image Load Error", "Unable to load image: " 
                             + e.getLocalizedMessage(), core.getRootWindow());
                 }                

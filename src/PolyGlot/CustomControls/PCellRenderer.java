@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -37,7 +37,7 @@ import javax.swing.table.TableCellRenderer;
  * @author draque
  */
 public class PCellRenderer implements TableCellRenderer {
-    private Font myFont;
+    private final Font myFont;
     private DocumentListener docListener;
     private final DictCore core;
 

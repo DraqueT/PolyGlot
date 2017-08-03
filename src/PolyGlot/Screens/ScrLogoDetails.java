@@ -35,6 +35,7 @@ import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTable;
 import PolyGlot.CustomControls.PTextPane;
+import PolyGlot.ManagersCollections.DictionaryCollection;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -124,7 +125,7 @@ public class ScrLogoDetails extends PFrame {
                 list.add(singleModeLogo);
 
                 populateLogographs(list.iterator());
-            } catch (Exception e) {
+            } catch (DictionaryCollection.NodeNotExistsException e) {
                 InfoBox.error("Logograph Error", "Unable to load logograph: " + e.getMessage(), _core.getRootWindow());
             }
 

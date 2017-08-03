@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
@@ -207,7 +208,7 @@ public class ImportFileHelper {
                             int propId = core.getWordPropertiesCollection().addNode(wordProp);
                             try {
                                 wordProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(propId);
-                            } catch (Exception e) {
+                            } catch (DictionaryCollection.NodeNotExistsException e) {
                                 throw new Exception("Problem pulling word class for word: " + newWord.getValue());
                             }
                         }
@@ -318,7 +319,7 @@ public class ImportFileHelper {
             // initialy, try to parse as int, if failure there, try to parse as column letters
             try {
                 ret = Integer.valueOf(entry.trim());
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 ret = columnStringValue(entry.trim());
             }
         } catch (NumberFormatException e) {
@@ -403,7 +404,7 @@ public class ImportFileHelper {
                 int propId = core.getWordPropertiesCollection().addNode(wordProp);
                 try {
                     wordProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(propId);
-                } catch (Exception e) {
+                } catch (DictionaryCollection.NodeNotExistsException e) {
                     throw new Exception("Problem pulling word class for word: " + newWord.getValue());
                 }
             }

@@ -79,7 +79,7 @@ public class ScrQuizGenDialog extends PFrame {
         
         try {
             numQuestions = Integer.parseInt(txtNumQuestions.getText());
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             InfoBox.error("Integer Value Required", "Number of questions must be an integer value.", core.getRootWindow());
             return;
         }

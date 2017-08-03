@@ -23,9 +23,7 @@ import PolyGlot.PGTUtil;
 import javax.swing.border.Border;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Image;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**

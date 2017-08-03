@@ -944,7 +944,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
                 core.getDeclensionManager().updateDeclensionTemplate(myType.getId(), decId, decl);
             }
-        } catch (Exception e) {
+        } catch (ClassCastException e) {
             InfoBox.error("Declension Creation Error", "Unable to create Declension "
                     + txtDeclensionName.getText() + "\n\n" + e.getMessage(), core.getRootWindow());
         }

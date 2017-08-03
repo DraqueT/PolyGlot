@@ -1154,7 +1154,7 @@ public class IOHandler {
         try {
             File file = new File(path);
             Desktop.getDesktop().open(file);
-        } catch (Exception e) {
+        } catch (IOException e) {
             ret = false;
         }
 

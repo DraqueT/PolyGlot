@@ -168,7 +168,8 @@ public class SoundRecorder {
         try {
             Thread.sleep(timeToDie);
         } // max amount of time before player kills self
-        catch (Exception e) {/*do nothing*/
+        catch (InterruptedException e) {
+            // if it's interrupted, it's fine. The recording will end.
         }
 
         if (soundThread != null
@@ -259,7 +260,7 @@ public class SoundRecorder {
         try {
             Thread.sleep(timeToDie);
         } // longest time for thread to die
-        catch (Exception e) {/*do nothing*/
+        catch (InterruptedException e) {/*do nothing*/
         }
 
         out.close();

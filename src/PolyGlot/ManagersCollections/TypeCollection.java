@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -204,8 +204,8 @@ public class TypeCollection extends DictionaryCollection {
         
         try {
             return (TypeNode) super.getNodeById(_id);
-        } catch (Exception e) {
-            // Do nothing. Lack of ID should resuly in return of null.
+        } catch (NodeNotExistsException e) {
+            // Do nothing. Lack of ID should result in return of null.
         }
         
         return ret;

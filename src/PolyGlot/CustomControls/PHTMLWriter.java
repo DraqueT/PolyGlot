@@ -27,7 +27,7 @@ import javax.swing.text.html.HTMLWriter;
  * Overridden to eliminate annoying line break inserts
  * @author draque.thompson
  */
-public class PHTMLWriter extends HTMLWriter {
+public final class PHTMLWriter extends HTMLWriter {
     public PHTMLWriter(Writer w, HTMLDocument doc, int pos, int len) {
         super(w, doc, pos, len);
         

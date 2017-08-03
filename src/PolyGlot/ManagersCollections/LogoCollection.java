@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -179,7 +179,7 @@ public class LogoCollection extends DictionaryCollection {
                         ret = true;
                         break;
                     }
-                } catch (Exception e) {/*do nothing*/}
+                } catch (ConWordCollection.WordNotExistsException e) {/*do nothing*/}
             }
         }
         
@@ -226,7 +226,7 @@ public class LogoCollection extends DictionaryCollection {
             try {
                 ConWord curNode = core.getWordCollection().getNodeById(it.next());
                 retList.add(curNode);
-            } catch (Exception e) {/*Do nothing*/}
+            } catch (ConWordCollection.WordNotExistsException e) {/*Do nothing*/}
                         
         }
         
@@ -357,7 +357,7 @@ public class LogoCollection extends DictionaryCollection {
         
         try {
             relNode = (LogoNode)getNodeById(Integer.parseInt(ids[0]));
-        } catch (Exception e) {
+        } catch (NodeNotExistsException | NumberFormatException e) {
             throw new Exception("Unable to load logograph relations.");
         }
         
@@ -371,7 +371,7 @@ public class LogoCollection extends DictionaryCollection {
                         Integer.parseInt(ids[i]));
                 
                 addWordLogoRelation(word, relNode);
-            } catch (Exception e) {
+            } catch (ConWordCollection.WordNotExistsException | NumberFormatException e) {
                 loadLog += "\nLogograph load error: " + e.getLocalizedMessage();
             }
         }
