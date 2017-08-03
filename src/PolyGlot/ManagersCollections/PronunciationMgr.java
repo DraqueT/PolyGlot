@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -308,19 +308,22 @@ public class PronunciationMgr {
      */
     public void writeXML(Document doc, Element rootElement) {
         Iterator<PronunciationNode> procGuide = getPronunciations().iterator();
+        Element collection = doc.createElement(PGTUtil.etymologyCollectionXID);
         Element wordNode;
         Element wordValue;
+        
+        rootElement.appendChild(collection);
         
         wordNode = doc.createElement(PGTUtil.proGuideRecurseXID);
         wordNode.appendChild(doc.createTextNode(recurse ?
                 PGTUtil.True : PGTUtil.False));
-        rootElement.appendChild(wordNode);
+        collection.appendChild(wordNode);
 
         while (procGuide.hasNext()) {
             PronunciationNode curNode = procGuide.next();
 
             wordNode = doc.createElement(PGTUtil.proGuideXID);
-            rootElement.appendChild(wordNode);
+            collection.appendChild(wordNode);
 
             wordValue = doc.createElement(PGTUtil.proGuideBaseXID);
             wordValue.appendChild(doc.createTextNode(curNode.getValue()));

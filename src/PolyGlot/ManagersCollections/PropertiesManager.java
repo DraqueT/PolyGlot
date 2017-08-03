@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.swing.JTextField;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -475,83 +474,86 @@ public class PropertiesManager {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
+        Element propContainer = doc.createElement(PGTUtil.langPropertiesXID);
         Element wordValue;
+        
+        rootElement.appendChild(propContainer);
 
         // store font for Conlang words
         wordValue = doc.createElement(PGTUtil.fontConXID);
         Font curFont = getFontCon();
         wordValue.appendChild(doc.createTextNode(curFont == null ? "" : curFont.getName()));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store font style
         wordValue = doc.createElement(PGTUtil.langPropFontStyleXID);
         wordValue.appendChild(doc.createTextNode(getFontStyle().toString()));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store font for Local words
         wordValue = doc.createElement(PGTUtil.langPropFontSizeXID);
         wordValue.appendChild(doc.createTextNode(getFontSize().toString()));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store name for conlang
         wordValue = doc.createElement(PGTUtil.langPropLangNameXID);
         wordValue.appendChild(doc.createTextNode(getLangName()));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store alpha order for conlang
         wordValue = doc.createElement(PGTUtil.langPropAlphaOrderXID);
         wordValue.appendChild(doc.createTextNode(getAlphaPlainText()));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store option for mandatory Types
         wordValue = doc.createElement(PGTUtil.langPropTypeMandatoryXID);
         wordValue.appendChild(doc.createTextNode(isTypesMandatory() ? PGTUtil.True : PGTUtil.False));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store option for mandatory Local word
         wordValue = doc.createElement(PGTUtil.langPropLocalMandatoryXID);
         wordValue.appendChild(doc.createTextNode(isLocalMandatory() ? PGTUtil.True : PGTUtil.False));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store option for unique local word
         wordValue = doc.createElement(PGTUtil.langPropLocalUniquenessXID);
         wordValue.appendChild(doc.createTextNode(isLocalUniqueness() ? PGTUtil.True : PGTUtil.False));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store option for unique conwords
         wordValue = doc.createElement(PGTUtil.langPropWordUniquenessXID);
         wordValue.appendChild(doc.createTextNode(isWordUniqueness() ? PGTUtil.True : PGTUtil.False));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store option for ignoring case
         wordValue = doc.createElement(PGTUtil.langPropIgnoreCaseXID);
         wordValue.appendChild(doc.createTextNode(isIgnoreCase() ? PGTUtil.True : PGTUtil.False));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store option for disabling regex or pronunciations
         wordValue = doc.createElement(PGTUtil.langPropDisableProcRegexXID);
         wordValue.appendChild(doc.createTextNode(isDisableProcRegex() ? PGTUtil.True : PGTUtil.False));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store option for enforcing RTL in conlang
         wordValue = doc.createElement(PGTUtil.langPropEnforceRTLXID);
         wordValue.appendChild(doc.createTextNode(isEnforceRTL() ? PGTUtil.True : PGTUtil.False));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store option for Author and copyright info
         wordValue = doc.createElement(PGTUtil.langPropAuthCopyrightXID);
         wordValue.appendChild(doc.createTextNode(copyrightAuthorInfo));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
 
         // store option local language name
         wordValue = doc.createElement(PGTUtil.langPropLocalLangNameXID);
         wordValue.appendChild(doc.createTextNode(localLangName));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
         
         // store kerning value (default 0)
         wordValue = doc.createElement(PGTUtil.langPropKerningVal);
         wordValue.appendChild(doc.createTextNode(kerningSpace.toString()));
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
         
         // store all replacement pairs
         wordValue = doc.createElement(PGTUtil.langPropCharRepContainerXID);
@@ -568,7 +570,7 @@ public class PropertiesManager {
             
             wordValue.appendChild(node);
         }
-        rootElement.appendChild(wordValue);
+        propContainer.appendChild(wordValue);
     }
 
     /**

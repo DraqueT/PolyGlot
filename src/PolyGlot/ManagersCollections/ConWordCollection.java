@@ -713,12 +713,15 @@ public class ConWordCollection extends DictionaryCollection {
      */
     public void writeXML(Document doc, Element rootElement) {
         List<ConWord> wordLoop = getWordNodes();
+        Element lexicon = doc.createElement(PGTUtil.lexiconXID);
         Element wordNode;
         Element wordValue;
 
+        rootElement.appendChild(lexicon);
+        
         for (ConWord curWord : wordLoop) {
             wordNode = doc.createElement(PGTUtil.wordXID);
-            rootElement.appendChild(wordNode);
+            lexicon.appendChild(wordNode);
 
             wordValue = doc.createElement(PGTUtil.wordIdXID);
             Integer wordId = curWord.getId();

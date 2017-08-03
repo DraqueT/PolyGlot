@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -842,9 +842,12 @@ public class DeclensionManager {
      */
     public void writeXML(Document doc, Element rootElement) {
         Set<Entry<Integer, List<DeclensionNode>>> declensionSet;
+        Element declensionCollection = doc.createElement(PGTUtil.declensionCollectionXID);
         Element wordNode;
         Element wordValue;
 
+        rootElement.appendChild(declensionCollection);
+        
         // record declension templates
         declensionSet = getTemplateMap().entrySet();
 
@@ -853,7 +856,7 @@ public class DeclensionManager {
 
             for (DeclensionNode curNode : e.getValue()) {
                 wordNode = doc.createElement(PGTUtil.declensionXID);
-                rootElement.appendChild(wordNode);
+                declensionCollection.appendChild(wordNode);
 
                 wordValue = doc.createElement(PGTUtil.declensionIdXID);
                 wordValue.appendChild(doc.createTextNode(curNode.getId().toString()));
@@ -909,7 +912,7 @@ public class DeclensionManager {
 
             for (DeclensionNode curNode : e.getValue()) {
                 wordNode = doc.createElement(PGTUtil.declensionXID);
-                rootElement.appendChild(wordNode);
+                declensionCollection.appendChild(wordNode);
 
                 wordValue = doc.createElement(PGTUtil.declensionIdXID);
                 wordValue.appendChild(doc.createTextNode(curNode.getId().toString()));
@@ -940,7 +943,7 @@ public class DeclensionManager {
         // record declension autogeneration rules
         for (DeclensionGenRule curRule : generationRules) {
             Element ruleNode = doc.createElement(PGTUtil.decGenRuleXID);
-            rootElement.appendChild(ruleNode);
+            declensionCollection.appendChild(ruleNode);
 
             wordValue = doc.createElement(PGTUtil.decGenRuleCombXID);
             wordValue.appendChild(doc.createTextNode(curRule.getCombinationId()));

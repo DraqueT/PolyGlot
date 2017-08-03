@@ -30,9 +30,11 @@ import javax.swing.ImageIcon;
  * @author draque
  */
 public class PGTUtil {
-    // properties on words
     public static final String dictionaryXID = "dictionary";
     public static final String pgVersionXID = "PolyGlotVer";
+    
+    // properties on words
+    public static final String lexiconXID = "lexicon";
     public static final String wordXID = "word";
     public static final String localWordXID = "localWord";
     public static final String conWordXID = "conWord";
@@ -52,6 +54,7 @@ public class PGTUtil {
     public static final String wordClassTextValueXID = "wordClassTextValue";
 
     // properties for types/parts of speech
+    public static final String typeCollectionXID = "partsOfSpeech";
     public static final String typeXID = "class";
     public static final String typeNameXID = "className";
     public static final String typeIdXID = "classId";
@@ -70,6 +73,7 @@ public class PGTUtil {
     public static final String genderNotesXID = "genderNotes";
 
     // language properties
+    public static final String langPropertiesXID = "languageProperties";
     public static final String fontConXID = "fontCon";
     public static final String fontLocalXID = "fontLocal";
     public static final String langPropLangNameXID = "langName";
@@ -94,6 +98,7 @@ public class PGTUtil {
     public static final String langPropCharRepValueXID = "langPropCharRepValue";
 
     // declension properties
+    public static final String declensionCollectionXID = "declensionCollection";
     public static final String declensionXID = "declensionNode";
     public static final String declensionIdXID = "declensionId";
     public static final String declensionTextXID = "declensionText";
@@ -110,6 +115,7 @@ public class PGTUtil {
     public static final String dimensionNameXID = "dimensionName";
 
     // pronunciation properties
+    public static final String etymologyCollectionXID = "etymologyCollection";
     public static final String proGuideXID = "proGuide";
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";
