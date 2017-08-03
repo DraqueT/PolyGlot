@@ -183,6 +183,16 @@ public class PGTUtil {
     public static final String ClassValueNodeXID = "wordGrammarClassValueNode";
     public static final String ClassValueNameXID = "wordGrammarClassValueName";
     public static final String ClassValueIdXID = "wordGrammarClassValueId";
+    
+    // etymology constants
+    public static final String EtyCollectionXID = "EtymologyCollection";
+    public static final String EtyIntRelationNodeXID = "EtymologyInternalRelation";
+    public static final String EtyIntChildXID = "EtymologyInternalChild";
+    public static final String EtyChildExternalsXID = "EtymologyChildToExternalsNode";
+    public static final String EtyExternalWordNodeXID = "EtymologyExternalWordNode";
+    public static final String EtyExternalWordValueXID = "EtymologyExternalWordValue";
+    public static final String EtyExternalWordOriginXID = "EtymologyExternalWordOrigin";
+    public static final String EtyExternalWordDefinitionXID = "EtymologyExternalWordDefinition";
 
     // constants for PolyGlot options found in PolyGlot.ini
     public static final int optionsNumLastFiles = 5;

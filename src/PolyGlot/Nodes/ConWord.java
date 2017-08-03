@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -46,7 +46,7 @@ public class ConWord extends DictNode {
     private boolean autoDeclensionOverride;
     private boolean rulesOverride;
     private DictCore core;
-    private ConWordCollection parent;
+    private ConWordCollection parentCollection;
     private final Map<Integer, Integer> classValues = new HashMap<>();
     private final Map<Integer, String> classTextValues = new HashMap<>();
     public String typeError = ""; // used only for returning error state
@@ -68,7 +68,7 @@ public class ConWord extends DictNode {
      * @return 
      */
     public boolean isWordLegal() {
-        ConWord checkValue = parent.testWordLegality(this);
+        ConWord checkValue = parentCollection.testWordLegality(this);
         String checkProc;
         
         // catches pronunciations which lead to regex errors
@@ -94,7 +94,7 @@ public class ConWord extends DictNode {
     }
     
     public void setParent(ConWordCollection _parent) {
-        parent = _parent;
+        parentCollection = _parent;
     }
     
     /**
@@ -185,19 +185,6 @@ public class ConWord extends DictNode {
         return core;
     }
     
-    /*
-        while (classIt.hasNext()) {
-            Entry<Integer, Integer> curEntry = classIt.next();
-            
-            if (!core.getWordPropertiesCollection().isValid(curEntry.getKey(), 
-                    curEntry.getValue())) {
-                classValues.remove(curEntry.getKey());
-            }
-        }
-        
-        return classValues.entrySet();
-    */
-    
     public void setCore(DictCore _core) {
         core = _core;
     }
@@ -242,9 +229,9 @@ public class ConWord extends DictNode {
     }
 
     public void setLocalWord(String _localWord) {
-        if (parent != null) {
+        if (parentCollection != null) {
             try {
-                parent.extertalBalanceWordCounts(id, value, _localWord);
+                parentCollection.extertalBalanceWordCounts(id, value, _localWord);
             } catch (Exception e) {
                 InfoBox.error("Word balance error.", "Unable to balance word: " 
                         + value, core.getRootWindow());
@@ -256,9 +243,9 @@ public class ConWord extends DictNode {
     
     @Override
     public void setValue(String _value) {
-        if (parent != null) {
+        if (parentCollection != null) {
             try {
-                parent.extertalBalanceWordCounts(id, _value, localWord);
+                parentCollection.extertalBalanceWordCounts(id, _value, localWord);
             } catch (Exception e) {
                 InfoBox.error("Word balance error.", "Unable to balance word: " 
                         + value, core.getRootWindow());
@@ -401,7 +388,7 @@ public class ConWord extends DictNode {
     public int compareTo(DictNode _compare) {
         int ret;
         
-        if (parent != null && parent.isLocalOrder()) {
+        if (parentCollection != null && parentCollection.isLocalOrder()) {
             ret = this.getLocalWord().compareToIgnoreCase(((ConWord)_compare).getLocalWord());
         } else {
             ret = super.compareTo(_compare);

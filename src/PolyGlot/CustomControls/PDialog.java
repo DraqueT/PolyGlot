@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 - 2015, Draque Thompson - draquemail@gmail.com
+ * Copyright (c) 2014 - 2017, Draque Thompson - draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -50,6 +50,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     private boolean hasFocus = false;
     protected DictCore core;
     protected boolean firstVisible = true;
+    protected boolean ignoreInitialResize = false;
         
     /**
      * Returns current running mode of window
@@ -174,7 +175,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     
     @Override
     public void setVisible(boolean visible) {
-        if (firstVisible) {
+        if (firstVisible && !ignoreInitialResize) {
             if (core == null) {
                 InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", core.getRootWindow());
             }

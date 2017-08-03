@@ -82,7 +82,7 @@ public class ScrLangProps extends PFrame {
             private void save() {
                 try {
                     core.getPropertiesManager().setKerningSpace(Double.parseDouble(txtKerning.getText()));
-                } catch (Exception e) {
+                } catch (NumberFormatException e) {
                     // do nothing. This fails on non-numeric values, which is handled elsewhere
                 }
             }

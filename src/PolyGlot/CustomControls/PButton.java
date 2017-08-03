@@ -31,6 +31,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import javax.swing.Icon;
 
 import javax.swing.JButton;
@@ -52,7 +53,7 @@ public class PButton extends JButton implements MouseListener {
     public PButton(DictCore _core) {
         try {
             super.setFont(IOHandler.getButtonFont());
-        } catch (Exception e) {
+        } catch (IOException e) {
             InfoBox.error("FONT ERROR", e.getLocalizedMessage(), _core.getRootWindow());
         }
         

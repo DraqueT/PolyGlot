@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, draque
+ * Copyright (c) 2015-2017, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -62,6 +62,8 @@ public class PTextField extends JTextField {
     private SwingWorker worker = null;
     private String defText;
     private EventListenerList tmpListenerList = null;
+    private Integer contentId = -1;
+    private Object associatedObject = null;
 
     /**
      * Init for PDialogs
@@ -431,5 +433,33 @@ public class PTextField extends JTextField {
      */
     private void superSetText(String text) {
         super.setText(text);
+    }
+
+    /**
+     * @return The ID of whatever content this field holds
+     */
+    public Integer getContentId() {
+        return contentId;
+    }
+
+    /**
+     * @param contentId Sets the ID for whatever content this field holds
+     */
+    public void setContentId(Integer contentId) {
+        this.contentId = contentId;
+    }
+
+    /**
+     * @return the associatedObject
+     */
+    public Object getAssociatedObject() {
+        return associatedObject;
+    }
+
+    /**
+     * @param associatedObject the associatedObject to set
+     */
+    public void setAssociatedObject(Object associatedObject) {
+        this.associatedObject = associatedObject;
     }
 }

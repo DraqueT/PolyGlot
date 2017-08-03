@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -89,9 +89,9 @@ public abstract class DictionaryCollection {
         return nodeMap.containsKey(objectId);
     }
     
-    public Object getNodeById(Integer _id) throws Exception {
+    public Object getNodeById(Integer _id) throws NodeNotExistsException {
         if (!nodeMap.containsKey(_id)) {
-            throw new Exception("Node with id: " + _id.toString()
+            throw new NodeNotExistsException("Node with id: " + _id.toString()
                     + " does not exist!");
         }
 
@@ -192,5 +192,11 @@ public abstract class DictionaryCollection {
         }
         
         return ret;
+    }
+    
+    public class NodeNotExistsException extends Exception {
+        public NodeNotExistsException(String message) {
+            super(message);
+        }
     }
 }

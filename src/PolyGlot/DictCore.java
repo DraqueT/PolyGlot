@@ -31,6 +31,7 @@ import PolyGlot.ManagersCollections.FamilyManager;
 import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.ManagersCollections.TypeCollection;
 import PolyGlot.ManagersCollections.ConWordCollection;
+import PolyGlot.ManagersCollections.EtymologyManager;
 import PolyGlot.ManagersCollections.ImageCollection;
 import PolyGlot.ManagersCollections.OptionsManager;
 import PolyGlot.ManagersCollections.RomanizationManager;
@@ -64,6 +65,7 @@ public class DictCore {
     private OptionsManager optionsManager;
     private WordPropertyCollection wordPropCollection;
     private ImageCollection imageCollection;
+    private EtymologyManager etymologyManager;
     private PFrame rootWindow;
     private Object clipBoard;
     private boolean curLoading = false;
@@ -86,6 +88,7 @@ public class DictCore {
             optionsManager = new OptionsManager(this);
             wordPropCollection = new WordPropertyCollection();
             imageCollection = new ImageCollection();
+            etymologyManager = new EtymologyManager(this);
 
             PAlphaMap alphaOrder = propertiesManager.getAlphaOrder();
 
@@ -422,6 +425,7 @@ public class DictCore {
         wordPropCollection.writeXML(doc, rootElement);
         typeCollection.writeXML(doc, rootElement);
         wordCollection.writeXML(doc, rootElement);
+        getEtymologyManager().writeXML(doc, rootElement);
         declensionMgr.writeXML(doc, rootElement);
         pronuncMgr.writeXML(doc, rootElement);
         romMgr.writeXML(doc, rootElement);
@@ -462,5 +466,9 @@ public class DictCore {
 
     public RomanizationManager getRomManager() {
         return romMgr;
+    }
+    
+    public EtymologyManager getEtymologyManager() {
+        return etymologyManager;
     }
 }

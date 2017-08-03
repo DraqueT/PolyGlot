@@ -32,6 +32,7 @@ import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.IOHandler;
+import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
@@ -205,7 +206,7 @@ public final class ScrLexicon extends PFrame {
         try {
             lstLexicon.setSelectedValue(
                     core.getWordCollection().getNodeById(wordId), true);
-        } catch (Exception e) {
+        } catch (ConWordCollection.WordNotExistsException e) {
             InfoBox.error("Refresh Error", "Unable to refresh lexicon: "
                     + e.getLocalizedMessage(), core.getRootWindow());
             //e.printStackTrace();
@@ -394,15 +395,15 @@ public final class ScrLexicon extends PFrame {
     private void setupClassPanel(int setTypeId) {
         ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
 
+        pnlClasses.removeAll();
+        
         // on no word selected, simply blank all classes
         if (curWord == null) {
-            pnlClasses.removeAll();
             return;
         }
 
         List<WordProperty> propList = core.getWordPropertiesCollection()
                 .getClassProps(setTypeId);
-        pnlClasses.removeAll();
         pnlClasses.setPreferredSize(new Dimension(4000, 1));
 
         pnlClasses.setLayout(new GridBagLayout());
@@ -1086,7 +1087,7 @@ public final class ScrLexicon extends PFrame {
 
         try {
             target = core.getWordCollection().getNodeById(id);
-        } catch (Exception e) {
+        } catch (ConWordCollection.WordNotExistsException e) {
             InfoBox.error("Word Selection Error", "Unable to select word:\n"
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -1353,6 +1354,7 @@ public final class ScrLexicon extends PFrame {
                 chkRuleOverride.setEnabled(enable);
                 btnDeclensions.setEnabled(enable);
                 btnLogographs.setEnabled(enable);
+                btnEtymology.setEnabled(enable);
                 for (JComponent classComp : classPropMap.values()) {
                     classComp.setEnabled(enable);
                 }
@@ -1617,6 +1619,7 @@ public final class ScrLexicon extends PFrame {
         pnlClasses = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         txtDefinition = new PTextPane(core, true, "-- Definition --");
+        btnEtymology = new PButton(core);
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         lstLexicon = new PList(core, true);
@@ -1739,15 +1742,20 @@ public final class ScrLexicon extends PFrame {
         txtDefinition.setName(""); // NOI18N
         jScrollPane4.setViewportView(txtDefinition);
 
+        btnEtymology.setText("Etymology");
+        btnEtymology.setToolTipText("A word's etymological roots are stored and set here.");
+        btnEtymology.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEtymologyActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlClasses, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(txtProc, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(chkProcOverride)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(chkRuleOverride)
                 .addContainerGap(333, Short.MAX_VALUE))
@@ -1757,9 +1765,15 @@ public final class ScrLexicon extends PFrame {
             .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(btnDeclensions)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLogographs))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkProcOverride)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(btnDeclensions)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEtymology)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnLogographs)))
+                .addGap(0, 91, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1779,13 +1793,14 @@ public final class ScrLexicon extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkRuleOverride)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLogographs, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDeclensions, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnDeclensions, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEtymology, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jSplitPane1.setRightComponent(jPanel3);
@@ -1994,10 +2009,15 @@ public final class ScrLexicon extends PFrame {
         ScrQuickWordEntry.run(core, this);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnEtymologyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEtymologyActionPerformed
+        new ScrEtymRoots(core, menuParent, getCurrentWord()).setVisible(true);
+    }//GEN-LAST:event_btnEtymologyActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddWord;
     private javax.swing.JButton btnDeclensions;
     private javax.swing.JButton btnDelWord;
+    private javax.swing.JButton btnEtymology;
     private javax.swing.JButton btnLogographs;
     private javax.swing.JCheckBox chkProcOverride;
     private javax.swing.JCheckBox chkRuleOverride;
