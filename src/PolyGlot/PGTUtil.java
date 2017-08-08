@@ -52,6 +52,7 @@ public class PGTUtil {
     public static final String wordClassAndValueXID = "wordClassification";
     public static final String wordClassTextValueCollectionXID = "wordClassTextValueCollection";
     public static final String wordClassTextValueXID = "wordClassTextValue";
+    public static final String wordEtymologyNotesXID = "wordEtymologyNotes";
 
     // properties for types/parts of speech
     public static final String typeCollectionXID = "partsOfSpeech";

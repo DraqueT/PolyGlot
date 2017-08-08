@@ -42,6 +42,7 @@ public class ConWord extends DictNode {
     private int typeId;
     private String definition;
     private String pronunciation;
+    private String etymNotes;
     private boolean procOverride;
     private boolean autoDeclensionOverride;
     private boolean rulesOverride;
@@ -61,6 +62,7 @@ public class ConWord extends DictNode {
         procOverride = false;
         autoDeclensionOverride = false;
         rulesOverride = false;
+        etymNotes = "";
     }
     
     /**
@@ -179,6 +181,7 @@ public class ConWord extends DictNode {
         }
         this.setProcOverride(set.isProcOverride());
         this.setOverrideAutoDeclen(set.isOverrideAutoDeclen());
+        this.setEtymNotes(set.getEtymNotes());
     }
     
     public DictCore getCore() {
@@ -395,5 +398,19 @@ public class ConWord extends DictNode {
         }
         
         return ret;
+    }
+
+    /**
+     * @return the etymNotes
+     */
+    public String getEtymNotes() {
+        return etymNotes;
+    }
+
+    /**
+     * @param etymNotes the etymNotes to set
+     */
+    public void setEtymNotes(String etymNotes) {
+        this.etymNotes = etymNotes;
     }
 }

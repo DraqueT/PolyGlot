@@ -780,6 +780,10 @@ public class ConWordCollection extends DictionaryCollection {
                 wordValue.appendChild(classVal);
             }
             wordNode.appendChild(wordValue);
+            
+            wordValue = doc.createElement(PGTUtil.wordEtymologyNotesXID);
+            wordValue.appendChild(doc.createTextNode(curWord.getEtymNotes()));
+            wordNode.appendChild(wordValue);
         }
     }
 

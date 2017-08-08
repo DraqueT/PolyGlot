@@ -75,6 +75,7 @@ public final class ScrEtymRoots extends PDialog {
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         lblWord.setFont(core.getPropertiesManager().getFontCon());
         setupDrawPanel();
+        txtNotes.setText(word.getEtymNotes());
     }
 
     private void setupDrawPanel() {
@@ -330,21 +331,25 @@ public final class ScrEtymRoots extends PDialog {
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane1 = new PTextPane(core, true, "-- Etymological Notes --");
+        txtNotes = new PTextPane(core, true, "-- Etymological Notes --");
         pnlParentsInt = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         pnlParentsExt = new javax.swing.JPanel();
+        jButton1 = new PButton(core);
 
         setTitle("Etymology Setup and Graphical Tree");
         setMinimumSize(new java.awt.Dimension(0, 425));
 
         lblWord.setBackground(new java.awt.Color(255, 255, 255));
+        lblWord.setMaximumSize(new java.awt.Dimension(0, 20));
 
         jLabel1.setText("Etymology for:");
+        jLabel1.setPreferredSize(new java.awt.Dimension(92, 1));
 
         jSplitPane1.setBackground(new java.awt.Color(255, 255, 255));
         jSplitPane1.setDividerLocation(225);
+        jSplitPane1.setPreferredSize(new java.awt.Dimension(9999, 9999));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -366,15 +371,15 @@ public final class ScrEtymRoots extends PDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE))
         );
 
         jSplitPane1.setRightComponent(jPanel1);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTextPane1.setPreferredSize(new java.awt.Dimension(0, 200));
-        jScrollPane2.setViewportView(jTextPane1);
+        txtNotes.setPreferredSize(new java.awt.Dimension(0, 200));
+        jScrollPane2.setViewportView(txtNotes);
 
         pnlParentsInt.setBackground(new java.awt.Color(255, 255, 255));
         pnlParentsInt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -408,7 +413,7 @@ public final class ScrEtymRoots extends PDialog {
         );
         pnlParentsExtLayout.setVerticalGroup(
             pnlParentsExtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 124, Short.MAX_VALUE)
+            .addGap(0, 78, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -441,30 +446,46 @@ public final class ScrEtymRoots extends PDialog {
 
         jSplitPane1.setLeftComponent(jPanel2);
 
+        jButton1.setText("OK");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblWord, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
-            .addComponent(jSplitPane1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblWord, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblWord, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSplitPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     @Override
     public void updateAllValues(DictCore _core) {
@@ -475,8 +496,15 @@ public final class ScrEtymRoots extends PDialog {
     public boolean thisOrChildrenFocused() {
         return this.hasFocus();
     }
+    
+    @Override
+    public void dispose() {
+        word.setEtymNotes(txtNotes.getText());
+        super.dispose();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -486,10 +514,10 @@ public final class ScrEtymRoots extends PDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JLabel lblWord;
     private javax.swing.JPanel pnlParentsExt;
     private javax.swing.JPanel pnlParentsInt;
     private javax.swing.JTextArea txtEtyFamily;
+    private javax.swing.JTextPane txtNotes;
     // End of variables declaration//GEN-END:variables
 }

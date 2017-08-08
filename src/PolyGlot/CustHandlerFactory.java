@@ -148,6 +148,7 @@ public class CustHandlerFactory {
             boolean bwordClassId = false;
             boolean bwordClassNotes = false;
             boolean bwordClassGloss = false;
+            boolean bwordEtymNotes = false;
             boolean bpronuncation = false;
             boolean bclassVal = false;
             boolean bgenderId = false;
@@ -279,6 +280,8 @@ public class CustHandlerFactory {
                     // plurality made into declension-deprecated from main screen
                     declensionMgr.clearBuffer();
                     bwordPlur = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordEtymologyNotesXID)) {
+                    bwordEtymNotes = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordRuleOverrideXID)) {
                     bwordRuleOverride = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordClassAndValueXID)) {
@@ -626,6 +629,8 @@ public class CustHandlerFactory {
                         warningLog += "\nWord image load error: " + e.getLocalizedMessage();
                     }
                     bdef = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.wordEtymologyNotesXID)) {
+                    bwordEtymNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.fontConXID)) {
                     bfontcon = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.fontLocalXID)) {
@@ -925,7 +930,10 @@ public class CustHandlerFactory {
                     } else {
                         ruleValBuffer += new String(ch, start, length);
                     }
-                } else if (bwordoverAutoDec) {
+                } else if (bwordEtymNotes) {
+                    ConWord buffer = core.getWordCollection().getBufferWord();
+                    buffer.setEtymNotes(buffer.getEtymNotes() + new String(ch, start, length));
+                }else if (bwordoverAutoDec) {
                     core.getWordCollection().getBufferWord()
                             .setOverrideAutoDeclen(new String(ch, start, length).equals(PGTUtil.True));
                     bwordoverAutoDec = false;
