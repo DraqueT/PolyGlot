@@ -50,6 +50,7 @@ public class ConWord extends DictNode {
     private ConWordCollection parentCollection;
     private final Map<Integer, Integer> classValues = new HashMap<>();
     private final Map<Integer, String> classTextValues = new HashMap<>();
+    private Object filterEtyParent;
     public String typeError = ""; // used only for returning error state
 
     public ConWord() {
@@ -412,5 +413,19 @@ public class ConWord extends DictNode {
      */
     public void setEtymNotes(String etymNotes) {
         this.etymNotes = etymNotes;
+    }
+
+    /**
+     * @return the filterEtyParent
+     */
+    public Object getFilterEtyParent() {
+        return filterEtyParent;
+    }
+
+    /**
+     * @param filterEtyParent the filterEtyParent to set
+     */
+    public void setFilterEtyParent(Object filterEtyParent) {
+        this.filterEtyParent = filterEtyParent;
     }
 }

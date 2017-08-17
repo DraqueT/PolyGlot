@@ -20,6 +20,7 @@
 package PolyGlot.ManagersCollections;
 
 import PolyGlot.DictCore;
+import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.EtyExternalParent;
 import PolyGlot.PGTUtil;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class EtymologyManager {
     private final Map<Integer, List<Integer>> childToParent = new HashMap<>();
     private final Map<String, List<Integer>> extParentToChild = new HashMap<>();
     private final Map<Integer, Map<String, EtyExternalParent>> childToExtParent = new HashMap<>();
-    private final List<String> allExtParents = new ArrayList<>();
+    private final Map<String, EtyExternalParent> allExtParents = new HashMap<>();
     private Integer bufferParent = 0;
     private Integer bufferChild = 0;
     private EtyExternalParent bufferExtParent = new EtyExternalParent();
@@ -99,6 +100,31 @@ public class EtymologyManager {
     }
     
     /**
+     * Collects and returns full list of all extant parents (both internal and
+     * external)
+     * @return 
+     */
+    public List<Object> getAllRoots() {
+        List<Object> ret = new ArrayList<>();
+        List<ConWord> parents = new ArrayList<>();
+        
+        for (Integer id : parentToChild.keySet()) {
+            try {
+                ConWord curParent = core.getWordCollection().getNodeById(id);
+                parents.add(curParent);
+            } catch (ConWordCollection.WordNotExistsException ex) {
+                // do nothing. Missing values cleared from list on save/load
+            }
+        }
+        
+        ret.addAll(parents);
+        // TODO: add this back again when there's a good way to display multiple fonts in a single combobox
+        ret.addAll(this.getExtParentList());
+        
+        return ret;
+    }
+    
+    /**
      * Returns a list of children that a word has
      * @param wordId ID of word to retrieve children of
      * @return list of integer IDs of child words (empty list if none)
@@ -149,6 +175,7 @@ public class EtymologyManager {
                 List<Integer> myList = new ArrayList<>();
                 myList.add(child);
                 extParentToChild.put(parent.getUniqueId(), myList);
+                allExtParents.put(parent.getUniqueId(), parent);
             } else {
                 List<Integer> myList = extParentToChild.get(parent.getUniqueId());
                 if (!myList.contains(child)) {
@@ -200,12 +227,10 @@ public class EtymologyManager {
      * @param parent Parent to add to list.
      */
     private void addExtParentToList(EtyExternalParent parent) {
-        String parentValue = getExtListParentValue(parent);
-        if (!allExtParents.contains(parentValue)) {
-            allExtParents.add(parentValue);
+        String parentId = parent.getUniqueId();
+        if (!allExtParents.containsKey(parentId)) {
+            allExtParents.put(parent.getUniqueId(), parent);
         }
-        
-        Collections.sort(allExtParents);
     }
     
     /**
@@ -223,8 +248,10 @@ public class EtymologyManager {
      * Gets list of every external parent referenced in entire language
      * @return alphabetical list by word + (language)
      */
-    private List<String> getExtParentList() {
-        return allExtParents;
+    private List<EtyExternalParent> getExtParentList() {
+        List<EtyExternalParent> ret = new ArrayList(allExtParents.values());        
+        Collections.sort(ret);
+        return ret;
     }
     
     /**
@@ -387,6 +414,44 @@ public class EtymologyManager {
     public void insertBufferExtParent() {
         addExternalRelation(bufferExtParent, bufferChild);
         bufferExtParent = new EtyExternalParent();
+    }
+    
+    /**
+     * Tests whether child word has parent word in its etymology
+     * @param childId id of child word
+     * @param parId id of parent word
+     * @return true if in etymology
+     */
+    public boolean childHasParent(Integer childId, Integer parId) {
+        boolean ret = false;
+        
+        if (childToParent.containsKey(childId)) {
+            List<Integer> myList = childToParent.get(childId);
+            ret = myList.contains(parId);
+            
+            if (!ret) {
+                for (Integer newChild : myList) {
+                    ret = childHasParent(newChild, parId);
+                    
+                    if (ret) {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Tests whether child word has external parent word in its etymology
+     * @param childId id of child word
+     * @param parId unique external id of parent word
+     * @return true if in etymology
+     */
+    public boolean childHasExtParent(Integer childId, String parId) {
+        return childToExtParent.containsKey(childId) 
+                && childToExtParent.get(childId).containsKey(parId);
     }
     
     /**

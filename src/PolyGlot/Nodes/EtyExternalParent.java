@@ -23,9 +23,8 @@ package PolyGlot.Nodes;
  * This node represents an external etymological parent
  * @author DThompson
  */
-public class EtyExternalParent {
+public class EtyExternalParent extends DictNode {
     
-    private String externalWord = "";
     private String externalLanguage = "";
     private String definition = "";
 
@@ -33,14 +32,14 @@ public class EtyExternalParent {
      * @return the externalWord
      */
     public String getExternalWord() {
-        return externalWord;
+        return value;
     }
 
     /**
      * @param externalWord the externalWord to set
      */
     public void setExternalWord(String externalWord) {
-        this.externalWord = externalWord;
+        this.value = externalWord;
     }
 
     /**
@@ -58,12 +57,13 @@ public class EtyExternalParent {
     }
     
     public String getUniqueId() {
-        return externalWord + externalLanguage;
+        return value + externalLanguage;
     }
     
     @Override
     public String toString() {
-        return externalWord + " (" + externalLanguage + ")";
+        return value + (externalLanguage.equals("") ? "" 
+                : " (" + externalLanguage + ")");
     }
 
     /**
@@ -78,5 +78,19 @@ public class EtyExternalParent {
      */
     public void setDefinition(String definition) {
         this.definition = definition;
+    }
+
+    @Override
+    public void setEqual(DictNode _node) throws ClassCastException {
+        if (_node instanceof EtyExternalParent) {
+            EtyExternalParent node = (EtyExternalParent)_node;
+            definition = node.getDefinition();
+            externalLanguage = node.getExternalLanguage();
+        } else {
+            throw new ClassCastException("Type: " 
+                    + _node.getClass().getCanonicalName() 
+                    + " cannot be explicitly converted to " 
+                    + getClass().getCanonicalName() + ".");
+        }
     }
 }

@@ -25,6 +25,7 @@ import PolyGlot.FormattedTextHelper;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.Nodes.DictNode;
+import PolyGlot.Nodes.EtyExternalParent;
 import PolyGlot.PGTUtil;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.RankedObject;
@@ -522,6 +523,24 @@ public class ConWordCollection extends DictionaryCollection {
                     if (cont) {
                         continue;
                     }
+                }
+                
+                // etymological root
+                Object parent = _filter.getFilterEtyParent();
+                if (parent != null) {
+                    if (parent instanceof ConWord) {
+                        ConWord parWord = (ConWord)parent;
+                        if (parWord.getId() == -1 || !core.getEtymologyManager()
+                                .childHasParent(curWord.getId(), parWord.getId())) {
+                            continue;
+                        }
+                    } if (parent instanceof EtyExternalParent) {
+                        EtyExternalParent parExt = (EtyExternalParent)parent;
+                        if (parExt.getId() == -1 || !core.getEtymologyManager()
+                                .childHasExtParent(curWord.getId(), parExt.getUniqueId())) {
+                            continue;
+                        }
+                    } 
                 }
 
                 retValues.setBufferWord(curWord);
