@@ -64,6 +64,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -544,7 +547,20 @@ public final class ScrLexicon extends PFrame {
 
             @Override
             public void focusLost(FocusEvent e) {
-                gridTitlePane.setExpanded(false);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        gridTitlePane.setAnimated(false);
+                        gridTitlePane.setExpanded(false);
+                        gridTitlePane.setAnimated(true);
+                    }
+                });
+                /*new AnimationTimer() {
+                    @Override
+                    public void handle(long now) {
+                        gridTitlePane.setExpanded(false);
+                    }                    
+                }.start();*/
             }
         });
         final CountDownLatch latch = new CountDownLatch(1);
@@ -1273,16 +1289,16 @@ public final class ScrLexicon extends PFrame {
                 Object type = evt.getEventType();
                 if (type.toString().equals(javafx.scene.control.ComboBoxBase.ON_HIDING.toString())) {
                     if (cmbRootSrc.getValue() instanceof ConWord) {
-                        cmbRootSrc.setStyle("-fx-font: " 
+                        cmbRootSrc.setStyle("-fx-font: "
                                 + core.getPropertiesManager()
-                                        .getFontCon().getSize() 
-                                + "px \"" 
+                                        .getFontCon().getSize()
+                                + "px \""
                                 + core.getPropertiesManager().getFontCon()
                                         .getFamily() + "\";");
                     } else {
-                        cmbRootSrc.setStyle("-fx-font: " 
+                        cmbRootSrc.setStyle("-fx-font: "
                                 + core.getPropertiesManager()
-                                        .getCharisUnicodeFont().getSize() + "px \"" 
+                                        .getCharisUnicodeFont().getSize() + "px \""
                                 + core.getPropertiesManager()
                                         .getCharisUnicodeFont().getFamily() + "\";");
                     }
