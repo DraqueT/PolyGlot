@@ -340,6 +340,11 @@ public class DictCore {
         String errorLog = "";
         String warningLog = "";
 
+        // test file exists
+        if (!IOHandler.fileExists(_fileName)) {
+            throw new IOException("File " + _fileName + " does not exist.");
+        }
+        
         // inform user if file is not an archive
         if (!IOHandler.isFileZipArchive(_fileName)) {
             throw new IOException("File " + _fileName + " is not a valid PolyGlot archive.");
