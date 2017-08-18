@@ -530,13 +530,13 @@ public class ConWordCollection extends DictionaryCollection {
                 if (parent != null) {
                     if (parent instanceof ConWord) {
                         ConWord parWord = (ConWord)parent;
-                        if (parWord.getId() == -1 || !core.getEtymologyManager()
+                        if (parWord.getId() != -1 && !core.getEtymologyManager()
                                 .childHasParent(curWord.getId(), parWord.getId())) {
                             continue;
                         }
                     } if (parent instanceof EtyExternalParent) {
                         EtyExternalParent parExt = (EtyExternalParent)parent;
-                        if (parExt.getId() == -1 || !core.getEtymologyManager()
+                        if (parExt.getId() != -1 && !core.getEtymologyManager()
                                 .childHasExtParent(curWord.getId(), parExt.getUniqueId())) {
                             continue;
                         }

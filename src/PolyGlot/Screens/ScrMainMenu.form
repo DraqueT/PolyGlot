@@ -296,7 +296,7 @@
         <Component class="javax.swing.JButton" name="btnPos">
           <Properties>
             <Property name="text" type="java.lang.String" value="Parts of Speech"/>
-            <Property name="toolTipText" type="java.lang.String" value="Create both parts of speech here, and define how their declension/conjugation rules work here."/>
+            <Property name="toolTipText" type="java.lang.String" value="Create both parts of speech and define how their declension/conjugation rules work here."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPosActionPerformed"/>

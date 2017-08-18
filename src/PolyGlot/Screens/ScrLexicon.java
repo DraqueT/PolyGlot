@@ -64,9 +64,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -172,8 +169,8 @@ public final class ScrLexicon extends PFrame {
 
     private void setCustomLabels() {
         if (System.getProperty("os.name").startsWith("Mac")) {
-            btnAddWord.setToolTipText(btnAddWord.getToolTipText() + " (⌘ +)");
-            btnDelWord.setToolTipText(btnDelWord.getToolTipText() + " (⌘ -)");
+            btnAddWord.setToolTipText(btnAddWord.getToolTipText() + " (Option +)");
+            btnDelWord.setToolTipText(btnDelWord.getToolTipText() + " (Option -)");
         } else {
             btnAddWord.setToolTipText(btnAddWord.getToolTipText() + " (CTRL +)");
             btnDelWord.setToolTipText(btnDelWord.getToolTipText() + " (CTRL -)");

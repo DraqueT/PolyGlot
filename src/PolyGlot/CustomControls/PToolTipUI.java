@@ -142,7 +142,10 @@ public class PToolTipUI extends ToolTipUI
         Dimension size = new Dimension(metrics.stringWidth(tipText) + 2, metrics.getHeight() + 2);
         
         c.setSize(size);
-        c.getParent().setSize(size);        
+        c.getParent().setSize(size);
+        if (c.getParent().getParent() != null) {
+            //c.getParent().getParent().setSize(size);
+        }
 
         Insets insets = c.getInsets();
         Rectangle paintTextR = new Rectangle(

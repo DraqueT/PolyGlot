@@ -833,7 +833,7 @@ ToolTipUI t;
         });
 
         btnPos.setText("Parts of Speech");
-        btnPos.setToolTipText("Create both parts of speech here, and define how their declension/conjugation rules work here.");
+        btnPos.setToolTipText("Create both parts of speech and define how their declension/conjugation rules work here.");
         btnPos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPosActionPerformed(evt);
