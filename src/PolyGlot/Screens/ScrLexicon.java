@@ -552,12 +552,6 @@ public final class ScrLexicon extends PFrame {
                         gridTitlePane.setAnimated(true);
                     }
                 });
-                /*new AnimationTimer() {
-                    @Override
-                    public void handle(long now) {
-                        gridTitlePane.setExpanded(false);
-                    }                    
-                }.start();*/
             }
         });
         final CountDownLatch latch = new CountDownLatch(1);
@@ -1070,6 +1064,11 @@ public final class ScrLexicon extends PFrame {
         txtDefSrc.setText("");
         cmbTypeSrc.getSelectionModel().select(defTypeValue);
         cmbRootSrc.getSelectionModel().select(defRootValue);
+        cmbRootSrc.setStyle("-fx-font: "
+                + core.getPropertiesManager()
+                .getCharisUnicodeFont().getSize() + "px \""
+                + core.getPropertiesManager()
+                .getCharisUnicodeFont().getFamily() + "\";");
     }
 
     /**
@@ -1288,16 +1287,16 @@ public final class ScrLexicon extends PFrame {
                     if (cmbRootSrc.getValue() instanceof ConWord) {
                         cmbRootSrc.setStyle("-fx-font: "
                                 + core.getPropertiesManager()
-                                        .getFontCon().getSize()
+                                .getFontCon().getSize()
                                 + "px \""
                                 + core.getPropertiesManager().getFontCon()
-                                        .getFamily() + "\";");
+                                .getFamily() + "\";");
                     } else {
                         cmbRootSrc.setStyle("-fx-font: "
                                 + core.getPropertiesManager()
-                                        .getCharisUnicodeFont().getSize() + "px \""
+                                .getCharisUnicodeFont().getSize() + "px \""
                                 + core.getPropertiesManager()
-                                        .getCharisUnicodeFont().getFamily() + "\";");
+                                .getCharisUnicodeFont().getFamily() + "\";");
                     }
                 }
             }

@@ -46,7 +46,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
-import sun.awt.image.MultiResolutionCachedImage;
 
 /**
  *
