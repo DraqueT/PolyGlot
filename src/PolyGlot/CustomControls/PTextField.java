@@ -309,9 +309,9 @@ public class PTextField extends JTextField {
         }
 
         if (isDefaultText()) {
-            if (!overrideFont) {
+            //if (!overrideFont) {
                 setFont(core.getPropertiesManager().getCharisUnicodeFont());
-            }
+            //}
             setForeground(Color.lightGray);
         } else {
             if (!overrideFont) {

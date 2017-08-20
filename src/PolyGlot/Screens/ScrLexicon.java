@@ -544,7 +544,7 @@ public final class ScrLexicon extends PFrame {
 
             @Override
             public void focusLost(FocusEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
+                Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         gridTitlePane.setAnimated(false);
@@ -1282,8 +1282,8 @@ public final class ScrLexicon extends PFrame {
         cmbRootSrc.addEventHandler(EventType.ROOT, new EventHandler() {
             @Override
             public void handle(Event evt) {
-                Object type = evt.getEventType();
-                if (type.toString().equals(javafx.scene.control.ComboBoxBase.ON_HIDING.toString())) {
+                //Object type = evt.getEventType();
+                //if (type.toString().equals(javafx.scene.control.ComboBoxBase.ON_HIDING.toString())) {
                     if (cmbRootSrc.getValue() instanceof ConWord) {
                         cmbRootSrc.setStyle("-fx-font: "
                                 + core.getPropertiesManager()
@@ -1298,7 +1298,7 @@ public final class ScrLexicon extends PFrame {
                                 + core.getPropertiesManager()
                                 .getCharisUnicodeFont().getFamily() + "\";");
                     }
-                }
+                //}
             }
         });
     }
