@@ -1282,23 +1282,20 @@ public final class ScrLexicon extends PFrame {
         cmbRootSrc.addEventHandler(EventType.ROOT, new EventHandler() {
             @Override
             public void handle(Event evt) {
-                //Object type = evt.getEventType();
-                //if (type.toString().equals(javafx.scene.control.ComboBoxBase.ON_HIDING.toString())) {
-                    if (cmbRootSrc.getValue() instanceof ConWord) {
-                        cmbRootSrc.setStyle("-fx-font: "
-                                + core.getPropertiesManager()
-                                .getFontCon().getSize()
-                                + "px \""
-                                + core.getPropertiesManager().getFontCon()
-                                .getFamily() + "\";");
-                    } else {
-                        cmbRootSrc.setStyle("-fx-font: "
-                                + core.getPropertiesManager()
-                                .getCharisUnicodeFont().getSize() + "px \""
-                                + core.getPropertiesManager()
-                                .getCharisUnicodeFont().getFamily() + "\";");
-                    }
-                //}
+                if (cmbRootSrc.getValue() instanceof ConWord) {
+                    cmbRootSrc.setStyle("-fx-font: "
+                            + core.getPropertiesManager()
+                            .getFontCon().getSize()
+                            + "px \""
+                            + core.getPropertiesManager().getFontCon()
+                            .getFamily() + "\";");
+                } else {
+                    cmbRootSrc.setStyle("-fx-font: "
+                            + core.getPropertiesManager()
+                            .getCharisUnicodeFont().getSize() + "px \""
+                            + core.getPropertiesManager()
+                            .getCharisUnicodeFont().getFamily() + "\";");
+                }
             }
         });
     }
