@@ -23,20 +23,20 @@ namespace PolyGlot_Frontend
         static String commandString = "command";
         static String shell = "Shell";
         static String commandFile = "cmd.exe";
-        static String command = "/C java -jar ";
+        static String command = "java -jar ";
         static String baseArgs = "PolyGlot.jar";
 
         static void Main(string[] args)
         {
             RegistryKey key;
             String keyCommand;
-
+            
             if (!testJavaInstalled())
             {
                 MessageBox.Show("Java is not installed. Please download/install the JVM (https://java.com/download) to use PolyGlot.", "Java Required");
                 return;
             }
-
+            
             // minimize system calls...
             key = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(keyName);
             key = key == null ? null : key.OpenSubKey(shell);
@@ -61,7 +61,6 @@ namespace PolyGlot_Frontend
             {
                 setFileAssociation(key);
             }
-
             startPolyGlot(args);
         }
 
@@ -87,19 +86,22 @@ namespace PolyGlot_Frontend
 
         private static void startPolyGlot(string[] args)
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = commandFile;
-            startInfo.Arguments = command + (System.Reflection.Assembly.GetExecutingAssembly().Location).Replace(exeFilename, "") + baseArgs;
-            process.StartInfo = startInfo;
+            ProcessStartInfo cmd = new ProcessStartInfo(commandFile);
+            cmd.RedirectStandardInput = true;
+            cmd.UseShellExecute = false;
+            cmd.CreateNoWindow = true;
+            cmd.WindowStyle = ProcessWindowStyle.Normal;
+            Process console = Process.Start(cmd);
 
-            if (args.GetLength(0) > 0)
+            String finalCommand = command + "\"" + (System.Reflection.Assembly.GetExecutingAssembly().Location).Replace(exeFilename, "") + baseArgs + "\"";
+
+            // TODO: in the future, expand for additional possible arguments
+            if(args.Length > 0)
             {
-                startInfo.Arguments += " " + args[0];
+                finalCommand += " \"" + args[0] + "\""; 
             }
 
-            process.Start();
+            console.StandardInput.WriteLine(finalCommand);
         }
 
         private static void setFileAssociation(RegistryKey key)
