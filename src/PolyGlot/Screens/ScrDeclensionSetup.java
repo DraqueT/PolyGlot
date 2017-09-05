@@ -438,7 +438,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
         if (InfoBox.yesNoCancel("Confirm action", "This action will deprecate all currently filled out \n"
                 + " declensions/conjugations (they won't be lost, but set to a deprecated\nstatus). Continue?", 
-                core.getRootWindow()) == JOptionPane.YES_OPTION) {
+                this) == JOptionPane.YES_OPTION) {
             ret = true;
         }
 
