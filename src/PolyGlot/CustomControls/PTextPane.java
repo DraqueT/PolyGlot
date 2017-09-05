@@ -326,7 +326,11 @@ public class PTextPane extends JTextPane {
             String body = super.getText();
             body = body.substring(0, body.indexOf("</body>"));
             body = body.substring(body.lastIndexOf("<body>") + 6, body.length());
-            ret = body.trim().equals("");
+            ret = !body.contains("<img src");
+            if (ret) {
+                body = body.replaceAll("<.*?>", "");
+                ret = body.trim().equals("");
+            }
         } catch (Exception e) {
             ret = true;
         }
