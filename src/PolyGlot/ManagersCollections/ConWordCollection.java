@@ -579,14 +579,19 @@ public class ConWordCollection extends DictionaryCollection {
             Iterator<DeclensionPair> decIt = core.getDeclensionManager().getAllCombinedIds(typeId).iterator();
 
             while (!ret && decIt.hasNext()) {
-                DeclensionPair curPair = decIt.next();
-                String declension = core.getDeclensionManager()
-                        .declineWord(typeId, curPair.combinedId, word.getValue());
+                // silently skip erroring entries. Too cumbersone to deal with during a search
+                try {
+                    DeclensionPair curPair = decIt.next();
+                    String declension = core.getDeclensionManager()
+                            .declineWord(typeId, curPair.combinedId, word.getValue());
 
-                if (!declension.trim().isEmpty()
-                        && (declension.matches(matchText)
-                        || declension.startsWith(matchText))) {
-                    ret = true;
+                    if (!declension.trim().isEmpty()
+                            && (declension.matches(matchText)
+                            || declension.startsWith(matchText))) {
+                        ret = true;
+                    }
+                } catch (Exception e) {
+                    // do nothing (see above comment)
                 }
             }
         }

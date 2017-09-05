@@ -219,8 +219,9 @@ public class DeclensionManager {
      * @param combinedId combined ID of word form to create
      * @param base base word string
      * @return new word value if exists, empty string otherwise
+     * @throws java.lang.Exception on bad regex
      */
-    public String declineWord(int typeId, String combinedId, String base) {
+    public String declineWord(int typeId, String combinedId, String base) throws Exception {
         Iterator<DeclensionGenRule> typeRules = getDeclensionRules(typeId).iterator();
         String ret = "";
 
@@ -237,7 +238,13 @@ public class DeclensionManager {
                 List<DeclensionGenTransform> transforms = curRule.getTransforms();
 
                 for (DeclensionGenTransform curTrans : transforms) {
-                    base = base.replaceAll(curTrans.regex, curTrans.replaceText);
+                    try {
+                        base = base.replaceAll(curTrans.regex, curTrans.replaceText);
+                    } catch (Exception e) {
+                        throw new Exception("Unable to create declension/conjugation "
+                                + "due to malformed regex (modify in Parts of Speech->Autogeneration): " 
+                                + e.getLocalizedMessage());
+                    }
 
                     ret = base;
                 }

@@ -318,10 +318,6 @@ public class PTextPane extends JTextPane {
     public boolean isEmpty() {
         boolean ret;
         
-        // TODO: track down reasons
-        // for unknown reasons, freshly emptied text panes when using enforced 
-        // RTL will throw an out of bounds exception when calling super.getText()
-        // This only happens when they are empty, so gather and return true.
         try{
             String body = super.getText();
             body = body.substring(0, body.indexOf("</body>"));
