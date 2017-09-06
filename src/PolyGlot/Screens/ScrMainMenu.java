@@ -69,6 +69,7 @@ import org.simplericity.macify.eawt.DefaultApplication;
 public class ScrMainMenu extends PFrame implements ApplicationListener {
 
     private PFrame curWindow = null;
+    private ScrLexicon cacheLexicon;
     private final List<String> lastFiles;
     private String curFileName = "";
     private Image backGround;
@@ -79,9 +80,11 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
      * @param overridePath Path PolyGlot should treat as home directory (blank
      * if default)
      */
+    @SuppressWarnings("LeakingThisInConstructor") // only passing as later reference
     public ScrMainMenu(String overridePath) {
         super();
         core = new DictCore(); // needed for initialization
+        cacheLexicon = ScrLexicon.run(core, this);
         
         UIManager.put("ScrollBarUI", "PolyGlot.CustomControls.PScrollBarUI");
         UIManager.put("SplitPaneUI", "PolyGlot.CustomControls.PSplitPaneUI");
@@ -118,8 +121,8 @@ ToolTipUI t;
      * For the purposes of startup with file
      */
     public void openLexicon() {
-        ScrLexicon lex = ScrLexicon.run(core, this);
-        changeScreen(lex, lex.getWindow(), null);
+        cacheLexicon.updateAllValues(core);
+        changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
     }
 
     @Override
@@ -281,8 +284,8 @@ ToolTipUI t;
             curFileName = fileName;
 
             if (curWindow == null) {
-                ScrLexicon lex = ScrLexicon.run(core, this);
-                changeScreen(lex, lex.getWindow(), null);
+                cacheLexicon.updateAllValues(core);
+                changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
             }
         } catch (IOException e) {
             core = new DictCore(); // don't allow partial loads
@@ -457,8 +460,8 @@ ToolTipUI t;
         updateAllValues(core);
 
         if (curWindow == null && performTest) {
-            ScrLexicon lex = ScrLexicon.run(core, this);
-            changeScreen(lex, lex.getWindow(), null);
+            cacheLexicon.updateAllValues(core);
+            changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
         }
     }
 
@@ -1157,8 +1160,8 @@ ToolTipUI t;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLexiconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLexiconActionPerformed
-        ScrLexicon lex = ScrLexicon.run(core, this);
-        changeScreen(lex, lex.getWindow(), (PButton) evt.getSource());
+        cacheLexicon.updateAllValues(core);
+        changeScreen(cacheLexicon, cacheLexicon.getWindow(), (PButton) evt.getSource());
     }//GEN-LAST:event_btnLexiconActionPerformed
 
     private void btnPosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPosActionPerformed
