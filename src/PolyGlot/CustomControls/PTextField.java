@@ -55,7 +55,7 @@ import javax.swing.event.EventListenerList;
  */
 public class PTextField extends JTextField {
 
-    private final DictCore core;
+    private DictCore core;
     boolean skipRepaint = false;
     boolean curSetText = false;
     boolean overrideFont = false;
@@ -106,6 +106,24 @@ public class PTextField extends JTextField {
         }
         
         super.setFont(setFont);
+    }
+    
+    public void setOverrideFont(boolean _overrideFont) {
+        overrideFont = _overrideFont;
+        
+        if (!overrideFont) {
+            setFont(core.getPropertiesManager().getFontCon());
+        } else {
+            setFont(core.getPropertiesManager().getCharisUnicodeFont().deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+        }
+    }
+    
+    public boolean getOverrideFont() {
+        return overrideFont;
+    }
+    
+    public void setCore(DictCore _core) {
+        core = _core;
     }
 
     @Override
