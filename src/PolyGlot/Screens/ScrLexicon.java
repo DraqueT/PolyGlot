@@ -1922,6 +1922,7 @@ public final class ScrLexicon extends PFrame {
         lstLexicon.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstLexicon.setToolTipText("List of Conlang Words");
         lstLexicon.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lstLexicon.setDragEnabled(true);
         lstLexicon.setMaximumSize(new java.awt.Dimension(4000, 4000));
         lstLexicon.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
