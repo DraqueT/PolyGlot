@@ -158,7 +158,7 @@ public class InfoBox extends JFrame {
      * @return true if chooser accepts, false otherwise
      */
     public static boolean deletionConfirmation(Window parent) {
-        int option = JOptionPane.showOptionDialog(parent,
+        int option = POptionPane.showOptionDialog(parent,
                 "Delete Entry? Cannot be undone.",
                 "Delete Confirmation",
                 JOptionPane.YES_NO_OPTION,
