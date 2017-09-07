@@ -292,8 +292,8 @@ public final class ScrLexicon extends PFrame {
                 curPopulating = localPopulating;
                 forceUpdate = false;
                 populateProperties();
-                ((PTextField)txtConWord).setCore(_core);
-                ((PTextField)txtConWord).setOverrideFont(false);
+                ((PTextField) txtConWord).setCore(_core);
+                ((PTextField) txtConWord).setOverrideFont(false);
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -709,6 +709,8 @@ public final class ScrLexicon extends PFrame {
         int filterType = cmbTypeSrc.getValue().equals(defTypeValue)
                 ? 0 : ((TypeNode) cmbTypeSrc.getValue()).getId();
 
+        saveValuesTo(getCurrentWord());
+        
         if (txtConSrc.getText().equals("")
                 && txtDefSrc.getText().equals("")
                 && txtLocalSrc.getText().equals("")
@@ -1068,9 +1070,9 @@ public final class ScrLexicon extends PFrame {
         cmbRootSrc.getSelectionModel().select(defRootValue);
         cmbRootSrc.setStyle("-fx-font: "
                 + core.getPropertiesManager()
-                .getCharisUnicodeFont().getSize() + "px \""
+                        .getCharisUnicodeFont().getSize() + "px \""
                 + core.getPropertiesManager()
-                .getCharisUnicodeFont().getFamily() + "\";");
+                        .getCharisUnicodeFont().getFamily() + "\";");
     }
 
     /**
@@ -1287,16 +1289,16 @@ public final class ScrLexicon extends PFrame {
                 if (cmbRootSrc.getValue() instanceof ConWord) {
                     cmbRootSrc.setStyle("-fx-font: "
                             + core.getPropertiesManager()
-                            .getFontCon().getSize()
+                                    .getFontCon().getSize()
                             + "px \""
                             + core.getPropertiesManager().getFontCon()
-                            .getFamily() + "\";");
+                                    .getFamily() + "\";");
                 } else {
                     cmbRootSrc.setStyle("-fx-font: "
                             + core.getPropertiesManager()
-                            .getCharisUnicodeFont().getSize() + "px \""
+                                    .getCharisUnicodeFont().getSize() + "px \""
                             + core.getPropertiesManager()
-                            .getCharisUnicodeFont().getFamily() + "\";");
+                                    .getCharisUnicodeFont().getFamily() + "\";");
                 }
             }
         });
@@ -1583,6 +1585,25 @@ public final class ScrLexicon extends PFrame {
         if (curType != null) {
             saveWord.setWordTypeId(curType.equals(defTypeValue)
                     ? 0 : ((TypeNode) curType).getId());
+        }
+
+        // save all class values
+        for (Entry<Integer, JComponent> entry : classPropMap.entrySet()) {
+            if (entry.getValue() instanceof PTextField) {
+                PTextField textField = (PTextField) entry.getValue();
+                saveWord.setClassTextValue(entry.getKey(), textField.getText());
+            } else if (entry.getValue() instanceof PComboBox) {
+                PComboBox comboBox = (PComboBox)entry.getValue();
+                if (comboBox.getSelectedItem() instanceof WordPropValueNode) {
+                    WordPropValueNode curValue = (WordPropValueNode) comboBox.getSelectedItem();
+                    saveWord.setClassValue(entry.getKey(), curValue.getId());
+                } else {
+                    // if not an instance of a value, then it's the default selection: remove class from word
+                    saveWord.setClassValue(entry.getKey(), -1);
+                }
+            } else {
+                InfoBox.error("Value Save Error", "Unknown class value type.", core.getRootWindow());
+            }
         }
     }
 
