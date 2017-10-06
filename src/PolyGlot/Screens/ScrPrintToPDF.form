@@ -205,6 +205,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="chkGloss" min="-2" max="-2" attributes="0"/>
                                   <Component id="chkPageNum" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkEtymology" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -229,7 +230,9 @@
                       <Component id="chkLogographs" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="chkPageNum" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="19" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="chkEtymology" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -303,6 +306,14 @@
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkEtymology">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Print Etymology Trees"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core);"/>
               </AuxValues>
             </Component>
           </SubComponents>

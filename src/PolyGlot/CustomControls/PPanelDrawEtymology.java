@@ -29,11 +29,13 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -208,9 +210,9 @@ public final class PPanelDrawEtymology extends JPanel {
     private void paintEt(Graphics g) {
         myWordPosition.children.clear();
         myWordPosition.parents.clear();
-        conFontMetrics = this.getGraphics().getFontMetrics(
+        conFontMetrics = g.getFontMetrics(
                 core.getPropertiesManager().getFontCon());
-        charisFontMetrics = this.getGraphics().getFontMetrics(
+        charisFontMetrics = g.getFontMetrics(
                 core.getPropertiesManager().getCharisUnicodeFont());
         curYDepth = conFontMetrics.getHeight();
 
@@ -400,5 +402,52 @@ public final class PPanelDrawEtymology extends JPanel {
 
             return ret;
         }
+    }
+    
+    /**
+     * Generates and returns properly sized image of the etymology panel
+     * Returns null if no etymology
+     * @return buffered image of rendered panel, null if no etymology
+     */
+    public BufferedImage getPanelImage() {
+        BufferedImage ret = null;
+        JFrame temp = new JFrame();
+        
+        temp.getRootPane().add(this);
+        temp.setVisible(true);
+        paintComponent(temp.getGraphics());
+        
+        // only paint if greater than one (no etymology otherwise)
+        if (columnWidth.size() > 1) {
+            this.setSize(getCalcWidth(),getCalcHeight());             
+            ret = new BufferedImage(getCalcWidth(),getCalcHeight(), BufferedImage.TYPE_INT_ARGB);
+            paint(ret.getGraphics());
+        }
+        temp.setVisible(false);
+        temp.dispose();
+        
+        return ret;
+    }
+    
+    /**
+     * Calculates and returns minimum appropriate height for panel
+     * @return minimum height
+     */
+    private int getCalcWidth() {
+        int ret = 0;
+        
+        for(Integer i : columnWidth.values()) {
+            ret += i;
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Calculates and returns minimum appropriate width for panel
+     * @return minimum width
+     */
+    private int getCalcHeight() {
+        return curYDepth;
     }
 }

@@ -22,6 +22,7 @@ package PolyGlot;
 import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.CustomControls.PPanelDrawEtymology;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.ImageNode;
 import PolyGlot.Nodes.TypeNode;
@@ -112,6 +113,7 @@ public class PExportToPDF {
     private boolean printGrammar = false;
     private boolean printGlossKey = false;
     private boolean printPageNumber = false;
+    private boolean printWordEtymologies = false;
     private String coverImagePath = "";
     private String forewardText = "";
     private String titleText = "";
@@ -491,7 +493,23 @@ public class PExportToPDF {
                     dictEntry.add(new Text(romStr + "\n").setFont(unicodeFontItalic));
                 }
             }
-
+            
+            // print word etymology tree if appropriate
+            // TODO: correct how this aligns images
+            if (printWordEtymologies) {
+                BufferedImage etymImage = (
+                        new PPanelDrawEtymology(core, curWord)).getPanelImage();
+                
+                // null image means there is no etymology for this word
+                if (etymImage != null) {
+                    //curLetterSec.add(dictEntry);
+                    //dictEntry = new Paragraph();
+                    dictEntry.add(new Text("\n").setFont(conFont));
+                    dictEntry.add(getScaledImage(etymImage, true));
+                }
+                
+            }
+            
             List<Object> defList = WebInterface.getElementsHTMLBody(curWord.getDefinition(), core);
             if (!defList.isEmpty()) {
                 dictEntry.add(new Text("\n"));
@@ -501,10 +519,16 @@ public class PExportToPDF {
                         String cleanedText = StringEscapeUtils.unescapeHtml4((String) o) + "\n";
                         dictEntry.add(new Text(cleanedText).setFontSize(defFontSize).setFont(unicodeFont));
                     } else if (o instanceof BufferedImage) {
+                        // TODO: Address here and below why this doesn't insert images properly. Need to re-architect... everything.
+                        // I am mis-using paragraphs. 
                         // must convert buffered image to bytes because WHY DOES iTEXT 7 NOT DO THIS ITSELF.
                         byte[] bytes = IOHandler.getBufferedImageByteArray((BufferedImage) o);
                         Image pdfImage = new Image(ImageDataFactory.create(bytes));
                         dictEntry.add(pdfImage);
+                        //curLetterSec.add(dictEntry);
+                        //dictEntry = new Paragraph();
+                        //dictEntry.add(new Text("\n").setFont(conFont));
+                        //dictEntry.add(getScaledImage((BufferedImage) o, true));
                     } else {
                         // Do nothing: May be expanded for further logic later
                     }
@@ -686,6 +710,23 @@ public class PExportToPDF {
                     dictEntry.add(new Text(romStr).setFont(unicodeFontItalic));
                 }
             }
+            
+            // print word etymology tree if appropriate
+            // TODO: correct how this aligns images
+            if (printWordEtymologies) {
+                BufferedImage etymImage = (
+                        new PPanelDrawEtymology(core, curWord)).getPanelImage();
+                
+                // null image means there is no etymology for this word
+                if (etymImage != null) {
+                    //curLetterSec.add(dictEntry);
+                    //dictEntry = new Paragraph();
+                    dictEntry.add(new Text("\n").setFont(conFont));
+                    dictEntry.add(getScaledImage(etymImage, true));
+                }
+                
+            }
+            
 
             List<Object> defList = WebInterface.getElementsHTMLBody(curWord.getDefinition(), core);
             if (!defList.isEmpty()) {
@@ -1057,5 +1098,43 @@ public class PExportToPDF {
             title = (String) value;
             return title;
         }
+    }
+
+    /**
+     * @param printWordEtymologies the printWordEtymologies to set
+     */
+    public void setPrintWordEtymologies(boolean printWordEtymologies) {
+        this.printWordEtymologies = printWordEtymologies;
+    }
+    
+    /**
+     * Takes a buffered image and returns an Image scaled to the appropriate 
+     * size. Scaled for full screen if columSize is set to false, and to fit
+     * into a column if set to true. If an image is already small enough, its
+     * size will not be scaled at all
+     * @param inputImage
+     * @param columnSize
+     * @return 
+     */
+    private Image getScaledImage(BufferedImage inputImage, boolean columnSize) throws IOException {
+        Image ret = new Image(ImageDataFactory.create(
+                            IOHandler.getBufferedImageByteArray(inputImage)));
+        float docWidth = PageSize.A4.getWidth();
+        float imageWidth = inputImage.getWidth();
+        float imageHeight = inputImage.getHeight();
+        
+        if ((columnSize && imageWidth > (docWidth/2)) || imageWidth > docWidth/2) {
+            float scaler = ((docWidth - document.getLeftMargin()
+                   - document.getRightMargin()) / imageWidth);
+
+            // slightly less than 1/2 due to buffer space between
+            if (columnSize) {
+                scaler /= 2.2;
+            }
+            
+            ret = ret.scaleToFit(scaler * imageWidth, scaler * imageHeight);
+        }
+        
+        return ret;
     }
 }

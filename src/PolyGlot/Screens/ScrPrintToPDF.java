@@ -85,6 +85,7 @@ public class ScrPrintToPDF extends PDialog {
         chkLogographs = new PCheckBox(core);
         chkPageNum = new PCheckBox(core);
         chkGloss = new PCheckBox(core);
+        chkEtymology = new PCheckBox(core);
         txtTitle = new PTextField(core, true, "-- Title --");
         txtSubtitle = new PTextField(core, true, "-- Title --");
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -154,6 +155,8 @@ public class ScrPrintToPDF extends PDialog {
         chkGloss.setText("Print Gloss Key");
         chkGloss.setToolTipText("Prints a key for part of speech glosses");
 
+        chkEtymology.setText("Print Etymology Trees");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -172,7 +175,8 @@ public class ScrPrintToPDF extends PDialog {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkGloss)
-                            .addComponent(chkPageNum))
+                            .addComponent(chkPageNum)
+                            .addComponent(chkEtymology))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -192,7 +196,9 @@ public class ScrPrintToPDF extends PDialog {
                 .addComponent(chkLogographs)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkPageNum)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(chkEtymology)
+                .addContainerGap())
         );
 
         txtTitle.setToolTipText("The title of your document");
@@ -342,12 +348,13 @@ public class ScrPrintToPDF extends PDialog {
         export.setPrintPageNumber(chkPageNum.isSelected());
         export.setPrintGlossKey(chkGloss.isSelected());
         export.setPrintGrammar(chkGrammar.isSelected());
+        export.setPrintWordEtymologies(chkEtymology.isSelected());
         
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try{
             export.print();
             if (Desktop.isDesktopSupported()) {
-                if (InfoBox.yesNoCancel("Print Success", "PDF successfully printed. Open file now?", core.getRootWindow()) 
+                if (InfoBox.yesNoCancel("Print Success", "PDF successfully printed. Open file now?", this) 
                         == JOptionPane.YES_OPTION) {
                     if (!IOHandler.openFileNativeOS(txtSavePath.getText())) {
                         InfoBox.error("File Error", "Unable to open PDF at location: " + txtSavePath.getText(), core.getRootWindow());
@@ -432,6 +439,7 @@ public class ScrPrintToPDF extends PDialog {
     private javax.swing.JButton btnSelectImagePath;
     private javax.swing.JButton btnSelectSavePath;
     private javax.swing.JCheckBox chkConLocal;
+    private javax.swing.JCheckBox chkEtymology;
     private javax.swing.JCheckBox chkGloss;
     private javax.swing.JCheckBox chkGrammar;
     private javax.swing.JCheckBox chkLocalCon;
