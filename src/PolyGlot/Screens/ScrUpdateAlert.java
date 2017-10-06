@@ -56,9 +56,9 @@ public class ScrUpdateAlert extends PDialog {
      * @throws java.lang.Exception if unable to connect
      */
     public ScrUpdateAlert(boolean verbose, DictCore _core) throws Exception {
+        core = _core;
         setupKeyStrokes();
         initComponents();
-        core = _core;
         
         jTextPane1.setContentType("text/html");
         jPanel1.setBackground(Color.white);
