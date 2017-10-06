@@ -52,7 +52,7 @@ import org.xml.sax.SAXException;
 
 public class DictCore {
 
-    private final String version = "2.0";
+    private final String version = "2.1";
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
     private DeclensionManager declensionMgr;
