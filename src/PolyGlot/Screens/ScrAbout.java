@@ -47,7 +47,7 @@ public class ScrAbout extends PDialog {
                 + "to distribute, so long as my work is credited and it not used for commercial "
                 + "purposes. Please don't sell this or call it your own, but feel free to "
                 + "use and modify the code found on the open source repository for PolyGlot.\n\n"
-                + "HomePage: http://Sulmere.tumblr.com/PolyGLot\nGitHub Repository: "
+                + "HomePage: http://draquet.github.io/PolyGlot/\nGitHub Repository: "
                 + "https://github.com/DraqueT/PolyGlot");
     }
 
