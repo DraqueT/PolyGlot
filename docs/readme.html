@@ -30,7 +30,7 @@
         <!-- Static navbar -->
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="container">
-                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 2.0</a> </div>
+                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 2.1</a> </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="https://github.com/DraqueT/PolyGlot">GitHub Page</a><br>
@@ -52,7 +52,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2 centered"> <img src="assets/PolyGlot%20Logo.png" alt="PolyGlot">
-                        <h1>Version 2.0</h1>
+                        <h1>Version 2.1</h1>
                         <!-- POLYGLOT STUFF START -->
                         <div style="text-align: left;"><a href="#WELCOMEOVERVIEW">i.
                                 Overview/Welcome</a><br>
@@ -70,6 +70,7 @@
                             &nbsp;&nbsp;&nbsp; <a href="#-_Language_Properties">- Language
                                 Properties</a><br>
                             &nbsp;&nbsp;&nbsp; <a href="#PHONOLOGY">- Phonology</a><br>
+							&nbsp;&nbsp;&nbsp; <a href="#ROMANIZATION">- Romanization</a><br>
                             &nbsp;&nbsp;&nbsp; <a href="#-_Images">- Images in Text</a><br>
                             &nbsp;&nbsp;&nbsp; <a href="#-_Family_Window">- Family Window</a><br>
                             &nbsp;&nbsp;&nbsp; <a href="#-_Accessing_the_Help_File">- Accessing
@@ -97,45 +98,32 @@
                                 source</a>
                             tool set that helps to build constructed languages! PolyGlot
                             is a project that I have been working on for some time, and it
-                            continues to become stable and capable with each release. If you
+                            continues to become more stable and capable with each release. If you
                             have ideas, find bugs, or have any comments at all, please feel free to
                             email me at <a href="mailto:draquemail@gmail.com">draquemail@gmail.com</a>!</div>
 
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
-                        <div align ="left"><br>The under the hood bug-fixes and 
-                            modifications this time around were massive. There were serious issues with data
-                            persistence corrected, numerous UI failings addressed, and countless minor bugs. In
-                            the process of the UI rewrite, a LOT of very old code was replaced. For every
-                            visible upgrade to PolyGlot this time around, there were a dozen tweaks to behavior
-                            that the end user will hopefully never notice. There's a reason this is being marked
-                            as 2.0.<br><br>
-
-                            The biggest improvement to PolyGlot is obviously the UI. This time around it is
-                            completely revamped. Almost all of the changes are based on user requests that I've
-                            gotten over time, and I am hoping that the new design significantly improves workflow
-                            within the system. In addition to this, there are some new features to play with as well!
-                            I have updated the class system to allow for free text classes. These classes are simply
-                            blank text fields added to words in your lexicon (as with the original classes, they can
-                            be assigned to particular parts of speech).
-
-                            The Windows frontend should make things much easier for those of you on Microsoft OSes. 
-                            It will associate itself with the PGD filetype, given them a nifty little icon, and 
-                            open them in PolyGlot automatically when they are double clicked.
-
-                            A much requested feature was a way to eliminate deprecated wordforms. Although sometimes
-                            these can be useful when revaming a system that includes manual exceptions to rules, it's
-                            often just a pain. In the conjugations/declensions window, I've added a button that will
-                            purge all deprecated wordforms for a given part of speech.<br><br>
+                        <div align ="left"><br>So this is a pretty big release of PolyGlot! There's a whole new
+                        Etymology engine that should help people to develop languages in a more iterative fashion,
+                        speed and stability optimizations, a character replacement macro, which will make typing 
+                        easier for you lovers of diacritic marks, user-modifiable kerning (long time coming!), and 
+                        a big update for anyone into complex phonemic orthographies.
+                        <br><br>
+                        As always, there were more bug fixes than anyone here is likely to be interested in hearing
+                        about, and a few that existed since the very earliest implementations of PolyGlot.
+                        For every visible upgrade to PolyGlot this time around, there were a dozen tweaks to behavior
+                        that the end user will hopefully never notice.<br><br>
                         </div>
 
                         <div align ="left"><ul>
-                                <li>total UI revamp</li>
-                                <li>Created freetext option for classes</li>
-                                <li>Windows Frontend now included</li>
-                                <li>Wipe Deprecated Wordforms option implemented</li>
-                                <li>Split Phonology into its own section</li>
-                                <li>Added Romanization option to Phonology section</li>
-                                <li>Upgraded to iText 7.0.1 for PDF printing</li>
+                                <li>Etymology Engine implemented!</li>
+                                <li>Search now includes word roots</li>
+                                <li>Significant UI speed optimizations</li>
+                                <li>Character Macros implemented (type one charcter, PolyGlot changes it to something you specify)</li>
+                                <li>User editable kerning (this one was a bitch)</li>
+                                <li>Phonemic Orthography now 100% regex compatible, and supports recursive logic</li>
+                                <li>Menu fonts resizable</li>
+                                <li>Tooltips now unicode compatible</li>
                             </ul></div>
 
                         <a name="INSTALLATION"></a>
@@ -170,7 +158,7 @@
                             After this, simply double click PolyGlot.jar and it should open up for you!</div>
                         <br><br>
                         MAC:<br>
-                        TODO: Rewrite this if the Mac frontend is finished in time...
+                        <div align="left">Unzip PlyGlot into a folder and double click PolyGlot.jar to run!</div>
                         <br><br>
                         LINUX:<br>
                         <div align ="left">Simply unzip the files where you like and run! For convenience, there is a script
@@ -260,7 +248,8 @@
                             a filter menu slides down (shown above). Here, you can filter words by
                             any of their main properties. The ConWord filter field will filter not
                             only on words' base forms, but also any declensions/conjugations of words.
-                            Fields are compatible with regex expressions.<br></div>
+                            Fields are compatible with regex expressions. Only word roots that have been used
+                            in the etymology engine will show up in the <br></div>
                         <br>
                         <br>
                         <a name="-_Word_Types"></a>- Parts of Speech<br>
@@ -601,7 +590,11 @@
                             will be ordered in standard fashion (as decided by your operating
                             system). Here, I have set the alphabetic order to follow qwerty. This
                             will order the dictionary and any alphabetically ordered fields with
-                            the order you provide.<br></div>
+                            the order you provide.<br>
+                            <br>
+                            - Kerning<br>
+                            The default value for kerning is set to 0. Making this larger or smaller 
+                            (into negatives) allows you to edit space between characters.<br></div>
                         <br>
 
                         <br>
@@ -765,18 +758,15 @@
                             from is set here. If you do not use multiple sheets, simply leave it to
                             its default value of 0.<br>
                             <br>
-                            <h2>- Exporting</h2><br>
-                            <br>
-                            &nbsp;&nbsp;&nbsp; Exporting from PolyGlot is very simple. Simply click
-                            Tools-&gt; Export to Excel and select a path/filename to export to. An
-                            excel file with separate sheets for vocab, types, word classes, and
-                            pronunciations will be created.</div>
+                            </div>
 
-                        <a name="PHONOLOGY"></a><h1>Phonology</h1><br>
-                        <img style="width: 199px; height: 283px;" alt="" src="assets/pron1.png"><br>
+                        <a name="PHONOLOGY"></a><h1>Phonemic Orthology</h1><br>
+                        <img src="assets/pron1.png"><br>
                         <br>
 
-                        <div align ="left">The above image shows the Character Pronunciation guide. New rows can
+                        <div align ="left">The above image shows the Phonemic Orthology guide. 
+                        This can be found by clicking the Phonology and Text menu button on the
+                        left of PolyGlot's menu. It is the first of the three menus. New rows can
                         be added with the Add button, and selected columns can be deleted with
                         the Delete button. The Character(s) row represents one character or a
                         series of characters that make up a sound or phoneme. The Pronunciation
@@ -786,7 +776,7 @@
                         save a lot of time. Both columns are compatible with regular
                         expressions (explained below).<br>
                         <br>
-                        Of note is the both upper and lower cases must be entered into the
+                        Of note is that both upper and lower cases must be entered into the
                         pronunciation guide unless both the <span style="font-weight: bold;">Ignore
                             Case</span> option and the <span style="font-weight: bold;">Disable
                             Proc Regex</span> options are selected.<br>
@@ -799,7 +789,7 @@
                         others. By selecting a row and clicking the up or down arrow to the
                         right of the guide, you can move a set to higher or lower priorities in
                         the guide. <br>
-
+                        
                         <br>
                         In addition to the basic functionality, the pronunciation guide is
                         compatible with regular expressions. For example, if you added the pair
@@ -808,25 +798,50 @@
                         orthographies to be easily be created. Links in the references section
                         of this document lead to good regular expression tutorials.<br>
                         <br>
+                        
+                        <br>
+                        The last element of the pronunciation guide is the Recurse Patterns button. 
+                        This enables a powerful function in PolyGlot, which will comb through a word 
+                        multiple times, applying new pronunciations so long as there are more transformations
+                        defined in the left column that might apply.
+                        <br><br>
+                        
                         <span style="font-weight: bold;">WORD OF WARNING:</span> Please be sure
                         to type in the "Character(s)" field in the exact same way as you are
                         going to be entering your words. I have encountered users that have
                         accidentally entered lookalike characters into the left-hand column.
                         This will mean that you cannot properly use the autopopulate feature.
-                        Keep in mind that just because "<br></div>
+                        Keep in mind that just because it looks correct does not mean that it 
+                        actually is.<br></div>
                         <br>
                         <br>
                         <img style="width: 514px; height: 222px;" alt="" src="assets/pron2.png"><br>
                         <br>
 
-                        <div align ="left">Back on the Dictionary tab, the pronunciation of our new word has
+                        <div align ="left">Back in the Dictionary menu, the pronunciation of our new word has
                         auto-populated! For more complex languages that use IPA pronunciation
                         standards, or other symbols, this can save a lot of tedious work.<br><br>
-                        
-                        Of note is the the Romanization fields work identically. The only difference is that
-                        the feature must be activated via the checkbox above its grid, and that generated
-                        Romanizations <i>cannot</i> be edited in the Lexicon.</div>
+                        </div>
 
+						<a name="ROMANIZATION"></a><h1>Word Romanization</h1><br>
+                        <img src="assets/pron3.png"><br>
+                        <br>
+						<div align ="left">
+						Romanization works identically to the pronunciation system. It is disabled by 
+						default. When enabled, a text box containing romanized words will appear on the 
+						Lexicon screen.
+                        </div>
+                        
+                        <a name="CHARREP"></a><h1>Character Replacement (Macros)</h1><br>
+                        <img src="assets/pron5.png"><br>
+                        <br>
+						<div align ="left">
+						This section will allow you to easily type words with diacritic marks without 
+						having to cramp your fingers. In the example, k is transformed to a K&#831. 
+						This will be applied in all PolyGlot fields that you type into, and be 
+						copied/pasted elsewhere.
+						</div>
+                        
                         <a name="STATISTICS_REPORT"></a><h1>Statistics Report</h1>
                         <br>
                         <div align ="left">To generate a statistics report on your language, click Tools-> Language Statistics
@@ -854,7 +869,12 @@
                                 words:</span> counts instances of each phoneme as used in all words<br>
                             <span style="font-style: italic;">Heat map of letter combination
                                 frequency:</span> This is a heat map of letter combinations used in
-                            your language. The fewer instances, the bluer a combination tile, the <br></div>
+                            your language. The fewer instances, the bluer a combination tile<br></div><br><br>
+                            
+                            Below are examples of the visual charts which the generated by the statistics report:<br><br>
+                            
+                            <img src="assets/stats1.png"><br><br>
+                            <img src="assets/stats2.png"><br><br>
 
 
                         <a name="LOGOGRAPHIC_DICTIONARY"></a><h1>Logographic Dictionary</h1>
