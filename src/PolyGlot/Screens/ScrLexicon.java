@@ -281,7 +281,7 @@ public final class ScrLexicon extends PFrame {
                     }
                 };
                 Platform.setImplicitExit(false);
-                Platform.runLater(fxSetup);
+                wrapPlatformRunnable(fxSetup);
 
                 ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
                 saveValuesTo(curWord);
@@ -546,7 +546,7 @@ public final class ScrLexicon extends PFrame {
 
             @Override
             public void focusLost(FocusEvent e) {
-                Platform.runLater(new Runnable() {
+                wrapPlatformRunnable(new Runnable() {
                     @Override
                     public void run() {
                         gridTitlePane.setAnimated(false);
@@ -622,11 +622,16 @@ public final class ScrLexicon extends PFrame {
      */
     private void genRom() {
         if (enableProcGen) {
-            try {
-                txtRom.setText(core.getRomManager().getPronunciation(txtConWord.getText()));
-            } catch (Exception e) {
-                setProcError(e.getLocalizedMessage());
-            }
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        txtRom.setText(core.getRomManager().getPronunciation(txtConWord.getText()));
+                    } catch (Exception e) {
+                        setProcError(e.getLocalizedMessage());
+                    }
+                }
+            });
         }
     }
 
@@ -687,14 +692,23 @@ public final class ScrLexicon extends PFrame {
                     lstLexicon.ensureIndexIsVisible(0);
                     populateProperties();
                     Thread.sleep(50); // wait for other elements to paint first...
-                    jPanel1.repaint();
+                    gridTitlePane.setAnimated(false);
+                    gridTitlePane.setExpanded(false);
+                    gridTitlePane.setAnimated(true);
                 } catch (InterruptedException e) {
                     // do nothing: interruption is due to additional user input
                 }
             }
         });
 
-        filterThread.start();
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                filterThread.start();
+            }
+        };
+
+        Platform.runLater(r);
     }
 
     /**
@@ -710,7 +724,7 @@ public final class ScrLexicon extends PFrame {
                 ? 0 : ((TypeNode) cmbTypeSrc.getValue()).getId();
 
         saveValuesTo(getCurrentWord());
-        
+
         if (txtConSrc.getText().equals("")
                 && txtDefSrc.getText().equals("")
                 && txtLocalSrc.getText().equals("")
@@ -780,7 +794,7 @@ public final class ScrLexicon extends PFrame {
                 }
             };
 
-            Platform.runLater(fxSetup);
+            SwingUtilities.invokeLater(fxSetup);
 
             try {
                 latch.await(); // do not continue until filter cleared
@@ -1593,7 +1607,7 @@ public final class ScrLexicon extends PFrame {
                 PTextField textField = (PTextField) entry.getValue();
                 saveWord.setClassTextValue(entry.getKey(), textField.getText());
             } else if (entry.getValue() instanceof PComboBox) {
-                PComboBox comboBox = (PComboBox)entry.getValue();
+                PComboBox comboBox = (PComboBox) entry.getValue();
                 if (comboBox.getSelectedItem() instanceof WordPropValueNode) {
                     WordPropValueNode curValue = (WordPropValueNode) comboBox.getSelectedItem();
                     saveWord.setClassValue(entry.getKey(), curValue.getId());
@@ -1699,6 +1713,21 @@ public final class ScrLexicon extends PFrame {
         saveValuesTo(curWord);
         Window window = ScrDeclensions.run(core, curWord);
         childFrames.add(window);
+    }
+
+    /**
+     * Wraps platform runnables within swing system. Messy but necessary to
+     * avoid race deadlocks
+     *
+     * @param r
+     */
+    private void wrapPlatformRunnable(final Runnable r) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(r);
+            }
+        });
     }
 
     /**
