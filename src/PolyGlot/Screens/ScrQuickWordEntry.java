@@ -86,7 +86,7 @@ public final class ScrQuickWordEntry extends PDialog {
 
         populateTypes();
     }
-
+   
     // Overridden to meet coding standards...
     @Override
     protected final void setupKeyStrokes() {
@@ -161,7 +161,7 @@ public final class ScrQuickWordEntry extends PDialog {
                 .getPronunciation(txtConWord.getText());
         } catch (Exception e) {
             InfoBox.error("Regex Error", "Unable to generate pronunciation: " 
-                    + e.getLocalizedMessage(), parent);
+                    + e.getLocalizedMessage(), this);
         }
 
         if (!proc.equals("")) {
@@ -272,7 +272,7 @@ public final class ScrQuickWordEntry extends PDialog {
 
         if (!testResults.isEmpty()) {
             InfoBox.warning("Illegal Values", "Word contains illegal values:\n\n"
-                    + testResults, core.getRootWindow());
+                    + testResults, this);
             return;
         }
 
@@ -283,7 +283,7 @@ public final class ScrQuickWordEntry extends PDialog {
 
             parent.refreshWordList(wordId);
         } catch (Exception e) {
-            InfoBox.error("Word Error", "Unable to insert word: " + e.getMessage(), core.getRootWindow());
+            InfoBox.error("Word Error", "Unable to insert word: " + e.getMessage(), this);
         }
     }
 

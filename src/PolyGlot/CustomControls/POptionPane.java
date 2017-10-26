@@ -55,7 +55,7 @@ import javax.swing.UIManager;
  * @author draque.thompson
  */
 public class POptionPane extends JOptionPane {
-
+    
     public POptionPane(Object message, int messageType, int optionType,
             Icon icon, Object[] options, Object initialValue) {
         super(message, messageType, optionType, icon, options, initialValue);
@@ -65,6 +65,10 @@ public class POptionPane extends JOptionPane {
             Object message, String title, int optionType, int messageType,
             Icon icon, Object[] options, Object initialValue)
             throws HeadlessException {
+        Window parentWindow = POptionPane.getWindowForComponent(parentComponent);
+        boolean parentIsModal = parentWindow instanceof Dialog 
+                && ((Dialog)parentWindow).isModal();
+        int ret = CLOSED_OPTION;
         POptionPane pane = new POptionPane(message, messageType,
                 optionType, icon,
                 options, initialValue);
@@ -74,35 +78,45 @@ public class POptionPane extends JOptionPane {
                 ? getRootFrame() : parentComponent).getComponentOrientation());
 
         int style = styleFromMessageType(messageType);
-        JDialog dialog = pane.createDialog(parentComponent, title, style);
+        JDialog dialog = pane.createDialog(parentWindow, parentComponent, title, style);
         dialog.setAlwaysOnTop(true);
         dialog.setModal(true);
 
         setAllWhite(pane);
+        
+        // prevent locking of application
+        if(parentIsModal && parentWindow != null) {
+            ((Dialog)parentWindow).setModal(false);
+        }
 
         pane.selectInitialValue();
-        
+
         dialog.setVisible(true);
         dialog.dispose();
 
         Object selectedValue = pane.getValue();
 
-        if (selectedValue == null) {
-            return CLOSED_OPTION;
-        }
-        if (options == null) {
-            if (selectedValue instanceof Integer) {
-                return ((Integer) selectedValue);
+        if (selectedValue != null) {
+            if (options != null) {
+                for (int counter = 0, maxCounter = options.length;
+                        counter < maxCounter; counter++) {
+                    if (options[counter].equals(selectedValue)) {
+                        ret = counter;
+                    }
+                }
+            } else {
+                if (selectedValue instanceof Integer) {
+                    ret = ((Integer) selectedValue);
+                }
             }
-            return CLOSED_OPTION;
         }
-        for (int counter = 0, maxCounter = options.length;
-                counter < maxCounter; counter++) {
-            if (options[counter].equals(selectedValue)) {
-                return counter;
-            }
+        
+        // prevent locking of application
+        if(parentIsModal && parentWindow != null) {
+            ((Dialog)parentWindow).setModal(true);
         }
-        return CLOSED_OPTION;
+
+        return ret;
     }
 
     private static void setAllWhite(Container c) {
@@ -131,17 +145,16 @@ public class POptionPane extends JOptionPane {
         }
     }
 
-    private JDialog createDialog(final Component parentComponent, String title, int style)
+    private JDialog createDialog(final Window parentWindow, 
+            final Component parentComponent, String title, int style)
             throws HeadlessException {
 
         final JDialog dialog;
 
-        Window window = POptionPane.getWindowForComponent(parentComponent);
-
-        if (window instanceof Frame) {
-            dialog = new JDialog((Frame) window, title, true);
+        if (parentWindow instanceof Frame) {
+            dialog = new JDialog((Frame) parentWindow, title, true);
         } else {
-            dialog = new JDialog((Dialog) window, title, true);
+            dialog = new JDialog((Dialog) parentWindow, title, true);
         }
 
         dialog.setAlwaysOnTop(true);
