@@ -538,24 +538,6 @@ public final class ScrLexicon extends PFrame {
         jPanel1.add(fxPanel, c);
         jPanel1.setBackground(Color.white);
         fxPanel.setBackground(Color.white);
-        fxPanel.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                // do nothing
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                wrapPlatformRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        gridTitlePane.setAnimated(false);
-                        gridTitlePane.setExpanded(false);
-                        gridTitlePane.setAnimated(true);
-                    }
-                });
-            }
-        });
         final CountDownLatch latch = new CountDownLatch(1);
         Runnable fxSetup = new Runnable() {
             @Override
@@ -691,10 +673,6 @@ public final class ScrLexicon extends PFrame {
                     lstLexicon.setSelectedIndex(0);
                     lstLexicon.ensureIndexIsVisible(0);
                     populateProperties();
-                    Thread.sleep(50); // wait for other elements to paint first...
-                    gridTitlePane.setAnimated(false);
-                    gridTitlePane.setExpanded(false);
-                    gridTitlePane.setAnimated(true);
                 } catch (InterruptedException e) {
                     // do nothing: interruption is due to additional user input
                 }
@@ -808,7 +786,6 @@ public final class ScrLexicon extends PFrame {
             txtLocalSrc.setText("");
             txtProcSrc.setText("");
             cmbTypeSrc.getSelectionModel().select(0);
-            gridTitlePane.setExpanded(false);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
