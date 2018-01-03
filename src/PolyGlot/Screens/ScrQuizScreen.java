@@ -51,7 +51,7 @@ import javax.swing.SwingUtilities;
 public class ScrQuizScreen extends PFrame {
 
     private final Quiz quiz;
-    private final PLabel lblQNode = new PLabel("", PLabel.CENTER, core);
+    private final PLabel lblQNode;
     private QuizQuestion curQuestion;
     private final Color correctGreen = new Color(15, 175, 15);
 
@@ -63,6 +63,7 @@ public class ScrQuizScreen extends PFrame {
      */
     public ScrQuizScreen(Quiz _quiz, DictCore _core) {
         core = _core;
+        lblQNode = new PLabel("", PLabel.CENTER, core);
         initComponents();
         quiz = _quiz;
 
