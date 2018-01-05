@@ -24,6 +24,8 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
@@ -42,32 +44,40 @@ import javax.swing.table.TableCellEditor;
  *
  * @author draque
  */
-public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
-
+public final class PCellEditor extends AbstractCellEditor implements TableCellEditor, Cloneable {
     private final JComponent component = new JTextField();
     Font myFont;
     DocumentListener docListener;
     private boolean ignoreListenerSilenceing = false;
+    private final boolean useConFont;
     private final DictCore core;
+
+    public PCellEditor(boolean _useConFont, DictCore _core) {
+        core = _core;
+        useConFont = _useConFont;
+        Font defFont = useConFont ? core.getPropertiesManager().getFontCon()
+                : core.getPropertiesManager().getCharisUnicodeFont();
+        Double kernVal = useConFont
+                ? core.getPropertiesManager().getKerningSpace() : 0.0;
+
+        Map attr = defFont.getAttributes();
+        attr.put(TextAttribute.TRACKING, kernVal);
+        attr.put(TextAttribute.SIZE, (float) core.getOptionsManager().getMenuFontSize());
+        myFont = defFont.deriveFont(attr);
+
+        final JTextField setupText = (JTextField) component;
+
+        setupRightClickMenu(setupText);
+
+        setupText.setBorder(BorderFactory.createBevelBorder(1));
+
+        this.setupTextFieldListener(setupText);
+    }
 
     public void setDocuListener(DocumentListener _listener) {
         docListener = _listener;
 
         ((JTextField) component).getDocument().addDocumentListener(docListener);
-    }
-
-    public PCellEditor(Font _myFont, Double kernVal, DictCore _core) {
-        core = _core;
-        Map attr = _myFont.getAttributes();
-        attr.put(TextAttribute.TRACKING, kernVal);
-        attr.put(TextAttribute.SIZE, (float)core.getOptionsManager().getMenuFontSize());
-        myFont = _myFont.deriveFont(attr);
-
-        JTextField setupText = (JTextField) component;
-
-        setupRightClickMenu(setupText);
-
-        setupText.setBorder(BorderFactory.createEmptyBorder());
     }
 
     public Component tableColumnEditor(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
@@ -76,16 +86,24 @@ public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
 
         return component;
     }
+    
+    /**
+     * Gets textfield component (to maintain listeners and text position)
+     * @return jtextfield component
+     */
+    public JTextField getTextFieldComponent() {
+        return (JTextField)component;
+    }
 
     // This method is called when a cell value is edited by the user.
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value,
             boolean isSelected, int rowIndex, int vColIndex) {
-        JTextField curComp = (JTextField) component;
+        /*JTextField curComp = (JTextField) component;
 
         setValue(curComp, (String) value);
 
-        curComp.setFont(myFont);
+        curComp.setFont(myFont);*/
 
         return component;
     }
@@ -120,16 +138,47 @@ public class PCellEditor extends AbstractCellEditor implements TableCellEditor {
     // It must return the new value to be stored in the cell.
     @Override
     public Object getCellEditorValue() {
-        ((JTextField) component).setFont(myFont);
+        JTextField myField = (JTextField) component;
+        myField.setFont(myFont);
 
-        return ((JTextField) component).getText();
+        return myField.getText();
     }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        ((JTextField) component).setFont(myFont);
+        JTextField myTextField = (JTextField)component;
+        myTextField.setFont(myFont);
+        
+        PCellEditor clone = (PCellEditor)super.clone();
+        this.setupTextFieldListener(clone.getTextFieldComponent());
+        return clone;
+    }
+    
+    /**
+     * Adds relevant keylisteners to passed text field
+     * @param _textField 
+     */
+    private void setupTextFieldListener(final JTextField textField) {
+        // handle character replacement
+        textField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // only use replacement if writing in confont
+                if (useConFont) {
+                    PTextField.handleCharacterReplacement(core, e, textField);
+                }
+            }
 
-        return super.clone();
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // do nothing
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // do nothing
+            }
+        });
     }
 
     private void setupRightClickMenu(JTextField editor) {

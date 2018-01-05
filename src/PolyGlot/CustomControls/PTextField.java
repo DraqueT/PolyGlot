@@ -48,6 +48,7 @@ import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
+import javax.swing.text.JTextComponent;
 
 /**
  *
@@ -89,7 +90,7 @@ public class PTextField extends JTextField {
         if (!overrideFont) {
             setFont(core.getPropertiesManager().getFontCon());
         } else {
-            setFont(core.getPropertiesManager().getCharisUnicodeFont().deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+            setFont(core.getPropertiesManager().getCharisUnicodeFont().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
         }
         setText(defText);
     }
@@ -97,31 +98,31 @@ public class PTextField extends JTextField {
     @Override
     public final void setFont(Font _font) {
         Font setFont = _font;
-        
+
         // if conlang font and core exists, set font kerning
         if (core != null && !overrideFont) {
             Map attr = _font.getAttributes();
             attr.put(TextAttribute.TRACKING, core.getPropertiesManager().getKerningSpace());
             setFont = _font.deriveFont(attr);
         }
-        
+
         super.setFont(setFont);
     }
-    
+
     public void setOverrideFont(boolean _overrideFont) {
         overrideFont = _overrideFont;
-        
+
         if (!overrideFont) {
             setFont(core.getPropertiesManager().getFontCon());
         } else {
-            setFont(core.getPropertiesManager().getCharisUnicodeFont().deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+            setFont(core.getPropertiesManager().getCharisUnicodeFont().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
         }
     }
-    
+
     public boolean getOverrideFont() {
         return overrideFont;
     }
-    
+
     public void setCore(DictCore _core) {
         core = _core;
     }
@@ -193,27 +194,13 @@ public class PTextField extends JTextField {
             }
         });
 
+        final PTextField me = this;
         // add a listener for character replacement if conlang font not overridden
         if (!overrideFont) {
             this.addKeyListener(new KeyListener() {
                 @Override
                 public void keyTyped(KeyEvent e) {
-                    Character c = e.getKeyChar();
-                    String repString = core.getPropertiesManager().getCharacterReplacement(c.toString());
-                    if (!repString.equals("")) {
-                        try {
-                            e.consume();
-                            ClipboardHandler cb = new ClipboardHandler();
-                            cb.cacheClipboard();
-                            cb.setClipboardContents(repString);
-                            paste();
-                            cb.restoreClipboard();
-                        } catch (Exception ex) {
-                            InfoBox.error("Character Replacement Error",
-                                    "Clipboard threw error during character replacement process:"
-                                    + ex.getLocalizedMessage(), core.getRootWindow());
-                        }
-                    }
+                    handleCharacterReplacement(core, e, me);
                 }
 
                 @Override
@@ -226,6 +213,31 @@ public class PTextField extends JTextField {
                     // do nothing
                 }
             });
+        }
+    }
+
+    /***
+     * Handles character replacement for arbitrary text target of KeyEvents
+     * @param core Dictionary core
+     * @param e key event (passed from listener)
+     * @param target (target object, typically "this")
+     */
+    public static void handleCharacterReplacement(DictCore core, KeyEvent e, JTextComponent target) {
+        Character c = e.getKeyChar();
+        String repString = core.getPropertiesManager().getCharacterReplacement(c.toString());
+        if (!repString.equals("")) {
+            try {
+                e.consume();
+                ClipboardHandler cb = new ClipboardHandler();
+                cb.cacheClipboard();
+                cb.setClipboardContents(repString);
+                target.paste();
+                cb.restoreClipboard();
+            } catch (Exception ex) {
+                InfoBox.error("Character Replacement Error",
+                        "Clipboard threw error during character replacement process:"
+                        + ex.getLocalizedMessage(), core.getRootWindow());
+            }
         }
     }
 
@@ -328,7 +340,7 @@ public class PTextField extends JTextField {
 
         if (isDefaultText()) {
             //if (!overrideFont) {
-                setFont(core.getPropertiesManager().getCharisUnicodeFont());
+            setFont(core.getPropertiesManager().getCharisUnicodeFont());
             //}
             setForeground(Color.lightGray);
         } else {
@@ -367,7 +379,7 @@ public class PTextField extends JTextField {
     }
 
     /**
-     * Stops current listeners from listening (can only be called once before 
+     * Stops current listeners from listening (can only be called once before
      * needing to be told to listen once again
      */
     public void stopListening() {
@@ -376,7 +388,7 @@ public class PTextField extends JTextField {
             listenerList = new EventListenerList();
         }
     }
-    
+
     /**
      * Turns listeners on again (can only be called when not listening
      */
@@ -386,7 +398,7 @@ public class PTextField extends JTextField {
             tmpListenerList = null;
         }
     }
-    
+
     private void setupRightClickMenu() {
         final JPopupMenu ruleMenu = new JPopupMenu();
         final JMenuItem cut = new JMenuItem("Cut");

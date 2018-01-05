@@ -238,7 +238,6 @@ public class ScrIPARefChart extends PFrame {
         } catch(Exception e) {
             InfoBox.error("IPA Error", e.getLocalizedMessage(), core.getRootWindow());
         }
-        System.out.println(x+","+y);
     }//GEN-LAST:event_jLabel23MouseClicked
 
     private void lblPulmonicConsonantsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPulmonicConsonantsMouseClicked

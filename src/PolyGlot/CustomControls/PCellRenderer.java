@@ -24,6 +24,8 @@ import PolyGlot.DictCore;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.font.TextAttribute;
 import java.util.Map;
 import javax.swing.BorderFactory;
@@ -40,10 +42,27 @@ public class PCellRenderer implements TableCellRenderer {
     private final Font myFont;
     private DocumentListener docListener;
     private final DictCore core;
+    private final boolean useConFont;
 
+    public PCellRenderer(boolean _useConFont, DictCore _core) {
+        core = _core; 
+        useConFont = _useConFont;
+        Double kernVal = useConFont ? 
+                core.getPropertiesManager().getKerningSpace() : 0.0;
+        Font selectedFont = useConFont ? 
+                core.getPropertiesManager().getFontCon() : 
+                core.getPropertiesManager().getCharisUnicodeFont();
+        
+        
+        Map attr = selectedFont.getAttributes();
+        
+        attr.put(TextAttribute.TRACKING, kernVal);
+        myFont = selectedFont.deriveFont(attr);
+    }
+    
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        JTextField editor = new JTextField();
+        final JTextField editor = new JTextField();
         
         if (value != null) {
             editor.setText(value.toString());
@@ -61,19 +80,41 @@ public class PCellRenderer implements TableCellRenderer {
         
         editor.getDocument().addDocumentListener(docListener);
 
-        editor.setBorder(BorderFactory.createEmptyBorder());
+        if (isSelected) {
+            editor.setBorder(BorderFactory.createBevelBorder(1));
+        } else {
+            editor.setBorder(BorderFactory.createEtchedBorder());
+        }
+        
+        editor.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // only use replacement if writing in confont
+                if (useConFont) {
+                    PTextField.handleCharacterReplacement(core, e, editor);
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // do nothing
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // do nothing
+            }
+        });System.out.println("zug");
         
         return editor;
+    }
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();        
     }
       
     public void setDocuListener(DocumentListener _listener) {
         docListener = _listener;
-    }
-
-    public PCellRenderer(Font _myFont, Double kernVal, DictCore _core) {
-        core = _core;
-        Map attr = _myFont.getAttributes();
-        attr.put(TextAttribute.TRACKING, kernVal);
-        myFont = _myFont.deriveFont(attr);
     }
 }

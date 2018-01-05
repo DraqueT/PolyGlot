@@ -186,8 +186,7 @@ public final class ScrDeclensionSetup extends PDialog {
         }
 
         TableColumn column = tblDimensions.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(new JLabel().getFont()
-                .deriveFont((float)core.getOptionsManager().getMenuFontSize()), 0.0, core));
+        column.setCellEditor(new PCellEditor(false, core));
 
         column = tblDimensions.getColumnModel().getColumn(1);
         column.setCellEditor(new TableBooleanEditor());

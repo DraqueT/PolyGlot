@@ -780,12 +780,10 @@ public class ScrLogoDetails extends PFrame {
         procModel.addColumn("Readings");
         tblReadings.setModel(procModel);
 
-        // Readings font must be set each time the table is rebuilt
-        Font setFont = core.getPropertiesManager().getFontCon();
-        Double kern = core.getPropertiesManager().getKerningSpace();
+        // Fonts must be set each time the table is rebuilt
         TableColumn column = tblReadings.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(setFont, kern, core));
-        column.setCellRenderer(new PCellRenderer(setFont, kern, core));
+        column.setCellEditor(new PCellEditor(true, core));
+        column.setCellRenderer(new PCellRenderer(true, core));
 
         while (procIt.hasNext()) {
             Object[] newRow = {procIt.next()};

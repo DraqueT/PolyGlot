@@ -340,7 +340,7 @@ public class ScrPhonology extends PFrame {
         procTableModel.addColumn("Character(s)");
         procTableModel.addColumn("Pronuncation");
         tblProcs.setModel(procTableModel); // TODO: find way to make tblProcs display RTL order when appropriate Maybe something on my custom cell editor
-
+        
         procTableModel.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
@@ -348,17 +348,13 @@ public class ScrPhonology extends PFrame {
             }
         });
 
-        Font defaultFont = core.getPropertiesManager().getCharisUnicodeFont();
-        Font conFont = core.getPropertiesManager().getFontCon();
-        Double kern = core.getPropertiesManager().getKerningSpace();
-
         TableColumn column = tblProcs.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(conFont, kern, core));
-        column.setCellRenderer(new PCellRenderer(conFont, kern, core));
+        column.setCellEditor(new PCellEditor(true, core));
+        column.setCellRenderer(new PCellRenderer(true, core));
 
         column = tblProcs.getColumnModel().getColumn(1);
-        column.setCellEditor(new PCellEditor(defaultFont,0.0, core));
-        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0, core));
+        column.setCellEditor(new PCellEditor(false, core));
+        column.setCellRenderer(new PCellRenderer(false, core));
 
         // disable tab/arrow selection
         InputMap procInput = tblProcs.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -387,11 +383,8 @@ public class ScrPhonology extends PFrame {
             }
         });
 
-        Font defaultFont = core.getPropertiesManager().getCharisUnicodeFont();
-        Font conFont = core.getPropertiesManager().getFontCon();
-
         TableColumn column = tblRep.getColumnModel().getColumn(0);
-        final PCellEditor editChar = new PCellEditor(defaultFont, 0.0, core);
+        final PCellEditor editChar = new PCellEditor(false, core);
         editChar.setIgnoreListenerSilenceing(true);
         editChar.setDocuListener(new DocumentListener() {
             @Override
@@ -429,10 +422,10 @@ public class ScrPhonology extends PFrame {
             }
         });        
         column.setCellEditor(editChar);
-        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0, core));
+        column.setCellRenderer(new PCellRenderer(false, core));
 
         column = tblRep.getColumnModel().getColumn(1);
-        PCellEditor valueEdit = new PCellEditor(conFont, core.getPropertiesManager().getKerningSpace(), core);
+        PCellEditor valueEdit = new PCellEditor(true, core);
         valueEdit.setIgnoreListenerSilenceing(true);
         valueEdit.setDocuListener(new DocumentListener() {
             @Override
@@ -451,7 +444,7 @@ public class ScrPhonology extends PFrame {
             }
         });
         column.setCellEditor(valueEdit);
-        column.setCellRenderer(new PCellRenderer(conFont, core.getPropertiesManager().getKerningSpace(), core));
+        column.setCellRenderer(new PCellRenderer(true, core));
 
         // disable tab/arrow selection
         InputMap procInput = tblRom.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -480,17 +473,13 @@ public class ScrPhonology extends PFrame {
             }
         });
 
-        Font defaultFont = core.getPropertiesManager().getCharisUnicodeFont();
-        Font conFont = core.getPropertiesManager().getFontCon();
-        Double kern = core.getPropertiesManager().getKerningSpace();
-
         TableColumn column = tblRom.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(conFont, kern, core));
-        column.setCellRenderer(new PCellRenderer(conFont, kern, core));
+        column.setCellEditor(new PCellEditor(true, core));
+        column.setCellRenderer(new PCellRenderer(true, core));
 
         column = tblRom.getColumnModel().getColumn(1);
-        column.setCellEditor(new PCellEditor(defaultFont, 0.0, core));
-        column.setCellRenderer(new PCellRenderer(defaultFont, 0.0, core));
+        column.setCellEditor(new PCellEditor(false, core));
+        column.setCellRenderer(new PCellRenderer(false, core));
 
         // disable tab/arrow selection
         InputMap procInput = tblRom.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);

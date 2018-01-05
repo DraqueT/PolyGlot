@@ -282,8 +282,6 @@ public class ScrDeclensionGenSetup extends PDialog {
      */
     private void populateTransforms() {
         DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
-        Font setFont = core.getPropertiesManager().getFontCon();
-        Double kern = core.getPropertiesManager().getKerningSpace();
 
         transModel = new DefaultTableModel();
         transModel.addColumn("Regex");
@@ -296,12 +294,12 @@ public class ScrDeclensionGenSetup extends PDialog {
         }
 
         TableColumn column = tblTransforms.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(setFont, kern, core));
-        column.setCellRenderer(new PCellRenderer(setFont, kern, core));
+        column.setCellEditor(new PCellEditor(true, core));
+        column.setCellRenderer(new PCellRenderer(true, core));
 
         column = tblTransforms.getColumnModel().getColumn(1);
-        column.setCellEditor(new PCellEditor(setFont, kern, core));
-        column.setCellRenderer(new PCellRenderer(setFont, kern, core));
+        column.setCellEditor(new PCellEditor(true, core));
+        column.setCellRenderer(new PCellRenderer(true, core));
 
         // do nothing if nothing selected in rule list
         if (curRule == null) {
@@ -1176,6 +1174,7 @@ public class ScrDeclensionGenSetup extends PDialog {
             return;
         }
 
+        // TODO: for ticket #519 add the type ID to the beginning of the combined ID as a string. This will fix it 100%
         core.getDeclensionManager().setCombinedDeclSurpressed(curPair.combinedId, chkDisableWordform.isSelected());
 
         enableEditing(!chkDisableWordform.isSelected()
