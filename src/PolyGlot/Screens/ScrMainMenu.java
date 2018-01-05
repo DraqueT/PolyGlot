@@ -110,7 +110,13 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         // activates macify for menu integration...
         if (System.getProperty("os.name").startsWith("Mac")) {
-            activateMacify();
+            try {
+                activateMacify();
+            } catch (Exception ex) {
+                //ex.printStackTrace();
+                // TODO: Consider removing macify entirely
+                // Inform user? Don't see a pressing need to...
+            }
         }
         
 ToolTipUI t;
@@ -151,6 +157,7 @@ ToolTipUI t;
         System.exit(0);
     }
 
+    // TODO: Consider removing Macify if it continues giving trouble/no benefit
     // MACIFY RELATED CODE ->    
     private void activateMacify() {
         Application application = new DefaultApplication();
