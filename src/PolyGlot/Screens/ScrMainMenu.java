@@ -99,7 +99,9 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
             backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
             jLabel1.setFont(IOHandler.getButtonFont().deriveFont(45f));
         } catch (IOException e) {
-            InfoBox.error("Resource Error", "Unable to load internal resource: " + e.getLocalizedMessage(), core.getRootWindow());
+            InfoBox.error("Resource Error", 
+                    "Unable to load internal resource: " + e.getLocalizedMessage(), 
+                    core.getRootWindow());
         }
 
         newFile(false);
@@ -510,9 +512,13 @@ ToolTipUI t;
 
             Insets insets = getInsets();
             try {
-                this.setSizeSmooth(dim.width + jPanel1.getWidth() + insets.left + insets.right, dim.height + insets.bottom + insets.top, true);
+                this.setSizeSmooth(dim.width + jPanel1.getWidth() + insets.left + insets.right, 
+                        dim.height + insets.bottom + insets.top, 
+                        true);
             } catch (InterruptedException e) {
-                InfoBox.error("Resize Error", "Unable to run resize animation: " + e.getLocalizedMessage(), core.getRootWindow());
+                InfoBox.error("Resize Error", 
+                        "Unable to run resize animation: " + e.getLocalizedMessage(), 
+                        core.getRootWindow());
             }
         }
 
@@ -522,12 +528,16 @@ ToolTipUI t;
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                javax.swing.GroupLayout.DEFAULT_SIZE, 
+                                javax.swing.GroupLayout.DEFAULT_SIZE, 
+                                Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                javax.swing.GroupLayout.DEFAULT_SIZE, 
+                                javax.swing.GroupLayout.DEFAULT_SIZE, 
+                                Short.MAX_VALUE)
         );
 
         curWindow = newScreen;
@@ -733,7 +743,9 @@ ToolTipUI t;
             ScrLexicon scrLexicon = (ScrLexicon) curWindow;
             scrLexicon.selectWordById(id);
         } else {
-            InfoBox.warning("Open Lexicon", "Please open the Lexicon and select a word to use this feature.", core.getRootWindow());
+            InfoBox.warning("Open Lexicon", 
+                    "Please open the Lexicon and select a word to use this feature.", 
+                    core.getRootWindow());
         }
     }
 
@@ -750,7 +762,9 @@ ToolTipUI t;
             ScrLexicon scrLexicon = (ScrLexicon) curWindow;
             ret = scrLexicon.getCurrentWord();
         } else {
-            InfoBox.warning("Open Lexicon", "Please open the Lexicon and select a word to use this feature.", core.getRootWindow());
+            InfoBox.warning("Open Lexicon", 
+                    "Please open the Lexicon and select a word to use this feature.", 
+                    core.getRootWindow());
         }
 
         return ret;
@@ -1341,34 +1355,46 @@ ToolTipUI t;
             @Override
             public void run() {
                 String overridePath = args.length > 1 ? args[1] : "";
-                ScrMainMenu s = new ScrMainMenu(overridePath);
+                String startProblems = "";
+                ScrMainMenu s = null;
 
-                s.checkForUpdates(false);
-                s.setupKeyStrokes();
-                s.setVisible(true);
+                try {
+                    s = new ScrMainMenu(overridePath);
 
-                // open file if one is provided via arguments
-                if (args.length > 0) {
-                    s.setFile(args[0]);
-                    s.openLexicon();
+                    s.checkForUpdates(false);
+                    s.setupKeyStrokes();
+                    s.setVisible(true);
+
+                    // open file if one is provided via arguments
+                    if (args.length > 0) {
+                        s.setFile(args[0]);
+                        s.openLexicon();
+                    }
+                } catch (Exception ex) {
+                    startProblems += "Unable to open PolyGlot main frame: \n" 
+                            + ex.getMessage() + "\n" 
+                            + "Please contact developer (draquemail@gmail.com) for assistance.";
                 }
-
-                String problems = "";
-                // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
+                
                 // Test for minimum version of Java (8)
                 String jVer = System.getProperty("java.version");
                 if (jVer.startsWith("1.5") || jVer.startsWith("1.6") || jVer.startsWith("1.7")) {
-                    problems += "Unable to start PolyGlot without Java 8.";
+                    startProblems += "Unable to start PolyGlot without Java 8 or higher.\n";
                 }
+                
                 try {
+                    // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
                     this.getClass().getClassLoader().loadClass("javafx.embed.swing.JFXPanel");
                 } catch (ClassNotFoundException e) {
-                    problems += "\nUnable to load Java FX. Download and install to use PolyGlot (JavaFX not included in some builds of Java 8 for Linux).";
+                    startProblems += "Unable to load Java FX. Download and install to use PolyGlot " 
+                            + "(JavaFX not included in some builds of Java 8 for Linux).\n";
                 }
 
-                if (!problems.equals("")) {
-                    InfoBox.error("Unable to start", problems + "\nPlease upgrade and restart to continue.", s);
-                    s.dispose();
+                if (!startProblems.equals("")) {
+                    InfoBox.error("Unable to start", startProblems, s);
+                    if (s != null) {
+                        s.dispose();
+                    }
                 }
             }
         });
