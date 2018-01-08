@@ -57,6 +57,7 @@ import javax.swing.KeyStroke;
 public class ScrLogoQuickView extends PFrame {
     private ScrLogoDetails logoFinder = null;
     private ConWord conWord = null;
+    private ScrLogoDetails logoParent = null;
 
     /**
      * opens window to show all logographs, or all radicals
@@ -153,6 +154,10 @@ public class ScrLogoQuickView extends PFrame {
     protected void setupKeyStrokes() {
         addBindingsToPanelComponents(this.getRootPane());
         super.setupKeyStrokes();
+    }
+    
+    public void setLogoParent(ScrLogoDetails _logoParent) {
+        logoParent = _logoParent;
     }
 
     @Override
@@ -414,6 +419,10 @@ public class ScrLogoQuickView extends PFrame {
     }//GEN-LAST:event_btnDelActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (logoParent != null) {
+            logoParent.addRadFromQuickview();
+        }
+        
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -99,11 +99,11 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value,
             boolean isSelected, int rowIndex, int vColIndex) {
-        /*JTextField curComp = (JTextField) component;
+        JTextField curComp = (JTextField) component;
 
         setValue(curComp, (String) value);
 
-        curComp.setFont(myFont);*/
+        curComp.setFont(myFont);
 
         return component;
     }

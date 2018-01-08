@@ -892,7 +892,7 @@ public class ScrLogoDetails extends PFrame {
      * adds a radical from the quickview window to the currently selected
      * logograph
      */
-    private void addRadFromQuickview() {
+    public void addRadFromQuickview() {
         LogoNode rad = quickView.getCurrentLogo();
         DefaultListModel radModel = (DefaultListModel) lstRadicals.getModel();
 
@@ -921,12 +921,14 @@ public class ScrLogoDetails extends PFrame {
      * deletes currently selected reading
      */
     private void deleteReading() {
-        if (tblReadings.getSelectedRow() == -1) {
+        int selectedRow = tblReadings.getSelectedRow();
+        DefaultTableModel myModel = (DefaultTableModel) tblReadings.getModel();
+        
+        if (selectedRow == -1) {
             return;
         }
 
-        ((DefaultTableModel) tblReadings.getModel()).
-                removeRow(tblReadings.getSelectedRow());
+        myModel.removeRow(selectedRow);
     }
 
     @Override
@@ -1417,7 +1419,8 @@ public class ScrLogoDetails extends PFrame {
         }
 
         DefaultTableModel model = (DefaultTableModel) tblReadings.getModel();
-        model.addRow(new Object[]{"New Reading"});
+        Object[] newRow = {"New Reading"};
+        model.addRow(newRow);
     }//GEN-LAST:event_btnAddReadingActionPerformed
 
     private void btnDelLogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelLogoActionPerformed
@@ -1436,7 +1439,7 @@ public class ScrLogoDetails extends PFrame {
         if (quickView == null || quickView.isDisposed()) {
             quickView = new ScrLogoQuickView(core, true);
             quickView.setBeside(this);
-            quickView.setCore(core);
+            quickView.setLogoParent(this);
             quickView.setVisible(true);
         } else {
             addRadFromQuickview();
