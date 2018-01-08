@@ -1123,7 +1123,7 @@ public class CustHandlerFactory {
                 } else if (bcombinedFormId) {
                     combinedDecId += new String(ch, start, length);
                 } else if (bcombinedFormSurpress) {
-                    core.getDeclensionManager().setCombinedDeclSurpressed(combinedDecId,
+                    core.getDeclensionManager().setCombinedDeclSurpressedRaw(combinedDecId,
                             new String(ch, start, length).equals(PGTUtil.True));
                 } else if (blogoStrokes) {
                     try {

@@ -1122,7 +1122,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         saveTransPairs(lstRules.getSelectedIndex());
         DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
         chkDisableWordform.setSelected(core.getDeclensionManager()
-                .isCombinedDeclSurpressed(curPair == null ? "" : curPair.combinedId));
+                .isCombinedDeclSurpressed(curPair == null ? "" : curPair.combinedId, typeId));
         populateRules();
         populateRuleProperties();
         populateTransforms();
@@ -1174,8 +1174,7 @@ public class ScrDeclensionGenSetup extends PDialog {
             return;
         }
 
-        // TODO: for ticket #519 add the type ID to the beginning of the combined ID as a string. This will fix it 100%
-        core.getDeclensionManager().setCombinedDeclSurpressed(curPair.combinedId, chkDisableWordform.isSelected());
+        core.getDeclensionManager().setCombinedDeclSurpressed(curPair.combinedId, typeId, chkDisableWordform.isSelected());
 
         enableEditing(!chkDisableWordform.isSelected()
                 && lstCombinedDec.getSelectedIndex() != -1);

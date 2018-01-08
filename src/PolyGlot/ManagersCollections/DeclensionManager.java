@@ -69,20 +69,33 @@ public class DeclensionManager {
     private final List<DeclensionGenRule> generationRules = new ArrayList<>();
     private DeclensionGenRule ruleBuffer = new DeclensionGenRule();
 
-    public boolean isCombinedDeclSurpressed(String _combId) {
-        if (!combSettings.containsKey(_combId)) {
+    public boolean isCombinedDeclSurpressed(String _combId, Integer _typeId) {
+        String storeId = _typeId.toString() + "," + _combId;
+        
+        if (!combSettings.containsKey(storeId)) {
             return false;
         }
 
-        return combSettings.get(_combId);
+        return combSettings.get(storeId);
     }
 
-    public void setCombinedDeclSurpressed(String _combId, boolean _surpress) {
-        if (!combSettings.containsKey(_combId)) {
-            combSettings.put(_combId, _surpress);
+    public void setCombinedDeclSurpressed(String _combId, Integer _typeId, boolean _surpress) {
+        String storeId = _typeId.toString() + "," + _combId;
+        
+        if (!combSettings.containsKey(storeId)) {
+            combSettings.put(storeId, _surpress);
         } else {
-            combSettings.replace(_combId, _surpress);
+            combSettings.replace(storeId, _surpress);
         }
+    }
+    
+    /**
+     * This sets the surpression data raw. Should only be used when loading from a file
+     * @param _completeId complete, raw ID of data
+     * @param _surpress surpression value
+     */
+    public void setCombinedDeclSurpressedRaw(String _completeId, boolean _surpress) {
+        combSettings.put(_completeId, _surpress);
     }
 
     /**
@@ -407,7 +420,7 @@ public class DeclensionManager {
                 DeclensionNode curMand = mandIt.next();
 
                 // skip surpressed forms
-                if (isCombinedDeclSurpressed(curMand.getCombinedDimId())) {
+                if (isCombinedDeclSurpressed(curMand.getCombinedDimId(), type.getId())) {
                     continue;
                 }
 

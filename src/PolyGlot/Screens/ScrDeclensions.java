@@ -274,7 +274,7 @@ public class ScrDeclensions extends PDialog {
             String curLabel = curDec.label;
             
             // skip forms that have been surpressed
-            if (core.getDeclensionManager().isCombinedDeclSurpressed(curId)) {
+            if (core.getDeclensionManager().isCombinedDeclSurpressed(curId, typeId)) {
                 allWordDeclensions.remove(curId);
                 continue;
             }
