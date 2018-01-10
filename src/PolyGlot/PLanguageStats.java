@@ -1,4 +1,4 @@
-/*
+    /*
  * Copyright (c) 2017, DThompson
  * All rights reserved.
  *
@@ -232,7 +232,7 @@ public class PLanguageStats {
         ret += "    </script>\n"
                 + "  </head>\n"
                 + "  <body>\n"
-                + "    <center>---LANGUAGE STAT REPORT---</center><br><br>";
+                + "    <center style=\"font-family:Kukun_Linear_A;\">---LANGUAGE STAT REPORT---</center><br><br>";
 
         ret += formatPlain("Count of words in conlang lexicon: " + wordCount + "<br><br>");
 

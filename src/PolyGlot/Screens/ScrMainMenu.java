@@ -34,6 +34,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Insets;
 import java.io.File;
@@ -42,6 +43,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
@@ -656,8 +659,9 @@ ToolTipUI t;
 
     /**
      * Prompts user for a location and exports font within PGD to given path
+     * @param exportCharis set to true to export charis, false to export con font
      */
-    public void exportFont() {
+    public void exportFont(boolean exportCharis) {
         JFileChooser chooser = new JFileChooser();
         String fileName;
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf");
@@ -678,7 +682,11 @@ ToolTipUI t;
         }
 
         try {
-            IOHandler.exportFont(fileName, curFileName);
+            if (exportCharis) {
+                IOHandler.exportCharisFont(fileName);
+            } else {
+                IOHandler.exportFont(fileName, curFileName);
+            }
             InfoBox.info("Export Success", "Font exported to: " + fileName, core.getRootWindow());
         } catch (IOException e) {
             InfoBox.error("Export Error", "Unable to export font: " + e.getMessage(), core.getRootWindow());
@@ -1234,7 +1242,7 @@ ToolTipUI t;
     }//GEN-LAST:event_mnuExportToExcelActionPerformed
 
     private void mnuExportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportFontActionPerformed
-        exportFont();
+        exportFont(false);
     }//GEN-LAST:event_mnuExportFontActionPerformed
 
     private void mnuLangStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLangStatsActionPerformed
@@ -1243,6 +1251,23 @@ ToolTipUI t;
                 + " take a long time to complete, depending on the complexity\n"
                 + "of your conlang. Continue?", core.getRootWindow()) == JOptionPane.YES_OPTION) {
             core.buildLanguageReport();
+            
+            // test whether con-font family is installed on computer
+            GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            String conFontFamily = core.getPropertiesManager().getFontCon().getFamily();
+            if (!Arrays.asList(g.getAvailableFontFamilyNames()).contains(conFontFamily)) {
+                // prompt user to install font (either Charis or their chosen con-font) if not currently on system
+                InfoBox.warning("Font Not Installed", 
+                        "The font used for your language is not installe on this computer.\n"
+                        + "This may result in the statistics page appearing incorrectly.\n"
+                        + "Please select a path to save font to, install from this location, "
+                        + "and re-run the statistics option.", this);
+                if (conFontFamily.equals(PGTUtil.UnicodeFontFamilyName)) {
+                    exportFont(true);
+                } else {
+                    exportFont(false);
+                }
+            }
         }
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuLangStatsActionPerformed

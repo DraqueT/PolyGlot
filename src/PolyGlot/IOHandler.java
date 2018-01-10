@@ -47,6 +47,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -852,6 +853,22 @@ public class IOHandler {
                 }
             } else {
                 throw new IOException("Custom font not found in PGD dictionary file.");
+            }
+        }
+    }
+    
+    /**
+     * Exports Charis unicode font to specified location
+     * @param exportPath full export path
+     * @throws IOException on failure
+     */
+    public static void exportCharisFont(String exportPath) throws IOException {
+        try (InputStream fontStream = IOHandler.class.getResourceAsStream(PGTUtil.UnicodeFontLocation)){
+            byte[] buffer = new byte[fontStream.available()];
+            fontStream.read(buffer);
+
+            try (OutputStream oStream = new FileOutputStream(new File(exportPath))) {
+                oStream.write(buffer);
             }
         }
     }

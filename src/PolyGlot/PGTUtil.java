@@ -218,6 +218,7 @@ public class PGTUtil {
     public static final String UnicodeFontBoldLocation = "/PolyGlot/GeneralResources/CharisSIL-Bold.ttf";
     public static final String UnicodeFontItalicLocation = "/PolyGlot/GeneralResources/CharisSIL-Italic.ttf";
     public static final String UnicodeFontBoldItalicLocation = "/PolyGlot/GeneralResources/CharisSIL-BoldItalic.ttf";
+    public static final String UnicodeFontFamilyName = "Charis SIL";
     public static final String ButtonFontLocation = "/PolyGlot/GeneralResources/buttonFont.ttf";
     public static final String logoGraphSavePath = "logoGraphs/";
     public static final String imagesSavePath = "images/";
