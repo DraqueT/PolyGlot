@@ -710,10 +710,11 @@ public class ConWordCollection extends DictionaryCollection {
      * Formats in HTML to a plain font to avoid conlang font
      *
      * @param toPlain text to make plain
+     * @param core
      * @return text in plain tag
      */
-    public static String formatPlain(String toPlain) {
-        String defaultFont = "face=\"" + Font.SANS_SERIF + "\"";
+    public static String formatPlain(String toPlain, DictCore core) {
+        String defaultFont = "face=\"" + core.getPropertiesManager().getCharisUnicodeFont().getFamily() + "\"";
         return "<font " + defaultFont + ">" + toPlain + "</font>";
     }
 

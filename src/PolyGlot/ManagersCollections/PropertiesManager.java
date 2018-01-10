@@ -444,7 +444,7 @@ public class PropertiesManager {
     public String buildPropertiesReport() {
         String ret = "";
 
-        ret += ConWordCollection.formatPlain("Language Name: " + langName + "<br><br>");
+        ret += ConWordCollection.formatPlain("Language Name: " + langName + "<br><br>", core);
 
         return ret;
     }

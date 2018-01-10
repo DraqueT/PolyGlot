@@ -228,13 +228,13 @@ public class PLanguageStats {
 
         ret += typesPie.getBuildHTML();
         ret += charStatBar.getBuildHTML();
-
+        
         ret += "    </script>\n"
                 + "  </head>\n"
-                + "  <body>\n"
-                + "    <center style=\"font-family:Kukun_Linear_A;\">---LANGUAGE STAT REPORT---</center><br><br>";
+                + "  <body style=\"font-family:" + core.getPropertiesManager().getCharisUnicodeFont().getFamily() + ";\">\n"
+                + "    <center>---LANGUAGE STAT REPORT---</center><br><br>";
 
-        ret += formatPlain("Count of words in conlang lexicon: " + wordCount + "<br><br>");
+        ret += formatPlain("Count of words in conlang lexicon: " + wordCount + "<br><br>", core);
 
         ret += typesPie.getDisplayHTML();
 
@@ -242,7 +242,7 @@ public class PLanguageStats {
         
         // buid grid of 2 letter combos
         char[] alphaGrid = core.getPropertiesManager().getAlphaPlainText().toCharArray();
-        ret += formatPlain("Heat map of letter combination frequency:<br>");
+        ret += formatPlain("Heat map of letter combination frequency:<br>", core);
         ret += "<table border=\"1\">";
         ret += "<tr><td></td>";
         for (char topRow : alphaGrid) {
@@ -262,26 +262,26 @@ public class PLanguageStats {
                 ret += "<td bgcolor=\"#" + Integer.toHexString(red)
                         + Integer.toHexString(blue) + Integer.toHexString(blue) + "\")>"
                         + formatCon(Character.toString(x) + Character.toString(y), core) + formatPlain(":"
-                        + comboValue.toString()) + "</td>";
+                        + comboValue.toString(), core) + "</td>";
             }
             ret += "</tr>";
         }
-        ret += "</table>" + formatPlain("<br><br>");
+        ret += "</table>" + formatPlain("<br><br>", core);
 
         // buid grid of 2 phoneme combos if no pronunciation recursion
         if (!core.getPronunciationMgr().isRecurse()) {
-            ret += formatPlain("Heat map of phoneme combination frequency:<br>");
+            ret += formatPlain("Heat map of phoneme combination frequency:<br>", core);
             ret += "<table border=\"1\">";
-            ret += "<tr>" + formatPlain("<td></td>");
+            ret += "<tr>" + formatPlain("<td></td>", core);
             Iterator<PronunciationNode> procIty = core.getPronunciationMgr().getPronunciations().iterator();
             while (procIty.hasNext()) {
-                ret += "<td>" + formatPlain(formatPlain(procIty.next().getPronunciation())) + "</td>";
+                ret += "<td>" + formatPlain(formatPlain(procIty.next().getPronunciation(), core), core) + "</td>";
             }
             ret += "</tr>";
             procIty = core.getPronunciationMgr().getPronunciations().iterator();
             while (procIty.hasNext()) {
                 PronunciationNode y = procIty.next();
-                ret += "<tr><td>" + formatPlain(y.getPronunciation()) + "</td>";
+                ret += "<tr><td>" + formatPlain(y.getPronunciation(), core) + "</td>";
                 Iterator<PronunciationNode> procItx = core.getPronunciationMgr().getPronunciations().iterator();
                 while (procItx.hasNext()) {
                     PronunciationNode x = procItx.next();
@@ -294,22 +294,22 @@ public class PLanguageStats {
                     ret += "<td bgcolor=\"#" + Integer.toHexString(red)
                             + Integer.toHexString(blue) + Integer.toHexString(blue) + "\")>"
                             + formatPlain(x.getPronunciation() + y.getPronunciation() + ":"
-                                    + comboValue.toString()) + "</td>";
+                                    + comboValue.toString(), core) + "</td>";
                 }
                 ret += "</tr>";
             }
             ret += "</table>";
             
             // build display for phoneme count if no pronunciation recursion
-            ret += formatPlain(" Breakdown of phonemes counted across all words:<br>");
+            ret += formatPlain(" Breakdown of phonemes counted across all words:<br>", core);
             Iterator<PronunciationNode> procLoop = core.getPronunciationMgr().getPronunciations().iterator();
             while (procLoop.hasNext()) {
                 PronunciationNode curNode = procLoop.next();
                 ret += formatPlain(curNode.getPronunciation() + " : "
                         + (phonemeCount.containsKey(curNode.getPronunciation())
-                        ? phonemeCount.get(curNode.getPronunciation()) : formatPlain("0")) + "<br>");
+                        ? phonemeCount.get(curNode.getPronunciation()) : formatPlain("0", core)) + "<br>", core);
             }
-            ret += formatPlain("<br><br>");
+            ret += formatPlain("<br><br>", core);
         }
 
         return ret;
