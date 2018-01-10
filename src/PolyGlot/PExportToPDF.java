@@ -23,7 +23,10 @@ import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PPanelDrawEtymology;
+import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ConWord;
+import PolyGlot.Nodes.DeclensionNode;
+import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.Nodes.ImageNode;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.PEntry;
@@ -114,6 +117,7 @@ public class PExportToPDF {
     private boolean printGlossKey = false;
     private boolean printPageNumber = false;
     private boolean printWordEtymologies = false;
+    private boolean printAllConjugations = false;
     private String coverImagePath = "";
     private String forewardText = "";
     private String titleText = "";
@@ -137,7 +141,7 @@ public class PExportToPDF {
         unicodeFont.setSubset(true);
         unicodeFontItalic = PdfFontFactory.createFont(unicodeFontItalicFile, PdfEncodings.IDENTITY_H, true);
         unicodeFontItalic.setSubset(true);
-        
+
         // If font file still null, no custom font was loaded.
         if (conFontFile == null) {
             // If confont not specified, assume that the conlang requires unicode characters
@@ -218,8 +222,8 @@ public class PExportToPDF {
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             document.add(new Paragraph(
                     new Text("Table of Contents")
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setFontSize(30)));
+                            .setTextAlignment(TextAlignment.CENTER)
+                            .setFontSize(30)));
             Div ToC = new Div();
             for (Entry curChap : chapList) {
                 Link link = new Link(chapTitles.get((String) curChap.getValue()),
@@ -316,7 +320,7 @@ public class PExportToPDF {
         }
 
         document.close();
-        
+
         // inform user of errors
         if (!log.equals("")) {
             InfoBox.warning("PDF Generation Errors", "Problems with PDF generation:\n"
@@ -325,9 +329,8 @@ public class PExportToPDF {
     }
 
     /**
-     * Gets map of types to their glosses (just type name if no gloss) and
-     * returns it. This prevents the necessity of looking up each gloss name for
-     * every instance on a word.
+     * Gets map of types to their glosses (just type name if no gloss) and returns it. This prevents the necessity of
+     * looking up each gloss name for every instance on a word.
      *
      * @return
      */
@@ -361,7 +364,7 @@ public class PExportToPDF {
         while (allWords.hasNext()) {
             Paragraph dictEntry = new Paragraph();
             ConWord curWord = allWords.next();
-            
+
             dictEntry.setMultipliedLeading(0.6f);
 
             // print large characters for alphabet sections
@@ -434,7 +437,7 @@ public class PExportToPDF {
                                 .getNodeById(curEntry.getKey());
                         value = prop.getValueById(curEntry.getValue());
                     } catch (Exception e) {
-                        log += "\nProblem printing classes for word (" + curWord.getValue() 
+                        log += "\nProblem printing classes for word (" + curWord.getValue()
                                 + "): " + e.getLocalizedMessage();
                         continue;
                     }
@@ -453,53 +456,52 @@ public class PExportToPDF {
                 varChunk.setFont(unicodeFont);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
-            
+
             if (!curWord.getClassTextValues().isEmpty()) {
                 varChunk = null;
-                
+
                 for (Entry<Integer, String> curEntry : curWord.getClassTextValues()) {
                     if (varChunk != null) {
                         dictEntry.add(new Text(", "));
                     }
                     try {
-                        WordProperty prop = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                        WordProperty prop = (WordProperty) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
                         varChunk = new Text(prop.getValue());
                         varChunk.setFont(unicodeFontItalic);
                         dictEntry.add(varChunk);
                         varChunk = new Text(" : " + curEntry.getValue());
                         varChunk.setFont(unicodeFont);
                         dictEntry.add(varChunk);
-                    } catch (Exception e) {
-                        log += "\nProblem printing classes for word (" + curWord.getValue() 
+                    } catch (DictionaryCollection.NodeNotExistsException e) {
+                        log += "\nProblem printing classes for word (" + curWord.getValue()
                                 + "): " + e.getLocalizedMessage();
                     }
                 }
-                
+
                 dictEntry.add(new Text(" - "));
             }
-            
+
             // write romanization value for word if active and word has one
             if (core.getRomManager().isEnabled()) {
                 String romStr;
-                
+
                 try {
                     romStr = core.getRomManager().getPronunciation(curWord.getValue());
-                } catch(Exception e) {
+                } catch (Exception e) {
                     romStr = "<ERROR>";
                 }
-                
+
                 if (!romStr.isEmpty()) {
                     dictEntry.add(new Text("\nRoman: ").setFont(unicodeFont));
                     dictEntry.add(new Text(romStr + "\n").setFont(unicodeFontItalic));
                 }
             }
-            
+
             // print word etymology tree if appropriate
             // TODO: correct how this aligns images
             if (printWordEtymologies) {
-                BufferedImage etymImage = (
-                        new PPanelDrawEtymology(core, curWord)).getPanelImage();
-                
+                BufferedImage etymImage = (new PPanelDrawEtymology(core, curWord)).getPanelImage();
+
                 // null image means there is no etymology for this word
                 if (etymImage != null) {
                     //curLetterSec.add(dictEntry);
@@ -507,9 +509,9 @@ public class PExportToPDF {
                     dictEntry.add(new Text("\n").setFont(conFont));
                     dictEntry.add(getScaledImage(etymImage, true));
                 }
-                
+
             }
-            
+
             List<Object> defList = WebInterface.getElementsHTMLBody(curWord.getDefinition(), core);
             if (!defList.isEmpty()) {
                 dictEntry.add(new Text("\n"));
@@ -544,6 +546,9 @@ public class PExportToPDF {
                 dictEntry.add(new Text("\n"));
             }
 
+            // print conjugations if specified by user
+            printConjugationsToEntry(dictEntry, curWord);
+
             dictEntry.setKeepTogether(true);
             curLetterSec.add(dictEntry);
 
@@ -577,7 +582,7 @@ public class PExportToPDF {
             ConWord curWord = allWords.next();
 
             dictEntry.setMultipliedLeading(0.6f);
-            
+
             if (curWord.getLocalWord().equals("")) {
                 continue;
             }
@@ -602,7 +607,7 @@ public class PExportToPDF {
 
             dictEntry.add(new Text(curWord.getLocalWord() + "\n\n")
                     .setFontSize(defFontSize + offsetSize));
-            
+
             String wordVal = PGTUtil.stripRTL(curWord.getValue());
             if (core.getPropertiesManager().isEnforceRTL()) {
                 // PDF Does not respect RTL characters...
@@ -672,51 +677,50 @@ public class PExportToPDF {
                 varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
-            
+
             if (!curWord.getClassTextValues().isEmpty()) {
                 varChunk = null;
-                
+
                 for (Entry<Integer, String> curEntry : curWord.getClassTextValues()) {
                     if (varChunk != null) {
                         dictEntry.add(new Text(", "));
                     }
                     try {
-                        WordProperty prop = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                        WordProperty prop = (WordProperty) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
                         varChunk = new Text(prop.getValue());
                         varChunk.setFont(unicodeFontItalic);
                         dictEntry.add(varChunk);
                         varChunk = new Text(" : " + curEntry.getValue());
                         varChunk.setFont(unicodeFont);
                         dictEntry.add(varChunk);
-                    } catch (Exception e) {
-                        log += "\nProblem printing classes for word (" + curWord.getValue() 
+                    } catch (DictionaryCollection.NodeNotExistsException e) {
+                        log += "\nProblem printing classes for word (" + curWord.getValue()
                                 + "): " + e.getLocalizedMessage();
                     }
                 }
             }
-            
+
             // write romanization value for word if active and word has one
             if (core.getRomManager().isEnabled()) {
                 String romStr;
-                
+
                 try {
                     romStr = core.getRomManager().getPronunciation(curWord.getValue());
-                } catch(Exception e) {
+                } catch (Exception e) {
                     romStr = "<ERROR>";
                 }
-                
+
                 if (!romStr.isEmpty()) {
                     dictEntry.add(new Text("\nRoman: ").setFont(unicodeFont));
                     dictEntry.add(new Text(romStr).setFont(unicodeFontItalic));
                 }
             }
-            
+
             // print word etymology tree if appropriate
             // TODO: correct how this aligns images
             if (printWordEtymologies) {
-                BufferedImage etymImage = (
-                        new PPanelDrawEtymology(core, curWord)).getPanelImage();
-                
+                BufferedImage etymImage = (new PPanelDrawEtymology(core, curWord)).getPanelImage();
+
                 // null image means there is no etymology for this word
                 if (etymImage != null) {
                     //curLetterSec.add(dictEntry);
@@ -724,9 +728,8 @@ public class PExportToPDF {
                     dictEntry.add(new Text("\n").setFont(conFont));
                     dictEntry.add(getScaledImage(etymImage, true));
                 }
-                
+
             }
-            
 
             List<Object> defList = WebInterface.getElementsHTMLBody(curWord.getDefinition(), core);
             if (!defList.isEmpty()) {
@@ -746,6 +749,9 @@ public class PExportToPDF {
                     }
                 }
             }
+
+            // print conjugations if specified by user
+            printConjugationsToEntry(dictEntry, curWord);
 
             dictEntry.setKeepTogether(true);
             curLetterSec.add(dictEntry);
@@ -804,6 +810,49 @@ public class PExportToPDF {
         return ret;
     }
 
+    private void printConjugationsToEntry(Paragraph dictEntry, ConWord curWord) {
+        Text varChunk;
+        
+        if (printAllConjugations) {
+            for (DeclensionPair curPair : core.getDeclensionManager().getAllCombinedIds(curWord.getWordTypeId())) {
+                DeclensionNode curDeclension
+                        = core.getDeclensionManager().getDeclensionByCombinedId(
+                                curWord.getId(), curPair.combinedId);
+
+                if (core.getDeclensionManager().isCombinedDeclSurpressed(curPair.combinedId, curWord.getId())) {
+                    continue;
+                }
+
+                varChunk = new Text(curPair.label + ": ");
+                varChunk.setFont(unicodeFont);
+                varChunk.setFontSize(defFontSize - 1);
+                dictEntry.add(varChunk);
+
+                String declensionValue = "";
+
+                // if set value exists, use this
+                if (curDeclension != null) {
+                    declensionValue = curDeclension.getValue();
+                } else { // otherwise generate a value
+                    try {
+                        declensionValue = core.getDeclensionManager().declineWord(curWord.getWordTypeId(),
+                                curPair.combinedId,
+                                curWord.getValue());
+                    } catch (Exception e) {
+                        log += "Problem generating " + curPair.label
+                                + " due to bad regex. Please check regex for word form.";
+                    }
+                }
+
+                varChunk = new Text(declensionValue);
+                varChunk.setFont(conFont);
+                varChunk.setFontSize(conFontSize / 2);
+                dictEntry.add(varChunk);
+                dictEntry.add(new Text("\n"));
+            }
+        }
+    }
+
     /**
      * Builds chapter on Grammar
      *
@@ -841,11 +890,11 @@ public class PExportToPDF {
                         try {
                             text = text.replace("<img src=\"", "").replace("\">", "");
                             int imgId = Integer.parseInt(text);
-                            ImageNode imageNode = (ImageNode)core.getImageCollection().getNodeById(imgId);
+                            ImageNode imageNode = (ImageNode) core.getImageCollection().getNodeById(imgId);
                             byte[] bytes = IOHandler.getBufferedImageByteArray(imageNode.getImage());
                             Image pdfImage = new Image(ImageDataFactory.create(bytes));
                             newSec.add(pdfImage);
-                        } catch (Exception e) {
+                        } catch (DictionaryCollection.NodeNotExistsException | IOException | NumberFormatException e) {
                             log += "\nUnable to include images from grammar section: " + curSec.getName();
                         }
                     } else {
@@ -859,7 +908,7 @@ public class PExportToPDF {
 
                             newSec.add(new Text(text).setFont(conFont)
                                     .setFontSize(conFontSize).setFontColor( // TODO: not setting size here. Later Rev (due to different size standards HTML vs Pt)
-                                            FormattedTextHelper.swtColorToItextColor(info.awtColor)));
+                                    FormattedTextHelper.swtColorToItextColor(info.awtColor)));
                         } else {
                             newSec.add(new Text(text).setFont(unicodeFont)
                                     .setFontColor( // TODO: not setting size here. Later Rev (due to different size standards HTML vs Pt)
@@ -1007,6 +1056,10 @@ public class PExportToPDF {
         this.subTitleText = subTitleText;
     }
 
+    public void setPrintAllConjugations(boolean _printAllConjugations) {
+        this.printAllConjugations = _printAllConjugations;
+    }
+
     private ColumnDocumentRenderer getColumnRender() {
         float offSet = 36;
         float gutter = 23;
@@ -1106,35 +1159,35 @@ public class PExportToPDF {
     public void setPrintWordEtymologies(boolean printWordEtymologies) {
         this.printWordEtymologies = printWordEtymologies;
     }
-    
+
     /**
-     * Takes a buffered image and returns an Image scaled to the appropriate 
-     * size. Scaled for full screen if columSize is set to false, and to fit
-     * into a column if set to true. If an image is already small enough, its
-     * size will not be scaled at all
+     * Takes a buffered image and returns an Image scaled to the appropriate size. Scaled for full screen if columSize
+     * is set to false, and to fit into a column if set to true. If an image is already small enough, its size will not
+     * be scaled at all
+     *
      * @param inputImage
      * @param columnSize
-     * @return 
+     * @return
      */
     private Image getScaledImage(BufferedImage inputImage, boolean columnSize) throws IOException {
         Image ret = new Image(ImageDataFactory.create(
-                            IOHandler.getBufferedImageByteArray(inputImage)));
+                IOHandler.getBufferedImageByteArray(inputImage)));
         float docWidth = PageSize.A4.getWidth();
         float imageWidth = inputImage.getWidth();
         float imageHeight = inputImage.getHeight();
-        
-        if ((columnSize && imageWidth > (docWidth/2)) || imageWidth > docWidth/2) {
+
+        if ((columnSize && imageWidth > (docWidth / 2)) || imageWidth > docWidth / 2) {
             float scaler = ((docWidth - document.getLeftMargin()
-                   - document.getRightMargin()) / imageWidth);
+                    - document.getRightMargin()) / imageWidth);
 
             // slightly less than 1/2 due to buffer space between
             if (columnSize) {
                 scaler /= 2.2;
             }
-            
+
             ret = ret.scaleToFit(scaler * imageWidth, scaler * imageHeight);
         }
-        
+
         return ret;
     }
 }

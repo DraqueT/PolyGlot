@@ -86,6 +86,7 @@ public class ScrPrintToPDF extends PDialog {
         chkPageNum = new PCheckBox(core);
         chkGloss = new PCheckBox(core);
         chkEtymology = new PCheckBox(core);
+        chkPrintConjugations = new PCheckBox(core);
         txtTitle = new PTextField(core, true, "-- Title --");
         txtSubtitle = new PTextField(core, true, "-- Title --");
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -157,6 +158,9 @@ public class ScrPrintToPDF extends PDialog {
 
         chkEtymology.setText("Print Etymology Trees");
 
+        chkPrintConjugations.setText("Print All Conjugations");
+        chkPrintConjugations.setToolTipText("If checked, words will have a list of all conjugated forms printed under their definitions.");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -176,7 +180,8 @@ public class ScrPrintToPDF extends PDialog {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkGloss)
                             .addComponent(chkPageNum)
-                            .addComponent(chkEtymology))
+                            .addComponent(chkEtymology)
+                            .addComponent(chkPrintConjugations))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -196,6 +201,8 @@ public class ScrPrintToPDF extends PDialog {
                 .addComponent(chkLogographs)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkPageNum)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkPrintConjugations)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(chkEtymology)
                 .addContainerGap())
@@ -349,6 +356,7 @@ public class ScrPrintToPDF extends PDialog {
         export.setPrintGlossKey(chkGloss.isSelected());
         export.setPrintGrammar(chkGrammar.isSelected());
         export.setPrintWordEtymologies(chkEtymology.isSelected());
+        export.setPrintAllConjugations(chkPrintConjugations.isSelected());
         
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try{
@@ -446,6 +454,7 @@ public class ScrPrintToPDF extends PDialog {
     private javax.swing.JCheckBox chkLogographs;
     private javax.swing.JCheckBox chkOrtho;
     private javax.swing.JCheckBox chkPageNum;
+    private javax.swing.JCheckBox chkPrintConjugations;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

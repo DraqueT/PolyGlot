@@ -206,6 +206,7 @@
                                   <Component id="chkGloss" min="-2" max="-2" attributes="0"/>
                                   <Component id="chkPageNum" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="chkEtymology" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkPrintConjugations" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -230,6 +231,8 @@
                       <Component id="chkLogographs" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="chkPageNum" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="chkPrintConjugations" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="chkEtymology" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -314,6 +317,15 @@
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core);"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkPrintConjugations">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Print All Conjugations"/>
+                <Property name="toolTipText" type="java.lang.String" value="If checked, words will have a list of all conjugated forms printed under their definitions."/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
               </AuxValues>
             </Component>
           </SubComponents>
