@@ -117,6 +117,7 @@ public class CustHandlerFactory {
             case "1.4":
             case "2.0":
             case "2.1":
+            case "2.2":
                 ret = CustHandlerFactory.get075orHigherHandler(core);
                 break;
             default:
