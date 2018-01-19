@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, DThompson
+ * Copyright (c) 2017-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -61,7 +61,7 @@ public class PTextFieldFilter extends DocumentFilter {
         boolean ret = true;
         
         // blank must always be allowed
-        if (!text.equals("")) {
+        if (text.length() != 0) {
             try {
                 Double.parseDouble(text);
             } catch (NumberFormatException e) {

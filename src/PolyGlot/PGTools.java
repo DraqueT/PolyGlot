@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -37,6 +37,7 @@ public class PGTools {
      * @param isBack whether display color is background (rather than foreground)
      * @return SwingWorker that will make given component flash if run
      */
+    @SuppressWarnings("SleepWhileHoldingLock")
     public static SwingWorker getFlashWorker(final JComponent flashMe, final Color flashColor, final boolean isBack) {
         // this will pop out in its own little thread...
         final SwingWorker worker = new SwingWorker() {
@@ -59,6 +60,7 @@ public class PGTools {
                         } else {
                             flashMe.setEnabled(false);
                         }
+                        // suppression for this is broken. Super annoying.
                         Thread.sleep(PGTUtil.menuFlashSleep);
                         if (isBack) {
                             flashMe.setBackground(originColor);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -393,7 +393,7 @@ public class ScrExcelImport extends PDialog {
 
         try {
             ImportFileHelper reader = new ImportFileHelper(core);
-            String delimiter = txtDelimiter.getText().equals("") ?
+            String delimiter = txtDelimiter.getText().length() == 0 ?
                     "," : txtDelimiter.getText();
             reader.setOptions(txtConWord.getText(), txtLocalWord.getText(),
                     txtType.getText(), txtClass.getText(),

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -72,7 +72,7 @@ public class WebInterface {
             throw new IOException("Update file not found. Please check for updates manually at PolyGlot homepage.");
         }
 
-        if (!xmlText.equals("")) {
+        if (xmlText.length() != 0) {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             InputSource is = new InputSource(new StringReader(xmlText));
@@ -176,7 +176,7 @@ public class WebInterface {
             } else {
                 // this is plaintext
                 String add = token.trim();
-                if (!add.equals("")) {
+                if (add.length() != 0) {
                     ret.add(add + " ");
                 }
             }

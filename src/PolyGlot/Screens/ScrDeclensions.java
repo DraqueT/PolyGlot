@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -246,7 +246,7 @@ public class ScrDeclensions extends PDialog {
             String curId = e.getKey();
             JTextField curField = e.getValue();
 
-            if (curField.getText().trim().equals("")) {
+            if (curField.getText().trim().length() == 0) {
                 continue;
             }
 
@@ -303,7 +303,7 @@ public class ScrDeclensions extends PDialog {
                     String newForm = core.getDeclensionManager().declineWord(typeId, curId, word.getValue());
                     
                     // only set value if form found
-                    if (!newForm.equals("")) {
+                    if (newForm.length() != 0) {
                         newField.setText(newForm);
                     }
                 } catch (Exception e) {

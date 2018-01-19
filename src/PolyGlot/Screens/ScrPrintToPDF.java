@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017, draque.thompson
+ * Copyright (c) 2016-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -325,7 +325,7 @@ public class ScrPrintToPDF extends PDialog {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        if (txtSavePath.getText().equals("")) {
+        if (txtSavePath.getText().length() == 0) {
             InfoBox.warning("File not Specified", "Please specify a file to save to.", core.getRootWindow());
             return;
         }

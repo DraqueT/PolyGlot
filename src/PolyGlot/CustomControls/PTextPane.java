@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque
+ * Copyright (c) 2016-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -137,7 +137,7 @@ public class PTextPane extends JTextPane {
     @Override
     public final void setText(String t) {
         try {
-            if (t.equals("") && !this.hasFocus()) {
+            if (t.length() == 0 && !this.hasFocus()) {
                 super.setText(defText);
             } else {
                 super.setText(t);
@@ -325,7 +325,7 @@ public class PTextPane extends JTextPane {
             ret = !body.contains("<img src");
             if (ret) {
                 body = body.replaceAll("<.*?>", "");
-                ret = body.trim().equals("");
+                ret = body.trim().length() == 0;
             }
         } catch (Exception e) {
             ret = true;
@@ -343,7 +343,7 @@ public class PTextPane extends JTextPane {
 
     private void setupListeners() {
         // if blank, this field is being used for something more complex: no listeners
-        if (!defText.equals("")) {
+        if (defText.length() != 0) {
             FocusListener listener = new FocusListener() {
                 @Override
                 public void focusGained(FocusEvent e) {
@@ -355,7 +355,7 @@ public class PTextPane extends JTextPane {
 
                 @Override
                 public void focusLost(FocusEvent e) {
-                    if (isEmpty() && !defText.equals("")) {
+                    if (isEmpty() && defText.length() != 0) {
                         setText(defText);
                         setForeground(Color.lightGray);
                     }
@@ -372,7 +372,7 @@ public class PTextPane extends JTextPane {
                 public void keyTyped(KeyEvent e) {
                     Character c = e.getKeyChar();
                     String repString = core.getPropertiesManager().getCharacterReplacement(c.toString());
-                    if (!repString.equals("")) {
+                    if (repString.length() != 0) {
                         try {
                             e.consume();
                             ClipboardHandler cb = new ClipboardHandler();

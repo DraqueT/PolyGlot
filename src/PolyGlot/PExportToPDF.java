@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017, draque.thompson
+ * Copyright (c) 2016-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -179,7 +179,7 @@ public class PExportToPDF {
         try {
             // front page is always built/added before chapter guide
             document.add(buildFrontPage());
-            if (!forewardText.equals("")) {
+            if (forewardText.length() != 0) {
                 chapTitles.put(FOREWORD, "Author Foreword");
                 chapList.add(new PEntry(buildForward(FOREWORD), FOREWORD));
             }
@@ -322,7 +322,7 @@ public class PExportToPDF {
         document.close();
 
         // inform user of errors
-        if (!log.equals("")) {
+        if (log.length() != 0) {
             InfoBox.warning("PDF Generation Errors", "Problems with PDF generation:\n"
                     + log, core.getRootWindow());
         }
@@ -338,7 +338,7 @@ public class PExportToPDF {
         Map<Integer, String> ret = new HashMap<>();
 
         for (TypeNode curNode : core.getTypes().getNodes()) {
-            if (curNode.getGloss().equals("")) {
+            if (curNode.getGloss().length() == 0) {
                 ret.put(curNode.getId(), curNode.getValue());
             } else {
                 ret.put(curNode.getId(), curNode.getGloss());
@@ -369,7 +369,7 @@ public class PExportToPDF {
 
             // print large characters for alphabet sections
             if (!curLetter.equals(curWord.getValue().substring(0, 1))) {
-                if (!curLetter.equals("")) {
+                if (curLetter.length() != 0) {
                     document.add(curLetterSec);
                     document.add(new AreaBreak(AreaBreakType.NEXT_AREA));
                     curLetterSec = new Div();
@@ -411,7 +411,7 @@ public class PExportToPDF {
             }
 
             try {
-                if (!curWord.getPronunciation().equals("")) {
+                if (curWord.getPronunciation().length() != 0) {
                     varChunk = new Text("/" + curWord.getPronunciation() + "/");
                     varChunk.setFont(unicodeFont);
                     varChunk.setFontSize(defFontSize);
@@ -442,7 +442,7 @@ public class PExportToPDF {
                         continue;
                     }
 
-                    if (!wordClasses.equals("")) {
+                    if (wordClasses.length() != 0) {
                         wordClasses += ", ";
                     }
 
@@ -537,7 +537,7 @@ public class PExportToPDF {
                 }
             }
 
-            if (!curWord.getLocalWord().equals("")) {
+            if (curWord.getLocalWord().length() != 0) {
                 varChunk = new Text("Synonym(s): ");
                 varChunk.setFont(unicodeFont);
                 varChunk.setFontSize(defFontSize);
@@ -583,14 +583,14 @@ public class PExportToPDF {
 
             dictEntry.setMultipliedLeading(0.6f);
 
-            if (curWord.getLocalWord().equals("")) {
+            if (curWord.getLocalWord().length() == 0) {
                 continue;
             }
 
             // print large characters for alphabet sections
             if (!curLetter.toLowerCase().equals(curWord.getLocalWord()
                     .substring(0, 1).toLowerCase())) {
-                if (!curLetter.equals("")) {
+                if (curLetter.length() != 0) {
                     document.add(curLetterSec);
                     document.add(new AreaBreak(AreaBreakType.NEXT_AREA));
                     curLetterSec = new Div();
@@ -633,7 +633,7 @@ public class PExportToPDF {
             }
 
             try {
-                if (!curWord.getPronunciation().equals("")) {
+                if (curWord.getPronunciation().length() != 0) {
                     varChunk = new Text("/" + curWord.getPronunciation() + "/");
                     varChunk.setFont(unicodeFont);
                     varChunk.setFontSize(defFontSize);
@@ -663,7 +663,7 @@ public class PExportToPDF {
                         continue;
                     }
 
-                    if (!wordClasses.equals("")) {
+                    if (wordClasses.length() != 0) {
                         wordClasses += ", ";
                     }
 
@@ -961,8 +961,8 @@ public class PExportToPDF {
         Text varChunk;
         ret.setTextAlignment(TextAlignment.CENTER);
 
-        if (titleText.equals("")) {
-            if (core.getPropertiesManager().getLangName().equals("")) {
+        if (titleText.length() == 0) {
+            if (core.getPropertiesManager().getLangName().length() == 0) {
                 varChunk = new Text("LANGUAGE GUIDE");
             } else {
                 varChunk = new Text(core.getPropertiesManager().getLangName());
@@ -975,7 +975,7 @@ public class PExportToPDF {
         varChunk.setFontSize(36);
         ret.add(varChunk);
 
-        if (!subTitleText.equals("")) {
+        if (subTitleText.length() != 0) {
             ret.add("\n");
             ret.add(new Text(subTitleText));
         }
@@ -983,14 +983,14 @@ public class PExportToPDF {
         ret.add("\n");
         ret.add("\n");
 
-        if (!coverImagePath.equals("")) {
+        if (coverImagePath.length() != 0) {
             Image img = new Image(ImageDataFactory.create(coverImagePath));
             ret.add(img);
             ret.add("\n");
             ret.add("\n");
         }
 
-        if (!core.getPropertiesManager().getCopyrightAuthorInfo().equals("")) {
+        if (core.getPropertiesManager().getCopyrightAuthorInfo().length() != 0) {
             varChunk = new Text(core.getPropertiesManager().getCopyrightAuthorInfo());
             varChunk.setTextAlignment(TextAlignment.LEFT);
             varChunk.setFontSize(defFontSize - 2);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -132,7 +132,7 @@ public class ImportFileHelper {
                     // add conword
                     columnList = Arrays.asList(iConWord.split(","));
                     for (String entry : columnList) {
-                        if (entry == null || entry.equals("")) {
+                        if (entry == null || entry.length() == 0) {
                             continue;
                         }
 
@@ -143,7 +143,7 @@ public class ImportFileHelper {
                             continue;
                         }
 
-                        if (newWord.getValue().trim().equals("")) {
+                        if (newWord.getValue().trim().length() == 0) {
                             newWord.setValue(columns[cellNum].trim());
                         } else {
                             newWord.setValue(newWord.getValue() + ", " + columns[cellNum].trim());
@@ -151,14 +151,14 @@ public class ImportFileHelper {
                     }
 
                     // if conword is blank, continue. Bare minimum for imported word is a conword value.
-                    if (newWord.getValue().trim().equals("")) {
+                    if (newWord.getValue().trim().length() == 0) {
                         continue;
                     }
 
                     // add definition
                     columnList = Arrays.asList(iDefinition.split(","));
                     for (String entry : columnList) {
-                        if (entry == null || entry.equals("")) {
+                        if (entry == null || entry.length() == 0) {
                             continue;
                         }
 
@@ -169,7 +169,7 @@ public class ImportFileHelper {
                             continue;
                         }
 
-                        if (newWord.getDefinition().trim().equals("")) {
+                        if (newWord.getDefinition().trim().length() == 0) {
                             newWord.setDefinition(columns[cellNum].trim());
                         } else {
                             newWord.setDefinition(newWord.getDefinition() + "\n\n" + columns[cellNum].trim());
@@ -179,7 +179,7 @@ public class ImportFileHelper {
                     // add classes
                     columnList = Arrays.asList(iClass.split(","));
                     for (String entry : columnList) {
-                        if (entry == null || entry.equals("")) {
+                        if (entry == null || entry.length() == 0) {
                             continue;
                         }
 
@@ -236,7 +236,7 @@ public class ImportFileHelper {
                     // add local word
                     columnList = Arrays.asList(iLocalWord.split(","));
                     for (String entry : columnList) {
-                        if (entry == null || entry.equals("")) {
+                        if (entry == null || entry.length() == 0) {
                             continue;
                         }
 
@@ -247,7 +247,7 @@ public class ImportFileHelper {
                             continue;
                         }
 
-                        if (newWord.getLocalWord().trim().equals("")) {
+                        if (newWord.getLocalWord().trim().length() == 0) {
                             newWord.setLocalWord(columns[cellNum].trim());
                         } else {
                             newWord.setLocalWord(newWord.getLocalWord() + ", " + columns[cellNum].trim());
@@ -257,7 +257,7 @@ public class ImportFileHelper {
                     // add pronunciation
                     columnList = Arrays.asList(iPronunciation.split(","));
                     for (String entry : columnList) {
-                        if (entry == null || entry.equals("")) {
+                        if (entry == null || entry.length() == 0) {
                             continue;
                         }
 
@@ -268,7 +268,7 @@ public class ImportFileHelper {
                             continue;
                         }
 
-                        if (newWord.getPronunciation().trim().equals("")) {
+                        if (newWord.getPronunciation().trim().length() == 0) {
                             newWord.setPronunciation(columns[cellNum].trim());
                         } else {
                             newWord.setPronunciation(newWord.getPronunciation() + ", " + columns[cellNum].trim());
@@ -278,7 +278,7 @@ public class ImportFileHelper {
                     // add type
                     columnList = Arrays.asList(iType.split(","));
                     for (String entry : columnList) {
-                        if (entry == null || entry.equals("")) {
+                        if (entry == null || entry.length() == 0) {
                             continue;
                         }
 
@@ -343,13 +343,13 @@ public class ImportFileHelper {
         // add conword
         columnList = Arrays.asList(iConWord.split(","));
         for (String entry : columnList) {
-            if (entry == null || entry.equals("")) {
+            if (entry == null || entry.length() == 0) {
                 continue;
             }
 
             Integer cellNum = cellNumCheckGet(entry);
 
-            if (newWord.getValue().trim().equals("")) {
+            if (newWord.getValue().trim().length() == 0) {
                 newWord.setValue(row.getCell(cellNum) != null ? row.getCell(cellNum).toString() : "");
             } else if (row.getCell(cellNum) != null) {
                 newWord.setValue(newWord.getValue() + ", " + row.getCell(cellNum).toString());
@@ -357,20 +357,20 @@ public class ImportFileHelper {
         }
 
         // if conword is blank, return. Bare minimum for imported word is a conword value.
-        if (newWord.getValue().trim().equals("")) {
+        if (newWord.getValue().trim().length() == 0) {
             return;
         }
 
         // add definition
         columnList = Arrays.asList(iDefinition.split(","));
         for (String entry : columnList) {
-            if (entry == null || entry.equals("")) {
+            if (entry == null || entry.length() == 0) {
                 continue;
             }
 
             Integer cellNum = cellNumCheckGet(entry);
 
-            if (newWord.getDefinition().trim().equals("")) {
+            if (newWord.getDefinition().trim().length() == 0) {
                 newWord.setDefinition(row.getCell(cellNum) != null ? row.getCell(cellNum).toString() : "");
             } else if (row.getCell(cellNum) != null) {
                 newWord.setDefinition(newWord.getDefinition() + "\n\n" + row.getCell(cellNum).toString());
@@ -380,7 +380,7 @@ public class ImportFileHelper {
         // add classes
         columnList = Arrays.asList(iClass.split(","));
         for (String entry : columnList) {
-            if (entry == null || entry.equals("")) {
+            if (entry == null || entry.length() == 0) {
                 continue;
             }
 
@@ -437,13 +437,13 @@ public class ImportFileHelper {
         // add local word
         columnList = Arrays.asList(iLocalWord.split(","));
         for (String entry : columnList) {
-            if (entry == null || entry.equals("")) {
+            if (entry == null || entry.length() == 0) {
                 continue;
             }
 
             Integer cellNum = cellNumCheckGet(entry);
 
-            if (newWord.getLocalWord().trim().equals("")) {
+            if (newWord.getLocalWord().trim().length() == 0) {
                 newWord.setLocalWord(row.getCell(cellNum) != null ? row.getCell(cellNum).toString() : "");
             } else if (row.getCell(cellNum) != null) {
                 newWord.setLocalWord(newWord.getLocalWord() + ", " + row.getCell(cellNum).toString());
@@ -453,13 +453,13 @@ public class ImportFileHelper {
         // add pronunciation
         columnList = Arrays.asList(iPronunciation.split(","));
         for (String entry : columnList) {
-            if (entry == null || entry.equals("")) {
+            if (entry == null || entry.length() == 0) {
                 continue;
             }
 
             Integer cellNum = cellNumCheckGet(entry);
 
-            if (newWord.getPronunciation().trim().equals("")) {
+            if (newWord.getPronunciation().trim().length() == 0) {
                 newWord.setPronunciation(row.getCell(cellNum) != null ? row.getCell(cellNum).toString() : "");
             } else if (row.getCell(cellNum) != null) {
                 newWord.setPronunciation(newWord.getPronunciation() + ", " + row.getCell(cellNum).toString());
@@ -469,7 +469,7 @@ public class ImportFileHelper {
         // add type
         columnList = Arrays.asList(iType.split(","));
         for (String entry : columnList) {
-            if (entry == null || entry.equals("")) {
+            if (entry == null || entry.length() == 0) {
                 continue;
             }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque
+ * Copyright (c) 2015-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -274,6 +274,7 @@ public class SoundRecorder {
      * @throws javax.sound.sampled.LineUnavailableException on no output line
      * @throws java.io.IOException on no output line
      */
+    @SuppressWarnings("SleepWhileHoldingLock")
     public void playPause() throws LineUnavailableException, IOException {
         // kill any recording session before initilizing playback
         if (isRecording()) {
@@ -320,6 +321,7 @@ public class SoundRecorder {
                             = ais.read(buffer, 0, buffer.length)) != -1) {
                         if (count > 0) {
                             while (playing == false) { // if paused, wait until unpaused
+                                // suppression for this warning is nonfunctional. Very annoying.
                                 Thread.sleep(timeToDie);
                                 playPauseBut.setIcon(playUp);
 

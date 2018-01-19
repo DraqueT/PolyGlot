@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, DThompson
+ * Copyright (c) 2017-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -62,7 +62,7 @@ public class EtyExternalParent extends DictNode {
     
     @Override
     public String toString() {
-        return value + (externalLanguage.equals("") ? "" 
+        return value + (externalLanguage.length() == 0 ? "" 
                 : " (" + externalLanguage + ")");
     }
 

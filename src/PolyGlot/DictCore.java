@@ -108,7 +108,7 @@ public class DictCore {
      * @return either name of conlang or "Conlang"
      */
     public String conLabel() {
-        return propertiesManager.getLangName().equals("")
+        return propertiesManager.getLangName().length() == 0
                 ? "Conlang"
                 : propertiesManager.getLangName();
     }
@@ -120,7 +120,7 @@ public class DictCore {
      * @return either name of local language or "Local Lang"
      */
     public String localLabel() {
-        return propertiesManager.getLocalLangName().equals("")
+        return propertiesManager.getLocalLangName().length() == 0
                 ? "Local Lang"
                 : propertiesManager.getLocalLangName();
     }
@@ -393,11 +393,11 @@ public class DictCore {
 
         curLoading = false;
 
-        if (!errorLog.trim().equals("")) {
+        if (errorLog.trim().length() != 0) {
             throw new IOException(errorLog);
         }
 
-        if (!warningLog.trim().equals("")) {
+        if (warningLog.trim().length() != 0) {
             throw new IllegalStateException(warningLog);
         }
     }

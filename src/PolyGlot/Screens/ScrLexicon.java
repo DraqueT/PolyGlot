@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2017, Draque Thompson
+ * Copyright (c) 2015-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -50,8 +50,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -232,7 +230,7 @@ public final class ScrLexicon extends PFrame {
         boolean ret = true;
 
         // error box only populated with word has illegal values
-        if (!txtErrorBox.getText().equals("") && !chkRuleOverride.isSelected()) {
+        if (txtErrorBox.getText().length() != 0 && !chkRuleOverride.isSelected()) {
             ret = false;
             InfoBox.warning("Illegal word.", "Please correct or delete currently selected word "
                     + "or select the rule override before exiting lexicon.", core.getRootWindow());
@@ -703,10 +701,10 @@ public final class ScrLexicon extends PFrame {
 
         saveValuesTo(getCurrentWord());
 
-        if (txtConSrc.getText().equals("")
-                && txtDefSrc.getText().equals("")
-                && txtLocalSrc.getText().equals("")
-                && txtProcSrc.getText().equals("")
+        if (txtConSrc.getText().length() == 0
+                && txtDefSrc.getText().length() == 0
+                && txtLocalSrc.getText().length() == 0
+                && txtProcSrc.getText().length() == 0
                 && filterType == 0
                 && cmbRootSrc.getValue().toString().equals(defRootValue.getValue())) {
             populateLexicon();
@@ -892,8 +890,8 @@ public final class ScrLexicon extends PFrame {
         Color hColor = core.getRequiredColor();
         boolean ret = true;
 
-        if (!message.equals("")) {
-            if (!txtErrorBox.getText().equals("")) {
+        if (message.length() != 0) {
+            if (txtErrorBox.getText().length() != 0) {
                 txtErrorBox.setText(txtErrorBox.getText() + "\n");
             }
 
@@ -1092,7 +1090,7 @@ public final class ScrLexicon extends PFrame {
     public void dispose() {
         boolean canClose = true;
 
-        if (!txtErrorBox.getText().equals("")
+        if (txtErrorBox.getText().length() != 0
                 && !chkRuleOverride.isSelected()) {
             InfoBox.warning("Illegal Word",
                     "Currently selected word is illegal. Please correct, or mark rule override.", core.getRootWindow());
@@ -1237,24 +1235,24 @@ public final class ScrLexicon extends PFrame {
                     if (enableProcGen) {
                         try {
                             tip = core.getPronunciationMgr().getPronunciation(curWord.getValue());
-                            if (tip.equals("")) {
+                            if (tip.length() == 0) {
                                 tip = curWord.getPronunciation();
                             }
                         } catch (Exception ex) {
                             setProcError(ex.getLocalizedMessage());
                         }
                     }
-                    if (tip.equals("")) {
+                    if (tip.length() == 0) {
                         tip = curWord.getLocalWord();
                     }
-                    if (tip.equals("")) {
+                    if (tip.length() == 0) {
                         tip = curWord.getValue();
                     }
                     if (curType != null) {
-                        tip += " : " + (curType.getGloss().equals("")
+                        tip += " : " + (curType.getGloss().length() == 0
                                 ? curType.getValue() : curType.getGloss());
                     }
-                    if (!curWord.getDefinition().equals("")) {
+                    if (curWord.getDefinition().length() != 0) {
                         tip += " : " + WebInterface.getTextFromHtml(curWord.getDefinition());
                     }
 
@@ -1384,10 +1382,10 @@ public final class ScrLexicon extends PFrame {
                     namePopulating = false;
                 }
                 txtDefinition.setText(curWord.getDefinition());
-                txtLocalWord.setText(curWord.getLocalWord().equals("")
+                txtLocalWord.setText(curWord.getLocalWord().length() == 0
                         ? ((PTextField) txtLocalWord).getDefaultValue() : curWord.getLocalWord());
                 if (enableProcGen) {
-                    txtProc.setText(curWord.getPronunciation().equals("")
+                    txtProc.setText(curWord.getPronunciation().length() == 0
                             ? ((PTextField) txtProc).getDefaultValue() : curWord.getPronunciation());
                 }
                 TypeNode type = curWord.getWordTypeId() == 0 ? null : core.getTypes().getNodeById(curWord.getWordTypeId());

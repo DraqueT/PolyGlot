@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2017, draque
+ * Copyright (c) 2015-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -162,7 +162,7 @@ public class ScrTypes extends PFrame {
             return;
         }
 
-        if (((PTextField) txtName).isDefaultText() || txtName.getText().equals("")) {
+        if (((PTextField) txtName).isDefaultText() || txtName.getText().length() == 0) {
             txtErrorBox.setText("Types must have name populated.");
             txtName.setBackground(core.getRequiredColor());
             lstTypes.setEnabled(false);
@@ -227,23 +227,23 @@ public class ScrTypes extends PFrame {
         } else {
             if (!updatingName) {
                 updatingName = true;
-                txtName.setText(curNode.getValue().equals("")
+                txtName.setText(curNode.getValue().length() == 0
                         ? ((PTextField) txtName).getDefaultValue() : curNode.getValue());
-                txtName.setForeground(curNode.getValue().equals("")
+                txtName.setForeground(curNode.getValue().length() == 0
                         ? Color.lightGray : Color.black);
                 updatingName = false;
             }
-            txtNotes.setText(curNode.getNotes().equals("")
+            txtNotes.setText(curNode.getNotes().length() == 0
                     ? ((PTextPane) txtNotes).getDefaultValue() : curNode.getNotes());
-            txtNotes.setForeground(curNode.getNotes().equals("")
+            txtNotes.setForeground(curNode.getNotes().length() == 0
                     ? Color.lightGray : Color.black);
-            txtTypePattern.setText(curNode.getPattern().equals("")
+            txtTypePattern.setText(curNode.getPattern().length() == 0
                     ? ((PTextField) txtTypePattern).getDefaultValue() : curNode.getPattern());
-            txtTypePattern.setForeground(curNode.getPattern().equals("")
+            txtTypePattern.setForeground(curNode.getPattern().length() == 0
                     ? Color.lightGray : Color.black);
-            txtGloss.setText(curNode.getGloss().equals("")
+            txtGloss.setText(curNode.getGloss().length() == 0
                     ? ((PTextField) txtGloss).getDefaultValue() : curNode.getGloss());
-            txtGloss.setForeground(curNode.getGloss().equals("")
+            txtGloss.setForeground(curNode.getGloss().length() == 0
                     ? Color.lightGray : Color.black);
             chkDefMand.setSelected(curNode.isDefMandatory());
             chkProcMand.setSelected(curNode.isProcMandatory());
@@ -649,7 +649,7 @@ public class ScrTypes extends PFrame {
         boolean ret = true;
         TypeNode curType = (TypeNode) lstTypes.getSelectedValue();
 
-        if (txtName.getText().equals("")
+        if (txtName.getText().length() == 0
                 && curType != null) {
             InfoBox.warning("Illegal Type",
                     "Currently selected type is illegal. Please correct or delete.", core.getRootWindow());

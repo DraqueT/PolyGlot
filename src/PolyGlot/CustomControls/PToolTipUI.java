@@ -176,7 +176,7 @@ public class PToolTipUI extends ToolTipUI
                                            insets.top+insets.bottom);
         String text = ((JToolTip)c).getTipText();
 
-        if (text != null && !text.equals("")) {
+        if (text != null && text.length() != 0) {
             prefSize.width += fm.stringWidth(text);
             prefSize.height += fm.getHeight();
         }

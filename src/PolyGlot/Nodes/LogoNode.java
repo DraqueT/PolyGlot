@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -185,7 +185,7 @@ public class LogoNode extends DictNode {
         Iterator<LogoNode> it = radicals.iterator();
 
         while (it.hasNext()) {
-            if (!ret.equals("")) {
+            if (ret.length() != 0) {
                 ret += ",";
             }
 
@@ -245,7 +245,7 @@ public class LogoNode extends DictNode {
      * @throws java.lang.Exception on load error
      */
     public void loadRadicalRelations(Map<Integer, DictNode> nodeMap) throws Exception {
-        if (tmpRads.equals("")) {
+        if (tmpRads.length() == 0) {
             return;
         }
 
@@ -262,7 +262,7 @@ public class LogoNode extends DictNode {
             }
         }
         
-        if (!loadLog.equals("")) {
+        if (loadLog.length() != 0) {
             throw new Exception("Logograph load error(s):" + loadLog);
         }
     }

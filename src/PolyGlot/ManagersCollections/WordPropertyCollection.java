@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Draque
+ * Copyright (c) 2016-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -124,7 +124,7 @@ public class WordPropertyCollection extends DictionaryCollection {
             // generates element with all type IDs of types this property applies to
             String applyTypes = "";
             for (Integer typeId : wordProp.getApplyTypes()) {
-                if (!applyTypes.equals("")) {
+                if (applyTypes.length() != 0) {
                     applyTypes += ",";
                 }
 

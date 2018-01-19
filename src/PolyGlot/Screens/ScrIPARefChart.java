@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017, draque
+ * Copyright (c) 2016-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -221,7 +221,7 @@ public class ScrIPARefChart extends PFrame {
             String ipaChar = handler.playOtherGetChar(x, y);
             new ClipboardHandler().setClipboardContents(ipaChar);
             String curText = txtIPAChars.getText();
-            txtIPAChars.setText((curText.equals("") ? "" : curText + " ") + ipaChar);
+            txtIPAChars.setText((curText.length() == 0 ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
             InfoBox.error("IPA Error", e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -234,7 +234,7 @@ public class ScrIPARefChart extends PFrame {
             String ipaChar = handler.playVowelGetChar(x, y);
             new ClipboardHandler().setClipboardContents(ipaChar);
             String curText = txtIPAChars.getText();
-            txtIPAChars.setText((curText.equals("") || ipaChar.equals("") ? "" : curText + " ") + ipaChar);
+            txtIPAChars.setText((curText.length() == 0 || ipaChar.length() == 0 ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
             InfoBox.error("IPA Error", e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -247,7 +247,7 @@ public class ScrIPARefChart extends PFrame {
             String ipaChar = handler.playPulConsGetChar(x, y);
             new ClipboardHandler().setClipboardContents(ipaChar);
             String curText = txtIPAChars.getText();
-            txtIPAChars.setText((curText.equals("") || ipaChar.equals("") ? "" : curText + " ") + ipaChar);
+            txtIPAChars.setText((curText.length() == 0 || ipaChar.length() == 0 ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
             InfoBox.error("IPA Error", e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -260,13 +260,13 @@ public class ScrIPARefChart extends PFrame {
             String ipaChar = handler.playNonPulConsGetChar(x, y);
             
             // empty string indicates invalid click location
-            if (ipaChar.equals("")) {
+            if (ipaChar.length() == 0) {
                 return;
             }
             
             new ClipboardHandler().setClipboardContents(ipaChar);
             String curText = txtIPAChars.getText();
-            txtIPAChars.setText((curText.equals("") ? "" : curText + " ") + ipaChar);
+            txtIPAChars.setText((curText.length() == 0 ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
             InfoBox.error("IPA Error", e.getLocalizedMessage(), core.getRootWindow());
         }

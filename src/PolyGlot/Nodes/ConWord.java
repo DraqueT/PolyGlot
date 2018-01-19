@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -81,11 +81,11 @@ public class ConWord extends DictNode {
             checkProc = "Regex error: " + e.getLocalizedMessage();
         }
         
-        return checkValue.getValue().equals("") &&
-                checkValue.getDefinition().equals("") &&
-                checkValue.getLocalWord().equals("") &&
-                checkProc.equals("") &&
-                checkValue.typeError.equals("");
+        return checkValue.getValue().length() == 0 &&
+                checkValue.getDefinition().length() == 0 &&
+                checkValue.getLocalWord().length() == 0 &&
+                checkProc.length() == 0 &&
+                checkValue.typeError.length() == 0;
     }
 
     public boolean isRulesOverrride() {
@@ -293,7 +293,7 @@ public class ConWord extends DictNode {
         boolean ret = true;
 
         // There might be no local translation, but the constructed word must exist
-        ret = ret && (!value.equals(""));
+        ret = ret && (value.length() != 0);
 
         return ret;
     }
@@ -317,7 +317,7 @@ public class ConWord extends DictNode {
         
         if (!procOverride && core != null) {
             String gen = core.getPronunciationMgr().getPronunciation(value);
-            if (!gen.equals("")) {
+            if (gen.length() != 0) {
                 ret = gen;
             }
         }

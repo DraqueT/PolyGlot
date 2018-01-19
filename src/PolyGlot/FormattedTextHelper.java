@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2017, draque
+ * Copyright (c) 2015-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -111,7 +111,7 @@ public class FormattedTextHelper {
                     if (core.getPropertiesManager().isEnforceRTL()) {
                         nextNode = PGTUtil.LTRMarker + nextNode;
                     }
-                    if (!font.equals("")) {
+                    if (font.length() != 0) {
                         StyleConstants.setFontFamily(aset, font);
                     }
                 }
@@ -122,7 +122,7 @@ public class FormattedTextHelper {
                 
                 StyleConstants.setForeground(aset, fontColor);
                 
-                if (!nextNode.equals("")){
+                if (nextNode.length() != 0){
                     doc.insertString(doc.getLength(), nextNode, aset);
                 }
             }
@@ -161,7 +161,7 @@ public class FormattedTextHelper {
                     nextNode = PGTUtil.LTRMarker + nextNode;
                 }
                 
-                if (!nextNode.equals("")){
+                if (nextNode.length() != 0){
                     conFont.awtFont = font.equals(core.getPropertiesManager().getFontCon().getFamily()) ? 
                             core.getPropertiesManager().getFontCon() : new JLabel().getFont();
                     ret.add(new SecEntry(nextNode, conFont));

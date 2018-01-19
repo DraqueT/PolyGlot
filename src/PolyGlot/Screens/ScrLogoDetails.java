@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -433,7 +433,7 @@ public class ScrLogoDetails extends PFrame {
         }
 
         // interpret blank field as 0 to avoid error below
-        if (txtStrokes.getText().equals("")) {
+        if (txtStrokes.getText().length() == 0) {
             curNode.setStrokes(0);
             return;
         }
@@ -627,15 +627,15 @@ public class ScrLogoDetails extends PFrame {
         saveRads(lstLogos.getSelectedIndex());
         saveReadings(lstLogos.getSelectedIndex());
 
-        if (fltNotes.getText().trim().equals("")
-                && fltRadical.getText().trim().equals("")
-                && fltReading.getText().trim().equals("")
-                && fltRelatedWord.getText().trim().equals("")
-                && fltStrokes.getText().trim().equals("")) {
+        if (fltNotes.getText().trim().length() == 0
+                && fltRadical.getText().trim().length() == 0
+                && fltReading.getText().trim().length() == 0
+                && fltRelatedWord.getText().trim().length() == 0
+                && fltStrokes.getText().trim().length() == 0) {
             populateLogographs();
         }
 
-        int strokes = fltStrokes.getText().trim().equals("")
+        int strokes = fltStrokes.getText().trim().length() == 0
                 ? 0 : Integer.parseInt(fltStrokes.getText());
 
         populateLogographs(core.getLogoCollection().getFilteredList(
@@ -654,7 +654,7 @@ public class ScrLogoDetails extends PFrame {
      * @return true if valid, false otherwise
      */
     private boolean checkStrokeFilter() {
-        if (!fltStrokes.getText().equals("")) {
+        if (fltStrokes.getText().length() != 0) {
             try {
                 Integer.parseInt(fltStrokes.getText());
             } catch (NumberFormatException e) {

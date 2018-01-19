@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -89,9 +89,9 @@ public class TypeCollection extends DictionaryCollection {
                 procVal = "<ERROR>";
             }
             
-            if (type.isDefMandatory() && word.getDefinition().equals("")) {
+            if (type.isDefMandatory() && word.getDefinition().length() == 0) {
                 ret = type.getValue() + " requires a definition.";
-            } else if (type.isProcMandatory() && procVal.equals("")) {
+            } else if (type.isProcMandatory() && procVal.length() == 0) {
                 ret = type.getValue() + " requires a pronunciation.";
             }
         }
@@ -132,7 +132,7 @@ public class TypeCollection extends DictionaryCollection {
     public TypeNode findTypeByName(String _name) {
         TypeNode ret = null;
 
-        if (!_name.equals("")) {
+        if (_name.length() != 0) {
             Iterator<Entry<Integer, TypeNode>> it = nodeMap.entrySet().iterator();
             Entry<Integer, TypeNode> curEntry;
 

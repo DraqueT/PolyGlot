@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 - 2017, draque.thompson
+ * Copyright (c) 2016 - 2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -33,7 +33,6 @@ import PolyGlot.Nodes.WordProperty;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;

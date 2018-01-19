@@ -1,5 +1,5 @@
     /*
- * Copyright (c) 2017, DThompson
+ * Copyright (c) 2017-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -79,7 +79,7 @@ public class PLanguageStats {
                 }
             }
 
-            if (alphabet.equals("")) {
+            if (alphabet.length() == 0) {
                 alphabet = allChars;
             }
 

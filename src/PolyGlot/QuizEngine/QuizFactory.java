@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque.thompson
+ * Copyright (c) 2016-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -176,7 +176,7 @@ public class QuizFactory {
                             WordProperty wordProp = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
                             WordPropValueNode valueNode = wordProp.getValueById(curEntry.getValue());
                             
-                            if (!choiceNode.getValue().equals("")) {
+                            if (choiceNode.getValue().length() != 0) {
                                 choiceNode.setValue(choiceNode.getValue() + ", ");
                             }
                             
@@ -195,7 +195,7 @@ public class QuizFactory {
                         WordProperty curProp = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
                         WordPropValueNode curVal = curProp.getValueById(curEntry.getValue());
                         
-                        if (!valAnswer.getValue().equals("")) {
+                        if (valAnswer.getValue().length() != 0) {
                             valAnswer.setValue(valAnswer.getValue() + ", ");
                         }
                         
@@ -204,7 +204,7 @@ public class QuizFactory {
                     valAnswer.setId(0);
                     
                     // handle case of words with no class
-                    if (valAnswer.getValue().equals("")) {
+                    if (valAnswer.getValue().length() == 0) {
                         valAnswer.setValue("No Class");
                     }
                     

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -86,9 +86,9 @@ public abstract class DictNode implements Comparable<DictNode> {
         } else {
             if (comp.equals(me)) {
                 ret = EQUAL;
-            } else if (comp.equals("")) {
+            } else if (comp.length() == 0) {
                 ret = AFTER;
-            } else if (me.equals("")) {
+            } else if (me.length() == 0) {
                 ret = BEFORE;
             } else {
                 if (alphaOrder.isEmpty()) {
@@ -157,6 +157,6 @@ public abstract class DictNode implements Comparable<DictNode> {
 
     @Override
     public String toString() {
-        return value.equals("") ? " " : value;
+        return value.length() == 0 ? " " : value;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -527,7 +527,7 @@ public class CustHandlerFactory {
                     romanizationMgr.addPronunciation(romBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordGenderXID)) {
                     // only create property if necessary.
-                    if (!tmpString.equals("")) {
+                    if (tmpString.length() != 0) {
                         // this uses a slow, heuristic method because it's a one time process
                         // that is replacing the existing, inexact method with an ID based one
                         WordProperty writeProp = null;
@@ -600,7 +600,7 @@ public class CustHandlerFactory {
                     // special position granted to plurals... fixes awful ID collision error
 
                     // skip insertion of empty
-                    if (!declensionMgr.getBuffer().getValue().trim().equals("")) {
+                    if (declensionMgr.getBuffer().getValue().trim().length() != 0) {
                         declensionMgr.getBuffer().setCombinedDimId("," + wId + "," + PGTUtil.wordPlurXID + ",");
                         declensionMgr.addDeclensionToWord(wId, Integer.MAX_VALUE, declensionMgr.getBuffer());
                     }

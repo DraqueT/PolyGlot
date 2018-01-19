@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2017, draque
+ * Copyright (c) 2015-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -184,7 +184,7 @@ public class PTextField extends JTextField {
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        if (getSuperText().equals("")) {
+                        if (getSuperText().length() == 0) {
                             setText(defText);
                             setForeground(Color.lightGray);
                         }
@@ -225,7 +225,7 @@ public class PTextField extends JTextField {
     public static void handleCharacterReplacement(DictCore core, KeyEvent e, JTextComponent target) {
         Character c = e.getKeyChar();
         String repString = core.getPropertiesManager().getCharacterReplacement(c.toString());
-        if (!repString.equals("")) {
+        if (repString.length() != 0) {
             try {
                 e.consume();
                 ClipboardHandler cb = new ClipboardHandler();
@@ -328,7 +328,7 @@ public class PTextField extends JTextField {
     public final void setText(String t) {
         curSetText = true;
         try {
-            if (t.equals("") && !this.hasFocus()) {
+            if (t.length() == 0 && !this.hasFocus()) {
                 super.setText(defText);
             } else {
                 super.setText(t);

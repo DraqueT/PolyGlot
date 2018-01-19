@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -273,7 +273,7 @@ public class PronunciationMgr {
                     String leadingChars = matcher.group(1);
 
                     // if a user has entered an empty pattern... just continue.
-                    if (leadingChars.equals("")) {
+                    if (leadingChars.length() == 0) {
                         continue;
                     }
                     List<PronunciationNode> temp

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017, draque.thompson
+ * Copyright (c) 2016-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -113,7 +113,7 @@ public class QuizQuestion extends DictNode {
     public String getQuestionValue() throws Exception {
         String ret;
         
-        if (!value.equals("")) {
+        if (value.length() != 0) {
             ret = value;
         } else {
             if (source instanceof ConWord) {
@@ -138,7 +138,7 @@ public class QuizQuestion extends DictNode {
                         break;
                     case Classes:
                         for (Entry<Integer, Integer> curEntry : ansWord.getClassValues()) {
-                            if (!qEnd.equals("")) {
+                            if (qEnd.length() != 0) {
                                 qEnd += "/";
                             }
                             

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2017, draque
+ * Copyright (c) 2015-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -784,7 +784,7 @@ public class ScrGrammarGuide extends PFrame {
                 String repString = core.getPropertiesManager().getCharacterReplacement(c.toString());
                 
                 // only run replacement logic if currently set to Conlang font
-                if (!repString.equals("") 
+                if (repString.length() != 0 
                         && cmbFonts.getSelectedItem().equals(core.getPropertiesManager().getFontCon().getName())) {
                     try {
                         e.consume();
@@ -1133,7 +1133,7 @@ public class ScrGrammarGuide extends PFrame {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
         GrammarChapNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
 
-        if (((PTextField) txtSearch).isDefaultText() || txtSearch.getText().equals("")) {
+        if (((PTextField) txtSearch).isDefaultText() || txtSearch.getText().length() == 0) {
             populateSections();
             return;
         }

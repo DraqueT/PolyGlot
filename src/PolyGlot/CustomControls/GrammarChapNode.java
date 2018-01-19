@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque
+ * Copyright (c) 2015-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -21,7 +21,6 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.ManagersCollections.GrammarManager;
 import java.util.Enumeration;
-import java.util.Vector;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
@@ -29,6 +28,8 @@ import javax.swing.tree.MutableTreeNode;
  * This node represents a chapter within the grammar recording section of
  * PolyGlot
  *
+ * Uses obsolete Vector class due to how the underlying class API is written...
+ * 
  * @author draque
  */
 @SuppressWarnings( "deprecation" )
@@ -76,12 +77,13 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
         super.remove(node);
     }
     
+    @SuppressWarnings("UseOfObsoleteCollectionType")
     private Enumeration internalChildren(String filter) {
         Enumeration ret;
-        if (filter.equals("") || children == null) {
+        if (filter.length() == 0 || children == null) {
             ret = super.children();
         } else if (children.elementAt(0) instanceof GrammarSectionNode) {
-            Vector<GrammarSectionNode> v = new Vector<>();
+            java.util.Vector<GrammarSectionNode> v = new java.util.Vector<>();
 
             for (Object curObject : children.toArray()) {
                 GrammarSectionNode curNode = (GrammarSectionNode)curObject;
@@ -93,7 +95,7 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
 
             ret = v.elements();
         } else if (children.elementAt(0) instanceof GrammarChapNode) {
-            Vector<GrammarChapNode> v = new Vector<>();
+            java.util.Vector<GrammarChapNode> v = new java.util.Vector<>();
             
             for (GrammarChapNode curNode : (GrammarChapNode[]) children.toArray()) {
                 if (curNode.getName().toLowerCase().contains(filter.toLowerCase())) {

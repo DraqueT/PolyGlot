@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, draque.thompson
+ * Copyright (c) 2017-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -344,12 +344,12 @@ ToolTipUI t;
      * @return true if file saved, false otherwise
      */
     public boolean saveFile() {
-        if (curFileName.equals("")) {
+        if (curFileName.length() == 0) {
             saveFileAs();
         }
 
         // if it still is blank, the user has hit cancel on the save as dialog
-        if (curFileName.equals("")) {
+        if (curFileName.length() == 0) {
             return false;
         }
 
@@ -555,13 +555,13 @@ ToolTipUI t;
     public void genTitle() {
         String title = "PolyGlot";
 
-        if (curWindow != null && !curWindow.getTitle().equals("")) {
+        if (curWindow != null && curWindow.getTitle().length() != 0) {
             title += "-" + curWindow.getTitle();
             String langName = core.getPropertiesManager().getLangName();
 
-            if (!langName.equals("")) {
+            if (langName.length() != 0) {
                 title += " : " + langName;
-            } else if (!curFileName.equals("")) {
+            } else if (curFileName.length() != 0) {
                 title += " : " + curFileName;
             }
         }
@@ -714,7 +714,7 @@ ToolTipUI t;
                 java.awt.Desktop.getDesktop().browse(uri);
             } else if (OS.startsWith("Mac")) {
                 String relLocation;
-                if (overridePath.equals("")) {
+                if (overridePath.length() == 0) {
                     relLocation = new File(".").getAbsolutePath();
                     relLocation = relLocation.substring(0, relLocation.length() - 1);
                     relLocation = "file://" + relLocation + "readme.html";
@@ -1414,7 +1414,7 @@ ToolTipUI t;
                             + "(JavaFX not included in some builds of Java 8 for Linux).\n";
                 }
 
-                if (!startProblems.equals("")) {
+                if (startProblems.length() != 0) {
                     InfoBox.error("Unable to start", startProblems, s);
                     if (s != null) {
                         s.dispose();

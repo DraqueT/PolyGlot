@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque.thompson
+ * Copyright (c) 2016-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -20,11 +20,10 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.Nodes.DictNode;
-import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Obsolete collection used because that's what underlying class API is built on...
  * @author draque.thompson
  */
 public class PTableModel extends DefaultTableModel{
@@ -33,8 +32,9 @@ public class PTableModel extends DefaultTableModel{
     }
     
     @Override
+    @SuppressWarnings("UseOfObsoleteCollectionType")
     public void setValueAt(Object aValue, int row, int column) {
-        Vector rowVector = (Vector)dataVector.elementAt(row);
+        java.util.Vector rowVector = (java.util.Vector)dataVector.elementAt(row);
         DictNode node = (DictNode)rowVector.get(column);
         node.setValue(aValue.toString());
         fireTableCellUpdated(row, column);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -30,7 +30,6 @@ import PolyGlot.PGTUtil;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.RankedObject;
 import PolyGlot.WebInterface;
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -118,7 +117,7 @@ public class ConWordCollection extends DictionaryCollection {
     public ConWord testWordLegality(ConWord word) {
         ConWord ret = new ConWord();
 
-        if (word.getValue().equals("")) {
+        if (word.getValue().length() == 0) {
             ret.setValue(core.conLabel() + " word value cannot be blank.");
         }
 
@@ -126,31 +125,31 @@ public class ConWordCollection extends DictionaryCollection {
             ret.typeError = "Types set to mandatory.";
         }
 
-        if (word.getLocalWord().equals("") && core.getPropertiesManager().isLocalMandatory()) {
+        if (word.getLocalWord().length() == 0 && core.getPropertiesManager().isLocalMandatory()) {
             ret.setLocalWord(core.localLabel() + " word set to mandatory.");
         }
 
         if (core.getPropertiesManager().isWordUniqueness() && core.getWordCollection().containsWord(word.getValue())) {
-            ret.setValue(ret.getValue() + (ret.getValue().equals("") ? "" : "\n")
+            ret.setValue(ret.getValue() + (ret.getValue().length() == 0 ? "" : "\n")
                     + core.conLabel() + " words set to enforced unique: this conword exists elsewhere.");
         }
 
-        if (core.getPropertiesManager().isLocalUniqueness() && !word.getLocalWord().equals("")
+        if (core.getPropertiesManager().isLocalUniqueness() && word.getLocalWord().length() != 0
                 && core.getWordCollection().containsLocalMultiples(word.getLocalWord())) {
-            ret.setLocalWord(ret.getLocalWord() + (ret.getLocalWord().equals("") ? "" : "\n")
+            ret.setLocalWord(ret.getLocalWord() + (ret.getLocalWord().length() == 0 ? "" : "\n")
                     + core.localLabel() + " words set to enforced unique: this local exists elsewhere.");
         }
 
         TypeNode wordType = core.getTypes().getNodeById(word.getWordTypeId());
 
-        ret.setDefinition(ret.getDefinition() + (ret.getDefinition().equals("") ? "" : "\n")
+        ret.setDefinition(ret.getDefinition() + (ret.getDefinition().length() == 0 ? "" : "\n")
                 + core.getDeclensionManager().declensionRequirementsMet(word, wordType));
 
         if (wordType != null) {
             String typeRegex = wordType.getPattern();
 
-            if (!typeRegex.equals("") && !word.getValue().matches(typeRegex)) {
-                ret.setDefinition(ret.getDefinition() + (ret.getDefinition().equals("") ? "" : "\n")
+            if (typeRegex.length() != 0 && !word.getValue().matches(typeRegex)) {
+                ret.setDefinition(ret.getDefinition() + (ret.getDefinition().length() == 0 ? "" : "\n")
                         + "Word does not match enforced pattern for type: " + word.getWordTypeDisplay() + ".");
                 ret.setProcOverride(true);
             }
@@ -352,7 +351,7 @@ public class ConWordCollection extends DictionaryCollection {
         Iterator<Entry<Integer, ConWord>> allWords = nodeMap.entrySet().iterator();
 
         // on empty, return empty list
-        if (_match.equals("")) {
+        if (_match.length() == 0) {
             return localEquals;
         }
 

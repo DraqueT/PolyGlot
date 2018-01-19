@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -138,15 +138,15 @@ public class LogoCollection extends DictionaryCollection {
         while (it.hasNext()) {
             LogoNode curNode = it.next();
 
-            if (!reading.trim().equals("") && !curNode.containsReading(reading, ignoreCase)) {
+            if (reading.trim().length() != 0 && !curNode.containsReading(reading, ignoreCase)) {
                 continue;
-            } else if (!radical.trim().equals("") && !curNode.containsRadicalString(radical, ignoreCase)) {
+            } else if (radical.trim().length() != 0 && !curNode.containsRadicalString(radical, ignoreCase)) {
                 continue;
             } else if (strokes != 0 && strokes != curNode.getStrokes()) {
                 continue;
-            } else if (!relWord.trim().equals("") && !logoRelatedToWord(curNode, relWord)) {
+            } else if (relWord.trim().length() != 0 && !logoRelatedToWord(curNode, relWord)) {
                 continue;
-            } else if (!notes.trim().equals("") && 
+            } else if (notes.trim().length() != 0 && 
                     ((ignoreCase && !curNode.getNotes().toLowerCase().contains(notes.toLowerCase())) 
                             || !curNode.getNotes().contains(notes))) {
                 continue;                
@@ -323,7 +323,7 @@ public class LogoCollection extends DictionaryCollection {
             }
             
             // only add if there is one more more relation
-            if (!wordIds.equals("")) {
+            if (wordIds.length() != 0) {
                 Element node = doc.createElement(PGTUtil.logoWordRelationXID);
                 // node is encoded with the logograph ID first, followed by all related words IDs
                 node.appendChild(doc.createTextNode(logoId + wordIds));
@@ -376,7 +376,7 @@ public class LogoCollection extends DictionaryCollection {
             }
         }
         
-        if (!loadLog.equals("")) {
+        if (loadLog.length() != 0) {
             throw new Exception("\nLogograph load errors:");
         }
     }
@@ -397,7 +397,7 @@ public class LogoCollection extends DictionaryCollection {
             }
         }
         
-        if (!loadLog.equals("")) {
+        if (loadLog.length() != 0) {
             throw new Exception("Problem loading radicals:\n" + loadLog);
         }
     }

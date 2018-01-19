@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -73,7 +73,7 @@ public class ExcelExport {
         
         String classes = "";
         for (Entry<Integer, Integer> curEntry : conWord.getClassValues()) {
-            if (!classes.equals("")) {
+            if (classes.length() != 0) {
                 classes += ", ";
             }
             try {

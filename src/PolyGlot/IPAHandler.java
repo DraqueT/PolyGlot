@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque
+ * Copyright (c) 2016-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -499,7 +499,7 @@ public class IPAHandler {
      * @param c
      */
     private void playChar(String c) throws Exception {
-        if (c.equals("")) {
+        if (c.length() == 0) {
             return;
         }
 

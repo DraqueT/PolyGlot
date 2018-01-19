@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, draque.thompson
+ * Copyright (c) 2017-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -237,7 +237,7 @@ public class ScrPhonology extends PFrame {
     private boolean checkRepRepeats(String value) {
         boolean ret = false;
 
-        if (!value.equals("")) {
+        if (value.length() != 0) {
             for (int i = 0; i < tblRep.getRowCount(); i++) {
                 if (value.equals((String) tblRep.getModel().getValueAt(i, 0))) {
                     ret = true;
@@ -543,7 +543,7 @@ public class ScrPhonology extends PFrame {
             String repChar = tblRep.getValueAt(i, 0).toString();
             String value = tblRep.getValueAt(i, 1).toString();
 
-            if (repChar.equals("")) {
+            if (repChar.length() == 0) {
                 continue;
             }
 
