@@ -418,7 +418,7 @@ public class IPAHandler {
         String ret = "*";
 
         // returns blank if in a non-viable position
-        if (x < 45 || x > 631 || y < 45 || y > 365 || (x > 313 && x < 332)
+        if (x < 15 || x > 631 || y < 45 || y > 365 || (x > 313 && x < 332)
                 || (x > 332 && y > 301)) {
             ret = "";
         } else {
