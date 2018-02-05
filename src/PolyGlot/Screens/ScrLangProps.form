@@ -178,7 +178,7 @@
                     <Property name="columns" type="int" value="20"/>
                     <Property name="lineWrap" type="boolean" value="true"/>
                     <Property name="rows" type="int" value="2"/>
-                    <Property name="text" type="java.lang.String" value="List all characters used in your conlang here in their alphabetical order without spaces or commas. Leave blank for system default."/>
+                    <Property name="text" type="java.lang.String" value="List all characters used in your conlang in alphabetical order. Comma delimt if using character groups. (blank = default alpha)"/>
                     <Property name="wrapStyleWord" type="boolean" value="true"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
@@ -437,7 +437,7 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="txtLocalLanguage" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane4" pref="72" max="32767" attributes="0"/>
+                  <Component id="jScrollPane4" pref="77" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

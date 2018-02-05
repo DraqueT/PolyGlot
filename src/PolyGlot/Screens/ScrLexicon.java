@@ -1637,6 +1637,7 @@ public final class ScrLexicon extends PFrame {
         } catch (Exception e) {
             InfoBox.error("Creation Error", "Unable to create word: "
                     + e.getLocalizedMessage(), core.getRootWindow());
+            e.printStackTrace();
         }
         curPopulating = false;
 

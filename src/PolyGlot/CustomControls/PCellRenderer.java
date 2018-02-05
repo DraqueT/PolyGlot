@@ -104,7 +104,7 @@ public class PCellRenderer implements TableCellRenderer {
             public void keyReleased(KeyEvent e) {
                 // do nothing
             }
-        });System.out.println("zug");
+        });
         
         return editor;
     }

@@ -207,9 +207,7 @@ public class SoundRecorder {
             soundThread.interrupt();
         }
 
-        soundThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
+        soundThread = new Thread(() -> {
                 int bytesRecorded = 0;
                 float BPS = (format.getSampleRate()
                         * format.getSampleSizeInBits()) / 8;
@@ -235,8 +233,6 @@ public class SoundRecorder {
                             + e.getLocalizedMessage(), parentWindow);
                 }
                 line.close();
-
-            }
         });
 
         recordThread = soundThread.toString();
@@ -304,40 +300,25 @@ public class SoundRecorder {
         killPlay = false;
         playPauseBut.setIcon(playDown);
 
-        soundThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try (SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info)) {
-                    sourceLine.open(format);
-                    sourceLine.start();
-
-                    int bufferSize = 1;
-                    byte[] buffer = new byte[bufferSize];
-                    int totalCycles = ais.available() / bufferSize;
-
-                    int count;
-                    int cycles = 0;
-                    while ((count
-                            = ais.read(buffer, 0, buffer.length)) != -1) {
-                        if (count > 0) {
-                            while (playing == false) { // if paused, wait until unpaused
-                                // suppression for this warning is nonfunctional. Very annoying.
-                                Thread.sleep(timeToDie);
-                                playPauseBut.setIcon(playUp);
-
-                                if (killPlay) { // immediately ends playing process
-                                    killPlay = false;
-                                    playing = false;
-                                    sourceLine.drain();
-                                    sourceLine.close();
-                                    ais.close();
-                                    input.close();
-                                    return;
-                                }
-                            }
-
-                            playPauseBut.setIcon(playDown);
-
+        soundThread = new Thread(() -> {
+            try (SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info)) {
+                sourceLine.open(format);
+                sourceLine.start();
+                
+                int bufferSize = 1;
+                byte[] buffer = new byte[bufferSize];
+                int totalCycles = ais.available() / bufferSize;
+                
+                int count;
+                int cycles = 0;
+                while ((count
+                        = ais.read(buffer, 0, buffer.length)) != -1) {
+                    if (count > 0) {
+                        while (playing == false) { // if paused, wait until unpaused
+                            // suppression for this warning is nonfunctional. Very annoying.
+                            Thread.sleep(timeToDie);
+                            playPauseBut.setIcon(playUp);
+                            
                             if (killPlay) { // immediately ends playing process
                                 killPlay = false;
                                 playing = false;
@@ -345,42 +326,54 @@ public class SoundRecorder {
                                 sourceLine.close();
                                 ais.close();
                                 input.close();
-                                playPauseBut.setIcon(playUp);
                                 return;
                             }
-
-                            sourceLine.write(buffer, 0, count);
-
-                            if (slider != null) {
-                                double percentPlayed = 1.0 - (((double) (totalCycles - cycles)) / (double) totalCycles);
-                                slider.setValue((int) (percentPlayed * slider.getMaximum()));
-                            }
-
-                            if (timer != null) {
-                                timer.setText(getTimerValue(bufferSize, cycles));
-                            }
                         }
-
-                        cycles++;
+                        
+                        playPauseBut.setIcon(playDown);
+                        
+                        if (killPlay) { // immediately ends playing process
+                            killPlay = false;
+                            playing = false;
+                            sourceLine.drain();
+                            sourceLine.close();
+                            ais.close();
+                            input.close();
+                            playPauseBut.setIcon(playUp);
+                            return;
+                        }
+                        
+                        sourceLine.write(buffer, 0, count);
+                        
+                        if (slider != null) {
+                            double percentPlayed = 1.0 - (((double) (totalCycles - cycles)) / (double) totalCycles);
+                            slider.setValue((int) (percentPlayed * slider.getMaximum()));
+                        }
+                        
+                        if (timer != null) {
+                            timer.setText(getTimerValue(bufferSize, cycles));
+                        }
                     }
-
-                    if (slider != null) {
-                        slider.setValue(slider.getMaximum());
-                    }
-
-                    playing = false;
-                    sourceLine.drain();
-                    sourceLine.close();
-                    ais.close();
-                    input.close();
-                } catch (LineUnavailableException | IOException | InterruptedException e) {
-                    //e.printStackTrace();
-                    InfoBox.error("Play Error", "Unable to play audio: "
-                            + e.getLocalizedMessage(), parentWindow);
+                    
+                    cycles++;
                 }
-
-                playPauseBut.setIcon(playUp);
+                
+                if (slider != null) {
+                    slider.setValue(slider.getMaximum());
+                }
+                
+                playing = false;
+                sourceLine.drain();
+                sourceLine.close();
+                ais.close();
+                input.close();
+            } catch (LineUnavailableException | IOException | InterruptedException e) {
+                //e.printStackTrace();
+                InfoBox.error("Play Error", "Unable to play audio: "
+                        + e.getLocalizedMessage(), parentWindow);
             }
+            
+            playPauseBut.setIcon(playUp);
         });
 
         playThread = soundThread.toString();

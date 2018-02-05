@@ -27,16 +27,9 @@ import PolyGlot.CustomControls.PAlphaMap;
  * @author draque
  */
 public abstract class DictNode implements Comparable<DictNode> {
-
-    // this represents the primary string value of the node, whether it is
-    // a word, a declension type, etc.
     protected String value = "";
-
-    protected Integer id = 0;
-
-    // used for alphabetic ordering of nodes
-    //private Map<Character, Integer> alphaOrder = new HashMap<>();
-    private PAlphaMap<String, Integer> alphaOrder = new PAlphaMap<>();
+    protected Integer id = 0;    
+    private PAlphaMap<String, Integer> alphaOrder = new PAlphaMap<>(); // used for alphabetic ordering of nodes
 
     /**
      * Sets a node equal to the argument node
@@ -84,70 +77,65 @@ public abstract class DictNode implements Comparable<DictNode> {
         if (this.alphaOrder.isEmpty()) {
             ret = me.compareTo(comp);
         } else {
-            if (comp.equals(me)) {
+            if (comp.equals(me) || (comp.isEmpty() && me.isEmpty())) {
                 ret = EQUAL;
-            } else if (comp.length() == 0) {
+            } else if (comp.isEmpty()) {
                 ret = AFTER;
-            } else if (me.length() == 0) {
+            } else if (me.isEmpty()) {
                 ret = BEFORE;
             } else {
-                if (alphaOrder.isEmpty()) {
-                    // if no settings,or missing settings for given character, comparison always goes before
+                // compare values based on largest front facing clusters found in alphabet order
+                int longest = alphaOrder.getLongestEntry();
+                int meLen = me.length();
+                int compLen = comp.length();
+                int meAlpha = -1;
+                int compAlpha = -1;
+                int preLen = 0;
+
+                for (int i = meLen > longest ? longest : meLen; i >= 0; i--) {
+                    String mePrefix = me.substring(0, i);
+
+                    if (alphaOrder.containsKey(mePrefix)) {
+                        meAlpha = (int) alphaOrder.get(mePrefix);
+                        break;
+                    }
+                }
+                
+                for (int i = compLen > longest ? longest : compLen; i >= 0; i--) {
+                    String compPrefix = comp.substring(0, i);
+
+                    if (alphaOrder.containsKey(compPrefix)) {
+                        compAlpha = (int) alphaOrder.get(compPrefix);
+                        preLen = compPrefix.length(); // record length for substring truncation if current patterns are equal
+                        break;
+                    }
+                }
+
+                if (meAlpha == -1 && compAlpha == -1) {
+                    // neither value is accounted for: equal
+                    ret = EQUAL;
+                } else if (meAlpha == -1) {
+                    // no prefixed value for own value: default to after
                     ret = BEFORE;
+                } else if (compAlpha == -1) {
+                    // no prefixed pattern found for comp value: default placing comparison after
+                    ret = AFTER;
+                } else if (compAlpha > meAlpha) {
+                    ret = BEFORE;
+                } else if (compAlpha < meAlpha) {
+                    ret = AFTER;
                 } else {
-                    // compare values based on largest front facing clusters found in alphabet order
-                    int longest = alphaOrder.getLongestEntry();
-                    int meLen = me.length();
-                    int compLen = comp.length();
-                    int meAlpha = -1;
-                    int compAlpha = -1;
+                    // two patterns are the same. Truncate and check subpatterns
+                    ConWord compChild = new ConWord();
+                    ConWord thisChild = new ConWord();
 
-                    for (int i = meLen > longest ? longest : meLen; i >= 0; i--) {
-                        String mePrefix = me.substring(0, i);
+                    compChild.setAlphaOrder(alphaOrder);
+                    thisChild.setAlphaOrder(alphaOrder);
 
-                        if (alphaOrder.containsKey(mePrefix)) {
-                            meAlpha = (int) alphaOrder.get(mePrefix);
-                            break;
-                        }
-                    }
+                    compChild.setValue(_compare.getValue().substring(preLen));
+                    thisChild.setValue(this.getValue().substring(preLen));
 
-                    if (meAlpha == -1) {
-                        // no prefixed pattern found for this value: default placing comparison before
-                        ret = BEFORE;
-                    } else {
-                        int preLen = 0;
-
-                        for (int i = compLen > longest ? longest : compLen; i >= 0; i--) {
-                            String compPrefix = comp.substring(0, i);
-
-                            if (alphaOrder.containsKey(compPrefix)) {
-                                compAlpha = (int) alphaOrder.get(compPrefix);
-                                preLen = compPrefix.length(); // record length for substring truncation if current patterns are equal
-                                break;
-                            }
-                        }
-
-                        if (compAlpha == -1) {
-                            // no prefixed pattern found for comp value: default placing comparison after
-                            ret = AFTER;
-                        } else if (compAlpha > meAlpha) {
-                            ret = BEFORE;
-                        } else if (compAlpha < meAlpha) {
-                            ret = AFTER;
-                        } else {
-                            // two patterns are the same. Truncate and check subpatterns
-                            ConWord compChild = new ConWord();
-                            ConWord thisChild = new ConWord();
-
-                            compChild.setAlphaOrder(alphaOrder);
-                            thisChild.setAlphaOrder(alphaOrder);
-
-                            compChild.setValue(_compare.getValue().substring(preLen));
-                            thisChild.setValue(this.getValue().substring(preLen));
-
-                            ret = thisChild.compareTo(compChild);
-                        }
-                    }
+                    ret = thisChild.compareTo(compChild);
                 }
             }
         }

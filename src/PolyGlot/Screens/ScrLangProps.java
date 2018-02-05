@@ -283,7 +283,7 @@ public class ScrLangProps extends PFrame {
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(2);
-        jTextArea1.setText("List all characters used in your conlang here in their alphabetical order without spaces or commas. Leave blank for system default.");
+        jTextArea1.setText("List all characters used in your conlang in alphabetical order. Comma delimt if using character groups. (blank = default alpha)");
         jTextArea1.setWrapStyleWord(true);
         jTextArea1.setEnabled(false);
         jScrollPane1.setViewportView(jTextArea1);
@@ -485,7 +485,7 @@ public class ScrLangProps extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtLocalLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
