@@ -243,18 +243,15 @@ ToolTipUI t;
             JMenuItem lastFile = new JMenuItem();
             lastFile.setText(fileName);
             lastFile.setToolTipText(curFile);
-            lastFile.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    // only open if save/cancel test is passed
-                    if (!saveOrCancelTest()) {
-                        return;
-                    }
-
-                    setFile(curFile);
-                    pushRecentFile(curFile);
-                    populateRecentOpened();
+            lastFile.addActionListener((java.awt.event.ActionEvent evt) -> {
+                // only open if save/cancel test is passed
+                if (!saveOrCancelTest()) {
+                    return;
                 }
+                
+                setFile(curFile);
+                pushRecentFile(curFile);
+                populateRecentOpened();
             });
             mnuRecents.add(lastFile);
         }

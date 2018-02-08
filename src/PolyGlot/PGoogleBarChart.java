@@ -108,9 +108,11 @@ public class PGoogleBarChart extends PGoogleChart {
         for (Entry<String, List<Double>> e : chartVals.entrySet()) {
             String dataSet = "";
             
-            for (double datum : e.getValue()) {
-                dataSet += Integer.toString((int)datum) + ",";
-            }
+            dataSet = e.getValue().stream().map((datum) -> 
+            {
+                return Integer.toString(datum.intValue()) + ",";        
+            }).reduce(dataSet, String::concat);
+            
             dataSet = dataSet.substring(0, dataSet.length()-1); // remove trailing comma...
             
             ret += "          ['" + e.getKey() + "', createCustomHTMLContent('" + e.getKey() + "'," + dataSet + ")," + dataSet + "],\n";

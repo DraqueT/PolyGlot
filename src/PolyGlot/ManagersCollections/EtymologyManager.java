@@ -108,14 +108,14 @@ public class EtymologyManager {
         List<Object> ret = new ArrayList<>();
         List<ConWord> parents = new ArrayList<>();
         
-        for (Integer id : parentToChild.keySet()) {
+        parentToChild.keySet().forEach((id) -> {
             try {
                 ConWord curParent = core.getWordCollection().getNodeById(id);
                 parents.add(curParent);
             } catch (ConWordCollection.WordNotExistsException ex) {
                 // do nothing. Missing values cleared from list on save/load
             }
-        }
+        });
         
         ret.addAll(parents);
         // TODO: add this back again when there's a good way to display multiple fonts in a single combobox
@@ -148,8 +148,8 @@ public class EtymologyManager {
      */
     public List<EtyExternalParent> getWordExternalParents(Integer childId) {
         return childToExtParent.containsKey(childId) ? 
-                new ArrayList<EtyExternalParent>(childToExtParent.get(childId).values()) : 
-                new ArrayList<EtyExternalParent>();
+                new ArrayList<>(childToExtParent.get(childId).values()) : 
+                new ArrayList<>();
     }
     
     /**
@@ -159,7 +159,7 @@ public class EtymologyManager {
      */
     public List<Integer> getWordParentsIds(Integer childId) {
         return childToParent.containsKey(childId) ? childToParent.get(childId) 
-                : new ArrayList<Integer>();
+                : new ArrayList<>();
     }
     
     /**
@@ -309,31 +309,31 @@ public class EtymologyManager {
         }
         
         // adds a node for each word with at least one external parent
-        for (Entry<Integer, Map<String, EtyExternalParent>> curEntry 
-                : childToExtParent.entrySet()) {
+        childToExtParent.entrySet().stream().map((curEntry) -> {
             Element childContainer = doc.createElement(PGTUtil.EtyChildExternalsXID);
             childContainer.appendChild(doc.createTextNode(curEntry.getKey().toString()));
-            
             // creates a node for each external parent within a word
-            for (EtyExternalParent curParent : curEntry.getValue().values()) {
+            curEntry.getValue().values().forEach((parent) -> {
                 Element extParentNode = doc.createElement(PGTUtil.EtyExternalWordNodeXID);
                 // record external word value
                 Element curElement = doc.createElement(PGTUtil.EtyExternalWordValueXID);
-                curElement.appendChild(doc.createTextNode(curParent.getExternalWord()));
+                curElement.appendChild(doc.createTextNode(parent.getExternalWord()));
                 extParentNode.appendChild(curElement);
                 // record external word origin
                 curElement = doc.createElement(PGTUtil.EtyExternalWordOriginXID);
-                curElement.appendChild(doc.createTextNode(curParent.getExternalLanguage()));
+                curElement.appendChild(doc.createTextNode(parent.getExternalLanguage()));
                 extParentNode.appendChild(curElement);
                 // record external word definition
                 curElement = doc.createElement(PGTUtil.EtyExternalWordDefinitionXID);
-                curElement.appendChild(doc.createTextNode(curParent.getDefinition()));
+                curElement.appendChild(doc.createTextNode(parent.getDefinition()));
                 extParentNode.appendChild(curElement);
                 
                 childContainer.appendChild(extParentNode);
-            }
+            });
+            return childContainer;
+        }).forEachOrdered((childContainer) -> {
             collection.appendChild(childContainer);
-        }
+        });
         
         rootElement.appendChild(collection);
     }

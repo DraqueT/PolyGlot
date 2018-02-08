@@ -141,13 +141,9 @@ public class PronunciationMgr {
     public void deletePronunciation(PronunciationNode remove) {
         List<PronunciationNode> newProcs = new ArrayList<>();
 
-        for (PronunciationNode curNode : pronunciations) {
-            if (curNode.equals(remove)) {
-                continue;
-            }
-
-            newProcs.add(curNode);
-        }
+        pronunciations.stream().filter((node) -> !(node.equals(remove))).forEachOrdered((node) -> {
+            newProcs.add(node);
+        });
 
         pronunciations = newProcs;
     }

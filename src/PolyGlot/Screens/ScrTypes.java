@@ -191,9 +191,9 @@ public class ScrTypes extends PFrame {
         try {
             DefaultListModel listModel = new DefaultListModel();
 
-            for (TypeNode typeIt : core.getTypes().getNodes()) {
+            core.getTypes().getNodes().forEach((typeIt) -> {
                 listModel.addElement(typeIt);
-            }
+            });
 
             lstTypes.setModel(listModel);
             lstTypes.setSelectedIndex(0);

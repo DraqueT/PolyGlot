@@ -173,13 +173,13 @@ public class ConWord extends DictNode {
         }
         this.setId(set.getId());
         List<Entry<Integer, Integer>> precLock = new ArrayList<>(set.getClassValues()); // avoid read/write collisions
-        for (Entry<Integer, Integer> curEntry : precLock) {
-            this.setClassValue(curEntry.getKey(), curEntry.getValue());
-        }
+        precLock.forEach((entry) -> {
+            this.setClassValue(entry.getKey(), entry.getValue());
+        });
         List<Entry<Integer, String>> textLock = new ArrayList<>(set.getClassTextValues()); // avoid read/write collisions
-        for (Entry<Integer, String> curEntry : textLock) {
-            this.setClassTextValue(curEntry.getKey(), curEntry.getValue());
-        }
+        textLock.forEach((entry) -> {
+            this.setClassTextValue(entry.getKey(), entry.getValue());
+        });
         this.setProcOverride(set.isProcOverride());
         this.setOverrideAutoDeclen(set.isOverrideAutoDeclen());
         this.setEtymNotes(set.getEtymNotes());

@@ -200,12 +200,7 @@ public class ScrDeclensions extends PDialog {
         s.setModal(true);
 
         // set up screen after it has been built (in setVisible)
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                s.setFormProps();
-            }
-        });
+        SwingUtilities.invokeLater(s::setFormProps);
         s.setCore(_core);
         s.setVisible(true);
         
@@ -241,22 +236,18 @@ public class ScrDeclensions extends PDialog {
         core.clearAllDeclensionsWord(word.getId());
         Set<Entry<String, JTextField>> saveSet = fieldMap.entrySet();
 
-        for (Entry<String, JTextField> e : saveSet) {
+        saveSet.stream().filter((entry) -> entry.getValue().getText().trim().length() != 0)
+        .forEach((entry) -> {
             DeclensionNode saveNode = new DeclensionNode(-1);
-            String curId = e.getKey();
-            JTextField curField = e.getValue();
+            String curId = entry.getKey();
 
-            if (curField.getText().trim().length() == 0) {
-                continue;
-            }
-
-            saveNode.setValue(curField.getText().trim());
+            saveNode.setValue(entry.getValue().getText().trim());
             saveNode.setCombinedDimId(curId);
             saveNode.setNotes(labelMap.get(curId));
 
             // declensions per word not saved via int id any longer
             core.getDeclensionManager().addDeclensionToWord(word.getId(), -1, saveNode);
-        }
+        });
 
         dispose();
     }

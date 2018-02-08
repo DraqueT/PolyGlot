@@ -36,7 +36,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JRootPane;
@@ -45,7 +44,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -116,13 +114,10 @@ public class ScrPhonology extends PFrame {
         populateProcs();
 
         // perform this action later, once the scroll object is properly updated
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                tblProcs.getSelectionModel().setSelectionInterval(curPosition + 1, curPosition + 1);
-                tblProcs.scrollRectToVisible(new Rectangle(tblProcs.getCellRect(curPosition + 1, 0, true)));
-                tblProcs.changeSelection(curPosition + 1, 0, false, false);
-            }
+        SwingUtilities.invokeLater(() -> {
+            tblProcs.getSelectionModel().setSelectionInterval(curPosition + 1, curPosition + 1);
+            tblProcs.scrollRectToVisible(new Rectangle(tblProcs.getCellRect(curPosition + 1, 0, true)));
+            tblProcs.changeSelection(curPosition + 1, 0, false, false);
         });
     }
 
@@ -136,13 +131,10 @@ public class ScrPhonology extends PFrame {
         populateRoms();
 
         // perform this action later, once the scroll object is properly updated
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                tblRom.getSelectionModel().setSelectionInterval(curPosition + 1, curPosition + 1);
-                tblRom.scrollRectToVisible(new Rectangle(tblRom.getCellRect(curPosition + 1, 0, true)));
-                tblRom.changeSelection(curPosition + 1, 0, false, false);
-            }
+        SwingUtilities.invokeLater(() -> {
+            tblRom.getSelectionModel().setSelectionInterval(curPosition + 1, curPosition + 1);
+            tblRom.scrollRectToVisible(new Rectangle(tblRom.getCellRect(curPosition + 1, 0, true)));
+            tblRom.changeSelection(curPosition + 1, 0, false, false);
         });
     }
 
@@ -175,9 +167,9 @@ public class ScrPhonology extends PFrame {
         // wipe current rows, repopulate from core
         setupProcTable();
 
-        for (PronunciationNode curNode : core.getPronunciationMgr().getPronunciations()) {
+        core.getPronunciationMgr().getPronunciations().forEach((curNode) -> {
             addProcWithValues(curNode.getValue(), curNode.getPronunciation());
-        }
+        });
         
         chkPhonRecurse.setSelected(core.getPronunciationMgr().isRecurse());
     }
@@ -189,9 +181,9 @@ public class ScrPhonology extends PFrame {
         // wipe current rows, repopulate from core
         setupRomTable();
 
-        for (PronunciationNode curNode : core.getRomManager().getPronunciations()) {
+        core.getRomManager().getPronunciations().forEach((curNode) -> {
             addRomWithValues(curNode.getValue(), curNode.getPronunciation());
-        }
+        });
         
         chkRomRecurse.setSelected(core.getRomManager().isRecurse());
     }
@@ -202,9 +194,9 @@ public class ScrPhonology extends PFrame {
     private void populateReps() {
         setupRepTable();
 
-        for (Entry<String, String> entry : core.getPropertiesManager().getAllCharReplacements()) {
+        core.getPropertiesManager().getAllCharReplacements().forEach((entry) -> {
             addRep(entry.getKey(), entry.getValue());
-        }
+        });
     }
 
     //private void addRep(Entry<String, String> entry) {
@@ -341,11 +333,8 @@ public class ScrPhonology extends PFrame {
         procTableModel.addColumn("Pronuncation");
         tblProcs.setModel(procTableModel); // TODO: find way to make tblProcs display RTL order when appropriate Maybe something on my custom cell editor
         
-        procTableModel.addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                saveProcGuide();
-            }
+        procTableModel.addTableModelListener((TableModelEvent e) -> {
+            saveProcGuide();
         });
 
         TableColumn column = tblProcs.getColumnModel().getColumn(0);
@@ -376,11 +365,8 @@ public class ScrPhonology extends PFrame {
         tableModel.addColumn("Replacement");
 
         tblRep.setModel(tableModel); // TODO: find way to make rom display RTL order when appropriate Maybe something on my custom cell editor
-        tableModel.addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                saveRepTable();
-            }
+        tableModel.addTableModelListener((TableModelEvent e) -> {
+            saveRepTable();
         });
 
         TableColumn column = tblRep.getColumnModel().getColumn(0);
@@ -407,14 +393,11 @@ public class ScrPhonology extends PFrame {
 
                 if (curPopulating) {
                 } else if (value.length() > 1) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            editChar.setIgnoreListenerSilenceing(false);
-                            editChar.setValue(value.substring(0, 1));
-                            editChar.setIgnoreListenerSilenceing(true);
-                            InfoBox.warning("Single Character Only", "Replacement characters can only be 1 character long.", core.getRootWindow());
-                        }
+                    SwingUtilities.invokeLater(() -> {
+                        editChar.setIgnoreListenerSilenceing(false);
+                        editChar.setValue(value.substring(0, 1));
+                        editChar.setIgnoreListenerSilenceing(true);
+                        InfoBox.warning("Single Character Only", "Replacement characters can only be 1 character long.", core.getRootWindow());
                     });
                 } else {
                     saveRepTable();
@@ -466,11 +449,8 @@ public class ScrPhonology extends PFrame {
         romTableModel.addColumn("Romanization");
         tblRom.setModel(romTableModel); // TODO: find way to make rom display RTL order when appropriate Maybe something on my custom cell editor
 
-        romTableModel.addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                saveRomGuide();
-            }
+        romTableModel.addTableModelListener((TableModelEvent e) -> {
+            saveRomGuide();
         });
 
         TableColumn column = tblRom.getColumnModel().getColumn(0);

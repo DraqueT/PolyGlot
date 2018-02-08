@@ -105,11 +105,10 @@ public final class ScrEtymRoots extends PDialog {
         gbc.fill = GridBagConstraints.BOTH;
         
         // Cycle through existing external parents and add them to the display
-        for (EtyExternalParent extPar : core.getEtymologyManager().getWordExternalParents(word.getId())) {
+        core.getEtymologyManager().getWordExternalParents(word.getId()).stream().map((extPar) -> {
             JPanel miniPanel = new JPanel();
             final PTextField p = new PTextField(core, true, "");
             PButton delButton = new PButton(core);
-
             p.setEditable(false);
             if (extPar.getExternalLanguage().isEmpty()) {
                 p.setText(extPar.getExternalWord());
@@ -125,43 +124,36 @@ public final class ScrEtymRoots extends PDialog {
                 toolTipString += " - " + extPar.getDefinition();
             }
             p.setToolTipText(toolTipString);
-
             delButton.setText("-");
             delButton.setToolTipText("Remove external arent from etymological lineage");
-            delButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    delExtParent((EtyExternalParent) p.getAssociatedObject());
-                }
+            delButton.addActionListener((ActionEvent e) -> {
+                delExtParent((EtyExternalParent) p.getAssociatedObject());
             });
-
             miniPanel.setMaximumSize(new Dimension(999, delButton.getPreferredSize().height));
             miniPanel.setMinimumSize(new Dimension(30, delButton.getPreferredSize().height));
             miniPanel.setPreferredSize(new Dimension(30, 0));
             miniPanel.setLayout(new BoxLayout(miniPanel, BoxLayout.X_AXIS));
-
             miniPanel.add(p, gbc);
             miniPanel.add(delButton, gbc);
+            return miniPanel;
+        }).forEachOrdered((miniPanel) -> {
             pnlParentsExt.add(miniPanel, gbc);
-        }
+        });
 
         // create and add button to add new external parents
         PButton addButton = new PButton(core);
         addButton.setText("+");
         addButton.setToolTipText("Add new etymological parent to lineage");
         final Window parentScreen = this;
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                PTextInputDialog dialog = new PTextInputDialog(parentScreen, core,
-                        "New External Parent", "Please enter details for the new external parent.");
-                dialog.addField("External Word", true, "This is the word in an external language which is the etymological root of your invented word.");
-                dialog.addField("Origin Language", true, "This is the language where the root originates.");
-                dialog.addField("Brief Definition", true, "This is a brief text description of the root's definition.");
-                dialog.setVisible(true);
-                addNewExtParent(dialog.getOrderedFields());
-                setupExternalParentsPanel();
-            }
+        addButton.addActionListener((ActionEvent e) -> {
+            PTextInputDialog dialog = new PTextInputDialog(parentScreen, core,
+                    "New External Parent", "Please enter details for the new external parent.");
+            dialog.addField("External Word", true, "This is the word in an external language which is the etymological root of your invented word.");
+            dialog.addField("Origin Language", true, "This is the language where the root originates.");
+            dialog.addField("Brief Definition", true, "This is a brief text description of the root's definition.");
+            dialog.setVisible(true);
+            addNewExtParent(dialog.getOrderedFields());
+            setupExternalParentsPanel();
         });
         JPanel vertExpand = new JPanel();
         vertExpand.setPreferredSize(new Dimension(9999,9999));
@@ -230,7 +222,7 @@ public final class ScrEtymRoots extends PDialog {
         gbc.fill = GridBagConstraints.BOTH;
 
         // populate all existing parents as noneditable text boxes with deletion buttons
-        for (Integer parentId : core.getEtymologyManager().getWordParentsIds(word.getId())) {
+        core.getEtymologyManager().getWordParentsIds(word.getId()).forEach((parentId) -> {
             try {
                 JPanel miniPanel = new JPanel();
                 final PTextField textField = new PTextField(core, false, "");
@@ -248,13 +240,10 @@ public final class ScrEtymRoots extends PDialog {
                 // button to remove parent value
                 delButton.setText("-");
                 delButton.setToolTipText("Delete this parent from your word.");
-                delButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        core.getEtymologyManager().delRelation(textField.getContentId(), word.getId());
-                        setupDrawPanel();
-                        setupParentsPanels();
-                    }
+                delButton.addActionListener((ActionEvent e) -> {
+                    core.getEtymologyManager().delRelation(textField.getContentId(), word.getId());
+                    setupDrawPanel();
+                    setupParentsPanels();
                 });
 
                 // panel to contain parent value and removal button
@@ -268,10 +257,8 @@ public final class ScrEtymRoots extends PDialog {
                 // do nothing. Unfound words are the result of orphaned values,
                 // which are automatically cleaned at time of archiving.
             }
+        });
 
-        }
-
-        //scroll.revalidate();
         //create new dropdown for potential additional parent to be added
         final PComboBox newParentBox = new PComboBox(core);
         newParentBox.setToolTipText("Add new parent to word here.");
@@ -280,9 +267,9 @@ public final class ScrEtymRoots extends PDialog {
         newParentBox.setModel(comboModel);
         newParentBox.setMaximumSize(new Dimension(99999, newParentBox.getPreferredSize().height));
         comboModel.addElement("");
-        for (ConWord newParent : core.getWordCollection().getWordNodes()) {
+        core.getWordCollection().getWordNodes().forEach((newParent) -> {
             comboModel.addElement(newParent);
-        }
+        });
 
         // on selection of a parent word, save to selected word and repaint
         newParentBox.addActionListener(new ActionListener() {

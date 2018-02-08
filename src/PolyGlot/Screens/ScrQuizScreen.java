@@ -26,7 +26,6 @@ import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PRadioButton;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
-import PolyGlot.Nodes.DictNode;
 import PolyGlot.QuizEngine.Quiz;
 import PolyGlot.QuizEngine.QuizQuestion;
 import java.awt.BorderLayout;
@@ -36,7 +35,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.Objects;
 import javax.swing.JComponent;
@@ -79,12 +77,9 @@ public class ScrQuizScreen extends PFrame {
         nextQuestion();
 
         // due to initilization process, this forces resize of tet in PLabel at appropriate time
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                jPanel3.add(lblQNode);
-                jPanel3.repaint();
-            }
+        SwingUtilities.invokeLater(() -> {
+            jPanel3.add(lblQNode);
+            jPanel3.repaint();
         });
     }
 
@@ -166,26 +161,22 @@ public class ScrQuizScreen extends PFrame {
             gbc.anchor = GridBagConstraints.NORTHWEST;
             gbc.weightx = 9999;
 
-            for (DictNode curNode : question.getChoices()) {
+            question.getChoices().forEach((choiceNode) -> {
                 final PRadioButton choice = new PRadioButton(core);
-                choice.setValue(curNode);
+                choice.setValue(choiceNode);
                 choice.setType(question.getType());
 
                 // on button selection, record user choice and right/wrong status
-                choice.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        QuizQuestion question = getCurQuestion();
-
-                        if (choice.getValue().getId().equals(question.getAnswer().getId())) {
-                            question.setAnswered(QuizQuestion.Answered.Correct);
-                            question.setUserAnswer(question.getAnswer());
-                        } else {
-                            question.setAnswered(QuizQuestion.Answered.Incorrect);
-                            question.setUserAnswer(choice.getValue());
-                        }
-                        setupScreen();
+                choice.addActionListener((ActionEvent e) -> {
+                    QuizQuestion question1 = getCurQuestion();
+                    if (choice.getValue().getId().equals(question1.getAnswer().getId())) {
+                        question1.setAnswered(QuizQuestion.Answered.Correct);
+                        question1.setUserAnswer(question1.getAnswer());
+                    } else {
+                        question1.setAnswered(QuizQuestion.Answered.Incorrect);
+                        question1.setUserAnswer(choice.getValue());
                     }
+                    setupScreen();
                 });
 
                 choice.setHorizontalAlignment(SwingConstants.LEFT);
@@ -196,16 +187,16 @@ public class ScrQuizScreen extends PFrame {
                 // if question is answered already, set answer
                 if (question.getAnswered() == QuizQuestion.Answered.Correct
                         || question.getAnswered() == QuizQuestion.Answered.Incorrect) {
-                    for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
+                    Collections.list(grpAnswerSelection.getElements()).forEach((curComp) -> {
                         PRadioButton radio = (PRadioButton) curComp;
                         if (Objects.equals(radio.getValue().getId(), question.getUserAnswer().getId())) {
                             grpAnswerSelection.setSelected(radio.getModel(), true);
                         }
 
                         curComp.setEnabled(false);
-                    }
+                    });
                 }
-            }
+            });
         } catch (Exception e) {
             //e.printStackTrace();
             InfoBox.error("Population Error", "Problem populating question: "
@@ -244,28 +235,28 @@ public class ScrQuizScreen extends PFrame {
 
         switch (curQuestion.getAnswered()) {
             case Unanswered:
-                for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
+                Collections.list(grpAnswerSelection.getElements()).forEach((curComp) -> {
                     curComp.setEnabled(true);
                     curComp.setForeground(Color.black);
-                }
+                });
 
                 lblAnsStat.setText("");
                 break;
             case Correct:
-                for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
+                Collections.list(grpAnswerSelection.getElements()).forEach((curComp) -> {
                     int ansId = ((PRadioButton) curComp).getValue().getId();
                     curComp.setEnabled(false);
 
                     if (ansId == curQuestion.getAnswer().getId()) {
                         curComp.setForeground(correctGreen);
                     }
-                }
+                });
 
                 lblAnsStat.setText("CORRECT");
                 lblAnsStat.setForeground(correctGreen);
                 break;
             case Incorrect:
-                for (Component curComp : Collections.list(grpAnswerSelection.getElements())) {
+                Collections.list(grpAnswerSelection.getElements()).forEach((curComp) -> {
                     int ansId = ((PRadioButton) curComp).getValue().getId();
                     curComp.setEnabled(false);
 
@@ -274,7 +265,7 @@ public class ScrQuizScreen extends PFrame {
                     } else if (ansId == curQuestion.getUserAnswer().getId()) {
                         curComp.setForeground(Color.red);
                     }
-                }
+                });
 
                 lblAnsStat.setText("INCORRECT");
                 lblAnsStat.setForeground(Color.red);

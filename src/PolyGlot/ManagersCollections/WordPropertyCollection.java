@@ -25,7 +25,6 @@ import PolyGlot.Nodes.WordPropValueNode;
 import PolyGlot.Nodes.WordProperty;
 import PolyGlot.PGTUtil;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
@@ -80,12 +79,13 @@ public class WordPropertyCollection extends DictionaryCollection {
     public List<WordProperty> getClassProps(int classId) {
         List<WordProperty> ret = new ArrayList<>();
 
-        for (WordProperty curProp : (ArrayList<WordProperty>) new ArrayList<>(nodeMap.values())) {
+        nodeMap.values().forEach((prop) -> {
+        WordProperty curProp = (WordProperty)prop;
             if (curProp.appliesToType(classId)
                     || curProp.appliesToType(-1)) { // -1 is class "all"
                 ret.add(curProp);
             }
-        }
+        });
 
         Collections.sort(ret);
         return ret;
@@ -102,7 +102,8 @@ public class WordPropertyCollection extends DictionaryCollection {
         Element wordProperties = doc.createElement(PGTUtil.ClassesNodeXID);
 
         // creates each property
-        for (WordProperty wordProp : (Collection<WordProperty>) nodeMap.values()) {
+        nodeMap.values().forEach((prop) -> {
+        WordProperty wordProp = (WordProperty)prop;
             // property element
             Element propElement = doc.createElement(PGTUtil.ClassXID);
 
@@ -153,7 +154,7 @@ public class WordPropertyCollection extends DictionaryCollection {
             propElement.appendChild(propProp);
 
             wordProperties.appendChild(propElement);
-        }
+        });
 
         rootElement.appendChild(wordProperties);
     }
@@ -231,14 +232,14 @@ public class WordPropertyCollection extends DictionaryCollection {
 
         if (!nodeMap.isEmpty()) {
             buildComboCacheInternal(0, new ArrayList(nodeMap.values()),
-                    new ArrayList<PEntry<Integer, Integer>>());
+                    new ArrayList<>());
         }
     }
 
     private void buildComboCacheInternal(int depth, List<WordProperty> props, List<PEntry<Integer, Integer>> curList) {
         WordProperty curProp = props.get(depth);
 
-        for (WordPropValueNode curVal : curProp.getValues()) {
+        curProp.getValues().forEach((curVal) -> {
             ArrayList<PEntry<Integer, Integer>> newList = new ArrayList(curList);
             newList.add(new PEntry(curProp.getId(), curVal.getId()));
 
@@ -248,7 +249,7 @@ public class WordPropertyCollection extends DictionaryCollection {
             } else {
                 buildComboCacheInternal(depth + 1, props, newList);
             }
-        }
+        });
     }
 
     /**

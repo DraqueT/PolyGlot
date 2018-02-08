@@ -23,7 +23,6 @@ import PolyGlot.DictCore;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -188,23 +187,14 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
         final JMenuItem paste = new JMenuItem("Paste");
         final JTextField parentField = editor;
 
-        cut.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                parentField.cut();
-            }
+        cut.addActionListener((ActionEvent ae) -> {
+            parentField.cut();
         });
-        copy.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                parentField.copy();
-            }
+        copy.addActionListener((ActionEvent ae) -> {
+            parentField.copy();
         });
-        paste.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                parentField.paste();
-            }
+        paste.addActionListener((ActionEvent ae) -> {
+            parentField.paste();
         });
 
         ruleMenu.add(cut);

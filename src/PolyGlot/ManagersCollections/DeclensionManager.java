@@ -110,9 +110,9 @@ public class DeclensionManager {
         Map<String, Integer> ruleMap = new HashMap<>();
 
         // creates searchable map of extant combination IDs
-        for (DeclensionPair curPair : typeRules) {
+        typeRules.forEach((curPair) -> {
             ruleMap.put(curPair.combinedId, 0);
-        }
+        });
 
         // adds to return value only if rule matches ID, and is orphaned
         int missingId = 0; //used for missing index values (index system bolton)
@@ -400,7 +400,7 @@ public class DeclensionManager {
      * @return a list of all mandatory declensions
      */
     public List<DeclensionNode> getMandDims(Integer typeId) {
-        return getMandDims(0, ",", new ArrayList<DeclensionNode>(), getDeclensionListTemplate(typeId), "", false);
+        return getMandDims(0, ",", new ArrayList<>(), getDeclensionListTemplate(typeId), "", false);
     }
 
     /**
@@ -849,9 +849,9 @@ public class DeclensionManager {
     public void removeDeclensionValues(Integer wordId, Collection<DeclensionNode> removeVals) {
         List<DeclensionNode> wordList = (List<DeclensionNode>) dList.get(wordId);
         
-        for (DeclensionNode remNode : removeVals) {
+        removeVals.forEach((remNode) -> {
             wordList.remove(remNode);
-        }
+        });
     }
 
     /**
@@ -1004,20 +1004,19 @@ public class DeclensionManager {
         Element combinedForms = doc.createElement(PGTUtil.decCombinedFormSectionXID);
         rootElement.appendChild(combinedForms);
 
-        for (Map.Entry pairs : combSettings.entrySet()) {
+        combSettings.entrySet().stream().map((pairs) -> {
             Element curCombForm = doc.createElement(PGTUtil.decCombinedFormXID);
             Element curAttrib;
-            
             // This section will have to be slightly rewritten if the combined settings become more complex
             curAttrib = doc.createElement(PGTUtil.decCombinedIdXID);
             curAttrib.appendChild(doc.createTextNode((String)pairs.getKey()));
             curCombForm.appendChild(curAttrib);
-            
             curAttrib = doc.createElement(PGTUtil.decCombinedSurpressXID);
-            curAttrib.appendChild(doc.createTextNode((Boolean)pairs.getValue() ? PGTUtil.True : PGTUtil.False));
+            curAttrib.appendChild(doc.createTextNode(pairs.getValue() ? PGTUtil.True : PGTUtil.False));
             curCombForm.appendChild(curAttrib);
-            
+            return curCombForm;            
+        }).forEachOrdered((curCombForm) -> {
             combinedForms.appendChild(curCombForm);
-        }
+        });
     }
 }

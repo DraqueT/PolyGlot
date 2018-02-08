@@ -192,18 +192,15 @@ public class POptionPane extends JOptionPane {
         dialog.pack();
         dialog.setLocationRelativeTo(parentComponent);
 
-        final PropertyChangeListener listener = new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent event) {
-                // Let the defaultCloseOperation handle the closing
-                // if the user closed the window without selecting a button
-                // (newValue = null in that case).  Otherwise, close the dialog.
-                if (dialog.isVisible() && event.getSource() == POptionPane.this
-                        && (event.getPropertyName().equals(VALUE_PROPERTY))
-                        && event.getNewValue() != null
-                        && event.getNewValue() != JOptionPane.UNINITIALIZED_VALUE) {
-                    dialog.setVisible(false);
-                }
+        final PropertyChangeListener listener = (PropertyChangeEvent event) -> {
+            // Let the defaultCloseOperation handle the closing
+            // if the user closed the window without selecting a button
+            // (newValue = null in that case).  Otherwise, close the dialog.
+            if (dialog.isVisible() && event.getSource() == POptionPane.this
+                    && (event.getPropertyName().equals(VALUE_PROPERTY))
+                    && event.getNewValue() != null
+                    && event.getNewValue() != JOptionPane.UNINITIALIZED_VALUE) {
+                dialog.setVisible(false);
             }
         };
 

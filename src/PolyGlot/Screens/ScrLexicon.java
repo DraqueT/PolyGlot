@@ -47,7 +47,6 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
@@ -60,14 +59,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -242,57 +238,51 @@ public final class ScrLexicon extends PFrame {
     @Override
     public void updateAllValues(final DictCore _core) {
         // ensure this is on the UI component stack to avoid read/writelocks...
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                // first push update to all child frames...
-                boolean localPopulating = curPopulating;
-                curPopulating = true;
-                forceUpdate = true;
-                for (Window window : childFrames) {
-                    if (window instanceof PFrame) {
-                        PFrame frame = ((PFrame) window);
-                        if (!frame.isDisposed()) {
-                            frame.updateAllValues(_core);
-                        }
-                    } else if (window instanceof PDialog) {
-                        PDialog dialog = ((PDialog) window);
-                        if (!dialog.isDisposed()) {
-                            dialog.updateAllValues(_core);
-                        }
+        Runnable runnable = () -> {
+            // first push update to all child frames...
+            boolean localPopulating = curPopulating;
+            curPopulating = true;
+            forceUpdate = true;
+            childFrames.forEach((window) -> {
+                if (window instanceof PFrame) {
+                    PFrame frame = ((PFrame) window);
+                    if (!frame.isDisposed()) {
+                        frame.updateAllValues(_core);
+                    }
+                } else if (window instanceof PDialog) {
+                    PDialog dialog = ((PDialog) window);
+                    if (!dialog.isDisposed()) {
+                        dialog.updateAllValues(_core);
                     }
                 }
+            });
 
-                if (core != _core) {
-                    core = _core;
-                    lstLexicon.setModel(new DefaultListModel());
-                    setDefaultValues();
-                    populateLexicon();
-                    lstLexicon.setSelectedIndex(0);
-                    populateProperties();
-                }
-                Runnable fxSetup = new Runnable() {
-                    @Override
-                    public void run() {
-                        setupComboBoxesFX();
-                        setFonts();
-                    }
-                };
-                Platform.setImplicitExit(false);
-                wrapPlatformRunnable(fxSetup);
-
-                ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
-                saveValuesTo(curWord);
-                ((PList) lstLexicon).setCore(core);
-                lstLexicon.clearSelection();
-                lstLexicon.setSelectedValue(curWord, true);
-                setupComboBoxesSwing();
-                curPopulating = localPopulating;
-                forceUpdate = false;
+            if (core != _core) {
+                core = _core;
+                lstLexicon.setModel(new DefaultListModel());
+                setDefaultValues();
+                populateLexicon();
+                lstLexicon.setSelectedIndex(0);
                 populateProperties();
-                ((PTextField) txtConWord).setCore(_core);
-                ((PTextField) txtConWord).setOverrideFont(false);
             }
+            Runnable fxSetup = () -> {
+                setupComboBoxesFX();
+                setFonts();
+            };
+            Platform.setImplicitExit(false);
+            wrapPlatformRunnable(fxSetup);
+
+            ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+            saveValuesTo(curWord);
+            ((PList) lstLexicon).setCore(core);
+            lstLexicon.clearSelection();
+            lstLexicon.setSelectedValue(curWord, true);
+            setupComboBoxesSwing();
+            curPopulating = localPopulating;
+            forceUpdate = false;
+            populateProperties();
+            ((PTextField) txtConWord).setCore(_core);
+            ((PTextField) txtConWord).setOverrideFont(false);
         };
         SwingUtilities.invokeLater(runnable);
     }
@@ -336,47 +326,46 @@ public final class ScrLexicon extends PFrame {
     private void populateClassPanel() {
         ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
 
-        for (Entry<Integer, Integer> curProp : curWord.getClassValues()) {
-            if (classPropMap.containsKey(curProp.getKey())) {
-                JComponent component = classPropMap.get(curProp.getKey());
+        curWord.getClassValues().stream()
+                .filter((curProp) -> (classPropMap.containsKey(curProp.getKey())))
+                .forEachOrdered((curProp) -> {
+                    JComponent component = classPropMap.get(curProp.getKey());
 
-                try {
-                    if (component instanceof JComboBox) {
-                        JComboBox combo = (JComboBox) component;
-                        combo.setSelectedItem(((WordProperty) core.getWordPropertiesCollection()
-                                .getNodeById(curProp.getKey())).getValueById(curProp.getValue()));
-                    } else if (component instanceof PTextField) {
-                        // class property has since been turned into a dropdown field: do nothing
+                    try {
+                        if (component instanceof JComboBox) {
+                            JComboBox combo = (JComboBox) component;
+                            combo.setSelectedItem(((WordProperty) core.getWordPropertiesCollection()
+                                    .getNodeById(curProp.getKey())).getValueById(curProp.getValue()));
+                        } else if (component instanceof PTextField) {
+                            // class property has since been turned into a dropdown field: do nothing
+                        }
+                    } catch (Exception e) {
+                        InfoBox.error("Word Class Error", "Unable to retrieve class/value pair "
+                                + curProp.getKey() + "/" + curProp.getValue(), core.getRootWindow());
                     }
-                } catch (Exception e) {
-                    InfoBox.error("Word Class Error", "Unable to retrieve class/value pair "
-                            + curProp.getKey() + "/" + curProp.getValue(), core.getRootWindow());
-                }
-            }
-        }
+                });
 
-        for (Entry<Integer, String> curProp : curWord.getClassTextValues()) {
-            if (classPropMap.containsKey(curProp.getKey())) {
-                JComponent component = classPropMap.get(curProp.getKey());
+        curWord.getClassTextValues().stream()
+                .filter((curProp) -> (classPropMap.containsKey(curProp.getKey())))
+                .forEachOrdered((curProp) -> {
+                    JComponent component = classPropMap.get(curProp.getKey());
 
-                try {
-                    if (component instanceof JComboBox) {
-                        // class property has since been turned into a free text field: do nothing
-                    } else if (component instanceof PTextField) {
-                        PTextField textField = (PTextField) component;
-                        textField.setText(curProp.getValue());
+                    try {
+                        if (component instanceof JComboBox) {
+                            // class property has since been turned into a free text field: do nothing
+                        } else if (component instanceof PTextField) {
+                            PTextField textField = (PTextField) component;
+                            textField.setText(curProp.getValue());
+                        }
+                    } catch (Exception e) {
+                        InfoBox.error("Word Class Error", "Unable to retrieve class/value pair "
+                                + curProp.getKey() + "/" + curProp.getValue(), core.getRootWindow());
                     }
-                } catch (Exception e) {
-                    InfoBox.error("Word Class Error", "Unable to retrieve class/value pair "
-                            + curProp.getKey() + "/" + curProp.getValue(), core.getRootWindow());
-                }
-            }
-        }
+                });
     }
 
     /**
-     * Sets up the romanization field. Should be run after setupClassPanel, as
-     * it utilizes the class pannel space
+     * Sets up the romanization field. Should be run after setupClassPanel, as it utilizes the class pannel space
      */
     private void setupRomField() {
         if (core.getRomManager().isEnabled()) {
@@ -471,27 +460,22 @@ public final class ScrLexicon extends PFrame {
                 comboModel.addElement("-- " + curProp.getValue() + " --");
 
                 // populate class dropdown
-                for (WordPropValueNode value : curProp.getValues()) {
+                curProp.getValues().forEach((value) -> {
                     comboModel.addElement(value);
-                }
+                });
 
-                classBox.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // don't run if populating currently
-                        if (curPopulating) {
-                            return;
-                        }
-
-                        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
-
-                        if (classBox.getSelectedItem() instanceof WordPropValueNode) {
-                            WordPropValueNode curValue = (WordPropValueNode) classBox.getSelectedItem();
-                            curWord.setClassValue(classId, curValue.getId());
-                        } else {
-                            // if not an instance of a value, then it's the default selection: remove class from word
-                            curWord.setClassValue(classId, -1);
-                        }
+                classBox.addActionListener((ActionEvent e) -> {
+                    // don't run if populating currently
+                    if (curPopulating) {
+                        return;
+                    }
+                    ConWord curWord1 = (ConWord) lstLexicon.getSelectedValue();
+                    if (classBox.getSelectedItem() instanceof WordPropValueNode) {
+                        WordPropValueNode curValue = (WordPropValueNode) classBox.getSelectedItem();
+                        curWord1.setClassValue(classId, curValue.getId());
+                    } else {
+                        // if not an instance of a value, then it's the default selection: remove class from word
+                        curWord1.setClassValue(classId, -1);
                     }
                 });
 
@@ -537,17 +521,13 @@ public final class ScrLexicon extends PFrame {
         jPanel1.setBackground(Color.white);
         fxPanel.setBackground(Color.white);
         final CountDownLatch latch = new CountDownLatch(1);
-        Runnable fxSetup = new Runnable() {
-            @Override
-            public void run() {
-                initFX(fxPanel);
-                setupComboBoxesFX();
-                setFonts();
-                latch.countDown();
-            }
-        };
         Platform.setImplicitExit(false);
-        Platform.runLater(fxSetup);
+        Platform.runLater(() -> {
+            initFX(fxPanel);
+            setupComboBoxesFX();
+            setFonts();
+            latch.countDown();
+        });
 
         try {
             latch.await();
@@ -602,22 +582,18 @@ public final class ScrLexicon extends PFrame {
      */
     private void genRom() {
         if (enableProcGen) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        txtRom.setText(core.getRomManager().getPronunciation(txtConWord.getText()));
-                    } catch (Exception e) {
-                        setProcError(e.getLocalizedMessage());
-                    }
+            SwingUtilities.invokeLater(() -> {
+                try {
+                    txtRom.setText(core.getRomManager().getPronunciation(txtConWord.getText()));
+                } catch (Exception e) {
+                    setProcError(e.getLocalizedMessage());
                 }
             });
         }
     }
 
     /**
-     * Sets the pronunciation generation to be disabled. This prevents endless
-     * error messages from popping.
+     * Sets the pronunciation generation to be disabled. This prevents endless error messages from popping.
      *
      * @param message error message to display to user
      */
@@ -634,23 +610,19 @@ public final class ScrLexicon extends PFrame {
         chkProcOverride.setSelected(false);
         chkRuleOverride.setSelected(false);
         cmbType.setSelectedIndex(0);
-        Runnable fxSetup = new Runnable() {
-            @Override
-            public void run() {
-                txtConSrc.setText("");
-                txtDefSrc.setText("");
-                txtLocalSrc.setText("");
-                txtProcSrc.setText("");
-                cmbTypeSrc.getSelectionModel().select(0);
-            }
-        };
         Platform.setImplicitExit(false);
-        Platform.runLater(fxSetup);
+        Platform.runLater(() -> {
+            txtConSrc.setText("");
+            txtDefSrc.setText("");
+            txtLocalSrc.setText("");
+            txtProcSrc.setText("");
+            cmbTypeSrc.getSelectionModel().select(0);
+        });
     }
 
     /**
-     * Runs filter on timed thread to avoid overabundance of filters and prevent
-     * filtering overlaps. Run this instead of filterLexicon().
+     * Runs filter on timed thread to avoid overabundance of filters and prevent filtering overlaps. Run this instead of
+     * filterLexicon().
      */
     private void runFilter() {
         if (filterThread != null
@@ -658,38 +630,27 @@ public final class ScrLexicon extends PFrame {
             filterThread.interrupt();
         }
 
-        filterThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(500); // wait for interrupt from user...
-                    if (txtConWord.getText().isEmpty()
-                            && lstLexicon.getSelectedIndex() != -1) {
-                        return; // prevents freezing scenario with if new word made beore thread continues
-                    }
-                    filterLexicon();
-                    lstLexicon.setSelectedIndex(0);
-                    lstLexicon.ensureIndexIsVisible(0);
-                    populateProperties();
-                } catch (InterruptedException e) {
-                    // do nothing: interruption is due to additional user input
+        filterThread = new Thread(() -> {
+            try {
+                Thread.sleep(500); // wait for interrupt from user...
+                if (txtConWord.getText().isEmpty()
+                        && lstLexicon.getSelectedIndex() != -1) {
+                    return; // prevents freezing scenario with if new word made beore thread continues
                 }
+                filterLexicon();
+                lstLexicon.setSelectedIndex(0);
+                lstLexicon.ensureIndexIsVisible(0);
+                populateProperties();
+            } catch (InterruptedException e) {
+                // do nothing: interruption is due to additional user input
             }
         });
 
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                filterThread.start();
-            }
-        };
-
-        Platform.runLater(r);
+        Platform.runLater(filterThread::start);
     }
 
     /**
-     * Filters lexicon. Call RunFilter() instead of this, which runs on a timed
-     * session to prevent overlapping filters.
+     * Filters lexicon. Call RunFilter() instead of this, which runs on a timed session to prevent overlapping filters.
      */
     private void filterLexicon() {
         if (curPopulating) {
@@ -762,15 +723,11 @@ public final class ScrLexicon extends PFrame {
         // only run process if in FX Application thread. Recurse within thread otherwise
         if (!Platform.isFxApplicationThread()) {
             final CountDownLatch latch = new CountDownLatch(1);
-            Runnable fxSetup = new Runnable() {
-                @Override
-                public void run() {
-                    clearFilter();
-                    latch.countDown();
-                }
-            };
 
-            SwingUtilities.invokeLater(fxSetup);
+            SwingUtilities.invokeLater(() -> {
+                clearFilter();
+                latch.countDown();
+            });
 
             try {
                 latch.await(); // do not continue until filter cleared
@@ -784,12 +741,7 @@ public final class ScrLexicon extends PFrame {
             txtLocalSrc.setText("");
             txtProcSrc.setText("");
             cmbTypeSrc.getSelectionModel().select(0);
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    populateLexicon();
-                }
-            });
+            SwingUtilities.invokeLater(this::populateLexicon);
         }
 
         // this is to address an odd timing error... sloppy, but it's somewhere in the Java API
@@ -800,8 +752,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Sets currently displayed word's legality (highlighted fields, error
-     * message, etc.)
+     * Sets currently displayed word's legality (highlighted fields, error message, etc.)
      */
     private void setWordLegality() {
         ConWord testWord = (ConWord) lstLexicon.getSelectedValue();
@@ -834,8 +785,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Sets lexicon tab's currently displayed word legality (highlighted fields,
-     * error message, etc.)
+     * Sets lexicon tab's currently displayed word legality (highlighted fields, error message, etc.)
      *
      * @param results current word
      * @param disableElements whether to disable control elements on fail
@@ -878,8 +828,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Adds error if any it error box and takes appropriate action to inform
-     * user
+     * Adds error if any it error box and takes appropriate action to inform user
      *
      * @param element element related to checked value
      * @param message message (if any) returned as error
@@ -927,19 +876,14 @@ public final class ScrLexicon extends PFrame {
      * @param enable true for enable, false for disable
      */
     private void setFilterEnabled(final boolean enable) {
-        Runnable fxSetup = new Runnable() {
-            @Override
-            public void run() {
-                txtConSrc.setDisable(!enable);
-                txtDefSrc.setDisable(!enable);
-                txtLocalSrc.setDisable(!enable);
-                txtProcSrc.setDisable(!enable);
-                cmbTypeSrc.setDisable(!enable);
-                chkFindBad.setDisable(!enable);
-            }
-        };
-
-        Platform.runLater(fxSetup);
+        Platform.runLater(() -> {
+            txtConSrc.setDisable(!enable);
+            txtDefSrc.setDisable(!enable);
+            txtLocalSrc.setDisable(!enable);
+            txtProcSrc.setDisable(!enable);
+            cmbTypeSrc.setDisable(!enable);
+            chkFindBad.setDisable(!enable);
+        });
     }
 
     /**
@@ -1001,11 +945,8 @@ public final class ScrLexicon extends PFrame {
 
         });
         chkFindBad.setTooltip(new Tooltip("Select to filter on all words with illegal values"));
-        chkFindBad.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
-                applyIllegalFilter();
-            }
+        chkFindBad.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) -> {
+            applyIllegalFilter();
         });
 
         grid.setVgap(4);
@@ -1033,12 +974,9 @@ public final class ScrLexicon extends PFrame {
 
         // sets up button to clear filter
         javafx.scene.control.Button clearButton = new javafx.scene.control.Button("Clear Filter");
-        clearButton.setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(javafx.event.ActionEvent t) {
-                clearFilterInternal();
-                runFilter();
-            }
+        clearButton.setOnAction((javafx.event.ActionEvent t) -> {
+            clearFilterInternal();
+            runFilter();
         });
         grid.add(clearButton, 4, 3);
 
@@ -1046,9 +984,8 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Should only be called from logic within the filter pane Does not close
-     * filter, and is guaranteed running inside fxProcess, so no latch logic
-     * necessary.
+     * Should only be called from logic within the filter pane Does not close filter, and is guaranteed running inside
+     * fxProcess, so no latch logic necessary.
      */
     private void clearFilterInternal() {
         txtConSrc.setText("");
@@ -1065,9 +1002,8 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Filters on illegel words. Does NOT respect "override" marker. This is to
-     * allow users to easily see what words are causing uniqueness errors, even
-     * if they themselves are legal via exception.
+     * Filters on illegel words. Does NOT respect "override" marker. This is to allow users to easily see what words are
+     * causing uniqueness errors, even if they themselves are legal via exception.
      */
     private void applyIllegalFilter() {
         clearFilterInternal();
@@ -1153,13 +1089,11 @@ public final class ScrLexicon extends PFrame {
      */
     private void setupListeners() {
         final Window parent = this;
-        gridTitlePane.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                int contentHeight = newValue.intValue();
-                jPanel1.setSize(jPanel1.getSize().width, contentHeight);
-                fxPanel.setSize(fxPanel.getSize().width, contentHeight);
-            }
+        gridTitlePane.heightProperty()
+                .addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            int contentHeight = newValue.intValue();
+            jPanel1.setSize(jPanel1.getSize().width, contentHeight);
+            fxPanel.setSize(fxPanel.getSize().width, contentHeight);
         });
 
         txtConWord.getDocument().addDocumentListener(new DocumentListener() {
@@ -1272,23 +1206,20 @@ public final class ScrLexicon extends PFrame {
         addFilterListeners(cmbRootSrc);
 
         // handles swapping of font for root box as appropriate
-        cmbRootSrc.addEventHandler(EventType.ROOT, new EventHandler() {
-            @Override
-            public void handle(Event evt) {
-                if (cmbRootSrc.getValue() instanceof ConWord) {
-                    cmbRootSrc.setStyle("-fx-font: "
-                            + core.getPropertiesManager()
-                                    .getFontCon().getSize()
-                            + "px \""
-                            + core.getPropertiesManager().getFontCon()
-                                    .getFamily() + "\";");
-                } else {
-                    cmbRootSrc.setStyle("-fx-font: "
-                            + core.getPropertiesManager()
-                                    .getCharisUnicodeFont().getSize() + "px \""
-                            + core.getPropertiesManager()
-                                    .getCharisUnicodeFont().getFamily() + "\";");
-                }
+        cmbRootSrc.addEventHandler(EventType.ROOT, (Event evt) -> {
+            if (cmbRootSrc.getValue() instanceof ConWord) {
+                cmbRootSrc.setStyle("-fx-font: "
+                        + core.getPropertiesManager()
+                                .getFontCon().getSize()
+                        + "px \""
+                        + core.getPropertiesManager().getFontCon()
+                                .getFamily() + "\";");
+            } else {
+                cmbRootSrc.setStyle("-fx-font: "
+                        + core.getPropertiesManager()
+                                .getCharisUnicodeFont().getSize() + "px \""
+                        + core.getPropertiesManager()
+                                .getCharisUnicodeFont().getFamily() + "\";");
             }
         });
     }
@@ -1302,12 +1233,9 @@ public final class ScrLexicon extends PFrame {
     private void addPropertyListeners(JComponent field, final String defValue) {
         if (field instanceof JComboBox) {
             final JComboBox cmbField = (JComboBox) field;
-            cmbField.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    setGreyFields(cmbField, defValue);
-                    setWordLegality();
-                }
+            cmbField.addActionListener((java.awt.event.ActionEvent evt) -> {
+                setGreyFields(cmbField, defValue);
+                setWordLegality();
             });
         }
     }
@@ -1319,23 +1247,17 @@ public final class ScrLexicon extends PFrame {
      */
     private void addFilterListeners(final Control field) {
         if (field instanceof TextField) {
-            field.addEventHandler(EventType.ROOT, new EventHandler() {
-                @Override
-                public void handle(Event evt) {
-                    Object type = evt.getEventType();
-                    if (type.toString().equals(javafx.scene.input.KeyEvent.KEY_PRESSED.toString())) {
-                        runFilter();
-                    }
+            field.addEventHandler(EventType.ROOT, (Event evt) -> {
+                Object type1 = evt.getEventType();
+                if (type1.toString().equals(javafx.scene.input.KeyEvent.KEY_PRESSED.toString())) {
+                    runFilter();
                 }
             });
         } else if (field instanceof ComboBox) {
-            field.addEventHandler(EventType.ROOT, new EventHandler() {
-                @Override
-                public void handle(Event evt) {
-                    Object type = evt.getEventType();
-                    if (type.toString().equals(javafx.scene.control.ComboBoxBase.ON_HIDING.toString())) {
-                        runFilter();
-                    }
+            field.addEventHandler(EventType.ROOT, (Event evt) -> {
+                Object type1 = evt.getEventType();
+                if (type1.toString().equals(javafx.scene.control.ComboBoxBase.ON_HIDING.toString())) {
+                    runFilter();
                 }
             });
         }
@@ -1347,9 +1269,9 @@ public final class ScrLexicon extends PFrame {
     private void setupComboBoxesSwing() {
         cmbType.removeAllItems();
         cmbType.addItem(defTypeValue);
-        for (TypeNode curNode : core.getTypes().getNodes()) {
+        core.getTypes().getNodes().forEach((curNode) -> {
             cmbType.addItem(curNode);
-        }
+        });
     }
 
     /**
@@ -1413,24 +1335,21 @@ public final class ScrLexicon extends PFrame {
      * @param enable
      */
     private void setPropertiesEnabled(final boolean enable) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                txtConWord.setEnabled(enable);
-                txtDefinition.setEnabled(enable);
-                txtLocalWord.setEnabled(enable);
-                txtProc.setEnabled(enable);
-                txtRom.setEnabled(enable);
-                cmbType.setEnabled(enable);
-                chkProcOverride.setEnabled(enable);
-                chkRuleOverride.setEnabled(enable);
-                btnDeclensions.setEnabled(enable);
-                btnLogographs.setEnabled(enable);
-                btnEtymology.setEnabled(enable);
-                for (JComponent classComp : classPropMap.values()) {
-                    classComp.setEnabled(enable);
-                }
-            }
+        Runnable runnable = () -> {
+            txtConWord.setEnabled(enable);
+            txtDefinition.setEnabled(enable);
+            txtLocalWord.setEnabled(enable);
+            txtProc.setEnabled(enable);
+            txtRom.setEnabled(enable);
+            cmbType.setEnabled(enable);
+            chkProcOverride.setEnabled(enable);
+            chkRuleOverride.setEnabled(enable);
+            btnDeclensions.setEnabled(enable);
+            btnLogographs.setEnabled(enable);
+            btnEtymology.setEnabled(enable);
+            classPropMap.values().forEach((classComp) -> {
+                classComp.setEnabled(enable);
+            });
         };
         SwingUtilities.invokeLater(runnable);
     }
@@ -1442,16 +1361,16 @@ public final class ScrLexicon extends PFrame {
         cmbTypeSrc.getItems().clear();
         cmbTypeSrc.getItems().add(defTypeValue);
         cmbTypeSrc.getSelectionModel().selectFirst();
-        for (TypeNode curNode : core.getTypes().getNodes()) {
+        core.getTypes().getNodes().forEach((curNode) -> {
             cmbTypeSrc.getItems().add(curNode);
-        }
+        });
 
         cmbRootSrc.getItems().clear();
         cmbRootSrc.getItems().add(defRootValue);
         cmbRootSrc.getSelectionModel().selectFirst();
-        for (Object o : core.getEtymologyManager().getAllRoots()) {
+        core.getEtymologyManager().getAllRoots().forEach((o) -> {
             cmbRootSrc.getItems().add(o);
-        }
+        });
     }
 
     /**
@@ -1470,8 +1389,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Sets fonts of relevant fields to conlang font Must be run inside JavaFX
-     * thread
+     * Sets fonts of relevant fields to conlang font Must be run inside JavaFX thread
      */
     private void setFonts() {
         javafx.scene.text.Font fontFx = core.getPropertiesManager().getFXFont();
@@ -1516,8 +1434,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Saves name to word, then repopulates lexicon to ensure proper
-     * alphabetical order. Reselects proper entry.
+     * Saves name to word, then repopulates lexicon to ensure proper alphabetical order. Reselects proper entry.
      */
     private void saveName() {
         if (curPopulating) {
@@ -1577,7 +1494,7 @@ public final class ScrLexicon extends PFrame {
         }
 
         // save all class values
-        for (Entry<Integer, JComponent> entry : classPropMap.entrySet()) {
+        classPropMap.entrySet().forEach((entry) -> {
             if (entry.getValue() instanceof PTextField) {
                 PTextField textField = (PTextField) entry.getValue();
                 saveWord.setClassTextValue(entry.getKey(), textField.getText());
@@ -1593,7 +1510,7 @@ public final class ScrLexicon extends PFrame {
             } else {
                 InfoBox.error("Value Save Error", "Unknown class value type.", core.getRootWindow());
             }
-        }
+        });
     }
 
     private void deleteWord() {
@@ -1637,19 +1554,13 @@ public final class ScrLexicon extends PFrame {
         } catch (Exception e) {
             InfoBox.error("Creation Error", "Unable to create word: "
                     + e.getLocalizedMessage(), core.getRootWindow());
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         curPopulating = false;
 
         setWordLegality();
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                txtConWord.requestFocus();
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
+        SwingUtilities.invokeLater(txtConWord::requestFocus);
     }
 
     /**
@@ -1692,24 +1603,19 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Wraps platform runnables within swing system. Messy but necessary to
-     * avoid race deadlocks
+     * Wraps platform runnables within swing system. Messy but necessary to avoid race deadlocks
      *
      * @param r
      */
     private void wrapPlatformRunnable(final Runnable r) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Platform.runLater(r);
-            }
+        SwingUtilities.invokeLater(() -> {
+            Platform.runLater(r);
         });
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -2064,22 +1970,14 @@ public final class ScrLexicon extends PFrame {
 
     private void btnAddWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddWordActionPerformed
         clearFilter();
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                addWord();
-            }
-        });
+        SwingUtilities.invokeLater(this::addWord);
     }//GEN-LAST:event_btnAddWordActionPerformed
 
     private void btnDelWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelWordActionPerformed
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                deleteWord();
-                filterLexicon();
-                gridTitlePane.setExpanded(false);
-            }
+        SwingUtilities.invokeLater(() -> {
+            deleteWord();
+            filterLexicon();
+            gridTitlePane.setExpanded(false);
         });
     }//GEN-LAST:event_btnDelWordActionPerformed
 

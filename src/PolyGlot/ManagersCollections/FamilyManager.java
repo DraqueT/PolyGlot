@@ -161,9 +161,9 @@ public class FamilyManager {
         }
         
         // save subnodes
-        for (FamNode curChild : curNode.getNodes()) {
-            curElement.appendChild(writeToSaveXML(doc, curChild));
-        }
+        curNode.getNodes().forEach((child) -> {
+            curElement.appendChild(writeToSaveXML(doc, child));
+        });
         
         return curElement;
     }

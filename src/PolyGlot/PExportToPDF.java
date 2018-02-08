@@ -28,7 +28,6 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.Nodes.ImageNode;
-import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.PEntry;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.Nodes.WordPropValueNode;
@@ -225,24 +224,23 @@ public class PExportToPDF {
                             .setTextAlignment(TextAlignment.CENTER)
                             .setFontSize(30)));
             Div ToC = new Div();
-            for (Entry curChap : chapList) {
+            chapList.forEach((curChap) -> {
                 Link link = new Link(chapTitles.get((String) curChap.getValue()),
                         PdfAction.createGoTo((String) curChap.getValue()));
                 ToC.add(new Paragraph(link).add("\n").add(" "));
-
                 // create subheadings for grammar chapter
                 if (curChap.getValue().equals(GRAMMAR)) {
                     Paragraph subSec = new Paragraph();
                     subSec.setMarginLeft(20f);
-                    for (SecEntry chapSect : chapSects) {
+                    chapSects.forEach((chapSect) -> {
                         Link secLink = new Link((String) chapSect.getValue(),
                                 PdfAction.createGoTo(String.valueOf((int) chapSect.getKey())));
                         secLink.setFontSize(9);
                         subSec.add(secLink).add("\n");
-                    }
+                    });
                     ToC.add(subSec);
                 }
-            }
+            });
             ToC.setBorder(new SolidBorder(0.5f)).setPadding(10);
 
             document.add(ToC);
@@ -337,14 +335,14 @@ public class PExportToPDF {
     private Map getGlossKey() {
         Map<Integer, String> ret = new HashMap<>();
 
-        for (TypeNode curNode : core.getTypes().getNodes()) {
+        core.getTypes().getNodes().forEach((curNode) -> {
             if (curNode.getGloss().length() == 0) {
                 ret.put(curNode.getId(), curNode.getValue());
             } else {
                 ret.put(curNode.getId(), curNode.getGloss());
                 setPrintGlossKey(true);
             }
-        }
+        });
 
         return ret;
     }
@@ -882,7 +880,7 @@ public class PExportToPDF {
                         .createFont(FontConstants.COURIER_OBLIQUE)).setFontSize(18));
                 newSec.add(new Text("\n"));
                 // populate text ensuring that conlang font is maintained where appropriate
-                for (Entry<String, PFontInfo> entry : FormattedTextHelper.getSectionTextFontSpecifec(curSec.getSectionText(), core)) {
+                FormattedTextHelper.getSectionTextFontSpecifec(curSec.getSectionText(), core).forEach((entry) -> {
                     PFontInfo info = entry.getValue();
                     String text = PGTUtil.stripRTL(entry.getKey());
 
@@ -915,7 +913,7 @@ public class PExportToPDF {
                                             FormattedTextHelper.swtColorToItextColor(info.awtColor)));
                         }
                     }
-                }
+                });
                 newSec.setFixedLeading(21f);
                 chapDiv.add(newSec);
             }
@@ -940,10 +938,11 @@ public class PExportToPDF {
         table.addCell(new Paragraph("Part of Speech").setFont(PdfFontFactory.createFont(FontConstants.COURIER_BOLD)));
         table.addCell(new Paragraph("Gloss").setFont(PdfFontFactory.createFont(FontConstants.COURIER_BOLD)));
 
-        for (TypeNode curType : core.getTypes().getNodes()) {
+        core.getTypes().getNodes().forEach((curType) -> {
+        //for (TypeNode curType : core.getTypes().getNodes()) {
             table.addCell(curType.getValue());
             table.addCell(curType.getGloss());
-        }
+        });
         ret.add(table);
 
         return ret;

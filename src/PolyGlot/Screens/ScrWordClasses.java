@@ -40,7 +40,6 @@ import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.swing.Box.Filler;
 import javax.swing.CellEditor;
 import javax.swing.DefaultListModel;
@@ -217,9 +216,9 @@ public class ScrWordClasses extends PFrame {
         // if "ALL" is selected, disable other choices, as they are redundant
         if (typeChecks.containsKey(-1)) {
             JCheckBox all = typeChecks.get(-1);
-            for (JCheckBox check : typeChecks.values()) {
+            typeChecks.values().forEach((check) -> {
                 check.setEnabled(!all.isSelected());
-            }
+            });
             // "ALL should always be enabled
             all.setEnabled(true);
         }
@@ -228,9 +227,9 @@ public class ScrWordClasses extends PFrame {
     private void populateWordProperties() {
         DefaultListModel listModel = new DefaultListModel();
 
-        for (WordProperty curNode : core.getWordPropertiesCollection().getAllWordProperties()) {
+        core.getWordPropertiesCollection().getAllWordProperties().forEach((curNode) -> {
             listModel.addElement(curNode);
-        }
+        });
 
         lstProperties.setModel(listModel);
         lstProperties.setSelectedIndex(0);
@@ -250,9 +249,9 @@ public class ScrWordClasses extends PFrame {
         if (curProp == null) {
             ((PTextField)txtName).setDefault();
             enableValues(false);
-            for (JCheckBox checkBox : typeChecks.values()) {
+            typeChecks.values().forEach((checkBox) -> {
                 checkBox.setSelected(false);
-            }
+            });
         } else {
             PTableModel tableModel = new PTableModel(new Object[]{"Values"}, 0);
             enableValues(true);
@@ -263,14 +262,14 @@ public class ScrWordClasses extends PFrame {
             chkFreeText.setSelected(curProp.isFreeText());
 
             // add property values
-            for (WordPropValueNode curValue : curProp.getValues()) {
+            curProp.getValues().forEach((curValue) -> {
                 tableModel.addRow(new Object[]{curValue});
-            }
+            });
             
             // set checkboxes for types this applies to
-            for (Entry<Integer, JCheckBox> e : typeChecks.entrySet()) {
+            typeChecks.entrySet().forEach((e) -> {
                 e.getValue().setSelected(curProp.appliesToType(e.getKey()));
-            }
+            });
 
             setFreeTextEnabled();
             setEnabledTypeText();
@@ -290,9 +289,9 @@ public class ScrWordClasses extends PFrame {
         btnAddValue.setEnabled(enable);
         btnDelValue.setEnabled(enable);
         
-        for (JCheckBox curBox : typeChecks.values()) {
+        typeChecks.values().forEach((curBox) -> {
             curBox.setEnabled(enable);
-        }
+        });
     }
 
     private void addWordProperty() {

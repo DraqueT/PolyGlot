@@ -21,7 +21,6 @@ package PolyGlot.QuizEngine;
 
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
-import PolyGlot.Nodes.DictNode;
 import PolyGlot.Nodes.PEntry;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordPropValueNode;
@@ -59,15 +58,12 @@ public class QuizFactory {
     /**
      * This randomly creates a quiz based on words from your language
      *
-     * @param numQuestions number of question in the quiz (will be less if
-     * filter too restrictive)
-     * @param multipleChoice generates multiple choice questions if set. User
-     * must fill in answers otherwise.
+     * @param numQuestions number of question in the quiz (will be less if filter too restrictive)
+     * @param multipleChoice generates multiple choice questions if set. User must fill in answers otherwise.
      * @param quizLocal whether to quiz on local word values of quiz words
      * @param partOfSpeech whether to quiz on part of speech
      * @param proc whether to quiz on pronunciation
-     * @param def whether to quiz on definition (probably turn multiple choice
-     * on for this one...
+     * @param def whether to quiz on definition (probably turn multiple choice on for this one...
      * @param wordClass whether to quiz on word classes
      * @return a constructed quiz based on given parameters
      * @throws java.lang.Exception
@@ -84,14 +80,12 @@ public class QuizFactory {
      *
      * @param filter a filter conword, which quiz words must match
      * @param conFromDef
-     * @param numQuestions number of question in the quiz (will be less if
-     * filter too restrictive)
+     * @param numQuestions number of question in the quiz (will be less if filter too restrictive)
      * @param quizLocal whether to quiz on local word values of quiz words
      * @param partOfSpeech whether to quiz on part of speech
      * @param proc whether to quiz on pronunciation
      * @param wordClass whether to quiz on word classes
-     * @param def whether to quiz on definition (probably turn multiple choice
-     * on for this one...
+     * @param def whether to quiz on definition (probably turn multiple choice on for this one...
      * @return a constructed quiz based on given parameters
      * @throws java.lang.Exception
      */
@@ -132,7 +126,7 @@ public class QuizFactory {
         // make certain the number of questions never exceeds the number of words available
         numQuestions = wordList.size() < numQuestions ? wordList.size() : numQuestions;
         Random randGen = new Random();
-        
+
         // make certain word properties have all combos built before making quiz
         core.getWordPropertiesCollection().buildComboCache();
 
@@ -148,17 +142,17 @@ public class QuizFactory {
                 case Proc:
                 case Def:
                 case ConEquiv:
-                    for (DictNode node : core.getWordCollection().getRandomNodes(numChoices - 1, curWord.getId())) {
+                    core.getWordCollection().getRandomNodes(numChoices - 1, curWord.getId()).forEach((node) -> {
                         question.addChoice(node);
-                    }
+                    });
                     question.addChoice(curWord);
                     question.setAnswer(curWord);
                     question.setSource(curWord);
                     break;
                 case PoS:
-                    for (DictNode node : core.getTypes().getRandomNodes(numChoices - 1, curWord.getWordTypeId())) {
+                    core.getTypes().getRandomNodes(numChoices - 1, curWord.getWordTypeId()).forEach((node) -> {
                         question.addChoice(node);
-                    }
+                    });
                     TypeNode typeAnswer = core.getTypes().getNodeById(curWord.getWordTypeId());
                     question.addChoice(typeAnswer);
                     question.setAnswer(typeAnswer);
@@ -166,48 +160,48 @@ public class QuizFactory {
                     break;
                 case Classes:
                     int curId = 0;
-                    for (List<PEntry<Integer, Integer>> curCombo 
+                    for (List<PEntry<Integer, Integer>> curCombo
                             : core.getWordPropertiesCollection()
                                     .getRandomPropertyCombinations(numChoices - 1, curWord)) {
                         curId++;
                         WordPropValueNode choiceNode = new WordPropValueNode();
-                                
-                        for (PEntry<Integer, Integer> curEntry: curCombo) {
-                            WordProperty wordProp = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+
+                        for (PEntry<Integer, Integer> curEntry : curCombo) {
+                            WordProperty wordProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
                             WordPropValueNode valueNode = wordProp.getValueById(curEntry.getValue());
-                            
+
                             if (choiceNode.getValue().length() != 0) {
                                 choiceNode.setValue(choiceNode.getValue() + ", ");
                             }
-                            
+
                             choiceNode.setValue(choiceNode.getValue() + valueNode.getValue());
                         }
-                        
+
                         choiceNode.setId(curId);
                         question.addChoice(choiceNode);
                     }
-                    
+
                     WordPropValueNode valAnswer = new WordPropValueNode();
                     Iterator<Entry<Integer, Integer>> propIt = curWord.getClassValues().iterator();
-                    
+
                     while (propIt.hasNext()) {
                         Entry<Integer, Integer> curEntry = propIt.next();
-                        WordProperty curProp = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                        WordProperty curProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
                         WordPropValueNode curVal = curProp.getValueById(curEntry.getValue());
-                        
+
                         if (valAnswer.getValue().length() != 0) {
                             valAnswer.setValue(valAnswer.getValue() + ", ");
                         }
-                        
+
                         valAnswer.setValue(valAnswer.getValue() + curVal.getValue());
                     }
                     valAnswer.setId(0);
-                    
+
                     // handle case of words with no class
                     if (valAnswer.getValue().length() == 0) {
                         valAnswer.setValue("No Class");
                     }
-                    
+
                     question.addChoice(valAnswer);
                     question.setAnswer(valAnswer);
                     question.setSource(curWord);
@@ -218,7 +212,7 @@ public class QuizFactory {
 
             ret.addNode(question);
         }
-        
+
         // clear combo cache from memory after done
         core.getWordPropertiesCollection().clearComboCache();
 

@@ -186,15 +186,14 @@ public class PLanguageStats {
         }
 
         // build pie chart of type counts
-        for (Map.Entry<Integer, Integer> curEntry : typeCountByWord.entrySet()) {
+        typeCountByWord.entrySet().forEach((curEntry) -> {
             TypeNode type = core.getTypes().getNodeById(curEntry.getKey());
-
             if (type != null) {
                 String[] label = {type.getValue()};
                 Double[] value = {(double) curEntry.getValue()};
                 typesPie.addVal(label, value);
             }
-        }
+        });
 
         // build bar chart of characters
         charStatBar.setLeftYAxisLabel("Starting With");

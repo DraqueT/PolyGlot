@@ -42,7 +42,6 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -354,11 +353,8 @@ public class ScrLogoDetails extends PFrame {
 
         final JPopupMenu ruleMenu = new JPopupMenu();
         final JMenuItem pasteImage = new JMenuItem("Paste Image");
-        pasteImage.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                pasteLogograph();
-            }
+        pasteImage.addActionListener((ActionEvent ae) -> {
+            pasteLogograph();
         });
         ruleMenu.add(pasteImage);
 
@@ -443,14 +439,11 @@ public class ScrLogoDetails extends PFrame {
             curNode.setStrokes(strokes);
         } catch (NumberFormatException e) {
             // run later to avoid update conflicts
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    curPopulating = true;
-                    txtStrokes.setText("");
-                    InfoBox.info("Type mismatch", "Strokes field compatible with integer values only", core.getRootWindow());
-                    curPopulating = false;
-                }
+            java.awt.EventQueue.invokeLater(() -> {
+                curPopulating = true;
+                txtStrokes.setText("");
+                InfoBox.info("Type mismatch", "Strokes field compatible with integer values only", core.getRootWindow());
+                curPopulating = false;
             });
         }
     }
@@ -659,14 +652,11 @@ public class ScrLogoDetails extends PFrame {
                 Integer.parseInt(fltStrokes.getText());
             } catch (NumberFormatException e) {
                 // run later to avoid update conflicts
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        curPopulating = true;
-                        fltStrokes.setText("");
-                        InfoBox.info("Type mismatch", "Strokes field compatible with integer values only", core.getRootWindow());
-                        curPopulating = false;
-                    }
+                java.awt.EventQueue.invokeLater(() -> {
+                    curPopulating = true;
+                    fltStrokes.setText("");
+                    InfoBox.info("Type mismatch", "Strokes field compatible with integer values only", core.getRootWindow());
+                    curPopulating = false;
                 });
 
                 return false;
@@ -1391,13 +1381,10 @@ public class ScrLogoDetails extends PFrame {
         int selected = lstLogos.getSelectedIndex();
         final int previous = selected == evt.getFirstIndex() ? evt.getLastIndex() : evt.getFirstIndex();
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                saveReadings(previous);
-                saveRads(previous);
-                populateLogoProps();
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            saveReadings(previous);
+            saveRads(previous);
+            populateLogoProps();
         });
     }//GEN-LAST:event_lstLogosValueChanged
 
@@ -1504,11 +1491,8 @@ public class ScrLogoDetails extends PFrame {
         s.setupKeyStrokes();
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                s.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            s.setVisible(true);
         });
 
         return s;

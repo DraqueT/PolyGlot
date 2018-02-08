@@ -66,11 +66,13 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         name = r.getName();
         regex = r.getRegex();
         transformations.clear();
-        for (DeclensionGenTransform copyFrom : r.getTransforms()) {
+        r.getTransforms().stream().map((copyFrom) -> {
             DeclensionGenTransform copyTo = new DeclensionGenTransform();
             copyTo.setEqual(copyFrom);
+            return copyTo;
+        }).forEachOrdered((copyTo) -> {
             transformations.add(copyTo);
-        }
+        });
     }
     
     /**

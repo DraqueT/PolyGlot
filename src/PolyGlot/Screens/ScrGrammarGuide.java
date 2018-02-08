@@ -62,7 +62,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -763,18 +762,15 @@ public class ScrGrammarGuide extends PFrame {
                 }
             }
         });
-        treChapList.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                TreePath oldPath = e.getOldLeadSelectionPath();
-                if (oldPath != null) {
-                    Object oldNode = oldPath.getPathComponent(oldPath.getPathCount() - 1);
-                    savePropsToNode((DefaultMutableTreeNode) oldNode);
-                }
-
-                closeAllPlayRecord();
-                populateProperties();
+        treChapList.addTreeSelectionListener((TreeSelectionEvent e) -> {
+            TreePath oldPath = e.getOldLeadSelectionPath();
+            if (oldPath != null) {
+                Object oldNode = oldPath.getPathComponent(oldPath.getPathCount() - 1);
+                savePropsToNode((DefaultMutableTreeNode) oldNode);
             }
+            
+            closeAllPlayRecord();
+            populateProperties();
         });
         // add listener for character replacement logic
         txtSection.addKeyListener(new KeyListener() {
@@ -954,11 +950,8 @@ public class ScrGrammarGuide extends PFrame {
                         + e.getLocalizedMessage(), core.getRootWindow());
                 //e.printStackTrace();
             }
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    panSection.getVerticalScrollBar().setValue(0);
-                }
+            SwingUtilities.invokeLater(() -> {
+                panSection.getVerticalScrollBar().setValue(0);
             });
 
         } else {
@@ -1099,12 +1092,9 @@ public class ScrGrammarGuide extends PFrame {
         s.setupKeyStrokes();
 
         // For some reason, adding items to the combobox moves this to the back... this fixes it
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                s.toFront();
-                s.requestFocus();
-            }
+        SwingUtilities.invokeLater(() -> {
+            s.toFront();
+            s.requestFocus();
         });
 
         return s;
@@ -1118,9 +1108,9 @@ public class ScrGrammarGuide extends PFrame {
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
 
-        for (GrammarChapNode curChap : core.getGrammarManager().getChapters()) {
+        core.getGrammarManager().getChapters().forEach((curChap) -> {
             rootNode.add(curChap);
-        }
+        });
 
         treeModel.reload(rootNode);
         treChapList.setLargeModel(true);
@@ -1140,11 +1130,11 @@ public class ScrGrammarGuide extends PFrame {
 
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
-        for (GrammarChapNode curChap : core.getGrammarManager().getChapters()) {
+        core.getGrammarManager().getChapters().forEach((chapter) -> {
             GrammarChapNode srcChap = new GrammarChapNode(core.getGrammarManager());
-            srcChap.setName(curChap.getName());
+            srcChap.setName(chapter.getName());
 
-            Enumeration sections = curChap.children(txtSearch.getText());
+            Enumeration sections = chapter.children(txtSearch.getText());
             while (sections.hasMoreElements()) {
                 GrammarSectionNode curSec = (GrammarSectionNode) sections.nextElement();
                 srcChap.add(curSec);
@@ -1153,7 +1143,8 @@ public class ScrGrammarGuide extends PFrame {
             if (srcChap.children().hasMoreElements()) {
                 rootNode.add(srcChap);
             }
-        }
+        });
+        
         treeModel.reload(rootNode);
     }
 

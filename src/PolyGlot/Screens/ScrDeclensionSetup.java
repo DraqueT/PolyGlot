@@ -294,12 +294,9 @@ public final class ScrDeclensionSetup extends PDialog {
         addDemensionWithValues("", false, -1);
 
         // perform this action later, once the scroll object is properly updated
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JScrollBar bar = sclDimensions.getVerticalScrollBar();
-                bar.setValue(bar.getMaximum() + bar.getBlockIncrement());
-            }
+        SwingUtilities.invokeLater(() -> {
+            JScrollBar bar = sclDimensions.getVerticalScrollBar();
+            bar.setValue(bar.getMaximum() + bar.getBlockIncrement());
         });
     }
 
@@ -340,9 +337,9 @@ public final class ScrDeclensionSetup extends PDialog {
 
         setupDimTable();
 
-        for (DeclensionDimension curNode : dimensionList) {
+        dimensionList.forEach((curNode) -> {
             addDemensionWithValues(curNode.getValue(), curNode.isMandatory(), curNode.getId());
-        }
+        });
     }
 
     private void addDemensionWithValues(String name, boolean mandatory, Integer dimId) {
@@ -371,11 +368,8 @@ public final class ScrDeclensionSetup extends PDialog {
         PCellEditor editor1 = (PCellEditor) tblDimensions.getCellEditor(model.getRowCount() - 1, 0);
         editor1.setDocuListener(docuListener);
 
-        ActionListener actListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveDimension();
-            }
+        ActionListener actListener = (ActionEvent e) -> {
+            saveDimension();
         };
 
         // set saving properties for second column editor
@@ -384,44 +378,41 @@ public final class ScrDeclensionSetup extends PDialog {
     }
 
     private void saveDimension() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                int curRow = tblDimensions.getSelectedRow();
-                int curCol = tblDimensions.getSelectedColumn();
-
-                DeclensionNode curDec = core.getDeclensionManager().getDeclension(myType.getId(),
-                        (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()));
-
-                for (int i = 0; i < tblDimensions.getRowCount(); i++) {
-
-                    String dimName = "";
-                    Boolean dimMand = false;
-
-                    // The currently selected row will have name information in buffer, not in model
-                    if (i == curRow) {
-                        if (curCol == 0) {
-                            dimName = (String) tblDimensions.getCellEditor(i, 0).getCellEditorValue();
-                            dimMand = (Boolean) tblDimensions.getModel().getValueAt(i, 1);
-                        } else if (curCol == 1) {
-                            dimMand = (Boolean) tblDimensions.getCellEditor(i, 1).getCellEditorValue();
-                            dimName = (String) tblDimensions.getModel().getValueAt(i, 0);
-                        }
-                    } else {
-                        dimName = (String) tblDimensions.getModel().getValueAt(i, 0);
+        SwingUtilities.invokeLater(() -> {
+            int curRow = tblDimensions.getSelectedRow();
+            int curCol = tblDimensions.getSelectedColumn();
+            
+            DeclensionNode curDec = core.getDeclensionManager().getDeclension(myType.getId(),
+                    (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()));
+            
+            for (int i = 0; i < tblDimensions.getRowCount(); i++) {
+                
+                String dimName = "";
+                Boolean dimMand = false;
+                
+                // The currently selected row will have name information in buffer, not in model
+                if (i == curRow) {
+                    if (curCol == 0) {
+                        dimName = (String) tblDimensions.getCellEditor(i, 0).getCellEditorValue();
                         dimMand = (Boolean) tblDimensions.getModel().getValueAt(i, 1);
+                    } else if (curCol == 1) {
+                        dimMand = (Boolean) tblDimensions.getCellEditor(i, 1).getCellEditorValue();
+                        dimName = (String) tblDimensions.getModel().getValueAt(i, 0);
                     }
-
-                    Integer dimId = (Integer) tblDimensions.getModel().getValueAt(i, 2);
-                    DeclensionDimension dim = new DeclensionDimension();
-
-                    dim.setId(dimId);
-                    dim.setValue(dimName);
-                    dim.setMandatory(dimMand);
-
-                    Integer setId = curDec.addDimension(dim);
-                    tblDimensions.getModel().setValueAt(setId, i, 2);
+                } else {
+                    dimName = (String) tblDimensions.getModel().getValueAt(i, 0);
+                    dimMand = (Boolean) tblDimensions.getModel().getValueAt(i, 1);
                 }
+                
+                Integer dimId = (Integer) tblDimensions.getModel().getValueAt(i, 2);
+                DeclensionDimension dim = new DeclensionDimension();
+                
+                dim.setId(dimId);
+                dim.setValue(dimName);
+                dim.setMandatory(dimMand);
+                
+                Integer setId = curDec.addDimension(dim);
+                tblDimensions.getModel().setValueAt(setId, i, 2);
             }
         });
     }

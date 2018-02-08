@@ -26,7 +26,6 @@ import PolyGlot.Nodes.ImageNode;
 import PolyGlot.PGTUtil;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -69,39 +68,27 @@ public class PGrammarPane extends JTextPane {
         final PGrammarPane parentPane = this;
 
         insertImage.setToolTipText("Insert Image into Text");
-        insertImage.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                try {
-                    ImageNode image = core.getImageCollection()
-                            .openNewImage((Window) parentPane.getTopLevelAncestor());
-                    if (image != null) {
-                        // null node means user cancelled process
-                        addImage(image);
-                    }
-                } catch (Exception e) {
-                    InfoBox.error("Image Import Error", "Unable to import image: "
-                            + e.getLocalizedMessage(), core.getRootWindow());
+        insertImage.addActionListener((ActionEvent ae) -> {
+            try {
+                ImageNode image = core.getImageCollection()
+                        .openNewImage((Window) parentPane.getTopLevelAncestor());
+                if (image != null) {
+                    // null node means user cancelled process
+                    addImage(image);
                 }
+            } catch (Exception e) {
+                InfoBox.error("Image Import Error", "Unable to import image: "
+                        + e.getLocalizedMessage(), core.getRootWindow());
             }
         });
-        cut.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                cut();
-            }
+        cut.addActionListener((ActionEvent ae) -> {
+            cut();
         });
-        copy.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                copy();
-            }
+        copy.addActionListener((ActionEvent ae) -> {
+            copy();
         });
-        paste.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                paste();
-            }
+        paste.addActionListener((ActionEvent ae) -> {
+            paste();
         });
 
         ruleMenu.add(insertImage);

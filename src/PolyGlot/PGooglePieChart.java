@@ -19,12 +19,9 @@
  */
 package PolyGlot;
 
-import java.util.List;
-import java.util.Map.Entry;
-
 /**
- * This is a wrapper for HTML/js based pie charts that are made available by
- * Google. Extends base google chart wrapping class.
+ * This is a wrapper for HTML/js based pie charts that are made available by Google. Extends base google chart wrapping
+ * class.
  *
  * @author DThompson
  */
@@ -35,8 +32,7 @@ public class PGooglePieChart extends PGoogleChart {
     }
 
     /**
-     * Returns constructed HTML which will generate the visuals for the pie
-     * chart
+     * Returns constructed HTML which will generate the visuals for the pie chart
      *
      * @return string value of HTML to insert into document
      */
@@ -46,10 +42,11 @@ public class PGooglePieChart extends PGoogleChart {
                 + "        let data = google.visualization.arrayToDataTable([\n"
                 + "          ['Item', 'Value'],\n";
 
-        for (Entry<String, List<Double>> curEntry : chartVals.entrySet()) {
-            ret += "          ['" + curEntry.getKey() + "', "
+        ret = chartVals.entrySet().stream().map((curEntry) -> 
+        {
+            return "          ['" + curEntry.getKey() + "', "
                     + curEntry.getValue().get(0).toString() + "],\n";
-        }
+        }).reduce(ret, String::concat);
 
         ret += "]);\n"
                 + "\n"
@@ -59,7 +56,7 @@ public class PGooglePieChart extends PGoogleChart {
                 + "'\n"
                 + "        };\n"
                 + "\n"
-                + "        var chart = new google.visualization.PieChart(document.getElementById('" 
+                + "        var chart = new google.visualization.PieChart(document.getElementById('"
                 + getFunctionName() + "'));\n"
                 + "\n"
                 + "        chart.draw(data, options);\n"

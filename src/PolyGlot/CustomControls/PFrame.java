@@ -78,12 +78,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
     private boolean curResizing;
 
     public PFrame() {
-        this.addWindowStateListener(new WindowStateListener() {
-            @Override
-            public void windowStateChanged(WindowEvent evt) {
-                setWindowState(evt);
-            }
-        });
+        this.addWindowStateListener(this::setWindowState);
     }
 
     @Override
@@ -219,18 +214,14 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
      * for Macs or PC/Linux boxes, respectively.)
      */
     private void addTextBindings(final String UIElement, final int mask) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                InputMap im = (InputMap) UIManager.get(UIElement);
-                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
-                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
-                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
-                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.selectAllAction);
-                UIManager.put(UIElement, im);
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
+        SwingUtilities.invokeLater(() -> {
+            InputMap im = (InputMap) UIManager.get(UIElement);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.selectAllAction);
+            UIManager.put(UIElement, im);
+        });
     }
 
     /**
@@ -298,43 +289,28 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
      * sets menu accelerators and menu item text to reflect this
      */
     public void setupAccelerators() {
-        mnuPublish.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ScrPrintToPDF.run(core);
-            }
+        mnuPublish.addActionListener((ActionEvent e) -> {
+            ScrPrintToPDF.run(core);
         });
         this.rootPane.add(mnuPublish);
 
-        mnuSave.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                core.coreSave();
-            }
+        mnuSave.addActionListener((java.awt.event.ActionEvent evt) -> {
+            core.coreSave();
         });
         this.rootPane.add(mnuSave);
 
-        mnuNew.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                core.coreNew(true);
-            }
+        mnuNew.addActionListener((java.awt.event.ActionEvent evt) -> {
+            core.coreNew(true);
         });
         this.rootPane.add(mnuNew);
 
-        mnuOpen.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                core.coreOpen();
-            }
+        mnuOpen.addActionListener((java.awt.event.ActionEvent evt) -> {
+            core.coreOpen();
         });
         this.rootPane.add(mnuOpen);
 
-        mnuExit.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dispose();
-            }
+        mnuExit.addActionListener((java.awt.event.ActionEvent evt) -> {
+            dispose();
         });
         this.rootPane.add(mnuExit);
 

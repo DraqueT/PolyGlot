@@ -45,23 +45,24 @@ import org.apache.poi.ss.usermodel.Row;
  * @author Draque
  */
 public class ExcelExport {
-    
+
     /**
      * Exports a dictionary to an excel file (externally facing)
+     *
      * @param fileName Filename to export to
      * @param core dictionary core
      * @throws Exception on write error
      */
     public static void exportExcelDict(String fileName, DictCore core) throws Exception {
         ExcelExport e = new ExcelExport();
-        
+
         e.export(fileName, core);
     }
-    
+
     private Object[] getWordForm(ConWord conWord, DictCore core) {
         List<String> ret = new ArrayList<>();
         String declensionCell = "";
-        
+
         ret.add(conWord.getValue());
         ret.add(conWord.getLocalWord());
         ret.add(conWord.getWordTypeDisplay());
@@ -70,14 +71,14 @@ public class ExcelExport {
         } catch (Exception e) {
             ret.add("<ERROR>");
         }
-        
+
         String classes = "";
         for (Entry<Integer, Integer> curEntry : conWord.getClassValues()) {
             if (classes.length() != 0) {
                 classes += ", ";
             }
             try {
-                WordProperty prop = (WordProperty)core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                WordProperty prop = (WordProperty) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
                 WordPropValueNode value = prop.getValueById(curEntry.getValue());
                 classes += value.getValue();
             } catch (Exception e) {
@@ -85,23 +86,23 @@ public class ExcelExport {
             }
         }
         ret.add(classes);
-        
+
         List<DeclensionNode> declensions = core.getDeclensionManager().getDeclensionListWord(conWord.getId());
-        
-        for(DeclensionNode curNode : declensions) {
-            declensionCell += curNode.getNotes() + " : " + curNode.getValue() + "\n";
-        }
-        
+
+        declensionCell = declensions.stream().map(
+                (curNode) -> {
+                    return curNode.getNotes() + " : " + curNode.getValue() + "\n";
+                }).reduce(declensionCell, String::concat);
+
         ret.add(declensionCell);
-        ret.add(conWord.getDefinition());        
-        
+        ret.add(conWord.getDefinition());
+
         return ret.toArray();
     }
-    
-    
-    
+
     /**
      * Exports a dictionary to an excel file
+     *
      * @param fileName Filename to export to
      * @param core dictionary core
      * @throws Exception on write error
@@ -116,17 +117,17 @@ public class ExcelExport {
         Font boldFont = workbook.createFont();
         conFont.setFontName(core.getPropertiesManager().getFontCon().getFontName());
         boldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
-        localStyle.setWrapText(true);        
+        localStyle.setWrapText(true);
         conStyle.setWrapText(true);
         conStyle.setFont(conFont);
         boldHeader.setWrapText(true);
         boldHeader.setFont(boldFont);
-        
+
         // record words on sheet 1        
         sheet = workbook.createSheet("Lexicon");
         Iterator<ConWord> wordIt = core.getWordCollection().getWordNodes().iterator();
-        
-        Row row  = sheet.createRow(0);
+
+        Row row = sheet.createRow(0);
         row.createCell(0).setCellValue(core.conLabel().toUpperCase() + " WORD");
         row.createCell(1).setCellValue(core.localLabel().toUpperCase() + " WORD");
         row.createCell(2).setCellValue("TYPE");
@@ -134,14 +135,14 @@ public class ExcelExport {
         row.createCell(4).setCellValue("CLASS(ES)");
         row.createCell(5).setCellValue("DECLENSIONS");
         row.createCell(6).setCellValue("DEFINITIONS");
-        
+
         for (Integer i = 1; wordIt.hasNext(); i++) {
             Object[] wordArray = getWordForm(wordIt.next(), core);
             row = sheet.createRow(i);
             for (Integer j = 0; j < wordArray.length; j++) {
                 Cell cell = row.createCell(j);
-                cell.setCellValue((String)wordArray[j]);
-                
+                cell.setCellValue((String) wordArray[j]);
+
                 if (j == 0) {
                     cell.setCellStyle(conStyle);
                 } else {
@@ -149,74 +150,74 @@ public class ExcelExport {
                 }
             }
         }
-        
+
         // record types on sheet 2
         sheet = workbook.createSheet("Types");
         Iterator<TypeNode> typeIt = core.getTypes().getNodes().iterator();
-        
+
         row = sheet.createRow(0);
         row.createCell(0).setCellValue("TYPE");
         row.createCell(1).setCellValue("NOTES");
-        
+
         for (Integer i = 1; typeIt.hasNext(); i++) {
             TypeNode curNode = typeIt.next();
             row = sheet.createRow(i);
-            
+
             Cell cell = row.createCell(0);
             cell.setCellValue(curNode.getValue());
             cell = row.createCell(1);
             cell.setCellValue(curNode.getNotes());
             cell.setCellStyle(localStyle);
         }
-        
+
         // record word classes on sheet 3
         sheet = workbook.createSheet("Lexical Classes");
         int propertyColumn = 0;
-        for (WordProperty curProp 
-                : core.getWordPropertiesCollection().getAllWordProperties()) {            
+        for (WordProperty curProp
+                : core.getWordPropertiesCollection().getAllWordProperties()) {
             // get row, if not exist, create
             row = sheet.getRow(0);
             if (row == null) {
                 row = sheet.createRow(0);
             }
-            
+
             Cell cell = row.createCell(propertyColumn);
-            cell.setCellValue(curProp.getValue());            
+            cell.setCellValue(curProp.getValue());
             cell.setCellStyle(boldHeader);
-            
+
             int rowIndex = 1;
             for (WordPropValueNode curVal : curProp.getValues()) {
                 row = sheet.getRow(rowIndex);
                 if (row == null) {
                     row = sheet.createRow(rowIndex);
                 }
-                
+
                 cell = row.createCell(propertyColumn);
                 cell.setCellStyle(localStyle);
                 cell.setCellValue(curVal.getValue());
-                
+
                 rowIndex++;
             }
-            
+
             propertyColumn++;
         }
-        
+
         // record pronunciations on sheet 4
         sheet = workbook.createSheet("Pronunciations");
         Iterator<PronunciationNode> procIt = core.getPronunciationMgr().getPronunciations().iterator();
-        
+
         row = sheet.createRow(0);
         row.createCell(0).setCellValue("CHARACTER(S)");
         row.createCell(1).setCellValue("PRONUNCIATION");
-        
+
         for (Integer i = 1; procIt.hasNext(); i++) {
             PronunciationNode curNode = procIt.next();
             row = sheet.createRow(i);
-            
+
             Cell cell = row.createCell(0);
             cell.setCellStyle(conStyle);
             cell.setCellValue(curNode.getValue());
-            
+
             cell = row.createCell(1);
             cell.setCellStyle(localStyle);
             cell.setCellValue(curNode.getPronunciation());

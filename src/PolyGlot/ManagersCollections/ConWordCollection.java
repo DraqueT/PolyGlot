@@ -96,13 +96,7 @@ public class ConWordCollection extends DictionaryCollection {
     public Iterator<ConWord> illegalFilter() {
         List<ConWord> retList = new ArrayList<>();
 
-        for (Object object : nodeMap.values()) {
-            ConWord curWord = (ConWord) object;
-
-            if (!curWord.isWordLegal()) {
-                retList.add(curWord);
-            }
-        }
+        nodeMap.values().stream().filter((word) -> !((ConWord)word).isWordLegal()).forEach((word) -> retList.add((ConWord)word));
 
         Collections.sort(retList);
         return retList.iterator();
@@ -652,8 +646,8 @@ public class ConWordCollection extends DictionaryCollection {
         List<ConWord> retList = new ArrayList<>();
 
         // cycle through and create copies of words with multiple local values
-        for (ConWord curWord : cycleList) {
-            String localPre = curWord.getLocalWord();
+        cycleList.forEach((ConWord word) -> {
+            String localPre = word.getLocalWord();
             if (localPre.contains(",")) {
                 String[] allLocals = localPre.split(",");
 
@@ -661,16 +655,16 @@ public class ConWordCollection extends DictionaryCollection {
                 for (String curLocal : allLocals) {
                     ConWord ins = new ConWord();
                     ins.setCore(core);
-                    ins.setEqual(curWord);
+                    ins.setEqual(word);
                     ins.setLocalWord(curLocal);
                     ins.setParent(this);
 
                     retList.add(ins);
                 }
             } else {
-                retList.add(curWord);
+                retList.add(word);
             }
-        }
+        });
 
         orderByLocal = true;
         Collections.sort(retList);
@@ -738,16 +732,13 @@ public class ConWordCollection extends DictionaryCollection {
     public void writeXML(Document doc, Element rootElement) {
         List<ConWord> wordLoop = getWordNodes();
         Element lexicon = doc.createElement(PGTUtil.lexiconXID);
-        Element wordNode;
-        Element wordValue;
-
         rootElement.appendChild(lexicon);
         
-        for (ConWord curWord : wordLoop) {
-            wordNode = doc.createElement(PGTUtil.wordXID);
+        wordLoop.stream().parallel().forEach((curWord) -> {
+            Element wordNode = doc.createElement(PGTUtil.wordXID);
             lexicon.appendChild(wordNode);
 
-            wordValue = doc.createElement(PGTUtil.wordIdXID);
+            Element wordValue = doc.createElement(PGTUtil.wordIdXID);
             Integer wordId = curWord.getId();
             wordValue.appendChild(doc.createTextNode(wordId.toString()));
             wordNode.appendChild(wordValue);
@@ -808,7 +799,7 @@ public class ConWordCollection extends DictionaryCollection {
             wordValue = doc.createElement(PGTUtil.wordEtymologyNotesXID);
             wordValue.appendChild(doc.createTextNode(curWord.getEtymNotes()));
             wordNode.appendChild(wordValue);
-        }
+        });
     }
 
     /**
@@ -823,34 +814,31 @@ public class ConWordCollection extends DictionaryCollection {
         Map<Integer, List<DeclensionPair>> comTypeDecs = new HashMap();
 
         // iterates over every word
-        for (Object curNode : nodeMap.values()) {
-            ConWord curWord = (ConWord) curNode;
+        nodeMap.values().stream()
+                .filter((word) -> ((ConWord)word).getWordTypeId().equals(typeId))
+                .forEach((node) -> {
+            ConWord word = (ConWord) node;
             List<DeclensionPair> curDeclensions;
 
-            // skip words not of given type
-            if (!curWord.getWordTypeId().equals(typeId)) {
-                continue;
-            }
-
             // ensure I'm only generating decelnsion patterns for any given part of speech only once
-            if (comTypeDecs.containsKey(curWord.getWordTypeId())) {
-                curDeclensions = comTypeDecs.get(curWord.getWordTypeId());
+            if (comTypeDecs.containsKey(word.getWordTypeId())) {
+                curDeclensions = comTypeDecs.get(word.getWordTypeId());
             } else {
-                curDeclensions = dm.getAllCombinedIds(curWord.getWordTypeId());
-                comTypeDecs.put(curWord.getWordTypeId(), curDeclensions);
+                curDeclensions = dm.getAllCombinedIds(word.getWordTypeId());
+                comTypeDecs.put(word.getWordTypeId(), curDeclensions);
             }
 
             // retrieves all stored declension values for word
-            Map<String, DeclensionNode> decMap = dm.getWordDeclensions(curWord.getId());
+            Map<String, DeclensionNode> decMap = dm.getWordDeclensions(word.getId());
 
             // removes all legitimate declensions from map
-            for (DeclensionPair curPair : curDeclensions) {
+            curDeclensions.forEach((curPair) -> {
                 decMap.remove(curPair.combinedId);
-            }
+            });
 
             // wipe remaining values from word
-            dm.removeDeclensionValues(curWord.getId(), decMap.values());
-        }
+            dm.removeDeclensionValues(word.getId(), decMap.values());
+        });
     }
 
     public class WordNotExistsException extends NodeNotExistsException {

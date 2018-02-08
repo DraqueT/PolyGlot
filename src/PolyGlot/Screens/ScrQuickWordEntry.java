@@ -35,13 +35,11 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -178,13 +176,7 @@ public final class ScrQuickWordEntry extends PDialog {
     public void updateAllValues(DictCore _core) {
         core = _core;
         // ensure this is on the UI component stack to avoid read/writelocks...
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                populateTypes();
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
+        SwingUtilities.invokeLater(this::populateTypes);
     }
 
     private void populateTypes() {
@@ -192,9 +184,9 @@ public final class ScrQuickWordEntry extends PDialog {
         final String defLabel = "-- Part of Speech --";
         cmbType.addItem(defLabel);
 
-        for (TypeNode curType : core.getTypes().getNodes()) {
+        core.getTypes().getNodes().forEach((curType) -> {
             cmbType.addItem(curType);
-        }
+        });
     }
 
     /**
@@ -214,7 +206,7 @@ public final class ScrQuickWordEntry extends PDialog {
         }
 
         // set class values
-        for (Entry<Integer, Component> curEntry : classComboMap.entrySet()) {
+        classComboMap.entrySet().forEach((curEntry) -> {
             if (curEntry.getValue() instanceof PComboBox) {
                 PComboBox boxEntry = (PComboBox) curEntry.getValue();
                 if (boxEntry.getSelectedItem() instanceof WordPropValueNode) {
@@ -225,7 +217,7 @@ public final class ScrQuickWordEntry extends PDialog {
                 PTextField curText = (PTextField) curEntry.getValue();
                 word.setClassTextValue(curEntry.getKey(), curText.getText());
             }
-        }
+        });
 
         ConWord test = core.getWordCollection().testWordLegality(word);
         String testResults = "";
@@ -330,11 +322,8 @@ public final class ScrQuickWordEntry extends PDialog {
             if (curProp.isFreeText()) {
                 PTextField textField = new PTextField(core, false, "-- " + curProp.getValue() + " --");
                 textField.setEnabled(chkClasses.isSelected());
-                textField.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        tryRecord();
-                    }
+                textField.addActionListener((ActionEvent e) -> {
+                    tryRecord();
                 });
                 
                 textField.setToolTipText(curProp.getValue() + " value");
@@ -348,9 +337,9 @@ public final class ScrQuickWordEntry extends PDialog {
                 comboModel.addElement("-- " + curProp.getValue() + " --");
 
                 // populate class dropdown
-                for (WordPropValueNode value : curProp.getValues()) {
+                curProp.getValues().forEach((value) -> {
                     comboModel.addElement(value);
-                }
+                });
 
                 classBox.setEnabled(chkClasses.isSelected());
                 classBox.addKeyListener(new KeyListener() {
@@ -626,23 +615,20 @@ public final class ScrQuickWordEntry extends PDialog {
     }//GEN-LAST:event_chkProcActionPerformed
 
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                if (cmbType.getSelectedItem() != null
-                        && cmbType.getSelectedItem() instanceof TypeNode) {
-                    setupClassPanel(((TypeNode) cmbType.getSelectedItem()).getId());
-                } else {
-                    setupClassPanel(0);
-                }
+        SwingUtilities.invokeLater(() -> {
+            if (cmbType.getSelectedItem() != null
+                    && cmbType.getSelectedItem() instanceof TypeNode) {
+                setupClassPanel(((TypeNode) cmbType.getSelectedItem()).getId());
+            } else {
+                setupClassPanel(0);
             }
         });
     }//GEN-LAST:event_cmbTypeActionPerformed
 
     private void chkClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkClassesActionPerformed
-        for (Component curBox : classComboMap.values()) {
+        classComboMap.values().forEach((curBox) -> {
             curBox.setEnabled(chkClasses.isSelected());
-        }
+        });
     }//GEN-LAST:event_chkClassesActionPerformed
 
     /**

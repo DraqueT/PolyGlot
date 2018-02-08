@@ -276,11 +276,8 @@ public class ScrLogoQuickView extends PFrame {
             logoFinder.setWordFetchMode(true);
             logoFinder.setBeside(this);
 
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    logoFinder.setVisible(true);
-                }
+            java.awt.EventQueue.invokeLater(() -> {
+                logoFinder.setVisible(true);
             });
         } else {
             LogoNode addLogo = logoFinder.getSelectedLogo();

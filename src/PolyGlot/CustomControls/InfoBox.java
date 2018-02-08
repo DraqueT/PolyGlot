@@ -25,7 +25,6 @@ package PolyGlot.CustomControls;
  */
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -98,40 +97,28 @@ public class InfoBox extends JFrame {
         };
 
         ok.setText("OK");
-        ok.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
-                // set the value of the option pane
-                pane.setValue(JOptionPane.OK_OPTION);
-            }
+        ok.addActionListener((ActionEvent e) -> {
+            JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
+            // set the value of the option pane
+            pane.setValue(JOptionPane.OK_OPTION);
         });
         
         yes.setText("Yes");
-        yes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
-                pane.setValue(JOptionPane.YES_OPTION);
-            }
+        yes.addActionListener((ActionEvent e) -> {
+            JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
+            pane.setValue(JOptionPane.YES_OPTION);
         });
 
         no.setText("No");
-        no.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
-                pane.setValue(JOptionPane.NO_OPTION);
-            }
+        no.addActionListener((ActionEvent e) -> {
+            JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
+            pane.setValue(JOptionPane.NO_OPTION);
         });
 
         cancel.setText("Cancel");
-        cancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
-                pane.setValue(JOptionPane.CANCEL_OPTION);
-            }
+        cancel.addActionListener((ActionEvent e) -> {
+            JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
+            pane.setValue(JOptionPane.CANCEL_OPTION);
         });
     }
 

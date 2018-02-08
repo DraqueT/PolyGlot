@@ -29,7 +29,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -80,20 +79,17 @@ public class ScrUpdateAlert extends PDialog {
             buttonMap.put(nameNode.getTextContent(), linkNode.getTextContent());
 
             PButton newButton = new PButton(core);
-            newButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    JButton thisButton = (JButton) e.getSource();
-                    String link = buttonMap.get(thisButton.getText());
-                    URI uri;
-
-                    try {
-                        uri = new URI(link);
-                        uri.normalize();
-                        java.awt.Desktop.getDesktop().browse(uri);
-                    } catch (IOException | URISyntaxException ex) {
-                        InfoBox.error("Browser Error", "Unable to open page: " + link, core.getRootWindow());
-                    }
+            newButton.addActionListener((ActionEvent e) -> {
+                JButton thisButton = (JButton) e.getSource();
+                String link = buttonMap.get(thisButton.getText());
+                URI uri;
+                
+                try {
+                    uri = new URI(link);
+                    uri.normalize();
+                    java.awt.Desktop.getDesktop().browse(uri);
+                } catch (IOException | URISyntaxException ex) {
+                    InfoBox.error("Browser Error", "Unable to open page: " + link, core.getRootWindow());
                 }
             });
 

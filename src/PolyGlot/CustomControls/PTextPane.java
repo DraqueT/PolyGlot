@@ -32,7 +32,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -204,43 +203,31 @@ public class PTextPane extends JTextPane {
         final PTextPane parentPane = this;
 
         insertImage.setToolTipText("Insert Image into Text");
-        insertImage.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                try {
-                    ImageNode image = core.getImageCollection()
-                            .openNewImage((Window)parentPane.getTopLevelAncestor());
-                    if (image != null) {
-                        // null node means user cancelled process
-                        addImage(image);
-                    }                    
-                } catch (Exception e) {
-                    InfoBox.error("Image Import Error", "Unable to import image: " 
-                            + e.getLocalizedMessage(), core.getRootWindow());
+        insertImage.addActionListener((ActionEvent ae) -> {
+            try {
+                ImageNode image = core.getImageCollection()
+                        .openNewImage((Window)parentPane.getTopLevelAncestor());
+                if (image != null) {
+                    // null node means user cancelled process
+                    addImage(image);
                 }
+            } catch (Exception e) {
+                InfoBox.error("Image Import Error", "Unable to import image: "
+                        + e.getLocalizedMessage(), core.getRootWindow());
             }
         });
-        cut.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                cut();
-            }
+        cut.addActionListener((ActionEvent ae) -> {
+            cut();
         });
-        copy.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                copy();
-            }
+        copy.addActionListener((ActionEvent ae) -> {
+            copy();
         });
-        paste.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                if(isDefaultText()) { //removes default text if appropriate
-                    superSetText("");
-                }
-                paste();
-                setText(getText()); // ensures text is not left grey
+        paste.addActionListener((ActionEvent ae) -> {
+            if(isDefaultText()) { //removes default text if appropriate
+                superSetText("");
             }
+            paste();
+            setText(getText()); // ensures text is not left grey
         });
 
         ruleMenu.add(insertImage);

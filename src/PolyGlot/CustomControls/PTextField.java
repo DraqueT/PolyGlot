@@ -28,7 +28,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -167,30 +166,22 @@ public class PTextField extends JTextField {
         this.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (getSuperText().equals(defText)) {
-                            setText("");
-                            setForeground(Color.black);
-                        }
+                SwingUtilities.invokeLater(() -> {
+                    if (getSuperText().equals(defText)) {
+                        setText("");
+                        setForeground(Color.black);
                     }
-                };
-                SwingUtilities.invokeLater(runnable);
+                });
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (getSuperText().length() == 0) {
-                            setText(defText);
-                            setForeground(Color.lightGray);
-                        }
+                SwingUtilities.invokeLater(() -> {
+                    if (getSuperText().length() == 0) {
+                        setText(defText);
+                        setForeground(Color.lightGray);
                     }
-                };
-                SwingUtilities.invokeLater(runnable);
+                });
             }
         });
 
@@ -406,27 +397,18 @@ public class PTextField extends JTextField {
         final JMenuItem paste = new JMenuItem("Paste");
         final PTextField parentField = this;
 
-        cut.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                cut();
-            }
+        cut.addActionListener((ActionEvent ae) -> {
+            cut();
         });
-        copy.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                copy();
-            }
+        copy.addActionListener((ActionEvent ae) -> {
+            copy();
         });
-        paste.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                if (isDefaultText()) { //removes default text if appropriate
-                    superSetText("");
-                }
-                paste();
-                setText(getText()); // ensures text is not left grey
+        paste.addActionListener((ActionEvent ae) -> {
+            if (isDefaultText()) { //removes default text if appropriate
+                superSetText("");
             }
+            paste();
+            setText(getText()); // ensures text is not left grey
         });
 
         ruleMenu.add(cut);

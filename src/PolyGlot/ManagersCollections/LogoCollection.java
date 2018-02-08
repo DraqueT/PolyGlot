@@ -51,11 +51,11 @@ public class LogoCollection extends DictionaryCollection {
      */
     public boolean addWordLogoRelation(ConWord word, LogoNode logo) {
         if (!logoToWord.containsKey(logo.getId())) {
-            logoToWord.put(logo.getId(), new ArrayList<Integer>());
+            logoToWord.put(logo.getId(), new ArrayList<>());
         }
         
         if(!wordToLogo.containsKey(word.getId())) {
-            wordToLogo.put(word.getId(), new ArrayList<Integer>());
+            wordToLogo.put(word.getId(), new ArrayList<>());
         }
         
         if (wordToLogo.get(word.getId()).contains(logo.getId())) {

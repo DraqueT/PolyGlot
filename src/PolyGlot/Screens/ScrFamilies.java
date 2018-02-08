@@ -393,13 +393,10 @@ public class ScrFamilies extends PFrame {
             }
         });
 
-        treFam.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                if (treFam.getLastSelectedPathComponent() != null) {
-                    updateAllProps();
-                    setEnabledMenuItems();
-                }
+        treFam.addTreeSelectionListener((TreeSelectionEvent e) -> {
+            if (treFam.getLastSelectedPathComponent() != null) {
+                updateAllProps();
+                setEnabledMenuItems();
             }
         });
         
@@ -647,11 +644,8 @@ public class ScrFamilies extends PFrame {
         s.setupKeyStrokes();
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                s.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            s.setVisible(true);
         });
 
         return s;

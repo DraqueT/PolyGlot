@@ -22,7 +22,6 @@ package PolyGlot.CustomControls;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.Nodes.ConWord;
-import PolyGlot.Nodes.EtyExternalParent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -105,9 +104,9 @@ public final class PPanelDrawEtymology extends JPanel {
             columnWidth.put(curDepth, mySize);
         }
 
-        for (EtymologyPrintingNode parentNode : curNode.parents) {
+        curNode.parents.forEach((parentNode) -> {
             calcColumnWidthParents(parentNode);
-        }
+        });
     }
 
     /**
@@ -129,9 +128,9 @@ public final class PPanelDrawEtymology extends JPanel {
             columnWidth.put(curDepth, mySize);
         }
 
-        for (EtymologyPrintingNode childNode : curNode.children) {
+        curNode.children.forEach((childNode) -> {
             calcColumnWidthChildren(childNode);
-        }
+        });
     }
 
     /**
@@ -140,7 +139,7 @@ public final class PPanelDrawEtymology extends JPanel {
      * @param curNode node to populate parentage of
      */
     private void addEtTreeParents(EtymologyPrintingNode curNode) {
-        for (Integer curParentId : core.getEtymologyManager().getWordParentsIds(curNode.word.getId())) {
+        core.getEtymologyManager().getWordParentsIds(curNode.word.getId()).forEach((curParentId) -> {
             try {
                 EtymologyPrintingNode parentNode = new EtymologyPrintingNode();
                 ConWord parentWord = core.getWordCollection().getNodeById(curParentId);
@@ -153,11 +152,10 @@ public final class PPanelDrawEtymology extends JPanel {
                 // do nothing. This is the result of a missing word due to user
                 // deletion, and will be cleaned at time of archival
             }
-        }
+        });
         
         // adds external parents
-        for (EtyExternalParent extPar
-                : core.getEtymologyManager().getWordExternalParents(curNode.word.getId())) {
+        core.getEtymologyManager().getWordExternalParents(curNode.word.getId()).forEach((extPar) -> {
             EtymologyPrintingNode parentNode = new EtymologyPrintingNode();
             parentNode.isExternal = true;
             parentNode.extWordValue = extPar.getExternalWord();
@@ -169,7 +167,7 @@ public final class PPanelDrawEtymology extends JPanel {
             parentNode.children.add(curNode);
             curNode.parents.add(parentNode);
             lowestDepth = lowestDepth > curNode.depth-1 ? curNode.depth-1 : lowestDepth;
-        }
+        });
 
         // make certain to update the lowest depth if needed
         lowestDepth = lowestDepth > curNode.depth ? curNode.depth : lowestDepth;
@@ -185,8 +183,7 @@ public final class PPanelDrawEtymology extends JPanel {
      */
     private void addEtTreeChildren(EtymologyPrintingNode curNode, int depth) {
         curNode.depth = depth;
-        for (Integer curChildId
-                : core.getEtymologyManager().getChildren(curNode.word.getId())) {
+        core.getEtymologyManager().getChildren(curNode.word.getId()).forEach((curChildId) -> {
             try {
                 EtymologyPrintingNode childNode = new EtymologyPrintingNode();
                 ConWord childWord = core.getWordCollection().getNodeById(curChildId);
@@ -198,7 +195,7 @@ public final class PPanelDrawEtymology extends JPanel {
                 // do nothing. This is the result of a missing word due to user
                 // deletion, and will be cleaned at time of archival
             }
-        }
+        });
 
         // sort in order of node depth
         Collections.sort(curNode.children);
@@ -434,13 +431,7 @@ public final class PPanelDrawEtymology extends JPanel {
      * @return minimum height
      */
     private int getCalcWidth() {
-        int ret = 0;
-        
-        for(Integer i : columnWidth.values()) {
-            ret += i;
-        }
-        
-        return ret;
+        return columnWidth.values().stream().mapToInt(Number::intValue).sum();
     }
     
     /**

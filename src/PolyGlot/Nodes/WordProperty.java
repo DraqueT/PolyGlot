@@ -60,14 +60,14 @@ public class WordProperty extends DictNode {
         
         this.value = copyProp.getValue();
         
-        for (WordPropValueNode curNode : copyProp.getValues()) {
+        copyProp.getValues().forEach((node) -> {
             try {
-                addValue(curNode.getValue(), curNode.getId());
+                addValue(node.getValue(), node.getId());
             } catch (Exception ex) {
                 throw new ClassCastException("Problem setting class value: " 
                         + ex.getLocalizedMessage());
             }
-        }
+        });
     }
     
     /**
