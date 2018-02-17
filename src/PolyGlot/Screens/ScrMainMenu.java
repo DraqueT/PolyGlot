@@ -62,9 +62,8 @@ import org.simplericity.macify.eawt.ApplicationListener;
 import org.simplericity.macify.eawt.DefaultApplication;
 
 /**
- * Primary window for PolyGlot interface. Main running class that instantiates
- * core and handles other windows/UI. Depends on DictCore for all heavy logical
- * lifting behind the scenes.
+ * Primary window for PolyGlot interface. Main running class that instantiates core and handles other windows/UI.
+ * Depends on DictCore for all heavy logical lifting behind the scenes.
  *
  * @author draque.thompson
  */
@@ -79,30 +78,29 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     /**
      * Creates new form ScrMainMenu
      *
-     * @param overridePath Path PolyGlot should treat as home directory (blank
-     * if default)
+     * @param overridePath Path PolyGlot should treat as home directory (blank if default)
      */
     @SuppressWarnings("LeakingThisInConstructor") // only passing as later reference
     public ScrMainMenu(String overridePath) {
         super();
         core = new DictCore(); // needed for initialization
         cacheLexicon = ScrLexicon.run(core, this);
-        
+
         UIManager.put("ScrollBarUI", "PolyGlot.CustomControls.PScrollBarUI");
         UIManager.put("SplitPaneUI", "PolyGlot.CustomControls.PSplitPaneUI");
         UIManager.put("OptionPane.background", Color.white);
         UIManager.put("Panel.background", Color.white);
         UIManager.put("ToolTipUI", "PolyGlot.CustomControls.PToolTipUI");
         UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
-        
+
         initComponents();
 
         try {
             backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
             jLabel1.setFont(IOHandler.getButtonFont().deriveFont(45f));
         } catch (IOException e) {
-            InfoBox.error("Resource Error", 
-                    "Unable to load internal resource: " + e.getLocalizedMessage(), 
+            InfoBox.error("Resource Error",
+                    "Unable to load internal resource: " + e.getLocalizedMessage(),
                     core.getRootWindow());
         }
 
@@ -122,8 +120,8 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 // Inform user? Don't see a pressing need to...
             }
         }
-        
-ToolTipUI t;
+
+        ToolTipUI t;
         super.setSize(super.getPreferredSize());
     }
 
@@ -210,8 +208,7 @@ ToolTipUI t;
     // <- MACIFY RELATED CODE
 
     /**
-     * Checks to make certain Java is a high enough version. Informs user and
-     * quits otherwise.
+     * Checks to make certain Java is a high enough version. Informs user and quits otherwise.
      */
     private void checkJavaVersion() {
         String javaVersion = System.getProperty("java.version");
@@ -248,7 +245,7 @@ ToolTipUI t;
                 if (!saveOrCancelTest()) {
                     return;
                 }
-                
+
                 setFile(curFile);
                 pushRecentFile(curFile);
                 populateRecentOpened();
@@ -434,8 +431,7 @@ ToolTipUI t;
     }
 
     /**
-     * Provided for cases where the java is run from an odd source folder (such
-     * as under an app file in OSX)
+     * Provided for cases where the java is run from an odd source folder (such as under an app file in OSX)
      *
      * @param override directory for base PolyGlot directory
      */
@@ -511,12 +507,12 @@ ToolTipUI t;
 
             Insets insets = getInsets();
             try {
-                this.setSizeSmooth(dim.width + jPanel1.getWidth() + insets.left + insets.right, 
-                        dim.height + insets.bottom + insets.top, 
+                this.setSizeSmooth(dim.width + jPanel1.getWidth() + insets.left + insets.right,
+                        dim.height + insets.bottom + insets.top,
                         true);
             } catch (InterruptedException e) {
-                InfoBox.error("Resize Error", 
-                        "Unable to run resize animation: " + e.getLocalizedMessage(), 
+                InfoBox.error("Resize Error",
+                        "Unable to run resize animation: " + e.getLocalizedMessage(),
                         core.getRootWindow());
             }
         }
@@ -527,15 +523,15 @@ ToolTipUI t;
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, 
-                                javax.swing.GroupLayout.DEFAULT_SIZE, 
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
                                 Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, 
-                                javax.swing.GroupLayout.DEFAULT_SIZE, 
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
                                 Short.MAX_VALUE)
         );
 
@@ -655,6 +651,7 @@ ToolTipUI t;
 
     /**
      * Prompts user for a location and exports font within PGD to given path
+     *
      * @param exportCharis set to true to export charis, false to export con font
      */
     public void exportFont(boolean exportCharis) {
@@ -747,8 +744,8 @@ ToolTipUI t;
             ScrLexicon scrLexicon = (ScrLexicon) curWindow;
             scrLexicon.selectWordById(id);
         } else {
-            InfoBox.warning("Open Lexicon", 
-                    "Please open the Lexicon and select a word to use this feature.", 
+            InfoBox.warning("Open Lexicon",
+                    "Please open the Lexicon and select a word to use this feature.",
                     core.getRootWindow());
         }
     }
@@ -756,8 +753,7 @@ ToolTipUI t;
     /**
      * Retrieves currently selected word (if any) from ScrLexicon
      *
-     * @return current word selected in scrLexicon, null otherwise (or if
-     * lexicon is not visible)
+     * @return current word selected in scrLexicon, null otherwise (or if lexicon is not visible)
      */
     public ConWord getCurrentWord() {
         ConWord ret = null;
@@ -766,8 +762,8 @@ ToolTipUI t;
             ScrLexicon scrLexicon = (ScrLexicon) curWindow;
             ret = scrLexicon.getCurrentWord();
         } else {
-            InfoBox.warning("Open Lexicon", 
-                    "Please open the Lexicon and select a word to use this feature.", 
+            InfoBox.warning("Open Lexicon",
+                    "Please open the Lexicon and select a word to use this feature.",
                     core.getRootWindow());
         }
 
@@ -785,9 +781,8 @@ ToolTipUI t;
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -1247,13 +1242,13 @@ ToolTipUI t;
                 + " take a long time to complete, depending on the complexity\n"
                 + "of your conlang. Continue?", core.getRootWindow()) == JOptionPane.YES_OPTION) {
             core.buildLanguageReport();
-            
+
             // test whether con-font family is installed on computer
             GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
             String conFontFamily = core.getPropertiesManager().getFontCon().getFamily();
             if (!Arrays.asList(g.getAvailableFontFamilyNames()).contains(conFontFamily)) {
                 // prompt user to install font (either Charis or their chosen con-font) if not currently on system
-                InfoBox.warning("Font Not Installed", 
+                InfoBox.warning("Font Not Installed",
                         "The font used for your language is not installe on this computer.\n"
                         + "This may result in the statistics page appearing incorrectly.\n"
                         + "Please select a path to save font to, install from this location, "
@@ -1348,8 +1343,8 @@ ToolTipUI t;
     }//GEN-LAST:event_mnuOptionsActionPerformed
 
     /**
-     * @param args the command line arguments args[0] = open file path (blank if
-     * none) args[1] = working directory of PolyGlot (blank if none)
+     * @param args the command line arguments args[0] = open file path (blank if none) args[1] = working directory of
+     * PolyGlot (blank if none)
      */
     public static void main(final String args[]) {
         /* Set the Nimbus look and feel */
@@ -1379,36 +1374,38 @@ ToolTipUI t;
                 String startProblems = "";
                 ScrMainMenu s = null;
 
-                try {
-                    s = new ScrMainMenu(overridePath);
-
-                    s.checkForUpdates(false);
-                    s.setupKeyStrokes();
-                    s.setVisible(true);
-
-                    // open file if one is provided via arguments
-                    if (args.length > 0) {
-                        s.setFile(args[0]);
-                        s.openLexicon();
-                    }
-                } catch (Exception ex) {
-                    startProblems += "Unable to open PolyGlot main frame: \n" 
-                            + ex.getMessage() + "\n" 
-                            + "Please contact developer (draquemail@gmail.com) for assistance.";
-                }
-                
                 // Test for minimum version of Java (8)
                 String jVer = System.getProperty("java.version");
                 if (jVer.startsWith("1.5") || jVer.startsWith("1.6") || jVer.startsWith("1.7")) {
                     startProblems += "Unable to start PolyGlot without Java 8 or higher.\n";
                 }
-                
+
                 try {
                     // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
                     this.getClass().getClassLoader().loadClass("javafx.embed.swing.JFXPanel");
                 } catch (ClassNotFoundException e) {
-                    startProblems += "Unable to load Java FX. Download and install to use PolyGlot " 
+                    startProblems += "Unable to load Java FX. Download and install to use PolyGlot "
                             + "(JavaFX not included in some builds of Java 8 for Linux).\n";
+                }
+
+                if (startProblems.length() == 0) {
+                    try {
+                        // separated due to serious nature of Thowable vs Exception
+                        s = new ScrMainMenu(overridePath);
+                        s.checkForUpdates(false);
+                        s.setupKeyStrokes();
+                        s.setVisible(true);
+
+                        // open file if one is provided via arguments
+                        if (args.length > 0) {
+                            s.setFile(args[0]);
+                            s.openLexicon();
+                        }
+                    } catch (Exception ex) {
+                        startProblems += "Unable to open PolyGlot main frame: \n"
+                                + ex.getMessage() + "\n"
+                                + "Please contact developer (draquemail@gmail.com) for assistance.";
+                    }
                 }
 
                 if (startProblems.length() != 0) {
@@ -1490,8 +1487,7 @@ ToolTipUI t;
     }
 
     /**
-     * For now, always returns true... shouldn't ever be any upstream window,
-     * regardless.
+     * For now, always returns true... shouldn't ever be any upstream window, regardless.
      *
      * @return
      */
