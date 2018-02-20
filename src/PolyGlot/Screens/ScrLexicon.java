@@ -263,6 +263,7 @@ public final class ScrLexicon extends PFrame {
                 setDefaultValues();
                 populateLexicon();
                 lstLexicon.setSelectedIndex(0);
+                setupComboBoxesSwing();
                 populateProperties();
             }
             Runnable fxSetup = () -> {

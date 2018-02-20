@@ -1088,7 +1088,9 @@ public class CustHandlerFactory {
                     try {
                         famMgr.getBuffer().addWord(core.getWordCollection().getNodeById(
                                 Integer.parseInt(new String(ch, start, length))));
-                    } catch (ConWordCollection.WordNotExistsException | NumberFormatException e) {
+                    } catch (ConWordCollection.WordNotExistsException e) {
+                        // do nothing. if a word has been deleted, simply do not load it here.
+                    } catch (NumberFormatException e) {
                         warningLog += "\nFamily load error: " + e.getLocalizedMessage();
                     }
                     bfamWord = false;
