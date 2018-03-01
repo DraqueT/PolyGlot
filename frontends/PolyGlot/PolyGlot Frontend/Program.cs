@@ -7,6 +7,7 @@ using System.Text;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.Win32;
 using System.Windows.Forms;
+using System.IO;
 
 namespace PolyGlot_Frontend
 {
@@ -61,7 +62,14 @@ namespace PolyGlot_Frontend
             {
                 setFileAssociation(key);
             }
-            startPolyGlot(args);
+
+            try
+            {
+                startPolyGlot(args);
+            } catch (Exception e)
+            {
+                MessageBox.Show("Unable to start PolyGlot via front end due to:\n" + e.Message + "\n Please start via jar file.");
+            }
         }
 
         //tests whether Java is installed.
@@ -86,24 +94,26 @@ namespace PolyGlot_Frontend
 
         private static void startPolyGlot(string[] args)
         {
-            ProcessStartInfo cmd = new ProcessStartInfo(commandFile);
-            cmd.RedirectStandardInput = true;
-            cmd.UseShellExecute = false;
-            cmd.CreateNoWindow = true;
-            cmd.WindowStyle = ProcessWindowStyle.Normal;
-            Process console = Process.Start(cmd);
-
-            String finalCommand = command + "\"" + (System.Reflection.Assembly.GetExecutingAssembly().Location).Replace(exeFilename, "") + baseArgs + "\"";
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "cmd.exe";
+            startInfo.RedirectStandardInput = true;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            process.StartInfo = startInfo;
+            process.Start();
 
             // TODO: in the future, expand for additional possible arguments
-            if(args.Length > 0)
+            String finalCommand = command + "\"" + (System.Reflection.Assembly.GetExecutingAssembly().Location).Replace(exeFilename, "") + baseArgs + "\"";
+            if (args.Length > 0)
             {
-                finalCommand += " \"" + args[0] + "\""; 
+                finalCommand += " \"" + args[0] + "\"";
             }
 
-            console.StandardInput.WriteLine(finalCommand);
+            process.StandardInput.WriteLine(finalCommand);
         }
-
+        
         private static void setFileAssociation(RegistryKey key)
         {
             Microsoft.Win32.RegistryKey BaseKey;
