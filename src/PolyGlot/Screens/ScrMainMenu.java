@@ -301,6 +301,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
 
+        genTitle();
         updateAllValues(core);
     }
 

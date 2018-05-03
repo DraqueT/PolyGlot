@@ -739,6 +739,7 @@ public class ScrPhonology extends PFrame {
         btnDelCharRep = new PolyGlot.CustomControls.PAddRemoveButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Phonology & Text");
         setBackground(new java.awt.Color(255, 255, 255));
 
         pnlRomanization.setBackground(new java.awt.Color(255, 255, 255));
