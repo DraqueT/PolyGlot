@@ -710,8 +710,13 @@ public final class ScrLexicon extends PFrame {
 
     /**
      * Clears lexicon's search/filter
+     * ALWAYS use within Platform.runLater to ensure this is run within a JFX thread
      */
-    private void clearFilter() {
+    private void clearFilter() throws Exception {
+        if (!Platform.isFxApplicationThread()) {
+            throw new Exception("This method must be run within a JFX thread.");
+        }
+        
         // if no filter in effect, do nothing
         if (txtConSrc.getText().isEmpty()
                 && txtDefSrc.getText().isEmpty()
@@ -721,35 +726,12 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        // only run process if in FX Application thread. Recurse within thread otherwise
-        if (!Platform.isFxApplicationThread()) {
-            final CountDownLatch latch = new CountDownLatch(1);
-
-            SwingUtilities.invokeLater(() -> {
-                clearFilter();
-                latch.countDown();
-            });
-
-            try {
-                latch.await(); // do not continue until filter cleared
-            } catch (InterruptedException e) {
-                InfoBox.error("JavaFX Problem", "Unable to clear filter: "
-                        + e.getLocalizedMessage(), core.getRootWindow());
-            }
-        } else {
-            txtConSrc.setText("");
-            txtDefSrc.setText("");
-            txtLocalSrc.setText("");
-            txtProcSrc.setText("");
-            cmbTypeSrc.getSelectionModel().select(0);
-            SwingUtilities.invokeLater(this::populateLexicon);
-        }
-
-        // this is to address an odd timing error... sloppy, but it's somewhere in the Java API
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException e) {
-        }
+        txtConSrc.setText("");
+        txtDefSrc.setText("");
+        txtLocalSrc.setText("");
+        txtProcSrc.setText("");
+        cmbTypeSrc.getSelectionModel().select(0);
+        SwingUtilities.invokeLater(this::populateLexicon);
     }
 
     /**
@@ -1530,7 +1512,6 @@ public final class ScrLexicon extends PFrame {
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
 
-        clearFilter();
         populateLexicon();
         lstLexicon.setSelectedIndex(curSelection == 0 ? 0 : curSelection - 1);
         populateProperties();
@@ -1970,15 +1951,30 @@ public final class ScrLexicon extends PFrame {
     }//GEN-LAST:event_lstLexiconValueChanged
 
     private void btnAddWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddWordActionPerformed
-        clearFilter();
-        SwingUtilities.invokeLater(this::addWord);
+        Platform.runLater(() -> {
+            try {
+                clearFilter();
+            } catch (Exception e) {
+                InfoBox.error("Filter Error", e.getLocalizedMessage(), menuParent);
+            }
+            SwingUtilities.invokeLater(() -> {
+                this.addWord();
+                gridTitlePane.setExpanded(false);
+            });
+        });
     }//GEN-LAST:event_btnAddWordActionPerformed
 
     private void btnDelWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelWordActionPerformed
-        SwingUtilities.invokeLater(() -> {
-            deleteWord();
-            filterLexicon();
-            gridTitlePane.setExpanded(false);
+        Platform.runLater(() -> {
+            try {
+                clearFilter();
+            } catch (Exception e) {
+                InfoBox.error("Filter Error", e.getLocalizedMessage(), menuParent);
+            }
+            SwingUtilities.invokeLater(() -> {
+                deleteWord();
+                gridTitlePane.setExpanded(false);
+            });
         });
     }//GEN-LAST:event_btnDelWordActionPerformed
 
