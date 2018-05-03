@@ -620,7 +620,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         rulesModel.addElement(newRule);
         lstRules.setSelectedIndex(lstRules.getLastVisibleIndex());
         txtRuleName.setText("");
-        txtRuleRegex.setText("");
+        txtRuleRegex.setText(".*");
         populateTransforms();
         enableTransformEditing(true);
     }
