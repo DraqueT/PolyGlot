@@ -88,9 +88,11 @@ public class ScrTypes extends PFrame {
     @Override
     public void updateAllValues(DictCore _core) {
         if (!ignoreUpdate) {
+            ignoreUpdate = true;
             core = _core;
             populateTypes();
             populateProperties();
+            ignoreUpdate = false;
         }
     }
 
