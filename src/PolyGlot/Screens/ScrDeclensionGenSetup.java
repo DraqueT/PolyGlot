@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -499,16 +499,6 @@ public class ScrDeclensionGenSetup extends PDialog {
         }
 
         core.setClipBoard(rules);
-
-        /*DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
-        
-        if (curRule == null) {
-            return;
-        }
-        
-        DeclensionGenRule copyRule = new DeclensionGenRule();
-        copyRule.setEqual(curRule, true);
-        core.setClipBoard(copyRule);*/
     }
 
     /**

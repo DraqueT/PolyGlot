@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -24,6 +24,7 @@ import PolyGlot.DeclensionDimension;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * This class represents both the header for declension templates, and the actual
@@ -161,6 +162,11 @@ public class DeclensionNode extends DictNode{
         this.setValue(node.getValue());
         this.setMandatory(node.isMandatory());
         this.setCombinedDimId(node.getCombinedDimId());
-        dimensions = node.getRawDimensions();
+
+        node.getRawDimensions().entrySet().forEach((entry) -> {
+            DeclensionDimension copyOfDim = new DeclensionDimension(entry.getKey());
+            copyOfDim.setEqual(entry.getValue());
+            dimensions.put(entry.getKey(), copyOfDim);
+        });
     }
 }

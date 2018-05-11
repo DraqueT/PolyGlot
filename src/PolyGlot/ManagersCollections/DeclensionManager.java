@@ -603,29 +603,6 @@ public class DeclensionManager {
         bufferRelId = -1;
     }
 
-    /**
-     * adds declension template directly to the map
-     *
-     * @param typeId ID of type to add to
-     * @param node new node to add
-     * @return the passed node
-     * @throws java.lang.Exception Throws exception if you feed in a dupe node
-     */
-    public DeclensionNode addDeclensionTemplate(Integer typeId, DeclensionNode node) throws Exception {
-        List recList;
-
-        if (dTemplates.containsKey(node.getId())) {
-            recList = (List) dTemplates.get(node.getId());
-            recList.add(node);
-        } else {
-            recList = new ArrayList<>();
-            recList.add(node);
-            dTemplates.put(typeId, recList);
-        }
-
-        return node;
-    }
-
     private DeclensionNode addDeclension(Integer typeId, String declension, Map list) {
         List wordList;
 

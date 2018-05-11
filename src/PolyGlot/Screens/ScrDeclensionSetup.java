@@ -31,12 +31,15 @@ import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTable;
 import PolyGlot.CustomControls.PTextField;
+import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,7 +47,9 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
@@ -62,8 +67,8 @@ import javax.swing.table.TableColumn;
  */
 public final class ScrDeclensionSetup extends PDialog {
 
-    private Map scrToCoreDeclensions = new HashMap<>();
-    private Map scrDeclensionMap = new HashMap<>();
+    private Map<Integer, Integer> scrToCoreDeclensions = new HashMap<>();
+    private Map<String, Integer> scrDeclensionMap = new HashMap<>();
     private TypeNode myType;
     private boolean curPopulating = false;
     private final DefaultListModel declListModel;
@@ -285,8 +290,94 @@ public final class ScrDeclensionSetup extends PDialog {
                 }
             }
         });
+        
+        final JPopupMenu ruleMenu = new JPopupMenu();
+        final JMenuItem copyItem = new JMenuItem("Copy Conjugation(s)");
+        final JMenuItem pasteItem = new JMenuItem("Paste Conjugation(s)");
+        copyItem.setToolTipText("Copy currently selected conjugation(s).");
+        pasteItem.setToolTipText("Paste conjugation(s) in clipboard to list.");
+
+        copyItem.addActionListener((ActionEvent ae) -> {
+            copyConjToClipboard();
+        });
+        pasteItem.addActionListener((ActionEvent ae) -> {
+            pasteConjFromClipboard();
+        });
+        ruleMenu.add(copyItem);
+        ruleMenu.add(pasteItem);
+        lstDeclensionList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    doPop(e);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    doPop(e);
+                }
+            }
+
+            private void doPop(MouseEvent e) {
+                if (lstDeclensionList.getSelectedValue() != null) {
+                    copyItem.setEnabled(true);
+                } else {
+                    copyItem.setEnabled(false);
+                }
+
+                ruleMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
+        });
+    }
+    
+    private void copyConjToClipboard() {
+        List<DeclensionNode> declesionTemplates = new ArrayList<>();
+
+        for (int i : lstDeclensionList.getSelectedIndices()) {
+            DeclensionNode curNodeToCopy = core.getDeclensionTemplate(myType.getId(), 
+                    scrToCoreDeclensions.get(i));
+            
+            DeclensionNode copyNode = new DeclensionNode(-1);
+            copyNode.setEqual(curNodeToCopy);
+            declesionTemplates.add(copyNode);
+        }
+
+        core.setClipBoard(declesionTemplates);
     }
 
+    private void pasteConjFromClipboard() {
+        Object fromClipBoard = core.getClipBoard();
+        
+        // only paste if appropriate type from clipboard
+        if (fromClipBoard == null
+                || !(fromClipBoard instanceof ArrayList)
+                || ((ArrayList) fromClipBoard).isEmpty()
+                || !(((ArrayList) fromClipBoard).get(0) instanceof DeclensionNode)) {
+            return;
+        }
+        
+        ArrayList<DeclensionNode> conjNodes = (ArrayList)fromClipBoard;
+        DeclensionManager decMan = core.getDeclensionManager();
+        
+        try {
+            for (DeclensionNode curNode : conjNodes) {
+                DeclensionNode copyNode = new DeclensionNode(-1);
+                copyNode.setEqual(curNode);
+                decMan.addDeclensionToTemplate(myType.getId(), -1, curNode);
+            }
+        } catch (ClassCastException e) {
+            InfoBox.error("Error Copying Conjugations", "Unable to copy conjugations: " 
+                    + e.getLocalizedMessage(), this);
+        }
+        
+        saveDimension();
+        saveDeclension();
+        populateDeclensionList();
+        populateDeclensionProps();
+    }
+    
     /**
      * adds new, empty dimensional row
      */
