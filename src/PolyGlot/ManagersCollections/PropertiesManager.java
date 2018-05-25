@@ -441,7 +441,7 @@ public class PropertiesManager {
         this.localUniqueness = localUniqueness;
     }
 
-    public String buildPropertiesReport() {
+    public String buildPropertiesReportTitle() {
         String ret = "";
 
         ret += ConWordCollection.formatPlain("Language Name: " + langName + "<br><br>", core);

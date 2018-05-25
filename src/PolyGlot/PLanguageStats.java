@@ -49,6 +49,8 @@ public class PLanguageStats {
         String ret = "<!doctype html>\n"
                 + "<html>"
                 + "<meta charset=utf-8>\n";
+        
+        ret += core.getPropertiesManager().buildPropertiesReportTitle();
 
         Map<String, Integer> wordStart = new HashMap<>();
         Map<String, Integer> wordEnd = new HashMap<>();

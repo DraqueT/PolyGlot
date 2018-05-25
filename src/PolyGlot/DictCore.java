@@ -313,15 +313,10 @@ public class DictCore {
      * expensive.
      */
     public void buildLanguageReport() {
-        String ret = "";
-
-        // TODO: move this into the wordCollection.buildWordReport() method
-        ret += propertiesManager.buildPropertiesReport();
-
-        ret += PLanguageStats.buildWordReport(this);
-
         try {
-            java.awt.Desktop.getDesktop().browse(IOHandler.createTmpURL(ret));
+            // create temp file for report, then let OS handle call to browser
+            java.awt.Desktop.getDesktop().browse(IOHandler.createTmpURL(
+                    PLanguageStats.buildWordReport(this)));
         } catch (IOException | URISyntaxException e) {
             InfoBox.error("Statistics Error", "Unable to generate/display language statistics: " 
                     + e.getLocalizedMessage(), getRootWindow());
