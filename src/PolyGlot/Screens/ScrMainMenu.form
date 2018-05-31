@@ -95,9 +95,19 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuExportFont">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Export Font"/>
+                <Property name="toolTipText" type="java.lang.String" value="Export font to file"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportFontActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuImportFont">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Import Font"/>
+                <Property name="toolTipText" type="java.lang.String" value="Import font from file"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportFontActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator1">

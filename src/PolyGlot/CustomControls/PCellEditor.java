@@ -58,10 +58,13 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
                 : core.getPropertiesManager().getCharisUnicodeFont();
         Double kernVal = useConFont
                 ? core.getPropertiesManager().getKerningSpace() : 0.0;
+        double fontSize = useConFont ? 
+                (core.getPropertiesManager().getFontSize()*2)/3 : // 2/3 normal display size
+                core.getOptionsManager().getMenuFontSize();
 
         Map attr = defFont.getAttributes();
         attr.put(TextAttribute.TRACKING, kernVal);
-        attr.put(TextAttribute.SIZE, (float) core.getOptionsManager().getMenuFontSize());
+        attr.put(TextAttribute.SIZE, (float) fontSize);
         myFont = defFont.deriveFont(attr);
 
         final JTextField setupText = (JTextField) component;

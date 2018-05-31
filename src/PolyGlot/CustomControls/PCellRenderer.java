@@ -43,6 +43,7 @@ public class PCellRenderer implements TableCellRenderer {
     private DocumentListener docListener;
     private final DictCore core;
     private final boolean useConFont;
+    private final double fontSize;
 
     public PCellRenderer(boolean _useConFont, DictCore _core) {
         core = _core; 
@@ -52,11 +53,14 @@ public class PCellRenderer implements TableCellRenderer {
         Font selectedFont = useConFont ? 
                 core.getPropertiesManager().getFontCon() : 
                 core.getPropertiesManager().getCharisUnicodeFont();
-        
+        fontSize = useConFont ? 
+                (core.getPropertiesManager().getFontSize()*2)/3 : // 2/3 normal display size
+                core.getOptionsManager().getMenuFontSize();
         
         Map attr = selectedFont.getAttributes();
         
         attr.put(TextAttribute.TRACKING, kernVal);
+        attr.put(TextAttribute.SIZE, (float) fontSize);
         myFont = selectedFont.deriveFont(attr);
     }
     
@@ -69,7 +73,7 @@ public class PCellRenderer implements TableCellRenderer {
         }
         
         if (myFont != null) {
-            editor.setFont(myFont.deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+            editor.setFont(myFont.deriveFont((float)fontSize));
         }
         
         if (table.isEnabled()) {

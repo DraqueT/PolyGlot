@@ -212,6 +212,35 @@ public class IOHandler {
             }
         }
     }
+    
+    /**
+     * Used for snagging cachable versions of files
+     * @param filePath path of file to fetch as byte array
+     * @return byte array of file at given path
+     * @throws java.io.FileNotFoundException
+     */
+    public static byte[] getFileByteArray(String filePath) throws FileNotFoundException, IOException {
+        byte[] ret;
+        final File toByteArrayFile = new File(filePath);
+        
+        try (InputStream inputStream = new FileInputStream(toByteArrayFile)) {
+            ret = IOUtils.toByteArray(inputStream);
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Fetches and returns a font from a given location
+     * @param filePath
+     * @return collected font
+     * @throws java.awt.FontFormatException
+     * @throws java.io.IOException
+     */
+    public static Font getFontFromFile(String filePath) throws FontFormatException, IOException {
+        File fontFile = new File(filePath);
+        return Font.createFont(Font.TRUETYPE_FONT, fontFile);
+    }
 
     /**
      * Given file name, returns appropriate cust handler
@@ -688,7 +717,6 @@ public class IOHandler {
         // unrecgnized types won't be loaded
         if (path.toLowerCase().endsWith(".ttf")
                 || path.toLowerCase().endsWith(".otf")
-                || path.toLowerCase().endsWith(".ttc")
                 || path.toLowerCase().endsWith(".ttc")
                 || path.toLowerCase().endsWith(".dfont")) {
             try {

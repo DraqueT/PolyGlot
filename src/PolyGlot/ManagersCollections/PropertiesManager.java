@@ -24,7 +24,9 @@ import PolyGlot.DictCore;
 import PolyGlot.IOHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -212,6 +214,12 @@ public class PropertiesManager {
     public byte[] getCachedFont() {
         return cachedFont;
     }
+    
+    public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
+        cachedFont = IOHandler.getFileByteArray(fontPath);
+        
+        setFontCon(IOHandler.getFontFromFile(fontPath).deriveFont(fontStyle, conFontSize), fontStyle, conFontSize);
+    }
 
     public void setOverrideProgramPath(String override) {
         if (override.equals(PGTUtil.emptyFile)) {
@@ -312,6 +320,7 @@ public class PropertiesManager {
      */
     public void setFontStyle(Integer _fontStyle) {
         fontStyle = _fontStyle;
+        font = font.deriveFont(fontStyle, conFontSize);
     }
 
     /**
@@ -328,6 +337,7 @@ public class PropertiesManager {
      */
     public void setFontSize(Integer _fontSize) {
         conFontSize = _fontSize < 0 ? 12 : _fontSize;
+        font = font.deriveFont(fontStyle, conFontSize);
     }
 
     /**

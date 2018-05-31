@@ -32,6 +32,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FontFormatException;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
@@ -826,6 +827,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         mnuImportFile = new javax.swing.JMenuItem();
         mnuExportToExcel = new javax.swing.JMenuItem();
         mnuExportFont = new javax.swing.JMenuItem();
+        mnuImportFont = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem1 = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
@@ -1078,12 +1080,22 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         mnuTools.add(mnuExportToExcel);
 
         mnuExportFont.setText("Export Font");
+        mnuExportFont.setToolTipText("Export font to file");
         mnuExportFont.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuExportFontActionPerformed(evt);
             }
         });
         mnuTools.add(mnuExportFont);
+
+        mnuImportFont.setText("Import Font");
+        mnuImportFont.setToolTipText("Import font from file");
+        mnuImportFont.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuImportFontActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuImportFont);
         mnuTools.add(jSeparator1);
 
         jMenuItem1.setText("Lexical Families");
@@ -1343,6 +1355,32 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         s.setVisible(true);
     }//GEN-LAST:event_mnuOptionsActionPerformed
 
+    private void mnuImportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFontActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        String fileName;
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf", "otf", "ttc", "dfont");
+
+        chooser.setDialogTitle("Import Font");
+        chooser.setFileFilter(filter);
+        chooser.setCurrentDirectory(new File("."));
+        chooser.setApproveButtonText("Open");
+
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            fileName = chooser.getSelectedFile().getAbsolutePath();
+        } else {
+            return;
+        }
+
+        try {
+            core.getPropertiesManager().setFontFromFile(fileName);
+        } catch (IOException e) {
+            InfoBox.error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage(), this);
+        } catch (FontFormatException e) {
+            InfoBox.error("Font Format Error", "Unable to read " + fileName + " due to: " 
+                    + e.getLocalizedMessage(), this);
+        }
+    }//GEN-LAST:event_mnuImportFontActionPerformed
+
     /**
      * @param args the command line arguments args[0] = open file path (blank if none) args[1] = working directory of
      * PolyGlot (blank if none)
@@ -1452,6 +1490,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private javax.swing.JMenu mnuHelp;
     private javax.swing.JMenuItem mnuIPAChart;
     private javax.swing.JMenuItem mnuImportFile;
+    private javax.swing.JMenuItem mnuImportFont;
     private javax.swing.JMenuItem mnuLangStats;
     private javax.swing.JMenuItem mnuNewLocal;
     private javax.swing.JMenuItem mnuOpenLocal;
