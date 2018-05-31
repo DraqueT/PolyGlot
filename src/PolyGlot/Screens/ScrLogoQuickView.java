@@ -126,6 +126,11 @@ public class ScrLogoQuickView extends PFrame {
     }
     
     @Override
+    public void saveAllValues() {
+        // not needed here
+    }
+    
+    @Override
     public boolean thisOrChildrenFocused() {
         boolean ret = this.isFocusOwner();
         ret = ret || (logoFinder != null && logoFinder.thisOrChildrenFocused());

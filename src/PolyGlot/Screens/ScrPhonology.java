@@ -79,7 +79,15 @@ public class ScrPhonology extends PFrame {
         if (tblRep.getCellEditor() != null) {
             tblRep.getCellEditor().stopCellEditing();
         }
+        saveAllValues();
         super.dispose();
+    }
+    
+    @Override
+    public void saveAllValues() {
+        saveProcGuide();
+        saveRepTable();
+        saveRomGuide();
     }
 
     private void setupButtons() {

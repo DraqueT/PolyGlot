@@ -68,15 +68,20 @@ public class ScrTypes extends PFrame {
             return;
         }
 
-        TypeNode curType = (TypeNode) lstTypes.getSelectedValue();
-        if (curType != null) {
-            savePropertiesTo(curType);
-            selectionAtClosing = curType;
-        }
+        saveAllValues();
 
         if (canClose()) {
             killAllChildren();
             super.dispose();
+        }
+    }
+    
+    @Override
+    public void saveAllValues() {
+        TypeNode curType = (TypeNode) lstTypes.getSelectedValue();
+        if (curType != null) {
+            savePropertiesTo(curType);
+            selectionAtClosing = curType;
         }
     }
 

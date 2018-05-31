@@ -227,6 +227,11 @@ public class ScrIPARefChart extends PFrame {
         }
     }//GEN-LAST:event_lblOtherSymbolsMouseClicked
 
+    @Override
+    public void saveAllValues() {
+        // no values to save
+    }
+    
     private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
         int x=evt.getX();
         int y=evt.getY();

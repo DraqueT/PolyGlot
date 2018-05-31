@@ -1017,14 +1017,17 @@ public final class ScrLexicon extends PFrame {
         }
 
         if (canClose) {
-            ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
-
-            if (curWord != null) {
-                saveValuesTo(curWord);
-            }
-
+            saveAllValues();
             killAllChildren();
             super.dispose();
+        }
+    }
+    
+    @Override
+    public void saveAllValues() {
+        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        if (curWord != null) {
+            saveValuesTo(curWord);
         }
     }
 

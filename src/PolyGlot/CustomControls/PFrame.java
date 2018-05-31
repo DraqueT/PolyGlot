@@ -125,6 +125,11 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
      * @return true if can close. False otherwise.
      */
     public abstract boolean canClose();
+    
+    /**
+     * Records all active/volatile values to core
+     */
+    public abstract void saveAllValues();
 
     @Override
     public void dispose() {

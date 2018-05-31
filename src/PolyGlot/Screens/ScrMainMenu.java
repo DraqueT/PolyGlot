@@ -125,6 +125,15 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         ToolTipUI t;
         super.setSize(super.getPreferredSize());
     }
+    
+    @Override
+    public void saveAllValues() {
+        if (curWindow != null) {
+            curWindow.saveAllValues();
+        }
+        
+        cacheLexicon.saveAllValues();
+    }
 
     /**
      * For the purposes of startup with file
@@ -351,6 +360,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         pushRecentFile(curFileName);
         populateRecentOpened();
+        saveAllValues();
         return doWrite(curFileName);
     }
 
@@ -429,6 +439,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         }
 
         curFileName = fileName;
+        // TODO: refactor to single exit point
         return true;
     }
 

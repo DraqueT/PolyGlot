@@ -117,6 +117,11 @@ public class ScrWordClasses extends PFrame {
         
         super.dispose();
     }
+    
+    @Override
+    public void saveAllValues() {
+        // not needed - saved in real time
+    }
 
     @Override
     public final void setupKeyStrokes() {

@@ -923,8 +923,7 @@ public class ScrLogoDetails extends PFrame {
 
     @Override
     public void dispose() {
-        saveReadings(lstLogos.getSelectedIndex());
-        saveRads(lstLogos.getSelectedIndex());
+        saveAllValues();
 
         // dispose of quickview window if not done already
         if (quickView != null && !quickView.isDisposed()) {
@@ -932,6 +931,12 @@ public class ScrLogoDetails extends PFrame {
         }
 
         super.dispose();
+    }
+    
+    @Override
+    public void saveAllValues() {
+        saveReadings(lstLogos.getSelectedIndex());
+        saveRads(lstLogos.getSelectedIndex());
     }
 
     private void addLogo() {

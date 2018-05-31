@@ -51,6 +51,11 @@ public class ScrQuizGenDialog extends PFrame {
         setupScreen();
     }
     
+    @Override
+    public void saveAllValues() {
+        // no values to save
+    }
+    
     private void setupScreen() {
         chkLocalQuiz.setText(core.localLabel() + " Equivalent");
         chkConlangQuiz.setText(core.conLabel() + " Equivalent");

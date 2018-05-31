@@ -86,6 +86,11 @@ public class ScrQuizScreen extends PFrame {
     private void nextQuestion() {
         setQuestion(quiz.next());
     }
+    
+    @Override
+    public void saveAllValues() {
+        // no values to save
+    }
 
     private void backQuestion() {
         setQuestion(quiz.prev());

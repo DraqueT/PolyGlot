@@ -153,7 +153,6 @@ public class ScrGrammarGuide extends PFrame {
         btnPlayPauseAudio.setFocusable(false);
         btnPlayPauseAudio.setRequestFocusEnabled(false);
         btnPlayPauseAudio.setContentAreaFilled(false);
-
         btnRecordAudio.setBorder(null);
         btnRecordAudio.setBorderPainted(false);
         btnRecordAudio.setFocusPainted(false);
@@ -218,18 +217,24 @@ public class ScrGrammarGuide extends PFrame {
 
     @Override
     public void dispose() {
+        saveAllValues();
+        stopAllSounds();
+        super.dispose();
+    }
+    
+    @Override
+    public void saveAllValues() {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
-
-        // stop playing sound if it exists
+    }
+    
+    private void stopAllSounds() {
         if (soundRecorder != null && soundRecorder.isPlaying()) {
             try {
                 soundRecorder.playPause();
             } catch (LineUnavailableException | IOException e) {
-                // ignore any sound errors here. We're killing the screen, and no
-                // process can be orphaned in doing so.
+                // ignore any sound errors here. We're killing the screen, and no process can be orphaned in doing so.
             }
         }
-        super.dispose();
     }
 
     /**
@@ -1157,7 +1162,6 @@ public class ScrGrammarGuide extends PFrame {
     public boolean canClose() {
         return true;
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddChapter;
     private javax.swing.JButton btnAddSection;

@@ -115,6 +115,11 @@ public class ScrLangProps extends PFrame {
         core.pushUpdate();
         super.dispose();
     }
+    
+    @Override
+    public void saveAllValues() {
+        saveAllProps();
+    }
 
     @Override
     public boolean thisOrChildrenFocused() {
