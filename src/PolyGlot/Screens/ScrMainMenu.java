@@ -121,8 +121,6 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
                 // Inform user? Don't see a pressing need to...
             }
         }
-
-        ToolTipUI t;
         super.setSize(super.getPreferredSize());
     }
     
