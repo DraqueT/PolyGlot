@@ -4,7 +4,6 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="Import From External Format"/>
-    <Property name="alwaysOnTop" type="boolean" value="true"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
@@ -259,7 +258,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Type"/>
+            <Property name="text" type="java.lang.String" value="Part of Speech"/>
             <Property name="toolTipText" type="java.lang.String" value="Part of speech"/>
           </Properties>
           <AuxValues>
@@ -307,7 +306,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtType">
           <Properties>
-            <Property name="toolTipText" type="java.lang.String" value="Column number of Type"/>
+            <Property name="toolTipText" type="java.lang.String" value="Column number of Part of Speech"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtDefinition">

@@ -112,7 +112,6 @@ public class ScrExcelImport extends PDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import From External Format");
-        setAlwaysOnTop(true);
         setResizable(false);
 
         txtFileName.setToolTipText("path and name of file to import");
@@ -143,7 +142,7 @@ public class ScrExcelImport extends PDialog {
         jLabel4.setText("Local Word");
         jLabel4.setToolTipText("Synonym in local language");
 
-        jLabel5.setText("Type");
+        jLabel5.setText("Part of Speech");
         jLabel5.setToolTipText("Part of speech");
 
         jLabel6.setText("Definition");
@@ -162,7 +161,7 @@ public class ScrExcelImport extends PDialog {
 
         txtLocalWord.setToolTipText("Column number of local word");
 
-        txtType.setToolTipText("Column number of Type");
+        txtType.setToolTipText("Column number of Part of Speech");
 
         txtDefinition.setToolTipText("Column number of definition");
 
@@ -370,6 +369,7 @@ public class ScrExcelImport extends PDialog {
         ScrExcelImport s = new ScrExcelImport(_core, _parent);
         
         s.setModal(true);
+        s.toFront();
         s.setVisible(true);
     }
 
@@ -401,7 +401,7 @@ public class ScrExcelImport extends PDialog {
                     chkFirstLabels.isSelected(), true);
             reader.importFile(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
             parent.updateAllValues(core);
-            InfoBox.info("Success!", txtFileName.getText() + " imported successfully!", core.getRootWindow());
+            InfoBox.info("Success!", txtFileName.getText() + " imported successfully!", this);
             
             // if everything has completed without error, close the window and open Lexicon
             dispose();
@@ -410,12 +410,12 @@ public class ScrExcelImport extends PDialog {
             InfoBox.warning("Unrecognized File Type", e.getLocalizedMessage(), core.getRootWindow());
         } catch (NumberFormatException e) {
             InfoBox.error("Import Error", "All column fields and sheet field must contain "
-                    +"numeric values only:\n" + e.getLocalizedMessage(), core.getRootWindow());
+                    +"numeric values only:\n" + e.getLocalizedMessage(), this);
         } catch (Exception e) {
             InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
                     + ".\n Check to make certain that column mappings are correct "
                     +"(nothing above max cell value) and that the file is not corrupt:\n" 
-                    + e.getLocalizedMessage(), core.getRootWindow());
+                    + e.getLocalizedMessage(), this);
             //e.printStackTrace();
         }
     }

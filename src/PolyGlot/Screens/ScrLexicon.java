@@ -202,17 +202,19 @@ public final class ScrLexicon extends PFrame {
     /**
      * forces refresh of word list
      *
-     * @param wordId id of newly created word
+     * @param wordId id of newly word to select (-1 if no selection)
      */
     public void refreshWordList(int wordId) {
         populateLexicon();
-        try {
-            lstLexicon.setSelectedValue(
-                    core.getWordCollection().getNodeById(wordId), true);
-        } catch (ConWordCollection.WordNotExistsException e) {
-            InfoBox.error("Refresh Error", "Unable to refresh lexicon: "
-                    + e.getLocalizedMessage(), core.getRootWindow());
-            //e.printStackTrace();
+        if (wordId != -1) {
+            try {
+                lstLexicon.setSelectedValue(
+                        core.getWordCollection().getNodeById(wordId), true);
+            } catch (ConWordCollection.WordNotExistsException e) {
+                InfoBox.error("Refresh Error", "Unable to refresh lexicon: "
+                        + e.getLocalizedMessage(), core.getRootWindow());
+                //e.printStackTrace();
+            }
         }
     }
 
