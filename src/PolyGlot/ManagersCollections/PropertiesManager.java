@@ -44,6 +44,7 @@ public class PropertiesManager {
     private Font font = null;
     private Integer fontStyle = 0;
     private Integer conFontSize = 12;
+    private double localFontSize = 12;
     private final PAlphaMap alphaOrder;
     private String alphaPlainText = "";
     private String langName = "";
@@ -57,11 +58,10 @@ public class PropertiesManager {
     private boolean enableRomanization = false;
     private boolean disableProcRegex = false;
     private boolean enforceRTL = false;
-    private byte[] cachedFont = null;
+    private byte[] cachedConFont = null;
+    private byte[] cachedLocalFont = null;
     private final Font charisUnicode;
-    private final Font charisUnicodeBold;
-    private final Font charisUnicodeItalic;
-    private final Font charisUnicodeBoldItalic;
+    private Font localFont;
     private final Map<String, String> charRep = new HashMap<>();
     private final DictCore core;
     private Double kerningSpace = 0.0;
@@ -72,9 +72,7 @@ public class PropertiesManager {
 
         // set default font to Charis, as it's unicode compatible
         charisUnicode = IOHandler.getCharisUnicodeFontInitial();
-        charisUnicodeBold = IOHandler.getCharisUnicodeFontBoldInitial();
-        charisUnicodeItalic = IOHandler.getCharisUnicodeFontItalicInitial();
-        charisUnicodeBoldItalic = IOHandler.getCharisUnicodeFontBoldItalicInitial();       
+        localFont = charisUnicode;
     }   
     
     /**
@@ -143,24 +141,34 @@ public class PropertiesManager {
      *
      * @return
      */
-    public Font getCharisUnicodeFont() {
-        return getCharisUnicodeFont(core.getOptionsManager().getMenuFontSize());
+    public Font getFontMenu() {
+        return charisUnicode.deriveFont(0, (float)core.getOptionsManager().getMenuFontSize());
     }
     
-    public Font getCharisUnicodeFont(double size) {
-        return charisUnicode.deriveFont(0, (float)size);
+    public Font getFontLocal() {
+        return getFontLocal(localFontSize);
     }
     
-    public Font getCharisUnicodeFontBold(int size) {
-        return charisUnicodeBold.deriveFont(0, size);
+    public Font getFontLocal(double size) {
+        return localFont.deriveFont(0, (float)size);
     }
     
-    public Font getCharisUnicodeFontItalic(int size) {
-        return charisUnicodeItalic.deriveFont(0, size);
+    public void setLocalFont(Font _localFont) {
+        setLocalFont(_localFont, localFontSize);
     }
     
-    public Font getCharisUnicodeFontBoldItalic(int size) {
-        return charisUnicodeBoldItalic.deriveFont(0, size);
+    public void setLocalFont(Font _localFont, double size) {
+        // null cached font if being set to new font
+        if (localFont != null && !localFont.getFamily().equals(_localFont.getFamily())) {
+            cachedLocalFont = null;
+        }
+        
+        localFont = _localFont; 
+        localFontSize = size;
+    }
+    
+    public void setLocalFontSize(double size) {
+        localFontSize = size;
     }
     
     /**
@@ -203,7 +211,7 @@ public class PropertiesManager {
      * @param _cachedFont value of cached font
      */
     public void setCachedFont(byte[] _cachedFont) {
-        cachedFont = _cachedFont;
+        cachedConFont = _cachedFont;
     }
 
     /**
@@ -212,11 +220,19 @@ public class PropertiesManager {
      * @return byte array of cached font file
      */
     public byte[] getCachedFont() {
-        return cachedFont;
+        return cachedConFont;
+    }
+    
+    public void setCachedLocalFont(byte[] _cachedLocalFont) {
+        cachedLocalFont = _cachedLocalFont;
+    }
+
+    public byte[] getCachedLocalFont() {
+        return cachedLocalFont;
     }
     
     public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
-        cachedFont = IOHandler.getFileByteArray(fontPath);
+        cachedConFont = IOHandler.getFileByteArray(fontPath);
         
         setFontCon(IOHandler.getFontFromFile(fontPath).deriveFont(fontStyle, conFontSize), fontStyle, conFontSize);
     }
@@ -291,7 +307,9 @@ public class PropertiesManager {
             conFontSize = 12;
         }
 
-        return font == null ? charisUnicode.deriveFont((float)core.getOptionsManager().getMenuFontSize()) : font.deriveFont(fontStyle, conFontSize);
+        return font == null ? 
+                charisUnicode.deriveFont((float)core.getOptionsManager().getMenuFontSize()) : 
+                font.deriveFont(fontStyle, conFontSize);
     }
 
     /**
@@ -302,7 +320,7 @@ public class PropertiesManager {
     public final void setFontCon(Font fontCon) {
         // null cached font if being set to new font
         if (font != null && !font.getFamily().equals(fontCon.getFamily())) {
-            cachedFont = null;
+            cachedConFont = null;
         }
 
         font = fontCon;
@@ -500,9 +518,14 @@ public class PropertiesManager {
         wordValue.appendChild(doc.createTextNode(getFontStyle().toString()));
         propContainer.appendChild(wordValue);
 
-        // store font for Local words
+        // store font size
         wordValue = doc.createElement(PGTUtil.langPropFontSizeXID);
         wordValue.appendChild(doc.createTextNode(getFontSize().toString()));
+        propContainer.appendChild(wordValue);
+        
+        // store font size for local language font
+        wordValue = doc.createElement(PGTUtil.langPropLocalFontSizeXID);
+        wordValue.appendChild(doc.createTextNode(Double.toString(localFontSize)));
         propContainer.appendChild(wordValue);
 
         // store name for conlang

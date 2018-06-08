@@ -80,6 +80,7 @@ public class PGTUtil {
     public static final String langPropLangNameXID = "langName";
     public static final String langPropFontSizeXID = "fontSize";
     public static final String langPropFontStyleXID = "fontStyle";
+    public static final String langPropLocalFontSizeXID = "localFontSize";
     public static final String langPropAlphaOrderXID = "alphaOrder";
     public static final String langPropTypeMandatoryXID = "langPropTypeMandatory";
     public static final String langPropLocalMandatoryXID = "langPropLocalMandatory";
@@ -212,7 +213,8 @@ public class PGTUtil {
 
     // string constants
     public static final String dictFileName = "PGDictionary.xml";
-    public static final String fontFileName = "conLangFont";
+    public static final String conFontFileName = "conLangFont";
+    public static final String localFontFileName = "localLangFont";
     public static final String LCDFontLocation = "/PolyGlot/GeneralResources/lcdFont.ttf";
     public static final String UnicodeFontLocation = "/PolyGlot/GeneralResources/CharisSIL-Regular.ttf";
     public static final String UnicodeFontBoldLocation = "/PolyGlot/GeneralResources/CharisSIL-Bold.ttf";

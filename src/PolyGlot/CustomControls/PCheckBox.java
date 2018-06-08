@@ -43,7 +43,7 @@ public class PCheckBox extends JCheckBox implements MouseListener {
         core = _core;
         
         // default to unicode compatible font
-        super.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        super.setFont(core.getPropertiesManager().getFontLocal());
         setupListeners();
     }
     

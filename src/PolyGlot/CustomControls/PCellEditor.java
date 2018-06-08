@@ -55,7 +55,7 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
         core = _core;
         useConFont = _useConFont;
         Font defFont = useConFont ? core.getPropertiesManager().getFontCon()
-                : core.getPropertiesManager().getCharisUnicodeFont();
+                : core.getPropertiesManager().getFontLocal();
         Double kernVal = useConFont
                 ? core.getPropertiesManager().getKerningSpace() : 0.0;
         double fontSize = useConFont ? 

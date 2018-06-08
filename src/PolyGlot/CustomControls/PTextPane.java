@@ -54,7 +54,7 @@ public class PTextPane extends JTextPane {
 
     private SwingWorker worker = null;
     private final String defText;
-    private final DictCore core;
+    private DictCore core;
     private final boolean overrideFont;
 
     public PTextPane(DictCore _core, boolean _overideFont, String _defText) {
@@ -67,12 +67,7 @@ public class PTextPane extends JTextPane {
         setupListeners();
         setText(defText);
         setForeground(Color.lightGray);
-        if (overrideFont) {
-            setFont(core.getPropertiesManager().getCharisUnicodeFont()
-                    .deriveFont((float)core.getOptionsManager().getMenuFontSize()));
-        } else {
-            setFont(core.getPropertiesManager().getFontCon());
-        }
+        setFontFromCore();
         
         this.setEditorKit(new PHTMLEditorKit());
     }
@@ -89,6 +84,15 @@ public class PTextPane extends JTextPane {
         }
         
         super.setFont(setFont);
+    }
+    
+    private void setFontFromCore() {
+        if (overrideFont) {
+            setFont(core.getPropertiesManager().getFontLocal()
+                    .deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+        } else {
+            setFont(core.getPropertiesManager().getFontCon());
+        }
     }
 
     @Override
@@ -258,6 +262,10 @@ public class PTextPane extends JTextPane {
                 }
             }
         });
+    }
+    
+    public void setCore(DictCore _core) {
+        core = _core;
     }
 
     /**

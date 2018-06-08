@@ -91,7 +91,7 @@ public class ScrPhonology extends PFrame {
     }
 
     private void setupButtons() {
-        Font charis = core.getPropertiesManager().getCharisUnicodeFont();
+        Font charis = core.getPropertiesManager().getFontLocal();
         btnDownProc.setFont(charis);
         btnDownRom.setFont(charis);
         btnUpProc.setFont(charis);

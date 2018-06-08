@@ -745,7 +745,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontFamilyTextField());
             label.setDisplayedMnemonic('F');
-            label.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+            label.setFont(core.getPropertiesManager().getFontMenu());
 
             fontNamePanel.add(label, BorderLayout.NORTH);
             fontNamePanel.add(p, BorderLayout.CENTER);
@@ -780,7 +780,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontStyleTextField());
             label.setDisplayedMnemonic('Y');
-            label.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+            label.setFont(core.getPropertiesManager().getFontMenu());
 
             fontStylePanel.add(label, BorderLayout.NORTH);
             fontStylePanel.add(p, BorderLayout.CENTER);
@@ -814,7 +814,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontSizeTextField());
             label.setDisplayedMnemonic('S');
-            label.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+            label.setFont(core.getPropertiesManager().getFontMenu());
 
             fontSizePanel.add(label, BorderLayout.NORTH);
             fontSizePanel.add(p, BorderLayout.CENTER);
@@ -827,7 +827,7 @@ public class JFontChooser extends JComponent
         if (samplePanel == null)
         {
             Border titledBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), ("Sample"), 0, 0, core.getPropertiesManager().getCharisUnicodeFontItalic(13));
+                BorderFactory.createEtchedBorder(), ("Sample"), 0, 0, core.getPropertiesManager().getFontMenu());
             Border empty = BorderFactory.createEmptyBorder(5, 10, 10, 10);
             Border border = BorderFactory.createCompoundBorder(titledBorder, empty);
 

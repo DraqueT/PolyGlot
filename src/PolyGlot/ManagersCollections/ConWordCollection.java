@@ -707,7 +707,7 @@ public class ConWordCollection extends DictionaryCollection {
      * @return text in plain tag
      */
     public static String formatPlain(String toPlain, DictCore core) {
-        String defaultFont = "face=\"" + core.getPropertiesManager().getCharisUnicodeFont().getFamily() + "\"";
+        String defaultFont = "face=\"" + core.getPropertiesManager().getFontLocal().getFamily() + "\"";
         return "<font " + defaultFont + ">" + toPlain + "</font>";
     }
 

@@ -420,7 +420,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton1.setFont(core.getPropertiesManager().getCharisUnicodeFont())&#xa;"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton1.setFont(core.getPropertiesManager().getFontMenu())&#xa;"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="jButton2">
@@ -432,7 +432,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton2.setFont(core.getPropertiesManager().getCharisUnicodeFont())"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton2.setFont(core.getPropertiesManager().getFontMenu())"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="jButton3">
@@ -444,7 +444,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton3.setFont(core.getPropertiesManager().getCharisUnicodeFont())"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton3.setFont(core.getPropertiesManager().getFontMenu())"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="jButton4">
@@ -456,7 +456,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton4.setFont(core.getPropertiesManager().getCharisUnicodeFont())"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton4.setFont(core.getPropertiesManager().getFontMenu())"/>
               </AuxValues>
             </Component>
           </SubComponents>

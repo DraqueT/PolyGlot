@@ -148,7 +148,7 @@ public class ScrQuizScreen extends PFrame {
                 }
                 case ConEquiv: {
                     ConWord sourceWord = (ConWord) question.getSource();
-                    lblQNode.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+                    lblQNode.setFont(core.getPropertiesManager().getFontLocal());
                     lblQNode.setText(sourceWord.getLocalWord());
                     break;
                 }

@@ -89,7 +89,7 @@ public class PTextField extends JTextField {
         if (!overrideFont) {
             setFont(core.getPropertiesManager().getFontCon());
         } else {
-            setFont(core.getPropertiesManager().getCharisUnicodeFont().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
+            setFont(core.getPropertiesManager().getFontLocal());
         }
         setText(defText);
     }
@@ -114,7 +114,7 @@ public class PTextField extends JTextField {
         if (!overrideFont) {
             setFont(core.getPropertiesManager().getFontCon());
         } else {
-            setFont(core.getPropertiesManager().getCharisUnicodeFont().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
+            setFont(core.getPropertiesManager().getFontLocal());
         }
     }
 
@@ -124,6 +124,7 @@ public class PTextField extends JTextField {
 
     public void setCore(DictCore _core) {
         core = _core;
+        setOverrideFont(overrideFont);
     }
 
     @Override
@@ -325,14 +326,13 @@ public class PTextField extends JTextField {
                 super.setText(t);
             }
         } catch (Exception e) {
+            InfoBox.error("Set text error", "Could not set text component: " 
+                    + e.getLocalizedMessage(), core.getRootWindow());
             //e.printStackTrace();
-            InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), core.getRootWindow());
         }
 
         if (isDefaultText()) {
-            //if (!overrideFont) {
-            setFont(core.getPropertiesManager().getCharisUnicodeFont());
-            //}
+            setFont(core.getPropertiesManager().getFontLocal());
             setForeground(Color.lightGray);
         } else {
             if (!overrideFont) {

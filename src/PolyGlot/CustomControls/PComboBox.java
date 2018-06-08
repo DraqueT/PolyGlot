@@ -46,7 +46,7 @@ public class PComboBox extends JComboBox implements MouseListener {
         setupListeners();
         
         // default font to Charis
-        super.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        super.setFont(core.getPropertiesManager().getFontMenu());
     }
 
     /**

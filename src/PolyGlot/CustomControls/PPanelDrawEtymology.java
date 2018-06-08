@@ -210,7 +210,7 @@ public final class PPanelDrawEtymology extends JPanel {
         conFontMetrics = g.getFontMetrics(
                 core.getPropertiesManager().getFontCon());
         charisFontMetrics = g.getFontMetrics(
-                core.getPropertiesManager().getCharisUnicodeFont());
+                core.getPropertiesManager().getFontLocal());
         curYDepth = conFontMetrics.getHeight();
 
         buildEtTree();
@@ -267,7 +267,7 @@ public final class PPanelDrawEtymology extends JPanel {
         }
 
         if (myNode.isExternal) {
-            g.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+            g.setFont(core.getPropertiesManager().getFontLocal());
             if (!myNode.extWordOrigin.isEmpty()) {
                 g.setColor(Color.gray);
                 g.drawString(myNode.extWordOrigin, xOffset, curYDepth);

@@ -41,6 +41,7 @@ import PolyGlot.WebInterface;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -285,7 +286,10 @@ public final class ScrLexicon extends PFrame {
             forceUpdate = false;
             populateProperties();
             ((PTextField) txtConWord).setCore(_core);
-            ((PTextField) txtConWord).setOverrideFont(false);
+            //((PTextField) txtConWord).setOverrideFont(false);
+            ((PTextField)txtLocalWord).setCore(_core);
+            ((PTextField)txtProc).setCore(_core);
+            ((PTextPane)txtDefinition).setCore(_core);
         };
         SwingUtilities.invokeLater(runnable);
     }
@@ -973,6 +977,7 @@ public final class ScrLexicon extends PFrame {
      * fxProcess, so no latch logic necessary.
      */
     private void clearFilterInternal() {
+        Font localFont = core.getPropertiesManager().getFontLocal();
         txtConSrc.setText("");
         txtLocalSrc.setText("");
         txtProcSrc.setText("");
@@ -980,10 +985,8 @@ public final class ScrLexicon extends PFrame {
         cmbTypeSrc.getSelectionModel().select(defTypeValue);
         cmbRootSrc.getSelectionModel().select(defRootValue);
         cmbRootSrc.setStyle("-fx-font: "
-                + core.getPropertiesManager()
-                        .getCharisUnicodeFont().getSize() + "px \""
-                + core.getPropertiesManager()
-                        .getCharisUnicodeFont().getFamily() + "\";");
+                + localFont.getSize() + "px \""
+                + localFont.getFamily() + "\";");
     }
 
     /**
@@ -1203,11 +1206,10 @@ public final class ScrLexicon extends PFrame {
                         + core.getPropertiesManager().getFontCon()
                                 .getFamily() + "\";");
             } else {
+                Font localFont = core.getPropertiesManager().getFontLocal();
                 cmbRootSrc.setStyle("-fx-font: "
-                        + core.getPropertiesManager()
-                                .getCharisUnicodeFont().getSize() + "px \""
-                        + core.getPropertiesManager()
-                                .getCharisUnicodeFont().getFamily() + "\";");
+                        + localFont.getSize() + "px \""
+                        + localFont.getFamily() + "\";");
             }
         });
     }
