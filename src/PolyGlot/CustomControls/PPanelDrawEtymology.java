@@ -22,12 +22,15 @@ package PolyGlot.CustomControls;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.Nodes.ConWord;
+import PolyGlot.RectangularCoordinateMap;
+import PolyGlot.WebInterface;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,12 +54,21 @@ public final class PPanelDrawEtymology extends JPanel {
     private int curYDepth = 0;
     private int lowestDepth = 0;
     private final int xWordSpaceBuffer = 20;
+    private RectangularCoordinateMap<ConWord> wordMap = new RectangularCoordinateMap<>();
 
     public PPanelDrawEtymology(DictCore _core, ConWord _word) {
         super();
         core = _core;
         myWordPosition = new EtymologyPrintingNode();
         myWordPosition.word = _word;
+        this.setToolTipText("");
+    }
+    
+    @Override
+    public String getToolTipText(MouseEvent event) {
+        ConWord tipWord = wordMap.getObjectAtLocation(event.getX(), event.getY());
+        System.out.println("x:" + event.getX() + "  y: " + event.getY());
+        return tipWord != null ? WebInterface.getTextFromHtml(tipWord.getDefinition()) : super.getToolTipText(event);
     }
 
     /**
@@ -205,6 +217,7 @@ public final class PPanelDrawEtymology extends JPanel {
      * Given a graphical interface, prints the etymology tree visually
      */
     private void paintEt(Graphics g) {
+        wordMap = new RectangularCoordinateMap<>();
         myWordPosition.children.clear();
         myWordPosition.parents.clear();
         conFontMetrics = g.getFontMetrics(
@@ -283,6 +296,14 @@ public final class PPanelDrawEtymology extends JPanel {
             g.drawString(myNode.word.getValue(), xOffset, curYDepth);
             halfTextHeight = conFontMetrics.getHeight() / 3;
             myLineHeight = curYDepth - halfTextHeight;
+            
+            try {
+                wordMap.addRectangle(xOffset, xOffset + conFontMetrics.stringWidth(myNode.word.getValue()), 
+                        curYDepth - conFontMetrics.getHeight(), curYDepth, myNode.word);
+            } catch (Exception e) {
+                InfoBox.error("Tooltip Generation error", "Error generating tooltip values: " 
+                        + e.getLocalizedMessage(), core.getRootWindow());
+            }
             curYDepth += conFontMetrics.getHeight();
         }
         
@@ -323,6 +344,15 @@ public final class PPanelDrawEtymology extends JPanel {
         if (!firstEntry) {
             g.setFont(core.getPropertiesManager().getFontCon());
             g.drawString(myNode.word.getValue(), xOffset, curYDepth);
+            
+            try {
+                wordMap.addRectangle(xOffset, xOffset + conFontMetrics.stringWidth(myText), 
+                        curYDepth - conFontMetrics.getHeight(), curYDepth, myNode.word);
+            } catch (Exception e) {
+                InfoBox.error("Tooltip Generation error", "Error generating tooltip values: " 
+                        + e.getLocalizedMessage(), core.getRootWindow());
+            }
+            
             curYDepth += conFontMetrics.getHeight();
 
             // only paint connector lines if not first entry (covered otherwise)
