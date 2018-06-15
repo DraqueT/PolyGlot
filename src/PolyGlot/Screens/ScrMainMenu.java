@@ -38,6 +38,9 @@ import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.KeyEventPostProcessor;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -95,6 +98,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
 
         initComponents();
+        setupEasterEgg();
 
         try {
             backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
@@ -789,6 +793,34 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         ((PButton) btnGrammar).setActiveSelected(false);
         ((PButton) btnClasses).setActiveSelected(false);
         ((PButton) btnPhonology).setActiveSelected(false);
+    }
+    
+    private void setupEasterEgg() {
+        class EnterKeyListener implements KeyEventPostProcessor {
+            String lastChars = "------------------------------";
+            @Override
+            public boolean postProcessKeyEvent(KeyEvent e) {
+                if(e.getKeyCode() == 0) {
+                    lastChars = lastChars.substring(1, lastChars.length());
+                    lastChars = lastChars + e.getKeyChar();
+                    
+                    if(lastChars.toLowerCase().endsWith("what did you see last tuesday")) {
+                        InfoBox.info("Coded Response", "A pink elephant.", null);
+                    } else if (lastChars.toLowerCase().endsWith("this is the forest primeval")) {
+                        InfoBox.info("Bearded with moss", "The murmuring pines and the hemlocks.", null);
+                    } else if (lastChars.toLowerCase().endsWith("it can't outlast you")) {
+                        InfoBox.info("Just human...", "Yes it can. You're not a kukun.", null);
+                    } else if (lastChars.toLowerCase().endsWith("who's draque") 
+                            || lastChars.toLowerCase().endsWith("who is draque")) {
+                        ScrEasterEgg.run(core.getRootWindow());
+                    }
+                }
+                
+                return false;
+            }
+        }        
+        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        manager.addKeyEventPostProcessor(new EnterKeyListener());
     }
 
     /**
