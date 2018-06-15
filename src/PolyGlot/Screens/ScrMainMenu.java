@@ -57,13 +57,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.plaf.ToolTipUI;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import org.simplericity.macify.eawt.Application;
-import org.simplericity.macify.eawt.ApplicationEvent;
-import org.simplericity.macify.eawt.ApplicationListener;
-import org.simplericity.macify.eawt.DefaultApplication;
 
 /**
  * Primary window for PolyGlot interface. Main running class that instantiates core and handles other windows/UI.
@@ -71,7 +66,7 @@ import org.simplericity.macify.eawt.DefaultApplication;
  *
  * @author draque.thompson
  */
-public class ScrMainMenu extends PFrame implements ApplicationListener {
+public class ScrMainMenu extends PFrame {
 
     private PFrame curWindow = null;
     private ScrLexicon cacheLexicon;
@@ -114,17 +109,6 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         lastFiles = core.getOptionsManager().getLastFiles();
         populateRecentOpened();
         checkJavaVersion();
-
-        // activates macify for menu integration...
-        if (System.getProperty("os.name").startsWith("Mac")) {
-            try {
-                activateMacify();
-            } catch (Exception ex) {
-                //ex.printStackTrace();
-                // TODO: Consider removing macify entirely
-                // Inform user? Don't see a pressing need to...
-            }
-        }
         super.setSize(super.getPreferredSize());
     }
     
@@ -170,54 +154,6 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         System.exit(0);
     }
-
-    // TODO: Consider removing Macify if it continues giving trouble/no benefit
-    // MACIFY RELATED CODE ->    
-    private void activateMacify() {
-        Application application = new DefaultApplication();
-        application.addApplicationListener(this);
-        application.addApplicationListener(this);
-        application.addPreferencesMenuItem();
-        application.setEnabledPreferencesMenu(true);
-    }
-
-    @Override
-    public void handleAbout(ApplicationEvent event) {
-        viewAbout();
-        event.setHandled(true);
-    }
-
-    @Override
-    public void handleOpenApplication(ApplicationEvent event) {
-        // Ok, we know our application started
-        // Not much to do about that..
-    }
-
-    @Override
-    public void handleOpenFile(ApplicationEvent event) {
-        //openFileInEditor(new File(event.getFilename()));
-    }
-
-    @Override
-    public void handlePreferences(ApplicationEvent event) {
-        //preferencesAction.actionPerformed(null);
-    }
-
-    @Override
-    public void handlePrintFile(ApplicationEvent event) {
-        ScrPrintToPDF.run(core);
-    }
-
-    @Override
-    public void handleQuit(ApplicationEvent event) {
-        dispose();
-    }
-
-    @Override
-    public void handleReOpenApplication(ApplicationEvent event) {
-        setVisible(true);
-    }
-    // <- MACIFY RELATED CODE
 
     /**
      * Checks to make certain Java is a high enough version. Informs user and quits otherwise.
@@ -1392,11 +1328,15 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     }//GEN-LAST:event_btnPhonologyActionPerformed
 
     private void mnuOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOptionsActionPerformed
+        showOptions();
+    }//GEN-LAST:event_mnuOptionsActionPerformed
+
+    private void showOptions() {
         ScrOptions s = new ScrOptions(core);
         s.setLocation(getLocation());
         s.setVisible(true);
-    }//GEN-LAST:event_mnuOptionsActionPerformed
-
+    }
+    
     private void mnuImportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFontActionPerformed
         JFileChooser chooser = new JFileChooser();
         String fileName;
