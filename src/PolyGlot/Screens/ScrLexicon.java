@@ -750,26 +750,25 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        if (testWord == null) {
-            setWordLegality(testWord);
+        if (testWord != null) {
+            Integer origWordId = testWord.getId();
+            testWord = new ConWord();
+            testWord.setId(origWordId);
+            int typeId = cmbType.getSelectedItem().equals(defTypeValue)
+                    ? 0 : ((TypeNode) cmbType.getSelectedItem()).getId();
+
+            if (curPopulating) {
+                return;
+            }
+
+            testWord.setValue(((PTextField) txtConWord).isDefaultText() ? "" : txtConWord.getText());
+            testWord.setLocalWord(((PTextField) txtLocalWord).isDefaultText() ? "" : txtLocalWord.getText());
+            testWord.setDefinition(txtDefinition.getText());
+            testWord.setPronunciation(((PTextField) txtProc).isDefaultText() ? "" : txtProc.getText());
+            testWord.setWordTypeId(typeId);
+            testWord.setRulesOverride(chkRuleOverride.isSelected());
+            testWord.setCore(core);
         }
-
-        testWord = new ConWord();
-        int typeId = cmbType.getSelectedItem().equals(defTypeValue)
-                ? 0 : ((TypeNode) cmbType.getSelectedItem()).getId();
-
-        if (curPopulating) {
-            return;
-        }
-
-        testWord.setValue(((PTextField) txtConWord).isDefaultText() ? "" : txtConWord.getText());
-        testWord.setLocalWord(((PTextField) txtLocalWord).isDefaultText() ? "" : txtLocalWord.getText());
-        testWord.setDefinition(txtDefinition.getText());
-        testWord.setPronunciation(((PTextField) txtProc).isDefaultText() ? "" : txtProc.getText());
-        testWord.setWordTypeId(typeId);
-        testWord.setRulesOverride(chkRuleOverride.isSelected());
-        testWord.setCore(core);
-
         setWordLegality(testWord);
     }
 
@@ -1987,6 +1986,7 @@ public final class ScrLexicon extends PFrame {
 
     private void btnDeclensionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclensionsActionPerformed
         viewDeclensions();
+        setWordLegality();
     }//GEN-LAST:event_btnDeclensionsActionPerformed
 
     private void btnLogographsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogographsActionPerformed
