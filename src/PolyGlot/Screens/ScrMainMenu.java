@@ -736,7 +736,7 @@ public class ScrMainMenu extends PFrame {
             String lastChars = "------------------------------";
             @Override
             public boolean postProcessKeyEvent(KeyEvent e) {
-                if(e.getKeyCode() == 0) {
+                if(e != null && e.getKeyCode() == 0) {
                     lastChars = lastChars.substring(1, lastChars.length());
                     lastChars = lastChars + e.getKeyChar();
                     
