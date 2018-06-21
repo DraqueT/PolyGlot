@@ -673,7 +673,7 @@ public class ScrGrammarGuide extends PFrame {
      * Sets input font/font of selected text
      */
     private void setFont() {
-        Font natFont = core.getPropertiesManager().getCharisUnicodeFont();
+        Font natFont = core.getPropertiesManager().getFontLocal();
         Font conFont = core.getPropertiesManager().getFontCon();
         SimpleAttributeSet aset = new SimpleAttributeSet();
 

@@ -179,7 +179,12 @@
                             name, java-openjfx.<br>
                             <br>
                             <span style="font-weight: bold;">NOTE FOR ARCH LINUX USERS: </span>You
-                            must install JFX manually to properly use PolyGlot.<br></div>
+                            must install JFX manually to properly use PolyGlot.<br>
+                            <br><span style="font-weight: bold;">NOTE FOR FEDORA USERS: </span>
+                            Alternate versions of openJDK/openJFK must be used for PolyGlot to work correctly.
+                             Use the line below in a terminal.
+                            <br>sudo dnf install java-1.8.0-openjdk-openjfx<br>
+                        </div>
 
 
                         <a name="BASIC_FUNCTIONALITY"></a><h1>BASIC FUNCTIONALITY</h1>
@@ -571,6 +576,12 @@
                             information, etc.<br>
                             <br>
                             - Conlang Font<br>
+                            <span style="font-weight:bold; color:red">WARNING:</span><br>
+                            If you create a custom font/script, remember to uninstall old copies
+                            of the font when moving to a new version. PolyGlot cannot detect
+                            the difference between multiple different versions of your font
+                            with the same name in your OS' font folder, and having multiple
+                            versions with the same name can lead to erratic behavior.<br><br>
                             Many ConLangs use nonstandard character sets, and it is sometimes
                             easiest to simply create a font yourself and map these characters to
                             standard Unicode characters. To load a font, click the Conlang Font
@@ -1246,8 +1257,6 @@
                                 PolyGlot uses the open source library Apache POI for excel
                                 parsing/writing.<br>
                                 PolyGlot uses the Masahiko SAWAI Font Chooser.<br>
-                                PolyGlot uses Macify under the larger Maven project (maven.apache.org)
-                                for its OSX shell integration<br>
                                 PolyGlot uses font Digital7 by Style7 (http://www.styleseven.com/)<br>
                                 PolyGlot uses IPA pronunciations sounds from the Wikimedia Commons,
                                 created by Peter Isotalo, User:Denelson83, UCLA Phonetics Lab Archive

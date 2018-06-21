@@ -58,7 +58,7 @@ public class PList extends JList {
                 testFont = testFont.deriveFont(attr);
                 setFont(testFont);
             } else {
-                setFont(core.getPropertiesManager().getCharisUnicodeFont());
+                setFont(core.getPropertiesManager().getFontLocal());
             }
             ignoreRepaint = false;
         }

@@ -28,7 +28,7 @@ import javax.swing.JTree;
  */
 public class PTree extends JTree {
     public PTree(DictCore _core) {
-        super.setFont(_core.getPropertiesManager().getCharisUnicodeFont());
+        super.setFont(_core.getPropertiesManager().getFontLocal());
         super.setCellRenderer(new PGTreeCellRenderer());
     }
 }

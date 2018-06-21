@@ -807,14 +807,14 @@ public class ScrDeclensionGenSetup extends PDialog {
         txtRuleRegex = new PTextField(core, false, "-- Filter Regex --");
         chkDisableWordform = new PCheckBox(core);
         jButton1 = new PButton(core);
-        jButton1.setFont(core.getPropertiesManager().getCharisUnicodeFont())
+        jButton1.setFont(core.getPropertiesManager().getFontMenu())
         ;
         jButton2 = new PButton(core);
-        jButton2.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        jButton2.setFont(core.getPropertiesManager().getFontMenu());
         jButton3 = new PButton(core);
-        jButton3.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        jButton3.setFont(core.getPropertiesManager().getFontMenu());
         jButton4 = new PButton(core);
-        jButton4.setFont(core.getPropertiesManager().getCharisUnicodeFont());
+        jButton4.setFont(core.getPropertiesManager().getFontMenu());
         jButton5 = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);

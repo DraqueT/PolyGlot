@@ -145,13 +145,14 @@ public class InfoBox extends JFrame {
      * @return true if chooser accepts, false otherwise
      */
     public static boolean deletionConfirmation(Window parent) {
+        PButton[] buttons = {yes, no};
         int option = POptionPane.showOptionDialog(parent,
                 "Delete Entry? Cannot be undone.",
                 "Delete Confirmation",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE,
                 UIManager.getIcon("OptionPane.questionIcon"),
-                null,
+                buttons,
                 null);
 
         return option == JOptionPane.YES_OPTION;
@@ -161,9 +162,14 @@ public class InfoBox extends JFrame {
         int ret;
         PButton[] option = {yes, no, cancel};
 
-        ret = POptionPane.showOptionDialog(parent, message, title, 
-                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, 
-                optionIcon, option, null);
+        ret = POptionPane.showOptionDialog(parent, 
+                message, 
+                title, 
+                JOptionPane.YES_NO_CANCEL_OPTION, 
+                JOptionPane.INFORMATION_MESSAGE, 
+                optionIcon, 
+                option, 
+                null);
 
         return ret;
     }

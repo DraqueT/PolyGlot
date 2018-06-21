@@ -38,6 +38,9 @@ import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.KeyEventPostProcessor;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -54,13 +57,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.plaf.ToolTipUI;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import org.simplericity.macify.eawt.Application;
-import org.simplericity.macify.eawt.ApplicationEvent;
-import org.simplericity.macify.eawt.ApplicationListener;
-import org.simplericity.macify.eawt.DefaultApplication;
 
 /**
  * Primary window for PolyGlot interface. Main running class that instantiates core and handles other windows/UI.
@@ -68,7 +66,7 @@ import org.simplericity.macify.eawt.DefaultApplication;
  *
  * @author draque.thompson
  */
-public class ScrMainMenu extends PFrame implements ApplicationListener {
+public class ScrMainMenu extends PFrame {
 
     private PFrame curWindow = null;
     private ScrLexicon cacheLexicon;
@@ -95,6 +93,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
 
         initComponents();
+        setupEasterEgg();
 
         try {
             backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
@@ -110,19 +109,6 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         lastFiles = core.getOptionsManager().getLastFiles();
         populateRecentOpened();
         checkJavaVersion();
-
-        // activates macify for menu integration...
-        if (System.getProperty("os.name").startsWith("Mac")) {
-            try {
-                activateMacify();
-            } catch (Exception ex) {
-                //ex.printStackTrace();
-                // TODO: Consider removing macify entirely
-                // Inform user? Don't see a pressing need to...
-            }
-        }
-
-        ToolTipUI t;
         super.setSize(super.getPreferredSize());
     }
     
@@ -168,54 +154,6 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
 
         System.exit(0);
     }
-
-    // TODO: Consider removing Macify if it continues giving trouble/no benefit
-    // MACIFY RELATED CODE ->    
-    private void activateMacify() {
-        Application application = new DefaultApplication();
-        application.addApplicationListener(this);
-        application.addApplicationListener(this);
-        application.addPreferencesMenuItem();
-        application.setEnabledPreferencesMenu(true);
-    }
-
-    @Override
-    public void handleAbout(ApplicationEvent event) {
-        viewAbout();
-        event.setHandled(true);
-    }
-
-    @Override
-    public void handleOpenApplication(ApplicationEvent event) {
-        // Ok, we know our application started
-        // Not much to do about that..
-    }
-
-    @Override
-    public void handleOpenFile(ApplicationEvent event) {
-        //openFileInEditor(new File(event.getFilename()));
-    }
-
-    @Override
-    public void handlePreferences(ApplicationEvent event) {
-        //preferencesAction.actionPerformed(null);
-    }
-
-    @Override
-    public void handlePrintFile(ApplicationEvent event) {
-        ScrPrintToPDF.run(core);
-    }
-
-    @Override
-    public void handleQuit(ApplicationEvent event) {
-        dispose();
-    }
-
-    @Override
-    public void handleReOpenApplication(ApplicationEvent event) {
-        setVisible(true);
-    }
-    // <- MACIFY RELATED CODE
 
     /**
      * Checks to make certain Java is a high enough version. Informs user and quits otherwise.
@@ -792,6 +730,34 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
         ((PButton) btnClasses).setActiveSelected(false);
         ((PButton) btnPhonology).setActiveSelected(false);
     }
+    
+    private void setupEasterEgg() {
+        class EnterKeyListener implements KeyEventPostProcessor {
+            String lastChars = "------------------------------";
+            @Override
+            public boolean postProcessKeyEvent(KeyEvent e) {
+                if(e != null && e.getKeyCode() == 0) {
+                    lastChars = lastChars.substring(1, lastChars.length());
+                    lastChars = lastChars + e.getKeyChar();
+                    
+                    if(lastChars.toLowerCase().endsWith("what did you see last tuesday")) {
+                        InfoBox.info("Coded Response", "A pink elephant.", null);
+                    } else if (lastChars.toLowerCase().endsWith("this is the forest primeval")) {
+                        InfoBox.info("Bearded with moss", "The murmuring pines and the hemlocks.", null);
+                    } else if (lastChars.toLowerCase().endsWith("it can't outlast you")) {
+                        InfoBox.info("Just human...", "Yes it can. You're not a kukun.", null);
+                    } else if (lastChars.toLowerCase().endsWith("who's draque") 
+                            || lastChars.toLowerCase().endsWith("who is draque")) {
+                        ScrEasterEgg.run(core.getRootWindow());
+                    }
+                }
+                
+                return false;
+            }
+        }        
+        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        manager.addKeyEventPostProcessor(new EnterKeyListener());
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -1247,6 +1213,7 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     private void mnuImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFileActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrExcelImport.run(core, this);
+        cacheLexicon.refreshWordList(-1); 
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuImportFileActionPerformed
 
@@ -1361,11 +1328,15 @@ public class ScrMainMenu extends PFrame implements ApplicationListener {
     }//GEN-LAST:event_btnPhonologyActionPerformed
 
     private void mnuOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOptionsActionPerformed
+        showOptions();
+    }//GEN-LAST:event_mnuOptionsActionPerformed
+
+    private void showOptions() {
         ScrOptions s = new ScrOptions(core);
         s.setLocation(getLocation());
         s.setVisible(true);
-    }//GEN-LAST:event_mnuOptionsActionPerformed
-
+    }
+    
     private void mnuImportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFontActionPerformed
         JFileChooser chooser = new JFileChooser();
         String fileName;

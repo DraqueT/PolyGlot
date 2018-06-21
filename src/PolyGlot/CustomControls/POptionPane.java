@@ -59,6 +59,7 @@ public class POptionPane extends JOptionPane {
     public POptionPane(Object message, int messageType, int optionType,
             Icon icon, Object[] options, Object initialValue) {
         super(message, messageType, optionType, icon, options, initialValue);
+        
     }
 
     public static int showOptionDialog(final Component parentComponent,
@@ -91,6 +92,7 @@ public class POptionPane extends JOptionPane {
 
         pane.selectInitialValue();
 
+        dialog.toFront();
         dialog.setVisible(true);
         dialog.dispose();
 

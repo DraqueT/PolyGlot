@@ -52,7 +52,7 @@ public class PCellRenderer implements TableCellRenderer {
                 core.getPropertiesManager().getKerningSpace() : 0.0;
         Font selectedFont = useConFont ? 
                 core.getPropertiesManager().getFontCon() : 
-                core.getPropertiesManager().getCharisUnicodeFont();
+                core.getPropertiesManager().getFontLocal();
         fontSize = useConFont ? 
                 (core.getPropertiesManager().getFontSize()*2)/3 : // 2/3 normal display size
                 core.getOptionsManager().getMenuFontSize();

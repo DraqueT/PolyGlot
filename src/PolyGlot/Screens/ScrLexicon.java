@@ -41,6 +41,7 @@ import PolyGlot.WebInterface;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -202,17 +203,19 @@ public final class ScrLexicon extends PFrame {
     /**
      * forces refresh of word list
      *
-     * @param wordId id of newly created word
+     * @param wordId id of newly word to select (-1 if no selection)
      */
     public void refreshWordList(int wordId) {
         populateLexicon();
-        try {
-            lstLexicon.setSelectedValue(
-                    core.getWordCollection().getNodeById(wordId), true);
-        } catch (ConWordCollection.WordNotExistsException e) {
-            InfoBox.error("Refresh Error", "Unable to refresh lexicon: "
-                    + e.getLocalizedMessage(), core.getRootWindow());
-            //e.printStackTrace();
+        if (wordId != -1) {
+            try {
+                lstLexicon.setSelectedValue(
+                        core.getWordCollection().getNodeById(wordId), true);
+            } catch (ConWordCollection.WordNotExistsException e) {
+                InfoBox.error("Refresh Error", "Unable to refresh lexicon: "
+                        + e.getLocalizedMessage(), core.getRootWindow());
+                //e.printStackTrace();
+            }
         }
     }
 
@@ -283,7 +286,10 @@ public final class ScrLexicon extends PFrame {
             forceUpdate = false;
             populateProperties();
             ((PTextField) txtConWord).setCore(_core);
-            ((PTextField) txtConWord).setOverrideFont(false);
+            //((PTextField) txtConWord).setOverrideFont(false);
+            ((PTextField)txtLocalWord).setCore(_core);
+            ((PTextField)txtProc).setCore(_core);
+            ((PTextPane)txtDefinition).setCore(_core);
         };
         SwingUtilities.invokeLater(runnable);
     }
@@ -744,26 +750,25 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        if (testWord == null) {
-            setWordLegality(testWord);
+        if (testWord != null) {
+            Integer origWordId = testWord.getId();
+            testWord = new ConWord();
+            testWord.setId(origWordId);
+            int typeId = cmbType.getSelectedItem().equals(defTypeValue)
+                    ? 0 : ((TypeNode) cmbType.getSelectedItem()).getId();
+
+            if (curPopulating) {
+                return;
+            }
+
+            testWord.setValue(((PTextField) txtConWord).isDefaultText() ? "" : txtConWord.getText());
+            testWord.setLocalWord(((PTextField) txtLocalWord).isDefaultText() ? "" : txtLocalWord.getText());
+            testWord.setDefinition(txtDefinition.getText());
+            testWord.setPronunciation(((PTextField) txtProc).isDefaultText() ? "" : txtProc.getText());
+            testWord.setWordTypeId(typeId);
+            testWord.setRulesOverride(chkRuleOverride.isSelected());
+            testWord.setCore(core);
         }
-
-        testWord = new ConWord();
-        int typeId = cmbType.getSelectedItem().equals(defTypeValue)
-                ? 0 : ((TypeNode) cmbType.getSelectedItem()).getId();
-
-        if (curPopulating) {
-            return;
-        }
-
-        testWord.setValue(((PTextField) txtConWord).isDefaultText() ? "" : txtConWord.getText());
-        testWord.setLocalWord(((PTextField) txtLocalWord).isDefaultText() ? "" : txtLocalWord.getText());
-        testWord.setDefinition(txtDefinition.getText());
-        testWord.setPronunciation(((PTextField) txtProc).isDefaultText() ? "" : txtProc.getText());
-        testWord.setWordTypeId(typeId);
-        testWord.setRulesOverride(chkRuleOverride.isSelected());
-        testWord.setCore(core);
-
         setWordLegality(testWord);
     }
 
@@ -971,6 +976,7 @@ public final class ScrLexicon extends PFrame {
      * fxProcess, so no latch logic necessary.
      */
     private void clearFilterInternal() {
+        Font localFont = core.getPropertiesManager().getFontLocal();
         txtConSrc.setText("");
         txtLocalSrc.setText("");
         txtProcSrc.setText("");
@@ -978,10 +984,8 @@ public final class ScrLexicon extends PFrame {
         cmbTypeSrc.getSelectionModel().select(defTypeValue);
         cmbRootSrc.getSelectionModel().select(defRootValue);
         cmbRootSrc.setStyle("-fx-font: "
-                + core.getPropertiesManager()
-                        .getCharisUnicodeFont().getSize() + "px \""
-                + core.getPropertiesManager()
-                        .getCharisUnicodeFont().getFamily() + "\";");
+                + localFont.getSize() + "px \""
+                + localFont.getFamily() + "\";");
     }
 
     /**
@@ -1201,11 +1205,10 @@ public final class ScrLexicon extends PFrame {
                         + core.getPropertiesManager().getFontCon()
                                 .getFamily() + "\";");
             } else {
+                Font localFont = core.getPropertiesManager().getFontLocal();
                 cmbRootSrc.setStyle("-fx-font: "
-                        + core.getPropertiesManager()
-                                .getCharisUnicodeFont().getSize() + "px \""
-                        + core.getPropertiesManager()
-                                .getCharisUnicodeFont().getFamily() + "\";");
+                        + localFont.getSize() + "px \""
+                        + localFont.getFamily() + "\";");
             }
         });
     }
@@ -1983,6 +1986,7 @@ public final class ScrLexicon extends PFrame {
 
     private void btnDeclensionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclensionsActionPerformed
         viewDeclensions();
+        setWordLegality();
     }//GEN-LAST:event_btnDeclensionsActionPerformed
 
     private void btnLogographsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogographsActionPerformed

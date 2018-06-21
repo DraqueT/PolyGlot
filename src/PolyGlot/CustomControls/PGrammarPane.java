@@ -26,6 +26,7 @@ import PolyGlot.Nodes.ImageNode;
 import PolyGlot.PGTUtil;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -44,8 +45,7 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyleConstants;
 
 /**
- * Similar to the PTextPane, but compatible with the HTML stylings performed in
- * the grammar window
+ * Similar to the PTextPane, but compatible with the HTML stylings performed in the grammar window
  *
  * @author draque.thompson
  */
@@ -119,6 +119,35 @@ public class PGrammarPane extends JTextPane {
                 }
             }
         });
+    }
+
+    @Override
+    protected void processKeyEvent(KeyEvent e) {
+        if (e != null) {
+            if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyChar() == KeyEvent.VK_TAB) {
+                tabKeyHit();
+                e.consume();
+            }
+            if (!e.isConsumed()) {
+                super.processKeyEvent(e);
+            }
+        }
+    }
+    
+    /**
+     * This is the action which replaces the tab key being hit due to rendering concerns with an external library
+     */
+    private void tabKeyHit() {
+        try {
+            ClipboardHandler cb = new ClipboardHandler();
+            cb.cacheClipboard();
+            cb.setClipboardContents("    "); // four spaces replace the tab
+            this.paste();
+            cb.restoreClipboard();
+        } catch (Exception e) {
+            InfoBox.error("Well this is embarassing.", "Tab rendering error: " 
+                    + e.getLocalizedMessage(), core.getRootWindow());
+        }
     }
 
     public void addImage(ImageNode image) {

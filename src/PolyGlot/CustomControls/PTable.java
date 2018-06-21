@@ -39,8 +39,7 @@ public class PTable extends JTable {
     public void paint(Graphics g) {
         // ensure headers use proper font/size
         if (core != null) {
-            Font font = core.getPropertiesManager()
-                    .getCharisUnicodeFont(core.getOptionsManager().getMenuFontSize());
+            Font font = core.getPropertiesManager().getFontLocal();
             this.getTableHeader().setFont(font);
             g.setFont(font);
         }
@@ -52,8 +51,7 @@ public class PTable extends JTable {
     public void repaint() {
         // ensure headers use proper font/size
         if (core != null) {
-            this.getTableHeader().setFont(core.getPropertiesManager()
-                    .getCharisUnicodeFont(core.getOptionsManager().getMenuFontSize()));
+            this.getTableHeader().setFont(core.getPropertiesManager().getFontLocal());
         }
         super.repaint();
     }

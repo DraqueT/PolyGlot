@@ -160,6 +160,7 @@ public class CustHandlerFactory {
             boolean blangName = false;
             boolean bfontSize = false;
             boolean bfontStyle = false;
+            boolean bfontLocalSize = false;
             boolean balphaOrder = false;
             boolean bDecId = false;
             boolean bDecText = false;
@@ -317,7 +318,10 @@ public class CustHandlerFactory {
                     blangName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontSizeXID)) {
                     bfontSize = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontStyleXID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalFontSizeXID)) {
+                    bfontLocalSize = true;
+                }
+                else if (qName.equalsIgnoreCase(PGTUtil.langPropFontStyleXID)) {
                     bfontStyle = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropAlphaOrderXID)) {
                     balphaOrder = true;
@@ -852,6 +856,8 @@ public class CustHandlerFactory {
                     bcharRepValue = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropKerningVal)) {
                     bKerningValue = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalFontSizeXID)) {
+                    bfontLocalSize = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuideRecurseXID)) {
                     bprocRecurse = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.romGuideRecurseXID)) {
@@ -995,7 +1001,10 @@ public class CustHandlerFactory {
                 } else if (bfontStyle) {
                     propertiesManager.setFontStyle(Integer.parseInt(new String(ch, start, length)));
                     bfontStyle = false;
-                } else if (balphaOrder) {
+                } else if (bfontLocalSize) {
+                    propertiesManager.setLocalFontSize(Double.parseDouble(new String(ch, start, length)));
+                }
+                else if (balphaOrder) {
                     propertiesManager.setAlphaOrder(propertiesManager.getAlphaPlainText()
                             + new String(ch, start, length));
                 } else if (bDecId) {

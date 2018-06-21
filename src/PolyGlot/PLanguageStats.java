@@ -232,7 +232,7 @@ public class PLanguageStats {
         
         ret += "    </script>\n"
                 + "  </head>\n"
-                + "  <body style=\"font-family:" + core.getPropertiesManager().getCharisUnicodeFont().getFamily() + ";\">\n"
+                + "  <body style=\"font-family:" + core.getPropertiesManager().getFontLocal().getFamily() + ";\">\n"
                 + "    <center>---LANGUAGE STAT REPORT---</center><br><br>";
 
         ret += formatPlain("Count of words in conlang lexicon: " + wordCount + "<br><br>", core);
