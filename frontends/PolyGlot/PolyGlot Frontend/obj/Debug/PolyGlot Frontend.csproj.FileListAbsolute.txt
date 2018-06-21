@@ -1,22 +1,3 @@
-c:\users\draque.thompson\documents\visual studio 2015\Projects\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.exe.config
-c:\users\draque.thompson\documents\visual studio 2015\Projects\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.exe
-c:\users\draque.thompson\documents\visual studio 2015\Projects\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.pdb
-c:\users\draque.thompson\documents\visual studio 2015\Projects\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.exe
-c:\users\draque.thompson\documents\visual studio 2015\Projects\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.pdb
-C:\Users\draque.thompson\Documents\Visual Studio 2015\Projects\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.csprojResolveAssemblyReference.cache
-C:\Users\draque.thompson\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.exe.config
-C:\Users\draque.thompson\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.exe
-C:\Users\draque.thompson\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.pdb
-C:\Users\draque.thompson\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.exe
-C:\Users\draque.thompson\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.pdb
-C:\Users\draque.thompson\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.csprojResolveAssemblyReference.cache
-C:\Users\LivingRoom\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.exe.config
-C:\Users\LivingRoom\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.exe
-C:\Users\LivingRoom\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.pdb
-C:\Users\LivingRoom\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.csprojResolveAssemblyReference.cache
-C:\Users\LivingRoom\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.csproj.CoreCompileInputs.cache
-C:\Users\LivingRoom\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.exe
-C:\Users\LivingRoom\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\obj\Debug\PolyGlot Frontend.pdb
 C:\Users\IEUser\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.exe.config
 C:\Users\IEUser\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.exe
 C:\Users\IEUser\Documents\NetBeansProjects\PolyGlot\frontends\PolyGlot\PolyGlot Frontend\bin\Debug\PolyGlot Frontend.pdb
