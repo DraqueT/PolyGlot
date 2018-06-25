@@ -43,7 +43,6 @@ import java.util.Map;
 import javax.swing.Box.Filler;
 import javax.swing.CellEditor;
 import javax.swing.DefaultListModel;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
@@ -59,7 +58,7 @@ import javax.swing.table.TableColumn;
  */
 public class ScrWordClasses extends PFrame {
 
-    private final Map<Integer, JCheckBox> typeChecks = new HashMap<>();
+    private final Map<Integer, PCheckBox> typeChecks = new HashMap<>();
 
     public ScrWordClasses(DictCore _core) {
         core = _core;
@@ -142,11 +141,11 @@ public class ScrWordClasses extends PFrame {
         gbc.weighty = 1;
         
         if (types.hasNext()) {
-            final JCheckBox checkAll = new JCheckBox();
+            final PCheckBox checkAll = new PCheckBox(core);
             checkAll.setText("All");
 
             checkAll.addItemListener(new ItemListener() {
-                final JCheckBox thisBox = checkAll;
+                final PCheckBox thisBox = checkAll;
 
                 @Override
                 public void itemStateChanged(ItemEvent e) {
@@ -175,11 +174,11 @@ public class ScrWordClasses extends PFrame {
         while (types.hasNext()) {
             TypeNode curNode = types.next();
             final int typeId = curNode.getId();
-            final JCheckBox checkType = new JCheckBox();
+            final PCheckBox checkType = new PCheckBox(core);
             
             checkType.setText(curNode.getValue());
             checkType.addItemListener(new ItemListener() {
-                final JCheckBox thisBox = checkType;
+                final PCheckBox thisBox = checkType;
                 final int thisTypeId = typeId;
 
                 @Override
@@ -220,7 +219,7 @@ public class ScrWordClasses extends PFrame {
     private void setEnabledTypeText() {
         // if "ALL" is selected, disable other choices, as they are redundant
         if (typeChecks.containsKey(-1)) {
-            JCheckBox all = typeChecks.get(-1);
+            PCheckBox all = typeChecks.get(-1);
             typeChecks.values().forEach((check) -> {
                 check.setEnabled(!all.isSelected());
             });
