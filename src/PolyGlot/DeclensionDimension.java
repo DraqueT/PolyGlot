@@ -21,9 +21,11 @@
 package PolyGlot;
 
 import PolyGlot.Nodes.DictNode;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
- *
+ * A single dimensional value of a conjugation element (for example, tense)
  * @author draque
  */
 public class DeclensionDimension extends DictNode {
@@ -51,5 +53,22 @@ public class DeclensionDimension extends DictNode {
     
     public boolean isMandatory() {
         return mandatory;
+    }
+    
+    public void writeXML(Document doc, Element rootElement) {
+        Element wordValue = doc.createElement(PGTUtil.dimensionNodeXID);
+        Element dimNode = doc.createElement(PGTUtil.dimensionIdXID);
+        dimNode.appendChild(doc.createTextNode(this.getId().toString()));
+        wordValue.appendChild(dimNode);
+
+        dimNode = doc.createElement(PGTUtil.dimensionNameXID);
+        dimNode.appendChild(doc.createTextNode(this.getValue()));
+        wordValue.appendChild(dimNode);
+
+        dimNode = doc.createElement(PGTUtil.dimensionMandXID);
+        dimNode.appendChild(doc.createTextNode(this.isMandatory() ? PGTUtil.True : PGTUtil.False));
+        wordValue.appendChild(dimNode);
+
+        rootElement.appendChild(wordValue);
     }
 }

@@ -23,8 +23,8 @@ import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.PEntry;
 import PolyGlot.Nodes.TypeNode;
-import PolyGlot.Nodes.WordPropValueNode;
-import PolyGlot.Nodes.WordProperty;
+import PolyGlot.Nodes.WordClassValue;
+import PolyGlot.Nodes.WordClass;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -164,11 +164,11 @@ public class QuizFactory {
                             : core.getWordPropertiesCollection()
                                     .getRandomPropertyCombinations(numChoices - 1, curWord)) {
                         curId++;
-                        WordPropValueNode choiceNode = new WordPropValueNode();
+                        WordClassValue choiceNode = new WordClassValue();
 
                         for (PEntry<Integer, Integer> curEntry : curCombo) {
-                            WordProperty wordProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
-                            WordPropValueNode valueNode = wordProp.getValueById(curEntry.getValue());
+                            WordClass wordProp = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                            WordClassValue valueNode = wordProp.getValueById(curEntry.getValue());
 
                             if (choiceNode.getValue().length() != 0) {
                                 choiceNode.setValue(choiceNode.getValue() + ", ");
@@ -181,13 +181,13 @@ public class QuizFactory {
                         question.addChoice(choiceNode);
                     }
 
-                    WordPropValueNode valAnswer = new WordPropValueNode();
+                    WordClassValue valAnswer = new WordClassValue();
                     Iterator<Entry<Integer, Integer>> propIt = curWord.getClassValues().iterator();
 
                     while (propIt.hasNext()) {
                         Entry<Integer, Integer> curEntry = propIt.next();
-                        WordProperty curProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
-                        WordPropValueNode curVal = curProp.getValueById(curEntry.getValue());
+                        WordClass curProp = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                        WordClassValue curVal = curProp.getValueById(curEntry.getValue());
 
                         if (valAnswer.getValue().length() != 0) {
                             valAnswer.setValue(valAnswer.getValue() + ", ");

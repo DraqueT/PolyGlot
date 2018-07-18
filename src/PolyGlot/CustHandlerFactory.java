@@ -37,8 +37,8 @@ import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.ManagersCollections.RomanizationManager;
 import PolyGlot.Nodes.EtyExternalParent;
-import PolyGlot.Nodes.WordPropValueNode;
-import PolyGlot.Nodes.WordProperty;
+import PolyGlot.Nodes.WordClassValue;
+import PolyGlot.Nodes.WordClass;
 import java.awt.Font;
 import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
@@ -68,67 +68,30 @@ public class CustHandlerFactory {
      * from newer version of PolyGlot
      */
     public static CustHandler getCustHandler(InputStream fileStream, DictCore core) throws Exception {
-        //File XMLFile = new File(fileName);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc;
 
         doc = dBuilder.parse(fileStream);
         doc.getDocumentElement().normalize();
-        Node versionNode;
-        String versionNumber;
-        CustHandler ret = null;
 
         // test for version number in pgd file, set to 0 if none found (pre 0.6)
-        versionNode = doc.getDocumentElement().getElementsByTagName(PGTUtil.pgVersionXID).item(0);
-        versionNumber = versionNode == null ? "0" : versionNode.getTextContent();
-
-        switch (versionNumber) {
-            case "0":
-            case "0.5":
-            case "0.5.1":
-            case "0.6":
-            case "0.6.1":
-            case "0.6.5":
-            case "0.7":
-                throw new Exception("Version " + versionNumber 
-                        + " no longer supported. Load/save with older version of"
-                        + "PolyGlot (0.7.5 through 1.2) to upconvert.");
-            case "0.7.5":
-            case "0.7.6":
-            case "0.7.6.1":
-            case "0.8":
-            case "0.8.1":
-            case "0.8.1.1":
-            case "0.8.1.2":
-            case "0.8.5":
-            case "0.9":
-            case "0.9.1":
-            case "0.9.2":
-            case "0.9.9":
-            case "0.9.9.1":
-            case "1.0":
-            case "1.0.1":
-            case "1.1":
-            case "1.2":
-            case "1.2.1":
-            case "1.2.2":
-            case "1.3":
-            case "1.4":
-            case "2.0":
-            case "2.1":
-            case "2.2":
-                ret = CustHandlerFactory.get075orHigherHandler(core);
-                break;
-            default:
-                throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
+        Node versionNode = doc.getDocumentElement().getElementsByTagName(PGTUtil.pgVersionXID).item(0);
+        String versionNumber = versionNode == null ? "0" : versionNode.getTextContent();
+        int fileVersionHierarchy = core.getVersionHierarchy(versionNumber);
+        
+        if (fileVersionHierarchy == -1) {
+            throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
                         + "written with a newer version with additional features: Ver " + versionNumber + ".");
+        } else if (fileVersionHierarchy < core.getVersionHierarchy("0.7.5")) {
+            throw new Exception("Version " + versionNumber + " no longer supported. Load/save with older version of"
+                        + "PolyGlot (0.7.5 through 1.2) to upconvert.");
         }
 
-        return ret;
+        return CustHandlerFactory.get075orHigherHandler(core, fileVersionHierarchy);
     }
 
-    private static CustHandler get075orHigherHandler(final DictCore core) {
+    private static CustHandler get075orHigherHandler(final DictCore core, final int versionHierarchy) {
         return new CustHandler() {
 
             PronunciationNode proBuffer;
@@ -205,6 +168,7 @@ public class CustHandlerFactory {
             boolean bdecGenRuleIndex = false;
             boolean bdecGenTransRegex = false;
             boolean bdecGenTransRep = false;
+            boolean bdecGenTransClassVal = false;
             boolean bcombinedFormId = false;
             boolean bcombinedFormSurpress = false;
             boolean bwordRuleOverride = false;
@@ -412,6 +376,8 @@ public class CustHandlerFactory {
                     bdecGenTransRegex = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decGenTransReplaceXID)) {
                     bdecGenTransRep = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleApplyToClassValue)) {
+                    bdecGenTransClassVal = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleIndexXID)) {
                     bdecGenRuleIndex = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decCombinedIdXID)) {
@@ -454,7 +420,7 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassIdXID)) {
                     bclassId = true;
                     // the buffer should not default to "apply to all."
-                    ((WordProperty)core.getWordPropertiesCollection().getBuffer()).deleteApplyType(-1);
+                    ((WordClass)core.getWordPropertiesCollection().getBuffer()).deleteApplyType(-1);
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassNameXID)) {
                     bclassName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassApplyTypesXID)) {
@@ -534,9 +500,9 @@ public class CustHandlerFactory {
                     if (tmpString.length() != 0) {
                         // this uses a slow, heuristic method because it's a one time process
                         // that is replacing the existing, inexact method with an ID based one
-                        WordProperty writeProp = null;
+                        WordClass writeProp = null;
                         // find gender property
-                        for (WordProperty prop : core.getWordPropertiesCollection().getAllWordProperties()) {
+                        for (WordClass prop : core.getWordPropertiesCollection().getAllWordClasses()) {
                             if (prop.getValue().equals("Gender")) {
                                 writeProp = prop;
                                 break;
@@ -549,12 +515,12 @@ public class CustHandlerFactory {
                                 core.getWordPropertiesCollection().clear();
                                 core.getWordPropertiesCollection().getBuffer().setValue("Gender");
                                 int id = core.getWordPropertiesCollection().insert();
-                                writeProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(id);
+                                writeProp = (WordClass) core.getWordPropertiesCollection().getNodeById(id);
                             }
 
-                            WordPropValueNode valueWrite = null;
+                            WordClassValue valueWrite = null;
 
-                            for (WordPropValueNode value : writeProp.getValues()) {
+                            for (WordClassValue value : writeProp.getValues()) {
                                 // test against constructed gender string
                                 if (value.getValue().equals(tmpString)) {
                                     valueWrite = value;
@@ -756,6 +722,8 @@ public class CustHandlerFactory {
                     bdecGenRuleName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleRegexXID)) {
                     bdecGenRuleRegex = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleApplyToClassValue)) {
+                    bdecGenTransClassVal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decGenRuleTypeXID)) {
                     bdecGenRuleType = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.decGenTransXID)) {
@@ -837,7 +805,7 @@ public class CustHandlerFactory {
                     bclassFreeText = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ClassValueNodeXID)) {
                     try {
-                        ((WordProperty) core.getWordPropertiesCollection().getBuffer()).insert();
+                        ((WordClass) core.getWordPropertiesCollection().getBuffer()).insert();
                     } catch (Exception e) {
                         warningLog += "\nWord class load error: " + e.getLocalizedMessage();
                     }
@@ -1109,6 +1077,11 @@ public class CustHandlerFactory {
                 } else if (bdisableProcRegex) {
                     core.getPropertiesManager().setDisableProcRegex(new String(ch, start, length).equals(PGTUtil.True));
                     bdisableProcRegex = false;
+                } else if (bdecGenTransClassVal) {
+                    String[] classValueIds = new String(ch, start, length).split(",");
+                    core.getDeclensionManager().getRuleBuffer().addClassToFilterList(
+                            Integer.parseInt(classValueIds[0]),
+                            Integer.parseInt(classValueIds[1]));
                 } else if (bdecGenRuleComb) {
                     core.getDeclensionManager().getRuleBuffer().setCombinationId(new String(ch, start, length));
                     bdecGenRuleComb = false;
@@ -1184,11 +1157,11 @@ public class CustHandlerFactory {
                 } else if (bclassId) {
                     core.getWordPropertiesCollection().getBuffer().setId(Integer.parseInt(new String(ch, start, length)));
                 } else if (bclassName) {
-                    WordProperty buffer = (WordProperty) core.getWordPropertiesCollection().getBuffer();
+                    WordClass buffer = (WordClass) core.getWordPropertiesCollection().getBuffer();
                     buffer.setValue(buffer.getValue() + new String(ch, start, length));
                 } else if (bclassApplyTypes) {
                     String types = new String(ch, start, length);
-                    WordProperty buffer = (WordProperty) core.getWordPropertiesCollection().getBuffer();
+                    WordClass buffer = (WordClass) core.getWordPropertiesCollection().getBuffer();
                     for (String curType : types.split(",")) {
                         int typeId = Integer.parseInt(curType);
                         buffer.addApplyType(typeId);
@@ -1196,14 +1169,14 @@ public class CustHandlerFactory {
                 } else if (bclassFreeText) {
                     String freeText = new String(ch, start, length);                    
                     if (freeText.equals(PGTUtil.True)) {
-                        ((WordProperty) core.getWordPropertiesCollection().getBuffer()).setFreeText(true);
+                        ((WordClass) core.getWordPropertiesCollection().getBuffer()).setFreeText(true);
                     } else {
-                        ((WordProperty) core.getWordPropertiesCollection().getBuffer()).setFreeText(false);
+                        ((WordClass) core.getWordPropertiesCollection().getBuffer()).setFreeText(false);
                     }
                 } else if (bclassValueId) {
-                    ((WordProperty) core.getWordPropertiesCollection().getBuffer()).buffer.setId(Integer.parseInt(new String(ch, start, length)));
+                    ((WordClass) core.getWordPropertiesCollection().getBuffer()).buffer.setId(Integer.parseInt(new String(ch, start, length)));
                 } else if (bclassValueName) {
-                    WordPropValueNode value = ((WordProperty) core.getWordPropertiesCollection().getBuffer()).buffer;
+                    WordClassValue value = ((WordClass) core.getWordPropertiesCollection().getBuffer()).buffer;
                     value.setValue(value.getValue() + new String(ch, start, length));
                 } else if (bcharRepChar) {
                     // can only pull single character, so no need to concatinate
@@ -1243,6 +1216,14 @@ public class CustHandlerFactory {
                 } else if (betyExternalWordDefinition) {
                     EtyExternalParent ext = core.getEtymologyManager().getBufferExtParent();
                     ext.setDefinition(ext.getDefinition() + new String(ch, start, length));
+                }
+            }
+            
+            @Override
+            public void endDocument() {
+                // Version 2.3 implemented class filters for conj rules. Default to all on.
+                if (versionHierarchy < core.getVersionHierarchy("2.2")) {
+                    core.getDeclensionManager().setAllDeclensionRulesToAllClasses();
                 }
             }
         };

@@ -22,8 +22,8 @@ package PolyGlot;
 import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.TypeNode;
-import PolyGlot.Nodes.WordPropValueNode;
-import PolyGlot.Nodes.WordProperty;
+import PolyGlot.Nodes.WordClassValue;
+import PolyGlot.Nodes.WordClass;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -191,10 +191,10 @@ public class ImportFileHelper {
                         }
 
                         String className = "CLASS" + cellNum.toString(); // guarantee unique name for user to rename later (based on column)
-                        WordProperty wordProp = null;
+                        WordClass wordProp = null;
 
                         // find class
-                        for (WordProperty findProp : core.getWordPropertiesCollection().getAllWordProperties()) {
+                        for (WordClass findProp : core.getWordPropertiesCollection().getAllWordClasses()) {
                             if (findProp.getValue().equals(className)) {
                                 wordProp = findProp;
                                 break;
@@ -203,19 +203,19 @@ public class ImportFileHelper {
 
                         // create class if doesn't yet exist
                         if (wordProp == null) {
-                            wordProp = new WordProperty();
+                            wordProp = new WordClass();
                             wordProp.setValue(className);
                             int propId = core.getWordPropertiesCollection().addNode(wordProp);
                             try {
-                                wordProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(propId);
+                                wordProp = (WordClass) core.getWordPropertiesCollection().getNodeById(propId);
                             } catch (DictionaryCollection.NodeNotExistsException e) {
                                 throw new Exception("Problem pulling word class for word: " + newWord.getValue());
                             }
                         }
 
                         // find class value
-                        WordPropValueNode wordVal = null;
-                        for (WordPropValueNode findVal : wordProp.getValues()) {
+                        WordClassValue wordVal = null;
+                        for (WordClassValue findVal : wordProp.getValues()) {
                             if (findVal.getValue().equals(columns[cellNum].trim())) {
                                 wordVal = findVal;
                                 break;
@@ -224,7 +224,7 @@ public class ImportFileHelper {
 
                         // create class value if doesn't exist yet
                         if (wordVal == null) {
-                            wordVal = new WordPropValueNode();
+                            wordVal = new WordClassValue();
                             wordVal.setValue(columns[cellNum].trim());
                             wordVal = wordProp.addValue(columns[cellNum].trim());
                         }
@@ -387,10 +387,10 @@ public class ImportFileHelper {
             Integer cellNum = cellNumCheckGet(entry);
 
             String className = "CLASS" + cellNum.toString(); // guarantee unique name for user to rename later (based on column)
-            WordProperty wordProp = null;
+            WordClass wordProp = null;
 
             // find class
-            for (WordProperty findProp : core.getWordPropertiesCollection().getAllWordProperties()) {
+            for (WordClass findProp : core.getWordPropertiesCollection().getAllWordClasses()) {
                 if (findProp.getValue().equals(className)) {
                     wordProp = findProp;
                     break;
@@ -399,11 +399,11 @@ public class ImportFileHelper {
 
             // create class if doesn't yet exist
             if (wordProp == null) {
-                wordProp = new WordProperty();
+                wordProp = new WordClass();
                 wordProp.setValue(className);
                 int propId = core.getWordPropertiesCollection().addNode(wordProp);
                 try {
-                    wordProp = (WordProperty) core.getWordPropertiesCollection().getNodeById(propId);
+                    wordProp = (WordClass) core.getWordPropertiesCollection().getNodeById(propId);
                 } catch (DictionaryCollection.NodeNotExistsException e) {
                     throw new Exception("Problem pulling word class for word: " + newWord.getValue());
                 }
@@ -411,9 +411,9 @@ public class ImportFileHelper {
 
             // find class value
             Cell curCell = row.getCell(cellNum);
-            WordPropValueNode wordVal = null;
+            WordClassValue wordVal = null;
             if (curCell != null) { // null = empty cell in many occasions, skip if this is the case
-                for (WordPropValueNode findVal : wordProp.getValues()) {
+                for (WordClassValue findVal : wordProp.getValues()) {
                     if (findVal.getValue().equals(curCell.toString().trim())) {
                         wordVal = findVal;
                         break;
@@ -425,7 +425,7 @@ public class ImportFileHelper {
 
             // create class value if doesn't exist yet
             if (wordVal == null) {
-                wordVal = new WordPropValueNode();
+                wordVal = new WordClassValue();
                 wordVal.setValue(row.getCell(cellNum).toString().trim());
                 wordVal = wordProp.addValue(row.getCell(cellNum).toString().trim());
             }

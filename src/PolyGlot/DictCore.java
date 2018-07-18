@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -35,13 +35,15 @@ import PolyGlot.ManagersCollections.EtymologyManager;
 import PolyGlot.ManagersCollections.ImageCollection;
 import PolyGlot.ManagersCollections.OptionsManager;
 import PolyGlot.ManagersCollections.RomanizationManager;
-import PolyGlot.ManagersCollections.WordPropertyCollection;
+import PolyGlot.ManagersCollections.WordClassCollection;
 import PolyGlot.Screens.ScrMainMenu;
 import java.awt.Color;
 import java.awt.FontFormatException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -52,7 +54,7 @@ import org.xml.sax.SAXException;
 
 public class DictCore {
 
-    private final String version = "2.2";
+    private final String version = "2.3";
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
     private DeclensionManager declensionMgr;
@@ -63,12 +65,13 @@ public class DictCore {
     private LogoCollection logoCollection;
     private GrammarManager grammarManager;
     private OptionsManager optionsManager;
-    private WordPropertyCollection wordPropCollection;
+    private WordClassCollection wordPropCollection;
     private ImageCollection imageCollection;
     private EtymologyManager etymologyManager;
     private PFrame rootWindow;
     private Object clipBoard;
     private boolean curLoading = false;
+    private Map<String, Integer> versionHierarchy = new HashMap<>();
 
     /**
      * Language core initialization
@@ -86,7 +89,7 @@ public class DictCore {
             logoCollection = new LogoCollection(this);
             grammarManager = new GrammarManager();
             optionsManager = new OptionsManager(this);
-            wordPropCollection = new WordPropertyCollection();
+            wordPropCollection = new WordClassCollection();
             imageCollection = new ImageCollection();
             etymologyManager = new EtymologyManager(this);
 
@@ -97,6 +100,9 @@ public class DictCore {
             logoCollection.setAlphaOrder(alphaOrder);
             wordPropCollection.setAlphaOrder(alphaOrder);
             rootWindow = null;
+            
+            populateVersionHierarchy();
+            validateVersion();
         } catch (Exception e) {
             InfoBox.error("CORE ERROR", "Error creating language core: " + e.getLocalizedMessage(), null);
         }
@@ -177,7 +183,7 @@ public class DictCore {
         return ret;
     }
 
-    public WordPropertyCollection getWordPropertiesCollection() {
+    public WordClassCollection getWordPropertiesCollection() {
         return wordPropCollection;
     }
 
@@ -470,5 +476,61 @@ public class DictCore {
     
     public EtymologyManager getEtymologyManager() {
         return etymologyManager;
+    }
+    
+    /**
+     * 
+     * @param version
+     * @return 
+     */
+    public int getVersionHierarchy(String version) {
+        int ret = -1;
+        
+        if (versionHierarchy.containsKey(version)) {
+            ret = versionHierarchy.get(version);
+        }
+        
+        return ret;
+    }
+    
+    private void validateVersion() throws Exception {
+        if (!versionHierarchy.containsKey(this.getVersion())) {
+            throw new Exception("ERROR: CURRENT VERSION NOT ACCOUNTED FOR IN VERSION HISTORY.");
+        }
+    }
+    
+    private void populateVersionHierarchy() {
+        versionHierarchy.put("0", 0);
+        versionHierarchy.put("0.5", 1);
+        versionHierarchy.put("0.5.1", 2);
+        versionHierarchy.put("0.6", 3);
+        versionHierarchy.put("0.6.1", 4);
+        versionHierarchy.put("0.6.5", 5);
+        versionHierarchy.put("0.7", 6);
+        versionHierarchy.put("0.7.5", 7);
+        versionHierarchy.put("0.7.6", 8);
+        versionHierarchy.put("0.7.6.1", 9);
+        versionHierarchy.put("0.8", 10);
+        versionHierarchy.put("0.8.1", 11);
+        versionHierarchy.put("0.8.1.1", 12);
+        versionHierarchy.put("0.8.1.2", 13);
+        versionHierarchy.put("0.8.5", 14);
+        versionHierarchy.put("0.9", 15);
+        versionHierarchy.put("0.9.1", 16);
+        versionHierarchy.put("0.9.2", 17);
+        versionHierarchy.put("0.9.9", 18);
+        versionHierarchy.put("0.9.9.1", 19);
+        versionHierarchy.put("1.0", 20);
+        versionHierarchy.put("1.0.1", 21);
+        versionHierarchy.put("1.1", 22);
+        versionHierarchy.put("1.2", 23);
+        versionHierarchy.put("1.2.1", 24);
+        versionHierarchy.put("1.2.2", 25);
+        versionHierarchy.put("1.3", 26);
+        versionHierarchy.put("1.4", 27);
+        versionHierarchy.put("2.0", 28);
+        versionHierarchy.put("2.1", 29);
+        versionHierarchy.put("2.2", 30);
+        versionHierarchy.put("2.3", 31);
     }
 }

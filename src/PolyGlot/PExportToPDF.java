@@ -30,8 +30,8 @@ import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.Nodes.ImageNode;
 import PolyGlot.Nodes.PEntry;
 import PolyGlot.Nodes.PronunciationNode;
-import PolyGlot.Nodes.WordPropValueNode;
-import PolyGlot.Nodes.WordProperty;
+import PolyGlot.Nodes.WordClassValue;
+import PolyGlot.Nodes.WordClass;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -427,11 +427,11 @@ public class PExportToPDF {
             if (!curWord.getClassValues().isEmpty()) {
                 String wordClasses = "";
                 for (Entry<Integer, Integer> curEntry : curWord.getClassValues()) {
-                    WordProperty prop;
-                    WordPropValueNode value;
+                    WordClass prop;
+                    WordClassValue value;
 
                     try {
-                        prop = (WordProperty) core.getWordPropertiesCollection()
+                        prop = (WordClass) core.getWordPropertiesCollection()
                                 .getNodeById(curEntry.getKey());
                         value = prop.getValueById(curEntry.getValue());
                     } catch (Exception e) {
@@ -463,7 +463,7 @@ public class PExportToPDF {
                         dictEntry.add(new Text(", "));
                     }
                     try {
-                        WordProperty prop = (WordProperty) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                        WordClass prop = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
                         varChunk = new Text(prop.getValue());
                         varChunk.setFont(unicodeFontItalic);
                         dictEntry.add(varChunk);
@@ -649,11 +649,11 @@ public class PExportToPDF {
             if (!curWord.getClassValues().isEmpty()) {
                 String wordClasses = "";
                 for (Entry<Integer, Integer> curEntry : curWord.getClassValues()) {
-                    WordProperty prop;
-                    WordPropValueNode value;
+                    WordClass prop;
+                    WordClassValue value;
 
                     try {
-                        prop = (WordProperty) core.getWordPropertiesCollection()
+                        prop = (WordClass) core.getWordPropertiesCollection()
                                 .getNodeById(curEntry.getKey());
                         value = prop.getValueById(curEntry.getValue());
                     } catch (Exception e) {
@@ -684,7 +684,7 @@ public class PExportToPDF {
                         dictEntry.add(new Text(", "));
                     }
                     try {
-                        WordProperty prop = (WordProperty) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                        WordClass prop = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
                         varChunk = new Text(prop.getValue());
                         varChunk.setFont(unicodeFontItalic);
                         dictEntry.add(varChunk);
@@ -833,7 +833,7 @@ public class PExportToPDF {
                     declensionValue = curDeclension.getValue();
                 } else { // otherwise generate a value
                     try {
-                        declensionValue = core.getDeclensionManager().declineWord(curWord.getWordTypeId(),
+                        declensionValue = core.getDeclensionManager().declineWord(curWord,
                                 curPair.combinedId,
                                 curWord.getValue());
                     } catch (Exception e) {

@@ -28,8 +28,8 @@ import PolyGlot.CustomControls.PTableModel;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.TypeNode;
-import PolyGlot.Nodes.WordPropValueNode;
-import PolyGlot.Nodes.WordProperty;
+import PolyGlot.Nodes.WordClassValue;
+import PolyGlot.Nodes.WordClass;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -89,7 +89,7 @@ public class ScrWordClasses extends PFrame {
             }
 
             public void sync() {
-                WordProperty prop = lstProperties.getSelectedValue();
+                WordClass prop = lstProperties.getSelectedValue();
 
                 if (prop != null && !((PTextField)txtName).isDefaultText()) {
                     prop.setValue(txtName.getText());
@@ -149,7 +149,7 @@ public class ScrWordClasses extends PFrame {
 
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    WordProperty prop = lstProperties.getSelectedValue();
+                    WordClass prop = lstProperties.getSelectedValue();
                     
                     if (thisBox.isSelected()) {
                         prop.addApplyType(-1);                       
@@ -183,7 +183,7 @@ public class ScrWordClasses extends PFrame {
 
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    WordProperty prop = lstProperties.getSelectedValue();
+                    WordClass prop = lstProperties.getSelectedValue();
                     
                     if (prop != null) {
                         if (thisBox.isSelected()) {
@@ -231,7 +231,7 @@ public class ScrWordClasses extends PFrame {
     private void populateWordProperties() {
         DefaultListModel listModel = new DefaultListModel();
 
-        core.getWordPropertiesCollection().getAllWordProperties().forEach((curNode) -> {
+        core.getWordPropertiesCollection().getAllWordClasses().forEach((curNode) -> {
             listModel.addElement(curNode);
         });
 
@@ -243,7 +243,7 @@ public class ScrWordClasses extends PFrame {
      * Populates all values associated with property
      */
     private void populatePropertyValues() {
-        WordProperty curProp = lstProperties.getSelectedValue();
+        WordClass curProp = lstProperties.getSelectedValue();
 
         CellEditor cellEditor = tblValues.getCellEditor();
         if (cellEditor != null) {
@@ -300,11 +300,11 @@ public class ScrWordClasses extends PFrame {
 
     private void addWordProperty() {
         int propId;
-        WordProperty prop;
+        WordClass prop;
 
         try {
-            propId = core.getWordPropertiesCollection().addNode(new WordProperty());
-            prop = (WordProperty) core.getWordPropertiesCollection().getNodeById(propId);
+            propId = core.getWordPropertiesCollection().addNode(new WordClass());
+            prop = (WordClass) core.getWordPropertiesCollection().getNodeById(propId);
         } catch (Exception e) {
             InfoBox.error("Property Creation Error", "Unable to create new word property: " + e.getLocalizedMessage(), core.getRootWindow());
             return;
@@ -316,7 +316,7 @@ public class ScrWordClasses extends PFrame {
     }
 
     private void deleteWordProperty() {
-        WordProperty prop = lstProperties.getSelectedValue();
+        WordClass prop = lstProperties.getSelectedValue();
         int position = lstProperties.getSelectedIndex();
 
         if (prop == null || InfoBox.yesNoCancel("Are you sure?", "This will delete the property from all words."
@@ -341,13 +341,13 @@ public class ScrWordClasses extends PFrame {
 
     private void addPropertyValue() {
         PTableModel tableModel = (PTableModel) tblValues.getModel();
-        WordProperty curProp = lstProperties.getSelectedValue();
+        WordClass curProp = lstProperties.getSelectedValue();
 
         if (curProp == null) {
             return;
         }
 
-        WordPropValueNode value;
+        WordClassValue value;
 
         try {
             value = curProp.addValue("");
@@ -590,7 +590,7 @@ public class ScrWordClasses extends PFrame {
     }//GEN-LAST:event_btnDelValueActionPerformed
 
     private void chkFreeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFreeTextActionPerformed
-        WordProperty prop = lstProperties.getSelectedValue();
+        WordClass prop = lstProperties.getSelectedValue();
         prop.setFreeText(chkFreeText.isSelected());
         setFreeTextEnabled();
     }//GEN-LAST:event_chkFreeTextActionPerformed
@@ -630,7 +630,7 @@ public class ScrWordClasses extends PFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JList<WordProperty> lstProperties;
+    private javax.swing.JList<WordClass> lstProperties;
     private javax.swing.JPanel pnlTypes;
     private javax.swing.JTable tblValues;
     private javax.swing.JTextField txtName;

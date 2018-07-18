@@ -23,11 +23,11 @@ package PolyGlot.Nodes;
  * This represents a single value within a word property
  * @author Draque Thompson
  */
-public class WordPropValueNode extends DictNode {
+public class WordClassValue extends DictNode {
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
-        if (!(_node instanceof WordPropValueNode)) {
-            throw new ClassCastException("Object not of type WordPropValueNode");
+        if (!(_node instanceof WordClassValue)) {
+            throw new ClassCastException("Object not of type WordClassValue");
         }
         
         this.value = _node.getValue();

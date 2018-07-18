@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -144,6 +144,8 @@ public class PGTUtil {
     public static final String decGenRuleRegexXID = "decGenRuleRegex";
     public static final String decGenRuleNameXID = "decGenRuleName";
     public static final String decGenRuleIndexXID = "decGenRuleIndex";
+    public static final String decGenRuleApplyToClasses = "decGenRuleApplyToClasses";
+    public static final String decGenRuleApplyToClassValue = "decGenRuleApplyToClassValue";
 
     // autodeclension transform properties
     public static final String decGenTransXID = "decGenTrans";

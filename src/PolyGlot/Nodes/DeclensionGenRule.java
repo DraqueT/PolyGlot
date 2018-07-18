@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,8 +19,14 @@
  */
 package PolyGlot.Nodes;
 
+import PolyGlot.PGTUtil;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * class to contain declension transformation rule and all transformations
@@ -34,6 +40,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
     private String regex = "";
     private String name = "";
     private List<DeclensionGenTransform> transformations = new ArrayList<>();
+    private final Map<Integer, Integer> applyToClasses = new HashMap<>();
     private DeclensionGenTransform transBuffer = new DeclensionGenTransform();
     
     /**
@@ -73,6 +80,10 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         }).forEachOrdered((copyTo) -> {
             transformations.add(copyTo);
         });
+        
+        for (Entry<Integer, Integer> classEntry : r.getClassFilterList().entrySet()) {
+            this.addClassToFilterList(classEntry.getKey(), classEntry.getValue());
+        }
     }
     
     /**
@@ -159,6 +170,45 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
     }
     
     /**
+     * Tests whether a word should have this rule applied to it. First tests based on the part of speech (type)
+     * Second tests on class of word. -1 in applyToClasses means "apply to all"
+     * @param word word to test rule for
+     * @return true if rule should be applied to word
+     */
+    public boolean doesRuleApplyToWord(ConWord word) {
+        boolean ret = false;
+        boolean wordTypeHasClasses = 
+                !word.getCore().getWordPropertiesCollection().getClassesForType(word.getWordTypeId()).isEmpty();
+        
+        // if -1 opresent in this rule, apply to all. Otherwise test against word classes. Skips mismatching PoS
+        if (typeId == word.getWordTypeId() && (!wordTypeHasClasses || applyToClasses.containsKey(-1))) {
+            ret = true;
+        } else if (typeId == word.getWordTypeId()) {
+            ret = true;
+            
+            // if a word does not match all of the entries in the required classes, reject
+            for (Entry<Integer, Integer> curEntry : applyToClasses.entrySet()) {
+                int classId = curEntry.getKey();
+                
+                if (!word.wordHasClassValue(classId, curEntry.getValue())) {
+                    ret = false;
+                    break;
+                }
+            }
+            // if one of the word's class/class value pairs matches that of this rule, 
+//            for (Entry<Integer, Integer> valueEntry : word.getClassValues()) {
+//                if (applyToClasses.containsKey(valueEntry.getKey())
+//                        && applyToClasses.get(valueEntry.getKey()).contains(valueEntry.getValue())) {
+//                    ret = true;
+//                    break;
+//                }
+//            }
+        }
+        
+        return ret;
+    }
+    
+    /**
      * organizes by index number
      * @param _compare node to compare
      * @return 
@@ -181,5 +231,125 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         }
         
         return ret;
+    }
+    
+    /**
+     * Returns true if this rule applies to a word of a given class. -1 indicates a test for cases of no class
+     * @param classId word class to test
+     * @param valueId value of word class to test
+     * @return true if the rule should apply to this class value
+     */
+    public boolean doesRuleApplyToClassValue(Integer classId, Integer valueId) {
+        return this.doesRuleApplyToClassValue(classId, valueId, false);
+    }
+    
+    /**
+     * Returns true if this rule applies to a word of a given class. -1 indicates a test for cases of no class
+     * @param classId word class to test
+     * @param valueId value of word class to test
+     * @param overrideDefault set to true if ignoring "All" value (-1)
+     * @return true if the rule should apply to this class value
+     */
+    public boolean doesRuleApplyToClassValue(Integer classId, Integer valueId, boolean overrideDefault) {
+        boolean ret = false;
+        
+        // if test for universal inclusion (-1 == include all classes and values)
+        if (classId != -1 && applyToClasses.containsKey(-1) && ! overrideDefault) {
+            ret = true;
+        } else if (applyToClasses.containsKey(classId)) {
+            ret = applyToClasses.get(classId).equals(valueId);
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Adds a word class (by class ID) to the rule filter. Only one value for a class ID can exist at once.
+     * If you add -1, it will wipe the filter first, as -1
+     * denotes All Classes
+     * @param classId id of parent class
+     * @param valueId if of value within class
+     */
+    public void addClassToFilterList(Integer classId, Integer valueId) {
+        if (classId == -1) {
+            wipeClassFilter();
+            applyToClasses.put(classId, -1);
+        } else if (!applyToClasses.containsKey(classId)) {
+            if (applyToClasses.containsKey(-1)) { // cannot contain both All and any other selection
+                applyToClasses.remove(-1);
+            }
+            applyToClasses.put(classId, valueId);
+        } else {
+            applyToClasses.replace(classId, valueId);
+        }
+    }
+    
+    /**
+     * Removes a class value from the list to apply this rule to. Removes the class ID entirely from the rule if no
+     * values from within it are selected
+     * @param classId
+     * @param valueId 
+     */
+    public void removeClassFromFilterList(Integer classId, Integer valueId) {
+        if (applyToClasses.containsKey(classId) && applyToClasses.get(classId).equals(valueId)) {
+            applyToClasses.remove(classId);
+        }
+    }
+    
+    /**
+     * Wipes all classes from rule selection filter
+     */
+    public void wipeClassFilter() {
+        applyToClasses.clear();
+    }
+    
+    /**
+     * Returns map of all word class ids that this applies to.
+     * If it contains only -1, then it applies to all classes.
+     * @return map of applicable word class properties: key = class ID, list = applicable value ids
+     */
+    public Map<Integer, Integer> getClassFilterList() {
+        return applyToClasses;
+    }
+    
+    public void writeXML(Document doc, Element rootElement) {
+        Element ruleNode = doc.createElement(PGTUtil.decGenRuleXID);
+        rootElement.appendChild(ruleNode);
+
+        Element wordValue = doc.createElement(PGTUtil.decGenRuleCombXID);
+        wordValue.appendChild(doc.createTextNode(this.getCombinationId()));
+        ruleNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.decGenRuleNameXID);
+        wordValue.appendChild(doc.createTextNode(this.getName()));
+        ruleNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.decGenRuleRegexXID);
+        wordValue.appendChild(doc.createTextNode(this.getRegex()));
+        ruleNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.decGenRuleTypeXID);
+        wordValue.appendChild(doc.createTextNode(Integer.toString(this.getTypeId())));
+        ruleNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.decGenRuleIndexXID);
+        wordValue.appendChild(doc.createTextNode(Integer.toString(this.getIndex())));
+        ruleNode.appendChild(wordValue);
+
+        this.getTransforms().forEach((curTransform) -> {
+            curTransform.writeXML(doc, ruleNode);
+        });
+        
+        Element applyToClassesEntry = doc.createElement(PGTUtil.decGenRuleApplyToClasses);
+        
+        // record each class value to apply this rule to
+        applyToClasses.entrySet().forEach((curEntry) -> {
+            Element applyToClassValue = doc.createElement(PGTUtil.decGenRuleApplyToClassValue);
+            applyToClassValue.appendChild(doc.createTextNode(curEntry.getKey().toString() 
+                    + "," + curEntry.getValue().toString()));
+            applyToClassesEntry.appendChild(applyToClassValue);
+        });
+        
+        ruleNode.appendChild(applyToClassesEntry);
     }
 }

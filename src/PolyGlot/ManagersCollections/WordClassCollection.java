@@ -21,8 +21,8 @@ package PolyGlot.ManagersCollections;
 
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.PEntry;
-import PolyGlot.Nodes.WordPropValueNode;
-import PolyGlot.Nodes.WordProperty;
+import PolyGlot.Nodes.WordClassValue;
+import PolyGlot.Nodes.WordClass;
 import PolyGlot.PGTUtil;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,19 +33,19 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- *
+ * Contains all word classes and what parts of speech they may apply to
  * @author Draque
  */
-public class WordPropertyCollection extends DictionaryCollection {
+public class WordClassCollection extends DictionaryCollection {
 
     private List<List<PEntry<Integer, Integer>>> comboCache = null;
 
-    public WordPropertyCollection() {
-        bufferNode = new WordProperty();
+    public WordClassCollection() {
+        bufferNode = new WordClass();
     }
 
-    public List<WordProperty> getAllWordProperties() {
-        List<WordProperty> retList = new ArrayList<>(nodeMap.values());
+    public List<WordClass> getAllWordClasses() {
+        List<WordClass> retList = new ArrayList<>(nodeMap.values());
 
         Collections.sort(retList);
 
@@ -54,7 +54,7 @@ public class WordPropertyCollection extends DictionaryCollection {
 
     @Override
     public void clear() {
-        bufferNode = new WordProperty();
+        bufferNode = new WordClass();
     }
 
     /**
@@ -72,15 +72,15 @@ public class WordPropertyCollection extends DictionaryCollection {
             ret = super.insert(bufferNode);
         }
 
-        bufferNode = new WordProperty();
+        bufferNode = new WordClass();
         return ret;
     }
 
-    public List<WordProperty> getClassProps(int classId) {
-        List<WordProperty> ret = new ArrayList<>();
+    public List<WordClass> getClassesForType(int classId) {
+        List<WordClass> ret = new ArrayList<>();
 
         nodeMap.values().forEach((prop) -> {
-        WordProperty curProp = (WordProperty)prop;
+        WordClass curProp = (WordClass)prop;
             if (curProp.appliesToType(classId)
                     || curProp.appliesToType(-1)) { // -1 is class "all"
                 ret.add(curProp);
@@ -92,52 +92,52 @@ public class WordPropertyCollection extends DictionaryCollection {
     }
 
     /**
-     * Writes all word properties information to XML document
+     * Writes all word class information to XML document
      *
      * @param doc Document to write to
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        // element containing all properties
-        Element wordProperties = doc.createElement(PGTUtil.ClassesNodeXID);
+        // element containing all classes
+        Element wordClasses = doc.createElement(PGTUtil.ClassesNodeXID);
 
-        // creates each property
-        nodeMap.values().forEach((prop) -> {
-        WordProperty wordProp = (WordProperty)prop;
-            // property element
-            Element propElement = doc.createElement(PGTUtil.ClassXID);
+        // creates each class
+        nodeMap.values().forEach((curClass) -> {
+        WordClass wordClass = (WordClass)curClass;
+            // class element
+            Element classElement = doc.createElement(PGTUtil.ClassXID);
 
             // ID element
-            Element propProp = doc.createElement(PGTUtil.ClassIdXID);
-            propProp.appendChild(doc.createTextNode(wordProp.getId().toString()));
-            propElement.appendChild(propProp);
+            Element classValue = doc.createElement(PGTUtil.ClassIdXID);
+            classValue.appendChild(doc.createTextNode(wordClass.getId().toString()));
+            classElement.appendChild(classValue);
 
             // Name element
-            propProp = doc.createElement(PGTUtil.ClassNameXID);
-            propProp.appendChild(doc.createTextNode(wordProp.getValue()));
-            propElement.appendChild(propProp);
+            classValue = doc.createElement(PGTUtil.ClassNameXID);
+            classValue.appendChild(doc.createTextNode(wordClass.getValue()));
+            classElement.appendChild(classValue);
             
             // Is Text Override
-            propProp = doc.createElement(PGTUtil.ClassIsFreetextXID);
-            propProp.appendChild(doc.createTextNode(wordProp.isFreeText() ? PGTUtil.True : PGTUtil.False));
-            propElement.appendChild(propProp);
+            classValue = doc.createElement(PGTUtil.ClassIsFreetextXID);
+            classValue.appendChild(doc.createTextNode(wordClass.isFreeText() ? PGTUtil.True : PGTUtil.False));
+            classElement.appendChild(classValue);
 
-            // generates element with all type IDs of types this property applies to
+            // generates element with all type IDs of types this class applies to
             String applyTypes = "";
-            for (Integer typeId : wordProp.getApplyTypes()) {
+            for (Integer typeId : wordClass.getApplyTypes()) {
                 if (applyTypes.length() != 0) {
                     applyTypes += ",";
                 }
 
                 applyTypes += typeId.toString();
             }
-            propProp = doc.createElement(PGTUtil.ClassApplyTypesXID);
-            propProp.appendChild(doc.createTextNode(applyTypes));
-            propElement.appendChild(propProp);
+            classValue = doc.createElement(PGTUtil.ClassApplyTypesXID);
+            classValue.appendChild(doc.createTextNode(applyTypes));
+            classElement.appendChild(classValue);
 
-            // element for collection of values of property
-            propProp = doc.createElement(PGTUtil.ClassValuesCollectionXID);
-            for (WordPropValueNode curValue : wordProp.getValues()) {
+            // element for collection of values of class
+            classValue = doc.createElement(PGTUtil.ClassValuesCollectionXID);
+            for (WordClassValue curValue : wordClass.getValues()) {
                 Element valueNode = doc.createElement(PGTUtil.ClassValueNodeXID);
 
                 Element value = doc.createElement(PGTUtil.ClassValueIdXID);
@@ -149,14 +149,14 @@ public class WordPropertyCollection extends DictionaryCollection {
                 value.appendChild(doc.createTextNode(curValue.getValue()));
                 valueNode.appendChild(value);
 
-                propProp.appendChild(valueNode);
+                classValue.appendChild(valueNode);
             }
-            propElement.appendChild(propProp);
+            classElement.appendChild(classValue);
 
-            wordProperties.appendChild(propElement);
+            wordClasses.appendChild(classElement);
         });
 
-        rootElement.appendChild(wordProperties);
+        rootElement.appendChild(wordClasses);
     }
 
     /**
@@ -225,7 +225,7 @@ public class WordPropertyCollection extends DictionaryCollection {
     }
 
     /**
-     * builds cache of every word property combination
+     * builds cache of every word class combination
      */
     public void buildComboCache() {
         comboCache = new ArrayList<>();
@@ -236,8 +236,8 @@ public class WordPropertyCollection extends DictionaryCollection {
         }
     }
 
-    private void buildComboCacheInternal(int depth, List<WordProperty> props, List<PEntry<Integer, Integer>> curList) {
-        WordProperty curProp = props.get(depth);
+    private void buildComboCacheInternal(int depth, List<WordClass> props, List<PEntry<Integer, Integer>> curList) {
+        WordClass curProp = props.get(depth);
 
         curProp.getValues().forEach((curVal) -> {
             ArrayList<PEntry<Integer, Integer>> newList = new ArrayList(curList);
@@ -275,7 +275,7 @@ public class WordPropertyCollection extends DictionaryCollection {
         if (!nodeMap.containsKey(classId)) {
             ret = false;
         } else {
-            WordProperty prop = (WordProperty) nodeMap.get(classId);
+            WordClass prop = (WordClass) nodeMap.get(classId);
             if (!prop.isValid(valId)) {
                 ret = false;
             }

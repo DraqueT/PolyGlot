@@ -576,7 +576,7 @@ public class ConWordCollection extends DictionaryCollection {
                 try {
                     DeclensionPair curPair = decIt.next();
                     String declension = core.getDeclensionManager()
-                            .declineWord(typeId, curPair.combinedId, word.getValue());
+                            .declineWord(word, curPair.combinedId, word.getValue());
 
                     if (!declension.trim().isEmpty()
                             && (declension.matches(matchText)

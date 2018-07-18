@@ -23,8 +23,8 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.TypeNode;
-import PolyGlot.Nodes.WordPropValueNode;
-import PolyGlot.Nodes.WordProperty;
+import PolyGlot.Nodes.WordClassValue;
+import PolyGlot.Nodes.WordClass;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -78,8 +78,8 @@ public class ExcelExport {
                 classes += ", ";
             }
             try {
-                WordProperty prop = (WordProperty) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
-                WordPropValueNode value = prop.getValueById(curEntry.getValue());
+                WordClass prop = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                WordClassValue value = prop.getValueById(curEntry.getValue());
                 classes += value.getValue();
             } catch (Exception e) {
                 classes = "ERROR: UNABLE TO PULL CLASS";
@@ -173,8 +173,8 @@ public class ExcelExport {
         // record word classes on sheet 3
         sheet = workbook.createSheet("Lexical Classes");
         int propertyColumn = 0;
-        for (WordProperty curProp
-                : core.getWordPropertiesCollection().getAllWordProperties()) {
+        for (WordClass curProp
+                : core.getWordPropertiesCollection().getAllWordClasses()) {
             // get row, if not exist, create
             row = sheet.getRow(0);
             if (row == null) {
@@ -186,7 +186,7 @@ public class ExcelExport {
             cell.setCellStyle(boldHeader);
 
             int rowIndex = 1;
-            for (WordPropValueNode curVal : curProp.getValues()) {
+            for (WordClassValue curVal : curProp.getValues()) {
                 row = sheet.getRow(rowIndex);
                 if (row == null) {
                     row = sheet.createRow(rowIndex);

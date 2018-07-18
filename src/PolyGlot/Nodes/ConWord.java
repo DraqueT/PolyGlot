@@ -129,6 +129,16 @@ public class ConWord extends DictNode {
     }
     
     /**
+     * Tests whether this word has a class value applied to it. 
+     * @param classId class id to test
+     * @param valueId value id withi class to test
+     * @return true if class + value appear on word
+     */
+    public boolean wordHasClassValue(int classId, int valueId) {
+        return classValues.containsKey(classId) && classValues.get(classId) == valueId;
+    }
+    
+    /**
      * Gets all freetext class values
      * Purges values which no longer exist
      * @return set of values with their IDs

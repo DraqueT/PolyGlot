@@ -20,7 +20,6 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.PFrame;
-import java.net.URL;
 import javax.swing.ImageIcon;
 
 /**

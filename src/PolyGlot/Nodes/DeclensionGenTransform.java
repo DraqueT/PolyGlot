@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -18,6 +18,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package PolyGlot.Nodes;
+
+import PolyGlot.PGTUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Container class for declension auto-transform transformation pairs
@@ -44,5 +48,18 @@ public class DeclensionGenTransform {
     public void setEqual(DeclensionGenTransform d) {
         regex = d.regex;
         replaceText = d.replaceText;
+    }
+    
+    public void writeXML(Document doc, Element rootElement) {
+        Element transNode = doc.createElement(PGTUtil.decGenTransXID);
+        rootElement.appendChild(transNode);
+
+        Element wordValue = doc.createElement(PGTUtil.decGenTransRegexXID);
+        wordValue.appendChild(doc.createTextNode(this.regex));
+        transNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.decGenTransReplaceXID);
+        wordValue.appendChild(doc.createTextNode(this.replaceText));
+        transNode.appendChild(wordValue);
     }
 }

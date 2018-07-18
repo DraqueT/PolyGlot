@@ -30,6 +30,7 @@ import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PCellRenderer;
 import PolyGlot.CustomControls.PCheckBox;
+import PolyGlot.CustomControls.PClassCheckboxPanel;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTable;
@@ -93,6 +94,8 @@ public class ScrDeclensionGenSetup extends PDialog {
         super.getRootPane().getContentPane().setBackground(Color.white);
 
         populateCombinedDecl();
+        pnlApplyClasses.setVisible(false);
+        pnlApplyClasses.setVisible(true);
     }
 
     @Override
@@ -133,7 +136,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         boolean ret = true;
         String userMessage = "";
 
-        List<DeclensionGenRule> typeRules = core.getDeclensionManager().getDeclensionRules(typeId);
+        List<DeclensionGenRule> typeRules = core.getDeclensionManager().getDeclensionRulesForType(typeId);
 
         for (DeclensionGenRule curRule : typeRules) {
             try {
@@ -227,7 +230,7 @@ public class ScrDeclensionGenSetup extends PDialog {
                 return;
             }
 
-            List<DeclensionGenRule> ruleList = core.getDeclensionManager().getDeclensionRules(typeId);
+            List<DeclensionGenRule> ruleList = core.getDeclensionManager().getDeclensionRulesForType(typeId);
 
             // only allow editing if there are actually rules to be populated... 
             enableTransformEditing(!ruleList.isEmpty());
@@ -254,7 +257,8 @@ public class ScrDeclensionGenSetup extends PDialog {
         curPopulating = true;
 
         DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
-
+        ((PClassCheckboxPanel)pnlApplyClasses).setRule(curRule);
+        
         if (curRule == null || lstRules.getSelectedIndices().length > 1) {
             txtRuleName.setText("");
             txtRuleRegex.setText("");
@@ -613,6 +617,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         txtRuleRegex.setText(".*");
         populateTransforms();
         enableTransformEditing(true);
+        ((PClassCheckboxPanel)pnlApplyClasses).setRule(newRule);
     }
 
     /**
@@ -796,25 +801,27 @@ public class ScrDeclensionGenSetup extends PDialog {
         jLabel2 = new PLabel("", core);
         jScrollPane2 = new javax.swing.JScrollPane();
         lstRules = new PList(core, false);
-        jLabel3 = new PLabel("", core);
         btnAddRule = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDeleteRule = new PolyGlot.CustomControls.PAddRemoveButton("-");
-        sclTransforms = new javax.swing.JScrollPane();
-        tblTransforms = new PTable(core);
-        btnAddTransform = new PolyGlot.CustomControls.PAddRemoveButton("+");
-        btnDeleteTransform = new PolyGlot.CustomControls.PAddRemoveButton("-");
-        txtRuleName = new PTextField(core, true, "-- Name --");
-        txtRuleRegex = new PTextField(core, false, "-- Filter Regex --");
         chkDisableWordform = new PCheckBox(core);
         jButton1 = new PButton(core);
         jButton1.setFont(core.getPropertiesManager().getFontMenu())
         ;
         jButton2 = new PButton(core);
         jButton2.setFont(core.getPropertiesManager().getFontMenu());
+        jPanel3 = new javax.swing.JPanel();
+        txtRuleName = new PTextField(core, true, "-- Name --");
+        txtRuleRegex = new PTextField(core, false, "-- Filter Regex --");
+        jLabel3 = new PLabel("", core);
+        sclTransforms = new javax.swing.JScrollPane();
+        tblTransforms = new PTable(core);
+        btnAddTransform = new PolyGlot.CustomControls.PAddRemoveButton("+");
         jButton3 = new PButton(core);
         jButton3.setFont(core.getPropertiesManager().getFontMenu());
         jButton4 = new PButton(core);
         jButton4.setFont(core.getPropertiesManager().getFontMenu());
+        btnDeleteTransform = new PolyGlot.CustomControls.PAddRemoveButton("-");
+        pnlApplyClasses = new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId));
         jButton5 = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -858,8 +865,6 @@ public class ScrDeclensionGenSetup extends PDialog {
         });
         jScrollPane2.setViewportView(lstRules);
 
-        jLabel3.setText("Transformations");
-
         btnAddRule.setToolTipText("Add Rule");
         btnAddRule.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -874,45 +879,6 @@ public class ScrDeclensionGenSetup extends PDialog {
                 btnDeleteRuleActionPerformed(evt);
             }
         });
-
-        tblTransforms.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tblTransforms.setToolTipText("Transformations to be applied.");
-        tblTransforms.setCellSelectionEnabled(true);
-        tblTransforms.setRowHeight(30);
-        sclTransforms.setViewportView(tblTransforms);
-
-        btnAddTransform.setToolTipText("Add Transformation");
-        btnAddTransform.setEnabled(false);
-        btnAddTransform.setPreferredSize(new java.awt.Dimension(40, 29));
-        btnAddTransform.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddTransformActionPerformed(evt);
-            }
-        });
-
-        btnDeleteTransform.setToolTipText("Delete Transformation");
-        btnDeleteTransform.setPreferredSize(new java.awt.Dimension(40, 29));
-        btnDeleteTransform.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteTransformActionPerformed(evt);
-            }
-        });
-
-        txtRuleName.setToolTipText("Name of rule");
-        txtRuleName.setEnabled(false);
-
-        txtRuleRegex.setToolTipText("This is a filter regex: Only words matching this filter will have transformations for this rule applied to them.");
-        txtRuleRegex.setEnabled(false);
 
         chkDisableWordform.setText("Disable Wordform");
         chkDisableWordform.setToolTipText("Disables currently selected conjugation/declension, and prevents it from being displayed at any point.");
@@ -941,6 +907,41 @@ public class ScrDeclensionGenSetup extends PDialog {
             }
         });
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtRuleName.setToolTipText("Name of rule");
+        txtRuleName.setEnabled(false);
+
+        txtRuleRegex.setToolTipText("This is a filter regex: Only words matching this filter will have transformations for this rule applied to them.");
+        txtRuleRegex.setEnabled(false);
+
+        jLabel3.setText("Transformations");
+
+        tblTransforms.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblTransforms.setToolTipText("Transformations to be applied.");
+        tblTransforms.setCellSelectionEnabled(true);
+        tblTransforms.setRowHeight(30);
+        sclTransforms.setViewportView(tblTransforms);
+
+        btnAddTransform.setToolTipText("Add Transformation");
+        btnAddTransform.setEnabled(false);
+        btnAddTransform.setPreferredSize(new java.awt.Dimension(40, 29));
+        btnAddTransform.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddTransformActionPerformed(evt);
+            }
+        });
+
         jButton3.setText("↑");
         jButton3.setToolTipText("Move Transform Up");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -956,6 +957,73 @@ public class ScrDeclensionGenSetup extends PDialog {
                 jButton4ActionPerformed(evt);
             }
         });
+
+        btnDeleteTransform.setToolTipText("Delete Transformation");
+        btnDeleteTransform.setPreferredSize(new java.awt.Dimension(40, 29));
+        btnDeleteTransform.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteTransformActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtRuleName)
+            .addComponent(txtRuleRegex)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(btnAddTransform, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
+                                .addComponent(btnDeleteTransform, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(sclTransforms, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(txtRuleName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtRuleRegex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(111, 111, 111)
+                        .addComponent(jButton4)
+                        .addGap(0, 97, Short.MAX_VALUE))
+                    .addComponent(sclTransforms, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAddTransform, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDeleteTransform, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        pnlApplyClasses.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout pnlApplyClassesLayout = new javax.swing.GroupLayout(pnlApplyClasses);
+        pnlApplyClasses.setLayout(pnlApplyClassesLayout);
+        pnlApplyClassesLayout.setHorizontalGroup(
+            pnlApplyClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 169, Short.MAX_VALUE)
+        );
+        pnlApplyClassesLayout.setVerticalGroup(
+            pnlApplyClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -976,24 +1044,10 @@ public class ScrDeclensionGenSetup extends PDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtRuleRegex)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnAddTransform, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                                .addComponent(btnDeleteTransform, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(sclTransforms, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                    .addComponent(txtRuleName, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlApplyClasses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -1001,38 +1055,25 @@ public class ScrDeclensionGenSetup extends PDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(txtRuleName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(chkDisableWordform)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel2)
+                        .addGap(9, 9, 9)
+                        .addComponent(jScrollPane2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtRuleRegex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(60, 60, 60)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sclTransforms, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(pnlApplyClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton2))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton3)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton4))))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE))
+                                .addComponent(jButton2)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddRule)
-                    .addComponent(btnDeleteRule, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddTransform, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDeleteTransform, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnDeleteRule, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -1045,8 +1086,7 @@ public class ScrDeclensionGenSetup extends PDialog {
                     .addComponent(jScrollPane1)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1085,7 +1125,7 @@ public class ScrDeclensionGenSetup extends PDialog {
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton5)
-                .addGap(6, 6, 6))
+                .addContainerGap())
         );
 
         pack();
@@ -1190,10 +1230,12 @@ public class ScrDeclensionGenSetup extends PDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList lstCombinedDec;
     private javax.swing.JList lstRules;
+    private javax.swing.JPanel pnlApplyClasses;
     private javax.swing.JScrollPane sclTransforms;
     private javax.swing.JTable tblTransforms;
     private javax.swing.JTextField txtRuleName;

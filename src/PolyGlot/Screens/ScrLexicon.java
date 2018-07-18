@@ -35,8 +35,8 @@ import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.Nodes.EtyExternalParent;
 import PolyGlot.Nodes.TypeNode;
-import PolyGlot.Nodes.WordPropValueNode;
-import PolyGlot.Nodes.WordProperty;
+import PolyGlot.Nodes.WordClassValue;
+import PolyGlot.Nodes.WordClass;
 import PolyGlot.WebInterface;
 import java.awt.Color;
 import java.awt.Component;
@@ -341,7 +341,7 @@ public final class ScrLexicon extends PFrame {
                     try {
                         if (component instanceof JComboBox) {
                             JComboBox combo = (JComboBox) component;
-                            combo.setSelectedItem(((WordProperty) core.getWordPropertiesCollection()
+                            combo.setSelectedItem(((WordClass) core.getWordPropertiesCollection()
                                     .getNodeById(curProp.getKey())).getValueById(curProp.getValue()));
                         } else if (component instanceof PTextField) {
                             // class property has since been turned into a dropdown field: do nothing
@@ -407,8 +407,8 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        List<WordProperty> propList = core.getWordPropertiesCollection()
-                .getClassProps(setTypeId);
+        List<WordClass> propList = core.getWordPropertiesCollection()
+                .getClassesForType(setTypeId);
         pnlClasses.setPreferredSize(new Dimension(4000, 1));
 
         pnlClasses.setLayout(new GridBagLayout());
@@ -423,7 +423,7 @@ public final class ScrLexicon extends PFrame {
         classPropMap.clear();
 
         // create dropdown for each class that applies to the curren word
-        for (WordProperty curProp : propList) {
+        for (WordClass curProp : propList) {
             final int classId = curProp.getId();
 
             if (curProp.isFreeText()) {
@@ -477,8 +477,8 @@ public final class ScrLexicon extends PFrame {
                         return;
                     }
                     ConWord curWord1 = (ConWord) lstLexicon.getSelectedValue();
-                    if (classBox.getSelectedItem() instanceof WordPropValueNode) {
-                        WordPropValueNode curValue = (WordPropValueNode) classBox.getSelectedItem();
+                    if (classBox.getSelectedItem() instanceof WordClassValue) {
+                        WordClassValue curValue = (WordClassValue) classBox.getSelectedItem();
                         curWord1.setClassValue(classId, curValue.getId());
                     } else {
                         // if not an instance of a value, then it's the default selection: remove class from word
@@ -1489,8 +1489,8 @@ public final class ScrLexicon extends PFrame {
                 saveWord.setClassTextValue(entry.getKey(), textField.getText());
             } else if (entry.getValue() instanceof PComboBox) {
                 PComboBox comboBox = (PComboBox) entry.getValue();
-                if (comboBox.getSelectedItem() instanceof WordPropValueNode) {
-                    WordPropValueNode curValue = (WordPropValueNode) comboBox.getSelectedItem();
+                if (comboBox.getSelectedItem() instanceof WordClassValue) {
+                    WordClassValue curValue = (WordClassValue) comboBox.getSelectedItem();
                     saveWord.setClassValue(entry.getKey(), curValue.getId());
                 } else {
                     // if not an instance of a value, then it's the default selection: remove class from word

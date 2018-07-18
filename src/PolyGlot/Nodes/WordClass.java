@@ -30,14 +30,14 @@ import java.util.Map;
  * speech, or only select parts of speech.
  * @author Draque Thompson
  */
-public class WordProperty extends DictNode {
-    private final Map<Integer, WordPropValueNode> values = new HashMap<>();
+public class WordClass extends DictNode {
+    private final Map<Integer, WordClassValue> values = new HashMap<>();
     private final List<Integer> applyTypes = new ArrayList<>();
     private boolean freeText = false;
     private int topId = 0;
-    public WordPropValueNode buffer = new WordPropValueNode();
+    public WordClassValue buffer = new WordClassValue();
     
-    public WordProperty() {
+    public WordClass() {
         // default to apply to all
         applyTypes.add(-1);
     }
@@ -53,10 +53,10 @@ public class WordProperty extends DictNode {
     
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
-        if (!(_node instanceof WordProperty)) {
+        if (!(_node instanceof WordClass)) {
             throw new ClassCastException("Object not of type WordPropValueNode");
         }
-        WordProperty copyProp = (WordProperty)_node;
+        WordClass copyProp = (WordClass)_node;
         
         this.value = copyProp.getValue();
         
@@ -76,7 +76,7 @@ public class WordProperty extends DictNode {
      */
     public void insert() throws Exception {
         addValue(buffer.getValue(), buffer.getId());
-        buffer = new WordPropValueNode();
+        buffer = new WordClassValue();
     }
     
     /**
@@ -121,7 +121,7 @@ public class WordProperty extends DictNode {
      * Gets iterator of values
      * @return iterator with all values of word property
      */
-    public Collection<WordPropValueNode> getValues() {
+    public Collection<WordClassValue> getValues() {
         return values.values();
     }
     
@@ -138,7 +138,7 @@ public class WordProperty extends DictNode {
         values.remove(_id);
     }
     
-    public WordPropValueNode getValueById(int _id) throws Exception {
+    public WordClassValue getValueById(int _id) throws Exception {
         if (!values.containsKey(_id)) {
             throw new Exception("No value with id: " + _id + " in property: " + this.value + ".");
         }
@@ -152,8 +152,8 @@ public class WordProperty extends DictNode {
      * @return value created
      * @throws java.lang.Exception if auto-assigned ID fails
      */
-    public WordPropValueNode addValue(String name) throws Exception {
-        WordPropValueNode ret = addValue(name, topId);
+    public WordClassValue addValue(String name) throws Exception {
+        WordClassValue ret = addValue(name, topId);
         topId++;
         return ret;
     }
@@ -165,12 +165,12 @@ public class WordProperty extends DictNode {
      * @return value created
      * @throws Exception if ID already exists
      */
-    public WordPropValueNode addValue(String name, int id) throws Exception {
+    public WordClassValue addValue(String name, int id) throws Exception {
         if (values.containsKey(id)) {
             throw new Exception("Cannot insert value: " + name + " Id: " + id + " into " + this.value + " (already exists).");
         }
         
-        WordPropValueNode ret = new WordPropValueNode();
+        WordClassValue ret = new WordClassValue();
         ret.setId(id);
         ret.setValue(name);
         values.put(id, ret);

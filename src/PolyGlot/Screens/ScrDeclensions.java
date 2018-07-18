@@ -291,7 +291,7 @@ public class ScrDeclensions extends PDialog {
             // if the autodeclension override is not set, create a value
             if (!word.isOverrideAutoDeclen()) {
                 try {
-                    String newForm = core.getDeclensionManager().declineWord(typeId, curId, word.getValue());
+                    String newForm = core.getDeclensionManager().declineWord(word, curId, word.getValue());
                     
                     // only set value if form found
                     if (newForm.length() != 0) {

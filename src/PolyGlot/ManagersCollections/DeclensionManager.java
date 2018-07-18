@@ -28,7 +28,6 @@ import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.PGTUtil;
 import PolyGlot.Nodes.TypeNode;
-import PolyGlot.WebInterface;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -190,15 +189,14 @@ public class DeclensionManager {
     /**
      * get list of all declension rules for a particular type
      *
-     * @param typeId typeID of type to get rules for
+     * @param typeId id of part of speech to collect all rules for (does not account for class filtering)
      * @return list of rules
      */
-    public List<DeclensionGenRule> getDeclensionRules(int typeId) {
+    public List<DeclensionGenRule> getDeclensionRulesForType(int typeId) {
         List<DeclensionGenRule> ret = new ArrayList<>();
-
         List<DeclensionGenRule> itRules = generationRules;
-
         int missingId = 0; //used for missing index values (index system bolton)
+        
         for(DeclensionGenRule curRule : itRules) {
             if (curRule.getIndex() == 0 || curRule.getIndex() == missingId) {
                 missingId++;
@@ -222,27 +220,63 @@ public class DeclensionManager {
         }
         
         return ret;
+    }    
+    
+    /**
+     * get list of all declension rules for a given word based on word type and word class values
+     *
+     * @param word word to get rules for (takes into account word type (PoS) & classes/class values it has
+     * @return list of rules
+     */
+    public List<DeclensionGenRule> getDeclensionRules(ConWord word) {
+        List<DeclensionGenRule> ret = new ArrayList<>();
+        List<DeclensionGenRule> itRules = generationRules;
+        int missingId = 0; //used for missing index values (index system bolton)
+        
+        for(DeclensionGenRule curRule : itRules) {
+            if (curRule.getIndex() == 0 || curRule.getIndex() == missingId) {
+                missingId++;
+                curRule.setIndex(missingId);
+            } else {
+                missingId = curRule.getIndex();
+            }
+
+            if (curRule.doesRuleApplyToWord(word)) {
+                ret.add(curRule);
+            }
+        }
+
+        Collections.sort(ret);
+        
+        // ensure that all rules cave continguous IDs before returning
+        int i = 1;
+        for (DeclensionGenRule curRule : ret) {
+            curRule.setIndex(i);
+            i++;
+        }
+        
+        return ret;
     }
 
     /**
      * Generates the new form of a declined/conjugated word based on rules for
      * its type
      *
-     * @param typeId type of word to transform
+     * @param word to transform
      * @param combinedId combined ID of word form to create
      * @param base base word string
      * @return new word value if exists, empty string otherwise
      * @throws java.lang.Exception on bad regex
      */
-    public String declineWord(int typeId, String combinedId, String base) throws Exception {
-        Iterator<DeclensionGenRule> typeRules = getDeclensionRules(typeId).iterator();
+    public String declineWord(ConWord word, String combinedId, String base) throws Exception {
+        Iterator<DeclensionGenRule> typeRules = getDeclensionRules(word).iterator();
         String ret = "";
 
         while (typeRules.hasNext()) {
             DeclensionGenRule curRule = typeRules.next();
 
             // skip all entries not applicable to this particular combined word ID
-            if (!curRule.getCombinationId().equals(combinedId)) {
+            if (!curRule.getCombinationId().equals(combinedId) || !curRule.doesRuleApplyToWord(word)) {
                 continue;
             }
 
@@ -840,142 +874,32 @@ public class DeclensionManager {
     public void writeXML(Document doc, Element rootElement) {
         Set<Entry<Integer, List<DeclensionNode>>> declensionSet;
         Element declensionCollection = doc.createElement(PGTUtil.declensionCollectionXID);
-        Element wordNode;
-        Element wordValue;
-
         rootElement.appendChild(declensionCollection);
         
         // record declension templates
         declensionSet = getTemplateMap().entrySet();
-
         for (Entry<Integer, List<DeclensionNode>> e : declensionSet) {
-            Integer relatedId = e.getKey();
+            final Integer relatedId = e.getKey();
 
-            for (DeclensionNode curNode : e.getValue()) {
-                wordNode = doc.createElement(PGTUtil.declensionXID);
-                declensionCollection.appendChild(wordNode);
-
-                wordValue = doc.createElement(PGTUtil.declensionIdXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getId().toString()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(PGTUtil.declensionTextXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getValue()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(PGTUtil.declensionNotesXID);
-                wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(curNode.getNotes())));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(PGTUtil.declensionIsTemplateXID);
-                wordValue.appendChild(doc.createTextNode("1"));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(PGTUtil.declensionRelatedIdXID);
-                wordValue.appendChild(doc.createTextNode(relatedId.toString()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(PGTUtil.declensionMandatoryXID);
-                wordValue.appendChild(doc.createTextNode(curNode.isMandatory() ? PGTUtil.True : PGTUtil.False));
-                wordNode.appendChild(wordValue);
-
-                Iterator<DeclensionDimension> dimIt = curNode.getDimensions().iterator();
-                while (dimIt.hasNext()) {
-                    wordValue = doc.createElement(PGTUtil.dimensionNodeXID);
-
-                    DeclensionDimension curDim = dimIt.next();
-
-                    Element dimNode = doc.createElement(PGTUtil.dimensionIdXID);
-                    dimNode.appendChild(doc.createTextNode(curDim.getId().toString()));
-                    wordValue.appendChild(dimNode);
-
-                    dimNode = doc.createElement(PGTUtil.dimensionNameXID);
-                    dimNode.appendChild(doc.createTextNode(curDim.getValue()));
-                    wordValue.appendChild(dimNode);
-
-                    dimNode = doc.createElement(PGTUtil.dimensionMandXID);
-                    dimNode.appendChild(doc.createTextNode(curDim.isMandatory() ? PGTUtil.True : PGTUtil.False));
-                    wordValue.appendChild(dimNode);
-
-                    wordNode.appendChild(wordValue);
-                }
-            }
+            e.getValue().forEach((curNode) -> {
+                curNode.writeXMLTemplate(doc, declensionCollection, relatedId);
+            });
         }
 
         // record word declensions
         declensionSet = getDeclensionMap().entrySet();
         for (Entry<Integer, List<DeclensionNode>> e : declensionSet) {
-            Integer relatedId = e.getKey();
+            final Integer relatedId = e.getKey();
 
-            for (DeclensionNode curNode : e.getValue()) {
-                wordNode = doc.createElement(PGTUtil.declensionXID);
-                declensionCollection.appendChild(wordNode);
-
-                wordValue = doc.createElement(PGTUtil.declensionIdXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getId().toString()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(PGTUtil.declensionTextXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getValue()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(PGTUtil.declensionNotesXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getNotes()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(PGTUtil.declensionRelatedIdXID);
-                wordValue.appendChild(doc.createTextNode(relatedId.toString()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(PGTUtil.declensionComDimIdXID);
-                wordValue.appendChild(doc.createTextNode(curNode.getCombinedDimId()));
-                wordNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(PGTUtil.declensionIsTemplateXID);
-                wordValue.appendChild(doc.createTextNode("0"));
-                wordNode.appendChild(wordValue);
-            }
+            e.getValue().forEach((curNode) -> {
+                curNode.writeXMLWordDeclension(doc, declensionCollection, relatedId);
+            });
         }
 
         // record declension autogeneration rules
-        for (DeclensionGenRule curRule : generationRules) {
-            Element ruleNode = doc.createElement(PGTUtil.decGenRuleXID);
-            declensionCollection.appendChild(ruleNode);
-
-            wordValue = doc.createElement(PGTUtil.decGenRuleCombXID);
-            wordValue.appendChild(doc.createTextNode(curRule.getCombinationId()));
-            ruleNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(PGTUtil.decGenRuleNameXID);
-            wordValue.appendChild(doc.createTextNode(curRule.getName()));
-            ruleNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(PGTUtil.decGenRuleRegexXID);
-            wordValue.appendChild(doc.createTextNode(curRule.getRegex()));
-            ruleNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(PGTUtil.decGenRuleTypeXID);
-            wordValue.appendChild(doc.createTextNode(Integer.toString(curRule.getTypeId())));
-            ruleNode.appendChild(wordValue);
-            
-            wordValue = doc.createElement(PGTUtil.decGenRuleIndexXID);
-            wordValue.appendChild(doc.createTextNode(Integer.toString(curRule.getIndex())));
-            ruleNode.appendChild(wordValue);
-
-            List<DeclensionGenTransform> transIt = curRule.getTransforms();
-            for (DeclensionGenTransform curTransform : transIt) {
-                Element transNode = doc.createElement(PGTUtil.decGenTransXID);
-                ruleNode.appendChild(transNode);
-
-                wordValue = doc.createElement(PGTUtil.decGenTransRegexXID);
-                wordValue.appendChild(doc.createTextNode(curTransform.regex));
-                transNode.appendChild(wordValue);
-
-                wordValue = doc.createElement(PGTUtil.decGenTransReplaceXID);
-                wordValue.appendChild(doc.createTextNode(curTransform.replaceText));
-                transNode.appendChild(wordValue);
-            }
-        }
+        generationRules.forEach((curRule) -> {
+            curRule.writeXML(doc, declensionCollection);
+        });
 
         // record combined form settings
         Element combinedForms = doc.createElement(PGTUtil.decCombinedFormSectionXID);
@@ -994,6 +918,15 @@ public class DeclensionManager {
             return curCombForm;            
         }).forEachOrdered((curCombForm) -> {
             combinedForms.appendChild(curCombForm);
+        });
+    }
+    
+    /**
+     * On load of older pgt files, must be called to maintain functionality of declension rules
+     */
+    public void setAllDeclensionRulesToAllClasses() {
+        generationRules.forEach((curRule)->{
+            curRule.addClassToFilterList(-1, -1);
         });
     }
 }

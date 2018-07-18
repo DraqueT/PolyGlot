@@ -20,7 +20,7 @@
 package PolyGlot.Nodes;
 
 /**
- *
+ * This represents a part of speech. Apologies for the naming scheme. "Type" doesn't really fit.
  * @author draque
  */
 @SuppressWarnings("EqualsAndHashcode")

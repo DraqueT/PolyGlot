@@ -28,8 +28,8 @@ import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.Nodes.TypeNode;
-import PolyGlot.Nodes.WordPropValueNode;
-import PolyGlot.Nodes.WordProperty;
+import PolyGlot.Nodes.WordClassValue;
+import PolyGlot.Nodes.WordClass;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -209,8 +209,8 @@ public final class ScrQuickWordEntry extends PDialog {
         classComboMap.entrySet().forEach((curEntry) -> {
             if (curEntry.getValue() instanceof PComboBox) {
                 PComboBox boxEntry = (PComboBox) curEntry.getValue();
-                if (boxEntry.getSelectedItem() instanceof WordPropValueNode) {
-                    WordPropValueNode curValue = (WordPropValueNode) boxEntry.getSelectedItem();
+                if (boxEntry.getSelectedItem() instanceof WordClassValue) {
+                    WordClassValue curValue = (WordClassValue) boxEntry.getSelectedItem();
                     word.setClassValue(curEntry.getKey(), curValue.getId());
                 }
             } else if (curEntry.getValue() instanceof PTextField) {
@@ -301,8 +301,8 @@ public final class ScrQuickWordEntry extends PDialog {
      * @param setTypeId ID of class to set panel up for, -1 if no class selected
      */
     private void setupClassPanel(int setTypeId) {
-        List<WordProperty> propList = core.getWordPropertiesCollection()
-                .getClassProps(setTypeId);
+        List<WordClass> propList = core.getWordPropertiesCollection()
+                .getClassesForType(setTypeId);
         pnlClasses.removeAll();
         pnlClasses.setPreferredSize(new Dimension(999999, 1));
 
@@ -318,7 +318,7 @@ public final class ScrQuickWordEntry extends PDialog {
         classComboMap.clear();
 
         // create dropdown for each class that applies to the curren word
-        for (WordProperty curProp : propList) {
+        for (WordClass curProp : propList) {
             if (curProp.isFreeText()) {
                 PTextField textField = new PTextField(core, false, "-- " + curProp.getValue() + " --");
                 textField.setEnabled(chkClasses.isSelected());
