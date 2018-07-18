@@ -299,6 +299,7 @@ public class ScrMainMenu extends PFrame {
         pushRecentFile(curFileName);
         populateRecentOpened();
         saveAllValues();
+        genTitle();
         return doWrite(curFileName);
     }
 
