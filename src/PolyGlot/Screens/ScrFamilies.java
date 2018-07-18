@@ -219,7 +219,7 @@ public class ScrFamilies extends PFrame {
      */
     private void removeWord() {
         if (chkInclSubFam.isSelected()) {
-            InfoBox.info("Alert", "Words may only be removed when \"Include Subfamilies\" box is unchecked.", core.getRootWindow());
+            InfoBox.info("Alert", "Words may only be removed when \"Include Subfamilies\" box is unchecked.", this);
             return;
         }
 

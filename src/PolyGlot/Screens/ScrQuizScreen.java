@@ -102,7 +102,7 @@ public class ScrQuizScreen extends PFrame {
 
         if (numRight == quizLen) {
             InfoBox.info("Quiz Complete", "Perfect score! " + numRight
-                    + " out of " + quizLen + "correct!", core.getRootWindow());
+                    + " out of " + quizLen + "correct!", this);
             dispose();
         } else {
             int retake = JOptionPane.showConfirmDialog(this, numRight
@@ -277,7 +277,7 @@ public class ScrQuizScreen extends PFrame {
                 break;
             default:
                 InfoBox.error("Unhandled Answer Type", "Answer type "
-                        + curQuestion.getAnswered() + " is not handled.", core.getRootWindow());
+                        + curQuestion.getAnswered() + " is not handled.", this);
         }
 
         pnlChoices.repaint();

@@ -149,7 +149,9 @@ public final class ScrDeclensionSetup extends PDialog {
         while (decIt.hasNext()) {
             DeclensionNode curDec = decIt.next();
             if (curDec.getDimensions().isEmpty()) {
-                InfoBox.error("Illegal Declension", "Declension \'" + curDec.getValue() + "\' must have at least one dimension.", core.getRootWindow());
+                InfoBox.error("Illegal Declension", "Declension \'" 
+                        + curDec.getValue() 
+                        + "\' must have at least one dimension.", this);
                 return false;
             }
         }
@@ -395,7 +397,7 @@ public final class ScrDeclensionSetup extends PDialog {
      * deletes selected dimension row, if one is selected
      */
     private void delDimension() {
-        if (!InfoBox.deletionConfirmation(core.getRootWindow())) {
+        if (!InfoBox.deletionConfirmation(this)) {
             return;
         }
 
@@ -778,7 +780,7 @@ public final class ScrDeclensionSetup extends PDialog {
     private void btnClearDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearDepActionPerformed
         if (InfoBox.yesNoCancel("Wipe All Deprecated Declensions?", 
                 "Are you sure? This cannot be undone, and will delete the values of all deprecated declensions of the type: "
-                + myType.getValue() + ".", core.getRootWindow()) == JOptionPane.YES_OPTION) {
+                + myType.getValue() + ".", this) == JOptionPane.YES_OPTION) {
             core.getWordCollection().clearDeprecatedDeclensions(myType.getId());
         }
     }//GEN-LAST:event_btnClearDepActionPerformed
@@ -887,7 +889,7 @@ public final class ScrDeclensionSetup extends PDialog {
                 curDec = core.getDeclensionTemplate(myType.getId(), decId);
             } catch (Exception e) {
                 InfoBox.error("Declension Population Error", "Unable to populate declension.\n\n"
-                        + e.getMessage(), core.getRootWindow());
+                        + e.getMessage(), this);
                 curPopulating = populatingLocal;
                 return;
             }
@@ -969,10 +971,10 @@ public final class ScrDeclensionSetup extends PDialog {
         Integer curIndex = lstDeclensionList.getSelectedIndex();
 
         try {
-            core.getDeclensionManager().deleteDeclensionFromTemplate(myType.getId(), (Integer) scrToCoreDeclensions.get(curIndex));
+            core.getDeclensionManager().deleteDeclensionFromTemplate(myType.getId(), scrToCoreDeclensions.get(curIndex));
         } catch (Exception e) {
             InfoBox.error("Declension Deletion Error", "Unable to delete Declension: "
-                    + (String) lstDeclensionList.getSelectedValue() + "\n\n" + e.getMessage(), core.getRootWindow());
+                    + (String) lstDeclensionList.getSelectedValue() + "\n\n" + e.getMessage(), this);
         }
 
         if (curIndex > 0) {
@@ -1026,7 +1028,7 @@ public final class ScrDeclensionSetup extends PDialog {
             }
         } catch (ClassCastException e) {
             InfoBox.error("Declension Creation Error", "Unable to create Declension "
-                    + txtDeclensionName.getText() + "\n\n" + e.getMessage(), core.getRootWindow());
+                    + txtDeclensionName.getText() + "\n\n" + e.getMessage(), this);
         }
 
         setIsActiveDimensions();

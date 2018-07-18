@@ -164,7 +164,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         }
 
         if (!ret) {
-            InfoBox.error("Unable to Close With Error", userMessage, core.getRootWindow());
+            InfoBox.error("Unable to Close With Error", userMessage, this);
         }
 
         return ret;
@@ -624,7 +624,7 @@ public class ScrDeclensionGenSetup extends PDialog {
      * deletes currently selected rule
      */
     private void deleteRule() {
-        if (!InfoBox.deletionConfirmation(core.getRootWindow())) {
+        if (!InfoBox.deletionConfirmation(this)) {
             return;
         }
 
@@ -657,7 +657,7 @@ public class ScrDeclensionGenSetup extends PDialog {
      * deletes currently selected transform from currently selected rule
      */
     private void deleteTransform() {
-        if (!InfoBox.deletionConfirmation(core.getRootWindow())) {
+        if (!InfoBox.deletionConfirmation(this)) {
             return;
         }
 
