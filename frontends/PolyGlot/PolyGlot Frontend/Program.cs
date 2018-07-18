@@ -25,7 +25,7 @@ namespace PolyGlot_Frontend
         static String shell = "Shell";
         static String commandFile = "cmd.exe";
         static String command = "java -jar ";
-        static String baseArgs = "PolyGlot.jar";
+        static String baseAppJar = "PolyGlot.jar";
 
         static void Main(string[] args)
         {
@@ -80,7 +80,7 @@ namespace PolyGlot_Frontend
 
             string currentVerion = subKey == null ? "" : subKey.GetValue("CurrentVersion").ToString();
 
-            return !subKey.Equals("");
+            return !(subKey == null || subKey.Equals(""));
         }
 
         private static void restartEscalated(string[] args)
@@ -94,6 +94,7 @@ namespace PolyGlot_Frontend
 
         private static void startPolyGlot(string[] args)
         {
+            String location = System.Reflection.Assembly.GetExecutingAssembly().Location.Replace(exeFilename, "");
             Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
@@ -102,10 +103,16 @@ namespace PolyGlot_Frontend
             startInfo.UseShellExecute = false;
             startInfo.CreateNoWindow = true;
             process.StartInfo = startInfo;
+
+            if (!File.Exists(location + baseAppJar))
+            {
+                throw new Exception("Unable to find " + baseAppJar + ". Frontend must be located in the same directory to run properly.");
+            }
+
             process.Start();
 
             // TODO: in the future, expand for additional possible arguments
-            String finalCommand = command + "\"" + (System.Reflection.Assembly.GetExecutingAssembly().Location).Replace(exeFilename, "") + baseArgs + "\"";
+            String finalCommand = command + "\"" + location + baseAppJar + "\"";
             if (args.Length > 0)
             {
                 finalCommand += " \"" + args[0] + "\"";
