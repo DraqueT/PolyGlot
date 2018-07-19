@@ -359,6 +359,12 @@ public class DictCore {
         }
 
         try {
+            IOHandler.setFontFrom(_fileName, this);
+        } catch (IOException | FontFormatException e) {
+            warningLog += e.getLocalizedMessage() + "\n";
+        }
+        
+        try {
             CustHandler handler = IOHandler.getHandlerFromFile(_fileName, this);
             IOHandler.parseHandler(_fileName, handler);
 
@@ -366,12 +372,6 @@ public class DictCore {
             warningLog += handler.getWarningLog();
         } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new IOException(e.getMessage());
-        }
-
-        try {
-            IOHandler.setFontFrom(_fileName, this);
-        } catch (IOException | FontFormatException e) {
-            warningLog += e.getLocalizedMessage() + "\n";
         }
 
         try {

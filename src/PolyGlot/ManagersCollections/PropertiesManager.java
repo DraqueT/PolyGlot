@@ -36,7 +36,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- *
+ * Contains and manages properties of given language
  * @author draque
  */
 public class PropertiesManager {
@@ -285,17 +285,49 @@ public class PropertiesManager {
 
     /**
      * Sets font.
+     * 
+     * Will first try to re-load the font from OS font repository folder (due to ligature error in Java)
      *
      * @param _fontCon The font being set
      * @param _fontStyle The style of the font (bold, underlined, etc.)
      * @param _fontSize Size of font
      */
     public void setFontCon(Font _fontCon, Integer _fontStyle, Integer _fontSize) {
-        setFontCon(_fontCon);
+        Font switchToFont = IOHandler.loadFontFromOSFileFolder(_fontCon);
+        
+        if (switchToFont == null) {
+            switchToFont = _fontCon;
+        }
+        
+        setFontConRaw(switchToFont);
         setFontSize(_fontSize);
         setFontStyle(_fontStyle);
     }
+    
+    /**
+     * Tries to load font from OS file, defaults to pulling from Font if unable
+     * (pulling from Font disables ligatures)
+     * @param _fontFamily 
+     * @throws java.lang.Exception if unable to load font 
+     */
+    public void setFontCon(String _fontFamily) throws Exception {
+        try {
+            Font newFont = IOHandler.loadFontFromOSFileFolder(Font.getFont(_fontFamily));
 
+            if (newFont == null) {
+                newFont = Font.getFont(_fontFamily);
+            } 
+
+            setFontConRaw(newFont);
+        } catch (Exception e) {
+            throw new Exception ("Unable to find or set font: " + _fontFamily + " due to: \n");
+        }
+    }
+
+    public void setFontCon(Font _font) {
+        setFontCon(_font, getFontStyle(), getFontSize());
+    }
+    
     /**
      * Gets language's font
      *
@@ -313,11 +345,13 @@ public class PropertiesManager {
     }
 
     /**
-     * Sets conlang font and nulls cached font value
+     * Sets conlang font and nulls cached font value.
+     * This is to be used only by the CustHandlerFactory and internally, as it sets the font as its raw
+     * value rather than by first searching for an appropriate file beforehand.
      *
      * @param fontCon the fontCon to set
      */
-    public final void setFontCon(Font fontCon) {
+    public void setFontConRaw(Font fontCon) {
         // null cached font if being set to new font
         if (font != null && !font.getFamily().equals(fontCon.getFamily())) {
             cachedConFont = null;
@@ -510,7 +544,7 @@ public class PropertiesManager {
         // store font for Conlang words
         wordValue = doc.createElement(PGTUtil.fontConXID);
         Font curFont = getFontCon();
-        wordValue.appendChild(doc.createTextNode(curFont == null ? "" : curFont.getName()));
+        wordValue.appendChild(doc.createTextNode(curFont == null ? "" : curFont.getFamily()));
         propContainer.appendChild(wordValue);
 
         // store font style

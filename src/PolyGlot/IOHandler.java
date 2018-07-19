@@ -34,6 +34,7 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Window;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -205,12 +206,14 @@ public class IOHandler {
                                 return;
                             }
 
+                            font = wrapFont(font);
+                            
                             byte[] cachedFont;
                             try (InputStream inputStream = new FileInputStream(tempFile)) {
                                 cachedFont = IOUtils.toByteArray(inputStream);
                             }
                             if (isConFont) {
-                                core.getPropertiesManager().setFontCon(font);
+                                core.getPropertiesManager().setFontConRaw(font);
                                 core.getPropertiesManager().setCachedFont(cachedFont);
                             } else {
                                 core.getPropertiesManager().setLocalFont(font);
@@ -253,7 +256,7 @@ public class IOHandler {
      */
     public static Font getFontFromFile(String filePath) throws FontFormatException, IOException {
         File fontFile = new File(filePath);
-        return Font.createFont(Font.TRUETYPE_FONT, fontFile);
+        return wrapFont(Font.createFont(Font.TRUETYPE_FONT, fontFile));
     }
 
     /**
@@ -694,7 +697,37 @@ public class IOHandler {
     public static byte[] getFontFileArray(Font font) throws Exception {
         return Files.readAllBytes(getFontFile(font).toPath());
     }
+    
+    /**
+     * Performs wrapping operations on fonts (such as enabling ligatures) and returns the wrapped font
+     * @param font
+     * @return 
+     */
+    private static Font wrapFont(Font font) {
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
+        return font.deriveFont(attributes);
+    }
 
+    /**
+     * Attempts to load the given font from the OS's font folder (due to Java's ligature problems)
+     * @param font
+     * @return returns loaded font file on success, null otherwise
+     */
+    public static Font loadFontFromOSFileFolder(Font font) {
+        Font ret = null;
+        try {
+            File fontFile = getFontFile(font);
+            if (fontFile != null && fontFile.exists()) {
+                ret = wrapFont(Font.createFont(Font.TRUETYPE_FONT, fontFile));
+            }
+        } catch (Exception e) {
+            // do nothing here. Failure means returning null
+        }
+        
+        return ret;
+    }
+    
     /**
      * gets the file of the current conlang font from the user's system
      *

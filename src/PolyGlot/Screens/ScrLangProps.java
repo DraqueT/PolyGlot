@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2017, draque
+ * Copyright (c) 2015-2018, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -185,15 +185,13 @@ public class ScrLangProps extends PFrame {
         return font;
     }
 
-    private void setConFont(Font conFont) {
-        if (conFont != null) {
-            txtAlphaOrder.setFont(conFont);
+    private void setConFont(Font _font, int fontStyle, int fontSize) {
+        core.getPropertiesManager().setFontCon(_font, fontStyle, fontSize);
+        Font conFont = core.getPropertiesManager().getFontCon();
+        txtAlphaOrder.setFont(conFont);
+        txtFont.setText(conFont.getFamily());
 
-            core.getPropertiesManager().setFontCon(conFont, conFont.getStyle(), conFont.getSize());
-            txtFont.setText(conFont.getFamily());
-            
-            testRTLWarning();
-        }        
+        testRTLWarning();      
     }
     
     private void setLocalFont(Font localFont) {
@@ -542,7 +540,12 @@ public class ScrLangProps extends PFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnChangeFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeFontActionPerformed
-        setConFont(fontDialog());
+        // Font not set manually because JAVA IS BROKEN. Gotta pull the binary for ligatures to load...
+        Font selectedFont = fontDialog();
+        
+        if (selectedFont != null) {
+            setConFont(selectedFont, selectedFont.getStyle(), selectedFont.getSize());
+        }
     }//GEN-LAST:event_btnChangeFontActionPerformed
 
     private void chkEnforceRTLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEnforceRTLActionPerformed

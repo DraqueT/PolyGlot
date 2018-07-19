@@ -913,8 +913,12 @@ public class CustHandlerFactory {
                     core.getWordCollection().getBufferWord()
                             .setOverrideAutoDeclen(new String(ch, start, length).equals(PGTUtil.True));
                     bwordoverAutoDec = false;
-                } else if (bfontcon) {
-                    propertiesManager.setFontCon(new Font(new String(ch, start, length), 0, 0));
+                } else if (bfontcon && core.getPropertiesManager().getCachedFont() == null) {
+                    try {
+                        propertiesManager.setFontCon(new String(ch, start, length));
+                    } catch (Exception e) {
+                        warningLog += "\nFont load error: " + e.getLocalizedMessage();
+                    }
                     bfontcon = false;
                 } else if (bwordClassNotes) {
                     TypeNode bufferType = core.getTypes().getBufferType();
