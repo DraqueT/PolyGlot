@@ -174,6 +174,11 @@ public class WordClass extends DictNode {
         ret.setId(id);
         ret.setValue(name);
         values.put(id, ret);
+        
+        if (id >= topId) {
+            topId = id + 1;
+        }
+        
         return ret;
     }
 

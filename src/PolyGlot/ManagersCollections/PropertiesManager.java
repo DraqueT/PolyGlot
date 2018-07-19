@@ -357,7 +357,7 @@ public class PropertiesManager {
             cachedConFont = null;
         }
 
-        font = fontCon;
+        font = fontCon == null ? charisUnicode : fontCon;
     }
 
     /**
