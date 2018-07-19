@@ -655,6 +655,22 @@ public final class ScrLexicon extends PFrame {
 
         Platform.runLater(filterThread::start);
     }
+    
+    /**
+     * Tests whether filter is currently empty
+     * @return 
+     */
+    private boolean isFilterBlank() {
+        int filterType = cmbTypeSrc.getValue().equals(defTypeValue)
+                ? 0 : ((TypeNode) cmbTypeSrc.getValue()).getId();
+        
+        return txtConSrc.getText().length() == 0
+                && txtDefSrc.getText().length() == 0
+                && txtLocalSrc.getText().length() == 0
+                && txtProcSrc.getText().length() == 0
+                && filterType == 0
+                && cmbRootSrc.getValue().toString().equals(defRootValue.getValue());
+    }
 
     /**
      * Filters lexicon. Call RunFilter() instead of this, which runs on a timed session to prevent overlapping filters.
@@ -669,12 +685,7 @@ public final class ScrLexicon extends PFrame {
 
         saveValuesTo(getCurrentWord());
 
-        if (txtConSrc.getText().length() == 0
-                && txtDefSrc.getText().length() == 0
-                && txtLocalSrc.getText().length() == 0
-                && txtProcSrc.getText().length() == 0
-                && filterType == 0
-                && cmbRootSrc.getValue().toString().equals(defRootValue.getValue())) {
+        if (isFilterBlank()) {
             populateLexicon();
             lstLexicon.setSelectedIndex(0);
             lstLexicon.ensureIndexIsVisible(0);
@@ -1099,7 +1110,10 @@ public final class ScrLexicon extends PFrame {
                 genProc();
                 genRom();
                 setWordLegality();
-                saveName();
+                if (isFilterBlank()) {
+                    // if filter is in place, do not trigger a rerender of the values
+                    saveName();
+                }
             }
 
             @Override
@@ -1107,7 +1121,10 @@ public final class ScrLexicon extends PFrame {
                 genProc();
                 genRom();
                 setWordLegality();
-                saveName();
+                if (isFilterBlank()) {
+                    // if filter is in place, do not trigger a rerender of the values
+                    saveName();
+                }
             }
         });
 
