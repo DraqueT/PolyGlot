@@ -255,6 +255,7 @@ public class PGTUtil {
     public static final Integer numMenuFlashes = 4;
     public static final Integer menuFlashSleep = 200;
     public static final Double defaultFontSize = 12.0;
+    public static final int maxProcRecursion = 20;
     
     // color constants
     public static final Color colorDisabledBG;

@@ -85,4 +85,9 @@ public class RomanizationManager extends PronunciationMgr {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+    
+    @Override
+    protected String getToolLabel() {
+        return "Romanization Manager";
+    }
 }
