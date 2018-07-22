@@ -123,7 +123,7 @@ public class PClassCheckboxPanel extends JPanel {
                                     PCheckBox thisBox = (PCheckBox)e.getSource();
                                     if (thisBox.isSelected()) {
                                         rule.addClassToFilterList(thisClassId, classValueId);
-                                        allCheckBox.setSelected(false);
+                                        init();
                                     } else {
                                         rule.removeClassFromFilterList(thisClassId, classValueId);
                                     }
