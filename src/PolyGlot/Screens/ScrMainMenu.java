@@ -1342,7 +1342,7 @@ public class ScrMainMenu extends PFrame {
         JFileChooser chooser = new JFileChooser();
         String fileName;
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf", "otf", "ttc", "dfont");
-
+        
         chooser.setDialogTitle("Import Font");
         chooser.setFileFilter(filter);
         chooser.setCurrentDirectory(new File("."));
@@ -1353,9 +1353,16 @@ public class ScrMainMenu extends PFrame {
         } else {
             return;
         }
+        
+        Double fontSize = InfoBox.doubleInputDialog("Font Size", "Enter a numeric value for font size.", this);
+        
+        if (fontSize == null) {
+            return;
+        }
 
         try {
             core.getPropertiesManager().setFontFromFile(fileName);
+            core.getPropertiesManager().setFontSize(fontSize.intValue());
         } catch (IOException e) {
             InfoBox.error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage(), this);
         } catch (FontFormatException e) {

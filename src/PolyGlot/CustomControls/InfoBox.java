@@ -23,6 +23,7 @@ package PolyGlot.CustomControls;
  *
  * @author draque
  */
+import java.awt.HeadlessException;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import javax.swing.Icon;
@@ -156,6 +157,32 @@ public class InfoBox extends JFrame {
                 null);
 
         return option == JOptionPane.YES_OPTION;
+    }
+    
+    /**
+     * Collects double value form user. Will re-call self if non-double value given.
+     * @param title title of query window
+     * @param message message on window given to user
+     * @param parent owner of dialog
+     * @return double value if input, null if cancel hit
+     */
+    public static Double doubleInputDialog(String title, String message, Window parent) {
+        Double ret = null;
+        
+        String inputString = JOptionPane.showInputDialog(parent,
+                message, title,
+                JOptionPane.INFORMATION_MESSAGE);
+        
+        if (inputString != null) {
+            try {
+                ret = Double.parseDouble(inputString);
+            } catch (HeadlessException | NumberFormatException e) {
+                InfoBox.warning("Incorrect Input", "Please provide a numeric value (default 12.0) for font size.", parent);
+                ret = InfoBox.doubleInputDialog(title, message, parent);
+            }
+        }
+        
+        return ret;
     }
 
     private Integer doYesNoCancel(String title, String message, Window parent) {
