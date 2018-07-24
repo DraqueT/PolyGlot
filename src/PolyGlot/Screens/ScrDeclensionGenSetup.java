@@ -1133,9 +1133,15 @@ public class ScrDeclensionGenSetup extends PDialog {
 
     private void lstCombinedDecValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstCombinedDecValueChanged
         saveTransPairs(lstRules.getSelectedIndex());
+        
+        // in case of 'DEPRECATED RULES' selection
+        if (lstCombinedDec.getSelectedValue() instanceof DeclensionPair) {
         DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
-        chkDisableWordform.setSelected(core.getDeclensionManager()
-                .isCombinedDeclSurpressed(curPair == null ? "" : curPair.combinedId, typeId));
+            chkDisableWordform.setSelected(core.getDeclensionManager()
+                    .isCombinedDeclSurpressed(curPair == null ? "" : curPair.combinedId, typeId));
+        } else {
+            chkDisableWordform.setSelected(false);
+        }
         populateRules();
         populateRuleProperties();
         populateTransforms();
