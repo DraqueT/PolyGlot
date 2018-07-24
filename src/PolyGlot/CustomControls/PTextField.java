@@ -331,7 +331,7 @@ public class PTextField extends JTextField {
             //e.printStackTrace();
         }
 
-        if (isDefaultText()) {
+        if (isDefaultText() && !defText.equals("")) {
             setFont(core.getPropertiesManager().getFontLocal());
             setForeground(Color.lightGray);
         } else {
