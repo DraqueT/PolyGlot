@@ -144,7 +144,7 @@ public final class ScrDeclensionSetup extends PDialog {
      * @return boolean as to whether it is legal to close the window.
      */
     private boolean canClose() {
-        Iterator<DeclensionNode> decIt = core.getDeclensionManager().getDeclensionListTemplate(myType.getId()).iterator();
+        Iterator<DeclensionNode> decIt = core.getDeclensionManager().getDimensionalDeclensionListTemplate(myType.getId()).iterator();
 
         while (decIt.hasNext()) {
             DeclensionNode curDec = decIt.next();
@@ -332,6 +332,19 @@ public final class ScrDeclensionSetup extends PDialog {
                 ruleMenu.show(e.getComponent(), e.getX(), e.getY());
             }
         });
+        
+        chkNonDimensional.addActionListener((ActionEvent e) -> {
+            if (chkNonDimensional.isSelected()) {
+                if (InfoBox.actionConfirmation("Are you sure?", "Are you sure you wish to make this dimensionless?\n"
+                        + "The dimensions for this declension/conjugation will be erased permanently.", this)) {
+                    saveDeclension();
+                } else {
+                    chkNonDimensional.setSelected(false);
+                }                
+            }
+            core.getDeclensionManager().deprecateAllDeclensions(myType.getId());
+            populateDimensions();
+        });
     }
     
     private void copyConjToClipboard() {
@@ -364,11 +377,11 @@ public final class ScrDeclensionSetup extends PDialog {
         DeclensionManager decMan = core.getDeclensionManager();
         
         try {
-            for (DeclensionNode curNode : conjNodes) {
+            conjNodes.forEach((curNode)->{
                 DeclensionNode copyNode = new DeclensionNode(-1);
                 copyNode.setEqual(curNode);
                 decMan.addDeclensionToTemplate(myType.getId(), -1, curNode);
-            }
+            });
         } catch (ClassCastException e) {
             InfoBox.error("Error Copying Conjugations", "Unable to copy conjugations: " 
                     + e.getLocalizedMessage(), this);
@@ -408,7 +421,7 @@ public final class ScrDeclensionSetup extends PDialog {
             return;
         }
 
-        Integer nodeId = (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
+        Integer nodeId = scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
         DeclensionNode delFrom = core.getDeclensionTemplate(myType.getId(), nodeId);
         Integer delDimId = (Integer) tblDimensions.getModel().getValueAt(tblDimensions.getSelectedRow(), 2);
         delFrom.deleteDimension(delDimId);
@@ -417,7 +430,7 @@ public final class ScrDeclensionSetup extends PDialog {
     }
 
     private void populateDimensions() {
-        Integer declensionId = (Integer) scrToCoreDeclensions.get((Integer) lstDeclensionList.getSelectedIndex());
+        Integer declensionId = scrToCoreDeclensions.get((Integer) lstDeclensionList.getSelectedIndex());
         DeclensionNode curDec = core.getDeclensionManager().getDeclension(myType.getId(), declensionId);
 
         // if no current declension, simply clear table.
@@ -430,9 +443,24 @@ public final class ScrDeclensionSetup extends PDialog {
 
         setupDimTable();
 
-        dimensionList.forEach((curNode) -> {
-            addDemensionWithValues(curNode.getValue(), curNode.isMandatory(), curNode.getId());
-        });
+        // do not display singleton dimension for singleton declensions
+        if (!curDec.isDimensionless()) {
+            dimensionList.forEach((curNode) -> {
+                addDemensionWithValues(curNode.getValue(), curNode.isMandatory(), curNode.getId());
+            });
+        }
+        
+        setMenuDimensionless(curDec.isDimensionless());
+    }
+    
+    /**
+     * Sets the menu up for a dimensioned/singleton declension node
+     * @param _dimensionless 
+     */
+    private void setMenuDimensionless(boolean _dimensionless) {
+        tblDimensions.setEnabled(!_dimensionless);
+        btnAddDimension.setEnabled(!_dimensionless);
+        btnDelDimension.setEnabled(!_dimensionless);
     }
 
     private void addDemensionWithValues(String name, boolean mandatory, Integer dimId) {
@@ -476,7 +504,7 @@ public final class ScrDeclensionSetup extends PDialog {
             int curCol = tblDimensions.getSelectedColumn();
             
             DeclensionNode curDec = core.getDeclensionManager().getDeclension(myType.getId(),
-                    (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()));
+                    scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()));
             
             for (int i = 0; i < tblDimensions.getRowCount(); i++) {
                 
@@ -549,6 +577,7 @@ public final class ScrDeclensionSetup extends PDialog {
         tblDimensions = new PTable(core);
         jScrollPane3 = new javax.swing.JScrollPane();
         txtDeclensionNotes = new PolyGlot.CustomControls.PTextPane(core, true, "-- Notes --");
+        chkNonDimensional = new javax.swing.JCheckBox();
         btnDeleteDeclension = new PolyGlot.CustomControls.PAddRemoveButton("-");
         btnAddDeclension = new PolyGlot.CustomControls.PAddRemoveButton("+");
         jButton1 = new PButton(core);
@@ -622,6 +651,9 @@ public final class ScrDeclensionSetup extends PDialog {
 
         jScrollPane3.setViewportView(txtDeclensionNotes);
 
+        chkNonDimensional.setText("Non-Dimensional");
+        chkNonDimensional.setToolTipText("Check this if this is a non dimensional form, such as a gerund.");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -629,9 +661,6 @@ public final class ScrDeclensionSetup extends PDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3)
@@ -641,17 +670,24 @@ public final class ScrDeclensionSetup extends PDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnDelDimension, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(sclDimensions, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkNonDimensional)
+                            .addComponent(jLabel3))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(txtDeclensionName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkNonDimensional)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sclDimensions, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                .addComponent(sclDimensions, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDelDimension)
@@ -725,7 +761,7 @@ public final class ScrDeclensionSetup extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnDeleteDeclension)
@@ -822,7 +858,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
         if (lstDeclensionList.getModel().getSize() != 0
                 && scrToCoreDeclensions.containsKey((Integer) lstDeclensionList.getSelectedIndex())
-                && (Integer) scrToCoreDeclensions.get((Integer) lstDeclensionList.getSelectedIndex()) == -1) {
+                && scrToCoreDeclensions.get((Integer) lstDeclensionList.getSelectedIndex()) == -1) {
             return;
         }
 
@@ -882,7 +918,7 @@ public final class ScrDeclensionSetup extends PDialog {
             curPopulating = populatingLocal;
         }
 
-        Integer decId = (Integer) scrToCoreDeclensions.get(decIndex);
+        Integer decId = scrToCoreDeclensions.get(decIndex);
 
         if (decId != null && decId != -1) {
             try {
@@ -913,6 +949,8 @@ public final class ScrDeclensionSetup extends PDialog {
         }
 
         populateDimensions();
+        
+        chkNonDimensional.setSelected(curDec.isDimensionless());
 
         curPopulating = populatingLocal;
     }
@@ -922,7 +960,7 @@ public final class ScrDeclensionSetup extends PDialog {
      */
     private void setIsActiveDimensions() {
         Integer decId = scrToCoreDeclensions.containsKey(lstDeclensionList.getSelectedIndex())
-                ? (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()) : -1;
+                ? scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()) : -1;
 
         if (decId == -1) {
             // the dimensions can only be added without error if there is a declension
@@ -1002,7 +1040,7 @@ public final class ScrDeclensionSetup extends PDialog {
         curPopulating = true;
 
         Integer decId = scrToCoreDeclensions.containsKey(decIndex)
-                ? (Integer) scrToCoreDeclensions.get(decIndex) : -1;
+                ? scrToCoreDeclensions.get(decIndex) : -1;
 
         DeclensionNode decl;
 
@@ -1012,6 +1050,7 @@ public final class ScrDeclensionSetup extends PDialog {
                 decl = core.getDeclensionManager().addDeclensionToTemplate(myType.getId(), txtDeclensionName.getText());
                 decl.setValue(txtDeclensionName.getText().trim());
                 decl.setNotes(txtDeclensionNotes.getText().trim());
+                decl.setDimensionless(chkNonDimensional.isSelected());
 
                 scrToCoreDeclensions.put(decIndex, decl.getId());
                 scrDeclensionMap.put(decl.getValue(), decIndex);
@@ -1023,6 +1062,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
                 decl.setValue(txtDeclensionName.getText().trim());
                 decl.setNotes(txtDeclensionNotes.getText().trim());
+                decl.setDimensionless(chkNonDimensional.isSelected());
 
                 core.getDeclensionManager().updateDeclensionTemplate(myType.getId(), decId, decl);
             }
@@ -1042,13 +1082,13 @@ public final class ScrDeclensionSetup extends PDialog {
             return;
         }
 
-        Integer curdecId = (Integer) scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
+        Integer curdecId = scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
         Integer setIndex = -1;
 
         curPopulating = true;
 
         Iterator<DeclensionNode> declIt = core.getDeclensionManager()
-                .getDeclensionListTemplate(myType.getId()).iterator();
+                .getFullDeclensionListTemplate(myType.getId()).iterator();
         DeclensionNode curdec;
 
         // relevant objects should be rebuilt
@@ -1085,6 +1125,7 @@ public final class ScrDeclensionSetup extends PDialog {
     private javax.swing.JButton btnClearDep;
     private javax.swing.JButton btnDelDimension;
     private javax.swing.JButton btnDeleteDeclension;
+    private javax.swing.JCheckBox chkNonDimensional;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;

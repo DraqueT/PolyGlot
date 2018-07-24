@@ -39,7 +39,6 @@ import PolyGlot.ManagersCollections.RomanizationManager;
 import PolyGlot.Nodes.EtyExternalParent;
 import PolyGlot.Nodes.WordClassValue;
 import PolyGlot.Nodes.WordClass;
-import java.awt.Font;
 import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -129,6 +128,7 @@ public class CustHandlerFactory {
             boolean bDecText = false;
             boolean bDecNotes = false;
             boolean bDecIsTemp = false;
+            boolean bDecIsDimless = false;
             boolean bDecRelId = false;
             boolean bDecCombId = false;
             boolean bpronBase = false;
@@ -308,6 +308,8 @@ public class CustHandlerFactory {
                     bDecNotes = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionIsTemplateXID)) {
                     bDecIsTemp = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionIsDimensionless)) {
+                    bDecIsDimless = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionRelatedIdXID)) {
                     bDecRelId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuideBaseXID)) {
@@ -666,6 +668,8 @@ public class CustHandlerFactory {
                     bDecNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionIsTemplateXID)) {
                     bDecIsTemp = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.declensionIsDimensionless)) {
+                    bDecIsDimless = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionRelatedIdXID)) {
                     bDecRelId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionMandatoryXID)) {
@@ -956,14 +960,8 @@ public class CustHandlerFactory {
                     bgenderId = false;
                 } else if (bgenderName) {
                     // Deprecated
-                    //GenderNode genderBuffer = genderCollection.getGenderBuffer();
-                    //genderBuffer.setValue(genderBuffer.getValue()
-                    //        + new String(ch, start, length));
                 } else if (bgenderNotes) {
                     // Deprecated
-                    //GenderNode genderBuffer = genderCollection.getGenderBuffer();
-                    //genderBuffer.setNotes(genderBuffer.getNotes()
-                    //        + new String(ch, start, length));
                 } else if (blangName) {
                     propertiesManager.setLangName(propertiesManager.getLangName()
                             + new String(ch, start, length));
@@ -991,6 +989,8 @@ public class CustHandlerFactory {
                 } else if (bDecIsTemp) {
                     declensionMgr.setBufferDecTemp(new String(ch, start, length).equals("1"));
                     bDecIsTemp = false;
+                } else if (bDecIsDimless) {
+                    declensionMgr.getBuffer().setDimensionless(new String(ch, start, length).equals(PGTUtil.True));
                 } else if (bDecCombId) {
                     declensionMgr.getBuffer().setCombinedDimId(new String(ch, start, length));
                     bDecIsTemp = false;

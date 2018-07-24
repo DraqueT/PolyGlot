@@ -109,6 +109,7 @@ public class PGTUtil {
     public static final String declensionIsTemplateXID = "declensionTemplate";
     public static final String declensionRelatedIdXID = "declensionRelatedId";
     public static final String declensionMandatoryXID = "declensionMandatory";
+    public static final String declensionIsDimensionless = "declensionDimensionless";
 
     // dimensional declension properties
     public static final String dimensionNodeXID = "dimensionNode";

@@ -301,10 +301,6 @@ public class DeclensionManager {
         return ret;
     }
 
-    public Map<Integer, List<DeclensionNode>> getTemplateMap() {
-        return dTemplates;
-    }
-
     public Map<Integer, List<DeclensionNode>> getDeclensionMap() {
         return dList;
     }
@@ -434,7 +430,7 @@ public class DeclensionManager {
      * @return a list of all mandatory declensions
      */
     public List<DeclensionNode> getMandDims(Integer typeId) {
-        return getMandDims(0, ",", new ArrayList<>(), getDeclensionListTemplate(typeId), "", false);
+        return getMandDims(0, ",", new ArrayList<>(), getDimensionalDeclensionListTemplate(typeId), "", false);
     }
 
     /**
@@ -487,7 +483,23 @@ public class DeclensionManager {
      * @return list of labels and IDs
      */
     public List<DeclensionPair> getAllCombinedIds(Integer typeId) {
-        return getAllCombinedIds(0, ",", "", getDeclensionListTemplate(typeId));
+        List<DeclensionNode> dimensionalDeclensionNodes = getDimensionalDeclensionListTemplate(typeId);
+        List<DeclensionNode> singletonDeclensionNodes = getSingletonDeclensionList(typeId, dTemplates);
+        List<DeclensionPair> ret = getAllCombinedDimensionalIds(0, ",", "", dimensionalDeclensionNodes);
+        ret.addAll(getAllSingletonIds(singletonDeclensionNodes));
+        
+        return ret;
+    }
+    
+    private List<DeclensionPair> getAllSingletonIds(List<DeclensionNode> declensionList) {
+        List<DeclensionPair> ret = new ArrayList<>();
+        
+        declensionList.forEach((curNode)->{
+            DeclensionPair curPair = new DeclensionPair(curNode.getCombinedDimId(), curNode.getValue());
+            ret.add(curPair);
+        });
+        
+        return ret; 
     }
 
     /**
@@ -499,7 +511,7 @@ public class DeclensionManager {
      * @param declensionList list of template declensions for type
      * @return list of currently constructed labels and ids
      */
-    private List<DeclensionPair> getAllCombinedIds(int depth, String curId, String curLabel, List<DeclensionNode> declensionList) {
+    private List<DeclensionPair> getAllCombinedDimensionalIds(int depth, String curId, String curLabel, List<DeclensionNode> declensionList) {
         List<DeclensionPair> ret = new ArrayList<>();
 
         // for the specific case that a word with no declension patterns has a deprecated declension
@@ -518,7 +530,7 @@ public class DeclensionManager {
             while (dimIt.hasNext()) {
                 DeclensionDimension curDim = dimIt.next();
 
-                ret.addAll(getAllCombinedIds(depth + 1, curId + curDim.getId().toString() + ",",
+                ret.addAll(getAllCombinedDimensionalIds(depth + 1, curId + curDim.getId().toString() + ",",
                         curLabel + (curLabel.length() == 0 ? "" : " ") + curDim.getValue(), declensionList));
             }
         }
@@ -526,12 +538,33 @@ public class DeclensionManager {
         return ret;
     }
 
+    // TODO: Do I need this at all? Can I have ONLY the full pull, rather than including dimensional?
+    /**
+     * Fetches list of declined/conjugated wordforms for a given word. Only pulls dimensional values. Singletons like
+     * gerunds are not included
+     * @param wordId
+     * @return 
+     */
     public List<DeclensionNode> getDeclensionListWord(Integer wordId) {
-        return getDeclensionList(wordId, dList);
+        return getDimensionalDeclensionList(wordId, dList);
     }
 
-    public List<DeclensionNode> getDeclensionListTemplate(Integer typeId) {
-        return getDeclensionList(typeId, dTemplates);
+    /**
+     * Gets list of dimensional template values. Does not pull singletons such as gerunds.
+     * @param typeId
+     * @return 
+     */
+    public List<DeclensionNode> getDimensionalDeclensionListTemplate(Integer typeId) {
+        return getDimensionalDeclensionList(typeId, dTemplates);
+    }
+    
+    /**
+     * Gets full list of dimensional template values including singletons such as gerunds.
+     * @param typeId
+     * @return 
+     */
+    public List<DeclensionNode> getFullDeclensionListTemplate(Integer typeId) {
+        return getFullDeclensionList(typeId, dTemplates);
     }
 
     public DeclensionNode addDeclensionToTemplate(Integer typeId, Integer declensionId, DeclensionNode declension) {
@@ -723,7 +756,7 @@ public class DeclensionManager {
     
     public String getCombNameFromCombId(int typeId, String combId) {
         String ret = "";
-        Iterator<DeclensionNode> it = getDeclensionListTemplate(typeId).iterator();
+        Iterator<DeclensionNode> it = getDimensionalDeclensionListTemplate(typeId).iterator();
         String[] splitIds = combId.split(",");
         
         for (int i = 0; it.hasNext(); i++) {
@@ -807,11 +840,68 @@ public class DeclensionManager {
         }
     }
 
-    private List<DeclensionNode> getDeclensionList(Integer wordId, Map list) {
+    /**
+     * Retrieves all dimensional declensions based on related ID and the list to be pulled from. The list can either
+     * be the templates (related via typeId) or actual words, related by wordId
+     * @param relatedId ID of related value
+     * @param list list of relations to search through
+     * @return 
+     */
+    private List<DeclensionNode> getDimensionalDeclensionList(Integer relatedId, 
+            Map<Integer, List<DeclensionNode>> list) {
         List<DeclensionNode> ret = new ArrayList<>();
 
-        if (list.containsKey(wordId)) {
-            ret = (List<DeclensionNode>) list.get(wordId);
+        if (list.containsKey(relatedId)) {
+            List<DeclensionNode> allNodes = list.get(relatedId);
+            
+            allNodes.forEach((curNode)->{
+                // dimensionless nodes
+                if (!curNode.isDimensionless()) {
+                    ret.add(curNode);
+                }
+            });
+        }
+
+        return ret;
+    }
+    
+    /**
+     * Retrieves all singleton declensions based on related ID and the list to be pulled from. The list can either
+     * be the templates (related via typeId) or actual words, related by wordId
+     * @param relatedId ID of related value
+     * @param list list of relations to search through
+     * @return 
+     */
+    private List<DeclensionNode> getSingletonDeclensionList(Integer relatedId, 
+            Map<Integer, List<DeclensionNode>> list) {
+        List<DeclensionNode> ret = new ArrayList<>();
+
+        if (list.containsKey(relatedId)) {
+            List<DeclensionNode> allNodes = list.get(relatedId);
+            
+            allNodes.forEach((curNode)->{
+                // dimensionless nodes
+                if (curNode.isDimensionless()) {
+                    ret.add(curNode);
+                }
+            });
+        }
+
+        return ret;
+    }
+    
+    /**
+     * Returns full list of declensions irrespective of whether they are dimensional or not. Will return singletons
+     * such as gerunds.
+     * @param relatedId ID of related value
+     * @param list list of relations to search through
+     * @return 
+     */
+    private List<DeclensionNode> getFullDeclensionList(Integer relatedId, Map list) {
+        List<DeclensionNode> ret = new ArrayList<>();
+
+        if (list.containsKey(relatedId)) {
+            ret = (List<DeclensionNode>) list.get(relatedId);
         }
 
         return ret;
@@ -877,7 +967,7 @@ public class DeclensionManager {
         rootElement.appendChild(declensionCollection);
         
         // record declension templates
-        declensionSet = getTemplateMap().entrySet();
+        declensionSet = dTemplates.entrySet();
         for (Entry<Integer, List<DeclensionNode>> e : declensionSet) {
             final Integer relatedId = e.getKey();
 

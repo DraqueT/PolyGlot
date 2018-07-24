@@ -35,10 +35,11 @@ import org.w3c.dom.Element;
  * body object for fully realized declension constructs (with full combined Dim Ids)
  * @author draque
  */
-public class DeclensionNode extends DictNode{
+public class DeclensionNode extends DictNode {
     private String notes = "";
     private String combinedDimId = "";
     private boolean mandatory = false;
+    private boolean dimensionless = false;
     private int highestDimension = 1;
     private final Map<Integer, DeclensionDimension> dimensions = new HashMap<>();
     private DeclensionDimension buffer = new DeclensionDimension(-1);
@@ -70,6 +71,30 @@ public class DeclensionNode extends DictNode{
      */
     public void clearBuffer() {
         buffer = new DeclensionDimension(-1);
+    }
+    
+    public boolean isDimensionless() {
+        return dimensionless;
+    }
+    
+    /**
+     * Sets value of dimensionless to this declension.
+     * WARNING: will erase ALL existing dimensions and add 1, which is a fixed value, rather than a true dimension when
+     * set to "true". Will wipe single existing singleton-dimension when setting to false. Does nothing if set value
+     * matches current value.
+     * @param _dimensionless 
+     */
+    public void setDimensionless(boolean _dimensionless) {
+        if (dimensionless != _dimensionless) {
+            dimensionless = _dimensionless;
+            dimensions.clear();
+
+            if (_dimensionless) {
+                DeclensionDimension dim = new DeclensionDimension();
+                dim.setValue("SINGLETON-DIMENSION");
+                addDimension(dim);
+            }
+        }
     }
     
     /**
@@ -150,37 +175,51 @@ public class DeclensionNode extends DictNode{
         combinedDimId = _id;
     }
     
+    /**
+     * Fetches combined id. In the case that this is a dimensionless template, it generates one.
+     * @return 
+     */
     public String getCombinedDimId() {
-        return combinedDimId;
+        String ret = combinedDimId;
+        if (dimensionless) {
+            // normal dimensional ids are comma delimited with guranteed commas before and after. This should be unique.
+            ret = id.toString();
+        }
+        
+        return ret;
     }
     
     public void writeXMLTemplate(Document doc, Element rootElement, Integer relatedId) {
         Element wordNode = doc.createElement(PGTUtil.declensionXID);
         rootElement.appendChild(wordNode);
 
-        Element wordValue = doc.createElement(PGTUtil.declensionIdXID);
-        wordValue.appendChild(doc.createTextNode(this.getId().toString()));
-        wordNode.appendChild(wordValue);
+        Element nodeValue = doc.createElement(PGTUtil.declensionIdXID);
+        nodeValue.appendChild(doc.createTextNode(this.getId().toString()));
+        wordNode.appendChild(nodeValue);
 
-        wordValue = doc.createElement(PGTUtil.declensionTextXID);
-        wordValue.appendChild(doc.createTextNode(this.getValue()));
-        wordNode.appendChild(wordValue);
+        nodeValue = doc.createElement(PGTUtil.declensionTextXID);
+        nodeValue.appendChild(doc.createTextNode(this.getValue()));
+        wordNode.appendChild(nodeValue);
 
-        wordValue = doc.createElement(PGTUtil.declensionNotesXID);
-        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getNotes())));
-        wordNode.appendChild(wordValue);
+        nodeValue = doc.createElement(PGTUtil.declensionNotesXID);
+        nodeValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getNotes())));
+        wordNode.appendChild(nodeValue);
 
-        wordValue = doc.createElement(PGTUtil.declensionIsTemplateXID);
-        wordValue.appendChild(doc.createTextNode("1"));
-        wordNode.appendChild(wordValue);
+        nodeValue = doc.createElement(PGTUtil.declensionIsTemplateXID);
+        nodeValue.appendChild(doc.createTextNode("1"));
+        wordNode.appendChild(nodeValue);
 
-        wordValue = doc.createElement(PGTUtil.declensionRelatedIdXID);
-        wordValue.appendChild(doc.createTextNode(relatedId.toString()));
-        wordNode.appendChild(wordValue);
+        nodeValue = doc.createElement(PGTUtil.declensionRelatedIdXID);
+        nodeValue.appendChild(doc.createTextNode(relatedId.toString()));
+        wordNode.appendChild(nodeValue);
 
-        wordValue = doc.createElement(PGTUtil.declensionMandatoryXID);
-        wordValue.appendChild(doc.createTextNode(this.isMandatory() ? PGTUtil.True : PGTUtil.False));
-        wordNode.appendChild(wordValue);
+        nodeValue = doc.createElement(PGTUtil.declensionMandatoryXID);
+        nodeValue.appendChild(doc.createTextNode(this.isMandatory() ? PGTUtil.True : PGTUtil.False));
+        wordNode.appendChild(nodeValue);
+        
+        nodeValue = doc.createElement(PGTUtil.declensionIsDimensionless);
+        nodeValue.appendChild(doc.createTextNode(this.isDimensionless() ? PGTUtil.True : PGTUtil.False));
+        wordNode.appendChild(nodeValue);
 
         // record dimensions of declension
         Iterator<DeclensionDimension> dimIt = this.getDimensions().iterator();
@@ -230,6 +269,7 @@ public class DeclensionNode extends DictNode{
         this.setValue(node.getValue());
         this.setMandatory(node.isMandatory());
         this.setCombinedDimId(node.getCombinedDimId());
+        this.setDimensionless(node.dimensionless);
 
         node.getRawDimensions().entrySet().forEach((entry) -> {
             DeclensionDimension copyOfDim = new DeclensionDimension(entry.getKey());

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -146,10 +146,22 @@ public class InfoBox extends JFrame {
      * @return true if chooser accepts, false otherwise
      */
     public static boolean deletionConfirmation(Window parent) {
+        return actionConfirmation("Delete Confirmation", "Delete Entry? Cannot be undone.", parent);
+    }
+    
+    /**
+     * Displays confirmation of user action
+     *
+     * @param title title of query message
+     * @param message shown to user
+     * @param parent parent caller
+     * @return true if chooser accepts, false otherwise
+     */
+    public static boolean actionConfirmation(String title, String message, Window parent) {
         PButton[] buttons = {yes, no};
         int option = POptionPane.showOptionDialog(parent,
-                "Delete Entry? Cannot be undone.",
-                "Delete Confirmation",
+                message,
+                title,
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE,
                 UIManager.getIcon("OptionPane.questionIcon"),
