@@ -912,7 +912,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         txtRuleName.setToolTipText("Name of rule");
         txtRuleName.setEnabled(false);
 
-        txtRuleRegex.setToolTipText("This is a filter regex: Only words matching this filter will have transformations for this rule applied to them.");
+        txtRuleRegex.setToolTipText("Only words matching this regex pattern will have transformations from this rule applied to them.");
         txtRuleRegex.setEnabled(false);
 
         jLabel3.setText("Transformations");
@@ -928,7 +928,7 @@ public class ScrDeclensionGenSetup extends PDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblTransforms.setToolTipText("Transformations to be applied.");
+        tblTransforms.setToolTipText("Transformations to be applied. The pattern on the left will be replaced with characters on the right.");
         tblTransforms.setCellSelectionEnabled(true);
         tblTransforms.setRowHeight(30);
         sclTransforms.setViewportView(tblTransforms);
