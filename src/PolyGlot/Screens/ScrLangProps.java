@@ -415,7 +415,7 @@ public class ScrLangProps extends PFrame {
 
         jLabel3.setText("Value");
 
-        txtKerning.setToolTipText("Values between -0.1 and 0.3 work best. 0 is default(blank)");
+        txtKerning.setToolTipText("Values between -0.1 and 0.3 work best. 0 is default(blank) WARNING: Values over 0 will cause PolyGlot to ignore ligatures.");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);

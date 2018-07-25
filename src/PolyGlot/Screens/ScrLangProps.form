@@ -410,7 +410,7 @@
             </Component>
             <Component class="javax.swing.JFormattedTextField" name="txtKerning">
               <Properties>
-                <Property name="toolTipText" type="java.lang.String" value="Values between -0.1 and 0.3 work best. 0 is default(blank)"/>
+                <Property name="toolTipText" type="java.lang.String" value="Values between -0.1 and 0.3 work best. 0 is default(blank) WARNING: Values over 0 will cause PolyGlot to ignore ligatures."/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JFormattedTextField(decimalFormat)"/>
