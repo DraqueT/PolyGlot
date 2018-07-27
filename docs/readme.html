@@ -30,7 +30,7 @@
         <!-- Static navbar -->
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="container">
-                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 2.1</a> </div>
+                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 2.3</a> </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="https://github.com/DraqueT/PolyGlot">GitHub Page</a><br>
@@ -52,7 +52,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2 centered"> <img src="assets/PolyGlot%20Logo.png" alt="PolyGlot">
-                        <h1>Version 2.1</h1>
+                        <h1>Version 2.3</h1>
                         <!-- POLYGLOT STUFF START -->
                         <div style="text-align: left;"><a href="#WELCOMEOVERVIEW">i.
                                 Overview/Welcome</a><br>
@@ -103,28 +103,57 @@
                             email me at <a href="mailto:draquemail@gmail.com">draquemail@gmail.com</a>!</div>
 
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
-                        <div align ="left"><br>So this is a pretty big release of PolyGlot! There's a whole new
-                        Etymology engine that should help people to develop languages in a more iterative fashion,
-                        speed and stability optimizations, a character replacement macro, which will make typing 
-                        easier for you lovers of diacritic marks, user-modifiable kerning (long time coming!), and 
-                        a big update for anyone into complex phonemic orthographies.
+                        <div align ="left"><br>Been a good bit since I released an update, and I'm feeling good about
+                            this one! It includes fixes to an embarrassing number of bugs that plagued the last version, 
+                            but also some new features that have been highly requested for some time now! Anyone who's 
+                            had problems with ligatures? Set. You wanted non dimensional conjugations? Done. Filtering 
+                            for conjugation rules based on word class? I'm pointing finger guns at you like an asshole. 
+                            But you have those, too! Also a bunch of little quality of life upgrades across the whole 
+                            program that I'm hoping will just go unnoticed, since they should have been that way from 
+                            the get go. Enjoy, everyone! And easter eggs. :3
                         <br><br>
-                        As always, there were more bug fixes than anyone here is likely to be interested in hearing
-                        about, and a few that existed since the very earliest implementations of PolyGlot.
-                        For every visible upgrade to PolyGlot this time around, there were a dozen tweaks to behavior
-                        that the end user will hopefully never notice.<br><br>
                         </div>
-
+                        FEATURES:
                         <div align ="left"><ul>
-                                <li>Etymology Engine implemented!</li>
-                                <li>Search now includes word roots</li>
-                                <li>Significant UI speed optimizations</li>
-                                <li>Character Macros implemented (type one charcter, PolyGlot changes it to something you specify)</li>
-                                <li>User editable kerning (this one was a bitch)</li>
-                                <li>Phonemic Orthography now 100% regex compatible, and supports recursive logic</li>
-                                <li>Menu fonts resizable</li>
-                                <li>Tooltips now unicode compatible</li>
+                                <li>Font ligatures now supported! This was a pain in the ass and a half to implement!</li>
+                                <li>Non dimensional conjugation forms now supported (such as gerunds)</li>
+                                <li>Conjugation rules can now be specified by word class (gender, mood, etc.)</li>
+                                <li>Fonts can now be manually imported via selecting the font file directly</li>
+                                <li>Users can now specify display font as well as conlang font</li>
+                                <li>Hovering over words in etymology window now provides tooltip with related information</li>
+                                <li>Conjugations can now be copy/pasted between parts of speech</li>
+                                <li>Autofill of word conjugation filter to ".*" in conjugation generation setup window</li>
+                                <li>Upgrade to Java 8</li>
+                                <li>Macify eliminated from code</li>
+                                <li>Secrets</li><!––what did you see last tuesday-->
                             </ul></div>
+                        <br><br>
+                        BUGS FIXED:
+                        <div align="left">
+                            <ul>
+                                <li>Certain patterns in the phonology section could lead to infinite recurse</li>
+                                <li>Trying to view deprecated declension rules led to uncaught error</li>
+                                <li>Font not loading in particular case for conjugation/declension display window</li>
+                                <li>Certain circumstances could lead to word properties being overwritten when using the filter</li>
+                                <li>After initial creation of class values, attempting to return and add more later led to an index error</li>
+                                <li>Confirmation boxes popping behind windows in certain situations</li>
+                                <li>Grammar section flipped out when tab key hit</li>
+                                <li>Word Class checkboxes standard Swing rather than custom PolyGlot boxes</li>
+                                <li>Mandatory conjugations being misidentified</li>
+                                <li>Lexicon fails to refresh after excel import</li>
+                                <li>confirmation buttons on info popups not using custom PolyGlot buttons</li>
+                                <li>Newly typed values of currently selected frame might not save if PolyGlot closed without deselecting frame</li>
+                                <li>Clicking add or delete word during word filtering led to hard freeze</li>
+                                <li>IPA Chart Mouse Detection bug</li>
+                                <li>Part of speech labels being wiped under certain scenarios</li>
+                                <li>Ambiguous alphabetical order bug</li>
+                                <li>Unable to open files with special characters it name (Windows)</li>
+                                <li>Window title failing to update as appropriate</li>
+                                <li>Correctly detects if Java is installed prior to startup (Windows frontend)</li>
+                                <li>Correctly detects of JFX is installed prior to startup</li>
+                            </ul>
+                        </div>
+                        
 
                         <a name="INSTALLATION"></a>
                         <h1>INSTALLATION</h1><br>
@@ -327,7 +356,12 @@
                             on the
                             Types window. The example below is not of Lodenkur, but an arbitrary
                             language, to give a better idea of how to use regular expressions
-                            (which Lodenkur lacks the correct characterset to represent currently).<br></div>
+                            (which Lodenkur lacks the correct character set to represent currently).
+                            <br><br>
+                            NOTE: Entire conjugations can be copy/pasted from one part of speech to another
+                            by right clicking on them or in the white space of the conjugation list, saving 
+                            significant time in languages with complex and related conjugational setups.
+                        </div>
                         <br>
 
                         <img alt="" src="assets/conj2.png"><br>
@@ -381,6 +415,17 @@
                             of speech at once. On the Conjugation setup page, click the "Clear Deprecated
                             Values" button to do this.
                             <br>
+                        </div><br><br>
+                        
+                        <img alt="" src="assets/conj8.png" width="350" height="450">
+                        <div align="left">
+                            <b>NON-DIMENSIONAL CONJUGATIONS</b><br><br>
+                            Some languages have non dimensional conjugations, such as gerunds.
+                            To create these, simply select the non-dimensional check-box as shown
+                            in the picture above.<br>
+                            <br>
+                            Non-dimensional conjugations will be single forms, unattached to
+                            dimensional forms such as tense.
                         </div>
 
                         <a name="-_Autogeneration_of"></a><div align ="left"><h1>Autogeneration of
@@ -483,6 +528,18 @@
                             which is a unique exception, click the <span style="font-weight: bold;">Autogen
                                 Override</span> check box on the word's Conjugations/Declensions screen.<br></div>
 
+                        <br><br><img alt="" src="assets/conj9.png" height=500 width=750><br>
+                        <div align="left">
+                            <b>FILTERING CONJUGATION RULES BY CLASS</b><br><br>
+                            Often times it can be useful to filter conjugation rules by the value of a word's class.
+                            For example, perhaps female nouns decline differently than male nouns. If this is the 
+                            case, defined class values (Classes covered in the next section) will appear in a filter
+                            box when creating rules. To apply a rule to words of all class values, simply choose "All." 
+                            To apply it to specific class values, deselect all and select the values to filter for. NOTE: 
+                            <b>every</b> value checked must match for the rule's transformations to be applied to a given 
+                            word.
+                        </div>
+                        
                         <a name ="CLASSES"></a><h1>Word Classes</h1><br>
                         <div align ="left">
                             Word class is most familiar as grammatical gender. Classes can be added to words by 
@@ -556,7 +613,7 @@
 
                         <a name="-_Language_Properties"></a><h1>Language Properties</h1>
                         <br>
-                        <img alt="" src="assets/prop.png"><br>
+                        <img alt="" src="assets/prop.png" height=550 width="700"><br>
                         <div align ="left">This screen allows various properties of the ConLang to be modified.
                             Below are explanations for each.<br>
                             <br>
@@ -576,12 +633,7 @@
                             information, etc.<br>
                             <br>
                             - Conlang Font<br>
-                            <span style="font-weight:bold; color:red">WARNING:</span><br>
-                            If you create a custom font/script, remember to uninstall old copies
-                            of the font when moving to a new version. PolyGlot cannot detect
-                            the difference between multiple different versions of your font
-                            with the same name in your OS' font folder, and having multiple
-                            versions with the same name can lead to erratic behavior.<br><br>
+                            
                             Many ConLangs use nonstandard character sets, and it is sometimes
                             easiest to simply create a font yourself and map these characters to
                             standard Unicode characters. To load a font, click the Conlang Font
@@ -592,6 +644,17 @@
                             when they load your dictionary, and see standard characters, rather
                             than your custom font.<br>
                             <br>
+                            If you would prefer to directly import your conlang font file, or if
+                            you are having versioning issues with it (see warning below), you
+                            can import them directly from the menu. Simply click Tools->Import 
+                            Font, and PolyGlot will load it without the need to install it to your 
+                            OS at all.<br><br>
+                            <span style="font-weight:bold; color:red">WARNING:</span><br>
+                            If you create a custom font/script, remember to uninstall old copies
+                            of the font when moving to a new version. PolyGlot cannot detect
+                            the difference between multiple different versions of your font
+                            with the same name in your OS' font folder, and having multiple
+                            versions with the same name can lead to erratic behavior.<br><br>
                             <span style="font-weight:bold; color:red">LINUX WARNING:</span><br>
                             If you use a font with ligatures, please use the manual load option
                             (tools->import font) to import your font. Due to a persistent bug in
@@ -599,6 +662,11 @@
                             ignored. This will be addressed in future releases of PolyGlot.
                             <br>
                             <br>
+                            - Local Font<br>
+                            This will allow you to change the font that your local language is 
+                            displayed in. In some cases, certain dicratic marks are useful to 
+                            have access to when creating romanizations or other scenarios.
+                            <br><br>
                             - Alphabetical Order<br>
                             This allows you to create a custom
                             alphabetical order for the
