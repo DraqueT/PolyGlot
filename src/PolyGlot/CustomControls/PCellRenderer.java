@@ -54,7 +54,7 @@ public class PCellRenderer implements TableCellRenderer {
                 core.getPropertiesManager().getFontCon() : 
                 core.getPropertiesManager().getFontLocal();
         fontSize = useConFont ? 
-                (core.getPropertiesManager().getFontSize()*2)/3 : // 2/3 normal display size
+                core.getPropertiesManager().getFontSize() :
                 core.getOptionsManager().getMenuFontSize();
         
         Map attr = selectedFont.getAttributes();

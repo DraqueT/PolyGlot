@@ -59,7 +59,7 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
         Double kernVal = useConFont
                 ? core.getPropertiesManager().getKerningSpace() : 0.0;
         double fontSize = useConFont ? 
-                (core.getPropertiesManager().getFontSize()*2)/3 : // 2/3 normal display size
+                core.getPropertiesManager().getFontSize() :
                 core.getOptionsManager().getMenuFontSize();
 
         Map attr = defFont.getAttributes();
