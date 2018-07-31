@@ -730,6 +730,7 @@ public class ScrMainMenu extends PFrame {
         ((PButton) btnGrammar).setActiveSelected(false);
         ((PButton) btnClasses).setActiveSelected(false);
         ((PButton) btnPhonology).setActiveSelected(false);
+        ((PButton) btnQuiz).setActiveSelected(false);
     }
     
     private void setupEasterEgg() {
@@ -776,6 +777,7 @@ public class ScrMainMenu extends PFrame {
         btnLogos = new PButton(core);
         btnProp = new PButton(core);
         btnPhonology = new PButton(core);
+        btnQuiz = new PButton(core);
         jPanel2 = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -809,7 +811,6 @@ public class ScrMainMenu extends PFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem1 = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
-        mnuQuiz = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         mnuIPAChart = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
@@ -884,6 +885,13 @@ public class ScrMainMenu extends PFrame {
             }
         });
 
+        btnQuiz.setText("Quiz Generator");
+        btnQuiz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuizActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -897,7 +905,8 @@ public class ScrMainMenu extends PFrame {
                     .addComponent(btnProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnLogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPhonology, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnPhonology, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -917,6 +926,8 @@ public class ScrMainMenu extends PFrame {
                 .addComponent(btnPhonology, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnProp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnQuiz)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1091,15 +1102,6 @@ public class ScrMainMenu extends PFrame {
             }
         });
         mnuTools.add(mnuLangStats);
-
-        mnuQuiz.setText("Quiz Generator");
-        mnuQuiz.setToolTipText("Generate customized flashcard quizzes to help increase fluency.");
-        mnuQuiz.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuQuizActionPerformed(evt);
-            }
-        });
-        mnuTools.add(mnuQuiz);
         mnuTools.add(jSeparator4);
 
         mnuIPAChart.setText("Interactive IPA Chart");
@@ -1255,10 +1257,6 @@ public class ScrMainMenu extends PFrame {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuLangStatsActionPerformed
 
-    private void mnuQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuQuizActionPerformed
-        quizHit();
-    }//GEN-LAST:event_mnuQuizActionPerformed
-
     private void mnuIPAChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIPAChartActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ipaHit();
@@ -1371,6 +1369,13 @@ public class ScrMainMenu extends PFrame {
         }
     }//GEN-LAST:event_mnuImportFontActionPerformed
 
+    private void btnQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuizActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        ScrQuizGenDialog s = new ScrQuizGenDialog(core);
+        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_btnQuizActionPerformed
+
     /**
      * @param args the command line arguments args[0] = open file path (blank if none) args[1] = working directory of
      * PolyGlot (blank if none)
@@ -1455,6 +1460,7 @@ public class ScrMainMenu extends PFrame {
     private javax.swing.JButton btnPhonology;
     private javax.swing.JButton btnPos;
     private javax.swing.JButton btnProp;
+    private javax.swing.JButton btnQuiz;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -1486,7 +1492,6 @@ public class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuOpenLocal;
     private javax.swing.JMenuItem mnuOptions;
     private javax.swing.JMenuItem mnuPublish;
-    private javax.swing.JMenuItem mnuQuiz;
     private javax.swing.JMenu mnuRecents;
     private javax.swing.JMenuItem mnuSaveAs;
     private javax.swing.JMenuItem mnuSaveLocal;
