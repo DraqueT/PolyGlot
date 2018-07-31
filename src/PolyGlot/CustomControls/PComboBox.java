@@ -104,12 +104,14 @@ public class PComboBox extends JComboBox implements MouseListener {
         }
         
         String text = getSelectedItem().toString();
-        FontMetrics fm = antiAlias.getFontMetrics(getFont());
-        Rectangle2D rec = fm.getStringBounds(text, antiAlias);
-        int stringW = (int) Math.round(rec.getWidth());
-        int stringH = (int) Math.round(rec.getHeight());
-        antiAlias.drawChars(text.toCharArray(), 0, text.length(), ((getWidth() - buttonWidth)/2) 
-                - (stringW/2), (getHeight() - 9)/2 + stringH/2);
+        if (text.length() > 0) { // 0 length text makes bounding box explode
+            FontMetrics fm = antiAlias.getFontMetrics(getFont());
+            Rectangle2D rec = fm.getStringBounds(text, antiAlias);
+            int stringW = (int) Math.round(rec.getWidth());
+            int stringH = (int) Math.round(rec.getHeight());
+            antiAlias.drawChars(text.toCharArray(), 0, text.length(), ((getWidth() - buttonWidth)/2) 
+                    - (stringW/2), (getHeight() - 9)/2 + stringH/2);
+        }
     }
     
     @Override
