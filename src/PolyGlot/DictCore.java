@@ -54,7 +54,7 @@ import org.xml.sax.SAXException;
 
 public class DictCore {
 
-    private final String version = "2.3";
+    private final String version = "2.3.1";
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
     private DeclensionManager declensionMgr;
@@ -532,5 +532,6 @@ public class DictCore {
         versionHierarchy.put("2.1", 29);
         versionHierarchy.put("2.2", 30);
         versionHierarchy.put("2.3", 31);
+        versionHierarchy.put("2.3.1", 32);
     }
 }

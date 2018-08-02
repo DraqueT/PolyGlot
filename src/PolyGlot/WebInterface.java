@@ -46,18 +46,17 @@ public class WebInterface {
     /**
      * Checks for updates to PolyGlot
      *
-     *
-     * @param curVersion current version from core
      * @return The XML document retrieved from the web
      * @throws java.lang.Exception if something goes wrong along the way.
      */
-    public static Document checkForUpdates(String curVersion) throws Exception {
+    public static Document checkForUpdates() throws Exception {
         Document ret = null;
         String xmlText = "";
         URL url;
 
         try {
             url = new URL("https://drive.google.com/uc?export=download&id=0B2RMQ7sRXResN3VwLTAwTFE0ZlE");
+            //url = new URL("https://drive.google.com/uc?export=download&id=1O1eKr8SEmhv2K9OCNwOLe0SNrSr0JE2Y"); // TEST SCENARIO
 
             try (InputStream is = url.openStream()) {
                 Scanner s = new Scanner(is);
