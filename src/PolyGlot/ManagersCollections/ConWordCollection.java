@@ -734,7 +734,7 @@ public class ConWordCollection extends DictionaryCollection {
         Element lexicon = doc.createElement(PGTUtil.lexiconXID);
         rootElement.appendChild(lexicon);
         
-        wordLoop.stream().parallel().forEach((curWord) -> {
+        wordLoop.stream().forEach((curWord) -> {
             Element wordNode = doc.createElement(PGTUtil.wordXID);
             lexicon.appendChild(wordNode);
 
