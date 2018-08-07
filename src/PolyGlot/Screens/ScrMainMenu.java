@@ -1247,11 +1247,8 @@ public class ScrMainMenu extends PFrame {
                         + "This may result in the statistics page appearing incorrectly.\n"
                         + "Please select a path to save font to, install from this location, "
                         + "and re-run the statistics option.", this);
-                if (conFontFamily.equals(PGTUtil.UnicodeFontFamilyName)) {
-                    exportFont(true);
-                } else {
-                    exportFont(false);
-                }
+
+                exportFont(false);
             }
         }
         setCursor(Cursor.getDefaultCursor());

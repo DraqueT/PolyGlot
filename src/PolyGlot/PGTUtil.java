@@ -218,13 +218,6 @@ public class PGTUtil {
     public static final String dictFileName = "PGDictionary.xml";
     public static final String conFontFileName = "conLangFont";
     public static final String localFontFileName = "localLangFont";
-    public static final String LCDFontLocation = "/PolyGlot/GeneralResources/lcdFont.ttf";
-    public static final String UnicodeFontLocation = "/PolyGlot/GeneralResources/CharisSIL-Regular.ttf";
-    public static final String UnicodeFontBoldLocation = "/PolyGlot/GeneralResources/CharisSIL-Bold.ttf";
-    public static final String UnicodeFontItalicLocation = "/PolyGlot/GeneralResources/CharisSIL-Italic.ttf";
-    public static final String UnicodeFontBoldItalicLocation = "/PolyGlot/GeneralResources/CharisSIL-BoldItalic.ttf";
-    public static final String UnicodeFontFamilyName = "Charis SIL";
-    public static final String ButtonFontLocation = "/PolyGlot/GeneralResources/buttonFont.ttf";
     public static final String logoGraphSavePath = "logoGraphs/";
     public static final String imagesSavePath = "images/";
     public static final String grammarSoundSavePath = "grammarSounds/";
