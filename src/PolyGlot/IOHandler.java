@@ -24,6 +24,7 @@ import PolyGlot.ManagersCollections.GrammarManager;
 import PolyGlot.ManagersCollections.LogoCollection;
 import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.GrammarChapNode;
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.ManagersCollections.ImageCollection;
 import PolyGlot.Nodes.ImageNode;
 import java.awt.Component;
@@ -52,6 +53,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -61,10 +63,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -494,7 +499,7 @@ public class IOHandler {
                             out.putNextEntry(new ZipEntry(PGTUtil.conFontFileName));
                         } else {
                             out.putNextEntry(new ZipEntry(PGTUtil.localFontFileName));
-                        } 
+                        }
                         int length;
 
                         while ((length = fis.read(buffer)) > 0) {
@@ -505,7 +510,11 @@ public class IOHandler {
                     }
                 }
             } else {
-                out.putNextEntry(new ZipEntry(PGTUtil.conFontFileName));
+                if (isConFont) {
+                    out.putNextEntry(new ZipEntry(PGTUtil.conFontFileName));
+                } else {
+                    out.putNextEntry(new ZipEntry(PGTUtil.localFontFileName));
+                }
                 out.write(cachedFont);
                 out.closeEntry();
             }
@@ -551,52 +560,6 @@ public class IOHandler {
                             core.getPropertiesManager().getCachedLocalFont(),
                             core,
                             false);
-
-//                    byte[] cachedFont = core.getPropertiesManager().getCachedFont();
-//
-//                    // only search for font if the cached font is null
-//                    if (cachedFont == null) {
-//                        // embed font in PGD archive if applicable
-//                        File fontFile = null;
-//                        try {
-//                            fontFile = IOHandler.getFontFile(core.getPropertiesManager().getFontCon());
-//                        } catch (Exception ex) {
-//                            writeLog += "\nerror: " + ex.getLocalizedMessage();
-//                        }
-//
-//                        if (fontFile != null) {
-//                            try {
-//                                try (FileInputStream fontInputStream = new FileInputStream(fontFile)) {
-//                                    core.getPropertiesManager().setCachedFont(IOUtils.toByteArray(fontInputStream));
-//                                }
-//                                byte[] buffer = new byte[1024];
-//                                try (FileInputStream fis = new FileInputStream(fontFile)) {
-//                                    out.putNextEntry(new ZipEntry(PGTUtil.conFontFileName));
-//                                    int length;
-//
-//                                    while ((length = fis.read(buffer)) > 0) {
-//                                        out.write(buffer, 0, length);
-//                                    }
-//
-//                                    out.closeEntry();
-//                                }
-//                            } catch (FileNotFoundException ex) {
-//                                writeLog += "\nUnable to write font to archive: " + ex.getMessage();
-//                            } catch (IOException ex) {
-//                                writeLog += "\nUnable to write font to archive: " + ex.getMessage();
-//                            }
-//                        }
-//                    } else {
-//                        try {
-//                            out.putNextEntry(new ZipEntry(PGTUtil.conFontFileName));
-//                            out.write(cachedFont);
-//                            out.closeEntry();
-//                        } catch (IOException ex) {
-//                            writeLog += "\nUnable to write font to archive: " + ex.getMessage();
-//                        }
-//                    }
-
-                    // write all logograph images to file
                     List<LogoNode> logoNodes = core.getLogoCollection().getAllLogos();
                     if (!logoNodes.isEmpty()) {
                         try {
