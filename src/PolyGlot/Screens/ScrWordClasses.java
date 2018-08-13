@@ -362,6 +362,7 @@ public class ScrWordClasses extends PFrame {
 
     private void delPropertyValue() {
         PTableModel tableModel = (PTableModel) tblValues.getModel();
+        WordClass curProp = lstProperties.getSelectedValue();
 
         if (tblValues.getCellEditor() != null) {
             tblValues.getCellEditor().stopCellEditing();
@@ -370,6 +371,12 @@ public class ScrWordClasses extends PFrame {
         int index = tblValues.getSelectedRow();
 
         if (index >= 0) {
+            tableModel.getValueAt(index, 0);
+            try {
+                curProp.deleteValue(curProp.getId());
+            } catch (Exception e) {
+                // do nothing. if it doesn't exist, deleting it is fine.
+            }
             tableModel.removeRow(index);
         }
     }

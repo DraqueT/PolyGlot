@@ -840,6 +840,22 @@ public class ConWordCollection extends DictionaryCollection {
             dm.removeDeclensionValues(word.getId(), decMap.values());
         });
     }
+    
+    /**
+     * if a value is deleted from a class, this must be called. This cycles through all 
+     * words and eliminates instances where the given class/value combo appear
+     * @param classId class from which value was deleted
+     * @param valueId value deleted
+     */
+    public void classValueDeleted(int classId, int valueId) {
+        nodeMap.values().forEach((value)->{
+            ConWord curWord = (ConWord)value;
+            
+            if(curWord.wordHasClassValue(classId, valueId)) {
+                curWord.setClassValue(classId, -1);
+            }
+        });
+    }
 
     public class WordNotExistsException extends NodeNotExistsException {
         public WordNotExistsException(String message) {

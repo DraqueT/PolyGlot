@@ -19,6 +19,7 @@
  */
 package PolyGlot.ManagersCollections;
 
+import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.PEntry;
 import PolyGlot.Nodes.WordClassValue;
@@ -39,9 +40,11 @@ import org.w3c.dom.Element;
 public class WordClassCollection extends DictionaryCollection {
 
     private List<List<PEntry<Integer, Integer>>> comboCache = null;
+    private final DictCore core;
 
-    public WordClassCollection() {
+    public WordClassCollection(DictCore _core) {
         bufferNode = new WordClass();
+        core = _core;
     }
 
     public List<WordClass> getAllWordClasses() {
@@ -282,5 +285,15 @@ public class WordClassCollection extends DictionaryCollection {
         }
 
         return ret;
+    }
+    
+    /**
+     * if a value is deleted from a class, this must be called. It tells the lexicon collection to cycle through all 
+     * words and eliminate instances where the given class/value combo appear
+     * @param classId class from which value was deleted
+     * @param valueId value deleted
+     */
+    public void classValueDeleted(int classId, int valueId) {
+        core.getWordCollection().classValueDeleted(classId, valueId);
     }
 }

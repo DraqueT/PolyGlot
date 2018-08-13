@@ -19,6 +19,7 @@
  */
 package PolyGlot.Nodes;
 
+import PolyGlot.ManagersCollections.WordClassCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import java.util.Map;
  * @author Draque Thompson
  */
 public class WordClass extends DictNode {
+    private WordClassCollection parent;
     private final Map<Integer, WordClassValue> values = new HashMap<>();
     private final List<Integer> applyTypes = new ArrayList<>();
     private boolean freeText = false;
@@ -127,15 +129,19 @@ public class WordClass extends DictNode {
     
     /**
      * Deletes value
-     * @param _id id of value to delete
+     * @param valueId id of value to delete
      * @throws Exception on id notexists
      */
-    public void deleteValue(int _id) throws Exception {
-        if (!values.containsKey(_id)) {
-            throw new Exception("Id: " + _id + " does not exist in WordProperty: " + this.value + ".");
+    public void deleteValue(int valueId) throws Exception {
+        if (!values.containsKey(valueId)) {
+            throw new Exception("Id: " + valueId + " does not exist in WordProperty: " + this.value + ".");
         }
         
-        values.remove(_id);
+        values.remove(valueId);
+        
+        if (parent != null) {
+            parent.classValueDeleted(this.id, valueId);
+        }
     }
     
     public WordClassValue getValueById(int _id) throws Exception {
@@ -200,5 +206,9 @@ public class WordClass extends DictNode {
      */
     public void setFreeText(boolean freeText) {
         this.freeText = freeText;
+    }
+    
+    public void setParent(WordClassCollection _parent) {
+        parent = _parent;
     }
 }
