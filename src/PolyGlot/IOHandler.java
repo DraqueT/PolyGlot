@@ -672,6 +672,7 @@ public class IOHandler {
     private static Font wrapFont(Font font) {
         Map attributes = font.getAttributes();
         attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
+        attributes.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
         return font.deriveFont(attributes);
     }
 
