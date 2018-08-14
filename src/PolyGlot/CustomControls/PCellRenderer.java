@@ -48,8 +48,6 @@ public class PCellRenderer implements TableCellRenderer {
     public PCellRenderer(boolean _useConFont, DictCore _core) {
         core = _core; 
         useConFont = _useConFont;
-        Double kernVal = useConFont ? 
-                core.getPropertiesManager().getKerningSpace() : 0.0;
         Font selectedFont = useConFont ? 
                 core.getPropertiesManager().getFontCon() : 
                 core.getPropertiesManager().getFontLocal();
@@ -58,8 +56,7 @@ public class PCellRenderer implements TableCellRenderer {
                 core.getOptionsManager().getMenuFontSize();
         
         Map attr = selectedFont.getAttributes();
-        
-        attr.put(TextAttribute.TRACKING, kernVal);
+
         attr.put(TextAttribute.SIZE, (float) fontSize);
         myFont = selectedFont.deriveFont(attr);
     }

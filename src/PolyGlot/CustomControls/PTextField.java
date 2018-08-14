@@ -119,20 +119,6 @@ public class PTextField extends JTextField {
         super.setBackground(b);
     }
 
-    @Override
-    public final void setFont(Font _font) {
-        Font setFont = _font;
-
-        // if conlang font and core exists, set font kerning
-        if (core != null && !overrideFont) {
-            Map attr = _font.getAttributes();
-            attr.put(TextAttribute.TRACKING, core.getPropertiesManager().getKerningSpace());
-            setFont = _font.deriveFont(attr);
-        }
-
-        super.setFont(setFont);
-    }
-
     public void setOverrideFont(boolean _overrideFont) {
         overrideFont = _overrideFont;
 

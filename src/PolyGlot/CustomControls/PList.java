@@ -53,9 +53,6 @@ public class PList extends JList {
             Font testFont = core.getPropertiesManager().getFontCon();
             ignoreRepaint = true;
             if (isConFont) {
-                Map attr = testFont.getAttributes();
-                attr.put(TextAttribute.TRACKING, core.getPropertiesManager().getKerningSpace());
-                testFont = testFont.deriveFont(attr);
                 setFont(testFont);
             } else {
                 setFont(core.getPropertiesManager().getFontLocal());

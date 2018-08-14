@@ -25,6 +25,7 @@ import PolyGlot.IOHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -334,14 +335,23 @@ public class PropertiesManager {
      * @return the fontCon
      */
     public Font getFontCon() {
+        // create copy so that initial font properties (such as kerning) is never lost
+        Font retFont = font == null ? null : font.deriveFont((float)0.0);
+        
         // under certain circumstances, this can default to 0...
         if (conFontSize == 0) {
             conFontSize = 12;
         }
 
-        return font == null ? 
+        if (retFont != null && kerningSpace != 0.0) {
+            Map attr = font.getAttributes();
+            attr.put(TextAttribute.TRACKING, kerningSpace);
+            retFont = retFont.deriveFont(attr);
+        }
+        
+        return retFont == null ? 
                 charisUnicode.deriveFont((float)core.getOptionsManager().getMenuFontSize()) : 
-                font.deriveFont(fontStyle, conFontSize);
+                retFont.deriveFont(fontStyle, conFontSize);
     }
 
     /**

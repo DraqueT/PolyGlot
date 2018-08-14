@@ -1434,6 +1434,7 @@ public class ScrMainMenu extends PFrame {
                         startProblems += "Unable to open PolyGlot main frame: \n"
                                 + ex.getMessage() + "\n"
                                 + "Please contact developer (draquemail@gmail.com) for assistance.";
+                        // ex.printStackTrace();
                     }
                 }
 
