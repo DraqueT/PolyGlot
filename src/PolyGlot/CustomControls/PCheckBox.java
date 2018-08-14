@@ -20,6 +20,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import PolyGlot.PGTUtil;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -53,44 +54,41 @@ public class PCheckBox extends JCheckBox implements MouseListener {
     
     @Override
     public void paint(Graphics g) {
-        Color selected;
-        Color backGround;
-        Color outLine;
-        Color hover = Color.black;
-        int rounding = 3;
+        boolean enabled = this.isEnabled();
+        Color selected = core.getVisualStyleManager().getCheckBoxSelected(enabled);
+        Color backGround = core.getVisualStyleManager().getCheckBoxBG(enabled);
+        Color outline = core.getVisualStyleManager().getCheckBoxOutline(enabled);
+        Color hover = core.getVisualStyleManager().getCheckBoxHover(enabled);
+        Color click = core.getVisualStyleManager().getCheckBoxClicked(enabled);
+        Color fieldBack = core.getVisualStyleManager().getCheckBoxFieldBack(enabled);
+        int rounding = PGTUtil.checkboxRounding;
         int thisHeight = this.getHeight();
         
-        if (this.isEnabled()) {
-            selected = Color.BLACK;
-            backGround = Color.white;
-            outLine = Color.BLACK;
-        } else {
-            selected = Color.gray;
-            backGround = Color.lightGray;
-            outLine = Color.gray;
-        }
-        
         if (this.hasFocus()) {
-            g.setColor(Color.lightGray);
+            g.setColor(selected);
             g.drawRect(0, 0, this.getWidth() - 1, thisHeight - 1);
         }
         
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        if (this.isEnabled() && mouseOver) {
-            g.setColor(hover);
-            g.drawRoundRect(3, 3, thisHeight - 6, thisHeight - 6, rounding, rounding);
+        if (enabled) {
+            if (mouseOver) {
+                g.setColor(hover);
+                g.drawRoundRect(3, 3, thisHeight - 6, thisHeight - 6, rounding, rounding);
+            }
+            if (clicked) {
+                backGround = click;
+            }            
         }
         
-        if (this.isEnabled() && clicked) {
-            backGround = Color.lightGray;
-        }
-        
-        g.setColor(outLine);
+        g.setColor(outline);
         g.drawRoundRect(4, 4, thisHeight - 8, thisHeight - 8, rounding, rounding);
         
         g.setColor(backGround);
         g.drawRoundRect(5, 5, thisHeight - 10, thisHeight - 10, rounding, rounding);
+        
+        g.setColor(fieldBack);
+        g.fillRect(6, 6, thisHeight - 11, thisHeight - 11);
         
         g.setColor(selected);
         
@@ -98,6 +96,7 @@ public class PCheckBox extends JCheckBox implements MouseListener {
             g.fillRect(7, 7, thisHeight - 14, thisHeight - 14);
         }
         
+        g.setColor(outline);
         char[] text = getText().toCharArray();
         FontMetrics fm = g.getFontMetrics(getFont());
         Rectangle2D rec = fm.getStringBounds(getText(), g);

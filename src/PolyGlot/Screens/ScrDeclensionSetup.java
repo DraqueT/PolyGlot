@@ -822,19 +822,6 @@ public final class ScrDeclensionSetup extends PDialog {
     }//GEN-LAST:event_btnClearDepActionPerformed
 
     public static ScrDeclensionSetup run(final DictCore _core, final Integer _typeId) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScrDeclensionSetup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        //</editor-fold>
         ScrDeclensionSetup s = new ScrDeclensionSetup(_core, _typeId);
 
         s.setModal(true);

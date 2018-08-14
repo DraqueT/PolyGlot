@@ -52,6 +52,7 @@ public final class ScrOptions extends PDialog {
         Double fontSize = Double.parseDouble(txtTextFontSize.getText());
         OptionsManager options = core.getOptionsManager();
         options.setAnimateWindows(chkResize.isSelected());
+        options.setNightMode(chkNightMode.isSelected());
         options.setMenuFontSize(fontSize);
         ((ScrMainMenu)core.getRootWindow()).changeToLexicon();
 
@@ -66,6 +67,7 @@ public final class ScrOptions extends PDialog {
                         core, PTextFieldFilter.FilterType.Double));
 
         chkResize.setSelected(core.getOptionsManager().isAnimateWindows());
+        chkNightMode.setSelected(core.getOptionsManager().isNightMode());
         txtTextFontSize.setText(Double.toString(core.getOptionsManager().getMenuFontSize()));
     }
 
@@ -82,6 +84,7 @@ public final class ScrOptions extends PDialog {
         chkResize = new PCheckBox(core);
         jLabel1 = new PLabel("", core);
         txtTextFontSize = new javax.swing.JTextField();
+        chkNightMode = new PCheckBox(core);
         btnOk = new PButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -97,18 +100,21 @@ public final class ScrOptions extends PDialog {
 
         jLabel1.setText("Default Font Size");
 
+        chkNightMode.setText("Night Mode");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chkResize)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTextFontSize)))
+                        .addComponent(txtTextFontSize, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(chkNightMode))
                 .addContainerGap(188, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -116,11 +122,13 @@ public final class ScrOptions extends PDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(chkResize)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkNightMode)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtTextFontSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(179, Short.MAX_VALUE))
+                .addContainerGap(156, Short.MAX_VALUE))
         );
 
         btnOk.setText("OK");
@@ -165,6 +173,7 @@ public final class ScrOptions extends PDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;
+    private javax.swing.JCheckBox chkNightMode;
     private javax.swing.JCheckBox chkResize;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

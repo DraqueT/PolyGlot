@@ -406,6 +406,9 @@ public class IOHandler {
                     case PGTUtil.optionsMenuFontSize:
                         core.getOptionsManager().setMenuFontSize(Double.parseDouble(bothVal[1]));
                         break;
+                    case PGTUtil.optionsNightMode:
+                        core.getOptionsManager().setNightMode(bothVal[1].equals(PGTUtil.True));
+                        break;
                     case "\n":
                         break;
                     default:
@@ -1217,10 +1220,15 @@ public class IOHandler {
             }
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.optionsAutoResize + "=" + (core.getOptionsManager().isAnimateWindows() ? PGTUtil.True : PGTUtil.False);
+            nextLine = PGTUtil.optionsAutoResize + "=" 
+                    + (core.getOptionsManager().isAnimateWindows() ? PGTUtil.True : PGTUtil.False);
             f0.write(nextLine + newLine);
 
             nextLine = PGTUtil.optionsMenuFontSize + "=" + Double.toString(core.getOptionsManager().getMenuFontSize());
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.optionsNightMode + "="
+                    + (core.getOptionsManager().isNightMode() ? PGTUtil.True : PGTUtil.False);
             f0.write(nextLine + newLine);
         }
     }

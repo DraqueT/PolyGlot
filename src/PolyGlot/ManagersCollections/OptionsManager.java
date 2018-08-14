@@ -40,6 +40,7 @@ import javax.swing.UIManager;
 public class OptionsManager {
 
     private boolean animateWindows = false;
+    private boolean nightMode = false;
     private List<String> lastFiles = new ArrayList<>();
     private final Map<String, Point> screenPos = new HashMap<>();
     private final Map<String, Dimension> screenSize = new HashMap<>();
@@ -203,5 +204,13 @@ public class OptionsManager {
      */
     public void setAnimateWindows(boolean animateWindows) {
         this.animateWindows = animateWindows;
+    }
+
+    public boolean isNightMode() {
+        return nightMode;
+    }
+
+    public void setNightMode(boolean nightMode) {
+        this.nightMode = nightMode;
     }
 }

@@ -35,6 +35,7 @@ import PolyGlot.ManagersCollections.EtymologyManager;
 import PolyGlot.ManagersCollections.ImageCollection;
 import PolyGlot.ManagersCollections.OptionsManager;
 import PolyGlot.ManagersCollections.RomanizationManager;
+import PolyGlot.ManagersCollections.VisualStyleManager;
 import PolyGlot.ManagersCollections.WordClassCollection;
 import PolyGlot.Screens.ScrMainMenu;
 import java.awt.Color;
@@ -68,6 +69,7 @@ public class DictCore {
     private WordClassCollection wordPropCollection;
     private ImageCollection imageCollection;
     private EtymologyManager etymologyManager;
+    private VisualStyleManager visualStyleManager;
     private PFrame rootWindow;
     private Object clipBoard;
     private boolean curLoading = false;
@@ -89,9 +91,10 @@ public class DictCore {
             logoCollection = new LogoCollection(this);
             grammarManager = new GrammarManager();
             optionsManager = new OptionsManager(this);
-            wordPropCollection = new WordClassCollection();
+            wordPropCollection = new WordClassCollection(this);
             imageCollection = new ImageCollection();
             etymologyManager = new EtymologyManager(this);
+            visualStyleManager = new VisualStyleManager(this);
 
             PAlphaMap alphaOrder = propertiesManager.getAlphaOrder();
 
@@ -141,6 +144,10 @@ public class DictCore {
 
     public ImageCollection getImageCollection() {
         return imageCollection;
+    }
+    
+    public VisualStyleManager getVisualStyleManager() {
+        return visualStyleManager;
     }
 
     /**

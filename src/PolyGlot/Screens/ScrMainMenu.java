@@ -1376,16 +1376,7 @@ public class ScrMainMenu extends PFrame {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnQuizActionPerformed
 
-    /**
-     * @param args the command line arguments args[0] = open file path (blank if none) args[1] = working directory of
-     * PolyGlot (blank if none)
-     */
-    public static void main(final String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    private static void setupNumbus() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -1396,11 +1387,15 @@ public class ScrMainMenu extends PFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ScrMainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
+    }
+    
+    /**
+     * @param args the command line arguments args[0] = open file path (blank if none) args[1] = working directory of
+     * PolyGlot (blank if none)
+     */
+    public static void main(final String args[]) {
+        setupNumbus();
 
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
