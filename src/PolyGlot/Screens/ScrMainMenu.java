@@ -348,10 +348,15 @@ public class ScrMainMenu extends PFrame {
     private boolean saveFileAs() {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Save Dictionary");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd", "xml");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        chooser.setCurrentDirectory(core.getPropertiesManager().getCannonicalDirectory());
+        if (curFileName.isEmpty()) {
+            chooser.setCurrentDirectory(core.getPropertiesManager().getCannonicalDirectory());
+        } else {
+            chooser.setCurrentDirectory(IOHandler.getDirectoryFromPath(curFileName));
+            chooser.setSelectedFile(IOHandler.getFileFromPath(curFileName));
+        }
 
         String fileName;
 
@@ -532,7 +537,11 @@ public class ScrMainMenu extends PFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
         chooser.setFileFilter(filter);
         String fileName;
-        chooser.setCurrentDirectory(core.getPropertiesManager().getCannonicalDirectory());
+        if (curFileName.isEmpty()) {
+            chooser.setCurrentDirectory(core.getPropertiesManager().getCannonicalDirectory());
+        } else {
+            chooser.setCurrentDirectory(IOHandler.getDirectoryFromPath(curFileName));
+        }
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();

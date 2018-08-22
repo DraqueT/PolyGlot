@@ -1383,4 +1383,34 @@ public class IOHandler {
 
         return ret;
     }
+    
+    /**
+     * Returns deepest directory from given path (truncating non-directory files from the end)
+     * @param path path to fetch directory from
+     * @return File representing directory, null if unable to capture directory path for any reason
+     */
+    public static File getDirectoryFromPath(String path) {
+        File ret = new File(path);
+        
+        if (ret.exists()) {
+            while (ret != null && ret.exists() && !ret.isDirectory()) {
+                ret = ret.getParentFile();
+            }
+        }
+        
+        if (!ret.exists()) {
+            ret = null;
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Wraps File so that I can avoid importing it elsewhere in code
+     * @param path path to file
+     * @return file
+     */
+    public static File getFileFromPath(String path) {
+        return new File(path);
+    }
 }
