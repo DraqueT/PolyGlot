@@ -1521,12 +1521,6 @@ public class ScrMainMenu extends PFrame {
     }
 
     @Override
-    public boolean thisOrChildrenFocused() {
-        // TODO: Ehhhh...... maybe just remove this functionality altogether with the 2.0 revision
-        return false;
-    }
-
-    @Override
     public void addBindingToComponent(JComponent c) {
         // none for this window
     }

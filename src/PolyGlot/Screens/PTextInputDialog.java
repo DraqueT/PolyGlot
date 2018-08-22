@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, DThompson
+ * Copyright (c) 2017-2018, DThompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -191,11 +191,6 @@ public final class PTextInputDialog extends PDialog {
     @Override
     public void updateAllValues(DictCore _core) {
         // unneccessary in this dialog
-    }
-
-    @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isActive();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

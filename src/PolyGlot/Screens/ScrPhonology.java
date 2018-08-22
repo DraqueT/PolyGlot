@@ -1162,11 +1162,6 @@ public class ScrPhonology extends PFrame {
     }
 
     @Override
-    public boolean thisOrChildrenFocused() {
-        return this.hasFocus();
-    }
-
-    @Override
     public void addBindingToComponent(JComponent c) {
         // no bindings to add
     }

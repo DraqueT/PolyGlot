@@ -621,11 +621,6 @@ public class ScrWordClasses extends PFrame {
         populatePropertyValues();        
     }
 
-    @Override
-    public boolean thisOrChildrenFocused() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddProp;
     private javax.swing.JButton btnAddValue;

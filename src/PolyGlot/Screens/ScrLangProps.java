@@ -122,11 +122,6 @@ public class ScrLangProps extends PFrame {
         saveAllProps();
     }
 
-    @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isFocusOwner();
-    }
-
     private void populateProperties() {
         PropertiesManager prop = core.getPropertiesManager();
 

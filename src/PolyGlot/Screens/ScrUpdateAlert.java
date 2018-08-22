@@ -322,11 +322,6 @@ public class ScrUpdateAlert extends PDialog {
     }
     
     @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isFocusOwner();
-    }
-    
-    @Override
     public final void dispose() {
         super.dispose();
     }

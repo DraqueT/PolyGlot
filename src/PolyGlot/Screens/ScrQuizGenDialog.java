@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017, draque.thompson
+ * Copyright (c) 2016-2018, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -388,11 +388,6 @@ public class ScrQuizGenDialog extends PFrame {
     public void updateAllValues(DictCore _core) {
         core = _core;
         setupScreen();
-    }
-
-    @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isFocused();
     }
 
     @Override

@@ -122,11 +122,6 @@ public class ScrDeclensionGenSetup extends PDialog {
         }
     }
 
-    @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isFocusOwner();
-    }
-
     /**
      * only allows the form to close on success, displays user prompt otherwise
      *

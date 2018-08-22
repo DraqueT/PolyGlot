@@ -123,11 +123,6 @@ public final class ScrReversion extends PDialog {
         // do nothing
     }
 
-    @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isFocusOwner();
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;

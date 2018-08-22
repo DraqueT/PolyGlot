@@ -62,12 +62,7 @@ public class ScrExcelImport extends PDialog {
     public final void setModal(boolean _modal) {
         super.setModal(_modal);
     }
-    
-    @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isFocusOwner();
-    }
-    
+ 
     @Override
     public void updateAllValues(DictCore _core) {
         // does nothing

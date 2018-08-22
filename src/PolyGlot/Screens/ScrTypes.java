@@ -85,11 +85,6 @@ public class ScrTypes extends PFrame {
     }
 
     @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isFocusOwner();
-    }
-
-    @Override
     public void updateAllValues(DictCore _core) {
         if (!ignoreUpdate) {
             ignoreUpdate = true;

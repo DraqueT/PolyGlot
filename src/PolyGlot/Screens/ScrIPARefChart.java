@@ -283,12 +283,6 @@ public class ScrIPARefChart extends PFrame {
     }
 
     @Override
-    public boolean thisOrChildrenFocused() {
-        // no children windows possible from here
-        return this.isFocusOwner();
-    }
-
-    @Override
     public void addBindingToComponent(JComponent c) {
         // nothing to bind in this window
     }

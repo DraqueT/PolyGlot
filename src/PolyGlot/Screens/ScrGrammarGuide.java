@@ -163,11 +163,6 @@ public class ScrGrammarGuide extends PFrame {
     }
 
     @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isFocusOwner();
-    }
-
-    @Override
     public void updateAllValues(DictCore _core) {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
         if (core != _core) {

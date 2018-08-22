@@ -208,11 +208,6 @@ public class ScrDeclensions extends PDialog {
     }
     
     @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isFocusOwner();
-    }
-
-    @Override
     public void setVisible(boolean visible) {
 
         if (typeId == -1) {

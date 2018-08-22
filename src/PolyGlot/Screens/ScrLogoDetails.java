@@ -138,13 +138,6 @@ public class ScrLogoDetails extends PFrame {
     }
 
     @Override
-    public boolean thisOrChildrenFocused() {
-        boolean ret = this.isFocusOwner();
-        ret = ret || (quickView != null && quickView.thisOrChildrenFocused());
-        return ret;
-    }
-
-    @Override
     protected void setupKeyStrokes() {
         addBindingsToPanelComponents(this.getRootPane());
         super.setupKeyStrokes();

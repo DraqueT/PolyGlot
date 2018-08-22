@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, draque.thompson
+ * Copyright (c) 2017-2018, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -200,12 +200,6 @@ public final class ScrOptions extends PDialog {
     public void updateAllValues(DictCore _core) {
         // does nothing in this dialog
     }
-
-    @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isFocused();
-    }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;

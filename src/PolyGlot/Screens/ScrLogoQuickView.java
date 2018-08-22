@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -128,13 +128,6 @@ public class ScrLogoQuickView extends PFrame {
     @Override
     public void saveAllValues() {
         // not needed here
-    }
-    
-    @Override
-    public boolean thisOrChildrenFocused() {
-        boolean ret = this.isFocusOwner();
-        ret = ret || (logoFinder != null && logoFinder.thisOrChildrenFocused());
-        return ret;
     }
     
     @Override

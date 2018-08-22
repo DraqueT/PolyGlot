@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2017, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -176,11 +176,6 @@ public class ScrAbout extends PDialog {
     @Override
     public void updateAllValues(DictCore _core) {
         // No values to update
-    }
-
-    @Override
-    public boolean thisOrChildrenFocused() {
-        return this.isFocusOwner();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

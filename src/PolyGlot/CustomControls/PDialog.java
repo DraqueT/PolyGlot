@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 - 2017, Draque Thompson - draquemail@gmail.com
+ * Copyright (c) 2014 - 2018, Draque Thompson - draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -91,12 +91,6 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
      * @param _core current dictionary core
      */
     public abstract void updateAllValues(DictCore _core);
-    
-    /**
-     * Tests whether given window or any child windows posess focus
-     * @return true if focus held, false otherwise
-     */
-    public abstract boolean thisOrChildrenFocused();
     
     /**
      * Sets window visibly to the right of the window handed in
