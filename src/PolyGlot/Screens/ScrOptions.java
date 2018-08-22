@@ -50,6 +50,10 @@ public final class ScrOptions extends PDialog {
         initComponents();
         setOptions();
         final ScrOptions optionsParent = this;
+        
+        // TODO: UNDO POST 2.3.3 RELEASE
+        chkNightMode.setVisible(false);
+        
         txtRevisionNumbers.setInputVerifier(new InputVerifier() {
             @Override
             public boolean verify(JComponent input) {
