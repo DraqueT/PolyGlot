@@ -85,12 +85,13 @@
                             <a href="#PRINT_PDF">7---- Publishing to PDF</a><br>
                             <a href="#IPA_WINDOW">8---- Interactive IPA Window</a><br>
                             <a href="#QUIZ">9---- Quiz Generation Tool</a><br>
-                            <a href="#LODENKUR_-_an_example_language">10---- Grammar Guide</a><br>
-                            <a href="#NEW_FEATURES">11---- New Features</a><br>
-                            <a href="#UPCOMING_FEATURES">12---- Upcoming Features</a><br>
-                            <a href="#KNOWN_BUGS">13---- Known Bugs</a><a href="#ADDITIONAL_RESOURCES"><br>
-                                14---- Additional Resources</a><br>
-                            <a href="#COPYRIGHT_AND_CONTACT_INFO">14---- Copyright and contact info</a><br>
+                            <a href="#LANG_REVERSION">10---- Language Reversion (Disaster Recovery)</a><br>
+                            <a href="#LODENKUR_-_an_example_language">11---- Grammar Guide</a><br>
+                            <a href="#NEW_FEATURES">12---- New Features</a><br>
+                            <a href="#UPCOMING_FEATURES">13---- Upcoming Features</a><br>
+                            <a href="#KNOWN_BUGS">14---- Known Bugs</a><a href="#ADDITIONAL_RESOURCES"><br>
+                                15---- Additional Resources</a><br>
+                            <a href="#COPYRIGHT_AND_CONTACT_INFO">16---- Copyright and contact info</a><br>
                         </div>
 
                         <h1><a name="WELCOMEOVERVIEW"></a>WELCOME/OVERVIEW</h1><br>
@@ -1224,8 +1225,33 @@
 
 
 
-
-                                <a name="LODENKUR_-_an_example_language"></a><h1> Grammar Guide</h1>
+                                <a name="LANG_REVERSION"></a><h1>Language Reversion</h1>
+                                <br>
+                                The language reversion tool allows you to roll your language file 
+                                back to a previously saved state. This can be enormously helpful in 
+                                the case of disaster recovery, or if you accidentally made/saved a 
+                                bulk operation on your lexicon.<br><br>
+                                <img src="assets/revert01.png" alt=""><br>
+                                The reversion menu can be accessed by clicking Tools->Revert Language, 
+                                as shown above.<br><br>
+                                <img src="assets/revert02.png" alt=""><br>
+                                In the reversion menu, you will see prior saves (limit of prior saves
+                                retained found in options menu, with 0 as infinite). They are listed
+                                in in descending order of save time/date. To revert to any given 
+                                state, select it and click the Revert To button.<br><br>
+                                If you modify and save from this point, a <i>new</i> reversion point 
+                                will be created rather than saving over the existing one you loaded. 
+                                Once a reversion point is created, it is fixed in time.<br><br>
+                                <img src="assets/revert03.png" alt=""><br>
+                                PolyGlot defaults to saving 10 prior save versions. Versions older 
+                                than this will be discarded. You can increase or decrease this number
+                                in the PolyGlot options menu (Tools->Options). The value 0 means that
+                                PolyGlot will not limit the number of saved versions. Take care when
+                                setting the value to 0. If you have a large language file and save
+                                frequently, this can make the size of your language save file balloon
+                                quickly.
+                                
+                                <a name="LODENKUR_-_an_example_language"></a><h1>Grammar Guide</h1>
                                 <br>
                                 The Grammar Guide allows you to organize gramatical rules of your
                                 language in easy to read and traverse chapters/sections. It it a
