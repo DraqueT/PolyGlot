@@ -67,7 +67,7 @@ public class PropertiesManager {
     private final DictCore core;
     private Double kerningSpace = 0.0;
 
-    public PropertiesManager(DictCore _core) throws Exception {
+    public PropertiesManager(DictCore _core) throws IOException {
         alphaOrder = new PAlphaMap();
         core = _core;
 

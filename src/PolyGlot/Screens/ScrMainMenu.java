@@ -287,20 +287,20 @@ public class ScrMainMenu extends PFrame {
      * @return true if file saved, false otherwise
      */
     public boolean saveFile() {
-        if (curFileName.length() == 0) {
+        if (getCurFileName().length() == 0) {
             saveFileAs();
         }
 
         // if it still is blank, the user has hit cancel on the save as dialog
-        if (curFileName.length() == 0) {
+        if (getCurFileName().length() == 0) {
             return false;
         }
 
-        pushRecentFile(curFileName);
+        pushRecentFile(getCurFileName());
         populateRecentOpened();
         saveAllValues();
         genTitle();
-        return doWrite(curFileName);
+        return doWrite(getCurFileName());
     }
 
     /**
@@ -320,14 +320,14 @@ public class ScrMainMenu extends PFrame {
         } catch (IOException | ParserConfigurationException
                 | TransformerException e) {
             InfoBox.error("Save Error", "Unable to save to file: "
-                    + curFileName + "\n\n" + e.getMessage(), core.getRootWindow());
+                    + getCurFileName() + "\n\n" + e.getMessage(), core.getRootWindow());
         }
 
         setCursor(Cursor.getDefaultCursor());
 
         if (cleanSave) {
             InfoBox.info("Success", "Dictionary saved to: "
-                    + curFileName + ".", core.getRootWindow());
+                    + getCurFileName() + ".", core.getRootWindow());
         }
 
         return cleanSave;
@@ -506,8 +506,8 @@ public class ScrMainMenu extends PFrame {
 
             if (langName.length() != 0) {
                 title += " : " + langName;
-            } else if (curFileName.length() != 0) {
-                title += " : " + curFileName;
+            } else if (getCurFileName().length() != 0) {
+                title += " : " + getCurFileName();
             }
         }
 
@@ -630,7 +630,7 @@ public class ScrMainMenu extends PFrame {
             if (exportCharis) {
                 IOHandler.exportCharisFont(fileName);
             } else {
-                IOHandler.exportFont(fileName, curFileName);
+                IOHandler.exportFont(fileName, getCurFileName());
             }
             InfoBox.info("Export Success", "Font exported to: " + fileName, core.getRootWindow());
         } catch (IOException e) {
@@ -815,6 +815,8 @@ public class ScrMainMenu extends PFrame {
         mnuIPAChart = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         mnuOptions = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
+        mnuRevertion = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
         mnuAbout = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
@@ -1120,6 +1122,16 @@ public class ScrMainMenu extends PFrame {
             }
         });
         mnuTools.add(mnuOptions);
+        mnuTools.add(jSeparator7);
+
+        mnuRevertion.setText("Revert Language");
+        mnuRevertion.setToolTipText("Allows reversion to an earlier save state of your language file.");
+        mnuRevertion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuRevertionActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuRevertion);
 
         jMenuBar1.add(mnuTools);
 
@@ -1376,6 +1388,10 @@ public class ScrMainMenu extends PFrame {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnQuizActionPerformed
 
+    private void mnuRevertionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRevertionActionPerformed
+        new ScrReversion(core).setVisible(true);
+    }//GEN-LAST:event_mnuRevertionActionPerformed
+
     private static void setupNumbus() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -1474,6 +1490,7 @@ public class ScrMainMenu extends PFrame {
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
+    private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JMenuItem mnuAbout;
     private javax.swing.JMenuItem mnuChkUpdate;
     private javax.swing.JMenuItem mnuExit;
@@ -1489,6 +1506,7 @@ public class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuOptions;
     private javax.swing.JMenuItem mnuPublish;
     private javax.swing.JMenu mnuRecents;
+    private javax.swing.JMenuItem mnuRevertion;
     private javax.swing.JMenuItem mnuSaveAs;
     private javax.swing.JMenuItem mnuSaveLocal;
     private javax.swing.JMenu mnuTools;
@@ -1499,6 +1517,7 @@ public class ScrMainMenu extends PFrame {
         if (curWindow != null) {
             curWindow.updateAllValues(_core);
         }
+        core = _core;
     }
 
     @Override
@@ -1525,5 +1544,9 @@ public class ScrMainMenu extends PFrame {
     @Override
     public boolean canClose() {
         return true;
+    }
+    
+    public String getCurFileName() {
+        return curFileName;
     }
 }

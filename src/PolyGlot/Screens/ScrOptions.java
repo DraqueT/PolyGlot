@@ -19,6 +19,7 @@
  */
 package PolyGlot.Screens;
 
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PDialog;
@@ -26,6 +27,9 @@ import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PTextFieldFilter;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.OptionsManager;
+import javax.swing.InputVerifier;
+import javax.swing.JComponent;
+import javax.swing.JTextField;
 import javax.swing.text.PlainDocument;
 
 /**
@@ -45,15 +49,31 @@ public final class ScrOptions extends PDialog {
         firstVisible = false;
         initComponents();
         setOptions();
+        final ScrOptions optionsParent = this;
+        txtRevisionNumbers.setInputVerifier(new InputVerifier() {
+            @Override
+            public boolean verify(JComponent input) {
+                try {
+                    Integer.parseInt(((JTextField)input).getText());
+                } catch (NumberFormatException e) {
+                    InfoBox.warning("Bad Input", "Please provide an integer (number) value.", optionsParent);
+                    return false;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
     public void dispose() {
         Double fontSize = Double.parseDouble(txtTextFontSize.getText());
+        int maxReversion = Integer.parseInt(txtRevisionNumbers.getText());
+        maxReversion = maxReversion > -1 ? maxReversion : 1;
         OptionsManager options = core.getOptionsManager();
         options.setAnimateWindows(chkResize.isSelected());
         options.setNightMode(chkNightMode.isSelected());
         options.setMenuFontSize(fontSize);
+        options.setMaxReversionCount(maxReversion);
         ((ScrMainMenu)core.getRootWindow()).changeToLexicon();
 
         super.dispose();
@@ -69,6 +89,7 @@ public final class ScrOptions extends PDialog {
         chkResize.setSelected(core.getOptionsManager().isAnimateWindows());
         chkNightMode.setSelected(core.getOptionsManager().isNightMode());
         txtTextFontSize.setText(Double.toString(core.getOptionsManager().getMenuFontSize()));
+        txtRevisionNumbers.setText(Integer.toString(core.getOptionsManager().getMaxReversionCount()));
     }
 
     /**
@@ -85,6 +106,8 @@ public final class ScrOptions extends PDialog {
         jLabel1 = new PLabel("", core);
         txtTextFontSize = new javax.swing.JTextField();
         chkNightMode = new PCheckBox(core);
+        jLabel2 = new javax.swing.JLabel();
+        txtRevisionNumbers = new javax.swing.JTextField();
         btnOk = new PButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -102,6 +125,11 @@ public final class ScrOptions extends PDialog {
 
         chkNightMode.setText("Night Mode");
 
+        jLabel2.setText("Revision States Saved");
+        jLabel2.setToolTipText("The max number of prior versions to save in your PGD files. 0 is unlimited (can lead to large files ).");
+
+        txtRevisionNumbers.setToolTipText("The max number of prior versions to save in your PGD files. 0 is unlimited (can lead to large files ).");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -114,8 +142,12 @@ public final class ScrOptions extends PDialog {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtTextFontSize, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(chkNightMode))
-                .addContainerGap(188, Short.MAX_VALUE))
+                    .addComponent(chkNightMode)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtRevisionNumbers, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,7 +160,11 @@ public final class ScrOptions extends PDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtTextFontSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(156, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtRevisionNumbers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(124, Short.MAX_VALUE))
         );
 
         btnOk.setText("OK");
@@ -176,7 +212,9 @@ public final class ScrOptions extends PDialog {
     private javax.swing.JCheckBox chkNightMode;
     private javax.swing.JCheckBox chkResize;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField txtRevisionNumbers;
     private javax.swing.JTextField txtTextFontSize;
     // End of variables declaration//GEN-END:variables
 }

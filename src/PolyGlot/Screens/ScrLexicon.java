@@ -262,13 +262,15 @@ public final class ScrLexicon extends PFrame {
 
             if (core != _core) {
                 core = _core;
-                lstLexicon.setModel(new DefaultListModel());
-                setDefaultValues();
-                populateLexicon();
-                lstLexicon.setSelectedIndex(0);
-                setupComboBoxesSwing();
-                populateProperties();
             }
+            
+            lstLexicon.setModel(new DefaultListModel());
+            setDefaultValues();
+            populateLexicon();
+            lstLexicon.setSelectedIndex(0);
+            setupComboBoxesSwing();
+            populateProperties();
+                
             Runnable fxSetup = () -> {
                 setupComboBoxesFX();
                 setFonts();
@@ -658,18 +660,28 @@ public final class ScrLexicon extends PFrame {
     
     /**
      * Tests whether filter is currently empty
+     * If testing fields are null, they aren't yet initialized, and therfore must be blank
      * @return 
      */
     private boolean isFilterBlank() {
-        int filterType = cmbTypeSrc.getValue().equals(defTypeValue)
-                ? 0 : ((TypeNode) cmbTypeSrc.getValue()).getId();
+        boolean ret = true;
+        if (txtConSrc != null 
+                && txtLocalSrc != null 
+                && txtProcSrc != null 
+                && cmbRootSrc != null 
+                && cmbRootSrc.getValue() != null) {
+            int filterType = cmbTypeSrc.getValue().equals(defTypeValue)
+                    ? 0 : ((TypeNode) cmbTypeSrc.getValue()).getId();
+
+            ret = txtConSrc.getText().length() == 0
+                    && txtDefSrc.getText().length() == 0
+                    && txtLocalSrc.getText().length() == 0
+                    && txtProcSrc.getText().length() == 0
+                    && filterType == 0
+                    && cmbRootSrc.getValue().toString().equals(defRootValue.getValue());
+        }
         
-        return txtConSrc.getText().length() == 0
-                && txtDefSrc.getText().length() == 0
-                && txtLocalSrc.getText().length() == 0
-                && txtProcSrc.getText().length() == 0
-                && filterType == 0
-                && cmbRootSrc.getValue().toString().equals(defRootValue.getValue());
+        return ret;
     }
 
     /**

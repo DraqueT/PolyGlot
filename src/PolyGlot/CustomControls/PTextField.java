@@ -341,7 +341,7 @@ public class PTextField extends JTextField {
         } catch (Exception e) {
             InfoBox.error("Set text error", "Could not set text component: " 
                     + e.getLocalizedMessage(), core.getRootWindow());
-            //e.printStackTrace();
+            e.printStackTrace();
         }
 
         if (isDefaultText() && !defText.equals("")) {

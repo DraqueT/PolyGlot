@@ -26,7 +26,9 @@ import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.ManagersCollections.ImageCollection;
+import PolyGlot.ManagersCollections.ReversionManager;
 import PolyGlot.Nodes.ImageNode;
+import PolyGlot.Nodes.ReversionNode;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -40,6 +42,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -53,7 +56,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -61,15 +63,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -294,6 +294,21 @@ public class IOHandler {
 
         return ret;
     }
+    
+    /**
+     * Creates a custhandler object from a reversion byte array of a language state
+     * @param byteArray byte array containing XML of language state
+     * @param _core dictionary core
+     * @return new custhandler class
+     * @throws IOException on parse error
+     */
+    public static CustHandler getHandlerFromByteArray(byte[] byteArray, DictCore _core) throws IOException {
+        try {
+            return CustHandlerFactory.getCustHandler(new ByteArrayInputStream(byteArray), _core);
+        } catch (Exception e) {
+            throw new IOException(e.getLocalizedMessage());
+        }
+    }
 
     /**
      * Opens an image via GUI and returns as buffered image Returns null if user
@@ -409,6 +424,9 @@ public class IOHandler {
                     case PGTUtil.optionsNightMode:
                         core.getOptionsManager().setNightMode(bothVal[1].equals(PGTUtil.True));
                         break;
+                    case PGTUtil.optionsReversionsCount:
+                        core.getOptionsManager().setMaxReversionCount(Integer.parseInt(bothVal[1]));
+                        break;
                     case "\n":
                         break;
                     default:
@@ -430,21 +448,24 @@ public class IOHandler {
      */
     public static void parseHandler(String _fileName, CustHandler _handler)
             throws IOException, ParserConfigurationException, SAXException {
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        SAXParser saxParser = factory.newSAXParser();
-
-        if (IOHandler.isFileZipArchive(_fileName)) {
-            try (ZipFile zipFile = new ZipFile(_fileName)) {
-                ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.dictFileName);
-                try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
-                    saxParser.parse(ioStream, _handler);
-                }
-            }
-        } else {
-            try (InputStream ioStream = new FileInputStream(_fileName)) {
-                saxParser.parse(ioStream, _handler);
+        try (ZipFile zipFile = new ZipFile(_fileName)) {
+            ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.dictFileName);
+            try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
+                parseHandlerInternal(ioStream, _handler);
             }
         }
+    }
+    
+    public static void parseHandlerByteArray(byte[] reversion, CustHandler _handler) 
+            throws ParserConfigurationException, IOException, SAXException {
+        parseHandlerInternal(new ByteArrayInputStream(reversion), _handler);
+    }
+    
+    private static void parseHandlerInternal(InputStream stream, CustHandler _handler) 
+            throws ParserConfigurationException, SAXException, IOException {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser saxParser = factory.newSAXParser();
+        saxParser.parse(stream, _handler);
     }
 
     /**
@@ -527,7 +548,8 @@ public class IOHandler {
         return writeLog;
     }
     
-    public static void writeFile(String _fileName, Document doc, DictCore core) throws IOException, TransformerException {
+    public static void writeFile(String _fileName, Document doc, DictCore core, Instant saveTime) 
+            throws IOException, TransformerException {
         File finalFile = new File(_fileName);
         String writeLog = "";
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -537,8 +559,8 @@ public class IOHandler {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
             StringBuilder sb = new StringBuilder();
-
             sb.append(writer.getBuffer().toString());
+            byte[] xmlData = sb.toString().getBytes("UTF-8");
 
             // save file to temp location initially.
             final File f = File.createTempFile(_fileName, null);
@@ -547,8 +569,7 @@ public class IOHandler {
                     ZipEntry e = new ZipEntry(PGTUtil.dictFileName);
                     out.putNextEntry(e);
 
-                    byte[] data = sb.toString().getBytes("UTF-8");
-                    out.write(data, 0, data.length);
+                    out.write(xmlData, 0, xmlData.length);
 
                     out.closeEntry();
                     
@@ -563,75 +584,11 @@ public class IOHandler {
                             core.getPropertiesManager().getCachedLocalFont(),
                             core,
                             false);
-                    List<LogoNode> logoNodes = core.getLogoCollection().getAllLogos();
-                    if (!logoNodes.isEmpty()) {
-                        try {
-                            out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath));
-                            for (LogoNode curNode : logoNodes) {
-                                try {
-                                    out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath
-                                            + curNode.getId().toString() + ".png"));
 
-                                    ImageIO.write(curNode.getLogoGraph(), "png", out);
-
-                                    out.closeEntry();
-                                } catch (IOException ex) {
-                                    writeLog += "\nUnable to save logograph: " + ex.getLocalizedMessage();
-                                }
-                            }
-                        } catch (IOException ex) {
-                            writeLog += "\nUnable to save Logographs: " + ex.getLocalizedMessage();
-                        }
-                    }
-
-                    // Write all general images in image repository to file
-                    List<ImageNode> imageNodes = core.getImageCollection().getAllImages();
-                    if (!imageNodes.isEmpty()) {
-                        try {
-                            out.putNextEntry(new ZipEntry(PGTUtil.imagesSavePath));
-                            for (ImageNode curNode : imageNodes) {
-                                try {
-                                    out.putNextEntry(new ZipEntry(PGTUtil.imagesSavePath
-                                            + curNode.getId().toString() + ".png"));
-
-                                    ImageIO.write(curNode.getImage(), "png", out);
-
-                                    out.closeEntry();
-                                } catch (IOException ex) {
-                                    writeLog += "\nUnable to save image: " + ex.getLocalizedMessage();
-                                }
-                            }
-                        } catch (IOException ex) {
-                            writeLog += "\nUnable to save Images: " + ex.getLocalizedMessage();
-                        }
-                    }
-
-                    // write all grammar wav recordings to file
-                    Map<Integer, byte[]> grammarSoundMap = core.getGrammarManager().getSoundMap();
-                    Iterator<Entry<Integer, byte[]>> gramSoundIt = grammarSoundMap.entrySet().iterator();
-                    if (gramSoundIt.hasNext()) {
-                        try {
-                            out.putNextEntry(new ZipEntry(PGTUtil.grammarSoundSavePath));
-
-                            while (gramSoundIt.hasNext()) {
-                                Entry<Integer, byte[]> curEntry = gramSoundIt.next();
-                                Integer curId = curEntry.getKey();
-                                byte[] curSound = curEntry.getValue();
-
-                                try {
-                                    out.putNextEntry(new ZipEntry(PGTUtil.grammarSoundSavePath
-                                            + curId.toString() + ".raw"));
-                                    out.write(curSound);
-                                    out.closeEntry();
-                                } catch (IOException ex) {
-                                    writeLog += "\nUnable to save sound: " + ex.getLocalizedMessage();
-                                }
-
-                            }
-                        } catch (IOException ex) {
-                            writeLog += "\nUnable to save sounds: " + ex.getLocalizedMessage();
-                        }
-                    }
+                    writeLog += writeLogoNodesToArchive(out, core);
+                    writeLog += writeImagesToArchive(out, core);
+                    writeLog += writeWavToArchive(out, core);
+                    writeLog += writePriorStatesToArchive(out, core);
 
                     out.finish();
                     out.close();
@@ -639,7 +596,7 @@ public class IOHandler {
             }
 
             // attempt to open file in dummy core. On success, copy file to end
-            // destination, on fail, delete file, and inform user by bubbling error
+            // destination, on fail, delete file and inform user by bubbling error
             try {
                 DictCore test = new DictCore();
                 test.readFile(f.getAbsolutePath());
@@ -653,11 +610,116 @@ public class IOHandler {
             } catch (IOException ex) {
                 throw new IOException("Unable to save file: " + ex.getMessage());
             }
+            
+            core.getReversionManager().addVersion(xmlData, saveTime);
         }
 
         if (writeLog.length() != 0) {
-            throw new IOException("Problems saving file " + _fileName + writeLog);
+            InfoBox.warning("File Save Issues", "Problems encountered when saving file " + _fileName + writeLog, null);
         }
+    }
+    
+    private static String writePriorStatesToArchive(ZipOutputStream out, DictCore core) throws IOException {
+        String writeLog = "";
+        List<ReversionNode> reversionList = core.getReversionManager().getReversionList();
+        
+        try {
+            out.putNextEntry(new ZipEntry(PGTUtil.reversionSavePath));
+
+            for (Integer i = 0; i < reversionList.size(); i++) {
+                ReversionNode node = reversionList.get(i);
+                
+                out.putNextEntry(new ZipEntry(PGTUtil.reversionSavePath + PGTUtil.reversionBaseFileName 
+                        + i.toString()));
+                out.write(node.value);
+                out.closeEntry();
+            }
+        } catch (IOException e) {
+            throw new IOException("Unable to create reversion files.");
+        }
+        
+        return writeLog;
+    }
+    
+    private static String writeLogoNodesToArchive(ZipOutputStream out, DictCore core) {
+        String writeLog = "";
+        List<LogoNode> logoNodes = core.getLogoCollection().getAllLogos();
+        if (!logoNodes.isEmpty()) {
+            try {
+                out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath));
+                for (LogoNode curNode : logoNodes) {
+                    try {
+                        out.putNextEntry(new ZipEntry(PGTUtil.logoGraphSavePath
+                                + curNode.getId().toString() + ".png"));
+
+                        ImageIO.write(curNode.getLogoGraph(), "png", out);
+
+                        out.closeEntry();
+                    } catch (IOException ex) {
+                        writeLog += "\nUnable to save logograph: " + ex.getLocalizedMessage();
+                    }
+                }
+            } catch (IOException ex) {
+                writeLog += "\nUnable to save Logographs: " + ex.getLocalizedMessage();
+            }
+        }
+        
+        return writeLog;
+    }
+    
+    private static String writeWavToArchive(ZipOutputStream out, DictCore core) {
+        String writeLog = "";
+        Map<Integer, byte[]> grammarSoundMap = core.getGrammarManager().getSoundMap();
+        Iterator<Entry<Integer, byte[]>> gramSoundIt = grammarSoundMap.entrySet().iterator();
+        if (gramSoundIt.hasNext()) {
+            try {
+                out.putNextEntry(new ZipEntry(PGTUtil.grammarSoundSavePath));
+
+                while (gramSoundIt.hasNext()) {
+                    Entry<Integer, byte[]> curEntry = gramSoundIt.next();
+                    Integer curId = curEntry.getKey();
+                    byte[] curSound = curEntry.getValue();
+
+                    try {
+                        out.putNextEntry(new ZipEntry(PGTUtil.grammarSoundSavePath
+                                + curId.toString() + ".raw"));
+                        out.write(curSound);
+                        out.closeEntry();
+                    } catch (IOException ex) {
+                        writeLog += "\nUnable to save sound: " + ex.getLocalizedMessage();
+                    }
+
+                }
+            } catch (IOException ex) {
+                writeLog += "\nUnable to save sounds: " + ex.getLocalizedMessage();
+            }
+        }
+        return writeLog;
+    }
+    
+    private static String writeImagesToArchive(ZipOutputStream out, DictCore core) {
+        String writeLog = "";
+        List<ImageNode> imageNodes = core.getImageCollection().getAllImages();
+        if (!imageNodes.isEmpty()) {
+            try {
+                out.putNextEntry(new ZipEntry(PGTUtil.imagesSavePath));
+                for (ImageNode curNode : imageNodes) {
+                    try {
+                        out.putNextEntry(new ZipEntry(PGTUtil.imagesSavePath
+                                + curNode.getId().toString() + ".png"));
+
+                        ImageIO.write(curNode.getImage(), "png", out);
+
+                        out.closeEntry();
+                    } catch (IOException ex) {
+                        writeLog += "\nUnable to save image: " + ex.getLocalizedMessage();
+                    }
+                }
+            } catch (IOException ex) {
+                writeLog += "\nUnable to save Images: " + ex.getLocalizedMessage();
+            }
+        }
+        return writeLog;
     }
 
     public static byte[] getFontFileArray(Font font) throws Exception {
@@ -905,10 +967,6 @@ public class IOHandler {
      */
     public static void loadLogographs(LogoCollection logoCollection,
             String fileName) throws Exception {
-        if (!isFileZipArchive(fileName)) {
-            return;
-        }
-
         Iterator<LogoNode> it = logoCollection.getAllLogos().iterator();
         try (ZipFile zipFile = new ZipFile(fileName)) {
             while (it.hasNext()) {
@@ -921,6 +979,47 @@ public class IOHandler {
                     img = ImageIO.read(imageStream);
                 }
                 curNode.setLogoGraph(img);
+            }
+        }
+    }
+    
+    /**
+     * Loads all reversion XML files from polyglot archive
+     * @param reversionManager reversion manager to load to
+     * @param fileName full path of polyglot archive
+     * @throws IOException on read error
+     */
+    public static void loadReversionStates(ReversionManager reversionManager,
+            String fileName) throws IOException, Exception {
+        try (ZipFile zipFile = new ZipFile(fileName)) {
+            Integer i = 0;
+            String errorLog = "";
+            DictCore tmpCore;
+            
+            ZipEntry reversion = zipFile.getEntry(PGTUtil.reversionSavePath
+                    + PGTUtil.reversionBaseFileName + i.toString());
+            
+            while (reversion != null) {
+                tmpCore = new DictCore();
+                errorLog += tmpCore.testLoadReversion(IOUtils.toByteArray(zipFile.getInputStream(reversion))) + "\n";
+                
+                reversionManager.addVersionToEnd(IOUtils.toByteArray(zipFile.getInputStream(reversion)),
+                        tmpCore.getLastSaveTime());
+                i++;
+                reversion = zipFile.getEntry(PGTUtil.reversionSavePath
+                        + PGTUtil.reversionBaseFileName + i.toString());
+            }
+            
+            // remember to load latest state in addition to all prior ones
+            reversion = zipFile.getEntry(PGTUtil.dictFileName);
+            tmpCore = new DictCore();
+            errorLog += tmpCore.testLoadReversion(IOUtils.toByteArray(zipFile.getInputStream(reversion))) + "\n";
+            reversionManager.addVersionToEnd(IOUtils.toByteArray(zipFile.getInputStream(reversion)),
+                        tmpCore.getLastSaveTime());
+            
+            // bubble any loading problems up as error
+            if (!errorLog.isEmpty()) {
+                throw new Exception(errorLog);
             }
         }
     }
@@ -1230,6 +1329,9 @@ public class IOHandler {
             
             nextLine = PGTUtil.optionsNightMode + "="
                     + (core.getOptionsManager().isNightMode() ? PGTUtil.True : PGTUtil.False);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.optionsReversionsCount + "=" + core.getOptionsManager().getMaxReversionCount();
             f0.write(nextLine + newLine);
         }
     }

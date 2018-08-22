@@ -46,6 +46,7 @@ public class OptionsManager {
     private final Map<String, Dimension> screenSize = new HashMap<>();
     private final List<String> screensUp = new ArrayList<>();
     private Double menuFontSize = 0.0;
+    private int maxReversionCount = PGTUtil.defaultMaxRollbackVersions;
     private final DictCore core;
 
     public OptionsManager(DictCore _core) {
@@ -212,5 +213,13 @@ public class OptionsManager {
 
     public void setNightMode(boolean nightMode) {
         this.nightMode = nightMode;
+    }
+
+    public int getMaxReversionCount() {
+        return maxReversionCount;
+    }
+
+    public void setMaxReversionCount(int maxRollbackVersions) {
+        this.maxReversionCount = maxRollbackVersions;
     }
 }

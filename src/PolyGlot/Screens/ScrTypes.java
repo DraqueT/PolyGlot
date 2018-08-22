@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import PolyGlot.CustomControls.PTextPane;
@@ -97,6 +96,7 @@ public class ScrTypes extends PFrame {
             core = _core;
             populateTypes();
             populateProperties();
+            
             ignoreUpdate = false;
         }
     }

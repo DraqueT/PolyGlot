@@ -34,6 +34,7 @@ import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.ManagersCollections.EtymologyManager;
 import PolyGlot.ManagersCollections.ImageCollection;
 import PolyGlot.ManagersCollections.OptionsManager;
+import PolyGlot.ManagersCollections.ReversionManager;
 import PolyGlot.ManagersCollections.RomanizationManager;
 import PolyGlot.ManagersCollections.VisualStyleManager;
 import PolyGlot.ManagersCollections.WordClassCollection;
@@ -43,6 +44,7 @@ import java.awt.FontFormatException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
@@ -70,10 +72,12 @@ public class DictCore {
     private ImageCollection imageCollection;
     private EtymologyManager etymologyManager;
     private VisualStyleManager visualStyleManager;
-    private PFrame rootWindow;
+    private ReversionManager reversionManager;
+    private ScrMainMenu rootWindow;
     private Object clipBoard;
     private boolean curLoading = false;
     private Map<String, Integer> versionHierarchy = new HashMap<>();
+    private Instant lastSaveTime = Instant.MIN;
 
     /**
      * Language core initialization
@@ -95,6 +99,7 @@ public class DictCore {
             imageCollection = new ImageCollection();
             etymologyManager = new EtymologyManager(this);
             visualStyleManager = new VisualStyleManager(this);
+            reversionManager = new ReversionManager(this);
 
             PAlphaMap alphaOrder = propertiesManager.getAlphaOrder();
 
@@ -134,7 +139,7 @@ public class DictCore {
                 : propertiesManager.getLocalLangName();
     }
 
-    public void setRootWindow(PFrame _rootWindow) {
+    public void setRootWindow(ScrMainMenu _rootWindow) {
         rootWindow = _rootWindow;
     }
 
@@ -240,6 +245,15 @@ public class DictCore {
      * through windows and their children.
      */
     public void pushUpdate() {
+        pushUpdate(this);
+    }
+    
+    /**
+     * Pushes signal to all forms to update their values from the core. Cascades
+     * through windows and their children.
+     * @param _core new core to push
+     */
+    public void pushUpdate(DictCore _core) {
         StackTraceElement stack[] = Thread.currentThread().getStackTrace();
 
         // prevent recursion (exclude check of top method, obviously)
@@ -250,12 +264,9 @@ public class DictCore {
             }
         }
 
-        if (rootWindow == null) {
-            InfoBox.warning("Bad Update", "This warning indicates that a root"
-                    + " window was null at the time of an update push.",
-                    rootWindow);
-        } else {
-            rootWindow.updateAllValues(this);
+        // null root window indicates that this is a virtual dict core used for library analysis
+        if (rootWindow != null) {
+            rootWindow.updateAllValues(_core);
         }
     }
 
@@ -344,6 +355,18 @@ public class DictCore {
      * @throws IllegalStateException for recoverable errors
      */
     public void readFile(String _fileName) throws IOException, IllegalStateException {
+        readFile(_fileName, null);
+    }
+    
+    /**
+     * Reads from given file
+     *
+     * @param _fileName filename to read from
+     * @param overrideXML override to where the XML should be loaded from
+     * @throws java.io.IOException for unrecoverable errors
+     * @throws IllegalStateException for recoverable errors
+     */
+    public void readFile(String _fileName, byte[] overrideXML) throws IOException, IllegalStateException {
         curLoading = true;
         String errorLog = "";
         String warningLog = "";
@@ -372,9 +395,16 @@ public class DictCore {
         }
         
         try {
-            CustHandler handler = IOHandler.getHandlerFromFile(_fileName, this);
-            IOHandler.parseHandler(_fileName, handler);
-
+            CustHandler handler;
+            // if override XML value, load from that, otherwise pull from file
+            if (overrideXML == null) {
+                handler = IOHandler.getHandlerFromFile(_fileName, this);
+                IOHandler.parseHandler(_fileName, handler);
+            } else {
+                handler = IOHandler.getHandlerFromByteArray(overrideXML, this);
+                IOHandler.parseHandlerByteArray(overrideXML, handler);
+            }
+            
             errorLog += handler.getErrorLog();
             warningLog += handler.getWarningLog();
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -398,6 +428,12 @@ public class DictCore {
         } catch (Exception e) {
             warningLog += e.getLocalizedMessage() + "\n";
         }
+        
+        try {
+            IOHandler.loadReversionStates(reversionManager, _fileName);
+        } catch (Exception e) {
+            warningLog += e.getLocalizedMessage() + "\n";
+        }
 
         curLoading = false;
 
@@ -409,7 +445,42 @@ public class DictCore {
             throw new IllegalStateException(warningLog);
         }
     }
+    
+    /**
+     * loads revision XML from revision byte array (does not support media revisions)
+     * @param revision 
+     * @param fileName 
+     * @throws java.io.IOException 
+     */
+    public void revertToState(byte[] revision, String fileName) throws IOException, Exception {
+        DictCore revDict = new DictCore();
+        revDict.readFile(fileName, revision);
+        revDict.setRootWindow(rootWindow);
+        
+        pushUpdate(revDict);
+    }
+    
+    /**
+     * Used for test loading reversion XMLs. Cannot successfully load actual revision into functioning DictCore
+     * @param reversion 
+     * @return
+     */
+    public String testLoadReversion(byte[] reversion) {
+        String errorLog;
+        
+        try {
+            CustHandler handler = IOHandler.getHandlerFromByteArray(reversion, this);
+            IOHandler.parseHandlerByteArray(reversion, handler);
 
+            errorLog = handler.getErrorLog();
+            // errorLog += handler.getWarningLog(); // warnings may be disregarded here
+        } catch (IOException | ParserConfigurationException | SAXException e) {
+            errorLog = e.getLocalizedMessage();
+        }
+        
+        return errorLog;
+    }
+    
     /**
      * Writes to given file
      *
@@ -422,18 +493,15 @@ public class DictCore {
             throws ParserConfigurationException, TransformerException, FileNotFoundException, IOException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        Instant newSaveTime = Instant.now();
 
         // root elements
         Document doc = docBuilder.newDocument();
         Element rootElement = doc.createElement(PGTUtil.dictionaryXID);
         doc.appendChild(rootElement);
 
-        // store version of PolyGlot
-        Element header = doc.createElement(PGTUtil.pgVersionXID);
-        header.appendChild(doc.createTextNode(version));
-        rootElement.appendChild(header);
-
         // collect XML representation of all dictionary elements
+        this.writeXMLHeader(doc, rootElement, newSaveTime);
         propertiesManager.writeXML(doc, rootElement);
         wordPropCollection.writeXML(doc, rootElement);
         typeCollection.writeXML(doc, rootElement);
@@ -449,7 +517,19 @@ public class DictCore {
         rootElement.appendChild(famManager.writeToSaveXML(doc));
 
         // have IOHandler write constructed document to file
-        IOHandler.writeFile(_fileName, doc, this);
+        IOHandler.writeFile(_fileName, doc, this, newSaveTime);
+        
+        setLastSaveTime(newSaveTime);
+    }
+    
+    private void writeXMLHeader(Document doc, Element rootElement, Instant saveTime) {
+        Element headerElement = doc.createElement(PGTUtil.pgVersionXID);
+        headerElement.appendChild(doc.createTextNode(version));
+        rootElement.appendChild(headerElement);
+        
+        headerElement = doc.createElement(PGTUtil.dictionarySaveDate);
+        headerElement.appendChild(doc.createTextNode(saveTime.toString()));
+        rootElement.appendChild(headerElement);
     }
 
     /**
@@ -485,6 +565,18 @@ public class DictCore {
         return etymologyManager;
     }
     
+    public ReversionManager getReversionManager() {
+        return reversionManager;
+    }
+    
+    public Instant getLastSaveTime() {
+        return lastSaveTime;
+    }
+
+    public void setLastSaveTime(Instant _lastSaveTime) {
+        lastSaveTime = _lastSaveTime;
+    }
+    
     /**
      * 
      * @param version
@@ -504,6 +596,10 @@ public class DictCore {
         if (!versionHierarchy.containsKey(this.getVersion())) {
             throw new Exception("ERROR: CURRENT VERSION NOT ACCOUNTED FOR IN VERSION HISTORY.");
         }
+    }
+    
+    public String getCurFileName() {
+        return rootWindow.getCurFileName();
     }
     
     private void populateVersionHierarchy() {

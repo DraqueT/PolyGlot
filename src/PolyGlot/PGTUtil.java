@@ -32,6 +32,7 @@ import javax.swing.ImageIcon;
 public class PGTUtil {
     public static final String dictionaryXID = "dictionary";
     public static final String pgVersionXID = "PolyGlotVer";
+    public static final String dictionarySaveDate = "DictSaveDate";
     
     // properties on words
     public static final String lexiconXID = "lexicon";
@@ -214,6 +215,7 @@ public class PGTUtil {
     public static final String optionsAutoResize = "OptionsResize";
     public static final String optionsMenuFontSize = "OptionsMenuFontSize";
     public static final String optionsNightMode = "OptionsNightMode";
+    public static final String optionsReversionsCount = "OptionsReversionCount";
 
     // string constants
     public static final String dictFileName = "PGDictionary.xml";
@@ -229,6 +231,8 @@ public class PGTUtil {
     public static final String logoGraphSavePath = "logoGraphs/";
     public static final String imagesSavePath = "images/";
     public static final String grammarSoundSavePath = "grammarSounds/";
+    public static final String reversionSavePath = "reversion/";
+    public static final String reversionBaseFileName = "reversionXMLFile";
     public static final String emptyFile = "<EMPTY>";
     public static final String tempFile = "xxTEMPPGTFILExx";
     public static final String polyGlotFont = "PolyGlot";
@@ -253,11 +257,12 @@ public class PGTUtil {
     public static final String scrIPARefChart;
     public static final String scrQuizGenDialog;
     
-    // int constants...
+    // numeric constants...
     public static final Integer numMenuFlashes = 4;
     public static final Integer menuFlashSleep = 200;
     public static final Double defaultFontSize = 12.0;
     public static final int maxProcRecursion = 20;
+    public static final int defaultMaxRollbackVersions = 10;
     
     // color constants
     public static final Color colorDisabledBG;

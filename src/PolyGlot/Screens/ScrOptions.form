@@ -72,8 +72,13 @@
                           <Component id="txtTextFontSize" min="-2" pref="46" max="-2" attributes="0"/>
                       </Group>
                       <Component id="chkNightMode" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="txtRevisionNumbers" min="-2" pref="52" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace pref="188" max="32767" attributes="0"/>
+                  <EmptySpace pref="154" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -89,7 +94,12 @@
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtTextFontSize" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="156" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtRevisionNumbers" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="124" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -121,6 +131,17 @@
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
           </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel2">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Revision States Saved"/>
+            <Property name="toolTipText" type="java.lang.String" value="The max number of prior versions to save in your PGD files. 0 is unlimited (can lead to large files )."/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtRevisionNumbers">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="The max number of prior versions to save in your PGD files. 0 is unlimited (can lead to large files )."/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
