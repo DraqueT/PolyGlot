@@ -84,6 +84,23 @@ public class DictCore {
      *
      */
     public DictCore() {
+        initializeDictCore();
+    }
+    
+    /**
+     * Initializes a new core based on the old one. Options, contents of prior clipboard, and the prior root
+     * window are retained.
+     * @param oldCore 
+     */
+    public DictCore(DictCore oldCore) {
+        initializeDictCore();
+        
+        optionsManager = oldCore.optionsManager;
+        clipBoard = oldCore.clipBoard;
+        rootWindow = oldCore.rootWindow;
+    }
+    
+    private void initializeDictCore() {
         try {
             wordCollection = new ConWordCollection(this);
             typeCollection = new TypeCollection(this);

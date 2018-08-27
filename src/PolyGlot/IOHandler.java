@@ -345,6 +345,24 @@ public class IOHandler {
         File file = new File(fullPath);
         return file.getName();
     }
+    
+    /**
+     * Deletes options file
+     * @param core 
+     */
+    public static void deleteIni(DictCore core) {
+        File f = new File(core.getWorkingDirectory() + PGTUtil.polyGlotIni);        
+        if (!f.exists()) {
+            return;
+        }
+        
+        try {
+            f.delete();
+        } catch (Exception e) {
+            InfoBox.error("Permissions Error", "PolyGlot lacks permissions to write to its native folder.\n"
+                    + "Please move to a folder with full write permissions: " + e.getLocalizedMessage(), null);
+        }
+    }
 
     /**
      * Loads all option data from ini file, if none, ignore. One will be created

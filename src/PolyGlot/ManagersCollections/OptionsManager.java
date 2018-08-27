@@ -41,7 +41,7 @@ public class OptionsManager {
 
     private boolean animateWindows = false;
     private boolean nightMode = false;
-    private List<String> lastFiles = new ArrayList<>();
+    private final List<String> lastFiles = new ArrayList<>();
     private final Map<String, Point> screenPos = new HashMap<>();
     private final Map<String, Dimension> screenSize = new HashMap<>();
     private final List<String> screensUp = new ArrayList<>();
@@ -170,8 +170,24 @@ public class OptionsManager {
         return lastFiles;
     }
     
-    public void setLastFiles(List<String> _lastFiles) {
-        lastFiles = _lastFiles;
+    /**
+     * Pushes a recently opened file (if appropriate) into the recent files list
+     *
+     * @param file full path of file
+     */
+    public void pushRecentFile(String file) {
+        if (!lastFiles.isEmpty()
+                && lastFiles.contains(file)) {
+            lastFiles.remove(file);
+            lastFiles.add(file);
+            return;
+        }
+
+        while (lastFiles.size() > PGTUtil.optionsNumLastFiles) {
+            lastFiles.remove(0);
+        }
+
+        lastFiles.add(file);
     }
 
     /**

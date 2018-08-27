@@ -70,7 +70,6 @@ public class ScrMainMenu extends PFrame {
 
     private PFrame curWindow = null;
     private ScrLexicon cacheLexicon;
-    private final List<String> lastFiles;
     private String curFileName = "";
     private Image backGround;
 
@@ -83,6 +82,7 @@ public class ScrMainMenu extends PFrame {
     public ScrMainMenu(String overridePath) {
         super();
         core = new DictCore(); // needed for initialization
+        core.setRootWindow(this);
         cacheLexicon = ScrLexicon.run(core, this);
 
         UIManager.put("ScrollBarUI", "PolyGlot.CustomControls.PScrollBarUI");
@@ -105,8 +105,16 @@ public class ScrMainMenu extends PFrame {
         }
 
         newFile(false);
-        setOverrideProgramPath(overridePath);
-        lastFiles = core.getOptionsManager().getLastFiles();
+        core.getPropertiesManager().setOverrideProgramPath(overridePath);
+        
+        try {
+            core.getOptionsManager().loadIni();
+        } catch (Exception e) {
+            InfoBox.error("Options Load Error", "Unable to load options file or file corrupted:\n"
+                    + e.getLocalizedMessage(), core.getRootWindow());
+            IOHandler.deleteIni(core);
+        }
+        
         populateRecentOpened();
         checkJavaVersion();
         super.setSize(super.getPreferredSize());
@@ -145,7 +153,6 @@ public class ScrMainMenu extends PFrame {
 
         core.getOptionsManager().setScreenPosition(getClass().getName(),
                 getLocation());
-        core.getOptionsManager().setLastFiles(lastFiles);
         try {
             core.getOptionsManager().saveIni();
         } catch (IOException ex) {
@@ -180,6 +187,7 @@ public class ScrMainMenu extends PFrame {
      */
     private void populateRecentOpened() {
         mnuRecents.removeAll();
+        List<String> lastFiles = core.getOptionsManager().getLastFiles();
 
         for (int i = lastFiles.size() - 1; i >= 0; i--) {
             final String curFile = lastFiles.get(i);
@@ -195,31 +203,10 @@ public class ScrMainMenu extends PFrame {
                 }
 
                 setFile(curFile);
-                pushRecentFile(curFile);
                 populateRecentOpened();
             });
             mnuRecents.add(lastFile);
         }
-    }
-
-    /**
-     * Pushes a recently opened file (if appropriate) into the recent files list
-     *
-     * @param file full path of file
-     */
-    private void pushRecentFile(String file) {
-        if (!lastFiles.isEmpty()
-                && lastFiles.contains(file)) {
-            lastFiles.remove(file);
-            lastFiles.add(file);
-            return;
-        }
-
-        while (lastFiles.size() > PGTUtil.optionsNumLastFiles) {
-            lastFiles.remove(0);
-        }
-
-        lastFiles.add(file);
     }
 
     private void setFile(String fileName) {
@@ -229,8 +216,7 @@ public class ScrMainMenu extends PFrame {
             return;
         }
 
-        core = new DictCore();
-        core.setRootWindow(this);
+        core = new DictCore(core);
 
         try {
             core.readFile(fileName);
@@ -241,7 +227,7 @@ public class ScrMainMenu extends PFrame {
                 changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
             }
         } catch (IOException e) {
-            core = new DictCore(); // don't allow partial loads
+            core = new DictCore(core); // don't allow partial loads
             InfoBox.error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage(), core.getRootWindow());
         } catch (IllegalStateException e) {
@@ -295,8 +281,8 @@ public class ScrMainMenu extends PFrame {
         if (getCurFileName().length() == 0) {
             return false;
         }
-
-        pushRecentFile(getCurFileName());
+        
+        core.getOptionsManager().pushRecentFile(getCurFileName());
         populateRecentOpened();
         saveAllValues();
         genTitle();
@@ -388,21 +374,6 @@ public class ScrMainMenu extends PFrame {
     }
 
     /**
-     * Provided for cases where the java is run from an odd source folder (such as under an app file in OSX)
-     *
-     * @param override directory for base PolyGlot directory
-     */
-    private void setOverrideProgramPath(String override) {
-        core.getPropertiesManager().setOverrideProgramPath(override);
-        try {
-            core.getOptionsManager().loadIni();
-        } catch (Exception e) {
-            InfoBox.error("Options Load Error", "Unable to load or create options file:\n"
-                    + e.getLocalizedMessage(), core.getRootWindow());
-        }
-    }
-
-    /**
      * Creates new, blank language file
      *
      * @param performTest whether the UI ask for confirmation
@@ -412,8 +383,7 @@ public class ScrMainMenu extends PFrame {
             return;
         }
 
-        core = new DictCore();
-        core.setRootWindow(this);
+        core = new DictCore(core);
         updateAllValues(core);
         curFileName = "";
 
@@ -545,10 +515,9 @@ public class ScrMainMenu extends PFrame {
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
-            core = new DictCore();
-            core.setRootWindow(this);
+            core = new DictCore(core);
             setFile(fileName);
-            pushRecentFile(fileName);
+            core.getOptionsManager().pushRecentFile(fileName);
             populateRecentOpened();
         }
 
