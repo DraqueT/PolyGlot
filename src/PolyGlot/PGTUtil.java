@@ -263,6 +263,7 @@ public class PGTUtil {
     public static final Double defaultFontSize = 12.0;
     public static final int maxProcRecursion = 20;
     public static final int defaultMaxRollbackVersions = 10;
+    public static final int maxFilePathLength = 1000;
     
     // color constants
     public static final Color colorDisabledBG;

@@ -379,6 +379,8 @@ public class IOHandler {
 
         try (BufferedReader br = new BufferedReader(new FileReader(
                 core.getWorkingDirectory() + PGTUtil.polyGlotIni))) {
+            String loadProblems = "";
+            
             for (String line; (line = br.readLine()) != null;) {
                 String[] bothVal = line.split("=");
 
@@ -410,8 +412,7 @@ public class IOHandler {
                             String[] splitSet = curPosSet.split(":");
 
                             if (splitSet.length != 3) {
-                                throw new Exception("Malformed Screen Position: "
-                                        + curPosSet);
+                                loadProblems += "Malformed Screen Position: " + curPosSet + "\n";
                             }
                             Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
                             core.getOptionsManager().setScreenPosition(splitSet[0], p);
@@ -426,8 +427,7 @@ public class IOHandler {
                             String[] splitSet = curSizeSet.split(":");
 
                             if (splitSet.length != 3) {
-                                throw new Exception("Malformed Screen Size: "
-                                        + curSizeSet);
+                                loadProblems += "Malformed Screen Size: " + curSizeSet + "\n";
                             }
                             Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
                             core.getOptionsManager().setScreenSize(splitSet[0], d);
@@ -448,9 +448,12 @@ public class IOHandler {
                     case "\n":
                         break;
                     default:
-                        throw new Exception("Unrecognized value: " + bothVal[0]
-                                + " in PolyGlot.ini.");
+                        loadProblems += "Unrecognized value: " + bothVal[0] + " in PolyGlot.ini." + "\n";
                 }
+            }
+            
+            if (!loadProblems.isEmpty()) {
+                throw new Exception("Problems loading ini file: \n" + loadProblems);
             }
         }
     }
@@ -1304,15 +1307,19 @@ public class IOHandler {
 
             if (!testCanWrite(core.getWorkingDirectory() + PGTUtil.polyGlotIni)) {
                 throw new IOException("Unable to save settings. Polyglot does not have permission to write to folder: "
-                        + core.getWorkingDirectory() + ". This is most common when running from Program Files in Windows.");
+                        + core.getWorkingDirectory() 
+                        + ". This is most common when running from Program Files in Windows.");
             }
 
             nextLine = PGTUtil.optionsLastFiles + "=";
             for (String file : core.getOptionsManager().getLastFiles()) {
-                if (nextLine.endsWith("=")) {
-                    nextLine += file;
-                } else {
-                    nextLine += ("," + file);
+                // only write to ini if 1) the max file path length is not absurd/garbage, and 2) the file exists
+                if (file.length() < PGTUtil.maxFilePathLength && new File(file).exists()) {
+                    if (nextLine.endsWith("=")) {
+                        nextLine += file;
+                    } else {
+                        nextLine += ("," + file);
+                    }
                 }
             }
             f0.write(nextLine + newLine);
