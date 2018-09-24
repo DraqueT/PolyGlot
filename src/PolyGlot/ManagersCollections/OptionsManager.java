@@ -48,6 +48,7 @@ public class OptionsManager {
     private Double menuFontSize = 0.0;
     private int maxReversionCount = PGTUtil.defaultMaxRollbackVersions;
     private final DictCore core;
+    private int toDoBarPosition = -1;
 
     public OptionsManager(DictCore _core) {
         core = _core;
@@ -237,5 +238,13 @@ public class OptionsManager {
 
     public void setMaxReversionCount(int maxRollbackVersions) {
         this.maxReversionCount = maxRollbackVersions;
+    }
+
+    public int getToDoBarPosition() {
+        return toDoBarPosition;
+    }
+
+    public void setToDoBarPosition(int toDoBarPosition) {
+        this.toDoBarPosition = toDoBarPosition;
     }
 }

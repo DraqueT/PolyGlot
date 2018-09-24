@@ -19,30 +19,56 @@
  */
 package PolyGlot.Nodes;
 
+import PolyGlot.PGTUtil;
 import java.util.ArrayList;
 import java.util.List;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * A single node in a to do list tree
  * @author DThompson
  */
 public class ToDoNode {
-    private final String value;
-    private final ToDoNode parent;
+    private String value;
+    private ToDoNode parent;
     private boolean isDone = false;
     private final List<ToDoNode> children = new ArrayList<>();
     
-    public ToDoNode(ToDoNode _parent, String _value) {
+    public ToDoNode(ToDoNode _parent, String _value, boolean _isDone) {
         value = _value;
         parent = _parent;
+        isDone = _isDone;
+    }
+    
+    public boolean allChildrenDone() {
+        boolean ret = true;
+        
+        for (ToDoNode curNode : children) {
+            ret = ret && curNode.isDone() && curNode.allChildrenDone();
+        }
+        
+        return ret;
     }
     
     /**
      * Adds a new to-do child to this node
      * @param childValue 
+     * @return  
      */
-    public void addChild(String childValue) {
-        children.add(new ToDoNode(this, childValue));
+    public ToDoNode addChild(String childValue) {
+        ToDoNode newChild = new ToDoNode(this, childValue, false);
+        children.add(newChild);
+        return newChild;
+    }
+    
+    public void addChild(ToDoNode child) {
+        child.setParent(this);
+        children.add(child);
+    }
+    
+    public void setParent(ToDoNode _parent) {
+        parent = _parent;
     }
     
     /**
@@ -97,6 +123,10 @@ public class ToDoNode {
         }
     }
     
+    public void setValue(String _value) {
+        value = _value;
+    }
+    
     /**
      * Moves child down one unless it is at the bottom
      * @param move node to move down
@@ -127,5 +157,38 @@ public class ToDoNode {
     @Override
     public String toString() {
         return value;
+    }
+    
+    public boolean hasChildren() {
+        return !children.isEmpty();
+    }
+    
+    /**
+     * Writes XML value of element to rootElement of given doc
+     * @param doc
+     * @param rootElement 
+     */
+    public void writeXML(Document doc, Element rootElement) {
+        Element writeNode = doc.createElement(PGTUtil.ToDoNodeXID);
+        Element nodeDone = doc.createElement(PGTUtil.ToDoNodeDoneXID);
+        Element nodeLabel = doc.createElement(PGTUtil.ToDoNodeLabelXID);
+        // TODO: Implement color
+        //Element nodeColor = doc.createElement(PGTUtil.ToDoNodeColorXID);
+        
+        nodeDone.appendChild(doc.createTextNode(this.isDone ? PGTUtil.True : PGTUtil.False));
+        writeNode.appendChild(nodeDone);
+        
+        nodeLabel.appendChild(doc.createTextNode(value));
+        writeNode.appendChild(nodeLabel);
+        
+        children.forEach((child) -> {
+            child.writeXML(doc, writeNode);
+        });
+        
+        rootElement.appendChild(writeNode);
+    }
+    
+    public ToDoNode getParent() {
+        return parent;
     }
 }

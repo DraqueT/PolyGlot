@@ -172,6 +172,17 @@ public class InfoBox extends JFrame {
     }
     
     /**
+     * Wraps JOptionPane dialog mostly for neatness/standardization
+     * @param title title of query window
+     * @param message message on window given to user
+     * @param parent owner of dialog
+     * @return string value if input, null if cancel hit
+     */
+    public static String stringInputDialog(String title, String message, Window parent) {
+        return JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    /**
      * Collects double value form user. Will re-call self if non-double value given.
      * @param title title of query window
      * @param message message on window given to user
@@ -181,14 +192,13 @@ public class InfoBox extends JFrame {
     public static Double doubleInputDialog(String title, String message, Window parent) {
         Double ret = null;
         
-        String inputString = JOptionPane.showInputDialog(parent,
-                message, title,
-                JOptionPane.INFORMATION_MESSAGE);
+        String inputString = JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
         
         if (inputString != null) {
             try {
                 ret = Double.parseDouble(inputString);
             } catch (HeadlessException | NumberFormatException e) {
+                // TODO: this message should be passed in rather than hardcoded here. It is particular to fonts.
                 InfoBox.warning("Incorrect Input", "Please provide a numeric value (default 12.0) for font size.", parent);
                 ret = InfoBox.doubleInputDialog(title, message, parent);
             }

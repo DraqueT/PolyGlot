@@ -20,15 +20,59 @@
 package PolyGlot.ManagersCollections;
 
 import PolyGlot.Nodes.ToDoNode;
+import PolyGlot.PGTUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Manager of the To Do list
  * @author DThompson
  */
 public class ToDoManager {
-    private final ToDoNode root = new ToDoNode(null, "ToDoRoot");
+    private ToDoNode root = null;
+    private ToDoNode bufferNode;
     
     public ToDoNode getRoot() {
+        if (root == null) {
+            root = new ToDoNode(null, PGTUtil.ToDoRoot, false);
+        }
         return root;
+    }
+    
+    /**
+     * Writes todo information to XML document
+     *
+     * @param doc Document to write to
+     * @param rootElement root element of document
+     */
+    public void writeXML(Document doc, Element rootElement) {
+        Element toDos = doc.createElement(PGTUtil.ToDoLogXID);
+        
+        getRoot().writeXML(doc, toDos);
+        
+        rootElement.appendChild(toDos);
+    }
+    
+    public ToDoNode getBuffer() {
+        if (root == null) {
+            bufferNode = getRoot();
+        }
+        
+        return bufferNode;
+    }
+    
+    public void pushBuffer() {
+       if (root == null) {
+           getBuffer();
+       } 
+       else {
+            ToDoNode newBuffer = new ToDoNode(bufferNode, "", false);
+            bufferNode.addChild(newBuffer);
+            bufferNode = newBuffer;
+       }
+    }
+    
+    public void popBuffer() {
+        bufferNode = bufferNode.getParent();
     }
 }

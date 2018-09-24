@@ -26,6 +26,7 @@ import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.ManagersCollections.ImageCollection;
+import PolyGlot.ManagersCollections.OptionsManager;
 import PolyGlot.ManagersCollections.ReversionManager;
 import PolyGlot.Nodes.ImageNode;
 import PolyGlot.Nodes.ReversionNode;
@@ -372,6 +373,7 @@ public class IOHandler {
      * @throws IOException on failure to open existing file
      */
     public static void loadOptionsIni(DictCore core) throws Exception {
+        OptionsManager opMan = core.getOptionsManager();
         File f = new File(core.getWorkingDirectory() + PGTUtil.polyGlotIni);
         if (!f.exists() || f.isDirectory()) {
             return;
@@ -396,11 +398,11 @@ public class IOHandler {
 
                 switch (bothVal[0]) {
                     case PGTUtil.optionsLastFiles:
-                        core.getOptionsManager().getLastFiles().addAll(Arrays.asList(bothVal[1].split(",")));
+                        opMan.getLastFiles().addAll(Arrays.asList(bothVal[1].split(",")));
                         break;
                     case PGTUtil.optionsScreensOpen:
                         for (String screen : bothVal[1].split(",")) {
-                            core.getOptionsManager().addScreenUp(screen);
+                            opMan.addScreenUp(screen);
                         }
                         break;
                     case PGTUtil.optionsScreenPos:
@@ -415,7 +417,7 @@ public class IOHandler {
                                 loadProblems += "Malformed Screen Position: " + curPosSet + "\n";
                             }
                             Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
-                            core.getOptionsManager().setScreenPosition(splitSet[0], p);
+                            opMan.setScreenPosition(splitSet[0], p);
                         }
                         break;
                     case PGTUtil.optionsScreensSize:
@@ -430,20 +432,23 @@ public class IOHandler {
                                 loadProblems += "Malformed Screen Size: " + curSizeSet + "\n";
                             }
                             Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
-                            core.getOptionsManager().setScreenSize(splitSet[0], d);
+                            opMan.setScreenSize(splitSet[0], d);
                         }
                         break;
                     case PGTUtil.optionsAutoResize:
-                        core.getOptionsManager().setAnimateWindows(bothVal[1].equals(PGTUtil.True));
+                        opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.True));
                         break;
                     case PGTUtil.optionsMenuFontSize:
-                        core.getOptionsManager().setMenuFontSize(Double.parseDouble(bothVal[1]));
+                        opMan.setMenuFontSize(Double.parseDouble(bothVal[1]));
                         break;
                     case PGTUtil.optionsNightMode:
-                        core.getOptionsManager().setNightMode(bothVal[1].equals(PGTUtil.True));
+                        opMan.setNightMode(bothVal[1].equals(PGTUtil.True));
                         break;
                     case PGTUtil.optionsReversionsCount:
-                        core.getOptionsManager().setMaxReversionCount(Integer.parseInt(bothVal[1]));
+                        opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
+                        break;
+                    case PGTUtil.optionsToDoDividerLocation:
+                        opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));
                         break;
                     case "\n":
                         break;
@@ -1302,6 +1307,7 @@ public class IOHandler {
         try (Writer f0 = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(core.getWorkingDirectory()
                         + PGTUtil.polyGlotIni), "UTF-8"))) {
+            OptionsManager opMan = core.getOptionsManager();
             String newLine = System.getProperty("line.separator");
             String nextLine;
 
@@ -1312,7 +1318,7 @@ public class IOHandler {
             }
 
             nextLine = PGTUtil.optionsLastFiles + "=";
-            for (String file : core.getOptionsManager().getLastFiles()) {
+            for (String file : opMan.getLastFiles()) {
                 // only write to ini if 1) the max file path length is not absurd/garbage, and 2) the file exists
                 if (file.length() < PGTUtil.maxFilePathLength && new File(file).exists()) {
                     if (nextLine.endsWith("=")) {
@@ -1325,14 +1331,14 @@ public class IOHandler {
             f0.write(nextLine + newLine);
 
             nextLine = PGTUtil.optionsScreenPos + "=";
-            for (Entry<String, Point> curPos : core.getOptionsManager().getScreenPositions().entrySet()) {
+            for (Entry<String, Point> curPos : opMan.getScreenPositions().entrySet()) {
                 nextLine += ("," + curPos.getKey() + ":" + curPos.getValue().x + ":"
                         + curPos.getValue().y);
             }
             f0.write(nextLine + newLine);
 
             nextLine = PGTUtil.optionsScreensSize + "=";
-            for (Entry<String, Dimension> curSize : core.getOptionsManager().getScreenSizes().entrySet()) {
+            for (Entry<String, Dimension> curSize : opMan.getScreenSizes().entrySet()) {
                 nextLine += ("," + curSize.getKey() + ":" + curSize.getValue().width + ":"
                         + curSize.getValue().height);
             }
@@ -1340,23 +1346,26 @@ public class IOHandler {
             f0.write(nextLine + newLine);
             nextLine = PGTUtil.optionsScreensOpen + "=";
 
-            for (String screen : core.getOptionsManager().getLastScreensUp()) {
+            for (String screen : opMan.getLastScreensUp()) {
                 nextLine += ("," + screen);
             }
             f0.write(nextLine + newLine);
 
             nextLine = PGTUtil.optionsAutoResize + "=" 
-                    + (core.getOptionsManager().isAnimateWindows() ? PGTUtil.True : PGTUtil.False);
+                    + (opMan.isAnimateWindows() ? PGTUtil.True : PGTUtil.False);
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.optionsMenuFontSize + "=" + Double.toString(core.getOptionsManager().getMenuFontSize());
+            nextLine = PGTUtil.optionsMenuFontSize + "=" + Double.toString(opMan.getMenuFontSize());
             f0.write(nextLine + newLine);
             
             nextLine = PGTUtil.optionsNightMode + "="
-                    + (core.getOptionsManager().isNightMode() ? PGTUtil.True : PGTUtil.False);
+                    + (opMan.isNightMode() ? PGTUtil.True : PGTUtil.False);
             f0.write(nextLine + newLine);
             
-            nextLine = PGTUtil.optionsReversionsCount + "=" + core.getOptionsManager().getMaxReversionCount();
+            nextLine = PGTUtil.optionsReversionsCount + "=" + opMan.getMaxReversionCount();
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.optionsToDoDividerLocation + "=" + opMan.getToDoBarPosition();
             f0.write(nextLine + newLine);
         }
     }

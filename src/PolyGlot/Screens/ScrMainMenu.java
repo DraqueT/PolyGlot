@@ -23,6 +23,9 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PLabel;
+import PolyGlot.CustomControls.PToDoTree;
+import PolyGlot.CustomControls.PToDoTreeModel;
+import PolyGlot.CustomControls.ToDoTreeNode;
 import PolyGlot.DictCore;
 import PolyGlot.ExcelExport;
 import PolyGlot.IOHandler;
@@ -57,6 +60,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultTreeModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -68,6 +72,7 @@ import javax.xml.transform.TransformerException;
  */
 public class ScrMainMenu extends PFrame {
 
+    private PToDoTree toDoTree;
     private PFrame curWindow = null;
     private ScrLexicon cacheLexicon;
     private String curFileName = "";
@@ -83,6 +88,7 @@ public class ScrMainMenu extends PFrame {
         super();
         core = new DictCore(); // needed for initialization
         core.setRootWindow(this);
+        toDoTree = new PToDoTree(core);
         cacheLexicon = ScrLexicon.run(core, this);
 
         UIManager.put("ScrollBarUI", "PolyGlot.CustomControls.PScrollBarUI");
@@ -115,6 +121,7 @@ public class ScrMainMenu extends PFrame {
             IOHandler.deleteIni(core);
         }
         
+        setupToDo();
         populateRecentOpened();
         checkJavaVersion();
         super.setSize(super.getPreferredSize());
@@ -151,8 +158,9 @@ public class ScrMainMenu extends PFrame {
 
         super.dispose();
 
-        core.getOptionsManager().setScreenPosition(getClass().getName(),
-                getLocation());
+        core.getOptionsManager().setScreenPosition(getClass().getName(), getLocation());
+        core.getOptionsManager().setToDoBarPosition(pnlToDoSplit.getDividerLocation());
+        
         try {
             core.getOptionsManager().saveIni();
         } catch (IOException ex) {
@@ -411,13 +419,13 @@ public class ScrMainMenu extends PFrame {
         }
 
         // blank the menu
-        jPanel2.removeAll();
+        pnlMain.removeAll();
         this.repaint();
 
         // resize screen
         if (curWindow != null) {
             // set size before disposing so that it will be properly saved to options
-            curWindow.getWindow().setSize(jPanel2.getSize());
+            curWindow.getWindow().setSize(pnlMain.getSize());
             curWindow.dispose();
 
             // after disposing, update new window in case old wrote anything to the core
@@ -434,7 +442,7 @@ public class ScrMainMenu extends PFrame {
 
             Insets insets = getInsets();
             try {
-                this.setSizeSmooth(dim.width + jPanel1.getWidth() + insets.left + insets.right,
+                this.setSizeSmooth(dim.width + pnlSideButtons.getWidth() + insets.left + insets.right,
                         dim.height + insets.bottom + insets.top,
                         true);
             } catch (InterruptedException e) {
@@ -445,8 +453,8 @@ public class ScrMainMenu extends PFrame {
         }
 
         // set new screen
-        GroupLayout layout = new GroupLayout(jPanel2);
-        jPanel2.setLayout(layout);
+        GroupLayout layout = new GroupLayout(pnlMain);
+        pnlMain.setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING,
@@ -711,6 +719,40 @@ public class ScrMainMenu extends PFrame {
         ((PButton) btnQuiz).setActiveSelected(false);
     }
     
+    private void setupToDo() {
+        int toDoPosition = core.getOptionsManager().getToDoBarPosition();
+        
+        javax.swing.JScrollPane jScrollPane = new javax.swing.JScrollPane();
+        toDoTree = new PToDoTree(core);
+        toDoTree.setToolTipText("To-Do list. Right click to add, remove, or rename tasks. Tasks can contain subtasks.");
+        
+        toDoTree.setSelectionModel(null);
+        jScrollPane.setViewportView(toDoTree);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(pnlToDo);
+        pnlToDo.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+        );
+        
+        if (toDoPosition >= 0) {
+            pnlToDoSplit.setDividerLocation(toDoPosition);
+        }
+        
+        populateToDo();
+    }
+    
+    private void populateToDo() {
+        toDoTree.setRootVisible(false);
+        toDoTree.setModel(new PToDoTreeModel(ToDoTreeNode.createToDoTreeNode(core.getToDoManager().getRoot())));
+        ((DefaultTreeModel)toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode)toDoTree.getModel().getRoot());
+    }
+    
     private void setupEasterEgg() {
         class EnterKeyListener implements KeyEventPostProcessor {
             String lastChars = "------------------------------";
@@ -738,7 +780,7 @@ public class ScrMainMenu extends PFrame {
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventPostProcessor(new EnterKeyListener());
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
      * content of this method is always regenerated by the Form Editor.
@@ -747,7 +789,10 @@ public class ScrMainMenu extends PFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        pnlToDoSplit = new javax.swing.JSplitPane();
+        pnlToDo = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        pnlSideButtons = new javax.swing.JPanel();
         btnLexicon = new PButton(core);
         btnPos = new PButton(core);
         btnClasses = new PButton(core);
@@ -756,7 +801,7 @@ public class ScrMainMenu extends PFrame {
         btnProp = new PButton(core);
         btnPhonology = new PButton(core);
         btnQuiz = new PButton(core);
-        jPanel2 = new javax.swing.JPanel() {
+        pnlMain = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -806,8 +851,29 @@ public class ScrMainMenu extends PFrame {
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(4000, 4000));
 
-        jPanel1.setBackground(new java.awt.Color(102, 204, 255));
-        jPanel1.setMaximumSize(new java.awt.Dimension(4000, 4000));
+        pnlToDoSplit.setBackground(new java.awt.Color(255, 255, 255));
+        pnlToDoSplit.setDividerLocation(675);
+        pnlToDoSplit.setDividerSize(10);
+
+        pnlToDo.setBackground(new java.awt.Color(255, 255, 255));
+        pnlToDo.setToolTipText("");
+        pnlToDo.setMinimumSize(new java.awt.Dimension(1, 1));
+
+        javax.swing.GroupLayout pnlToDoLayout = new javax.swing.GroupLayout(pnlToDo);
+        pnlToDo.setLayout(pnlToDoLayout);
+        pnlToDoLayout.setHorizontalGroup(
+            pnlToDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 117, Short.MAX_VALUE)
+        );
+        pnlToDoLayout.setVerticalGroup(
+            pnlToDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 430, Short.MAX_VALUE)
+        );
+
+        pnlToDoSplit.setRightComponent(pnlToDo);
+
+        pnlSideButtons.setBackground(new java.awt.Color(102, 204, 255));
+        pnlSideButtons.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         btnLexicon.setText("Lexicon");
         btnLexicon.setToolTipText("A customizable dictionary for your language's vocabulary");
@@ -872,13 +938,13 @@ public class ScrMainMenu extends PFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlSideButtonsLayout = new javax.swing.GroupLayout(pnlSideButtons);
+        pnlSideButtons.setLayout(pnlSideButtonsLayout);
+        pnlSideButtonsLayout.setHorizontalGroup(
+            pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSideButtonsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnLexicon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -887,11 +953,11 @@ public class ScrMainMenu extends PFrame {
                     .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPhonology, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        pnlSideButtonsLayout.setVerticalGroup(
+            pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSideButtonsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnLexicon, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -911,8 +977,8 @@ public class ScrMainMenu extends PFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setMaximumSize(new java.awt.Dimension(4000, 4000));
+        pnlMain.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMain.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         jButton1.setText("OPEN LANGUAGE");
         jButton1.setToolTipText("Open an existing language");
@@ -941,35 +1007,52 @@ public class ScrMainMenu extends PFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("or simply begin work on the blank file currently loaded.");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
+        pnlMain.setLayout(pnlMainLayout);
+        pnlMainLayout.setHorizontalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainLayout.createSequentialGroup()
                 .addGap(101, 101, 101)
                 .addComponent(jButton1)
                 .addGap(95, 95, 95)
                 .addComponent(jButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+                .addContainerGap(10, Short.MAX_VALUE))
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(97, Short.MAX_VALUE)
+        pnlMainLayout.setVerticalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
+                .addContainerGap(129, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
                 .addGap(118, 118, 118))
         );
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(pnlSideButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlSideButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pnlToDoSplit.setLeftComponent(jPanel3);
 
         jMenuBar1.setOpaque(false);
 
@@ -1148,15 +1231,11 @@ public class ScrMainMenu extends PFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(pnlToDoSplit, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlToDoSplit)
         );
 
         pack();
@@ -1460,8 +1539,7 @@ public class ScrMainMenu extends PFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -1488,6 +1566,10 @@ public class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuSaveAs;
     private javax.swing.JMenuItem mnuSaveLocal;
     private javax.swing.JMenu mnuTools;
+    private javax.swing.JPanel pnlMain;
+    private javax.swing.JPanel pnlSideButtons;
+    private javax.swing.JPanel pnlToDo;
+    private javax.swing.JSplitPane pnlToDoSplit;
     // End of variables declaration//GEN-END:variables
 
     @Override

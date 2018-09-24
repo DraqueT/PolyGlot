@@ -37,6 +37,7 @@ import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.ManagersCollections.RomanizationManager;
 import PolyGlot.Nodes.EtyExternalParent;
+import PolyGlot.Nodes.ToDoNode;
 import PolyGlot.Nodes.WordClassValue;
 import PolyGlot.Nodes.WordClass;
 import java.io.InputStream;
@@ -209,6 +210,8 @@ public class CustHandlerFactory {
             boolean betyExternalWordValue = false;
             boolean betyExternalWordOrigin = false;
             boolean betyExternalWordDefinition = false;
+            boolean btoDoNodeDone = false;
+            boolean btoDoNodeLabel = false;
             
             int wId;
             int wCId;
@@ -463,6 +466,12 @@ public class CustHandlerFactory {
                      betyExternalWordOrigin = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.EtyExternalWordDefinitionXID)) {
                      betyExternalWordDefinition = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.ToDoNodeXID)) {
+                     core.getToDoManager().pushBuffer();
+                } else if (qName.equalsIgnoreCase(PGTUtil.ToDoNodeLabelXID)) {
+                     btoDoNodeLabel = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.ToDoNodeDoneXID)) {
+                     btoDoNodeDone = true;
                 }
             }
 
@@ -855,6 +864,12 @@ public class CustHandlerFactory {
                      betyExternalWordOrigin = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.EtyExternalWordDefinitionXID)) {
                      betyExternalWordDefinition = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.ToDoNodeXID)) {
+                     core.getToDoManager().popBuffer();
+                } else if (qName.equalsIgnoreCase(PGTUtil.ToDoNodeLabelXID)) {
+                     btoDoNodeLabel = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.ToDoNodeDoneXID)) {
+                     btoDoNodeDone = false;
                 }
             }
 
@@ -1227,6 +1242,11 @@ public class CustHandlerFactory {
                 } else if (betyExternalWordDefinition) {
                     EtyExternalParent ext = core.getEtymologyManager().getBufferExtParent();
                     ext.setDefinition(ext.getDefinition() + new String(ch, start, length));
+                } else if (btoDoNodeLabel) {
+                    ToDoNode node = core.getToDoManager().getBuffer();
+                    node.setValue(node.toString() + new String(ch, start, length));
+                } else if (btoDoNodeDone) {
+                    core.getToDoManager().getBuffer().setDone(new String(ch, start, length).equals(PGTUtil.True));
                 }
             }
             

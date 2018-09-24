@@ -205,6 +205,14 @@ public class PGTUtil {
     public static final String EtyExternalWordValueXID = "EtymologyExternalWordValue";
     public static final String EtyExternalWordOriginXID = "EtymologyExternalWordOrigin";
     public static final String EtyExternalWordDefinitionXID = "EtymologyExternalWordDefinition";
+    
+    // TODO Node constants
+    public static final String ToDoLogXID = "ToDoLog";
+    public static final String ToDoNodeXID = "ToDoNodeHead";
+    public static final String ToDoNodeDoneXID = "ToDoNodeDone";
+    public static final String ToDoNodeLabelXID = "ToDoNodeLabel";
+    public static final String ToDoNodeColorXID = "ToDoNodeColor";
+    public static final String ToDoRoot = "ToDoRoot";
 
     // constants for PolyGlot options found in PolyGlot.ini
     public static final int optionsNumLastFiles = 5;
@@ -216,6 +224,7 @@ public class PGTUtil {
     public static final String optionsMenuFontSize = "OptionsMenuFontSize";
     public static final String optionsNightMode = "OptionsNightMode";
     public static final String optionsReversionsCount = "OptionsReversionCount";
+    public static final String optionsToDoDividerLocation = "ToDoDividerLocation";
 
     // string constants
     public static final String dictFileName = "PGDictionary.xml";

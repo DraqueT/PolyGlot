@@ -36,6 +36,7 @@ import PolyGlot.ManagersCollections.ImageCollection;
 import PolyGlot.ManagersCollections.OptionsManager;
 import PolyGlot.ManagersCollections.ReversionManager;
 import PolyGlot.ManagersCollections.RomanizationManager;
+import PolyGlot.ManagersCollections.ToDoManager;
 import PolyGlot.ManagersCollections.VisualStyleManager;
 import PolyGlot.ManagersCollections.WordClassCollection;
 import PolyGlot.Screens.ScrMainMenu;
@@ -73,10 +74,11 @@ public class DictCore {
     private EtymologyManager etymologyManager;
     private VisualStyleManager visualStyleManager;
     private ReversionManager reversionManager;
+    private ToDoManager toDoManager;
     private ScrMainMenu rootWindow;
     private Object clipBoard;
     private boolean curLoading = false;
-    private Map<String, Integer> versionHierarchy = new HashMap<>();
+    private final Map<String, Integer> versionHierarchy = new HashMap<>();
     private Instant lastSaveTime = Instant.MIN;
 
     /**
@@ -117,6 +119,7 @@ public class DictCore {
             etymologyManager = new EtymologyManager(this);
             visualStyleManager = new VisualStyleManager(this);
             reversionManager = new ReversionManager(this);
+            toDoManager = new ToDoManager();
 
             PAlphaMap alphaOrder = propertiesManager.getAlphaOrder();
 
@@ -529,6 +532,7 @@ public class DictCore {
         romMgr.writeXML(doc, rootElement);
         logoCollection.writeXML(doc, rootElement);
         grammarManager.writeXML(doc, rootElement);
+        toDoManager.writeXML(doc, rootElement);
 
         // write family entries
         rootElement.appendChild(famManager.writeToSaveXML(doc));
@@ -584,6 +588,10 @@ public class DictCore {
     
     public ReversionManager getReversionManager() {
         return reversionManager;
+    }
+    
+    public ToDoManager getToDoManager() {
+        return toDoManager;
     }
     
     public Instant getLastSaveTime() {

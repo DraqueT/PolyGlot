@@ -21,10 +21,8 @@ package PolyGlot.Screens;
 
 // TODO: Most of these tests
 
-import PolyGlot.DictCore;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,7 +32,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
