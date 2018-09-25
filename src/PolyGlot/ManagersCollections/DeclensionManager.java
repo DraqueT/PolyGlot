@@ -928,7 +928,7 @@ public class DeclensionManager {
      * @param wordId word to get declensions of
      * @return map of all declensions in a word (empty if none)
      */
-    public Map getWordDeclensions(Integer wordId) {
+    public Map<String, DeclensionNode> getWordDeclensions(Integer wordId) {
         Map<String, DeclensionNode> ret = new HashMap<>();
 
         Iterator<DeclensionNode> decs = getDeclensionListWord(wordId).iterator();

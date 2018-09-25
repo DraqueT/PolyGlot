@@ -19,9 +19,11 @@
  */
 package PolyGlot;
 
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.Nodes.DeclensionNode;
+import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordClassValue;
 import PolyGlot.Nodes.WordClass;
@@ -45,21 +47,43 @@ import org.apache.poi.ss.usermodel.Row;
  * @author Draque
  */
 public class ExcelExport {
-
+    
+    private final DictCore core;
+    HSSFWorkbook workbook = new HSSFWorkbook();
+    HSSFSheet sheet;
+    CellStyle localStyle = workbook.createCellStyle();
+    CellStyle conStyle = workbook.createCellStyle();
+    CellStyle boldHeader = workbook.createCellStyle();
+    Font conFont = workbook.createFont();
+    Font boldFont = workbook.createFont();
+    
+    private ExcelExport(DictCore _core) {
+        core = _core;
+        
+        conFont.setFontName(core.getPropertiesManager().getFontCon().getFontName());
+        boldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        localStyle.setWrapText(true);
+        conStyle.setWrapText(true);
+        conStyle.setFont(conFont);
+        boldHeader.setWrapText(true);
+        boldHeader.setFont(boldFont);
+    }
+    
     /**
      * Exports a dictionary to an excel file (externally facing)
      *
      * @param fileName Filename to export to
      * @param core dictionary core
+     * @param separateDeclensions whether to separate parts of speech into separate pages for declension values
      * @throws Exception on write error
      */
-    public static void exportExcelDict(String fileName, DictCore core) throws Exception {
-        ExcelExport e = new ExcelExport();
+    public static void exportExcelDict(String fileName, DictCore core, boolean separateDeclensions) throws Exception {
+        ExcelExport e = new ExcelExport(core);
 
-        e.export(fileName, core);
+        e.export(fileName, separateDeclensions);
     }
 
-    private Object[] getWordForm(ConWord conWord, DictCore core) {
+    private Object[] getWordForm(ConWord conWord) {
         List<String> ret = new ArrayList<>();
         String declensionCell = "";
 
@@ -99,63 +123,22 @@ public class ExcelExport {
 
         return ret.toArray();
     }
-
+    
     /**
      * Exports a dictionary to an excel file
      *
      * @param fileName Filename to export to
-     * @param core dictionary core
+     * @param separateDeclensions whether to separate parts of speech into separate pages for declension values
      * @throws Exception on write error
      */
-    private void export(String fileName, DictCore core) throws Exception {
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet;
-        CellStyle localStyle = workbook.createCellStyle();
-        CellStyle conStyle = workbook.createCellStyle();
-        CellStyle boldHeader = workbook.createCellStyle();
-        Font conFont = workbook.createFont();
-        Font boldFont = workbook.createFont();
-        conFont.setFontName(core.getPropertiesManager().getFontCon().getFontName());
-        boldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
-        localStyle.setWrapText(true);
-        conStyle.setWrapText(true);
-        conStyle.setFont(conFont);
-        boldHeader.setWrapText(true);
-        boldHeader.setFont(boldFont);
-
-        // record words on sheet 1        
-        sheet = workbook.createSheet("Lexicon");
-        Iterator<ConWord> wordIt = core.getWordCollection().getWordNodes().iterator();
-
-        Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue(core.conLabel().toUpperCase() + " WORD");
-        row.createCell(1).setCellValue(core.localLabel().toUpperCase() + " WORD");
-        row.createCell(2).setCellValue("TYPE");
-        row.createCell(3).setCellValue("PRONUNCIATION");
-        row.createCell(4).setCellValue("CLASS(ES)");
-        row.createCell(5).setCellValue("DECLENSIONS");
-        row.createCell(6).setCellValue("DEFINITIONS");
-
-        for (Integer i = 1; wordIt.hasNext(); i++) {
-            Object[] wordArray = getWordForm(wordIt.next(), core);
-            row = sheet.createRow(i);
-            for (Integer j = 0; j < wordArray.length; j++) {
-                Cell cell = row.createCell(j);
-                cell.setCellValue((String) wordArray[j]);
-
-                if (j == 0) {
-                    cell.setCellStyle(conStyle);
-                } else {
-                    cell.setCellStyle(localStyle);
-                }
-            }
-        }
-
-        // record types on sheet 2
+    private void export(String fileName, boolean separateDeclensions) throws Exception {
+        this.recordWords(separateDeclensions);
+        
+        // record types on sheet
         sheet = workbook.createSheet("Types");
         Iterator<TypeNode> typeIt = core.getTypes().getNodes().iterator();
 
-        row = sheet.createRow(0);
+        Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("TYPE");
         row.createCell(1).setCellValue("NOTES");
 
@@ -170,7 +153,7 @@ public class ExcelExport {
             cell.setCellStyle(localStyle);
         }
 
-        // record word classes on sheet 3
+        // record word classes on sheet
         sheet = workbook.createSheet("Lexical Classes");
         int propertyColumn = 0;
         for (WordClass curProp
@@ -202,7 +185,7 @@ public class ExcelExport {
             propertyColumn++;
         }
 
-        // record pronunciations on sheet 4
+        // record pronunciations on sheet
         sheet = workbook.createSheet("Pronunciations");
         Iterator<PronunciationNode> procIt = core.getPronunciationMgr().getPronunciations().iterator();
 
@@ -229,6 +212,78 @@ public class ExcelExport {
             }
         } catch (IOException e) {
             throw new Exception("Unable to write file: " + fileName);
+        }
+    }
+    
+    private void recordWords(boolean separateDeclensions) {
+        // separate words by part of speech if requested so that each POS can have distinct declension columns
+        if (separateDeclensions) {
+            // create separate page for each part of speech
+            core.getTypes().getNodes().forEach((type) -> {
+                sheet = workbook.createSheet("Lexicon: " + type.getValue());
+                ConWord filter = new ConWord();
+                filter.setWordTypeId(type.getId());
+                
+                Row row = sheet.createRow(0);
+                row.createCell(0).setCellValue(core.conLabel().toUpperCase() + " WORD");
+                row.createCell(1).setCellValue(core.localLabel().toUpperCase() + " WORD");
+                row.createCell(2).setCellValue("PoS");
+                row.createCell(3).setCellValue("PRONUNCIATION");
+                
+                // create column for each declension
+                int colNum = 4;
+                Iterator<DeclensionPair> decIt = core.getDeclensionManager().getAllCombinedIds(type.getId()).iterator();
+                while (decIt.hasNext()) {
+                    DeclensionPair curDec = decIt.next();
+                    
+                    
+                    colNum++;
+                }
+                
+                try {
+                    core.getWordCollection().filteredList(filter).forEach((word) -> {
+                        
+                    });
+                } catch (Exception e) {
+                    InfoBox.error("Export Error", 
+                            "Unable to export " + type.getValue() + " lexical values", 
+                            core.getRootWindow());
+                }
+            });
+        } else {
+            recordWordsOld();
+        }
+    }
+    
+    /**
+     * Old style of printing words
+     */
+    private void recordWordsOld () {
+        sheet = workbook.createSheet("Lexicon");
+        
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue(core.conLabel().toUpperCase() + " WORD");
+        row.createCell(1).setCellValue(core.localLabel().toUpperCase() + " WORD");
+        row.createCell(2).setCellValue("PoS");
+        row.createCell(3).setCellValue("PRONUNCIATION");
+        row.createCell(4).setCellValue("CLASS(ES)");
+        row.createCell(5).setCellValue("DECLENSIONS");
+        row.createCell(6).setCellValue("DEFINITIONS");
+
+        Iterator<ConWord> wordIt = core.getWordCollection().getWordNodes().iterator();
+        for (Integer i = 1; wordIt.hasNext(); i++) {
+            Object[] wordArray = getWordForm(wordIt.next());
+            row = sheet.createRow(i);
+            for (Integer j = 0; j < wordArray.length; j++) {
+                Cell cell = row.createCell(j);
+                cell.setCellValue((String) wordArray[j]);
+
+                if (j == 0) {
+                    cell.setCellStyle(conStyle);
+                } else {
+                    cell.setCellStyle(localStyle);
+                }
+            }
         }
     }
 }

@@ -320,7 +320,7 @@ public class ScrDeclensions extends PDialog {
      * creates fields for deprecated dimension combinations
      */
     private void createDeprecatedFields() {
-        Set decSet = allWordDeclensions.entrySet();
+        Set<Entry<String, DeclensionNode>> decSet = allWordDeclensions.entrySet();
         Iterator<Entry<String, DeclensionNode>> depIt = decSet.iterator();
 
         // separates new and deprecated fields
