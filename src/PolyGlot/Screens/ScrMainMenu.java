@@ -580,10 +580,15 @@ public class ScrMainMenu extends PFrame {
         }
 
         try {
-            ExcelExport.exportExcelDict(fileName, core);
+            ExcelExport.exportExcelDict(fileName, core, 
+                    InfoBox.actionConfirmation("Excel Export", 
+                            "Export all declensions? (Separates parts of speech into individual tabs)", 
+                            core.getRootWindow()));
+            
             InfoBox.info("Export Status", "Dictionary exported to " + fileName + ".", core.getRootWindow());
         } catch (Exception e) {
             InfoBox.info("Export Problem", e.getLocalizedMessage(), core.getRootWindow());
+            e.printStackTrace();
         }
     }
 

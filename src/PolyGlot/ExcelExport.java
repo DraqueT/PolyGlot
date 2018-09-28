@@ -20,6 +20,7 @@
 package PolyGlot;
 
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.Nodes.DeclensionNode;
@@ -49,6 +50,7 @@ import org.apache.poi.ss.usermodel.Row;
 public class ExcelExport {
     
     private final DictCore core;
+    private final DeclensionManager decMan;
     HSSFWorkbook workbook = new HSSFWorkbook();
     HSSFSheet sheet;
     CellStyle localStyle = workbook.createCellStyle();
@@ -59,6 +61,7 @@ public class ExcelExport {
     
     private ExcelExport(DictCore _core) {
         core = _core;
+        decMan = core.getDeclensionManager();
         
         conFont.setFontName(core.getPropertiesManager().getFontCon().getFontName());
         boldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
@@ -82,8 +85,25 @@ public class ExcelExport {
 
         e.export(fileName, separateDeclensions);
     }
+    
+    /**
+     * Returns a legal worksheet name from the string handed in (illegal characters removed, forced size
+     * @param startName
+     * @return 
+     */
+    private String legalWorksheetName(String startName) {
+        // illegal characters: \ / * [ ] : ?
+        String ret = startName.replaceAll("/|\\*|\\[|\\]|:|\\?", "");
+        
+        // max worksheet name length = 31 chars (why so short?!)
+        if (ret.length() > 31) {
+            ret = ret.substring(0, 30);
+        }
+        
+        return ret;
+    }
 
-    private Object[] getWordForm(ConWord conWord) {
+    private Object[] getWordFormOld(ConWord conWord) {
         List<String> ret = new ArrayList<>();
         String declensionCell = "";
 
@@ -122,6 +142,46 @@ public class ExcelExport {
         ret.add(conWord.getDefinition());
 
         return ret.toArray();
+    }
+    
+    private List<String> getWordForm(ConWord conWord, List<DeclensionPair> decList) {
+        List<String> ret = new ArrayList<>();
+
+        ret.add(conWord.getValue());
+        ret.add(conWord.getLocalWord());
+        ret.add(conWord.getWordTypeDisplay());
+        try {
+            ret.add(conWord.getPronunciation());
+        } catch (Exception e) {
+            ret.add("<ERROR>");
+        }
+
+        String classes = "";
+        for (Entry<Integer, Integer> curEntry : conWord.getClassValues()) {
+            if (classes.length() != 0) {
+                classes += ", ";
+            }
+            try {
+                WordClass prop = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                WordClassValue value = prop.getValueById(curEntry.getValue());
+                classes += value.getValue();
+            } catch (Exception e) {
+                classes = "ERROR: UNABLE TO PULL CLASS";
+            }
+        }
+        ret.add(classes);
+
+        decList.forEach((declension) -> {
+            try {
+                ret.add(decMan.declineWord(conWord, declension.combinedId, conWord.getValue()));
+            } catch (Exception e) {
+                ret.add("DECLENSION ERROR");
+            }
+        });
+        
+        ret.add(WebInterface.getTextFromHtml(conWord.getDefinition()));
+
+        return ret;
     }
     
     /**
@@ -220,7 +280,7 @@ public class ExcelExport {
         if (separateDeclensions) {
             // create separate page for each part of speech
             core.getTypes().getNodes().forEach((type) -> {
-                sheet = workbook.createSheet("Lexicon: " + type.getValue());
+                sheet = workbook.createSheet(legalWorksheetName("Lex-" + type.getValue()));
                 ConWord filter = new ConWord();
                 filter.setWordTypeId(type.getId());
                 
@@ -229,21 +289,36 @@ public class ExcelExport {
                 row.createCell(1).setCellValue(core.localLabel().toUpperCase() + " WORD");
                 row.createCell(2).setCellValue("PoS");
                 row.createCell(3).setCellValue("PRONUNCIATION");
+                row.createCell(4).setCellValue("CLASS(ES)");
                 
                 // create column for each declension
+                List<DeclensionPair> decList = core.getDeclensionManager().getAllCombinedIds(type.getId());
                 int colNum = 4;
-                Iterator<DeclensionPair> decIt = core.getDeclensionManager().getAllCombinedIds(type.getId()).iterator();
-                while (decIt.hasNext()) {
-                    DeclensionPair curDec = decIt.next();
-                    
-                    
+                for (DeclensionPair curDec : decList) {
                     colNum++;
+                    row.createCell(colNum).setCellValue(curDec.label.toUpperCase());
                 }
                 
+                row.createCell(colNum + 1).setCellValue("DEFINITION");
+                
                 try {
-                    core.getWordCollection().filteredList(filter).forEach((word) -> {
+                    int rowCount = 1;
+                    for (ConWord word : core.getWordCollection().filteredList(filter)) {
+                        row = sheet.createRow(rowCount);
                         
-                    });
+                        Object[] wordArray = getWordForm(word, decList).toArray();
+                        for (int colCount = 0; colCount < wordArray.length; colCount++) {
+                            Cell cell = row.createCell(colCount);
+                            cell.setCellValue((String)wordArray[colCount]);
+
+                            if (colCount == 0) {
+                                cell.setCellStyle(conStyle);
+                            } else {
+                                cell.setCellStyle(localStyle);
+                            }
+                        }
+                        rowCount++;
+                    }
                 } catch (Exception e) {
                     InfoBox.error("Export Error", 
                             "Unable to export " + type.getValue() + " lexical values", 
@@ -272,7 +347,7 @@ public class ExcelExport {
 
         Iterator<ConWord> wordIt = core.getWordCollection().getWordNodes().iterator();
         for (Integer i = 1; wordIt.hasNext(); i++) {
-            Object[] wordArray = getWordForm(wordIt.next());
+            Object[] wordArray = getWordFormOld(wordIt.next());
             row = sheet.createRow(i);
             for (Integer j = 0; j < wordArray.length; j++) {
                 Cell cell = row.createCell(j);
