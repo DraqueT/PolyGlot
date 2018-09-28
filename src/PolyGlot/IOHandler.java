@@ -76,6 +76,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -1087,14 +1088,7 @@ public class IOHandler {
      * @throws IOException on failure
      */
     public static void exportCharisFont(String exportPath) throws IOException {
-        try (InputStream fontStream = IOHandler.class.getResourceAsStream(PGTUtil.UnicodeFontLocation)){
-            byte[] buffer = new byte[fontStream.available()];
-            fontStream.read(buffer);
-
-            try (OutputStream oStream = new FileOutputStream(new File(exportPath))) {
-                oStream.write(buffer);
-            }
-        }
+        throw new IOException("This feature has been disabled in this version of PolyGlot.");
     }
 
     /**
@@ -1163,16 +1157,7 @@ public class IOHandler {
      * @throws java.io.IOException if unable to load font
      */
     private Font getLcdFontInternal() throws FontFormatException, IOException {
-        try (InputStream tmp = this.getClass().getResourceAsStream(PGTUtil.LCDFontLocation)) {
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            Font ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
-
-            if (ret != null) {
-                ge.registerFont(ret);
-            }
-
-            return ret;
-        }
+        return new JLabel().getFont();
     }
 
     /**
@@ -1184,7 +1169,7 @@ public class IOHandler {
      * @throws java.io.IOException
      */
     public static Font getCharisUnicodeFontInitial() throws IOException {
-        return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontLocation);
+        return new JLabel().getFont();
     }
 
     /**
@@ -1194,7 +1179,7 @@ public class IOHandler {
      * @throws java.io.IOException
      */
     public static Font getCharisUnicodeFontBoldInitial() throws IOException {
-        return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontBoldLocation);
+        return new JLabel().getFont();
     }
 
     /**
@@ -1204,7 +1189,7 @@ public class IOHandler {
      * @throws java.io.IOException
      */
     public static Font getCharisUnicodeFontItalicInitial() throws IOException {
-        return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontItalicLocation);
+        return new JLabel().getFont();
     }
 
     /**
@@ -1214,7 +1199,7 @@ public class IOHandler {
      * @throws java.io.IOException
      */
     public static Font getCharisUnicodeFontBoldItalicInitial() throws IOException {
-        return new IOHandler().getCharisUnicodeFontInternal(PGTUtil.UnicodeFontBoldItalicLocation);
+        return new JLabel().getFont();
     }
 
     /**
@@ -1250,9 +1235,9 @@ public class IOHandler {
      *
      * @return
      */
-    public InputStream getCharisInputStream() {
-        return this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation);
-    }
+//    public InputStream getCharisInputStream() {
+//        return this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation);
+//    }
 
     /**
      * Fetches and returns default button font
@@ -1271,19 +1256,7 @@ public class IOHandler {
      * @throws java.io.IOException if unable to load font
      */
     private Font getButtonFontInternal() throws IOException {
-        Font ret = null;
-        try (InputStream tmp = this.getClass().getResourceAsStream(PGTUtil.ButtonFontLocation)) {
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
-            ret = ret.deriveFont(new Float(12)); // default to size 12 font
-            if (ret != null) {
-                ge.registerFont(ret);
-            }
-        } catch (Exception e) {
-            throw new IOException("Unable to load button font.");
-        }
-
-        return ret;
+        return new JLabel().getFont();
     }
 
     /**
@@ -1378,11 +1351,11 @@ public class IOHandler {
      * internally
      * @throws IOException if this throws, something is wrong internally
      */
-    public byte[] getUnicodeFontByteArray() throws FileNotFoundException, IOException {
-        try (InputStream localStream = this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation)) {
-            return IOUtils.toByteArray(localStream);
-        }
-    }
+//    public byte[] getUnicodeFontByteArray() throws FileNotFoundException, IOException {
+//        try (InputStream localStream = this.getClass().getResourceAsStream(PGTUtil.UnicodeFontLocation)) {
+//            return IOUtils.toByteArray(localStream);
+//        }
+//    }
 
     /**
      * Gets Unicode compatible font as byte array
@@ -1392,11 +1365,11 @@ public class IOHandler {
      * internally
      * @throws IOException if this throws, something is wrong internally
      */
-    public byte[] getUnicodeFontItalicByteArray() throws FileNotFoundException, IOException {
-        try (InputStream localStream = this.getClass().getResourceAsStream(PGTUtil.UnicodeFontItalicLocation)) {
-            return IOUtils.toByteArray(localStream);
-        }
-    }
+//    public byte[] getUnicodeFontItalicByteArray() throws FileNotFoundException, IOException {
+//        try (InputStream localStream = this.getClass().getResourceAsStream(PGTUtil.UnicodeFontItalicLocation)) {
+//            return IOUtils.toByteArray(localStream);
+//        }
+//    }
 
     /**
      * Opens an arbitrary file via the local OS's default. If unable to open for
