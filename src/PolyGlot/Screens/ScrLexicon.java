@@ -891,7 +891,7 @@ public final class ScrLexicon extends PFrame {
      */
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
-        final javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new IOHandler().getCharisInputStream(), 12);
+        final javafx.scene.text.Font font = javafx.scene.text.Font.font(defLexValue);
 
         grid.setPrefWidth(4000);
         txtConSrc = new TextField();
