@@ -21,8 +21,6 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import java.awt.Font;
-import java.awt.font.TextAttribute;
-import java.util.Map;
 import javax.swing.JList;
 
 /**

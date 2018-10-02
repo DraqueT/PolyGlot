@@ -588,7 +588,6 @@ public class ScrMainMenu extends PFrame {
             InfoBox.info("Export Status", "Dictionary exported to " + fileName + ".", core.getRootWindow());
         } catch (Exception e) {
             InfoBox.info("Export Problem", e.getLocalizedMessage(), core.getRootWindow());
-            e.printStackTrace();
         }
     }
 

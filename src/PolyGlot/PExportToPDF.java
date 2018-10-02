@@ -91,7 +91,7 @@ public class PExportToPDF {
     private final String GLOSSKEY = "GLOSSKEY";
     private final String GRAMMAR = "GRAMMAR";
     private final Map<Integer, String> glossKey;
-    private final List<Entry<Div, String>> chapList = new ArrayList<>();
+    private final List<PEntry<Div, String>> chapList = new ArrayList<>();
     private final List<SecEntry> chapSects = new ArrayList<>();
     private final Map<String, String> chapTitles = new HashMap<>();
     private final int offsetSize = 1;
@@ -180,15 +180,15 @@ public class PExportToPDF {
             document.add(buildFrontPage());
             if (forewardText.length() != 0) {
                 chapTitles.put(FOREWORD, "Author Foreword");
-                chapList.add(new PEntry(buildForward(FOREWORD), FOREWORD));
+                chapList.add(new PEntry<>(buildForward(FOREWORD), FOREWORD));
             }
             if (printOrtho) {
                 chapTitles.put(ORTHOGRAPHY, "Orthography");
-                chapList.add(new PEntry(buildOrthography(ORTHOGRAPHY), ORTHOGRAPHY));
+                chapList.add(new PEntry<>(buildOrthography(ORTHOGRAPHY), ORTHOGRAPHY));
             }
             if (printGlossKey) {
                 chapTitles.put(GLOSSKEY, "Gloss Key");
-                chapList.add(new PEntry(buildGlossKey(GLOSSKEY), GLOSSKEY));
+                chapList.add(new PEntry<>(buildGlossKey(GLOSSKEY), GLOSSKEY));
             }
 
             if (printConLocal) {
@@ -200,7 +200,7 @@ public class PExportToPDF {
                 title += core.localLabel();
 
                 chapTitles.put(DICTCON2LOC, title);
-                chapList.add(new PEntry(null, DICTCON2LOC));
+                chapList.add(new PEntry<>(null, DICTCON2LOC));
             }
             if (printLocalCon) {
                 String title = "Dictionary: ";
@@ -209,12 +209,12 @@ public class PExportToPDF {
                 title += core.conLabel();
 
                 chapTitles.put(DICTLOC2CON, title);
-                chapList.add(new PEntry(null, DICTLOC2CON));
+                chapList.add(new PEntry<>(null, DICTLOC2CON));
             }
 
             if (printGrammar) {
                 chapTitles.put(GRAMMAR, "Grammar");
-                chapList.add(new PEntry(buildGrammar(GRAMMAR), GRAMMAR));
+                chapList.add(new PEntry<>(buildGrammar(GRAMMAR), GRAMMAR));
             }
 
             // build table of contents
@@ -332,7 +332,7 @@ public class PExportToPDF {
      *
      * @return
      */
-    private Map getGlossKey() {
+    private Map<Integer, String> getGlossKey() {
         Map<Integer, String> ret = new HashMap<>();
 
         core.getTypes().getNodes().forEach((curNode) -> {

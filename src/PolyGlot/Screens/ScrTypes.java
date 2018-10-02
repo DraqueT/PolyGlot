@@ -191,7 +191,7 @@ public class ScrTypes extends PFrame {
      */
     private void populateTypes() {
         try {
-            DefaultListModel listModel = new DefaultListModel();
+            DefaultListModel<TypeNode> listModel = new DefaultListModel<>();
 
             core.getTypes().getNodes().forEach((typeIt) -> {
                 listModel.addElement(typeIt);
