@@ -139,7 +139,7 @@ public class FormattedTextHelper {
     public static List<Entry<String, PFontInfo>> getSectionTextFontSpecifec(String savedVal, DictCore core) {
         String remaining = savedVal;
         String font = "";
-        List<Entry<String, PFontInfo>> ret = new ArrayList();
+        List<Entry<String, PFontInfo>> ret = new ArrayList<>();
         PFontInfo conFont = new PFontInfo();
                 
         while (!remaining.isEmpty()) {
@@ -164,7 +164,8 @@ public class FormattedTextHelper {
                 if (nextNode.length() != 0){
                     conFont.awtFont = font.equals(core.getPropertiesManager().getFontCon().getFamily()) ? 
                             core.getPropertiesManager().getFontCon() : new JLabel().getFont();
-                    ret.add(new SecEntry(nextNode, conFont));
+                    SecEntry temp = new SecEntry(nextNode, conFont);
+                    ret.add(temp);
                     conFont = new PFontInfo();
                 }
             }
@@ -457,9 +458,9 @@ public class FormattedTextHelper {
         return ret.replaceAll("<.*?>", "");
     }
     
-    static class SecEntry implements Entry {
+    static class SecEntry<String, PFontInfo> implements Entry {
         final String key;
-        PFontInfo fontInfo;        
+        Object fontInfo;        
         public SecEntry(String _key, PFontInfo _fontInfo) {
             key = _key;
             fontInfo = _fontInfo;
@@ -474,7 +475,7 @@ public class FormattedTextHelper {
         }
         @Override
         public Object setValue(Object value) {
-            fontInfo = (PFontInfo)value;
+            fontInfo = value;
             return fontInfo;
         }        
     }
