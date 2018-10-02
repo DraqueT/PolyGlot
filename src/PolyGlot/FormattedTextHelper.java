@@ -174,6 +174,64 @@ public class FormattedTextHelper {
         return ret;
     }
     
+    public static com.itextpdf.kernel.color.Color swtColorToItextColor(Color awtc) {
+        com.itextpdf.kernel.color.Color ret = com.itextpdf.kernel.color.Color.BLACK;
+        if (awtc == Color.BLACK) {
+            ret = com.itextpdf.kernel.color.Color.BLACK;
+        } else if (awtc == Color.BLUE) {
+            ret = com.itextpdf.kernel.color.Color.BLUE;
+        } else if (awtc == Color.CYAN) {
+            ret = com.itextpdf.kernel.color.Color.CYAN;
+        }  else if (awtc == Color.DARK_GRAY) {
+            ret = com.itextpdf.kernel.color.Color.DARK_GRAY;
+        } else if (awtc == Color.GRAY) {
+            ret = com.itextpdf.kernel.color.Color.GRAY;
+        } else if (awtc == Color.GREEN) {
+            ret = com.itextpdf.kernel.color.Color.GREEN;
+        } else if (awtc == Color.LIGHT_GRAY) {
+            ret = com.itextpdf.kernel.color.Color.LIGHT_GRAY;
+        } else if (awtc == Color.MAGENTA) {
+            ret = com.itextpdf.kernel.color.Color.MAGENTA;
+        } else if (awtc == Color.ORANGE) {
+            ret = com.itextpdf.kernel.color.Color.ORANGE;
+        } else if (awtc == Color.PINK) {
+            ret = com.itextpdf.kernel.color.Color.PINK;
+        } else if (awtc == Color.RED) {
+            ret = com.itextpdf.kernel.color.Color.RED;
+        } else if (awtc == Color.WHITE) {
+            ret = com.itextpdf.kernel.color.Color.WHITE;
+        } else if (awtc == Color.YELLOW) {
+            ret = com.itextpdf.kernel.color.Color.YELLOW;
+        } else if (awtc == Color.black) {
+            ret = com.itextpdf.kernel.color.Color.BLACK;
+        } else if (awtc == Color.blue) {
+            ret = com.itextpdf.kernel.color.Color.BLUE;
+        } else if (awtc == Color.cyan) {
+            ret = com.itextpdf.kernel.color.Color.CYAN;
+        } else if (awtc == Color.darkGray) {
+            ret = com.itextpdf.kernel.color.Color.DARK_GRAY;
+        } else if (awtc == Color.gray) {
+            ret = com.itextpdf.kernel.color.Color.GRAY;
+        } else if (awtc == Color.green) {
+            ret = com.itextpdf.kernel.color.Color.GREEN;
+        } else if (awtc == Color.lightGray) {
+            ret = com.itextpdf.kernel.color.Color.LIGHT_GRAY;
+        } else if (awtc == Color.magenta) {
+            ret = com.itextpdf.kernel.color.Color.MAGENTA;
+        } else if (awtc == Color.orange) {
+            ret = com.itextpdf.kernel.color.Color.ORANGE;
+        } else if (awtc == Color.pink) {
+            ret = com.itextpdf.kernel.color.Color.PINK;
+        } else if (awtc == Color.red) {
+            ret = com.itextpdf.kernel.color.Color.RED;
+        } else if (awtc == Color.white) {
+            ret = com.itextpdf.kernel.color.Color.WHITE;
+        } else if (awtc == Color.yellow) {
+            ret = com.itextpdf.kernel.color.Color.YELLOW;
+        }
+        return ret;
+    }
+    
     /**
      * Given an HTML <font~> node, return the font family
      * @param targetNode string value of HTML node
