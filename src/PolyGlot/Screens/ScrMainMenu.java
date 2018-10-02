@@ -1480,6 +1480,9 @@ public class ScrMainMenu extends PFrame {
                 String startProblems = "";
                 ScrMainMenu s = null;
 
+                // set DPI scaling to false (requires Java 9)
+                System.getProperties().setProperty("Dsun.java2d.dpiaware", "false");
+
                 // Test for minimum version of Java (8)
                 String jVer = System.getProperty("java.version");
                 if (jVer.startsWith("1.5") || jVer.startsWith("1.6") || jVer.startsWith("1.7")) {
