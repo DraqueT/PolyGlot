@@ -415,8 +415,7 @@ public class ConWordCollection extends DictionaryCollection {
         ConWordCollection retValues = new ConWordCollection(core);
         retValues.setAlphaOrder(alphaOrder);
 
-        Iterator<Entry<Integer, ConWord>> filterList = nodeMap.entrySet()
-                .iterator();
+        Iterator<Entry<Integer, ConWord>> filterList = nodeMap.entrySet().iterator();
         Entry<Integer, ConWord> curEntry;
         ConWord curWord;
         // definition search should always ignore case

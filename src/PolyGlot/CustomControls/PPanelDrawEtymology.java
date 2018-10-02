@@ -245,7 +245,6 @@ public final class PPanelDrawEtymology extends JPanel {
         int bottomParentHeight = 0;
         int halfTextHeight;
         int myLineHeight;
-        List<Object> allParents = new ArrayList(myNode.parents);
         
         // recursively print all parents 
         for (EtymologyPrintingNode parNode : myNode.parents) {

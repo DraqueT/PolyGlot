@@ -229,7 +229,7 @@ public class ScrWordClasses extends PFrame {
     }
 
     private void populateWordProperties() {
-        DefaultListModel listModel = new DefaultListModel();
+        DefaultListModel<WordClass> listModel = new DefaultListModel<>();
 
         core.getWordPropertiesCollection().getAllWordClasses().forEach((curNode) -> {
             listModel.addElement(curNode);
@@ -310,7 +310,7 @@ public class ScrWordClasses extends PFrame {
             return;
         }
 
-        DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
+        DefaultListModel<WordClass> listModel = (DefaultListModel<WordClass>) lstProperties.getModel();
         listModel.addElement(prop);
         lstProperties.setSelectedValue(prop, true);
     }

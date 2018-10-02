@@ -29,7 +29,7 @@ import java.util.List;
  * @param <K> Type of the rectangle target
  */
 public class RectangularCoordinateMap<K> {
-    private final List<Rectangle> rectList = new ArrayList<>();
+    private final List<Rectangle<K>> rectList = new ArrayList<>();
     
     /**
      * Adds rectangle to an infinite grid.
@@ -66,7 +66,7 @@ public class RectangularCoordinateMap<K> {
     public K getObjectAtLocation(int x, int y) {
         K ret = null;
         
-        for (Rectangle rect : rectList) {
+        for (Rectangle<K> rect : rectList) {
             if (x >= rect.leftEdge 
                     && x <= rect.rightEdge
                     && y >= rect.topEdge

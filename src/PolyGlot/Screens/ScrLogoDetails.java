@@ -119,7 +119,7 @@ public class ScrLogoDetails extends PFrame {
         } else {
             try {
                 singleModeLogo = (LogoNode) core.getLogoCollection().getNodeById(logoId);
-                List<LogoNode> list = new ArrayList();
+                List<LogoNode> list = new ArrayList<>();
                 list.add(singleModeLogo);
 
                 populateLogographs(list.iterator());

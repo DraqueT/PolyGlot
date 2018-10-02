@@ -86,7 +86,7 @@ public class POptionPane extends JOptionPane {
         setAllWhite(pane);
         
         // prevent locking of application
-        if(parentIsModal && parentWindow != null) {
+        if(parentIsModal) {
             ((Dialog)parentWindow).setModal(false);
         }
 
@@ -114,7 +114,7 @@ public class POptionPane extends JOptionPane {
         }
         
         // prevent locking of application
-        if(parentIsModal && parentWindow != null) {
+        if(parentIsModal) {
             ((Dialog)parentWindow).setModal(true);
         }
 

@@ -26,7 +26,6 @@ import PolyGlot.ManagersCollections.VisualStyleManager;
 import PolyGlot.PGTUtil;
 import PolyGlot.PGTools;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
@@ -35,9 +34,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.font.TextAttribute;
 import java.io.Serializable;
-import java.util.Map;
 import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JMenuItem;
@@ -341,7 +338,6 @@ public class PTextField extends JTextField {
         } catch (Exception e) {
             InfoBox.error("Set text error", "Could not set text component: " 
                     + e.getLocalizedMessage(), core.getRootWindow());
-            e.printStackTrace();
         }
 
         if (isDefaultText() && !defText.equals("")) {

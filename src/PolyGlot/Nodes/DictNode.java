@@ -46,7 +46,7 @@ public abstract class DictNode implements Comparable<DictNode> {
         return id;
     }
 
-    public void setAlphaOrder(PAlphaMap _alphaOrder) {
+    public void setAlphaOrder(PAlphaMap<String, Integer> _alphaOrder) {
         alphaOrder = _alphaOrder;
     }
 

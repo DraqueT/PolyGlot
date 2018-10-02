@@ -86,7 +86,7 @@ public class EtyExternalParent extends DictNode {
             EtyExternalParent node = (EtyExternalParent)_node;
             definition = node.getDefinition();
             externalLanguage = node.getExternalLanguage();
-        } else {
+        } else if (_node != null) {
             throw new ClassCastException("Type: " 
                     + _node.getClass().getCanonicalName() 
                     + " cannot be explicitly converted to " 

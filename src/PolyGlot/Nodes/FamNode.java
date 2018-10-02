@@ -162,7 +162,7 @@ public class FamNode extends DictNode {
     private List<ConWord> getWordsIncludeSubsInternal() {
         manager.removeDeadWords(this, words);
         
-        List<ConWord> ret = new ArrayList(words);
+        List<ConWord> ret = new ArrayList<>(words);
         
         Iterator<FamNode> subIt = subNodes.iterator();
         

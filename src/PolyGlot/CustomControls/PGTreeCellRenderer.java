@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque
+ * Copyright (c) 2015-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -38,13 +38,6 @@ public class PGTreeCellRenderer extends DefaultTreeCellRenderer {
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 
-        // What on earth was I looking to accomplish here?? Leaving code for now in case it had a purpose...
-        /*Object userObject = node.getUserObject();
-        if (userObject != null) {
-            setText(value.toString() + " [" + userObject.getClass().getName() + "]");
-        } else {
-            setText(value.toString());
-        }*/
         setText(value.toString());
 
         if (node instanceof GrammarChapNode
