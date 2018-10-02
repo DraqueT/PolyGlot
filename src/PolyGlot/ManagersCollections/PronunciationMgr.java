@@ -161,12 +161,23 @@ public class PronunciationMgr {
      * @throws java.lang.Exception on malformed regex statements encountered
      */
     public String getPronunciation(String base) throws Exception {
+        String[] spaceDelimited = base.trim().split(" ");
+        String ret = "";
+        
+        for (String fragment : spaceDelimited) {
+            ret += " " + getPronunciationInternal(fragment);
+        }
+        
+        return ret.trim();
+    }
+    
+    public String getPronunciationInternal(String base) throws Exception {
         String ret = "";
 
         Iterator<PronunciationNode> procCycle = getPronunciationElements(base, 0).iterator();
         while (procCycle.hasNext()) {
             PronunciationNode curProc = procCycle.next();
-            ret += curProc.getPronunciation() + " ";
+            ret += curProc.getPronunciation();
         }
 
         return ret;
