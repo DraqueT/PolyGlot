@@ -1473,59 +1473,73 @@ public class ScrMainMenu extends PFrame {
     public static void main(final String args[]) {
         setupNumbus();
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                String overridePath = args.length > 1 ? args[1] : "";
-                String startProblems = "";
-                ScrMainMenu s = null;
-
-                // set DPI scaling to false (requires Java 9)
-                System.getProperties().setProperty("Dsun.java2d.dpiaware", "false");
-
-                // Test for minimum version of Java (8)
-                String jVer = System.getProperty("java.version");
-                if (jVer.startsWith("1.5") || jVer.startsWith("1.6") || jVer.startsWith("1.7")) {
-                    startProblems += "Unable to start PolyGlot without Java 8 or higher.\n";
-                }
-
+        java.awt.EventQueue.invokeLater(() -> {
+            String overridePath = args.length > 1 ? args[1] : "";
+            ScrMainMenu s = null;
+            
+            // set DPI scaling to false (requires Java 9)
+            System.getProperties().setProperty("Dsun.java2d.dpiaware", "false");
+            
+            if (canStart()) {
                 try {
-                    // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
-                    this.getClass().getClassLoader().loadClass("javafx.embed.swing.JFXPanel");
-                } catch (ClassNotFoundException e) {
-                    startProblems += "Unable to load Java FX. Download and install to use PolyGlot "
-                            + "(JavaFX not included in some builds of Java 8 for Linux).\n";
-                }
-
-                if (startProblems.length() == 0) {
-                    try {
-                        // separated due to serious nature of Thowable vs Exception
-                        s = new ScrMainMenu(overridePath);
-                        s.checkForUpdates(false);
-                        s.setupKeyStrokes();
-                        s.setVisible(true);
-
-                        // open file if one is provided via arguments
-                        if (args.length > 0) {
-                            s.setFile(args[0]);
-                            s.openLexicon();
-                        }
-                    } catch (Exception ex) {
-                        startProblems += "Unable to open PolyGlot main frame: \n"
-                                + ex.getMessage() + "\n"
-                                + "Please contact developer (draquemail@gmail.com) for assistance.";
-                        // ex.printStackTrace();
+                    // separated due to serious nature of Thowable vs Exception
+                    s = new ScrMainMenu(overridePath);
+                    s.checkForUpdates(false);
+                    s.setupKeyStrokes();
+                    s.setVisible(true);
+                    
+                    // open file if one is provided via arguments
+                    if (args.length > 0) {
+                        s.setFile(args[0]);
+                        s.openLexicon();
                     }
-                }
-
-                if (startProblems.length() != 0) {
-                    InfoBox.error("Unable to start", startProblems, s);
+                } catch (Exception ex) {
+                    InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
+                            + ex.getMessage() + "\n"
+                                    + "Please contact developer (draquemail@gmail.com) for assistance.", null);
+                    
                     if (s != null) {
                         s.dispose();
                     }
+                    // ex.printStackTrace();
                 }
             }
         });
+    }
+    
+    /**
+     * Tests whether PolyGlot can start, informs user of startup problems.
+     * @return 
+     */
+    private static boolean canStart() {
+        String startProblems = "";
+        boolean ret = true;
+        
+        // Test for minimum version of Java (8)
+        String jVer = System.getProperty("java.version");
+        if (jVer.startsWith("1.5") || jVer.startsWith("1.6") || jVer.startsWith("1.7")) {
+            startProblems += "Unable to start PolyGlot without Java 8 or higher.\n";
+        }
+
+        // keep people from running PolyGlot from within a zip file...
+        if (System.getProperty("user.dir").toLowerCase().startsWith("c:\\windows\\system")) {
+            startProblems += "PolyGlot cannot be run from within a zip archive. Please unzip all files to a folder.\n";
+        }
+
+        try {
+            // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
+            ScrMainMenu.class.getClassLoader().loadClass("javafx.embed.swing.JFXPanel");
+        } catch (ClassNotFoundException e) {
+            startProblems += "Unable to load Java FX. Download and install to use PolyGlot "
+                    + "(JavaFX not included in some builds of Java 8 for Linux).\n";
+        }
+        
+        if (startProblems.length() != 0) {
+            InfoBox.error("Unable to start PolyGlot", startProblems, null);
+            ret = false;
+        }
+        
+        return ret;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
