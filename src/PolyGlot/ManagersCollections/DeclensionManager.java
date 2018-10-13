@@ -166,15 +166,13 @@ public class DeclensionManager {
      * @param typeId ID of type to wipe
      */
     public void wipeDeclensionGenRules(int typeId) {
-        Iterator<DeclensionGenRule> itRules = generationRules.iterator();
-
-        while (itRules.hasNext()) {
-            DeclensionGenRule curRule = itRules.next();
-
-            if (curRule.getTypeId() == typeId) {
-                generationRules.remove(curRule);
+        List<DeclensionGenRule> rulesList = new ArrayList<DeclensionGenRule>(generationRules);
+        
+        rulesList.forEach((rule) -> {
+            if (rule.getTypeId() == typeId) {
+                generationRules.remove(rule);
             }
-        }
+        });
     }
 
     /**
@@ -728,7 +726,9 @@ public class DeclensionManager {
     }
 
     /**
-     * Gets declension for a word from combined dimensional Id of declension
+     * Gets stored declension for a word from combined dimensional Id of declension.
+     * This does NOT generate a new declension, and is primarily of use with overridden
+     * values and language files which do not use autodeclension.
      *
      * @param wordId the id of the root word
      * @param dimId the combined dim Id of the dimension

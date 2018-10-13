@@ -144,6 +144,13 @@ public class ExcelExport {
         return ret.toArray();
     }
     
+    /**
+     * Returns list of all legal wordforms this word can take.
+     * Accounts for overridden forms and properly filters forms marked as disabled
+     * @param conWord
+     * @param decList
+     * @return 
+     */
     private List<String> getWordForm(ConWord conWord, List<DeclensionPair> decList) {
         List<String> ret = new ArrayList<>();
 
@@ -173,7 +180,14 @@ public class ExcelExport {
 
         decList.forEach((declension) -> {
             try {
-                ret.add(decMan.declineWord(conWord, declension.combinedId, conWord.getValue()));
+                DeclensionNode existingValue = decMan.getDeclensionByCombinedId(conWord.getId(), declension.combinedId);
+                
+                if (existingValue != null) {
+                    ret.add(existingValue.getValue());
+                }
+                else {
+                    ret.add(decMan.declineWord(conWord, declension.combinedId, conWord.getValue()));
+                }
             } catch (Exception e) {
                 ret.add("DECLENSION ERROR");
             }
