@@ -498,6 +498,11 @@ public class DictCore {
             errorLog = e.getLocalizedMessage();
         }
         
+        // if no save time present, simply timestamp for current time (only relevant for first time revision log added)
+        if (lastSaveTime == Instant.MIN) {
+            lastSaveTime = Instant.now();
+        }
+        
         return errorLog;
     }
     
