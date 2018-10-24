@@ -18,9 +18,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package PolyGlot;
+package PolyGlot.Nodes;
 
-import PolyGlot.Nodes.DictNode;
+import PolyGlot.PGTUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

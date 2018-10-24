@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import PolyGlot.Nodes.DeclensionDimension;
 import PolyGlot.Nodes.DeclensionGenTransform;
 import PolyGlot.Nodes.DeclensionGenRule;
 import PolyGlot.Nodes.ConWord;

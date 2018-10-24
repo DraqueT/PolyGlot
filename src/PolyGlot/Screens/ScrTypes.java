@@ -611,7 +611,9 @@ public class ScrTypes extends PFrame {
         }
 
         Window window = ScrDeclensionGenSetup.run(core, curNode.getId());
-        childFrames.add(window);
+        if (window != null) {
+            childFrames.add(window);
+        }
     }//GEN-LAST:event_btnAutogenActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
