@@ -19,6 +19,11 @@
  */
 package PolyGlot.Nodes;
 
+import PolyGlot.PGTUtil;
+import PolyGlot.WebInterface;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 /**
  * This represents a part of speech. Apologies for the naming scheme. "Type" doesn't really fit.
  * @author draque
@@ -113,4 +118,38 @@ public class TypeNode extends DictNode {
         this.defMandatory = defMandatory;
     }
 
+    public void writeXML(Document doc, Element rootElement) {
+        Element wordNode = doc.createElement(PGTUtil.typeXID);
+        
+        Element wordValue = doc.createElement(PGTUtil.typeIdXID);
+        Integer wordId = this.getId();
+        wordValue.appendChild(doc.createTextNode(wordId.toString()));
+        wordNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.typeNameXID);
+        wordValue.appendChild(doc.createTextNode(this.getValue()));
+        wordNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.typeNotesXID);
+        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getNotes())));
+        wordNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.typeDefManXID);
+        wordValue.appendChild(doc.createTextNode(this.isDefMandatory() ? PGTUtil.True : PGTUtil.False));
+        wordNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.typeProcManXID);
+        wordValue.appendChild(doc.createTextNode(this.isProcMandatory() ? PGTUtil.True : PGTUtil.False));
+        wordNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.typePatternXID);
+        wordValue.appendChild(doc.createTextNode(this.getPattern()));
+        wordNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.typeGlossXID);
+        wordValue.appendChild(doc.createTextNode(this.getGloss()));
+        wordNode.appendChild(wordValue);
+        
+        rootElement.appendChild(wordNode);
+    }
 }

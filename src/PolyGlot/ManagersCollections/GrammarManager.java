@@ -160,45 +160,11 @@ public class GrammarManager {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Iterator<GrammarChapNode> it = chapters.iterator();
         Element grammarRoot = doc.createElement(PGTUtil.grammarSectionXID);
         rootElement.appendChild(grammarRoot);
-        Element chapNode;
-        GrammarChapNode curChap;
         
-        while (it.hasNext()) {
-            curChap = it.next();
-
-            chapNode = doc.createElement(PGTUtil.grammarChapterNodeXID);
-            grammarRoot.appendChild(chapNode);
-
-            Element chapElement = doc.createElement(PGTUtil.grammarChapterNameXID);
-            chapElement.appendChild(doc.createTextNode(curChap.getName()));
-            chapNode.appendChild(chapElement);
-            
-            chapElement = doc.createElement(PGTUtil.grammarSectionsListXID);
-            
-            for (int i = 0; i < curChap.getChildCount(); i++) {
-                GrammarSectionNode curSec = (GrammarSectionNode)curChap.getChildAt(i);
-                
-                Element secNode = doc.createElement(PGTUtil.grammarSectionNodeXID);
-                
-                Element secElement = doc.createElement(PGTUtil.grammarSectionNameXID);
-                secElement.appendChild(doc.createTextNode(curSec.getName()));
-                secNode.appendChild(secElement);
-                
-                secElement = doc.createElement(PGTUtil.grammarSectionRecordingXID);
-                secElement.appendChild(doc.createTextNode(curSec.getRecordingId().toString()));
-                secNode.appendChild(secElement);
-                
-                secElement = doc.createElement(PGTUtil.grammarSectionTextXID);
-                secElement.appendChild(doc.createTextNode(curSec.getSectionText()));
-                secNode.appendChild(secElement);
-                
-                chapElement.appendChild(secNode);
-            }
-            
-            chapNode.appendChild(chapElement);
-        }
+        chapters.forEach((chapter)->{
+            chapter.writeXML(doc, grammarRoot);
+        });
     }
 }

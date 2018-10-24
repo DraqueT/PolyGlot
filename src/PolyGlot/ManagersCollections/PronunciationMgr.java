@@ -322,32 +322,18 @@ public class PronunciationMgr {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Iterator<PronunciationNode> procGuide = getPronunciations().iterator();
         Element collection = doc.createElement(PGTUtil.etymologyCollectionXID);
-        Element wordNode;
-        Element wordValue;
         
         rootElement.appendChild(collection);
         
-        wordNode = doc.createElement(PGTUtil.proGuideRecurseXID);
-        wordNode.appendChild(doc.createTextNode(recurse ?
+        Element recurseNode = doc.createElement(PGTUtil.proGuideRecurseXID);
+        recurseNode.appendChild(doc.createTextNode(recurse ?
                 PGTUtil.True : PGTUtil.False));
-        collection.appendChild(wordNode);
-
-        while (procGuide.hasNext()) {
-            PronunciationNode curNode = procGuide.next();
-
-            wordNode = doc.createElement(PGTUtil.proGuideXID);
-            collection.appendChild(wordNode);
-
-            wordValue = doc.createElement(PGTUtil.proGuideBaseXID);
-            wordValue.appendChild(doc.createTextNode(curNode.getValue()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(PGTUtil.proGuidePhonXID);
-            wordValue.appendChild(doc.createTextNode(curNode.getPronunciation()));
-            wordNode.appendChild(wordValue);
-        }
+        collection.appendChild(recurseNode);
+        
+        pronunciations.forEach((proc)->{
+            proc.writeXML(doc, collection);
+        });
     }
 
     /**

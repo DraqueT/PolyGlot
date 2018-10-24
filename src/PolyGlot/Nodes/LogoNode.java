@@ -20,6 +20,7 @@
 package PolyGlot.Nodes;
 
 import PolyGlot.PGTUtil;
+import PolyGlot.WebInterface;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.ImageIcon;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -284,5 +287,45 @@ public class LogoNode extends DictNode {
         value = setNode.value;
         strokes = setNode.getStrokes();
         id = setNode.getId();
+    }
+    
+    public void writeXML(Document doc, Element rootElement) {
+        Element logoElement = doc.createElement(PGTUtil.logoGraphNodeXID);
+        Element node;
+
+        node = doc.createElement(PGTUtil.logoGraphIdXID);
+        node.appendChild(doc.createTextNode(this.getId().toString()));
+        logoElement.appendChild(node);
+
+        node = doc.createElement(PGTUtil.logoGraphValueXID);
+        node.appendChild(doc.createTextNode(this.getValue()));
+        logoElement.appendChild(node);
+
+        node = doc.createElement(PGTUtil.logoIsRadicalXID);
+        node.appendChild(doc.createTextNode(this.isRadical()? PGTUtil.True :PGTUtil.False));
+        logoElement.appendChild(node);
+
+        node = doc.createElement(PGTUtil.logoNotesXID);
+        node.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getNotes())));
+        logoElement.appendChild(node);
+
+        node = doc.createElement(PGTUtil.logoRadicalListXID);
+        node.appendChild(doc.createTextNode(this.getRadicalListString()));
+        logoElement.appendChild(node);
+
+        node = doc.createElement(PGTUtil.logoStrokesXID);
+        node.appendChild(doc.createTextNode(this.getStrokes().toString()));
+        logoElement.appendChild(node);
+
+        Iterator<String> readIt = this.getReadings().iterator();
+        while (readIt.hasNext()) {
+            String curReading = readIt.next();
+
+            node = doc.createElement(PGTUtil.logoReadingXID);
+            node.appendChild(doc.createTextNode(curReading));
+            logoElement.appendChild(node);
+        }
+
+        rootElement.appendChild(logoElement);
     }
 }

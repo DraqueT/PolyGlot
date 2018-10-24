@@ -24,6 +24,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.PGTUtil;
+import PolyGlot.WebInterface;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -437,5 +440,73 @@ public class ConWord extends DictNode {
      */
     public void setFilterEtyParent(Object filterEtyParent) {
         this.filterEtyParent = filterEtyParent;
+    }
+    
+    public void writeXML(Document doc, Element rootElement) {
+        Element wordNode = doc.createElement(PGTUtil.wordXID);
+
+            Element wordValue = doc.createElement(PGTUtil.wordIdXID);
+            Integer wordId = this.getId();
+            wordValue.appendChild(doc.createTextNode(wordId.toString()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(PGTUtil.localWordXID);
+            wordValue.appendChild(doc.createTextNode(this.getLocalWord()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(PGTUtil.conWordXID);
+            wordValue.appendChild(doc.createTextNode(this.getValue()));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(PGTUtil.wordTypeIdXID);
+            wordValue.appendChild(doc.createTextNode(this.getWordTypeId().toString()));
+            wordNode.appendChild(wordValue);
+
+            try {
+                wordValue = doc.createElement(PGTUtil.wordProcXID);
+                wordValue
+                        .appendChild(doc.createTextNode(this.getPronunciation()));
+                wordNode.appendChild(wordValue);
+            } catch (Exception e) {
+                // Do nothing. Users are made aware of this issue elsewhere.
+            }
+
+            wordValue = doc.createElement(PGTUtil.wordDefXID);
+            wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getDefinition())));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(PGTUtil.wordProcOverrideXID);
+            wordValue.appendChild(doc.createTextNode(this.isProcOverride() ? PGTUtil.True : PGTUtil.False));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(PGTUtil.wordAutoDeclenOverrideXID);
+            wordValue.appendChild(doc.createTextNode(this.isOverrideAutoDeclen() ? PGTUtil.True : PGTUtil.False));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(PGTUtil.wordRuleOverrideXID);
+            wordValue.appendChild(doc.createTextNode(this.isRulesOverrride() ? PGTUtil.True : PGTUtil.False));
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(PGTUtil.wordClassCollectionXID);
+            for (Entry<Integer, Integer> entry : this.getClassValues()) {
+                Element classVal = doc.createElement(PGTUtil.wordClassAndValueXID);
+                classVal.appendChild(doc.createTextNode(entry.getKey() + "," + entry.getValue()));
+                wordValue.appendChild(classVal);
+            }
+            wordNode.appendChild(wordValue);
+
+            wordValue = doc.createElement(PGTUtil.wordClassTextValueCollectionXID);
+            for (Entry<Integer, String> entry : this.getClassTextValues()) {
+                Element classVal = doc.createElement(PGTUtil.wordClassTextValueXID);
+                classVal.appendChild(doc.createTextNode(entry.getKey() + "," + entry.getValue()));
+                wordValue.appendChild(classVal);
+            }
+            wordNode.appendChild(wordValue);
+            
+            wordValue = doc.createElement(PGTUtil.wordEtymologyNotesXID);
+            wordValue.appendChild(doc.createTextNode(this.getEtymNotes()));
+            wordNode.appendChild(wordValue);
+            
+            rootElement.appendChild(wordNode);
     }
 }

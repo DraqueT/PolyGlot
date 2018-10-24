@@ -20,6 +20,10 @@
 
 package PolyGlot.Nodes;
 
+import PolyGlot.PGTUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 /**
  * Records orthographic pronunciation values
  * @author draque
@@ -51,5 +55,19 @@ public class PronunciationNode extends DictNode {
         this.setPronunciation(node.getPronunciation());
         this.setValue(node.getValue());
         this.setId(node.getId());
+    }
+    
+    public void writeXML(Document doc, Element rootElement) {
+        Element wordNode = doc.createElement(PGTUtil.proGuideXID);
+
+        Element wordValue = doc.createElement(PGTUtil.proGuideBaseXID);
+        wordValue.appendChild(doc.createTextNode(this.getValue()));
+        wordNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.proGuidePhonXID);
+        wordValue.appendChild(doc.createTextNode(this.getPronunciation()));
+        wordNode.appendChild(wordValue);
+        
+        rootElement.appendChild(wordNode);
     }
 }

@@ -106,57 +106,7 @@ public class WordClassCollection extends DictionaryCollection {
 
         // creates each class
         nodeMap.values().forEach((curClass) -> {
-        WordClass wordClass = (WordClass)curClass;
-            // class element
-            Element classElement = doc.createElement(PGTUtil.ClassXID);
-
-            // ID element
-            Element classValue = doc.createElement(PGTUtil.ClassIdXID);
-            classValue.appendChild(doc.createTextNode(wordClass.getId().toString()));
-            classElement.appendChild(classValue);
-
-            // Name element
-            classValue = doc.createElement(PGTUtil.ClassNameXID);
-            classValue.appendChild(doc.createTextNode(wordClass.getValue()));
-            classElement.appendChild(classValue);
-            
-            // Is Text Override
-            classValue = doc.createElement(PGTUtil.ClassIsFreetextXID);
-            classValue.appendChild(doc.createTextNode(wordClass.isFreeText() ? PGTUtil.True : PGTUtil.False));
-            classElement.appendChild(classValue);
-
-            // generates element with all type IDs of types this class applies to
-            String applyTypes = "";
-            for (Integer typeId : wordClass.getApplyTypes()) {
-                if (applyTypes.length() != 0) {
-                    applyTypes += ",";
-                }
-
-                applyTypes += typeId.toString();
-            }
-            classValue = doc.createElement(PGTUtil.ClassApplyTypesXID);
-            classValue.appendChild(doc.createTextNode(applyTypes));
-            classElement.appendChild(classValue);
-
-            // element for collection of values of class
-            classValue = doc.createElement(PGTUtil.ClassValuesCollectionXID);
-            for (WordClassValue curValue : wordClass.getValues()) {
-                Element valueNode = doc.createElement(PGTUtil.ClassValueNodeXID);
-
-                Element value = doc.createElement(PGTUtil.ClassValueIdXID);
-                value.appendChild(doc.createTextNode(curValue.getId().toString()));
-                valueNode.appendChild(value);
-
-                // value string
-                value = doc.createElement(PGTUtil.ClassValueNameXID);
-                value.appendChild(doc.createTextNode(curValue.getValue()));
-                valueNode.appendChild(value);
-
-                classValue.appendChild(valueNode);
-            }
-            classElement.appendChild(classValue);
-
-            wordClasses.appendChild(classElement);
+            ((WordClass)curClass).writeXML(doc, wordClasses);
         });
 
         rootElement.appendChild(wordClasses);

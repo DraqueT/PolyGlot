@@ -20,11 +20,14 @@
 package PolyGlot.Nodes;
 
 import PolyGlot.ManagersCollections.WordClassCollection;
+import PolyGlot.PGTUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Word properties cover things such as gender. They may apply to all parts of
@@ -210,5 +213,46 @@ public class WordClass extends DictNode {
     
     public void setParent(WordClassCollection _parent) {
         parent = _parent;
+    }
+    
+    public void writeXML(Document doc, Element rootElement) {
+        Element classElement = doc.createElement(PGTUtil.ClassXID);
+
+        // ID element
+        Element classValue = doc.createElement(PGTUtil.ClassIdXID);
+        classValue.appendChild(doc.createTextNode(this.getId().toString()));
+        classElement.appendChild(classValue);
+
+        // Name element
+        classValue = doc.createElement(PGTUtil.ClassNameXID);
+        classValue.appendChild(doc.createTextNode(this.getValue()));
+        classElement.appendChild(classValue);
+
+        // Is Text Override
+        classValue = doc.createElement(PGTUtil.ClassIsFreetextXID);
+        classValue.appendChild(doc.createTextNode(this.isFreeText() ? PGTUtil.True : PGTUtil.False));
+        classElement.appendChild(classValue);
+
+        // generates element with all type IDs of types this class applies to
+        String applyTypesRec = "";
+        for (Integer typeId : this.getApplyTypes()) {
+            if (applyTypesRec.length() != 0) {
+                applyTypesRec += ",";
+            }
+
+            applyTypesRec += typeId.toString();
+        }
+        classValue = doc.createElement(PGTUtil.ClassApplyTypesXID);
+        classValue.appendChild(doc.createTextNode(applyTypesRec));
+        classElement.appendChild(classValue);
+
+        // element for collection of values of class
+        classValue = doc.createElement(PGTUtil.ClassValuesCollectionXID);
+        for (WordClassValue curValue : this.getValues()) {
+            curValue.writeXML(doc, classValue);
+        }
+        classElement.appendChild(classValue);
+
+        rootElement.appendChild(classElement);
     }
 }

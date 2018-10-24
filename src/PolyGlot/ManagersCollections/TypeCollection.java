@@ -283,43 +283,11 @@ public class TypeCollection extends DictionaryCollection {
      */
     public void writeXML(Document doc, Element rootElement) {
         Element typeContainer = doc.createElement(PGTUtil.typeCollectionXID);
-        Element wordNode;
-        Element wordValue;
+        
+        getNodes().forEach((curType) -> {
+            curType.writeXML(doc, typeContainer);
+        });
         
         rootElement.appendChild(typeContainer);
-        
-        for (TypeNode curType : getNodes()) {
-            wordNode = doc.createElement(PGTUtil.typeXID);
-            typeContainer.appendChild(wordNode);
-
-            wordValue = doc.createElement(PGTUtil.typeIdXID);
-            Integer wordId = curType.getId();
-            wordValue.appendChild(doc.createTextNode(wordId.toString()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(PGTUtil.typeNameXID);
-            wordValue.appendChild(doc.createTextNode(curType.getValue()));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(PGTUtil.typeNotesXID);
-            wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(curType.getNotes())));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(PGTUtil.typeDefManXID);
-            wordValue.appendChild(doc.createTextNode(curType.isDefMandatory() ? PGTUtil.True : PGTUtil.False));
-            wordNode.appendChild(wordValue);
-
-            wordValue = doc.createElement(PGTUtil.typeProcManXID);
-            wordValue.appendChild(doc.createTextNode(curType.isProcMandatory() ? PGTUtil.True : PGTUtil.False));
-            wordNode.appendChild(wordValue);
-            
-            wordValue = doc.createElement(PGTUtil.typePatternXID);
-            wordValue.appendChild(doc.createTextNode(curType.getPattern()));
-            wordNode.appendChild(wordValue);
-            
-            wordValue = doc.createElement(PGTUtil.typeGlossXID);
-            wordValue.appendChild(doc.createTextNode(curType.getGloss()));
-            wordNode.appendChild(wordValue);
-        }
     }
 }

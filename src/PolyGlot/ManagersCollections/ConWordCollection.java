@@ -97,6 +97,14 @@ public class ConWordCollection extends DictionaryCollection {
         List<ConWord> retList = new ArrayList<>();
 
         nodeMap.values().stream().filter((word) -> !((ConWord)word).isWordLegal()).forEach((word) -> retList.add((ConWord)word));
+        
+        for (Object object : nodeMap.values()) {
+            ConWord curWord = (ConWord) object;
+
+            if (!curWord.isWordLegal()) {
+                retList.add(curWord);
+            }
+        }
 
         Collections.sort(retList);
         return retList.iterator();
@@ -731,11 +739,9 @@ public class ConWordCollection extends DictionaryCollection {
     public void writeXML(Document doc, Element rootElement) {
         List<ConWord> wordLoop = getWordNodes();
         Element lexicon = doc.createElement(PGTUtil.lexiconXID);
-        rootElement.appendChild(lexicon);
         
         wordLoop.stream().forEach((curWord) -> {
             Element wordNode = doc.createElement(PGTUtil.wordXID);
-            lexicon.appendChild(wordNode);
 
             Element wordValue = doc.createElement(PGTUtil.wordIdXID);
             Integer wordId = curWord.getId();
@@ -798,7 +804,11 @@ public class ConWordCollection extends DictionaryCollection {
             wordValue = doc.createElement(PGTUtil.wordEtymologyNotesXID);
             wordValue.appendChild(doc.createTextNode(curWord.getEtymNotes()));
             wordNode.appendChild(wordValue);
+            
+            lexicon.appendChild(wordNode);
         });
+        
+        rootElement.appendChild(lexicon);
     }
 
     /**
