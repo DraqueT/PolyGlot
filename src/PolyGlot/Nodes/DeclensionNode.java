@@ -20,7 +20,6 @@
 
 package PolyGlot.Nodes;
 
-import PolyGlot.DeclensionDimension;
 import PolyGlot.PGTUtil;
 import PolyGlot.WebInterface;
 import java.util.Collection;
@@ -169,6 +168,21 @@ public class DeclensionNode extends DictNode {
 
     protected Map<Integer, DeclensionDimension> getRawDimensions() {
         return dimensions;
+    }
+    
+    /**
+     * Selects and returns a declension dimension by its id if it exists
+     * @param id id of declension dimension
+     * @return declension dimension if it exists, null otherwise
+     */
+    public DeclensionDimension getDeclensionDimensionById(int id) {
+        DeclensionDimension ret = null;
+        
+        if (dimensions.containsKey(id)) {
+            ret = dimensions.get(id);
+        }
+        
+        return ret;
     }
     
     public void setCombinedDimId(String _id) {

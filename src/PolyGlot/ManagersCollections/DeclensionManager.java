@@ -20,7 +20,7 @@
 package PolyGlot.ManagersCollections;
 
 import PolyGlot.Nodes.ConWord;
-import PolyGlot.DeclensionDimension;
+import PolyGlot.Nodes.DeclensionDimension;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.DeclensionGenRule;
 import PolyGlot.Nodes.DeclensionGenTransform;
@@ -96,7 +96,7 @@ public class DeclensionManager {
     public void setCombinedDeclSurpressedRaw(String _completeId, boolean _surpress) {
         combSettings.put(_completeId, _surpress);
     }
-
+    
     /**
      * Gets list of all deprecated autogeneration rules
      *
@@ -116,7 +116,7 @@ public class DeclensionManager {
         // adds to return value only if rule matches ID, and is orphaned
         int missingId = 0; //used for missing index values (index system bolton)
         for (DeclensionGenRule curRule : generationRules) {
-            if (curRule.getIndex() == 0 || curRule.getIndex() == missingId) {
+            if (curRule.getIndex() <= missingId) {
                 missingId++;
                 curRule.setIndex(missingId);
             } else {
@@ -844,15 +844,15 @@ public class DeclensionManager {
      * Retrieves all dimensional declensions based on related ID and the list to be pulled from. The list can either
      * be the templates (related via typeId) or actual words, related by wordId
      * @param relatedId ID of related value
-     * @param list list of relations to search through
+     * @param valueMap list of relations to search through
      * @return 
      */
     private List<DeclensionNode> getDimensionalDeclensionList(Integer relatedId, 
-            Map<Integer, List<DeclensionNode>> list) {
+            Map<Integer, List<DeclensionNode>> valueMap) {
         List<DeclensionNode> ret = new ArrayList<>();
 
-        if (list.containsKey(relatedId)) {
-            List<DeclensionNode> allNodes = list.get(relatedId);
+        if (valueMap.containsKey(relatedId)) {
+            List<DeclensionNode> allNodes = valueMap.get(relatedId);
             
             allNodes.forEach((curNode)->{
                 // dimensionless nodes
@@ -1010,6 +1010,61 @@ public class DeclensionManager {
             combinedForms.appendChild(curCombForm);
         });
     }
+    
+    /**
+     * This copies a list of rules to the bottom of the list of all declension templates for a given part of speech
+     * that share a declension (decId) with the value defined by dimId
+     * 
+     * NOTE: Only applies to dimensional declensions.Singletons must be copied to manually.
+     * 
+     * @param typeId Part of speech to target
+     * @param decId declension dimension to target
+     * @param dimId dimension value to target
+     * @param rules rules to be copied
+     * @param selfCombId The combined ID of the form this was initially called from (do not copy duplicate of rule to self)
+     */
+    public void copyRulesToDeclensionTemplates(int typeId, 
+            int decId, int dimId, 
+            List<DeclensionGenRule> rules, 
+            String selfCombId) {
+        List<DeclensionNode> allNodes = getDimensionalDeclensionListTemplate(typeId);
+        List<DeclensionPair> decList =  getAllCombinedDimensionalIds(0, ",", "", allNodes);
+        
+        decList.forEach((decPair)->{
+            // only copy rule if distinct from base word form && it matches the dimensional value matches
+            if (!decPair.combinedId.equals(selfCombId) && combDimIdMatches(decId, dimId, decPair.combinedId)) {
+                rules.forEach((rule)->{
+                    // insert rule
+                    DeclensionGenRule newRule = new DeclensionGenRule();
+                    newRule.setEqual(rule, false);
+                    newRule.setTypeId(typeId);
+                    newRule.setCombinationId(decPair.combinedId);
+                    newRule.setIndex(0);
+                    
+                    addDeclensionGenRule(newRule);
+                    
+                    // call get rules for type (will automatically assign next highest index to rule
+                    this.getAllDepGenerationRules(typeId);
+                });
+            }
+        });
+    }
+    
+    private boolean combDimIdMatches(int decId, int dimId, String combDimId) {
+        String[] strIds = combDimId.split(",");
+        String strId = strIds[decId + 1]; // account for leading comma
+        int dimValId = Integer.parseInt(strId);
+        return dimValId == dimId;
+    }
+    
+    public String getDeclensionLabel(int typeId, int decId) {
+        return dTemplates.get(typeId).get(decId).getValue();
+    }
+    
+    public String getDeclensionValueLabel(int typeId, int decId, int decValId) {
+        return dTemplates.get(typeId).get(decId).getDeclensionDimensionById(decValId).getValue();
+    }
+
     
     /**
      * On load of older pgt files, must be called to maintain functionality of declension rules

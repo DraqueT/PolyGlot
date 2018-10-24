@@ -19,7 +19,7 @@
  */
 package PolyGlot.Screens;
 
-import PolyGlot.DeclensionDimension;
+import PolyGlot.Nodes.DeclensionDimension;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;

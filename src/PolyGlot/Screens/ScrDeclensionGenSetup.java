@@ -34,12 +34,15 @@ import PolyGlot.CustomControls.PClassCheckboxPanel;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTable;
+import PolyGlot.Nodes.DeclensionDimension;
+import PolyGlot.Nodes.DeclensionNode;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -50,6 +53,7 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.DefaultListModel;
 import javax.swing.InputMap;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
@@ -445,6 +449,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         ruleAm.put(pasteKey, rulePasteAction);
 
         final JPopupMenu ruleMenu = new JPopupMenu();
+        final JMenu pushToDimension = new JMenu("Push To Dimension");
         final JMenuItem copyItem = new JMenuItem("Copy Rule");
         final JMenuItem pasteItem = new JMenuItem("Paste Rule");
         copyItem.setToolTipText("Copy currently selected rule.");
@@ -458,6 +463,8 @@ public class ScrDeclensionGenSetup extends PDialog {
         });
         ruleMenu.add(copyItem);
         ruleMenu.add(pasteItem);
+        ruleMenu.addSeparator();
+        ruleMenu.add(pushToDimension);
         lstRules.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -476,19 +483,78 @@ public class ScrDeclensionGenSetup extends PDialog {
             private void doPop(MouseEvent e) {
                 if (lstRules.getSelectedValue() != null) {
                     copyItem.setEnabled(true);
+                    setupPushToDimension((DeclensionPair)lstCombinedDec.getSelectedValue());
+                    pushToDimension.setEnabled(true);
                 } else {
-
+                    copyItem.setEnabled(false);
+                    pushToDimension.setEnabled(true);
                 }
 
                 ruleMenu.show(e.getComponent(), e.getX(), e.getY());
             }
+            
+            // sets up all menu items for copying rules to dimensions
+            private void setupPushToDimension(DeclensionPair selDec) {
+                pushToDimension.removeAll();                
+                
+                List<DeclensionNode> nodes = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId);
+                List<Integer> ids = new ArrayList<>();
+                
+                for (String singleId : selDec.combinedId.split(",")) {
+                    if (!singleId.isEmpty()) {
+                        ids.add(Integer.parseInt(singleId));
+                    }
+                }
+
+                for (int i = 0; i < ids.size() ; i++) {
+                    int dimId = ids.get(i);
+                    DeclensionNode decNode = nodes.get(i);
+                    DeclensionDimension decDim = decNode.getDeclensionDimensionById(dimId);
+                    if (decDim != null) {
+                        final JMenuItem copyTo = new JMenuItem("Copy To " + decDim.getValue());
+                        copyTo.setToolTipText("Copy selected rule(s) to all word forms with dimension: " 
+                                + decDim.getValue());
+                        copyTo.addActionListener(
+                                buildCopyToDimensionAction(i, decDim.getId(), selDec.combinedId));
+                        pushToDimension.add(copyTo);
+                    }
+                }
+            }
+            
+            private ActionListener buildCopyToDimensionAction(int decId, int dimId, String combId) {
+                return (ActionEvent ae) -> {
+                    List<DeclensionGenRule> rules = getSelectedRules();
+                    if (verifyCopyRulesToDimension(decId, dimId, rules)) {
+                        core.getDeclensionManager().copyRulesToDeclensionTemplates(typeId, 
+                                decId, 
+                                dimId, 
+                                rules,
+                                combId);
+                    }
+                };
+            }
         });
     }
-
+    
+    public boolean verifyCopyRulesToDimension(int decId, int dimId, List<DeclensionGenRule> rules) {
+        String decLabel = core.getDeclensionManager().getDeclensionLabel(typeId, decId);
+        String decDimLabel = core.getDeclensionManager().getDeclensionValueLabel(typeId, decId, dimId);
+        String message = "You are about to copy the following rule(s):\n\n";
+        
+        for (DeclensionGenRule rule : rules) {
+            message += rule.getName() + "\n";
+        }
+        
+        message += "\nto all rules for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
+        
+        return InfoBox.actionConfirmation("Confirm Rule Copy", message, this);
+    }
+    
     /**
-     * Copies selected rule (if any) to clipboard
+     * Gets all currently selected rules
+     * @return list of all selected rule objects
      */
-    private void copyRuleToClipboard() {
+    private List<DeclensionGenRule> getSelectedRules() {
         List<DeclensionGenRule> rules = new ArrayList<>();
 
         for (int i : lstRules.getSelectedIndices()) {
@@ -496,8 +562,15 @@ public class ScrDeclensionGenSetup extends PDialog {
             copyRule.setEqual((DeclensionGenRule) lstRules.getModel().getElementAt(i), true);
             rules.add(copyRule);
         }
+        
+        return rules;
+    }
 
-        core.setClipBoard(rules);
+    /**
+     * Copies selected rule (if any) to clipboard
+     */
+    private void copyRuleToClipboard() {
+        core.setClipBoard(getSelectedRules());
     }
 
     /**

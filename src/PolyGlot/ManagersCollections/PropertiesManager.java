@@ -398,7 +398,7 @@ public class PropertiesManager {
      * @param _fontSize the fontSize to set
      */
     public void setFontSize(Integer _fontSize) {
-        conFontSize = _fontSize < 0 ? 12 : _fontSize;
+        conFontSize = _fontSize< 0 ? 12 : _fontSize;
         font = font.deriveFont(fontStyle, conFontSize);
     }
 
@@ -435,7 +435,7 @@ public class PropertiesManager {
             }
         }
     }
-
+       
     /**
      * @return the alphaPlainText
      */
