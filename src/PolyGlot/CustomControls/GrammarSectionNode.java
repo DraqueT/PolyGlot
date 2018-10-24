@@ -20,8 +20,11 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.ManagersCollections.GrammarManager;
+import PolyGlot.PGTUtil;
 import java.util.Enumeration;
 import javax.swing.tree.DefaultMutableTreeNode;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * This is a chapter section of the PolyGlot grammar guide.
@@ -78,5 +81,23 @@ public class GrammarSectionNode extends DefaultMutableTreeNode {
     @Override
     public String toString() {
         return name;
+    }
+    
+    public void writeXML(Document doc, Element rootElement) {
+        Element secNode = doc.createElement(PGTUtil.grammarSectionNodeXID);
+                
+        Element secElement = doc.createElement(PGTUtil.grammarSectionNameXID);
+        secElement.appendChild(doc.createTextNode(this.getName()));
+        secNode.appendChild(secElement);
+
+        secElement = doc.createElement(PGTUtil.grammarSectionRecordingXID);
+        secElement.appendChild(doc.createTextNode(this.getRecordingId().toString()));
+        secNode.appendChild(secElement);
+
+        secElement = doc.createElement(PGTUtil.grammarSectionTextXID);
+        secElement.appendChild(doc.createTextNode(this.getSectionText()));
+        secNode.appendChild(secElement);
+
+        rootElement.appendChild(secNode);
     }
 }

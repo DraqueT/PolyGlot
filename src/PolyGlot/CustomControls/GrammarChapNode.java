@@ -20,9 +20,12 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.ManagersCollections.GrammarManager;
+import PolyGlot.PGTUtil;
 import java.util.Enumeration;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * This node represents a chapter within the grammar recording section of
@@ -139,5 +142,23 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
     @Override
     public String toString() {
         return name;
+    }
+    
+    public void writeXML(Document doc, Element rootElement) {
+        Element chapNode = doc.createElement(PGTUtil.grammarChapterNodeXID);
+            rootElement.appendChild(chapNode);
+
+            Element chapElement = doc.createElement(PGTUtil.grammarChapterNameXID);
+            chapElement.appendChild(doc.createTextNode(this.getName()));
+            chapNode.appendChild(chapElement);
+            
+            chapElement = doc.createElement(PGTUtil.grammarSectionsListXID);
+            
+            for (int i = 0; i < this.getChildCount(); i++) {
+                GrammarSectionNode curSec = (GrammarSectionNode)this.getChildAt(i);                
+                curSec.writeXML(doc, chapElement);
+            }
+            
+            chapNode.appendChild(chapElement);
     }
 }

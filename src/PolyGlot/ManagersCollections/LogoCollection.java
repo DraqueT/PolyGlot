@@ -263,50 +263,12 @@ public class LogoCollection extends DictionaryCollection {
         rootElement.appendChild(logoRoot);
         
         // write all logographs to XML
-        Iterator<LogoNode> it = getAllLogos().iterator();
         Element logoCollection = doc.createElement(PGTUtil.logoGraphsCollectionXID);
         logoRoot.appendChild(logoCollection);
-        while (it.hasNext()) {
-            Element logoGraph = doc.createElement(PGTUtil.logoGraphNodeXID);
-            Element node;
-            
-            LogoNode curNode = it.next();
-            
-            node = doc.createElement(PGTUtil.logoGraphIdXID);
-            node.appendChild(doc.createTextNode(curNode.getId().toString()));
-            logoGraph.appendChild(node);
-            
-            node = doc.createElement(PGTUtil.logoGraphValueXID);
-            node.appendChild(doc.createTextNode(curNode.getValue()));
-            logoGraph.appendChild(node);
-            
-            node = doc.createElement(PGTUtil.logoIsRadicalXID);
-            node.appendChild(doc.createTextNode(curNode.isRadical()? PGTUtil.True :PGTUtil.False));
-            logoGraph.appendChild(node);
-            
-            node = doc.createElement(PGTUtil.logoNotesXID);
-            node.appendChild(doc.createTextNode(WebInterface.archiveHTML(curNode.getNotes())));
-            logoGraph.appendChild(node);
-            
-            node = doc.createElement(PGTUtil.logoRadicalListXID);
-            node.appendChild(doc.createTextNode(curNode.getRadicalListString()));
-            logoGraph.appendChild(node);
-            
-            node = doc.createElement(PGTUtil.logoStrokesXID);
-            node.appendChild(doc.createTextNode(curNode.getStrokes().toString()));
-            logoGraph.appendChild(node);
-            
-            Iterator<String> readings = curNode.getReadings().iterator();
-            while (readings.hasNext()) {
-                String curReading = readings.next();
-                
-                node = doc.createElement(PGTUtil.logoReadingXID);
-                node.appendChild(doc.createTextNode(curReading));
-                logoGraph.appendChild(node);
-            }
-            
-            logoCollection.appendChild(logoGraph);
-        }
+        
+        getAllLogos().forEach((logo)->{
+            logo.writeXML(doc, logoCollection);
+        });
         
         // write all logo->word relations to XML (reverse will be inferred on load)
         Iterator<Entry<Integer, ArrayList<Integer>>> setIt = logoToWord.entrySet().iterator();

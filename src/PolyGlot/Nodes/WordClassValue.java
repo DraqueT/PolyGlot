@@ -19,6 +19,10 @@
  */
 package PolyGlot.Nodes;
 
+import PolyGlot.PGTUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 /**
  * This represents a single value within a word property
  * @author Draque Thompson
@@ -33,4 +37,19 @@ public class WordClassValue extends DictNode {
         this.value = _node.getValue();
         this.id = _node.getId();
     }
+    
+     public void writeXML(Document doc, Element rootElement) {
+         Element valueNode = doc.createElement(PGTUtil.ClassValueNodeXID);
+
+        Element valueElement = doc.createElement(PGTUtil.ClassValueIdXID);
+        valueElement.appendChild(doc.createTextNode(this.getId().toString()));
+        valueNode.appendChild(valueElement);
+
+        // value string
+        valueElement = doc.createElement(PGTUtil.ClassValueNameXID);
+        valueElement.appendChild(doc.createTextNode(this.getValue()));
+        valueNode.appendChild(valueElement);
+
+        rootElement.appendChild(valueNode);
+     }
 }
