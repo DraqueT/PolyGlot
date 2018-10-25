@@ -19,7 +19,6 @@
  */
 package PolyGlot;
 
-import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordClassValue;
@@ -206,11 +205,7 @@ public class ImportFileHelper {
                             wordProp = new WordClass();
                             wordProp.setValue(className);
                             int propId = core.getWordPropertiesCollection().addNode(wordProp);
-                            try {
-                                wordProp = (WordClass) core.getWordPropertiesCollection().getNodeById(propId);
-                            } catch (DictionaryCollection.NodeNotExistsException e) {
-                                throw new Exception("Problem pulling word class for word: " + newWord.getValue());
-                            }
+                            wordProp = (WordClass) core.getWordPropertiesCollection().getNodeById(propId);
                         }
 
                         // find class value
@@ -402,11 +397,7 @@ public class ImportFileHelper {
                 wordProp = new WordClass();
                 wordProp.setValue(className);
                 int propId = core.getWordPropertiesCollection().addNode(wordProp);
-                try {
-                    wordProp = (WordClass) core.getWordPropertiesCollection().getNodeById(propId);
-                } catch (DictionaryCollection.NodeNotExistsException e) {
-                    throw new Exception("Problem pulling word class for word: " + newWord.getValue());
-                }
+                wordProp = (WordClass) core.getWordPropertiesCollection().getNodeById(propId);
             }
 
             // find class value

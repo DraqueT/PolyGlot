@@ -166,7 +166,7 @@ public class DeclensionManager {
      * @param typeId ID of type to wipe
      */
     public void wipeDeclensionGenRules(int typeId) {
-        List<DeclensionGenRule> rulesList = new ArrayList<DeclensionGenRule>(generationRules);
+        List<DeclensionGenRule> rulesList = new ArrayList<>(generationRules);
         
         rulesList.forEach((rule) -> {
             if (rule.getTypeId() == typeId) {
@@ -327,15 +327,9 @@ public class DeclensionManager {
             List<DeclensionNode> curList = curEntry.getValue();
             
             // only run for declensions of words with particular type
-            try {
-                if (!core.getWordCollection().getNodeById(curEntry.getKey()).getWordTypeId().equals(typeId)) {
-                    continue;
-                }
-            } catch (ConWordCollection.WordNotExistsException e) {
-                // if a word isn't found, then the value is orphaned and declension values will be wiped next time the user saves
+            if (!core.getWordCollection().getNodeById(curEntry.getKey()).getWordTypeId().equals(typeId)) {
                 continue;
             }
-            
             
             Iterator<DeclensionNode> nodeIt = curList.iterator();
 

@@ -248,9 +248,8 @@ public class ConWordCollection extends DictionaryCollection {
      * @param id id of word to modify
      * @param wordVal new conword value
      * @param wordLoc new local word value
-     * @throws java.lang.Exception if word not found
      */
-    public void extertalBalanceWordCounts(Integer id, String wordVal, String wordLoc) throws Exception {
+    public void extertalBalanceWordCounts(Integer id, String wordVal, String wordLoc) {
         ConWord oldWord = getNodeById(id);
         ConWord newWord = new ConWord();
 
@@ -600,12 +599,8 @@ public class ConWordCollection extends DictionaryCollection {
     }
 
     @Override
-    public ConWord getNodeById(Integer _id) throws WordNotExistsException {
-        try {
-            return (ConWord) super.getNodeById(_id);
-        } catch (NodeNotExistsException e) {
-            throw new WordNotExistsException(e.getLocalizedMessage());
-        }
+    public ConWord getNodeById(Integer _id) {
+        return (ConWord) super.getNodeById(_id);
     }
 
     /**
@@ -865,10 +860,17 @@ public class ConWordCollection extends DictionaryCollection {
             }
         });
     }
+    
+    @Override
+    public Object notFoundNode() {
+        ConWord notFound = new ConWord();
 
-    public class WordNotExistsException extends NodeNotExistsException {
-        public WordNotExistsException(String message) {
-            super(message);
-        }
-    }
+        notFound.setValue("WORD NOT FOUND");
+        notFound.setCore(core);
+        notFound.setDefinition("WORD NOT FOUND");
+        notFound.setLocalWord("WORD NOT FOUND");
+        notFound.setPronunciation("WORD NOT FOUND");
+        
+        return notFound;
+    }  
 }

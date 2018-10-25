@@ -19,11 +19,12 @@
  */
 package PolyGlot.ManagersCollections;
 
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.LogoNode;
 import PolyGlot.PGTUtil;
-import PolyGlot.WebInterface;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.imageio.ImageIO;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -172,14 +174,12 @@ public class LogoCollection extends DictionaryCollection {
             Iterator<Integer> it = logoToWord.get(node.getId()).iterator();
             
             while (it.hasNext()) {
-                try {
-                    ConWord curWord = core.getWordCollection().getNodeById(it.next());
-                    if ((ignoreCase && curWord.getValue().equalsIgnoreCase(relWord))
-                            || curWord.getValue().equals(relWord)) {
-                        ret = true;
-                        break;
-                    }
-                } catch (ConWordCollection.WordNotExistsException e) {/*do nothing*/}
+                ConWord curWord = core.getWordCollection().getNodeById(it.next());
+                if ((ignoreCase && curWord.getValue().equalsIgnoreCase(relWord))
+                        || curWord.getValue().equals(relWord)) {
+                    ret = true;
+                    break;
+                }
             }
         }
         
@@ -223,11 +223,8 @@ public class LogoCollection extends DictionaryCollection {
         }
         
         while (it != null && it.hasNext()) {
-            try {
-                ConWord curNode = core.getWordCollection().getNodeById(it.next());
-                retList.add(curNode);
-            } catch (ConWordCollection.WordNotExistsException e) {/*Do nothing*/}
-                        
+            ConWord curNode = core.getWordCollection().getNodeById(it.next());
+            retList.add(curNode);
         }
         
         return retList;
@@ -319,7 +316,7 @@ public class LogoCollection extends DictionaryCollection {
         
         try {
             relNode = (LogoNode)getNodeById(Integer.parseInt(ids[0]));
-        } catch (NodeNotExistsException | NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new Exception("Unable to load logograph relations.");
         }
         
@@ -333,7 +330,7 @@ public class LogoCollection extends DictionaryCollection {
                         Integer.parseInt(ids[i]));
                 
                 addWordLogoRelation(word, relNode);
-            } catch (ConWordCollection.WordNotExistsException | NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 loadLog += "\nLogograph load error: " + e.getLocalizedMessage();
             }
         }
@@ -368,5 +365,20 @@ public class LogoCollection extends DictionaryCollection {
     public void clear() {
         bufferNode = new LogoNode();
     }
-    
+
+    @Override
+    public Object notFoundNode() {
+        LogoNode emptyNode = new LogoNode();
+        
+        try {
+            emptyNode.setLogoGraph(ImageIO.read(getClass().getResource(PGTUtil.notFoundImage)));
+        } catch (IOException e) {
+            InfoBox.error("INTERNAL ERROR", 
+                    "Unable to locate missing-image image.\nThis is kind of an ironic error.", null);
+        }
+        
+        emptyNode.setValue("LOGO NOT FOUND");
+        
+        return emptyNode;
+    }
 }

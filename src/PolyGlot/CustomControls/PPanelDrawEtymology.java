@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, DThompson
+ * Copyright (c) 2017-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -20,7 +20,6 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
-import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.RectangularCoordinateMap;
 import PolyGlot.WebInterface;
@@ -152,18 +151,13 @@ public final class PPanelDrawEtymology extends JPanel {
      */
     private void addEtTreeParents(EtymologyPrintingNode curNode) {
         core.getEtymologyManager().getWordParentsIds(curNode.word.getId()).forEach((curParentId) -> {
-            try {
-                EtymologyPrintingNode parentNode = new EtymologyPrintingNode();
-                ConWord parentWord = core.getWordCollection().getNodeById(curParentId);
-                parentNode.word = parentWord;
-                parentNode.depth = curNode.depth - 1;
-                addEtTreeParents(parentNode);
-                parentNode.children.add(curNode);
-                curNode.parents.add(parentNode);
-            } catch (ConWordCollection.WordNotExistsException ex) {
-                // do nothing. This is the result of a missing word due to user
-                // deletion, and will be cleaned at time of archival
-            }
+            EtymologyPrintingNode parentNode = new EtymologyPrintingNode();
+            ConWord parentWord = core.getWordCollection().getNodeById(curParentId);
+            parentNode.word = parentWord;
+            parentNode.depth = curNode.depth - 1;
+            addEtTreeParents(parentNode);
+            parentNode.children.add(curNode);
+            curNode.parents.add(parentNode);
         });
         
         // adds external parents
@@ -196,17 +190,12 @@ public final class PPanelDrawEtymology extends JPanel {
     private void addEtTreeChildren(EtymologyPrintingNode curNode, int depth) {
         curNode.depth = depth;
         core.getEtymologyManager().getChildren(curNode.word.getId()).forEach((curChildId) -> {
-            try {
-                EtymologyPrintingNode childNode = new EtymologyPrintingNode();
-                ConWord childWord = core.getWordCollection().getNodeById(curChildId);
-                childNode.word = childWord;
-                addEtTreeChildren(childNode, depth + 1);
-                curNode.children.add(childNode);
-                childNode.parents.add(curNode);
-            } catch (ConWordCollection.WordNotExistsException ex) {
-                // do nothing. This is the result of a missing word due to user
-                // deletion, and will be cleaned at time of archival
-            }
+            EtymologyPrintingNode childNode = new EtymologyPrintingNode();
+            ConWord childWord = core.getWordCollection().getNodeById(curChildId);
+            childNode.word = childWord;
+            addEtTreeChildren(childNode, depth + 1);
+            curNode.children.add(childNode);
+            childNode.parents.add(curNode);
         });
 
         // sort in order of node depth

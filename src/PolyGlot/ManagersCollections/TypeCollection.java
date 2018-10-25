@@ -25,7 +25,6 @@ import PolyGlot.DictCore;
 import PolyGlot.Nodes.DictNode;
 import PolyGlot.PGTUtil;
 import PolyGlot.Nodes.TypeNode;
-import PolyGlot.WebInterface;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -200,15 +199,7 @@ public class TypeCollection extends DictionaryCollection {
 
     @Override
     public TypeNode getNodeById(Integer _id) {
-        TypeNode ret = null;
-        
-        try {
-            return (TypeNode) super.getNodeById(_id);
-        } catch (NodeNotExistsException e) {
-            // Do nothing. Lack of ID should result in return of null.
-        }
-        
-        return ret;
+        return (TypeNode) super.getNodeById(_id);
     }
     
     @Override
@@ -289,5 +280,13 @@ public class TypeCollection extends DictionaryCollection {
         });
         
         rootElement.appendChild(typeContainer);
+    }
+
+    @Override
+    public Object notFoundNode() {
+        TypeNode emptyNode = new TypeNode();
+        emptyNode.setValue("POS NOT FOUND");
+        emptyNode.setNotes("POT NOT FOUND");
+        return emptyNode;
     }
 }

@@ -223,40 +223,35 @@ public final class ScrEtymRoots extends PDialog {
 
         // populate all existing parents as noneditable text boxes with deletion buttons
         core.getEtymologyManager().getWordParentsIds(word.getId()).forEach((parentId) -> {
-            try {
-                JPanel miniPanel = new JPanel();
-                final PTextField textField = new PTextField(core, false, "");
-                PButton delButton = new PButton(core);
+            JPanel miniPanel = new JPanel();
+            final PTextField textField = new PTextField(core, false, "");
+            PButton delButton = new PButton(core);
 
-                // this field holds the text from a parent value
-                textField.setEditable(false);
-                textField.setText(core.getWordCollection().getNodeById(parentId).getValue());
-                textField.setFont(core.getPropertiesManager().getFontCon());
-                textField.setMaximumSize(new Dimension(9999, textField.getPreferredSize().height));
-                textField.setMinimumSize(new Dimension(1, textField.getPreferredSize().height));
-                textField.setToolTipText("Parent word");
-                textField.setContentId(parentId);
+            // this field holds the text from a parent value
+            textField.setEditable(false);
+            textField.setText(core.getWordCollection().getNodeById(parentId).getValue());
+            textField.setFont(core.getPropertiesManager().getFontCon());
+            textField.setMaximumSize(new Dimension(9999, textField.getPreferredSize().height));
+            textField.setMinimumSize(new Dimension(1, textField.getPreferredSize().height));
+            textField.setToolTipText("Parent word");
+            textField.setContentId(parentId);
 
-                // button to remove parent value
-                delButton.setText("-");
-                delButton.setToolTipText("Delete this parent from your word.");
-                delButton.addActionListener((ActionEvent e) -> {
-                    core.getEtymologyManager().delRelation(textField.getContentId(), word.getId());
-                    setupDrawPanel();
-                    setupParentsPanels();
-                });
+            // button to remove parent value
+            delButton.setText("-");
+            delButton.setToolTipText("Delete this parent from your word.");
+            delButton.addActionListener((ActionEvent e) -> {
+                core.getEtymologyManager().delRelation(textField.getContentId(), word.getId());
+                setupDrawPanel();
+                setupParentsPanels();
+            });
 
-                // panel to contain parent value and removal button
-                miniPanel.setPreferredSize(new Dimension(30, 0));
-                miniPanel.setLayout(new BoxLayout(miniPanel, BoxLayout.X_AXIS));
-                miniPanel.add(textField, gbc);
-                miniPanel.add(delButton, gbc);
+            // panel to contain parent value and removal button
+            miniPanel.setPreferredSize(new Dimension(30, 0));
+            miniPanel.setLayout(new BoxLayout(miniPanel, BoxLayout.X_AXIS));
+            miniPanel.add(textField, gbc);
+            miniPanel.add(delButton, gbc);
 
-                pnlParentsInt.add(miniPanel, gbc);
-            } catch (ConWordCollection.WordNotExistsException e) {
-                // do nothing. Unfound words are the result of orphaned values,
-                // which are automatically cleaned at time of archiving.
-            }
+            pnlParentsInt.add(miniPanel, gbc);
         });
 
         //create new dropdown for potential additional parent to be added
