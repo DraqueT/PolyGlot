@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Draque
+ * Copyright (c) 2016-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,13 +19,16 @@
  */
 package PolyGlot.ManagersCollections;
 
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ImageNode;
+import PolyGlot.PGTUtil;
 import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -98,5 +101,19 @@ public class ImageCollection extends DictionaryCollection {
         insert(ret);
         
         return ret;
+    }
+
+    @Override
+    public Object notFoundNode() {
+        ImageNode emptyImage = new ImageNode();
+        
+        try {
+            emptyImage.setImage(ImageIO.read(getClass().getResource(PGTUtil.notFoundImage)));
+        } catch (IOException e) {
+            InfoBox.error("INTERNAL ERROR", 
+                    "Unable to locate missing-image image.\nThis is kind of an ironic error.", null);
+        }
+        
+        return emptyImage;
     }
 }

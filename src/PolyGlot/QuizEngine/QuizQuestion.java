@@ -20,7 +20,6 @@
 package PolyGlot.QuizEngine;
 
 import PolyGlot.DictCore;
-import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DictNode;
 import java.util.ArrayList;
@@ -142,11 +141,7 @@ public class QuizQuestion extends DictNode {
                                 qEnd += "/";
                             }
                             
-                            try {
-                                qEnd += core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
-                            } catch (DictionaryCollection.NodeNotExistsException e) {
-                                throw new Exception("Question building error: " + e.getLocalizedMessage());
-                            }
+                            qEnd += core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
                         }
                         
                         qEnd += " classification?";

@@ -19,7 +19,6 @@
  */
 package PolyGlot;
 
-import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ImageNode;
 import java.io.IOException;
 import java.io.InputStream;
@@ -114,7 +113,7 @@ public class WebInterface {
                 int imageId = Integer.parseInt(regPath);
                 ImageNode image = (ImageNode)core.getImageCollection().getNodeById(imageId);
                 html = html.replace("<img src=\""+ regPath + "\">", "<img src=\"file:///"+ image.getImagePath() + "\">");
-            } catch (DictionaryCollection.NodeNotExistsException | IOException | NumberFormatException e) {
+            } catch (IOException | NumberFormatException e) {
                 throw new Exception("problem loading image : " + e.getLocalizedMessage());
             }
         }

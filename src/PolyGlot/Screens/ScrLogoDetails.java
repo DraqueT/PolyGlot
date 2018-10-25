@@ -117,15 +117,11 @@ public class ScrLogoDetails extends PFrame {
                 btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (CTRL -)");
             }
         } else {
-            try {
-                singleModeLogo = (LogoNode) core.getLogoCollection().getNodeById(logoId);
-                List<LogoNode> list = new ArrayList<>();
-                list.add(singleModeLogo);
+            singleModeLogo = (LogoNode) core.getLogoCollection().getNodeById(logoId);
+            List<LogoNode> list = new ArrayList<>();
+            list.add(singleModeLogo);
 
-                populateLogographs(list.iterator());
-            } catch (DictionaryCollection.NodeNotExistsException e) {
-                InfoBox.error("Logograph Error", "Unable to load logograph: " + e.getMessage(), _core.getRootWindow());
-            }
+            populateLogographs(list.iterator());
 
             setSingleLogoMode(true);
             setTitle("Logograph Details/Modification");

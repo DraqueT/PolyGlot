@@ -22,7 +22,6 @@ package PolyGlot.ManagersCollections;
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.PEntry;
-import PolyGlot.Nodes.WordClassValue;
 import PolyGlot.Nodes.WordClass;
 import PolyGlot.PGTUtil;
 import java.util.ArrayList;
@@ -245,5 +244,12 @@ public class WordClassCollection extends DictionaryCollection {
      */
     public void classValueDeleted(int classId, int valueId) {
         core.getWordCollection().classValueDeleted(classId, valueId);
+    }
+
+    @Override
+    public Object notFoundNode() {
+        WordClass emptyClass = new WordClass();
+        emptyClass.setValue("CLASS NOT FOUND");
+        return emptyClass;
     }
 }

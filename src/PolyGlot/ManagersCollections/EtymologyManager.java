@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, DThompson
+ * Copyright (c) 2017-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -109,12 +109,8 @@ public class EtymologyManager {
         List<ConWord> parents = new ArrayList<>();
         
         parentToChild.keySet().forEach((id) -> {
-            try {
-                ConWord curParent = core.getWordCollection().getNodeById(id);
-                parents.add(curParent);
-            } catch (ConWordCollection.WordNotExistsException ex) {
-                // do nothing. Missing values cleared from list on save/load
-            }
+            ConWord curParent = core.getWordCollection().getNodeById(id);
+            parents.add(curParent);
         });
         
         ret.addAll(parents);

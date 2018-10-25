@@ -195,14 +195,8 @@ public final class ScrLexicon extends PFrame {
     public void refreshWordList(int wordId) {
         populateLexicon();
         if (wordId != -1) {
-            try {
-                lstLexicon.setSelectedValue(
-                        core.getWordCollection().getNodeById(wordId), true);
-            } catch (ConWordCollection.WordNotExistsException e) {
-                InfoBox.error("Refresh Error", "Unable to refresh lexicon: "
-                        + e.getLocalizedMessage(), core.getRootWindow());
-                //e.printStackTrace();
-            }
+            lstLexicon.setSelectedValue(
+                    core.getWordCollection().getNodeById(wordId), true);
         }
     }
 
@@ -1069,19 +1063,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     public void selectWordById(int id) {
-        ConWord target = null;
-
-        try {
-            target = core.getWordCollection().getNodeById(id);
-        } catch (ConWordCollection.WordNotExistsException e) {
-            InfoBox.error("Word Selection Error", "Unable to select word:\n"
-                    + e.getLocalizedMessage(), core.getRootWindow());
-        }
-
-        if (target == null) {
-            return;
-        }
-        lstLexicon.setSelectedValue(target, true);
+        lstLexicon.setSelectedValue(core.getWordCollection().getNodeById(id), true);
     }
 
     /**

@@ -23,7 +23,6 @@ import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PPanelDrawEtymology;
-import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
@@ -462,18 +461,14 @@ public class PExportToPDF {
                     if (varChunk != null) {
                         dictEntry.add(new Text(", "));
                     }
-                    try {
-                        WordClass prop = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
-                        varChunk = new Text(prop.getValue());
-                        varChunk.setFont(unicodeFontItalic);
-                        dictEntry.add(varChunk);
-                        varChunk = new Text(" : " + curEntry.getValue());
-                        varChunk.setFont(unicodeFont);
-                        dictEntry.add(varChunk);
-                    } catch (DictionaryCollection.NodeNotExistsException e) {
-                        log += "\nProblem printing classes for word (" + curWord.getValue()
-                                + "): " + e.getLocalizedMessage();
-                    }
+                    
+                    WordClass prop = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                    varChunk = new Text(prop.getValue());
+                    varChunk.setFont(unicodeFontItalic);
+                    dictEntry.add(varChunk);
+                    varChunk = new Text(" : " + curEntry.getValue());
+                    varChunk.setFont(unicodeFont);
+                    dictEntry.add(varChunk);
                 }
 
                 dictEntry.add(new Text(" - "));
@@ -683,18 +678,14 @@ public class PExportToPDF {
                     if (varChunk != null) {
                         dictEntry.add(new Text(", "));
                     }
-                    try {
-                        WordClass prop = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
-                        varChunk = new Text(prop.getValue());
-                        varChunk.setFont(unicodeFontItalic);
-                        dictEntry.add(varChunk);
-                        varChunk = new Text(" : " + curEntry.getValue());
-                        varChunk.setFont(unicodeFont);
-                        dictEntry.add(varChunk);
-                    } catch (DictionaryCollection.NodeNotExistsException e) {
-                        log += "\nProblem printing classes for word (" + curWord.getValue()
-                                + "): " + e.getLocalizedMessage();
-                    }
+                    
+                    WordClass prop = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                    varChunk = new Text(prop.getValue());
+                    varChunk.setFont(unicodeFontItalic);
+                    dictEntry.add(varChunk);
+                    varChunk = new Text(" : " + curEntry.getValue());
+                    varChunk.setFont(unicodeFont);
+                    dictEntry.add(varChunk);
                 }
             }
 
@@ -892,7 +883,7 @@ public class PExportToPDF {
                             byte[] bytes = IOHandler.getBufferedImageByteArray(imageNode.getImage());
                             Image pdfImage = new Image(ImageDataFactory.create(bytes));
                             newSec.add(pdfImage);
-                        } catch (DictionaryCollection.NodeNotExistsException | IOException | NumberFormatException e) {
+                        } catch (IOException | NumberFormatException e) {
                             log += "\nUnable to include images from grammar section: " + curSec.getName();
                         }
                     } else {

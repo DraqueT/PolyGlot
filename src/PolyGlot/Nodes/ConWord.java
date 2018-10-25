@@ -20,7 +20,6 @@
 
 package PolyGlot.Nodes;
 
-import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.PGTUtil;
@@ -247,12 +246,7 @@ public class ConWord extends DictNode {
 
     public void setLocalWord(String _localWord) {
         if (parentCollection != null) {
-            try {
-                parentCollection.extertalBalanceWordCounts(id, value, _localWord);
-            } catch (Exception e) {
-                InfoBox.error("Word balance error.", "Unable to balance word: " 
-                        + value, core.getRootWindow());
-            }
+            parentCollection.extertalBalanceWordCounts(id, value, _localWord);
         }
         
         this.localWord = _localWord.trim();
@@ -261,12 +255,7 @@ public class ConWord extends DictNode {
     @Override
     public void setValue(String _value) {
         if (parentCollection != null) {
-            try {
-                parentCollection.extertalBalanceWordCounts(id, _value, localWord);
-            } catch (Exception e) {
-                InfoBox.error("Word balance error.", "Unable to balance word: " 
-                        + value, core.getRootWindow());
-            }
+            parentCollection.extertalBalanceWordCounts(id, _value, localWord);
         }        
         super.setValue(_value.replace(PGTUtil.RTLMarker, "").replace(PGTUtil.LTRMarker, ""));
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, draque.thompson
+ * Copyright (c) 2016-2018, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -168,5 +168,12 @@ public class Quiz extends DictionaryCollection {
         quizPos--;
         
         return quizList.get(quizPos);
+    }
+
+    @Override
+    public Object notFoundNode() {
+        QuizQuestion emptyQuestion = new QuizQuestion(core);
+        emptyQuestion.setValue("QUESTION NOT FOUND");
+        return emptyQuestion;
     }
 }

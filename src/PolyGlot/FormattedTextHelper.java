@@ -19,9 +19,7 @@
  */
 package PolyGlot;
 
-import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PGrammarPane;
-import PolyGlot.ManagersCollections.DictionaryCollection;
 import PolyGlot.Nodes.ImageNode;
 import java.awt.Color;
 import java.awt.Font;
@@ -91,13 +89,8 @@ public class FormattedTextHelper {
             } else if (nextNode.startsWith("<img src=")) {
                 String idString = nextNode.replace("<img src=\"", "").replace("\">", "");
                 Integer id = Integer.parseInt(idString);
-                try {
-                    ImageNode imageNode = (ImageNode)core.getImageCollection().getNodeById(id);
-                    ((PGrammarPane)pane).addImage(imageNode);
-                } catch (DictionaryCollection.NodeNotExistsException e) {
-                    InfoBox.error("Image Load Error", "Unable to load image: " 
-                            + e.getLocalizedMessage(), core.getRootWindow());
-                }                
+                ImageNode imageNode = (ImageNode)core.getImageCollection().getNodeById(id);
+                ((PGrammarPane)pane).addImage(imageNode);      
             } else {
                 Document doc = pane.getDocument();
                 
