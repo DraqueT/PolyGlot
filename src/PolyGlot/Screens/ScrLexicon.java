@@ -32,7 +32,6 @@ import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.IOHandler;
-import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.Nodes.EtyExternalParent;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordClassValue;
@@ -146,7 +145,6 @@ public final class ScrLexicon extends PFrame {
 
         lstLexicon.setModel(new DefaultListModel());
 
-        setupKeyStrokes();
         setupFilterMenu();
         setupComboBoxesSwing();
         setDefaultValues();
