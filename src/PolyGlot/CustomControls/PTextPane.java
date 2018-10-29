@@ -29,6 +29,7 @@ import PolyGlot.WebInterface;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
@@ -38,10 +39,14 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import javax.swing.InputMap;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
+import javax.swing.UIManager;
+import javax.swing.text.DefaultEditorKit;
 
 /**
  *
@@ -67,6 +72,23 @@ public class PTextPane extends JTextPane {
         setFontFromCore();
         
         this.setEditorKit(new PHTMLEditorKit());
+        
+        setupCopyPaste();
+    }
+    
+    /**
+     * Due to setting editor kit, need to create input map manually
+     */
+    private void setupCopyPaste() {
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            int mask = KeyEvent.META_DOWN_MASK;
+
+            InputMap im = this.getInputMap();
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.selectAllAction);
+        }
     }
     
     private void setFontFromCore() {

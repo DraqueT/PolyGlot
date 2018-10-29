@@ -188,19 +188,13 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
      * specific, text based bindings I might choose to add later
      */
     protected void setupKeyStrokes() {
-        int mask;
-        String OS = System.getProperty("os.name");
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            int mask = KeyEvent.META_DOWN_MASK;
 
-        if (OS.startsWith("Mac")) {
-            mask = KeyEvent.META_DOWN_MASK;
-        } else {
-            mask = KeyEvent.CTRL_DOWN_MASK;
-        }
-
-        if (OS.startsWith("Mac")) {
             addTextBindings("TextField.focusInputMap", mask);
             addTextBindings("TextArea.focusInputMap", mask);
             addTextBindings("TextPane.focusInputMap", mask);
+            addTextBindings("ScrollPane.ancestorInputMap", mask);
         }
     }
 
