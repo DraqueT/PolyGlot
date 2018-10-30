@@ -136,7 +136,14 @@ public class PTextPane extends JTextPane {
                 InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else if (ClipboardHandler.isClipboardString()) {
-            super.paste();
+            try {
+                // sanitize contents to plain text
+                ClipboardHandler board = new ClipboardHandler();
+                board.setClipboardContents(board.getClipboardText());
+                super.paste();
+            } catch (Exception e) {
+                InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
+            }
         } else {
             super.paste();
         }
