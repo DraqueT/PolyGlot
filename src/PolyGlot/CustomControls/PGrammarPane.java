@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016=2017, draque.thompson
+ * Copyright (c) 2016-2018 Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -26,6 +26,7 @@ import PolyGlot.Nodes.ImageNode;
 import PolyGlot.PGTUtil;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -34,14 +35,17 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -59,6 +63,22 @@ public class PGrammarPane extends JTextPane {
         core = _core;
         setupRightClickMenu();
         setEditorKit(new GlyphVectorEditorKit());
+        setupCopyPaste();
+    }
+    
+    /**
+     * Due to setting editor kit, need to create input map manually
+     */
+    private void setupCopyPaste() {
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            int mask = KeyEvent.META_DOWN_MASK;
+
+            InputMap im = this.getInputMap();
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.selectAllAction);
+        }
     }
 
     private void setupRightClickMenu() {
@@ -196,7 +216,14 @@ public class PGrammarPane extends JTextPane {
                 InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else if (ClipboardHandler.isClipboardString()) {
-            super.paste();
+            try {
+                // sanitize contents to plain text
+                ClipboardHandler board = new ClipboardHandler();
+                board.setClipboardContents(board.getClipboardText());
+                super.paste();
+            } catch (Exception e) {
+                InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
+            }
         } else {
             super.paste();
         }
