@@ -32,8 +32,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -103,7 +105,7 @@ public class ExcelExport {
         return ret;
     }
 
-    private Object[] getWordFormOld(ConWord conWord) {
+    private Object[] getWordFormOld(ConWord conWord, List<DeclensionPair> decList) {
         List<String> ret = new ArrayList<>();
         String declensionCell = "";
 
@@ -132,14 +134,24 @@ public class ExcelExport {
         ret.add(classes);
 
         List<DeclensionNode> declensions = core.getDeclensionManager().getDeclensionListWord(conWord.getId());
-
-        declensionCell = declensions.stream().map(
-                (curNode) -> {
-                    return curNode.getNotes() + " : " + curNode.getValue() + "\n";
-                }).reduce(declensionCell, String::concat);
+        
+        for (DeclensionPair declension : decList) {
+            try {
+                DeclensionNode existingValue = decMan.getDeclensionByCombinedId(conWord.getId(), declension.combinedId);
+                
+                if (existingValue != null && conWord.isOverrideAutoDeclen()) {
+                    declensionCell += existingValue.getValue() + ":";
+                }
+                else {
+                    declensionCell += decMan.declineWord(conWord, declension.combinedId, conWord.getValue()) + ":";
+                }
+            } catch (Exception e) {
+                declensionCell += "DECLENSION ERROR";
+            }
+        }
 
         ret.add(declensionCell);
-        ret.add(conWord.getDefinition());
+        ret.add(WebInterface.getTextFromHtml(conWord.getDefinition()));
 
         return ret.toArray();
     }
@@ -182,7 +194,7 @@ public class ExcelExport {
             try {
                 DeclensionNode existingValue = decMan.getDeclensionByCombinedId(conWord.getId(), declension.combinedId);
                 
-                if (existingValue != null) {
+                if (existingValue != null && conWord.isOverrideAutoDeclen()) {
                     ret.add(existingValue.getValue());
                 }
                 else {
@@ -209,11 +221,11 @@ public class ExcelExport {
         this.recordWords(separateDeclensions);
         
         // record types on sheet
-        sheet = workbook.createSheet("Types");
+        sheet = workbook.createSheet("Parts of Speech");
         Iterator<TypeNode> typeIt = core.getTypes().getNodes().iterator();
 
         Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("TYPE");
+        row.createCell(0).setCellValue("PoS");
         row.createCell(1).setCellValue("NOTES");
 
         for (Integer i = 1; typeIt.hasNext(); i++) {
@@ -223,7 +235,7 @@ public class ExcelExport {
             Cell cell = row.createCell(0);
             cell.setCellValue(curNode.getValue());
             cell = row.createCell(1);
-            cell.setCellValue(curNode.getNotes());
+            cell.setCellValue(WebInterface.getTextFromHtml(curNode.getNotes()));
             cell.setCellStyle(localStyle);
         }
 
@@ -349,6 +361,7 @@ public class ExcelExport {
      */
     private void recordWordsOld () {
         sheet = workbook.createSheet("Lexicon");
+        Map<Integer, List<DeclensionPair>> typeDecMap = new HashMap<>();
         
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue(core.conLabel().toUpperCase() + " WORD");
@@ -361,7 +374,17 @@ public class ExcelExport {
 
         Iterator<ConWord> wordIt = core.getWordCollection().getWordNodes().iterator();
         for (Integer i = 1; wordIt.hasNext(); i++) {
-            Object[] wordArray = getWordFormOld(wordIt.next());
+            ConWord word = wordIt.next();
+            List<DeclensionPair> decList;
+            
+            if (typeDecMap.containsKey(word.getWordTypeId())) {
+                decList = typeDecMap.get(word.getWordTypeId());
+            } else {
+                decList = core.getDeclensionManager().getAllCombinedIds(word.getWordTypeId());
+                typeDecMap.put(word.getWordTypeId(), decList);
+            }
+            
+            Object[] wordArray = getWordFormOld(word, decList);
             row = sheet.createRow(i);
             for (Integer j = 0; j < wordArray.length; j++) {
                 Cell cell = row.createCell(j);
