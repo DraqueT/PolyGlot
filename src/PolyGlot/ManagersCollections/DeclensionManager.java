@@ -350,7 +350,7 @@ public class DeclensionManager {
      */
     public DeclensionNode getDeclension(Integer typeId, Integer declensionId) {
         DeclensionNode ret = null;
-        List<DeclensionNode> decList = (List) dTemplates.get(typeId);
+        List<DeclensionNode> decList = (List<DeclensionNode>) dTemplates.get(typeId);
 
         // only search farther if declension itself actually exists
         if (decList != null) {
@@ -492,6 +492,24 @@ public class DeclensionManager {
         });
         
         return ret; 
+    }
+    
+    /**
+     * Gets the location of a dimension's id in a dimensionalID string
+     * @param typeId part of speech associated with dimension
+     * @param node dimension to find
+     * @return locational index within dimensional ids (-1 if no value found)
+     */
+    public int getDimensionTemplateIndex(int typeId, DeclensionNode node) {
+        int ret = -1;
+        
+        if (dTemplates.containsKey(typeId)) {
+            List<DeclensionNode> declensionValues = dTemplates.get(typeId);
+            
+            ret = declensionValues.indexOf(node);
+        }
+        
+        return ret;
     }
 
     /**
@@ -732,12 +750,7 @@ public class DeclensionManager {
         DeclensionNode ret = null;
 
         if (dList.containsKey(wordId)) {
-            List<DeclensionNode> searchList = (List<DeclensionNode>) dList.get(wordId);
-            Iterator<DeclensionNode> searchIt = searchList.iterator();
-
-            while (searchIt.hasNext()) {
-                DeclensionNode test = searchIt.next();
-
+            for (DeclensionNode test : (List<DeclensionNode>) dList.get(wordId)) {
                 if (dimId.equals(test.getCombinedDimId())) {
                     ret = test;
                     break;
