@@ -161,7 +161,6 @@ public final class ScrDeclensionSetup extends PDialog {
                     "Dimension", "Mandatory", "ID"
                 }
         ) {
-            // col 0 = dimension name, col 1 = manditory selection, col 3 = hidden dim ID
             Class[] types = new Class[]{
                 java.lang.String.class, java.lang.Boolean.class, java.lang.Integer.class
             };

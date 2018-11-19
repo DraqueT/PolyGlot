@@ -511,6 +511,16 @@ public class DeclensionManager {
         
         return ret;
     }
+    
+    /**
+     * Gets a declension node based on positional index (rather than ID)
+     * @param typeId
+     * @param index
+     * @return 
+     */
+    public DeclensionNode getDeclentionTemplateByIndex(int typeId, int index) {
+        return dTemplates.get(typeId).get(index);
+    }
 
     /**
      * recursive method to calculate value of overridden method

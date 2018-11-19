@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
  * Obsolete collection used because that's what underlying class API is built on...
  * @author draque.thompson
  */
-public class PTableModel extends DefaultTableModel{
+public class PTableModel extends DefaultTableModel {
     public PTableModel(Object[] columnNames, int rowCount) {
         super(convertToVector(columnNames), rowCount);
     }
