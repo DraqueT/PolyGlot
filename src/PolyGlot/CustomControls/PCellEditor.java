@@ -20,6 +20,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -237,5 +238,9 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
      */
     public void setIgnoreListenerSilenceing(boolean ignoreListenerSilenceing) {
         this.ignoreListenerSilenceing = ignoreListenerSilenceing;
+    }
+    
+    public void setBackground(Color bg) {
+        component.setBackground(Color.gray);
     }
 }

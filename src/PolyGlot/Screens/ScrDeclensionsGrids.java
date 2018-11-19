@@ -29,7 +29,6 @@ import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -60,7 +59,6 @@ public class ScrDeclensionsGrids extends PDialog {
         this.setModal(true);
         setupDimDropdowns();
         populateDecIdToValues();
-        buildWindowBody();
         setupListeners();
     }
     
@@ -110,6 +108,9 @@ public class ScrDeclensionsGrids extends PDialog {
         cmbDimX.setModel(modelX);
         cmbDimY.setModel(modelY);
         
+        modelX.addElement(new DeclensionNode(-1));
+        modelY.addElement(new DeclensionNode(-1));
+        
         for (DeclensionNode node : declensionNodes) {
             modelX.addElement(node);
             modelY.addElement(node);
@@ -120,27 +121,27 @@ public class ScrDeclensionsGrids extends PDialog {
         DeclensionNode dimX = (DeclensionNode)cmbDimX.getSelectedItem();
         DeclensionNode dimY = (DeclensionNode)cmbDimY.getSelectedItem();
         
-        if (dimX == dimY) {
+        pnlTabDeclensions.removeAll();
+        
+        if (dimX == dimY || dimX.getId() < 0 || dimY.getId() < 0) {
             System.out.println("YALL CAN'T DO THAT. IT'S AGIN' GAWD.");
         } else {
-            // TODO: ALL THE SHIT HERE
             // TODO: remember that cells should have a tooltip value that is equal to their pronunciation (see l:276 of ScrDeclensions.java)
-            // 1) wipe any prior state
-            pnlTabDeclensions.removeAll();
-            
-            // 2) get all partial dim ID patterns (sans X & Y dims)
+
+            // 2) get all partial dim ID patterns (sans X & Y dims)/feed to grid pannel class
             getPanelPartialDimIds().forEach((partialDim)->{
-                pnlTabDeclensions.addTab(partialDim, new PDeclensionGridPanel(partialDim, dimX, dimY));
+                PDeclensionGridPanel gridPanel 
+                        = new PDeclensionGridPanel(partialDim, dimX, dimY, word.getWordTypeId(), core, word);
+                pnlTabDeclensions.addTab(gridPanel.getTabName(), gridPanel);
             });
              
-            
-            // 3) feed each pattern to grid pannel class
-            // 4) make a panel with singleton forms (if they exist)
+            // 2.5) only do 2 if there is more than 1 dimension... otherwise display everything in 3
+
+            // 3) make a panel with singleton forms (if they exist)
         }
     }
     
     private String replaceDimensionByIndex(String dimensions, int index, String replacement) {
-        // Arrays.copyOfRange(oldArr, 1, oldArr.length);
         String[] dimArray = dimensions.split(","); 
         dimArray = Arrays.copyOfRange(dimArray, 1, dimArray.length); // first value always empty
         String ret = ",";
@@ -157,6 +158,7 @@ public class ScrDeclensionsGrids extends PDialog {
      * Gets partial dim ids to be fed to grid panels
      * Positions containing the values of the dimensions selected by the user
      * replaced with "X" and "Y" respectively
+     * Filters out null values (values for disabled word forms)
      */
     private List<String> getPanelPartialDimIds() {
         List<String> partialIds = new ArrayList<>();
@@ -178,6 +180,16 @@ public class ScrDeclensionsGrids extends PDialog {
         
         return partialIds;
     }
+    
+    private void saveValues() {
+        if (chkAutogenOverride.isSelected()) {
+            // TODO: save all values as populated
+        } else {
+            // TODO: make sure all saved values are wiped
+        }
+        
+        word.setOverrideAutoDeclen(chkAutogenOverride.isSelected());
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -190,8 +202,27 @@ public class ScrDeclensionsGrids extends PDialog {
         cmbDimX = new PComboBox(core);
         cmbDimY = new PComboBox(core);
         pnlTabDeclensions = new javax.swing.JTabbedPane();
+        chkAutogenOverride = new javax.swing.JCheckBox();
+        btnOk = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        chkAutogenOverride.setText("Autogen Override");
+
+        btnOk.setText("OK");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -204,6 +235,12 @@ public class ScrDeclensionsGrids extends PDialog {
                 .addComponent(cmbDimY, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(178, Short.MAX_VALUE))
             .addComponent(pnlTabDeclensions)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(chkAutogenOverride)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCancel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnOk))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,11 +250,26 @@ public class ScrDeclensionsGrids extends PDialog {
                     .addComponent(cmbDimX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbDimY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlTabDeclensions, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE))
+                .addComponent(pnlTabDeclensions, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkAutogenOverride, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnOk)
+                        .addComponent(btnCancel))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        saveValues();
+        dispose();
+    }//GEN-LAST:event_btnOkActionPerformed
 
     @Override
     public void updateAllValues(DictCore _core) {
@@ -225,6 +277,9 @@ public class ScrDeclensionsGrids extends PDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnOk;
+    private javax.swing.JCheckBox chkAutogenOverride;
     private javax.swing.JComboBox<DeclensionNode> cmbDimX;
     private javax.swing.JComboBox<DeclensionNode> cmbDimY;
     private javax.swing.JTabbedPane pnlTabDeclensions;

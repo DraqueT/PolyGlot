@@ -40,6 +40,7 @@ import javax.swing.table.TableCellRenderer;
  */
 public class PCellRenderer implements TableCellRenderer {
     private final Font myFont;
+    private Color background = Color.white;
     private DocumentListener docListener;
     private final DictCore core;
     private final boolean useConFont;
@@ -61,9 +62,15 @@ public class PCellRenderer implements TableCellRenderer {
         myFont = selectedFont.deriveFont(attr);
     }
     
+    public void setBackground(Color _background) {
+        background = _background;
+    }
+    
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         final JTextField editor = new JTextField();
+        
+        editor.setBackground(background);
         
         if (value != null) {
             editor.setText(value.toString());
