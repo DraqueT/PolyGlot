@@ -19,9 +19,9 @@
  */
 package PolyGlot.Screens;
 
-import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDeclensionGridPanel;
+import PolyGlot.CustomControls.PDeclensionListPanel;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.DeclensionManager;
@@ -34,17 +34,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.DefaultComboBoxModel;
+import PolyGlot.CustomControls.PDeclensionPanelInterface;
 
 /**
  *
  * @author DThompson
  */
 public class ScrDeclensionsGrids extends PDialog {
-    private final Map<String, String> decIdToValue = new HashMap<>();
-    private final Map<String, DeclensionPair> decIdToTemplatePair = new HashMap<>();
+    private final List<String> combDecIds = new ArrayList<>();
     private final ConWord word;
     private final DeclensionManager decMan;
+    private final Map<String, String> labelMap = new HashMap<>();
     
     /**
      * Creates new form ScrDeclensionsGrids
@@ -59,7 +61,9 @@ public class ScrDeclensionsGrids extends PDialog {
         this.setModal(true);
         setupDimDropdowns();
         populateDecIdToValues();
+        buildWindowBody();
         setupListeners();
+        chkAutogenOverride.setSelected(word.isOverrideAutoDeclen());
     }
     
     private void setupListeners() {
@@ -72,36 +76,21 @@ public class ScrDeclensionsGrids extends PDialog {
     }
     
     private void populateDecIdToValues() {
-        List<DeclensionPair> decTemplateList = decMan.getAllCombinedIds(word.getWordTypeId());
+        List<DeclensionPair> decTemplateList = decMan.getDimensionalCombinedIds(word.getWordTypeId());
         
         for (DeclensionPair curPair : decTemplateList) {
-            // skip forms that have been surpressed and sets pair values to null (indicating disabled table cells)
+            // skip forms that have been surpressed
             if (decMan.isCombinedDeclSurpressed(curPair.combinedId, word.getWordTypeId())) {
-                // TODO: TEST FOR NULL ENTRIES LATER. VERY, VERY IMPORTANT. Maybe wrap to avoid directly touching the map.
-                decIdToTemplatePair.put(curPair.combinedId, null);
-                decIdToValue.put(curPair.combinedId, null);
                 continue;
             }
             
-            // if the autodeclension override is not set, create a value, else gather existing form
-            if (!word.isOverrideAutoDeclen()) {
-                try {
-                    decIdToValue.put(curPair.combinedId, 
-                            decMan.declineWord(word, curPair.combinedId, word.getValue()));
-                } catch (Exception e) {
-                    InfoBox.error("Declension Error", e.getLocalizedMessage(), this);
-                }
-            } else {
-                DeclensionNode userNode = decMan.getDeclensionByCombinedId(word.getId(), 
-                        curPair.combinedId);
-                decIdToValue.put(curPair.combinedId, userNode.getValue());
-            }
-            
-            decIdToTemplatePair.put(curPair.combinedId, curPair);
+            combDecIds.add(curPair.combinedId);
+            labelMap.put(curPair.combinedId, curPair.label);
         }
     }
     
     private void setupDimDropdowns() {
+        // TODO: Set X to first possible choice and Y to second possible choice if available
         List<DeclensionNode> declensionNodes = decMan.getDimensionalDeclensionListTemplate(word.getWordTypeId());
         DefaultComboBoxModel<DeclensionNode> modelX = new DefaultComboBoxModel<>();
         DefaultComboBoxModel<DeclensionNode> modelY = new DefaultComboBoxModel<>();
@@ -123,22 +112,37 @@ public class ScrDeclensionsGrids extends PDialog {
         
         pnlTabDeclensions.removeAll();
         
-        if (dimX == dimY || dimX.getId() < 0 || dimY.getId() < 0) {
-            System.out.println("YALL CAN'T DO THAT. IT'S AGIN' GAWD.");
+        // only renders as dimensional if there are at least two dimensional declensions. Renders as list otherwise.
+        if (shouldRenderDimensional()) {
+            if (!(dimX == dimY || dimX.getId() < 0 || dimY.getId() < 0)) {
+                // TODO: Disabled cells should be light grey to indicate this
+                // get all partial dim ID patterns (sans X & Y dims)/feed to grid pannel class
+                getPanelPartialDimIds().forEach((partialDim)->{
+                    PDeclensionGridPanel gridPanel 
+                            = new PDeclensionGridPanel(partialDim, dimX, dimY, word.getWordTypeId(), core, word);
+                    pnlTabDeclensions.addTab(gridPanel.getTabName(), gridPanel);
+                });
+
+                // add singleton values when appropriate
+                List<DeclensionPair> singletons = decMan.getSingletonCombinedIds(word.getWordTypeId());
+                if (!singletons.isEmpty()) {
+                    PDeclensionListPanel listPanel = new PDeclensionListPanel(singletons, core, word, false);
+                    pnlTabDeclensions.addTab(listPanel.getTabName(), listPanel);
+                }
+            }
         } else {
-            // TODO: remember that cells should have a tooltip value that is equal to their pronunciation (see l:276 of ScrDeclensions.java)
-
-            // 2) get all partial dim ID patterns (sans X & Y dims)/feed to grid pannel class
-            getPanelPartialDimIds().forEach((partialDim)->{
-                PDeclensionGridPanel gridPanel 
-                        = new PDeclensionGridPanel(partialDim, dimX, dimY, word.getWordTypeId(), core, word);
-                pnlTabDeclensions.addTab(gridPanel.getTabName(), gridPanel);
-            });
-             
-            // 2.5) only do 2 if there is more than 1 dimension... otherwise display everything in 3
-
-            // 3) make a panel with singleton forms (if they exist)
+            cmbDimX.setVisible(false);
+            cmbDimY.setVisible(false);
+            List<DeclensionPair> completeList = decMan.getAllCombinedIds(word.getWordTypeId());
+            PDeclensionListPanel listPanel 
+                    = new PDeclensionListPanel(completeList, core, word, true);
+            
+            pnlTabDeclensions.addTab(listPanel.getTabName(), listPanel);
         }
+    }
+    
+    private boolean shouldRenderDimensional() {
+        return decMan.getDimensionalDeclensionListTemplate(word.getWordTypeId()).size() > 1;
     }
     
     private String replaceDimensionByIndex(String dimensions, int index, String replacement) {
@@ -165,7 +169,7 @@ public class ScrDeclensionsGrids extends PDialog {
         int xNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (DeclensionNode)cmbDimX.getSelectedItem());
         int yNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (DeclensionNode)cmbDimY.getSelectedItem());
         
-        for (String dimId : decIdToValue.keySet()) {
+        for (String dimId : combDecIds) {
             if (dimId == null) {
                 continue;
             }
@@ -182,13 +186,42 @@ public class ScrDeclensionsGrids extends PDialog {
     }
     
     private void saveValues() {
+        core.clearAllDeclensionsWord(word.getId());
+        
         if (chkAutogenOverride.isSelected()) {
-            // TODO: save all values as populated
-        } else {
-            // TODO: make sure all saved values are wiped
+            int count = pnlTabDeclensions.getTabCount();
+            for (int i = 0; i < count; i++) {
+                PDeclensionPanelInterface comp = (PDeclensionPanelInterface)pnlTabDeclensions.getComponentAt(i);
+                
+                for (Entry<String, String> entry : comp.getAllDecValues().entrySet()) {
+                    DeclensionNode saveNode = new DeclensionNode(-1);
+
+                    saveNode.setValue(entry.getValue().trim());
+                    saveNode.setCombinedDimId(entry.getKey());
+                    saveNode.setNotes(labelMap.get(entry.getKey()));
+
+                    // declensions per word not saved via int id any longer
+                    decMan.addDeclensionToWord(word.getId(), -1, saveNode);
+                }
+            }
         }
         
         word.setOverrideAutoDeclen(chkAutogenOverride.isSelected());
+    }
+    
+    @Override
+    public void dispose() {
+        // TODO: restore this somehow
+//        Integer userChoice = InfoBox.yesNoCancel("Save Confirmation", "Save values?", this);
+//        
+//        // yes = save, no = don't save, any other choice = cancel & do not exit
+//        if (userChoice == JOptionPane.YES_OPTION) {
+//            saveValues();
+//            super.dispose();
+//        } else if (userChoice == JOptionPane.NO_OPTION) {
+//            super.dispose();
+//        }
+        super.dispose();
     }
 
     /**
@@ -263,14 +296,14 @@ public class ScrDeclensionsGrids extends PDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        dispose();
+        super.dispose(); // skips save dialog
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         saveValues();
-        dispose();
+        super.dispose(); // skips save dialog
     }//GEN-LAST:event_btnOkActionPerformed
-
+    
     @Override
     public void updateAllValues(DictCore _core) {
         // DOES NOTHING IN THIS WINDOW
