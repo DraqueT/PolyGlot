@@ -26,13 +26,17 @@ import PolyGlot.Nodes.DeclensionDimension;
 import PolyGlot.Nodes.DeclensionNode;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import org.apache.commons.lang3.StringUtils;
 
@@ -41,7 +45,7 @@ import org.apache.commons.lang3.StringUtils;
  * It requires at least two dimensions in the language to work.
  * @author DThompson
  */
-public class PDeclensionGridPanel extends JPanel {
+public class PDeclensionGridPanel extends JPanel implements PDeclensionPanelInterface {
     private final PTable table;
     private final DictCore core;
     private final String tabName;
@@ -49,6 +53,7 @@ public class PDeclensionGridPanel extends JPanel {
     private final DeclensionManager decMan;
     private final String partialDeclensionIds;
     private final ConWord word;
+    private final Map<String, Dimension> decIdsToGridLocation = new HashMap<>();
     
     /**
      * Generates grid panel for displaying/editing word forms
@@ -162,6 +167,7 @@ public class PDeclensionGridPanel extends JPanel {
                 // if surpressed, add null value
                 if (!decMan.isCombinedDeclSurpressed(fullDecId, typeId)) {
                     tableModel.setValueAt(getWordForm(fullDecId), yPos, xPos);
+                    decIdsToGridLocation.put(fullDecId, new Dimension(xPos, yPos));
                 } else {
                     tableModel.setValueAt(null, yPos, xPos);
                 }
@@ -172,11 +178,50 @@ public class PDeclensionGridPanel extends JPanel {
         }
     }
     
+    /**
+     * fetches value of word form based on combined dec id. Returns empty string if not present or if null value.
+     * @param combDecId
+     * @return 
+     */
+    public String getDecValueByCombDecId(String combDecId) {
+        String ret = "";
+        
+        if (decIdsToGridLocation.containsKey(combDecId)) {
+            Dimension gridLocation = decIdsToGridLocation.get(combDecId);
+            Object value = table.getModel().getValueAt(gridLocation.width, gridLocation.height);
+            ret = value == null ? "" : (String)value;
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Gets map of all declined word forms. Key = combined ID, value = word form
+     * @return 
+     */
+    @Override
+    public Map<String, String> getAllDecValues() {
+        Map<String, String> ret = new HashMap<>();
+        
+        TableCellEditor editor = table.getCellEditor();
+        if (editor != null) {
+            editor.stopCellEditing();
+        }
+        
+        decIdsToGridLocation.entrySet().forEach((entry) -> {
+            Object val = table.getModel().getValueAt(entry.getValue().height, entry.getValue().width);
+            ret.put(entry.getKey(), val == null ? "" : (String)val);
+        });
+        
+        return ret;
+    }
+    
     private String getWordForm(String fullDecId) {
         String ret;
 
         if (word.isOverrideAutoDeclen()) {
-            ret = decMan.getDeclensionByCombinedId(word.getId(), fullDecId).getValue();
+            DeclensionNode node = decMan.getDeclensionByCombinedId(word.getId(), fullDecId);
+            ret = node == null ? "" : node.getValue();
         } else {
             try {
                 ret = decMan.declineWord(word, fullDecId, word.getValue());
@@ -256,6 +301,7 @@ public class PDeclensionGridPanel extends JPanel {
         return ret;
     }
     
+    @Override
     public String getTabName() {
         return tabName;
     }

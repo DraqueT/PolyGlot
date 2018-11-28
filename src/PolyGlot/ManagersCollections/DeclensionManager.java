@@ -483,7 +483,31 @@ public class DeclensionManager {
         return ret;
     }
     
-    private List<DeclensionPair> getAllSingletonIds(List<DeclensionNode> declensionList) {
+    /**
+     * get list of all labels and combined IDs of dimensional declension combinations
+     * for a type
+     *
+     * @param typeId ID of type to fetch combined IDs for
+     * @return list of labels and IDs
+     */
+    public List<DeclensionPair> getDimensionalCombinedIds(Integer typeId) {
+        List<DeclensionNode> dimensionalDeclensionNodes = getDimensionalDeclensionListTemplate(typeId);
+        return getAllCombinedDimensionalIds(0, ",", "", dimensionalDeclensionNodes);
+    }
+    
+    /**
+     * get list of all labels and combined IDs of singleton declension combinations
+     * for a type
+     *
+     * @param typeId ID of type to fetch combined IDs for
+     * @return list of labels and IDs
+     */
+    public List<DeclensionPair> getSingletonCombinedIds(Integer typeId) {
+        List<DeclensionNode> singletonDeclensionNodes = getSingletonDeclensionList(typeId, dTemplates);
+        return getAllSingletonIds(singletonDeclensionNodes);
+    }
+    
+    public List<DeclensionPair> getAllSingletonIds(List<DeclensionNode> declensionList) {
         List<DeclensionPair> ret = new ArrayList<>();
         
         declensionList.forEach((curNode)->{
@@ -690,16 +714,16 @@ public class DeclensionManager {
         bufferRelId = -1;
     }
 
-    private DeclensionNode addDeclension(Integer typeId, String declension, Map list) {
-        List wordList;
+    private DeclensionNode addDeclension(Integer typeId, String declension, Map<Integer, List<DeclensionNode>> idToDecNodes) {
+        List<DeclensionNode> wordList;
 
         topId++;
 
-        if (list.containsKey(typeId)) {
-            wordList = (List) list.get(typeId);
+        if (idToDecNodes.containsKey(typeId)) {
+            wordList = (List<DeclensionNode>) idToDecNodes.get(typeId);
         } else {
             wordList = new ArrayList<>();
-            list.put(typeId, wordList);
+            idToDecNodes.put(typeId, wordList);
         }
 
         DeclensionNode addNode = new DeclensionNode(topId);
@@ -843,7 +867,6 @@ public class DeclensionManager {
             list.remove(typeId);
             list.put(typeId, copyTo);
         }
-
     }
 
     /**
@@ -880,6 +903,17 @@ public class DeclensionManager {
         }
 
         return ret;
+    }
+    
+    /**
+     * Public version of private method directly below.
+     * Retrieves all singleton declensions based on related ID and the list to be pulled from. The list can either
+     * be the templates (related via typeId) or actual words, related by wordId
+     * @param relatedId ID of related value
+     * @return 
+     */
+    public List<DeclensionNode> getSingletonDeclensionList(Integer relatedId) {
+        return getSingletonDeclensionList(relatedId, dTemplates);
     }
     
     /**

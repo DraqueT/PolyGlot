@@ -22,6 +22,7 @@ package PolyGlot.CustomControls;
 import PolyGlot.DictCore;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 
 /**
@@ -54,5 +55,24 @@ public class PTable extends JTable {
             this.getTableHeader().setFont(core.getPropertiesManager().getFontLocal());
         }
         super.repaint();
+    }
+    
+    @Override
+    public String getToolTipText(MouseEvent e) {
+        String tip = "";
+        java.awt.Point p = e.getPoint();
+        int rowIndex = rowAtPoint(p);
+        int colIndex = columnAtPoint(p);
+        Object target = this.getValueAt(rowIndex, colIndex);
+
+        if (target != null) {
+            try {
+                tip = core.getPronunciationMgr().getPronunciation(target.toString());
+            } catch (Exception ex) {
+                tip = "MALFORMED PRONUNCIATION REGEX: " + ex.getLocalizedMessage();
+            }
+        }
+
+        return tip.isEmpty() ? super.getToolTipText(e) : tip;
     }
 }

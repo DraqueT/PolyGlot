@@ -702,6 +702,7 @@ public class ScrMainMenu extends PFrame {
 
         if (curWindow instanceof ScrLexicon) {
             ScrLexicon scrLexicon = (ScrLexicon) curWindow;
+            scrLexicon.saveAllValues();
             ret = scrLexicon.getCurrentWord();
         } else {
             InfoBox.warning("Open Lexicon",
