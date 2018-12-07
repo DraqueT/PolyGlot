@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, DThompson
+ * Copyright (c) 2017-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -63,16 +63,22 @@ public class PTable extends JTable {
         java.awt.Point p = e.getPoint();
         int rowIndex = rowAtPoint(p);
         int colIndex = columnAtPoint(p);
-        Object target = this.getValueAt(rowIndex, colIndex);
+        
+        try {
+            Object target = this.getValueAt(rowIndex, colIndex);
 
-        if (target != null) {
-            try {
-                tip = core.getPronunciationMgr().getPronunciation(target.toString());
-            } catch (Exception ex) {
-                tip = "MALFORMED PRONUNCIATION REGEX: " + ex.getLocalizedMessage();
+            if (target != null) {
+                try {
+                    tip = core.getPronunciationMgr().getPronunciation(target.toString());
+                } catch (Exception ex) {
+                    tip = "MALFORMED PRONUNCIATION REGEX: " + ex.getLocalizedMessage();
+                }
             }
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            // do nothing. This happens if a non-value portion of the table is hovered over due to how objects are fetched
+            // all other errors bubble beyond this point
         }
-
+        
         return tip.isEmpty() ? super.getToolTipText(e) : tip;
     }
 }
