@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018, Draque Thompson
+ * Copyright (c) 2017-2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -846,7 +846,6 @@ public class ScrMainMenu extends PFrame {
         mnuOptions = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         mnuRevertion = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
         mnuAbout = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
@@ -1203,14 +1202,6 @@ public class ScrMainMenu extends PFrame {
         });
         mnuTools.add(mnuRevertion);
 
-        jMenuItem3.setText("jMenuItem3");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        mnuTools.add(jMenuItem3);
-
         jMenuBar1.add(mnuTools);
 
         mnuHelp.setText("Help");
@@ -1466,10 +1457,6 @@ public class ScrMainMenu extends PFrame {
         new ScrReversion(core).setVisible(true);
     }//GEN-LAST:event_mnuRevertionActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        new ScrDeclensionsGrids(core, this.getCurrentWord()).setVisible(true);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
-
     private static void setupNumbus() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -1577,7 +1564,6 @@ public class ScrMainMenu extends PFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPopupMenu.Separator jSeparator1;

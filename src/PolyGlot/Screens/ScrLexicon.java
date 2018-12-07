@@ -1582,7 +1582,8 @@ public final class ScrLexicon extends PFrame {
         }
 
         saveValuesTo(curWord);
-        Window window = ScrDeclensions.run(core, curWord);
+        Window window = new ScrDeclensionsGrids(core, this.getCurrentWord());
+        window.setVisible(true);
         childFrames.add(window);
     }
 
