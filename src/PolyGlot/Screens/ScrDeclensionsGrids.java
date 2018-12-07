@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, DThompson
+ * Copyright (c) 2018, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,6 +19,7 @@
  */
 package PolyGlot.Screens;
 
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDeclensionGridPanel;
 import PolyGlot.CustomControls.PDeclensionListPanel;
@@ -37,16 +38,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.swing.DefaultComboBoxModel;
 import PolyGlot.CustomControls.PDeclensionPanelInterface;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author DThompson
  */
-public class ScrDeclensionsGrids extends PDialog {
+public final class ScrDeclensionsGrids extends PDialog {
     private final List<String> combDecIds = new ArrayList<>();
     private final ConWord word;
     private final DeclensionManager decMan;
     private final Map<String, String> labelMap = new HashMap<>();
+    private boolean closeWithoutSave = false;
     
     /**
      * Creates new form ScrDeclensionsGrids
@@ -57,13 +60,40 @@ public class ScrDeclensionsGrids extends PDialog {
         core = _core;
         word = _word;
         decMan = core.getDeclensionManager();
-        initComponents();
-        this.setModal(true);
-        setupDimDropdowns();
-        populateDecIdToValues();
-        buildWindowBody();
-        setupListeners();
-        chkAutogenOverride.setSelected(word.isOverrideAutoDeclen());
+        
+        if (canOpen()) {
+            initComponents();
+            this.setModal(true);
+            setupDimDropdowns();
+            populateDecIdToValues();
+            buildWindowBody();
+            setupListeners();
+            chkAutogenOverride.setSelected(word.isOverrideAutoDeclen());
+        } else {
+            closeWithoutSave = true;
+            dispose();
+        }
+    }
+    
+    private boolean canOpen() {
+        boolean ret = true;
+        int typeId = word.getWordTypeId();
+        
+        if (typeId == -1) {
+            InfoBox.info("Missing Part of Speech", 
+                    "Word must have a part of Speech set, and declensions defined before using this feature.", 
+                    core.getRootWindow());
+            ret = false;
+        } else if ((decMan.getDimensionalDeclensionListTemplate(typeId) == null
+                    || decMan.getDimensionalDeclensionListTemplate(typeId).isEmpty())
+                && decMan.getDeclensionListWord(word.getId()).isEmpty()) {
+            InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
+                    + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the "
+                            + "Declensions button.", this);
+            ret = false;
+        }
+        
+        return ret;
     }
     
     private void setupListeners() {
@@ -90,19 +120,20 @@ public class ScrDeclensionsGrids extends PDialog {
     }
     
     private void setupDimDropdowns() {
-        // TODO: Set X to first possible choice and Y to second possible choice if available
         List<DeclensionNode> declensionNodes = decMan.getDimensionalDeclensionListTemplate(word.getWordTypeId());
         DefaultComboBoxModel<DeclensionNode> modelX = new DefaultComboBoxModel<>();
         DefaultComboBoxModel<DeclensionNode> modelY = new DefaultComboBoxModel<>();
         cmbDimX.setModel(modelX);
         cmbDimY.setModel(modelY);
         
-        modelX.addElement(new DeclensionNode(-1));
-        modelY.addElement(new DeclensionNode(-1));
-        
         for (DeclensionNode node : declensionNodes) {
             modelX.addElement(node);
             modelY.addElement(node);
+        }
+        
+        if (declensionNodes.size() > 1) {
+            cmbDimX.setSelectedIndex(0);
+            cmbDimY.setSelectedIndex(1);
         }
     }
     
@@ -211,17 +242,19 @@ public class ScrDeclensionsGrids extends PDialog {
     
     @Override
     public void dispose() {
-        // TODO: restore this somehow
-//        Integer userChoice = InfoBox.yesNoCancel("Save Confirmation", "Save values?", this);
-//        
-//        // yes = save, no = don't save, any other choice = cancel & do not exit
-//        if (userChoice == JOptionPane.YES_OPTION) {
-//            saveValues();
-//            super.dispose();
-//        } else if (userChoice == JOptionPane.NO_OPTION) {
-//            super.dispose();
-//        }
-        super.dispose();
+        if (!closeWithoutSave) {
+            Integer userChoice = InfoBox.yesNoCancel("Save Confirmation", "Save changes?", this);
+
+            // yes = save, no = don't save, any other choice = cancel & do not exit
+            if (userChoice == JOptionPane.YES_OPTION) {
+                saveValues();
+                super.dispose();
+            } else if (userChoice == JOptionPane.NO_OPTION) {
+                super.dispose();
+            }
+        } else {
+            super.dispose();
+        }
     }
 
     /**
@@ -238,12 +271,20 @@ public class ScrDeclensionsGrids extends PDialog {
         chkAutogenOverride = new javax.swing.JCheckBox();
         btnOk = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        cmbDimX.setToolTipText("Rows in wordform grids will be based on this donjugation/declension dimension");
+
+        cmbDimY.setToolTipText("Columns in wordform grids will be based on this donjugation/declension dimension");
+
         chkAutogenOverride.setText("Autogen Override");
+        chkAutogenOverride.setToolTipText("Check to override autogeneration of declension forms (if autogeneration patterns exist)");
 
         btnOk.setText("OK");
+        btnOk.setToolTipText("Record changes and exit");
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOkActionPerformed(evt);
@@ -251,11 +292,16 @@ public class ScrDeclensionsGrids extends PDialog {
         });
 
         btnCancel.setText("Cancel");
+        btnCancel.setToolTipText("Discard changes and exit");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("Rows:");
+
+        jLabel2.setText("Columns:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -263,14 +309,18 @@ public class ScrDeclensionsGrids extends PDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmbDimX, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmbDimY, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(178, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(pnlTabDeclensions)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(chkAutogenOverride)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 223, Short.MAX_VALUE)
                 .addComponent(btnCancel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnOk))
@@ -281,7 +331,9 @@ public class ScrDeclensionsGrids extends PDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbDimX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbDimY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbDimY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlTabDeclensions, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -296,7 +348,8 @@ public class ScrDeclensionsGrids extends PDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        super.dispose(); // skips save dialog
+        closeWithoutSave = true;
+        dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
@@ -315,6 +368,8 @@ public class ScrDeclensionsGrids extends PDialog {
     private javax.swing.JCheckBox chkAutogenOverride;
     private javax.swing.JComboBox<DeclensionNode> cmbDimX;
     private javax.swing.JComboBox<DeclensionNode> cmbDimY;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JTabbedPane pnlTabDeclensions;
     // End of variables declaration//GEN-END:variables
 }
