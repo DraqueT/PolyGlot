@@ -20,14 +20,12 @@ package PolyGlot.Screens;
 
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DeclensionNode;
-import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.CustomControls.PTextField;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
@@ -46,7 +44,7 @@ import javax.swing.SwingUtilities;
  *
  * @author draque
  */
-public class ScrDeclensions extends PDialog {
+public final class ScrDeprecatedDeclensions extends PDialog {
 
     private final Map<String, JTextField> fieldMap = new HashMap<>();
     private final Map<String, String> labelMap = new HashMap<>();
@@ -57,29 +55,13 @@ public class ScrDeclensions extends PDialog {
     private Integer textHeight = 0;
     private Map<String, DeclensionNode> allWordDeclensions = new HashMap<>();
     private JTextField firstField;
-    private final Integer MAXLABELWIDTH = 300;
 
-    public ScrDeclensions(DictCore _core) {
+    public ScrDeprecatedDeclensions(DictCore _core) {
         core = _core;
         this.setupKeyStrokes();
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setModal(true);
-    }
-    
-    @Override
-    public final void setModal(boolean _modal) {
-        super.setModal(_modal);
-    }
-    
-    @Override 
-    public final void setDefaultCloseOperation(int _operation) {
-        super.setDefaultCloseOperation(_operation);
-    }
-    
-    @Override 
-    public final void setupKeyStrokes() {
-        super.setupKeyStrokes();
+        this.setModal(false);
     }
 
     @Override
@@ -108,22 +90,12 @@ public class ScrDeclensions extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnCancel = new PButton(core);
         btnOk = new PButton(core);
         scrDeclensions = new javax.swing.JScrollPane();
         pnlDeclensions = new javax.swing.JPanel();
-        chkAutogenOverride = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Conjugations/Declensions");
-
-        btnCancel.setText("Cancel");
-        btnCancel.setToolTipText("Exit screen without saving anything.");
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
-            }
-        });
+        setTitle("Deprecated Conjugations/Declensions");
 
         btnOk.setText("OK");
         btnOk.setToolTipText("Accept and save changes to declension/conjugations.");
@@ -143,54 +115,41 @@ public class ScrDeclensions extends PDialog {
         );
         pnlDeclensionsLayout.setVerticalGroup(
             pnlDeclensionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 441, Short.MAX_VALUE)
+            .addGap(0, 443, Short.MAX_VALUE)
         );
 
         scrDeclensions.setViewportView(pnlDeclensions);
-
-        chkAutogenOverride.setText("Autogen Override");
-        chkAutogenOverride.setToolTipText("Check to override autogeneration of declension forms (if autogeneration patterns exist)");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(chkAutogenOverride)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnOk)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCancel)
-                .addContainerGap())
             .addComponent(scrDeclensions)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnOk)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(scrDeclensions)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chkAutogenOverride))
+                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnCancelActionPerformed
-
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        saveDeclension();
+        dispose();
     }//GEN-LAST:event_btnOkActionPerformed
 
     public static Window run(DictCore _core, ConWord _word) {
         TypeNode wordType = _core.getTypes().getNodeById(_word.getWordTypeId());
         
-        final ScrDeclensions s = new ScrDeclensions(_core);
+        final ScrDeprecatedDeclensions s = new ScrDeprecatedDeclensions(_core);
         s.setConWord(_word);
         s.setConFont(_core.getPropertiesManager().getFontCon());
         s.setWordType(wordType == null ? -1 : wordType.getId());
@@ -223,10 +182,14 @@ public class ScrDeclensions extends PDialog {
             super.setVisible(visible);
         }
     }
+    
+    @Override
+    public void dispose() {
+        saveDeclension();
+        super.dispose();
+    }
 
     private void saveDeclension() {
-        word.setOverrideAutoDeclen(chkAutogenOverride.isSelected());
-        
         core.clearAllDeclensionsWord(word.getId());
         Set<Entry<String, JTextField>> saveSet = fieldMap.entrySet();
 
@@ -242,77 +205,6 @@ public class ScrDeclensions extends PDialog {
             // declensions per word not saved via int id any longer
             core.getDeclensionManager().addDeclensionToWord(word.getId(), -1, saveNode);
         });
-
-        dispose();
-    }
-
-    /**
-     * creates all the fields for declension
-     * combinations
-     */
-    private void createFields() {
-        Iterator<DeclensionPair> decIt = core.getDeclensionManager().getAllCombinedIds(typeId).iterator();
-        
-        while (decIt.hasNext()) {
-            DeclensionPair curDec = decIt.next();
-            String curId = curDec.combinedId;
-            String curLabel = curDec.label;
-            
-            // skip forms that have been surpressed
-            if (core.getDeclensionManager().isCombinedDeclSurpressed(curId, typeId)) {
-                allWordDeclensions.remove(curId);
-                continue;
-            }
-            
-            Label newLabel = new Label(curLabel);
-            JTextField newField = new PTextField(core, false, "");
-            Dimension labelDim = new Dimension();
-            labelDim.setSize(MAXLABELWIDTH, 0);
-            newLabel.setMaximumSize(labelDim);
-            
-            DeclensionNode findDec = core.getDeclensionManager().getDeclensionByCombinedId(word.getId(), curId);
-
-            if (findDec != null) {
-                String value = findDec.getValue();
-                newField.setText(value);
-                try {
-                    newField.setToolTipText(core.getPronunciationMgr().getPronunciation(value));
-                } catch (Exception e) {
-                    newField.setToolTipText("Regex error: " + e.getLocalizedMessage());
-                }
-            }
-            
-            // if the autodeclension override is not set, create a value
-            if (!word.isOverrideAutoDeclen()) {
-                try {
-                    String newForm = core.getDeclensionManager().declineWord(word, curId, word.getValue());
-                    
-                    // only set value if form found
-                    if (newForm.length() != 0) {
-                        newField.setText(newForm);
-                    }
-                } catch (Exception e) {
-                    InfoBox.error("Declension Error", e.getLocalizedMessage(), this);
-                }
-            }
-
-            if (conFont != null) {
-                newField.setFont(conFont);
-            }
-
-            pnlDeclensions.add(newLabel);
-            pnlDeclensions.add(newField);
-            allWordDeclensions.remove(curId);
-
-            // capture first field to pull height from later...
-            if (firstField == null) {
-                firstField = newField;
-            }
-
-            fieldMap.put(curId, newField);
-            labelMap.put(curId, curLabel);
-            numFields++;
-        }
     }
     
     /**
@@ -321,13 +213,6 @@ public class ScrDeclensions extends PDialog {
     private void createDeprecatedFields() {
         Set<Entry<String, DeclensionNode>> decSet = allWordDeclensions.entrySet();
         Iterator<Entry<String, DeclensionNode>> depIt = decSet.iterator();
-
-        // separates new and deprecated fields
-        if (!decSet.isEmpty()) {
-            pnlDeclensions.add(new Label("DEPRECATED DECLENSIONS"));
-            pnlDeclensions.add(new Label(" "));
-            numFields ++;
-        }
         
         while (depIt.hasNext()) {
             Entry<String, DeclensionNode> decEnt = depIt.next();
@@ -397,34 +282,19 @@ public class ScrDeclensions extends PDialog {
      * (including deprecated ones)
      */
     private void getAllWordDeclensions() {
-        Iterator<DeclensionNode> decIt = core.getDeclensionManager().getDeclensionListWord(word.getId()).iterator();
-
-        while (decIt.hasNext()) {
-            DeclensionNode curNode = decIt.next();
-            allWordDeclensions.put(curNode.getCombinedDimId(), curNode);
-        }
+        allWordDeclensions = core.getDeclensionManager().getDeprecatedForms(word);
     }
 
     /**
      * builds all aspects of the form which are generated per case
      */
     private void buildForm() {
-        // creates list of all declensions in word (even deprecated ones
-        allWordDeclensions = core.getDeclensionManager().getWordDeclensions(word.getId());
-
-        chkAutogenOverride.setSelected(word.isOverrideAutoDeclen());
-        
-        createFields();
-
         createDeprecatedFields();
-        
         setFormProps();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
-    private javax.swing.JCheckBox chkAutogenOverride;
     private javax.swing.JPanel pnlDeclensions;
     private javax.swing.JScrollPane scrDeclensions;
     // End of variables declaration//GEN-END:variables

@@ -303,6 +303,6 @@ public class PDeclensionGridPanel extends JPanel implements PDeclensionPanelInte
     
     @Override
     public String getTabName() {
-        return tabName;
+        return tabName.trim().isEmpty() ? "Declensions/Conjugations" : tabName;
     }
 }
