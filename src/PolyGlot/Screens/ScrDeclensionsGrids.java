@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.swing.DefaultComboBoxModel;
 import PolyGlot.CustomControls.PDeclensionPanelInterface;
+import java.awt.Window;
 import javax.swing.JOptionPane;
 
 /**
@@ -50,6 +51,7 @@ public final class ScrDeclensionsGrids extends PDialog {
     private final DeclensionManager decMan;
     private final Map<String, String> labelMap = new HashMap<>();
     private boolean closeWithoutSave = false;
+    Window depVals = null;
     
     /**
      * Creates new form ScrDeclensionsGrids
@@ -162,6 +164,10 @@ public final class ScrDeclensionsGrids extends PDialog {
                 }
             }
         } else {
+            if (dimX == dimY) {
+                InfoBox.warning("Dimension Selection", "Please select differing Row and Column values.", this);
+            }
+            
             cmbDimX.setVisible(false);
             cmbDimY.setVisible(false);
             List<DeclensionPair> completeList = decMan.getAllCombinedIds(word.getWordTypeId());
@@ -170,6 +176,8 @@ public final class ScrDeclensionsGrids extends PDialog {
             
             pnlTabDeclensions.addTab(listPanel.getTabName(), listPanel);
         }
+        
+        btnDeprecated.setVisible(decMan.wordHasDeprecatedForms(word));
     }
     
     private boolean shouldRenderDimensional() {
@@ -242,14 +250,21 @@ public final class ScrDeclensionsGrids extends PDialog {
     
     @Override
     public void dispose() {
-        if (!closeWithoutSave) {
-            Integer userChoice = InfoBox.yesNoCancel("Save Confirmation", "Save changes?", this);
+        if (!isDisposed()) {
+            if (!closeWithoutSave) {
+                Integer userChoice = InfoBox.yesNoCancel("Save Confirmation", "Save changes?", this);
 
-            // yes = save, no = don't save, any other choice = cancel & do not exit
-            if (userChoice == JOptionPane.YES_OPTION) {
-                saveValues();
-                super.dispose();
-            } else if (userChoice == JOptionPane.NO_OPTION) {
+                // yes = save, no = don't save, any other choice = cancel & do not exit
+                if (userChoice == JOptionPane.YES_OPTION) {
+                    saveValues();
+                    super.dispose();
+                } else if (userChoice == JOptionPane.NO_OPTION) {
+                    super.dispose();
+                }
+            } else {
+                if (depVals != null && !depVals.isVisible()) {
+                    depVals.dispose();
+                }
                 super.dispose();
             }
         } else {
@@ -273,8 +288,10 @@ public final class ScrDeclensionsGrids extends PDialog {
         btnCancel = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        btnDeprecated = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Conjugations/Declensions");
 
         cmbDimX.setToolTipText("Rows in wordform grids will be based on this donjugation/declension dimension");
 
@@ -303,6 +320,14 @@ public final class ScrDeclensionsGrids extends PDialog {
 
         jLabel2.setText("Columns:");
 
+        btnDeprecated.setText("Deprecated");
+        btnDeprecated.setToolTipText("Deprecated Conjugations/Declensions");
+        btnDeprecated.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeprecatedActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -316,11 +341,13 @@ public final class ScrDeclensionsGrids extends PDialog {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmbDimY, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
             .addComponent(pnlTabDeclensions)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(chkAutogenOverride)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 223, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnDeprecated)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCancel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnOk))
@@ -341,7 +368,8 @@ public final class ScrDeclensionsGrids extends PDialog {
                     .addComponent(chkAutogenOverride, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnOk)
-                        .addComponent(btnCancel))))
+                        .addComponent(btnCancel)
+                        .addComponent(btnDeprecated))))
         );
 
         pack();
@@ -356,6 +384,10 @@ public final class ScrDeclensionsGrids extends PDialog {
         saveValues();
         super.dispose(); // skips save dialog
     }//GEN-LAST:event_btnOkActionPerformed
+
+    private void btnDeprecatedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeprecatedActionPerformed
+        depVals = ScrDeprecatedDeclensions.run(core, word);
+    }//GEN-LAST:event_btnDeprecatedActionPerformed
     
     @Override
     public void updateAllValues(DictCore _core) {
@@ -364,6 +396,7 @@ public final class ScrDeclensionsGrids extends PDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnDeprecated;
     private javax.swing.JButton btnOk;
     private javax.swing.JCheckBox chkAutogenOverride;
     private javax.swing.JComboBox<DeclensionNode> cmbDimX;

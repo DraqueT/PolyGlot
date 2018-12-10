@@ -1125,4 +1125,34 @@ public class DeclensionManager {
             curRule.addClassToFilterList(-1, -1);
         });
     }
+    
+    /**
+     * Returns all saved yet deprecated wordforms of a word
+     * @param word
+     * @return 
+     */
+    public Map<String, DeclensionNode> getDeprecatedForms(ConWord word) {
+        Map<String, DeclensionNode> ret = new HashMap<>();
+        
+        // first get all values that exist for this word
+        getDeclensionListWord(word.getId()).forEach((node)->{
+            ret.put(node.getCombinedDimId(), node);
+        });
+        
+        // then remove all values which match existing combined type ids
+        getAllCombinedIds(word.getWordTypeId()).forEach((pair)->{
+            ret.remove(pair.combinedId);
+        });
+        
+        return ret;
+    }
+    
+    /**
+     * Returns true if given word has deprecated wordforms
+     * @param word
+     * @return 
+     */
+    public boolean wordHasDeprecatedForms(ConWord word) {
+        return !getDeprecatedForms(word).isEmpty();
+    }
 }
