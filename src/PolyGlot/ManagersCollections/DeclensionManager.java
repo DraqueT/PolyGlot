@@ -996,7 +996,7 @@ public class DeclensionManager {
     }
     
     public List<DeclensionNode> getFullDeclensionListWord(Integer wordId) {
-        return 
+        return getFullDeclensionList(wordId, dList);
     }
 
     /**
@@ -1176,8 +1176,7 @@ public class DeclensionManager {
         Map<String, DeclensionNode> ret = new HashMap<>();
         
         // first get all values that exist for this word
-        jahsydajmhdbas,jh
-        getDimensionalDeclensionListWord(word.getId()).forEach((node)->{
+        getFullDeclensionListWord(word.getId()).forEach((node)->{
             ret.put(node.getCombinedDimId(), node);
         });
         
