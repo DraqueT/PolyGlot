@@ -133,7 +133,7 @@ public class ExcelExport {
         }
         ret.add(classes);
 
-        List<DeclensionNode> declensions = core.getDeclensionManager().getDeclensionListWord(conWord.getId());
+        List<DeclensionNode> declensions = core.getDeclensionManager().getDimensionalDeclensionListWord(conWord.getId());
         
         for (DeclensionPair declension : decList) {
             try {

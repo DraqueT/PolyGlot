@@ -88,7 +88,7 @@ public final class ScrDeclensionsGrids extends PDialog {
             ret = false;
         } else if ((decMan.getDimensionalDeclensionListTemplate(typeId) == null
                     || decMan.getDimensionalDeclensionListTemplate(typeId).isEmpty())
-                && decMan.getDeclensionListWord(word.getId()).isEmpty()) {
+                && decMan.getDimensionalDeclensionListWord(word.getId()).isEmpty()) {
             InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the "
                             + "Declensions button.", this);
@@ -147,7 +147,10 @@ public final class ScrDeclensionsGrids extends PDialog {
         
         // only renders as dimensional if there are at least two dimensional declensions. Renders as list otherwise.
         if (shouldRenderDimensional()) {
-            if (!(dimX == dimY || dimX.getId() < 0 || dimY.getId() < 0)) {
+            if (dimX == dimY) {
+                    InfoBox.warning("Dimension Selection", "Please select differing Row and Column values.", this);
+            }
+            else {
                 // TODO: Disabled cells should be light grey to indicate this
                 // get all partial dim ID patterns (sans X & Y dims)/feed to grid pannel class
                 getPanelPartialDimIds().forEach((partialDim)->{
@@ -164,12 +167,10 @@ public final class ScrDeclensionsGrids extends PDialog {
                 }
             }
         } else {
-            if (dimX == dimY) {
-                InfoBox.warning("Dimension Selection", "Please select differing Row and Column values.", this);
-            }
-            
             cmbDimX.setVisible(false);
             cmbDimY.setVisible(false);
+            jLabel1.setVisible(false);
+            jLabel2.setVisible(false);
             List<DeclensionPair> completeList = decMan.getAllCombinedIds(word.getWordTypeId());
             PDeclensionListPanel listPanel 
                     = new PDeclensionListPanel(completeList, core, word, true);
@@ -251,7 +252,7 @@ public final class ScrDeclensionsGrids extends PDialog {
     @Override
     public void dispose() {
         if (!isDisposed()) {
-            if (!closeWithoutSave) {
+            if (!closeWithoutSave && chkAutogenOverride.isSelected()) {
                 Integer userChoice = InfoBox.yesNoCancel("Save Confirmation", "Save changes?", this);
 
                 // yes = save, no = don't save, any other choice = cancel & do not exit
