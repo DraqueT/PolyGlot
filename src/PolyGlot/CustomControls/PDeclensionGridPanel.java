@@ -114,8 +114,8 @@ public class PDeclensionGridPanel extends JPanel implements PDeclensionPanelInte
     private DefaultTableModel buildTableModel() {
         int xIndex = getDeclensionIndexOf(partialDeclensionIds, "X");
         int yIndex = getDeclensionIndexOf(partialDeclensionIds, "Y");
-        DeclensionNode xNode = decMan.getDeclentionTemplateByIndex(typeId, xIndex);
-        DeclensionNode yNode = decMan.getDeclentionTemplateByIndex(typeId, yIndex);
+        DeclensionNode xNode = decMan.getDimensionalDeclentionTemplateByIndex(typeId, xIndex);
+        DeclensionNode yNode = decMan.getDimensionalDeclentionTemplateByIndex(typeId, yIndex);
         Object[] columnLabels = getLabels(xNode, true);
         Object[] rowLabels = getLabels(yNode, false);
         
@@ -275,9 +275,9 @@ public class PDeclensionGridPanel extends JPanel implements PDeclensionPanelInte
         
         for (int i = 0; i < dimArray.length; i++) {
             String curId = dimArray[i];
-            DeclensionNode node = decMan.getDeclentionTemplateByIndex(typeId, i);
+            DeclensionNode node = decMan.getDimensionalDeclentionTemplateByIndex(typeId, i);
             // skips X and Y elements
-            if (StringUtils.isNumeric(curId)) {
+            if (StringUtils.isNumeric(curId) && !node.isDimensionless()) {
                 ret += node.getDeclensionDimensionById(Integer.parseInt(curId)).getValue() + " ";
             }
         }

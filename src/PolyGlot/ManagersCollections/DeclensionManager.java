@@ -526,11 +526,24 @@ public class DeclensionManager {
      */
     public int getDimensionTemplateIndex(int typeId, DeclensionNode node) {
         int ret = -1;
-        
+               
         if (dTemplates.containsKey(typeId)) {
             List<DeclensionNode> declensionValues = dTemplates.get(typeId);
             
             ret = declensionValues.indexOf(node);
+            
+            // must loop through due to inclusion of singleton declensions here
+            int numSingleton = 0;
+            for (DeclensionNode testNode : declensionValues) {
+                if (testNode.isDimensionless()) {
+                    numSingleton ++;
+                }
+                if (node.getId().equals(testNode.getId())) {
+                    break;
+                }
+            }
+            
+            ret -= numSingleton;
         }
         
         return ret;
@@ -544,6 +557,30 @@ public class DeclensionManager {
      */
     public DeclensionNode getDeclentionTemplateByIndex(int typeId, int index) {
         return dTemplates.get(typeId).get(index);
+    }
+    
+    /**
+     * Same as above, but SKIPS indecies of singleton declensions
+     * @param typeId
+     * @param index
+     * @return null if none found
+     */
+    public DeclensionNode getDimensionalDeclentionTemplateByIndex(int typeId, int index) {
+        DeclensionNode ret = null;
+        List<DeclensionNode> nodes = dTemplates.get(typeId);
+        
+        int curIndex = 0;
+        for (DeclensionNode node : nodes) {
+            if (node.isDimensionless()) {
+                continue;
+            } else if (curIndex == index) {
+                ret = node;
+                break;
+            }
+            curIndex++;
+        }
+        
+        return ret;
     }
 
     /**
@@ -589,7 +626,7 @@ public class DeclensionManager {
      * @param wordId
      * @return 
      */
-    public List<DeclensionNode> getDeclensionListWord(Integer wordId) {
+    public List<DeclensionNode> getDimensionalDeclensionListWord(Integer wordId) {
         return getDimensionalDeclensionList(wordId, dList);
     }
 
@@ -957,6 +994,10 @@ public class DeclensionManager {
 
         return ret;
     }
+    
+    public List<DeclensionNode> getFullDeclensionListWord(Integer wordId) {
+        return 
+    }
 
     /**
      * @return the bufferDecMandatory
@@ -982,7 +1023,7 @@ public class DeclensionManager {
     public Map<String, DeclensionNode> getWordDeclensions(Integer wordId) {
         Map<String, DeclensionNode> ret = new HashMap<>();
 
-        Iterator<DeclensionNode> decs = getDeclensionListWord(wordId).iterator();
+        Iterator<DeclensionNode> decs = getDimensionalDeclensionListWord(wordId).iterator();
 
         while (decs.hasNext()) {
             DeclensionNode curNode = decs.next();
@@ -1135,7 +1176,8 @@ public class DeclensionManager {
         Map<String, DeclensionNode> ret = new HashMap<>();
         
         // first get all values that exist for this word
-        getDeclensionListWord(word.getId()).forEach((node)->{
+        jahsydajmhdbas,jh
+        getDimensionalDeclensionListWord(word.getId()).forEach((node)->{
             ret.put(node.getCombinedDimId(), node);
         });
         
