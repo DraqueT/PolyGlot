@@ -26,8 +26,10 @@ import java.awt.Color;
 import java.util.List;
 import java.util.Map.Entry;
 import javax.swing.JTextPane;
+import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  *
@@ -45,6 +47,50 @@ public class FormattedTextHelperTest {
     public FormattedTextHelperTest() throws Exception {
         core = new DictCore();
         core.readFile("test/TestResources/Lodenkur_TEST.pgd");
+    }
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
+    
+    @Test
+    public void testHTMLLineBreakParseNoBreaks() {
+        String testVal = "golly gee";
+        String expectedVal = "golly gee";
+        String result = FormattedTextHelper.HTMLLineBreakParse(testVal);
+        
+        assertEquals(expectedVal, result);
+    }
+    
+    @Test
+    public void testHTMLLineBreakParseBr() {
+        String testVal = "<br>golly gee";
+        String expectedVal = "<br>golly gee";
+        String result = FormattedTextHelper.HTMLLineBreakParse(testVal);
+        
+        assertEquals(expectedVal, result);
+    }
+    
+    @Test
+    public void testHTMLLineBreakParseNewlineThenBr() {
+        String testVal = "x\n<br>golly gee";
+        String expectedVal = "x<br><br>golly gee";
+        String result = FormattedTextHelper.HTMLLineBreakParse(testVal);
+        
+        assertEquals(expectedVal, result);
+    }
+    
+    @Test
+    public void testHTMLLineBreakParseBrThenNewline() {
+        String testVal = "<br>\ngolly gee";
+        String expectedVal = "<br>golly gee";
+        String result = FormattedTextHelper.HTMLLineBreakParse(testVal);
+        
+        assertEquals(expectedVal, result);
     }
 
     @Test
@@ -118,6 +164,17 @@ public class FormattedTextHelperTest {
         String initial = "<html><head>adhgvasdjvsh</head><body>Zip zop!<br>Have a hyperlink! <a href =\"poop\">here!</a></body></html>";
         String expected = "Zip zop!Have a hyperlink! here!";
         assertEquals(FormattedTextHelper.getTextBody(initial), expected);
+    }
+
+    /**
+     * Test of swtColorToItextColor method, of class FormattedTextHelper.
+     */
+    @Test
+    public void testSwtColorToItextColor() {
+        Color awtc = Color.darkGray;
+        com.itextpdf.kernel.color.Color expResult = com.itextpdf.kernel.color.Color.DARK_GRAY;
+        com.itextpdf.kernel.color.Color result = FormattedTextHelper.swtColorToItextColor(awtc);
+        assertEquals(expResult, result);
     }
     
 }
