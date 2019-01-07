@@ -489,6 +489,7 @@ public class FormattedTextHelper {
         }
         
         body = body.trim();
+        body = body.replace("<br>\n", "<br>"); // prevents doubling of <br> statements due to formatting
         body = body.replace("\n", "<br>");
         
         return preFix + body + postFix;
