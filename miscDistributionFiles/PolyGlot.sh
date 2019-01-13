@@ -1,2 +1,5 @@
 #!/bin/bash
-java -jar ./PolyGlot.jar
+
+basedir=$(dirname $(readlink -f $0))
+
+java -jar $basedir/PolyGlot.jar
