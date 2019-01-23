@@ -30,6 +30,7 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -102,10 +103,10 @@ public class PDeclensionGridPanel extends JPanel implements PDeclensionPanelInte
         column.setCellEditor(editor);
         column.setCellRenderer(renderer);
         
-        Iterator<TableColumn> colIt = table.getColumnModel().getColumns().asIterator();
-        colIt.next(); // first column always labels
-        while (colIt.hasNext()) { // tables use enumerations, so using iterators...
-            TableColumn col = colIt.next();
+        Enumeration<TableColumn> colIt = table.getColumnModel().getColumns();
+        colIt.nextElement(); // first column is always labels
+        while (colIt.hasMoreElements()) {
+            TableColumn col = colIt.nextElement();
             col.setCellEditor(new PCellEditor(true, core));
             col.setCellRenderer(new PCellRenderer(true, core));
         }
