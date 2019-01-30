@@ -329,13 +329,13 @@ public final class ScrDeclensionSetup extends PDialog {
         
         chkNonDimensional.addActionListener((ActionEvent e) -> {
             if (chkNonDimensional.isSelected()) {
-                if (InfoBox.actionConfirmation("Are you sure?", "Are you sure you wish to make this dimensionless?\n"
+                if (!InfoBox.actionConfirmation("Are you sure?", "Are you sure you wish to make this dimensionless?\n"
                         + "The dimensions for this declension/conjugation will be erased permanently.", this)) {
-                    saveDeclension();
-                } else {
                     chkNonDimensional.setSelected(false);
                 }                
             }
+            
+            saveDeclension();
             core.getDeclensionManager().deprecateAllDeclensions(myType.getId());
             populateDimensions();
         });
@@ -942,8 +942,9 @@ public final class ScrDeclensionSetup extends PDialog {
     private void setIsActiveDimensions() {
         Integer decId = scrToCoreDeclensions.containsKey(lstDeclensionList.getSelectedIndex())
                 ? scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()) : -1;
-
-        if (decId == -1) {
+        
+        // also checks whether the form is dimensional in the first place
+        if (decId == -1 || chkNonDimensional.isSelected()) {
             // the dimensions can only be added without error if there is a declension
             tblDimensions.setEnabled(false);
             btnAddDimension.setEnabled(false);
