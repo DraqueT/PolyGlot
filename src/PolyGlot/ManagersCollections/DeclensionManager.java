@@ -112,15 +112,18 @@ public class DeclensionManager {
         typeRules.forEach((curPair) -> {
             ruleMap.put(curPair.combinedId, 0);
         });
-
-        // adds to return value only if rule matches ID, and is orphaned
-        int missingId = 0; //used for missing index values (index system bolton)
+        
+        int highestIndex = 0;
         for (DeclensionGenRule curRule : generationRules) {
-            if (curRule.getIndex() <= missingId) {
-                missingId++;
-                curRule.setIndex(missingId);
-            } else {
-                missingId = curRule.getIndex();
+            int curRuleIndex = curRule.getIndex();
+            highestIndex = highestIndex > curRuleIndex ? highestIndex : curRuleIndex;
+        }
+        
+        for (DeclensionGenRule curRule : generationRules) {
+            // adds to return value only if rule matches ID, and is orphaned
+            if (curRule.getIndex() == 0) {
+                highestIndex++;
+                curRule.setIndex(highestIndex);
             }
             
             if (curRule.getTypeId() == typeId

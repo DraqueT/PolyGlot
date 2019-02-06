@@ -71,7 +71,7 @@ public final class ScrDeclensionSetup extends PDialog {
     private Map<String, Integer> scrDeclensionMap = new HashMap<>();
     private TypeNode myType;
     private boolean curPopulating = false;
-    private final DefaultListModel declListModel;
+    private final DefaultListModel<String> declListModel;
 
     /**
      * Creates new form ScrDeclensionSetup
@@ -95,7 +95,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
         btnClearDep.setToolTipText(btnClearDep.getToolTipText() + myType.getValue());
 
-        declListModel = new DefaultListModel();
+        declListModel = new DefaultListModel<>();
         lstDeclensionList.setModel(declListModel);
         setModal(true);
 
@@ -433,7 +433,7 @@ public final class ScrDeclensionSetup extends PDialog {
             return;
         }
 
-        List<DeclensionDimension> dimensionList = new ArrayList(curDec.getDimensions());
+        List<DeclensionDimension> dimensionList = new ArrayList<>(curDec.getDimensions());
 
         setupDimTable();
 
