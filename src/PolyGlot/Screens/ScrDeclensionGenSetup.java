@@ -808,7 +808,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         int lastIndex = 0;
         DeclensionGenRule top = (DeclensionGenRule) lstModel.getElementAt(selectedIndicies[0] - 1);
 
-        for (int index : lstRules.getSelectedIndices()) {
+        for (int index : selectedIndicies) {
             DeclensionGenRule curRule = (DeclensionGenRule) lstModel.getElementAt(index);
             lastIndex = curRule.getIndex();
             curRule.setIndex(curRule.getIndex() - 1);
