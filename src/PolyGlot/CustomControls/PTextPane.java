@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018, Draque Thompson
+ * Copyright (c) 2016-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -111,7 +111,16 @@ public class PTextPane extends JTextPane {
     @Override
     public void paste() {
         // might handle more types in the future
-        if (ClipboardHandler.isClipboardImage()) {
+        if (ClipboardHandler.isClipboardString()) {
+            try {
+                // sanitize contents to plain text
+                ClipboardHandler board = new ClipboardHandler();
+                board.setClipboardContents(board.getClipboardText());
+                super.paste();
+            } catch (Exception e) {
+                InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
+            }
+        } else if (ClipboardHandler.isClipboardImage()) {
             try {
                 Object imageObject = ClipboardHandler.getClipboardImage();
                 BufferedImage image;
@@ -134,15 +143,6 @@ public class PTextPane extends JTextPane {
                 addImage(imageNode);
             } catch (Exception e) {
                 InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
-            }
-        } else if (ClipboardHandler.isClipboardString()) {
-            try {
-                // sanitize contents to plain text
-                ClipboardHandler board = new ClipboardHandler();
-                board.setClipboardContents(board.getClipboardText());
-                super.paste();
-            } catch (Exception e) {
-                InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else {
             super.paste();
