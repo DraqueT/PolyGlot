@@ -71,4 +71,19 @@ public class ReversionManager {
         Collections.sort(reversionList);
         return reversionList;
     }
+    
+    public int getMaxReversionsCount() {
+        return core.getOptionsManager().getMaxReversionCount();
+    }
+    
+    /**
+     * Trims reversions down to the max number allowed in the options
+     */
+    public void trimReversions() {
+        int maxReversions = core.getOptionsManager().getMaxReversionCount();
+        
+        if (reversionList.size() > maxReversions) {
+            reversionList = reversionList.subList(0, maxReversions);
+        }
+    }
 }

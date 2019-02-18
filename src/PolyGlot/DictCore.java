@@ -98,6 +98,7 @@ public class DictCore {
         initializeDictCore();
         
         optionsManager = oldCore.optionsManager;
+        optionsManager.setCore(this);
         clipBoard = oldCore.clipBoard;
         rootWindow = oldCore.rootWindow;
     }
