@@ -616,6 +616,8 @@ public class CustHandlerFactory {
                     } catch (Exception e) {
                         warningLog += "\nWord image load error: " + e.getLocalizedMessage();
                     }
+                    
+                    curWord.setDefinition(curWord.getDefinition().replaceAll("<br>\\s*[<br>\\s*]+<br>\\s*", ""));
                     bdef = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.wordEtymologyNotesXID)) {
                     bwordEtymNotes = false;
