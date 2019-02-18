@@ -1025,7 +1025,7 @@ public class IOHandler {
             ZipEntry reversion = zipFile.getEntry(PGTUtil.reversionSavePath
                     + PGTUtil.reversionBaseFileName + i.toString());
             
-            while (reversion != null) {
+            while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
                 tmpCore = new DictCore();
                 errorLog += tmpCore.testLoadReversion(IOUtils.toByteArray(zipFile.getInputStream(reversion))) + "\n";
                 
