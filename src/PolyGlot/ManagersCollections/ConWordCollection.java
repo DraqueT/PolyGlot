@@ -19,6 +19,7 @@
  */
 package PolyGlot.ManagersCollections;
 
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.FormattedTextHelper;
@@ -26,9 +27,12 @@ import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.Nodes.DictNode;
 import PolyGlot.Nodes.EtyExternalParent;
+import PolyGlot.Nodes.LexiconProblemNode;
 import PolyGlot.PGTUtil;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.RankedObject;
+import PolyGlot.Screens.ScrLexiconProblemDisplay;
+import PolyGlot.Screens.ScrProgressMenu;
 import PolyGlot.WebInterface;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +41,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -777,7 +785,7 @@ public class ConWordCollection extends DictionaryCollection {
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.wordRuleOverrideXID);
-            wordValue.appendChild(doc.createTextNode(curWord.isRulesOverrride() ? PGTUtil.True : PGTUtil.False));
+            wordValue.appendChild(doc.createTextNode(curWord.isRulesOverride() ? PGTUtil.True : PGTUtil.False));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.wordClassCollectionXID);
@@ -872,5 +880,87 @@ public class ConWordCollection extends DictionaryCollection {
         notFound.setPronunciation("WORD NOT FOUND");
         
         return notFound;
-    }  
+    }
+    
+    /**
+     * Checks the lexicon for erroneous values
+     */
+    public void checkLexicon() {
+        final int wordCount = nodeMap.size();
+        final ScrProgressMenu progress = new ScrProgressMenu(wordCount, false, true);
+        List<LexiconProblemNode> problems = new ArrayList<>();
+        
+        progress.setVisible(true);
+        progress.setLocation(core.getRootWindow().getLocation());
+        
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                for (Object rawNode : nodeMap.values()) {
+                    String problemString = "";
+                    
+                    ConWord curWord = (ConWord)rawNode;
+
+                    // check word legality (if not overridden)
+                    if (!curWord.isRulesOverride()) {
+                        ConWord testLegal = testWordLegality(curWord);
+                        
+                        problemString += testLegal.getValue().equals("") ? "" : testLegal.getValue() + "\n";
+                        problemString += testLegal.typeError.equals("") ? "" : testLegal.typeError + "\n";
+                        problemString += testLegal.getLocalWord().equals("") ? "" : testLegal.getLocalWord() + "\n";
+                        problemString += testLegal.getDefinition().equals("") ? "" : testLegal.getDefinition() + "\n";
+                    }
+                    
+                    // check word made up of defined characters (document if not)
+                    if (!core.getPropertiesManager().testStringAgainstAlphabet(curWord.getValue())) {
+                        problemString += "Word contains characters undefined in alphabet settings.\n";
+                    }
+                    
+                    // check word pronunciation can be generated (if pronunciations set up and not overridden)
+                    if (core.getPronunciationMgr().isInUse()) {
+                        try {
+                            if (core. getPronunciationMgr().getPronunciation(curWord.getValue()).isEmpty()) {
+                                problemString += "Word pronunciation cannot be generated properly (missing regex pattern).\n";
+                            } 
+                        } catch (Exception e) {
+                            problemString += "Word encounters malformed regex when generating pronunciation.\n";
+                        }
+                    }
+                    
+                    // check word romanization can be generated (if rominzations set up)
+                    if (core.getRomManager().isEnabled()) {
+                        try {
+                            if (core. getRomManager().getPronunciation(curWord.getValue()).isEmpty()) {
+                                problemString += "Word cannot be romanized properly (missing regex pattern).\n";
+                            } 
+                        } catch (Exception e) {
+                            problemString += "Word encounters malformed regex when generating Romanization.\n";
+                        }
+                    }
+                    
+                    // record results of each for report
+                    if (!problemString.trim().isEmpty()) {
+                        problems.add(new LexiconProblemNode(curWord, problemString.trim()));
+                    }
+
+                    // iterate progress bar
+                    progress.iterateTask();
+                }
+            }
+        };
+        
+        thread.start();
+        
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            InfoBox.error("Thread Error", "Lexicon validation thread error: " + e.getLocalizedMessage(), core.getRootWindow());
+        }
+        
+        if (problems.size() > 0) {
+            new ScrLexiconProblemDisplay(problems, core).setVisible(true);
+        } else {
+            InfoBox.info("Lexicon Check Results", "No problems found in lexicon!", core.getRootWindow());
+        }
+    }
 }

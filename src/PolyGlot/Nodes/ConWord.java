@@ -90,7 +90,7 @@ public class ConWord extends DictNode {
                 checkValue.typeError.length() == 0;
     }
 
-    public boolean isRulesOverrride() {
+    public boolean isRulesOverride() {
         return rulesOverride;
     }
     
@@ -473,7 +473,7 @@ public class ConWord extends DictNode {
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.wordRuleOverrideXID);
-            wordValue.appendChild(doc.createTextNode(this.isRulesOverrride() ? PGTUtil.True : PGTUtil.False));
+            wordValue.appendChild(doc.createTextNode(this.isRulesOverride() ? PGTUtil.True : PGTUtil.False));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.wordClassCollectionXID);

@@ -349,4 +349,12 @@ public class PronunciationMgr {
     public void setRecurse(boolean recurse) {
         this.recurse = recurse;
     }
+    
+    /**
+     * Returns true if there are any pronunciation rules defined
+     * @return 
+     */
+    public boolean isInUse() {
+        return !pronunciations.isEmpty();
+    }
 }

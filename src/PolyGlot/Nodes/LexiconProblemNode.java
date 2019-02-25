@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, DThompson
+ * Copyright (c) 2019, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -17,37 +17,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package PolyGlot;
-
-import java.util.HashSet;
-import java.util.Set;
-import nl.flotsam.xeger.Xeger;
-
+package PolyGlot.Nodes;
 
 /**
  *
- * @author DThompson
+ * @author draque
  */
-public class RegexTools {
-    public void test() {
-
-        String regex = "[ab]{4,6}c";
-        //String regex = "(regular|tonic)(ly)?";
-        Xeger generator = new Xeger(regex);
-        String result = generator.generate();
-        //assertTrue(result.matches(regex));
-
-        // bruteforce
-        Set<String> generated = new HashSet<>();
-        for (int i = 0; i < 100000; i++) {
-            generated.add(generator.generate());
-        }
-        for (String g : generated) {
-            System.out.println(g);
-        }
+public class LexiconProblemNode {
+    public ConWord problemWord;
+    public String description;
+    
+    public LexiconProblemNode(ConWord _problemWord, String _description) {
+        problemWord = _problemWord;
+        description = _description;
     }
     
-//    public static void main(String[] args) {
-//        new RegexTools().test();
-//    }
+    @Override
+    public String toString() {
+        return problemWord.getValue();
+    }
 }

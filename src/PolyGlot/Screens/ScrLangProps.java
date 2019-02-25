@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2018, draque
+ * Copyright (c) 2015-2019, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -364,21 +364,18 @@ public class ScrLangProps extends PFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(chkDisableProcRegex)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(chkEnforceRTL))
                             .addComponent(chkLocalMandatory)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(161, 161, 161)
-                                .addComponent(chkIgnoreCase))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(chkTypesMandatory)
-                                    .addComponent(chkWordUniqueness))
-                                .addGap(10, 10, 10)
-                                .addComponent(chkLocalUniqueness)))
-                        .addGap(0, 54, Short.MAX_VALUE)))
+                                    .addComponent(chkWordUniqueness)
+                                    .addComponent(chkDisableProcRegex))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(chkEnforceRTL)
+                                    .addComponent(chkLocalUniqueness)
+                                    .addComponent(chkIgnoreCase))))
+                        .addGap(0, 41, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(

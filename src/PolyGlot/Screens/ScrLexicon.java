@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2018, Draque Thompson
+ * Copyright (c) 2015-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -267,7 +267,6 @@ public final class ScrLexicon extends PFrame {
             forceUpdate = false;
             populateProperties();
             ((PTextField) txtConWord).setCore(_core);
-            //((PTextField) txtConWord).setOverrideFont(false);
             ((PTextField)txtLocalWord).setCore(_core);
             ((PTextField)txtProc).setCore(_core);
             ((PTextPane)txtDefinition).setCore(_core);
@@ -809,7 +808,7 @@ public final class ScrLexicon extends PFrame {
         isLegal = isLegal && addErrorBoxMessage(txtConWord, results.getDefinition());
         isLegal = isLegal && addErrorBoxMessage(cmbType, results.typeError);
 
-        if (!testWord.isRulesOverrride()
+        if (!testWord.isRulesOverride()
                 && !chkFindBad.isSelected()) { // if looking for illegals, allow free movement
             setLexiconEnabled(isLegal);
         } else {
@@ -1060,8 +1059,9 @@ public final class ScrLexicon extends PFrame {
         return (ConWord) lstLexicon.getSelectedValue();
     }
 
-    public void selectWordById(int id) {
+    public void setWordSelectedById(int id) {
         lstLexicon.setSelectedValue(core.getWordCollection().getNodeById(id), true);
+        setWordLegality();
     }
 
     /**
@@ -1298,7 +1298,7 @@ public final class ScrLexicon extends PFrame {
                 TypeNode type = curWord.getWordTypeId() == 0 ? null : core.getTypes().getNodeById(curWord.getWordTypeId());
                 cmbType.setSelectedItem(type == null ? defTypeValue : type);
                 chkProcOverride.setSelected(curWord.isProcOverride());
-                chkRuleOverride.setSelected(curWord.isRulesOverrride());
+                chkRuleOverride.setSelected(curWord.isRulesOverride());
                 setupClassPanel(curWord.getWordTypeId());
                 setupRomField();
                 populateClassPanel();
@@ -1943,6 +1943,8 @@ public final class ScrLexicon extends PFrame {
                 ConWord saveWord = (ConWord) lstLexicon.getModel().getElementAt(index);
                 saveValuesTo(saveWord);
             }
+            
+            txtErrorBox.setText("");
         }
 
         populateProperties();
