@@ -73,18 +73,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="chkProcMand" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="txtErrorBox" max="32767" attributes="0"/>
-                          </Group>
                           <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
-                          <Component id="btnAutogen" alignment="0" pref="329" max="32767" attributes="0"/>
+                          <Component id="btnAutogen" alignment="0" pref="368" max="32767" attributes="0"/>
                           <Component id="btnSetup" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtTypePattern" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtGloss" alignment="0" max="32767" attributes="0"/>
                           <Component id="jScrollPane3" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtName" max="32767" attributes="0"/>
+                          <Component id="txtErrorBox" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -107,10 +103,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txtErrorBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="chkProcMand" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="txtErrorBox" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -183,17 +176,21 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="chkDefMand" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="195" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="chkDefMand" min="-2" max="-2" attributes="0"/>
+                              <Component id="chkProcMand" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="chkDefMand" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="7" max="32767" attributes="0"/>
+                          <Component id="chkProcMand" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -203,6 +200,15 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Definition Mandatory"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select to enforce definition text for this par of speech."/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JCheckBox" name="chkProcMand">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Pronunciation Mandatory"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to enforce pronunciation text for this par of speech."/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
@@ -232,15 +238,6 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JCheckBox" name="chkProcMand">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Pronunciation Mandatory"/>
-                <Property name="toolTipText" type="java.lang.String" value="Select to enforce pronunciation text for this par of speech."/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
-              </AuxValues>
-            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel2">
@@ -299,6 +296,7 @@
                   </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(core, false)"/>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;TypeNode&gt;"/>
                   </AuxValues>
                 </Component>
               </SubComponents>

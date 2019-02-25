@@ -1132,6 +1132,40 @@ public final class ScrLexicon extends PFrame {
                 }
             }
         });
+        
+        txtDefinition.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                setWordLegality();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                setWordLegality();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                setWordLegality();
+            }
+        });
+        
+        txtProc.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                setWordLegality();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                setWordLegality();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                setWordLegality();
+            }
+        });
 
         lstLexicon.addMouseMotionListener(new MouseMotionListener() {
             @Override
