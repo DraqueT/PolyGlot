@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -126,6 +126,13 @@ public class ConWordCollection extends DictionaryCollection {
      */
     public ConWord testWordLegality(ConWord word) {
         ConWord ret = new ConWord();
+        String pronunciation = "";
+        
+        try {
+            pronunciation = word.getPronunciation();
+        } catch (Exception e) {
+            ret.setDefinition("Pronunciation cannot be generated, likely due to malformed regex in pronunciation menu.");
+        }
 
         if (word.getValue().length() == 0) {
             ret.setValue(core.conLabel() + " word value cannot be blank.");
@@ -158,10 +165,20 @@ public class ConWordCollection extends DictionaryCollection {
         if (wordType != null) {
             String typeRegex = wordType.getPattern();
 
+            if (wordType.isProcMandatory() && pronunciation.isEmpty() && !word.isProcOverride()) {
+                ret.setDefinition(ret.getDefinition() + (ret.getDefinition().length() == 0 ? "" : "\n")
+                        + "Pronunciation required for " + wordType.getValue() + " words.");
+            }
+            
             if (typeRegex.length() != 0 && !word.getValue().matches(typeRegex)) {
                 ret.setDefinition(ret.getDefinition() + (ret.getDefinition().length() == 0 ? "" : "\n")
                         + "Word does not match enforced pattern for type: " + word.getWordTypeDisplay() + ".");
                 ret.setProcOverride(true);
+            }
+            
+            if (wordType.isDefMandatory() && word.getDefinition().isEmpty()) {
+                ret.setDefinition(ret.getDefinition() + (ret.getDefinition().length() == 0 ? "" : "\n")
+                        + "Definition required for " + wordType.getValue() + " words.");
             }
         }
 

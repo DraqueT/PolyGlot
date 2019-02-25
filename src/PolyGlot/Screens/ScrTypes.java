@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2018, Draque Thompson
+ * Copyright (c) 2015-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -363,6 +363,33 @@ public class ScrTypes extends PFrame {
     public TypeNode closedGetSelectedType() {
         return selectionAtClosing;
     }
+    
+    @Override
+    public boolean canClose() {
+        boolean ret = true;
+        
+        ret = ret && setLegal();
+        
+        return ret;
+    }
+    
+    /**
+     * Tests and sets legality of current type
+     * @return 
+     */
+    private boolean setLegal() {
+        boolean ret = true;
+        TypeNode curType = (TypeNode) lstTypes.getSelectedValue();
+
+        if (txtName.getText().length() == 0
+                && curType != null) {
+            InfoBox.warning("Illegal Type",
+                    "Currently selected type is illegal. Please correct or delete.", core.getRootWindow());
+            ret = false;
+        }
+        
+        return ret;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -382,10 +409,10 @@ public class ScrTypes extends PFrame {
         txtErrorBox = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         chkDefMand = new PCheckBox(core);
+        chkProcMand = new PCheckBox(core);
         txtGloss = new PTextField(core, true, "-- Part of Speech Gloss --");
         jScrollPane3 = new javax.swing.JScrollPane();
         txtNotes = new PolyGlot.CustomControls.PTextPane(core, true, "-- Notes --");
-        chkProcMand = new PCheckBox(core);
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstTypes = new PList(core, false);
@@ -434,29 +461,32 @@ public class ScrTypes extends PFrame {
         chkDefMand.setText("Definition Mandatory");
         chkDefMand.setToolTipText("Select to enforce definition text for this par of speech.");
 
+        chkProcMand.setText("Pronunciation Mandatory");
+        chkProcMand.setToolTipText("Select to enforce pronunciation text for this par of speech.");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(chkDefMand)
-                .addContainerGap(195, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkDefMand)
+                    .addComponent(chkProcMand))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(chkDefMand)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(chkProcMand))
         );
 
         txtGloss.setToolTipText("Part of speech's gloss");
 
         jScrollPane3.setViewportView(txtNotes);
-
-        chkProcMand.setText("Pronunciation Mandatory");
-        chkProcMand.setToolTipText("Select to enforce pronunciation text for this par of speech.");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -464,17 +494,14 @@ public class ScrTypes extends PFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(chkProcMand)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtErrorBox))
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAutogen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+                    .addComponent(btnAutogen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
                     .addComponent(btnSetup, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtTypePattern, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtGloss, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtName))
+                    .addComponent(txtName)
+                    .addComponent(txtErrorBox))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -494,9 +521,7 @@ public class ScrTypes extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chkProcMand)))
+                .addComponent(txtErrorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jSplitPane1.setRightComponent(jPanel1);
@@ -629,28 +654,13 @@ public class ScrTypes extends PFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JList lstTypes;
+    private javax.swing.JList<TypeNode> lstTypes;
     private javax.swing.JTextField txtErrorBox;
     private javax.swing.JTextField txtGloss;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextPane txtNotes;
     private javax.swing.JTextField txtTypePattern;
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    public boolean canClose() {
-        boolean ret = true;
-        TypeNode curType = (TypeNode) lstTypes.getSelectedValue();
-
-        if (txtName.getText().length() == 0
-                && curType != null) {
-            InfoBox.warning("Illegal Type",
-                    "Currently selected type is illegal. Please correct or delete.", core.getRootWindow());
-            ret = false;
-        }
-
-        return ret;
-    }
 
     @Override
     public void addBindingToComponent(JComponent c) {
