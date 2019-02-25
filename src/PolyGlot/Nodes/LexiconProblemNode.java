@@ -23,7 +23,7 @@ package PolyGlot.Nodes;
  *
  * @author draque
  */
-public class LexiconProblemNode {
+public class LexiconProblemNode implements Comparable<LexiconProblemNode>{
     public ConWord problemWord;
     public String description;
     
@@ -35,5 +35,10 @@ public class LexiconProblemNode {
     @Override
     public String toString() {
         return problemWord.getValue();
+    }
+
+    @Override
+    public int compareTo(LexiconProblemNode o) {
+        return this.problemWord.compareTo(o.problemWord);
     }
 }
