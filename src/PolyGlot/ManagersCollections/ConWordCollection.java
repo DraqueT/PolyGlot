@@ -977,6 +977,8 @@ public class ConWordCollection extends DictionaryCollection {
             InfoBox.error("Thread Error", "Lexicon validation thread error: " + e.getLocalizedMessage(), core.getRootWindow());
         }
         
+        Collections.sort(problems);
+        
         if (problems.size() > 0 && display) {
             new ScrLexiconProblemDisplay(problems, core).setVisible(true);
         } else if (display) {

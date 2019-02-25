@@ -80,6 +80,7 @@ public class ScrLexiconProblemDisplay extends PDialog {
             public int getSize() { return strings.length; }
             public LexiconProblemNode getElementAt(int i) { return strings[i]; }
         });
+        jList1.setToolTipText("List of problem words from lexicon");
         jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jList1ValueChanged(evt);
@@ -94,6 +95,7 @@ public class ScrLexiconProblemDisplay extends PDialog {
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
+        jTextArea1.setToolTipText("Problems with lexical entries");
         jTextArea1.setWrapStyleWord(true);
         jScrollPane2.setViewportView(jTextArea1);
 
@@ -101,6 +103,7 @@ public class ScrLexiconProblemDisplay extends PDialog {
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(230, 230, 230));
+        jTextField1.setToolTipText("Count of problems found in lexicon scan");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
