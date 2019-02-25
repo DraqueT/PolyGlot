@@ -1475,7 +1475,7 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_mnuRevertionActionPerformed
 
     private void mnuCheckLexiconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCheckLexiconActionPerformed
-        core.getWordCollection().checkLexicon();
+        core.getWordCollection().checkLexicon(true);
     }//GEN-LAST:event_mnuCheckLexiconActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

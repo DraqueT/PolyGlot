@@ -896,15 +896,20 @@ public class ConWordCollection extends DictionaryCollection {
     }
     
     /**
-     * Checks the lexicon for erroneous values
+     * Checks the lexicon for erroneous values & returns values
+     * @param display whether to make a visual display of this
+     * @return 
      */
-    public void checkLexicon() {
+    public List<LexiconProblemNode> checkLexicon(boolean display) {
         final int wordCount = nodeMap.size();
-        final ScrProgressMenu progress = new ScrProgressMenu(wordCount, false, true);
+        final ScrProgressMenu progress = display ? new ScrProgressMenu(wordCount, false, true) : null;// 
         List<LexiconProblemNode> problems = new ArrayList<>();
         
-        progress.setVisible(true);
-        progress.setLocation(core.getRootWindow().getLocation());
+        if (display) {
+            progress.setVisible(true);
+            progress.setLocation(core.getRootWindow().getLocation());
+        }
+        
         
         Thread thread = new Thread(){
             @Override
@@ -956,8 +961,10 @@ public class ConWordCollection extends DictionaryCollection {
                         problems.add(new LexiconProblemNode(curWord, problemString.trim()));
                     }
 
-                    // iterate progress bar
-                    progress.iterateTask();
+                    // iterate progress bar if displaying
+                    if (display) { 
+                        progress.iterateTask();
+                    }
                 }
             }
         };
@@ -970,10 +977,12 @@ public class ConWordCollection extends DictionaryCollection {
             InfoBox.error("Thread Error", "Lexicon validation thread error: " + e.getLocalizedMessage(), core.getRootWindow());
         }
         
-        if (problems.size() > 0) {
+        if (problems.size() > 0 && display) {
             new ScrLexiconProblemDisplay(problems, core).setVisible(true);
-        } else {
+        } else if (display) {
             InfoBox.info("Lexicon Check Results", "No problems found in lexicon!", core.getRootWindow());
         }
+        
+        return problems;
     }
 }
