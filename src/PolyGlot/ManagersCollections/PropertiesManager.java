@@ -398,7 +398,7 @@ public class PropertiesManager {
      * @param _fontSize the fontSize to set
      */
     public void setFontSize(Integer _fontSize) {
-        conFontSize = _fontSize< 0 ? 12 : _fontSize;
+        conFontSize = _fontSize < 0 ? 12 : _fontSize;
         font = font.deriveFont(fontStyle, conFontSize);
     }
 
@@ -704,5 +704,43 @@ public class PropertiesManager {
      */
     public void setKerningSpace(Double kerningSpace) {
         this.kerningSpace = kerningSpace;
+    }
+    
+    /**
+     * Tests whether all characters within word are covered by ordered alphabet
+     * @param testString string to test
+     * @return true if string comprised of only characters defined in alphabet or if no alphabet defined
+     * order menu
+     */
+    public boolean testStringAgainstAlphabet(String testString) {
+        boolean ret = true;
+        int longestChar = alphaOrder.getLongestEntry();
+        
+        if (!alphaOrder.isEmpty()) {
+            String currentCharacter = ""; // Linguistic character (can be made up of multiple string entries)
+            
+            // loop on every character
+            for (char c : testString.toCharArray()) {
+                currentCharacter += c; // add current character to unmatched prior character (or set value if last character matched)
+                
+                // if current string longer than any recorded, fail
+                if (currentCharacter.length() > longestChar) {
+                    ret = false;
+                    break;
+                }
+                
+                // if current character found, blank (otherwise loop to add)
+                if (alphaOrder.containsKey(currentCharacter)) {
+                    currentCharacter = "";
+                }
+            }
+            
+            // if not blanked, the last characte never matched
+            if (!currentCharacter.isEmpty()) {
+                ret = false;
+            }
+        }
+        
+        return ret;
     }
 }
