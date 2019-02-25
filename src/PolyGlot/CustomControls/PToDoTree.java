@@ -149,6 +149,7 @@ public final class PToDoTree extends JTree {
                 clickedPath = selfPointer.getPathForLocation(me.getX(), me.getY());
                 if (SwingUtilities.isRightMouseButton(me)) {
                     deleteItem.setEnabled(clickedPath != null);
+                    renameItem.setEnabled(clickedPath != null);
                     ruleMenu.show(me.getComponent(), me.getX(), me.getY());
                 } else {
                     if (clickedPath == null) {
