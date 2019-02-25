@@ -174,7 +174,8 @@ public class PronunciationMgr {
     public String getPronunciationInternal(String base) throws Exception {
         String ret = "";
 
-        Iterator<PronunciationNode> procCycle = getPronunciationElements(base, 0).iterator();
+        // -base.length() fed as initial depth to ensure that longer words cannot be artificaially labeled as breaking max depth
+        Iterator<PronunciationNode> procCycle = getPronunciationElements(base, -base.length()).iterator();
         while (procCycle.hasNext()) {
             PronunciationNode curProc = procCycle.next();
             ret += curProc.getPronunciation();
@@ -192,7 +193,8 @@ public class PronunciationMgr {
      * @throws java.lang.Exception if malformed regex expression encountered
      */
     public List<PronunciationNode> getPronunciationElements(String base) throws Exception {
-        return getPronunciationElements(base, 0);
+        // -base.length() fed as initial depth to ensure that longer words cannot be artificaially labeled as breaking max depth
+        return getPronunciationElements(base, -base.length());
     }
     
     protected String getToolLabel() {
