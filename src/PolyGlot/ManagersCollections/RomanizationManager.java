@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, draque.thompson
+ * Copyright (c) 2017-2019, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
