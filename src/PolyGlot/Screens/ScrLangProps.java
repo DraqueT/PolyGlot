@@ -147,18 +147,22 @@ public class ScrLangProps extends PFrame {
     private void saveAllProps() {
         PropertiesManager propMan = core.getPropertiesManager();
 
-        propMan.setAlphaOrder(txtAlphaOrder.getText().trim());
-        propMan.setDisableProcRegex(chkDisableProcRegex.isSelected());
-        propMan.setIgnoreCase(chkIgnoreCase.isSelected());
-        propMan.setLangName(txtLangName.getText());
-        propMan.setCopyrightAuthorInfo(txtAuthorCopyright.getText());
-        propMan.setLocalLangName(txtLocalLanguage.getText());
-        propMan.setLocalMandatory(chkLocalMandatory.isSelected());
-        propMan.setLocalUniqueness(chkLocalUniqueness.isSelected());
-        propMan.setTypesMandatory(chkTypesMandatory.isSelected());
-        propMan.setWordUniqueness(chkWordUniqueness.isSelected());
-        propMan.setEnforceRTL(chkEnforceRTL.isSelected());
-        propMan.setKerningSpace(Double.parseDouble(txtKerning.getText()));
+        try {
+            propMan.setAlphaOrder(txtAlphaOrder.getText().trim());
+            propMan.setDisableProcRegex(chkDisableProcRegex.isSelected());
+            propMan.setIgnoreCase(chkIgnoreCase.isSelected());
+            propMan.setLangName(txtLangName.getText());
+            propMan.setCopyrightAuthorInfo(txtAuthorCopyright.getText());
+            propMan.setLocalLangName(txtLocalLanguage.getText());
+            propMan.setLocalMandatory(chkLocalMandatory.isSelected());
+            propMan.setLocalUniqueness(chkLocalUniqueness.isSelected());
+            propMan.setTypesMandatory(chkTypesMandatory.isSelected());
+            propMan.setWordUniqueness(chkWordUniqueness.isSelected());
+            propMan.setEnforceRTL(chkEnforceRTL.isSelected());
+            propMan.setKerningSpace(Double.parseDouble(txtKerning.getText()));
+        } catch (Exception e) {
+            InfoBox.error("Properties Error", "Problem saving properties.\n" + e.getLocalizedMessage(), this);
+        }
     }
 
     /**

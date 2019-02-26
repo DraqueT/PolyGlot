@@ -409,10 +409,17 @@ public class PropertiesManager {
         return alphaOrder;
     }
 
+    public void setAlphaOrder(String order) throws Exception {
+        setAlphaOrder(order, false);
+    }
+    
     /**
      * @param order alphabetical order
+     * @param overrideDupe Override provides a method to prevent a check on repetitions
+     * (necessary for loading of legacy language files prior to v 2.4)
+     * @throws java.lang.Exception
      */
-    public void setAlphaOrder(String order) {
+    public void setAlphaOrder(String order, boolean overrideDupe) throws Exception {
         alphaPlainText = order;
 
         alphaOrder.clear();
@@ -422,16 +429,28 @@ public class PropertiesManager {
             String[] orderVals = order.split(",");
             
             for (int i = 0; i < orderVals.length; i++) {
-                String curVal = orderVals[i].trim();
-                if (curVal.isEmpty()) {
+                String newEntry = orderVals[i].trim();
+                if (newEntry.isEmpty()) {
                     continue;
                 }
                 
-                alphaOrder.put(curVal, i);
+                if (alphaOrder.containsKey(newEntry) && ! overrideDupe) {
+                    throw new Exception("Alphabet contains duplicate entry: " + newEntry);
+                }
+                else {
+                    alphaOrder.put(newEntry, i);
+                }
             }
         } else {
             for (int i = 0; i < order.length(); i++) {
-                alphaOrder.put(order.substring(i, i+1), i);
+                String newEntry = order.substring(i, i+1);
+                
+                if (alphaOrder.containsKey(newEntry) && !overrideDupe) {
+                    throw new Exception("Alphabet contains duplicate entry: " + newEntry);
+                }
+                else {
+                    alphaOrder.put(newEntry, i);
+                }
             }
         }
     }
