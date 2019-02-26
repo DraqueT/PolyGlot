@@ -66,8 +66,16 @@ public final class PPanelDrawEtymology extends JPanel {
     @Override
     public String getToolTipText(MouseEvent event) {
         ConWord tipWord = wordMap.getObjectAtLocation(event.getX(), event.getY());
-        System.out.println("x:" + event.getX() + "  y: " + event.getY());
-        return tipWord != null ? WebInterface.getTextFromHtml(tipWord.getDefinition()) : super.getToolTipText(event);
+        String ret;
+        
+        if (tipWord != null) {
+            ret = WebInterface.getTextFromHtml(tipWord.getDefinition());
+            ret = ret.trim().isEmpty() ? tipWord.getLocalWord() : ret;
+        } else {
+            ret = super.getToolTipText(event);
+        }
+        
+        return ret;
     }
 
     /**
