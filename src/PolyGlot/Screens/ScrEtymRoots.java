@@ -28,7 +28,6 @@ import PolyGlot.CustomControls.PPanelDrawEtymology;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.DictCore;
-import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.ManagersCollections.EtymologyManager;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.EtyExternalParent;
