@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -975,7 +975,7 @@ public class CustHandlerFactory {
                     } catch (Exception e) {
                         // Don't bother raising an exception. This is regenerated
                         // each time the word is accessed if the error pops
-                        // users will be informed at that, more obvious point.
+                        // users will be informed at that more obvious point.
                     }
                 } else if (bgender) {
                     tmpString += new String(ch, start, length);
@@ -999,8 +999,12 @@ public class CustHandlerFactory {
                     propertiesManager.setLocalFontSize(Double.parseDouble(new String(ch, start, length)));
                 }
                 else if (balphaOrder) {
-                    propertiesManager.setAlphaOrder(propertiesManager.getAlphaPlainText()
-                            + new String(ch, start, length));
+                    try {
+                        propertiesManager.setAlphaOrder(propertiesManager.getAlphaPlainText()
+                                + new String(ch, start, length), true);
+                    } catch (Exception e) {
+                        throw new SAXException("Load error: " + e.getLocalizedMessage());
+                    }
                 } else if (bDecId) {
                     declensionMgr.setBufferId(Integer.parseInt(new String(ch, start, length)));
                     bDecId = false;
