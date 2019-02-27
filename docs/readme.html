@@ -30,7 +30,7 @@
         <!-- Static navbar -->
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="container">
-                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 2.3</a> </div>
+                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 2.4</a> </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="https://github.com/DraqueT/PolyGlot">GitHub Page</a><br>
@@ -51,10 +51,10 @@
         <div id="ww">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2 centered"> <img src="assets/PolyGlot%20Logo.png" alt="PolyGlot">
-                        <h1>Version 2.3</h1>
+                    <div class="col-lg-10 col-lg-offset-1 centered"> <img src="assets/PolyGlot%20Logo.png" alt="PolyGlot">
+                        <h1>Version 2.4</h1>
                         <!-- POLYGLOT STUFF START -->
-                        <div style="text-align: left;"><a href="#WELCOMEOVERVIEW">i.
+                        <div style="text-align: center;"><a href="#WELCOMEOVERVIEW">i.
                                 Overview/Welcome</a><br>
                             <a href="#-----_ii_-----">ii. What's New</a><br>
                             <a href="#INSTALLATION">1---- Installation</a><br>
@@ -73,10 +73,7 @@
 							&nbsp;&nbsp;&nbsp; <a href="#ROMANIZATION">- Romanization</a><br>
                             &nbsp;&nbsp;&nbsp; <a href="#-_Images">- Images in Text</a><br>
                             &nbsp;&nbsp;&nbsp; <a href="#-_Family_Window">- Family Window</a><br>
-                            &nbsp;&nbsp;&nbsp; <a href="#-_Accessing_the_Help_File">- Accessing
-                                the Help File</a><br>
-                            &nbsp;&nbsp;&nbsp; <a href="#-_Checking_for_Updates">- Checking for
-                                Updates</a><br>
+                            &nbsp;&nbsp;&nbsp; <a href="#-_Check_Lexicon">- Using the Check Lexicon Tool</a><br>
                             <a href="#IMPORTING_FROM_EXCEL">3---- Importing and Exporting to/from
                                 Excel or CSV</a><br>
                             <a href="#ETYMOLOGY">4---- Etymology Engine</a><br>
@@ -101,57 +98,54 @@
                             is a project that I have been working on for some time, and it
                             continues to become more stable and capable with each release. If you
                             have ideas, find bugs, or have any comments at all, please feel free to
-                            email me at <a href="mailto:draquemail@gmail.com">draquemail@gmail.com</a>!</div>
+                            email me at <a href="mailto:draquemail@gmail.com">draquemail@gmail.com</a> or
+                            post them on <a href="https://github.com/DraqueT/PolyGlot/issues">PolyGlot's issues page</a>!</div>
 
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
-                        <div align ="left"><br>Been a good bit since I released an update, and I'm feeling good about
-                            this one! It includes fixes to an embarrassing number of bugs that plagued the last version, 
-                            but also some new features that have been highly requested for some time now! Anyone who's 
-                            had problems with ligatures? Set. You wanted non dimensional conjugations? Done. Filtering 
-                            for conjugation rules based on word class? I'm pointing finger guns at you like an asshole. 
-                            But you have those, too! Also a bunch of little quality of life upgrades across the whole 
-                            program that I'm hoping will just go unnoticed, since they should have been that way from 
-                            the get go. Enjoy, everyone! And easter eggs. :3
+                        <div align ="left"><br>Heyo, everyone! I've got a new version of PolyGlot with some nice new 
+                            features to share! On top of the most obvious improvements (the declension display and the 
+                            lexical checking tool), I've taken some time to seriously rework and improve the automated 
+                            testing in PolyGlot. It started as a tiny side project, but the size at this point 
+                            absolutely requires a testing suite to help keep bugs down.
+
+                            As always, please enjoy, everyone!
                         <br><br>
                         </div>
                         FEATURES:
                         <div align ="left"><ul>
-                                <li>Font ligatures now supported! This was a pain in the ass and a half to implement!</li>
-                                <li>Non dimensional conjugation forms now supported (such as gerunds)</li>
-                                <li>Conjugation rules can now be specified by word class (gender, mood, etc.)</li>
-                                <li>Fonts can now be manually imported via selecting the font file directly</li>
-                                <li>Users can now specify display font as well as conlang font</li>
-                                <li>Hovering over words in etymology window now provides tooltip with related information</li>
-                                <li>Conjugations can now be copy/pasted between parts of speech</li>
-                                <li>Autofill of word conjugation filter to ".*" in conjugation generation setup window</li>
-                                <li>Upgrade to Java 8</li>
-                                <li>Macify eliminated from code</li>
-                                <li>Secrets</li><!––what did you see last tuesday-->
+                                <li>Completely reworked Declension/Conjugation Interface with grid based display (the big one)</li>
+                                <li>Lexical Checker tool added to allow users to easily spot all problem areas in lexicon</li>
+                                <li>Can export to Excel now with all declined/conjugated forms</li>
+                                <li>Spaces now allowed in automatically generated pronunciations</li>
+                                <li>Detect/Prevent Zipped Execution</li>
+                                <li>Cleaned up file saving</li>
+                                <li>Users can now copy full conjugation ruleset to given dimension to save time when building word forms</li>
+                                <li>Export of overridden conjugations to excel</li>
+                                <li>Checks/alerts user to repeated values in alphabetic ordering section</li>
+                                <li>Etymology tooltip defaults to local language synonym if no longform definition</li>
+                                <li>Compatibility dropped to Java 8.x again</li>
+                                <!––Secret Codes:
+                                what did you see last tuesday
+                                Who is Draque
+                                this is the forest primeval
+                                it can't outlast you
+                                -->
                             </ul></div>
                         <br><br>
                         BUGS FIXED:
                         <div align="left">
                             <ul>
-                                <li>Certain patterns in the phonology section could lead to infinite recurse</li>
-                                <li>Trying to view deprecated declension rules led to uncaught error</li>
-                                <li>Font not loading in particular case for conjugation/declension display window</li>
-                                <li>Certain circumstances could lead to word properties being overwritten when using the filter</li>
-                                <li>After initial creation of class values, attempting to return and add more later led to an index error</li>
-                                <li>Confirmation boxes popping behind windows in certain situations</li>
-                                <li>Grammar section flipped out when tab key hit</li>
-                                <li>Word Class checkboxes standard Swing rather than custom PolyGlot boxes</li>
-                                <li>Mandatory conjugations being misidentified</li>
-                                <li>Lexicon fails to refresh after excel import</li>
-                                <li>confirmation buttons on info popups not using custom PolyGlot buttons</li>
-                                <li>Newly typed values of currently selected frame might not save if PolyGlot closed without deselecting frame</li>
-                                <li>Clicking add or delete word during word filtering led to hard freeze</li>
-                                <li>IPA Chart Mouse Detection bug</li>
-                                <li>Part of speech labels being wiped under certain scenarios</li>
-                                <li>Ambiguous alphabetical order bug</li>
-                                <li>Unable to open files with special characters it name (Windows)</li>
-                                <li>Window title failing to update as appropriate</li>
-                                <li>Correctly detects if Java is installed prior to startup (Windows frontend)</li>
-                                <li>Correctly detects of JFX is installed prior to startup</li>
+                                <li>Options reset on load of new file</li>
+                                <li>Oversized INI file lead to "JVM not installed" message on startup</li>
+                                <li>First lexicon entry part of speech lost on load</li>
+                                <li>Resolution Scaling On Windows (partial fix implemented, the rest of the problem is within Java itself)</li>
+                                <li>On initial load of non-versioned file, uncaught error can occur</li>
+                                <li>Various Excel Export issues</li>
+                                <li>"Java Not Installed" message erroneously displaying from frontend on some PCs</li>
+                                <li>Corrected issue where &lt;br&gt; tags could invisibly multiply exponentially, causing massive slowdowns</li>
+                                <li>Declension rule order would revert/not save when exiting the menu</li>
+                                <li>Copying from MS Office apps on the PC (and some macs) resulted in a black box</li>
+                                <li>Pronunciation/romanization of words terminated early under circumstance of word being longer than max depth for recursing patterns</li>
                             </ul>
                         </div>
                         
@@ -396,24 +390,20 @@
                         <br>
                         <br>
                         <img alt="" src="assets/conj5.png"><br>
-                        <div align ="left">Forms for every logical combination of dimensions may be saved here. As you
-                            can see, all forms of verbs for tense, certainty, and positivity
-                            have fields generated, which I've filled in appropriately.
-                            Although it may be tedious to fill out every form for every word, this
-                            is particularly useful for nonstandard conjugations and exception
-                            forms. Word forms typed here will be persisted/modified if
-                            OK is clicked, and any changed will be discarded if Cancel is clicked.<br>
+                        <div align ="left">
+                            Here, every word form defined for a word's part of speech can be seen. If 
+                            autogeneration of the forms is defined, each space should be filled in with the 
+                            appropriately generated word form. To the top of the screen, the dimensions for 
+                            the columns and the rows may be selected (if there are two or more dimensions). 
+                            If there are three or more dimensions, the dimensions not chosen in either of the 
+                            dropdowns is represented by a tab that can be selected. Non-dimensional word forms 
+                            are displayed on their own tab, as are deprecated forms which had previously been 
+                            saved.
+                            
+                            If you wish to override autogeneration rules for a word that is an exception, select 
+                            the Autogen Override check box to the lower left, and edit the existing values as 
+                            you see fit.<br>
                             <br></div>
-                        <img alt="" src="assets/conj6.png"><br>
-                        <div align ="left">If a new conjugation/declension is created, or if one is deleted, the
-                            old forms are <span style="font-style: italic;">not</span>
-                            simply deleted. Here, I have removed the conjugation for gender and
-                            returned to the Conjugation/Declension screen for "zerf." The
-                            deprecated forms of the word are displayed below. Once you have
-                            reworked them into their newer, appropriate forms, you can delete them
-                            and click "OK," to remove the deprecated forms from the word. If they
-                            are not deleted, they will persist as you have left them, and will at
-                            no point be discarded without explicit user action.<br></div>
                         <br><br>
 
                         <img alt="" src="assets/conj7.png">
@@ -789,7 +779,30 @@
                             will be auto-selected in the dictionary lexicon. This can be useful for
                             vocabularies that have not been wholly committed to memory.<br></div>
 
-
+                        <a name="-_Check_Lexicon"></a><h1>Using the Check Lexicon Tool</h1>
+                        <br>
+                        <div align="left">The Check Lexicon tool allows you to easily check over your lexicon
+                            to see if you have mistakenly left entries which break patterns you have established 
+                            for your language. It can check for the following cases:
+                            
+                            <ul>
+                                <li>Words missing Part of Speech (if set mandatory in Language Properties)</li>
+                                <li>Non-Unique words (if set illegal in Language Properties)</li>
+                                <li>Coverage of characters used in the script alphabet section</li>
+                                <li>Proper generation of pronunciation (if set up)</li>
+                                <li>Proper generation of Romanized word form (if set up)</li>
+                                <li>Completion of definition (if required by part of speech)</li>
+                                <li>Completion of pronunciation (if required by part of speech)</li>
+                                <li>Word matches pattern associated with given part of speech</li>
+                            </ul>
+                            
+                            Check your lexicon by clicking Tools->Check Lexicon. Each word will be checked, and 
+                            a window will appear with a list of all words containing problems. Selecting a word 
+                            will display the problems associated with the word and select it on the main Lexicon 
+                            screen to allow you to correct the problems or to select the override option if the 
+                            entry represents an exception to your rules.
+                        </div>
+                        
                         <a name="IMPORTING_FROM_EXCEL"></a><h1>Importing/Exporting to/from Excel (or CSV files)</h1>
                         <br>
 
@@ -1289,33 +1302,32 @@
                                 your conlang. This is especially useful when your language uses
                                 particular tones or inflections that it is difficult to describe in
                                 simple text.<br>
-                                </p>
 
-                                <p>
+                                <div>
                                     <a name="NEW_FEATURES"></a><h1>New Features</h1>
                                 <br>
                                 All new features/updates can be found on the github page for this
                                 project: <a href="https://github.com/DraqueT/PolyGlot/issues?q=is%3Aopen+label%3Aenhancement+sort%3Aupdated-desc">https://github.com/DraqueT/PolyGlot/issues?q=is%3Aopen+label%3Aenhancement+sort%3Aupdated-desc</a><br>
                                 <br>
-                                </p>
+                                </div>
 
-                                <p>
+                                <div>
                                     <a name="UPCOMING_FEATURES"></a><h1>Upcoming Features (not in order of
                                     planned implementation)</h1>
                                 <br>
                                 All upcoming features can be seen <a href="https://github.com/DraqueT/PolyGlot/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement">here</a>. If there’s a feature you would like to see, feel free to create
                                 a new ticket for it here!
                                 <br>
-                                </p>
+                                </div>
 
-                                <p>
+                                <div>
                                     <a name="KNOWN_BUGS"></a><h1>Known Bugs</h1>
                                 <br>
                                 Up to date list of all bugs and issues here: <a href="https://github.com/DraqueT/PolyGlot/labels/bug">https://github.com/DraqueT/PolyGlot/labels/bug</a><br>
                                 <br>
-                                </p>
+                                </div>
 
-                                <p>
+                                <div>
                                     <a name="ADDITIONAL_RESOURCES"></a><h1>Additional Resources</h1>
                                 <br>
                                 The following sites are excellent for creating your
@@ -1356,14 +1368,14 @@
 
                                         </li>
                                     </ul></div>
-                                </p>
+                                </div>
 
-                                <p>
+                                <div>
                                     <a name="COPYRIGHT_AND_CONTACT_INFO"></a><h1>Copyright, Contact, and Legal
                                     Info</h1>
                                 <br>
 
-                                This program is copyright(©) Draque Thompson 2014-2018. <br>
+                                This program is copyright(©) Draque Thompson 2014-2019. <br>
                                 <br>
                                 <br>Additional assistance and design of the todo list: Joseph Cramsey josephcsoftware@gmail.com https://joeycramsey.bandcamp.com<br>
                                 PolyGlot uses the open source library Apache POI for excel
@@ -1393,7 +1405,7 @@
                                 <br>
                                 Please send questions, concerns, and ideas for anything that you would
                                 like to see implemented!<br>
-                                </p>
+                                </div>
 
                                 <!-- POLYGLOT STUFF START END -->
 
@@ -1414,6 +1426,7 @@
                             <div class="col-lg-4">
                                 <h4>Other Creative Work</h4>
                                 <p> <a href="http://sulmere.tumblr.com/">Ask Sulmere</a></p>
+                                <p> <a href="https://www.etsy.com/listing/665084286/tarot-tarot-deck-illustrated-tarot-deck">The Lomisht: A Darisa Tarot</a>
                             </div>
                             <!-- /col-lg-4 -->
                             <div class="col-lg-4">
@@ -1440,4 +1453,7 @@
                 ================================================== --><!-- Placed at the end of the document so the pages load faster -->
 
                 <script src="assets/js/bootstrap.min.js"></script>
-                </body></html>
+            </div>
+        </div>
+    </body>
+</html>
