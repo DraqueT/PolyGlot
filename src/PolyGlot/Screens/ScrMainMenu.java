@@ -616,6 +616,11 @@ public final class ScrMainMenu extends PFrame {
         if (!fileName.contains(".")) {
             fileName += ".ttf";
         }
+        
+        if (IOHandler.fileExists(fileName) 
+                && !InfoBox.actionConfirmation("Overwrite Confirmation", "File will be overwritten. Continue?", this)) {
+            return;
+        }
 
         try {
             if (exportCharis) {
