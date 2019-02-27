@@ -421,6 +421,7 @@ public class PropertiesManager {
      */
     public void setAlphaOrder(String order, boolean overrideDupe) throws Exception {
         alphaPlainText = order;
+        String error = "";
 
         alphaOrder.clear();
 
@@ -435,7 +436,7 @@ public class PropertiesManager {
                 }
                 
                 if (alphaOrder.containsKey(newEntry) && ! overrideDupe) {
-                    throw new Exception("Alphabet contains duplicate entry: " + newEntry);
+                    error += "Alphabet contains duplicate entry: " + newEntry;
                 }
                 else {
                     alphaOrder.put(newEntry, i);
@@ -446,12 +447,16 @@ public class PropertiesManager {
                 String newEntry = order.substring(i, i+1);
                 
                 if (alphaOrder.containsKey(newEntry) && !overrideDupe) {
-                    throw new Exception("Alphabet contains duplicate entry: " + newEntry);
+                    error += "Alphabet contains duplicate entry: " + newEntry;
                 }
                 else {
                     alphaOrder.put(newEntry, i);
                 }
             }
+        }
+        
+        if (!error.isEmpty()) {
+            throw new Exception(error.trim());
         }
     }
        

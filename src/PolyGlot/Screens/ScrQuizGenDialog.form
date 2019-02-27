@@ -25,314 +25,319 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="213" max="32767" attributes="0"/>
-              <Component id="btnQuiz" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jPanel1" max="32767" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
-          </Group>
+          <Component id="jPanel3" alignment="1" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="410" max="32767" attributes="0"/>
-              <Component id="btnQuiz" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="45" max="32767" attributes="0"/>
-              </Group>
-          </Group>
+          <Component id="jPanel3" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JButton" name="btnQuiz">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Take Quiz"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnQuizActionPerformed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
-      </AuxValues>
-    </Component>
-    <Container class="javax.swing.JPanel" name="jPanel1">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-        </Property>
-      </Properties>
+    <Container class="javax.swing.JPanel" name="jPanel3">
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="btnQuiz" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="chkLocalQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="chkTypeQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="chkClassQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="chkProcQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="chkDefQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="chkConlangQuiz" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtNumQuestions" min="-2" pref="39" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="jLabel3" alignment="0" min="-2" pref="56" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace pref="132" max="32767" attributes="0"/>
               </Group>
+              <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
+                  <Component id="jPanel1" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtNumQuestions" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="btnQuiz" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="chkLocalQuiz" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="chkTypeQuiz" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="chkClassQuiz" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="chkProcQuiz" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="chkDefQuiz" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="chkConlangQuiz" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="26" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Container class="javax.swing.JPanel" name="jPanel2">
+        <Component class="javax.swing.JButton" name="btnQuiz">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Take Quiz"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnQuizActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
+          </AuxValues>
+        </Component>
+        <Container class="javax.swing.JPanel" name="jPanel1">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
-            </Property>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder/>
-              </Border>
             </Property>
           </Properties>
 
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="cmbFilterType" pref="119" max="32767" attributes="0"/>
-                              <Component id="txtFilterLocalWord" alignment="0" max="32767" attributes="0"/>
-                              <Component id="txtFilterConWord" alignment="0" max="32767" attributes="0"/>
-                          </Group>
-                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="chkLocalQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkTypeQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkClassQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkProcQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkDefQuiz" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkConlangQuiz" min="-2" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <EmptySpace min="0" pref="29" max="32767" attributes="0"/>
-                              <Component id="btnClearFilter" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtNumQuestions" min="-2" pref="39" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="txtFilterProc" max="32767" attributes="0"/>
+                          <Component id="jLabel3" alignment="0" min="-2" pref="56" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="0" pref="11" max="32767" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txtFilterConWord" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtFilterProc" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtNumQuestions" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtFilterLocalWord" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cmbFilterType" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnClearFilter" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="chkLocalQuiz" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="chkTypeQuiz" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="chkClassQuiz" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="chkProcQuiz" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="chkDefQuiz" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="chkConlangQuiz" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="71" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JTextField" name="txtFilterConWord">
+            <Container class="javax.swing.JPanel" name="jPanel2">
               <Properties>
-                <Property name="toolTipText" type="java.lang.String" value="Filter by conword here"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, false, &quot;-- &quot; + core.conLabel() + &quot; Filter --&quot;)"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtFilterLocalWord">
-              <Properties>
-                <Property name="toolTipText" type="java.lang.String" value="Filter by local word here"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- &quot; + core.localLabel() + &quot; Filter --&quot;)"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JComboBox" name="cmbFilterType">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value="Item 1"/>
-                    <StringItem index="1" value="Item 2"/>
-                    <StringItem index="2" value="Item 3"/>
-                    <StringItem index="3" value="Item 4"/>
-                  </StringArray>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="toolTipText" type="java.lang.String" value="Filter by part of speech here"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                    <LineBorder/>
+                  </Border>
+                </Property>
               </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(core)"/>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtFilterProc">
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="cmbFilterType" pref="119" max="32767" attributes="0"/>
+                                  <Component id="txtFilterLocalWord" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtFilterConWord" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="0" pref="122" max="32767" attributes="0"/>
+                                  <Component id="btnClearFilter" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="txtFilterProc" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="0" pref="11" max="32767" attributes="0"/>
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="txtFilterConWord" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtFilterProc" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="txtFilterLocalWord" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="cmbFilterType" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnClearFilter" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JTextField" name="txtFilterConWord">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter by conword here"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, false, &quot;-- &quot; + core.conLabel() + &quot; Filter --&quot;)"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JTextField" name="txtFilterLocalWord">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter by local word here"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- &quot; + core.localLabel() + &quot; Filter --&quot;)"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JComboBox" name="cmbFilterType">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="4">
+                        <StringItem index="0" value="Item 1"/>
+                        <StringItem index="1" value="Item 2"/>
+                        <StringItem index="2" value="Item 3"/>
+                        <StringItem index="3" value="Item 4"/>
+                      </StringArray>
+                    </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter by part of speech here"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(core)"/>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JTextField" name="txtFilterProc">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter by pronunciation here"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Pronunciation Filter --&quot;)"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnClearFilter">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Clear Filter"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Clear the filter"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClearFilterActionPerformed"/>
+                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel1">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Vocabulary Filter"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+                  </AuxValues>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
-                <Property name="toolTipText" type="java.lang.String" value="Filter by pronunciation here"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Pronunciation Filter --&quot;)"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnClearFilter">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Clear Filter"/>
-                <Property name="toolTipText" type="java.lang.String" value="Clear the filter"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClearFilterActionPerformed"/>
-              </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core)"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabel1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Vocabulary Filter"/>
+                <Property name="text" type="java.lang.String" value="Quiz Length"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
               </AuxValues>
             </Component>
+            <Component class="javax.swing.JTextField" name="txtNumQuestions">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="10"/>
+                <Property name="toolTipText" type="java.lang.String" value="Number of questions in quiz (defaults to 10)"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Quiz On:"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkDefQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Definition"/>
+                <Property name="toolTipText" type="java.lang.String" value="Definitions of conlang words"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkProcQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Pronunciation"/>
+                <Property name="toolTipText" type="java.lang.String" value="Pronunciation of conlang words"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkClassQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Word Class"/>
+                <Property name="toolTipText" type="java.lang.String" value="Classes of words (such as male/female)"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkClassQuizActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkTypeQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Part of Speech"/>
+                <Property name="toolTipText" type="java.lang.String" value="Part of speech for words"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkTypeQuizActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkLocalQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="-UPDATE VIA CODE-"/>
+                <Property name="toolTipText" type="java.lang.String" value="Conlang equivlent of local language words"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkConlangQuiz">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="-UPDATE VIA CODE-"/>
+                <Property name="toolTipText" type="java.lang.String" value="The conlang equivalent of local language words"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+              </AuxValues>
+            </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JLabel" name="jLabel2">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Quiz Length"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JTextField" name="txtNumQuestions">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="10"/>
-            <Property name="toolTipText" type="java.lang.String" value="Number of questions in quiz (defaults to 10)"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabel3">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Quiz On:"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="chkDefQuiz">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Definition"/>
-            <Property name="toolTipText" type="java.lang.String" value="Definitions of conlang words"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="chkProcQuiz">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Pronunciation"/>
-            <Property name="toolTipText" type="java.lang.String" value="Pronunciation of conlang words"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="chkClassQuiz">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Word Class"/>
-            <Property name="toolTipText" type="java.lang.String" value="Classes of words (such as male/female)"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkClassQuizActionPerformed"/>
-          </Events>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="chkTypeQuiz">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Part of Speech"/>
-            <Property name="toolTipText" type="java.lang.String" value="Part of speech for words"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkTypeQuizActionPerformed"/>
-          </Events>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="chkLocalQuiz">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="-UPDATE VIA CODE-"/>
-            <Property name="toolTipText" type="java.lang.String" value="Conlang equivlent of local language words"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="chkConlangQuiz">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="-UPDATE VIA CODE-"/>
-            <Property name="toolTipText" type="java.lang.String" value="The conlang equivalent of local language words"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
-          </AuxValues>
-        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

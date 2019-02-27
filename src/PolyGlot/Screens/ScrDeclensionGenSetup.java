@@ -985,6 +985,8 @@ public class ScrDeclensionGenSetup extends PDialog {
 
         jLabel3.setText("Transformations");
 
+        sclTransforms.setToolTipText("Transformations to be applied. The pattern on the left will be replaced with characters on the right.");
+
         tblTransforms.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -996,7 +998,7 @@ public class ScrDeclensionGenSetup extends PDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblTransforms.setToolTipText("Transformations to be applied. The pattern on the left will be replaced with characters on the right.");
+        tblTransforms.setToolTipText("");
         tblTransforms.setCellSelectionEnabled(true);
         tblTransforms.setRowHeight(30);
         sclTransforms.setViewportView(tblTransforms);
@@ -1070,9 +1072,8 @@ public class ScrDeclensionGenSetup extends PDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jButton3)
-                        .addGap(111, 111, 111)
-                        .addComponent(jButton4)
-                        .addGap(0, 97, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton4))
                     .addComponent(sclTransforms, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1128,7 +1129,7 @@ public class ScrDeclensionGenSetup extends PDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addGap(9, 9, 9)
-                        .addComponent(jScrollPane2))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(60, 60, 60)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
