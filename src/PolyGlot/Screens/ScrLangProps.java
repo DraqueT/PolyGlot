@@ -161,7 +161,7 @@ public class ScrLangProps extends PFrame {
             propMan.setEnforceRTL(chkEnforceRTL.isSelected());
             propMan.setKerningSpace(Double.parseDouble(txtKerning.getText()));
         } catch (Exception e) {
-            InfoBox.error("Properties Error", "Problem saving properties.\n" + e.getLocalizedMessage(), this);
+            InfoBox.warning("Properties Error", "Problem saving properties.\n" + e.getLocalizedMessage(), this);
         }
     }
 
@@ -232,6 +232,19 @@ public class ScrLangProps extends PFrame {
     public Component getWindow() {
         return this.getRootPane();
     }
+    
+    /**
+     * Alerts user if their alphabetic order contains regex characters
+     */
+    private void checkAlphaContainsRegexCharacters() {
+        String test = txtAlphaOrder.getText();
+        if (test.matches(".*(\\[|\\]|\\{|\\}|\\\\|\\^|\\$|\\.|\\||\\?|\\*|\\+|\\(|\\)).*")) {
+            InfoBox.warning("Character Warning", "Some of the characters defined in your alphabetic order are used \n"
+                    + "in regular expressions. If you are planning on autogenerating pronunciations or \n"
+                    + "conjugations/declensions, please consider using alternate characters from these:\n\n"
+                    + "[ ] \\ ^ $ . | ? * + ( ) { }", this);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -245,10 +258,6 @@ public class ScrLangProps extends PFrame {
         jPanel2 = new javax.swing.JPanel();
         btnChangeFont = new PButton(core);
         txtFont = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
-        txtAlphaOrder = new PTextField(core, false, "-- Alphabetical Order --");
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         chkTypesMandatory = new PCheckBox(core);
         chkLocalMandatory = new PCheckBox(core);
@@ -264,6 +273,7 @@ public class ScrLangProps extends PFrame {
         txtKerning = new javax.swing.JFormattedTextField(decimalFormat);
         jButton1 = new PButton(core);
         txtLocalFont = new javax.swing.JTextField();
+        txtAlphaOrder = new PTextField(core, false, "-- Alphabetical Order --");
         jPanel5 = new javax.swing.JPanel();
         txtLangName = new PTextField(core, true, "-- Language Name --");
         txtLocalLanguage = new PTextField(core, true, "-- Local Language --");
@@ -287,43 +297,6 @@ public class ScrLangProps extends PFrame {
 
         txtFont.setToolTipText("Conlang Font");
         txtFont.setEnabled(false);
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        txtAlphaOrder.setToolTipText("List of all characters in conlang in alphabetical order (both upper and lower case)");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(2);
-        jTextArea1.setText("List all characters used in your conlang in alphabetical order. Comma delimt if using character groups. (blank = default alpha)");
-        jTextArea1.setWrapStyleWord(true);
-        jTextArea1.setEnabled(false);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(txtAlphaOrder))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jScrollPane1)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtAlphaOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-                .addContainerGap())
-        );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -446,6 +419,13 @@ public class ScrLangProps extends PFrame {
         txtLocalFont.setToolTipText("Local Language Font");
         txtLocalFont.setEnabled(false);
 
+        txtAlphaOrder.setToolTipText("List of all characters in conlang in alphabetical order (both upper and lower case). Comma delimt if using character groups. (blank = default alpha)");
+        txtAlphaOrder.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtAlphaOrderFocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -453,35 +433,35 @@ public class ScrLangProps extends PFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtAlphaOrder, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnChangeFont, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtFont)
-                            .addComponent(txtLocalFont))))
+                        .addComponent(txtLocalFont))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnChangeFont)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFont)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnChangeFont)
                     .addComponent(txtFont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(txtLocalFont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtAlphaOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -513,7 +493,7 @@ public class ScrLangProps extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtLocalLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -529,7 +509,8 @@ public class ScrLangProps extends PFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -554,6 +535,10 @@ public class ScrLangProps extends PFrame {
         setLocalFont(fontDialog());
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void txtAlphaOrderFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAlphaOrderFocusLost
+        checkAlphaContainsRegexCharacters();
+    }//GEN-LAST:event_txtAlphaOrderFocusLost
+
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
         s.setupKeyStrokes();
@@ -574,14 +559,11 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField txtAlphaOrder;
     private javax.swing.JTextPane txtAuthorCopyright;
     private javax.swing.JTextField txtFont;

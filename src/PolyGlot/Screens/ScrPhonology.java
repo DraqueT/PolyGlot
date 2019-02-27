@@ -780,6 +780,8 @@ public class ScrPhonology extends PFrame {
             }
         });
 
+        jScrollPane3.setToolTipText("");
+
         tblRom.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
@@ -797,7 +799,7 @@ public class ScrPhonology extends PFrame {
                 return types [columnIndex];
             }
         });
-        tblRom.setToolTipText("Add characters (or sets of characters) here with their associated pronunciations.");
+        tblRom.setToolTipText("Add characters (or sets of characters) here with their associated pronunciations. Characters column accepts regex patterns.");
         tblRom.setMinimumSize(new java.awt.Dimension(10, 20));
         tblRom.setRowHeight(30);
         jScrollPane3.setViewportView(tblRom);
@@ -922,7 +924,7 @@ public class ScrPhonology extends PFrame {
                 return types [columnIndex];
             }
         });
-        tblProcs.setToolTipText("Add characters (or sets of characters) here with their associated pronunciations.");
+        tblProcs.setToolTipText("Add characters (or sets of characters) here with their associated pronunciations. Characters column accepts regex patterns.");
         tblProcs.setMinimumSize(new java.awt.Dimension(10, 20));
         tblProcs.setRowHeight(30);
         jScrollPane2.setViewportView(tblProcs);

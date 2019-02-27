@@ -432,7 +432,7 @@ public class ScrTypes extends PFrame {
 
         txtName.setToolTipText("Part of speech name");
 
-        txtTypePattern.setToolTipText("Regex pattern to enforce on part of speech");
+        txtTypePattern.setToolTipText("Regex pattern which words of this type must conform to");
 
         btnSetup.setText("Conjugations/Declensions Setup");
         btnSetup.setToolTipText("Create declension and conjugation dimensins here.");

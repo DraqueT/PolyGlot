@@ -172,6 +172,9 @@
           </AuxValues>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
           <AuxValues>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
           </AuxValues>
@@ -186,7 +189,7 @@
                     <Column editable="true" title="Pronunciation" type="java.lang.String"/>
                   </Table>
                 </Property>
-                <Property name="toolTipText" type="java.lang.String" value="Add characters (or sets of characters) here with their associated pronunciations."/>
+                <Property name="toolTipText" type="java.lang.String" value="Add characters (or sets of characters) here with their associated pronunciations. Characters column accepts regex patterns."/>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[10, 20]"/>
                 </Property>
@@ -348,7 +351,7 @@
                     <Column editable="true" title="Pronunciation" type="java.lang.String"/>
                   </Table>
                 </Property>
-                <Property name="toolTipText" type="java.lang.String" value="Add characters (or sets of characters) here with their associated pronunciations."/>
+                <Property name="toolTipText" type="java.lang.String" value="Add characters (or sets of characters) here with their associated pronunciations. Characters column accepts regex patterns."/>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[10, 20]"/>
                 </Property>
