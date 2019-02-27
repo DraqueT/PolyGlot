@@ -1016,10 +1016,9 @@ public class IOHandler {
      * @throws IOException on read error
      */
     public static void loadReversionStates(ReversionManager reversionManager,
-            String fileName) throws IOException, Exception {
+            String fileName) throws IOException {
         try (ZipFile zipFile = new ZipFile(fileName)) {
             Integer i = 0;
-            String errorLog = "";
             DictCore tmpCore;
             
             ZipEntry reversion = zipFile.getEntry(PGTUtil.reversionSavePath
@@ -1027,7 +1026,6 @@ public class IOHandler {
             
             while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
                 tmpCore = new DictCore();
-                errorLog += tmpCore.testLoadReversion(IOUtils.toByteArray(zipFile.getInputStream(reversion))) + "\n";
                 
                 reversionManager.addVersionToEnd(IOUtils.toByteArray(zipFile.getInputStream(reversion)),
                         tmpCore.getLastSaveTime());
@@ -1039,14 +1037,8 @@ public class IOHandler {
             // remember to load latest state in addition to all prior ones
             reversion = zipFile.getEntry(PGTUtil.dictFileName);
             tmpCore = new DictCore();
-            errorLog += tmpCore.testLoadReversion(IOUtils.toByteArray(zipFile.getInputStream(reversion))) + "\n";
             reversionManager.addVersionToEnd(IOUtils.toByteArray(zipFile.getInputStream(reversion)),
                         tmpCore.getLastSaveTime());
-            
-            // bubble any loading problems up as error
-            if (!errorLog.isEmpty()) {
-                throw new Exception(errorLog);
-            }
         }
     }
 
