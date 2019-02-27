@@ -452,7 +452,7 @@ public class DictCore {
         
         try {
             IOHandler.loadReversionStates(reversionManager, _fileName);
-        } catch (Exception e) {
+        } catch (IOException e) {
             warningLog += e.getLocalizedMessage() + "\n";
         }
 
