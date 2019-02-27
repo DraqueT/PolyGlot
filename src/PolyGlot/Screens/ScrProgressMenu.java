@@ -20,6 +20,7 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -35,11 +36,38 @@ public final class ScrProgressMenu extends javax.swing.JDialog {
 
     /**
      * Creates new form ProgressMenu
+     * @param title label for window to have
+     * @param _taskLength length of task to perform
+     * @param displayText whether to display text updates below progress bar
+     * @param _closeOnComplete Whether to close the window on task completion
+     * @return 
+     * @throws java.lang.InterruptedException 
+     */
+    public static ScrProgressMenu createScrProgressMenu(final String title, 
+            final int _taskLength, final boolean displayText, final boolean _closeOnComplete) throws InterruptedException {
+        final ScrProgressMenu[] ret = new ScrProgressMenu[1];
+        
+        Thread makeNew = new Thread(){
+            @Override
+            public void run() {
+                ret[0] = new ScrProgressMenu(title, _taskLength, displayText, _closeOnComplete);
+            }
+        };
+        
+        makeNew.start();
+        makeNew.join();
+        
+        return ret [0];
+    }
+    
+    /**
+     * Creates new form ProgressMenu
+     * @param title label for window to have
      * @param _taskLength length of task to perform
      * @param displayText whether to display text updates below progress bar
      * @param _closeOnComplete Whether to close the window on task completion
      */
-    public ScrProgressMenu(int _taskLength, boolean displayText, boolean _closeOnComplete) {
+    private ScrProgressMenu(String title, int _taskLength, boolean displayText, boolean _closeOnComplete) {
         taskLength = _taskLength;
         progress = 0;
         displayTextValue = "";
@@ -48,12 +76,17 @@ public final class ScrProgressMenu extends javax.swing.JDialog {
         
         initComponents();
         
-        if (!displayText) {
-            jScrollPane1.setVisible(false);
-            this.setSize(this.getSize().width, jProgressBar1.getHeight() + 30);
-        }
+        SwingUtilities.invokeLater(()->{
+            if (!displayText) {
+                jScrollPane1.setVisible(false);
+                this.setSize(this.getSize().width, jProgressBar1.getHeight() + 30);
+            }
+
+            this.setTitle(title);
+
+            jProgressBar1.setMaximum(100);
+        });
         
-        jProgressBar1.setMaximum(100);
         
         startUpdateThread();
     }

@@ -19,16 +19,20 @@
  */
 package PolyGlot;
 
+import PolyGlot.CustomControls.InfoBox;
 import static PolyGlot.ManagersCollections.ConWordCollection.formatCon;
 import static PolyGlot.ManagersCollections.ConWordCollection.formatPlain;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.PronunciationNode;
 import PolyGlot.Nodes.TypeNode;
+import PolyGlot.Screens.ScrProgressMenu;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,32 @@ public class PLanguageStats {
      * @return
      */
     public static String buildWordReport(DictCore core) {
+        final String[] ret = new String[1]; // using array so I can set value in a thread...
+        ret[0] = "";
+        
+        try {
+            final int wordCount = core.getWordCollection().getWordCount();
+            final ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);
+            progress.setVisible(true);
+            progress.setLocation(core.getRootWindow().getLocation());
+
+            Thread thread = new Thread(){
+                @Override
+                public void run(){
+                    ret[0] = buildWordReport(core, progress);
+                }           
+            };
+
+            thread.start();
+            thread.join();
+        } catch (InterruptedException e) {
+            InfoBox.error("Language Stat Error", "Unable to generate langauge statistics: " + e.getLocalizedMessage(), core.getRootWindow());
+        }
+        
+        return ret[0];
+    }
+    
+    private static String buildWordReport(DictCore core, ScrProgressMenu progress) {
         PGooglePieChart typesPie = new PGooglePieChart("Word Counts by Part of Speech");
         PGoogleBarChart charStatBar = new PGoogleBarChart("Character Stats");
 
@@ -74,6 +104,8 @@ public class PLanguageStats {
             final int curValueLength = curValue.length();
             final int curType = curWord.getWordTypeId();
 
+            progress.iterateTask("Analyzing: " + curWord.getValue());
+            
             // make sure we have all the characters in the word (if they forgot to populate one in their alpha order(
             for (char c : curValue.toCharArray()) {
                 if (!allChars.contains(String.valueOf(c))) {
@@ -186,6 +218,8 @@ public class PLanguageStats {
                 typeCountByWord.put(curType, 1);
             }
         }
+        
+        progress.iterateTask("Building report...");
 
         // build pie chart of type counts
         typeCountByWord.entrySet().forEach((curEntry) -> {
@@ -237,6 +271,7 @@ public class PLanguageStats {
 
         ret += formatPlain("Count of words in conlang lexicon: " + wordCount + "<br><br>", core);
 
+        progress.iterateTask("Building charts...");
         ret += typesPie.getDisplayHTML();
 
         ret += charStatBar.getDisplayHTML();
@@ -251,6 +286,7 @@ public class PLanguageStats {
         }
         ret += "</tr>";
 
+        progress.iterateTask("Building character combo grid...");
         for (char y : alphaGrid) {
             ret += "<tr><td>" + formatCon(Character.toString(y), core) + "</td>";
             for (char x : alphaGrid) {
@@ -270,6 +306,7 @@ public class PLanguageStats {
         ret += "</table>" + formatPlain("<br><br>", core);
 
         // buid grid of 2 phoneme combos if no pronunciation recursion
+        progress.iterateTask("Building phoneme combo grid...");
         if (!core.getPronunciationMgr().isRecurse()) {
             ret += formatPlain("Heat map of phoneme combination frequency:<br>", core);
             ret += "<table border=\"1\">";
@@ -312,6 +349,8 @@ public class PLanguageStats {
             }
             ret += formatPlain("<br><br>", core);
         }
+        
+        progress.iterateTask("DONE!");
 
         return ret;
     }
