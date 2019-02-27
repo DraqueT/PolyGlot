@@ -901,77 +901,77 @@ public class ConWordCollection extends DictionaryCollection {
      * @return 
      */
     public List<LexiconProblemNode> checkLexicon(boolean display) {
-        final int wordCount = nodeMap.size();
-        final ScrProgressMenu progress = display ? new ScrProgressMenu(wordCount, false, true) : null;// 
         List<LexiconProblemNode> problems = new ArrayList<>();
         
-        if (display) {
-            progress.setVisible(true);
-            progress.setLocation(core.getRootWindow().getLocation());
-        }
-        
-        
-        Thread thread = new Thread(){
-            @Override
-            public void run(){
-                for (Object rawNode : nodeMap.values()) {
-                    String problemString = "";
-                    
-                    ConWord curWord = (ConWord)rawNode;
+        try {
+            final int wordCount = nodeMap.size();
+            final ScrProgressMenu progress = display ? ScrProgressMenu.createScrProgressMenu("Checking Lexicon", wordCount, false, true) : null;// 
 
-                    // check word legality (if not overridden)
-                    if (!curWord.isRulesOverride()) {
-                        ConWord testLegal = testWordLegality(curWord);
-                        
-                        problemString += testLegal.getValue().equals("") ? "" : testLegal.getValue() + "\n";
-                        problemString += testLegal.typeError.equals("") ? "" : testLegal.typeError + "\n";
-                        problemString += testLegal.getLocalWord().equals("") ? "" : testLegal.getLocalWord() + "\n";
-                        problemString += testLegal.getDefinition().equals("") ? "" : testLegal.getDefinition() + "\n";
-                    }
-                    
-                    // check word made up of defined characters (document if not)
-                    if (!core.getPropertiesManager().testStringAgainstAlphabet(curWord.getValue())) {
-                        problemString += "Word contains characters undefined in alphabet settings.\n";
-                    }
-                    
-                    // check word pronunciation can be generated (if pronunciations set up and not overridden)
-                    if (core.getPronunciationMgr().isInUse()) {
-                        try {
-                            if (core. getPronunciationMgr().getPronunciation(curWord.getValue()).isEmpty()) {
-                                problemString += "Word pronunciation cannot be generated properly (missing regex pattern).\n";
-                            } 
-                        } catch (Exception e) {
-                            problemString += "Word encounters malformed regex when generating pronunciation.\n";
-                        }
-                    }
-                    
-                    // check word romanization can be generated (if rominzations set up)
-                    if (core.getRomManager().isEnabled()) {
-                        try {
-                            if (core. getRomManager().getPronunciation(curWord.getValue()).isEmpty()) {
-                                problemString += "Word cannot be romanized properly (missing regex pattern).\n";
-                            } 
-                        } catch (Exception e) {
-                            problemString += "Word encounters malformed regex when generating Romanization.\n";
-                        }
-                    }
-                    
-                    // record results of each for report
-                    if (!problemString.trim().isEmpty()) {
-                        problems.add(new LexiconProblemNode(curWord, problemString.trim()));
-                    }
+            if (display && progress != null) {
+                progress.setVisible(true);
+                progress.setLocation(core.getRootWindow().getLocation());
+            }
 
-                    // iterate progress bar if displaying
-                    if (display) { 
-                        progress.iterateTask();
+
+            Thread thread = new Thread(){
+                @Override
+                public void run(){
+                    for (Object rawNode : nodeMap.values()) {
+                        String problemString = "";
+
+                        ConWord curWord = (ConWord)rawNode;
+
+                        // check word legality (if not overridden)
+                        if (!curWord.isRulesOverride()) {
+                            ConWord testLegal = testWordLegality(curWord);
+
+                            problemString += testLegal.getValue().equals("") ? "" : testLegal.getValue() + "\n";
+                            problemString += testLegal.typeError.equals("") ? "" : testLegal.typeError + "\n";
+                            problemString += testLegal.getLocalWord().equals("") ? "" : testLegal.getLocalWord() + "\n";
+                            problemString += testLegal.getDefinition().equals("") ? "" : testLegal.getDefinition() + "\n";
+                        }
+
+                        // check word made up of defined characters (document if not)
+                        if (!core.getPropertiesManager().testStringAgainstAlphabet(curWord.getValue())) {
+                            problemString += "Word contains characters undefined in alphabet settings.\n";
+                        }
+
+                        // check word pronunciation can be generated (if pronunciations set up and not overridden)
+                        if (core.getPronunciationMgr().isInUse()) {
+                            try {
+                                if (core. getPronunciationMgr().getPronunciation(curWord.getValue()).isEmpty()) {
+                                    problemString += "Word pronunciation cannot be generated properly (missing regex pattern).\n";
+                                } 
+                            } catch (Exception e) {
+                                problemString += "Word encounters malformed regex when generating pronunciation.\n";
+                            }
+                        }
+
+                        // check word romanization can be generated (if rominzations set up)
+                        if (core.getRomManager().isEnabled()) {
+                            try {
+                                if (core. getRomManager().getPronunciation(curWord.getValue()).isEmpty()) {
+                                    problemString += "Word cannot be romanized properly (missing regex pattern).\n";
+                                } 
+                            } catch (Exception e) {
+                                problemString += "Word encounters malformed regex when generating Romanization.\n";
+                            }
+                        }
+
+                        // record results of each for report
+                        if (!problemString.trim().isEmpty()) {
+                            problems.add(new LexiconProblemNode(curWord, problemString.trim()));
+                        }
+
+                        // iterate progress bar if displaying
+                        if (display) { 
+                            progress.iterateTask();
+                        }
                     }
                 }
-            }
-        };
-        
-        thread.start();
-        
-        try {
+            };
+
+            thread.start();
             thread.join();
         } catch (InterruptedException e) {
             InfoBox.error("Thread Error", "Lexicon validation thread error: " + e.getLocalizedMessage(), core.getRootWindow());

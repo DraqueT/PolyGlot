@@ -358,14 +358,21 @@ public class DictCore {
      * expensive.
      */
     public void buildLanguageReport() {
-        try {
-            // create temp file for report, then let OS handle call to browser
-            java.awt.Desktop.getDesktop().browse(IOHandler.createTmpURL(
-                    PLanguageStats.buildWordReport(this)));
-        } catch (IOException | URISyntaxException e) {
-            InfoBox.error("Statistics Error", "Unable to generate/display language statistics: " 
-                    + e.getLocalizedMessage(), getRootWindow());
-        }
+        final DictCore core = this;
+        
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    // create temp file for report, then let OS handle call to browser
+                    java.awt.Desktop.getDesktop().browse(IOHandler.createTmpURL(
+                            PLanguageStats.buildWordReport(core)));
+                } catch (IOException | URISyntaxException e) {
+                    InfoBox.error("Statistics Error", "Unable to generate/display language statistics: " 
+                            + e.getLocalizedMessage(), getRootWindow());
+                }
+            }
+        }.start();
     }
 
     /**
