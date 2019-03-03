@@ -154,7 +154,8 @@ public class DeclensionNode extends DictNode {
     }
     
     public void setNotes(String _notes) {
-        notes = _notes;
+        // handles very specific case where notes are set to null rather than blank
+        notes = _notes == null ? "" : _notes;
     }
     
     public String getNotes() {
