@@ -316,6 +316,7 @@ public final class ScrMainMenu extends PFrame {
                 | TransformerException e) {
             InfoBox.error("Save Error", "Unable to save to file: "
                     + getCurFileName() + "\n\n" + e.getMessage(), core.getRootWindow());
+            // e.printStackTrace();
         }
 
         setCursor(Cursor.getDefaultCursor());

@@ -19,9 +19,22 @@
  */
 package PolyGlot.Nodes;
 
+import PolyGlot.DictCore;
+import PolyGlot.ManagersCollections.ReversionManager;
+import PolyGlot.PGTUtil;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 /**
  * A node representing one prior state of a language XML file
@@ -30,15 +43,36 @@ import java.time.format.DateTimeFormatter;
 public class ReversionNode implements Comparable<ReversionNode> {
     public final byte[] value;
     public Instant saveTime;
+    public final ReversionManager parent;
         
-    public ReversionNode(byte[] _value) {
+    public ReversionNode(byte[] _value, ReversionManager _parent) {
         value = _value;
+        parent = _parent;
     }
     
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
-        return "saved: " + formatter.format(saveTime);
+        String ret = "saved: ";
+        
+        try {
+            // First time load for these, the saveTime won't be populated...
+            if (saveTime.equals(Instant.MIN)) {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                factory.setNamespaceAware(true);
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document tmpDoc = builder.parse(new ByteArrayInputStream(value));
+
+                Node saveNode = tmpDoc.getElementsByTagName(PGTUtil.dictionarySaveDate).item(0);
+                saveTime = Instant.parse(saveNode.getTextContent());
+            } else {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
+                ret += formatter.format(saveTime);
+            }
+        } catch (SAXException | IOException | ParserConfigurationException ex) {
+                ret += "<UNKNOWN TIME>";
+        }
+        
+        return ret;
     }
 
     @Override
