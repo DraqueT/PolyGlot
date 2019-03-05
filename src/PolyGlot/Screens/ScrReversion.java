@@ -36,7 +36,7 @@ public final class ScrReversion extends PDialog {
         core = _core;
         initComponents();
         
-        DefaultListModel revModel = new DefaultListModel();
+        DefaultListModel<ReversionNode> revModel = new DefaultListModel<>();
         
         lstReversions.setModel(revModel);
         this.setModal(true);

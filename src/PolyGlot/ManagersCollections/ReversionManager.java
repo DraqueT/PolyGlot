@@ -46,7 +46,7 @@ public class ReversionManager {
      * @param saveTime The time at which this was saved
      */
     public void addVersion(byte[] addVersion, Instant saveTime) {
-        ReversionNode reversion = new ReversionNode(addVersion);
+        ReversionNode reversion = new ReversionNode(addVersion, this);
         reversion.saveTime = saveTime;
         reversionList.add(0, reversion);
         
@@ -62,7 +62,7 @@ public class ReversionManager {
      * @param saveTime
      */
     public void addVersionToEnd(byte[] addVersion, Instant saveTime) {
-        ReversionNode reg = new ReversionNode(addVersion);
+        ReversionNode reg = new ReversionNode(addVersion, this);
         reg.saveTime = saveTime;
         reversionList.add(reg);
     }
