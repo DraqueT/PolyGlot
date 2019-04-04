@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -37,7 +37,6 @@ import org.w3c.dom.Element;
 public class DeclensionNode extends DictNode {
     private String notes = "";
     private String combinedDimId = "";
-    private boolean mandatory = false;
     private boolean dimensionless = false;
     private int highestDimension = 1;
     private final Map<Integer, DeclensionDimension> dimensions = new HashMap<>();
@@ -113,11 +112,12 @@ public class DeclensionNode extends DictNode {
         }
         
         // highest current dimension is always whichever value is larger. Prevent overlap.
-        highestDimension = highestDimension > ret ? highestDimension : ret;
+        if (highestDimension < ret) {
+            highestDimension = ret;
+        }
         
         addDim = new DeclensionDimension(ret);
         addDim.setValue(dim.getValue());
-        addDim.setMandatory(dim.isMandatory());
         
         dimensions.put(ret, addDim);
                
@@ -143,14 +143,6 @@ public class DeclensionNode extends DictNode {
         
     public DeclensionNode(Integer _declentionId) {
         id = _declentionId;
-    }
-    
-    public boolean isMandatory() {
-        return mandatory;
-    }
-    
-    public void setMandatory(boolean _mandatory) {
-        mandatory = _mandatory;
     }
     
     public void setNotes(String _notes) {
@@ -227,10 +219,6 @@ public class DeclensionNode extends DictNode {
         nodeValue = doc.createElement(PGTUtil.declensionRelatedIdXID);
         nodeValue.appendChild(doc.createTextNode(relatedId.toString()));
         wordNode.appendChild(nodeValue);
-
-        nodeValue = doc.createElement(PGTUtil.declensionMandatoryXID);
-        nodeValue.appendChild(doc.createTextNode(this.isMandatory() ? PGTUtil.True : PGTUtil.False));
-        wordNode.appendChild(nodeValue);
         
         nodeValue = doc.createElement(PGTUtil.declensionIsDimensionless);
         nodeValue.appendChild(doc.createTextNode(this.isDimensionless() ? PGTUtil.True : PGTUtil.False));
@@ -282,7 +270,6 @@ public class DeclensionNode extends DictNode {
         
         this.setNotes(node.getNotes());
         this.setValue(node.getValue());
-        this.setMandatory(node.isMandatory());
         this.setCombinedDimId(node.getCombinedDimId());
         this.setDimensionless(node.dimensionless);
 

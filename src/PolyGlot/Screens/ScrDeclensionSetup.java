@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -158,7 +158,7 @@ public final class ScrDeclensionSetup extends PDialog {
         DefaultTableModel dimTableModel = new javax.swing.table.DefaultTableModel(
                 new Object[][][]{},
                 new String[]{
-                    "Dimension", "Mandatory", "ID"
+                    "Dimension", "ID"
                 }
         ) {
             Class[] types = new Class[]{
@@ -180,16 +180,11 @@ public final class ScrDeclensionSetup extends PDialog {
         tblDimensions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         if (tblDimensions.getColumnModel().getColumnCount() > 0) {
             tblDimensions.getColumnModel().getColumn(0).setMinWidth(0);
-            tblDimensions.getColumnModel().getColumn(1).setMinWidth(0);
-            tblDimensions.getColumnModel().getColumn(1).setPreferredWidth(10);
-            tblDimensions.removeColumn(tblDimensions.getColumn(tblDimensions.getColumnName(2)));
+            tblDimensions.removeColumn(tblDimensions.getColumn(tblDimensions.getColumnName(1)));
         }
 
         TableColumn column = tblDimensions.getColumnModel().getColumn(0);
         column.setCellEditor(new PCellEditor(false, core));
-
-        column = tblDimensions.getColumnModel().getColumn(1);
-        column.setCellEditor(new TableBooleanEditor());
 
         // disable tab/arrow selection
         tblDimensions.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
@@ -391,7 +386,7 @@ public final class ScrDeclensionSetup extends PDialog {
      * adds new, empty dimensional row
      */
     private void addDimension() {
-        addDemensionWithValues("", false, -1);
+        addDemensionWithValues("", -1);
 
         // perform this action later, once the scroll object is properly updated
         SwingUtilities.invokeLater(() -> {
@@ -440,7 +435,7 @@ public final class ScrDeclensionSetup extends PDialog {
         // do not display singleton dimension for singleton declensions
         if (!curDec.isDimensionless()) {
             dimensionList.forEach((curNode) -> {
-                addDemensionWithValues(curNode.getValue(), curNode.isMandatory(), curNode.getId());
+                addDemensionWithValues(curNode.getValue(), curNode.getId());
             });
         }
         
@@ -457,10 +452,10 @@ public final class ScrDeclensionSetup extends PDialog {
         btnDelDimension.setEnabled(!_dimensionless);
     }
 
-    private void addDemensionWithValues(String name, boolean mandatory, Integer dimId) {
+    private void addDemensionWithValues(String name, Integer dimId) {
         DefaultTableModel model = (DefaultTableModel) tblDimensions.getModel();
 
-        model.addRow(new Object[]{name, mandatory, dimId});
+        model.addRow(new Object[]{name, dimId});
 
         // document listener to be fed into editor/renderers for cells...
         DocumentListener docuListener = new DocumentListener() {
@@ -482,14 +477,6 @@ public final class ScrDeclensionSetup extends PDialog {
         // set saving properties for first column editor
         PCellEditor editor1 = (PCellEditor) tblDimensions.getCellEditor(model.getRowCount() - 1, 0);
         editor1.setDocuListener(docuListener);
-
-        ActionListener actListener = (ActionEvent e) -> {
-            saveDimension();
-        };
-
-        // set saving properties for second column editor
-        TableBooleanEditor editor2 = (TableBooleanEditor) tblDimensions.getCellEditor(model.getRowCount() - 1, 1);
-        editor2.setDocuListener(actListener);
     }
 
     private void saveDimension() {
@@ -503,31 +490,22 @@ public final class ScrDeclensionSetup extends PDialog {
             for (int i = 0; i < tblDimensions.getRowCount(); i++) {
                 
                 String dimName = "";
-                Boolean dimMand = false;
                 
                 // The currently selected row will have name information in buffer, not in model
-                if (i == curRow) {
-                    if (curCol == 0) {
-                        dimName = (String) tblDimensions.getCellEditor(i, 0).getCellEditorValue();
-                        dimMand = (Boolean) tblDimensions.getModel().getValueAt(i, 1);
-                    } else if (curCol == 1) {
-                        dimMand = (Boolean) tblDimensions.getCellEditor(i, 1).getCellEditorValue();
-                        dimName = (String) tblDimensions.getModel().getValueAt(i, 0);
-                    }
+                if (i == curRow && curCol == 0) {
+                    dimName = (String) tblDimensions.getCellEditor(i, 0).getCellEditorValue();
                 } else {
                     dimName = (String) tblDimensions.getModel().getValueAt(i, 0);
-                    dimMand = (Boolean) tblDimensions.getModel().getValueAt(i, 1);
                 }
                 
-                Integer dimId = (Integer) tblDimensions.getModel().getValueAt(i, 2);
+                Integer dimId = (Integer) tblDimensions.getModel().getValueAt(i, 1);
                 DeclensionDimension dim = new DeclensionDimension();
                 
                 dim.setId(dimId);
                 dim.setValue(dimName);
-                dim.setMandatory(dimMand);
                 
                 Integer setId = curDec.addDimension(dim);
-                tblDimensions.getModel().setValueAt(setId, i, 2);
+                tblDimensions.getModel().setValueAt(setId, i, 1);
             }
         });
     }

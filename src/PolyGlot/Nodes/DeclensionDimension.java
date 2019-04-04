@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -29,7 +29,6 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class DeclensionDimension extends DictNode {
-    private boolean mandatory = false;
     
     public DeclensionDimension(Integer _id) {
         id = _id;
@@ -44,15 +43,6 @@ public class DeclensionDimension extends DictNode {
         DeclensionDimension copyNode = (DeclensionDimension)_node;
         
         this.value = copyNode.getValue();
-        mandatory = copyNode.isMandatory();
-    }
-    
-    public void setMandatory(boolean _mandatory) {
-        mandatory = _mandatory;
-    }
-    
-    public boolean isMandatory() {
-        return mandatory;
     }
     
     public void writeXML(Document doc, Element rootElement) {
@@ -63,10 +53,6 @@ public class DeclensionDimension extends DictNode {
 
         dimNode = doc.createElement(PGTUtil.dimensionNameXID);
         dimNode.appendChild(doc.createTextNode(this.getValue()));
-        wordValue.appendChild(dimNode);
-
-        dimNode = doc.createElement(PGTUtil.dimensionMandXID);
-        dimNode.appendChild(doc.createTextNode(this.isMandatory() ? PGTUtil.True : PGTUtil.False));
         wordValue.appendChild(dimNode);
 
         rootElement.appendChild(wordValue);

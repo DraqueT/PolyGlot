@@ -155,8 +155,7 @@ public class ConWordCollection extends DictionaryCollection {
 
         TypeNode wordType = core.getTypes().getNodeById(word.getWordTypeId());
 
-        ret.setDefinition(ret.getDefinition() + (ret.getDefinition().length() == 0 ? "" : "\n")
-                + core.getDeclensionManager().declensionRequirementsMet(word, wordType));
+        ret.setDefinition(ret.getDefinition() + (ret.getDefinition().length() == 0 ? "" : "\n"));
 
         if (wordType != null) {
             String typeRegex = wordType.getPattern();

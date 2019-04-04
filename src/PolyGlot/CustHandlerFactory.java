@@ -147,7 +147,6 @@ public class CustHandlerFactory {
             boolean blangPropEnforceRTL = false;
             boolean blangPropLocalLangName = false;
             boolean blangPropAuthCopyright = false;
-            boolean bdeclensionMandatory = false;
             boolean bwordClassDefMan = false;
             boolean bwordClassGenderMan = false;
             boolean bwordClassProcMan = false;
@@ -156,7 +155,6 @@ public class CustHandlerFactory {
             boolean bwordProcOverride = false;
             boolean bdimNode = false;
             boolean bdimId = false;
-            boolean bdimMand = false;
             boolean bdimName = false;
             boolean bfamName = false;
             boolean bfamNotes = false;
@@ -341,8 +339,6 @@ public class CustHandlerFactory {
                     bwordClassDefMan = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.typePatternXID)) {
                     bwordClassPattern = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.declensionMandatoryXID)) {
-                    bdeclensionMandatory = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalUniquenessXID)) {
                     blangPropLocalUniqueness = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropWordUniquenessXID)) {
@@ -355,8 +351,6 @@ public class CustHandlerFactory {
                     bdimNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.dimensionIdXID)) {
                     bdimId = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionMandXID)) {
-                    bdimMand = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.dimensionNameXID)) {
                     bdimName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionComDimIdXID)) {
@@ -688,8 +682,6 @@ public class CustHandlerFactory {
                     bDecIsDimless = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionRelatedIdXID)) {
                     bDecRelId = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.declensionMandatoryXID)) {
-                    bdeclensionMandatory = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.declensionComDimIdXID)) {
                     bDecCombId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.proGuideBaseXID)) {
@@ -712,8 +704,6 @@ public class CustHandlerFactory {
                     bdimNode = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.dimensionIdXID)) {
                     bdimId = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.dimensionMandXID)) {
-                    bdimMand = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.dimensionNameXID)) {
                     bdimName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.famNameXID)) {
@@ -1052,9 +1042,6 @@ public class CustHandlerFactory {
                 } else if (bwordClassDefMan) {
                     core.getTypes().getBufferType().setDefMandatory(new String(ch, start, length).equals(PGTUtil.True));
                     bwordClassDefMan = false;
-                } else if (bdeclensionMandatory) {
-                    declensionMgr.setBufferDecMandatory(new String(ch, start, length).equals(PGTUtil.True));
-                    bdeclensionMandatory = false;
                 } else if (blangPropLocalUniqueness) {
                     propertiesManager.setLocalUniqueness(new String(ch, start, length).equals(PGTUtil.True));
                     blangPropLocalUniqueness = false;
@@ -1076,9 +1063,6 @@ public class CustHandlerFactory {
                 } else if (blangPropLocalLangName) {
                     propertiesManager.setLocalLangName(propertiesManager.getLocalLangName()
                             + new String(ch, start, length));
-                } else if (bdimMand) {
-                    declensionMgr.getBuffer().getBuffer().setMandatory(new String(ch, start, length).equals(PGTUtil.True));
-                    bdimMand = false;
                 } else if (bdimId) {
                     declensionMgr.getBuffer().getBuffer().setId(Integer.parseInt(new String(ch, start, length)));
                     bdimId = false;
