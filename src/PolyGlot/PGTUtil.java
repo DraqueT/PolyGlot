@@ -109,13 +109,11 @@ public class PGTUtil {
     public static final String declensionNotesXID = "declensionNotes";
     public static final String declensionIsTemplateXID = "declensionTemplate";
     public static final String declensionRelatedIdXID = "declensionRelatedId";
-    public static final String declensionMandatoryXID = "declensionMandatory";
     public static final String declensionIsDimensionless = "declensionDimensionless";
 
     // dimensional declension properties
     public static final String dimensionNodeXID = "dimensionNode";
     public static final String dimensionIdXID = "dimensionId";
-    public static final String dimensionMandXID = "dimensionMand";
     public static final String dimensionNameXID = "dimensionName";
 
     // pronunciation properties

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -373,95 +373,6 @@ public class DeclensionManager {
     }
 
     /**
-     * Recursive method to get all mandatory declensions for a type
-     *
-     * @param depth current dim depth
-     * @param curId current generated id
-     * @param retValue return list(passed by ref)
-     * @param declensionList list of all declensions headers
-     * @param mand whether any dimensions were mandatory
-     * @return string list of all mandatory declensions
-     */
-    private List<DeclensionNode> getMandDims(int depth,
-            String curId,
-            List<DeclensionNode> retValue,
-            List<DeclensionNode> declensionList,
-            String label,
-            boolean mand) {
-        if (depth >= declensionList.size()) {
-            if (mand) {
-                DeclensionNode ret = new DeclensionNode(-1);
-                ret.setCombinedDimId(curId);
-                ret.setValue(label);
-                retValue.add(ret);
-            }
-
-            return retValue;
-        }
-
-        DeclensionNode curNode = declensionList.get(depth);
-        Collection<DeclensionDimension> dimensions = curNode.getDimensions();
-        Iterator<DeclensionDimension> dimIt = dimensions.iterator();
-
-        while (dimIt.hasNext()) {
-            DeclensionDimension curDim = dimIt.next();
-
-            getMandDims(depth + 1,
-                    curId + curDim.getId().toString() + ",",
-                    retValue,
-                    declensionList,
-                    label + " " + curDim.getValue(),
-                    curDim.isMandatory() || mand);
-        }
-
-        return retValue;
-    }
-
-    /**
-     * returns ids of all generated declensions for given type that are
-     * mandatory
-     *
-     * @param typeId the type to get mandatories for
-     * @return a list of all mandatory declensions
-     */
-    public List<DeclensionNode> getMandDims(Integer typeId) {
-        return getMandDims(0, ",", new ArrayList<>(), getDimensionalDeclensionListTemplate(typeId), "", false);
-    }
-
-    /**
-     * Tests whether type based requirements met for word
-     *
-     * @param word word to check
-     * @param type type of word
-     * @return empty if no problems, string with problem description otherwise
-     */
-    public String declensionRequirementsMet(ConWord word, TypeNode type) {
-        String ret = "";
-        // type will be null if no type (or bad type) on word, no type = no requirements
-        if (type != null) {
-            Iterator<DeclensionNode> mandIt = getMandDims(type.getId()).iterator();
-
-            while (mandIt.hasNext()) {
-                DeclensionNode curMand = mandIt.next();
-
-                // skip surpressed forms
-                if (isCombinedDeclSurpressed(curMand.getCombinedDimId(), type.getId())) {
-                    continue;
-                }
-
-                DeclensionNode dimExists = getDeclensionByCombinedId(word.getId(), curMand.getCombinedDimId());
-
-                if (dimExists == null) {
-                    ret = "Required Decl/Conj " + curMand.getValue() + " must be filled in.";
-                    break;
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    /**
      * Clears all declensions from word
      *
      * @param wordId ID of word to clear of all declensions
@@ -731,8 +642,6 @@ public class DeclensionManager {
     }
 
     public void insertBuffer() {
-        buffer.setMandatory(isBufferDecMandatory());
-
         if (bufferDecTemp) {
             this.addDeclensionToTemplate(bufferRelId, buffer.getId(), buffer);
         } else {
@@ -1001,20 +910,6 @@ public class DeclensionManager {
     
     public List<DeclensionNode> getFullDeclensionListWord(Integer wordId) {
         return getFullDeclensionList(wordId, dList);
-    }
-
-    /**
-     * @return the bufferDecMandatory
-     */
-    public boolean isBufferDecMandatory() {
-        return buffer.isMandatory();
-    }
-
-    /**
-     * @param bufferDecMandatory the bufferDecMandatory to set
-     */
-    public void setBufferDecMandatory(boolean bufferDecMandatory) {
-        buffer.setMandatory(bufferDecMandatory);
     }
 
     /**
