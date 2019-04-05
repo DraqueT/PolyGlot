@@ -663,6 +663,7 @@ public class ScrDeclensionGenSetup extends PDialog {
      * Copies selected rule (if any) to clipboard
      */
     private void copyRuleToClipboard() {
+        this.saveTransPairs(typeId);
         core.setClipBoard(getSelectedRules());
     }
 
