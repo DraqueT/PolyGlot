@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -84,6 +84,33 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         for (Entry<Integer, Integer> classEntry : r.getClassFilterList().entrySet()) {
             this.addClassToFilterList(classEntry.getKey(), classEntry.getValue());
         }
+    }
+    
+    /***
+     * Checks if Gen Rules are equal. The combination ID is NOT accounted for, 
+     * as this is used when checking equality across rules set to different
+     * declensions. ID is also not accounted for, as this is an identity value.
+     * It also does not apply to the applyToClasses values, as this is similar
+     * to the first requirement.
+     * @param o
+     * @return 
+     */
+    public boolean valuesEqual(Object o) {
+        boolean ret = true;
+        
+        if (this != o) {
+            if (o != null && o instanceof DeclensionGenRule) {
+                DeclensionGenRule comp = (DeclensionGenRule)o;
+                ret = this.typeId == comp.typeId
+                        && this.regex.equals(comp.regex)
+                        && this.name.equals(comp.name)
+                        && this.transformations.equals(comp.transformations);
+            } else {
+                ret = false;
+            }
+        }
+        
+        return ret;
     }
     
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, DThompson
+ * Copyright (c) 2018-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -21,6 +21,8 @@ package PolyGlot.ManagersCollections;
 
 import PolyGlot.DictCore;
 import PolyGlot.Nodes.DeclensionGenRule;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -120,179 +122,365 @@ public class DeclensionManagerTest {
 
         assertTrue(rules.contains(rule1) && rules.contains(rule2));
     }
+    
+    /**
+     * Test of deleteRulesFromDeclensionTemplates method, of class DeclensionManager.
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testDeleteRulesFromDeclensionTemplatesInitial() throws IOException {
+        DictCore subCore = new DictCore();
+        subCore.readFile("test/TestResources/testBulkDelete.pgd");
+        int expectedInitialSize = 8;
+        
+        DeclensionManager decManSub = subCore.getDeclensionManager();
+        assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedInitialSize);
+    }
+    
+    @Test
+    public void testDeleteRulesFromDeclensionTemplatesDelPast() throws IOException {
+        DictCore subCore = new DictCore();
+        subCore.readFile("test/TestResources/testBulkDelete.pgd");
+        int expectedFinalSize = 6;
+        
+        DeclensionManager decManSub = subCore.getDeclensionManager();
+        DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
+        List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+        rulesToDelete.add(toDelete);
+        decManSub.deleteRulesFromDeclensionTemplates(2, 1, 2, rulesToDelete);
+        assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+    }
+    
+    @Test
+    public void testDeleteRulesFromDeclensionTemplatesDelFemale() throws IOException {
+        DictCore subCore = new DictCore();
+        subCore.readFile("test/TestResources/testBulkDelete.pgd");
+        int expectedFinalSize = 6;
+        
+        DeclensionManager decManSub = subCore.getDeclensionManager();
+        DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
+        List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+        rulesToDelete.add(toDelete);
+        decManSub.deleteRulesFromDeclensionTemplates(2, 0, 3, rulesToDelete);
+        assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+    }
+
+    /**
+     * Test of bulkDeleteRuleFromDeclensionTemplates method, of class DeclensionManager.
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testBulkDeleteRuleFromDeclensionTemplates() throws IOException {
+        DictCore subCore = new DictCore();
+        subCore.readFile("test/TestResources/testBulkDelete.pgd");
+        int expectedFinalSize = 5;
+        
+        DeclensionManager decManSub = subCore.getDeclensionManager();
+        DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
+        List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+        rulesToDelete.add(toDelete);
+        decManSub.bulkDeleteRuleFromDeclensionTemplates(2, rulesToDelete);
+        assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+    }
+    
+    @Test
+    public void testBulkDeleteRuleFromDeclensionTemplatesMultiSelect() throws IOException {
+        DictCore subCore = new DictCore();
+        subCore.readFile("test/TestResources/testBulkDelete.pgd");
+        List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+        int expectedFinalSize = 4;
+        
+        DeclensionManager decManSub = subCore.getDeclensionManager();
+        rulesToDelete.add(decManSub.getDeclensionRulesForType(2).get(2));
+        rulesToDelete.add(decManSub.getDeclensionRulesForType(2).get(1));
+        decManSub.bulkDeleteRuleFromDeclensionTemplates(2, rulesToDelete);
+        assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+    }
 
     // TODO: all tests blelow this point
     
-    @Test
-    public void testGetAllDepGenerationRules() {
-    }
-    
-    @Test
-    public void testGetDeclensionRules() {
-    }
-
-    @Test
-    public void testDeclineWord() throws Exception {
-    }
-
-    @Test
-    public void testGetDeclensionMap() {
-    }
-
-    @Test
-    public void testAddDeclensionToWord() {
-    }
-
-    @Test
-    public void testDeleteDeclensionFromWord() {
-    }
-
-    @Test
-    public void testUpdateDeclensionWord() {
-    }
-
-    @Test
-    public void testDeprecateAllDeclensions() {
-    }
-
-    @Test
-    public void testGetDeclension() {
-    }
-
-    @Test
-    public void testGetMandDims() {
-    }
-
-    @Test
-    public void testDeclensionRequirementsMet() {
-    }
-
-    @Test
-    public void testClearAllDeclensionsWord() {
-    }
-
-    @Test
-    public void testGetAllCombinedIds() {
-    }
-
-    @Test
-    public void testGetDeclensionListWord() {
-    }
-
-    @Test
-    public void testGetDimensionalDeclensionListTemplate() {
-    }
-
-    @Test
-    public void testGetFullDeclensionListTemplate() {
-    }
-
-    @Test
-    public void testAddDeclensionToTemplate_3args() {
-    }
-
-    @Test
-    public void testAddDeclensionToTemplate_Integer_String() {
-    }
-
-    @Test
-    public void testDeleteDeclensionFromTemplate() {
-    }
-
-    @Test
-    public void testUpdateDeclensionTemplate() {
-    }
-
-    @Test
-    public void testGetDeclensionTemplate() {
-    }
-
-    @Test
-    public void testClearAllDeclensionsTemplate() {
-    }
-
-    @Test
-    public void testSetBufferId() {
-    }
-
-    @Test
-    public void testSetBufferDecText() {
-    }
-
-    @Test
-    public void testGetBufferDecText() {
-    }
-
-    @Test
-    public void testSetBufferDecNotes() {
-    }
-
-    @Test
-    public void testGetBufferDecNotes() {
-    }
-
-    @Test
-    public void testSetBufferDecTemp() {
-    }
-
-    @Test
-    public void testSetBufferRelId() {
-    }
-
-    @Test
-    public void testGetBufferRelId() {
-    }
-
-    @Test
-    public void testIsBufferDecTemp() {
-    }
-
-    @Test
-    public void testInsertBuffer() {
-    }
-
-    @Test
-    public void testGetBuffer() {
-    }
-
-    @Test
-    public void testClearBuffer() {
-    }
-
-    @Test
-    public void testGetDeclensionByCombinedId() {
-    }
-
-    @Test
-    public void testGetCombNameFromCombId() {
-    }
-
-    @Test
-    public void testDeleteDeclension() {
-    }
-
-    @Test
-    public void testIsBufferDecMandatory() {
-    }
-
-    @Test
-    public void testSetBufferDecMandatory() {
-    }
-
-    @Test
-    public void testGetWordDeclensions() {
-    }
-
-    @Test
-    public void testRemoveDeclensionValues() {
-    }
-
-    @Test
-    public void testWriteXML() {
-    }
-
-    @Test
-    public void testSetAllDeclensionRulesToAllClasses() {
-    }
+//    @Test
+//    public void testGetAllDepGenerationRules() {
+//    }
+//    
+//    @Test
+//    public void testGetDeclensionRules() {
+//    }
+//
+//    @Test
+//    public void testDeclineWord() throws Exception {
+//    }
+//
+//    @Test
+//    public void testGetDeclensionMap() {
+//    }
+//
+//    @Test
+//    public void testAddDeclensionToWord() {
+//    }
+//
+//    @Test
+//    public void testDeleteDeclensionFromWord() {
+//    }
+//
+//    @Test
+//    public void testUpdateDeclensionWord() {
+//    }
+//
+//    @Test
+//    public void testDeprecateAllDeclensions() {
+//    }
+//
+//    @Test
+//    public void testGetDeclension() {
+//    }
+//
+//    @Test
+//    public void testGetMandDims() {
+//    }
+//
+//    @Test
+//    public void testDeclensionRequirementsMet() {
+//    }
+//
+//    @Test
+//    public void testClearAllDeclensionsWord() {
+//    }
+//
+//    @Test
+//    public void testGetAllCombinedIds() {
+//    }
+//
+//    @Test
+//    public void testGetDeclensionListWord() {
+//    }
+//
+//    @Test
+//    public void testGetDimensionalDeclensionListTemplate() {
+//    }
+//
+//    @Test
+//    public void testGetFullDeclensionListTemplate() {
+//    }
+//
+//    @Test
+//    public void testAddDeclensionToTemplate_3args() {
+//    }
+//
+//    @Test
+//    public void testAddDeclensionToTemplate_Integer_String() {
+//    }
+//
+//    @Test
+//    public void testDeleteDeclensionFromTemplate() {
+//    }
+//
+//    @Test
+//    public void testUpdateDeclensionTemplate() {
+//    }
+//
+//    @Test
+//    public void testGetDeclensionTemplate() {
+//    }
+//
+//    @Test
+//    public void testClearAllDeclensionsTemplate() {
+//    }
+//
+//    @Test
+//    public void testSetBufferId() {
+//    }
+//
+//    @Test
+//    public void testSetBufferDecText() {
+//    }
+//
+//    @Test
+//    public void testGetBufferDecText() {
+//    }
+//
+//    @Test
+//    public void testSetBufferDecNotes() {
+//    }
+//
+//    @Test
+//    public void testGetBufferDecNotes() {
+//    }
+//
+//    @Test
+//    public void testSetBufferDecTemp() {
+//    }
+//
+//    @Test
+//    public void testSetBufferRelId() {
+//    }
+//
+//    @Test
+//    public void testGetBufferRelId() {
+//    }
+//
+//    @Test
+//    public void testIsBufferDecTemp() {
+//    }
+//
+//    @Test
+//    public void testInsertBuffer() {
+//    }
+//
+//    @Test
+//    public void testGetBuffer() {
+//    }
+//
+//    @Test
+//    public void testClearBuffer() {
+//    }
+//
+//    @Test
+//    public void testGetDeclensionByCombinedId() {
+//    }
+//
+//    @Test
+//    public void testGetCombNameFromCombId() {
+//    }
+//
+//    @Test
+//    public void testDeleteDeclension() {
+//    }
+//
+//    @Test
+//    public void testIsBufferDecMandatory() {
+//    }
+//
+//    @Test
+//    public void testSetBufferDecMandatory() {
+//    }
+//
+//    @Test
+//    public void testGetWordDeclensions() {
+//    }
+//
+//    @Test
+//    public void testRemoveDeclensionValues() {
+//    }
+//
+//    @Test
+//    public void testWriteXML() {
+//    }
+//
+//    @Test
+//    public void testSetAllDeclensionRulesToAllClasses() {
+//    }
+//
+//    /**
+//     * Test of getRuleBuffer method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetRuleBuffer() {
+//    }
+//
+//    /**
+//     * Test of insRuleBuffer method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testInsRuleBuffer() {
+//    }
+//
+//    /**
+//     * Test of getDimensionalCombinedIds method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetDimensionalCombinedIds() {
+//    }
+//
+//    /**
+//     * Test of getSingletonCombinedIds method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetSingletonCombinedIds() {
+//    }
+//
+//    /**
+//     * Test of getAllSingletonIds method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetAllSingletonIds() {
+//    }
+//
+//    /**
+//     * Test of getDimensionTemplateIndex method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetDimensionTemplateIndex() {
+//    }
+//
+//    /**
+//     * Test of getDeclentionTemplateByIndex method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetDeclentionTemplateByIndex() {
+//    }
+//
+//    /**
+//     * Test of getDimensionalDeclentionTemplateByIndex method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetDimensionalDeclentionTemplateByIndex() {
+//    }
+//
+//    /**
+//     * Test of getDimensionalDeclensionListWord method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetDimensionalDeclensionListWord() {
+//    }
+//
+//    /**
+//     * Test of getSingletonDeclensionList method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetSingletonDeclensionList() {
+//    }
+//
+//    /**
+//     * Test of getFullDeclensionListWord method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetFullDeclensionListWord() {
+//    }
+//
+//    /**
+//     * Test of copyRulesToDeclensionTemplates method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testCopyRulesToDeclensionTemplates() {
+//    }
+//
+//    /**
+//     * Test of getDeclensionLabel method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetDeclensionLabel() {
+//    }
+//
+//    /**
+//     * Test of getDeclensionValueLabel method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetDeclensionValueLabel() {
+//    }
+//
+//    /**
+//     * Test of getDeprecatedForms method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testGetDeprecatedForms() {
+//    }
+//
+//    /**
+//     * Test of wordHasDeprecatedForms method, of class DeclensionManager.
+//     */
+//    @Test
+//    public void testWordHasDeprecatedForms() {
+//    }
     
 }

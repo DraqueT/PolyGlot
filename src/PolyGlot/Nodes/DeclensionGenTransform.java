@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -20,6 +20,7 @@
 package PolyGlot.Nodes;
 
 import PolyGlot.PGTUtil;
+import java.util.Objects;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -48,6 +49,31 @@ public class DeclensionGenTransform {
     public void setEqual(DeclensionGenTransform d) {
         regex = d.regex;
         replaceText = d.replaceText;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.regex);
+        hash = 59 * hash + Objects.hashCode(this.replaceText);
+        return hash;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        boolean ret = true;
+        
+        if (this != o) {
+            if (o != null && o instanceof DeclensionGenTransform) {
+                DeclensionGenTransform comp = (DeclensionGenTransform)o;
+                ret = this.regex.equals(comp.regex) 
+                        && this.replaceText.equals(comp.replaceText);
+            } else {
+                ret = false;
+            }
+        }
+        
+        return ret;
     }
     
     public void writeXML(Document doc, Element rootElement) {

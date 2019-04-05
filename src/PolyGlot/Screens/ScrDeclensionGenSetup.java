@@ -71,8 +71,8 @@ public class ScrDeclensionGenSetup extends PDialog {
 
     final String depRulesLabel = "DEPRECATED RULES";
     final int typeId;
-    DefaultListModel decListModel;
-    DefaultListModel rulesModel;
+    DefaultListModel<Object> decListModel;
+    DefaultListModel<Object> rulesModel;
     DefaultTableModel transModel;
     boolean curPopulating = false;
     boolean upDownPress = false;
@@ -364,10 +364,10 @@ public class ScrDeclensionGenSetup extends PDialog {
      * sets up object models for visual components
      */
     private void setupObjectModels() {
-        decListModel = new DefaultListModel();
+        decListModel = new DefaultListModel<Object>();
         lstCombinedDec.setModel(decListModel);
 
-        rulesModel = new DefaultListModel();
+        rulesModel = new DefaultListModel<Object>();
         lstRules.setModel(rulesModel);
 
         transModel = new DefaultTableModel();
@@ -450,10 +450,13 @@ public class ScrDeclensionGenSetup extends PDialog {
 
         final JPopupMenu ruleMenu = new JPopupMenu();
         final JMenu pushToDimension = new JMenu("Push To Dimension");
+        final JMenu deleteFromDimension = new JMenu("Delete From Dimension");
         final JMenuItem copyItem = new JMenuItem("Copy Rule");
         final JMenuItem pasteItem = new JMenuItem("Paste Rule");
+        final JMenuItem bulkDelete = new JMenuItem("Bulk Delete Rule");
         copyItem.setToolTipText("Copy currently selected rule.");
         pasteItem.setToolTipText("Paste rule in clipboard to rule list.");
+        bulkDelete.setToolTipText("Bulk delete all instances of this rule from this part of speech");
 
         copyItem.addActionListener((ActionEvent ae) -> {
             copyRuleToClipboard();
@@ -461,10 +464,15 @@ public class ScrDeclensionGenSetup extends PDialog {
         pasteItem.addActionListener((ActionEvent ae) -> {
             pasteRuleFromClipboard();
         });
+        bulkDelete.addActionListener((ActionEvent ae) -> {
+            bulkDelete();
+        });
         ruleMenu.add(copyItem);
         ruleMenu.add(pasteItem);
         ruleMenu.addSeparator();
         ruleMenu.add(pushToDimension);
+        ruleMenu.add(deleteFromDimension);
+        ruleMenu.add(bulkDelete);
         lstRules.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -485,9 +493,12 @@ public class ScrDeclensionGenSetup extends PDialog {
                     copyItem.setEnabled(true);
                     setupPushToDimension((DeclensionPair)lstCombinedDec.getSelectedValue());
                     pushToDimension.setEnabled(true);
+                    setupDeleteFromDimension((DeclensionPair)lstCombinedDec.getSelectedValue());
+                    deleteFromDimension.setEnabled(true);
                 } else {
                     copyItem.setEnabled(false);
-                    pushToDimension.setEnabled(true);
+                    pushToDimension.setEnabled(false);
+                    deleteFromDimension.setEnabled(true);
                 }
 
                 ruleMenu.show(e.getComponent(), e.getX(), e.getY());
@@ -511,14 +522,57 @@ public class ScrDeclensionGenSetup extends PDialog {
                     DeclensionNode decNode = nodes.get(i);
                     DeclensionDimension decDim = decNode.getDeclensionDimensionById(dimId);
                     if (decDim != null) {
-                        final JMenuItem copyTo = new JMenuItem("Copy To " + decDim.getValue());
-                        copyTo.setToolTipText("Copy selected rule(s) to all word forms with dimension: " 
+                        final JMenuItem pushTo = new JMenuItem("Push To " + decDim.getValue());
+                        pushTo.setToolTipText("Push selected rule(s) to word forms with dimension: " 
                                 + decDim.getValue());
-                        copyTo.addActionListener(
+                        pushTo.addActionListener(
                                 buildCopyToDimensionAction(i, decDim.getId(), selDec.combinedId));
-                        pushToDimension.add(copyTo);
+                        pushToDimension.add(pushTo);
                     }
                 }
+            }
+            
+            // sets up all menu items for deleting rules from dimensions
+            private void setupDeleteFromDimension(DeclensionPair selDec) {
+                deleteFromDimension.removeAll();                
+                
+                List<DeclensionNode> nodes = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId);
+                List<Integer> ids = new ArrayList<>();
+                
+                for (String singleId : selDec.combinedId.split(",")) {
+                    if (!singleId.isEmpty()) {
+                        ids.add(Integer.parseInt(singleId));
+                    }
+                }
+
+                for (int i = 0; i < ids.size() ; i++) {
+                    int dimId = ids.get(i);
+                    DeclensionNode decNode = nodes.get(i);
+                    DeclensionDimension decDim = decNode.getDeclensionDimensionById(dimId);
+                    if (decDim != null) {
+                        final JMenuItem deleteFrom = new JMenuItem("Delete From " + decDim.getValue());
+                        deleteFrom.setToolTipText("Delete selected rule(s) from word forms with dimension: " 
+                                + decDim.getValue());
+                        deleteFrom.addActionListener(
+                                buildDeleteFromDimensionAction(i, decDim.getId()));
+                        deleteFromDimension.add(deleteFrom);
+                    }
+                }
+            }
+            
+            private ActionListener buildDeleteFromDimensionAction(int decId, int dimId) {
+                return (ActionEvent ae) -> {
+                    List<DeclensionGenRule> rules = getSelectedRules();
+                    if (verifyDeleteRulesToDimension(decId, dimId, rules)) {
+                        core.getDeclensionManager().deleteRulesFromDeclensionTemplates(typeId, 
+                                decId, 
+                                dimId, 
+                                rules);
+                        populateRules();
+                        populateRuleProperties();
+                        populateTransforms();
+                    }
+                };
             }
             
             private ActionListener buildCopyToDimensionAction(int decId, int dimId, String combId) {
@@ -545,7 +599,33 @@ public class ScrDeclensionGenSetup extends PDialog {
             message += rule.getName() + "\n";
         }
         
-        message += "\nto all rules for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
+        message += "\nto all word forms for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
+        
+        return InfoBox.actionConfirmation("Confirm Rule Copy", message, this);
+    }
+    
+    public boolean verifyDeleteRulesToDimension(int decId, int dimId, List<DeclensionGenRule> rules) {
+        String decLabel = core.getDeclensionManager().getDeclensionLabel(typeId, decId);
+        String decDimLabel = core.getDeclensionManager().getDeclensionValueLabel(typeId, decId, dimId);
+        String message = "You are about to delete the following rule(s):\n\n";
+        
+        for (DeclensionGenRule rule : rules) {
+            message += rule.getName() + "\n";
+        }
+        
+        message += "\nfrom all word forms for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
+        
+        return InfoBox.actionConfirmation("Confirm Rule Copy", message, this);
+    }
+    
+    public boolean verifyBulkDeleteRule(List<DeclensionGenRule> rules) {
+        String message = "You are about to bulk delete the following rule(s):\n\n";
+        
+        for (DeclensionGenRule rule : rules) {
+            message += rule.getName() + "\n";
+        }
+        
+        message += "Continue?";
         
         return InfoBox.actionConfirmation("Confirm Rule Copy", message, this);
     }
@@ -566,6 +646,19 @@ public class ScrDeclensionGenSetup extends PDialog {
         return rules;
     }
 
+    /**
+     * Bulk deletes selected rule from current part of speech
+     */
+    private void bulkDelete() {
+        List<DeclensionGenRule> selectedRules = getSelectedRules();
+        if (verifyBulkDeleteRule(selectedRules)) {
+            core.getDeclensionManager().bulkDeleteRuleFromDeclensionTemplates(typeId, selectedRules);
+            populateRules();
+            populateRuleProperties();
+            populateTransforms();
+        }
+    }
+    
     /**
      * Copies selected rule (if any) to clipboard
      */
@@ -588,7 +681,8 @@ public class ScrDeclensionGenSetup extends PDialog {
             return;
         }
 
-        List<DeclensionGenRule> rules = (ArrayList) fromClipBoard;
+        @SuppressWarnings("unchecked") // this is checked immediately above
+        List<DeclensionGenRule> rules = (ArrayList<DeclensionGenRule>) fromClipBoard;
 
         rules.forEach((curRule) -> {
             DeclensionGenRule copyRule = new DeclensionGenRule(typeId, curPair.combinedId);
@@ -901,7 +995,7 @@ public class ScrDeclensionGenSetup extends PDialog {
 
         jLabel1.setText("Conjugation/Declensions");
 
-        lstCombinedDec.setModel(new javax.swing.AbstractListModel() {
+        lstCombinedDec.setModel(new javax.swing.AbstractListModel<Object>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -920,7 +1014,7 @@ public class ScrDeclensionGenSetup extends PDialog {
 
         jLabel2.setText("Rules");
 
-        lstRules.setModel(new javax.swing.AbstractListModel() {
+        lstRules.setModel(new javax.swing.AbstractListModel<Object>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1308,8 +1402,8 @@ public class ScrDeclensionGenSetup extends PDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JList lstCombinedDec;
-    private javax.swing.JList lstRules;
+    private javax.swing.JList<Object> lstCombinedDec;
+    private javax.swing.JList<Object> lstRules;
     private javax.swing.JPanel pnlApplyClasses;
     private javax.swing.JScrollPane sclTransforms;
     private javax.swing.JTable tblTransforms;

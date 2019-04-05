@@ -27,7 +27,6 @@ import PolyGlot.Nodes.DeclensionGenTransform;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.PGTUtil;
-import PolyGlot.Nodes.TypeNode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -693,8 +692,8 @@ public class DeclensionManager {
      * @param list list to add node to (word list or type list)
      * @return declension node created
      */
-    private DeclensionNode addDeclension(Integer relId, Integer declensionId, DeclensionNode declension, Map list) {
-        List wordList;
+    private DeclensionNode addDeclension(Integer relId, Integer declensionId, DeclensionNode declension, Map<Integer, List<DeclensionNode>> list) {
+        List<DeclensionNode> wordList;
 
         if (declensionId == -1) {
             declensionId = topId + 1;
@@ -703,7 +702,7 @@ public class DeclensionManager {
         deleteDeclensionFromWord(relId, declensionId);
 
         if (list.containsKey(relId)) {
-            wordList = (List) list.get(relId);
+            wordList = (List<DeclensionNode>) list.get(relId);
         } else {
             wordList = new ArrayList<>();
             list.put(relId, wordList);
@@ -772,10 +771,10 @@ public class DeclensionManager {
         return ret.trim();
     }
     
-    public void deleteDeclension(Integer typeId, Integer declensionId, Map list) {
+    public void deleteDeclension(Integer typeId, Integer declensionId, Map<Integer, List<DeclensionNode>> list) {
         if (list.containsKey(typeId)) {
             List<DeclensionNode> copyTo = new ArrayList<>();
-            Iterator<DeclensionNode> copyFrom = ((List) list.get(typeId)).iterator();
+            Iterator<DeclensionNode> copyFrom = ((List<DeclensionNode>) list.get(typeId)).iterator();
 
             while (copyFrom.hasNext()) {
                 DeclensionNode curNode = copyFrom.next();
@@ -796,10 +795,13 @@ public class DeclensionManager {
         }
     }
 
-    private void updateDeclension(Integer typeId, Integer declensionId, DeclensionNode declension, Map list) {
+    private void updateDeclension(Integer typeId, 
+            Integer declensionId, 
+            DeclensionNode declension, 
+            Map<Integer, List<DeclensionNode>> list) {
         if (list.containsKey(typeId)) {
             List<DeclensionNode> copyTo = new ArrayList<>();
-            Iterator<DeclensionNode> copyFrom = ((List) list.get(typeId)).iterator();
+            Iterator<DeclensionNode> copyFrom = ((List<DeclensionNode>) list.get(typeId)).iterator();
 
             while (copyFrom.hasNext()) {
                 DeclensionNode curNode = copyFrom.next();
@@ -898,7 +900,7 @@ public class DeclensionManager {
      * @param list list of relations to search through
      * @return 
      */
-    private List<DeclensionNode> getFullDeclensionList(Integer relatedId, Map list) {
+    private List<DeclensionNode> getFullDeclensionList(Integer relatedId, Map<Integer, List<DeclensionNode>> list) {
         List<DeclensionNode> ret = new ArrayList<>();
 
         if (list.containsKey(relatedId)) {
@@ -1040,6 +1042,48 @@ public class DeclensionManager {
                 });
             }
         });
+    }
+    
+    //deleteRulesFromDeclensionTemplates
+    /**
+     * This copies a list of rules to the bottom of the list of all declension templates for a given part of speech
+     * that share a declension (decId) with the value defined by dimId
+     * 
+     * NOTE: Only applies to dimensional declensions.Singletons must be copied to manually.
+     * 
+     * @param typeId Part of speech to target
+     * @param decId declension dimension to target
+     * @param dimId dimension value to target
+     * @param rulesToDelete rules to be deleted
+     */
+    public void deleteRulesFromDeclensionTemplates(int typeId, 
+            int decId, int dimId, 
+            List<DeclensionGenRule> rulesToDelete) {
+        
+        for (DeclensionGenRule rule : this.getDeclensionRulesForType(typeId)) {
+            if (combDimIdMatches(decId, dimId, rule.getCombinationId())) {
+                for (DeclensionGenRule ruleDelete : rulesToDelete) {
+                    if (rule.valuesEqual(ruleDelete)) {
+                        this.deleteDeclensionGenRule(rule);
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Deletes ALL instances of a rule within a given word type
+     * @param typeId part of speech to clear
+     * @param rulesToDelete rules in this pos to delete
+     */
+    public void bulkDeleteRuleFromDeclensionTemplates(int typeId, List<DeclensionGenRule> rulesToDelete) {
+        for (DeclensionGenRule rule : this.getDeclensionRulesForType(typeId)) {
+            for (DeclensionGenRule ruleDelete : rulesToDelete) {
+                if (rule.valuesEqual(ruleDelete)) {
+                    this.deleteDeclensionGenRule(rule);
+                }
+            }
+        }
     }
     
     private boolean combDimIdMatches(int decId, int dimId, String combDimId) {
