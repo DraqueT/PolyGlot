@@ -222,7 +222,9 @@ public class ScrDeclensionGenSetup extends PDialog {
 
             enableEditing(false);
         } else {
-
+            // done first in the case that it is later disabled due to a disabled wordform
+            enableEditing(true);
+            
             DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
 
             if (curPair == null) {
