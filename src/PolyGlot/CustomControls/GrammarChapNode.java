@@ -78,8 +78,20 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
      */
     public void doRemove(MutableTreeNode node) {
         super.remove(node);
+        
+        if (parentManager != null && node instanceof GrammarChapNode) {
+            parentManager.removeChapter((GrammarChapNode)node);
+        }
     }
     
+    public void doInsert(MutableTreeNode node, int index) {
+        super.insert(node, index);
+        
+        if (parentManager != null && node instanceof GrammarChapNode) {
+            parentManager.addChapterAtIndex((GrammarChapNode)node, index);
+        }
+    }
+
     @SuppressWarnings("UseOfObsoleteCollectionType")
     private Enumeration internalChildren(String filter) {
         Enumeration ret;

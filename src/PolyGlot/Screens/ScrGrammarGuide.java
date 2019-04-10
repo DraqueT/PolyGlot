@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2018, Draque Thompson
+ * Copyright (c) 2015-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -122,9 +122,7 @@ public class ScrGrammarGuide extends PFrame {
 
         setupRecordButtons();
 
-        DefaultMutableTreeNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
-        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
-        treChapList.setModel(treeModel);
+        setupChapTreeModel();
 
         txtSection.setCaret(new HighlightCaret());
 
@@ -134,7 +132,6 @@ public class ScrGrammarGuide extends PFrame {
         setInitialValues();
         setupListeners();
         populateSections();
-        treChapList.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         if (System.getProperty("os.name").startsWith("Mac")) {
             btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (⌘ +)");
@@ -143,6 +140,13 @@ public class ScrGrammarGuide extends PFrame {
             btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (CTRL +)");
             btnDelete.setToolTipText(btnDelete.getToolTipText() + " (CTRL -)");
         }
+    }
+    
+    private void setupChapTreeModel() {
+        DefaultMutableTreeNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
+        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+        treChapList.setModel(treeModel);
+        treChapList.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     }
 
     private void setupRecordButtons() {
@@ -267,12 +271,14 @@ public class ScrGrammarGuide extends PFrame {
         btnAddSection = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelete = new PolyGlot.CustomControls.PAddRemoveButton("-");
         btnAddChapter = new PButton(core);
+        btnMoveNodeDown = new PButton();
+        btnMoveNodeUp = new PButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Grammar Guide");
 
         jSplitPane1.setBackground(new java.awt.Color(255, 255, 255));
-        jSplitPane1.setDividerLocation(170);
+        jSplitPane1.setDividerLocation(220);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
@@ -434,7 +440,7 @@ public class ScrGrammarGuide extends PFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(sldSoundPosition, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE))
+                        .addComponent(sldSoundPosition, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -470,7 +476,7 @@ public class ScrGrammarGuide extends PFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(351, Short.MAX_VALUE))
+                .addContainerGap(300, Short.MAX_VALUE))
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -529,6 +535,30 @@ public class ScrGrammarGuide extends PFrame {
             }
         });
 
+        btnMoveNodeDown.setText("↓");
+        btnMoveNodeDown.setToolTipText("Move chapter/section down");
+        btnMoveNodeDown.setMaximumSize(new java.awt.Dimension(40, 29));
+        btnMoveNodeDown.setMinimumSize(new java.awt.Dimension(40, 29));
+        btnMoveNodeDown.setPreferredSize(new java.awt.Dimension(40, 29));
+        btnMoveNodeDown.setSize(new java.awt.Dimension(40, 29));
+        btnMoveNodeDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMoveNodeDownActionPerformed(evt);
+            }
+        });
+
+        btnMoveNodeUp.setText("↑");
+        btnMoveNodeUp.setToolTipText("Move chapter/section up");
+        btnMoveNodeUp.setMaximumSize(new java.awt.Dimension(40, 29));
+        btnMoveNodeUp.setMinimumSize(new java.awt.Dimension(40, 29));
+        btnMoveNodeUp.setPreferredSize(new java.awt.Dimension(40, 29));
+        btnMoveNodeUp.setSize(new java.awt.Dimension(40, 29));
+        btnMoveNodeUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMoveNodeUpActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -537,15 +567,22 @@ public class ScrGrammarGuide extends PFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnMoveNodeUp, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnMoveNodeDown, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(btnAddSection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAddChapter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnAddChapter)
+                .addGap(4, 4, 4)
+                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 35, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -554,7 +591,12 @@ public class ScrGrammarGuide extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnMoveNodeUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnMoveNodeDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddSection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -568,7 +610,7 @@ public class ScrGrammarGuide extends PFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 759, Short.MAX_VALUE)
+            .addComponent(jSplitPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -620,6 +662,14 @@ public class ScrGrammarGuide extends PFrame {
             updateFontSize();
         }
     }//GEN-LAST:event_txtFontSizeKeyPressed
+
+    private void btnMoveNodeUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveNodeUpActionPerformed
+        moveNodeUp();
+    }//GEN-LAST:event_btnMoveNodeUpActionPerformed
+
+    private void btnMoveNodeDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveNodeDownActionPerformed
+        moveNodeDown();
+    }//GEN-LAST:event_btnMoveNodeDownActionPerformed
 
     private void updateFontSize() {
         try {
@@ -981,27 +1031,65 @@ public class ScrGrammarGuide extends PFrame {
         DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 
-        if (selection == null) {
-            return;
-        }
+        if (selection != null
+                && InfoBox.yesNoCancel("Confirmation", "Really delete? This cannot be undone.", 
+                        core.getRootWindow())
+                        != JOptionPane.YES_OPTION) {
+            if (selection instanceof GrammarSectionNode) {
+                GrammarSectionNode curNode = (GrammarSectionNode) selection;
+                GrammarChapNode parent = (GrammarChapNode) curNode.getParent();
+                parent.doRemove(curNode);
+                treChapList.expandPath(new TreePath(model.getPathToRoot(parent)));
+                treChapList.setSelectionPath(new TreePath(model.getPathToRoot(parent)));
+            } else if (selection instanceof GrammarChapNode) {
+                ((GrammarChapNode) root).doRemove((GrammarChapNode) selection);
+                core.getGrammarManager().removeChapter((GrammarChapNode) selection);
+            }
 
-        if (InfoBox.yesNoCancel("Confirmation", "Really delete? This cannot be undone.", core.getRootWindow())
-                != JOptionPane.YES_OPTION) {
-            return;
+            model.reload(root);
         }
-
-        if (selection instanceof GrammarSectionNode) {
-            GrammarSectionNode curNode = (GrammarSectionNode) selection;
-            GrammarChapNode parent = (GrammarChapNode) curNode.getParent();
-            parent.doRemove(curNode);
-            treChapList.expandPath(new TreePath(model.getPathToRoot(parent)));
-            treChapList.setSelectionPath(new TreePath(model.getPathToRoot(parent)));
-        } else if (selection instanceof GrammarChapNode) {
-            ((GrammarChapNode) root).doRemove((GrammarChapNode) selection);
-            core.getGrammarManager().removeChapter((GrammarChapNode) selection);
+    }
+    
+    private void moveNodeUp() {
+        moveNode(-1);
+    }
+    
+    private void moveNodeDown() {
+        moveNode(1);
+    }
+    
+    private void moveNode(int distance) {
+        Object selection = treChapList.getLastSelectedPathComponent();
+        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
+        GrammarChapNode root = (GrammarChapNode) model.getRoot();
+        TreePath selectedPath = treChapList.getSelectionPath();
+        
+        if (selection != null) {
+            if (selection instanceof GrammarSectionNode) {
+                GrammarSectionNode curNode = (GrammarSectionNode) selection;
+                GrammarChapNode parent = (GrammarChapNode) curNode.getParent();
+                int nodeIndex = parent.getIndex(curNode);
+                int newLocation = nodeIndex + distance;
+                
+                if (newLocation >= 0 && newLocation < parent.getChildCount()) {
+                    parent.remove(nodeIndex);
+                    parent.insert(curNode, newLocation);
+                    model.reload(root);
+                    treChapList.setSelectionPath(selectedPath);
+                }
+            } else if (selection instanceof GrammarChapNode) {
+                GrammarChapNode chapter = (GrammarChapNode) selection;
+                int chapIndex = root.getIndex(chapter);
+                int newLocation = chapIndex + distance;
+                
+                if (newLocation >= 0 && newLocation < root.getChildCount()) {
+                    root.doRemove(chapter);
+                    root.doInsert(chapter, newLocation);
+                    model.reload(root);
+                    treChapList.setSelectionPath(selectedPath);
+                }
+            }
         }
-
-        model.reload(root);
     }
 
     private void addChapter() {
@@ -1162,10 +1250,12 @@ public class ScrGrammarGuide extends PFrame {
     private javax.swing.JButton btnAddSection;
     private javax.swing.JButton btnApply;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnMoveNodeDown;
+    private javax.swing.JButton btnMoveNodeUp;
     private javax.swing.JButton btnPlayPauseAudio;
     private javax.swing.JButton btnRecordAudio;
     private javax.swing.JComboBox cmbFontColor;
-    private javax.swing.JComboBox cmbFonts;
+    private javax.swing.JComboBox<Object> cmbFonts;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
