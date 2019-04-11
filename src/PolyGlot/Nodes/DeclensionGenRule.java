@@ -222,14 +222,6 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
                     break;
                 }
             }
-            // if one of the word's class/class value pairs matches that of this rule, 
-//            for (Entry<Integer, Integer> valueEntry : word.getClassValues()) {
-//                if (applyToClasses.containsKey(valueEntry.getKey())
-//                        && applyToClasses.get(valueEntry.getKey()).contains(valueEntry.getValue())) {
-//                    ret = true;
-//                    break;
-//                }
-//            }
         }
         
         return ret;
