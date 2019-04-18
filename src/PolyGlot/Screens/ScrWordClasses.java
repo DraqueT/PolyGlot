@@ -256,6 +256,8 @@ public class ScrWordClasses extends PFrame {
             typeChecks.values().forEach((checkBox) -> {
                 checkBox.setSelected(false);
             });
+            PTableModel tableModel = new PTableModel(new Object[]{"Values"}, 0);
+            tblValues.setModel(tableModel);
         } else {
             PTableModel tableModel = new PTableModel(new Object[]{"Values"}, 0);
             enableValues(true);
