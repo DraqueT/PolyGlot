@@ -319,7 +319,7 @@ public class ScrWordClasses extends PFrame {
         WordClass prop = lstProperties.getSelectedValue();
         int position = lstProperties.getSelectedIndex();
 
-        if (prop == null || InfoBox.yesNoCancel("Are you sure?", "This will delete the property from all words."
+        if (prop == null || InfoBox.yesNoCancel("Are you sure?", "This will delete the class from all words."
                 + " Values will be irretrevably lost.", core.getRootWindow()) != JOptionPane.YES_OPTION) {
             return;
         }
@@ -371,9 +371,9 @@ public class ScrWordClasses extends PFrame {
         int index = tblValues.getSelectedRow();
 
         if (index >= 0) {
-            tableModel.getValueAt(index, 0);
+            WordClassValue value = (WordClassValue)tableModel.getValueAt(index, 0);
             try {
-                curProp.deleteValue(curProp.getId());
+                curProp.deleteValue(value.getId());
             } catch (Exception e) {
                 // do nothing. if it doesn't exist, deleting it is fine.
             }
