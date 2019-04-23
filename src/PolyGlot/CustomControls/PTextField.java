@@ -21,6 +21,7 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.ClipboardHandler;
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.ManagersCollections.VisualStyleManager;
 import PolyGlot.PGTUtil;
@@ -234,6 +235,7 @@ public class PTextField extends JTextField {
                 target.paste();
                 cb.restoreClipboard();
             } catch (Exception ex) {
+                IOHandler.writeErrorLog(ex);
                 InfoBox.error("Character Replacement Error",
                         "Clipboard threw error during character replacement process:"
                         + ex.getLocalizedMessage(), core.getRootWindow());
@@ -336,6 +338,7 @@ public class PTextField extends JTextField {
                 super.setText(t);
             }
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Set text error", "Could not set text component: " 
                     + e.getLocalizedMessage(), core.getRootWindow());
         }

@@ -20,6 +20,7 @@
 package PolyGlot.Nodes;
 
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.ReversionManager;
 import PolyGlot.PGTUtil;
 import java.io.ByteArrayInputStream;
@@ -68,8 +69,9 @@ public class ReversionNode implements Comparable<ReversionNode> {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
                 ret += formatter.format(saveTime);
             }
-        } catch (SAXException | IOException | ParserConfigurationException ex) {
-                ret += "<UNKNOWN TIME>";
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            IOHandler.writeErrorLog(e);
+            ret += "<UNKNOWN TIME>";
         }
         
         return ret;

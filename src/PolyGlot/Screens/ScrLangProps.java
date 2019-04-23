@@ -28,6 +28,7 @@ import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PLabel;
+import PolyGlot.IOHandler;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -84,6 +85,7 @@ public class ScrLangProps extends PFrame {
                     core.getPropertiesManager().setKerningSpace(Double.parseDouble(txtKerning.getText()));
                 } catch (NumberFormatException e) {
                     // do nothing. This fails on non-numeric values, which is handled elsewhere
+                    // IOHandler.writeErrorLog(e);
                 }
             }
         });
@@ -161,6 +163,7 @@ public class ScrLangProps extends PFrame {
             propMan.setEnforceRTL(chkEnforceRTL.isSelected());
             propMan.setKerningSpace(Double.parseDouble(txtKerning.getText()));
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.warning("Properties Error", "Problem saving properties.\n" + e.getLocalizedMessage(), this);
         }
     }

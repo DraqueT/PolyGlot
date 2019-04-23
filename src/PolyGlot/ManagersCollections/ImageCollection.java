@@ -110,6 +110,7 @@ public class ImageCollection extends DictionaryCollection {
         try {
             emptyImage.setImage(ImageIO.read(getClass().getResource(PGTUtil.notFoundImage)));
         } catch (IOException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("INTERNAL ERROR", 
                     "Unable to locate missing-image image.\nThis is kind of an ironic error.", null);
         }

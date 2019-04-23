@@ -27,6 +27,7 @@ import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTableModel;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordClassValue;
 import PolyGlot.Nodes.WordClass;
@@ -308,6 +309,7 @@ public class ScrWordClasses extends PFrame {
             propId = core.getWordPropertiesCollection().addNode(new WordClass());
             prop = (WordClass) core.getWordPropertiesCollection().getNodeById(propId);
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Property Creation Error", "Unable to create new word property: " + e.getLocalizedMessage(), core.getRootWindow());
             return;
         }
@@ -329,6 +331,7 @@ public class ScrWordClasses extends PFrame {
         try {
             core.getWordPropertiesCollection().deleteNodeById(prop.getId());
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Unable to Delete", "Unable to delete property: " + e.getLocalizedMessage(), core.getRootWindow());
         }
         DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
@@ -354,6 +357,7 @@ public class ScrWordClasses extends PFrame {
         try {
             value = curProp.addValue("");
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Value Add Error", e.getLocalizedMessage(), core.getRootWindow());
             return;
         }
@@ -378,6 +382,7 @@ public class ScrWordClasses extends PFrame {
                 curProp.deleteValue(value.getId());
             } catch (Exception e) {
                 // do nothing. if it doesn't exist, deleting it is fine.
+                // IOHandler.writeErrorLog(e);
             }
             tableModel.removeRow(index);
         }

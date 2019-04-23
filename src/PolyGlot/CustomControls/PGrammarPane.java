@@ -22,6 +22,7 @@ package PolyGlot.CustomControls;
 import PolyGlot.ClipboardHandler;
 import PolyGlot.DictCore;
 import PolyGlot.ExternalCode.GlyphVectorEditorKit;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ImageNode;
 import PolyGlot.PGTUtil;
 import java.awt.Graphics2D;
@@ -99,6 +100,7 @@ public class PGrammarPane extends JTextPane {
                     addImage(image);
                 }
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Image Import Error", "Unable to import image: "
                         + e.getLocalizedMessage(), core.getRootWindow());
             }
@@ -167,7 +169,8 @@ public class PGrammarPane extends JTextPane {
             this.paste();
             cb.restoreClipboard();
         } catch (Exception e) {
-            InfoBox.error("Well this is embarassing.", "Tab rendering error: " 
+            IOHandler.writeErrorLog(e);
+            InfoBox.error("Rendering Error", "Tab rendering error: " 
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
     }
@@ -181,6 +184,7 @@ public class PGrammarPane extends JTextPane {
             replaceSelection(" ", false);
             inputAttributes.removeAttributes(inputAttributes);
         } catch (IOException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Image Insertion Error", "Unable to insert image: "
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -213,6 +217,7 @@ public class PGrammarPane extends JTextPane {
                 ImageNode imageNode = core.getImageCollection().getFromBufferedImage(image);
                 addImage(imageNode);
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else if (ClipboardHandler.isClipboardString()) {
@@ -222,6 +227,7 @@ public class PGrammarPane extends JTextPane {
                 board.setClipboardContents(board.getClipboardText());
                 super.paste();
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else {
@@ -256,6 +262,7 @@ public class PGrammarPane extends JTextPane {
                     restoreComposedText();
                 }
             } catch (BadLocationException e) {
+                IOHandler.writeErrorLog(e);
                 UIManager.getLookAndFeel().provideErrorFeedback(PGrammarPane.this);
             }
         }

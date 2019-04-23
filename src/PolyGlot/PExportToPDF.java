@@ -314,6 +314,7 @@ public class PExportToPDF {
             // Do nothing. These throw null errors if they haven't been written
             // to, and there is no good way to test beforehand. IsFlushed() doesn't
             // work, and is on the iText team's bugfix list currently.
+            // IOHandler.writeErrorLog(e);
         }
 
         document.close();
@@ -420,6 +421,7 @@ public class PExportToPDF {
             } catch (Exception e) {
                 // do nothing. On Print, simply continue without printing this
                 // word's pronunciation.
+                // IOHandler.writeErrorLog(e);
             }
 
             // adds values 
@@ -434,6 +436,7 @@ public class PExportToPDF {
                                 .getNodeById(curEntry.getKey());
                         value = prop.getValueById(curEntry.getValue());
                     } catch (Exception e) {
+                        IOHandler.writeErrorLog(e);
                         log += "\nProblem printing classes for word (" + curWord.getValue()
                                 + "): " + e.getLocalizedMessage();
                         continue;
@@ -481,6 +484,7 @@ public class PExportToPDF {
                 try {
                     romStr = core.getRomManager().getPronunciation(curWord.getValue());
                 } catch (Exception e) {
+                    IOHandler.writeErrorLog(e);
                     romStr = "<ERROR>";
                 }
 
@@ -638,6 +642,7 @@ public class PExportToPDF {
             } catch (Exception e) {
                 // do nothing. On Print, simply continue without printing this
                 // word's pronunciation.
+                // IOHandler.writeErrorLog(e);
             }
 
             // adds values 
@@ -652,6 +657,7 @@ public class PExportToPDF {
                                 .getNodeById(curEntry.getKey());
                         value = prop.getValueById(curEntry.getValue());
                     } catch (Exception e) {
+                        IOHandler.writeErrorLog(e);
                         log += "\nProblem printing classes for word: " + curWord.getValue();
                         continue;
                     }
@@ -696,6 +702,7 @@ public class PExportToPDF {
                 try {
                     romStr = core.getRomManager().getPronunciation(curWord.getValue());
                 } catch (Exception e) {
+                    IOHandler.writeErrorLog(e);
                     romStr = "<ERROR>";
                 }
 
@@ -828,6 +835,7 @@ public class PExportToPDF {
                                 curPair.combinedId,
                                 curWord.getValue());
                     } catch (Exception e) {
+                        IOHandler.writeErrorLog(e);
                         log += "Problem generating " + curPair.label
                                 + " due to bad regex. Please check regex for word form.";
                     }
@@ -884,6 +892,7 @@ public class PExportToPDF {
                             Image pdfImage = new Image(ImageDataFactory.create(bytes));
                             newSec.add(pdfImage);
                         } catch (IOException | NumberFormatException e) {
+                            IOHandler.writeErrorLog(e);
                             log += "\nUnable to include images from grammar section: " + curSec.getName();
                         }
                     } else {

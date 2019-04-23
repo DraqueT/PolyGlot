@@ -23,6 +23,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
 import PolyGlot.FormattedTextHelper;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
 import PolyGlot.Nodes.DictNode;
@@ -127,6 +128,7 @@ public class ConWordCollection extends DictionaryCollection {
         try {
             pronunciation = word.getPronunciation();
         } catch (Exception e) {
+            // IOHandler.writeErrorLog(e);
             ret.setDefinition("Pronunciation cannot be generated, likely due to malformed regex in pronunciation menu.");
         }
 
@@ -565,6 +567,7 @@ public class ConWordCollection extends DictionaryCollection {
                 retValues.setBufferWord(curWord);
                 retValues.insert(curWord.getId());
             } catch (Exception e) {
+                // IOHandler.writeErrorLog(e);
                 throw new Exception("FILTERING ERROR: " + e.getMessage());
             }
         }
@@ -611,6 +614,7 @@ public class ConWordCollection extends DictionaryCollection {
                     }
                 } catch (Exception e) {
                     // do nothing (see above comment)
+                    // IOHandler.writeErrorLog(e);
                 }
             }
         }
@@ -782,6 +786,7 @@ public class ConWordCollection extends DictionaryCollection {
                 wordNode.appendChild(wordValue);
             } catch (Exception e) {
                 // Do nothing. Users are made aware of this issue elsewhere.
+                // IOHandler.writeErrorLog(e);
             }
 
             wordValue = doc.createElement(PGTUtil.wordDefXID);
@@ -942,7 +947,8 @@ public class ConWordCollection extends DictionaryCollection {
                                     problemString += "Word pronunciation cannot be generated properly (missing regex pattern).\n";
                                 } 
                             } catch (Exception e) {
-                                problemString += "Word encounters malformed regex when generating pronunciation.\n";
+                                problemString += "Word encountered malformed regex when generating pronunciation.\n";
+                                // IOHandler.writeErrorLog(e);
                             }
                         }
 
@@ -954,6 +960,7 @@ public class ConWordCollection extends DictionaryCollection {
                                 } 
                             } catch (Exception e) {
                                 problemString += "Word encounters malformed regex when generating Romanization.\n";
+                                // IOHandler.writeErrorLog(e);
                             }
                         }
 
@@ -973,6 +980,7 @@ public class ConWordCollection extends DictionaryCollection {
             thread.start();
             thread.join();
         } catch (InterruptedException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Thread Error", "Lexicon validation thread error: " + e.getLocalizedMessage(), core.getRootWindow());
         }
         

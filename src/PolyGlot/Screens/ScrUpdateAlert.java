@@ -24,6 +24,7 @@ import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.WebInterface;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -160,6 +161,7 @@ public class ScrUpdateAlert extends PDialog {
                     ret.add(message);
                 }
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 throw new Exception("Message: " + messageId + " malformed: \n" + e.getLocalizedMessage());
             }
         }
@@ -281,6 +283,7 @@ public class ScrUpdateAlert extends PDialog {
                     uri.normalize();
                     java.awt.Desktop.getDesktop().browse(uri);
                 } catch (IOException | URISyntaxException ex) {
+                    IOHandler.writeErrorLog(ex);
                     InfoBox.error("Browser Error", "Unable to open page: " + link, core.getRootWindow());
                 }
             });

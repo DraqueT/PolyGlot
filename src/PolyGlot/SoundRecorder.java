@@ -170,6 +170,7 @@ public class SoundRecorder {
         } // max amount of time before player kills self
         catch (InterruptedException e) {
             // if it's interrupted, it's fine. The recording will end.
+            // IOHandler.writeErrorLog(e);
         }
 
         if (soundThread != null
@@ -229,6 +230,7 @@ public class SoundRecorder {
                     out.close();
                 } catch (IOException e) {
                     //e.printStackTrace();
+                    IOHandler.writeErrorLog(e);
                     InfoBox.error("Recording wrror: ", "Unable to record: "
                             + e.getLocalizedMessage(), parentWindow);
                 }
@@ -256,7 +258,9 @@ public class SoundRecorder {
         try {
             Thread.sleep(timeToDie);
         } // longest time for thread to die
-        catch (InterruptedException e) {/*do nothing*/
+        catch (InterruptedException e) {
+            // do nothing
+            // IOHandler.writeErrorLog(e);
         }
 
         out.close();
@@ -369,6 +373,7 @@ public class SoundRecorder {
                 input.close();
             } catch (LineUnavailableException | IOException | InterruptedException e) {
                 //e.printStackTrace();
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Play Error", "Unable to play audio: "
                         + e.getLocalizedMessage(), parentWindow);
             }

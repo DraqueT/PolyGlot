@@ -20,6 +20,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.PGTUtil.WindowMode;
 import PolyGlot.Screens.ScrMainMenu;
 import PolyGlot.Screens.ScrPrintToPDF;
@@ -149,6 +150,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
                 TimeUnit.MICROSECONDS.sleep(250);
                 super.dispose();
             } catch (IllegalStateException|InterruptedException ex) {
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Closing Error", "Window failed to close: " + ex.getLocalizedMessage(), core.getRootWindow());
             }
         }

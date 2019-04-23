@@ -115,6 +115,7 @@ public class ExcelExport {
         try {
             ret.add(conWord.getPronunciation());
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             ret.add("<ERROR>");
         }
 
@@ -128,6 +129,7 @@ public class ExcelExport {
                 WordClassValue value = prop.getValueById(curEntry.getValue());
                 classes += value.getValue();
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 classes = "ERROR: UNABLE TO PULL CLASS";
             }
         }
@@ -146,6 +148,7 @@ public class ExcelExport {
                     declensionCell += decMan.declineWord(conWord, declension.combinedId, conWord.getValue()) + ":";
                 }
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 declensionCell += "DECLENSION ERROR";
             }
         }
@@ -172,6 +175,7 @@ public class ExcelExport {
         try {
             ret.add(conWord.getPronunciation());
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             ret.add("<ERROR>");
         }
 
@@ -185,6 +189,7 @@ public class ExcelExport {
                 WordClassValue value = prop.getValueById(curEntry.getValue());
                 classes += value.getValue();
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 classes = "ERROR: UNABLE TO PULL CLASS";
             }
         }
@@ -201,6 +206,7 @@ public class ExcelExport {
                     ret.add(decMan.declineWord(conWord, declension.combinedId, conWord.getValue()));
                 }
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 ret.add("DECLENSION ERROR");
             }
         });
@@ -346,6 +352,7 @@ public class ExcelExport {
                         rowCount++;
                     }
                 } catch (Exception e) {
+                    IOHandler.writeErrorLog(e);
                     InfoBox.error("Export Error", 
                             "Unable to export " + type.getValue() + " lexical values", 
                             core.getRootWindow());

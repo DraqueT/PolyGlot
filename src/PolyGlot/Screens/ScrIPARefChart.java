@@ -23,6 +23,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.DictCore;
 import PolyGlot.ClipboardHandler;
+import PolyGlot.IOHandler;
 import PolyGlot.IPAHandler;
 import java.awt.Component;
 import javax.swing.JComponent;
@@ -223,6 +224,7 @@ public class ScrIPARefChart extends PFrame {
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.length() == 0 ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
         }
     }//GEN-LAST:event_lblOtherSymbolsMouseClicked
@@ -241,6 +243,7 @@ public class ScrIPARefChart extends PFrame {
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.length() == 0 || ipaChar.length() == 0 ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
         }
     }//GEN-LAST:event_jLabel23MouseClicked
@@ -254,6 +257,7 @@ public class ScrIPARefChart extends PFrame {
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.length() == 0 || ipaChar.length() == 0 ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
         }
     }//GEN-LAST:event_lblPulmonicConsonantsMouseClicked
@@ -273,6 +277,7 @@ public class ScrIPARefChart extends PFrame {
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.length() == 0 ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
         }
     }//GEN-LAST:event_lblNonPulmonicConsonantsMouseClicked

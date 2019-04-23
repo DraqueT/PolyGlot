@@ -25,6 +25,7 @@ import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PRadioButton;
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.QuizEngine.Quiz;
 import PolyGlot.QuizEngine.QuizQuestion;
@@ -203,7 +204,7 @@ public class ScrQuizScreen extends PFrame {
                 }
             });
         } catch (Exception e) {
-            //e.printStackTrace();
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Population Error", "Problem populating question: "
                     + e.getLocalizedMessage(), core.getRootWindow());
         }

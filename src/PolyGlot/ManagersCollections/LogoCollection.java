@@ -22,6 +22,7 @@ package PolyGlot.ManagersCollections;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.LogoNode;
 import PolyGlot.PGTUtil;
 import java.io.IOException;
@@ -331,6 +332,7 @@ public class LogoCollection extends DictionaryCollection {
                 
                 addWordLogoRelation(word, relNode);
             } catch (NumberFormatException e) {
+                IOHandler.writeErrorLog(e);
                 loadLog += "\nLogograph load error: " + e.getLocalizedMessage();
             }
         }
@@ -352,6 +354,7 @@ public class LogoCollection extends DictionaryCollection {
                 LogoNode curNode = it.next();
                 curNode.loadRadicalRelations(nodeMap);
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 loadLog = e.getLocalizedMessage() + "\n";
             }
         }
@@ -373,6 +376,7 @@ public class LogoCollection extends DictionaryCollection {
         try {
             emptyNode.setLogoGraph(ImageIO.read(getClass().getResource(PGTUtil.notFoundImage)));
         } catch (IOException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("INTERNAL ERROR", 
                     "Unable to locate missing-image image.\nThis is kind of an ironic error.", null);
         }

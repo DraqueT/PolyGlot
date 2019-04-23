@@ -232,6 +232,8 @@ public final class ScrDeprecatedDeclensions extends PDialog {
                 newField.setToolTipText(core.getPronunciationMgr()
                         .getPronunciation(value));
             } catch (Exception e) {
+                // user error
+                // IOHandler.writeErrorLog(e);
                 newField.setToolTipText("Regex error: " + e.getLocalizedMessage());
             }
 

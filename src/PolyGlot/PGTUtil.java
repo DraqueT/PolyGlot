@@ -240,6 +240,7 @@ public class PGTUtil {
     public static final String grammarSoundSavePath = "grammarSounds/";
     public static final String reversionSavePath = "reversion/";
     public static final String reversionBaseFileName = "reversionXMLFile";
+    public static final String errorLogFile = "error_log.log";
     public static final String emptyFile = "<EMPTY>";
     public static final String tempFile = "xxTEMPPGTFILExx";
     public static final String polyGlotFont = "PolyGlot";
@@ -272,6 +273,7 @@ public class PGTUtil {
     public static final int maxProcRecursion = 100;
     public static final int defaultMaxRollbackVersions = 10;
     public static final int maxFilePathLength = 1000;
+    public static final int maxLogCharacters = 25000;
     
     // color constants
     public static final Color colorDisabledBG;

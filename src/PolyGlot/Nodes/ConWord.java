@@ -21,6 +21,7 @@
 package PolyGlot.Nodes;
 
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.ConWordCollection;
 import PolyGlot.PGTUtil;
 import PolyGlot.WebInterface;
@@ -80,6 +81,7 @@ public class ConWord extends DictNode {
         try {
             checkProc = checkValue.getPronunciation();
         } catch (Exception e) {
+            // IOHandler.writeErrorLog(e);
             checkProc = "Regex error: " + e.getLocalizedMessage();
         }
         
@@ -181,6 +183,7 @@ public class ConWord extends DictNode {
         try {
             this.setPronunciation(set.getPronunciation());
         } catch (Exception e) {
+            // IOHandler.writeErrorLog(e);
             this.setPronunciation("<ERROR>");
         }
         this.setId(set.getId());
@@ -271,6 +274,7 @@ public class ConWord extends DictNode {
             try {
                 ret = core.getTypes().getNodeById(typeId).getValue();
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 // If a type no longer exists, set the type ID to 0, then continue
                 typeId = 0;
             }
@@ -458,6 +462,7 @@ public class ConWord extends DictNode {
                 wordNode.appendChild(wordValue);
             } catch (Exception e) {
                 // Do nothing. Users are made aware of this issue elsewhere.
+                // IOHandler.writeErrorLog(e);
             }
 
             wordValue = doc.createElement(PGTUtil.wordDefXID);

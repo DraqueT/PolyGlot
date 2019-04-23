@@ -315,9 +315,12 @@ public class ImportFileHelper {
             try {
                 ret = Integer.valueOf(entry.trim());
             } catch (NumberFormatException e) {
+                // questionable practice here... not logging because of nature of try/catch in programmatic logic
+                // IOHandler.writeErrorLog(e);
                 ret = columnStringValue(entry.trim());
             }
         } catch (NumberFormatException e) {
+            IOHandler.writeErrorLog(e);
             throw new Exception("non-integer value in field.");
         }
 

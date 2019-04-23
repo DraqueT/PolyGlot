@@ -71,12 +71,15 @@ public class PTable extends JTable {
                 try {
                     tip = core.getPronunciationMgr().getPronunciation(target.toString());
                 } catch (Exception ex) {
+                    // user error: do not log
+                    // IOHandler.writeErrorLog(e);
                     tip = "MALFORMED PRONUNCIATION REGEX: " + ex.getLocalizedMessage();
                 }
             }
         } catch (ArrayIndexOutOfBoundsException ex) {
             // do nothing. This happens if a non-value portion of the table is hovered over due to how objects are fetched
             // all other errors bubble beyond this point
+            // IOHandler.writeErrorLog(e);
         }
         
         return tip.isEmpty() ? super.getToolTipText(e) : tip;

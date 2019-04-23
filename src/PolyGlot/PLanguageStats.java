@@ -64,6 +64,7 @@ public class PLanguageStats {
             thread.start();
             thread.join();
         } catch (InterruptedException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Language Stat Error", "Unable to generate langauge statistics: " + e.getLocalizedMessage(), core.getRootWindow());
         }
         
@@ -147,6 +148,7 @@ public class PLanguageStats {
                 } catch (Exception e) {
                     // do nothing. This is just a report, users will be made aware
                     // of illegal pronunciation values elsewhere
+                    // IOHandler.writeErrorLog(e);
                     phonArray = new ArrayList<>();
                 }
 
