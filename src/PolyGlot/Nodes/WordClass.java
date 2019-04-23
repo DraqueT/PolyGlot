@@ -19,6 +19,7 @@
  */
 package PolyGlot.Nodes;
 
+import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.WordClassCollection;
 import PolyGlot.PGTUtil;
 import java.util.ArrayList;
@@ -68,9 +69,10 @@ public class WordClass extends DictNode {
         copyProp.getValues().forEach((node) -> {
             try {
                 addValue(node.getValue(), node.getId());
-            } catch (Exception ex) {
+            } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 throw new ClassCastException("Problem setting class value: " 
-                        + ex.getLocalizedMessage());
+                        + e.getLocalizedMessage());
             }
         });
     }

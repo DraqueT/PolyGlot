@@ -34,6 +34,7 @@ import PolyGlot.CustomControls.PClassCheckboxPanel;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTable;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.DeclensionDimension;
 import PolyGlot.Nodes.DeclensionNode;
 import java.awt.Color;
@@ -141,6 +142,8 @@ public class ScrDeclensionGenSetup extends PDialog {
             try {
                 Pattern.compile(curRule.getRegex());
             } catch (Exception e) {
+                // user error
+                // IOHandler.writeErrorLog(e);
                 userMessage += "\nProblem with word match regex in rule " + curRule.getName() + ": " + e.getMessage();
                 ret = false;
             }
@@ -153,6 +156,8 @@ public class ScrDeclensionGenSetup extends PDialog {
 
                     Pattern.compile(curTransform.regex);
                 } catch (Exception e) {
+                    // user error
+                    // IOHandler.writeErrorLog(e);
                     userMessage += "\nProblem with regular expression under declension \'"
                             + core.getDeclensionManager().getCombNameFromCombId(typeId, curRule.getCombinationId())
                             + "\' in rule \'" + curRule.getName() + "\' transform \'" + curTransform.regex + " -> "

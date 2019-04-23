@@ -133,6 +133,7 @@ public class DictCore {
             populateVersionHierarchy();
             validateVersion();
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("CORE ERROR", "Error creating language core: " + e.getLocalizedMessage(), null);
         }
     }
@@ -204,6 +205,7 @@ public class DictCore {
         try {
             ret = ret.isEmpty() ? DictCore.class.getProtectionDomain().getCodeSource().getLocation().toURI().g‌​etPath() : ret;
         } catch (URISyntaxException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("PATH ERROR", "Unable to resolve root path of PolyGlot:\n"
                     + e.getLocalizedMessage(), rootWindow);
         }
@@ -368,6 +370,7 @@ public class DictCore {
                     java.awt.Desktop.getDesktop().browse(IOHandler.createTmpURL(
                             PLanguageStats.buildWordReport(core)));
                 } catch (IOException | URISyntaxException e) {
+                    IOHandler.writeErrorLog(e);
                     InfoBox.error("Statistics Error", "Unable to generate/display language statistics: " 
                             + e.getLocalizedMessage(), getRootWindow());
                 }
@@ -419,6 +422,7 @@ public class DictCore {
         try {
             IOHandler.setFontFrom(_fileName, this);
         } catch (IOException | FontFormatException e) {
+            IOHandler.writeErrorLog(e);
             warningLog += e.getLocalizedMessage() + "\n";
         }
         
@@ -442,24 +446,28 @@ public class DictCore {
         try {
             IOHandler.loadGrammarSounds(_fileName, grammarManager);
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             warningLog += e.getLocalizedMessage() + "\n";
         }
 
         try {
             logoCollection.loadRadicalRelations();
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             warningLog += e.getLocalizedMessage() + "\n";
         }
 
         try {
             IOHandler.loadLogographs(logoCollection, _fileName);
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             warningLog += e.getLocalizedMessage() + "\n";
         }
         
         try {
             IOHandler.loadReversionStates(reversionManager, _fileName);
         } catch (IOException e) {
+            IOHandler.writeErrorLog(e);
             warningLog += e.getLocalizedMessage() + "\n";
         }
 
@@ -503,6 +511,7 @@ public class DictCore {
             errorLog = handler.getErrorLog();
             // errorLog += handler.getWarningLog(); // warnings may be disregarded here
         } catch (IOException | ParserConfigurationException | SAXException e) {
+            IOHandler.writeErrorLog(e);
             errorLog = e.getLocalizedMessage();
         }
         
@@ -687,34 +696,42 @@ public class DictCore {
         setupNumbus();
 
         java.awt.EventQueue.invokeLater(() -> {
-            String overridePath = args.length > 1 ? args[1] : "";
-            ScrMainMenu s = null;
-            
-            // set DPI scaling to false (requires Java 9)
-            System.getProperties().setProperty("Dsun.java2d.dpiaware", "false");
-            
-            if (canStart()) {
-                try {
-                    // separated due to serious nature of Thowable vs Exception
-                    s = new ScrMainMenu(overridePath);
-                    s.checkForUpdates(false);
-                    s.setVisible(true);
-                    
-                    // open file if one is provided via arguments
-                    if (args.length > 0) {
-                        s.setFile(args[0]);
-                        s.openLexicon();
+            // catch all top level application killing throwables (and bubble up directly to ensure reasonable behavior)
+            try {
+                String overridePath = args.length > 1 ? args[1] : "";
+                ScrMainMenu s = null;
+
+                // set DPI scaling to false (requires Java 9)
+                System.getProperties().setProperty("Dsun.java2d.dpiaware", "false");
+
+                if (canStart()) {
+                    try {
+                        // separated due to serious nature of Thowable vs Exception
+                        s = new ScrMainMenu(overridePath);
+                        s.checkForUpdates(false);
+                        s.setVisible(true);
+
+                        // open file if one is provided via arguments
+                        if (args.length > 0) {
+                            s.setFile(args[0]);
+                            s.openLexicon();
+                        }
+                    } catch (Exception e) {
+                        IOHandler.writeErrorLog(e);
+                        InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
+                                + e.getMessage() + "\n"
+                                        + "Please contact developer (draquemail@gmail.com) for assistance.", null);
+
+                        if (s != null) {
+                            s.dispose();
+                        }
+                        // ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
-                            + ex.getMessage() + "\n"
-                                    + "Please contact developer (draquemail@gmail.com) for assistance.", null);
-                    
-                    if (s != null) {
-                        s.dispose();
-                    }
-                    // ex.printStackTrace();
                 }
+            } catch (Throwable t) {
+                InfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage(), null);
+                IOHandler.writeErrorLog(t);
+                throw t;
             }
         });
     }
@@ -727,8 +744,9 @@ public class DictCore {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScrMainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException e) {
+            java.util.logging.Logger.getLogger(ScrMainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, e);
+            IOHandler.writeErrorLog(e);
         }
     }
     
@@ -755,6 +773,7 @@ public class DictCore {
             // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
             ScrMainMenu.class.getClassLoader().loadClass("javafx.embed.swing.JFXPanel");
         } catch (ClassNotFoundException e) {
+            IOHandler.writeErrorLog(e);
             startProblems += "Unable to load Java FX. Download and install to use PolyGlot "
                     + "(JavaFX not included in some builds of Java 8 for Linux).\n";
         }

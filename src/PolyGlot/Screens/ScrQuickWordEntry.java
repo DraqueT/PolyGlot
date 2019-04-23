@@ -27,6 +27,7 @@ import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PTextPane;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordClassValue;
 import PolyGlot.Nodes.WordClass;
@@ -158,6 +159,8 @@ public final class ScrQuickWordEntry extends PDialog {
             core.getPronunciationMgr()
                 .getPronunciation(txtConWord.getText());
         } catch (Exception e) {
+            // user error
+            // IOHandler.writeErrorLog(e);
             InfoBox.error("Regex Error", "Unable to generate pronunciation: " 
                     + e.getLocalizedMessage(), this);
         }
@@ -232,6 +235,7 @@ public final class ScrQuickWordEntry extends PDialog {
             }
         } catch (Exception e) {
             // do nothing. The user will be informed of this elsewhere.
+            // IOHandler.writeErrorLog(e);
         }
         if (!test.getDefinition().isEmpty()) {
             // errors having to do with type patterns returned in def field.
@@ -270,6 +274,7 @@ public final class ScrQuickWordEntry extends PDialog {
 
             parent.refreshWordList(wordId);
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Word Error", "Unable to insert word: " + e.getMessage(), this);
         }
     }

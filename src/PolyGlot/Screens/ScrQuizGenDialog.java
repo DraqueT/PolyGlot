@@ -27,6 +27,7 @@ import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.QuizEngine.Quiz;
@@ -85,6 +86,8 @@ public class ScrQuizGenDialog extends PFrame {
         try {
             numQuestions = Integer.parseInt(txtNumQuestions.getText());
         } catch (NumberFormatException e) {
+            // user error
+            // IOHandler.writeErrorLog(e);
             InfoBox.error("Integer Value Required", "Number of questions must be an integer value.", core.getRootWindow());
             return;
         }
@@ -109,7 +112,7 @@ public class ScrQuizGenDialog extends PFrame {
             ScrQuizScreen.run(genQuiz, core);
             dispose();
         } catch (Exception e) {
-            //e.printStackTrace();
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), core.getRootWindow());
         }
     }

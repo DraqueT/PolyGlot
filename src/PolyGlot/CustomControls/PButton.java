@@ -53,6 +53,7 @@ public class PButton extends JButton implements MouseListener {
         try {
             super.setFont(IOHandler.getButtonFont());
         } catch (IOException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("FONT ERROR", e.getLocalizedMessage(), _core.getRootWindow());
         }
         

@@ -262,6 +262,7 @@ public class LogoNode extends DictNode {
                 addRadical((LogoNode) nodeMap.get(nodeId));
             } catch (NumberFormatException e) {
                 loadLog += "\nlogograph error: " + e.getLocalizedMessage();
+                // IOHandler.writeErrorLog(e);
             }
         }
         

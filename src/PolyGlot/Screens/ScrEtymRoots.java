@@ -28,6 +28,7 @@ import PolyGlot.CustomControls.PPanelDrawEtymology;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.EtymologyManager;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.EtyExternalParent;
@@ -289,8 +290,9 @@ public final class ScrEtymRoots extends PDialog {
     private void addRelation(Integer parentId, Integer childId) {
         try {
             core.getEtymologyManager().addRelation(parentId, childId);
-        } catch (EtymologyManager.IllegalLoopException ex) {
-            InfoBox.error("Illegal Loop: Parent not Added", ex.getLocalizedMessage(), this);
+        } catch (EtymologyManager.IllegalLoopException e) {
+            IOHandler.writeErrorLog(e);
+            InfoBox.error("Illegal Loop: Parent not Added", e.getLocalizedMessage(), this);
         }
     }
 

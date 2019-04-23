@@ -65,6 +65,8 @@ public class PTextFieldFilter extends DocumentFilter {
             try {
                 Double.parseDouble(text);
             } catch (NumberFormatException e) {
+                // non programatic exception
+                // IOHandler.writeErrorLog(e);
                 ret = false;
             }
         }

@@ -37,6 +37,7 @@ import javax.swing.JList;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import PolyGlot.CustomControls.PTextPane;
+import PolyGlot.IOHandler;
 import java.awt.Component;
 import javax.swing.JComponent;
 
@@ -201,6 +202,7 @@ public class ScrTypes extends PFrame {
             lstTypes.setSelectedIndex(0);
             lstTypes.ensureIndexIsVisible(0);
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Type Population Error", "Unable to populate types: "
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -278,6 +280,7 @@ public class ScrTypes extends PFrame {
         try {
             core.getTypes().insert();
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Type Creation Error", "Could not create new type: "
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -308,6 +311,7 @@ public class ScrTypes extends PFrame {
         try {
             core.getTypes().deleteNodeById(curType.getId());
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Deletion Error", "Unable to delete type." + e.getLocalizedMessage(), core.getRootWindow());
         }
         

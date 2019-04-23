@@ -340,6 +340,7 @@ public class ScrPrintToPDF extends PDialog {
         try {
             export = new PExportToPDF(core, txtSavePath.getText());
         } catch (IOException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Save Error", "Unable to initialize export object: " + e.getMessage(), core.getRootWindow());
             return;
         }
@@ -374,7 +375,7 @@ public class ScrPrintToPDF extends PDialog {
             
             this.dispose();
         } catch (Exception e) {
-            //e.printStackTrace(); 
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Save Error", "Unable to print to file: " + e.getMessage(), core.getRootWindow());
         }
         setCursor(Cursor.getDefaultCursor());

@@ -51,6 +51,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -65,12 +66,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -85,6 +89,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.util.IOUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -360,6 +365,8 @@ public class IOHandler {
         try {
             f.delete();
         } catch (Exception e) {
+            // can't write to folder, so don't bother trying to write log file...
+            // IOHandler.writeErrorLog(e);
             InfoBox.error("Permissions Error", "PolyGlot lacks permissions to write to its native folder.\n"
                     + "Please move to a folder with full write permissions: " + e.getLocalizedMessage(), null);
         }
@@ -530,8 +537,9 @@ public class IOHandler {
                 File fontFile = null;
                 try {
                     fontFile = IOHandler.getFontFile(ouputFont);
-                } catch (Exception ex) {
-                    writeLog += "\nerror: " + ex.getLocalizedMessage();
+                } catch (Exception e) {
+                    IOHandler.writeErrorLog(e);
+                    writeLog += "\nerror: " + e.getLocalizedMessage();
                 }
 
 
@@ -569,6 +577,7 @@ public class IOHandler {
                 out.closeEntry();
             }
         } catch (IOException e) {
+            IOHandler.writeErrorLog(e);
             writeLog += "\nUnable to write font to archive: " + e.getMessage();
         }
         return writeLog;
@@ -681,12 +690,14 @@ public class IOHandler {
                         ImageIO.write(curNode.getLogoGraph(), "png", out);
 
                         out.closeEntry();
-                    } catch (IOException ex) {
-                        writeLog += "\nUnable to save logograph: " + ex.getLocalizedMessage();
+                    } catch (IOException e) {
+                        IOHandler.writeErrorLog(e);
+                        writeLog += "\nUnable to save logograph: " + e.getLocalizedMessage();
                     }
                 }
-            } catch (IOException ex) {
-                writeLog += "\nUnable to save Logographs: " + ex.getLocalizedMessage();
+            } catch (IOException e) {
+                IOHandler.writeErrorLog(e);
+                writeLog += "\nUnable to save Logographs: " + e.getLocalizedMessage();
             }
         }
         
@@ -711,13 +722,15 @@ public class IOHandler {
                                 + curId.toString() + ".raw"));
                         out.write(curSound);
                         out.closeEntry();
-                    } catch (IOException ex) {
-                        writeLog += "\nUnable to save sound: " + ex.getLocalizedMessage();
+                    } catch (IOException e) {
+                        IOHandler.writeErrorLog(e);
+                        writeLog += "\nUnable to save sound: " + e.getLocalizedMessage();
                     }
 
                 }
-            } catch (IOException ex) {
-                writeLog += "\nUnable to save sounds: " + ex.getLocalizedMessage();
+            } catch (IOException e) {
+                IOHandler.writeErrorLog(e);
+                writeLog += "\nUnable to save sounds: " + e.getLocalizedMessage();
             }
         }
         return writeLog;
@@ -737,12 +750,14 @@ public class IOHandler {
                         ImageIO.write(curNode.getImage(), "png", out);
 
                         out.closeEntry();
-                    } catch (IOException ex) {
-                        writeLog += "\nUnable to save image: " + ex.getLocalizedMessage();
+                    } catch (IOException e) {
+                        IOHandler.writeErrorLog(e);
+                        writeLog += "\nUnable to save image: " + e.getLocalizedMessage();
                     }
                 }
-            } catch (IOException ex) {
-                writeLog += "\nUnable to save Images: " + ex.getLocalizedMessage();
+            } catch (IOException e) {
+                IOHandler.writeErrorLog(e);
+                writeLog += "\nUnable to save Images: " + e.getLocalizedMessage();
             }
         }
         return writeLog;
@@ -777,6 +792,7 @@ public class IOHandler {
                 ret = wrapFont(Font.createFont(Font.TRUETYPE_FONT, fontFile));
             }
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             // do nothing here. Failure means returning null
         }
         
@@ -887,6 +903,7 @@ public class IOHandler {
                 }
 
             } catch (FontFormatException | IOException e) {
+                IOHandler.writeErrorLog(e);
                 // null detected and message bubbled to user elsewhere
                 ret = null;
                 // e.printStackTrace();
@@ -1122,8 +1139,10 @@ public class IOHandler {
                     try (InputStream soundStream = zipFile.getInputStream(soundEntry)) {
                         sound = IOUtils.toByteArray(soundStream);
                     } catch (IOException e) {
+                        IOHandler.writeErrorLog(e);
                         loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
                     } catch (Exception e) {
+                        IOHandler.writeErrorLog(e);
                         loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
                     }
 
@@ -1404,6 +1423,8 @@ public class IOHandler {
             File file = new File(path);
             Desktop.getDesktop().open(file);
         } catch (IOException e) {
+            // internal logic based on thrown exception due to specific use case. No logging required.
+            // IOHandler.writeErrorLog(e);
             ret = false;
         }
 
@@ -1438,5 +1459,60 @@ public class IOHandler {
      */
     public static File getFileFromPath(String path) {
         return new File(path);
+    }
+    
+    /**
+     * Writes to the PolyGlot error log file
+     * @param exception 
+     */
+    public static void writeErrorLog(Throwable exception) {
+        String errorMessage = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
+        errorMessage += "-" + exception.getLocalizedMessage() + "-" + exception.getClass().getName();
+        Throwable rootCause = ExceptionUtils.getRootCause(exception);
+        rootCause = rootCause == null ? exception : rootCause;
+        errorMessage += "\n" + ExceptionUtils.getStackTrace(rootCause);
+        BufferedWriter writer;
+        
+        File errorLog = new File(PGTUtil.errorLogFile);
+        
+        try {
+            String output;
+            
+            if (errorLog.exists()) {
+                Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z");
+                String contents = logScanner.hasNext() ? logScanner.next() : "";
+                
+                writer = new BufferedWriter(new FileWriter(errorLog));
+                int length = contents.length();
+                int newLength = length + errorMessage.length();
+                
+                if (newLength > PGTUtil.maxLogCharacters) {
+                    contents = contents.substring(newLength - PGTUtil.maxLogCharacters);
+                }
+                
+                output = contents + errorMessage + "\n";
+            } else {
+                writer = new BufferedWriter(new FileWriter(errorLog));
+                output = errorMessage + "\n";
+            }
+            
+            writer.write(output);
+            writer.close();
+        } catch (IOException e) {
+            // Fail silently. This fails almost exclusively due to being run in write protected folder, caught elsewhere
+            // do not log to written file for obvious reasons
+            // IOHandler.writeErrorLog(e);
+        }
+    }
+    
+    public static String getErrorLog() throws FileNotFoundException {
+        String ret = "";
+        File errorLog = new File(PGTUtil.errorLogFile);
+        
+        if (errorLog.exists()) {
+            Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z");
+            ret = logScanner.hasNext() ? logScanner.next() : "";
+        }
+        return ret;
     }
 }

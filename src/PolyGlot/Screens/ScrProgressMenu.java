@@ -20,6 +20,7 @@
 package PolyGlot.Screens;
 
 import PolyGlot.CustomControls.InfoBox;
+import PolyGlot.IOHandler;
 import javax.swing.SwingUtilities;
 
 /**
@@ -98,6 +99,7 @@ public final class ScrProgressMenu extends javax.swing.JDialog {
                 try {
                     updateProcess();
                 } catch (InterruptedException e) {
+                    IOHandler.writeErrorLog(e);
                     InfoBox.error("Progress Error", "Error in progress bar: " + e.getLocalizedMessage(), null);
                     dispose();
                 }

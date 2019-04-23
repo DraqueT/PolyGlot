@@ -20,6 +20,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DictNode;
 import PolyGlot.QuizEngine.QuizQuestion.QuestionType;
@@ -71,6 +72,7 @@ public class PRadioButton extends JRadioButton {
                     try {
                         ret = ((ConWord)value).getPronunciation();
                     } catch (Exception e) {
+                        IOHandler.writeErrorLog(e);
                         ret = "<ERROR>";
                     }
                     break;

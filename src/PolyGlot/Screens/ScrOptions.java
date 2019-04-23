@@ -60,6 +60,8 @@ public final class ScrOptions extends PDialog {
                 try {
                     Integer.parseInt(((JTextField)input).getText());
                 } catch (NumberFormatException e) {
+                    // user error
+                    // IOHandler.writeErrorLog(e);
                     InfoBox.warning("Bad Input", "Please provide an integer (number) value.", optionsParent);
                     return false;
                 }

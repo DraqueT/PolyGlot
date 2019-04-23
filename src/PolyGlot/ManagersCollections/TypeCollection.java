@@ -85,6 +85,7 @@ public class TypeCollection extends DictionaryCollection {
             try {
                 procVal = word.getPronunciation();
             } catch (Exception e) {
+                // IOHandler.writeErrorLog(e);
                 procVal = "<ERROR>";
             }
             

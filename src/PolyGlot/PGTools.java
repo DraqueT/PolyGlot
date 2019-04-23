@@ -71,6 +71,8 @@ public class PGTools {
                     }
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
+                    // catch of thread interrupt not logworthy
+                    // IOHandler.writeErrorLog(e);
                 }
 
                 return null;

@@ -27,6 +27,7 @@ import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PLabel;
+import PolyGlot.IOHandler;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -382,11 +383,14 @@ public class ScrExcelImport extends PDialog {
             dispose();
             parent.openLexicon();
         } catch (InvalidFormatException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.warning("Unrecognized File Type", e.getLocalizedMessage(), core.getRootWindow());
         } catch (NumberFormatException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Import Error", "All column fields and sheet field must contain "
                     +"numeric values only:\n" + e.getLocalizedMessage(), this);
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
                     + ".\n Check to make certain that column mappings are correct "
                     +"(nothing above max cell value) and that the file is not corrupt:\n" 

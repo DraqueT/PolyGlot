@@ -105,6 +105,7 @@ public final class ScrMainMenu extends PFrame {
             backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
             jLabel1.setFont(IOHandler.getButtonFont().deriveFont(45f));
         } catch (IOException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Resource Error",
                     "Unable to load internal resource: " + e.getLocalizedMessage(),
                     core.getRootWindow());
@@ -116,6 +117,7 @@ public final class ScrMainMenu extends PFrame {
         try {
             core.getOptionsManager().loadIni();
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Options Load Error", "Unable to load options file or file corrupted:\n"
                     + e.getLocalizedMessage(), core.getRootWindow());
             IOHandler.deleteIni(core);
@@ -164,7 +166,9 @@ public final class ScrMainMenu extends PFrame {
         
         try {
             core.getOptionsManager().saveIni();
-        } catch (IOException ex) {
+        } catch (IOException e) {
+            // save error likely due to inability to write to disk, disable logging
+            // IOHandler.writeErrorLog(e);
             InfoBox.warning("INI Save Error", "Unable to save settings file on exit.", core.getRootWindow());
         }
 
@@ -236,10 +240,12 @@ public final class ScrMainMenu extends PFrame {
                 changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
             }
         } catch (IOException e) {
+            IOHandler.writeErrorLog(e);
             core = new DictCore(core); // don't allow partial loads
             InfoBox.error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage(), core.getRootWindow());
         } catch (IllegalStateException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.warning("File Read Problems", "Problems reading file:\n"
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -314,9 +320,9 @@ public final class ScrMainMenu extends PFrame {
             cleanSave = true;
         } catch (IOException | ParserConfigurationException
                 | TransformerException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Save Error", "Unable to save to file: "
                     + getCurFileName() + "\n\n" + e.getMessage(), core.getRootWindow());
-            // e.printStackTrace();
         }
 
         setCursor(Cursor.getDefaultCursor());
@@ -448,6 +454,7 @@ public final class ScrMainMenu extends PFrame {
                         dim.height + insets.bottom + insets.top,
                         true);
             } catch (InterruptedException e) {
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Resize Error",
                         "Unable to run resize animation: " + e.getLocalizedMessage(),
                         core.getRootWindow());
@@ -546,6 +553,7 @@ public final class ScrMainMenu extends PFrame {
                 try {
                     ScrUpdateAlert.run(verbose, core);
                 } catch (Exception e) {
+                    IOHandler.writeErrorLog(e);
                     if (verbose) {
                         PolyGlot.CustomControls.InfoBox.error("Update Problem",
                                 "Unable to check for update:\n"
@@ -589,6 +597,7 @@ public final class ScrMainMenu extends PFrame {
             
             InfoBox.info("Export Status", "Dictionary exported to " + fileName + ".", core.getRootWindow());
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.info("Export Problem", e.getLocalizedMessage(), core.getRootWindow());
         }
     }
@@ -631,6 +640,7 @@ public final class ScrMainMenu extends PFrame {
             }
             InfoBox.info("Export Success", "Font exported to: " + fileName, core.getRootWindow());
         } catch (IOException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Export Error", "Unable to export font: " + e.getMessage(), core.getRootWindow());
         }
     }
@@ -675,6 +685,8 @@ public final class ScrMainMenu extends PFrame {
                         + ". Please open readme.html in the application directory", core.getRootWindow());
             }
         } catch (URISyntaxException | IOException e) {
+            // no need to log this.
+            // IOHandler.writeErrorLog(e);
             InfoBox.error("Missing File", "Unable to open readme.html.", core.getRootWindow());
         }
     }
@@ -1464,6 +1476,7 @@ public final class ScrMainMenu extends PFrame {
         } catch (IOException e) {
             InfoBox.error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage(), this);
         } catch (FontFormatException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Font Format Error", "Unable to read " + fileName + " due to: " 
                     + e.getLocalizedMessage(), this);
         }

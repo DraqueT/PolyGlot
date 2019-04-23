@@ -31,6 +31,7 @@ import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTable;
 import PolyGlot.CustomControls.PTextField;
+import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Cursor;
@@ -87,6 +88,7 @@ public final class ScrDeclensionSetup extends PDialog {
             myType = _core.getTypes().getNodeById(_typeId);
             this.setTitle("Declensions/Conjugations for type: " + myType.getValue());
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Part of Speech Error",
                     "Part of Speech not found, unable to open declensions for type with id: "
                     + _typeId + " " + e.getMessage(), core.getRootWindow());
@@ -372,6 +374,7 @@ public final class ScrDeclensionSetup extends PDialog {
                 decMan.addDeclensionToTemplate(myType.getId(), -1, curNode);
             });
         } catch (ClassCastException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Error Copying Conjugations", "Unable to copy conjugations: " 
                     + e.getLocalizedMessage(), this);
         }
@@ -883,6 +886,7 @@ public final class ScrDeclensionSetup extends PDialog {
             try {
                 curDec = core.getDeclensionTemplate(myType.getId(), decId);
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Declension Population Error", "Unable to populate declension.\n\n"
                         + e.getMessage(), this);
                 curPopulating = populatingLocal;
@@ -971,6 +975,7 @@ public final class ScrDeclensionSetup extends PDialog {
         try {
             core.getDeclensionManager().deleteDeclensionFromTemplate(myType.getId(), scrToCoreDeclensions.get(curIndex));
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Declension Deletion Error", "Unable to delete Declension: "
                     + (String) lstDeclensionList.getSelectedValue() + "\n\n" + e.getMessage(), this);
         }
@@ -1027,6 +1032,7 @@ public final class ScrDeclensionSetup extends PDialog {
                 core.getDeclensionManager().updateDeclensionTemplate(myType.getId(), decId, decl);
             }
         } catch (ClassCastException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Declension Creation Error", "Unable to create Declension "
                     + txtDeclensionName.getText() + "\n\n" + e.getMessage(), this);
         }

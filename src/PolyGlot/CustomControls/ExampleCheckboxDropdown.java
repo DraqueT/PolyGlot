@@ -28,6 +28,7 @@ Once this is used elsewhere in code, delete this example, as it will be evident
 how to use it there.
  */
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import java.awt.*;
 import javax.swing.*;
 
@@ -69,8 +70,9 @@ public final class ExampleCheckboxDropdown extends JPanel {
     public static void createAndShowGui() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            IOHandler.writeErrorLog(e);
+            e.printStackTrace();
         }
         JFrame frame = new JFrame("CheckedComboBox");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

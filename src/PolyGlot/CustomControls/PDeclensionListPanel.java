@@ -20,6 +20,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.DeclensionNode;
@@ -114,6 +115,7 @@ public class PDeclensionListPanel extends JPanel implements PDeclensionPanelInte
             try {
                 ret = decMan.declineWord(word, fullDecId, word.getValue());
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 ret = "ERROR!";
             }
         }

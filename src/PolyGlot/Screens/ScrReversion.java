@@ -23,6 +23,7 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ReversionNode;
 import javax.swing.DefaultListModel;
 
@@ -112,6 +113,7 @@ public final class ScrReversion extends PDialog {
                 InfoBox.info("Successful Reversion", "Reversion Successful!", this);
                 this.dispose();
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Unable to Revert", "Unable to revert to prior version: " 
                         + e.getLocalizedMessage(), this);
             }

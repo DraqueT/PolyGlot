@@ -64,6 +64,7 @@ public class PGDocument extends DefaultStyledDocument {
             a.getDocument().insertString(start, "<img src=\"" + "https://www.topatoco.com/images/three-five.png" + "\">", null);
         } catch (BadLocationException e) {
             // do nothing
+            // IOHandler.writeErrorLog(e);
         }
     }
 }

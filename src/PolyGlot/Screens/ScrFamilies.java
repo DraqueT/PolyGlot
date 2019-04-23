@@ -28,6 +28,7 @@ import PolyGlot.CustomControls.FamTreeNode;
 import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PTree;
+import PolyGlot.IOHandler;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -632,8 +633,9 @@ public class ScrFamilies extends PFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            InfoBox.error("Window Error", "Unable to open families: " + ex.getLocalizedMessage(), _core.getRootWindow());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException e) {
+            IOHandler.writeErrorLog(e);
+            InfoBox.error("Window Error", "Unable to open families: " + e.getLocalizedMessage(), _core.getRootWindow());
         }
 
         // set the leaf icon to be a folder, since all nodes are for containing words

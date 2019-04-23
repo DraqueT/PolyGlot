@@ -60,6 +60,7 @@ public class PToolTipUI extends ToolTipUI
         try {
             font = IOHandler.getCharisUnicodeFontInitial().deriveFont((float)14.0);
         } catch (IOException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Font error", "Unable to load tooltip font: " 
                     + e.getLocalizedMessage(), null);
         }

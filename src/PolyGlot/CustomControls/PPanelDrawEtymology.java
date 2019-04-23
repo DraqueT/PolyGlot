@@ -20,6 +20,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ConWord;
 import PolyGlot.RectangularCoordinateMap;
 import PolyGlot.WebInterface;
@@ -297,6 +298,7 @@ public final class PPanelDrawEtymology extends JPanel {
                 wordMap.addRectangle(xOffset, xOffset + conFontMetrics.stringWidth(myNode.word.getValue()), 
                         curYDepth - conFontMetrics.getHeight(), curYDepth, myNode.word);
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Tooltip Generation error", "Error generating tooltip values: " 
                         + e.getLocalizedMessage(), core.getRootWindow());
             }
@@ -345,6 +347,7 @@ public final class PPanelDrawEtymology extends JPanel {
                 wordMap.addRectangle(xOffset, xOffset + conFontMetrics.stringWidth(myText), 
                         curYDepth - conFontMetrics.getHeight(), curYDepth, myNode.word);
             } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Tooltip Generation error", "Error generating tooltip values: " 
                         + e.getLocalizedMessage(), core.getRootWindow());
             }

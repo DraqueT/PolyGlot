@@ -232,6 +232,7 @@ public class ScrGrammarGuide extends PFrame {
                 soundRecorder.playPause();
             } catch (LineUnavailableException | IOException e) {
                 // ignore any sound errors here. We're killing the screen, and no process can be orphaned in doing so.
+                // IOHandler.writeErrorLog(e);
             }
         }
     }
@@ -675,6 +676,8 @@ public class ScrGrammarGuide extends PFrame {
         try {
             Integer.parseInt(txtFontSize.getText());
         } catch (NumberFormatException e) {
+            // user error
+            // IOHandler.writeErrorLog(e);
             InfoBox.warning("Font Size", "Invalid size: " + txtFontSize.getText(), core.getRootWindow());
             txtFontSize.setText("12");
         }
@@ -696,6 +699,7 @@ public class ScrGrammarGuide extends PFrame {
         try {
             txtTimer.setFont(IOHandler.getLcdFont().deriveFont(0, 18f));
         } catch (FontFormatException | IOException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), core.getRootWindow());
         }
 
@@ -748,6 +752,7 @@ public class ScrGrammarGuide extends PFrame {
                 doc.insertString(caretStart, " ", aset);
                 caretEnd++;
             } catch (BadLocationException e) {
+                IOHandler.writeErrorLog(e);
                 InfoBox.warning("Font Error", "Problem setting font: "
                         + e.getLocalizedMessage(), core.getRootWindow());
             }
@@ -840,6 +845,7 @@ public class ScrGrammarGuide extends PFrame {
                         txtSection.paste();
                         cb.restoreClipboard();
                     } catch (Exception ex) {
+                        IOHandler.writeErrorLog(ex);
                         InfoBox.error("Character Replacement Error",
                                 "Clipboard threw error during character replacement process:"
                                 + ex.getLocalizedMessage(), core.getRootWindow());
@@ -872,7 +878,7 @@ public class ScrGrammarGuide extends PFrame {
             try {
                 secNode.setSectionText(FormattedTextHelper.storageFormat(txtSection));
             } catch (Exception e) {
-                //e.printStackTrace();
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Section Save Error", "Unable to save section text: "
                         + e.getLocalizedMessage(), core.getRootWindow());
             }
@@ -937,10 +943,10 @@ public class ScrGrammarGuide extends PFrame {
             }
         } catch (LineUnavailableException | IOException e) {
             // on exception, inform user and replace sound recorder
+            IOHandler.writeErrorLog(e);
             soundRecorder = new SoundRecorder(this);
             soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
             InfoBox.error("Recorder Error", "Unable to end audio stream: " + e.getLocalizedMessage(), core.getRootWindow());
-            //e.printStackTrace();
         }
     }
 
@@ -988,7 +994,7 @@ public class ScrGrammarGuide extends PFrame {
             try {
                 soundRecorder.setSound(secNode.getRecording());
             } catch (Exception e) {
-                //e.printStackTrace();
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Recording Load Failure", "Unable to load recording: "
                         + e.getLocalizedMessage(), core.getRootWindow());
             }
@@ -996,9 +1002,9 @@ public class ScrGrammarGuide extends PFrame {
                 FormattedTextHelper.restoreFromString(secNode.getSectionText(),
                         txtSection, core);
             } catch (BadLocationException e) {
+                IOHandler.writeErrorLog(e);
                 InfoBox.error("Section Load Error", "Unable to load section text: "
                         + e.getLocalizedMessage(), core.getRootWindow());
-                //e.printStackTrace();
             }
             SwingUtilities.invokeLater(() -> {
                 panSection.getVerticalScrollBar().setValue(0);
@@ -1150,8 +1156,8 @@ public class ScrGrammarGuide extends PFrame {
         try {
             soundRecorder.playPause();
         } catch (LineUnavailableException | IOException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Play Error", "Unable to play due to: " + e.getLocalizedMessage(), core.getRootWindow());
-            //e.printStackTrace();
         }
     }
 
@@ -1170,8 +1176,8 @@ public class ScrGrammarGuide extends PFrame {
                 soundRecorder.beginRecording();
             }
         } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Recording Error", "Unable to record due to: " + e.getLocalizedMessage(), core.getRootWindow());
-            //e.printStackTrace();
         }
     }
 
