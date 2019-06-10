@@ -55,6 +55,7 @@ public class PropertiesManager {
     private boolean localMandatory = false;
     private boolean wordUniqueness = false;
     private boolean localUniqueness = false;
+    private boolean overrideRegexFont = false;
     private boolean ignoreCase = false;
     private boolean enableRomanization = false;
     private boolean disableProcRegex = false;
@@ -640,6 +641,11 @@ public class PropertiesManager {
         wordValue = doc.createElement(PGTUtil.langPropEnforceRTLXID);
         wordValue.appendChild(doc.createTextNode(isEnforceRTL() ? PGTUtil.True : PGTUtil.False));
         propContainer.appendChild(wordValue);
+        
+        // store option for overriding the regex display font
+        wordValue = doc.createElement(PGTUtil.langPropOverrideRegexFont);
+        wordValue.appendChild(doc.createTextNode(isOverrideRegexFont() ? PGTUtil.True : PGTUtil.False));
+        propContainer.appendChild(wordValue);
 
         // store option for Author and copyright info
         wordValue = doc.createElement(PGTUtil.langPropAuthCopyrightXID);
@@ -766,5 +772,19 @@ public class PropertiesManager {
         }
         
         return ret;
+    }
+
+    /**
+     * @return the overrideRegexFont
+     */
+    public boolean isOverrideRegexFont() {
+        return overrideRegexFont;
+    }
+
+    /**
+     * @param overrideRegexFont the overrideRegexFont to set
+     */
+    public void setOverrideRegexFont(boolean overrideRegexFont) {
+        this.overrideRegexFont = overrideRegexFont;
     }
 }

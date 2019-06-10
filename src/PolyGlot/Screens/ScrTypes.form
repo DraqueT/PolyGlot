@@ -122,7 +122,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Regex pattern which words of this type must conform to"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, false, &quot;-- Type Pattern --&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, &#xa;core.getPropertiesManager().isOverrideRegexFont(),&#xa;&quot;-- Type Pattern --&quot;)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnSetup">

@@ -407,7 +407,9 @@ public class ScrTypes extends PFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         txtName = new PTextField(core, true, "-- Part of Speech Name --");
-        txtTypePattern = new PTextField(core, false, "-- Type Pattern --");
+        txtTypePattern = new PTextField(core,
+            core.getPropertiesManager().isOverrideRegexFont(),
+            "-- Type Pattern --");
         btnSetup = new PButton(core);
         btnAutogen = new PButton(core);
         txtErrorBox = new javax.swing.JTextField();

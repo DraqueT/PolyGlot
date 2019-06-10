@@ -397,7 +397,7 @@
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, false, &quot;-- Filter Regex --&quot;)"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, &#xa;core.getPropertiesManager().isOverrideRegexFont(),&#xa;&quot;-- Filter Regex --&quot;)"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel3">

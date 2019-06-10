@@ -344,10 +344,12 @@ public class ScrPhonology extends PFrame {
         procTableModel.addTableModelListener((TableModelEvent e) -> {
             saveProcGuide();
         });
+        
+        boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 
         TableColumn column = tblProcs.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(true, core));
-        column.setCellRenderer(new PCellRenderer(true, core));
+        column.setCellEditor(new PCellEditor(useConFont, core));
+        column.setCellRenderer(new PCellRenderer(useConFont, core));
 
         column = tblProcs.getColumnModel().getColumn(1);
         column.setCellEditor(new PCellEditor(false, core));
@@ -376,6 +378,8 @@ public class ScrPhonology extends PFrame {
         tableModel.addTableModelListener((TableModelEvent e) -> {
             saveRepTable();
         });
+        
+        boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 
         TableColumn column = tblRep.getColumnModel().getColumn(0);
         final PCellEditor editChar = new PCellEditor(false, core);
@@ -416,7 +420,7 @@ public class ScrPhonology extends PFrame {
         column.setCellRenderer(new PCellRenderer(false, core));
 
         column = tblRep.getColumnModel().getColumn(1);
-        PCellEditor valueEdit = new PCellEditor(true, core);
+        PCellEditor valueEdit = new PCellEditor(useConFont, core);
         valueEdit.setIgnoreListenerSilenceing(true);
         valueEdit.setDocuListener(new DocumentListener() {
             @Override
@@ -435,7 +439,7 @@ public class ScrPhonology extends PFrame {
             }
         });
         column.setCellEditor(valueEdit);
-        column.setCellRenderer(new PCellRenderer(true, core));
+        column.setCellRenderer(new PCellRenderer(useConFont, core));
 
         // disable tab/arrow selection
         InputMap procInput = tblRom.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -460,10 +464,12 @@ public class ScrPhonology extends PFrame {
         romTableModel.addTableModelListener((TableModelEvent e) -> {
             saveRomGuide();
         });
+        
+        boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 
         TableColumn column = tblRom.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(true, core));
-        column.setCellRenderer(new PCellRenderer(true, core));
+        column.setCellEditor(new PCellEditor(useConFont, core));
+        column.setCellRenderer(new PCellRenderer(useConFont, core));
 
         column = tblRom.getColumnModel().getColumn(1);
         column.setCellEditor(new PCellEditor(false, core));

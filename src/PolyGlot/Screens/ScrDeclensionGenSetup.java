@@ -183,8 +183,10 @@ public class ScrDeclensionGenSetup extends PDialog {
      * sets fonts of objects
      */
     private void setObjectProperties() {
-        Font setFont = core.getPropertiesManager().getFontCon();
-        txtRuleRegex.setFont(setFont);
+        if (!core.getPropertiesManager().isOverrideRegexFont()) {
+            Font setFont = core.getPropertiesManager().getFontCon();
+            txtRuleRegex.setFont(setFont);
+        }
     }
 
     /**
@@ -300,14 +302,16 @@ public class ScrDeclensionGenSetup extends PDialog {
         if (lstRules.getSelectedIndices().length > 1) {
             return;
         }
+        
+        boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 
         TableColumn column = tblTransforms.getColumnModel().getColumn(0);
-        column.setCellEditor(new PCellEditor(true, core));
-        column.setCellRenderer(new PCellRenderer(true, core));
-
+        column.setCellEditor(new PCellEditor(useConFont, core));
+        column.setCellRenderer(new PCellRenderer(useConFont, core));
+        
         column = tblTransforms.getColumnModel().getColumn(1);
-        column.setCellEditor(new PCellEditor(true, core));
-        column.setCellRenderer(new PCellRenderer(true, core));
+        column.setCellEditor(new PCellEditor(useConFont, core));
+        column.setCellRenderer(new PCellRenderer(useConFont, core));
 
         // do nothing if nothing selected in rule list
         if (curRule == null) {
@@ -981,7 +985,9 @@ public class ScrDeclensionGenSetup extends PDialog {
         jButton2.setFont(core.getPropertiesManager().getFontMenu());
         jPanel3 = new javax.swing.JPanel();
         txtRuleName = new PTextField(core, true, "-- Name --");
-        txtRuleRegex = new PTextField(core, false, "-- Filter Regex --");
+        txtRuleRegex = new PTextField(core,
+            core.getPropertiesManager().isOverrideRegexFont(),
+            "-- Filter Regex --");
         jLabel3 = new PLabel("", core);
         sclTransforms = new javax.swing.JScrollPane();
         tblTransforms = new PTable(core);
