@@ -149,22 +149,19 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="chkTypesMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkWordUniqueness" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkDisableProcRegex" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="chkLocalMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="chkTypesMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="chkWordUniqueness" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="chkDisableProcRegex" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="chkEnforceRTL" min="-2" max="-2" attributes="0"/>
-                                          <Component id="chkLocalUniqueness" min="-2" max="-2" attributes="0"/>
-                                          <Component id="chkIgnoreCase" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
                               </Group>
-                              <EmptySpace min="0" pref="41" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="chkOverrideRegexFont" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkEnforceRTL" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkLocalUniqueness" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkIgnoreCase" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="24" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -191,7 +188,10 @@
                           <Component id="chkEnforceRTL" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="chkLocalMandatory" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="chkLocalMandatory" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkOverrideRegexFont" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -267,10 +267,19 @@
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="Lexical Enfocement"/>
+                <Property name="text" type="java.lang.String" value="Language Toggles"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkOverrideRegexFont">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Override Regex Font"/>
+                <Property name="toolTipText" type="java.lang.String" value="This overrides the font of all display elements within PolyGlot to show a default font (if your script makes regexes hard to work with)"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
               </AuxValues>
             </Component>
           </SubComponents>

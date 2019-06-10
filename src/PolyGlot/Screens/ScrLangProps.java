@@ -140,6 +140,7 @@ public class ScrLangProps extends PFrame {
         chkTypesMandatory.setSelected(prop.isTypesMandatory());
         chkWordUniqueness.setSelected(prop.isWordUniqueness());
         chkEnforceRTL.setSelected(prop.isEnforceRTL());
+        chkOverrideRegexFont.setSelected(prop.isOverrideRegexFont());
         txtKerning.setValue(prop.getKerningSpace());
     }
 
@@ -161,6 +162,7 @@ public class ScrLangProps extends PFrame {
             propMan.setTypesMandatory(chkTypesMandatory.isSelected());
             propMan.setWordUniqueness(chkWordUniqueness.isSelected());
             propMan.setEnforceRTL(chkEnforceRTL.isSelected());
+            propMan.setOverrideRegexFont(chkOverrideRegexFont.isSelected());
             propMan.setKerningSpace(Double.parseDouble(txtKerning.getText()));
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
@@ -270,6 +272,7 @@ public class ScrLangProps extends PFrame {
         chkDisableProcRegex = new PCheckBox(core);
         chkEnforceRTL = new PCheckBox(core);
         jLabel2 = new PLabel("", core);
+        chkOverrideRegexFont = new PCheckBox(core);
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new PLabel("", core);
         jLabel3 = new PLabel("", core);
@@ -331,7 +334,10 @@ public class ScrLangProps extends PFrame {
         });
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Lexical Enfocement");
+        jLabel2.setText("Language Toggles");
+
+        chkOverrideRegexFont.setText("Override Regex Font");
+        chkOverrideRegexFont.setToolTipText("This overrides the font of all display elements within PolyGlot to show a default font (if your script makes regexes hard to work with)");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -344,18 +350,17 @@ public class ScrLangProps extends PFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkLocalMandatory)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(chkTypesMandatory)
-                                    .addComponent(chkWordUniqueness)
-                                    .addComponent(chkDisableProcRegex))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(chkEnforceRTL)
-                                    .addComponent(chkLocalUniqueness)
-                                    .addComponent(chkIgnoreCase))))
-                        .addGap(0, 41, Short.MAX_VALUE)))
+                            .addComponent(chkTypesMandatory)
+                            .addComponent(chkWordUniqueness)
+                            .addComponent(chkDisableProcRegex)
+                            .addComponent(chkLocalMandatory))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkOverrideRegexFont)
+                            .addComponent(chkEnforceRTL)
+                            .addComponent(chkLocalUniqueness)
+                            .addComponent(chkIgnoreCase))
+                        .addGap(0, 24, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -375,7 +380,9 @@ public class ScrLangProps extends PFrame {
                     .addComponent(chkDisableProcRegex)
                     .addComponent(chkEnforceRTL))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(chkLocalMandatory)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkLocalMandatory)
+                    .addComponent(chkOverrideRegexFont))
                 .addContainerGap())
         );
 
@@ -556,6 +563,7 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JCheckBox chkIgnoreCase;
     private javax.swing.JCheckBox chkLocalMandatory;
     private javax.swing.JCheckBox chkLocalUniqueness;
+    private javax.swing.JCheckBox chkOverrideRegexFont;
     private javax.swing.JCheckBox chkTypesMandatory;
     private javax.swing.JCheckBox chkWordUniqueness;
     private javax.swing.JButton jButton1;

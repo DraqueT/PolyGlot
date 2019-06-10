@@ -123,6 +123,7 @@ public class CustHandlerFactory {
             boolean bgenderName = false;
             boolean bgender = false;
             boolean blangName = false;
+            boolean blangRegexFontOvr = false;
             boolean bfontSize = false;
             boolean bfontStyle = false;
             boolean bfontLocalSize = false;
@@ -285,6 +286,8 @@ public class CustHandlerFactory {
                     bgenderNotes = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropLangNameXID)) {
                     blangName = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropOverrideRegexFont)) {
+                    blangRegexFontOvr = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontSizeXID)) {
                     bfontSize = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalFontSizeXID)) {
@@ -656,6 +659,8 @@ public class CustHandlerFactory {
                     bwordoverAutoDec = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropLangNameXID)) {
                     blangName = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropOverrideRegexFont)) {
+                    blangRegexFontOvr = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontSizeXID)) {
                     bfontSize = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropFontStyleXID)) {
@@ -991,6 +996,8 @@ public class CustHandlerFactory {
                 } else if (blangName) {
                     propertiesManager.setLangName(propertiesManager.getLangName()
                             + new String(ch, start, length));
+                } else if (blangRegexFontOvr) {
+                    propertiesManager.setOverrideRegexFont(new String(ch, start, length).equals(PGTUtil.True));
                 } else if (bfontSize) {
                     propertiesManager.setFontSize(Integer.parseInt(new String(ch, start, length)));
                     bfontSize = false;
