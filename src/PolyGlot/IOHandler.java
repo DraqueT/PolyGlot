@@ -772,11 +772,9 @@ public class IOHandler {
      * @param font
      * @return 
      */
-    private static Font wrapFont(Font font) {
-        Map attributes = font.getAttributes();
-        attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
-        attributes.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
-        return font.deriveFont(attributes);
+    private static Font wrapFont(Font _font) {
+        Font font = PGTUtil.addFontAttribute(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON, _font);
+        return PGTUtil.addFontAttribute(TextAttribute.KERNING, TextAttribute.KERNING_ON, font);
     }
 
     /**
@@ -903,10 +901,10 @@ public class IOHandler {
                 }
 
             } catch (FontFormatException | IOException e) {
-                IOHandler.writeErrorLog(e);
+                // "Font name not found" errors due to Java bug (Java does not recognize some Mac style ttf fonts)
+                IOHandler.writeErrorLog(e, path);
                 // null detected and message bubbled to user elsewhere
                 ret = null;
-                // e.printStackTrace();
             }
         }
 
@@ -1466,12 +1464,25 @@ public class IOHandler {
      * @param exception 
      */
     public static void writeErrorLog(Throwable exception) {
+        writeErrorLog(exception, "");
+    }
+    
+    /**
+     * Writes to the PolyGlot error log file
+     * @param exception 
+     * @param comment 
+     */
+    public static void writeErrorLog(Throwable exception, String comment) {
         String errorMessage = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
         errorMessage += "-" + exception.getLocalizedMessage() + "-" + exception.getClass().getName();
         Throwable rootCause = ExceptionUtils.getRootCause(exception);
         rootCause = rootCause == null ? exception : rootCause;
         errorMessage += "\n" + ExceptionUtils.getStackTrace(rootCause);
         BufferedWriter writer;
+        
+        if (!comment.isEmpty()) {
+            errorMessage = comment + ":\n" + errorMessage;
+        }
         
         File errorLog = new File(PGTUtil.errorLogFile);
         
@@ -1496,6 +1507,8 @@ public class IOHandler {
                 output = errorMessage + "\n";
             }
             
+            output = getSystemInformation() + "\n" + output;
+            
             writer.write(output);
             writer.close();
         } catch (IOException e) {
@@ -1503,6 +1516,36 @@ public class IOHandler {
             // do not log to written file for obvious reasons
             // IOHandler.writeErrorLog(e);
         }
+    }
+    
+    /**
+     * Gets system information in human readable format
+     * @return system information
+     */
+    public static String getSystemInformation() {
+        List<String> attributes = Arrays.asList("java.version",
+            "java.vendor",
+            "java.vendor.url",
+            "java.vm.specification.version",
+            "java.vm.specification.name",
+            "java.vm.version",
+            "java.vm.vendor",
+            "java.vm.name",
+            "java.specification.version",
+            "java.specification.vendor",
+            "java.specification.name",
+            "java.class.version",
+            "java.ext.dirs",
+            "os.name",
+            "os.arch",
+            "os.version");
+        String ret = "";
+        
+        for (String attribute : attributes) {
+            ret += attribute + " : " + System.getProperty(attribute) + "\n";
+        }
+        
+        return ret;
     }
     
     public static String getErrorLog() throws FileNotFoundException {

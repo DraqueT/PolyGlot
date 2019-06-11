@@ -24,7 +24,7 @@ package PolyGlot;
  * standardize this when handing them around
  * @author draque.thompson
  */
-public class PFontInfo {
+public final class PFontInfo {
     public java.awt.Font awtFont;
     public java.awt.Color awtColor;
     public int size;

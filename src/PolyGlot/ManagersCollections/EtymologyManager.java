@@ -76,11 +76,11 @@ public class EtymologyManager {
         }
         
         if (!parentToChild.containsKey(parent)) {
-            List newList = new ArrayList<>();
+            List<Integer> newList = new ArrayList<>();
             newList.add(child);
             parentToChild.put(parent, newList);
         } else {
-            List myList = parentToChild.get(parent);
+            List<Integer> myList = parentToChild.get(parent);
             
             if (!myList.contains(child)) {
                 myList.add(child);
@@ -88,11 +88,11 @@ public class EtymologyManager {
         }
         
         if (!childToParent.containsKey(child)) {
-            List newList = new ArrayList<>();
+            List<Integer> newList = new ArrayList<>();
             newList.add(parent);
             childToParent.put(child, newList);
         } else {
-            List myList = childToParent.get(child);
+            List<Integer> myList = childToParent.get(child);
             
             if (!myList.contains(parent)) {
                 myList.add(parent);
@@ -246,7 +246,7 @@ public class EtymologyManager {
      * @return alphabetical list by word + (language)
      */
     private List<EtyExternalParent> getExtParentList() {
-        List<EtyExternalParent> ret = new ArrayList(allExtParents.values());        
+        List<EtyExternalParent> ret = new ArrayList<>(allExtParents.values());        
         Collections.sort(ret);
         return ret;
     }

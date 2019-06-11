@@ -21,6 +21,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import PolyGlot.PGTUtil;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -50,17 +51,17 @@ public class PCellRenderer implements TableCellRenderer {
     public PCellRenderer(boolean _useConFont, DictCore _core) {
         core = _core; 
         useConFont = _useConFont;
+        Integer preSize = core.getPropertiesManager().getFontSize();
+        preSize = preSize == null ? 0 : preSize;
+        
         Font selectedFont = useConFont ? 
                 core.getPropertiesManager().getFontCon() : 
                 core.getPropertiesManager().getFontLocal();
         fontSize = useConFont ? 
-                core.getPropertiesManager().getFontSize() :
+                preSize :
                 core.getOptionsManager().getMenuFontSize();
         
-        Map attr = selectedFont.getAttributes();
-
-        attr.put(TextAttribute.SIZE, (float) fontSize);
-        myFont = selectedFont.deriveFont(attr);
+        myFont = PGTUtil.addFontAttribute(TextAttribute.SIZE, (float)fontSize, selectedFont);
     }
     
     public void setBackground(Color _background) {

@@ -204,7 +204,7 @@ public class ScrLogoQuickView extends PFrame {
     private void populateLogos(List<LogoNode> logos) {
         Iterator<LogoNode> it = logos.iterator();
 
-        DefaultListModel newModel = new DefaultListModel();
+        DefaultListModel<Object> newModel = new DefaultListModel<>();
 
         while (it.hasNext()) {
             newModel.addElement(it.next());
@@ -281,7 +281,7 @@ public class ScrLogoQuickView extends PFrame {
             LogoNode addLogo = logoFinder.getSelectedLogo();
             
             if (core.getLogoCollection().addWordLogoRelation(conWord, addLogo)) {
-                ((DefaultListModel) lstLogos.getModel()).addElement(addLogo);
+                ((DefaultListModel<Object>) lstLogos.getModel()).addElement(addLogo);
                 logoFinder.refreshRelatedWords();
             }
         }
@@ -318,7 +318,7 @@ public class ScrLogoQuickView extends PFrame {
 
         lblLogoPic.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lstLogos.setModel(new javax.swing.AbstractListModel() {
+        lstLogos.setModel(new javax.swing.AbstractListModel<Object>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -458,6 +458,6 @@ public class ScrLogoQuickView extends PFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblLogoPic;
-    private javax.swing.JList lstLogos;
+    private javax.swing.JList<Object> lstLogos;
     // End of variables declaration//GEN-END:variables
 }

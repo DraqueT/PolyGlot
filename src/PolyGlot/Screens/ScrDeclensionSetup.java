@@ -364,6 +364,7 @@ public final class ScrDeclensionSetup extends PDialog {
             return;
         }
         
+        @SuppressWarnings("unchecked") // this is checked above - supress
         ArrayList<DeclensionNode> conjNodes = (ArrayList)fromClipBoard;
         DeclensionManager decMan = core.getDeclensionManager();
         
@@ -1099,7 +1100,7 @@ public final class ScrDeclensionSetup extends PDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JList lstDeclensionList;
+    private javax.swing.JList<String> lstDeclensionList;
     private javax.swing.JScrollPane sclDimensions;
     private javax.swing.JTable tblDimensions;
     private javax.swing.JTextField txtDeclensionName;

@@ -22,6 +22,7 @@ package PolyGlot;
 import PolyGlot.CustomControls.GrammarChapNode;
 import PolyGlot.CustomControls.GrammarSectionNode;
 import PolyGlot.CustomControls.PGrammarPane;
+import PolyGlot.FormattedTextHelper.SecEntry;
 import java.awt.Color;
 import java.util.List;
 import java.util.Map.Entry;

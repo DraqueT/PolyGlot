@@ -98,7 +98,7 @@ public class ScrFamilies extends PFrame {
         TreeModel newModel = new DefaultTreeModel(root);
         treFam.setModel(newModel);
         treFam.setRootVisible(false);
-        lstWords.setModel(new DefaultListModel());
+        lstWords.setModel(new DefaultListModel<Object>());
         lstWords.setFont(core.getPropertiesManager().getFontCon());
     }
     
@@ -309,7 +309,7 @@ public class ScrFamilies extends PFrame {
     private void updateWordsProp() {
         FamTreeNode curNode = (FamTreeNode) treFam.getLastSelectedPathComponent();
 
-        DefaultListModel model = (DefaultListModel) lstWords.getModel();
+        DefaultListModel<Object> model = (DefaultListModel<Object>) lstWords.getModel();
 
         model.clear();
 
@@ -436,7 +436,7 @@ public class ScrFamilies extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         chkInclSubFam = new PCheckBox(core);
         jScrollPane3 = new javax.swing.JScrollPane();
-        lstWords = new javax.swing.JList();
+        lstWords = new javax.swing.JList<>();
         jLabel1 = new PLabel("", core);
         btnAddWord = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelWord = new PolyGlot.CustomControls.PAddRemoveButton("-");
@@ -673,7 +673,7 @@ public class ScrFamilies extends PFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JList lstWords;
+    private javax.swing.JList<Object> lstWords;
     private javax.swing.JTree treFam;
     private javax.swing.JTextField txtFamName;
     private javax.swing.JTextPane txtNotes;

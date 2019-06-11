@@ -36,7 +36,7 @@ import org.w3c.dom.Element;
  * Contains all word classes and what parts of speech they may apply to
  * @author Draque
  */
-public class WordClassCollection extends DictionaryCollection {
+public class WordClassCollection extends DictionaryCollection<WordClass> {
 
     private List<List<PEntry<Integer, Integer>>> comboCache = null;
     private final DictCore core;
@@ -65,7 +65,8 @@ public class WordClassCollection extends DictionaryCollection {
      * @return inserted Id
      * @throws java.lang.Exception
      */
-    public int insert() throws Exception {
+    @Override
+    public Integer insert() throws Exception {
         int ret;
 
         if (bufferNode.getId() > 0) {
@@ -141,7 +142,7 @@ public class WordClassCollection extends DictionaryCollection {
 
         if (comboCache != null && comboCache.size() > 0) {
             for (int i = 0; (i - offset) < numRandom && i + offset < comboCache.size(); i++) {
-                if (propCombEqual(comboCache.get(i + offset), new ArrayList(excludeWord.getClassValues()))) {
+                if (propCombEqual(comboCache.get(i + offset), new ArrayList<>(excludeWord.getClassValues()))) {
                     offset++;
                     continue;
                 }
@@ -183,7 +184,7 @@ public class WordClassCollection extends DictionaryCollection {
         comboCache = new ArrayList<>();
 
         if (!nodeMap.isEmpty()) {
-            buildComboCacheInternal(0, new ArrayList(nodeMap.values()),
+            buildComboCacheInternal(0, new ArrayList<>(nodeMap.values()),
                     new ArrayList<>());
         }
     }
@@ -192,8 +193,8 @@ public class WordClassCollection extends DictionaryCollection {
         WordClass curProp = props.get(depth);
 
         curProp.getValues().forEach((curVal) -> {
-            ArrayList<PEntry<Integer, Integer>> newList = new ArrayList(curList);
-            newList.add(new PEntry(curProp.getId(), curVal.getId()));
+            ArrayList<PEntry<Integer, Integer>> newList = new ArrayList<>(curList);
+            newList.add(new PEntry<>(curProp.getId(), curVal.getId()));
 
             // if at max depth, cease recursion
             if (depth == props.size() - 1) {

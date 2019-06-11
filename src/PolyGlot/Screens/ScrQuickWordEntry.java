@@ -331,8 +331,8 @@ public final class ScrQuickWordEntry extends PDialog {
                 pnlClasses.add(textField, gbc);
                 classComboMap.put(curProp.getId(), textField); // dropbox mapped to related class ID.
             } else {
-                final PComboBox classBox = new PComboBox(core);
-                DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
+                final PComboBox<Object> classBox = new PComboBox<>(core);
+                DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 comboModel.addElement("-- " + curProp.getValue() + " --");
 
@@ -422,7 +422,7 @@ public final class ScrQuickWordEntry extends PDialog {
         setMinimumSize(new java.awt.Dimension(335, 406));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(1));
         jPanel1.setMinimumSize(new java.awt.Dimension(265, 57));
 
         chkLocal.setSelected(true);
@@ -502,9 +502,9 @@ public final class ScrQuickWordEntry extends PDialog {
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(1));
 
-        cmbType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbTypeActionPerformed(evt);
@@ -650,7 +650,7 @@ public final class ScrQuickWordEntry extends PDialog {
     private javax.swing.JCheckBox chkLocal;
     private javax.swing.JCheckBox chkProc;
     private javax.swing.JCheckBox chkType;
-    private javax.swing.JComboBox cmbType;
+    private javax.swing.JComboBox<Object> cmbType;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

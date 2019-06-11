@@ -113,8 +113,8 @@ public final class ScrLexicon extends PFrame {
     private TextField txtLocalSrc;
     private TextField txtProcSrc;
     private TextField txtDefSrc;
-    private ComboBox cmbTypeSrc;
-    private ComboBox cmbRootSrc;
+    private ComboBox<Object> cmbTypeSrc;
+    private ComboBox<Object> cmbRootSrc;
     private boolean curPopulating = false;
     private boolean namePopulating = false;
     private boolean forceUpdate = false;
@@ -143,7 +143,7 @@ public final class ScrLexicon extends PFrame {
         txtRom.setToolTipText("Romanized representation of word");
         initComponents();
 
-        lstLexicon.setModel(new DefaultListModel());
+        lstLexicon.setModel(new DefaultListModel<Object>());
 
         setupFilterMenu();
         setupComboBoxesSwing();
@@ -243,7 +243,7 @@ public final class ScrLexicon extends PFrame {
                 core = _core;
             }
             
-            lstLexicon.setModel(new DefaultListModel());
+            lstLexicon.setModel(new DefaultListModel<Object>());
             setDefaultValues();
             populateLexicon();
             lstLexicon.setSelectedIndex(0);
@@ -443,8 +443,8 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classText, gbc);
                 classPropMap.put(curProp.getId(), classText); // text box mapped to related class ID.
             } else {
-                final JComboBox classBox = new PComboBox(core);
-                DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
+                final JComboBox<Object> classBox = new PComboBox<>(core);
+                DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 comboModel.addElement("-- " + curProp.getValue() + " --");
 
@@ -909,14 +909,14 @@ public final class ScrLexicon extends PFrame {
         txtDefSrc.setPromptText("Search by Definition...");
         txtDefSrc.setFont(font);
         txtDefSrc.setTooltip(new Tooltip("Filter lexicon entries based on definition value of your language's words"));
-        cmbTypeSrc = new ComboBox();
+        cmbTypeSrc = new ComboBox<>();
         cmbTypeSrc.setTooltip(new Tooltip("Filter lexicon entries based on their parts of speech"));
         gridTitlePane = new TitledPane();
         gridTitlePane.setFont(font);
         chkFindBad = new CheckBox();
         chkFindBad.setFont(font);
         chkFindBad.setTooltip(new Tooltip("Filter lexicon entries to find words with illegal values"));
-        cmbRootSrc = new ComboBox();
+        cmbRootSrc = new ComboBox<>();
         cmbRootSrc.setCellFactory(
                 new Callback<ListView<Object>, ListCell<Object>>() {
             @Override
@@ -1441,7 +1441,7 @@ public final class ScrLexicon extends PFrame {
         curPopulating = true;
 
         try {
-            DefaultListModel listModel = new DefaultListModel();
+            DefaultListModel<Object> listModel = new DefaultListModel<>();
 
             while (lexIt.hasNext()) {
                 ConWord curNode = lexIt.next();
@@ -2086,7 +2086,7 @@ public final class ScrLexicon extends PFrame {
     private javax.swing.JButton btnLogographs;
     private javax.swing.JCheckBox chkProcOverride;
     private javax.swing.JCheckBox chkRuleOverride;
-    private javax.swing.JComboBox cmbType;
+    private javax.swing.JComboBox<Object> cmbType;
     private javax.swing.JButton jButton1;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
@@ -2097,7 +2097,7 @@ public final class ScrLexicon extends PFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JList lstLexicon;
+    private javax.swing.JList<Object> lstLexicon;
     private javax.swing.JPanel pnlClasses;
     private javax.swing.JTextField txtConWord;
     private javax.swing.JTextPane txtDefinition;

@@ -26,10 +26,10 @@ import java.util.HashMap;
  * constructed lettering.
  * 
  * @author Draque Thompson
- * @param <String>
- * @param <Integer>
+ * @param <K>
+ * @param <V>
  */
-public class PAlphaMap<String,Integer> extends HashMap {
+public class PAlphaMap<K, V> extends HashMap<K, V> {
     int longestEntry = 0;
     
     /**
@@ -39,14 +39,14 @@ public class PAlphaMap<String,Integer> extends HashMap {
      * @return 
      */
     @Override
-    public Object put(Object key, Object orderVal) {
+    public V put(K key, V orderVal) {
         java.lang.String sKey = (java.lang.String)key;
         int keyLen = sKey.length();
         if (keyLen > longestEntry) {
             longestEntry = keyLen;
         }
         
-        return super.put(key, orderVal);
+        return (V)super.put((K)key, (V)orderVal);
     }
     
     public int getLongestEntry() {

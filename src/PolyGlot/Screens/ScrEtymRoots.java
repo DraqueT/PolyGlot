@@ -255,10 +255,10 @@ public final class ScrEtymRoots extends PDialog {
         });
 
         //create new dropdown for potential additional parent to be added
-        final PComboBox newParentBox = new PComboBox(core);
+        final PComboBox<Object> newParentBox = new PComboBox<>(core);
         newParentBox.setToolTipText("Add new parent to word here.");
         newParentBox.setFont(core.getPropertiesManager().getFontCon());
-        DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
+        DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
         newParentBox.setModel(comboModel);
         newParentBox.setMaximumSize(new Dimension(99999, newParentBox.getPreferredSize().height));
         comboModel.addElement("");

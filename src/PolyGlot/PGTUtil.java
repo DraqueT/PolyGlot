@@ -22,7 +22,9 @@ package PolyGlot;
 
 import PolyGlot.Screens.*;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
+import java.util.Map;
 import javax.swing.ImageIcon;
 
 /**
@@ -408,5 +410,19 @@ public class PGTUtil {
      */
     public static String stripRTL(String strip) {
         return strip.replace(RTLMarker, "").replace(LTRMarker, "");
+    }
+    
+    /**
+     * Adds attributes to fontmapping
+     * @param key Key value
+     * @param value value-value
+     * @param font font to add value to
+     * @return newly derived font
+     */
+    @SuppressWarnings("unchecked") // No good way to do this in a type safe manner.
+    public static Font addFontAttribute(Object key, Object value, Font font) {
+        Map attributes = font.getAttributes();
+        attributes.put(key, value);
+        return font.deriveFont(attributes);
     }
 }

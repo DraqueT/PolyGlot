@@ -42,8 +42,8 @@ import javax.swing.text.StyleConstants;
  * @author draque
  */
 public class FormattedTextHelper {
-    private final static String findBody = "<body>";
-    private final static String findBodyEnd = "</body>";
+    private final static String FINDBODY = "<body>";
+    private final static String FINDBODYEND = "</body>";
     private final static String BLACK = "black";
     private final static String RED = "red";
     private final static String GRAY = "gray";
@@ -157,7 +157,7 @@ public class FormattedTextHelper {
                 if (nextNode.length() != 0){
                     conFont.awtFont = font.equals(core.getPropertiesManager().getFontCon().getFamily()) ? 
                             core.getPropertiesManager().getFontCon() : new JLabel().getFont();
-                    SecEntry temp = new SecEntry(nextNode, conFont);
+                    Entry<String, PFontInfo> temp = new SecEntry<>(nextNode, conFont);
                     ret.add(temp);
                     conFont = new PFontInfo();
                 }
@@ -476,14 +476,14 @@ public class FormattedTextHelper {
         String postFix = "";
         String body = html;
         
-        if (body.contains(findBody)) {
-            int pos = body.indexOf(findBody);
-            preFix = body.substring(0, pos + findBody.length());
-            body = body.substring(pos + findBody.length());
+        if (body.contains(FINDBODY)) {
+            int pos = body.indexOf(FINDBODY);
+            preFix = body.substring(0, pos + FINDBODY.length());
+            body = body.substring(pos + FINDBODY.length());
         }
         
-        if (body.contains(findBodyEnd)) {
-            int pos = body.indexOf(findBodyEnd);
+        if (body.contains(FINDBODYEND)) {
+            int pos = body.indexOf(FINDBODYEND);
             postFix = body.substring(pos);
             body = body.substring(0, pos);
         }
@@ -503,32 +503,34 @@ public class FormattedTextHelper {
     public static String getTextBody(String html) {
         String ret = html;
         
-        if (html.contains(findBody) && html.contains(findBodyEnd)) {
-            ret = html.substring(html.indexOf(findBody) + findBody.length(), html.indexOf(findBodyEnd));
+        if (html.contains(FINDBODY) && html.contains(FINDBODYEND)) {
+            ret = html.substring(html.indexOf(FINDBODY) + FINDBODY.length(), html.indexOf(FINDBODYEND));
         }
         
         return ret.replaceAll("<.*?>", "");
     }
     
-    static class SecEntry<String, PFontInfo> implements Entry {
-        final String key;
-        Object fontInfo;        
-        public SecEntry(String _key, PFontInfo _fontInfo) {
+    static class SecEntry<K, V> implements Entry<K, V> {
+        final K key;
+        V fontInfo;        
+        public SecEntry(K _key, V _fontInfo) {
             key = _key;
             fontInfo = _fontInfo;
         }        
         @Override
-        public Object getKey() {
+        public K getKey() {
             return key;
         }
         @Override
-        public Object getValue() {
+        public V getValue() {
             return fontInfo;
         }
+        
         @Override
-        public Object setValue(Object value) {
-            fontInfo = value;
-            return fontInfo;
-        }        
+        public V setValue(V value) {
+            V old = this.fontInfo;
+            this.fontInfo = value;
+            return old;
+        }
     }
 }

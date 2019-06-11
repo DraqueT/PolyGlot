@@ -22,7 +22,6 @@ package PolyGlot.QuizEngine;
 import PolyGlot.DictCore;
 import PolyGlot.ManagersCollections.DictionaryCollection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
@@ -32,7 +31,7 @@ import java.util.Random;
  *
  * @author draque.thompson
  */
-public class Quiz extends DictionaryCollection {
+public class Quiz extends DictionaryCollection<QuizQuestion> {
     private final DictCore core;
     List<QuizQuestion> quizList = null;
     int quizPos = -1; // start at -1 because initial next() call bumps to 0
@@ -66,7 +65,7 @@ public class Quiz extends DictionaryCollection {
      */
     public List<QuizQuestion> getQuestions() {
         long seed = System.nanoTime();
-        List questions = Arrays.asList(nodeMap.values().toArray());
+        List<QuizQuestion> questions = new ArrayList<>(nodeMap.values());
         Collections.shuffle(questions, new Random(seed));
         return questions;
     }
@@ -108,12 +107,11 @@ public class Quiz extends DictionaryCollection {
     }
     
     public void trimQuiz() {
-        for (Object o : nodeMap.entrySet().toArray()) {
-            Entry<Integer, QuizQuestion> e = (Entry<Integer, QuizQuestion>)o;
-            QuizQuestion question = e.getValue();
+        for (Entry<Integer, QuizQuestion> o : nodeMap.entrySet()) {
+            QuizQuestion question = o.getValue();
             
             if (question.getAnswered() == QuizQuestion.Answered.Correct) {
-                nodeMap.remove(e.getKey());
+                nodeMap.remove(o.getKey());
             } else {
                 question.setAnswered(QuizQuestion.Answered.Unanswered);
                 question.setUserAnswer(null);
@@ -131,7 +129,7 @@ public class Quiz extends DictionaryCollection {
      */
     public boolean hasNext() {
         if (quizList == null) {
-            quizList = new ArrayList(nodeMap.values());
+            quizList = new ArrayList<>(nodeMap.values());
         }
         
         return quizList.size() > quizPos;
@@ -146,7 +144,7 @@ public class Quiz extends DictionaryCollection {
      */
     public QuizQuestion next() {
         if (quizList == null) {
-            quizList = new ArrayList(nodeMap.values());
+            quizList = new ArrayList<>(nodeMap.values());
         }
         
         quizPos++;        

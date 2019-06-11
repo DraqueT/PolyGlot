@@ -588,13 +588,13 @@ public class ScrLogoDetails extends PFrame {
         LogoNode curNode = (LogoNode) lstLogos.getSelectedValue();
 
         if (curNode == null) {
-            lstRelWords.setModel(new DefaultListModel());
+            lstRelWords.setModel(new DefaultListModel<Object>());
             return;
         }
 
         Iterator<ConWord> it = core.getLogoCollection().getLogoWords(curNode).iterator();
 
-        DefaultListModel wordModel = new DefaultListModel();
+        DefaultListModel<Object> wordModel = new DefaultListModel<>();
 
         while (it.hasNext()) {
             wordModel.addElement(it.next());
@@ -684,7 +684,7 @@ public class ScrLogoDetails extends PFrame {
      * @param it iterator of all logographs to populate
      */
     private void populateLogographs(Iterator<LogoNode> it) {
-        DefaultListModel logoModel = new DefaultListModel();
+        DefaultListModel<Object> logoModel = new DefaultListModel<>();
 
         while (it.hasNext()) {
             LogoNode curLog = it.next();
@@ -721,9 +721,9 @@ public class ScrLogoDetails extends PFrame {
             txtName.setText("");
             txtNotes.setText("");
             txtStrokes.setText("");
-            lstRadicals.setModel(new DefaultListModel());
+            lstRadicals.setModel(new DefaultListModel<Object>());
             tblReadings.setModel(new DefaultTableModel(new Object[]{"Readings"}, 0));
-            lstRelWords.setModel(new DefaultListModel());
+            lstRelWords.setModel(new DefaultListModel<Object>());
             chkIsRad.setSelected(false);
             lblLogo.setIcon(new ImageIcon(new LogoNode().getLogoGraph().getScaledInstance(
                     lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH)));
@@ -743,7 +743,7 @@ public class ScrLogoDetails extends PFrame {
 
         // Populate radicals
         Iterator<LogoNode> radIt = curNode.getRadicals().iterator();
-        DefaultListModel radModel = new DefaultListModel();
+        DefaultListModel<Object> radModel = new DefaultListModel<>();
 
         while (radIt.hasNext()) {
             try {
@@ -868,7 +868,7 @@ public class ScrLogoDetails extends PFrame {
      */
     public void addRadFromQuickview() {
         LogoNode rad = quickView.getCurrentLogo();
-        DefaultListModel radModel = (DefaultListModel) lstRadicals.getModel();
+        DefaultListModel<Object> radModel = (DefaultListModel<Object>) lstRadicals.getModel();
 
         if (rad != null) {
             // ignore calls to add radicals already in list
@@ -1054,7 +1054,7 @@ public class ScrLogoDetails extends PFrame {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        lstLogos.setModel(new javax.swing.AbstractListModel() {
+        lstLogos.setModel(new javax.swing.AbstractListModel<Object>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1088,7 +1088,7 @@ public class ScrLogoDetails extends PFrame {
 
         lblLogo.setText("jLabel6");
         lblLogo.setToolTipText("Logograph image");
-        lblLogo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        lblLogo.setBorder(javax.swing.BorderFactory.createBevelBorder(1));
         lblLogo.setMaximumSize(new java.awt.Dimension(49, 49));
         lblLogo.setMinimumSize(new java.awt.Dimension(49, 49));
         lblLogo.setName(""); // NOI18N
@@ -1096,7 +1096,7 @@ public class ScrLogoDetails extends PFrame {
 
         jScrollPane2.setMinimumSize(new java.awt.Dimension(0, 0));
 
-        lstRelWords.setModel(new javax.swing.AbstractListModel() {
+        lstRelWords.setModel(new javax.swing.AbstractListModel<Object>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1110,7 +1110,7 @@ public class ScrLogoDetails extends PFrame {
 
         jScrollPane4.setPreferredSize(new java.awt.Dimension(0, 130));
 
-        lstRadicals.setModel(new javax.swing.AbstractListModel() {
+        lstRadicals.setModel(new javax.swing.AbstractListModel<Object>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1527,9 +1527,9 @@ public class ScrLogoDetails extends PFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JLabel lblLogo;
-    private javax.swing.JList lstLogos;
-    private javax.swing.JList lstRadicals;
-    private javax.swing.JList lstRelWords;
+    private javax.swing.JList<Object> lstLogos;
+    private javax.swing.JList<Object> lstRadicals;
+    private javax.swing.JList<Object> lstRelWords;
     private javax.swing.JTable tblReadings;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextPane txtNotes;

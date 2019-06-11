@@ -34,7 +34,7 @@ import javax.imageio.ImageIO;
  *
  * @author Draque
  */
-public class ImageCollection extends DictionaryCollection {
+public class ImageCollection extends DictionaryCollection<ImageNode> {
     public ImageCollection() {
         bufferNode = new ImageNode();
     }
@@ -98,7 +98,7 @@ public class ImageCollection extends DictionaryCollection {
     public ImageNode getFromBufferedImage(BufferedImage _image) throws Exception {
         ImageNode ret = new ImageNode();
         ret.setImage(_image);
-        insert(ret);
+        this.insert(ret);
         
         return ret;
     }
@@ -116,5 +116,10 @@ public class ImageCollection extends DictionaryCollection {
         }
         
         return emptyImage;
+    }
+    
+    @Override
+    public ImageNode getBuffer() {
+        return (ImageNode)bufferNode;
     }
 }

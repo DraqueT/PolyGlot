@@ -247,7 +247,7 @@ public class LogoNode extends DictNode {
      * @param nodeMap pass nodeMap from parent collection for reference
      * @throws java.lang.Exception on load error
      */
-    public void loadRadicalRelations(Map<Integer, DictNode> nodeMap) throws Exception {
+    public void loadRadicalRelations(Map<Integer, LogoNode> nodeMap) throws Exception {
         if (tmpRads.length() == 0) {
             return;
         }
