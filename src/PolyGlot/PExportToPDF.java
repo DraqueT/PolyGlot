@@ -815,7 +815,7 @@ public class PExportToPDF {
                         = core.getDeclensionManager().getDeclensionByCombinedId(
                                 curWord.getId(), curPair.combinedId);
 
-                if (core.getDeclensionManager().isCombinedDeclSurpressed(curPair.combinedId, curWord.getId())) {
+                if (core.getDeclensionManager().isCombinedDeclSurpressed(curPair.combinedId, curWord.getWordTypeId())) {
                     continue;
                 }
 
