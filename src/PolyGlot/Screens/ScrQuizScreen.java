@@ -103,7 +103,7 @@ public class ScrQuizScreen extends PFrame {
 
         if (numRight == quizLen) {
             InfoBox.info("Quiz Complete", "Perfect score! " + numRight
-                    + " out of " + quizLen + "correct!", this);
+                    + " out of " + quizLen + " correct!", this);
             dispose();
         } else {
             int retake = JOptionPane.showConfirmDialog(this, numRight

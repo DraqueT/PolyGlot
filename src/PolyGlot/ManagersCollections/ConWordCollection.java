@@ -26,7 +26,6 @@ import PolyGlot.FormattedTextHelper;
 import PolyGlot.IOHandler;
 import PolyGlot.Nodes.DeclensionNode;
 import PolyGlot.Nodes.DeclensionPair;
-import PolyGlot.Nodes.DictNode;
 import PolyGlot.Nodes.EtyExternalParent;
 import PolyGlot.Nodes.LexiconProblemNode;
 import PolyGlot.PGTUtil;
@@ -49,7 +48,7 @@ import org.w3c.dom.Element;
  * @author draque
  *
  */
-public class ConWordCollection extends DictionaryCollection {
+public class ConWordCollection extends DictionaryCollection<ConWord> {
 
     private final String splitChar = ",";
     private final DictCore core;
@@ -252,13 +251,25 @@ public class ConWordCollection extends DictionaryCollection {
      * @param additive true if adding, false if removing
      */
     private void balanceWordCounts(ConWord insWord, boolean additive) {
-        Integer curCount = allConWords.containsKey(insWord.getValue())
-                ? allConWords.get(insWord.getValue()) : 0;
+        Integer curCount =  0;
+        if (allConWords.containsKey(insWord.getValue())) {
+            Integer tmp = allConWords.get(insWord.getValue());
+            if (tmp != null) {
+                curCount = tmp;
+            }
+        }
+
         allConWords.remove(insWord.getValue());
         allConWords.put(insWord.getValue(), curCount + (additive ? 1 : -1));
 
-        curCount = allLocalWords.containsKey(insWord.getLocalWord())
-                ? allLocalWords.get(insWord.getLocalWord()) : 0;
+        curCount =  0;
+        if (allLocalWords.containsKey(insWord.getLocalWord())) {
+            Integer tmp = allLocalWords.get(insWord.getLocalWord());
+            if (tmp != null) {
+                curCount = tmp;
+            }
+        }
+
         allLocalWords.remove(insWord.getLocalWord());
         allLocalWords.put(insWord.getLocalWord(), curCount + (additive ? 1 : -1));
     }
@@ -318,7 +329,7 @@ public class ConWordCollection extends DictionaryCollection {
     }
 
     @Override
-    public void modifyNode(Integer _id, DictNode _modNode) throws Exception {
+    public void modifyNode(Integer _id, ConWord _modNode) throws Exception {
         // do bookkeepingfor word counts
         ConWord oldWord = getNodeById(_id);
         balanceWordCounts(oldWord, false);
@@ -338,7 +349,7 @@ public class ConWordCollection extends DictionaryCollection {
      * @throws Exception same as super
      */
     @Override
-    protected Integer insert(Integer _id, DictNode _buffer) throws Exception {
+    protected Integer insert(Integer _id, ConWord _buffer) throws Exception {
         ((ConWord) _buffer).setCore(core);
         ((ConWord) _buffer).setParent(this);
         return super.insert(_id, _buffer);
@@ -840,7 +851,7 @@ public class ConWordCollection extends DictionaryCollection {
      */
     public void clearDeprecatedDeclensions(Integer typeId) {
         DeclensionManager dm = core.getDeclensionManager();
-        Map<Integer, List<DeclensionPair>> comTypeDecs = new HashMap();
+        Map<Integer, List<DeclensionPair>> comTypeDecs = new HashMap<>();
 
         // iterates over every word
         nodeMap.values().stream()

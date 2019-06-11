@@ -291,8 +291,14 @@ public class PLanguageStats {
             ret += "<tr><td>" + formatCon(Character.toString(y), core) + "</td>";
             for (char x : alphaGrid) {
                 String search = "" + x + y;
-                Integer comboValue = (characterCombos2.containsKey(search)
-                        ? characterCombos2.get(search) : 0);
+                Integer comboValue = 0;
+                
+                if (characterCombos2.containsKey(search)) {
+                    Integer tmp = characterCombos2.get(search);
+                    if (tmp != null) {
+                        comboValue = tmp;
+                    }
+                }
 
                 int red = (255 / highestCombo2) * comboValue;
                 int blue = 255 - red;
@@ -324,8 +330,13 @@ public class PLanguageStats {
                 while (procItx.hasNext()) {
                     PronunciationNode x = procItx.next();
                     String search = x.getPronunciation() + " " + y.getPronunciation();
-                    Integer comboValue = (phonemeCombo2.containsKey(search)
-                            ? phonemeCombo2.get(search) : 0);
+                    Integer comboValue = 0;
+                    if (phonemeCombo2.containsKey(search)) {
+                        Integer tmp = phonemeCombo2.get(search);
+                        if (tmp != null) {
+                            comboValue = tmp;
+                        }
+                    }
 
                     Integer red = (255 / highestCombo2) * comboValue;
                     Integer blue = 255 - red;

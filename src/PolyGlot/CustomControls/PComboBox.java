@@ -37,7 +37,7 @@ import javax.swing.SwingWorker;
  *
  * @author draque
  */
-public class PComboBox extends JComboBox implements MouseListener {
+public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     private SwingWorker worker = null;
     private boolean mouseOver = false;
     private final DictCore core;

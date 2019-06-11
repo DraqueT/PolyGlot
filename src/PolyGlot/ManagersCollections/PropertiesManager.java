@@ -46,7 +46,7 @@ public class PropertiesManager {
     private Integer fontStyle = 0;
     private Integer conFontSize = 12;
     private double localFontSize = 12;
-    private final PAlphaMap alphaOrder;
+    private final PAlphaMap<String, Integer> alphaOrder;
     private String alphaPlainText = "";
     private String langName = "";
     private String localLangName = "";
@@ -69,7 +69,7 @@ public class PropertiesManager {
     private Double kerningSpace = 0.0;
 
     public PropertiesManager(DictCore _core) throws IOException {
-        alphaOrder = new PAlphaMap();
+        alphaOrder = new PAlphaMap<>();
         core = _core;
 
         // set default font to Charis, as it's unicode compatible
@@ -345,9 +345,7 @@ public class PropertiesManager {
         }
 
         if (retFont != null && kerningSpace != 0.0) {
-            Map attr = font.getAttributes();
-            attr.put(TextAttribute.TRACKING, kerningSpace);
-            retFont = retFont.deriveFont(attr);
+            retFont = PGTUtil.addFontAttribute(TextAttribute.TRACKING, kerningSpace, font);
         }
         
         return retFont == null ? 
@@ -399,14 +397,16 @@ public class PropertiesManager {
      * @param _fontSize the fontSize to set
      */
     public void setFontSize(Integer _fontSize) {
-        conFontSize = _fontSize < 0 ? 12 : _fontSize;
-        font = font.deriveFont(fontStyle, conFontSize);
+        if (_fontSize != null) {
+            conFontSize = _fontSize < 0 ? 12 : _fontSize;
+            font = font.deriveFont(fontStyle, conFontSize);
+        }
     }
 
     /**
      * @return the alphaOrder
      */
-    public PAlphaMap getAlphaOrder() {
+    public PAlphaMap<String, Integer> getAlphaOrder() {
         return alphaOrder;
     }
 

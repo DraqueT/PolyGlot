@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, draque.thompson
+ * Copyright (c) 2017-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -192,7 +192,7 @@ public class PArrowButton extends JButton {
 
     @Override
     // prevents this from shutting popups that it appears on
-    public boolean isFocusTraversable() {
+    public boolean isFocusable() {
         return false;
     }
 }

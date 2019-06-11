@@ -69,7 +69,7 @@ public class ScrQuizGenDialog extends PFrame {
     }
     
     private void populateDropdowns() {
-        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<>();
         model.addElement("-- Part of Speech --");
         core.getTypes().getNodes().forEach((curNode) -> {
             model.addElement(curNode);
@@ -405,7 +405,7 @@ public class ScrQuizGenDialog extends PFrame {
     private javax.swing.JCheckBox chkLocalQuiz;
     private javax.swing.JCheckBox chkProcQuiz;
     private javax.swing.JCheckBox chkTypeQuiz;
-    private javax.swing.JComboBox<String> cmbFilterType;
+    private javax.swing.JComboBox<Object> cmbFilterType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -32,12 +32,13 @@ import java.util.Random;
 /**
  *
  * @author draque
+ * @param <N> Type of node
  */
-public abstract class DictionaryCollection {
+public abstract class DictionaryCollection<N> {
 
-    protected PAlphaMap alphaOrder;
-    protected final Map nodeMap = new HashMap<>();
-    protected DictNode bufferNode;
+    protected PAlphaMap<String, Integer> alphaOrder;
+    protected final Map<Integer, N> nodeMap = new HashMap<>();
+    protected N bufferNode;
 
     private int highestNodeId = 1;
 
@@ -58,7 +59,7 @@ public abstract class DictionaryCollection {
         
         clear();
         
-        bufferNode.setEqual(_addType);
+        ((DictNode)bufferNode).setEqual(_addType);
 
         ret = this.insert(bufferNode);
 
@@ -70,7 +71,7 @@ public abstract class DictionaryCollection {
      * @param _modNode Node to replace prior word with
      * @throws Exception Throws exception when ID matches no node in collection
      */
-    public void modifyNode(Integer _id, DictNode _modNode) throws Exception {
+    public void modifyNode(Integer _id, N _modNode) throws Exception {
         if (!nodeMap.containsKey(_id)) {
             throw new Exception("No node with id: " + _id.toString()
                     + "; cannot modify value.");
@@ -78,12 +79,14 @@ public abstract class DictionaryCollection {
         if (_id < 1) {
             throw new Exception("Id can never be less than 1.");
         }
+        
+        DictNode myNode = (DictNode)_modNode;
 
-        _modNode.setId(_id);
-        _modNode.setAlphaOrder(alphaOrder);
+        myNode.setId(_id);
+        myNode.setAlphaOrder(alphaOrder);
         
         nodeMap.remove(_id);
-        nodeMap.put(_modNode.getId(), _modNode);
+        nodeMap.put(myNode.getId(), _modNode);
     }
     
     /**
@@ -125,12 +128,21 @@ public abstract class DictionaryCollection {
         nodeMap.remove(_id);
     }
 
-    public void setAlphaOrder(PAlphaMap _alphaOrder) {
+    public void setAlphaOrder(PAlphaMap<String, Integer> _alphaOrder) {
         alphaOrder = _alphaOrder;
     }
     
-    public DictNode getBuffer () {
+    public N getBuffer () {
         return bufferNode;
+    }
+    
+    /**
+     * Simply inserts buffer as it currently exists
+     * @return ID of inserted buffer
+     * @throws Exception 
+     */
+    protected Integer insert() throws Exception {
+        return insert(bufferNode);
     }
 
     /**
@@ -139,7 +151,7 @@ public abstract class DictionaryCollection {
      * @return ID of inserted buffer
      * @throws Exception if unable to insert node to nodemap
      */
-    protected Integer insert(DictNode _buffer) throws Exception {
+    protected Integer insert(N _buffer) throws Exception {
         highestNodeId++;
 
         return this.insert(highestNodeId, _buffer);
@@ -152,12 +164,13 @@ public abstract class DictionaryCollection {
      * @return ID of inserted buffer
      * @throws Exception if unable to insert
      */
-    protected Integer insert(Integer _id, DictNode _buffer) throws Exception {
-        _buffer.setId(_id);
-        _buffer.setAlphaOrder(alphaOrder);
+    protected Integer insert(Integer _id, N _buffer) throws Exception {
+        DictNode myBuffer = (DictNode) _buffer;
+        myBuffer.setId(_id);
+        myBuffer.setAlphaOrder(alphaOrder);
 
         if (nodeMap.containsKey(_id)) {
-            throw new Exception("Duplicate ID " + _id.toString() + " for collection object: " + _buffer.getValue());
+            throw new Exception("Duplicate ID " + _id.toString() + " for collection object: " + myBuffer.getValue());
         }
         if (_id < 1) {
             throw new Exception("Collection node ID may never be zero or less.");
@@ -165,8 +178,12 @@ public abstract class DictionaryCollection {
 
         nodeMap.put(_id, _buffer);
 
-        // sets highest word ID, if current id is higher
-        highestNodeId = _id > highestNodeId ? _id : highestNodeId;
+        if (_id != null) {
+            // sets highest word ID, if current id is higher
+            highestNodeId = _id > highestNodeId ? _id : highestNodeId;
+        } else {
+            throw new Exception("ID cannot be null.");
+        }
 
         return _id;
     }
@@ -176,7 +193,7 @@ public abstract class DictionaryCollection {
      * @param numRandom number of nodes to select
      * @return Either the number of nodes requested, or the total number in the collection (if not enough)
      */
-    public List<DictNode> getRandomNodes(int numRandom) {
+    public List<N> getRandomNodes(int numRandom) {
         return getRandomNodes(numRandom, 0);
     }
     
@@ -186,13 +203,13 @@ public abstract class DictionaryCollection {
      * @param exclude ID of element to exclude
      * @return Either the number of nodes requested, or the total number in the collection (if not enough)
      */
-    public List<DictNode> getRandomNodes(int numRandom, Integer exclude) {
-        List<DictNode> ret = new ArrayList<>();
-        List<DictNode> allValues = new ArrayList(nodeMap.values());
+    public List<N> getRandomNodes(int numRandom, Integer exclude) {
+        List<N> ret = new ArrayList<>();
+        List<N> allValues = new ArrayList<>(nodeMap.values());
         
         
         if (nodeMap.containsKey(exclude)) {
-            allValues.remove((DictNode)nodeMap.get(exclude));
+            allValues.remove(nodeMap.get(exclude));
         }
         
         // randommize order...

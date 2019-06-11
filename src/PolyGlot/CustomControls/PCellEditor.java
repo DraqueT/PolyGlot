@@ -20,6 +20,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import PolyGlot.PGTUtil;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -55,16 +56,16 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
     public PCellEditor(boolean _useConFont, DictCore _core) {
         core = _core;
         useConFont = _useConFont;
+        Integer preSize = core.getPropertiesManager().getFontSize();
+        preSize = preSize == null ? 0 : preSize;
+        
         Font defFont = useConFont ? core.getPropertiesManager().getFontCon()
                 : core.getPropertiesManager().getFontLocal();
         double fontSize = useConFont ? 
-                core.getPropertiesManager().getFontSize() :
+                preSize :
                 core.getOptionsManager().getMenuFontSize();
 
-        Map attr = defFont.getAttributes();
-        
-        attr.put(TextAttribute.SIZE, (float) fontSize);
-        myFont = defFont.deriveFont(attr);
+        myFont = PGTUtil.addFontAttribute(TextAttribute.SIZE, (float)fontSize, defFont);
 
         final JTextField setupText = (JTextField) component;
 

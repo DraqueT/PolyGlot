@@ -122,7 +122,7 @@ public class DictCore {
             reversionManager = new ReversionManager(this);
             toDoManager = new ToDoManager();
 
-            PAlphaMap alphaOrder = propertiesManager.getAlphaOrder();
+            PAlphaMap<String, Integer> alphaOrder = propertiesManager.getAlphaOrder();
 
             wordCollection.setAlphaOrder(alphaOrder);
             typeCollection.setAlphaOrder(alphaOrder);

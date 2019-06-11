@@ -69,7 +69,7 @@ public class FamilyManager {
      * @param wordList raw words from entry
      */
     public void removeDeadWords(FamNode fam, List<ConWord> wordList) {
-        Iterator<ConWord> wordIt = new ArrayList(wordList).iterator();
+        Iterator<ConWord> wordIt = new ArrayList<>(wordList).iterator();
         
         while (wordIt.hasNext()) {
             ConWord curWord = wordIt.next();

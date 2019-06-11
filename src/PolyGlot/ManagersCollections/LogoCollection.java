@@ -41,7 +41,7 @@ import org.w3c.dom.Element;
  *
  * @author draque
  */
-public class LogoCollection extends DictionaryCollection {
+public class LogoCollection extends DictionaryCollection<LogoNode> {
     private final Map<Integer, ArrayList<Integer>> logoToWord;
     private final Map<Integer, ArrayList<Integer>> wordToLogo;
     private final DictCore core;
@@ -296,7 +296,8 @@ public class LogoCollection extends DictionaryCollection {
         return (LogoNode)bufferNode;
     }
     
-    public int insert() throws Exception {
+    @Override
+    public Integer insert() throws Exception {
         int ret = insert(bufferNode.getId(), bufferNode);
         
         bufferNode = new LogoNode();

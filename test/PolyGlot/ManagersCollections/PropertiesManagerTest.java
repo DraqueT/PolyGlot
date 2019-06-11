@@ -51,7 +51,7 @@ public class PropertiesManagerTest {
         System.out.println("getAlphaOrder");
         PropertiesManager instance = core.getPropertiesManager();
         instance.setAlphaOrder("a");
-        PAlphaMap expResult = new PAlphaMap();
+        PAlphaMap<String, Integer> expResult = new PAlphaMap<>();
         expResult.put("a", 0);
         PAlphaMap result = instance.getAlphaOrder();
         

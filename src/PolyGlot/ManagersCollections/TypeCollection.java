@@ -38,7 +38,7 @@ import org.w3c.dom.Element;
  *
  * @author draque
  */
-public class TypeCollection extends DictionaryCollection {
+public class TypeCollection extends DictionaryCollection<TypeNode> {
     final DictCore core;
 
     public TypeNode getBufferType() {

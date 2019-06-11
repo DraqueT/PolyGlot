@@ -294,13 +294,14 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
         return -1;
     }
 
+    @SuppressWarnings("unchecked") // not my code - surpress
     private int[] getJustificationData(GlyphView v) {
         View parent = v.getParent();
         int [] ret = null;
 
         //use reflection to get the data
         Class pClass=parent.getClass();
-        if (pClass.isAssignableFrom(ParagraphView.class.getDeclaredClasses()[0])) { //if (parent instanceof ParagraphView.Row) {
+        if (pClass.isAssignableFrom(ParagraphView.class.getDeclaredClasses()[0])) {
             try {
                 Field f=pClass.getDeclaredField("justificationData");
                 if (f!=null) {
