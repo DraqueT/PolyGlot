@@ -708,7 +708,7 @@ public class PExportToPDF {
 
                 if (!romStr.isEmpty()) {
                     dictEntry.add(new Text("\nRoman: ").setFont(unicodeFont));
-                    dictEntry.add(new Text(romStr).setFont(unicodeFontItalic));
+                    dictEntry.add(new Text(romStr + "\n").setFont(unicodeFontItalic));
                 }
             }
 
