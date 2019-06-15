@@ -97,7 +97,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      *
      * @return an iterator full of all illegal conwords
      */
-    public Iterator<ConWord> illegalFilter() {
+    public List<ConWord> illegalFilter() {
         List<ConWord> retList = new ArrayList<>();
 
         nodeMap.values().stream().filter((word) -> !((ConWord)word).isWordLegal()).forEach((word) -> retList.add((ConWord)word));
@@ -111,7 +111,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         }
 
         Collections.sort(retList);
-        return retList.iterator();
+        return retList;
     }
 
     /**
@@ -188,6 +188,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      * @return ID of newly created node
      * @throws Exception
      */
+    @Override
     public Integer insert() throws Exception {
         Integer ret;
 
@@ -1004,5 +1005,85 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         }
         
         return problems;
+    }
+    
+    /**
+     * Gets a list of display word nodes. Set up specifically for display rather
+     * than programmatic or logical consumption
+     * @return 
+     */
+    public List<ConWordDisplay> getWordNodesDisplay() {
+        return toDisplayList(getWordNodes());
+    }
+    
+    /**
+     * Converts a list of words into a display list and reorders if appropriate
+     * @param wordList List of words to convert to display list
+     * @return 
+     */
+    public List<ConWordDisplay> toDisplayList(List<ConWord> wordList) {
+        List<ConWordDisplay> ret = new ArrayList<>();
+        
+        for (ConWord conWord : wordList) {
+            ret.add(new ConWordDisplay(conWord, core));
+        }
+        
+        if (core.getPropertiesManager().isUseLocalWordLex()) {
+            Collections.sort(ret);
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Wrapper class of ConWord that allows for more display options in menus
+     * Separated to eliminate possibility of display logic interfering with program logic
+     */
+    public class ConWordDisplay implements Comparable<ConWordDisplay> {
+        private final ConWord conWord;
+        private final DictCore core;
+        
+        public ConWordDisplay(ConWord _conWord, DictCore _core) {
+            conWord = _conWord;
+            core = _core;
+        }
+        
+        public ConWord getConWord() {
+            return conWord;
+        }
+        
+        @Override
+        public String toString() {
+            String ret;
+            
+            if (core.getPropertiesManager().isUseLocalWordLex()) {
+                ret = conWord.getLocalWord();
+            } else {
+                ret = conWord.toString();
+            }
+            
+            return ret;
+        }
+        
+        /**
+        * Respects language property to display/sort lexicon by local words
+        * value set for this.
+        * @param _compare
+        * @return 
+        */
+       @Override
+       public int compareTo(ConWordDisplay _compare) {
+           String myLocalWord = conWord.getLocalWord();
+           String compareLocalWord = _compare.getConWord().getLocalWord();
+           int ret;
+
+           if (core.getPropertiesManager().isUseLocalWordLex()) {
+               ret = myLocalWord.compareTo(compareLocalWord);
+           } else {
+               ret = conWord.compareTo(_compare.getConWord());
+           }
+
+           return ret;
+       }
     }
 }

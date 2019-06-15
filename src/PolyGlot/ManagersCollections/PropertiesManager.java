@@ -60,6 +60,7 @@ public class PropertiesManager {
     private boolean enableRomanization = false;
     private boolean disableProcRegex = false;
     private boolean enforceRTL = false;
+    private boolean useLocalWordLex = false;
     private byte[] cachedConFont = null;
     private byte[] cachedLocalFont = null;
     private final Font charisUnicode;
@@ -647,6 +648,11 @@ public class PropertiesManager {
         wordValue.appendChild(doc.createTextNode(isOverrideRegexFont() ? PGTUtil.True : PGTUtil.False));
         propContainer.appendChild(wordValue);
 
+        // store option for displaying local words in lexicon
+        wordValue = doc.createElement(PGTUtil.langPropUseLocalLexicon);
+        wordValue.appendChild(doc.createTextNode(isUseLocalWordLex() ? PGTUtil.True : PGTUtil.False));
+        propContainer.appendChild(wordValue);
+
         // store option for Author and copyright info
         wordValue = doc.createElement(PGTUtil.langPropAuthCopyrightXID);
         wordValue.appendChild(doc.createTextNode(copyrightAuthorInfo));
@@ -786,5 +792,19 @@ public class PropertiesManager {
      */
     public void setOverrideRegexFont(boolean overrideRegexFont) {
         this.overrideRegexFont = overrideRegexFont;
+    }
+
+    /**
+     * @return the useLocalWordLex
+     */
+    public boolean isUseLocalWordLex() {
+        return useLocalWordLex;
+    }
+
+    /**
+     * @param useLocalWordLex the useLocalWordLex to set
+     */
+    public void setUseLocalWordLex(boolean useLocalWordLex) {
+        this.useLocalWordLex = useLocalWordLex;
     }
 }

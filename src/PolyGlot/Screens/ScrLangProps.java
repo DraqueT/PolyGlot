@@ -125,23 +125,24 @@ public class ScrLangProps extends PFrame {
     }
 
     private void populateProperties() {
-        PropertiesManager prop = core.getPropertiesManager();
+        PropertiesManager propMan = core.getPropertiesManager();
 
-        txtLangName.setText(prop.getLangName());
-        txtFont.setText(prop.getFontCon().getFamily());
-        txtLocalFont.setText(prop.getFontLocal().getFamily());
-        txtAlphaOrder.setText(prop.getAlphaPlainText());
-        txtLocalLanguage.setText(prop.getLocalLangName());
-        txtAuthorCopyright.setText(prop.getCopyrightAuthorInfo());
-        chkDisableProcRegex.setSelected(prop.isDisableProcRegex());
-        chkIgnoreCase.setSelected(prop.isIgnoreCase());
-        chkLocalMandatory.setSelected(prop.isLocalMandatory());
-        chkLocalUniqueness.setSelected(prop.isLocalUniqueness());
-        chkTypesMandatory.setSelected(prop.isTypesMandatory());
-        chkWordUniqueness.setSelected(prop.isWordUniqueness());
-        chkEnforceRTL.setSelected(prop.isEnforceRTL());
-        chkOverrideRegexFont.setSelected(prop.isOverrideRegexFont());
-        txtKerning.setValue(prop.getKerningSpace());
+        txtLangName.setText(propMan.getLangName());
+        txtFont.setText(propMan.getFontCon().getFamily());
+        txtLocalFont.setText(propMan.getFontLocal().getFamily());
+        txtAlphaOrder.setText(propMan.getAlphaPlainText());
+        txtLocalLanguage.setText(propMan.getLocalLangName());
+        txtAuthorCopyright.setText(propMan.getCopyrightAuthorInfo());
+        chkDisableProcRegex.setSelected(propMan.isDisableProcRegex());
+        chkIgnoreCase.setSelected(propMan.isIgnoreCase());
+        chkLocalMandatory.setSelected(propMan.isLocalMandatory());
+        chkLocalUniqueness.setSelected(propMan.isLocalUniqueness());
+        chkTypesMandatory.setSelected(propMan.isTypesMandatory());
+        chkWordUniqueness.setSelected(propMan.isWordUniqueness());
+        chkEnforceRTL.setSelected(propMan.isEnforceRTL());
+        chkOverrideRegexFont.setSelected(propMan.isOverrideRegexFont());
+        chkUseLocalWordLex.setSelected(propMan.isUseLocalWordLex());
+        txtKerning.setValue(propMan.getKerningSpace());
     }
 
     /**
@@ -163,6 +164,7 @@ public class ScrLangProps extends PFrame {
             propMan.setWordUniqueness(chkWordUniqueness.isSelected());
             propMan.setEnforceRTL(chkEnforceRTL.isSelected());
             propMan.setOverrideRegexFont(chkOverrideRegexFont.isSelected());
+            propMan.setUseLocalWordLex(chkUseLocalWordLex.isSelected());
             propMan.setKerningSpace(Double.parseDouble(txtKerning.getText()));
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
@@ -273,6 +275,7 @@ public class ScrLangProps extends PFrame {
         chkEnforceRTL = new PCheckBox(core);
         jLabel2 = new PLabel("", core);
         chkOverrideRegexFont = new PCheckBox(core);
+        chkUseLocalWordLex = new PCheckBox(core);
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new PLabel("", core);
         jLabel3 = new PLabel("", core);
@@ -291,7 +294,7 @@ public class ScrLangProps extends PFrame {
         setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(1));
 
         btnChangeFont.setText("Conlang Font");
         btnChangeFont.setToolTipText("Change native conlang font");
@@ -339,6 +342,9 @@ public class ScrLangProps extends PFrame {
         chkOverrideRegexFont.setText("Override Regex Font");
         chkOverrideRegexFont.setToolTipText("This overrides the font of all display elements within PolyGlot to show a default font (if your script makes regexes hard to work with)");
 
+        chkUseLocalWordLex.setText("Local Word Lex Display");
+        chkUseLocalWordLex.setToolTipText("Display the local word rather than the conlang word in the lexicon display");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -350,17 +356,20 @@ public class ScrLangProps extends PFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkTypesMandatory)
-                            .addComponent(chkWordUniqueness)
-                            .addComponent(chkDisableProcRegex)
-                            .addComponent(chkLocalMandatory))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkOverrideRegexFont)
-                            .addComponent(chkEnforceRTL)
-                            .addComponent(chkLocalUniqueness)
-                            .addComponent(chkIgnoreCase))
-                        .addGap(0, 24, Short.MAX_VALUE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(chkTypesMandatory)
+                                    .addComponent(chkWordUniqueness)
+                                    .addComponent(chkDisableProcRegex)
+                                    .addComponent(chkLocalMandatory))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(chkOverrideRegexFont)
+                                    .addComponent(chkEnforceRTL)
+                                    .addComponent(chkLocalUniqueness)
+                                    .addComponent(chkIgnoreCase)))
+                            .addComponent(chkUseLocalWordLex))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -379,11 +388,13 @@ public class ScrLangProps extends PFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkDisableProcRegex)
                     .addComponent(chkEnforceRTL))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkLocalMandatory)
                     .addComponent(chkOverrideRegexFont))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkUseLocalWordLex)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -447,22 +458,21 @@ public class ScrLangProps extends PFrame {
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtAlphaOrder, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtLocalFont))
+                    .addComponent(txtAlphaOrder, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnChangeFont)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtFont)))
+                        .addComponent(txtFont))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtLocalFont)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnChangeFont)
                     .addComponent(txtFont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -471,15 +481,15 @@ public class ScrLangProps extends PFrame {
                     .addComponent(txtLocalFont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtAlphaOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(1));
 
         txtLangName.setToolTipText("Your Conlang's Name");
 
@@ -503,7 +513,7 @@ public class ScrLangProps extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtLocalLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -565,6 +575,7 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JCheckBox chkLocalUniqueness;
     private javax.swing.JCheckBox chkOverrideRegexFont;
     private javax.swing.JCheckBox chkTypesMandatory;
+    private javax.swing.JCheckBox chkUseLocalWordLex;
     private javax.swing.JCheckBox chkWordUniqueness;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

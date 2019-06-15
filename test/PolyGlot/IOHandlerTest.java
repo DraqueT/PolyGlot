@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, draque
+ * Copyright (c) 2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -71,9 +71,11 @@ public class IOHandlerTest {
             IOHandler.writeErrorLog(new Exception("This is a test: " + i));
         }
         
-        String log = IOHandler.getErrorLog();
+        int logLength = IOHandler.getErrorLog().length();
+        int systemInfoLength = IOHandler.getSystemInformation().length();
         
-        assertTrue(log.length() == PGTUtil.maxLogCharacters);        
+        // off by one due to concatination effect when adding system info (newline)
+        assertTrue(logLength == PGTUtil.maxLogCharacters + systemInfoLength + 1);        
         wipeErrorLog();
     }
     

@@ -145,6 +145,7 @@ public class CustHandlerFactory {
             boolean blangPropLocalMandatory = false;
             boolean blangPropWordUniqueness = false;
             boolean blangPropLocalUniqueness = false;
+            boolean blangPropUseLocalLex = false;
             boolean blangPropEnforceRTL = false;
             boolean blangPropLocalLangName = false;
             boolean blangPropAuthCopyright = false;
@@ -344,6 +345,8 @@ public class CustHandlerFactory {
                     bwordClassPattern = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalUniquenessXID)) {
                     blangPropLocalUniqueness = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropUseLocalLexicon)) {
+                    blangPropUseLocalLex = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropWordUniquenessXID)) {
                     blangPropWordUniqueness = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropLocalMandatoryXID)) {
@@ -842,6 +845,8 @@ public class CustHandlerFactory {
                     core.getPropertiesManager().addCharacterReplacement(charRepCharBuffer, charRepValBuffer);
                     charRepCharBuffer = "";
                     charRepValBuffer = "";
+                } else if (qName.equalsIgnoreCase(PGTUtil.langPropUseLocalLexicon)) {
+                    blangPropUseLocalLex = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropCharRepCharacterXID)) {
                     bcharRepChar = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.langPropCharRepValueXID)) {
@@ -1064,6 +1069,8 @@ public class CustHandlerFactory {
                 } else if (blangPropLocalUniqueness) {
                     propertiesManager.setLocalUniqueness(new String(ch, start, length).equals(PGTUtil.True));
                     blangPropLocalUniqueness = false;
+                } else if (blangPropUseLocalLex) {
+                    propertiesManager.setUseLocalWordLex(new String(ch, start, length).equals(PGTUtil.True));
                 } else if (blangPropWordUniqueness) {
                     propertiesManager.setWordUniqueness(new String(ch, start, length).equals(PGTUtil.True));
                     blangPropWordUniqueness = false;

@@ -32,6 +32,7 @@ import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.IOHandler;
+import PolyGlot.ManagersCollections.ConWordCollection.ConWordDisplay;
 import PolyGlot.Nodes.EtyExternalParent;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordClassValue;
@@ -143,7 +144,7 @@ public final class ScrLexicon extends PFrame {
         txtRom.setToolTipText("Romanized representation of word");
         initComponents();
 
-        lstLexicon.setModel(new DefaultListModel<Object>());
+        lstLexicon.setModel(new DefaultListModel<ConWordDisplay>());
 
         setupFilterMenu();
         setupComboBoxesSwing();
@@ -243,7 +244,7 @@ public final class ScrLexicon extends PFrame {
                 core = _core;
             }
             
-            lstLexicon.setModel(new DefaultListModel<Object>());
+            lstLexicon.setModel(new DefaultListModel<ConWordDisplay>());
             setDefaultValues();
             populateLexicon();
             lstLexicon.setSelectedIndex(0);
@@ -257,11 +258,10 @@ public final class ScrLexicon extends PFrame {
             Platform.setImplicitExit(false);
             wrapPlatformRunnable(fxSetup);
 
-            ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+            ConWord curWord = getCurrentWord();
             saveValuesTo(curWord);
             ((PList) lstLexicon).setCore(core);
-            lstLexicon.clearSelection();
-            lstLexicon.setSelectedValue(curWord, true);
+            ((PList) lstLexicon).setConFont(!core.getPropertiesManager().isUseLocalWordLex());
             setupComboBoxesSwing();
             curPopulating = localPopulating;
             forceUpdate = false;
@@ -311,7 +311,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     private void populateClassPanel() {
-        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        ConWord curWord = getCurrentWord();
 
         curWord.getClassValues().stream()
                 .filter((curProp) -> (classPropMap.containsKey(curProp.getKey())))
@@ -380,7 +380,7 @@ public final class ScrLexicon extends PFrame {
      * @param setTypeId ID of class to set panel up for
      */
     private void setupClassPanel(int setTypeId) {
-        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        ConWord curWord = getCurrentWord();
 
         pnlClasses.removeAll();
 
@@ -433,7 +433,7 @@ public final class ScrLexicon extends PFrame {
                             return;
                         }
 
-                        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+                        ConWord curWord = getCurrentWord();
                         if (curWord != null) {
                             curWord.setClassTextValue(classId, classText.getText());
                         }
@@ -458,7 +458,7 @@ public final class ScrLexicon extends PFrame {
                     if (curPopulating) {
                         return;
                     }
-                    ConWord curWord1 = (ConWord) lstLexicon.getSelectedValue();
+                    ConWord curWord1 = getCurrentWord();
                     if (classBox.getSelectedItem() instanceof WordClassValue) {
                         WordClassValue curValue = (WordClassValue) classBox.getSelectedItem();
                         curWord1.setClassValue(classId, curValue.getId());
@@ -644,7 +644,7 @@ public final class ScrLexicon extends PFrame {
     
     /**
      * Tests whether filter is currently empty
-     * If testing fields are null, they aren't yet initialized, and therfore must be blank
+     * If testing fields are null, they aren't yet initialized, and therefore must be blank
      * @return 
      */
     private boolean isFilterBlank() {
@@ -706,13 +706,14 @@ public final class ScrLexicon extends PFrame {
         filter.setFilterEtyParent(cmbRootSrc.getValue());
 
         // save word before applying filter
-        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        ConWord curWord = getCurrentWord();
         if (curWord != null) {
             saveValuesTo(curWord);
         }
 
         try {
-            populateLexicon(core.getWordCollection().filteredList(filter).iterator());
+            populateLexicon(core.getWordCollection().toDisplayList(
+                    core.getWordCollection().filteredList(filter)));
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Filter Error", "Unable to apply filter.\n\n" + e.getMessage(), core.getRootWindow());
@@ -752,7 +753,7 @@ public final class ScrLexicon extends PFrame {
      * Sets currently displayed word's legality (highlighted fields, error message, etc.)
      */
     private void setWordLegality() {
-        ConWord testWord = (ConWord) lstLexicon.getSelectedValue();
+        ConWord testWord = getCurrentWord();
 
         if (forceUpdate) {
             return;
@@ -926,7 +927,7 @@ public final class ScrLexicon extends PFrame {
                     public void updateItem(Object item,
                             boolean empty) {
                         super.updateItem(item, empty);
-                        if (item != null && item instanceof ConWord) {
+                        if (item != null && (item instanceof ConWord || item instanceof ConWordDisplay)) {
                             setFont(core.getPropertiesManager().getFXFont());
                             setText(item.toString());
                         } else if (item != null && item instanceof EtyExternalParent) {
@@ -1012,7 +1013,8 @@ public final class ScrLexicon extends PFrame {
         cmbRootSrc.setDisable(chkFindBad.isSelected());
 
         if (chkFindBad.isSelected()) {
-            populateLexicon(core.getWordCollection().illegalFilter());
+            populateLexicon(core.getWordCollection().toDisplayList(
+                    core.getWordCollection().illegalFilter()));
         } else {
             populateLexicon();
         }
@@ -1038,7 +1040,7 @@ public final class ScrLexicon extends PFrame {
     
     @Override
     public void saveAllValues() {
-        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        ConWord curWord = getCurrentWord();
         if (curWord != null) {
             saveValuesTo(curWord);
         }
@@ -1064,7 +1066,8 @@ public final class ScrLexicon extends PFrame {
     }
 
     public ConWord getCurrentWord() {
-        return (ConWord) lstLexicon.getSelectedValue();
+        ConWordDisplay retVal = lstLexicon.getSelectedValue();
+        return retVal == null ? null : retVal.getConWord();
     }
 
     public void setWordSelectedById(int id) {
@@ -1186,7 +1189,7 @@ public final class ScrLexicon extends PFrame {
                 ListModel model = theList.getModel();
                 int index = theList.locationToIndex(e.getPoint());
                 if (index > -1) {
-                    ConWord curWord = (ConWord) model.getElementAt(index);
+                    ConWord curWord = ((ConWordDisplay)model.getElementAt(index)).getConWord();
                     TypeNode curType = null;
                     try {
                         curType = core.getTypes().getNodeById(curWord.getWordTypeId());
@@ -1237,7 +1240,7 @@ public final class ScrLexicon extends PFrame {
 
         // handles swapping of font for root box as appropriate
         cmbRootSrc.addEventHandler(EventType.ROOT, (Event evt) -> {
-            if (cmbRootSrc.getValue() instanceof ConWord) {
+            if (cmbRootSrc.getValue() instanceof ConWord || cmbRootSrc.getValue() instanceof ConWordDisplay) {
                 cmbRootSrc.setStyle("-fx-font: "
                         + core.getPropertiesManager()
                                 .getFontCon().getSize()
@@ -1307,7 +1310,7 @@ public final class ScrLexicon extends PFrame {
      * populates properties of currently selected word
      */
     private void populateProperties() {
-        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        ConWord curWord = getCurrentWord();
 
         boolean localPopulating = curPopulating;
         curPopulating = true;
@@ -1430,23 +1433,21 @@ public final class ScrLexicon extends PFrame {
      * populates lexicon list with all words from core
      */
     private void populateLexicon() {
-        populateLexicon(core.getWordCollection().getWordNodes().iterator());
+        populateLexicon(core.getWordCollection().getWordNodesDisplay());
     }
 
     /**
      * populates lexicon list with given iterator
      */
-    private void populateLexicon(Iterator<ConWord> lexIt) {
+    private void populateLexicon(List<ConWordDisplay> wordList) {
         boolean localPopulating = curPopulating;
         curPopulating = true;
 
         try {
-            DefaultListModel<Object> listModel = new DefaultListModel<>();
-
-            while (lexIt.hasNext()) {
-                ConWord curNode = lexIt.next();
-
-                listModel.addElement(curNode);
+            DefaultListModel<ConWordDisplay> listModel = new DefaultListModel<>();
+            
+            for (ConWordDisplay conWord : wordList) {
+                listModel.addElement(conWord);
             }
 
             lstLexicon.setModel(listModel);
@@ -1473,7 +1474,7 @@ public final class ScrLexicon extends PFrame {
 
         curPopulating = true;
         namePopulating = true;
-        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        ConWord curWord = getCurrentWord();
 
         try {
             if (curWord == null) {
@@ -1547,7 +1548,7 @@ public final class ScrLexicon extends PFrame {
     private void deleteWord() {
         curPopulating = true;
         int curSelection = lstLexicon.getSelectedIndex();
-        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        ConWord curWord = getCurrentWord();
 
         if (curSelection == -1) {
             return;
@@ -1569,7 +1570,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     private void addWord() {
-        ConWord curNode = (ConWord) lstLexicon.getSelectedValue();
+        ConWord curNode = getCurrentWord();
         if (curNode != null) {
             saveValuesTo(curNode);
         }
@@ -1598,7 +1599,7 @@ public final class ScrLexicon extends PFrame {
      * Open quickview on logographs for currently selected word
      */
     private void viewQuickLogographs() {
-        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        ConWord curWord = getCurrentWord();
 
         if (curWord == null) {
             return;
@@ -1622,7 +1623,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     private void viewDeclensions() {
-        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        ConWord curWord = getCurrentWord();
 
         if (curWord == null) {
             return;
@@ -1987,7 +1988,7 @@ public final class ScrLexicon extends PFrame {
 
             if (index != -1
                     && index < lstLexicon.getModel().getSize()) {
-                ConWord saveWord = (ConWord) lstLexicon.getModel().getElementAt(index);
+                ConWord saveWord = lstLexicon.getModel().getElementAt(index).getConWord();
                 saveValuesTo(saveWord);
             }
             
@@ -2046,7 +2047,7 @@ public final class ScrLexicon extends PFrame {
     }//GEN-LAST:event_lstLexiconFocusGained
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
-        ConWord curWord = (ConWord) lstLexicon.getSelectedValue();
+        ConWord curWord = getCurrentWord();
         if (curWord != null) {
             saveValuesTo(curWord);
         }
@@ -2097,7 +2098,7 @@ public final class ScrLexicon extends PFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JList<Object> lstLexicon;
+    private javax.swing.JList<ConWordDisplay> lstLexicon;
     private javax.swing.JPanel pnlClasses;
     private javax.swing.JTextField txtConWord;
     private javax.swing.JTextPane txtDefinition;
