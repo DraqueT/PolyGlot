@@ -49,7 +49,7 @@ public class ConWord extends DictNode {
     private boolean procOverride;
     private boolean autoDeclensionOverride;
     private boolean rulesOverride;
-    private DictCore core;
+    protected DictCore core;
     private ConWordCollection parentCollection;
     private final Map<Integer, Integer> classValues = new HashMap<>();
     private final Map<Integer, String> classTextValues = new HashMap<>();
@@ -385,7 +385,16 @@ public class ConWord extends DictNode {
      * @return id of value assigned to class. -1 if not set.
      */
     public Integer getClassValue(int classId) {
-        return classValues.containsKey(classId) ? classValues.get(classId) : -1;
+        Integer ret = -1;
+        
+        if (classValues.containsKey(classId)) {
+            Integer tmp = classValues.get(classId);
+            if (tmp != null) {
+                ret = tmp;
+            }
+        }
+        
+        return ret;
     }
     
     /**

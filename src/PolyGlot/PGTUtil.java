@@ -94,6 +94,7 @@ public class PGTUtil {
     public static final String langPropEnforceRTLXID = "langPropEnforceRTL";
     public static final String langPropAuthCopyrightXID = "langPropAuthorCopyright";
     public static final String langPropLocalLangNameXID = "langPropLocalLangName";
+    public static final String langPropUseLocalLexicon = "langPropUseLocalLexicon";
     public static final String langPropKerningVal = "langPropKerningValue";
     public static final String langPropOverrideRegexFont ="langPropOverrideRegexFont";
     

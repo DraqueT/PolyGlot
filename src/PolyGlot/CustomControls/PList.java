@@ -29,7 +29,7 @@ import javax.swing.JList;
  */
 public class PList extends JList {
     private DictCore core;
-    private final boolean isConFont;
+    private boolean isConFont;
     boolean ignoreRepaint = false;
     
     public PList(DictCore _core, boolean _isConFont) {        
@@ -59,5 +59,9 @@ public class PList extends JList {
         }
         
         super.repaint(); 
+    }
+    
+    public void setConFont(boolean _isConFont) {
+        isConFont = _isConFont;
     }
 }
