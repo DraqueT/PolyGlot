@@ -708,7 +708,7 @@ public class PExportToPDF {
 
                 if (!romStr.isEmpty()) {
                     dictEntry.add(new Text("\nRoman: ").setFont(unicodeFont));
-                    dictEntry.add(new Text(romStr + "\n").setFont(unicodeFontItalic));
+                    dictEntry.add(new Text(romStr).setFont(unicodeFontItalic));
                 }
             }
 
@@ -819,6 +819,7 @@ public class PExportToPDF {
                     continue;
                 }
 
+                dictEntry.add(new Text("\n"));
                 varChunk = new Text(curPair.label + ": ");
                 varChunk.setFont(unicodeFont);
                 varChunk.setFontSize(defFontSize - 1);
@@ -845,7 +846,6 @@ public class PExportToPDF {
                 varChunk.setFont(conFont);
                 varChunk.setFontSize(conFontSize / 2);
                 dictEntry.add(varChunk);
-                dictEntry.add(new Text("\n"));
             }
         }
     }
