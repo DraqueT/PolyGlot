@@ -1,0 +1,9 @@
+THIS IS A BETA COPY OF POLYGLOT.
+
+PLEASE USE WITH CAUTION.
+
+PLEASE REPORT BUGS AT: https://github.com/DraqueT/PolyGlot/issues
+
+Enjoy. :3
+
+- Draque

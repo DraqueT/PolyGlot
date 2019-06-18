@@ -25,6 +25,13 @@
         </bundleapp>
     </target>
     <!-- END MAC BUNDLER MODIFICATION -->
+    
+    <target name="-post-jar">
+        <exec executable="/bin/bash">
+        <arg value="post_build.sh"/>
+        </exec>
+    </target>
+    
     <import file="nbproject/build-impl.xml"/>
     <!--
 
