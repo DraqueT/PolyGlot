@@ -29,6 +29,8 @@ import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PFocusTraversalPolicy;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PList;
+import PolyGlot.CustomControls.PListLexicon;
+import PolyGlot.CustomControls.PListModelLexicon;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.CustomControls.PTextPane;
 import PolyGlot.IOHandler;
@@ -84,7 +86,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -144,7 +145,7 @@ public final class ScrLexicon extends PFrame {
         txtRom.setToolTipText("Romanized representation of word");
         initComponents();
 
-        lstLexicon.setModel(new DefaultListModel<ConWordDisplay>());
+        lstLexicon.setModel(new PListModelLexicon());
 
         setupFilterMenu();
         setupComboBoxesSwing();
@@ -244,7 +245,7 @@ public final class ScrLexicon extends PFrame {
                 core = _core;
             }
             
-            lstLexicon.setModel(new DefaultListModel<ConWordDisplay>());
+            lstLexicon.setModel(new PListModelLexicon());
             setDefaultValues();
             populateLexicon();
             lstLexicon.setSelectedIndex(0);
@@ -654,14 +655,16 @@ public final class ScrLexicon extends PFrame {
                 && txtProcSrc != null 
                 && cmbRootSrc != null 
                 && cmbRootSrc.getValue() != null) {
-            int filterType = cmbTypeSrc.getValue().equals(defTypeValue)
-                    ? 0 : ((TypeNode) cmbTypeSrc.getValue()).getId();
+            int filterType = 0;
+            if (cmbTypeSrc.getValue().equals(defTypeValue)) {
+                filterType = ((TypeNode) cmbTypeSrc.getValue()).getId();
+            }
 
             ret = txtConSrc.getText().length() == 0
                     && txtDefSrc.getText().length() == 0
                     && txtLocalSrc.getText().length() == 0
                     && txtProcSrc.getText().length() == 0
-                    && filterType == 0
+                    && filterType == defTypeValue.getId()
                     && cmbRootSrc.getValue().toString().equals(defRootValue.getValue());
         }
         
@@ -763,8 +766,10 @@ public final class ScrLexicon extends PFrame {
             Integer origWordId = testWord.getId();
             testWord = new ConWord();
             testWord.setId(origWordId);
-            int typeId = cmbType.getSelectedItem().equals(defTypeValue)
-                    ? 0 : ((TypeNode) cmbType.getSelectedItem()).getId();
+            int typeId = 0;
+            if (cmbType.getSelectedItem().equals(defTypeValue)) {
+                typeId = ((TypeNode) cmbType.getSelectedItem()).getId();
+            }
 
             if (curPopulating) {
                 return;
@@ -1127,11 +1132,19 @@ public final class ScrLexicon extends PFrame {
             @Override
             public void removeUpdate(DocumentEvent e) {
                 setWordLegality();
+                if (isFilterBlank()) {
+                    // if filter is in place, do not trigger a rerender of the values
+                    saveName();
+                }
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
                 setWordLegality();
+                if (isFilterBlank()) {
+                    // if filter is in place, do not trigger a rerender of the values
+                    saveName();
+                }
             }
         });
 
@@ -1319,7 +1332,11 @@ public final class ScrLexicon extends PFrame {
             if (curWord == null) {
                 if (!namePopulating) {
                     namePopulating = true;
-                    ((PTextField) txtConWord).setDefault();
+                    try {
+                        ((PTextField) txtConWord).setDefault();
+                    } catch (Exception e) {
+                        IOHandler.writeErrorLog(e);
+                    }
                     namePopulating = false;
                 }
                 ((PTextField) txtLocalWord).setDefault();
@@ -1332,7 +1349,11 @@ public final class ScrLexicon extends PFrame {
             } else {
                 if (!namePopulating) {
                     namePopulating = true;
-                    txtConWord.setText(curWord.getValue());
+                    try {
+                        txtConWord.setText(curWord.getValue());
+                    } catch (Exception e) {
+                        IOHandler.writeErrorLog(e);
+                    }
                     namePopulating = false;
                 }
                 txtDefinition.setText(curWord.getDefinition());
@@ -1444,7 +1465,7 @@ public final class ScrLexicon extends PFrame {
         curPopulating = true;
 
         try {
-            DefaultListModel<ConWordDisplay> listModel = new DefaultListModel<>();
+            PListModelLexicon listModel = new PListModelLexicon();
             
             for (ConWordDisplay conWord : wordList) {
                 listModel.addElement(conWord);
@@ -1468,37 +1489,38 @@ public final class ScrLexicon extends PFrame {
      * Saves name to word, then repopulates lexicon to ensure proper alphabetical order. Reselects proper entry.
      */
     private void saveName() {
-        if (curPopulating) {
-            return;
-        }
+        if (!curPopulating) {
+            curPopulating = true;
+            namePopulating = true;
 
-        curPopulating = true;
-        namePopulating = true;
-        ConWord curWord = getCurrentWord();
+            try {
+                ConWord curWord = getCurrentWord();
 
-        try {
-            if (curWord == null) {
-                return;
+                try {
+                    if (curWord != null) {
+                        saveValuesTo(curWord);
+                    }
+                } catch (Exception e) {
+                    IOHandler.writeErrorLog(e);
+                    InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), core.getRootWindow());
+                }
+
+                curPopulating = false;
+
+                // don't repopulate if looking for illegals
+                if (!chkFindBad.isSelected()) {
+                    filterLexicon();
+                }
+
+                curPopulating = true;
+                lstLexicon.setSelectedValue(curWord, true);
+            } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
             }
-
-            saveValuesTo(curWord);
-        } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), core.getRootWindow());
+            namePopulating = false;
+            curPopulating = false;
+            setWordLegality();
         }
-
-        curPopulating = false;
-
-        // don't repopulate if looking for illegals
-        if (!chkFindBad.isSelected()) {
-            filterLexicon();
-        }
-
-        curPopulating = true;
-        lstLexicon.setSelectedValue(curWord, true);
-        namePopulating = false;
-        curPopulating = false;
-        setWordLegality();
     }
 
     /**
@@ -1675,7 +1697,7 @@ public final class ScrLexicon extends PFrame {
         btnEtymology = new PButton(core);
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        lstLexicon = new PList(core, true);
+        lstLexicon = new PListLexicon(core, true);
         btnAddWord = new PolyGlot.CustomControls.PAddRemoveButton("+");
         btnDelWord = new PolyGlot.CustomControls.PAddRemoveButton("-");
         jButton1 = new PButton(core);

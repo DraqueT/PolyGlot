@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque
+ * Copyright (c) 2019, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -20,49 +20,27 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
-import java.awt.Font;
-import javax.swing.JList;
+import PolyGlot.ManagersCollections.ConWordCollection.ConWordDisplay;
+import PolyGlot.Nodes.ConWord;
 
 /**
- *
+ * This specifically handles list cases for the Lexicon display
  * @author draque
- * @param <N>
  */
-public class PList<N> extends JList<N> {
-    private DictCore core;
-    private boolean isConFont;
-    boolean ignoreRepaint = false;
-    
-    public PList(DictCore _core, boolean _isConFont) {        
-        core = _core;
-        isConFont = _isConFont;
+public class PListLexicon extends PList<ConWordDisplay> {
+    public PListLexicon(DictCore _core, boolean _isConFont) {        
+        super(_core, _isConFont);
     }
     
-    public void setCore(DictCore _core) {
-        core = _core;
-    }
-
     @Override
-    public void repaint() {
-        if (ignoreRepaint) {
-            return;
+    public void setSelectedValue(Object value, boolean shouldScroll) {
+        Object passThrough = value;
+        
+        if (value instanceof ConWord && this.getModel() instanceof PListModelLexicon) {
+            passThrough = ((PListModelLexicon)this.getModel()).getDisplayFromWord((ConWord)value);
+            passThrough = passThrough == null ? value : passThrough;
         }
         
-        if (core != null) { // initial paint happens before initilization complete
-            Font testFont = core.getPropertiesManager().getFontCon();
-            ignoreRepaint = true;
-            if (isConFont) {
-                setFont(testFont);
-            } else {
-                setFont(core.getPropertiesManager().getFontLocal());
-            }
-            ignoreRepaint = false;
-        }
-        
-        super.repaint(); 
-    }
-    
-    public void setConFont(boolean _isConFont) {
-        isConFont = _isConFont;
+        super.setSelectedValue(passThrough, shouldScroll);
     }
 }
