@@ -1062,7 +1062,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                 ret = conWord.toString();
             }
             
-            return ret;
+            return ret.isEmpty() ? " " : ret;
         }
         
         /**
@@ -1078,7 +1078,11 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
            int ret;
 
            if (core.getPropertiesManager().isUseLocalWordLex()) {
-               ret = myLocalWord.compareTo(compareLocalWord);
+               if (core.getPropertiesManager().isIgnoreCase()) {
+                    ret = myLocalWord.toLowerCase().compareTo(compareLocalWord.toLowerCase());
+               } else {
+                    ret = myLocalWord.compareTo(compareLocalWord);
+               }
            } else {
                ret = conWord.compareTo(_compare.getConWord());
            }

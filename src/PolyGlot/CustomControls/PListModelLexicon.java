@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, draque
+ * Copyright (c) 2019, draque
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,50 +19,38 @@
  */
 package PolyGlot.CustomControls;
 
-import PolyGlot.DictCore;
-import java.awt.Font;
-import javax.swing.JList;
+import PolyGlot.ManagersCollections.ConWordCollection.ConWordDisplay;
+import PolyGlot.Nodes.ConWord;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.DefaultListModel;
 
 /**
  *
  * @author draque
- * @param <N>
  */
-public class PList<N> extends JList<N> {
-    private DictCore core;
-    private boolean isConFont;
-    boolean ignoreRepaint = false;
+public class PListModelLexicon extends DefaultListModel<ConWordDisplay> {
+    Map<Integer, ConWordDisplay> wordToDisplay = new HashMap<>();
     
-    public PList(DictCore _core, boolean _isConFont) {        
-        core = _core;
-        isConFont = _isConFont;
-    }
-    
-    public void setCore(DictCore _core) {
-        core = _core;
-    }
-
     @Override
-    public void repaint() {
-        if (ignoreRepaint) {
-            return;
-        }
-        
-        if (core != null) { // initial paint happens before initilization complete
-            Font testFont = core.getPropertiesManager().getFontCon();
-            ignoreRepaint = true;
-            if (isConFont) {
-                setFont(testFont);
-            } else {
-                setFont(core.getPropertiesManager().getFontLocal());
-            }
-            ignoreRepaint = false;
-        }
-        
-        super.repaint(); 
+    public void addElement(ConWordDisplay element) {
+        wordToDisplay.put(element.getConWord().getId(), element);
+        super.addElement(element);
     }
     
-    public void setConFont(boolean _isConFont) {
-        isConFont = _isConFont;
+    /**
+     * Gets display of conword from the conword itself
+     * returns null if not exists
+     * @param conWord
+     * @return 
+     */
+    public ConWordDisplay getDisplayFromWord(ConWord conWord) {
+        ConWordDisplay ret = null;
+        
+        if (wordToDisplay.containsKey(conWord.getId())) {
+            ret = wordToDisplay.get(conWord.getId());
+        }
+        
+        return ret;
     }
 }
