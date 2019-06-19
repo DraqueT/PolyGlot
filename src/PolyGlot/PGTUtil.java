@@ -261,6 +261,7 @@ public class PGTUtil {
     public static final String ImageIdAttribute = "imageIDAttribute";
     public static final String True = "T";
     public static final String False = "F";
+    public static final String displayName = "PolyGlot";
 
     // screen names when they're required as constants...
     public static final String scrNameLexicon;
@@ -322,6 +323,7 @@ public class PGTUtil {
     public static final ImageIcon delButtonIcon;
     public static final ImageIcon addButtonIconPressed;
     public static final ImageIcon delButtonIconPressed;
+    public static final ImageIcon polyGlotIcon;
     
     // one time set for code driven static values
     static {
@@ -385,6 +387,8 @@ public class PGTUtil {
         delButtonIconPressed = new ImageIcon(new ImageIcon(
                 PGTUtil.class.getResource("/PolyGlot/ImageAssets/delete_button_pressed.png"))
                 .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
+        polyGlotIcon = new ImageIcon(
+                PGTUtil.class.getResource("/PolyGlot/ImageAssets/PolyGlotIcon.png"));
     }
     
     /**
@@ -425,5 +429,13 @@ public class PGTUtil {
         Map attributes = font.getAttributes();
         attributes.put(key, value);
         return font.deriveFont(attributes);
+    }
+    
+    /**
+     * Tests and returns true if running OSX
+     * @return 
+     */
+    public static boolean isOSX() {
+        return System.getProperty("os.name").startsWith("Mac");
     }
 }

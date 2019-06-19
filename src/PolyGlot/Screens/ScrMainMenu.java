@@ -30,6 +30,7 @@ import PolyGlot.DictCore;
 import PolyGlot.ExcelExport;
 import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ConWord;
+import PolyGlot.OSIntegrations;
 import PolyGlot.PGTUtil;
 import java.awt.Color;
 import java.awt.Component;

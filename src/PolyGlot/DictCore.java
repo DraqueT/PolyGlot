@@ -48,6 +48,7 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JMenuBar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -693,7 +694,8 @@ public class DictCore {
      * PolyGlot (blank if none)
      */
     public static void main(final String args[]) {
-        setupNumbus();
+        Object preNimbusMenu = OSIntegrations.integrateToOs();
+        setupNimbus();
 
         java.awt.EventQueue.invokeLater(() -> {
             // catch all top level application killing throwables (and bubble up directly to ensure reasonable behavior)
@@ -716,6 +718,11 @@ public class DictCore {
                             s.setFile(args[0]);
                             s.openLexicon();
                         }
+                        
+                        // runs additional integration if on OSX system
+                        if (PGTUtil.isOSX()) {
+                            OSIntegrations.integrateMacMenuBar(s.getJMenuBar(), preNimbusMenu);
+                        }
                     } catch (Exception e) {
                         IOHandler.writeErrorLog(e);
                         InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
@@ -736,7 +743,7 @@ public class DictCore {
         });
     }
     
-    private static void setupNumbus() {
+    private static void setupNimbus() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
