@@ -8,6 +8,16 @@
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
 <project name="PolyGlot" default="default" basedir=".">
+    <!--OS CONDITIONALS-->
+    <condition property="isMac">
+        <os family="mac" />
+    </condition>
+
+    <condition property="isWindows">
+        <os family="windows" />
+    </condition>
+    <!--END OS CONDITIONALS-->
+    
     <description>Builds, tests, and runs the project PolyGlot.</description>
     <!-- START MAC BUNDLER MODIFICATION -->
     <taskdef name="bundleapp"
@@ -26,7 +36,7 @@
     </target>
     <!-- END MAC BUNDLER MODIFICATION -->
     
-    <target name="-post-jar">
+    <target name="-post-jar" if="isMac">
         <exec executable="/bin/bash">
         <arg value="post_build.sh"/>
         </exec>
