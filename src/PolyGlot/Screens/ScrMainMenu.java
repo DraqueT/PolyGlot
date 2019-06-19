@@ -30,7 +30,6 @@ import PolyGlot.DictCore;
 import PolyGlot.ExcelExport;
 import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ConWord;
-import PolyGlot.OSIntegrations;
 import PolyGlot.PGTUtil;
 import java.awt.Color;
 import java.awt.Component;
@@ -129,6 +128,15 @@ public final class ScrMainMenu extends PFrame {
         checkJavaVersion();
         super.setSize(super.getPreferredSize());
         setupKeyStrokes();
+    }
+    
+    /**
+     * Warns user if they are using a beta version (based on beta warning file)
+     */
+    public void warnBeta() {
+        if (IOHandler.fileExists("BETA_WARNING.txt")) {
+            InfoBox.warning("BETA VERSION", "You are using a beta version of PolyGlot. Please proceed with caution!", this);
+        }
     }
     
     @Override

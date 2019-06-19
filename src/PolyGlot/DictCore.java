@@ -39,6 +39,7 @@ import PolyGlot.ManagersCollections.RomanizationManager;
 import PolyGlot.ManagersCollections.ToDoManager;
 import PolyGlot.ManagersCollections.VisualStyleManager;
 import PolyGlot.ManagersCollections.WordClassCollection;
+import PolyGlot.Screens.ScrAbout;
 import PolyGlot.Screens.ScrMainMenu;
 import java.awt.Color;
 import java.awt.FontFormatException;
@@ -48,7 +49,6 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JMenuBar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -694,9 +694,22 @@ public class DictCore {
      * PolyGlot (blank if none)
      */
     public static void main(final String args[]) {
-        Object preNimbusMenu = OSIntegrations.integrateToOs();
+        //Object preNimbusMenu = OSIntegrations.integrateToOs();
+        Object preNimbusMenu = null;
+        if (PGTUtil.isOSX()) {
+            Runnable scrAboutRun = new Runnable(){
+                @Override
+                public void run() {
+                    ScrAbout.run(new DictCore());
+                }
+            };
+            preNimbusMenu = osintegration_mac.OSIntegration_Mac.integrateToMac(PGTUtil.displayName, 
+                    PGTUtil.polyGlotIcon.getImage(), scrAboutRun);
+        }
         setupNimbus();
-
+        
+        final Object finalPreNimbusMenu = preNimbusMenu;
+        
         java.awt.EventQueue.invokeLater(() -> {
             // catch all top level application killing throwables (and bubble up directly to ensure reasonable behavior)
             try {
@@ -721,7 +734,8 @@ public class DictCore {
                         
                         // runs additional integration if on OSX system
                         if (PGTUtil.isOSX()) {
-                            OSIntegrations.integrateMacMenuBar(s.getJMenuBar(), preNimbusMenu);
+                            //OSIntegrations.integrateMacMenuBar(s.getJMenuBar(), preNimbusMenu);
+                            osintegration_mac.OSIntegration_Mac.integrateMacMenuBar(s.getJMenuBar(), finalPreNimbusMenu);
                         }
                     } catch (Exception e) {
                         IOHandler.writeErrorLog(e);
