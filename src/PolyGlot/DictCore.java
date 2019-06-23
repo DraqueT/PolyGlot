@@ -698,6 +698,7 @@ public class DictCore {
         
         // must be set before accessing System to test OS (values will simply be ignored for other OSes
         osintegration_mac.OSIntegration_Mac.setDisplayName(PGTUtil.displayName);
+        osintegration_mac.OSIntegration_Mac.setIcon(PGTUtil.polyGlotIcon.getImage());
         
         if (PGTUtil.isOSX()) {
             preNimbusMenu = osintegration_mac.OSIntegration_Mac.setBlankAppleMenuBar();
