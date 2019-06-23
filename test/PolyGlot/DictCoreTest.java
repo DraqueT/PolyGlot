@@ -68,7 +68,7 @@ public class DictCoreTest {
      */
     @Test
     public void testMainNoFile() {
-        String[] args = null;
+        String[] args = {"", "", PGTUtil.True};
         DictCore.main(args);
     }
     
@@ -78,7 +78,7 @@ public class DictCoreTest {
      */
     @Test
     public void testMainWithFile() {
-        String[] args = new String[]{"test/TestResources/Lodenkur_TEST.pgd"};
+        String[] args = new String[]{"test/TestResources/Lodenkur_TEST.pgd", "", PGTUtil.True};
         DictCore.main(args);
     }
     
@@ -89,7 +89,7 @@ public class DictCoreTest {
      */
     @Test
     public void testMainWithMissingFile() {
-        String[] args = new String[]{"test/TestResources/MISSING_FILE.pgd"};
+        String[] args = new String[]{"test/TestResources/MISSING_FILE.pgd", "", PGTUtil.True};
         DictCore.main(args);
     }
 }
