@@ -20,6 +20,7 @@
 package PolyGlot.ManagersCollections;
 
 import PolyGlot.DictCore;
+import PolyGlot.Nodes.ConWord;
 import PolyGlot.Nodes.LexiconProblemNode;
 import java.io.IOException;
 import java.util.List;
@@ -83,4 +84,56 @@ public class ConWordCollectionTest {
         
     }
     
+    @Test
+    public void testMissingConWord() {
+        DictCore core = new DictCore();
+        ConWord test = new ConWord();
+        
+        ConWord results = core.getWordCollection().testWordLegality(test);
+        
+        assertEquals(results.getValue(), "Conlang word value cannot be blank.");
+    }
+    
+    @Test
+    public void testMissingLocalWordWithRequirement() {
+        DictCore core = new DictCore();
+        ConWord test = new ConWord();
+        
+        core.getPropertiesManager().setLocalMandatory(true);
+        test.setValue("TEST");
+        ConWord results = core.getWordCollection().testWordLegality(test);
+        
+        assertEquals(results.getLocalWord(), "Local Lang word set to mandatory.");
+    }
+    
+    @Test
+    public void testMissingLocalWordNoRequirement() {
+        DictCore core = new DictCore();
+        ConWord test = new ConWord();
+        
+        ConWord results = core.getWordCollection().testWordLegality(test);
+        
+        assertEquals(results.getLocalWord(), "");
+    }
+    
+    @Test
+    public void testMissingPOSWithoRequirement() {
+        DictCore core = new DictCore();
+        ConWord test = new ConWord();
+        
+        core.getPropertiesManager().setTypesMandatory(true);
+        ConWord results = core.getWordCollection().testWordLegality(test);
+        
+        assertEquals(results.typeError, "Types set to mandatory.");
+    }
+    
+    @Test
+    public void testMissingPOSNoRequirement() {
+        DictCore core = new DictCore();
+        ConWord test = new ConWord();
+        
+        ConWord results = core.getWordCollection().testWordLegality(test);
+        
+        assertEquals(results.getLocalWord(), "");
+    }
 }

@@ -694,23 +694,29 @@ public class DictCore {
      * PolyGlot (blank if none)
      */
     public static void main(final String args[]) {
-        //Object preNimbusMenu = OSIntegrations.integrateToOs();
         Object preNimbusMenu = null;
+        
+        // must be set before accessing System to test OS (values will simply be ignored for other OSes
+        osintegration_mac.OSIntegration_Mac.setDisplayName(PGTUtil.displayName);
+        
         if (PGTUtil.isOSX()) {
+            preNimbusMenu = osintegration_mac.OSIntegration_Mac.setBlankAppleMenuBar();
+            
             Runnable scrAboutRun = new Runnable(){
                 @Override
                 public void run() {
                     ScrAbout.run(new DictCore());
                 }
             };
-            preNimbusMenu = osintegration_mac.OSIntegration_Mac.integrateToMac(PGTUtil.displayName, 
-                    PGTUtil.polyGlotIcon.getImage(), scrAboutRun);
+            
+            osintegration_mac.OSIntegration_Mac.setAboutHandler(scrAboutRun);
         }
         setupNimbus();
         
         final Object finalPreNimbusMenu = preNimbusMenu;
         
         java.awt.EventQueue.invokeLater(() -> {
+            
             // catch all top level application killing throwables (and bubble up directly to ensure reasonable behavior)
             try {
                 String overridePath = args.length > 1 ? args[1] : "";
@@ -734,7 +740,6 @@ public class DictCore {
                         
                         // runs additional integration if on OSX system
                         if (PGTUtil.isOSX()) {
-                            //OSIntegrations.integrateMacMenuBar(s.getJMenuBar(), preNimbusMenu);
                             osintegration_mac.OSIntegration_Mac.integrateMacMenuBar(s.getJMenuBar(), finalPreNimbusMenu);
                         }
                     } catch (Exception e) {
