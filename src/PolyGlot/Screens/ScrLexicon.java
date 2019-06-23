@@ -1228,7 +1228,7 @@ public final class ScrLexicon extends PFrame {
                     if (tip.length() == 0) {
                         tip = curWord.getValue();
                     }
-                    if (curType != null) {
+                    if (curType != null && (curType.getId() != 0 || core.getPropertiesManager().isTypesMandatory())) {
                         tip += " : " + (curType.getGloss().length() == 0
                                 ? curType.getValue() : curType.getGloss());
                     }

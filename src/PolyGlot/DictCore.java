@@ -689,18 +689,27 @@ public class DictCore {
         versionHierarchy.put("2.4", 35);
     }
     
+    private static boolean shouldUseOSInegration(String args[]) {
+        return args == null || args.length < 3 || !args[2].equals(PGTUtil.True);
+    }
+    
     /**
-     * @param args the command line arguments args[0] = open file path (blank if none) args[1] = working directory of
-     * PolyGlot (blank if none)
+     * @param args the command line arguments: 
+     * args[0] = open file path (blank if none) 
+     * args[1] = working directory of PolyGlot (blank if none)
+     * args[2] = set to PGTUtils.True to skip OS Integration
      */
     public static void main(final String args[]) {
         Object preNimbusMenu = null;
+        boolean osIntegration = shouldUseOSInegration(args);
         
-        // must be set before accessing System to test OS (values will simply be ignored for other OSes
-        osintegration_mac.OSIntegration_Mac.setDisplayName(PGTUtil.displayName);
-        osintegration_mac.OSIntegration_Mac.setIcon(PGTUtil.polyGlotIcon.getImage());
+        if (osIntegration) {
+            // must be set before accessing System to test OS (values will simply be ignored for other OSes
+            osintegration_mac.OSIntegration_Mac.setDisplayName(PGTUtil.displayName);
+            osintegration_mac.OSIntegration_Mac.setIcon(PGTUtil.polyGlotIcon.getImage());
+        }
         
-        if (PGTUtil.isOSX()) {
+        if (PGTUtil.isOSX() && osIntegration) {
             preNimbusMenu = osintegration_mac.OSIntegration_Mac.setBlankAppleMenuBar();
             
             Runnable scrAboutRun = new Runnable(){
@@ -740,7 +749,7 @@ public class DictCore {
                         }
                         
                         // runs additional integration if on OSX system
-                        if (PGTUtil.isOSX()) {
+                        if (PGTUtil.isOSX() && osIntegration) {
                             osintegration_mac.OSIntegration_Mac.integrateMacMenuBar(s.getJMenuBar(), finalPreNimbusMenu);
                         }
                     } catch (Exception e) {
