@@ -705,7 +705,10 @@ public class DictCore {
         
         if (osIntegration) {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
-            osintegration_mac.OSIntegration_Mac.setDisplayName(PGTUtil.displayName);
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            System.setProperty("apple.awt.application.name", PGTUtil.displayName);
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", PGTUtil.displayName);
+            
             osintegration_mac.OSIntegration_Mac.setIcon(PGTUtil.polyGlotIcon.getImage());
         }
         
@@ -750,12 +753,20 @@ public class DictCore {
                         
                         // runs additional integration if on OSX system
                         if (PGTUtil.isOSX() && osIntegration) {
-                            final ScrMainMenu disposeScr = s;
+                            final ScrMainMenu staticScr = s;
                             osintegration_mac.OSIntegration_Mac.integrateMacMenuBar(s.getJMenuBar(), finalPreNimbusMenu);
                             osintegration_mac.OSIntegration_Mac.setQuitAction(new Runnable() {
                                 @Override
                                 public void run() {
-                                    disposeScr.dispose();
+                                    staticScr.dispose();
+                                }
+                                
+                            });
+                            
+                            osintegration_mac.OSIntegration_Mac.setPreferanceManager(new Runnable() {
+                                @Override
+                                public void run() {
+                                    staticScr.showOptions();
                                 }
                                 
                             });

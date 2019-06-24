@@ -1451,7 +1451,7 @@ public final class ScrMainMenu extends PFrame {
         showOptions();
     }//GEN-LAST:event_mnuOptionsActionPerformed
 
-    private void showOptions() {
+    public void showOptions() {
         ScrOptions s = new ScrOptions(core);
         s.setLocation(getLocation());
         s.setVisible(true);
