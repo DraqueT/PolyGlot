@@ -750,7 +750,15 @@ public class DictCore {
                         
                         // runs additional integration if on OSX system
                         if (PGTUtil.isOSX() && osIntegration) {
+                            final ScrMainMenu disposeScr = s;
                             osintegration_mac.OSIntegration_Mac.integrateMacMenuBar(s.getJMenuBar(), finalPreNimbusMenu);
+                            osintegration_mac.OSIntegration_Mac.setQuitAction(new Runnable() {
+                                @Override
+                                public void run() {
+                                    disposeScr.dispose();
+                                }
+                                
+                            });
                         }
                     } catch (Exception e) {
                         IOHandler.writeErrorLog(e);
