@@ -89,7 +89,6 @@ public class WebInterface {
      * @return 
      */
     public static String getTextFromHtml(String text) {
-        //return text.replaceAll("<[^>]+>", "").trim();
         return Jsoup.parse(text).text();
     }
     
