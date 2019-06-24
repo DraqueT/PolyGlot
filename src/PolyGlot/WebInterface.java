@@ -34,6 +34,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.jsoup.Jsoup;
 
 /**
  * This class handles all web communication to and from PolyGlot
@@ -88,7 +89,8 @@ public class WebInterface {
      * @return 
      */
     public static String getTextFromHtml(String text) {
-        return text.replaceAll("<[^>]+>", "").trim();
+        //return text.replaceAll("<[^>]+>", "").trim();
+        return Jsoup.parse(text).text();
     }
     
     /**
