@@ -28,7 +28,7 @@
         <bundleapp outputdirectory="dist"
             name="PolyGlot"
 			icon="macSet.icns"
-            displayname="PolyGlot BETA"
+            displayname="PolyGlot"
             identifier="PolyGlot.ScrDictInterface"
             mainclassname="PolyGlot.ScrDictInterface">
             <classpath file="dist/PolyGlot.jar" />
