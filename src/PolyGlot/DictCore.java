@@ -700,95 +700,112 @@ public class DictCore {
      * args[2] = set to PGTUtils.True to skip OS Integration
      */
     public static void main(final String args[]) {
-        Object preNimbusMenu = null;
-        boolean osIntegration = shouldUseOSInegration(args);
-        
-        if (osIntegration) {
-            // must be set before accessing System to test OS (values will simply be ignored for other OSes
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("apple.awt.application.name", PGTUtil.displayName);
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name", PGTUtil.displayName);
+        try {
+            betaMessageDisplay();
             
-            osintegration_mac.OSIntegration_Mac.setIcon(PGTUtil.polyGlotIcon.getImage());
-        }
-        
-        if (PGTUtil.isOSX() && osIntegration) {
-            preNimbusMenu = osintegration_mac.OSIntegration_Mac.setBlankAppleMenuBar();
-            
-            Runnable scrAboutRun = new Runnable(){
-                @Override
-                public void run() {
-                    ScrAbout.run(new DictCore());
-                }
-            };
-            
-            osintegration_mac.OSIntegration_Mac.setAboutHandler(scrAboutRun);
-        }
-        setupNimbus();
-        
-        final Object finalPreNimbusMenu = preNimbusMenu;
-        
-        java.awt.EventQueue.invokeLater(() -> {
-            
-            // catch all top level application killing throwables (and bubble up directly to ensure reasonable behavior)
-            try {
-                String overridePath = args.length > 1 ? args[1] : "";
-                ScrMainMenu s = null;
+            Object preNimbusMenu = null;
+            boolean osIntegration = shouldUseOSInegration(args);
 
-                // set DPI scaling to false (requires Java 9)
-                System.getProperties().setProperty("Dsun.java2d.dpiaware", "false");
-
-                if (canStart()) {
-                    try {
-                        // separated due to serious nature of Thowable vs Exception
-                        s = new ScrMainMenu(overridePath);
-                        s.checkForUpdates(false);
-                        s.setVisible(true);
-
-                        // open file if one is provided via arguments
-                        if (args.length > 0) {
-                            s.setFile(args[0]);
-                            s.openLexicon();
-                        }
-                        
-                        // runs additional integration if on OSX system
-                        if (PGTUtil.isOSX() && osIntegration) {
-                            final ScrMainMenu staticScr = s;
-                            osintegration_mac.OSIntegration_Mac.integrateMacMenuBar(s.getJMenuBar(), finalPreNimbusMenu);
-                            osintegration_mac.OSIntegration_Mac.setQuitAction(new Runnable() {
-                                @Override
-                                public void run() {
-                                    staticScr.dispose();
-                                }
-                                
-                            });
-                            
-                            osintegration_mac.OSIntegration_Mac.setPreferanceManager(new Runnable() {
-                                @Override
-                                public void run() {
-                                    staticScr.showOptions();
-                                }
-                                
-                            });
-                        }
-                    } catch (Exception e) {
-                        IOHandler.writeErrorLog(e);
-                        InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
-                                + e.getMessage() + "\n"
-                                        + "Please contact developer (draquemail@gmail.com) for assistance.", null);
-
-                        if (s != null) {
-                            s.dispose();
-                        }
-                        // ex.printStackTrace();
-                    }
-                }
-            } catch (Throwable t) {
-                InfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage(), null);
-                IOHandler.writeErrorLog(t);
-                throw t;
+            if (osIntegration) {
+                // must be set before accessing System to test OS (values will simply be ignored for other OSes
+                System.setProperty("apple.laf.useScreenMenuBar", "true");
+                System.setProperty("apple.awt.application.name", PGTUtil.displayName);
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", PGTUtil.displayName);
             }
-        });
+
+            if (PGTUtil.isOSX() && osIntegration) {
+                preNimbusMenu = osintegration_mac.OSIntegration_Mac.setBlankAppleMenuBar();
+
+                osintegration_mac.OSIntegration_Mac.setIcon(PGTUtil.polyGlotIcon.getImage());
+
+                Runnable scrAboutRun = new Runnable(){
+                    @Override
+                    public void run() {
+                        ScrAbout.run(new DictCore());
+                    }
+                };
+
+                osintegration_mac.OSIntegration_Mac.setAboutHandler(scrAboutRun);
+            }
+            setupNimbus();
+
+            final Object finalPreNimbusMenu = preNimbusMenu;
+
+            java.awt.EventQueue.invokeLater(() -> {
+
+                // catch all top level application killing throwables (and bubble up directly to ensure reasonable behavior)
+                try {
+                    String overridePath = args.length > 1 ? args[1] : "";
+                    ScrMainMenu s = null;
+
+                    // set DPI scaling to false (requires Java 9)
+                    System.getProperties().setProperty("Dsun.java2d.dpiaware", "false");
+
+                    if (canStart()) {
+                        try {
+                            // separated due to serious nature of Thowable vs Exception
+                            s = new ScrMainMenu(overridePath);
+                            s.checkForUpdates(false);
+                            s.setVisible(true);
+
+                            // open file if one is provided via arguments
+                            if (args.length > 0) {
+                                s.setFile(args[0]);
+                                s.openLexicon();
+                            }
+
+                            // runs additional integration if on OSX system
+                            if (PGTUtil.isOSX() && osIntegration) {
+                                final ScrMainMenu staticScr = s;
+                                osintegration_mac.OSIntegration_Mac.integrateMacMenuBar(s.getJMenuBar(), finalPreNimbusMenu);
+                                osintegration_mac.OSIntegration_Mac.setQuitAction(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        staticScr.dispose();
+                                    }
+
+                                });
+
+                                osintegration_mac.OSIntegration_Mac.setPreferanceManager(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        staticScr.showOptions();
+                                    }
+
+                                });
+                            }
+                        } catch (Exception e) {
+                            IOHandler.writeErrorLog(e);
+                            InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
+                                    + e.getMessage() + "\n"
+                                            + "Please contact developer (draquemail@gmail.com) for assistance.", null);
+
+                            if (s != null) {
+                                s.dispose();
+                            }
+                        }
+                    }
+                } catch (Throwable t) {
+                    InfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage(), null);
+                    IOHandler.writeErrorLog(t);
+                    throw t;
+                }
+            });
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, "Startup Exception");
+            InfoBox.error("PolyGlot Error", "A serious error has occurred: " + e.getLocalizedMessage(), null);
+            throw e;
+        }
+    }
+    
+    /**
+     * Displays beta message if appropriate (beta builds have warning text within lib folder
+     */
+    private static void betaMessageDisplay() {
+        //String beta
+        if (IOHandler.fileExists("lib/BETA_WARNING.txt")) {
+            InfoBox.warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.", null);
+        }
     }
     
     private static void setupNimbus() {
