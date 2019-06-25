@@ -46,11 +46,12 @@ if [ -f "$file_dest" ]
 then
         echo "Creating Beta Build to upload..."
 	cp "${beta_warn_orig}" "${beta_warn_dest}" 
+        cp "${frontend}" dist
 	echo -e "\n\nCompiled:" >> "${beta_warn_dest}"
 	date >> "${beta_warn_dest}"
 	cat >> "${beta_warn_dest}"
 	echo Archiving PolyGlot Beta...
-	zip -r PolyGlot_BETA.zip dist
+	zip -r "${file_orig}" dist
 	echo Copying to public share folder...
 	mv "${file_orig}" "${file_dest}"
 else

@@ -56,7 +56,6 @@ public class WebInterface {
 
         try {
             url = new URL("https://drive.google.com/uc?export=download&id=0B2RMQ7sRXResN3VwLTAwTFE0ZlE");
-            //url = new URL("https://drive.google.com/uc?export=download&id=1O1eKr8SEmhv2K9OCNwOLe0SNrSr0JE2Y"); // TEST SCENARIO
 
             try (InputStream is = url.openStream()) {
                 Scanner s = new Scanner(is);
