@@ -75,26 +75,12 @@ namespace PolyGlot_Frontend
         //tests whether Java is installed.
         private static Boolean testJavaInstalled()
         {
-            Boolean error = false;
-            string strOutput = "";
+            RegistryKey rk = Registry.LocalMachine;
+            RegistryKey subKey = rk.OpenSubKey("SOFTWARE\\JavaSoft\\Java Runtime Environment");
 
-            try
-            {
-                ProcessStartInfo psi = new ProcessStartInfo();
-                psi.FileName = "java";
-                psi.UseShellExecute = false;
-                psi.RedirectStandardError = true;
+            string currentVerion = subKey == null ? "" : subKey.GetValue("CurrentVersion").ToString();
 
-                psi.Arguments = "-version";
-                Process p = Process.Start(psi);
-                strOutput = p.StandardError.ReadToEnd();
-                p.WaitForExit();
-            } catch (System.ComponentModel.Win32Exception)
-            {
-                error = true;
-            }
-
-            return strOutput.StartsWith("java version") && !error;
+            return !(subKey == null || subKey.Equals(""));
         }
 
         private static void restartEscalated(string[] args)
