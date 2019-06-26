@@ -21,6 +21,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
+import PolyGlot.PGTUtil;
 import PolyGlot.PGTUtil.WindowMode;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -190,5 +191,10 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         }
         
         super.setVisible(visible);
+
+        // reposition appropriately if appears offscreen
+        if (visible) {
+            PGTUtil.checkPositionInBounds(this);
+        }
     }
 }
