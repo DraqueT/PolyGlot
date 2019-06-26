@@ -22,8 +22,12 @@ package PolyGlot;
 
 import PolyGlot.Screens.*;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.util.Map;
 import javax.swing.ImageIcon;
 
@@ -437,5 +441,23 @@ public class PGTUtil {
      */
     public static boolean isOSX() {
         return System.getProperty("os.name").startsWith("Mac");
+    }
+
+    public static boolean isWindows() {
+        return System.getProperty("os.name").startsWith("Win");
+    }
+
+    /**
+    * Checks that the position is in bounds for the screen and places it in visible
+    * area if not
+    */
+    public static void checkPositionInBounds(Window w) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Point location = w.getLocationOnScreen();
+
+        // if this would appear offscreen, simply place it in the center of the screen
+        if (screenSize.getWidth() < location.x || screenSize.getHeight() < location.y) {
+            w.setLocationRelativeTo(null);
+        }
     }
 }

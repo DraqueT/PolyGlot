@@ -21,6 +21,7 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import PolyGlot.IOHandler;
+import PolyGlot.PGTUtil;
 import PolyGlot.PGTUtil.WindowMode;
 import PolyGlot.Screens.ScrMainMenu;
 import PolyGlot.Screens.ScrPrintToPDF;
@@ -385,6 +386,11 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
         setupKeyStrokes();
 
         super.setVisible(visible);
+
+        // reposition appropriately if appears offscreen
+        if (visible) {
+            PGTUtil.checkPositionInBounds(this);
+        }
     }
     
     @Override
