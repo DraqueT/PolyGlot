@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018, Draque Thompson
+ * Copyright (c) 2016-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -53,6 +53,7 @@ import com.itextpdf.layout.ColumnDocumentRenderer;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.border.SolidBorder;
 import com.itextpdf.layout.element.AreaBreak;
+import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Div;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.LineSeparator;
@@ -280,7 +281,7 @@ public class PExportToPDF {
 
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             Paragraph fin = new Paragraph("Created with PolyGlot: Language Creation Tool Version " + core.getVersion() + "\n");
-            fin.add(new Link("Get PolyGlot Here", PdfAction.createURI("https://github.com/DraqueT/PolyGlot/releases")).setUnderline());
+            fin.add(new Link("Get PolyGlot Here", PdfAction.createURI(PGTUtil.homePage)).setUnderline());
             fin.add(new Text("\nPolyGlot Created By Draque Thompson"));
             fin.setFontSize(20);
             fin.setFontColor(Color.LIGHT_GRAY);
@@ -360,6 +361,7 @@ public class PExportToPDF {
         curLetterSec.setProperty(Property.DESTINATION, anchorPoint);
 
         while (allWords.hasNext()) {
+            Cell dictEntryWord = new Cell();
             Paragraph dictEntry = new Paragraph();
             ConWord curWord = allWords.next();
 
@@ -518,16 +520,17 @@ public class PExportToPDF {
                         String cleanedText = StringEscapeUtils.unescapeHtml4((String) o) + "\n";
                         dictEntry.add(new Text(cleanedText).setFontSize(defFontSize).setFont(unicodeFont));
                     } else if (o instanceof BufferedImage) {
-                        // TODO: Address here and below why this doesn't insert images properly. Need to re-architect... everything.
-                        // I am mis-using paragraphs. 
                         // must convert buffered image to bytes because WHY DOES iTEXT 7 NOT DO THIS ITSELF.
                         byte[] bytes = IOHandler.getBufferedImageByteArray((BufferedImage) o);
                         Image pdfImage = new Image(ImageDataFactory.create(bytes));
-                        dictEntry.add(pdfImage);
-                        //curLetterSec.add(dictEntry);
-                        //dictEntry = new Paragraph();
-                        //dictEntry.add(new Text("\n").setFont(conFont));
-                        //dictEntry.add(getScaledImage((BufferedImage) o, true));
+                        
+                        if (!dictEntry.isEmpty()) {
+                            dictEntry.setKeepTogether(true);
+                            dictEntryWord.add(dictEntry);
+                            dictEntry = new Paragraph();
+                        }
+                        
+                        dictEntryWord.add(pdfImage);
                     } else {
                         // Do nothing: May be expanded for further logic later
                     }
@@ -547,7 +550,8 @@ public class PExportToPDF {
             printConjugationsToEntry(dictEntry, curWord);
 
             dictEntry.setKeepTogether(true);
-            curLetterSec.add(dictEntry);
+            dictEntryWord.add(dictEntry);
+            curLetterSec.add(dictEntryWord);
 
             // add line break if more words
             if (allWords.hasNext()) {
@@ -575,6 +579,7 @@ public class PExportToPDF {
         curLetterSec.setProperty(Property.DESTINATION, anchorPoint);
 
         while (allWords.hasNext()) {
+            Cell dictEntryWord = new Cell();
             Paragraph dictEntry = new Paragraph();
             ConWord curWord = allWords.next();
 
@@ -739,7 +744,14 @@ public class PExportToPDF {
                         // must convert buffered image to bytes because WHY DOES iTEXT 7 NOT DO THIS ITSELF.
                         byte[] bytes = IOHandler.getBufferedImageByteArray((BufferedImage) o);
                         Image pdfImage = new Image(ImageDataFactory.create(bytes));
-                        dictEntry.add(pdfImage);
+                        
+                        if (!dictEntry.isEmpty()) {
+                            dictEntry.setKeepTogether(true);
+                            dictEntryWord.add(dictEntry);
+                            dictEntry = new Paragraph();
+                        }
+                        
+                        dictEntryWord.add(pdfImage);
                     } else {
                         // Do nothing: May be expanded for further logic later
                     }
@@ -750,7 +762,8 @@ public class PExportToPDF {
             printConjugationsToEntry(dictEntry, curWord);
 
             dictEntry.setKeepTogether(true);
-            curLetterSec.add(dictEntry);
+            dictEntryWord.add(dictEntry);
+            curLetterSec.add(dictEntryWord);
 
             // add line break if more words
             if (allWords.hasNext()) {
