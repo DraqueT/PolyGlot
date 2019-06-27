@@ -848,8 +848,15 @@ public class DictCore {
             ScrMainMenu.class.getClassLoader().loadClass("javafx.embed.swing.JFXPanel");
         } catch (ClassNotFoundException e) {
             IOHandler.writeErrorLog(e);
-            startProblems += "Unable to load Java FX. Download and install to use PolyGlot "
-                    + "(JavaFX not included in some builds of Java 8 for Linux).\n";
+            startProblems += "Unable to load Java FX. Download and install to use PolyGlot ";
+            
+            if (PGTUtil.isOSX()) {
+                startProblems += "The default Java Virtual Machine for OSX does not include JFX. Please download from java.com/en/download/";
+            } else if (PGTUtil.isWindows()) {
+                startProblems += "The version of Java you are using does not include JFX.  Please download from java.com/en/download/";
+            } else {
+                startProblems += "(JavaFX not included in some builds of Java for Linux).\n";
+            }
         }
         
         if (startProblems.length() != 0) {
