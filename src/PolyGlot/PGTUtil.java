@@ -450,6 +450,7 @@ public class PGTUtil {
     /**
     * Checks that the position is in bounds for the screen and places it in visible
     * area if not
+     * @param w
     */
     public static void checkPositionInBounds(Window w) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
