@@ -588,6 +588,7 @@ public class ScrDeclensionGenSetup extends PDialog {
             
             private ActionListener buildCopyToDimensionAction(int decId, int dimId, String combId) {
                 return (ActionEvent ae) -> {
+                    saveTransPairs(lstRules.getSelectedIndex());
                     List<DeclensionGenRule> rules = getSelectedRules();
                     if (verifyCopyRulesToDimension(decId, dimId, rules)) {
                         core.getDeclensionManager().copyRulesToDeclensionTemplates(typeId, 
