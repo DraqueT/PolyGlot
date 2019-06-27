@@ -74,11 +74,12 @@ public class PGTUtil {
     public static final String typePatternXID = "classPattern";
     public static final String typeGlossXID = "classGloss";
 
-    // properties for genders
+    // properties for genders DEPRECATED -->>
     public static final String genderXID = "gender";
     public static final String genderNameXID = "genderName";
     public static final String genderIdXID = "genderId";
     public static final String genderNotesXID = "genderNotes";
+    // <-- DEPRECATED
 
     // language properties
     public static final String langPropertiesXID = "languageProperties";
@@ -266,6 +267,7 @@ public class PGTUtil {
     public static final String True = "T";
     public static final String False = "F";
     public static final String displayName = "PolyGlot";
+    public static final String homePage = "http://draquet.github.io/PolyGlot/";
 
     // screen names when they're required as constants...
     public static final String scrNameLexicon;
