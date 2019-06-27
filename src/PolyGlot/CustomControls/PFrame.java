@@ -388,7 +388,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
         super.setVisible(visible);
 
         // reposition appropriately if appears offscreen
-        if (visible) {
+        if (visible && this.isVisible()) {
             PGTUtil.checkPositionInBounds(this);
         }
     }

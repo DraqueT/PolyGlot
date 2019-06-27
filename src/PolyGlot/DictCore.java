@@ -773,6 +773,8 @@ public class DictCore {
                                     }
 
                                 });
+                            } else if (PGTUtil.isWindows() && osIntegration) {
+                                s.setIconImage(PGTUtil.polyGlotIcon.getImage());
                             }
                         } catch (Exception e) {
                             IOHandler.writeErrorLog(e);

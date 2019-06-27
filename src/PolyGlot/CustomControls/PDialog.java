@@ -193,7 +193,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         super.setVisible(visible);
 
         // reposition appropriately if appears offscreen
-        if (visible) {
+        if (visible && this.isVisible()) {
             PGTUtil.checkPositionInBounds(this);
         }
     }
