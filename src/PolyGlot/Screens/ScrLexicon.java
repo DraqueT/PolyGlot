@@ -39,6 +39,7 @@ import PolyGlot.Nodes.EtyExternalParent;
 import PolyGlot.Nodes.TypeNode;
 import PolyGlot.Nodes.WordClassValue;
 import PolyGlot.Nodes.WordClass;
+import PolyGlot.PFontHandler;
 import PolyGlot.WebInterface;
 import java.awt.Color;
 import java.awt.Component;
@@ -896,7 +897,7 @@ public final class ScrLexicon extends PFrame {
      */
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
-        final javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new IOHandler().getCharisInputStream(), 12);
+        final javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), 12);
 
         grid.setPrefWidth(4000);
         txtConSrc = new TextField();

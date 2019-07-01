@@ -21,6 +21,7 @@ package PolyGlot.CustomControls;
 
 import PolyGlot.DictCore;
 import PolyGlot.IOHandler;
+import PolyGlot.PFontHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -51,7 +52,7 @@ public class PButton extends JButton implements MouseListener {
     
     public PButton(DictCore _core) {
         try {
-            super.setFont(IOHandler.getButtonFont());
+            super.setFont(PFontHandler.getButtonFont());
         } catch (IOException e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("FONT ERROR", e.getLocalizedMessage(), _core.getRootWindow());

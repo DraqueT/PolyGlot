@@ -421,7 +421,7 @@ public class DictCore {
         }
 
         try {
-            IOHandler.setFontFrom(_fileName, this);
+            PFontHandler.setFontFrom(_fileName, this);
         } catch (IOException | FontFormatException e) {
             IOHandler.writeErrorLog(e);
             warningLog += e.getLocalizedMessage() + "\n";
