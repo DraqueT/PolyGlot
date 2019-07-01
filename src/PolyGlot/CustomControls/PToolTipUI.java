@@ -20,6 +20,7 @@
 package PolyGlot.CustomControls;
 
 import PolyGlot.IOHandler;
+import PolyGlot.PFontHandler;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -58,7 +59,7 @@ public class PToolTipUI extends ToolTipUI
         super();
         
         try {
-            font = IOHandler.getCharisUnicodeFontInitial().deriveFont((float)14.0);
+            font = PFontHandler.getCharisUnicodeFontInitial().deriveFont((float)14.0);
         } catch (IOException e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Font error", "Unable to load tooltip font: " 

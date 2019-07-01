@@ -22,6 +22,7 @@ package PolyGlot.ManagersCollections;
 import PolyGlot.CustomControls.PAlphaMap;
 import PolyGlot.DictCore;
 import PolyGlot.IOHandler;
+import PolyGlot.PFontHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -42,7 +43,7 @@ import org.w3c.dom.Element;
  */
 public class PropertiesManager {
     private String overrideProgramPath = "";
-    private Font font = null;
+    private Font conFont = null;
     private Integer fontStyle = 0;
     private Integer conFontSize = 12;
     private double localFontSize = 12;
@@ -74,7 +75,7 @@ public class PropertiesManager {
         core = _core;
 
         // set default font to Charis, as it's unicode compatible
-        charisUnicode = IOHandler.getCharisUnicodeFontInitial();
+        charisUnicode = PFontHandler.getCharisUnicodeFontInitial();
         localFont = charisUnicode;
     }   
     
@@ -198,11 +199,11 @@ public class PropertiesManager {
     public javafx.scene.text.Font getFXFont() {
         javafx.scene.text.Font ret;
 
-        if (font == null) {
+        if (conFont == null) {
             ret = (new javafx.scene.control.TextField()).getFont();
         } else {
-            java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
-            ret = javafx.scene.text.Font.font(font.getFamily(), conFontSize);
+            java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(conFont);
+            ret = javafx.scene.text.Font.font(conFont.getFamily(), conFontSize);
         }
 
         return ret;
@@ -237,7 +238,7 @@ public class PropertiesManager {
     public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
         cachedConFont = IOHandler.getFileByteArray(fontPath);
         
-        setFontCon(IOHandler.getFontFromFile(fontPath).deriveFont(fontStyle, conFontSize), fontStyle, conFontSize);
+        setFontCon(PFontHandler.getFontFromFile(fontPath).deriveFont(fontStyle, conFontSize), fontStyle, conFontSize);
     }
 
     public void setOverrideProgramPath(String override) {
@@ -296,7 +297,7 @@ public class PropertiesManager {
      * @param _fontSize Size of font
      */
     public void setFontCon(Font _fontCon, Integer _fontStyle, Integer _fontSize) {
-        Font switchToFont = IOHandler.loadFontFromOSFileFolder(_fontCon);
+        Font switchToFont = PFontHandler.loadFontFromOSFileFolder(_fontCon);
         
         if (switchToFont == null) {
             switchToFont = _fontCon;
@@ -315,7 +316,7 @@ public class PropertiesManager {
      */
     public void setFontCon(String _fontFamily) throws Exception {
         try {
-            Font newFont = IOHandler.loadFontFromOSFileFolder(Font.getFont(_fontFamily));
+            Font newFont = PFontHandler.loadFontFromOSFileFolder(Font.getFont(_fontFamily));
 
             if (newFont == null) {
                 newFont = Font.getFont(_fontFamily);
@@ -338,7 +339,7 @@ public class PropertiesManager {
      */
     public Font getFontCon() {
         // create copy so that initial font properties (such as kerning) is never lost
-        Font retFont = font == null ? null : font.deriveFont((float)0.0);
+        Font retFont = conFont == null ? null : conFont.deriveFont((float)0.0);
         
         // under certain circumstances, this can default to 0...
         if (conFontSize == 0) {
@@ -346,7 +347,7 @@ public class PropertiesManager {
         }
 
         if (retFont != null && kerningSpace != 0.0) {
-            retFont = PGTUtil.addFontAttribute(TextAttribute.TRACKING, kerningSpace, font);
+            retFont = PGTUtil.addFontAttribute(TextAttribute.TRACKING, kerningSpace, conFont);
         }
         
         return retFont == null ? 
@@ -363,11 +364,11 @@ public class PropertiesManager {
      */
     public void setFontConRaw(Font fontCon) {
         // null cached font if being set to new font
-        if (font != null && !font.getFamily().equals(fontCon.getFamily())) {
+        if (conFont != null && !conFont.getFamily().equals(fontCon.getFamily())) {
             cachedConFont = null;
         }
 
-        font = fontCon == null ? charisUnicode : fontCon;
+        conFont = fontCon == null ? charisUnicode : fontCon;
     }
 
     /**
@@ -382,7 +383,7 @@ public class PropertiesManager {
      */
     public void setFontStyle(Integer _fontStyle) {
         fontStyle = _fontStyle;
-        font = font.deriveFont(fontStyle, conFontSize);
+        conFont = conFont.deriveFont(fontStyle, conFontSize);
     }
 
     /**
@@ -400,7 +401,7 @@ public class PropertiesManager {
     public void setFontSize(Integer _fontSize) {
         if (_fontSize != null) {
             conFontSize = _fontSize < 0 ? 12 : _fontSize;
-            font = font.deriveFont(fontStyle, conFontSize);
+            conFont = conFont.deriveFont(fontStyle, conFontSize);
         }
     }
 
@@ -806,5 +807,30 @@ public class PropertiesManager {
      */
     public void setUseLocalWordLex(boolean useLocalWordLex) {
         this.useLocalWordLex = useLocalWordLex;
+    }
+    
+    /**
+     * Refreshes all fonts in PolyGlot, ensuring that the most recent versions
+     * of given fonts installed on the system are used.
+     * @throws java.lang.Exception
+     */
+    public void refreshFonts() throws Exception {
+        try {
+            File updatedConFont = PFontHandler.getFontFile(conFont);
+            File updatedLocalFont = PFontHandler.getFontFile(localFont);
+        
+            if (updatedConFont != null) {
+                conFont = PFontHandler.getFontFromFile(updatedConFont.getAbsolutePath());
+                cachedConFont = IOHandler.getByteArrayFromFile(updatedConFont);
+            }
+            
+            if (updatedLocalFont != null) {
+                localFont = PFontHandler.getFontFromFile(updatedLocalFont.getAbsolutePath());
+                cachedLocalFont = IOHandler.getByteArrayFromFile(updatedLocalFont);
+            }
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
+            throw new Exception("Unable to refresh fonts: " + e.getLocalizedMessage());
+        }
     }
 }

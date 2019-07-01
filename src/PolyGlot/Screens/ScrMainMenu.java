@@ -30,6 +30,7 @@ import PolyGlot.DictCore;
 import PolyGlot.ExcelExport;
 import PolyGlot.IOHandler;
 import PolyGlot.Nodes.ConWord;
+import PolyGlot.PFontHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Color;
 import java.awt.Component;
@@ -103,7 +104,7 @@ public final class ScrMainMenu extends PFrame {
 
         try {
             backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
-            jLabel1.setFont(IOHandler.getButtonFont().deriveFont(45f));
+            jLabel1.setFont(PFontHandler.getButtonFont().deriveFont(45f));
         } catch (IOException e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Resource Error",

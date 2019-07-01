@@ -36,6 +36,7 @@ import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.ExternalCode.GlyphVectorPainter;
 import PolyGlot.CustomControls.PTree;
+import PolyGlot.PFontHandler;
 import PolyGlot.SoundRecorder;
 import java.awt.Color;
 import java.awt.Component;
@@ -697,7 +698,7 @@ public class ScrGrammarGuide extends PFrame {
         txtSection.addStyle("default", null); // default style makes word wrap active
 
         try {
-            txtTimer.setFont(IOHandler.getLcdFont().deriveFont(0, 18f));
+            txtTimer.setFont(PFontHandler.getLcdFont().deriveFont(0, 18f));
         } catch (FontFormatException | IOException e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), core.getRootWindow());
