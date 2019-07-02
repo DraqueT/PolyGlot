@@ -404,6 +404,7 @@ public class ScrPrintToPDF extends PDialog {
      * @param _core Dictionary Core
      */
     public static void run(final DictCore _core) {
+        _core.getRootWindow().saveAllValues();
         java.awt.EventQueue.invokeLater(() -> {
             new ScrPrintToPDF(_core).setVisible(true);
         });
