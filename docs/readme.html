@@ -435,7 +435,10 @@
                             The dictionary used here as an example is included along with PolyGlot
                             as the file exampleAutoGen.pgt. For those of you unfamiliar with
                             regular expressions, links to excellent tutorials exist in the <a href="readme.html#ADDITIONAL_RESOURCES">Additional Resources</a>
-                            section of this document.<br></div>
+                            section of this document. Additionally, there are example dictionaries
+                            included with the download of PolyGlot (in the Example Lexicons folder)
+                            which may be helpful with some common patterns. For those of you who 
+                            who are into infixes, examples are given on how to set this up!<br></div>
                         <br>
                         <br>
                         <img alt="" src="assets/Types3.png"><br>
@@ -483,7 +486,7 @@
                             column is the Regex value for the transformation. This is the section of the word
                             that PolyGlot will target to replace. In my example it looks for the character "lo" in 
                             my script at the end of words. The right column contains the text that will replace 
-                            the text targetted in the left column.
+                            the text targeted in the left column.<br><br>
 
                             Here is the complete logic that this rule will result in when PolyGlot looks to create
                             conjugations for verbs:
@@ -492,9 +495,9 @@
                                 <li>Is this word a verb? If so, continue.</li>
                                 <li>Create a Past Certain Positive conjugation field for the word</li>
                                 <li>Are rules available which the word matches the rule regex fits? If so, apply those rules to the word</li>
-                                <li>For each rule whhich applies to the word, apply each transformation in the order they appear</li>
+                                <li>For each rule which applies to the word, apply each transformation in the order they appear</li>
                                 <li>For each transformation, target matching regex text and overwrite it with the replacement text</li>
-                                <li>The resulting text is your fully conjugated wordform.</li>
+                                <li>The resulting text is your fully conjugated word-form.</li>
                             </ul></div>
                         <br>
                         <br>
