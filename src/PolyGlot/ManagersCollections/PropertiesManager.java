@@ -44,7 +44,7 @@ import org.w3c.dom.Element;
 public class PropertiesManager {
     private String overrideProgramPath = "";
     private Font conFont = null;
-    private Integer fontStyle = 0;
+    private Integer conFontStyle = 0;
     private Integer conFontSize = 12;
     private double localFontSize = 12;
     private final PAlphaMap<String, Integer> alphaOrder;
@@ -238,7 +238,7 @@ public class PropertiesManager {
     public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
         cachedConFont = IOHandler.getFileByteArray(fontPath);
         
-        setFontCon(PFontHandler.getFontFromFile(fontPath).deriveFont(fontStyle, conFontSize), fontStyle, conFontSize);
+        setFontCon(PFontHandler.getFontFromFile(fontPath).deriveFont(conFontStyle, conFontSize), conFontStyle, conFontSize);
     }
 
     public void setOverrideProgramPath(String override) {
@@ -352,7 +352,7 @@ public class PropertiesManager {
         
         return retFont == null ? 
                 charisUnicode.deriveFont((float)core.getOptionsManager().getMenuFontSize()) : 
-                retFont.deriveFont(fontStyle, conFontSize);
+                retFont.deriveFont(conFontStyle, conFontSize);
     }
 
     /**
@@ -375,15 +375,15 @@ public class PropertiesManager {
      * @return the fontStyle
      */
     public Integer getFontStyle() {
-        return fontStyle;
+        return conFontStyle;
     }
 
     /**
      * @param _fontStyle the fontStyle to set
      */
     public void setFontStyle(Integer _fontStyle) {
-        fontStyle = _fontStyle;
-        conFont = conFont.deriveFont(fontStyle, conFontSize);
+        conFontStyle = _fontStyle;
+        conFont = conFont.deriveFont(conFontStyle, conFontSize);
     }
 
     /**
@@ -401,7 +401,7 @@ public class PropertiesManager {
     public void setFontSize(Integer _fontSize) {
         if (_fontSize != null) {
             conFontSize = _fontSize < 0 ? 12 : _fontSize;
-            conFont = conFont.deriveFont(fontStyle, conFontSize);
+            conFont = conFont.deriveFont(conFontStyle, conFontSize);
         }
     }
 
@@ -821,11 +821,13 @@ public class PropertiesManager {
         
             if (updatedConFont != null) {
                 conFont = PFontHandler.getFontFromFile(updatedConFont.getAbsolutePath());
+                conFont = conFont.deriveFont(conFontStyle, conFontSize);
                 cachedConFont = IOHandler.getByteArrayFromFile(updatedConFont);
             }
             
             if (updatedLocalFont != null) {
                 localFont = PFontHandler.getFontFromFile(updatedLocalFont.getAbsolutePath());
+                localFont = localFont.deriveFont((float)localFontSize);
                 cachedLocalFont = IOHandler.getByteArrayFromFile(updatedLocalFont);
             }
         } catch (Exception e) {

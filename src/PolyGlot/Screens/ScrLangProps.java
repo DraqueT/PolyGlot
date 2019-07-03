@@ -31,6 +31,7 @@ import PolyGlot.CustomControls.PLabel;
 import PolyGlot.IOHandler;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -576,12 +577,15 @@ public class ScrLangProps extends PFrame {
 
     private void btnFontRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFontRefreshActionPerformed
         try {
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             core.getPropertiesManager().refreshFonts();
             txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
         } catch (Exception e) {
             InfoBox.error("Font Refresh Failed", e.getLocalizedMessage(), this);
             IOHandler.writeErrorLog(e, "Top level exception caught here. See prior exception.");
         }
+        
+        this.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnFontRefreshActionPerformed
 
     public static ScrLangProps run(DictCore _core) {
