@@ -20,6 +20,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuNewLocal">
               <Properties>
                 <Property name="text" type="java.lang.String" value="New"/>
+                <Property name="toolTipText" type="java.lang.String" value="New PolyGlot Language File"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuNewLocalActionPerformed"/>
@@ -28,6 +29,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuSaveLocal">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Save"/>
+                <Property name="toolTipText" type="java.lang.String" value="Save Current Language File"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSaveLocalActionPerformed"/>
@@ -36,6 +38,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuSaveAs">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Save As"/>
+                <Property name="toolTipText" type="java.lang.String" value="Save Current Language File As"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSaveAsActionPerformed"/>
@@ -44,6 +47,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuOpenLocal">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Open"/>
+                <Property name="toolTipText" type="java.lang.String" value="Open Existing Language File"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuOpenLocalActionPerformed"/>
@@ -52,13 +56,14 @@
             <Menu class="javax.swing.JMenu" name="mnuRecents">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Recent"/>
+                <Property name="toolTipText" type="java.lang.String" value="Recently Opened Language Files"/>
               </Properties>
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator5">
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuPublish">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Publish to PDF"/>
+                <Property name="text" type="java.lang.String" value="Publish Language to PDF"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuPublishActionPerformed"/>
@@ -69,6 +74,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuExit">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Exit"/>
+                <Property name="toolTipText" type="java.lang.String" value="Exit PolyGlot"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExitActionPerformed"/>
@@ -84,6 +90,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportFile">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Import from File"/>
+                <Property name="toolTipText" type="java.lang.String" value="Import language values from comma delimited file or excel sheet"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportFileActionPerformed"/>
@@ -92,6 +99,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuExportToExcel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Export to Excel"/>
+                <Property name="toolTipText" type="java.lang.String" value="Export language values to excel sheet"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportToExcelActionPerformed"/>
@@ -124,6 +132,15 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCheckLexiconActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuIpaTranslator">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="IPA Conversion Tool"/>
+                <Property name="toolTipText" type="java.lang.String" value="Converts parahraph form phrases into IPA"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuIpaTranslatorActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator1">
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
@@ -137,6 +154,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuLangStats">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Language Statistics"/>
+                <Property name="toolTipText" type="java.lang.String" value="Generate Language Statistics page"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuLangStatsActionPerformed"/>
@@ -147,6 +165,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuIPAChart">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Interactive IPA Chart"/>
+                <Property name="toolTipText" type="java.lang.String" value="Opens interactive IPA chart"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuIPAChartActionPerformed"/>
@@ -157,6 +176,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuOptions">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Options"/>
+                <Property name="toolTipText" type="java.lang.String" value="PolyGlot Options"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuOptionsActionPerformed"/>
@@ -183,6 +203,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuAbout">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Help"/>
+                <Property name="toolTipText" type="java.lang.String" value="Opens Help File"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuAboutActionPerformed"/>
@@ -191,6 +212,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuChkUpdate">
               <Properties>
                 <Property name="text" type="java.lang.String" value="About"/>
+                <Property name="toolTipText" type="java.lang.String" value="About PolyGlot"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuChkUpdateActionPerformed"/>
@@ -201,6 +223,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Check for Updates"/>
+                <Property name="toolTipText" type="java.lang.String" value="Check web for newer versions of PolyGlot"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem8ActionPerformed"/>
