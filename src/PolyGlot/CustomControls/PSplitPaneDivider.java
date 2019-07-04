@@ -38,7 +38,7 @@ public class PSplitPaneDivider extends BasicSplitPaneDivider {
     @Override
     public void paint(Graphics g) {
         final int rounding = 5;
-        final int barWidth = 4;
+        final int barThickness = 4;
         final int thisWidth = this.getWidth();
         final int thisHeight = this.getHeight();
         boolean isVertical = thisHeight > thisWidth;
@@ -49,15 +49,27 @@ public class PSplitPaneDivider extends BasicSplitPaneDivider {
         antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         if (isVertical) {
+            int barLength = (thisHeight - (2 * ballGap)) / 2;
+            
+            // draw top, then bottom line
             g.setColor(Color.lightGray);
-            g.fillRoundRect((thisWidth - barWidth)/2, ballGap, barWidth, ((thisHeight - 2 * ballGap) / 2) - ballGap, rounding, rounding);
-            g.fillRoundRect((thisWidth - barWidth)/2, ((thisHeight - 2 * ballGap) / 2) + ballGap, barWidth, ((thisHeight - 2 * ballGap) / 2) - ballGap, rounding, rounding);
+            g.fillRoundRect((thisWidth - barThickness)/2, ballGap, barThickness, barLength - ballGap, rounding, rounding);
+            g.fillRoundRect((thisWidth - barThickness)/2, barLength + ballGap, barThickness, barLength - ballGap, rounding, rounding);
+            
+            // draw ball
             g.setColor(Color.darkGray);
             g.drawOval((thisWidth - ball)/2, (thisHeight / 2) - 11, ball, ball);
         } else {
-            // If needed, implement horizontal pane splits here.
-            g.setColor(Color.red);        
-            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+            int barLength = (thisWidth - (2 * ballGap)) / 2;
+            
+            // draw top, then bottom line
+            g.setColor(Color.lightGray);
+            g.fillRoundRect(ballGap, (thisHeight - barThickness) / 2, barLength - ballGap, barThickness, rounding, rounding);
+            g.fillRoundRect((ballGap * 2) + barLength, (thisHeight - barThickness) / 2, barLength - ballGap, barThickness, rounding, rounding);
+            
+            // draw ball
+            g.setColor(Color.darkGray);
+            g.drawOval((thisWidth / 2) - 2, ((thisHeight  - ball) / 2), ball, ball);
         }
     }
 }
