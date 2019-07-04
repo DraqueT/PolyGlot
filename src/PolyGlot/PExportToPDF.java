@@ -280,7 +280,7 @@ public class PExportToPDF {
             }
 
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-            Paragraph fin = new Paragraph("Created with PolyGlot: Language Creation Tool Version " + core.getVersion() + "\n");
+            Paragraph fin = new Paragraph("Created with PolyGlot: Language Creation Tool Version " + core.getDisplayVersion() + "\n");
             fin.add(new Link("Get PolyGlot Here", PdfAction.createURI(PGTUtil.homePage)).setUnderline());
             fin.add(new Text("\nPolyGlot Created By Draque Thompson"));
             fin.setFontSize(20);

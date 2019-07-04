@@ -42,7 +42,7 @@ public class ScrAbout extends PDialog {
         setModal(true);
         super.getRootPane().getContentPane().setBackground(Color.white);
 
-        txtAbout.setText("PolyGlot ver. " + core.getVersion() + "\n\nPolyGlot is "
+        txtAbout.setText("PolyGlot ver. " + core.getDisplayVersion() + "\n\nPolyGlot is "
                 + "copyright Draque Thompson 2014-" + Calendar.getInstance().get(Calendar.YEAR)
                 + ". It is licensed under the Creative Commons "
                 + "Attribution-Noncommercial 4.0 International Public License, so it is free "
@@ -123,6 +123,7 @@ public class ScrAbout extends PDialog {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
         );
 
+        jButton1.setText("OK");
         jButton1.setToolTipText("");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

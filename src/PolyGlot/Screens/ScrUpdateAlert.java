@@ -100,8 +100,14 @@ public class ScrUpdateAlert extends PDialog {
             setVisible(true);
         } else {
             if (verbose) { // if in verbose mode (user selected update) inform user they're good to go
-                InfoBox.info("Update Status", "You're up to date and on the newest version: "
-                    + core.getVersion() + ".", core.getRootWindow());
+                // custom message if user is on a beta copy of PolyGlot
+                if (core.isBeta()) {
+                    InfoBox.info("Update Status", "You're up to date on a beta build branched from the most recent release ("
+                            + core.getVersion() + ")", core.getRootWindow());
+                } else {
+                    InfoBox.info("Update Status", "You're up to date and on the newest version: "
+                        + core.getVersion() + ".", core.getRootWindow());
+                }
             }            
             this.setVisible(false);
             this.dispose();

@@ -90,7 +90,6 @@ public final class ScrMainMenu extends PFrame {
         core = new DictCore(); // needed for initialization
         core.setRootWindow(this);
         toDoTree = new PToDoTree(core);
-        cacheLexicon = ScrLexicon.run(core, this);
 
         UIManager.put("ScrollBarUI", "PolyGlot.CustomControls.PScrollBarUI");
         UIManager.put("SplitPaneUI", "PolyGlot.CustomControls.PSplitPaneUI");
@@ -99,6 +98,8 @@ public final class ScrMainMenu extends PFrame {
         UIManager.put("ToolTipUI", "PolyGlot.CustomControls.PToolTipUI");
         UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
 
+        cacheLexicon = ScrLexicon.run(core, this);
+        
         initComponents();
         setupEasterEgg();
 
@@ -873,6 +874,7 @@ public final class ScrMainMenu extends PFrame {
         mnuExportFont = new javax.swing.JMenuItem();
         mnuImportFont = new javax.swing.JMenuItem();
         mnuCheckLexicon = new javax.swing.JMenuItem();
+        mnuIpaTranslator = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem1 = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
@@ -1103,6 +1105,7 @@ public final class ScrMainMenu extends PFrame {
         jMenu1.setText("File");
 
         mnuNewLocal.setText("New");
+        mnuNewLocal.setToolTipText("New PolyGlot Language File");
         mnuNewLocal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuNewLocalActionPerformed(evt);
@@ -1111,6 +1114,7 @@ public final class ScrMainMenu extends PFrame {
         jMenu1.add(mnuNewLocal);
 
         mnuSaveLocal.setText("Save");
+        mnuSaveLocal.setToolTipText("Save Current Language File");
         mnuSaveLocal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuSaveLocalActionPerformed(evt);
@@ -1119,6 +1123,7 @@ public final class ScrMainMenu extends PFrame {
         jMenu1.add(mnuSaveLocal);
 
         mnuSaveAs.setText("Save As");
+        mnuSaveAs.setToolTipText("Save Current Language File As");
         mnuSaveAs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuSaveAsActionPerformed(evt);
@@ -1127,6 +1132,7 @@ public final class ScrMainMenu extends PFrame {
         jMenu1.add(mnuSaveAs);
 
         mnuOpenLocal.setText("Open");
+        mnuOpenLocal.setToolTipText("Open Existing Language File");
         mnuOpenLocal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuOpenLocalActionPerformed(evt);
@@ -1135,10 +1141,11 @@ public final class ScrMainMenu extends PFrame {
         jMenu1.add(mnuOpenLocal);
 
         mnuRecents.setText("Recent");
+        mnuRecents.setToolTipText("Recently Opened Language Files");
         jMenu1.add(mnuRecents);
         jMenu1.add(jSeparator5);
 
-        mnuPublish.setText("Publish to PDF");
+        mnuPublish.setText("Publish Language to PDF");
         mnuPublish.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuPublishActionPerformed(evt);
@@ -1148,6 +1155,7 @@ public final class ScrMainMenu extends PFrame {
         jMenu1.add(jSeparator2);
 
         mnuExit.setText("Exit");
+        mnuExit.setToolTipText("Exit PolyGlot");
         mnuExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuExitActionPerformed(evt);
@@ -1160,6 +1168,7 @@ public final class ScrMainMenu extends PFrame {
         mnuTools.setText("Tools");
 
         mnuImportFile.setText("Import from File");
+        mnuImportFile.setToolTipText("Import language values from comma delimited file or excel sheet");
         mnuImportFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuImportFileActionPerformed(evt);
@@ -1168,6 +1177,7 @@ public final class ScrMainMenu extends PFrame {
         mnuTools.add(mnuImportFile);
 
         mnuExportToExcel.setText("Export to Excel");
+        mnuExportToExcel.setToolTipText("Export language values to excel sheet");
         mnuExportToExcel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuExportToExcelActionPerformed(evt);
@@ -1201,6 +1211,15 @@ public final class ScrMainMenu extends PFrame {
             }
         });
         mnuTools.add(mnuCheckLexicon);
+
+        mnuIpaTranslator.setText("IPA Conversion Tool");
+        mnuIpaTranslator.setToolTipText("Converts parahraph form phrases into IPA");
+        mnuIpaTranslator.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuIpaTranslatorActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuIpaTranslator);
         mnuTools.add(jSeparator1);
 
         jMenuItem1.setText("Lexical Families");
@@ -1212,6 +1231,7 @@ public final class ScrMainMenu extends PFrame {
         mnuTools.add(jMenuItem1);
 
         mnuLangStats.setText("Language Statistics");
+        mnuLangStats.setToolTipText("Generate Language Statistics page");
         mnuLangStats.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuLangStatsActionPerformed(evt);
@@ -1221,6 +1241,7 @@ public final class ScrMainMenu extends PFrame {
         mnuTools.add(jSeparator4);
 
         mnuIPAChart.setText("Interactive IPA Chart");
+        mnuIPAChart.setToolTipText("Opens interactive IPA chart");
         mnuIPAChart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuIPAChartActionPerformed(evt);
@@ -1230,6 +1251,7 @@ public final class ScrMainMenu extends PFrame {
         mnuTools.add(jSeparator6);
 
         mnuOptions.setText("Options");
+        mnuOptions.setToolTipText("PolyGlot Options");
         mnuOptions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuOptionsActionPerformed(evt);
@@ -1252,6 +1274,7 @@ public final class ScrMainMenu extends PFrame {
         mnuHelp.setText("Help");
 
         mnuAbout.setText("Help");
+        mnuAbout.setToolTipText("Opens Help File");
         mnuAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuAboutActionPerformed(evt);
@@ -1260,6 +1283,7 @@ public final class ScrMainMenu extends PFrame {
         mnuHelp.add(mnuAbout);
 
         mnuChkUpdate.setText("About");
+        mnuChkUpdate.setToolTipText("About PolyGlot");
         mnuChkUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuChkUpdateActionPerformed(evt);
@@ -1269,6 +1293,7 @@ public final class ScrMainMenu extends PFrame {
         mnuHelp.add(jSeparator3);
 
         jMenuItem8.setText("Check for Updates");
+        jMenuItem8.setToolTipText("Check web for newer versions of PolyGlot");
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem8ActionPerformed(evt);
@@ -1507,6 +1532,10 @@ public final class ScrMainMenu extends PFrame {
         core.getWordCollection().checkLexicon(true);
     }//GEN-LAST:event_mnuCheckLexiconActionPerformed
 
+    private void mnuIpaTranslatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIpaTranslatorActionPerformed
+        new ScrIpaTranslator(core).setVisible(true);
+    }//GEN-LAST:event_mnuIpaTranslatorActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -1544,6 +1573,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuIPAChart;
     private javax.swing.JMenuItem mnuImportFile;
     private javax.swing.JMenuItem mnuImportFont;
+    private javax.swing.JMenuItem mnuIpaTranslator;
     private javax.swing.JMenuItem mnuLangStats;
     private javax.swing.JMenuItem mnuNewLocal;
     private javax.swing.JMenuItem mnuOpenLocal;

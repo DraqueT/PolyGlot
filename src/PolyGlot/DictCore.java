@@ -60,6 +60,7 @@ import org.xml.sax.SAXException;
 public class DictCore {
 
     private final String version = "2.4";
+    private boolean isBeta = false;
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
     private DeclensionManager declensionMgr;
@@ -106,6 +107,7 @@ public class DictCore {
     
     private void initializeDictCore() {
         try {
+            isBeta = testIsBeta();
             wordCollection = new ConWordCollection(this);
             typeCollection = new TypeCollection(this);
             declensionMgr = new DeclensionManager(this);
@@ -345,6 +347,28 @@ public class DictCore {
      */
     public String getVersion() {
         return version;
+    }
+    
+    /**
+     * Returns true if running a beta build of PolyGlot
+     * @return 
+     */
+    public boolean isBeta() {
+        return isBeta;
+    }
+    
+    /**
+     * Used for getting the display version (potentially different than the internal version due to betas, etc.)
+     * @return 
+     */
+    public String getDisplayVersion() {
+        String ret = version;
+        
+        if (isBeta) {
+            ret = "BETA (last release: " + version + ")";
+        }
+        
+        return ret;
     }
 
     /**
@@ -693,6 +717,10 @@ public class DictCore {
         return args == null || args.length < 3 || !args[2].equals(PGTUtil.True);
     }
     
+    private static boolean testIsBeta() {
+        return IOHandler.fileExists("lib/BETA_WARNING.txt");
+    }
+    
     /**
      * @param args the command line arguments: 
      * args[0] = open file path (blank if none) 
@@ -701,7 +729,7 @@ public class DictCore {
      */
     public static void main(final String args[]) {
         try {
-            betaMessageDisplay();
+            conditionalBetaSetup();
             
             Object preNimbusMenu = null;
             boolean osIntegration = shouldUseOSInegration(args);
@@ -776,7 +804,12 @@ public class DictCore {
                             } else if (PGTUtil.isWindows() && osIntegration) {
                                 s.setIconImage(PGTUtil.polyGlotIcon.getImage());
                             }
-                        } catch (Exception e) {
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            IOHandler.writeErrorLog(e, "Problem with top level PolyGlot arguments.");
+                            InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
+                                    + e.getMessage() + "\n"
+                                            + "Problem with top level PolyGlot arguments.", null);
+                        } catch (Exception e) { // split up for logical clarity... migt want to differn
                             IOHandler.writeErrorLog(e);
                             InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
                                     + e.getMessage() + "\n"
@@ -801,11 +834,11 @@ public class DictCore {
     }
     
     /**
-     * Displays beta message if appropriate (beta builds have warning text within lib folder
+     * Displays beta message if appropriate (beta builds have warning text within lib folder)
+     * Sets version to display as beta
      */
-    private static void betaMessageDisplay() {
-        //String beta
-        if (IOHandler.fileExists("lib/BETA_WARNING.txt")) {
+    private static void conditionalBetaSetup() {
+        if (testIsBeta()) {
             InfoBox.warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.", null);
         }
     }

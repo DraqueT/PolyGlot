@@ -175,9 +175,8 @@ public class PronunciationMgr {
         String ret = "";
 
         // -base.length() fed as initial depth to ensure that longer words cannot be artificaially labeled as breaking max depth
-        Iterator<PronunciationNode> procCycle = getPronunciationElements(base, -base.length()).iterator();
-        while (procCycle.hasNext()) {
-            PronunciationNode curProc = procCycle.next();
+        List<PronunciationNode> procCycle = getPronunciationElements(base, -base.length());
+        for (PronunciationNode curProc : procCycle) {
             ret += curProc.getPronunciation();
         }
 
