@@ -259,8 +259,13 @@ public class PFontHandler {
                     ret = fontFile;
                 }
 
-            } catch (FontFormatException | IOException e) {
+            } catch (FontFormatException e) {
                 // "Font name not found" errors due to Java bug (Java does not recognize some Mac style ttf fonts)
+                // disabling logging until Java bug corrected.
+                // IOHandler.writeErrorLog(e, path);
+                // null detected and message bubbled to user elsewhere
+                ret = null;
+            } catch (IOException e) {
                 IOHandler.writeErrorLog(e, path);
                 // null detected and message bubbled to user elsewhere
                 ret = null;
