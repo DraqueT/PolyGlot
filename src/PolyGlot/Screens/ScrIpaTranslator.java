@@ -19,10 +19,8 @@
  */
 package PolyGlot.Screens;
 
-import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.DictCore;
-import PolyGlot.IOHandler;
 import PolyGlot.ManagersCollections.PronunciationMgr;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -39,7 +37,6 @@ public final class ScrIpaTranslator extends PDialog {
      */
     public ScrIpaTranslator(DictCore _core) {
         core = _core;
-        this.setModal(true);
         initComponents();
         
         txtSource.setFont(core.getPropertiesManager().getFontCon());
