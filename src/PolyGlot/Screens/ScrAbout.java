@@ -36,7 +36,6 @@ public class ScrAbout extends PDialog {
      * @param _core dictionary core
      */
     public ScrAbout(DictCore _core) {
-        this.setupKeyStrokes();
         initComponents();
         core = _core;
         setModal(true);
@@ -51,11 +50,6 @@ public class ScrAbout extends PDialog {
                 + "use and modify the code found on the open source repository for PolyGlot.\n\n"
                 + "HomePage: http://draquet.github.io/PolyGlot/\nGitHub Repository: "
                 + "https://github.com/DraqueT/PolyGlot");
-    }
-
-    @Override
-    public final void setupKeyStrokes() {
-        super.setupKeyStrokes();
     }
     
     @Override

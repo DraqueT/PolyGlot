@@ -45,7 +45,7 @@ import javax.swing.JComponent;
  *
  * @author draque
  */
-public class ScrTypes extends PFrame {
+public final class ScrTypes extends PFrame {
 
     private final List<Window> childFrames = new ArrayList<>();
     private TypeNode selectionAtClosing = null;
@@ -341,7 +341,6 @@ public class ScrTypes extends PFrame {
 
     public static ScrTypes run(DictCore _core) {
         ScrTypes s = new ScrTypes(_core);
-        s.setupKeyStrokes();
         s.setCore(_core);
         return s;
     }

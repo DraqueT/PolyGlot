@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018, draque.thompson
+ * Copyright (c) 2016-2019, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -47,7 +47,7 @@ import javax.swing.SwingUtilities;
  *
  * @author draque.thompson
  */
-public class ScrQuizScreen extends PFrame {
+public final class ScrQuizScreen extends PFrame {
 
     private final Quiz quiz;
     private final PLabel lblQNode;

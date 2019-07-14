@@ -78,7 +78,7 @@ import javax.swing.tree.TreeSelectionModel;
  *
  * @author draque
  */
-public class ScrGrammarGuide extends PFrame {
+public final class ScrGrammarGuide extends PFrame {
 
     private final String defTime;
     private SoundRecorder soundRecorder;
@@ -122,8 +122,8 @@ public class ScrGrammarGuide extends PFrame {
         initComponents();
 
         setupRecordButtons();
-
         setupChapTreeModel();
+        addBindingsToPanelComponents(this.getRootPane());
 
         txtSection.setCaret(new HighlightCaret());
 
@@ -177,12 +177,6 @@ public class ScrGrammarGuide extends PFrame {
         }
 
         populateProperties();
-    }
-
-    @Override
-    public void setupKeyStrokes() {
-        addBindingsToPanelComponents(this.getRootPane());
-        super.setupKeyStrokes();
     }
 
     @Override
@@ -1184,7 +1178,6 @@ public class ScrGrammarGuide extends PFrame {
 
     public static ScrGrammarGuide run(DictCore _core) {
         final ScrGrammarGuide s = new ScrGrammarGuide(_core);
-        s.setupKeyStrokes();
 
         // For some reason, adding items to the combobox moves this to the back... this fixes it
         SwingUtilities.invokeLater(() -> {

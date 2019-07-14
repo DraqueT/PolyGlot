@@ -54,7 +54,7 @@ import javax.swing.KeyStroke;
  *
  * @author draque
  */
-public class ScrLogoQuickView extends PFrame {
+public final class ScrLogoQuickView extends PFrame {
     private ScrLogoDetails logoFinder = null;
     private ConWord conWord = null;
     private ScrLogoDetails logoParent = null;
@@ -66,7 +66,7 @@ public class ScrLogoQuickView extends PFrame {
      * @param showRadicalsOnly set true to limit to only radicals
      */
     public ScrLogoQuickView(DictCore _core, boolean showRadicalsOnly) {
-        super.setupKeyStrokes();
+        addBindingsToPanelComponents(this.getRootPane());
         initComponents();
         super.getRootPane().getContentPane().setBackground(Color.white);
 
@@ -146,12 +146,6 @@ public class ScrLogoQuickView extends PFrame {
                 && !logoFinder.isDisposed()) {
             logoFinder.updateAllValues(_core);
         }
-    }
-    
-    @Override
-    protected void setupKeyStrokes() {
-        addBindingsToPanelComponents(this.getRootPane());
-        super.setupKeyStrokes();
     }
     
     public void setLogoParent(ScrLogoDetails _logoParent) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -55,7 +55,7 @@ import javax.swing.tree.TreePath;
  *
  * @author draque
  */
-public class ScrFamilies extends PFrame {
+public final class ScrFamilies extends PFrame {
 
     private boolean curUpdating = false;
     private final ScrMainMenu parent;
@@ -81,6 +81,8 @@ public class ScrFamilies extends PFrame {
             btnAddFamily.setToolTipText(btnAddFamily.getToolTipText() + " (CTRL +)");
             btnDelFamily.setToolTipText(btnDelFamily.getToolTipText() + " (CTRL -)");
         }
+        
+        addBindingsToPanelComponents(this.getRootPane());
     }
     
     @Override
@@ -100,12 +102,6 @@ public class ScrFamilies extends PFrame {
         treFam.setRootVisible(false);
         lstWords.setModel(new DefaultListModel<Object>());
         lstWords.setFont(core.getPropertiesManager().getFontCon());
-    }
-    
-    @Override
-    public void setupKeyStrokes() {
-        addBindingsToPanelComponents(this.getRootPane());
-        super.setupKeyStrokes();
     }
     
     @Override
@@ -642,7 +638,6 @@ public class ScrFamilies extends PFrame {
         UIManager.put("Tree.leafIcon", UIManager.get("Tree.closedIcon"));
 
         final ScrFamilies s = new ScrFamilies(_core, parent);
-        s.setupKeyStrokes();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {

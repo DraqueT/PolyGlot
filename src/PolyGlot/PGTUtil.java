@@ -323,6 +323,34 @@ public class PGTUtil {
     
     // visual style constants
     public static final int checkboxRounding = 3;
+    
+    // UI Elements to set on OSX (copy/paste/cut)
+    public static final String[] inputMaps = {"Button.focusInputMap",
+                "CheckBox.focusInputMap",
+                "ComboBox.ancestorInputMap",
+                "EditorPane.focusInputMap",
+                "FileChooser.ancestorInputMap",
+                "FormattedTextField.focusInputMap",
+                "List.focusInputMap",
+                "PasswordField.focusInputMap",
+                "RadioButton.focusInputMap",
+                "RootPane.ancestorInputMap",
+                "ScrollBar.ancestorInputMap",
+                "ScrollPane.ancestorInputMap",
+                "Slider.focusInputMap",
+                "Spinner.ancestorInputMap",
+                "SplitPane.ancestorInputMap",
+                "TabbedPane.ancestorInputMap",
+                "TabbedPane.focusInputMap",
+                "Table.ancestorInputMap",
+                "TableHeader.ancestorInputMap",
+                "ToolBar.ancestorInputMap",
+                "Tree.ancestorInputMap",
+                "TextArea.focusInputMap",
+                "TextField.focusInputMap",
+                "TextPane.focusInputMap",
+                "ToggleButton.focusInputMap",
+                "Tree.focusInputMap"};
 
     // images and icons that only need to be loaded once
     public static final ImageIcon addButtonIcon;

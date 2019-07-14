@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018, DThompson
+ * Copyright (c) 2017-2019, DThompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -50,7 +50,9 @@ public final class PTextInputDialog extends PDialog {
     public PTextInputDialog(Window _parent, DictCore _core, String caption, String dialog) {
         initComponents();
         parent = _parent;
-        this.setLocation(parent.getLocation());
+        if (parent != null) {
+            this.setLocation(parent.getLocation());
+        }
         this.setModal(true);
         this.setAlwaysOnTop(true);
         this.setTitle(caption);

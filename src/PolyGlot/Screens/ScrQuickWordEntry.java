@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -65,7 +65,6 @@ public final class ScrQuickWordEntry extends PDialog {
         core = _core;
         parent = _parent;
 
-        setupKeyStrokes();
         initComponents();
         setupListeners();
         blankWord();
@@ -84,12 +83,6 @@ public final class ScrQuickWordEntry extends PDialog {
         }
 
         populateTypes();
-    }
-   
-    // Overridden to meet coding standards...
-    @Override
-    protected final void setupKeyStrokes() {
-        super.setupKeyStrokes();
     }
 
     /**

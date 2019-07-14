@@ -40,7 +40,7 @@ import javax.swing.JComponent;
  *
  * @author draque.thompson
  */
-public class ScrQuizGenDialog extends PFrame {
+public final class ScrQuizGenDialog extends PFrame {
 
     /**
      * Creates new form scrQuizGenDialog

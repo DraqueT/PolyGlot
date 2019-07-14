@@ -68,7 +68,7 @@ import javax.swing.table.TableColumn;
  *
  * @author draque
  */
-public class ScrDeclensionGenSetup extends PDialog {
+public final class ScrDeclensionGenSetup extends PDialog {
 
     final String depRulesLabel = "DEPRECATED RULES";
     final int typeId;
@@ -90,7 +90,6 @@ public class ScrDeclensionGenSetup extends PDialog {
         typeId = _typeId;
         depRulesList = core.getDeclensionManager().getAllDepGenerationRules(_typeId);
 
-        setupKeyStrokes();
         initComponents();
         setupObjectModels();
         setupListeners();
@@ -101,11 +100,6 @@ public class ScrDeclensionGenSetup extends PDialog {
         populateCombinedDecl();
         pnlApplyClasses.setVisible(false);
         pnlApplyClasses.setVisible(true);
-    }
-
-    @Override
-    public final void setupKeyStrokes() {
-        super.setupKeyStrokes();
     }
 
     @Override

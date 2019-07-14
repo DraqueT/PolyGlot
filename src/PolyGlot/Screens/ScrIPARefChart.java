@@ -43,12 +43,6 @@ public class ScrIPARefChart extends PFrame {
         core = _core;
         initComponents();
         handler = new IPAHandler(this);
-        this.setupKeyStrokes();
-    }
-    
-    @Override
-    public final void setupKeyStrokes() {
-        super.setupKeyStrokes();
     }
 
     /**

@@ -277,12 +277,6 @@ public final class ScrLexicon extends PFrame {
     }
 
     @Override
-    protected void setupKeyStrokes() {
-        addBindingsToPanelComponents(this.getRootPane());
-        super.setupKeyStrokes();
-    }
-
-    @Override
     public void addBindingToComponent(JComponent c) {
         Action addAction = new AbstractAction() {
             @Override
@@ -1629,7 +1623,7 @@ public final class ScrLexicon extends PFrame {
         }
 
         ScrLogoQuickView window = new ScrLogoQuickView(core, curWord);
-        window.setupKeyStrokes();
+        window.addBindingToComponent(window.getRootPane());
         childFrames.add(window);
         window.setCore(core);
         window.setVisible(true);

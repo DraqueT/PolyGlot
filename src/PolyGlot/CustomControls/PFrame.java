@@ -30,6 +30,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -90,15 +91,18 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
 
     /**
      * Gets frame state of frame
-     * @return -1 for none set, otherwise Frame.ICONIFIED or Frame.MAXIMIZED_BOTH
+     *
+     * @return -1 for none set, otherwise Frame.ICONIFIED or
+     * Frame.MAXIMIZED_BOTH
      */
     public Integer getFrameState() {
         return frameState;
     }
-    
+
     /**
      * Used to set frame state of window
-     * @param e 
+     *
+     * @param e
      */
     private void setWindowState(WindowEvent e) {
         if ((e.getNewState() & Frame.ICONIFIED) == Frame.ICONIFIED) {
@@ -127,7 +131,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
      * @return true if can close. False otherwise.
      */
     public abstract boolean canClose();
-    
+
     /**
      * Records all active/volatile values to core
      */
@@ -150,7 +154,7 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
             try {
                 TimeUnit.MICROSECONDS.sleep(250);
                 super.dispose();
-            } catch (IllegalStateException|InterruptedException ex) {
+            } catch (IllegalStateException | InterruptedException ex) {
                 IOHandler.writeErrorLog(e);
                 InfoBox.error("Closing Error", "Window failed to close: " + ex.getLocalizedMessage(), core.getRootWindow());
             }
@@ -190,14 +194,11 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
      * enable cut/copy/paste/select all if running on a Mac, and any other
      * specific, text based bindings I might choose to add later
      */
-    protected void setupKeyStrokes() {
+    public static void setupOSSpecificCutCopyPaste() {
         if (System.getProperty("os.name").startsWith("Mac")) {
-            int mask = KeyEvent.META_DOWN_MASK;
-
-            addTextBindings("TextField.focusInputMap", mask);
-            addTextBindings("TextArea.focusInputMap", mask);
-            addTextBindings("TextPane.focusInputMap", mask);
-            addTextBindings("ScrollPane.ancestorInputMap", mask);
+            for (String inputMap : PGTUtil.inputMaps) {
+                addTextBindings(inputMap, KeyEvent.META_DOWN_MASK);
+            }
         }
     }
 
@@ -208,14 +209,18 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
      * @param mask the mask to associate the binding with (command or control,
      * for Macs or PC/Linux boxes, respectively.)
      */
-    private void addTextBindings(final String UIElement, final int mask) {
+    private static void addTextBindings(final String UIElement, final int mask) {
         SwingUtilities.invokeLater(() -> {
-            InputMap im = (InputMap) UIManager.get(UIElement);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.selectAllAction);
-            UIManager.put(UIElement, im);
+            try {
+                InputMap im = (InputMap) UIManager.get(UIElement);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.copyAction);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.pasteAction);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.cutAction);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | mask), DefaultEditorKit.selectAllAction);
+                UIManager.put(UIElement, im);
+            } catch (NullPointerException e) {
+                IOHandler.writeErrorLog(e, "Unable to get input map for: " + UIElement);
+            }
         });
     }
 
@@ -383,7 +388,6 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
         }
 
         setupAccelerators();
-        setupKeyStrokes();
 
         super.setVisible(visible);
 
@@ -392,28 +396,28 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
             PGTUtil.checkPositionInBounds(this);
         }
     }
-    
+
     @Override
     public void paint(Graphics g) {
         if (!curResizing) {
             super.paint(g);
         }
     }
-    
+
     @Override
     public void paintComponents(Graphics g) {
         if (!curResizing) {
             super.paintComponents(g);
         }
     }
-    
+
     @Override
     public void repaint() {
         if (!curResizing) {
             super.repaint();
         }
     }
-    
+
     public void setCurResizing(boolean _resizing) {
         curResizing = _resizing;
     }
@@ -432,14 +436,14 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
         final int initialX = this.getWidth();
         final int initialY = this.getHeight();
         final float xDif = width - initialX;
-        final float yDif = height - initialY;        
+        final float yDif = height - initialY;
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-              
+
         setCurResizing(true);
-        
+
         executorService.scheduleAtFixedRate(new Runnable() {
             int framesRun = 0;
-            
+
             @Override
             public void run() {
                 if (framesRun >= numFrames) {
@@ -449,11 +453,11 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
                     executorService.shutdown();
                     return;
                 }
-                
+
                 float newX = initialX + (xDif / numFrames) * (framesRun + 1);
                 float newY = initialY + (yDif / numFrames) * (framesRun + 1);
                 PFrame.super.setSize((int) newX, (int) newY);
-                
+
                 framesRun++;
             }
         }, 0, msDelay, TimeUnit.MILLISECONDS);
