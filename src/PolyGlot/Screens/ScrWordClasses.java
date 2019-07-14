@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 - 2018, Draque Thompson
+ * Copyright (c) 2016 - 2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -57,14 +57,13 @@ import javax.swing.table.TableColumn;
  *
  * @author draque.thompson
  */
-public class ScrWordClasses extends PFrame {
+public final class ScrWordClasses extends PFrame {
 
     private final Map<Integer, PCheckBox> typeChecks = new HashMap<>();
 
     public ScrWordClasses(DictCore _core) {
         core = _core;
         initComponents();
-        setupKeyStrokes();
         populateTypes();
         populateWordProperties();
         populatePropertyValues();
@@ -121,11 +120,6 @@ public class ScrWordClasses extends PFrame {
     @Override
     public void saveAllValues() {
         // not needed - saved in real time
-    }
-
-    @Override
-    public final void setupKeyStrokes() {
-        super.setupKeyStrokes();
     }
 
     /**

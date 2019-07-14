@@ -25,7 +25,6 @@ import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PDialog;
-import PolyGlot.CustomControls.TableBooleanEditor;
 import PolyGlot.CustomControls.PCellEditor;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PList;
@@ -36,7 +35,6 @@ import PolyGlot.ManagersCollections.DeclensionManager;
 import PolyGlot.Nodes.TypeNode;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -82,7 +80,6 @@ public final class ScrDeclensionSetup extends PDialog {
      */
     public ScrDeclensionSetup(DictCore _core, Integer _typeId) {
         core = _core;
-        setupKeyStrokes();
         initComponents();
         try {
             myType = _core.getTypes().getNodeById(_typeId);
@@ -105,11 +102,6 @@ public final class ScrDeclensionSetup extends PDialog {
         populateDeclensionProps();
         populateDimensions();
         setupListeners();
-    }
-
-    @Override
-    public final void setupKeyStrokes() {
-        super.setupKeyStrokes();
     }
 
     @Override
@@ -493,7 +485,7 @@ public final class ScrDeclensionSetup extends PDialog {
             
             for (int i = 0; i < tblDimensions.getRowCount(); i++) {
                 
-                String dimName = "";
+                String dimName;
                 
                 // The currently selected row will have name information in buffer, not in model
                 if (i == curRow && curCol == 0) {

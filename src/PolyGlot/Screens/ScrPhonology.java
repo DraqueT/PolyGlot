@@ -51,7 +51,7 @@ import javax.swing.table.TableColumn;
  *
  * @author draque.thompson
  */
-public class ScrPhonology extends PFrame {
+public final class ScrPhonology extends PFrame {
 
     private boolean curPopulating = false;
 

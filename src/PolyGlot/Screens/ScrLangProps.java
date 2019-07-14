@@ -590,7 +590,6 @@ public class ScrLangProps extends PFrame {
 
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
-        s.setupKeyStrokes();
         s.setCore(_core);
         return s;
     }

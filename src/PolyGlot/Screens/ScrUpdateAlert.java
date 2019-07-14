@@ -61,7 +61,6 @@ public class ScrUpdateAlert extends PDialog {
      */
     public ScrUpdateAlert(boolean verbose, DictCore _core) throws Exception {
         core = _core;
-        setupKeyStrokes();
         initComponents();
         
         jTextPane1.setContentType("text/html");
@@ -313,11 +312,6 @@ public class ScrUpdateAlert extends PDialog {
     @Override
     public final void setTitle(String _title) {
         super.setTitle(_title);
-    }
-    
-    @Override
-    public final void setupKeyStrokes() {
-        super.setupKeyStrokes();
     }
     
     @Override

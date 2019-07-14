@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -58,7 +58,6 @@ public final class ScrDeprecatedDeclensions extends PDialog {
 
     public ScrDeprecatedDeclensions(DictCore _core) {
         core = _core;
-        this.setupKeyStrokes();
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setModal(false);

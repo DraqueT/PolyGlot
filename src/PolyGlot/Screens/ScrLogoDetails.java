@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -132,12 +132,6 @@ public class ScrLogoDetails extends PFrame {
         populateLogoProps();
         setupListeners();
         super.getRootPane().getContentPane().setBackground(Color.white);
-    }
-
-    @Override
-    protected void setupKeyStrokes() {
-        addBindingsToPanelComponents(this.getRootPane());
-        super.setupKeyStrokes();
     }
 
     @Override
@@ -1478,7 +1472,7 @@ public class ScrLogoDetails extends PFrame {
 
     public static ScrLogoDetails run(DictCore _core) {
         final ScrLogoDetails s = new ScrLogoDetails(_core);
-        s.setupKeyStrokes();
+        s.addBindingsToPanelComponents(s.getRootPane());
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018, draque.thompson
+ * Copyright (c) 2017-2019, draque.thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -45,7 +45,6 @@ public final class ScrOptions extends PDialog {
      */
     public ScrOptions(DictCore _core) {
         core = _core;
-        setupKeyStrokes();
         firstVisible = false;
         initComponents();
         setOptions();

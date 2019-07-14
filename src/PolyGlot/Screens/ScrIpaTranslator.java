@@ -58,8 +58,6 @@ public final class ScrIpaTranslator extends PDialog {
                 translateToIpa();
             }
         });
-        
-        super.setupKeyStrokes();
     }
     
     @Override

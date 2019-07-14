@@ -772,6 +772,7 @@ public class DictCore {
                     if (canStart()) {
                         try {
                             // separated due to serious nature of Thowable vs Exception
+                            PFrame.setupOSSpecificCutCopyPaste();
                             s = new ScrMainMenu(overridePath);
                             s.checkForUpdates(false);
                             s.setVisible(true);
