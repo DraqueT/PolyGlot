@@ -272,6 +272,10 @@ public final class ScrDeclensionsGrids extends PDialog {
             super.dispose();
         }
     }
+    
+    public void setCloseWithoutSave(boolean _closeWithoutSave) {
+        closeWithoutSave = _closeWithoutSave;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

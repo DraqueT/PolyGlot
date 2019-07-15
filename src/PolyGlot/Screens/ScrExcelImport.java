@@ -370,12 +370,15 @@ public class ScrExcelImport extends PDialog {
                     txtDefinition.getText(), txtPronunciation.getText(), delimiter,
                     chkFirstLabels.isSelected(), true);
             reader.importFile(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
-            parent.updateAllValues(core);
-            InfoBox.info("Success!", txtFileName.getText() + " imported successfully!", this);
             
-            // if everything has completed without error, close the window and open Lexicon
-            dispose();
-            parent.openLexicon();
+            if (parent != null) {
+                parent.updateAllValues(core);
+                InfoBox.info("Success!", txtFileName.getText() + " imported successfully!", this);
+
+                // if everything has completed without error, close the window and open Lexicon
+                dispose();
+                parent.openLexicon();
+            }
         } catch (InvalidFormatException e) {
             IOHandler.writeErrorLog(e);
             InfoBox.warning("Unrecognized File Type", e.getLocalizedMessage(), core.getRootWindow());

@@ -47,7 +47,7 @@ public class ScrPrintToPDF extends PDialog {
      * Creates new form ScrPrintToPDF
      * @param _core Dictionary core
      */
-    private ScrPrintToPDF(DictCore _core) {
+    public ScrPrintToPDF(DictCore _core) {
         core = _core;
         initComponents();        
         

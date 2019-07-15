@@ -235,10 +235,6 @@ public final class ScrQuickWordEntry extends PDialog {
             ((PComboBox) cmbType).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.getDefinition());
         }
-        /*if (!test.getGender().isEmpty()) {
-            ((PComboBox)cmbGender).makeFlash(core.getRequiredColor(), true);
-            testResults += ("\n" + test.getGender());
-        }*/ // replace with class filtering (relevant code for class values eventually)
         if (!test.typeError.isEmpty()) {
             ((PComboBox) cmbType).makeFlash(core.getRequiredColor(), true);
             testResults += ("\n" + test.typeError);

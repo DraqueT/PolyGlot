@@ -85,7 +85,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
      * @param _core dictionary core
      * @param _typeId ID of type to pull rules for
      */
-    private ScrDeclensionGenSetup(DictCore _core, int _typeId) {
+    public ScrDeclensionGenSetup(DictCore _core, int _typeId) {
         core = _core;
         typeId = _typeId;
         depRulesList = core.getDeclensionManager().getAllDepGenerationRules(_typeId);
@@ -190,6 +190,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
      * @param _typeId type ID to open window for
      * @return a copy of itself
      */
+    // TODO: Solve #723 here
     public static ScrDeclensionGenSetup run(DictCore _core, int _typeId) {
         ScrDeclensionGenSetup s = new ScrDeclensionGenSetup(_core, _typeId);
         s.setModal(true);

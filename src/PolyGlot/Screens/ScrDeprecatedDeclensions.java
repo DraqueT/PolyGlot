@@ -56,8 +56,9 @@ public final class ScrDeprecatedDeclensions extends PDialog {
     private Map<String, DeclensionNode> allWordDeclensions = new HashMap<>();
     private JTextField firstField;
 
-    public ScrDeprecatedDeclensions(DictCore _core) {
+    public ScrDeprecatedDeclensions(DictCore _core, ConWord _word) {
         core = _core;
+        word = _word;
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setModal(false);
@@ -148,7 +149,7 @@ public final class ScrDeprecatedDeclensions extends PDialog {
     public static Window run(DictCore _core, ConWord _word) {
         TypeNode wordType = _core.getTypes().getNodeById(_word.getWordTypeId());
         
-        final ScrDeprecatedDeclensions s = new ScrDeprecatedDeclensions(_core);
+        final ScrDeprecatedDeclensions s = new ScrDeprecatedDeclensions(_core, _word);
         s.setConWord(_word);
         s.setConFont(_core.getPropertiesManager().getFontCon());
         s.setWordType(wordType == null ? -1 : wordType.getId());
