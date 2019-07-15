@@ -108,11 +108,11 @@ public final class ScrLogoQuickView extends PFrame {
         mode = WindowMode.SELECTLIST;
         
         if (System.getProperty("os.name").startsWith("Mac")) {
-            btnAdd.setToolTipText(btnAdd.getToolTipText() + " (⌘ +)");
-            btnDel.setToolTipText(btnDel.getToolTipText() + " (⌘ -)");
+            btnAdd.setToolTipText("Add (Option +)");
+            btnDel.setToolTipText("Remove (Option -)");
         } else {
-            btnAdd.setToolTipText(btnAdd.getToolTipText() + " (CTRL +)");
-            btnDel.setToolTipText(btnDel.getToolTipText() + " (CTRL -)");
+            btnAdd.setToolTipText("Add (CTRL +)");
+            btnDel.setToolTipText("Remove (CTRL -)");
         }
     }
     
