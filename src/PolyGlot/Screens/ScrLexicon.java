@@ -470,10 +470,12 @@ public final class ScrLexicon extends PFrame {
                 classPropMap.put(curProp.getId(), classBox); // combobox mapped to related class ID.
             }
 
-            // messy, but gets a full rebuild of screen since this is happening post-initial visibility-pop
-            Dimension dim = menuParent.getSize();
-            menuParent.setSize(dim.width, dim.height + 1);
-            menuParent.setSize(dim.width, dim.height);
+            if (menuParent != null) {
+                // messy, but gets a full rebuild of screen since this is happening post-initial visibility-pop
+                Dimension dim = menuParent.getSize();
+                menuParent.setSize(dim.width, dim.height + 1);
+                menuParent.setSize(dim.width, dim.height);
+            }
         }
 
         if (propList.isEmpty()) {

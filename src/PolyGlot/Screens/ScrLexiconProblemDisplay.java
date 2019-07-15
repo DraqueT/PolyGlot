@@ -128,8 +128,10 @@ public class ScrLexiconProblemDisplay extends PDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        jTextArea1.setText(jList1.getSelectedValue().description);
-        main.setWordSelectedById(jList1.getSelectedValue().problemWord.getId());
+        if (main != null && jList1.getSelectedValue() != null) {
+            jTextArea1.setText(jList1.getSelectedValue().description);
+            main.setWordSelectedById(jList1.getSelectedValue().problemWord.getId());
+        }
     }//GEN-LAST:event_jList1ValueChanged
     @Override
     public void updateAllValues(DictCore _core) {

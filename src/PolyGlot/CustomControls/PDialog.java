@@ -26,18 +26,12 @@ import PolyGlot.PGTUtil.WindowMode;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import javax.swing.InputMap;
 import javax.swing.JDialog;
-import javax.swing.KeyStroke;
-import javax.swing.UIManager;
-import javax.swing.text.DefaultEditorKit;
 
 /**
  * superclass for JDialog windows in PolyGlot. Includes setup instructions for
@@ -173,5 +167,12 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         if (visible && this.isVisible()) {
             PGTUtil.checkPositionInBounds(this);
         }
+    }
+    
+    /**
+     * Forces fast dispose of window. Used primarily for testing.
+     */
+    public void hardDispose()  {
+        super.dispose();
     }
 }

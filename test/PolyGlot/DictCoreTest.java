@@ -19,31 +19,9 @@
  */
 package PolyGlot;
 
-import PolyGlot.CustomControls.PFrame;
-import PolyGlot.ManagersCollections.ConWordCollection;
-import PolyGlot.ManagersCollections.DeclensionManager;
-import PolyGlot.ManagersCollections.EtymologyManager;
-import PolyGlot.ManagersCollections.FamilyManager;
-import PolyGlot.ManagersCollections.GrammarManager;
-import PolyGlot.ManagersCollections.ImageCollection;
-import PolyGlot.ManagersCollections.LogoCollection;
-import PolyGlot.ManagersCollections.OptionsManager;
-import PolyGlot.ManagersCollections.PronunciationMgr;
-import PolyGlot.ManagersCollections.PropertiesManager;
-import PolyGlot.ManagersCollections.ReversionManager;
-import PolyGlot.ManagersCollections.RomanizationManager;
-import PolyGlot.ManagersCollections.ToDoManager;
-import PolyGlot.ManagersCollections.TypeCollection;
-import PolyGlot.ManagersCollections.VisualStyleManager;
-import PolyGlot.ManagersCollections.WordClassCollection;
-import PolyGlot.Nodes.DeclensionNode;
-import PolyGlot.Screens.ScrMainMenu;
-import java.awt.Color;
-import java.time.Instant;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

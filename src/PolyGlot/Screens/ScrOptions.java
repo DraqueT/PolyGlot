@@ -79,7 +79,10 @@ public final class ScrOptions extends PDialog {
         options.setNightMode(chkNightMode.isSelected());
         options.setMenuFontSize(fontSize);
         options.setMaxReversionCount(maxReversion);
-        ((ScrMainMenu)core.getRootWindow()).changeToLexicon();
+        
+        if (core.getRootWindow() != null) {
+            ((ScrMainMenu)core.getRootWindow()).changeToLexicon();
+        }
 
         super.dispose();
     }

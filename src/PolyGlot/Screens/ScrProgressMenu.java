@@ -62,13 +62,13 @@ public final class ScrProgressMenu extends javax.swing.JDialog {
     }
     
     /**
-     * Creates new form ProgressMenu
+     * Creates new form ProgressMenu (Use crateScrProgressMenu instead unless you have a good reason
      * @param title label for window to have
      * @param _taskLength length of task to perform
      * @param displayText whether to display text updates below progress bar
      * @param _closeOnComplete Whether to close the window on task completion
      */
-    private ScrProgressMenu(String title, int _taskLength, boolean displayText, boolean _closeOnComplete) {
+    public ScrProgressMenu(String title, int _taskLength, boolean displayText, boolean _closeOnComplete) {
         taskLength = _taskLength;
         progress = 0;
         displayTextValue = "";

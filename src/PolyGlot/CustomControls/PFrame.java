@@ -462,6 +462,14 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
             }
         }, 0, msDelay, TimeUnit.MILLISECONDS);
     }
+    
+    /**
+     * Forces fast dispose of window. Used primarily for testing.
+     */
+    public void hardDispose()  {
+        super.dispose();
+    }
+            
 
     public abstract Component getWindow();
 }
