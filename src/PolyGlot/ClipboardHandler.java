@@ -28,7 +28,10 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
+import sun.awt.image.MultiResolutionImage;
 
 public final class ClipboardHandler implements ClipboardOwner {
     private Transferable cachedContents;
@@ -113,6 +116,17 @@ public final class ClipboardHandler implements ClipboardOwner {
                 ret = (Image)contents.getTransferData(DataFlavor.imageFlavor);
             } catch (UnsupportedFlavorException | IOException e) {
                 throw new Exception("Clipboard error: " + e.getLocalizedMessage());
+            }
+        }
+        
+        if (ret instanceof sun.awt.image.MultiResolutionImage) {
+            MultiResolutionImage mri = (MultiResolutionImage) ret;
+            List<Image> images = mri.getResolutionVariants();
+            
+            if (images != null && images.size() > 0) {
+                ret = images.get(0);
+            } else {
+                throw new Exception("Unable to retrieve image from clipboard.");
             }
         }
         
