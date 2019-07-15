@@ -62,28 +62,40 @@ public final class ScrDeclensionsGrids extends PDialog {
         core = _core;
         word = _word;
         decMan = core.getDeclensionManager();
+
+        initComponents();
+        this.setModal(true);
+        setupDimDropdowns();
+        populateDecIdToValues();
+        buildWindowBody();
+        setupListeners();
+        chkAutogenOverride.setSelected(word.isOverrideAutoDeclen());
+}
+    
+    /**
+     * Creates new declension grid window. Returns null if cannot open.
+     * @param core
+     * @param word
+     * @return 
+     */
+    public static ScrDeclensionsGrids run(DictCore core, ConWord word) {
+        ScrDeclensionsGrids ret = null;
         
-        if (canOpen()) {
-            initComponents();
-            this.setModal(true);
-            setupDimDropdowns();
-            populateDecIdToValues();
-            buildWindowBody();
-            setupListeners();
-            chkAutogenOverride.setSelected(word.isOverrideAutoDeclen());
-        } else {
-            closeWithoutSave = true;
-            dispose();
+        if (canOpen(core, word)) {
+            ret = new ScrDeclensionsGrids(core, word);
         }
+        
+        return ret;
     }
     
-    private boolean canOpen() {
+    public static boolean canOpen(DictCore core, ConWord word) {
         boolean ret = true;
         int typeId = word.getWordTypeId();
+        DeclensionManager decMan = core.getDeclensionManager();
         
-        if (typeId == -1) {
+        if (typeId == 0) {
             InfoBox.info("Missing Part of Speech", 
-                    "Word must have a part of Speech set, and declensions defined before using this feature.", 
+                    "Word must have a part of Speech set and the part of speech must have declensions defined before using this feature.", 
                     core.getRootWindow());
             ret = false;
         } else if ((decMan.getDimensionalDeclensionListTemplate(typeId) == null
@@ -91,7 +103,7 @@ public final class ScrDeclensionsGrids extends PDialog {
                 && decMan.getDimensionalDeclensionListWord(word.getId()).isEmpty()) {
             InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the "
-                            + "Declensions button.", this);
+                            + "Declensions button.", core.getRootWindow());
             ret = false;
         }
         
