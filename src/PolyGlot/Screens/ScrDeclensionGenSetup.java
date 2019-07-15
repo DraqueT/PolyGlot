@@ -34,7 +34,6 @@ import PolyGlot.CustomControls.PClassCheckboxPanel;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.CustomControls.PList;
 import PolyGlot.CustomControls.PTable;
-import PolyGlot.IOHandler;
 import PolyGlot.Nodes.DeclensionDimension;
 import PolyGlot.Nodes.DeclensionNode;
 import java.awt.Color;
@@ -190,7 +189,6 @@ public final class ScrDeclensionGenSetup extends PDialog {
      * @param _typeId type ID to open window for
      * @return a copy of itself
      */
-    // TODO: Solve #723 here
     public static ScrDeclensionGenSetup run(DictCore _core, int _typeId) {
         ScrDeclensionGenSetup s = new ScrDeclensionGenSetup(_core, _typeId);
         s.setModal(true);
