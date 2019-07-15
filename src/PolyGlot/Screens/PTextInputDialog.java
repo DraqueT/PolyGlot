@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, DThompson
+ * Copyright (c) 2017-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -29,6 +29,7 @@ import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
+import javax.swing.JDialog;
 
 /**
  * SImple dialog to collect arbitrary number of text values
@@ -36,6 +37,8 @@ import javax.swing.BoxLayout;
  */
 public final class PTextInputDialog extends PDialog {
     private final Window parent;
+    private boolean parentModal;
+    private boolean parentAlwaysOnTop;
     private final GridBagConstraints gbc = new GridBagConstraints();
     private final List<PTextField> orderedFields = new ArrayList<>();
     private List<PTextField> retVal = new ArrayList<>();
@@ -58,6 +61,8 @@ public final class PTextInputDialog extends PDialog {
         this.setTitle(caption);
         core = _core;
         
+        setParentModalOntop(_parent);
+        
         txtDialog.setText("<HTML>" + dialog + "</HTML>");
         
         pnlTextFields.setLayout(new BoxLayout(pnlTextFields, BoxLayout.Y_AXIS));
@@ -67,6 +72,18 @@ public final class PTextInputDialog extends PDialog {
         gbc.weightx = 1;
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.BOTH;
+    }
+    
+    private void setParentModalOntop(Window _parent) {
+        if (_parent instanceof JDialog && ((JDialog)_parent).isModal()) {
+            parentModal = true;
+            ((JDialog)_parent).setModal(false);
+        }
+        
+        if (_parent.isAlwaysOnTop()) {
+            parentAlwaysOnTop = true;
+            _parent.setAlwaysOnTop(false);
+        }
     }
     
     /**
@@ -90,7 +107,16 @@ public final class PTextInputDialog extends PDialog {
         this.ignoreInitialResize = true;
         this.setSize(new Dimension(initialSize()));
         this.setResizable(false);
+        this.toFront();
         super.setVisible(visible);
+        
+        if (parentAlwaysOnTop) {
+            parent.setAlwaysOnTop(true);
+        }
+        
+        if (parentModal) {
+            ((JDialog)parent).setModal(true);
+        }
     }
     
     private Dimension initialSize() {
