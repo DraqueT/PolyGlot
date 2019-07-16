@@ -48,7 +48,7 @@ public class OpenScreensTest {
     
     @Test
     public void testPTextInputDialog() throws Exception {
-        PTextInputDialog s = new PTextInputDialog(null, core, "", "");
+        PTextInputDialog s = new PTextInputDialog(new ScrAbout(core), core, "", "");
         s.dispose();
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());

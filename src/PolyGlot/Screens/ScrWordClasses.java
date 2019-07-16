@@ -146,11 +146,14 @@ public final class ScrWordClasses extends PFrame {
                 public void itemStateChanged(ItemEvent e) {
                     WordClass prop = lstProperties.getSelectedValue();
                     
-                    if (thisBox.isSelected()) {
-                        prop.addApplyType(-1);                       
-                    } else {
-                        prop.deleteApplyType(-1);
+                    if (prop != null) {
+                        if (thisBox.isSelected()) {
+                            prop.addApplyType(-1);                       
+                        } else {
+                            prop.deleteApplyType(-1);
+                        }
                     }
+                    
                     setEnabledTypeText();
                 }
             });

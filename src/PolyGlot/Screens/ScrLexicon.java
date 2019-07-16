@@ -25,7 +25,6 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PCheckBox;
 import PolyGlot.CustomControls.PComboBox;
-import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PFocusTraversalPolicy;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.CustomControls.PList;
@@ -56,11 +55,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -104,7 +99,7 @@ import javax.swing.event.DocumentListener;
  */
 public final class ScrLexicon extends PFrame {
 
-    private final List<Window> childFrames = new ArrayList<>();
+    private ScrLogoQuickView logoQuick = null;
     private final Map<Integer, JComponent> classPropMap = new HashMap<>();
     private TitledPane gridTitlePane = null;
     private CheckBox chkFindBad;
@@ -177,18 +172,6 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Opens quickentry window if not already open
-     *
-     * @return quickentry window
-     */
-    public ScrQuickWordEntry openQuickEntry() {
-        ScrQuickWordEntry s = ScrQuickWordEntry.run(core, this);
-        childFrames.add(s);
-
-        return s;
-    }
-
-    /**
      * forces refresh of word list
      *
      * @param wordId id of newly word to select (-1 if no selection)
@@ -224,23 +207,9 @@ public final class ScrLexicon extends PFrame {
     public void updateAllValues(final DictCore _core) {
         // ensure this is on the UI component stack to avoid read/writelocks...
         Runnable runnable = () -> {
-            // first push update to all child frames...
             boolean localPopulating = curPopulating;
             curPopulating = true;
             forceUpdate = true;
-            childFrames.forEach((window) -> {
-                if (window instanceof PFrame) {
-                    PFrame frame = ((PFrame) window);
-                    if (!frame.isDisposed()) {
-                        frame.updateAllValues(_core);
-                    }
-                } else if (window instanceof PDialog) {
-                    PDialog dialog = ((PDialog) window);
-                    if (!dialog.isDisposed()) {
-                        dialog.updateAllValues(_core);
-                    }
-                }
-            });
 
             if (core != _core) {
                 core = _core;
@@ -1035,7 +1004,7 @@ public final class ScrLexicon extends PFrame {
 
         if (canClose) {
             saveAllValues();
-            killAllChildren();
+            killLogoChild();
             super.dispose();
         }
     }
@@ -1051,20 +1020,10 @@ public final class ScrLexicon extends PFrame {
     /**
      * Closes all child windows
      */
-    private void killAllChildren() {
-        Iterator<Window> it = childFrames.iterator();
-
-        while (it.hasNext()) {
-            Window curFrame = it.next();
-
-            if (curFrame != null
-                    && curFrame.isShowing()) {
-                curFrame.setVisible(false);
-                curFrame.dispose();
-            }
+    private void killLogoChild() {
+        if (logoQuick != null && !logoQuick.isDisposed()) {
+            logoQuick.dispose();
         }
-
-        childFrames.clear();
     }
 
     public ConWord getCurrentWord() {
@@ -1623,22 +1582,13 @@ public final class ScrLexicon extends PFrame {
         if (curWord == null) {
             return;
         }
+        
+        killLogoChild();
 
-        ScrLogoQuickView window = new ScrLogoQuickView(core, curWord);
-        window.addBindingToComponent(window.getRootPane());
-        childFrames.add(window);
-        window.setCore(core);
-        window.setVisible(true);
-        final Window parent = this;
-        this.setEnabled(false);
-
-        window.addWindowListener(new WindowAdapter() {
-
-            @Override
-            public void windowClosing(WindowEvent arg0) {
-                parent.setEnabled(true);
-            }
-        });
+        logoQuick = new ScrLogoQuickView(core, curWord);
+        logoQuick.addBindingToComponent(logoQuick.getRootPane());
+        logoQuick.setCore(core);
+        logoQuick.setVisible(true);
     }
 
     private void viewDeclensions() {
@@ -1653,7 +1603,6 @@ public final class ScrLexicon extends PFrame {
         
         if (window != null) {
             window.setVisible(true);
-            childFrames.add(window);
         }
     }
 
