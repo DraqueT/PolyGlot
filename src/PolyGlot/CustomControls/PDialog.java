@@ -125,13 +125,15 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     @Override
     public void windowGainedFocus(WindowEvent e) {
         hasFocus = true;
-        core.checkProgramFocus();
     }
 
     @Override
     public void windowLostFocus(WindowEvent e) {
         hasFocus = false;
-        core.checkProgramFocus();
+        
+        if (core != null) {
+            core.pushUpdate();
+        }
     }
     
     @Override

@@ -190,14 +190,6 @@ public class DictCore {
     }
 
     /**
-     * Checks whether PolyGlot has focus, and sets main menu to always on top
-     * ONLY if so
-     */
-    public void checkProgramFocus() {
-        // currently does nothing. Previously used for assisting program focus.
-    }
-
-    /**
      * Retrieves working directory of PolyGlot
      *
      * @return current working directory
@@ -271,7 +263,7 @@ public class DictCore {
      * through windows and their children.
      */
     public void pushUpdate() {
-        pushUpdate(this);
+        pushUpdateWithCore(this);
     }
     
     /**
@@ -279,13 +271,13 @@ public class DictCore {
      * through windows and their children.
      * @param _core new core to push
      */
-    public void pushUpdate(DictCore _core) {
+    public void pushUpdateWithCore(DictCore _core) {
         StackTraceElement stack[] = Thread.currentThread().getStackTrace();
 
         // prevent recursion (exclude check of top method, obviously)
         for (int i = (stack.length - 1); i > 1; i--) {
             StackTraceElement element = stack[i];
-            if (element.getMethodName().equals("pushUpdate")) {
+            if (element.getMethodName().equals("pushUpdateWithCore")) {
                 return;
             }
         }
@@ -518,7 +510,7 @@ public class DictCore {
         revDict.readFile(fileName, revision);
         revDict.setRootWindow(rootWindow);
         
-        pushUpdate(revDict);
+        pushUpdateWithCore(revDict);
     }
     
     /**
@@ -780,7 +772,7 @@ public class DictCore {
                             // open file if one is provided via arguments
                             if (args.length > 0) {
                                 s.setFile(args[0]);
-                                s.openLexicon();
+                                s.openLexicon(true);
                             }
 
                             // runs additional integration if on OSX system

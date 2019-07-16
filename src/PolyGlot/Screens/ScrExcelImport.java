@@ -377,7 +377,7 @@ public class ScrExcelImport extends PDialog {
 
                 // if everything has completed without error, close the window and open Lexicon
                 dispose();
-                parent.openLexicon();
+                parent.openLexicon(true);
             }
         } catch (InvalidFormatException e) {
             IOHandler.writeErrorLog(e);

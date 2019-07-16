@@ -30,7 +30,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -343,13 +342,16 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
     @Override
     public void windowGainedFocus(WindowEvent e) {
         hasFocus = true;
-        core.checkProgramFocus();
     }
 
     @Override
     public void windowLostFocus(WindowEvent e) {
         hasFocus = false;
-        core.checkProgramFocus();
+        saveAllValues();
+        
+        if (core != null) {
+            core.pushUpdate();
+        }
     }
 
     public abstract void addBindingToComponent(JComponent c);

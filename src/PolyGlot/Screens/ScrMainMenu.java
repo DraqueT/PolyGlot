@@ -44,21 +44,31 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultTreeModel;
@@ -78,6 +88,7 @@ public final class ScrMainMenu extends PFrame {
     private ScrLexicon cacheLexicon;
     private String curFileName = "";
     private Image backGround;
+    private List<Window> childWindows = new ArrayList<>();
 
     /**
      * Creates new form ScrMainMenu
@@ -125,11 +136,12 @@ public final class ScrMainMenu extends PFrame {
             IOHandler.deleteIni(core);
         }
         
+        setupButtonPopouts();
         setupToDo();
         populateRecentOpened();
         checkJavaVersion();
         super.setSize(super.getPreferredSize());
-        setupKeyStrokes();
+        addBindingsToPanelComponents(this.getRootPane());
     }
     
     /**
@@ -152,10 +164,16 @@ public final class ScrMainMenu extends PFrame {
 
     /**
      * For the purposes of startup with file
+     * @param switchTo
      */
-    public void openLexicon() {
+    public Window openLexicon(boolean switchTo) {
         cacheLexicon.updateAllValues(core);
-        changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
+        
+        if (switchTo) {
+            changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
+        }
+        
+        return cacheLexicon;
     }
 
     @Override
@@ -169,6 +187,8 @@ public final class ScrMainMenu extends PFrame {
             // make certain that all actions necessary for saving information are complete
             curWindow.dispose();
         }
+        
+        killAllChildren();
 
         super.dispose();
 
@@ -184,6 +204,17 @@ public final class ScrMainMenu extends PFrame {
         }
 
         System.exit(0);
+    }
+    
+    /**
+     * Kills all children. Hiding under the covers won't save them.
+     */
+    private void killAllChildren() {
+        for (Window child : childWindows) {
+            child.dispose();
+        }
+        
+        childWindows.clear();
     }
 
     /**
@@ -421,83 +452,6 @@ public final class ScrMainMenu extends PFrame {
             cacheLexicon.updateAllValues(core);
             changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
         }
-    }
-
-    /**
-     * Performs all actions necessary for changing the viewed panel
-     *
-     * @param newScreen new window to display
-     * @param display component to be added as main display
-     */
-    private void changeScreen(PFrame newScreen, Component display, PButton button) {
-        // simply fail if current window cannot close. Window is responsible
-        // for informing user of reason.
-        if (curWindow != null && !curWindow.canClose()) {
-            newScreen.dispose();
-            return;
-        }
-
-        // blank the menu
-        pnlMain.removeAll();
-        this.repaint();
-
-        // resize screen
-        if (curWindow != null) {
-            // set size before disposing so that it will be properly saved to options
-            curWindow.getWindow().setSize(pnlMain.getSize());
-            curWindow.dispose();
-
-            // after disposing, update new window in case old wrote anything to the core
-            newScreen.updateAllValues(core);
-        }
-
-        // only resize if animation is enabled and the window isn't maximized
-        if (core.getOptionsManager().isAnimateWindows() && getFrameState() != Frame.MAXIMIZED_BOTH) {
-            Dimension dim = core.getOptionsManager().getScreenSize(newScreen.getClass().getName());
-
-            if (dim == null) {
-                dim = newScreen.getPreferredSize();
-            }
-
-            Insets insets = getInsets();
-            try {
-                this.setSizeSmooth(dim.width + pnlSideButtons.getWidth() + insets.left + insets.right,
-                        dim.height + insets.bottom + insets.top,
-                        true);
-            } catch (InterruptedException e) {
-                IOHandler.writeErrorLog(e);
-                InfoBox.error("Resize Error",
-                        "Unable to run resize animation: " + e.getLocalizedMessage(),
-                        core.getRootWindow());
-            }
-        }
-
-        // set new screen
-        GroupLayout layout = new GroupLayout(pnlMain);
-        pnlMain.setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING,
-                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING,
-                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                Short.MAX_VALUE)
-        );
-
-        curWindow = newScreen;
-
-        if (button != null) {
-            deselectButtons();
-            button.setActiveSelected(true);
-        }
-
-        genTitle();
     }
 
     public void genTitle() {
@@ -820,6 +774,227 @@ public final class ScrMainMenu extends PFrame {
         if (cacheLexicon != null) {
             cacheLexicon.setWordSelectedById(id);
         }
+    }
+    
+    /**
+     * Performs all actions necessary for changing the viewed panel
+     *
+     * @param newScreen new window to display
+     * @param display component to be added as main display
+     */
+    private void changeScreen(PFrame newScreen, Component display, PButton button) {
+        // simply fail if current window cannot close. Window is responsible
+        // for informing user of reason.
+        if (curWindow != null && !curWindow.canClose()) {
+            newScreen.dispose();
+            return;
+        }
+
+        // blank the menu
+        pnlMain.removeAll();
+        this.repaint();
+
+        // resize screen
+        if (curWindow != null) {
+            // set size before disposing so that it will be properly saved to options
+            curWindow.getWindow().setSize(pnlMain.getSize());
+            curWindow.dispose();
+
+            // after disposing, update new window in case old wrote anything to the core
+            newScreen.updateAllValues(core);
+        }
+
+        // only resize if animation is enabled and the window isn't maximized
+        if (core.getOptionsManager().isAnimateWindows() && getFrameState() != Frame.MAXIMIZED_BOTH) {
+            Dimension dim = core.getOptionsManager().getScreenSize(newScreen.getClass().getName());
+
+            if (dim == null) {
+                dim = newScreen.getPreferredSize();
+            }
+
+            Insets insets = getInsets();
+            try {
+                this.setSizeSmooth(dim.width + pnlSideButtons.getWidth() + insets.left + insets.right,
+                        dim.height + insets.bottom + insets.top,
+                        true);
+            } catch (InterruptedException e) {
+                IOHandler.writeErrorLog(e);
+                InfoBox.error("Resize Error",
+                        "Unable to run resize animation: " + e.getLocalizedMessage(),
+                        core.getRootWindow());
+            }
+        }
+
+        // set new screen
+        GroupLayout layout = new GroupLayout(pnlMain);
+        pnlMain.setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(display, javax.swing.GroupLayout.Alignment.TRAILING,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE)
+        );
+
+        curWindow = newScreen;
+
+        if (button != null) {
+            deselectButtons();
+            button.setActiveSelected(true);
+        }
+
+        genTitle();
+    }
+    
+    /**
+     * Switches to first active menu button
+     */
+    private void selectFirstAvailableButton() {
+        openLexicon();
+    }
+    
+    private void setupButtonPopouts() {
+        // not all buttons support this feature, but those that don't should still display it in grey
+        setupButtonPopout((PButton)btnLexicon, () -> {return null;}, false);
+        setupButtonPopout((PButton)btnPos, () -> {return ScrTypes.run(core);}, true);
+        setupButtonPopout((PButton)btnClasses, () -> {return new ScrWordClasses(core);}, true);
+        setupButtonPopout((PButton)btnGrammar, () -> {return new ScrGrammarGuide(core);}, true);
+        setupButtonPopout((PButton)btnLogos, () -> {return new ScrLogoDetails(core);}, true);
+        setupButtonPopout((PButton)btnPhonology, () -> {return new ScrPhonology(core);}, true);
+        setupButtonPopout((PButton)btnProp, () -> {return new ScrLangProps(core);}, true);
+        setupButtonPopout((PButton)btnQuiz, () -> {return null;}, false);
+    }
+    
+    /**
+     * 
+     * @param button
+     * @param cachedWindow
+     * @param setNewWindow 
+     */
+    private void setupButtonPopout(final PButton button, Supplier<Window> setNewWindow, boolean _enable) {
+        final JPopupMenu buttonMenu = new JPopupMenu();
+        final JMenuItem popOut = new JMenuItem("Pop Window Out");
+        final boolean enable = _enable;
+        
+        if (enable) {
+            popOut.setToolTipText("Pops " + button.getText() + " into independant window.");
+        } else {
+            popOut.setToolTipText(button.getText() + " cannot be popped out.");
+        }
+        
+        popOut.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Window w = setNewWindow.get();
+                button.setEnabled(false);
+                w.addWindowListener(new WindowListener(){
+                    @Override
+                    public void windowOpened(WindowEvent e) {}
+                    @Override
+                    public void windowClosing(WindowEvent e) {}
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        childWindows.remove(w);
+                        button.setEnabled(true);
+                    }
+                    @Override
+                    public void windowIconified(WindowEvent e) {}
+                    @Override
+                    public void windowDeiconified(WindowEvent e) {}
+                    @Override
+                    public void windowActivated(WindowEvent e) {}
+                    @Override
+                    public void windowDeactivated(WindowEvent e) {}
+                });
+                w.setVisible(true);
+                w.toFront();
+                childWindows.add(w);
+                
+                if (button.isActiveSelected()) {
+                    selectFirstAvailableButton();
+                }
+            }
+        });
+        
+        buttonMenu.add(popOut);
+        
+        button.addMouseListener(new MouseListener(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    doPop(e);
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    doPop(e);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+            
+            private void doPop(MouseEvent e) {
+                popOut.setEnabled(button.isEnabled() && enable);
+                buttonMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
+        });
+    }
+    
+    private void openLexicon() {
+        cacheLexicon.updateAllValues(core);
+        changeScreen(cacheLexicon, cacheLexicon.getWindow(), (PButton)btnLexicon);
+    }
+    
+    @Override
+    public void updateAllValues(DictCore _core) {
+        if (curWindow != null) {
+            curWindow.updateAllValues(_core);
+        }
+        
+        if (cacheLexicon != null) {
+            cacheLexicon.updateAllValues(_core);
+        }
+        core = _core;
+    }
+
+    @Override
+    public void addBindingToComponent(JComponent c) {
+        // none for this window
+    }
+
+    @Override
+    public Component getWindow() {
+        throw new UnsupportedOperationException("The main window never returns a value here. Do not call this.");
+    }
+
+    /**
+     * For now, always returns true... shouldn't ever be any upstream window, regardless.
+     *
+     * @return
+     */
+    @Override
+    public boolean canClose() {
+        return true;
+    }
+    
+    public String getCurFileName() {
+        return curFileName;
     }
     
     /**
@@ -1320,8 +1495,7 @@ public final class ScrMainMenu extends PFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLexiconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLexiconActionPerformed
-        cacheLexicon.updateAllValues(core);
-        changeScreen(cacheLexicon, cacheLexicon.getWindow(), (PButton) evt.getSource());
+        openLexicon();
     }//GEN-LAST:event_btnLexiconActionPerformed
 
     private void btnPosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPosActionPerformed
@@ -1589,36 +1763,4 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JPanel pnlToDo;
     private javax.swing.JSplitPane pnlToDoSplit;
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    public void updateAllValues(DictCore _core) {
-        if (curWindow != null) {
-            curWindow.updateAllValues(_core);
-        }
-        core = _core;
-    }
-
-    @Override
-    public void addBindingToComponent(JComponent c) {
-        // none for this window
-    }
-
-    @Override
-    public Component getWindow() {
-        throw new UnsupportedOperationException("The main window never returns a value here. Do not call this.");
-    }
-
-    /**
-     * For now, always returns true... shouldn't ever be any upstream window, regardless.
-     *
-     * @return
-     */
-    @Override
-    public boolean canClose() {
-        return true;
-    }
-    
-    public String getCurFileName() {
-        return curFileName;
-    }
 }
