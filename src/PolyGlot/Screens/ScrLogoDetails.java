@@ -908,6 +908,7 @@ public class ScrLogoDetails extends PFrame {
             quickView.dispose();
         }
 
+        core.pushUpdate();
         super.dispose();
     }
     

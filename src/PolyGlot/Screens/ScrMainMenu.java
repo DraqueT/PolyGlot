@@ -161,10 +161,27 @@ public final class ScrMainMenu extends PFrame {
         
         cacheLexicon.saveAllValues();
     }
+    
+    /**
+     * Externally visible method for enabling logograph menu button
+     * @param enable 
+     */
+    public void setEnabledLogoButton(boolean enable) {
+        btnLogos.setEnabled(enable);
+        
+        if(((PButton)btnLogos).isActiveSelected() && !enable) {
+            changeToLexicon();
+        }
+    }
+    
+    public boolean isEnabledLogoButton() {
+        return btnLogos.isEnabled();
+    }
 
     /**
      * For the purposes of startup with file
      * @param switchTo
+     * @return 
      */
     public Window openLexicon(boolean switchTo) {
         cacheLexicon.updateAllValues(core);

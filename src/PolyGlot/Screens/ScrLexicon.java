@@ -55,6 +55,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -241,6 +243,9 @@ public final class ScrLexicon extends PFrame {
             ((PTextField)txtLocalWord).setCore(_core);
             ((PTextField)txtProc).setCore(_core);
             ((PTextPane)txtDefinition).setCore(_core);
+            
+            // ensures multiple logograph screens can't be open at once
+            btnLogographs.setEnabled(btnLogoShouldEnable());
         };
         SwingUtilities.invokeLater(runnable);
     }
@@ -1355,13 +1360,18 @@ public final class ScrLexicon extends PFrame {
             chkProcOverride.setEnabled(enable);
             chkRuleOverride.setEnabled(enable);
             btnDeclensions.setEnabled(enable);
-            btnLogographs.setEnabled(enable);
+            btnLogographs.setEnabled(enable && btnLogoShouldEnable());
             btnEtymology.setEnabled(enable);
             classPropMap.values().forEach((classComp) -> {
                 classComp.setEnabled(enable);
             });
         };
         SwingUtilities.invokeLater(runnable);
+    }
+    
+    private boolean btnLogoShouldEnable() {
+        return menuParent.isEnabledLogoButton() 
+                && (logoQuick == null || logoQuick.isDisposed());
     }
 
     /**
@@ -1584,11 +1594,34 @@ public final class ScrLexicon extends PFrame {
         }
         
         killLogoChild();
+        menuParent.setEnabledLogoButton(false);
+        btnLogographs.setEnabled(btnLogoShouldEnable());
 
         logoQuick = new ScrLogoQuickView(core, curWord);
         logoQuick.addBindingToComponent(logoQuick.getRootPane());
         logoQuick.setCore(core);
         logoQuick.setVisible(true);
+        logoQuick.addWindowListener(new WindowListener(){
+            @Override
+            public void windowOpened(WindowEvent e) {}
+            @Override
+            public void windowClosing(WindowEvent e) {}
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                menuParent.setEnabledLogoButton(true);
+                btnLogographs.setEnabled(btnLogoShouldEnable());
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {}
+            @Override
+            public void windowDeiconified(WindowEvent e) {}
+            @Override
+            public void windowActivated(WindowEvent e) {}
+            @Override
+            public void windowDeactivated(WindowEvent e) {}
+        });
     }
 
     private void viewDeclensions() {
