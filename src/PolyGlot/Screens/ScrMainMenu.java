@@ -1068,7 +1068,7 @@ public final class ScrMainMenu extends PFrame {
         mnuCheckLexicon = new javax.swing.JMenuItem();
         mnuIpaTranslator = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mnuLexFamilies = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         mnuIPAChart = new javax.swing.JMenuItem();
@@ -1414,13 +1414,13 @@ public final class ScrMainMenu extends PFrame {
         mnuTools.add(mnuIpaTranslator);
         mnuTools.add(jSeparator1);
 
-        jMenuItem1.setText("Lexical Families");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        mnuLexFamilies.setText("Lexical Families");
+        mnuLexFamilies.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                mnuLexFamiliesActionPerformed(evt);
             }
         });
-        mnuTools.add(jMenuItem1);
+        mnuTools.add(mnuLexFamilies);
 
         mnuLangStats.setText("Language Statistics");
         mnuLangStats.setToolTipText("Generate Language Statistics page");
@@ -1636,18 +1636,39 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_btnLogosActionPerformed
 
     private void btnPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropActionPerformed
+
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrLangProps s = new ScrLangProps(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnPropActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void mnuLexFamiliesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLexFamiliesActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        mnuLexFamilies.setEnabled(false);
         ScrFamilies s = new ScrFamilies(core, this);
+        s.addWindowListener(new WindowListener(){
+            @Override
+            public void windowOpened(WindowEvent e) {}
+            @Override
+            public void windowClosing(WindowEvent e) {}
+            @Override
+            public void windowClosed(WindowEvent e) {
+                mnuLexFamilies.setEnabled(true);
+            }
+            @Override
+            public void windowIconified(WindowEvent e) {}
+            @Override
+            public void windowDeiconified(WindowEvent e) {}
+            @Override
+            public void windowActivated(WindowEvent e) {}
+            @Override
+            public void windowDeactivated(WindowEvent e) {}
+        });
         s.setVisible(true);
         setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+        
+    }//GEN-LAST:event_mnuLexFamiliesActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         mnuOpenLocalActionPerformed(evt);
@@ -1743,7 +1764,6 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel3;
@@ -1766,6 +1786,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuImportFont;
     private javax.swing.JMenuItem mnuIpaTranslator;
     private javax.swing.JMenuItem mnuLangStats;
+    private javax.swing.JMenuItem mnuLexFamilies;
     private javax.swing.JMenuItem mnuNewLocal;
     private javax.swing.JMenuItem mnuOpenLocal;
     private javax.swing.JMenuItem mnuOptions;
