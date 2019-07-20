@@ -217,10 +217,19 @@ public final class ScrLexicon extends PFrame {
                 core = _core;
             }
             
+            // ensure same value is selected post update
+            ConWordDisplay selectedWord = lstLexicon.getSelectedValue();
+            
             lstLexicon.setModel(new PListModelLexicon());
             setDefaultValues();
             populateLexicon();
-            lstLexicon.setSelectedIndex(0);
+            
+            if (selectedWord != null) {
+                lstLexicon.setSelectedValue(selectedWord, forceUpdate);
+            } else {
+                lstLexicon.setSelectedIndex(0);
+            }
+            
             setupComboBoxesSwing();
             populateProperties();
                 

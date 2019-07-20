@@ -41,6 +41,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -1089,5 +1090,32 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
            return ret;
        }
+       
+       @Override
+       public boolean equals(Object o) {
+           boolean ret = o != null;
+           
+           if (ret) {
+               ret = o instanceof ConWordDisplay;
+               
+               if (ret) {
+                    ConWord compWord = ((ConWordDisplay)o).conWord;
+                    ret = compWord != null && compWord.getId() != null && conWord != null;
+                   
+                    if (ret && compWord != null) {
+                        ret = conWord.getId().equals(compWord.getId());
+                    }
+               }
+           }
+           
+           return ret;
+       }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 29 * hash + Objects.hashCode(this.conWord);
+            return hash;
+        }
     }
 }
