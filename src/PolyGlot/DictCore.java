@@ -59,7 +59,7 @@ import org.xml.sax.SAXException;
 
 public class DictCore {
 
-    private final String version = "2.4";
+    private final String version = "2.5";
     private boolean isBeta = false;
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
@@ -703,6 +703,7 @@ public class DictCore {
         versionHierarchy.put("2.3.2", 33);
         versionHierarchy.put("2.3.3", 34);
         versionHierarchy.put("2.4", 35);
+        versionHierarchy.put("2.5", 36);
     }
     
     private static boolean shouldUseOSInegration(String args[]) {
