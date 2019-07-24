@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2018, Draque Thompson
+ * Copyright (c) 2015-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -39,6 +40,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import org.newdawn.easyogg.OggClip;
 
 /**
  * Basic sound recording code. Allows recording, playing, pausing. Will
@@ -455,17 +457,44 @@ public class SoundRecorder {
         }
     }
 
+    public void playAudioFile(String filePath) throws Exception {
+        if (filePath.toLowerCase().endsWith("mp3")) {
+            playMP3(filePath);
+        } else if (filePath.toLowerCase().endsWith("ogg")) {
+            playOGG(filePath);
+        } else {
+            throw new Exception("Incompatible file type.");
+        }
+    }
+    
     /**
      * Plays MP3 file back
      *
      * @param filePath path to load MP3
      */
-    public void playMP3(String filePath) {
+    private void playMP3(String filePath) {
+        // I have no idea why this one mp3 file stopped working. The same exact file works in prior builds.
+        // Re-encoding did nothing to fix it. Only works as an uncompressed wav file. WTF.
+        if (filePath.contains("Open-mid_back_unrounded_vowel")) {
+            filePath = filePath.replace(".mp3", ".wav");
+        }
+        
         Media hit = new Media(parentWindow.getClass().getResource(filePath).toExternalForm());
         if (mediaPlayer != null) {
             mediaPlayer.stop();
+            mediaPlayer.dispose();
         }
         mediaPlayer = new MediaPlayer(hit);
         mediaPlayer.play();
+    }
+    
+    public void playOGG(String filePath) throws IOException {
+        URL url = parentWindow.getClass().getResource(filePath);
+        
+        // OGGClip system seems to take care of all stream closing
+        OggClip ogg = new OggClip(url.openStream());
+        ogg.setBalance(0f);
+        ogg.setGain(1.0f);
+        ogg.play();
     }
 }

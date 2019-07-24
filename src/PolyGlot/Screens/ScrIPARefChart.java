@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018, Draque Thompson
+ * Copyright (c) 2016-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -23,8 +23,10 @@ import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PFrame;
 import PolyGlot.DictCore;
 import PolyGlot.ClipboardHandler;
+import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.IOHandler;
 import PolyGlot.IPAHandler;
+import PolyGlot.IPAHandler.IPALibrary;
 import java.awt.Component;
 import javax.swing.JComponent;
 
@@ -64,6 +66,7 @@ public class ScrIPARefChart extends PFrame {
         jPanel4 = new javax.swing.JPanel();
         lblOtherSymbols = new javax.swing.JLabel();
         txtIPAChars = new javax.swing.JTextField();
+        cmbIpaLibSelect = new PComboBox<IPALibrary>(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("IPA Pronunciation/Character Guide");
@@ -88,7 +91,7 @@ public class ScrIPARefChart extends PFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(106, 106, 106)
                 .addComponent(jLabel23)
-                .addContainerGap(124, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,7 +126,7 @@ public class ScrIPARefChart extends PFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblPulmonicConsonants)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Pulmonic consonants", jPanel2);
@@ -144,7 +147,7 @@ public class ScrIPARefChart extends PFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(139, 139, 139)
                 .addComponent(lblNonPulmonicConsonants)
-                .addContainerGap(145, Short.MAX_VALUE))
+                .addContainerGap(141, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,19 +175,23 @@ public class ScrIPARefChart extends PFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(88, 88, 88)
                 .addComponent(lblOtherSymbols)
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblOtherSymbols)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Other/Affricates", jPanel4);
 
         txtIPAChars.setToolTipText("Symbols Copied Here");
+
+        cmbIpaLibSelect.setModel(new javax.swing.DefaultComboBoxModel<IPALibrary>(new IPALibrary[] {IPALibrary.WIKI_IPA, IPALibrary.UCLA_IPA}));
+        cmbIpaLibSelect.setSelectedIndex(0);
+        cmbIpaLibSelect.setSelectedItem(IPALibrary.WIKI_IPA);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -192,13 +199,16 @@ public class ScrIPARefChart extends PFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtIPAChars)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 843, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(cmbIpaLibSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1)
+                .addComponent(cmbIpaLibSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtIPAChars, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -213,7 +223,7 @@ public class ScrIPARefChart extends PFrame {
         int x=evt.getX();
         int y=evt.getY();
         try {
-            String ipaChar = handler.playOtherGetChar(x, y);
+            String ipaChar = handler.playOtherGetChar(x, y, (IPALibrary)cmbIpaLibSelect.getSelectedItem());
             new ClipboardHandler().setClipboardContents(ipaChar);
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.length() == 0 ? "" : curText + " ") + ipaChar);
@@ -232,7 +242,7 @@ public class ScrIPARefChart extends PFrame {
         int x=evt.getX();
         int y=evt.getY();
         try {
-            String ipaChar = handler.playVowelGetChar(x, y);
+            String ipaChar = handler.playVowelGetChar(x, y, (IPALibrary)cmbIpaLibSelect.getSelectedItem());
             new ClipboardHandler().setClipboardContents(ipaChar);
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.length() == 0 || ipaChar.length() == 0 ? "" : curText + " ") + ipaChar);
@@ -246,7 +256,7 @@ public class ScrIPARefChart extends PFrame {
         int x=evt.getX();
         int y=evt.getY();
         try {
-            String ipaChar = handler.playPulConsGetChar(x, y);
+            String ipaChar = handler.playPulConsGetChar(x, y, (IPALibrary)cmbIpaLibSelect.getSelectedItem());
             new ClipboardHandler().setClipboardContents(ipaChar);
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.length() == 0 || ipaChar.length() == 0 ? "" : curText + " ") + ipaChar);
@@ -260,7 +270,7 @@ public class ScrIPARefChart extends PFrame {
         int x=evt.getX();
         int y=evt.getY();
         try {
-            String ipaChar = handler.playNonPulConsGetChar(x, y);
+            String ipaChar = handler.playNonPulConsGetChar(x, y, (IPALibrary)cmbIpaLibSelect.getSelectedItem());
             
             // empty string indicates invalid click location
             if (ipaChar.length() == 0) {
@@ -297,6 +307,7 @@ public class ScrIPARefChart extends PFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<IPALibrary> cmbIpaLibSelect;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018, Draque Thompson
+ * Copyright (c) 2016-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -39,6 +39,10 @@ public class IPAHandler {
     private final SoundRecorder soundRecorder;
     private final Map<String, String> charMap;
     private final String[][] pulmonicTable = new String[23][9];
+    private final String ucla_location = "ucla_mp3s/";
+    private final String wiki_location = "wiki_oggs/";
+    private final String mp3Suffix = ".mp3";
+    private final String oggSuffix = ".ogg";
 
     public IPAHandler(Window _parent) {
         soundRecorder = new SoundRecorder(_parent);
@@ -47,124 +51,124 @@ public class IPAHandler {
     }
 
     private void setupMap() {
-        charMap.put("ʍ", "Voiceless_labio-velar_fricative.mp3");
-        charMap.put("w", "Voiced_labio-velar_approximant.mp3");
-        charMap.put("ɥ", "Labial-palatal_approximant.mp3");
-        charMap.put("ʜ", "Voiceless_epiglottal_fricative.mp3");
-        charMap.put("ʢ", "Voiced_epiglottal_fricative.mp3");
-        charMap.put("ʡ", "Voiceless_epiglottal_plosive.mp3");
-        charMap.put("ɕ", "Voiceless_alveolo-palatal_fricative.mp3");
-        charMap.put("ʑ", "Voiced_alveolo-palatal_fricative.mp3");
-        charMap.put("ɺ", "Alveolar_lateral_flap.mp3");
-        charMap.put("ɧ", "Voiceless_dorso-palatal_velar_fricative.mp3");
-        charMap.put("t͡s", "Voiceless_alveolar_affricate.mp3");
-        charMap.put("t͡ʃ", "Voiceless_palato-alveolar_affricate.mp3");
-        charMap.put("t͡ɕ", "Voiceless_alveolo-palatal_affricate.mp3");
-        charMap.put("t͡ʂ", "Voiceless_retroflex_affricate.mp3");
-        charMap.put("d͡z", "Voiceless_alveolar_affricate.mp3");
-        charMap.put("d͡ʒ", "Voiced_postalveolar_affricate.mp3");
-        charMap.put("d͡ʑ", "Voiced_alveolo-palatal_affricate.mp3");
-        charMap.put("d͡ʐ", "Voiceless_retroflex_affricate.mp3");
-        charMap.put("ʘ", "Bilabial_click.mp3");
-        charMap.put("ǀ", "Dental_click.mp3");
-        charMap.put("ǃ", "Postalveolar_click.mp3");
-        charMap.put("ǂ", "Palatoalveolar_click.mp3");
-        charMap.put("ǁ", "Alveolar_lateral_click.mp3");
-        charMap.put("ɓ", "Voiced_bilabial_implosive.mp3");
-        charMap.put("ɗ", "Voiced_alveolar_implosive.mp3");
-        charMap.put("ʄ", "Voiced_palatal_implosive.mp3");
-        charMap.put("ɠ", "Voiced_velar_implosive.mp3");
-        charMap.put("ʛ", "Voiced_uvular_implosive.mp3");
-        charMap.put("p'", "Bilabial_ejective_plosive.mp3");
-        charMap.put("t'", "Alveolar_ejective_plosive.mp3");
-        charMap.put("k'", "Velar_ejective_plosive.mp3");
-        charMap.put("s'", "Alveolar_ejective_fricative.mp3");
-        charMap.put("p", "Voiceless_bilabial_plosive.mp3");
-        charMap.put("b", "Voiced_bilabial_plosive.mp3");
-        charMap.put("t", "Voiceless_alveolar_plosive.mp3");
-        charMap.put("d", "Voiced_alveolar_plosive.mp3");
-        charMap.put("ʈ", "Voiceless_retroflex_plosive.mp3");
-        charMap.put("ɖ", "Voiced_retroflex_plosive.mp3");
-        charMap.put("c", "Voiceless_palatal_plosive.mp3");
-        charMap.put("ɟ", "Voiced_palatal_plosive.mp3");
-        charMap.put("k", "Voiceless_velar_plosive.mp3");
-        charMap.put("g", "Voiced_velar_plosive.mp3");
-        charMap.put("q", "Voiceless_uvular_plosive.mp3");
-        charMap.put("ɢ", "Voiced_uvular_plosive.mp3");
-        charMap.put("ʔ", "Glottal_stop.mp3");
-        charMap.put("m", "Bilabial_nasal.mp3");
-        charMap.put("ɱ", "Labiodental_nasal.mp3");
-        charMap.put("n", "Alveolar_nasal.mp3");
-        charMap.put("ɳ", "Retroflex_nasal.mp3");
-        charMap.put("ɲ", "Palatal_nasal.mp3");
-        charMap.put("ŋ", "Velar_nasal.mp3");
-        charMap.put("ɴ", "Uvular_nasal.mp3");
-        charMap.put("ʙ", "Bilabial_trill.mp3");
-        charMap.put("r", "Alveolar_trill.mp3");
-        charMap.put("ʀ", "Uvular_trill.mp3");
-        charMap.put("ɾ", "Alveolar_tap.mp3");
-        charMap.put("ɽ", "Retroflex_flap.mp3");
-        charMap.put("ɸ", "Voiceless_bilabial_fricative.mp3");
-        charMap.put("β", "Voiced_bilabial_fricative.mp3");
-        charMap.put("f", "Voiceless_labiodental_fricative.mp3");
-        charMap.put("v", "Voiced_labiodental_fricative.mp3");
-        charMap.put("θ", "Voiceless_dental_fricative.mp3");
-        charMap.put("ð", "Voiced_dental_fricative.mp3");
-        charMap.put("s", "Voiceless_alveolar_fricative.mp3");
-        charMap.put("z", "Voiced_alveolar_fricative.mp3");
-        charMap.put("ʃ", "Voiceless_postalveolar_fricative.mp3");
-        charMap.put("ʒ", "Voiced_postalveolar_fricative.mp3");
-        charMap.put("ʂ", "Voiceless_retroflex_fricative.mp3");
-        charMap.put("ʐ", "Voiced_retroflex_fricative.mp3");
-        charMap.put("ç", "Voiceless_palatal_fricative.mp3");
-        charMap.put("ʝ", "Voiced_palatal_fricative.mp3");
-        charMap.put("x", "Voiceless_velar_fricative.mp3");
-        charMap.put("ɣ", "Voiced_velar_fricative.mp3");
-        charMap.put("χ", "Voiceless_uvular_fricative.mp3");
-        charMap.put("ʁ", "Voiced_uvular_fricative.mp3");
-        charMap.put("ħ", "Voiceless_pharyngeal_fricative.mp3");
-        charMap.put("ʕ", "Voiced_pharyngeal_fricative.mp3");
-        charMap.put("h", "Voiceless_glottal_fricative.mp3");
-        charMap.put("ɦ", "Voiced_glottal_fricative.mp3");
-        charMap.put("ɬ", "Voiceless_alveolar_lateral_fricative.mp3");
-        charMap.put("ɮ", "Voiced_alveolar_lateral_fricative.mp3");
-        charMap.put("ʋ", "Labiodental_approximant.mp3");      
-        charMap.put("ɹ", "Alveolar_approximant.mp3");
-        charMap.put("ɻ", "Retroflex_approximant.mp3");
-        charMap.put("j", "Palatal_approximant.mp3");
-        charMap.put("ɰ", "Voiced_velar_approximant.mp3");
-        charMap.put("l", "Alveolar_lateral_approximant.mp3");
-        charMap.put("ɭ", "Retroflex_lateral_approximant.mp3");
-        charMap.put("ʎ", "Palatal_lateral_approximant.mp3");
-        charMap.put("ʟ", "Velar_lateral_approximant.mp3");
-        charMap.put("i", "Close_front_unrounded_vowel.mp3");
-        charMap.put("y", "Close_front_rounded_vowel.mp3");
-        charMap.put("ɨ", "Close_central_unrounded_vowel.mp3");
-        charMap.put("ʉ", "Close_central_rounded_vowel.mp3");
-        charMap.put("ɯ", "Close_back_unrounded_vowel.mp3");
-        charMap.put("u", "Close_back_rounded_vowel.mp3");
-        charMap.put("ɪ", "Near-close_near-front_unrounded_vowel.mp3");
-        charMap.put("ʏ", "Near-close_near-front_rounded_vowel.mp3");
-        charMap.put("ʊ", "Near-close_near-back_rounded_vowel.mp3");
-        charMap.put("e", "Close-mid_front_unrounded_vowel.mp3");
-        charMap.put("ø", "Close-mid_front_rounded_vowel.mp3");
-        charMap.put("ɘ", "Close-mid_central_unrounded_vowel.mp3");
-        charMap.put("ɵ", "Close-mid_central_rounded_vowel.mp3");
-        charMap.put("ɤ", "Close-mid_back_unrounded_vowel.mp3");
-        charMap.put("o", "Close-mid_back_rounded_vowel.mp3");
-        charMap.put("ə", "Mid-central_vowel.mp3");
-        charMap.put("ɛ", "Open-mid_front_unrounded_vowel.mp3");
-        charMap.put("œ", "Open-mid_front_rounded_vowel.mp3");
-        charMap.put("ɜ", "Open-mid_central_unrounded_vowel.mp3");
-        charMap.put("ɞ", "Open-mid_central_rounded_vowel.mp3");
-        charMap.put("ʌ", "Open-mid_back_unrounded_vowel.mp3");
-        charMap.put("ɔ", "Open-mid_back_rounded_vowel.mp3");
-        charMap.put("æ", "Near-open_front_unrounded_vowel.mp3");
-        charMap.put("ɐ", "Near-open_central_unrounded_vowel.mp3");
-        charMap.put("a", "Open_front_unrounded_vowel.mp3");
-        charMap.put("ɶ", "Open_front_rounded_vowel.mp3");
-        charMap.put("ɑ", "Open_back_unrounded_vowel.mp3");
-        charMap.put("ɒ", "Open_back_rounded_vowel.mp3");
+        charMap.put("ʍ", "Voiceless_labio-velar_fricative");
+        charMap.put("w", "Voiced_labio-velar_approximant");
+        charMap.put("ɥ", "Labial-palatal_approximant");
+        charMap.put("ʜ", "Voiceless_epiglottal_fricative");
+        charMap.put("ʢ", "Voiced_epiglottal_fricative");
+        charMap.put("ʡ", "Voiceless_epiglottal_plosive");
+        charMap.put("ɕ", "Voiceless_alveolo-palatal_fricative");
+        charMap.put("ʑ", "Voiced_alveolo-palatal_fricative");
+        charMap.put("ɺ", "Alveolar_lateral_flap");
+        charMap.put("ɧ", "Voiceless_dorso-palatal_velar_fricative");
+        charMap.put("t͡s", "Voiceless_alveolar_affricate");
+        charMap.put("t͡ʃ", "Voiceless_palato-alveolar_affricate");
+        charMap.put("t͡ɕ", "Voiceless_alveolo-palatal_affricate");
+        charMap.put("t͡ʂ", "Voiceless_retroflex_affricate");
+        charMap.put("d͡z", "Voiceless_alveolar_affricate"); // - FIX??
+        charMap.put("d͡ʒ", "Voiced_postalveolar_affricate");
+        charMap.put("d͡ʑ", "Voiced_alveolo-palatal_affricate");
+        charMap.put("d͡ʐ", "Voiceless_retroflex_affricate");
+        charMap.put("ʘ", "Bilabial_click");
+        charMap.put("ǀ", "Dental_click");
+        charMap.put("ǃ", "Postalveolar_click");
+        charMap.put("ǂ", "Palatoalveolar_click");
+        charMap.put("ǁ", "Alveolar_lateral_click");
+        charMap.put("ɓ", "Voiced_bilabial_implosive");
+        charMap.put("ɗ", "Voiced_alveolar_implosive");
+        charMap.put("ʄ", "Voiced_palatal_implosive");
+        charMap.put("ɠ", "Voiced_velar_implosive");
+        charMap.put("ʛ", "Voiced_uvular_implosive");
+        charMap.put("p'", "Bilabial_ejective_plosive");
+        charMap.put("t'", "Alveolar_ejective_plosive");
+        charMap.put("k'", "Velar_ejective_plosive");
+        charMap.put("s'", "Alveolar_ejective_fricative");
+        charMap.put("p", "Voiceless_bilabial_plosive");
+        charMap.put("b", "Voiced_bilabial_plosive");
+        charMap.put("t", "Voiceless_alveolar_plosive");
+        charMap.put("d", "Voiced_alveolar_plosive");
+        charMap.put("ʈ", "Voiceless_retroflex_plosive");
+        charMap.put("ɖ", "Voiced_retroflex_plosive");
+        charMap.put("c", "Voiceless_palatal_plosive");
+        charMap.put("ɟ", "Voiced_palatal_plosive");
+        charMap.put("k", "Voiceless_velar_plosive");
+        charMap.put("g", "Voiced_velar_plosive");
+        charMap.put("q", "Voiceless_uvular_plosive");
+        charMap.put("ɢ", "Voiced_uvular_plosive");
+        charMap.put("ʔ", "Glottal_stop");
+        charMap.put("m", "Bilabial_nasal");
+        charMap.put("ɱ", "Labiodental_nasal");
+        charMap.put("n", "Alveolar_nasal");
+        charMap.put("ɳ", "Retroflex_nasal");
+        charMap.put("ɲ", "Palatal_nasal");
+        charMap.put("ŋ", "Velar_nasal");
+        charMap.put("ɴ", "Uvular_nasal");
+        charMap.put("ʙ", "Bilabial_trill");
+        charMap.put("r", "Alveolar_trill");
+        charMap.put("ʀ", "Uvular_trill");
+        charMap.put("ɾ", "Alveolar_tap");
+        charMap.put("ɽ", "Retroflex_flap");
+        charMap.put("ɸ", "Voiceless_bilabial_fricative");
+        charMap.put("β", "Voiced_bilabial_fricative");
+        charMap.put("f", "Voiceless_labiodental_fricative");
+        charMap.put("v", "Voiced_labiodental_fricative");
+        charMap.put("θ", "Voiceless_dental_fricative");
+        charMap.put("ð", "Voiced_dental_fricative");
+        charMap.put("s", "Voiceless_alveolar_fricative");
+        charMap.put("z", "Voiced_alveolar_fricative");
+        charMap.put("ʃ", "Voiceless_postalveolar_fricative");
+        charMap.put("ʒ", "Voiced_postalveolar_fricative");
+        charMap.put("ʂ", "Voiceless_retroflex_fricative");
+        charMap.put("ʐ", "Voiced_retroflex_fricative");
+        charMap.put("ç", "Voiceless_palatal_fricative");
+        charMap.put("ʝ", "Voiced_palatal_fricative");
+        charMap.put("x", "Voiceless_velar_fricative");
+        charMap.put("ɣ", "Voiced_velar_fricative");
+        charMap.put("χ", "Voiceless_uvular_fricative");
+        charMap.put("ʁ", "Voiced_uvular_fricative");
+        charMap.put("ħ", "Voiceless_pharyngeal_fricative");
+        charMap.put("ʕ", "Voiced_pharyngeal_fricative");
+        charMap.put("h", "Voiceless_glottal_fricative");
+        charMap.put("ɦ", "Voiced_glottal_fricative");
+        charMap.put("ɬ", "Voiceless_alveolar_lateral_fricative");
+        charMap.put("ɮ", "Voiced_alveolar_lateral_fricative");
+        charMap.put("ʋ", "Labiodental_approximant");      
+        charMap.put("ɹ", "Alveolar_approximant");
+        charMap.put("ɻ", "Retroflex_approximant");
+        charMap.put("j", "Palatal_approximant");
+        charMap.put("ɰ", "Voiced_velar_approximant");
+        charMap.put("l", "Alveolar_lateral_approximant");
+        charMap.put("ɭ", "Retroflex_lateral_approximant");
+        charMap.put("ʎ", "Palatal_lateral_approximant");
+        charMap.put("ʟ", "Velar_lateral_approximant");
+        charMap.put("i", "Close_front_unrounded_vowel");
+        charMap.put("y", "Close_front_rounded_vowel");
+        charMap.put("ɨ", "Close_central_unrounded_vowel");
+        charMap.put("ʉ", "Close_central_rounded_vowel");
+        charMap.put("ɯ", "Close_back_unrounded_vowel");
+        charMap.put("u", "Close_back_rounded_vowel");
+        charMap.put("ɪ", "Near-close_near-front_unrounded_vowel");
+        charMap.put("ʏ", "Near-close_near-front_rounded_vowel");
+        charMap.put("ʊ", "Near-close_near-back_rounded_vowel");
+        charMap.put("e", "Close-mid_front_unrounded_vowel");
+        charMap.put("ø", "Close-mid_front_rounded_vowel");
+        charMap.put("ɘ", "Close-mid_central_unrounded_vowel");
+        charMap.put("ɵ", "Close-mid_central_rounded_vowel");
+        charMap.put("ɤ", "Close-mid_back_unrounded_vowel");
+        charMap.put("o", "Close-mid_back_rounded_vowel");
+        charMap.put("ə", "Mid-central_vowel");
+        charMap.put("ɛ", "Open-mid_front_unrounded_vowel");
+        charMap.put("œ", "Open-mid_front_rounded_vowel");
+        charMap.put("ɜ", "Open-mid_central_unrounded_vowel");
+        charMap.put("ɞ", "Open-mid_central_rounded_vowel");
+        charMap.put("ʌ", "Open-mid_back_unrounded_vowel");
+        charMap.put("ɔ", "Open-mid_back_rounded_vowel");
+        charMap.put("æ", "Near-open_front_unrounded_vowel");
+        charMap.put("ɐ", "Near-open_central_unrounded_vowel");
+        charMap.put("a", "Open_front_unrounded_vowel");
+        charMap.put("ɶ", "Open_front_rounded_vowel");
+        charMap.put("ɑ", "Open_back_unrounded_vowel");
+        charMap.put("ɒ", "Open_back_rounded_vowel");
         
         pulmonicTable[1][1] = "p";
         pulmonicTable[2][1] = "b";
@@ -245,7 +249,7 @@ public class IPAHandler {
         
     }
 
-    public String playVowelGetChar(int x, int y) throws Exception {
+    public String playVowelGetChar(int x, int y, IPALibrary ipaLibrary) throws Exception {
         String ret = "";
 
         if (y > 67 && y < 102) {
@@ -318,12 +322,12 @@ public class IPAHandler {
             }
         }
         
-        playChar(ret);
+        playChar(ret, ipaLibrary);
 
         return ret;
     }
 
-    public String playPulConsGetChar(int x, int y) throws Exception {
+    public String playPulConsGetChar(int x, int y, IPALibrary ipaLibrary) throws Exception {
         String ret;
         int col = ((x - 182) / 28) + 1;
         int row = ((y - 80) / 29) + 1;
@@ -338,12 +342,12 @@ public class IPAHandler {
             }
         }
         
-        playChar(ret);
+        playChar(ret, ipaLibrary);
 
         return ret;
     }
 
-    public String playNonPulConsGetChar(int x, int y) throws Exception {
+    public String playNonPulConsGetChar(int x, int y, IPALibrary ipaLibrary) throws Exception {
         String ret = "*";
 
         if (y < 66 || y > 226 || x < 12 || x > 530 || (x > 353 && y > 194)) {
@@ -409,12 +413,20 @@ public class IPAHandler {
             }
         }
 
-        playChar(ret);
+        playChar(ret, ipaLibrary);
 
         return ret;
     }
 
-    public String playOtherGetChar(int x, int y) throws Exception {
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param ipaLibrary
+     * @return character mapped to location
+     * @throws Exception on any playback error, unknown IPA character, unknown IPA sound library
+     */
+    public String playOtherGetChar(int x, int y, IPALibrary ipaLibrary) throws Exception {
         String ret = "*";
 
         // returns blank if in a non-viable position
@@ -488,7 +500,7 @@ public class IPAHandler {
             }
         }
 
-        playChar(ret);
+        playChar(ret, ipaLibrary);
 
         return ret;
     }
@@ -496,26 +508,63 @@ public class IPAHandler {
     /**
      * Plays sound of IPA pronunciation based on Stringacter
      *
-     * @param c
+     * @param c IPA character to play
+     * @param ipaLibrary library to use to play sound
+     * @throws Exception on any playback error, unknown IPA character, unknown IPA sound library
      */
-    private void playChar(String c) throws Exception {
+    private void playChar(String c, IPALibrary ipaLibrary) throws Exception {
         if (c.length() == 0) {
             return;
         }
 
         if (charMap.containsKey(c)) {
-            playProc(charMap.get(c));
+            playProc(charMap.get(c), ipaLibrary);
         } else {
             throw new Exception("Unable to find character " + c
                     + " in pronunciations.");
         }
     }
 
-    private void playProc(String soundName) throws Exception {
+    /**
+     * Plays the sound associated with an IPA letter
+     * @param _soundName IPA character associated with sound
+     * @param ipaLibrary library to use to play sound
+     * @throws Exception on any playback error, unknown IPA character, unknown IPA sound library
+     */
+    private void playProc(String _soundName, IPALibrary ipaLibrary) throws Exception {
+        String soundName = _soundName;
+        
+        switch (ipaLibrary) {
+            case UCLA_IPA:
+                soundName = ucla_location + soundName + mp3Suffix;
+                break;
+            case WIKI_IPA:
+                soundName = wiki_location + soundName + oggSuffix;
+                break;
+            default:
+                throw new Exception("Unrecognized IPA sound library: " + ipaLibrary);
+        }
+        
         try {
-            soundRecorder.playMP3(PGTUtil.ipaSoundsLocation + soundName);
+            soundRecorder.playAudioFile(PGTUtil.ipaSoundsLocation + soundName);
         } catch (Exception e) {
-            throw new Exception("Possible file signature error: " + e.getLocalizedMessage());
+            throw new Exception("Playback error: " + e.getLocalizedMessage(), e);
+        }
+    }
+    
+    public enum IPALibrary {
+        WIKI_IPA("Wikimedia Commons IPA"),
+        UCLA_IPA("UCLA Phonetics Lab IPA");
+        
+        public final String label;
+        
+        private IPALibrary(String label) {
+            this.label = label;
+        }
+        
+        @Override
+        public String toString() {
+            return this.label;
         }
     }
 }
