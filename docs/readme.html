@@ -112,29 +112,28 @@
 
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
                         <div align ="left"><br>Heyo, everyone! I've got a new version of PolyGlot with some nice new 
-                            features to share! On top of the most obvious improvements (the declension display and the 
-                            lexical checking tool), I've taken some time to seriously rework and improve the automated 
-                            testing in PolyGlot. It started as a tiny side project, but the size at this point 
-                            absolutely requires a testing suite to help keep bugs down. Additionally, there are a lot
-                            of tiny life improvement changes and annoying error fixes that are not listed below (for 
-                            a full list, check out the issues page linked above and check out what's been closed).
-
-                            As always, please enjoy, everyone!
+                            features to share! This release includes some big stability/quality of life improvements, 
+                            most notably for Windows users with high resolution monitors (it's not tiny any more!) and 
+                            the ability to pop most windows out from the main program window. As always, I hope these 
+                            modifications help increase efficiency and ease of working on your languages! Further 
+                            details regarding new features and fixed bugs below. Enjoy, everyone!
                         <br><br>
                         </div>
                         FEATURES:
                         <div align ="left"><ul>
-                                <li>Completely reworked Declension/Conjugation Interface with grid based display (the big one)</li>
-                                <li>Lexical Checker tool added to allow users to easily spot all problem areas in lexicon</li>
-                                <li>Can export to Excel now with all declined/conjugated forms</li>
-                                <li>Spaces now allowed in automatically generated pronunciations</li>
-                                <li>Detect/Prevent Zipped Execution</li>
-                                <li>Cleaned up file saving</li>
-                                <li>Users can now copy full conjugation ruleset to given dimension to save time when building word forms</li>
-                                <li>Export of overridden conjugations to excel</li>
-                                <li>Checks/alerts user to repeated values in alphabetic ordering section</li>
-                                <li>Etymology tooltip defaults to local language synonym if no longform definition</li>
-                                <li>Compatibility dropped to Java 8.x again</li>
+                                <li>Added the IPA Translator tool (quickly change large swathes of text into IPA format)</li>
+                                <li>Added "Refresh Font" button to Language Properties page (if a created font loses synch with the OS)</li>
+                                <li>Added an example dictionary with conjugated infixes</li>
+                                <li>By right clicking, most windows can now be popped out of the main window if desired</li>
+                                <li>Added additional IPA sound library for those who prefer alternate readings</li>
+                                <li>Added "Delete From Dimensions" option for conjugation rules to speed complex rule editing</li>
+                                <li>Added option to override custom fonts for fields which accept regex values</li>
+                                <li>Users can now re-order chapters</li>
+                                <li>Lexicon can now display/order base on local language rather than conlang values</li>
+                                <li>Significant additional OS integration, particularly for OSX</li>
+                                <li>More verbose warnings per OS if JFX not installed</li>
+                                <li>Errors now written to log file to help with user-assisted debugging in the future</li>
+                                <li>Massive code cleanup under the hood</li>
                                 <!––Secret Codes:
                                 what did you see last tuesday
                                 Who is Draque
@@ -146,17 +145,18 @@
                         BUGS FIXED:
                         <div align="left">
                             <ul>
-                                <li>Options reset on load of new file</li>
-                                <li>Oversized INI file lead to "JVM not installed" message on startup</li>
-                                <li>First lexicon entry part of speech lost on load</li>
-                                <li>Resolution Scaling On Windows (partial fix implemented, the rest of the problem is within Java itself)</li>
-                                <li>On initial load of non-versioned file, uncaught error can occur</li>
-                                <li>Various Excel Export issues</li>
-                                <li>"Java Not Installed" message erroneously displaying from frontend on some PCs</li>
-                                <li>Corrected issue where &lt;br&gt; tags could invisibly multiply exponentially, causing massive slowdowns</li>
-                                <li>Declension rule order would revert/not save when exiting the menu</li>
-                                <li>Copying from MS Office apps on the PC (and some macs) resulted in a black box</li>
-                                <li>Pronunciation/romanization of words terminated early under circumstance of word being longer than max depth for recursing patterns</li>
+                                <li>WINDOWS APP SCALING FINALLY SUPPORTED (please start via the frontend)</li>
+                                <li>Old versions of installed fonts were often selected if multiple versions present</li>
+                                <li>When printing to PDF, images no longer obscure text</li>
+                                <li>under certain circumstances, mandatory conjugation requirements could be impossible to fulfill</li>
+                                <li>Certain singleton conjugation labels could cause saving errors</li>
+                                <li>Recorded save time for reversion records broke under certain circumstances</li>
+                                <li>Transformations for conjugations would sometimes fail to copy</li>
+                                <li>Improper behavior of classes/class values</li>
+                                <li>Disabled wordforms no longer printed to PDF</li>
+                                <li>Conjugation rules sometimes threw errors when copies were attempted</li>
+                                <li>When printing to PDF, currently selected values saved prior to print</li>
+                                <li>Unicode alphabets now supported properly in tool-tips</li>
                             </ul>
                         </div>
                         
@@ -235,10 +235,16 @@
                             primary modules listed to the left as buttons. These modules contain the
                             most basic elements of language creation. Here, you can open an existing 
                             PolyGlot library or simply click one of the modules and begin to edit a
-                            blank language file.<br></div>
+                            blank language file.</div><br>
                         <img alt="" src="assets/MainMenu.png"><br>
                         <br>
                         <br>
+                        <div align ="left">Most of the windows can be optionally popped out to be worked on
+                        independantly. This can be very helpful when looking to use both the lexicon and 
+                        grammar guides together to translate a section of text. To do so, simply right click 
+                        on the a given module's menu button and click the "Pop Window Out" option.</div><br>
+                        <img alt="" src="assets/MainMenu2.png">
+                        <br><br>
                         <div align ="left">If you click the Lexicon button, you'll see an empty dictionary. If
                             you
                             have an Excel sheet with a language that preexists, you can skip to
@@ -1242,7 +1248,12 @@
                             Pulmonic Consonants, Non-Pulmonic Consonants, and Other/Affricates. If
                             you click on any of the characters, PolyGlot will play the associated
                             sound and copy the character into the textbox in the bottom of the
-                            window.</div>
+                            window.<br><br>
+                            Two IPA sound libraries are accessible through PolyGlot, the set found on 
+                            Wikimedia commons, and the set produced by the UCLA Phonetics Lab. You can 
+                            select which you would prefer in the dropdown which appears at the top of 
+                            this screen.
+                        </div>
                         <br>
 
 
@@ -1431,6 +1442,8 @@
                                 2003, User:Halibutt, User:Pmx and User:Octane, and covered under the
                                 GNU Free Documentation
                                 License<br>
+                                PolyGlot uses IPA pronunciations from the Wikimedia Commons (referenced and linked 
+                                <a href="https://en.wikipedia.org/wiki/International_Phonetic_Alphabet">here</a>)<br>
                                 PolyGlot uses font Charis, Copyright (c) 1997-2014, SIL International
                                 (http://scripts.sil.org/) with Reserved Font Names "Charis" and "SIL"<br>
                                 PolyGlot uses iText7, which is created and owned by iText Software
@@ -1439,6 +1452,7 @@
                                 (http://java-sl.com/) <br>
                                 PolyGlot uses the HTML parsing library <a href="https://jsoup.org/">jsoup</a> by Jonathan Hedley
                                 <br>
+                                PolyGlot uses EasyOGG by Kevin Glass (found <a href="http://www.cokeandcode.com/main/code/">here</a>)<br>
                                 This program is free to distribute. Neither it nor its internal code
                                 may be sold for a profit or bundled with
                                 for profit software. Basically, don't be a dick about this.<br>
