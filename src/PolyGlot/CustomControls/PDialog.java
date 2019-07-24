@@ -64,8 +64,10 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         if (!isDisposed) {
             core.getOptionsManager().setScreenPosition(getClass().getName(),
                 this.getLocation());
-            core.getOptionsManager().setScreenSize(getClass().getName(),
-                this.getSize());
+            if (this.isResizable()) { // do not save size of non-resizable windows
+                core.getOptionsManager().setScreenSize(getClass().getName(),
+                    this.getSize());
+            }
         }
         
         isDisposed = true;
