@@ -71,23 +71,34 @@ public final class ScrOptions extends PDialog {
 
     @Override
     public void dispose() {
-        Double fontSize = Double.parseDouble(txtTextFontSize.getText());
-        int maxReversion = Integer.parseInt(txtRevisionNumbers.getText());
-        maxReversion = maxReversion > -1 ? maxReversion : 1;
-        OptionsManager options = core.getOptionsManager();
-        options.setAnimateWindows(chkResize.isSelected());
-        options.setNightMode(chkNightMode.isSelected());
-        options.setMenuFontSize(fontSize);
-        options.setMaxReversionCount(maxReversion);
-        
-        if (core.getRootWindow() != null) {
-            ((ScrMainMenu)core.getRootWindow()).changeToLexicon();
-        }
+        if (testWarnClose()) {
+            Double fontSize = Double.parseDouble(txtTextFontSize.getText());
+            int maxReversion = Integer.parseInt(txtRevisionNumbers.getText());
+            maxReversion = maxReversion > -1 ? maxReversion : 1;
+            OptionsManager options = core.getOptionsManager();
+            options.setAnimateWindows(chkResize.isSelected());
+            options.setNightMode(chkNightMode.isSelected());
+            options.setMenuFontSize(fontSize);
+            options.setMaxReversionCount(maxReversion);
 
-        super.dispose();
+            if (core.getRootWindow() != null) {
+                ((ScrMainMenu)core.getRootWindow()).changeToLexicon();
+            }
+
+            super.dispose();
+        }
     }
 
-    
+    public boolean testWarnClose() {
+        boolean ret = true;
+        
+        if (Double.parseDouble(txtTextFontSize.getText()) > 30.0) {
+            ret = false;
+            InfoBox.warning("Inalid text size", "Text cannot be larger thant 30.0 points.", this);
+        }
+        
+        return ret;
+    }
 
     private void setOptions() {
         ((PlainDocument) txtTextFontSize.getDocument())
