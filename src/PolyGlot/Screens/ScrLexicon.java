@@ -636,7 +636,9 @@ public final class ScrLexicon extends PFrame {
                 && cmbRootSrc != null 
                 && cmbRootSrc.getValue() != null) {
             int filterType = 0;
-            if (cmbTypeSrc.getValue().equals(defTypeValue)) {
+            if (cmbTypeSrc != null
+                    && cmbTypeSrc.getValue() != null 
+                    && cmbTypeSrc.getValue().equals(defTypeValue)) {
                 filterType = ((TypeNode) cmbTypeSrc.getValue()).getId();
             }
 

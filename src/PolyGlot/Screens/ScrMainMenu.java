@@ -69,6 +69,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultTreeModel;
@@ -901,6 +902,7 @@ public final class ScrMainMenu extends PFrame {
         final boolean enable = _enable;
         
         if (enable) {
+            button.setToolTipText(button.getToolTipText() + " (right click to pop window out)");
             popOut.setToolTipText("Pops " + button.getText() + " into independant window.");
         } else {
             popOut.setToolTipText(button.getText() + " cannot be popped out.");
@@ -945,14 +947,16 @@ public final class ScrMainMenu extends PFrame {
         button.addMouseListener(new MouseListener(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.isPopupTrigger()) {
+                if (e.isPopupTrigger()
+                        || SwingUtilities.isRightMouseButton(e)) {
                     doPop(e);
                 }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.isPopupTrigger()) {
+                if (e.isPopupTrigger()
+                        || SwingUtilities.isRightMouseButton(e)) {
                     doPop(e);
                 }
             }

@@ -120,6 +120,9 @@ public final class ScrGrammarGuide extends PFrame {
                 new ImageIcon(getClass().getResource("/PolyGlot/ImageAssets/delete_button_pressed.png")));
 
         initComponents();
+        
+        cmbFonts.addItem(core.localLabel() + " Font");
+        cmbFonts.addItem(core.getPropertiesManager().getFontCon().getName());
 
         setupRecordButtons();
         setupChapTreeModel();
@@ -135,8 +138,8 @@ public final class ScrGrammarGuide extends PFrame {
         populateSections();
 
         if (System.getProperty("os.name").startsWith("Mac")) {
-            btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (⌘ +)");
-            btnDelete.setToolTipText(btnDelete.getToolTipText() + " (⌘ -)");
+            btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (Option +)");
+            btnDelete.setToolTipText(btnDelete.getToolTipText() + " (Option -)");
         } else {
             btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (CTRL +)");
             btnDelete.setToolTipText(btnDelete.getToolTipText() + " (CTRL -)");
@@ -683,6 +686,7 @@ public final class ScrGrammarGuide extends PFrame {
      * Sets up initial values of components
      */
     private void setInitialValues() {
+        // popping to back somewhere here
         treChapList.requestFocus();
         soundRecorder.setTimer(txtTimer);
         soundRecorder.setSlider(sldSoundPosition);
@@ -697,9 +701,6 @@ public final class ScrGrammarGuide extends PFrame {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), core.getRootWindow());
         }
-
-        cmbFonts.addItem(core.localLabel() + " Font");
-        cmbFonts.addItem(core.getPropertiesManager().getFontCon().getName());
 
         btnPlayPauseAudio.setText("");
         btnRecordAudio.setText("");
