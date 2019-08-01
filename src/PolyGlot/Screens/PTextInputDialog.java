@@ -51,6 +51,7 @@ public final class PTextInputDialog extends PDialog {
      * @param dialog
      */
     public PTextInputDialog(Window _parent, DictCore _core, String caption, String dialog) {
+        core = _core;
         initComponents();
         parent = _parent;
         if (parent != null) {
@@ -59,7 +60,6 @@ public final class PTextInputDialog extends PDialog {
         this.setModal(true);
         this.setAlwaysOnTop(true);
         this.setTitle(caption);
-        core = _core;
         
         setParentModalOntop(_parent);
         

@@ -1,10 +1,11 @@
 /************************************************************
  * Copyright 2004-2005,2007-2008 Masahiko SAWAI All Rights Reserved. 
  ************************************************************/
-package PolyGlot;
+package PolyGlot.ExternalCode;
 
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
+import PolyGlot.DictCore;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
