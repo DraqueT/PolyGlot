@@ -36,8 +36,8 @@ public class ScrAbout extends PDialog {
      * @param _core dictionary core
      */
     public ScrAbout(DictCore _core) {
-        initComponents();
         core = _core;
+        initComponents();
         setModal(true);
         super.getRootPane().getContentPane().setBackground(Color.white);
 

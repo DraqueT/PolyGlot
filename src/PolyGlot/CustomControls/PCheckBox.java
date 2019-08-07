@@ -22,6 +22,7 @@ package PolyGlot.CustomControls;
 import PolyGlot.DictCore;
 import PolyGlot.PGTUtil;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -43,8 +44,9 @@ public class PCheckBox extends JCheckBox implements MouseListener {
     public PCheckBox(DictCore _core) {
         core = _core == null ? new DictCore() : _core;
         
-        // default to unicode compatible font
-        super.setFont(core.getPropertiesManager().getFontLocal());
+        float fontSize = (float)core.getOptionsManager().getMenuFontSize();
+        super.setFont(PGTUtil.PMenuFont.deriveFont(fontSize));
+        
         setupListeners();
     }
     

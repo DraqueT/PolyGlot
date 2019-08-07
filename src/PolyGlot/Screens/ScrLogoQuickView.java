@@ -94,11 +94,11 @@ public final class ScrLogoQuickView extends PFrame {
      * @param _conWord conword to open logographs for
      */
     public ScrLogoQuickView(DictCore _core, ConWord _conWord) {
+        core = _core;
         initComponents();
         super.getRootPane().getContentPane().setBackground(Color.white);
         
         conWord = _conWord;
-        core = _core;
 
         setupFonts();
         setupResize();

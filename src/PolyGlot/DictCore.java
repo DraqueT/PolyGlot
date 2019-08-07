@@ -722,19 +722,20 @@ public class DictCore {
      */
     public static void main(final String args[]) {
         try {
-            conditionalBetaSetup();
-            
             Object preNimbusMenu = null;
+            System.setProperty("apple.awt.application.name", PGTUtil.displayName);
             boolean osIntegration = shouldUseOSInegration(args);
-
+            
+            // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (osIntegration) {
-                // must be set before accessing System to test OS (values will simply be ignored for other OSes
-                System.setProperty("apple.laf.useScreenMenuBar", "true");
+                // TODO: apple.laf.useScreenMenuBar should be enabled (and the whole preNimbusMenu
+                // mess removed) once upgrading past Java 9. useScreenMenuBar is automatic and cleaner
+                // System.setProperty("apple.laf.useScreenMenuBar", "true");
                 System.setProperty("apple.awt.application.name", PGTUtil.displayName);
                 System.setProperty("com.apple.mrj.application.apple.menu.about.name", PGTUtil.displayName);
             }
 
-            if (PGTUtil.isOSX() && osIntegration) {
+            if (PGTUtil.isOSX && osIntegration) {
                 preNimbusMenu = osintegration_mac.OSIntegration_Mac.setBlankAppleMenuBar();
 
                 osintegration_mac.OSIntegration_Mac.setIcon(PGTUtil.polyGlotIcon.getImage());
@@ -749,6 +750,8 @@ public class DictCore {
                 osintegration_mac.OSIntegration_Mac.setAboutHandler(scrAboutRun);
             }
             setupNimbus();
+            
+            conditionalBetaSetup();
 
             final Object finalPreNimbusMenu = preNimbusMenu;
 
@@ -777,7 +780,7 @@ public class DictCore {
                             }
 
                             // runs additional integration if on OSX system
-                            if (PGTUtil.isOSX() && osIntegration) {
+                            if (PGTUtil.isOSX && osIntegration) {
                                 final ScrMainMenu staticScr = s;
                                 osintegration_mac.OSIntegration_Mac.integrateMacMenuBar(s.getJMenuBar(), finalPreNimbusMenu);
                                 osintegration_mac.OSIntegration_Mac.setQuitAction(new Runnable() {
@@ -795,7 +798,7 @@ public class DictCore {
                                     }
 
                                 });
-                            } else if (PGTUtil.isWindows() && osIntegration) {
+                            } else if (PGTUtil.isWindows && osIntegration) {
                                 s.setIconImage(PGTUtil.polyGlotIcon.getImage());
                             }
                         } catch (ArrayIndexOutOfBoundsException e) {
@@ -877,9 +880,9 @@ public class DictCore {
             IOHandler.writeErrorLog(e);
             startProblems += "Unable to load Java FX. Download and install to use PolyGlot ";
             
-            if (PGTUtil.isOSX()) {
+            if (PGTUtil.isOSX) {
                 startProblems += "The default Java Virtual Machine for OSX does not include JFX. Please download from java.com/en/download/";
-            } else if (PGTUtil.isWindows()) {
+            } else if (PGTUtil.isWindows) {
                 startProblems += "The version of Java you are using does not include JFX.  Please download from java.com/en/download/";
             } else {
                 startProblems += "(JavaFX not included in some builds of Java for Linux).\n";

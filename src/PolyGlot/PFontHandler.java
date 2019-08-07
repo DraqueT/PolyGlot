@@ -449,12 +449,13 @@ public class PFontHandler {
 
     /**
      * Fetches and returns default button font
+     * Should only be called a single time (font then cached)
      *
      * @return Font to default buttons to
      * @throws java.io.IOException if unable to load font
      */
-    public static Font getButtonFont() throws IOException {
-        return new PFontHandler().getButtonFontInternal();
+    public static Font getMenuFont() throws IOException {
+        return new PFontHandler().getMenuFontInternal();
     }
 
     /**
@@ -463,12 +464,12 @@ public class PFontHandler {
      * @return Font to default buttons to
      * @throws java.io.IOException if unable to load font
      */
-    private Font getButtonFontInternal() throws IOException {
+    private Font getMenuFontInternal() throws IOException {
         Font ret = null;
         try (InputStream tmp = this.getClass().getResourceAsStream(PGTUtil.ButtonFontLocation)) {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
-            ret = ret.deriveFont(new Float(12)); // default to size 12 font
+            ret = ret.deriveFont((float) 12); // default to size 12 font
             if (ret != null) {
                 ge.registerFont(ret);
             }

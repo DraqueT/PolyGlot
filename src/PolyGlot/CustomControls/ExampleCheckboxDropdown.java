@@ -72,7 +72,7 @@ public final class ExampleCheckboxDropdown extends JPanel {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             IOHandler.writeErrorLog(e);
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         JFrame frame = new JFrame("CheckedComboBox");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

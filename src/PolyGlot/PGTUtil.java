@@ -20,6 +20,7 @@
 
 package PolyGlot;
 
+import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.Screens.*;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,6 +29,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.io.IOException;
 import java.util.Map;
 import javax.swing.ImageIcon;
 
@@ -359,6 +361,12 @@ public class PGTUtil {
     public static final ImageIcon delButtonIconPressed;
     public static final ImageIcon polyGlotIcon;
     
+    // Fonts stored here to cache values single time
+    public static final Font PMenuFont;
+    
+    public static final boolean isOSX;
+    public static final boolean isWindows;
+    
     // one time set for code driven static values
     static {
         colorDisabledBG = Color.decode("#b0b0b0");
@@ -395,12 +403,16 @@ public class PGTUtil {
         colorCheckboxClickedDisabled = Color.darkGray;
         colorCheckBoxFieldBackDisabled = Color.gray;
         
-        /*
-        Color selected;
-        Color backGround;
-        Color outLine;
-        Color hover = Color.black;
-        */
+        // loads default font on system error (never came up, but for completeness...)
+        Font tmpFont;
+        try {
+            tmpFont = PFontHandler.getMenuFont();
+        } catch (IOException e) {
+            InfoBox.error("PolyGlot Load Error", "Unable to load default button font.", null);
+            IOHandler.writeErrorLog(e, "Initilization error (PGTUtil)");
+            tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
+        }
+        PMenuFont = tmpFont;
         
         scrNameLexicon = ScrLexicon.class.getName();
         scrNameGrammar = ScrGrammarGuide.class.getName();
@@ -423,6 +435,9 @@ public class PGTUtil {
                 .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
         polyGlotIcon = new ImageIcon(
                 PGTUtil.class.getResource("/PolyGlot/ImageAssets/PolyGlotIcon.png"));
+        
+        isOSX = isOSX();
+        isWindows = isWindows();
     }
     
     /**
@@ -469,11 +484,11 @@ public class PGTUtil {
      * Tests and returns true if running OSX
      * @return 
      */
-    public static boolean isOSX() {
+    private static boolean isOSX() {
         return System.getProperty("os.name").startsWith("Mac");
     }
 
-    public static boolean isWindows() {
+    private static boolean isWindows() {
         return System.getProperty("os.name").startsWith("Win");
     }
 

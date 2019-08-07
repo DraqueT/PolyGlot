@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017, draque.thompson
+ * Copyright (c) 2016-2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -28,7 +28,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import sun.awt.image.MultiResolutionImage;

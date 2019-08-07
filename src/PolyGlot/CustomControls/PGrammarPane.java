@@ -63,7 +63,7 @@ public class PGrammarPane extends JTextPane {
     public PGrammarPane(DictCore _core) {
         core = _core;
         setupRightClickMenu();
-        setEditorKit(new GlyphVectorEditorKit());
+        setEditorKit(new GlyphVectorEditorKit()); // TODO: This is causing access violations that will make trouble in Java 13+. Deal with it at some point.
         setupCopyPaste();
     }
     
