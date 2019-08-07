@@ -117,7 +117,7 @@ public final class ScrMainMenu extends PFrame {
 
         try {
             backGround = ImageIO.read(getClass().getResource("/PolyGlot/ImageAssets/PolyGlotBG.png"));
-            jLabel1.setFont(PFontHandler.getButtonFont().deriveFont(45f));
+            jLabel1.setFont(PGTUtil.PMenuFont.deriveFont(45f));
         } catch (IOException e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Resource Error",

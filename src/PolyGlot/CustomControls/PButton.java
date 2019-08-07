@@ -25,6 +25,7 @@ import PolyGlot.PFontHandler;
 import PolyGlot.PGTUtil;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -51,13 +52,8 @@ public class PButton extends JButton implements MouseListener {
     }
     
     public PButton(DictCore _core) {
-        try {
-            super.setFont(PFontHandler.getButtonFont());
-        } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("FONT ERROR", e.getLocalizedMessage(), _core.getRootWindow());
-        }
-        
+        float fontSize = (float)_core.getOptionsManager().getMenuFontSize();
+        super.setFont(PGTUtil.PMenuFont.deriveFont(fontSize));        
         setupListeners();
     }
     

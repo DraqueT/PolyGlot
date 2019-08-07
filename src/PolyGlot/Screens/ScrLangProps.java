@@ -22,7 +22,7 @@ package PolyGlot.Screens;
 import PolyGlot.DictCore;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
-import PolyGlot.JFontChooser;
+import PolyGlot.ExternalCode.JFontChooser;
 import PolyGlot.CustomControls.PTextField;
 import PolyGlot.ManagersCollections.PropertiesManager;
 import PolyGlot.CustomControls.PCheckBox;

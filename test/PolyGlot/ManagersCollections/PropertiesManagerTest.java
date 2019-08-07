@@ -21,14 +21,8 @@ package PolyGlot.ManagersCollections;
 
 import PolyGlot.CustomControls.PAlphaMap;
 import PolyGlot.DictCore;
-import java.awt.Font;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  *
@@ -78,7 +72,7 @@ public class PropertiesManagerTest {
     public void testSetAlphaOrder_String_Dupes_Commas() {
         System.out.println("testSetAlphaOrder_String_Dupes_Commas");
         String order = "a, aa, b, bb, ab, a";
-        PropertiesManager instance = null;
+        PropertiesManager instance = null; // TODO: this seems incorrect... should not be null (inspect test intent)
         try {
             instance.setAlphaOrder(order);
             fail("Expected exception not hit");
@@ -170,6 +164,7 @@ public class PropertiesManagerTest {
 
     /**
      * Test of getAlphaPlainText method, of class PropertiesManager.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetAlphaPlainText() throws Exception {
