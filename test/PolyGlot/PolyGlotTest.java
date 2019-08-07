@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, draque
+ * Copyright (c) 2019, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,25 +19,16 @@
  */
 package PolyGlot;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author draque
  */
-public class DictCoreTest {
+public class PolyGlotTest {
     
-    public DictCoreTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
+    public PolyGlotTest() {
     }
 
     /**
@@ -47,7 +38,7 @@ public class DictCoreTest {
     @Test
     public void testMainNoFile() {
         String[] args = {"", "", PGTUtil.True};
-        DictCore.main(args);
+        PolyGlot.main(args);
     }
     
     /**
@@ -57,7 +48,7 @@ public class DictCoreTest {
     @Test
     public void testMainWithFile() {
         String[] args = new String[]{"test/TestResources/Lodenkur_TEST.pgd", "", PGTUtil.True};
-        DictCore.main(args);
+        PolyGlot.main(args);
     }
     
     /**
@@ -68,6 +59,6 @@ public class DictCoreTest {
     @Test
     public void testMainWithMissingFile() {
         String[] args = new String[]{"test/TestResources/MISSING_FILE.pgd", "", PGTUtil.True};
-        DictCore.main(args);
+        PolyGlot.main(args);
     }
 }
