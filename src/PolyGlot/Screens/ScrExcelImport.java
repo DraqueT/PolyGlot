@@ -17,7 +17,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package PolyGlot.Screens;
 
 import PolyGlot.DictCore;
@@ -25,6 +24,7 @@ import PolyGlot.ImportFileHelper;
 import PolyGlot.CustomControls.InfoBox;
 import PolyGlot.CustomControls.PButton;
 import PolyGlot.CustomControls.PCheckBox;
+import PolyGlot.CustomControls.PComboBox;
 import PolyGlot.CustomControls.PDialog;
 import PolyGlot.CustomControls.PLabel;
 import PolyGlot.IOHandler;
@@ -32,14 +32,16 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.supercsv.prefs.CsvPreference;
 
 /**
  *
  * @author draque
  */
 public class ScrExcelImport extends PDialog {
+
     private final ScrMainMenu parent;
-    
+
     /**
      * Creates new form scrExcelImport
      *
@@ -52,12 +54,12 @@ public class ScrExcelImport extends PDialog {
         initComponents();
         setModal(true);
     }
-    
+
     @Override
     public final void setModal(boolean _modal) {
         super.setModal(_modal);
     }
- 
+
     @Override
     public void updateAllValues(DictCore _core) {
         // does nothing
@@ -96,7 +98,7 @@ public class ScrExcelImport extends PDialog {
         jLabel11 = new PLabel("", core);
         txtExcelSheet = new javax.swing.JTextField();
         jLabel10 = new PLabel("", core);
-        txtDelimiter = new javax.swing.JTextField();
+        cmbPreferences = new PComboBox<Delimiter>(core);
         btnImport = new PButton(core);
         btnCancel = new PButton(core);
 
@@ -159,6 +161,7 @@ public class ScrExcelImport extends PDialog {
 
         txtClass.setToolTipText("Column number(s) for word class values (for example, gender)");
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
@@ -173,7 +176,8 @@ public class ScrExcelImport extends PDialog {
 
         jLabel10.setText("Delimiter");
 
-        txtDelimiter.setToolTipText("Delimiter character for CSV files. Blank to default to comma. Unneccessary for excel imports.");
+        cmbPreferences.setModel(new javax.swing.DefaultComboBoxModel<>(new Delimiter[] { Delimiter.comma, Delimiter.semicolon, Delimiter.tab }));
+        cmbPreferences.setToolTipText("Set the delimiter to comma, semicolon, or tab (only matters for CSV imports)");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -184,16 +188,14 @@ public class ScrExcelImport extends PDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chkFirstLabels)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel10))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
@@ -203,8 +205,11 @@ public class ScrExcelImport extends PDialog {
                                 .addComponent(txtDefinition, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtType, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtLocalWord, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtConWord, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(txtDelimiter, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(txtConWord, javax.swing.GroupLayout.Alignment.LEADING))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbPreferences, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
@@ -251,9 +256,9 @@ public class ScrExcelImport extends PDialog {
                             .addComponent(txtClass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDelimiter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10))
-                        .addGap(0, 43, Short.MAX_VALUE))
+                            .addComponent(jLabel10)
+                            .addComponent(cmbPreferences, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 42, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -330,14 +335,14 @@ public class ScrExcelImport extends PDialog {
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
         browseFile();
     }//GEN-LAST:event_btnBrowseActionPerformed
-    
+
     /**
      * @param _core the dictionary core
      * @param _parent main menu form
      */
     public static void run(DictCore _core, ScrMainMenu _parent) {
         ScrExcelImport s = new ScrExcelImport(_core, _parent);
-        
+
         s.setModal(true);
         s.toFront();
         s.setVisible(true);
@@ -363,14 +368,13 @@ public class ScrExcelImport extends PDialog {
 
         try {
             ImportFileHelper reader = new ImportFileHelper(core);
-            String delimiter = txtDelimiter.getText().length() == 0 ?
-                    "," : txtDelimiter.getText();
+            CsvPreference csvPreference = ((Delimiter) cmbPreferences.getSelectedItem()).getPref();
             reader.setOptions(txtConWord.getText(), txtLocalWord.getText(),
                     txtType.getText(), txtClass.getText(),
-                    txtDefinition.getText(), txtPronunciation.getText(), delimiter,
+                    txtDefinition.getText(), txtPronunciation.getText(), csvPreference,
                     chkFirstLabels.isSelected(), true);
             reader.importFile(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
-            
+
             if (parent != null) {
                 parent.updateAllValues(core);
                 InfoBox.info("Success!", txtFileName.getText() + " imported successfully!", this);
@@ -385,14 +389,41 @@ public class ScrExcelImport extends PDialog {
         } catch (NumberFormatException e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Import Error", "All column fields and sheet field must contain "
-                    +"numeric values only:\n" + e.getLocalizedMessage(), this);
+                    + "numeric values only:\n" + e.getLocalizedMessage(), this);
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
                     + ".\n Check to make certain that column mappings are correct "
-                    +"(nothing above max cell value) and that the file is not corrupt:\n" 
+                    + "(nothing above max cell value) and that the file is not corrupt:\n"
                     + e.getLocalizedMessage(), this);
             //e.printStackTrace();
+        }
+    }
+
+    public enum Delimiter {
+        comma("Comma", CsvPreference.STANDARD_PREFERENCE),
+        semicolon("Semicolon", CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE),
+        tab("Tab", CsvPreference.TAB_PREFERENCE);
+
+        private final String name;
+        private final CsvPreference pref;
+
+        private Delimiter(String s, CsvPreference _pref) {
+            name = s;
+            pref = _pref;
+        }
+
+        public boolean equalsName(String otherName) {
+            return name.equals(otherName);
+        }
+
+        @Override
+        public String toString() {
+            return this.name;
+        }
+        
+        public CsvPreference getPref() {
+            return this.pref;
         }
     }
 
@@ -401,6 +432,7 @@ public class ScrExcelImport extends PDialog {
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnImport;
     private javax.swing.JCheckBox chkFirstLabels;
+    private javax.swing.JComboBox<Delimiter> cmbPreferences;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -418,7 +450,6 @@ public class ScrExcelImport extends PDialog {
     private javax.swing.JTextField txtClass;
     private javax.swing.JTextField txtConWord;
     private javax.swing.JTextField txtDefinition;
-    private javax.swing.JTextField txtDelimiter;
     private javax.swing.JTextField txtExcelSheet;
     private javax.swing.JTextField txtFileName;
     private javax.swing.JTextField txtLocalWord;
