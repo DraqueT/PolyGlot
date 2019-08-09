@@ -1381,8 +1381,14 @@ public final class ScrLexicon extends PFrame {
     }
     
     private boolean btnLogoShouldEnable() {
-        return menuParent.isEnabledLogoButton() 
-                && (logoQuick == null || logoQuick.isDisposed());
+        boolean ret = true;
+        
+        if (menuParent != null) {
+            ret = menuParent.isEnabledLogoButton() 
+                    && (logoQuick == null || logoQuick.isDisposed());
+        }
+        
+        return ret;
     }
 
     /**

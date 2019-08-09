@@ -72,7 +72,7 @@ public class PropertiesManagerTest {
     public void testSetAlphaOrder_String_Dupes_Commas() {
         System.out.println("testSetAlphaOrder_String_Dupes_Commas");
         String order = "a, aa, b, bb, ab, a";
-        PropertiesManager instance = null; // TODO: this seems incorrect... should not be null (inspect test intent)
+        PropertiesManager instance = core.getPropertiesManager();
         try {
             instance.setAlphaOrder(order);
             fail("Expected exception not hit");
