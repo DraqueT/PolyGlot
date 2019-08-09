@@ -316,7 +316,7 @@ public class ImportFileHelper {
     private List<List<String>> getRows(String inputFile, CsvPreference csvPreference) throws FileNotFoundException, IOException {
         List<List<String>> ret = new ArrayList<>();
 
-        try (ICsvListReader listReader = new CsvListReader(new FileReader("/Users/draque/Desktop/test.csv"), csvPreference)) {
+        try (ICsvListReader listReader = new CsvListReader(new FileReader(inputFile), csvPreference)) {
             List<String> row;
 
             while ((row = listReader.read()) != null) {
