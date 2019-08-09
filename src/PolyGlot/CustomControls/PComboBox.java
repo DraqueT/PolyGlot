@@ -79,30 +79,14 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         } else {
             antiAlias.setColor(Color.decode("#e0e0e4"));
         }
-        
         antiAlias.fillRoundRect(1, 1, getWidth(), getHeight() - 2, 5, 5);
         
-        if (enabled) {
-            antiAlias.setColor(PGTUtil.colorEnabledBG);
-        } else {
-            antiAlias.setColor(Color.decode("#d0d0d0"));
-        }
-        antiAlias.fillRect(getWidth() - buttonWidth, 1, buttonWidth, getHeight() - 1);
-        
-        if ((mouseOver || this.hasFocus()) && enabled) {
-            antiAlias.setColor(Color.black);
-        } else 
-        {
-            antiAlias.setColor(Color.lightGray);
-        }
-        antiAlias.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 5, 5);
-        
+        // draw text
         if (enabled) {
             antiAlias.setColor(Color.black);
         } else {
             antiAlias.setColor(Color.decode("#909090"));
-        }
-        
+        } 
         Object selectedItem = getSelectedItem();
         String text = selectedItem == null ? "" : getSelectedItem().toString();
         if (text.length() > 0) { // 0 length text makes bounding box explode
@@ -113,6 +97,22 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
             antiAlias.drawChars(text.toCharArray(), 0, text.length(), ((getWidth() - buttonWidth)/2) 
                     - (stringW/2), (getHeight() - 9)/2 + stringH/2);
         }
+        
+        if (enabled) {
+            antiAlias.setColor(PGTUtil.colorEnabledBG);
+        } else {
+            antiAlias.setColor(Color.decode("#d0d0d0"));
+        }
+        antiAlias.fillRect(getWidth() - buttonWidth, 1, buttonWidth, getHeight() - 1);
+        
+        // draw outline
+        if ((mouseOver || this.hasFocus()) && enabled) {
+            antiAlias.setColor(Color.black);
+        } else 
+        {
+            antiAlias.setColor(Color.lightGray);
+        }
+        antiAlias.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 5, 5);
     }
     
     @Override
