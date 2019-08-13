@@ -93,12 +93,12 @@ public class ScrExcelImport extends PDialog {
         txtDefinition = new javax.swing.JTextField();
         txtPronunciation = new javax.swing.JTextField();
         txtClass = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jLabel11 = new PLabel("", core);
         txtExcelSheet = new javax.swing.JTextField();
         jLabel10 = new PLabel("", core);
         cmbPreferences = new PComboBox<Delimiter>(core);
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
         btnImport = new PButton(core);
         btnCancel = new PButton(core);
 
@@ -161,14 +161,6 @@ public class ScrExcelImport extends PDialog {
 
         txtClass.setToolTipText("Column number(s) for word class values (for example, gender)");
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Columns may be addressed numerically or alphabetically. If numerically, begin with 0.\n\nMap the columns within the target Excel/CSV file to their related fields within the conlang dictionary. \n\nIf the “First row is labels” box is selected, the first row of the grid will be ignored.\n\nTo map multiple columns to a single field (generally multiple to definition), simply add the row numbers separated by a comma.\n\nThe dilimiter is the character separating entries if you are importing from a CSV. Leave blank to default to a comma.\n\nIf you don't know what \"Excel Sheet\" means, or are using a CSV leave it at 0.");
-        jTextArea1.setWrapStyleWord(true);
-        jScrollPane1.setViewportView(jTextArea1);
-
         jLabel11.setText("Excel Sheet");
 
         txtExcelSheet.setText("0");
@@ -178,6 +170,11 @@ public class ScrExcelImport extends PDialog {
 
         cmbPreferences.setModel(new javax.swing.DefaultComboBoxModel<>(new Delimiter[] { Delimiter.comma, Delimiter.semicolon, Delimiter.tab }));
         cmbPreferences.setToolTipText("Set the delimiter to comma, semicolon, or tab (only matters for CSV imports)");
+
+        jTextPane1.setContentType("text/html"); // NOI18N
+        jTextPane1.setText("<html>Columns may be addressed numerically or alphabetically. <b>If numerically, begin with 0.</b>  <br><br>Map the columns within the target Excel/CSV file to their related fields within the conlang dictionary.   <br><br>If the “First row is labels” box is selected, the first row of the grid will be ignored.  <br><br>To map multiple columns to a single field (generally multiple to definition), simply add the row numbers separated by a comma.  <br><br>The dilimiter is the character separating entries if you are importing from a CSV. Leave blank to default to a comma.  <br><br>If you don't know what \\\"Excel Sheet\\\" means, or are using a CSV leave it at 0. </html>");
+        jTextPane1.setToolTipText("");
+        jScrollPane2.setViewportView(jTextPane1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -212,11 +209,11 @@ public class ScrExcelImport extends PDialog {
                         .addComponent(cmbPreferences, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtExcelSheet)))
+                        .addComponent(txtExcelSheet, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -258,9 +255,9 @@ public class ScrExcelImport extends PDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
                             .addComponent(cmbPreferences, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 42, Short.MAX_VALUE))
+                        .addGap(0, 44, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
+                        .addComponent(jScrollPane2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
@@ -295,7 +292,7 @@ public class ScrExcelImport extends PDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtFileName, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
+                        .addComponent(txtFileName, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBrowse))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -445,8 +442,8 @@ public class ScrExcelImport extends PDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextField txtClass;
     private javax.swing.JTextField txtConWord;
     private javax.swing.JTextField txtDefinition;

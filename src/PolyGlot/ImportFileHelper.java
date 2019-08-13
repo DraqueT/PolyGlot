@@ -28,6 +28,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -316,7 +318,9 @@ public class ImportFileHelper {
     private List<List<String>> getRows(String inputFile, CsvPreference csvPreference) throws FileNotFoundException, IOException {
         List<List<String>> ret = new ArrayList<>();
 
-        try (ICsvListReader listReader = new CsvListReader(new FileReader(inputFile), csvPreference)) {
+        InputStreamReader reader = new InputStreamReader(new FileInputStream(inputFile), StandardCharsets.UTF_8);
+        
+        try (ICsvListReader listReader = new CsvListReader(reader, csvPreference)) {
             List<String> row;
 
             while ((row = listReader.read()) != null) {
