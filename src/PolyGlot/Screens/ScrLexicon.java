@@ -749,7 +749,8 @@ public final class ScrLexicon extends PFrame {
             testWord = new ConWord();
             testWord.setId(origWordId);
             int typeId = 0;
-            if (!cmbType.getSelectedItem().equals(defTypeValue)) {
+            Object selectedType = cmbType.getSelectedItem();
+            if (selectedType != null && !selectedType.equals(defTypeValue)) {
                 typeId = ((TypeNode) cmbType.getSelectedItem()).getId();
             }
 
