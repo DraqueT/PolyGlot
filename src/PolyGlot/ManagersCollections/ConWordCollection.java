@@ -680,7 +680,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      *
      * @return
      */
-    public Iterator<ConWord> getNodeIteratorLocalOrder() {
+    public List<ConWord> getNodesLocalOrder() {
         List<ConWord> cycleList = new ArrayList<>(nodeMap.values());
         List<ConWord> retList = new ArrayList<>();
 
@@ -709,7 +709,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         Collections.sort(retList);
         orderByLocal = false;
 
-        return retList.iterator();
+        return retList;
     }
 
     /**

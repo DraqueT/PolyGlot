@@ -356,14 +356,13 @@ public class PExportToPDF {
     private void buildConToLocalDictionary(String anchorPoint) throws IOException {
         String curLetter = "";
         Div curLetterSec = new Div();
-        Iterator<ConWord> allWords = core.getWordCollection().getWordNodes().iterator();
         curLetterSec.add(new Paragraph(new Text("\n")));
         curLetterSec.setProperty(Property.DESTINATION, anchorPoint);
+        PdfFont timesBold = PdfFontFactory.createFont(FontConstants.TIMES_BOLD);
 
-        while (allWords.hasNext()) {
+        for (ConWord curWord : core.getWordCollection().getWordNodes()) {
             Cell dictEntryWord = new Cell();
             Paragraph dictEntry = new Paragraph();
-            ConWord curWord = allWords.next();
 
             dictEntry.setMultipliedLeading(0.6f);
 
@@ -397,7 +396,7 @@ public class PExportToPDF {
             dictEntry.add(varChunk);
 
             varChunk = new Text(" - ");
-            varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
+            varChunk.setFont(timesBold);
             dictEntry.add(varChunk.setFontSize(defFontSize));
 
             // Add word type (if one exists)
@@ -406,7 +405,7 @@ public class PExportToPDF {
                 varChunk.setFont(unicodeFont);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
                 varChunk = new Text(" - ");
-                varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
+                varChunk.setFont(timesBold);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
 
@@ -417,7 +416,7 @@ public class PExportToPDF {
                     varChunk.setFontSize(defFontSize);
                     dictEntry.add(varChunk);
                     varChunk = new Text(" - ");
-                    varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
+                    varChunk.setFont(timesBold);
                     dictEntry.add(varChunk.setFontSize(defFontSize));
                 }
             } catch (Exception e) {
@@ -498,7 +497,7 @@ public class PExportToPDF {
 
             // print word etymology tree if appropriate
             // TODO: correct how this aligns images
-            if (printWordEtymologies) {
+            if (printWordEtymologies && core.getEtymologyManager().hasEtymology(curWord)) {
                 BufferedImage etymImage = (new PPanelDrawEtymology(core, curWord)).getPanelImage();
 
                 // null image means there is no etymology for this word
@@ -553,13 +552,10 @@ public class PExportToPDF {
             dictEntryWord.add(dictEntry);
             curLetterSec.add(dictEntryWord);
 
-            // add line break if more words
-            if (allWords.hasNext()) {
-                LineSeparator ls = new LineSeparator(new SolidLine(1f));
-                ls.setWidthPercent(30);
-                ls.setMarginTop(5);
-                curLetterSec.add(ls);
-            }
+            LineSeparator ls = new LineSeparator(new SolidLine(1f));
+            ls.setWidthPercent(30);
+            ls.setMarginTop(5);
+            curLetterSec.add(ls);
         }
 
         // add last letter section
@@ -574,14 +570,13 @@ public class PExportToPDF {
     private void buildLocalToConDictionary(String anchorPoint) throws IOException { // rework with anchor
         String curLetter = "";
         Div curLetterSec = new Div();
-        Iterator<ConWord> allWords = core.getWordCollection().getNodeIteratorLocalOrder();
         curLetterSec.add(new Paragraph(new Text("\n")));
         curLetterSec.setProperty(Property.DESTINATION, anchorPoint);
+        PdfFont timesBold = PdfFontFactory.createFont(FontConstants.TIMES_BOLD);
 
-        while (allWords.hasNext()) {
+        for (ConWord curWord : core.getWordCollection().getNodesLocalOrder()) {
             Cell dictEntryWord = new Cell();
             Paragraph dictEntry = new Paragraph();
-            ConWord curWord = allWords.next();
 
             dictEntry.setMultipliedLeading(0.6f);
 
@@ -621,7 +616,7 @@ public class PExportToPDF {
             dictEntry.add(varChunk);
 
             varChunk = new Text(" - ");
-            varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
+            varChunk.setFont(timesBold);
             dictEntry.add(varChunk.setFontSize(defFontSize));
 
             // Add word type (if one exists)
@@ -630,7 +625,7 @@ public class PExportToPDF {
                 varChunk.setFont(unicodeFont);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
                 varChunk = new Text(" - ");
-                varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
+                varChunk.setFont(timesBold);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
 
@@ -641,7 +636,7 @@ public class PExportToPDF {
                     varChunk.setFontSize(defFontSize);
                     dictEntry.add(varChunk);
                     varChunk = new Text(" - ");
-                    varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
+                    varChunk.setFont(timesBold);
                     dictEntry.add(varChunk.setFontSize(defFontSize));
                 }
             } catch (Exception e) {
@@ -678,7 +673,7 @@ public class PExportToPDF {
                 dictEntry.add(varChunk.setFontSize(defFontSize));
 
                 varChunk = new Text(" - ");
-                varChunk.setFont(PdfFontFactory.createFont(FontConstants.TIMES_BOLD));
+                varChunk.setFont(timesBold);
                 dictEntry.add(varChunk.setFontSize(defFontSize));
             }
 
@@ -719,7 +714,7 @@ public class PExportToPDF {
 
             // print word etymology tree if appropriate
             // TODO: correct how this aligns images
-            if (printWordEtymologies) {
+            if (printWordEtymologies && core.getEtymologyManager().hasEtymology(curWord)) {
                 BufferedImage etymImage = (new PPanelDrawEtymology(core, curWord)).getPanelImage();
 
                 // null image means there is no etymology for this word
@@ -765,13 +760,11 @@ public class PExportToPDF {
             dictEntryWord.add(dictEntry);
             curLetterSec.add(dictEntryWord);
 
-            // add line break if more words
-            if (allWords.hasNext()) {
-                LineSeparator ls = new LineSeparator(new SolidLine(1f));
-                ls.setWidthPercent(30);
-                ls.setMarginTop(5);
-                curLetterSec.add(ls);
-            }
+            // add line break
+            LineSeparator ls = new LineSeparator(new SolidLine(1f));
+            ls.setWidthPercent(30);
+            ls.setMarginTop(5);
+            curLetterSec.add(ls);
         }
 
         // add last letter section
