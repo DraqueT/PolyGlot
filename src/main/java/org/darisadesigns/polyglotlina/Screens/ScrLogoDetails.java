@@ -390,7 +390,7 @@ public class ScrLogoDetails extends PFrame {
                     return;
                 }
 
-                BufferedImage image = (BufferedImage) ClipboardHandler.getClipboardImage();
+                Image image = ClipboardHandler.getClipboardImage();
                 curNode.setLogoGraph(image);
                 saveReadings(lstLogos.getSelectedIndex());
                 saveRads(lstLogos.getSelectedIndex());

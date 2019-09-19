@@ -589,7 +589,8 @@ public class IOHandler {
                         out.putNextEntry(new ZipEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                                 + curNode.getId().toString() + ".png"));
 
-                        ImageIO.write(curNode.getLogoGraph(), "png", out);
+                        BufferedImage write = PGTUtil.toBufferedImage(curNode.getLogoGraph());
+                        ImageIO.write(write, "png", out);
 
                         out.closeEntry();
                     } catch (IOException e) {

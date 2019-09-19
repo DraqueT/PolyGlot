@@ -83,14 +83,8 @@
       <SubComponents>
         <Component class="javax.swing.JList" name="lstLogos">
           <Properties>
-            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
-              </StringArray>
+            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.AbstractListModel&lt;LogoNode&gt;() {&#xa;    // set up this way as an artifact of netbeans being annoying...&#xa;    public int getSize() { return 1; }&#xa;    public LogoNode getElementAt(int i) { return new LogoNode(); }&#xa;}" type="code"/>
             </Property>
           </Properties>
           <Events>
@@ -98,7 +92,7 @@
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(core, true)"/>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;LogoNode&gt;"/>
           </AuxValues>
         </Component>
       </SubComponents>

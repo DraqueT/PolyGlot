@@ -17,17 +17,18 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.darisadesigns.polyglotlina;
 
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -41,15 +42,17 @@ import org.darisadesigns.polyglotlina.Screens.ScrQuizGenDialog;
 
 /**
  * This contains various constant vales in PolyGlot
+ *
  * @author draque
  */
 public class PGTUtil {
+
     private static File java8BridgeLocation = null;
     private static File errorDirectory;
     public static final String DICTIONARY_XID = "dictionary";
     public static final String PGVERSION_XID = "PolyGlotVer";
     public static final String DICTIONARY_SAVE_DATE = "DictSaveDate";
-    
+
     // properties on words
     public static final String LEXICON_XID = "lexicon";
     public static final String WORD_XID = "word";
@@ -99,8 +102,8 @@ public class PGTUtil {
     public static final String LANG_PROP_LOCAL_NAME_XID = "langPropLocalLangName";
     public static final String LANG_PROP_USE_LOCAL_LEX_XID = "langPropUseLocalLexicon";
     public static final String LANG_PROP_KERN_VAL_XID = "langPropKerningValue";
-    public static final String LANG_PROP_OVERRIDE_REGEX_FONT_XID ="langPropOverrideRegexFont";
-    
+    public static final String LANG_PROP_OVERRIDE_REGEX_FONT_XID = "langPropOverrideRegexFont";
+
     // character replacement pair values
     public static final String langPropCharRepContainerXID = "langPropCharRep";
     public static final String langPropCharRepNodeXID = "langPropCharRepNode";
@@ -129,7 +132,7 @@ public class PGTUtil {
     public static final String proGuideBaseXID = "proGuideBase";
     public static final String proGuidePhonXID = "proGuidePhon";
     public static final String proGuideRecurseXID = "proGuideRecurse";
-    
+
     // romanization properties
     public static final String romGuideXID = "romGuide";
     public static final String romGuideEnabledXID = "romGuideEnabled";
@@ -200,7 +203,7 @@ public class PGTUtil {
     public static final String ClassValueNodeXID = "wordGrammarClassValueNode";
     public static final String ClassValueNameXID = "wordGrammarClassValueName";
     public static final String ClassValueIdXID = "wordGrammarClassValueId";
-    
+
     // etymology constants
     public static final String EtyCollectionXID = "EtymologyCollection";
     public static final String EtyIntRelationNodeXID = "EtymologyInternalRelation";
@@ -210,7 +213,7 @@ public class PGTUtil {
     public static final String EtyExternalWordValueXID = "EtymologyExternalWordValue";
     public static final String EtyExternalWordOriginXID = "EtymologyExternalWordOrigin";
     public static final String EtyExternalWordDefinitionXID = "EtymologyExternalWordDefinition";
-    
+
     // TODO Node constants
     public static final String ToDoLogXID = "ToDoLog";
     public static final String ToDoNodeXID = "ToDoNodeHead";
@@ -241,7 +244,7 @@ public class PGTUtil {
     public static final String JAVA8_PDFCOMMAND = "pdf-export";
     public static final String JAVA8_EXCELTOCVSCOMMAND = "excel-to-cvs";
     public static final String JAVA8_EXPORTTOEXCELCOMMAND = "export-to-excel";
-    
+
     // string constants
     public static final String LANG_FILE_NAME = "PGDictionary.xml";
     public static final String CON_FONT_FILE_NAME = "conLangFont";
@@ -271,7 +274,7 @@ public class PGTUtil {
     public static final String POLYGLOT_ABOUT = "/assets/org/DarisaDesigns/ImageAssets/PolyGlot_About.png";
     public static final String POLYGLOT_EASTER = "/assets/org/DarisaDesigns/ImageAssets/n0rara_draque.png";
     public static final String TESTRESOURCES = "src/test/java/TestResources/";
-    
+
     public static final String playButtonUp = "/assets/org/DarisaDesigns/ImageAssets/play_OFF_BIG.png";
     public static final String playButtonDown = "/assets/org/DarisaDesigns/ImageAssets/play_ON_BIG.png";
     public static final String recordButtonUp = "/assets/org/DarisaDesigns/ImageAssets/recording_OFF_BIG.png";
@@ -280,17 +283,17 @@ public class PGTUtil {
     public static final String deleteButton = "/assets/org/DarisaDesigns/ImageAssets/delete_button.png";
     public static final String addButtonPressed = "/assets/org/DarisaDesigns/ImageAssets/add_button_pressed.png";
     public static final String deleteButtonPressed = "/assets/org/DarisaDesigns/ImageAssets/delete_button_pressed.png";
-    
+
     // Sound Recorder Constants
     public static final String ipa_vowels = "/assets/org/DarisaDesigns/ImageAssets/IPA_Vowels.png";
     public static final String pulmonic_consonants = "/assets/org/DarisaDesigns/ImageAssets/IPA_Pulmonic_Consonants.png";
     public static final String non_pulmonic_consonants = "/assets/org/DarisaDesigns/ImageAssets/IPA_NonPulmonicConsonants.png";
-    public static final String ipa_other ="/assets/org/DarisaDesigns/ImageAssets/IPA_Other.png";
+    public static final String ipa_other = "/assets/org/DarisaDesigns/ImageAssets/IPA_Other.png";
     public static final String mainMenuBG = "/assets/org/DarisaDesigns/ImageAssets/PolyGlotBG.png";
     public static final String ucla_location = "ucla_wavs/";
     public static final String wiki_location = "wiki_wavs/";
     public static final String wavSuffix = ".wav";
-    
+
     public static final String ipaSoundsLocation = "/assets/org/DarisaDesigns/SoundAssets/";
     public static final String RTLMarker = "\u202e";
     public static final String LTRMarker = "\u202c";
@@ -298,7 +301,7 @@ public class PGTUtil {
     public static final String True = "T";
     public static final String False = "F";
     public static final String displayName = "PolyGlot";
-    
+
     // web locations
     public static final String HOMEPAGE_URL = "http://draquet.github.io/PolyGlot/";
     public static final String UPDATE_FILE_URL = "https://drive.google.com/uc?export=download&id=0B2RMQ7sRXResN3VwLTAwTFE0ZlE";
@@ -310,7 +313,7 @@ public class PGTUtil {
     public static final String scrNameFam;
     public static final String scrIPARefChart;
     public static final String scrQuizGenDialog;
-    
+
     // numeric constants...
     public static final Integer numMenuFlashes = 4;
     public static final Integer menuFlashSleep = 200;
@@ -319,7 +322,7 @@ public class PGTUtil {
     public static final int defaultMaxRollbackVersions = 10;
     public static final int maxFilePathLength = 1000;
     public static final int maxLogCharacters = 25000;
-    
+
     // color constants
     public static final Color colorDisabledBG;
     public static final Color colorEnabledBG;
@@ -354,37 +357,37 @@ public class PGTUtil {
     public static final Color colorCheckboxHoverDisabled;
     public static final Color colorCheckboxClickedDisabled;
     public static final Color colorCheckBoxFieldBackDisabled;
-    
+
     // visual style constants
     public static final int CHECKBOX_ROUNDING = 3;
-    
+
     // UI Elements to set on OSX (copy/paste/cut)
     public static final String[] INPUT_MAPS = {"Button.focusInputMap",
-                "CheckBox.focusInputMap",
-                "ComboBox.ancestorInputMap",
-                "EditorPane.focusInputMap",
-                "FileChooser.ancestorInputMap",
-                "FormattedTextField.focusInputMap",
-                "List.focusInputMap",
-                "PasswordField.focusInputMap",
-                "RadioButton.focusInputMap",
-                "RootPane.ancestorInputMap",
-                "ScrollBar.ancestorInputMap",
-                "ScrollPane.ancestorInputMap",
-                "Slider.focusInputMap",
-                "Spinner.ancestorInputMap",
-                "SplitPane.ancestorInputMap",
-                "TabbedPane.ancestorInputMap",
-                "TabbedPane.focusInputMap",
-                "Table.ancestorInputMap",
-                "TableHeader.ancestorInputMap",
-                "ToolBar.ancestorInputMap",
-                "Tree.ancestorInputMap",
-                "TextArea.focusInputMap",
-                "TextField.focusInputMap",
-                "TextPane.focusInputMap",
-                "ToggleButton.focusInputMap",
-                "Tree.focusInputMap"};
+        "CheckBox.focusInputMap",
+        "ComboBox.ancestorInputMap",
+        "EditorPane.focusInputMap",
+        "FileChooser.ancestorInputMap",
+        "FormattedTextField.focusInputMap",
+        "List.focusInputMap",
+        "PasswordField.focusInputMap",
+        "RadioButton.focusInputMap",
+        "RootPane.ancestorInputMap",
+        "ScrollBar.ancestorInputMap",
+        "ScrollPane.ancestorInputMap",
+        "Slider.focusInputMap",
+        "Spinner.ancestorInputMap",
+        "SplitPane.ancestorInputMap",
+        "TabbedPane.ancestorInputMap",
+        "TabbedPane.focusInputMap",
+        "Table.ancestorInputMap",
+        "TableHeader.ancestorInputMap",
+        "ToolBar.ancestorInputMap",
+        "Tree.ancestorInputMap",
+        "TextArea.focusInputMap",
+        "TextField.focusInputMap",
+        "TextPane.focusInputMap",
+        "ToggleButton.focusInputMap",
+        "Tree.focusInputMap"};
 
     // images and icons that only need to be loaded once
     public static final ImageIcon ADD_BUTTON_ICON;
@@ -392,13 +395,13 @@ public class PGTUtil {
     public static final ImageIcon ADD_BUTTON_ICON_PRESSED;
     public static final ImageIcon DEL_BUTTON_ICON_PRESSED;
     public static final ImageIcon POLYGLOT_ICON;
-    
+
     // Fonts stored here to cache values single time
     public static final Font MENU_FONT;
-    
+
     public static final boolean IS_OSX;
     public static final boolean IS_WINDOWS;
-    
+
     // one time set for code driven static values
     static {
         colorDisabledBG = Color.decode("#b0b0b0");
@@ -434,7 +437,7 @@ public class PGTUtil {
         colorCheckboxHoverDisabled = Color.darkGray;
         colorCheckboxClickedDisabled = Color.darkGray;
         colorCheckBoxFieldBackDisabled = Color.gray;
-        
+
         // loads default font on system error (never came up, but for completeness...)
         Font tmpFont;
         try {
@@ -445,17 +448,17 @@ public class PGTUtil {
             tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
         }
         MENU_FONT = tmpFont;
-        
+
         scrNameLexicon = ScrLexicon.class.getName();
         scrNameGrammar = ScrGrammarGuide.class.getName();
         scrNameLogo = ScrLogoDetails.class.getName();
         scrNameFam = ScrFamilies.class.getName();
         scrIPARefChart = ScrIPARefChart.class.getName();
         scrQuizGenDialog = ScrQuizGenDialog.class.getName();
-        
+
         ADD_BUTTON_ICON = new ImageIcon(new ImageIcon(
-                    PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/add_button.png"))
-                    .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
+                PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/add_button.png"))
+                .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
         DEL_BUTTON_ICON = new ImageIcon(new ImageIcon(
                 PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/delete_button.png"))
                 .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
@@ -467,11 +470,11 @@ public class PGTUtil {
                 .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
         POLYGLOT_ICON = new ImageIcon(
                 PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/PolyGlotIcon.png"));
-        
+
         IS_OSX = isOSX();
         IS_WINDOWS = isWindows();
     }
-    
+
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to
      * STANDARD
@@ -482,6 +485,7 @@ public class PGTUtil {
 
     /**
      * Encapsulates a string in RTL characters, setting back to LTR after
+     *
      * @param encapsulate string to encapsulate
      * @return encapsulated string
      */
@@ -491,15 +495,17 @@ public class PGTUtil {
 
     /**
      * Strips string of RTL and LTR markers
+     *
      * @param strip string to strip
      * @return stripped string
      */
     public static String stripRTL(String strip) {
         return strip.replace(RTLMarker, "").replace(LTRMarker, "");
     }
-    
+
     /**
      * Adds attributes to fontmapping
+     *
      * @param key Key value
      * @param value value-value
      * @param font font to add value to
@@ -511,10 +517,11 @@ public class PGTUtil {
         attributes.put(key, value);
         return font.deriveFont(attributes);
     }
-    
+
     /**
      * Tests and returns true if running OSX
-     * @return 
+     *
+     * @return
      */
     private static boolean isOSX() {
         return System.getProperty("os.name").startsWith("Mac");
@@ -525,10 +532,11 @@ public class PGTUtil {
     }
 
     /**
-    * Checks that the position is in bounds for the screen and places it in visible
-    * area if not
+     * Checks that the position is in bounds for the screen and places it in
+     * visible area if not
+     *
      * @param w
-    */
+     */
     public static void checkPositionInBounds(Window w) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Point location = w.getLocationOnScreen();
@@ -538,47 +546,74 @@ public class PGTUtil {
             w.setLocationRelativeTo(null);
         }
     }
-    
+
     /**
      * Gets Java8 bridge class location. Caches value.
-     * @return 
-     * @throws java.io.IOException 
+     *
+     * @return
+     * @throws java.io.IOException
      */
     public static File getJava8BridgeLocation() throws IOException {
         if (java8BridgeLocation == null || !java8BridgeLocation.exists()) {
             java8BridgeLocation = Java8Bridge.getNewJavaBridgeLocation();
         }
-        
+
         return java8BridgeLocation;
     }
-    
+
     /**
      * Default directory based on OS value for user dir
-     * @return 
+     *
+     * @return
      */
     public static File getDefaultDirectory() {
         File ret = new File(System.getProperty("user.home") + File.separator + PGTUtil.POLYGLOT_WORKINGDIRECTORY);
-        
+
         if (!ret.exists()) {
             ret.mkdir();
         }
-        
+
         return ret;
     }
 
     /**
      * Error directory defaults based on OS settings (overrides respected)
-     * @return 
+     *
+     * @return
      */
     public static File getErrorDirectory() {
-        if (errorDirectory == null || !errorDirectory.exists()){
+        if (errorDirectory == null || !errorDirectory.exists()) {
             errorDirectory = getDefaultDirectory();
         }
-        
+
         return errorDirectory;
     }
 
     public static void setErrorDirectory(File _errorDirectory) {
         errorDirectory = _errorDirectory;
+    }
+
+    /**
+     * Converts a given Image into a BufferedImage
+     *
+     * @param img The Image to be converted
+     * @return The converted BufferedImage
+     */
+    public static BufferedImage toBufferedImage(Image img) {
+        BufferedImage ret = null;
+        
+        if (img instanceof BufferedImage) {
+            ret = (BufferedImage) img;
+        } else if (img != null) {
+            // Create a buffered image with transparency
+            ret = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+            // Draw the image on to the buffered image
+            Graphics2D bGr = ret.createGraphics();
+            bGr.drawImage(img, 0, 0, null);
+            bGr.dispose();
+        }
+
+        return ret;
     }
 }

@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.Nodes;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,7 +40,7 @@ public class LogoNode extends DictNode {
 
     private int strokes = 0;
     private String notes = "";
-    private BufferedImage logoGraph;
+    private Image logoGraph;
     private boolean isRadical = false;
     private String tmpRads = "";
     private String tmpReadingBuffer = "";
@@ -61,11 +62,11 @@ public class LogoNode extends DictNode {
         logoGraph = image;
     }
 
-    public BufferedImage getLogoGraph() {
+    public Image getLogoGraph() {
         return logoGraph;
     }
 
-    public void setLogoGraph(BufferedImage _logoGraph) {
+    public void setLogoGraph(Image _logoGraph) {
         logoGraph = _logoGraph;
     }
 

@@ -50,6 +50,7 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -199,7 +200,7 @@ public final class ScrLogoQuickView extends PFrame {
     private void populateLogos(List<LogoNode> logos) {
         Iterator<LogoNode> it = logos.iterator();
 
-        DefaultListModel<Object> newModel = new DefaultListModel<>();
+        DefaultListModel<LogoNode> newModel = new DefaultListModel<>();
 
         while (it.hasNext()) {
             newModel.addElement(it.next());
@@ -218,12 +219,13 @@ public final class ScrLogoQuickView extends PFrame {
         this.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                BufferedImage imgLogo = lstLogos.getSelectedValue() == null
-                        ? null
-                        : ((LogoNode) lstLogos.getSelectedValue()).getLogoGraph();
-
-                if (imgLogo != null) {
-                    lblLogoPic.setIcon(new ImageIcon(imgLogo.getScaledInstance(lblLogoPic.getWidth(), lblLogoPic.getHeight(), Image.SCALE_SMOOTH)));
+                LogoNode selected = lstLogos.getSelectedValue();
+                
+                if (selected != null) {
+                    BufferedImage imgLogo = PGTUtil.toBufferedImage(selected.getLogoGraph());
+                    lblLogoPic.setIcon(new ImageIcon(imgLogo.getScaledInstance(lblLogoPic.getWidth(), 
+                            lblLogoPic.getHeight(), 
+                            Image.SCALE_SMOOTH)));
                     lblLogoPic.setMinimumSize(new Dimension(1, 1));
                 }
             }
@@ -276,7 +278,7 @@ public final class ScrLogoQuickView extends PFrame {
             LogoNode addLogo = logoFinder.getSelectedLogo();
             
             if (core.getLogoCollection().addWordLogoRelation(conWord, addLogo)) {
-                ((DefaultListModel<Object>) lstLogos.getModel()).addElement(addLogo);
+                ((DefaultListModel<LogoNode>) lstLogos.getModel()).addElement(addLogo);
                 logoFinder.refreshRelatedWords();
             }
         }
@@ -313,10 +315,10 @@ public final class ScrLogoQuickView extends PFrame {
 
         lblLogoPic.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lstLogos.setModel(new javax.swing.AbstractListModel<Object>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        lstLogos.setModel(new javax.swing.AbstractListModel<LogoNode>() {
+            // set up this way as an artifact of netbeans being annoying...
+            public int getSize() { return 1; }
+            public LogoNode getElementAt(int i) { return new LogoNode(); }
         });
         lstLogos.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -453,6 +455,6 @@ public final class ScrLogoQuickView extends PFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblLogoPic;
-    private javax.swing.JList<Object> lstLogos;
+    private javax.swing.JList<LogoNode> lstLogos;
     // End of variables declaration//GEN-END:variables
 }
