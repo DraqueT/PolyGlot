@@ -54,6 +54,8 @@ public class ScrPrintToPDF extends PDialog {
         chkConLocal.setText("Print " + core.conLabel() + " -> " + core.localLabel() + " Dictionary");
         chkLocalCon.setText("Print " + core.localLabel() + " -> " + core.conLabel() + " Dictionary");
         
+        txtForeword.setText(""); // default test fails to load here... forcing update
+        
         setModal(true);
     }
 
