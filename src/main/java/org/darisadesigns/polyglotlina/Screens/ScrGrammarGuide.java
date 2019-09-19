@@ -1030,7 +1030,7 @@ public final class ScrGrammarGuide extends PFrame {
         if (selection != null
                 && InfoBox.yesNoCancel("Confirmation", "Really delete? This cannot be undone.", 
                         core.getRootWindow())
-                        != JOptionPane.YES_OPTION) {
+                        == JOptionPane.YES_OPTION) {
             if (selection instanceof GrammarSectionNode) {
                 GrammarSectionNode curNode = (GrammarSectionNode) selection;
                 GrammarChapNode parent = (GrammarChapNode) curNode.getParent();
