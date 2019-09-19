@@ -237,9 +237,8 @@ public class PropertiesManager {
     }
     
     public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
-        cachedConFont = IOHandler.getFileByteArray(fontPath);
-        
         setFontCon(PFontHandler.getFontFromFile(fontPath).deriveFont(conFontStyle, conFontSize), conFontStyle, conFontSize);
+        setCachedFont(IOHandler.getFileByteArray(fontPath));
     }
 
     public void setOverrideProgramPath(String override) {
@@ -289,7 +288,7 @@ public class PropertiesManager {
     }
 
     /**
-     * Sets font.
+     * Sets font. Cached font byte array will be cleared.
      * 
      * Will first try to re-load the font from OS font repository folder (due to ligature error in Java)
      *
@@ -366,7 +365,7 @@ public class PropertiesManager {
     public void setFontConRaw(Font fontCon) {
         // null cached font if being set to new font
         if (conFont != null && !conFont.getFamily().equals(fontCon.getFamily())) {
-            cachedConFont = null;
+            setCachedFont(null);
         }
 
         conFont = fontCon == null ? charisUnicode : fontCon;
@@ -823,7 +822,7 @@ public class PropertiesManager {
             if (updatedConFont != null) {
                 conFont = PFontHandler.getFontFromFile(updatedConFont.getAbsolutePath());
                 conFont = conFont.deriveFont(conFontStyle, conFontSize);
-                cachedConFont = IOHandler.getByteArrayFromFile(updatedConFont);
+                setCachedFont(IOHandler.getByteArrayFromFile(updatedConFont));
             }
             
             if (updatedLocalFont != null) {
