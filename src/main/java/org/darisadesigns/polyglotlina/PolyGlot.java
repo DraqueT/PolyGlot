@@ -87,7 +87,18 @@ public class PolyGlot {
                     if (canStart()) {
                         try {
                             // separated due to serious nature of Thowable vs Exception
-                            s = new ScrMainMenu(overridePath);
+                             DictCore core = new DictCore();
+                                        
+                            try {
+                                IOHandler.loadOptionsIni(core);
+                            } catch (Exception ex) {
+                                IOHandler.writeErrorLog(ex);
+                                InfoBox.error("Options Load Error", "Unable to load options file or file corrupted:\n"
+                                        + ex.getLocalizedMessage(), core.getRootWindow());
+                                IOHandler.deleteIni(core);
+                            }
+                            
+                            s = new ScrMainMenu(overridePath, core);
                             s.checkForUpdates(false);
                             s.setVisible(true);
 
@@ -118,7 +129,7 @@ public class PolyGlot {
 
                                 desk.setAboutHandler(new AboutHandler(){
                                     @Override
-                                    public void handleAbout(AboutEvent e) {
+                                    public void handleAbout(AboutEvent e) { 
                                         ScrAbout.run(new DictCore());
                                     }
                                 });

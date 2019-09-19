@@ -20,12 +20,9 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.PFontHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -33,7 +30,6 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 import javax.swing.Icon;
 import javax.swing.JButton;
 

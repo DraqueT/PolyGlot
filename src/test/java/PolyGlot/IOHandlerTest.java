@@ -19,13 +19,17 @@
  */
 package PolyGlot;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -133,6 +137,59 @@ public class IOHandlerTest {
         InputStream is = new FileInputStream(PGTUtil.TESTRESOURCES + "inputTest.txt");
         byte[] result = IOHandler.streamToBytArray(is);
         assertTrue(java.util.Arrays.equals(expectedResult, result));
+    }
+    
+    @Test
+    public void iniFile() throws Exception {
+        System.out.println("write/read of ini file");
+        try {
+            String testScreenName = "Silly Sergal Merp Screen";
+
+            boolean animatedExpected = true;
+            int reversionCountExpected = 13;
+            double menuFontExpected = 16;
+            boolean nightModeExpected = true;
+            Point expectedScreenPosition = new Point(13, 42);
+            Dimension expectedScreenDimension = new Dimension(69, 420);
+            int toDoBarPositionExpected = 666;
+
+            // create test core to set values in...
+            DictCore core = new DictCore();
+            core.getPropertiesManager().setOverrideProgramPath(PGTUtil.TESTRESOURCES);
+            OptionsManager opt = core.getOptionsManager();
+
+            opt.setAnimateWindows(animatedExpected);
+            opt.setMaxReversionCount(reversionCountExpected);
+            opt.setMenuFontSize(menuFontExpected);
+            opt.setNightMode(nightModeExpected);
+            opt.setScreenPosition(testScreenName, expectedScreenPosition);
+            opt.setScreenSize(testScreenName, expectedScreenDimension);
+            opt.setToDoBarPosition(toDoBarPositionExpected);
+
+            // save values to disk...
+            IOHandler.saveOptionsIni(core);
+
+            // create new core to load saved values into...
+            core = new DictCore();
+            core.getPropertiesManager().setOverrideProgramPath(PGTUtil.TESTRESOURCES);
+            opt = core.getOptionsManager();
+            
+            // relaod saved values...
+            IOHandler.loadOptionsIni(core);
+            
+            assertEquals(opt.isAnimateWindows(), animatedExpected);
+            assertEquals(opt.getMaxReversionCount(), reversionCountExpected);
+            assertEquals(opt.getMenuFontSize(), menuFontExpected);
+            assertEquals(opt.isNightMode(), nightModeExpected);
+            assertEquals(opt.getScreenPosition(testScreenName), expectedScreenPosition);
+            assertEquals(opt.getScreenSize(testScreenName), expectedScreenDimension);
+            assertEquals(opt.getToDoBarPosition(), toDoBarPositionExpected);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            // clean up
+            new File(PGTUtil.TESTRESOURCES + PGTUtil.POLYGLOT_INI).delete();
+        }
     }
     
     private void wipeErrorLog() {

@@ -27,6 +27,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +39,7 @@ public class ScrMainMenuTest {
     final ScrMainMenu mainMenu;
     
     public ScrMainMenuTest() {
-        mainMenu = new ScrMainMenu("");
+        mainMenu = new ScrMainMenu("", new DictCore());
     }
     
     @Test
