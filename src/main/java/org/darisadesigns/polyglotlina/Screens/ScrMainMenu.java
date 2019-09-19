@@ -1738,6 +1738,7 @@ public final class ScrMainMenu extends PFrame {
         try {
             core.getPropertiesManager().setFontFromFile(fileName);
             core.getPropertiesManager().setFontSize(fontSize.intValue());
+            this.selectFirstAvailableButton();
         } catch (IOException e) {
             InfoBox.error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage(), this);
         } catch (FontFormatException e) {
