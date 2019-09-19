@@ -218,7 +218,7 @@ public class OpenScreensTest {
     @Test
     public void testScrMainMenu() throws Exception {
         System.out.println("testScrMainMenu");
-        ScrMainMenu s = new ScrMainMenu("");
+        ScrMainMenu s = new ScrMainMenu("", new DictCore());
         s.updateAllValues(core);
         s.hardDispose();
         

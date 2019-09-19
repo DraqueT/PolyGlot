@@ -20,12 +20,10 @@
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -189,25 +187,6 @@ public class OptionsManager {
         }
 
         lastFiles.add(file);
-    }
-
-    /**
-     * Loads all option data from ini file, if none, ignore. One will be created
-     * on exit.
-     *
-     * @throws IOException on failure to open existing file
-     */
-    public void loadIni() throws Exception {
-        IOHandler.loadOptionsIni(core);
-    }
-
-    /**
-     * Saves ini file to disk
-     *
-     * @throws IOException on failure to write
-     */
-    public void saveIni() throws IOException {
-        IOHandler.saveOptionsIni(core);
     }
 
     /**

@@ -497,9 +497,8 @@ public class DictCore {
      * @throws java.io.IOException 
      */
     public void revertToState(byte[] revision, String fileName) throws IOException, Exception {
-        DictCore revDict = new DictCore();
+        DictCore revDict = new DictCore(this);
         revDict.readFile(fileName, revision);
-        revDict.setRootWindow(rootWindow);
         
         pushUpdateWithCore(revDict);
     }

@@ -92,11 +92,11 @@ public final class ScrMainMenu extends PFrame {
      * Creates new form ScrMainMenu
      *
      * @param overridePath Path PolyGlot should treat as home directory (blank if default)
+     * @param _core DictCore menus run on
      */
-    @SuppressWarnings("LeakingThisInConstructor") // only passing as later reference
-    public ScrMainMenu(String overridePath) {
+    public ScrMainMenu(String overridePath, DictCore _core) {
         super();
-        core = new DictCore(); // needed for initialization
+        core = _core;
         core.setRootWindow(this);
         toDoTree = new PToDoTree(core);
         cacheLexicon = ScrLexicon.run(core, this);
@@ -116,15 +116,6 @@ public final class ScrMainMenu extends PFrame {
 
         newFile(false);
         core.getPropertiesManager().setOverrideProgramPath(overridePath);
-        
-        try {
-            core.getOptionsManager().loadIni();
-        } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Options Load Error", "Unable to load options file or file corrupted:\n"
-                    + e.getLocalizedMessage(), core.getRootWindow());
-            IOHandler.deleteIni(core);
-        }
         
         setupButtonPopouts();
         setupToDo();
@@ -185,32 +176,40 @@ public final class ScrMainMenu extends PFrame {
 
     @Override
     public void dispose() {
-        // only exit if save/cancel test is passed and current window is legal to close
-        if (!saveOrCancelTest() || (curWindow != null && !curWindow.canClose())) {
-            return;
-        }
+        this.dispose(true);
+    }
+    
+    private void dispose(boolean doExit) {
+        if (doExit) { // skip saving file if not exiting program...
+            // only exit if save/cancel test is passed and current window is legal to close
+            if (!saveOrCancelTest() || (curWindow != null && !curWindow.canClose())) {
+                return;
+            }
 
-        if (curWindow != null && !curWindow.isDisposed()) {
-            // make certain that all actions necessary for saving information are complete
-            curWindow.dispose();
+            if (curWindow != null && !curWindow.isDisposed()) {
+                // make certain that all actions necessary for saving information are complete
+                curWindow.dispose();
+            }
         }
         
         killAllChildren();
 
         super.dispose();
-
-        core.getOptionsManager().setScreenPosition(getClass().getName(), getLocation());
-        core.getOptionsManager().setToDoBarPosition(pnlToDoSplit.getDividerLocation());
         
-        try {
-            core.getOptionsManager().saveIni();
-        } catch (IOException e) {
-            // save error likely due to inability to write to disk, disable logging
-            // IOHandler.writeErrorLog(e);
-            InfoBox.warning("INI Save Error", e.getLocalizedMessage(), core.getRootWindow());
-        }
+        if (doExit) { // skip saving options if not exiting program...
+            core.getOptionsManager().setScreenPosition(getClass().getName(), getLocation());
+            core.getOptionsManager().setToDoBarPosition(pnlToDoSplit.getDividerLocation());
 
-        System.exit(0);
+            try {
+                IOHandler.saveOptionsIni(core);
+            } catch (IOException e) {
+                // save error likely due to inability to write to disk, disable logging
+                // IOHandler.writeErrorLog(e);
+                InfoBox.warning("INI Save Error", e.getLocalizedMessage(), core.getRootWindow());
+            }
+
+            System.exit(0);
+        }
     }
     
     /**
@@ -1011,6 +1010,17 @@ public final class ScrMainMenu extends PFrame {
     
     public void printToPdf() {
         ScrPrintToPDF.run(core);
+    }
+    
+    /**
+     * Loads new menu screen with old core and disposes self
+     */
+    public void refreshMainMenu() {
+        ScrMainMenu newMenu = new ScrMainMenu(core.getPropertiesManager().getOverrideProgramPath(), core);
+        this.setVisible(false);
+        newMenu.setVisible(true);
+        newMenu.selectFirstAvailableButton();
+        this.dispose(false);
     }
     
     /**

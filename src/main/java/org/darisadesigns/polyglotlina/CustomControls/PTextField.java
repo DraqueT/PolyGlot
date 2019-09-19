@@ -52,7 +52,7 @@ import javax.swing.text.JTextComponent;
  *
  * @author draque
  */
-public class PTextField extends JTextField {
+public final class PTextField extends JTextField {
 
     private DictCore core;
     boolean skipRepaint = false;
@@ -80,16 +80,11 @@ public class PTextField extends JTextField {
         pVis.addChangeListener(new PScrollRepainter());
 
         core = _core;
-        overrideFont = _overideFont;
         defText = _defText;
         setupListeners();
         setForeground(Color.lightGray);
         setupRightClickMenu();
-        if (!overrideFont) {
-            setFont(core.getPropertiesManager().getFontCon());
-        } else {
-            setFont(core.getPropertiesManager().getFontLocal());
-        }
+        this.setOverrideFont(_overideFont);
         setText(defText);
         setupLook();
     }
@@ -123,7 +118,7 @@ public class PTextField extends JTextField {
         if (!overrideFont) {
             setFont(core.getPropertiesManager().getFontCon());
         } else {
-            setFont(core.getPropertiesManager().getFontLocal());
+            setFont(core.getPropertiesManager().getFontLocal().deriveFont((float)core.getOptionsManager().getMenuFontSize()));
         }
     }
 
@@ -345,7 +340,8 @@ public class PTextField extends JTextField {
         }
 
         if (isDefaultText() && !defText.equals("")) {
-            setFont(core.getPropertiesManager().getFontLocal());
+            float menuFontSize = (float)core.getOptionsManager().getMenuFontSize();
+            setFont(core.getPropertiesManager().getFontLocal().deriveFont(menuFontSize));
             setForeground(Color.lightGray);
         } else {
             if (!overrideFont) {
