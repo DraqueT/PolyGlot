@@ -23,11 +23,17 @@ import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -182,6 +188,28 @@ public class WebInterface {
                     ret.add(add + " ");
                 }
             }
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Tests current internet connection based on google
+     * @return true if connected
+     */
+    public static boolean isInternetConnected() {
+        String address = "www.google.com";
+        int port = 80;
+        int timeout = 5000;
+        boolean ret = false;
+        
+        try {
+            try (Socket soc = new Socket()) {
+                soc.connect(new InetSocketAddress(address, port), timeout);
+            }
+            ret = true;
+        } catch (IOException e) {
+            IOHandler.writeErrorLog(e, "Unable to reach: " + address);
         }
         
         return ret;

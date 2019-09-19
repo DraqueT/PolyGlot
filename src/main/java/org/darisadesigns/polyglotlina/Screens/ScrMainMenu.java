@@ -72,6 +72,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.Java8Bridge;
+import org.darisadesigns.polyglotlina.WebInterface;
 
 /**
  * Primary window for PolyGlot interface. Main running class that instantiates core and handles other windows/UI.
@@ -1582,6 +1583,11 @@ public final class ScrMainMenu extends PFrame {
         if (InfoBox.yesNoCancel("Continue Operation?", "The statistics report can"
                 + " take a long time to complete, depending on the complexity\n"
                 + "of your conlang. Continue?", core.getRootWindow()) == JOptionPane.YES_OPTION) {
+            
+            if (!WebInterface.isInternetConnected()) {
+                InfoBox.warning("No Net Connection", "No network connection detected. Google generated graphs will not be rendered.", this);
+            }
+            
             core.buildLanguageReport();
 
             // test whether con-font family is installed on computer
