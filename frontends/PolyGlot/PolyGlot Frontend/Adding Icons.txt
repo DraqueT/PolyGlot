@@ -1,7 +1,0 @@
-To add icons
-
-1) Build the project.
-2) Close the project.
-3) Open the exe file through file->open (just raw)
-4) Right click the icons node and add a resourcce
-5) The last loaded icon will be the highest ID icon (the first is the default)

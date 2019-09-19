@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=PolyGlot
-Exec=<install-dir>/PolyGlot.sh
-Terminal=false
-Icon=<install-dir>/assets/PolyGlot Logo.png
-Type=Application
-Categories=Development;Education;Science;
