@@ -240,13 +240,14 @@ public class ScrIPARefChart extends PFrame {
     }
     
     private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
-        int x=evt.getX();
-        int y=evt.getY();
+        int x = evt.getX();
+        int y = evt.getY();
         try {
             String ipaChar = handler.playVowelGetChar(x, y, (IPALibrary)cmbIpaLibSelect.getSelectedItem());
             new ClipboardHandler().setClipboardContents(ipaChar);
-            String curText = txtIPAChars.getText();
-            txtIPAChars.setText((curText.length() == 0 || ipaChar.length() == 0 ? "" : curText + " ") + ipaChar);
+            String text = txtIPAChars.getText();
+            text = ipaChar.length() == 0 ? text : text + " " + ipaChar;
+            txtIPAChars.setText(text);
         } catch(Exception e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
