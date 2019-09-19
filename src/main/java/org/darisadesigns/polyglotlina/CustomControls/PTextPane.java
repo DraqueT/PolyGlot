@@ -46,14 +46,13 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
-import javax.swing.UIManager;
 import javax.swing.text.DefaultEditorKit;
 
 /**
  *
  * @author draque
  */
-public class PTextPane extends JTextPane {
+public final class PTextPane extends JTextPane {
 
     private SwingWorker worker = null;
     private final String defText;
@@ -99,11 +98,6 @@ public class PTextPane extends JTextPane {
         } else {
             setFont(core.getPropertiesManager().getFontCon());
         }
-    }
-
-    @Override
-    public final void setForeground(Color _color) {
-        super.setForeground(_color);
     }
     
     /**
@@ -363,8 +357,9 @@ public class PTextPane extends JTextPane {
                 public void focusGained(FocusEvent e) {
                     if (isDefaultText()) {
                         setText("");
-                        setForeground(Color.black);
                     }
+                    
+                    setForeground(Color.black);
                 }
 
                 @Override
