@@ -43,7 +43,6 @@ import java.awt.event.WindowStateListener;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -53,9 +52,6 @@ import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.text.DefaultEditorKit;
 
 /**
  * superclass for JFrame windows in PolyGlot. Includes setup instructions for
@@ -63,7 +59,7 @@ import javax.swing.text.DefaultEditorKit;
  *
  * @author Draque
  */
-public abstract class PFrame extends JFrame implements FocusListener, WindowFocusListener {
+public abstract class PFrame extends JFrame implements FocusListener {
 
     private final JMenuItem mnuPublish = new JMenuItem();
     private final JMenuItem mnuSave = new JMenuItem();
@@ -307,21 +303,6 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
         // Do nothing
     }
 
-    @Override
-    public void windowGainedFocus(WindowEvent e) {
-        hasFocus = true;
-    }
-
-    @Override
-    public void windowLostFocus(WindowEvent e) {
-        hasFocus = false;
-        saveAllValues();
-        
-        if (core != null) {
-            core.pushUpdate();
-        }
-    }
-
     public abstract void addBindingToComponent(JComponent c);
 
     @Override
@@ -350,7 +331,6 @@ public abstract class PFrame extends JFrame implements FocusListener, WindowFocu
                 if (core == null && !(this instanceof ScrMainMenu)) {
                     InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", core.getRootWindow());
                 }
-                addWindowFocusListener(this);
             }
 
             super.getRootPane().getContentPane().setBackground(Color.white);
