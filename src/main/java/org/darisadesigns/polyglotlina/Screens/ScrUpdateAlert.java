@@ -63,6 +63,10 @@ public class ScrUpdateAlert extends PDialog {
         core = _core;
         initComponents();
         
+        if (!WebInterface.isInternetConnected()) {
+            throw new Exception("No Internet connection detected.");
+        }
+        
         jTextPane1.setContentType("text/html");
         jPanel1.setBackground(Color.white);
         super.getRootPane().getContentPane().setBackground(Color.white);
