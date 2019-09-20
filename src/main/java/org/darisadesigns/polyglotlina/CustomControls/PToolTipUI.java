@@ -50,7 +50,7 @@ import javax.swing.text.View;
  */
 public class PToolTipUI extends ToolTipUI
 {
-    private static final PToolTipUI sharedInstance = new PToolTipUI();
+    private static final PToolTipUI SHARED_INSTANCE = new PToolTipUI();
     private static PropertyChangeListener sharedPropertyChangedListener;
     private PropertyChangeListener propertyChangeListener;
     private Font font;
@@ -68,7 +68,7 @@ public class PToolTipUI extends ToolTipUI
     }
 
     public static ComponentUI createUI(JComponent c) {
-        return sharedInstance;
+        return SHARED_INSTANCE;
     }
 
     @Override

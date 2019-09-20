@@ -42,8 +42,9 @@ public class ImageNode extends DictNode {
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
         if (!(_node instanceof ImageNode)) {
+            String name = _node == null ? "null" : _node.getClass().getName();
             throw new ClassCastException("Cannot convert type: " 
-                    + _node.getClass().getName() + " to type ImageNode.");
+                    + name + " to type ImageNode.");
         }
         ImageNode tmpNode = (ImageNode)_node;
         

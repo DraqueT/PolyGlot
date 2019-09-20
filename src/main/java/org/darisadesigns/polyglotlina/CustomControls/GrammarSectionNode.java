@@ -84,17 +84,17 @@ public class GrammarSectionNode extends DefaultMutableTreeNode {
     }
     
     public void writeXML(Document doc, Element rootElement) {
-        Element secNode = doc.createElement(PGTUtil.grammarSectionNodeXID);
+        Element secNode = doc.createElement(PGTUtil.GRAMMAR_SECTION_NODE_XID);
                 
-        Element secElement = doc.createElement(PGTUtil.grammarSectionNameXID);
+        Element secElement = doc.createElement(PGTUtil.GRAMMAR_SECTION_NAME_XID);
         secElement.appendChild(doc.createTextNode(this.getName()));
         secNode.appendChild(secElement);
 
-        secElement = doc.createElement(PGTUtil.grammarSectionRecordingXID);
+        secElement = doc.createElement(PGTUtil.GRAMMAR_SECTION_RECORDING_XID);
         secElement.appendChild(doc.createTextNode(this.getRecordingId().toString()));
         secNode.appendChild(secElement);
 
-        secElement = doc.createElement(PGTUtil.grammarSectionTextXID);
+        secElement = doc.createElement(PGTUtil.GRAMMAR_SECTION_TEXT_XID);
         secElement.appendChild(doc.createTextNode(this.getSectionText()));
         secNode.appendChild(secElement);
 

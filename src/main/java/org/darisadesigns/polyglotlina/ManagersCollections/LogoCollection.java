@@ -257,11 +257,11 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Element logoRoot = doc.createElement(PGTUtil.logoRootNoteXID);
+        Element logoRoot = doc.createElement(PGTUtil.LOGO_ROOT_NOTE_XID);
         rootElement.appendChild(logoRoot);
         
         // write all logographs to XML
-        Element logoCollection = doc.createElement(PGTUtil.logoGraphsCollectionXID);
+        Element logoCollection = doc.createElement(PGTUtil.LOGOGRAPHS_COLLECTION_XID);
         logoRoot.appendChild(logoCollection);
         
         getAllLogos().forEach((logo)->{
@@ -270,7 +270,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         
         // write all logo->word relations to XML (reverse will be inferred on load)
         Iterator<Entry<Integer, ArrayList<Integer>>> setIt = logoToWord.entrySet().iterator();
-        Element relationsCollection = doc.createElement(PGTUtil.logoRelationsCollectionXID);
+        Element relationsCollection = doc.createElement(PGTUtil.LOGO_RELATION_COLLECTION_XID);
         logoRoot.appendChild(relationsCollection);
         while (setIt.hasNext()) {
             Entry<Integer, ArrayList<Integer>> curEntry = setIt.next();
@@ -284,7 +284,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
             
             // only add if there is one more more relation
             if (wordIds.length() != 0) {
-                Element node = doc.createElement(PGTUtil.logoWordRelationXID);
+                Element node = doc.createElement(PGTUtil.LOGO_WORD_RELATION_XID);
                 // node is encoded with the logograph ID first, followed by all related words IDs
                 node.appendChild(doc.createTextNode(logoId + wordIds));
                 relationsCollection.appendChild(node);

@@ -169,13 +169,13 @@ public class ToDoNode {
      * @param rootElement 
      */
     public void writeXML(Document doc, Element rootElement) {
-        Element writeNode = doc.createElement(PGTUtil.ToDoNodeXID);
-        Element nodeDone = doc.createElement(PGTUtil.ToDoNodeDoneXID);
-        Element nodeLabel = doc.createElement(PGTUtil.ToDoNodeLabelXID);
+        Element writeNode = doc.createElement(PGTUtil.TODO_NODE_XID);
+        Element nodeDone = doc.createElement(PGTUtil.TODO_NODE_DONE_XID);
+        Element nodeLabel = doc.createElement(PGTUtil.TODO_NODE_LABEL_XID);
         // TODO: Implement color
         //Element nodeColor = doc.createElement(PGTUtil.ToDoNodeColorXID);
         
-        nodeDone.appendChild(doc.createTextNode(this.isDone ? PGTUtil.True : PGTUtil.False));
+        nodeDone.appendChild(doc.createTextNode(this.isDone ? PGTUtil.TRUE : PGTUtil.FALSE));
         writeNode.appendChild(nodeDone);
         
         nodeLabel.appendChild(doc.createTextNode(value));

@@ -38,7 +38,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowStateListener;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -69,7 +68,6 @@ public abstract class PFrame extends JFrame implements FocusListener {
     protected DictCore core;
     private boolean isDisposed = false;
     private boolean ignoreCenter = false;
-    private boolean hasFocus = false;
     protected WindowMode mode = WindowMode.STANDARD;
     protected int frameState = -1;
     private boolean firstVisible = true;
@@ -304,11 +302,6 @@ public abstract class PFrame extends JFrame implements FocusListener {
     }
 
     public abstract void addBindingToComponent(JComponent c);
-
-    @Override
-    public boolean isFocusOwner() {
-        return hasFocus;
-    }
 
     // positions on screen once form has already been build/sized
     @Override

@@ -34,7 +34,7 @@ public class ToDoManager {
     
     public ToDoNode getRoot() {
         if (root == null) {
-            root = new ToDoNode(null, PGTUtil.ToDoRoot, false);
+            root = new ToDoNode(null, PGTUtil.TODO_ROOT_XID, false);
         }
         return root;
     }
@@ -46,7 +46,7 @@ public class ToDoManager {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Element toDos = doc.createElement(PGTUtil.ToDoLogXID);
+        Element toDos = doc.createElement(PGTUtil.TODO_LOG_XID);
         
         getRoot().writeXML(doc, toDos);
         

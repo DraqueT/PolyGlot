@@ -52,6 +52,7 @@ public class PGTUtil {
     public static final String DICTIONARY_XID = "dictionary";
     public static final String PGVERSION_XID = "PolyGlotVer";
     public static final String DICTIONARY_SAVE_DATE = "DictSaveDate";
+    public static final String MAIN_MENU_IMAGE = "/assets/org/DarisaDesigns/ImageAssets/PolyGlotBG.png";
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";
@@ -105,134 +106,134 @@ public class PGTUtil {
     public static final String LANG_PROP_OVERRIDE_REGEX_FONT_XID = "langPropOverrideRegexFont";
 
     // character replacement pair values
-    public static final String langPropCharRepContainerXID = "langPropCharRep";
-    public static final String langPropCharRepNodeXID = "langPropCharRepNode";
-    public static final String langPropCharRepCharacterXID = "langPropCharRepCharacter";
-    public static final String langPropCharRepValueXID = "langPropCharRepValue";
+    public static final String LANG_PROP_CHAR_REP_CONTAINER_XID = "langPropCharRep";
+    public static final String LANG_PROPCHAR_REP_NODE_XID = "langPropCharRepNode";
+    public static final String LANG_PROP_CHAR_REP_CHAR_XID = "langPropCharRepCharacter";
+    public static final String LANG_PROP_CHAR_REP_VAL_XID = "langPropCharRepValue";
 
     // declension properties
-    public static final String declensionCollectionXID = "declensionCollection";
-    public static final String declensionXID = "declensionNode";
-    public static final String declensionIdXID = "declensionId";
-    public static final String declensionTextXID = "declensionText";
-    public static final String declensionComDimIdXID = "combinedDimId";
-    public static final String declensionNotesXID = "declensionNotes";
-    public static final String declensionIsTemplateXID = "declensionTemplate";
-    public static final String declensionRelatedIdXID = "declensionRelatedId";
-    public static final String declensionIsDimensionless = "declensionDimensionless";
+    public static final String DECLENSION_COLLECTION_XID = "declensionCollection";
+    public static final String DECLENSION_XID = "declensionNode";
+    public static final String DECLENSION_ID_XID = "declensionId";
+    public static final String DECLENSION_TEXT_XID = "declensionText";
+    public static final String DECLENSION_COMB_DIM_XID = "combinedDimId";
+    public static final String DECLENSION_NOTES_XID = "declensionNotes";
+    public static final String DECLENSION_IS_TEMPLATE_XID = "declensionTemplate";
+    public static final String DECLENSION_RELATED_ID_XID = "declensionRelatedId";
+    public static final String DECLENSION_IS_DIMENSIONLESS_XID = "declensionDimensionless";
 
     // dimensional declension properties
-    public static final String dimensionNodeXID = "dimensionNode";
-    public static final String dimensionIdXID = "dimensionId";
-    public static final String dimensionNameXID = "dimensionName";
+    public static final String DIMENSION_NODE_XID = "dimensionNode";
+    public static final String DIMENSION_ID_XID = "dimensionId";
+    public static final String DIMENSION_NAME_XID = "dimensionName";
 
     // pronunciation properties
-    public static final String etymologyCollectionXID = "etymologyCollection";
-    public static final String proGuideXID = "proGuide";
-    public static final String proGuideBaseXID = "proGuideBase";
-    public static final String proGuidePhonXID = "proGuidePhon";
-    public static final String proGuideRecurseXID = "proGuideRecurse";
+    public static final String ETYMOLOGY_COLLECTION_XID = "etymologyCollection";
+    public static final String PRO_GUIDE_XID = "proGuide";
+    public static final String PRO_GUIDE_BASE_XID = "proGuideBase";
+    public static final String PRO_GUIDE_PHON_XID = "proGuidePhon";
+    public static final String PRO_GUIDE_RECURSIVE_XID = "proGuideRecurse";
 
     // romanization properties
-    public static final String romGuideXID = "romGuide";
-    public static final String romGuideEnabledXID = "romGuideEnabled";
-    public static final String romGuideNodeXID = "romGuideNode";
-    public static final String romGuideBaseXID = "romGuideBase";
-    public static final String romGuidePhonXID = "romGuidePhon";
-    public static final String romGuideRecurseXID = "romGuideRecurse";
+    public static final String ROM_GUIDE_XID = "romGuide";
+    public static final String ROM_GUIDE_ENABLED_XID = "romGuideEnabled";
+    public static final String ROM_GUIDE_NODE_XID = "romGuideNode";
+    public static final String ROM_GUIDE_BASE_XID = "romGuideBase";
+    public static final String ROM_GUIDE_PHON_XID = "romGuidePhon";
+    public static final String ROM_GUIDE_RECURSE_XID = "romGuideRecurse";
 
     // family properties
-    public static final String famNodeXID = "thesNode";
-    public static final String famNotesXID = "thesNotes";
-    public static final String famNameXID = "thesName";
-    public static final String famWordXID = "thesWord";
+    public static final String FAM_NODE_XID = "thesNode";
+    public static final String FAM_NOTES_XID = "thesNotes";
+    public static final String FAM_NAME_XID = "thesName";
+    public static final String FAM_WORD_XID = "thesWord";
 
     // autodeclansion generation properties
-    public static final String decGenRuleXID = "decGenRule";
-    public static final String decGenRuleTypeXID = "decGenRuleTypeId";
-    public static final String decGenRuleCombXID = "decGenRuleComb";
-    public static final String decGenRuleRegexXID = "decGenRuleRegex";
-    public static final String decGenRuleNameXID = "decGenRuleName";
-    public static final String decGenRuleIndexXID = "decGenRuleIndex";
-    public static final String decGenRuleApplyToClasses = "decGenRuleApplyToClasses";
-    public static final String decGenRuleApplyToClassValue = "decGenRuleApplyToClassValue";
+    public static final String DEC_GEN_RULE_XID = "decGenRule";
+    public static final String DEC_GEN_RULE_TYPE_XID = "decGenRuleTypeId";
+    public static final String DEC_GEN_RULE_COMB_XID = "decGenRuleComb";
+    public static final String DEC_GEN_RULE_REGEX_XID = "decGenRuleRegex";
+    public static final String DEC_GEN_RULE_NAME_XID = "decGenRuleName";
+    public static final String DEC_GEN_RULE_INDEX_XID = "decGenRuleIndex";
+    public static final String DEC_GEN_RULE_APPLY_TO_CLASSES_XID = "decGenRuleApplyToClasses";
+    public static final String DEC_GEN_RULE_APPLY_TO_CLASS_VALUE_XID = "decGenRuleApplyToClassValue";
 
     // autodeclension transform properties
-    public static final String decGenTransXID = "decGenTrans";
-    public static final String decGenTransRegexXID = "decGenTransRegex";
-    public static final String decGenTransReplaceXID = "decGenTransReplace";
+    public static final String DEG_GEN_TRANS_XID = "decGenTrans";
+    public static final String DEC_GEN_TRANS_REGEX_XID = "decGenTransRegex";
+    public static final String DEC_GEN_TRANS_REPLACE_XID = "decGenTransReplace";
 
     // constructed declension dimension properties
-    public static final String decCombinedFormSectionXID = "decCombinedFormSection";
-    public static final String decCombinedFormXID = "decCombinedForm";
-    public static final String decCombinedIdXID = "decCombinedId";
-    public static final String decCombinedSurpressXID = "decCombinedSurpress";
+    public static final String DEC_COMBINED_FORM_SECTION_XID = "decCombinedFormSection";
+    public static final String DEC_COMBINED_FORM_XID = "decCombinedForm";
+    public static final String DEC_COMBINED_ID_XID = "decCombinedId";
+    public static final String DEC_COMBINED_SURPRESS_XID = "decCombinedSurpress";
 
     // properties for logographs
-    public static final String logoRootNoteXID = "logoRootNode";
-    public static final String logoGraphsCollectionXID = "logoGraphsCollection";
-    public static final String logoStrokesXID = "logoStrokes";
-    public static final String logoNotesXID = "logoNotes";
-    public static final String logoIsRadicalXID = "logoIsRadical";
-    public static final String logoRadicalListXID = "logoRadicalList";
-    public static final String logoReadingXID = "logoReading";
-    public static final String logoGraphValueXID = "logoGraphValue";
-    public static final String logoGraphIdXID = "logoGraphId";
-    public static final String logoGraphNodeXID = "LogoGraphNode";
-    public static final String logoWordRelationXID = "LogoWordRelation";
-    public static final String logoRelationsCollectionXID = "LogoRelationsCollection";
+    public static final String LOGO_ROOT_NOTE_XID = "logoRootNode";
+    public static final String LOGOGRAPHS_COLLECTION_XID = "logoGraphsCollection";
+    public static final String LOGO_STROKES_XID = "logoStrokes";
+    public static final String LOGO_NOTES_XID = "logoNotes";
+    public static final String LOGO_IS_RADICAL_XID = "logoIsRadical";
+    public static final String LOGO_RADICAL_LIST_XID = "logoRadicalList";
+    public static final String LOGO_READING_LIST_XID = "logoReading";
+    public static final String LOGOGRAPH_VALUE_XID = "logoGraphValue";
+    public static final String LOGOGRAPH_ID_XID = "logoGraphId";
+    public static final String LOGOGRAPH_NODE_XID = "LogoGraphNode";
+    public static final String LOGO_WORD_RELATION_XID = "LogoWordRelation";
+    public static final String LOGO_RELATION_COLLECTION_XID = "LogoRelationsCollection";
 
     // properties for the grammar dictioary
-    public static final String grammarSectionXID = "grammarCollection";
-    public static final String grammarChapterNodeXID = "grammarChapterNode";
-    public static final String grammarChapterNameXID = "grammarChapterName";
-    public static final String grammarSectionsListXID = "grammarSectionsList";
-    public static final String grammarSectionNodeXID = "grammarSectionNode";
-    public static final String grammarSectionNameXID = "grammarSectionName";
-    public static final String grammarSectionRecordingXID = "grammarSectionRecordingXID";
-    public static final String grammarSectionTextXID = "grammarSectionText";
+    public static final String GRAMMAR_SECTION_XID = "grammarCollection";
+    public static final String GRAMMAR_CHAPTER_NODE_XID = "grammarChapterNode";
+    public static final String GRAMMAR_CHAPTER_NAME_XID = "grammarChapterName";
+    public static final String GRAMMAR_SECTIONS_LIST_XID = "grammarSectionsList";
+    public static final String GRAMMAR_SECTION_NODE_XID = "grammarSectionNode";
+    public static final String GRAMMAR_SECTION_NAME_XID = "grammarSectionName";
+    public static final String GRAMMAR_SECTION_RECORDING_XID = "grammarSectionRecordingXID";
+    public static final String GRAMMAR_SECTION_TEXT_XID = "grammarSectionText";
 
     // properties for word classes
-    public static final String ClassesNodeXID = "wordGrammarClassCollection";
-    public static final String ClassXID = "wordGrammarClassNode";
-    public static final String ClassIdXID = "wordGrammarClassID";
-    public static final String ClassNameXID = "wordGrammarClassName";
-    public static final String ClassApplyTypesXID = "wordGrammarApplyTypes";
-    public static final String ClassIsFreetextXID = "wordGrammarIsFreeTextField";
-    public static final String ClassValuesCollectionXID = "wordGrammarClassValuesCollection";
-    public static final String ClassValueNodeXID = "wordGrammarClassValueNode";
-    public static final String ClassValueNameXID = "wordGrammarClassValueName";
-    public static final String ClassValueIdXID = "wordGrammarClassValueId";
+    public static final String CLASSES_NODE_XID = "wordGrammarClassCollection";
+    public static final String CLASS_XID = "wordGrammarClassNode";
+    public static final String CLASS_ID_XID = "wordGrammarClassID";
+    public static final String CLASS_NAME_XID = "wordGrammarClassName";
+    public static final String CLASS_APPLY_TYPES_XID = "wordGrammarApplyTypes";
+    public static final String CLASS_IS_FREETEXT_XID = "wordGrammarIsFreeTextField";
+    public static final String CLASS_VALUES_COLLECTION_XID = "wordGrammarClassValuesCollection";
+    public static final String CLASS_VALUES_NODE_XID = "wordGrammarClassValueNode";
+    public static final String CLASS_VALUE_NAME_XID = "wordGrammarClassValueName";
+    public static final String CLASS_VALUE_ID_XID = "wordGrammarClassValueId";
 
     // etymology constants
-    public static final String EtyCollectionXID = "EtymologyCollection";
-    public static final String EtyIntRelationNodeXID = "EtymologyInternalRelation";
-    public static final String EtyIntChildXID = "EtymologyInternalChild";
-    public static final String EtyChildExternalsXID = "EtymologyChildToExternalsNode";
-    public static final String EtyExternalWordNodeXID = "EtymologyExternalWordNode";
-    public static final String EtyExternalWordValueXID = "EtymologyExternalWordValue";
-    public static final String EtyExternalWordOriginXID = "EtymologyExternalWordOrigin";
-    public static final String EtyExternalWordDefinitionXID = "EtymologyExternalWordDefinition";
+    public static final String ETY_COLLECTION_XID = "EtymologyCollection";
+    public static final String ETY_INT_RELATION_NODE_XID = "EtymologyInternalRelation";
+    public static final String ETY_INT_CHILD_XID = "EtymologyInternalChild";
+    public static final String ETY_CHILD_EXTERNALS_XID = "EtymologyChildToExternalsNode";
+    public static final String ETY_EXTERNAL_WORD_NODE_XID = "EtymologyExternalWordNode";
+    public static final String ETY_EXTERNAL_WORD_VALUE_XID = "EtymologyExternalWordValue";
+    public static final String ETY_EXTERNAL_WORD_ORIGIN_XID = "EtymologyExternalWordOrigin";
+    public static final String ETY_EXTERNAL_WORD_DEFINITION_XID = "EtymologyExternalWordDefinition";
 
     // TODO Node constants
-    public static final String ToDoLogXID = "ToDoLog";
-    public static final String ToDoNodeXID = "ToDoNodeHead";
-    public static final String ToDoNodeDoneXID = "ToDoNodeDone";
-    public static final String ToDoNodeLabelXID = "ToDoNodeLabel";
-    public static final String ToDoNodeColorXID = "ToDoNodeColor";
-    public static final String ToDoRoot = "ToDoRoot";
+    public static final String TODO_LOG_XID = "ToDoLog";
+    public static final String TODO_NODE_XID = "ToDoNodeHead";
+    public static final String TODO_NODE_DONE_XID = "ToDoNodeDone";
+    public static final String TODO_NODE_LABEL_XID = "ToDoNodeLabel";
+    public static final String TODO_NODE_COLOR_XID = "ToDoNodeColor";
+    public static final String TODO_ROOT_XID = "ToDoRoot";
 
     // constants for PolyGlot options found in PolyGlot.ini
-    public static final int optionsNumLastFiles = 5;
-    public static final String optionsLastFiles = "LastFiles";
-    public static final String optionsScreenPos = "ScreenPositions";
-    public static final String optionsScreensSize = "ScreenSizes";
-    public static final String optionsScreensOpen = "ScreensUp";
-    public static final String optionsAutoResize = "OptionsResize";
-    public static final String optionsMenuFontSize = "OptionsMenuFontSize";
-    public static final String optionsNightMode = "OptionsNightMode";
-    public static final String optionsReversionsCount = "OptionsReversionCount";
-    public static final String optionsToDoDividerLocation = "ToDoDividerLocation";
+    public static final int OPTIONS_NUM_LAST_FILES = 5;
+    public static final String OPTIONS_LAST_FILES = "LastFiles";
+    public static final String OPTIONS_SCREEN_POS = "ScreenPositions";
+    public static final String OPTIONS_SCREENS_SIZE = "ScreenSizes";
+    public static final String OPTIONS_SCREENS_OPEN = "ScreensUp";
+    public static final String OPTIONS_AUTO_RESIZE = "OptionsResize";
+    public static final String OPTIONS_MENU_FONT_SIZE = "OptionsMenuFontSize";
+    public static final String OPTIONS_NIGHT_MODE = "OptionsNightMode";
+    public static final String OPTIONS_REVERSIONS_COUNT = "OptionsReversionCount";
+    public static final String OPTIONS_TODO_DIV_LOCATION = "ToDoDividerLocation";
 
     // Java 8 bridge constants
     public static final String JAVA8_JAVA_COMMAND = "java";
@@ -275,88 +276,87 @@ public class PGTUtil {
     public static final String POLYGLOT_EASTER = "/assets/org/DarisaDesigns/ImageAssets/n0rara_draque.png";
     public static final String TESTRESOURCES = "src/test/java/TestResources/";
 
-    public static final String playButtonUp = "/assets/org/DarisaDesigns/ImageAssets/play_OFF_BIG.png";
-    public static final String playButtonDown = "/assets/org/DarisaDesigns/ImageAssets/play_ON_BIG.png";
-    public static final String recordButtonUp = "/assets/org/DarisaDesigns/ImageAssets/recording_OFF_BIG.png";
-    public static final String recordButtonDown = "/assets/org/DarisaDesigns/ImageAssets/recording_ON_BIG.png";
-    public static final String addButton = "/assets/org/DarisaDesigns/ImageAssets/add_button.png";
-    public static final String deleteButton = "/assets/org/DarisaDesigns/ImageAssets/delete_button.png";
-    public static final String addButtonPressed = "/assets/org/DarisaDesigns/ImageAssets/add_button_pressed.png";
-    public static final String deleteButtonPressed = "/assets/org/DarisaDesigns/ImageAssets/delete_button_pressed.png";
+    public static final String PLAY_BUTTON_UP = "/assets/org/DarisaDesigns/ImageAssets/play_OFF_BIG.png";
+    public static final String PLAY_BUTTON_DOWN = "/assets/org/DarisaDesigns/ImageAssets/play_ON_BIG.png";
+    public static final String RECORD_BUTTON_UP = "/assets/org/DarisaDesigns/ImageAssets/recording_OFF_BIG.png";
+    public static final String RECORD_BUTTON_DOWN = "/assets/org/DarisaDesigns/ImageAssets/recording_ON_BIG.png";
+    public static final String ADD_BUTTON = "/assets/org/DarisaDesigns/ImageAssets/add_button.png";
+    public static final String DELETE_BUTTON = "/assets/org/DarisaDesigns/ImageAssets/delete_button.png";
+    public static final String ADD_BUTTON_PRESSED = "/assets/org/DarisaDesigns/ImageAssets/add_button_pressed.png";
+    public static final String DELETE_BUTTON_PRESSED = "/assets/org/DarisaDesigns/ImageAssets/delete_button_pressed.png";
 
     // Sound Recorder Constants
-    public static final String ipa_vowels = "/assets/org/DarisaDesigns/ImageAssets/IPA_Vowels.png";
-    public static final String pulmonic_consonants = "/assets/org/DarisaDesigns/ImageAssets/IPA_Pulmonic_Consonants.png";
-    public static final String non_pulmonic_consonants = "/assets/org/DarisaDesigns/ImageAssets/IPA_NonPulmonicConsonants.png";
-    public static final String ipa_other = "/assets/org/DarisaDesigns/ImageAssets/IPA_Other.png";
-    public static final String mainMenuBG = "/assets/org/DarisaDesigns/ImageAssets/PolyGlotBG.png";
-    public static final String ucla_location = "ucla_wavs/";
-    public static final String wiki_location = "wiki_wavs/";
-    public static final String wavSuffix = ".wav";
-
-    public static final String ipaSoundsLocation = "/assets/org/DarisaDesigns/SoundAssets/";
-    public static final String RTLMarker = "\u202e";
-    public static final String LTRMarker = "\u202c";
-    public static final String ImageIdAttribute = "imageIDAttribute";
-    public static final String True = "T";
-    public static final String False = "F";
-    public static final String displayName = "PolyGlot";
+    public static final String IPA_VOWEL_IMAGE = "/assets/org/DarisaDesigns/ImageAssets/IPA_Vowels.png";
+    public static final String IPA_PULMONIC_CONSONANT_IMAGE = "/assets/org/DarisaDesigns/ImageAssets/IPA_Pulmonic_Consonants.png";
+    public static final String IPA_NON_PULMONIC_CONSONANTS_IMAGE = "/assets/org/DarisaDesigns/ImageAssets/IPA_NonPulmonicConsonants.png";
+    public static final String IPA_OTHER_IMAGE = "/assets/org/DarisaDesigns/ImageAssets/IPA_Other.png";
+    public static final String UCLA_WAV_LOCATION = "ucla_wavs/";
+    public static final String WIKI_WAV_LOCATION = "wiki_wavs/";
+    public static final String WAV_SUFFIX = ".wav";
+    public static final String IPA_SOUNDS_LOCATION = "/assets/org/DarisaDesigns/SoundAssets/";
+    
+    public static final String RTL_CHARACTER = "\u202e";
+    public static final String LTR_MARKER = "\u202c";
+    public static final String IMAGE_ID_ATTRIBUTE = "imageIDAttribute";
+    public static final String TRUE = "T";
+    public static final String FALSE = "F";
+    public static final String DISPLAY_NAME = "PolyGlot";
 
     // web locations
     public static final String HOMEPAGE_URL = "http://draquet.github.io/PolyGlot/";
     public static final String UPDATE_FILE_URL = "https://drive.google.com/uc?export=download&id=0B2RMQ7sRXResN3VwLTAwTFE0ZlE";
 
     // screen names when they're required as constants...
-    public static final String scrNameLexicon;
-    public static final String scrNameGrammar;
-    public static final String scrNameLogo;
-    public static final String scrNameFam;
-    public static final String scrIPARefChart;
-    public static final String scrQuizGenDialog;
+    public static final String LEXICON_SCR_NAME;
+    public static final String GRAMMAR_SCR_NAME;
+    public static final String LOGO_SCR_NAME;
+    public static final String FAMILY_SCR_NAME;
+    public static final String IPA_REF_CHART_NAME;
+    public static final String QUIZ_GEN_DIALOG_SCR_NAME;
 
     // numeric constants...
-    public static final Integer numMenuFlashes = 4;
-    public static final Integer menuFlashSleep = 200;
-    public static final Double defaultFontSize = 12.0;
-    public static final int maxProcRecursion = 100;
-    public static final int defaultMaxRollbackVersions = 10;
-    public static final int maxFilePathLength = 1000;
-    public static final int maxLogCharacters = 25000;
+    public static final Integer NUM_MENU_FLASHES = 4;
+    public static final Integer MENU_FLASH_SLEEP = 200;
+    public static final Double DEFAULT_FONT_SIZE = 12.0;
+    public static final int MAX_PROC_RECURSE = 100;
+    public static final int DEFAULT_MAX_ROLLBACK_NUM = 10;
+    public static final int MAX_FILE_PATH_LENGTH = 1000;
+    public static final int MAX_LOG_CHARACTERS = 25000;
 
     // color constants
-    public static final Color colorDisabledBG;
-    public static final Color colorEnabledBG;
-    public static final Color colorSelectedBG;
-    public static final Color colorDisabledForeground;
-    public static final Color colorMouseoverBorder;
-    public static final Color colorText;
-    public static final Color colorDefaultText;
-    public static final Color colorDefaultTextNight;
-    public static final Color colorTextBG;
-    public static final Color colorTextNight;
-    public static final Color colorTextBGNight;
-    public static final Color colorTextDisabled;
-    public static final Color colorTextDisabledBG;
-    public static final Color colorTextDisabledNight;
-    public static final Color colorTextDisabledBGNight;
-    public static final Color colorCheckboxSelected;
-    public static final Color colorCheckboxBackground;
-    public static final Color colorCheckboxOutline;
-    public static final Color colorCheckboxHover;
-    public static final Color colorCheckboxClicked;
-    public static final Color colorCheckBoxFieldBack;
-    public static final Color colorCheckboxSelectedNight;
-    public static final Color colorCheckboxBackgroundNight;
-    public static final Color colorCheckboxOutlineNight;
-    public static final Color colorCheckboxHoverNight;
-    public static final Color colorCheckboxClickedNight;
-    public static final Color colorCheckBoxFieldBackNight;
-    public static final Color colorCheckboxSelectedDisabled;
-    public static final Color colorCheckboxBackgroundDisabled;
-    public static final Color colorCheckboxOutlineDisabled;
-    public static final Color colorCheckboxHoverDisabled;
-    public static final Color colorCheckboxClickedDisabled;
-    public static final Color colorCheckBoxFieldBackDisabled;
+    public static final Color COLOR_DISABLED_BG;
+    public static final Color COLOR_ENABLED_BG;
+    public static final Color COLOR_SELECTED_BG;
+    public static final Color COLOR_DISABLED_FOREGROUND;
+    public static final Color COLOR_MOUSEOVER_BORDER;
+    public static final Color COLOR_TEXT;
+    public static final Color COLOR_DEFAULT_TEXT;
+    public static final Color COLOR_DEFAULT_TEXT_NIGHT;
+    public static final Color COLOR_TEXT_BG;
+    public static final Color COLOR_TEXT_NIGHT;
+    public static final Color COLOR_TEXT_BG_NIGHT;
+    public static final Color COLOR_TEXT_DISABLED;
+    public static final Color COLOR_TEXT_DISABLED_BG;
+    public static final Color COLOR_TEXT_DISABLED_NIGHT;
+    public static final Color COLOR_TEXT_DISABLED_BG_NIGHT;
+    public static final Color COLOR_CHECKBOX_SELECTED;
+    public static final Color COLOR_CHECKBOX_BG;
+    public static final Color COLOR_CHECKBOX_OUTLINE;
+    public static final Color COLOR_CHECKBOX_HOVER;
+    public static final Color COLOR_CHECKBOX_CLICKED;
+    public static final Color COLOR_CHECKBOX_FIELD_BACK;
+    public static final Color COLOR_CHECKBOX_SELECTED_NIGHT;
+    public static final Color COLOR_CHECKBOX_BG_NIGHT;
+    public static final Color COLOR_CHECKBOX_OUTLINE_NIGHT;
+    public static final Color COLOR_CHECKBOX_HOVER_NIGHT;
+    public static final Color COLOR_CHECKBOX_CLICKED_NIGHT;
+    public static final Color COLOR_CHECKBOX_FIELD_BACK_NIGHT;
+    public static final Color COLOR_CHECKBOX_SELECTED_DISABLED;
+    public static final Color COLOR_CHECKBOX_BG_DISABLED;
+    public static final Color COLOR_CHECKBOX_OUTLINE_DISABLED;
+    public static final Color COLOR_CHECKBOX_HOVER_DISABLED;
+    public static final Color COLOR_CHECKBOX_CLICKED_DISABLED;
+    public static final Color COLOR_CHECKBOX_FIELD_BACK_DISABLED;
 
     // visual style constants
     public static final int CHECKBOX_ROUNDING = 3;
@@ -404,39 +404,39 @@ public class PGTUtil {
 
     // one time set for code driven static values
     static {
-        colorDisabledBG = Color.decode("#b0b0b0");
-        colorEnabledBG = Color.decode("#66b2ff");
-        colorSelectedBG = Color.decode("#7979ef");
-        colorDisabledForeground = Color.decode("#808080");
-        colorMouseoverBorder = Color.decode("#909090");
-        colorText = Color.decode("#000000");
-        colorTextBG = Color.decode("#ffffff");
-        colorTextNight = Color.decode("#ffffff");
-        colorTextBGNight = Color.decode("#000000");
-        colorDefaultText = Color.lightGray;
-        colorDefaultTextNight = Color.darkGray;
-        colorTextDisabled = Color.lightGray;
-        colorTextDisabledBG = Color.darkGray;
-        colorTextDisabledNight = Color.lightGray;
-        colorTextDisabledBGNight = Color.darkGray;
-        colorCheckboxSelected = Color.black;
-        colorCheckboxBackground = Color.white;
-        colorCheckboxOutline = Color.black;
-        colorCheckboxHover = Color.black;
-        colorCheckboxClicked = Color.lightGray;
-        colorCheckBoxFieldBack = Color.white;
-        colorCheckboxSelectedNight = Color.gray;
-        colorCheckboxBackgroundNight = Color.black;
-        colorCheckboxOutlineNight = Color.darkGray;
-        colorCheckboxHoverNight = Color.lightGray;
-        colorCheckboxClickedNight = Color.white;
-        colorCheckBoxFieldBackNight = Color.black;
-        colorCheckboxSelectedDisabled = Color.gray;
-        colorCheckboxBackgroundDisabled = Color.lightGray;
-        colorCheckboxOutlineDisabled = Color.gray;
-        colorCheckboxHoverDisabled = Color.darkGray;
-        colorCheckboxClickedDisabled = Color.darkGray;
-        colorCheckBoxFieldBackDisabled = Color.gray;
+        COLOR_DISABLED_BG = Color.decode("#b0b0b0");
+        COLOR_ENABLED_BG = Color.decode("#66b2ff");
+        COLOR_SELECTED_BG = Color.decode("#7979ef");
+        COLOR_DISABLED_FOREGROUND = Color.decode("#808080");
+        COLOR_MOUSEOVER_BORDER = Color.decode("#909090");
+        COLOR_TEXT = Color.decode("#000000");
+        COLOR_TEXT_BG = Color.decode("#ffffff");
+        COLOR_TEXT_NIGHT = Color.decode("#ffffff");
+        COLOR_TEXT_BG_NIGHT = Color.decode("#000000");
+        COLOR_DEFAULT_TEXT = Color.lightGray;
+        COLOR_DEFAULT_TEXT_NIGHT = Color.darkGray;
+        COLOR_TEXT_DISABLED = Color.lightGray;
+        COLOR_TEXT_DISABLED_BG = Color.darkGray;
+        COLOR_TEXT_DISABLED_NIGHT = Color.lightGray;
+        COLOR_TEXT_DISABLED_BG_NIGHT = Color.darkGray;
+        COLOR_CHECKBOX_SELECTED = Color.black;
+        COLOR_CHECKBOX_BG = Color.white;
+        COLOR_CHECKBOX_OUTLINE = Color.black;
+        COLOR_CHECKBOX_HOVER = Color.black;
+        COLOR_CHECKBOX_CLICKED = Color.lightGray;
+        COLOR_CHECKBOX_FIELD_BACK = Color.white;
+        COLOR_CHECKBOX_SELECTED_NIGHT = Color.gray;
+        COLOR_CHECKBOX_BG_NIGHT = Color.black;
+        COLOR_CHECKBOX_OUTLINE_NIGHT = Color.darkGray;
+        COLOR_CHECKBOX_HOVER_NIGHT = Color.lightGray;
+        COLOR_CHECKBOX_CLICKED_NIGHT = Color.white;
+        COLOR_CHECKBOX_FIELD_BACK_NIGHT = Color.black;
+        COLOR_CHECKBOX_SELECTED_DISABLED = Color.gray;
+        COLOR_CHECKBOX_BG_DISABLED = Color.lightGray;
+        COLOR_CHECKBOX_OUTLINE_DISABLED = Color.gray;
+        COLOR_CHECKBOX_HOVER_DISABLED = Color.darkGray;
+        COLOR_CHECKBOX_CLICKED_DISABLED = Color.darkGray;
+        COLOR_CHECKBOX_FIELD_BACK_DISABLED = Color.gray;
 
         // loads default font on system error (never came up, but for completeness...)
         Font tmpFont;
@@ -449,12 +449,12 @@ public class PGTUtil {
         }
         MENU_FONT = tmpFont;
 
-        scrNameLexicon = ScrLexicon.class.getName();
-        scrNameGrammar = ScrGrammarGuide.class.getName();
-        scrNameLogo = ScrLogoDetails.class.getName();
-        scrNameFam = ScrFamilies.class.getName();
-        scrIPARefChart = ScrIPARefChart.class.getName();
-        scrQuizGenDialog = ScrQuizGenDialog.class.getName();
+        LEXICON_SCR_NAME = ScrLexicon.class.getName();
+        GRAMMAR_SCR_NAME = ScrGrammarGuide.class.getName();
+        LOGO_SCR_NAME = ScrLogoDetails.class.getName();
+        FAMILY_SCR_NAME = ScrFamilies.class.getName();
+        IPA_REF_CHART_NAME = ScrIPARefChart.class.getName();
+        QUIZ_GEN_DIALOG_SCR_NAME = ScrQuizGenDialog.class.getName();
 
         ADD_BUTTON_ICON = new ImageIcon(new ImageIcon(
                 PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/add_button.png"))
@@ -490,7 +490,7 @@ public class PGTUtil {
      * @return encapsulated string
      */
     public static String encapsulateRTL(String encapsulate) {
-        return RTLMarker + encapsulate + LTRMarker;
+        return RTL_CHARACTER + encapsulate + LTR_MARKER;
     }
 
     /**
@@ -500,7 +500,7 @@ public class PGTUtil {
      * @return stripped string
      */
     public static String stripRTL(String strip) {
-        return strip.replace(RTLMarker, "").replace(LTRMarker, "");
+        return strip.replace(RTL_CHARACTER, "").replace(LTR_MARKER, "");
     }
 
     /**

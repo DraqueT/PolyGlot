@@ -84,7 +84,7 @@ public class IOHandlerTest {
         int systemInfoLength = IOHandler.getSystemInformation().length();
         
         // off by one due to concatination effect when adding system info (newline)
-        assertTrue(logLength == PGTUtil.maxLogCharacters + systemInfoLength + 1);        
+        assertTrue(logLength == PGTUtil.MAX_LOG_CHARACTERS + systemInfoLength + 1);        
         wipeErrorLog();
     }
     

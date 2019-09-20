@@ -532,17 +532,17 @@ public class IPAHandler {
         
         switch (ipaLibrary) {
             case UCLA_IPA:
-                soundName = PGTUtil.ucla_location + soundName + PGTUtil.wavSuffix;
+                soundName = PGTUtil.UCLA_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX;
                 break;
             case WIKI_IPA:
-                soundName = PGTUtil.wiki_location + soundName + PGTUtil.wavSuffix;
+                soundName = PGTUtil.WIKI_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX;
                 break;
             default:
                 throw new Exception("Unrecognized IPA sound library: " + ipaLibrary);
         }
         
         try {
-            soundRecorder.playAudioFile(PGTUtil.ipaSoundsLocation + soundName);
+            soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + soundName);
         } catch (Exception e) {
             throw new Exception("Playback error: " + e.getLocalizedMessage(), e);
         }

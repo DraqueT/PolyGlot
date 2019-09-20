@@ -183,6 +183,7 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
      * @return ID of newly created node
      * @throws Exception
      */
+    @Override
     public Integer insert() throws Exception {
         Integer ret;
 

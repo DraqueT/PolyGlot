@@ -36,6 +36,7 @@ import javax.swing.SwingWorker;
 /**
  *
  * @author draque
+ * @param <E> Type to display
  */
 public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     private SwingWorker worker = null;
@@ -99,7 +100,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         }
         
         if (enabled) {
-            antiAlias.setColor(PGTUtil.colorEnabledBG);
+            antiAlias.setColor(PGTUtil.COLOR_ENABLED_BG);
         } else {
             antiAlias.setColor(Color.decode("#d0d0d0"));
         }

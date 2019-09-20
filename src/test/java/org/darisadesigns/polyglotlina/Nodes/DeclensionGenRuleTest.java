@@ -19,8 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenRule;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenTransform;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 

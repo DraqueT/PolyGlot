@@ -917,8 +917,11 @@ public final class ScrDeclensionSetup extends PDialog {
      * Sets the dimension controls active if appropriate, inactive otherwise
      */
     private void setIsActiveDimensions() {
-        Integer decId = scrToCoreDeclensions.containsKey(lstDeclensionList.getSelectedIndex())
-                ? scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()) : -1;
+        int decId = -1;
+        
+        if (scrToCoreDeclensions.containsKey(lstDeclensionList.getSelectedIndex())) {
+            decId = scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
+        }
         
         // also checks whether the form is dimensional in the first place
         if (decId == -1 || chkNonDimensional.isSelected()) {
@@ -999,8 +1002,11 @@ public final class ScrDeclensionSetup extends PDialog {
 
         curPopulating = true;
 
-        Integer decId = scrToCoreDeclensions.containsKey(decIndex)
-                ? scrToCoreDeclensions.get(decIndex) : -1;
+        int decId = -1;
+        
+        if (scrToCoreDeclensions.containsKey(decIndex)) {
+            decId = scrToCoreDeclensions.get(decIndex);
+        }
 
         DeclensionNode decl;
 

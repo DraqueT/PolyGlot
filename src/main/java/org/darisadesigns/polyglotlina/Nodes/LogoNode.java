@@ -292,30 +292,30 @@ public class LogoNode extends DictNode {
     }
     
     public void writeXML(Document doc, Element rootElement) {
-        Element logoElement = doc.createElement(PGTUtil.logoGraphNodeXID);
+        Element logoElement = doc.createElement(PGTUtil.LOGOGRAPH_NODE_XID);
         Element node;
 
-        node = doc.createElement(PGTUtil.logoGraphIdXID);
+        node = doc.createElement(PGTUtil.LOGOGRAPH_ID_XID);
         node.appendChild(doc.createTextNode(this.getId().toString()));
         logoElement.appendChild(node);
 
-        node = doc.createElement(PGTUtil.logoGraphValueXID);
+        node = doc.createElement(PGTUtil.LOGOGRAPH_VALUE_XID);
         node.appendChild(doc.createTextNode(this.getValue()));
         logoElement.appendChild(node);
 
-        node = doc.createElement(PGTUtil.logoIsRadicalXID);
-        node.appendChild(doc.createTextNode(this.isRadical()? PGTUtil.True :PGTUtil.False));
+        node = doc.createElement(PGTUtil.LOGO_IS_RADICAL_XID);
+        node.appendChild(doc.createTextNode(this.isRadical()? PGTUtil.TRUE :PGTUtil.FALSE));
         logoElement.appendChild(node);
 
-        node = doc.createElement(PGTUtil.logoNotesXID);
+        node = doc.createElement(PGTUtil.LOGO_NOTES_XID);
         node.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getNotes())));
         logoElement.appendChild(node);
 
-        node = doc.createElement(PGTUtil.logoRadicalListXID);
+        node = doc.createElement(PGTUtil.LOGO_RADICAL_LIST_XID);
         node.appendChild(doc.createTextNode(this.getRadicalListString()));
         logoElement.appendChild(node);
 
-        node = doc.createElement(PGTUtil.logoStrokesXID);
+        node = doc.createElement(PGTUtil.LOGO_STROKES_XID);
         node.appendChild(doc.createTextNode(this.getStrokes().toString()));
         logoElement.appendChild(node);
 
@@ -323,7 +323,7 @@ public class LogoNode extends DictNode {
         while (readIt.hasNext()) {
             String curReading = readIt.next();
 
-            node = doc.createElement(PGTUtil.logoReadingXID);
+            node = doc.createElement(PGTUtil.LOGO_READING_LIST_XID);
             node.appendChild(doc.createTextNode(curReading));
             logoElement.appendChild(node);
         }

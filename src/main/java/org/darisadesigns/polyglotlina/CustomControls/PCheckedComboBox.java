@@ -202,7 +202,7 @@ public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> imp
         antiAlias.fillRoundRect(1, 1, getWidth(), getHeight() - 2, 5, 5);
         
         if (enabled) {
-            antiAlias.setColor(PGTUtil.colorEnabledBG);
+            antiAlias.setColor(PGTUtil.COLOR_ENABLED_BG);
         } else {
             antiAlias.setColor(Color.decode("#d0d0d0"));
         }

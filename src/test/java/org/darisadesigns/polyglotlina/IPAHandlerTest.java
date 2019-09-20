@@ -52,14 +52,14 @@ public class IPAHandlerTest {
         
         // only test playing the first sounds of each library (just test the rest exist)
         String firstSound = (String)charMap.values().toArray()[0];
-        soundRecorder.playAudioFile(PGTUtil.ipaSoundsLocation + PGTUtil.ucla_location + firstSound + PGTUtil.wavSuffix);
-        soundRecorder.playAudioFile(PGTUtil.ipaSoundsLocation + PGTUtil.ucla_location + firstSound + PGTUtil.wavSuffix);
+        soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
+        soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
         
         for (String soundName : charMap.values()) {
             String sound = "";
             try {
-                System.out.println(PGTUtil.ucla_location + soundName + PGTUtil.wavSuffix);
-                sound = PGTUtil.ipaSoundsLocation + PGTUtil.ucla_location + soundName + PGTUtil.wavSuffix;
+                System.out.println(PGTUtil.UCLA_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX);
+                sound = PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX;
                 assertNotEquals(sound, null);
             } catch (Exception e) {
                 System.out.println("FAILED: " + sound);
@@ -70,8 +70,8 @@ public class IPAHandlerTest {
         for (String soundName : charMap.values()) {
             String sound = "";
             try {
-                System.out.println(PGTUtil.wiki_location + soundName + PGTUtil.wavSuffix);
-                sound = PGTUtil.ipaSoundsLocation + PGTUtil.wiki_location + soundName + PGTUtil.wavSuffix;
+                System.out.println(PGTUtil.WIKI_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX);
+                sound = PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX;
                 assertNotEquals(sound, null);
             } catch (Exception e) {
                 System.out.println("FAILED: " + sound);

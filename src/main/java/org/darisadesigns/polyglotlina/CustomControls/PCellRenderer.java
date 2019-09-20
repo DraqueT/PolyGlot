@@ -28,7 +28,6 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.font.TextAttribute;
-import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JTable;
 import javax.swing.JTextField;

@@ -346,7 +346,7 @@ public final class ScrQuizGenDialog extends PFrame {
 
     private void chkClassQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkClassQuizActionPerformed
         // do not allow self to be checked if no classes exist
-        if (core.getWordPropertiesCollection().getAllWordClasses().isEmpty()
+        if (core.getWordClassCollection().getAllWordClasses().isEmpty()
                 && chkClassQuiz.isSelected()) {
             InfoBox.warning("No Classes Exist", "No word classes exist.", core.getRootWindow());
             chkClassQuiz.setSelected(false);

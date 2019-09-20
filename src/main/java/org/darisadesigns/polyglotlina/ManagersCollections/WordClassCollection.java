@@ -102,7 +102,7 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
      */
     public void writeXML(Document doc, Element rootElement) {
         // element containing all classes
-        Element wordClasses = doc.createElement(PGTUtil.ClassesNodeXID);
+        Element wordClasses = doc.createElement(PGTUtil.CLASSES_NODE_XID);
 
         // creates each class
         nodeMap.values().forEach((curClass) -> {

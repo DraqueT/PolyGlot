@@ -178,7 +178,7 @@ public class ImportFileHelper {
                 WordClass wordProp = null;
 
                 // find class
-                for (WordClass findProp : core.getWordPropertiesCollection().getAllWordClasses()) {
+                for (WordClass findProp : core.getWordClassCollection().getAllWordClasses()) {
                     if (findProp.getValue().equals(className)) {
                         wordProp = findProp;
                         break;
@@ -189,8 +189,8 @@ public class ImportFileHelper {
                 if (wordProp == null) {
                     wordProp = new WordClass();
                     wordProp.setValue(className);
-                    int propId = core.getWordPropertiesCollection().addNode(wordProp);
-                    wordProp = (WordClass) core.getWordPropertiesCollection().getNodeById(propId);
+                    int propId = core.getWordClassCollection().addNode(wordProp);
+                    wordProp = (WordClass) core.getWordClassCollection().getNodeById(propId);
                 }
 
                 // find class value

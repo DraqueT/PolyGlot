@@ -38,7 +38,7 @@ public class PolyGlotTest {
      */
     @Test
     public void testMainNoFile() {
-        String[] args = {"", "", PGTUtil.True};
+        String[] args = {"", "", PGTUtil.TRUE};
         PolyGlot.main(args);
     }
     
@@ -48,7 +48,7 @@ public class PolyGlotTest {
      */
     @Test
     public void testMainWithFile() {
-        String[] args = new String[]{"test/TestResources/Lodenkur_TEST.pgd", "", PGTUtil.True};
+        String[] args = new String[]{"test/TestResources/Lodenkur_TEST.pgd", "", PGTUtil.TRUE};
         PolyGlot.main(args);
     }
     
@@ -59,7 +59,7 @@ public class PolyGlotTest {
      */
     @Test
     public void testMainWithMissingFile() {
-        String[] args = new String[]{"test/TestResources/MISSING_FILE.pgd", "", PGTUtil.True};
+        String[] args = new String[]{"test/TestResources/MISSING_FILE.pgd", "", PGTUtil.TRUE};
         PolyGlot.main(args);
     }
 }
