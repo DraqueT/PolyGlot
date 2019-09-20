@@ -47,7 +47,7 @@ import org.apache.commons.lang3.StringUtils;
  * It requires at least two dimensions in the language to work.
  * @author DThompson
  */
-public class PDeclensionGridPanel extends JPanel implements PDeclensionPanelInterface {
+public final class PDeclensionGridPanel extends JPanel implements PDeclensionPanelInterface {
     private final PTable table;
     private final DictCore core;
     private final String tabName;

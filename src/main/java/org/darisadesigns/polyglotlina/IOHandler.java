@@ -361,15 +361,15 @@ public class IOHandler {
                 }
 
                 switch (bothVal[0]) {
-                    case PGTUtil.optionsLastFiles:
+                    case PGTUtil.OPTIONS_LAST_FILES:
                         opMan.getLastFiles().addAll(Arrays.asList(bothVal[1].split(",")));
                         break;
-                    case PGTUtil.optionsScreensOpen:
+                    case PGTUtil.OPTIONS_SCREENS_OPEN:
                         for (String screen : bothVal[1].split(",")) {
                             opMan.addScreenUp(screen);
                         }
                         break;
-                    case PGTUtil.optionsScreenPos:
+                    case PGTUtil.OPTIONS_SCREEN_POS:
                         for (String curPosSet : bothVal[1].split(",")) {
                             if (curPosSet.isEmpty()) {
                                 continue;
@@ -384,7 +384,7 @@ public class IOHandler {
                             opMan.setScreenPosition(splitSet[0], p);
                         }
                         break;
-                    case PGTUtil.optionsScreensSize:
+                    case PGTUtil.OPTIONS_SCREENS_SIZE:
                         for (String curSizeSet : bothVal[1].split(",")) {
                             if (curSizeSet.isEmpty()) {
                                 continue;
@@ -399,19 +399,19 @@ public class IOHandler {
                             opMan.setScreenSize(splitSet[0], d);
                         }
                         break;
-                    case PGTUtil.optionsAutoResize:
-                        opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.True));
+                    case PGTUtil.OPTIONS_AUTO_RESIZE:
+                        opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
                         break;
-                    case PGTUtil.optionsMenuFontSize:
+                    case PGTUtil.OPTIONS_MENU_FONT_SIZE:
                         opMan.setMenuFontSize(Double.parseDouble(bothVal[1]));
                         break;
-                    case PGTUtil.optionsNightMode:
-                        opMan.setNightMode(bothVal[1].equals(PGTUtil.True));
+                    case PGTUtil.OPTIONS_NIGHT_MODE:
+                        opMan.setNightMode(bothVal[1].equals(PGTUtil.TRUE));
                         break;
-                    case PGTUtil.optionsReversionsCount:
+                    case PGTUtil.OPTIONS_REVERSIONS_COUNT:
                         opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
                         break;
-                    case PGTUtil.optionsToDoDividerLocation:
+                    case PGTUtil.OPTIONS_TODO_DIV_LOCATION:
                         opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));
                         break;
                     case "\n":
@@ -956,10 +956,10 @@ public class IOHandler {
                         + ". This is most common when running from Program Files in Windows.");
             }
 
-            nextLine = PGTUtil.optionsLastFiles + "=";
+            nextLine = PGTUtil.OPTIONS_LAST_FILES + "=";
             for (String file : opMan.getLastFiles()) {
                 // only write to ini if 1) the max file path length is not absurd/garbage, and 2) the file exists
-                if (file.length() < PGTUtil.maxFilePathLength && new File(file).exists()) {
+                if (file.length() < PGTUtil.MAX_FILE_PATH_LENGTH && new File(file).exists()) {
                     if (nextLine.endsWith("=")) {
                         nextLine += file;
                     } else {
@@ -969,42 +969,42 @@ public class IOHandler {
             }
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.optionsScreenPos + "=";
+            nextLine = PGTUtil.OPTIONS_SCREEN_POS + "=";
             for (Entry<String, Point> curPos : opMan.getScreenPositions().entrySet()) {
                 nextLine += ("," + curPos.getKey() + ":" + curPos.getValue().x + ":"
                         + curPos.getValue().y);
             }
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.optionsScreensSize + "=";
+            nextLine = PGTUtil.OPTIONS_SCREENS_SIZE + "=";
             for (Entry<String, Dimension> curSize : opMan.getScreenSizes().entrySet()) {
                 nextLine += ("," + curSize.getKey() + ":" + curSize.getValue().width + ":"
                         + curSize.getValue().height);
             }
 
             f0.write(nextLine + newLine);
-            nextLine = PGTUtil.optionsScreensOpen + "=";
+            nextLine = PGTUtil.OPTIONS_SCREENS_OPEN + "=";
 
             for (String screen : opMan.getLastScreensUp()) {
                 nextLine += ("," + screen);
             }
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.optionsAutoResize + "="
-                    + (opMan.isAnimateWindows() ? PGTUtil.True : PGTUtil.False);
+            nextLine = PGTUtil.OPTIONS_AUTO_RESIZE + "="
+                    + (opMan.isAnimateWindows() ? PGTUtil.TRUE : PGTUtil.FALSE);
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.optionsMenuFontSize + "=" + Double.toString(opMan.getMenuFontSize());
+            nextLine = PGTUtil.OPTIONS_MENU_FONT_SIZE + "=" + Double.toString(opMan.getMenuFontSize());
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.optionsNightMode + "="
-                    + (opMan.isNightMode() ? PGTUtil.True : PGTUtil.False);
+            nextLine = PGTUtil.OPTIONS_NIGHT_MODE + "="
+                    + (opMan.isNightMode() ? PGTUtil.TRUE : PGTUtil.FALSE);
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.optionsReversionsCount + "=" + opMan.getMaxReversionCount();
+            nextLine = PGTUtil.OPTIONS_REVERSIONS_COUNT + "=" + opMan.getMaxReversionCount();
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.optionsToDoDividerLocation + "=" + opMan.getToDoBarPosition();
+            nextLine = PGTUtil.OPTIONS_TODO_DIV_LOCATION + "=" + opMan.getToDoBarPosition();
             f0.write(nextLine + newLine);
         }
     }
@@ -1134,8 +1134,8 @@ public class IOHandler {
                 int length = contents.length();
                 int newLength = length + errorMessage.length();
 
-                if (newLength > PGTUtil.maxLogCharacters) {
-                    contents = contents.substring(newLength - PGTUtil.maxLogCharacters);
+                if (newLength > PGTUtil.MAX_LOG_CHARACTERS) {
+                    contents = contents.substring(newLength - PGTUtil.MAX_LOG_CHARACTERS);
                 }
 
                 output = contents + errorMessage + "\n";

@@ -440,7 +440,7 @@ public final class PTextPane extends JTextPane {
     public String getText() {
         final String bodyS = "<body>";
         final String bodyE = "</body>";        
-        String ret = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
+        String ret = super.getText().replaceAll(PGTUtil.RTL_CHARACTER, "").replaceAll(PGTUtil.LTR_MARKER, "");
 
         // special logic needed if this is written in the conlang's font and RTL is enforced.
         if (isDefaultText()) {
@@ -451,7 +451,7 @@ public final class PTextPane extends JTextPane {
             body = body.substring(body.lastIndexOf(bodyS) + bodyS.length(), body.length());
             String start = ret.substring(0, ret.indexOf(bodyS) + bodyS.length());
             String end = ret.substring(ret.indexOf(bodyE));
-            ret = start + PGTUtil.RTLMarker + body.trim() + end;
+            ret = start + PGTUtil.RTL_CHARACTER + body.trim() + end;
         }
 
         return FormattedTextHelper.HTMLLineBreakParse(ret);
@@ -463,6 +463,6 @@ public final class PTextPane extends JTextPane {
      * @return
      */
     private String getSuperText() {
-        return super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
+        return super.getText().replaceAll(PGTUtil.RTL_CHARACTER, "").replaceAll(PGTUtil.LTR_MARKER, "");
     }
 }

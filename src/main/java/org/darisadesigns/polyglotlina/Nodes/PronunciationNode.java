@@ -58,13 +58,13 @@ public class PronunciationNode extends DictNode {
     }
     
     public void writeXML(Document doc, Element rootElement) {
-        Element wordNode = doc.createElement(PGTUtil.proGuideXID);
+        Element wordNode = doc.createElement(PGTUtil.PRO_GUIDE_XID);
 
-        Element wordValue = doc.createElement(PGTUtil.proGuideBaseXID);
+        Element wordValue = doc.createElement(PGTUtil.PRO_GUIDE_BASE_XID);
         wordValue.appendChild(doc.createTextNode(this.getValue()));
         wordNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.proGuidePhonXID);
+        wordValue = doc.createElement(PGTUtil.PRO_GUIDE_PHON_XID);
         wordValue.appendChild(doc.createTextNode(this.getPronunciation()));
         wordNode.appendChild(wordValue);
         

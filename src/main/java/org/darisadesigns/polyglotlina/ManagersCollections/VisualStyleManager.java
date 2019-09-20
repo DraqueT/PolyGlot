@@ -45,36 +45,36 @@ public class VisualStyleManager {
     // color of regular text
     public Color getTextColor() {
         return core.getOptionsManager().isNightMode() ?
-                PGTUtil.colorTextNight:
-                PGTUtil.colorText;
+                PGTUtil.COLOR_TEXT_NIGHT:
+                PGTUtil.COLOR_TEXT;
     }
     
     // color of regular text background
     public Color getTextBGColor() {
         return core.getOptionsManager().isNightMode() ?
-                PGTUtil.colorTextBGNight:
-                PGTUtil.colorTextBG;
+                PGTUtil.COLOR_TEXT_BG_NIGHT:
+                PGTUtil.COLOR_TEXT_BG;
     }
     
     // color of default value text
     public Color getDefaultTextColor() {
         return core.getOptionsManager().isNightMode() ?
-                PGTUtil.colorDefaultTextNight:
-                PGTUtil.colorDefaultText;
+                PGTUtil.COLOR_DEFAULT_TEXT_NIGHT:
+                PGTUtil.COLOR_DEFAULT_TEXT;
     }
     
     // color of disabled text
     public Color getDisabledTextColor() {
         return core.getOptionsManager().isNightMode() ?
-                PGTUtil.colorTextDisabledNight:
-                PGTUtil.colorTextDisabled;
+                PGTUtil.COLOR_TEXT_DISABLED_NIGHT:
+                PGTUtil.COLOR_TEXT_DISABLED;
     }
     
     // color of disabled text BG
     public Color getDisabledTextColorBG() {
         return core.getOptionsManager().isNightMode() ?
-                PGTUtil.colorTextDisabledBGNight:
-                PGTUtil.colorTextDisabledBG;
+                PGTUtil.COLOR_TEXT_DISABLED_BG_NIGHT:
+                PGTUtil.COLOR_TEXT_DISABLED_BG;
     }
     
     public UIDefaults getUIOverrides() {
@@ -82,60 +82,60 @@ public class VisualStyleManager {
     }
     
     public Color getCheckBoxSelected(boolean isEnabled) {
-        Color ret = PGTUtil.colorCheckboxSelectedDisabled;
+        Color ret = PGTUtil.COLOR_CHECKBOX_SELECTED_DISABLED;
         
         if (isEnabled && core.getOptionsManager().isNightMode()) {
-            ret = PGTUtil.colorCheckboxSelectedNight;
+            ret = PGTUtil.COLOR_CHECKBOX_SELECTED_NIGHT;
         } else if (isEnabled) {
-            ret = PGTUtil.colorCheckboxSelected;
+            ret = PGTUtil.COLOR_CHECKBOX_SELECTED;
         }
         
         return ret;
     }
     
     public Color getCheckBoxBG(boolean isEnabled) {
-        Color ret = PGTUtil.colorCheckboxBackgroundDisabled;
+        Color ret = PGTUtil.COLOR_CHECKBOX_BG_DISABLED;
         
         if (isEnabled && core.getOptionsManager().isNightMode()) {
-            ret = PGTUtil.colorCheckboxBackgroundNight;
+            ret = PGTUtil.COLOR_CHECKBOX_BG_NIGHT;
         } else if (isEnabled) {
-            ret = PGTUtil.colorCheckboxBackground;
+            ret = PGTUtil.COLOR_CHECKBOX_BG;
         }
         
         return ret;
     }
     
     public Color getCheckBoxOutline(boolean isEnabled) {
-        Color ret = PGTUtil.colorCheckboxOutlineDisabled;
+        Color ret = PGTUtil.COLOR_CHECKBOX_OUTLINE_DISABLED;
         
         if (isEnabled && core.getOptionsManager().isNightMode()) {
-            ret = PGTUtil.colorCheckboxOutlineNight;
+            ret = PGTUtil.COLOR_CHECKBOX_OUTLINE_NIGHT;
         } else if (isEnabled) {
-            ret = PGTUtil.colorCheckboxOutline;
+            ret = PGTUtil.COLOR_CHECKBOX_OUTLINE;
         }
         
         return ret;
     }
     
     public Color getCheckBoxHover(boolean isEnabled) {
-        Color ret = PGTUtil.colorCheckboxHoverDisabled;
+        Color ret = PGTUtil.COLOR_CHECKBOX_HOVER_DISABLED;
         
         if (isEnabled && core.getOptionsManager().isNightMode()) {
-            ret = PGTUtil.colorCheckboxHoverNight;
+            ret = PGTUtil.COLOR_CHECKBOX_HOVER_NIGHT;
         } else if (isEnabled) {
-            ret = PGTUtil.colorCheckboxHover;
+            ret = PGTUtil.COLOR_CHECKBOX_HOVER;
         }
         
         return ret;
     }
     
     public Color getCheckBoxClicked(boolean isEnabled) {
-        Color ret = PGTUtil.colorCheckboxClickedDisabled;
+        Color ret = PGTUtil.COLOR_CHECKBOX_CLICKED_DISABLED;
         
         if (isEnabled && core.getOptionsManager().isNightMode()) {
-            ret = PGTUtil.colorCheckboxClickedNight;
+            ret = PGTUtil.COLOR_CHECKBOX_CLICKED_NIGHT;
         } else if (isEnabled) {
-            ret = PGTUtil.colorCheckboxClicked;
+            ret = PGTUtil.COLOR_CHECKBOX_CLICKED;
         }
         
         return ret;
@@ -143,12 +143,12 @@ public class VisualStyleManager {
     
     
     public Color getCheckBoxFieldBack(boolean isEnabled) {
-        Color ret = PGTUtil.colorCheckBoxFieldBackDisabled;
+        Color ret = PGTUtil.COLOR_CHECKBOX_FIELD_BACK_DISABLED;
         
         if (isEnabled && core.getOptionsManager().isNightMode()) {
-            ret = PGTUtil.colorCheckBoxFieldBackNight;
+            ret = PGTUtil.COLOR_CHECKBOX_FIELD_BACK_NIGHT;
         } else if (isEnabled) {
-            ret = PGTUtil.colorCheckBoxFieldBack;
+            ret = PGTUtil.COLOR_CHECKBOX_FIELD_BACK;
         }
         
         return ret;

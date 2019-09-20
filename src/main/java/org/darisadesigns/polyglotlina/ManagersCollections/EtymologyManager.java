@@ -281,7 +281,7 @@ public class EtymologyManager {
      */
     public void writeXML(Document doc, Element rootElement) {
         ConWordCollection wordCollection = core.getWordCollection();
-        Element collection = doc.createElement(PGTUtil.EtyCollectionXID);
+        Element collection = doc.createElement(PGTUtil.ETY_COLLECTION_XID);
         
         // we only need to record the relationship one way, the bidirection will be regenerated
         for (Entry<Integer, List<Integer>> curEntry : parentToChild.entrySet()) {
@@ -290,7 +290,7 @@ public class EtymologyManager {
                 continue;
             }
             
-            Element myNode = doc.createElement(PGTUtil.EtyIntRelationNodeXID);
+            Element myNode = doc.createElement(PGTUtil.ETY_INT_RELATION_NODE_XID);
             myNode.appendChild(doc.createTextNode(curEntry.getKey().toString()));
             
             for (Integer curChild : curEntry.getValue()) {
@@ -298,7 +298,7 @@ public class EtymologyManager {
                     continue;
                 }
                 
-                Element child = doc.createElement(PGTUtil.EtyIntChildXID);
+                Element child = doc.createElement(PGTUtil.ETY_INT_CHILD_XID);
                 child.appendChild(doc.createTextNode(curChild.toString()));
                 myNode.appendChild(child);
             }
@@ -307,21 +307,21 @@ public class EtymologyManager {
         
         // adds a node for each word with at least one external parent
         childToExtParent.entrySet().stream().map((curEntry) -> {
-            Element childContainer = doc.createElement(PGTUtil.EtyChildExternalsXID);
+            Element childContainer = doc.createElement(PGTUtil.ETY_CHILD_EXTERNALS_XID);
             childContainer.appendChild(doc.createTextNode(curEntry.getKey().toString()));
             // creates a node for each external parent within a word
             curEntry.getValue().values().forEach((parent) -> {
-                Element extParentNode = doc.createElement(PGTUtil.EtyExternalWordNodeXID);
+                Element extParentNode = doc.createElement(PGTUtil.ETY_EXTERNAL_WORD_NODE_XID);
                 // record external word value
-                Element curElement = doc.createElement(PGTUtil.EtyExternalWordValueXID);
+                Element curElement = doc.createElement(PGTUtil.ETY_EXTERNAL_WORD_VALUE_XID);
                 curElement.appendChild(doc.createTextNode(parent.getExternalWord()));
                 extParentNode.appendChild(curElement);
                 // record external word origin
-                curElement = doc.createElement(PGTUtil.EtyExternalWordOriginXID);
+                curElement = doc.createElement(PGTUtil.ETY_EXTERNAL_WORD_ORIGIN_XID);
                 curElement.appendChild(doc.createTextNode(parent.getExternalLanguage()));
                 extParentNode.appendChild(curElement);
                 // record external word definition
-                curElement = doc.createElement(PGTUtil.EtyExternalWordDefinitionXID);
+                curElement = doc.createElement(PGTUtil.ETY_EXTERNAL_WORD_DEFINITION_XID);
                 curElement.appendChild(doc.createTextNode(parent.getDefinition()));
                 extParentNode.appendChild(curElement);
                 

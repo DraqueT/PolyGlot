@@ -180,7 +180,7 @@ public class PGrammarPane extends JTextPane {
             MutableAttributeSet inputAttributes = getInputAttributes();
             inputAttributes.removeAttributes(inputAttributes);
             StyleConstants.setIcon(inputAttributes, new ImageIcon(image.getImagePath()));
-            inputAttributes.addAttribute(PGTUtil.ImageIdAttribute, image.getId());
+            inputAttributes.addAttribute(PGTUtil.IMAGE_ID_ATTRIBUTE, image.getId());
             replaceSelection(" ", false);
             inputAttributes.removeAttributes(inputAttributes);
         } catch (IOException e) {

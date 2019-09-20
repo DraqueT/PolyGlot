@@ -77,14 +77,14 @@ public class DeclensionGenTransform {
     }
     
     public void writeXML(Document doc, Element rootElement) {
-        Element transNode = doc.createElement(PGTUtil.decGenTransXID);
+        Element transNode = doc.createElement(PGTUtil.DEG_GEN_TRANS_XID);
         rootElement.appendChild(transNode);
 
-        Element wordValue = doc.createElement(PGTUtil.decGenTransRegexXID);
+        Element wordValue = doc.createElement(PGTUtil.DEC_GEN_TRANS_REGEX_XID);
         wordValue.appendChild(doc.createTextNode(this.regex));
         transNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.decGenTransReplaceXID);
+        wordValue = doc.createElement(PGTUtil.DEC_GEN_TRANS_REPLACE_XID);
         wordValue.appendChild(doc.createTextNode(this.replaceText));
         transNode.appendChild(wordValue);
     }

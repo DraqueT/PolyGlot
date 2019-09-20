@@ -37,7 +37,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 /**
  * Basic sound recording code. Allows recording, playing, pausing. Will

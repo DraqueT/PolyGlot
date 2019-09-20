@@ -44,7 +44,7 @@ public class OptionsManager {
     private final Map<String, Dimension> screenSize = new HashMap<>();
     private final List<String> screensUp = new ArrayList<>();
     private Double menuFontSize = 0.0;
-    private int maxReversionCount = PGTUtil.defaultMaxRollbackVersions;
+    private int maxReversionCount = PGTUtil.DEFAULT_MAX_ROLLBACK_NUM;
     private DictCore core;
     private int toDoBarPosition = -1;
 
@@ -53,7 +53,7 @@ public class OptionsManager {
     }
     
     public double getMenuFontSize() {
-        return menuFontSize == 0.0 ? PGTUtil.defaultFontSize : menuFontSize;
+        return menuFontSize == 0.0 ? PGTUtil.DEFAULT_FONT_SIZE : menuFontSize;
     }
     
     public void setMenuFontSize(double _size) {
@@ -182,7 +182,7 @@ public class OptionsManager {
             return;
         }
 
-        while (lastFiles.size() > PGTUtil.optionsNumLastFiles) {
+        while (lastFiles.size() > PGTUtil.OPTIONS_NUM_LAST_FILES) {
             lastFiles.remove(0);
         }
 

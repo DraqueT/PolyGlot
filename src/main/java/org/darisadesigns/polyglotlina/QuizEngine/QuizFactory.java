@@ -128,7 +128,7 @@ public class QuizFactory {
         Random randGen = new Random();
 
         // make certain word properties have all combos built before making quiz
-        core.getWordPropertiesCollection().buildComboCache();
+        core.getWordClassCollection().buildComboCache();
 
         for (int i = 0; i < numQuestions; i++) {
             ConWord curWord = wordList.get(i);
@@ -161,13 +161,13 @@ public class QuizFactory {
                 case Classes:
                     int curId = 0;
                     for (List<PEntry<Integer, Integer>> curCombo
-                            : core.getWordPropertiesCollection()
+                            : core.getWordClassCollection()
                                     .getRandomPropertyCombinations(numChoices - 1, curWord)) {
                         curId++;
                         WordClassValue choiceNode = new WordClassValue();
 
                         for (PEntry<Integer, Integer> curEntry : curCombo) {
-                            WordClass wordProp = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                            WordClass wordProp = (WordClass) core.getWordClassCollection().getNodeById(curEntry.getKey());
                             WordClassValue valueNode = wordProp.getValueById(curEntry.getValue());
 
                             if (choiceNode.getValue().length() != 0) {
@@ -186,7 +186,7 @@ public class QuizFactory {
 
                     while (propIt.hasNext()) {
                         Entry<Integer, Integer> curEntry = propIt.next();
-                        WordClass curProp = (WordClass) core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                        WordClass curProp = (WordClass) core.getWordClassCollection().getNodeById(curEntry.getKey());
                         WordClassValue curVal = curProp.getValueById(curEntry.getValue());
 
                         if (valAnswer.getValue().length() != 0) {
@@ -214,7 +214,7 @@ public class QuizFactory {
         }
 
         // clear combo cache from memory after done
-        core.getWordPropertiesCollection().clearComboCache();
+        core.getWordClassCollection().clearComboCache();
 
         return ret;
     }

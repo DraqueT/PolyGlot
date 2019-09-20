@@ -141,7 +141,7 @@ public class QuizQuestion extends DictNode {
                                 qEnd += "/";
                             }
                             
-                            qEnd += core.getWordPropertiesCollection().getNodeById(curEntry.getKey());
+                            qEnd += core.getWordClassCollection().getNodeById(curEntry.getKey());
                         }
                         
                         qEnd += " classification?";

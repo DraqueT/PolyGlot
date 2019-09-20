@@ -290,7 +290,7 @@ public final class ScrQuickWordEntry extends PDialog {
      * @param setTypeId ID of class to set panel up for, -1 if no class selected
      */
     private void setupClassPanel(int setTypeId) {
-        List<WordClass> propList = core.getWordPropertiesCollection()
+        List<WordClass> propList = core.getWordClassCollection()
                 .getClassesForType(setTypeId);
         pnlClasses.removeAll();
         pnlClasses.setPreferredSize(new Dimension(999999, 1));

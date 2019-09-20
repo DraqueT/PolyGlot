@@ -350,6 +350,7 @@ public class ScrExcelImport extends PDialog {
     /**
      * @param _core the dictionary core
      * @param _parent main menu form
+     * @return 
      */
     public static ScrExcelImport run(DictCore _core, ScrMainMenu _parent) {
         ScrExcelImport s = new ScrExcelImport(_core, _parent);

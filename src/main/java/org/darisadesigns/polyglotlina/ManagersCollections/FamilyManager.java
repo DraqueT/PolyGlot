@@ -134,19 +134,19 @@ public class FamilyManager {
      * @return an element containing all family data
      */
     private Element writeToSaveXML(Document doc, FamNode curNode) {
-        Element curElement = doc.createElement(PGTUtil.famNodeXID);
+        Element curElement = doc.createElement(PGTUtil.FAM_NODE_XID);
         
         if (curNode == null) {
             return curElement;
         }
 
         // save name
-        Element property = doc.createElement(PGTUtil.famNameXID);
+        Element property = doc.createElement(PGTUtil.FAM_NAME_XID);
         property.appendChild(doc.createTextNode(curNode.getValue()));
         curElement.appendChild(property);
         
         // save notes
-        property = doc.createElement(PGTUtil.famNotesXID);
+        property = doc.createElement(PGTUtil.FAM_NOTES_XID);
         property.appendChild(doc.createTextNode(WebInterface.archiveHTML(curNode.getNotes())));
         curElement.appendChild(property);
         
@@ -155,7 +155,7 @@ public class FamilyManager {
         while (wordIt.hasNext()) {
             ConWord curWord = wordIt.next();
             
-            property = doc.createElement(PGTUtil.famWordXID);
+            property = doc.createElement(PGTUtil.FAM_WORD_XID);
             property.appendChild(doc.createTextNode(curWord.getId().toString()));
             curElement.appendChild(property);
         }

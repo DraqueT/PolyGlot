@@ -39,14 +39,14 @@ public class WordClassValue extends DictNode {
     }
     
      public void writeXML(Document doc, Element rootElement) {
-         Element valueNode = doc.createElement(PGTUtil.ClassValueNodeXID);
+         Element valueNode = doc.createElement(PGTUtil.CLASS_VALUES_NODE_XID);
 
-        Element valueElement = doc.createElement(PGTUtil.ClassValueIdXID);
+        Element valueElement = doc.createElement(PGTUtil.CLASS_VALUE_ID_XID);
         valueElement.appendChild(doc.createTextNode(this.getId().toString()));
         valueNode.appendChild(valueElement);
 
         // value string
-        valueElement = doc.createElement(PGTUtil.ClassValueNameXID);
+        valueElement = doc.createElement(PGTUtil.CLASS_VALUE_NAME_XID);
         valueElement.appendChild(doc.createTextNode(this.getValue()));
         valueNode.appendChild(valueElement);
 

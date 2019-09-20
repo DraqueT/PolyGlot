@@ -218,21 +218,21 @@ public class WordClass extends DictNode {
     }
     
     public void writeXML(Document doc, Element rootElement) {
-        Element classElement = doc.createElement(PGTUtil.ClassXID);
+        Element classElement = doc.createElement(PGTUtil.CLASS_XID);
 
         // ID element
-        Element classValue = doc.createElement(PGTUtil.ClassIdXID);
+        Element classValue = doc.createElement(PGTUtil.CLASS_ID_XID);
         classValue.appendChild(doc.createTextNode(this.getId().toString()));
         classElement.appendChild(classValue);
 
         // Name element
-        classValue = doc.createElement(PGTUtil.ClassNameXID);
+        classValue = doc.createElement(PGTUtil.CLASS_NAME_XID);
         classValue.appendChild(doc.createTextNode(this.getValue()));
         classElement.appendChild(classValue);
 
         // Is Text Override
-        classValue = doc.createElement(PGTUtil.ClassIsFreetextXID);
-        classValue.appendChild(doc.createTextNode(this.isFreeText() ? PGTUtil.True : PGTUtil.False));
+        classValue = doc.createElement(PGTUtil.CLASS_IS_FREETEXT_XID);
+        classValue.appendChild(doc.createTextNode(this.isFreeText() ? PGTUtil.TRUE : PGTUtil.FALSE));
         classElement.appendChild(classValue);
 
         // generates element with all type IDs of types this class applies to
@@ -244,12 +244,12 @@ public class WordClass extends DictNode {
 
             applyTypesRec += typeId.toString();
         }
-        classValue = doc.createElement(PGTUtil.ClassApplyTypesXID);
+        classValue = doc.createElement(PGTUtil.CLASS_APPLY_TYPES_XID);
         classValue.appendChild(doc.createTextNode(applyTypesRec));
         classElement.appendChild(classValue);
 
         // element for collection of values of class
-        classValue = doc.createElement(PGTUtil.ClassValuesCollectionXID);
+        classValue = doc.createElement(PGTUtil.CLASS_VALUES_COLLECTION_XID);
         for (WordClassValue curValue : this.getValues()) {
             curValue.writeXML(doc, classValue);
         }

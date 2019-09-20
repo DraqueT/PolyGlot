@@ -97,12 +97,12 @@ public class FormattedTextHelper {
                 MutableAttributeSet aset = new SimpleAttributeSet();
                 if (font.equals(PGTUtil.CONLANG_FONT)) {
                     if (core.getPropertiesManager().isEnforceRTL()) {
-                        nextNode = PGTUtil.RTLMarker + nextNode;
+                        nextNode = PGTUtil.RTL_CHARACTER + nextNode;
                     }
                     StyleConstants.setFontFamily(aset, conFont.getFamily());
                 } else {
                     if (core.getPropertiesManager().isEnforceRTL()) {
-                        nextNode = PGTUtil.LTRMarker + nextNode;
+                        nextNode = PGTUtil.LTR_MARKER + nextNode;
                     }
                     if (font.length() != 0) {
                         StyleConstants.setFontFamily(aset, font);
@@ -149,9 +149,9 @@ public class FormattedTextHelper {
                 // do nothing. All font changes are prefixed with<font
             } else {
                 if (font.equals(conFont.awtFont.getFamily()) && core.getPropertiesManager().isEnforceRTL()) {
-                    nextNode = PGTUtil.RTLMarker + nextNode;
+                    nextNode = PGTUtil.RTL_CHARACTER + nextNode;
                 } else if (core.getPropertiesManager().isEnforceRTL()) {
-                    nextNode = PGTUtil.LTRMarker + nextNode;
+                    nextNode = PGTUtil.LTR_MARKER + nextNode;
                 }
                 
                 if (nextNode.length() != 0){
@@ -299,7 +299,7 @@ public class FormattedTextHelper {
      */
     public static String storageFormat(JTextPane pane) throws BadLocationException, Exception {
         String ret = storeFormatRecurse(pane.getDocument().getDefaultRootElement(), pane);
-        return ret.replace(PGTUtil.RTLMarker, "").replace(PGTUtil.LTRMarker, "");
+        return ret.replace(PGTUtil.RTL_CHARACTER, "").replace(PGTUtil.LTR_MARKER, "");
     }
 
     /**
@@ -318,11 +318,11 @@ public class FormattedTextHelper {
             // hard coded values because they're hard coded in Java. Eh.
             if (e.getAttributes().getAttribute("$ename") != null
                     && e.getAttributes().getAttribute("$ename").equals("icon")) {
-                if (e.getAttributes().getAttribute(PGTUtil.ImageIdAttribute) == null) {
+                if (e.getAttributes().getAttribute(PGTUtil.IMAGE_ID_ATTRIBUTE) == null) {
                     throw new Exception("ID For image not stored. Unable to store section.");
                 }
                 
-                ret += "<img src=\"" + e.getAttributes().getAttribute(PGTUtil.ImageIdAttribute) + "\">";
+                ret += "<img src=\"" + e.getAttributes().getAttribute(PGTUtil.IMAGE_ID_ATTRIBUTE) + "\">";
             } else {
                 int start = e.getStartOffset();
                 int len = e.getEndOffset() - start;

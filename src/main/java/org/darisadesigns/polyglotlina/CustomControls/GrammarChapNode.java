@@ -157,14 +157,14 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
     }
     
     public void writeXML(Document doc, Element rootElement) {
-        Element chapNode = doc.createElement(PGTUtil.grammarChapterNodeXID);
+        Element chapNode = doc.createElement(PGTUtil.GRAMMAR_CHAPTER_NODE_XID);
             rootElement.appendChild(chapNode);
 
-            Element chapElement = doc.createElement(PGTUtil.grammarChapterNameXID);
+            Element chapElement = doc.createElement(PGTUtil.GRAMMAR_CHAPTER_NAME_XID);
             chapElement.appendChild(doc.createTextNode(this.getName()));
             chapNode.appendChild(chapElement);
             
-            chapElement = doc.createElement(PGTUtil.grammarSectionsListXID);
+            chapElement = doc.createElement(PGTUtil.GRAMMAR_SECTIONS_LIST_XID);
             
             for (int i = 0; i < this.getChildCount(); i++) {
                 GrammarSectionNode curSec = (GrammarSectionNode)this.getChildAt(i);                

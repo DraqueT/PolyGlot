@@ -69,14 +69,14 @@ public class Java8Bridge {
             subTitleText,
             coverImage,
             foreward,
-            (printAllConjugations ? PGTUtil.True : PGTUtil.False),
-            (printConLocal ? PGTUtil.True : PGTUtil.False),
-            (printGlossKey ? PGTUtil.True : PGTUtil.False),
-            (printGrammar ? PGTUtil.True : PGTUtil.False),
-            (printLocalCon ? PGTUtil.True : PGTUtil.False),
-            (printOrtho ? PGTUtil.True : PGTUtil.False),
-            (printPageNumber ? PGTUtil.True : PGTUtil.False),
-            (printWordEtymologies ? PGTUtil.True : PGTUtil.False)
+            (printAllConjugations ? PGTUtil.TRUE : PGTUtil.FALSE),
+            (printConLocal ? PGTUtil.TRUE : PGTUtil.FALSE),
+            (printGlossKey ? PGTUtil.TRUE : PGTUtil.FALSE),
+            (printGrammar ? PGTUtil.TRUE : PGTUtil.FALSE),
+            (printLocalCon ? PGTUtil.TRUE : PGTUtil.FALSE),
+            (printOrtho ? PGTUtil.TRUE : PGTUtil.FALSE),
+            (printPageNumber ? PGTUtil.TRUE : PGTUtil.FALSE),
+            (printWordEtymologies ? PGTUtil.TRUE : PGTUtil.FALSE)
         };
         
         String[] result = IOHandler.runAtConsole(command);
@@ -144,7 +144,7 @@ public class Java8Bridge {
             PGTUtil.JAVA8_EXPORTTOEXCELCOMMAND, // export command 
             tmpLangFile.getAbsolutePath(), // language file
             fileName, // target file
-            (separateDeclensions ? PGTUtil.True : PGTUtil.False) // separate declensions
+            (separateDeclensions ? PGTUtil.TRUE : PGTUtil.FALSE) // separate declensions
         };
         
         String[] result = IOHandler.runAtConsole(command);

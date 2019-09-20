@@ -957,7 +957,7 @@ public class DeclensionManager {
      */
     public void writeXML(Document doc, Element rootElement) {
         Set<Entry<Integer, List<DeclensionNode>>> declensionSet;
-        Element declensionCollection = doc.createElement(PGTUtil.declensionCollectionXID);
+        Element declensionCollection = doc.createElement(PGTUtil.DECLENSION_COLLECTION_XID);
         rootElement.appendChild(declensionCollection);
         
         // record declension templates
@@ -986,18 +986,18 @@ public class DeclensionManager {
         });
 
         // record combined form settings
-        Element combinedForms = doc.createElement(PGTUtil.decCombinedFormSectionXID);
+        Element combinedForms = doc.createElement(PGTUtil.DEC_COMBINED_FORM_SECTION_XID);
         rootElement.appendChild(combinedForms);
 
         combSettings.entrySet().stream().map((pairs) -> {
-            Element curCombForm = doc.createElement(PGTUtil.decCombinedFormXID);
+            Element curCombForm = doc.createElement(PGTUtil.DEC_COMBINED_FORM_XID);
             Element curAttrib;
             // This section will have to be slightly rewritten if the combined settings become more complex
-            curAttrib = doc.createElement(PGTUtil.decCombinedIdXID);
+            curAttrib = doc.createElement(PGTUtil.DEC_COMBINED_ID_XID);
             curAttrib.appendChild(doc.createTextNode((String)pairs.getKey()));
             curCombForm.appendChild(curAttrib);
-            curAttrib = doc.createElement(PGTUtil.decCombinedSurpressXID);
-            curAttrib.appendChild(doc.createTextNode(pairs.getValue() ? PGTUtil.True : PGTUtil.False));
+            curAttrib = doc.createElement(PGTUtil.DEC_COMBINED_SURPRESS_XID);
+            curAttrib.appendChild(doc.createTextNode(pairs.getValue() ? PGTUtil.TRUE : PGTUtil.FALSE));
             curCombForm.appendChild(curAttrib);
             return curCombForm;            
         }).forEachOrdered((curCombForm) -> {

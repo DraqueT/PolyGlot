@@ -54,20 +54,20 @@ public class PGTools {
                         ? Color.white : flashColor;
 
                 try {
-                    for (int i = 0; i < PGTUtil.numMenuFlashes; i++) {
+                    for (int i = 0; i < PGTUtil.NUM_MENU_FLASHES; i++) {
                         if (isBack) {
                             flashMe.setBackground(requiredColor);
                         } else {
                             flashMe.setEnabled(false);
                         }
                         // suppression for this is broken. Super annoying.
-                        Thread.sleep(PGTUtil.menuFlashSleep);
+                        Thread.sleep(PGTUtil.MENU_FLASH_SLEEP);
                         if (isBack) {
                             flashMe.setBackground(originColor);
                         } else {
                             flashMe.setEnabled(true);
                         }
-                        Thread.sleep(PGTUtil.menuFlashSleep);
+                        Thread.sleep(PGTUtil.MENU_FLASH_SLEEP);
                     }
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();

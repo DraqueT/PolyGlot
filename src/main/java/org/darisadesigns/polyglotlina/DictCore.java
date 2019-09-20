@@ -57,6 +57,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+/**
+ * This is the core of PolyGlot. It manages the top level of all aspects of the program.
+ * @author draque
+ */
 public class DictCore {
     
     private final String version = "2.5";
@@ -164,18 +168,34 @@ public class DictCore {
                 : propertiesManager.getLocalLangName();
     }
 
+    /**
+     * Sets root window (the ScrMainMenu object that the user sees)
+     * @param _rootWindow 
+     */
     public void setRootWindow(ScrMainMenu _rootWindow) {
         rootWindow = _rootWindow;
     }
 
+    /**
+     * Gets options manager
+     * @return 
+     */
     public OptionsManager getOptionsManager() {
         return optionsManager;
     }
 
+    /**
+     * Gets collection of all images available within current file
+     * @return 
+     */
     public ImageCollection getImageCollection() {
         return imageCollection;
     }
     
+    /**
+     * What is says on the tin.
+     * @return 
+     */
     public VisualStyleManager getVisualStyleManager() {
         return visualStyleManager;
     }
@@ -204,7 +224,11 @@ public class DictCore {
         return ret;
     }
 
-    public WordClassCollection getWordPropertiesCollection() {
+    /**
+     * Returns all word classes
+     * @return 
+     */
+    public WordClassCollection getWordClassCollection() {
         return wordPropCollection;
     }
 
@@ -306,10 +330,18 @@ public class DictCore {
         return famManager;
     }
 
+    /**
+     * Returns collection of all logographs in language file
+     * @return 
+     */
     public LogoCollection getLogoCollection() {
         return logoCollection;
     }
 
+    /**
+     * Returns grammar guide in language file
+     * @return 
+     */
     public GrammarManager getGrammarManager() {
         return grammarManager;
     }
@@ -591,42 +623,84 @@ public class DictCore {
         declensionMgr.clearAllDeclensionsWord(wordId);
     }
 
+    /**
+     * Returns declension template (and ONLY template) for given POS/template id
+     * @param typeId
+     * @param templateId
+     * @return 
+     */
     public DeclensionNode getDeclensionTemplate(Integer typeId, Integer templateId) {
         return declensionMgr.getDeclensionTemplate(typeId, templateId);
     }
 
+    /**
+     * Returns declension manager within language file
+     * @return 
+     */
     public DeclensionManager getDeclensionManager() {
         return declensionMgr;
     }
 
+    /**
+     * Returns all parts of speech
+     * @return 
+     */
     public TypeCollection getTypes() {
         return typeCollection;
     }
 
+    /**
+     * Returns pronunciations within language file
+     * @return 
+     */
     public PronunciationMgr getPronunciationMgr() {
         return pronuncMgr;
     }
 
+    /**
+     * Returns romanization manager within language file
+     * @return 
+     */
     public RomanizationManager getRomManager() {
         return romMgr;
     }
     
+    /**
+     * Returns etymology manager within language file
+     * @return 
+     */
     public EtymologyManager getEtymologyManager() {
         return etymologyManager;
     }
     
+    /**
+     * Returns XML file reversions within language file
+     * @return 
+     */
     public ReversionManager getReversionManager() {
         return reversionManager;
     }
     
+    /**
+     * Returns to do manager within language file
+     * @return 
+     */
     public ToDoManager getToDoManager() {
         return toDoManager;
     }
     
+    /**
+     * Returns last time language file was saved
+     * @return 
+     */
     public Instant getLastSaveTime() {
         return lastSaveTime;
     }
 
+    /**
+     * Sets time of last save
+     * @param _lastSaveTime 
+     */
     public void setLastSaveTime(Instant _lastSaveTime) {
         lastSaveTime = _lastSaveTime;
     }
@@ -652,6 +726,10 @@ public class DictCore {
         }
     }
     
+    /**
+     * Returns current file's full path
+     * @return 
+     */
     public String getCurFileName() {
         return rootWindow.getCurFileName();
     }

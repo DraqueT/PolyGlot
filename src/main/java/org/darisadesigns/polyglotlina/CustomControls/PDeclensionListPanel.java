@@ -42,7 +42,7 @@ import javax.swing.table.TableColumn;
  *
  * @author DThompson
  */
-public class PDeclensionListPanel extends JPanel implements PDeclensionPanelInterface {
+public final class PDeclensionListPanel extends JPanel implements PDeclensionPanelInterface {
     private final Map<String, Integer> decIdsToListLocation = new HashMap<>();
     private final List<DeclensionPair> declensionPairs;
     private final DictCore core;

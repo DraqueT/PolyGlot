@@ -78,7 +78,7 @@ public class ScrIPARefChart extends PFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource(PGTUtil.ipa_vowels)));
+        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_VOWEL_IMAGE)));
         jLabel23.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel23MouseClicked(evt);
@@ -106,7 +106,7 @@ public class ScrIPARefChart extends PFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        lblPulmonicConsonants.setIcon(new javax.swing.ImageIcon(getClass().getResource(PGTUtil.pulmonic_consonants)));
+        lblPulmonicConsonants.setIcon(new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_PULMONIC_CONSONANT_IMAGE)));
         lblPulmonicConsonants.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblPulmonicConsonantsMouseClicked(evt);
@@ -134,7 +134,7 @@ public class ScrIPARefChart extends PFrame {
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
-        lblNonPulmonicConsonants.setIcon(new javax.swing.ImageIcon(getClass().getResource(PGTUtil.non_pulmonic_consonants)));
+        lblNonPulmonicConsonants.setIcon(new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_NON_PULMONIC_CONSONANTS_IMAGE)));
         lblNonPulmonicConsonants.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblNonPulmonicConsonantsMouseClicked(evt);
@@ -162,7 +162,7 @@ public class ScrIPARefChart extends PFrame {
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
-        lblOtherSymbols.setIcon(new javax.swing.ImageIcon(getClass().getResource(PGTUtil.ipa_other)));
+        lblOtherSymbols.setIcon(new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_OTHER_IMAGE)));
         lblOtherSymbols.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblOtherSymbolsMouseClicked(evt);

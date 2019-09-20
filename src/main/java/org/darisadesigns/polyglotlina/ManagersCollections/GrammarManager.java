@@ -159,7 +159,7 @@ public class GrammarManager {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Element grammarRoot = doc.createElement(PGTUtil.grammarSectionXID);
+        Element grammarRoot = doc.createElement(PGTUtil.GRAMMAR_SECTION_XID);
         rootElement.appendChild(grammarRoot);
         
         chapters.forEach((chapter)->{

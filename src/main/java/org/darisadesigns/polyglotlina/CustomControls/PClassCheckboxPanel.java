@@ -55,7 +55,7 @@ public class PClassCheckboxPanel extends JPanel {
     
     private void init() {
         // this should not be displayed if there are no classes for this type
-        if (rule != null &&core.getWordPropertiesCollection().getClassesForType(type.getId()).isEmpty()) {
+        if (rule != null &&core.getWordClassCollection().getClassesForType(type.getId()).isEmpty()) {
             this.setVisible(false);
         } else if (rule != null) {
             applyClassesCheckboxes.clear();
@@ -110,7 +110,7 @@ public class PClassCheckboxPanel extends JPanel {
                     },
                 -1, -1);
                         
-        core.getWordPropertiesCollection().getClassesForType(type.getId()).forEach((wordClass)->{
+        core.getWordClassCollection().getClassesForType(type.getId()).forEach((wordClass)->{
             wordClass.getValues().forEach((classValue)->{
                 this.addCheckBox(classValue.getValue(), 
                             "Apply to " + wordClass.getValue() + ":" + classValue.getValue(), 

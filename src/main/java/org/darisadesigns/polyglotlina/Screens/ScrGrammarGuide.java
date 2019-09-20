@@ -104,14 +104,14 @@ public final class ScrGrammarGuide extends PFrame {
         defTime = "00:00:00";
         core = _core;
 
-        playButtonUp = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.playButtonUp)));
-        playButtonDown = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.playButtonDown)));
-        recordButtonUp = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.recordButtonUp)));
-        recordButtonDown = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.recordButtonDown)));
-        addButton = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.addButton)));
-        addButtonPressed = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.addButtonPressed)));
-        deleteButton = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.deleteButton)));
-        deleteButtonPressed = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.deleteButtonPressed)));
+        playButtonUp = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.PLAY_BUTTON_UP)));
+        playButtonDown = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.PLAY_BUTTON_DOWN)));
+        recordButtonUp = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.RECORD_BUTTON_UP)));
+        recordButtonDown = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.RECORD_BUTTON_DOWN)));
+        addButton = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.ADD_BUTTON)));
+        addButtonPressed = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.ADD_BUTTON_PRESSED)));
+        deleteButton = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.DELETE_BUTTON)));
+        deleteButtonPressed = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.DELETE_BUTTON_PRESSED)));
 
         initComponents();
         

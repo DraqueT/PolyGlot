@@ -156,7 +156,7 @@ public final class PTextField extends JTextField {
      */
     public boolean isDefaultText() {
         // account for RtL languages
-        String curText = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
+        String curText = super.getText().replaceAll(PGTUtil.RTL_CHARACTER, "").replaceAll(PGTUtil.LTR_MARKER, "");
         return curText.equals(defText);
     }
 
@@ -272,11 +272,11 @@ public final class PTextField extends JTextField {
      * Prefixes the RTL character if not prefixed already
      */
     private void prefixRTL() {
-        if (super.getText().startsWith(PGTUtil.RTLMarker)) {
+        if (super.getText().startsWith(PGTUtil.RTL_CHARACTER)) {
             return;
         }
 
-        setText(PGTUtil.RTLMarker + getText());
+        setText(PGTUtil.RTL_CHARACTER + getText());
     }
 
     @Override
@@ -359,7 +359,7 @@ public final class PTextField extends JTextField {
      * @return super's text
      */
     private String getSuperText() {
-        return super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
+        return super.getText().replaceAll(PGTUtil.RTL_CHARACTER, "").replaceAll(PGTUtil.LTR_MARKER, "");
     }
 
     @Override
@@ -367,12 +367,12 @@ public final class PTextField extends JTextField {
      * Make certain only to return appropriate text and never default text
      */
     public String getText() {
-        String ret = super.getText().replaceAll(PGTUtil.RTLMarker, "").replaceAll(PGTUtil.LTRMarker, "");
+        String ret = super.getText().replaceAll(PGTUtil.RTL_CHARACTER, "").replaceAll(PGTUtil.LTR_MARKER, "");
 
         if (ret.equals(defText)) {
             ret = "";
         } else {
-            ret = (core.getPropertiesManager().isEnforceRTL() && !overrideFont) ? PGTUtil.RTLMarker + ret : ret;
+            ret = (core.getPropertiesManager().isEnforceRTL() && !overrideFont) ? PGTUtil.RTL_CHARACTER + ret : ret;
         }
 
         return ret;

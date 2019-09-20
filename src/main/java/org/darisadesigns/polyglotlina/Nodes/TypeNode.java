@@ -135,11 +135,11 @@ public class TypeNode extends DictNode {
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.POS_DEF_MAN_XID);
-        wordValue.appendChild(doc.createTextNode(this.isDefMandatory() ? PGTUtil.True : PGTUtil.False));
+        wordValue.appendChild(doc.createTextNode(this.isDefMandatory() ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.POS_PROC_MAN_XID);
-        wordValue.appendChild(doc.createTextNode(this.isProcMandatory() ? PGTUtil.True : PGTUtil.False));
+        wordValue.appendChild(doc.createTextNode(this.isProcMandatory() ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.POS_PATTERN_XID);

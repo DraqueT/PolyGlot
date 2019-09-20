@@ -807,15 +807,15 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.WORD_PROCOVERRIDE_XID);
-            wordValue.appendChild(doc.createTextNode(curWord.isProcOverride() ? PGTUtil.True : PGTUtil.False));
+            wordValue.appendChild(doc.createTextNode(curWord.isProcOverride() ? PGTUtil.TRUE : PGTUtil.FALSE));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.WORD_AUTODECLOVERRIDE_XID);
-            wordValue.appendChild(doc.createTextNode(curWord.isOverrideAutoDeclen() ? PGTUtil.True : PGTUtil.False));
+            wordValue.appendChild(doc.createTextNode(curWord.isOverrideAutoDeclen() ? PGTUtil.TRUE : PGTUtil.FALSE));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.WORD_RULEORVERRIDE_XID);
-            wordValue.appendChild(doc.createTextNode(curWord.isRulesOverride() ? PGTUtil.True : PGTUtil.False));
+            wordValue.appendChild(doc.createTextNode(curWord.isRulesOverride() ? PGTUtil.TRUE : PGTUtil.FALSE));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.WORD_CLASSCOLLECTION_XID);

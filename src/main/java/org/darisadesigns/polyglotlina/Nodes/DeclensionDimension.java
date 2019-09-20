@@ -46,12 +46,12 @@ public class DeclensionDimension extends DictNode {
     }
     
     public void writeXML(Document doc, Element rootElement) {
-        Element wordValue = doc.createElement(PGTUtil.dimensionNodeXID);
-        Element dimNode = doc.createElement(PGTUtil.dimensionIdXID);
+        Element wordValue = doc.createElement(PGTUtil.DIMENSION_NODE_XID);
+        Element dimNode = doc.createElement(PGTUtil.DIMENSION_ID_XID);
         dimNode.appendChild(doc.createTextNode(this.getId().toString()));
         wordValue.appendChild(dimNode);
 
-        dimNode = doc.createElement(PGTUtil.dimensionNameXID);
+        dimNode = doc.createElement(PGTUtil.DIMENSION_NAME_XID);
         dimNode.appendChild(doc.createTextNode(this.getValue()));
         wordValue.appendChild(dimNode);
 

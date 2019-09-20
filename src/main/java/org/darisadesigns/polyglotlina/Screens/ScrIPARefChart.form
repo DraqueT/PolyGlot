@@ -100,7 +100,7 @@
             <Component class="javax.swing.JLabel" name="jLabel23">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new javax.swing.ImageIcon(getClass().getResource(PGTUtil.ipa_vowels))" type="code"/>
+                  <Connection code="new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_VOWEL_IMAGE))" type="code"/>
                 </Property>
               </Properties>
               <Events>
@@ -147,7 +147,7 @@
             <Component class="javax.swing.JLabel" name="lblPulmonicConsonants">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new javax.swing.ImageIcon(getClass().getResource(PGTUtil.pulmonic_consonants))" type="code"/>
+                  <Connection code="new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_PULMONIC_CONSONANT_IMAGE))" type="code"/>
                 </Property>
               </Properties>
               <Events>
@@ -194,7 +194,7 @@
             <Component class="javax.swing.JLabel" name="lblNonPulmonicConsonants">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new javax.swing.ImageIcon(getClass().getResource(PGTUtil.non_pulmonic_consonants))" type="code"/>
+                  <Connection code="new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_NON_PULMONIC_CONSONANTS_IMAGE))" type="code"/>
                 </Property>
               </Properties>
               <Events>
@@ -241,7 +241,7 @@
             <Component class="javax.swing.JLabel" name="lblOtherSymbols">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new javax.swing.ImageIcon(getClass().getResource(PGTUtil.ipa_other))" type="code"/>
+                  <Connection code="new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_OTHER_IMAGE))" type="code"/>
                 </Property>
               </Properties>
               <Events>

@@ -212,7 +212,7 @@ public class PronunciationMgr {
         List<PronunciationNode> ret = new ArrayList<>();
         Iterator<PronunciationNode> finder = getPronunciations().iterator();
 
-        if (depth > PGTUtil.maxProcRecursion) {
+        if (depth > PGTUtil.MAX_PROC_RECURSE) {
             throw new Exception("Max recursions for " + getToolLabel() + " exceeded.");
         }
         
@@ -323,13 +323,13 @@ public class PronunciationMgr {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Element collection = doc.createElement(PGTUtil.etymologyCollectionXID);
+        Element collection = doc.createElement(PGTUtil.ETYMOLOGY_COLLECTION_XID);
         
         rootElement.appendChild(collection);
         
-        Element recurseNode = doc.createElement(PGTUtil.proGuideRecurseXID);
+        Element recurseNode = doc.createElement(PGTUtil.PRO_GUIDE_RECURSIVE_XID);
         recurseNode.appendChild(doc.createTextNode(recurse ?
-                PGTUtil.True : PGTUtil.False));
+                PGTUtil.TRUE : PGTUtil.FALSE));
         collection.appendChild(recurseNode);
         
         pronunciations.forEach((proc)->{

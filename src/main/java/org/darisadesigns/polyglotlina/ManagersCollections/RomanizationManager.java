@@ -47,26 +47,26 @@ public class RomanizationManager extends PronunciationMgr {
     public void writeXML(Document doc, Element rootElement) {
         List<PronunciationNode> romGuide = getPronunciations();
         
-        Element guideNode = doc.createElement(PGTUtil.romGuideXID);
+        Element guideNode = doc.createElement(PGTUtil.ROM_GUIDE_XID);
         rootElement.appendChild(guideNode);
         
-        Element enabledNode = doc.createElement(PGTUtil.romGuideEnabledXID);
-        enabledNode.appendChild(doc.createTextNode(enabled ? PGTUtil.True : PGTUtil.False));
+        Element enabledNode = doc.createElement(PGTUtil.ROM_GUIDE_ENABLED_XID);
+        enabledNode.appendChild(doc.createTextNode(enabled ? PGTUtil.TRUE : PGTUtil.FALSE));
         guideNode.appendChild(enabledNode);
         
-        enabledNode = doc.createElement(PGTUtil.romGuideRecurseXID);
-        enabledNode.appendChild(doc.createTextNode(recurse ? PGTUtil.True : PGTUtil.False));
+        enabledNode = doc.createElement(PGTUtil.ROM_GUIDE_RECURSE_XID);
+        enabledNode.appendChild(doc.createTextNode(recurse ? PGTUtil.TRUE : PGTUtil.FALSE));
         guideNode.appendChild(enabledNode);
         
         romGuide.forEach((PronunciationNode curNode) -> {
-            Element romNode = doc.createElement(PGTUtil.romGuideNodeXID);
+            Element romNode = doc.createElement(PGTUtil.ROM_GUIDE_NODE_XID);
             guideNode.appendChild(romNode);
             
-            Element valueNode = doc.createElement(PGTUtil.romGuideBaseXID);
+            Element valueNode = doc.createElement(PGTUtil.ROM_GUIDE_BASE_XID);
             valueNode.appendChild(doc.createTextNode(curNode.getValue()));
             romNode.appendChild(valueNode);
             
-            Element procNode = doc.createElement(PGTUtil.romGuidePhonXID);
+            Element procNode = doc.createElement(PGTUtil.ROM_GUIDE_PHON_XID);
             procNode.appendChild(doc.createTextNode(curNode.getPronunciation()));
             romNode.appendChild(procNode);
         });

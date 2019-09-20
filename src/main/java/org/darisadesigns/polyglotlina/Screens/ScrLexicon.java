@@ -301,7 +301,7 @@ public final class ScrLexicon extends PFrame {
                     try {
                         if (component instanceof JComboBox) {
                             JComboBox combo = (JComboBox) component;
-                            combo.setSelectedItem(((WordClass) core.getWordPropertiesCollection()
+                            combo.setSelectedItem(((WordClass) core.getWordClassCollection()
                                     .getNodeById(curProp.getKey())).getValueById(curProp.getValue()));
                         } else if (component instanceof PTextField) {
                             // class property has since been turned into a dropdown field: do nothing
@@ -369,7 +369,7 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        List<WordClass> propList = core.getWordPropertiesCollection()
+        List<WordClass> propList = core.getWordClassCollection()
                 .getClassesForType(setTypeId);
         pnlClasses.setPreferredSize(new Dimension(4000, 1));
 

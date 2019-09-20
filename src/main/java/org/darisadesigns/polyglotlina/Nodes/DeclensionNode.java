@@ -197,31 +197,31 @@ public class DeclensionNode extends DictNode {
     }
     
     public void writeXMLTemplate(Document doc, Element rootElement, Integer relatedId) {
-        Element wordNode = doc.createElement(PGTUtil.declensionXID);
+        Element wordNode = doc.createElement(PGTUtil.DECLENSION_XID);
         rootElement.appendChild(wordNode);
 
-        Element nodeValue = doc.createElement(PGTUtil.declensionIdXID);
+        Element nodeValue = doc.createElement(PGTUtil.DECLENSION_ID_XID);
         nodeValue.appendChild(doc.createTextNode(this.getId().toString()));
         wordNode.appendChild(nodeValue);
 
-        nodeValue = doc.createElement(PGTUtil.declensionTextXID);
+        nodeValue = doc.createElement(PGTUtil.DECLENSION_TEXT_XID);
         nodeValue.appendChild(doc.createTextNode(this.getValue()));
         wordNode.appendChild(nodeValue);
 
-        nodeValue = doc.createElement(PGTUtil.declensionNotesXID);
+        nodeValue = doc.createElement(PGTUtil.DECLENSION_NOTES_XID);
         nodeValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getNotes())));
         wordNode.appendChild(nodeValue);
 
-        nodeValue = doc.createElement(PGTUtil.declensionIsTemplateXID);
+        nodeValue = doc.createElement(PGTUtil.DECLENSION_IS_TEMPLATE_XID);
         nodeValue.appendChild(doc.createTextNode("1"));
         wordNode.appendChild(nodeValue);
 
-        nodeValue = doc.createElement(PGTUtil.declensionRelatedIdXID);
+        nodeValue = doc.createElement(PGTUtil.DECLENSION_RELATED_ID_XID);
         nodeValue.appendChild(doc.createTextNode(relatedId.toString()));
         wordNode.appendChild(nodeValue);
         
-        nodeValue = doc.createElement(PGTUtil.declensionIsDimensionless);
-        nodeValue.appendChild(doc.createTextNode(this.isDimensionless() ? PGTUtil.True : PGTUtil.False));
+        nodeValue = doc.createElement(PGTUtil.DECLENSION_IS_DIMENSIONLESS_XID);
+        nodeValue.appendChild(doc.createTextNode(this.isDimensionless() ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(nodeValue);
 
         // record dimensions of declension
@@ -232,30 +232,30 @@ public class DeclensionNode extends DictNode {
     }
     
     public void writeXMLWordDeclension(Document doc, Element rootElement, Integer relatedId) {
-        Element wordNode = doc.createElement(PGTUtil.declensionXID);
+        Element wordNode = doc.createElement(PGTUtil.DECLENSION_XID);
         rootElement.appendChild(wordNode);
 
-        Element wordValue = doc.createElement(PGTUtil.declensionIdXID);
+        Element wordValue = doc.createElement(PGTUtil.DECLENSION_ID_XID);
         wordValue.appendChild(doc.createTextNode(this.getId().toString()));
         wordNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.declensionTextXID);
+        wordValue = doc.createElement(PGTUtil.DECLENSION_TEXT_XID);
         wordValue.appendChild(doc.createTextNode(this.getValue()));
         wordNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.declensionNotesXID);
+        wordValue = doc.createElement(PGTUtil.DECLENSION_NOTES_XID);
         wordValue.appendChild(doc.createTextNode(this.getNotes()));
         wordNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.declensionRelatedIdXID);
+        wordValue = doc.createElement(PGTUtil.DECLENSION_RELATED_ID_XID);
         wordValue.appendChild(doc.createTextNode(relatedId.toString()));
         wordNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.declensionComDimIdXID);
+        wordValue = doc.createElement(PGTUtil.DECLENSION_COMB_DIM_XID);
         wordValue.appendChild(doc.createTextNode(this.getCombinedDimId()));
         wordNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.declensionIsTemplateXID);
+        wordValue = doc.createElement(PGTUtil.DECLENSION_IS_TEMPLATE_XID);
         wordValue.appendChild(doc.createTextNode("0"));
         wordNode.appendChild(wordValue);
     }

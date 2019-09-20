@@ -230,7 +230,7 @@ public final class ScrWordClasses extends PFrame {
     private void populateWordProperties() {
         DefaultListModel<WordClass> listModel = new DefaultListModel<>();
 
-        core.getWordPropertiesCollection().getAllWordClasses().forEach((curNode) -> {
+        core.getWordClassCollection().getAllWordClasses().forEach((curNode) -> {
             listModel.addElement(curNode);
         });
 
@@ -304,8 +304,8 @@ public final class ScrWordClasses extends PFrame {
         WordClass prop;
 
         try {
-            propId = core.getWordPropertiesCollection().addNode(new WordClass());
-            prop = (WordClass) core.getWordPropertiesCollection().getNodeById(propId);
+            propId = core.getWordClassCollection().addNode(new WordClass());
+            prop = (WordClass) core.getWordClassCollection().getNodeById(propId);
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Property Creation Error", "Unable to create new word property: " + e.getLocalizedMessage(), core.getRootWindow());
@@ -327,7 +327,7 @@ public final class ScrWordClasses extends PFrame {
         }
 
         try {
-            core.getWordPropertiesCollection().deleteNodeById(prop.getId());
+            core.getWordClassCollection().deleteNodeById(prop.getId());
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Unable to Delete", "Unable to delete property: " + e.getLocalizedMessage(), core.getRootWindow());

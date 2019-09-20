@@ -205,7 +205,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
     public boolean doesRuleApplyToWord(ConWord word) {
         boolean ret = false;
         boolean wordTypeHasClasses = 
-                !word.getCore().getWordPropertiesCollection().getClassesForType(word.getWordTypeId()).isEmpty();
+                !word.getCore().getWordClassCollection().getClassesForType(word.getWordTypeId()).isEmpty();
         
         // if -1 opresent in this rule, apply to all. Otherwise test against word classes. Skips mismatching PoS
         if (typeId == word.getWordTypeId() && (!wordTypeHasClasses || applyToClasses.containsKey(-1))) {
@@ -332,26 +332,26 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
     }
     
     public void writeXML(Document doc, Element rootElement) {
-        Element ruleNode = doc.createElement(PGTUtil.decGenRuleXID);
+        Element ruleNode = doc.createElement(PGTUtil.DEC_GEN_RULE_XID);
         rootElement.appendChild(ruleNode);
 
-        Element wordValue = doc.createElement(PGTUtil.decGenRuleCombXID);
+        Element wordValue = doc.createElement(PGTUtil.DEC_GEN_RULE_COMB_XID);
         wordValue.appendChild(doc.createTextNode(this.getCombinationId()));
         ruleNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.decGenRuleNameXID);
+        wordValue = doc.createElement(PGTUtil.DEC_GEN_RULE_NAME_XID);
         wordValue.appendChild(doc.createTextNode(this.getName()));
         ruleNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.decGenRuleRegexXID);
+        wordValue = doc.createElement(PGTUtil.DEC_GEN_RULE_REGEX_XID);
         wordValue.appendChild(doc.createTextNode(this.getRegex()));
         ruleNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.decGenRuleTypeXID);
+        wordValue = doc.createElement(PGTUtil.DEC_GEN_RULE_TYPE_XID);
         wordValue.appendChild(doc.createTextNode(Integer.toString(this.getTypeId())));
         ruleNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.decGenRuleIndexXID);
+        wordValue = doc.createElement(PGTUtil.DEC_GEN_RULE_INDEX_XID);
         wordValue.appendChild(doc.createTextNode(Integer.toString(this.getIndex())));
         ruleNode.appendChild(wordValue);
 
@@ -359,11 +359,11 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
             curTransform.writeXML(doc, ruleNode);
         });
         
-        Element applyToClassesEntry = doc.createElement(PGTUtil.decGenRuleApplyToClasses);
+        Element applyToClassesEntry = doc.createElement(PGTUtil.DEC_GEN_RULE_APPLY_TO_CLASSES_XID);
         
         // record each class value to apply this rule to
         applyToClasses.entrySet().forEach((curEntry) -> {
-            Element applyToClassValue = doc.createElement(PGTUtil.decGenRuleApplyToClassValue);
+            Element applyToClassValue = doc.createElement(PGTUtil.DEC_GEN_RULE_APPLY_TO_CLASS_VALUE_XID);
             applyToClassValue.appendChild(doc.createTextNode(curEntry.getKey().toString() 
                     + "," + curEntry.getValue().toString()));
             applyToClassesEntry.appendChild(applyToClassValue);

@@ -65,8 +65,8 @@ public class PolyGlot {
                 }
                 
                 System.setProperty("apple.laf.useScreenMenuBar", "true");
-                System.setProperty("apple.awt.application.name", PGTUtil.displayName);
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", PGTUtil.displayName);
+                System.setProperty("apple.awt.application.name", PGTUtil.DISPLAY_NAME);
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", PGTUtil.DISPLAY_NAME);
             }
 
             setupNimbus();
@@ -248,7 +248,7 @@ public class PolyGlot {
     }
     
         private static boolean shouldUseOSInegration(String args[]) {
-        return args == null || args.length < 3 || !args[2].equals(PGTUtil.True);
+        return args == null || args.length < 3 || !args[2].equals(PGTUtil.TRUE);
     }
 
     public static boolean testIsBeta() {

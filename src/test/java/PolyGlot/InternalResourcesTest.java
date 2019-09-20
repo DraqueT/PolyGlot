@@ -57,7 +57,7 @@ public class InternalResourcesTest {
             "/PolyGlot/ImageAssets/n0rara_draque.png",
             "/PolyGlot/ImageAssets/recording_OFF_BIG.png",
             PGTUtil.EMPTY_LOGO_IMAGE,
-            PGTUtil.ipa_other,
+            PGTUtil.IPA_OTHER_IMAGE,
             PGTUtil.TREE_NODE_IMAGE,
             PGTUtil.NOT_FOUND_IMAGE};
         

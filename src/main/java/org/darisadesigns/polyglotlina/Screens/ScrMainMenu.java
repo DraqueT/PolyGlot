@@ -106,7 +106,7 @@ public final class ScrMainMenu extends PFrame {
         setupEasterEgg();
 
         try {
-            backGround = ImageIO.read(getClass().getResource(PGTUtil.mainMenuBG));
+            backGround = ImageIO.read(getClass().getResource(PGTUtil.MAIN_MENU_IMAGE));
             jLabel1.setFont(PGTUtil.MENU_FONT.deriveFont(45f));
         } catch (IOException e) {
             IOHandler.writeErrorLog(e);

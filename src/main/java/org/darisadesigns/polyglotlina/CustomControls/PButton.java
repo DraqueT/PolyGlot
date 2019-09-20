@@ -87,13 +87,13 @@ public class PButton extends JButton implements MouseListener {
         final int thisWidth = getWidth();
         
         if (!enabled) {
-            bgColor = PGTUtil.colorDisabledBG;
-            fontColor = PGTUtil.colorDisabledForeground;
+            bgColor = PGTUtil.COLOR_DISABLED_BG;
+            fontColor = PGTUtil.COLOR_DISABLED_FOREGROUND;
         } else if (mousePressed && mouseEntered) {
-            bgColor = PGTUtil.colorSelectedBG;
+            bgColor = PGTUtil.COLOR_SELECTED_BG;
             fontColor = getForeground();
         } else {
-            bgColor = PGTUtil.colorEnabledBG;
+            bgColor = PGTUtil.COLOR_ENABLED_BG;
             fontColor = getForeground();
         }
         
@@ -112,7 +112,7 @@ public class PButton extends JButton implements MouseListener {
 
         // draw black border on mouseover if button enabled
         if (mouseEntered && enabled) {
-            g.setColor(PGTUtil.colorMouseoverBorder);
+            g.setColor(PGTUtil.COLOR_MOUSEOVER_BORDER);
             g.drawRect(1, 1, thisWidth - 3, thisHeight - 3);
         }
         

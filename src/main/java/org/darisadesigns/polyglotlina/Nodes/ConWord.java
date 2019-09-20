@@ -152,7 +152,7 @@ public class ConWord extends DictNode {
         
         while (classIt.hasNext()) {
             Entry<Integer, String> curEntry = classIt.next();
-            if (!core.getWordPropertiesCollection().exists(curEntry.getKey())) {
+            if (!core.getWordClassCollection().exists(curEntry.getKey())) {
                 classTextValues.remove(curEntry.getKey());
             }
         }
@@ -260,7 +260,7 @@ public class ConWord extends DictNode {
         if (parentCollection != null) {
             parentCollection.extertalBalanceWordCounts(id, _value, localWord);
         }        
-        super.setValue(_value.replace(PGTUtil.RTLMarker, "").replace(PGTUtil.LTRMarker, ""));
+        super.setValue(_value.replace(PGTUtil.RTL_CHARACTER, "").replace(PGTUtil.LTR_MARKER, ""));
     }
 
     /**
@@ -370,7 +370,7 @@ public class ConWord extends DictNode {
         while (classIt.hasNext()) {
             Entry<Integer, Integer> curEntry = classIt.next();
             
-            if (!core.getWordPropertiesCollection().isValid(curEntry.getKey(), 
+            if (!core.getWordClassCollection().isValid(curEntry.getKey(), 
                     curEntry.getValue())) {
                 classValues.remove(curEntry.getKey());
             }
@@ -479,15 +479,15 @@ public class ConWord extends DictNode {
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.WORD_PROCOVERRIDE_XID);
-            wordValue.appendChild(doc.createTextNode(this.isProcOverride() ? PGTUtil.True : PGTUtil.False));
+            wordValue.appendChild(doc.createTextNode(this.isProcOverride() ? PGTUtil.TRUE : PGTUtil.FALSE));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.WORD_AUTODECLOVERRIDE_XID);
-            wordValue.appendChild(doc.createTextNode(this.isOverrideAutoDeclen() ? PGTUtil.True : PGTUtil.False));
+            wordValue.appendChild(doc.createTextNode(this.isOverrideAutoDeclen() ? PGTUtil.TRUE : PGTUtil.FALSE));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.WORD_RULEORVERRIDE_XID);
-            wordValue.appendChild(doc.createTextNode(this.isRulesOverride() ? PGTUtil.True : PGTUtil.False));
+            wordValue.appendChild(doc.createTextNode(this.isRulesOverride() ? PGTUtil.TRUE : PGTUtil.FALSE));
             wordNode.appendChild(wordValue);
 
             wordValue = doc.createElement(PGTUtil.WORD_CLASSCOLLECTION_XID);

@@ -115,6 +115,10 @@ public final class ClipboardHandler implements ClipboardOwner {
         return ret;
     }
     
+    /**
+     * Temporarily caches contents of clipboard
+     * @throws Exception 
+     */
     public void cacheClipboard() throws Exception {
         try {
             Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -125,6 +129,9 @@ public final class ClipboardHandler implements ClipboardOwner {
         }
     }
     
+    /**
+     * restores clipboard contents from cache
+     */
     public void restoreClipboard() {
         if (cachedContents == null)
         {
