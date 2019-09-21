@@ -53,6 +53,8 @@ public class PGTUtil {
     public static final String PGVERSION_XID = "PolyGlotVer";
     public static final String DICTIONARY_SAVE_DATE = "DictSaveDate";
     public static final String MAIN_MENU_IMAGE = "/assets/org/DarisaDesigns/ImageAssets/PolyGlotBG.png";
+    public static final String POLYGLOT_FILE_SUFFIX = "pgd";
+    public static final String TMP_SAVE_FILE = "xPOLYGLOT_TMPx.pgd";
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";

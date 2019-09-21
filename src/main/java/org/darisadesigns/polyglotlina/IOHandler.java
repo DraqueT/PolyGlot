@@ -499,8 +499,8 @@ public class IOHandler {
             sb.append(writer.getBuffer().toString());
             byte[] xmlData = sb.toString().getBytes("UTF-8");
 
-            // save file to temp location initially.
-            final File f = File.createTempFile(_fileName, null); // TODO: Make this save a temp file in the SAME DIRECTORY as the initial file (per #744)
+            final File f = makeTempSaveFile(core);
+
             try (FileOutputStream fileOutputStream = new FileOutputStream(f)) {
                 try (ZipOutputStream out = new ZipOutputStream(fileOutputStream, Charset.forName("ISO-8859-1"))) {
                     ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME);
@@ -543,7 +543,8 @@ public class IOHandler {
             }
 
             try {
-                java.nio.file.Files.copy(f.toPath(), finalFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                copyFile(f.toPath(), finalFile.toPath(), true);
+                f.delete(); // wipe temp file if successful
             } catch (IOException ex) {
                 throw new IOException("Unable to save file: " + ex.getMessage());
             }
@@ -554,6 +555,29 @@ public class IOHandler {
         if (writeLog.length() != 0) {
             InfoBox.warning("File Save Issues", "Problems encountered when saving file " + _fileName + writeLog, null);
         }
+    }
+    
+    private static File makeTempSaveFile(DictCore core) {
+        final File ret = new File(core.getWorkingDirectory() + File.separator + PGTUtil.TEMP_FILE);
+        if (ret.exists()) { // If PolyGlot is open and working, user has already been alerted and ignored it.
+            ret.delete();
+        }
+        return ret;
+    }
+    
+    public static void copyFile(Path fromLocation, Path toLocation, boolean replaceExisting) throws IOException {
+        StandardCopyOption option = replaceExisting ? StandardCopyOption.REPLACE_EXISTING : StandardCopyOption.ATOMIC_MOVE;
+        Files.copy(fromLocation, toLocation, option);
+    }
+    
+    /**
+     * Gets temporary save file if one exists, null otherwise
+     * @param core
+     * @return 
+     */
+    public static File getTempSaveFileIfExists(DictCore core) {
+        File ret = new File(core.getWorkingDirectory() + File.separator + PGTUtil.TEMP_FILE);
+        return ret.exists() ? ret : null;
     }
 
     private static String writePriorStatesToArchive(ZipOutputStream out, DictCore core) throws IOException {
