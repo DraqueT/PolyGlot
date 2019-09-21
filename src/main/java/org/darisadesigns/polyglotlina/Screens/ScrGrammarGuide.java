@@ -115,8 +115,7 @@ public final class ScrGrammarGuide extends PFrame {
 
         initComponents();
         
-        cmbFonts.addItem(core.localLabel() + " Font");
-        cmbFonts.addItem(core.getPropertiesManager().getFontCon().getName());
+        initFontDrop();
 
         setupRecordButtons();
         setupChapTreeModel();
@@ -138,6 +137,12 @@ public final class ScrGrammarGuide extends PFrame {
             btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (CTRL +)");
             btnDelete.setToolTipText(btnDelete.getToolTipText() + " (CTRL -)");
         }
+    }
+    
+    private void initFontDrop() {
+        cmbFonts.removeAllItems();
+        cmbFonts.addItem(core.localLabel() + " Font");
+        cmbFonts.addItem(core.getPropertiesManager().getFontCon().getName());
     }
     
     private void setupChapTreeModel() {
@@ -174,6 +179,7 @@ public final class ScrGrammarGuide extends PFrame {
         }
 
         populateProperties();
+        initFontDrop();
     }
 
     @Override
@@ -720,7 +726,7 @@ public final class ScrGrammarGuide extends PFrame {
         if (cmbFonts.getSelectedIndex() == 0) {
             StyleConstants.setFontFamily(aset, natFont.getFamily());
         } else {
-            aset.addAttribute(GlyphVectorPainter.KEY_KERNING, new Float(core.getPropertiesManager().getKerningSpace()*10));
+            aset.addAttribute(GlyphVectorPainter.KEY_KERNING, core.getPropertiesManager().getKerningSpace() * 10);
             StyleConstants.setFontFamily(aset, conFont.getFamily());
         }
 
