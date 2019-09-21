@@ -33,10 +33,15 @@ import java.awt.desktop.QuitEvent;
 import java.awt.desktop.QuitHandler;
 import java.awt.desktop.QuitResponse;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.InputMap;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.Screens.ScrAbout;
@@ -102,12 +107,6 @@ public class PolyGlot {
                             s.checkForUpdates(false);
                             s.setVisible(true);
 
-                            // open file if one is provided via arguments
-                            if (args.length > 0) {
-                                s.setFile(args[0]);
-                                s.openLexicon(true);
-                            }
-
                             // runs additional integration if on OSX system
                             if (PGTUtil.IS_OSX && osIntegration) {
                                 Desktop desk = Desktop.getDesktop();
@@ -141,7 +140,64 @@ public class PolyGlot {
                                     }
                                 });
                             } else if (PGTUtil.IS_WINDOWS && osIntegration) {
+                                // TODO: review if needed
                                 s.setIconImage(PGTUtil.POLYGLOT_ICON.getImage());
+                            }
+                            
+                            // if a recovery file exists, query user for action
+                            File recovery = IOHandler.getTempSaveFileIfExists(core);
+                            if (recovery != null) {
+                                if (InfoBox.yesNoCancel("Recovery File Detected", 
+                                        "PolyGlot appears to have shut down mid save. Would you like to recover the file?", s) == JOptionPane.YES_OPTION) {    
+                                    JFileChooser chooser = new JFileChooser();
+                                    chooser.setDialogTitle("Recover Dictionary To");
+                                    FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
+                                    chooser.setFileFilter(filter);
+                                    chooser.setApproveButtonText("Recover");
+                                    chooser.setCurrentDirectory(core.getPropertiesManager().getCannonicalDirectory());
+                                    
+                                    String fileName;
+
+                                    if (chooser.showOpenDialog(s) == JFileChooser.APPROVE_OPTION) {
+                                        fileName = chooser.getSelectedFile().getAbsolutePath();
+                                        if (!fileName.toLowerCase().endsWith(PGTUtil.POLYGLOT_FILE_SUFFIX)) {
+                                            fileName += "." + PGTUtil.POLYGLOT_FILE_SUFFIX;
+                                        }
+                                        File copyTo = new File(fileName);
+                                        try {
+                                            IOHandler.copyFile(recovery.toPath(), copyTo.toPath(), true);
+                                            
+                                            if (copyTo.exists()) {
+                                                s.setFile(copyTo.getAbsolutePath());
+                                                s.openLexicon(osIntegration);
+                                                recovery.delete();
+                                                InfoBox.info("Success!", "Language successfully recovered!", s);
+                                            } else {
+                                                throw new IOException("File not copied.");
+                                            }
+                                        } catch(IOException e) {
+                                            InfoBox.error("Recovery Problem", "Unable to recover file due to: " 
+                                                    + e.getLocalizedMessage() 
+                                                    + ". Recovery file exists at location: " 
+                                                    + recovery.toPath() 
+                                                    + ". To attempt manual recovery, add .pgd suffix to file name and open with PolyGlot by hand.", s);
+                                        }
+                                    } else {
+                                        InfoBox.info("Recovery Cancelled", "Recovery Cancelled. Restart PolyGlot to be prompted again.", s);
+                                    }
+                                } else {
+                                    if (InfoBox.yesNoCancel("Delete Recovery File", "Delete the recovery file, then?", s) == JOptionPane.YES_OPTION) {
+                                        recovery.delete();
+                                    }
+                                    
+                                    recovery = null;
+                                }
+                            }
+                            
+                            // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
+                            if (args.length > 0 && recovery == null) {
+                                s.setFile(args[0]);
+                                s.openLexicon(true);
                             }
                         } catch (ArrayIndexOutOfBoundsException e) {
                             IOHandler.writeErrorLog(e, "Problem with top level PolyGlot arguments.");
