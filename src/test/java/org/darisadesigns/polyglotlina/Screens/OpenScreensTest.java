@@ -140,15 +140,14 @@ public class OpenScreensTest {
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
     }
     
-    // TODO: the grammar guide throws errors on open that must be corrected before the release of PolyGlot 3.0
-//    @Test
-//    public void testScrGrammarGuide() throws Exception {
-//        System.out.println("testScrGrammarGuide");
-//        ScrGrammarGuide s = new ScrGrammarGuide(core);
-//        s.dispose();
-//        
-//        testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
-//    }
+    @Test
+    public void testScrGrammarGuide() throws Exception {
+        System.out.println("testScrGrammarGuide");
+        ScrGrammarGuide s = new ScrGrammarGuide(core);
+        s.dispose();
+        
+        testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
+    }
     
     @Test
     public void testScrIPARefChart() throws Exception {
