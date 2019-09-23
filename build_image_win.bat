@@ -51,7 +51,7 @@ IF  "%RES%"=="T" (
     rmdir /s /q appimage 
     echo "packing Windows app..."
     echo on
-    %JAVA_PACKAGER_LOCATION%\jpackage --runtime-image build\image --output appimage --name PolyGlot --module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot --copyright "2014-2019 Draque Thompson" --description "PolyGlot is a spoken language construction toolkit." --icon packaging_files/PolyGlot0.ico
+    %JAVA_PACKAGER_LOCATION%\jpackage --runtime-image build\image --output appimage --name PolyGlot --module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot --copyright "2014-2019 Draque Thompson" --description "PolyGlot is a spoken language construction toolkit." --icon packaging_files/win/PolyGlot0.ico
     echo off
     copy appimage\PolyGlot\app\PolyGlot.cfg appimage\PolyGlot\PolyGlot.cfg
     rmdir /s /q appimage\PolyGlot\app
@@ -67,6 +67,7 @@ IF  "%RES%"=="T" (
     echo "Creating distribution package..."
     rmdir /s /q installer
     echo on
+    :: If this does not work correctly, install WiX Toolset: https://wixtoolset.org/releases/
     %JAVA_PACKAGER_LOCATION%\jpackage --runtime-image build\image --win-shortcut --win-menu --win-dir-chooser --package-type exe --file-associations packaging_files\win\file_types_win.prop --output installer --name PolyGlot --module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot --copyright "2014-2019 Draque Thompson" --description "PolyGlot is a spoken language construction toolkit." --icon packaging_files/win/PolyGlot0.ico
     echo off
     ren installer\PolyGlot-1.0.exe PolyGlot-Ins.exe
