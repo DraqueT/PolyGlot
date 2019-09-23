@@ -27,6 +27,7 @@ This will show you how to package PolyGlot for OSX, Windows, and Linux.
 	- the end of the location should read "openjfx." Do NOT copy the full path of one of the dependencies, or it will not work.
 4) Change the value of JAVA_PACKAGER_LOCATION to the JDK14 bin folder
 5) In a terminal, nagivate to the PolyGlot project folder.
+5.5) (Windows only) Download and install WiX Toolset: https://wixtoolset.org/releases/
 6) On OSX, enter the command "./build_image.sh" without the quotes
 	- On Linux, enter the command "./build_image_linux.sh" without the quotes
 	- On Windows, enter the command "build_image_win.bat" without the quotes
