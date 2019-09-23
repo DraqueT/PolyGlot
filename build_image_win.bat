@@ -14,7 +14,7 @@ IF "%1"=="build" set RES=T
 IF  "%RES%"=="T" (
     echo "cleaning/testing/compiling..."
     echo on
-    ::mvn clean package
+    mvn clean package
     echo off
 )
 set RES=F
@@ -45,21 +45,32 @@ IF  "%RES%"=="T" (
 )
 set RES=F
 
-IF "%1"=="" set RES=T
+:: Only run on request (creates direct application, rather than installer)
 IF "%1"=="pack" set RES=T
 IF  "%RES%"=="T" (
-    rmdir appimage /s /q
-    echo "packing Linux app..."
+    rmdir /s /q appimage 
+    echo "packing Windows app..."
     echo on
-    %JAVA_PACKAGER_LOCATION%\jpackage --runtime-image build\image --input target --output appimage --name PolyGlot --main-jar %JAR_W_DEP% --copyright "2014-2019 Draque Thompson" --description "PolyGlot is a spoken language construction toolkit." --icon packaging_files/PolyGlot0.ico
+    %JAVA_PACKAGER_LOCATION%\jpackage --runtime-image build\image --output appimage --name PolyGlot --module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot --copyright "2014-2019 Draque Thompson" --description "PolyGlot is a spoken language construction toolkit." --icon packaging_files/PolyGlot0.ico
     echo off
     copy appimage\PolyGlot\app\PolyGlot.cfg appimage\PolyGlot\PolyGlot.cfg
-    rmdir appimage\PolyGlot\app /s /q
+    rmdir /s /q appimage\PolyGlot\app
     mkdir appimage\PolyGlot\app
     copy appimage\PolyGlot\PolyGlot.cfg appimage\PolyGlot\app\PolyGlot.cfg
     del appimage\PolyGlot\PolyGlot.cfg
 )
 set RES=F
 
-echo "Done!"
+IF "%1"=="" set RES=T
+IF "%1"=="dist" set RES=T
+IF  "%RES%"=="T" (
+    echo "Creating distribution package..."
+    rmdir /s /q installer
+    echo on
+    %JAVA_PACKAGER_LOCATION%\jpackage --runtime-image build\image --win-shortcut --win-menu --win-dir-chooser --package-type exe --file-associations packaging_files\win\file_types_win.prop --output installer --name PolyGlot --module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot --copyright "2014-2019 Draque Thompson" --description "PolyGlot is a spoken language construction toolkit." --icon packaging_files/win/PolyGlot0.ico
+    echo off
+    ren installer\PolyGlot-1.0.exe PolyGlot-Ins.exe
+)
+set RES=F
 
+echo "Done!"
