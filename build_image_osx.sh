@@ -28,12 +28,13 @@ if [ "$1" = "" ] || [ "$1" = "image" ]; then
     echo "creating runnable image..."
     $JAVA_HOME/bin/jlink \
         --module-path "module_injected_jars/:\
-            target/mods:$JAVAFX_LOCATION/javafx-graphics/$JAVAFX_VER/:\
-            $JAVAFX_LOCATION/javafx-base/$JAVAFX_VER/:\
-            $JAVAFX_LOCATION/javafx-media/12.0.2/:\
-            $JAVAFX_LOCATION/javafx-swing/$JAVAFX_VER/:\
-            $JAVAFX_LOCATION/javafx-controls/$JAVAFX_VER/:\
-            $JAVA_HOME/jmods" \
+target/mods:\
+$JAVAFX_LOCATION/javafx-graphics/$JAVAFX_VER/:\
+$JAVAFX_LOCATION/javafx-base/$JAVAFX_VER/:\
+$JAVAFX_LOCATION/javafx-media/12.0.2/:\
+$JAVAFX_LOCATION/javafx-swing/$JAVAFX_VER/:\
+$JAVAFX_LOCATION/javafx-controls/$JAVAFX_VER/:\
+$JAVA_HOME/jmods" \
         --add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" \
         --output "build/image/" \
         --compress=2 \
@@ -57,19 +58,19 @@ fi
 
 if [ "$1" = "" ] || [ "$1" = "dist" ]; then
     echo "Creating distribution package..."
-    rm -f installer/PolyGlot-Ins.dmg
-    rm -f installer/rw.PolyGlot-Ins.dmg
+    rm -rf installer
+    mkdir installer
     # if this does not work correctly: brew install create-dmg
     create-dmg \
         --volname "PolyGlot Installer" \
         --volicon "packaging_files/mac/PolyGlot.icns" \
-        --app-drop-link 600 185 \
+        --app-drop-link 450 250 \
         --hide-extension "PolyGlot.app" \
         --background "packaging_files/mac/bg.png" \
         --window-pos 200 120 \
         --window-size 650 591 \
-        --icon-size 100 \
-        --icon "PolyGlot.app" 200 190 \
+        --icon-size 120 \
+        --icon "PolyGlot.app" 200 250 \
         "installer/PolyGlot-Ins.dmg" \
         "appimage/"
 fi
