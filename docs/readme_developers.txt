@@ -22,17 +22,18 @@ You are now ready to begin work! Building this will result in a runnable jar fil
 This will show you how to package PolyGlot for OSX, Windows, and Linux.
 
 1) Download the JDK14 preview and drop it in a folder somewhere. (I probably won't update this in forever, so maybe it's no longer a preview as you read this! :D)
-2) Open build_image.sh (build_image_linux.sh if you are on Linux, build_image_win.bat if you are on Windows) in a text editor.
-3) Change the value of JAVAFX_LOCATION to wherever jfx got dumped (you can get this by looking at the properties of any of the jfx dependencies)
+2) Open build_image.py in a text editor.
+3) Change the value of JAVAFX_LOCATION_<OS> to wherever jfx got dumped (you can get this by looking at the properties of any of the jfx dependencies)
 	- the end of the location should read "openjfx." Do NOT copy the full path of one of the dependencies, or it will not work.
-4) Change the value of JAVA_PACKAGER_LOCATION to the JDK14 bin folder (this step will vanish once J14 is officially released)
+        - there are separate variables for each OS, as I presume the directory structures of the environments you build on will differ.
+4) Change the value of JAVA_PACKAGER_LOCATION_<OS> to the JDK14 bin folder (this step will vanish once J14 is officially released)
+        - same value per OS is the jfx location above
 5) In a terminal, navigate to the PolyGlot project folder.
 5.5) (Windows only) Download and install WiX Toolset: https://wixtoolset.org/releases/
 5.5) (OSX Only) install create-dmg (at terminal: "brew install create-dmg" or download from repository at https://github.com/andreyvit/create-dmg)
-6) On OSX, enter the command "./build_image_osx.sh" without the quotes
-	- On Linux, enter the command "./build_image_linux.sh" without the quotes
-	- On Windows, enter the command "build_image_win.bat" without the quotes
-	- If you open the script files, you'll see that they're segmented so that you can give arguments and just execute one section them at a time for convenience.
+6) If your system does not have python, install it. Windows and some versions of Linux may not.
+7) E "python build_image.py" without the quotes
+	- If you open the script file, you'll see that they're segmented so that you can give arguments and just execute one section them at a time for convenience.
 
 PolyGlot will now build itself into a platform specific application for you! This can be run on machines regardless of whether they have Java installed, as it builds a Java runtime into the distribution.
 

@@ -37,6 +37,8 @@ def getVersion():
 
 ###############################
 # LINUX BUILD CONSTANTS
+JAVAFX_LOCATION_LINUX = "/home/osboxes/.m2/repository/org/openjfx"
+JAVA_PACKAGER_LOCATION_LINUX = "/usr/Java/jdk-14/bin" # this will go away once Java 14 drops officially...
 
 
 ###############################
@@ -60,10 +62,6 @@ POLYGLOT_VERSION = getVersion()
 
 def main(args):
     fullBuild = (len(args) == 1) # length of 1 means no arguments (full build)
-        
-    # OSX's version of Python does not include future by default, but has a fix for print in its Python 2.7
-    if osString != osxString:
-        from future import print_function
     
     if "help" in args:
         print("this should print help. use textblock")
@@ -123,24 +121,78 @@ def dist():
     elif osString == winString:
         distWin()
 
+
 #######################
 # LINUX FUNCTIONALITY
 #######################
 
 def buildLinux():
-    print(__name__)
+    print('cleaning/testing/compiling...')
+    os.system('mvn clean package')
     
 def cleanLinux():
-    print(__name__)
+    print('cleaning build paths...')
+    os.system('rm -rf target/mods')
+    os.system('rm -rf build')
     
 def imageLinux():
-    print(__name__)
+    print('creating jmod based on jar built without dependencies...')
+    os.system('mkdir target/mods')
+    os.system('$JAVA_HOME/bin/jmod create ' +
+        '--class-path target/' + JAR_WO_DEP + ' ' +
+        '--main-class org.darisadesigns.polyglotlina.PolyGlot target/mods/PolyGlot.jmod')
+
+    print('creating runnable image...')
+    command = ('$JAVA_HOME/bin/jlink ' +
+        '--module-path "module_injected_jars/:' +
+        'target/mods:' +
+        JAVAFX_LOCATION_LINUX + '/javafx-graphics/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION_LINUX + '/javafx-base/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION_LINUX + '/javafx-media/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION_LINUX + '/javafx-swing/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION_LINUX + '/javafx-controls/' + JAVAFX_VER + '/:' +
+        '$JAVA_HOME/jmods" ' +
+        '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
+        '--output "build/image/" ' +
+        '--compress=2 ' +
+        '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
+
+    os.system(command)
     
 def packLinux():
-    print(__name__)
+    print("packing Linux app...")
+    os.system('rm -rf appimage')
+
+    command = (JAVA_PACKAGER_LOCATION_LINUX + '/jpackage ' +
+        '--runtime-image build/image ' +
+        '--output appimage ' +
+        '--name PolyGlot ' +
+        '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
+        '--copyright "2014-2019 Draque Thompson" ' +
+        '--description "PolyGlot is a spoken language construction toolkit." ' +
+        '--icon packaging_files/PolyGlot0.png') 
+        # adding version number in Linux with modular build currently broken in jpackage. Check back after J14 release...
+        # '--app-version ' + POLYGLOT_VERSION)
+
+    os.system(command)
     
 def distLinux():
-    print(__name__)
+    print('Creating distribution deb...')
+    os.system('rm -rf installer')
+    os.system('mkdir installer')
+    command = (JAVA_PACKAGER_LOCATION_LINUX + '/jpackage ' +
+        '--package-type deb ' +
+        '--file-associations packaging_files/linux/file_types_linux.prop ' +
+        '--runtime-image build/image ' +
+        '--output installer ' +
+        '--name PolyGlot ' +
+        '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
+        '--copyright "2014-2019 Draque Thompson" ' +
+        '--description "PolyGlot is a spoken language construction toolkit." ' +
+        '--icon packaging_files/PolyGlot0.png')
+
+    os.system(command)
+
 
 #######################
 # OSX FUNCTIONALITY
@@ -211,6 +263,7 @@ def distOsx():
         '--icon "PolyGlot.app" 200 250 ' +
         '"installer/PolyGlot-Ins.dmg" ' +
         '"appimage/"')
+
 
 #######################
 # WINDOWS FUNCTIONALITY
