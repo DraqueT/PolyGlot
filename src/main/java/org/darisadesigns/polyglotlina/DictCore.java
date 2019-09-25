@@ -63,7 +63,6 @@ import org.xml.sax.SAXException;
  */
 public class DictCore {
     
-    private final String version = "2.5";
     private boolean isBeta = false;
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
@@ -354,15 +353,6 @@ public class DictCore {
     public PropertiesManager getPropertiesManager() {
         return propertiesManager;
     }
-
-    /**
-     * gets version ID of PolyGlot
-     *
-     * @return String value of version
-     */
-    public String getVersion() {
-        return version;
-    }
     
     /**
      * Returns true if running a beta build of PolyGlot
@@ -377,10 +367,10 @@ public class DictCore {
      * @return 
      */
     public String getDisplayVersion() {
-        String ret = version;
+        String ret = PGTUtil.PGT_VERSION;
         
         if (isBeta) {
-            ret = "BETA (last release: " + version + ")";
+            ret = "BETA (last release: " + ret + ")";
         }
         
         return ret;
@@ -606,7 +596,7 @@ public class DictCore {
     
     private void writeXMLHeader(Document doc, Element rootElement, Instant saveTime) {
         Element headerElement = doc.createElement(PGTUtil.PGVERSION_XID);
-        headerElement.appendChild(doc.createTextNode(version));
+        headerElement.appendChild(doc.createTextNode(PGTUtil.PGT_VERSION));
         rootElement.appendChild(headerElement);
         
         headerElement = doc.createElement(PGTUtil.DICTIONARY_SAVE_DATE);
@@ -721,7 +711,7 @@ public class DictCore {
     }
     
     private void validateVersion() throws Exception {
-        if (!versionHierarchy.containsKey(this.getVersion())) {
+        if (!versionHierarchy.containsKey(PGTUtil.PGT_VERSION)) {
             throw new Exception("ERROR: CURRENT VERSION NOT ACCOUNTED FOR IN VERSION HISTORY.");
         }
     }
@@ -772,5 +762,6 @@ public class DictCore {
         versionHierarchy.put("2.3.3", 34);
         versionHierarchy.put("2.4", 35);
         versionHierarchy.put("2.5", 36);
+        versionHierarchy.put("3.0", 37);
     }
 }

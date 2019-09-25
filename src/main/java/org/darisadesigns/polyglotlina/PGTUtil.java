@@ -29,8 +29,11 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import org.darisadesigns.polyglotlina.Screens.ScrFamilies;
@@ -55,6 +58,8 @@ public class PGTUtil {
     public static final String MAIN_MENU_IMAGE = "/assets/org/DarisaDesigns/ImageAssets/PolyGlotBG.png";
     public static final String POLYGLOT_FILE_SUFFIX = "pgd";
     public static final String TMP_SAVE_FILE = "xPOLYGLOT_TMPx.pgd";
+    public static final String VERSION_LOCATION = "/assets/org/DarisaDesigns/version";
+    public static final String PGT_VERSION = getVersion();
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";
@@ -617,5 +622,21 @@ public class PGTUtil {
         }
 
         return ret;
+    }
+    
+    /**
+     * Gets version of PolyGlot based on version resource file
+     * @return 
+     */
+    private static String getVersion() {
+        try {
+            URL versionUrl = PGTUtil.class.getResource(VERSION_LOCATION);
+            BufferedReader br = new BufferedReader(new InputStreamReader(versionUrl.openStream()));
+            return br.readLine();
+        } catch (IOException e) {
+            InfoBox.error("PolyGlot Load Error", "Unable to load version file.", null);
+        }
+        
+        return "ERROR";
     }
 }

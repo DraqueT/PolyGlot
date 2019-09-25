@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
 import org.apache.commons.lang3.StringUtils;
+import org.darisadesigns.polyglotlina.PGTUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -78,7 +79,7 @@ public class ScrUpdateAlert extends PDialog {
         List<ConditionalMessage> urgentMessages = getUrgentMessages(condMessages);
         setupButtons(doc.getElementsByTagName("LinkButtons").item(0));
         int upstreamVer = core.getVersionHierarchy(ver);
-        int selfVer = core.getVersionHierarchy(core.getVersion());
+        int selfVer = core.getVersionHierarchy(PGTUtil.PGT_VERSION);
 
         if (!urgentMessages.isEmpty()) { // prioritize urgent messages first
             this.setTitle("--URGENT POLYGLOT ALERT--");
@@ -146,7 +147,7 @@ public class ScrUpdateAlert extends PDialog {
         String myJavaVersion = System.getProperty("java.version");
         String myOs = System.getProperty("os.name");
         String myOsVersion = System.getProperty("os.version");
-        String myPolyVersion = core.getVersion();
+        String myPolyVersion = PGTUtil.PGT_VERSION;
         
         NodeList condList = root.getElementsByTagName("ConditionalMessage");
         for (int i = 0; i < condList.getLength(); i ++) {
