@@ -31,7 +31,7 @@ if [ "$1" = "" ] || [ "$1" = "image" ]; then
 target/mods:\
 $JAVAFX_LOCATION/javafx-graphics/$JAVAFX_VER/:\
 $JAVAFX_LOCATION/javafx-base/$JAVAFX_VER/:\
-$JAVAFX_LOCATION/javafx-media/12.0.2/:\
+$JAVAFX_LOCATION/javafx-media/$JAVAFX_VER/:\
 $JAVAFX_LOCATION/javafx-swing/$JAVAFX_VER/:\
 $JAVAFX_LOCATION/javafx-controls/$JAVAFX_VER/:\
 $JAVA_HOME/jmods" \
@@ -43,9 +43,10 @@ fi
 
 if [ "$1" = "" ] || [ "$1" = "pack" ]; then
     rm -rf appimage
-    echo "packing mac app..."
+    echo "packing OSX app..."
     $JAVA_PACKAGER_LOCATION/jpackage \
-        --runtime-image build/image --output appimage \
+        --runtime-image build/image \
+        --output appimage \
         --name PolyGlot \
         --module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot \
         --copyright "2014-2019 Draque Thompson" \
@@ -57,7 +58,7 @@ if [ "$1" = "" ] || [ "$1" = "pack" ]; then
 fi
 
 if [ "$1" = "" ] || [ "$1" = "dist" ]; then
-    echo "Creating distribution package..."
+    echo "Creating distribution dmg..."
     rm -rf installer
     mkdir installer
     # if this does not work correctly: brew install create-dmg

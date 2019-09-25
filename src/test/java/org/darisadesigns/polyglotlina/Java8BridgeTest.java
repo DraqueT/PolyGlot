@@ -103,33 +103,33 @@ public class Java8BridgeTest {
         assertTrue(result.exists());
         assertEquals(outputContents, expectedContents);
     }
-
-    @Test
-    public void testExportExcelDict() throws Exception {
-        System.out.println("exportExcelDict");
-        String os = System.getProperty("os.name").toLowerCase();
-        File expectedFile;
-        
-        // expectation of file slightly different per OS
-        if (os.contains("linux")) {
-            expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_checkLinux.xls");// TODO: Create this file so it doesn't fail on Linux
-        } else if (os.contains("win")) {
-            expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_check_win.xls");
-        } else {
-            expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_check.xls");
-        }
-        
-        core.readFile(PGTUtil.TESTRESOURCES + "excel_exp_test.pgd");
-        boolean separateDeclensions = true;
-        Java8Bridge.exportExcelDict(OUTPUT, core, separateDeclensions);
-        
-        File result = new File(OUTPUT);
-        
-        byte[] expBytes = Files.readAllBytes(expectedFile.toPath());
-        byte[] resBytes = Files.readAllBytes(result.toPath());
-        
-        assertTrue(Arrays.equals(expBytes, resBytes));
-    }
+// TODO: This test is fundamentally broken. It encodes username in the xls. Convert back to cvs, then check *THAT* for consistency.
+//    @Test
+//    public void testExportExcelDict() throws Exception {
+//        System.out.println("exportExcelDict");
+//        String os = System.getProperty("os.name").toLowerCase();
+//        File expectedFile;
+//        
+//        // expectation of file slightly different per OS
+//        if (os.contains("linux")) {
+//            expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_checkLinux.xls");// TODO: Create this file so it doesn't fail on Linux
+//        } else if (os.contains("win")) {
+//            expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_check_win.xls");
+//        } else {
+//            expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_check.xls");
+//        }
+//        
+//        core.readFile(PGTUtil.TESTRESOURCES + "excel_exp_test.pgd");
+//        boolean separateDeclensions = true;
+//        Java8Bridge.exportExcelDict(OUTPUT, core, separateDeclensions);
+//        
+//        File result = new File(OUTPUT);
+//        
+//        byte[] expBytes = Files.readAllBytes(expectedFile.toPath());
+//        byte[] resBytes = Files.readAllBytes(result.toPath());
+//        
+//        assertTrue(Arrays.equals(expBytes, resBytes));
+//    }
     
     private void cleanup() {
         new File(OUTPUT).delete();

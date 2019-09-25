@@ -25,11 +25,11 @@ This will show you how to package PolyGlot for OSX, Windows, and Linux.
 2) Open build_image.sh (build_image_linux.sh if you are on Linux, build_image_win.bat if you are on Windows) in a text editor.
 3) Change the value of JAVAFX_LOCATION to wherever jfx got dumped (you can get this by looking at the properties of any of the jfx dependencies)
 	- the end of the location should read "openjfx." Do NOT copy the full path of one of the dependencies, or it will not work.
-4) Change the value of JAVA_PACKAGER_LOCATION to the JDK14 bin folder
-5) In a terminal, nagivate to the PolyGlot project folder.
+4) Change the value of JAVA_PACKAGER_LOCATION to the JDK14 bin folder (this step will vanish once J14 is officially released)
+5) In a terminal, navigate to the PolyGlot project folder.
 5.5) (Windows only) Download and install WiX Toolset: https://wixtoolset.org/releases/
 5.5) (OSX Only) install create-dmg (at terminal: "brew install create-dmg" or download from repository at https://github.com/andreyvit/create-dmg)
-6) On OSX, enter the command "./build_image.sh" without the quotes
+6) On OSX, enter the command "./build_image_osx.sh" without the quotes
 	- On Linux, enter the command "./build_image_linux.sh" without the quotes
 	- On Windows, enter the command "build_image_win.bat" without the quotes
 	- If you open the script files, you'll see that they're segmented so that you can give arguments and just execute one section them at a time for convenience.
