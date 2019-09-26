@@ -22,7 +22,7 @@ winString = "Windows"
 
 ###############################
 # LINUX BUILD CONSTANTS
-# update the JFX and packager locations
+# update the JFX and packager locations for your Linux build
 
 JAVAFX_LOCATION_LINUX = "/home/osboxes/.m2/repository/org/openjfx"
 JAVA_PACKAGER_LOCATION_LINUX = "/usr/Java/jdk-14/bin" # this will go away once Java 14 drops officially...
@@ -31,14 +31,14 @@ JAVA_PACKAGER_LOCATION_LINUX = "/usr/Java/jdk-14/bin" # this will go away once J
 ###############################
 # OSX BUILD CONSTANTS
 
-# update the JFX and packager locations
+# update the JFX and packager locations for your OSX build
 JAVAFX_LOCATION_OSX = "/Users/draque/.m2/repository/org/openjfx"
 JAVA_PACKAGER_LOCATION_OSX = "/Users/draque/NetBeansProjects/jdk_14_packaging/Contents/Home/bin"  # this will go away once Java 14 drops officially...
 
 
 ###############################
 # WINDOWS BUILD CONSTANTS
-# update the JFX and packager locations
+# update the JFX and packager locations for your Windows build
 
 JAVAFX_LOCATION_WIN = 'C:\\Users\\user\\.m2\\repository\\org\\openjfx'
 JAVA_PACKAGER_LOCATION_WIN = 'C:\\Java\\jdk-14\\bin'
@@ -61,8 +61,8 @@ def main(args):
     fullBuild = (len(args) == 1) # length of 1 means no arguments (full build)
     POLYGLOT_VERSION = getVersion()
     
-    if "help" in args:
-        print("this should print help. use textblock")
+    if 'help' in args or '-help' in args or '--help' in args:
+        printHelp()
 
     if osString == winString:
         os.system('echo off')
@@ -352,6 +352,34 @@ def getVersion():
         data = myfile.read()
         
     return data
+
+def printHelp():
+    print("""
+#################################################
+#       PolyGlot Build Script
+#################################################
+
+To use this utility, simply execute this script with no arguments to run the entire application construction sequence.
+To target particular steps, use any combination of the following arguments:
+
+    build - Performs a maven build. creates both the jar with and the jar without dependencies included. Produced files
+    stored in the target folder.
+    
+    clean - Wipes the product of build.
+    image - From the built jar files (which must exist), creates a runnable image. This image is platform dependent.
+    Produced files stored in the build folder.
+    
+    pack - Packs the image (which must exist) into a distributable application. This is platform dependent. Produced
+    files stored in the appimage folder.
+    
+    dist - Creates distribution files for the packed application (which must exist). This is platform dependent.
+    Produced files stores in the installer folder.
+
+Example: python build_image.py image pack
+
+The above will presume that the maven build has already taken place. It will use the produced jar files to create a 
+runnable image, then from that image, create a packed application for the platform you are currently running.
+""")
 
 if __name__ == "__main__":
     main(sys.argv)
