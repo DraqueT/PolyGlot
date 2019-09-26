@@ -484,11 +484,6 @@ public final class ScrMainMenu extends PFrame {
      * opens dictionary file
      */
     public void open() {
-        // only open if save/cancel test is passed
-        if (!saveOrCancelTest()) {
-            return;
-        }
-
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Open Dictionary");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
@@ -501,6 +496,11 @@ public final class ScrMainMenu extends PFrame {
         }
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            // only open if save/cancel test is passed
+            if (!saveOrCancelTest()) {
+                return;
+            }
+            
             fileName = chooser.getSelectedFile().getAbsolutePath();
             core = new DictCore(core);
             setFile(fileName);
