@@ -70,123 +70,13 @@ public class ScrMainMenuTest {
         testFile.delete();
     }
 
-    /**
-     * Test of saveAllValues method, of class ScrMainMenu.
-     */
     @Test
-    public void testSaveAllValues() {
-    }
-
     /**
-     * Test of openLexicon method, of class ScrMainMenu.
+     * This one does actually open a browser window. Sorry about that.
      */
-    @Test
-    public void testOpenLexicon() {
+    public void testOpenHelp() throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Method method = ScrMainMenu.class.getDeclaredMethod("openHelp");
+        method.setAccessible(true);
+        method.invoke(mainMenu);
     }
-
-    /**
-     * Test of dispose method, of class ScrMainMenu.
-     */
-    @Test
-    public void testDispose() {
-    }
-
-    /**
-     * Test of saveFile method, of class ScrMainMenu.
-     */
-    @Test
-    public void testSaveFile() {
-    }
-
-    /**
-     * Test of changeToLexicon method, of class ScrMainMenu.
-     */
-    @Test
-    public void testChangeToLexicon() {
-    }
-
-    /**
-     * Test of newFile method, of class ScrMainMenu.
-     */
-    @Test
-    public void testNewFile() {
-    }
-
-    /**
-     * Test of genTitle method, of class ScrMainMenu.
-     */
-    @Test
-    public void testGenTitle() {
-    }
-
-    /**
-     * Test of open method, of class ScrMainMenu.
-     */
-    @Test
-    public void testOpen() {
-    }
-
-    /**
-     * Test of exportFont method, of class ScrMainMenu.
-     */
-    @Test
-    public void testExportFont() {
-    }
-
-    /**
-     * Test of selectWordById method, of class ScrMainMenu.
-     */
-    @Test
-    public void testSelectWordById() {
-    }
-
-    /**
-     * Test of getCurrentWord method, of class ScrMainMenu.
-     */
-    @Test
-    public void testGetCurrentWord() {
-    }
-
-    /**
-     * Test of main method, of class ScrMainMenu.
-     */
-    @Test
-    public void testMain() {
-    }
-
-    /**
-     * Test of updateAllValues method, of class ScrMainMenu.
-     */
-    @Test
-    public void testUpdateAllValues() {
-    }
-
-    /**
-     * Test of thisOrChildrenFocused method, of class ScrMainMenu.
-     */
-    @Test
-    public void testThisOrChildrenFocused() {
-    }
-
-    /**
-     * Test of addBindingToComponent method, of class ScrMainMenu.
-     */
-    @Test
-    public void testAddBindingToComponent() {
-    }
-
-    /**
-     * Test of getWindow method, of class ScrMainMenu.
-     */
-    @Test
-    public void testGetWindow() {
-    }
-
-    /**
-     * Test of canClose method, of class ScrMainMenu.
-     */
-    @Test
-    public void testCanClose() {
-    }
-    
 }

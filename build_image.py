@@ -13,6 +13,8 @@
 import platform
 import sys
 import os
+from os import path
+import shutil
 
 osString = platform.system()
 linString = "Linux"
@@ -67,15 +69,17 @@ def main(args):
     if osString == winString:
         os.system('echo off')
     
-    if fullBuild or "build" in args:
+    if fullBuild or 'docs' in args:
+        injectReadme()
+    if fullBuild or 'build' in args:
         build()
-    if fullBuild or "clean" in args or "image" in args:
+    if fullBuild or 'clean' in args or "image" in args:
         clean()
-    if fullBuild or "image" in args:
+    if fullBuild or 'image' in args:
         image()
-    if fullBuild or "pack" in args:
+    if fullBuild or 'pack' in args:
         pack()
-    if fullBuild or "dist" in args:
+    if fullBuild or 'dist' in args:
         dist()
         
     print('Done!')
@@ -353,6 +357,20 @@ def getVersion():
         
     return data
 
+def injectReadme():
+    print('Injecting documentation...')
+
+    extension = '.zip'
+    if osString == winString:
+        readmeLocation = 'assets\\assets\\org\\DarisaDesigns\\readme'
+    else:
+        readmeLocation = 'assets/assets/org/DarisaDesigns/readme'
+
+    if path.exists(readmeLocation + extension):
+        os.remove(readmeLocation + extension)
+
+    shutil.make_archive(readmeLocation, 'zip', 'docs')
+
 def printHelp():
     print("""
 #################################################
@@ -361,6 +379,8 @@ def printHelp():
 
 To use this utility, simply execute this script with no arguments to run the entire application construction sequence.
 To target particular steps, use any combination of the following arguments:
+
+    docs - Zips and injects documentation into the application assets.
 
     build - Performs a maven build. creates both the jar with and the jar without dependencies included. Produced files
     stored in the target folder.

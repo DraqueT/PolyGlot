@@ -1226,7 +1226,7 @@ public class IOHandler {
 
         return ret;
     }
-
+    
     /**
      * Unzips given archive to destination
      *
@@ -1267,6 +1267,12 @@ public class IOHandler {
         }
     }
 
+    public static File unzipResourceToTempLocation(String resourceLocation)throws IOException {
+        Path tmpPath = Files.createTempDirectory(PGTUtil.DISPLAY_NAME);
+        unzipResourceToDir(resourceLocation, tmpPath);
+        return tmpPath.toFile();
+    }
+    
     /**
      * Unzips an internal resource to a targeted path.Does not check header.
      *

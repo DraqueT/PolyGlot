@@ -60,6 +60,8 @@ public class PGTUtil {
     public static final String TMP_SAVE_FILE = "xPOLYGLOT_TMPx.pgd";
     public static final String VERSION_LOCATION = "/assets/org/DarisaDesigns/version";
     public static final String PGT_VERSION = getVersion();
+    public static final String HELP_FILE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/readme.zip";
+    public static final String HELP_FILE_NAME = "readme.html";
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";
