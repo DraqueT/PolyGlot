@@ -51,8 +51,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -623,48 +621,10 @@ public final class ScrMainMenu extends PFrame {
         ipa.toFront();
     }
 
-    private void openHelp() {
-        URI uri;
-        try {
-            String OS = System.getProperty("os.name");
-            String overridePath = core.getPropertiesManager().getOverrideProgramPath();
-            if (OS.startsWith("Windows")) {
-                String relLocation = new File(".").getAbsolutePath();
-                relLocation = relLocation.substring(0, relLocation.length() - 1);
-                relLocation = "file:///" + relLocation + "readme.html";
-                relLocation = relLocation.replaceAll(" ", "%20");
-                relLocation = relLocation.replaceAll("\\\\", "/");
-                uri = new URI(relLocation);
-                uri.normalize();
-                java.awt.Desktop.getDesktop().browse(uri);
-            } else if (OS.startsWith("Mac")) {
-                String relLocation;
-                if (overridePath.length() == 0) {
-                    relLocation = new File(".").getAbsolutePath();
-                    relLocation = relLocation.substring(0, relLocation.length() - 1);
-                    relLocation = "file://" + relLocation + "readme.html";
-                } else {
-                    relLocation = core.getPropertiesManager().getOverrideProgramPath();
-                    relLocation = "file://" + relLocation + "/Contents/Resources/readme.html";
-                }
-                relLocation = relLocation.replaceAll(" ", "%20");
-                uri = new URI(relLocation);
-                uri.normalize();
-                java.awt.Desktop.getDesktop().browse(uri);
-            } else {
-                // TODO: Implement this for Linux
-                InfoBox.error("Help", "This is not yet implemented for OS: " + OS
-                        + ". Please open readme.html in the application directory", core.getRootWindow());
-            }
-        } catch (URISyntaxException | IOException e) {
-            // no need to log this.
-            // IOHandler.writeErrorLog(e);
-            InfoBox.error("Missing File", "Unable to open readme.html.", core.getRootWindow());
-        }
-    }
-
-    private void quizHit() {
-        ScrQuizGenDialog.run(core);
+    private void openHelp() throws IOException {
+        File readmeDir = IOHandler.unzipResourceToTempLocation(PGTUtil.HELP_FILE_ARCHIVE_LOCATION);
+        File readmeFile = new File(readmeDir.getAbsolutePath() + File.separator + PGTUtil.HELP_FILE_NAME);
+        java.awt.Desktop.getDesktop().browse(readmeFile.toURI());
     }
 
     /**
@@ -1617,7 +1577,11 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_mnuIPAChartActionPerformed
 
     private void mnuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutActionPerformed
-        openHelp();
+        try {
+            openHelp();
+        } catch (IOException e) {
+            InfoBox.error("Help Error", "Unable to open help file: " + e.getLocalizedMessage(), this);
+        }
     }//GEN-LAST:event_mnuAboutActionPerformed
 
     private void mnuChkUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChkUpdateActionPerformed
