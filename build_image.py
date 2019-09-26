@@ -4,7 +4,7 @@
 #
 #   This script builds PolyGlot into a distributable package on Linux,
 #   OSX, and Windows. Windows does not come with Python installed by default.
-#   This should run on both Python 2.7 and 3.x. 
+#   This runs on both Python 2.7 and 3.x. 
 #
 #   From: https://github.com/DraqueT/PolyGlot/
 #
@@ -19,52 +19,53 @@ linString = "Linux"
 osxString = "Darwin"
 winString = "Windows"
 
-#######################
-# UTIL FUNCTIONALITY
-#######################
-
-def getVersion():
-    if osString == winString:
-        location = 'assets\assets\org\DarisaDesigns\version'
-    else:
-        location = 'assets/assets/org/DarisaDesigns/version'
-
-    with open(location, 'r') as myfile:
-        data = myfile.read()
-        
-    return data
-
 
 ###############################
 # LINUX BUILD CONSTANTS
+# update the JFX and packager locations
+
 JAVAFX_LOCATION_LINUX = "/home/osboxes/.m2/repository/org/openjfx"
 JAVA_PACKAGER_LOCATION_LINUX = "/usr/Java/jdk-14/bin" # this will go away once Java 14 drops officially...
 
 
 ###############################
 # OSX BUILD CONSTANTS
+
+# update the JFX and packager locations
 JAVAFX_LOCATION_OSX = "/Users/draque/.m2/repository/org/openjfx"
 JAVA_PACKAGER_LOCATION_OSX = "/Users/draque/NetBeansProjects/jdk_14_packaging/Contents/Home/bin"  # this will go away once Java 14 drops officially...
 
 
 ###############################
 # WINDOWS BUILD CONSTANTS
+# update the JFX and packager locations
 
+JAVAFX_LOCATION_WIN = 'C:\\Users\\user\\.m2\\repository\\org\\openjfx'
+JAVA_PACKAGER_LOCATION_WIN = 'C:\\Java\\jdk-14\\bin'
 
 ###############################
 # UNIVERSAL BUILD CONSTANTS
+# You will not need to change these
 JAR_W_DEP = "PolyGlotLinA-3.0-jar-with-dependencies.jar"
 JAR_WO_DEP = "PolyGlotLinA-3.0.jar"
 JAVAFX_VER = "12.0.2"
-POLYGLOT_VERSION = getVersion()
+POLYGLOT_VERSION = '' # set in main for timing reasons
 
 
+
+######################################
+#   PLATFORM AGNOSTIC FUNCTIONALITY
+######################################
 
 def main(args):
     fullBuild = (len(args) == 1) # length of 1 means no arguments (full build)
+    POLYGLOT_VERSION = getVersion()
     
     if "help" in args:
         print("this should print help. use textblock")
+
+    if osString == winString:
+        os.system('echo off')
     
     if fullBuild or "build" in args:
         build()
@@ -72,14 +73,13 @@ def main(args):
         clean()
     if fullBuild or "image" in args:
         image()
-    if fullBuild or "pack" in args: # not all OSes need this. consider
+    if fullBuild or "pack" in args:
         pack()
     if fullBuild or "dist" in args:
         dist()
         
     print('Done!')
     
-
 def build():
     if osString == linString:
         buildLinux()
@@ -122,9 +122,9 @@ def dist():
         distWin()
 
 
-#######################
-# LINUX FUNCTIONALITY
-#######################
+######################################
+#       LINUX FUNCTIONALITY
+######################################
 
 def buildLinux():
     print('cleaning/testing/compiling...')
@@ -194,9 +194,9 @@ def distLinux():
     os.system(command)
 
 
-#######################
-# OSX FUNCTIONALITY
-#######################
+######################################
+#       OSX FUNCTIONALITY
+######################################
 
 def buildOsx():
     print('cleaning/testing/compiling...')
@@ -233,7 +233,8 @@ def packOsx():
     print("Packing mac app...")
     os.system('rm -rf appimage')
     command = (JAVA_PACKAGER_LOCATION_OSX + '/jpackage ' +
-        '--runtime-image build/image --output appimage ' +
+        '--runtime-image build/image ' +
+        '--output appimage ' +
         '--name PolyGlot ' +
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
         '--copyright "2014-2019 Draque Thompson" ' +
@@ -265,24 +266,92 @@ def distOsx():
         '"appimage/"')
 
 
-#######################
-# WINDOWS FUNCTIONALITY
-#######################
+######################################
+#       WINDOWS FUNCTIONALITY
+######################################
 
 def buildWin():
-    print(__name__)
+    print('cleaning/testing/compiling...')
+    os.system('mvn clean package')
     
 def cleanWin():
-    print(__name__)
+    print('cleaning build paths...')
+    os.system('rmdir target\mods /s /q')
+    os.system('rmdir build /s /q')
     
 def imageWin():
-    print(__name__)
-    
+    print('creating jmod based on jar built without dependencies...')
+    os.system('mkdir target\mods')
+    os.system(JAVA_PACKAGER_LOCATION_WIN + '\\jmod create ' +
+        '--class-path target\\' + JAR_WO_DEP +
+        ' --main-class org.darisadesigns.polyglotlina.PolyGlot ' +
+        'target\mods\PolyGlot.jmod')
+
+    print('creating runnable image...')
+    command = ('%JAVA_HOME%\\bin\\jlink ' +
+        '--module-path "module_injected_jars;' +
+        'target\\mods;' +
+        JAVAFX_LOCATION_WIN + '\\javafx-graphics\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION_WIN + '\\javafx-base\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION_WIN + '\\javafx-media\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION_WIN + '\\javafx-swing\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION_WIN + '\\javafx-controls\\' + JAVAFX_VER + ';' +
+        '%JAVA_HOME%\jmods" ' +
+        '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
+        '--output "build\image" ' +
+        '--compress=2 ' +
+        '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
+    os.system(command)
+
 def packWin():
-    print(__name__)
-    
+    print('Packing Windows app...')
+    os.system('rmdir /s /q appimage')
+    command = (JAVA_PACKAGER_LOCATION_WIN + '\\jpackage ' +
+        '--runtime-image build\\image ' +
+        '--output appimage ' +
+        '--name PolyGlot ' +
+        '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
+        '--copyright "2014-2019 Draque Thompson" ' +
+        '--description "PolyGlot is a spoken language construction toolkit." ' +
+        '--icon packaging_files/win/PolyGlot0.ico ' +
+        '--app-version "' + POLYGLOT_VERSION + '"')
+    os.system(command)
+
 def distWin():
-    print(__name__)
+    print('Creating distribution package...')
+    os.system('rmdir /s /q installer')
+    # If this does not work correctly, install WiX Toolset: https://wixtoolset.org/releases/
+    command = (JAVA_PACKAGER_LOCATION_WIN + '\\jpackage ' + 
+        '--runtime-image build\\image ' +
+        '--win-shortcut ' +
+        '--win-menu ' +
+        '--win-dir-chooser ' +
+        '--package-type exe ' +
+        '--file-associations packaging_files\\win\\file_types_win.prop ' +
+        '--output installer ' +
+        '--name PolyGlot ' +
+        '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
+        '--copyright "2014-2019 Draque Thompson" ' +
+        '--description "PolyGlot is a spoken language construction toolkit."' +
+        ' --icon packaging_files/win/PolyGlot0.ico')
+    os.system(command)
+    os.system('ren installer\PolyGlot-1.0.exe PolyGlot-Ins.exe')
+
+
+####################################
+#       UTIL FUNCTIONALITY
+####################################
+
+def getVersion():
+    if osString == winString:
+        location = 'assets\\assets\\org\\DarisaDesigns\\version'
+    else:
+        location = 'assets/assets/org/DarisaDesigns/version'
+
+    with open(location, 'r') as myfile:
+        data = myfile.read()
+        
+    return data
 
 if __name__ == "__main__":
     main(sys.argv)
