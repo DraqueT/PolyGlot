@@ -56,6 +56,7 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
     private final String partialDeclensionIds;
     private final ConWord word;
     private final Map<String, Dimension> decIdsToGridLocation = new HashMap<>();
+    private boolean autoPopulated = false;
     
     /**
      * Generates grid panel for displaying/editing word forms
@@ -168,7 +169,9 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
                 
                 // if surpressed, add null value
                 if (!decMan.isCombinedDeclSurpressed(fullDecId, typeId)) {
-                    tableModel.setValueAt(getWordForm(fullDecId), yPos, xPos);
+                    String wordForm = getWordForm(fullDecId);
+                    autoPopulated = autoPopulated || !wordForm.isBlank(); // keep track of whether anything in this grid is populated
+                    tableModel.setValueAt(wordForm, yPos, xPos);
                     decIdsToGridLocation.put(fullDecId, new Dimension(xPos, yPos));
                 } else {
                     tableModel.setValueAt(null, yPos, xPos);
@@ -178,6 +181,14 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
             }
             xPos++;
         }
+    }
+    
+    /**
+     * Returns true if any value in this panel's list is auto-populated
+     * @return 
+     */
+    public boolean isAutoPopulated() {
+        return autoPopulated;
     }
     
     /**

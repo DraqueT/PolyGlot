@@ -50,6 +50,7 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
     private final boolean onlyTab;
     private final PTable table;
     private final DeclensionManager decMan;
+    private boolean autoPopulated = false;
     
     /**
      * Instantiates declension list tab (grid with only one column)
@@ -85,7 +86,9 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
         for (DeclensionPair pair : declensionPairs) {
             // if surpressed, add null value
             if (!decMan.isCombinedDeclSurpressed(pair.combinedId, word.getWordTypeId())) {
-                tableModel.setValueAt(getWordForm(pair.combinedId), yPos, 1);
+                String wordForm = getWordForm(pair.combinedId);
+                autoPopulated = autoPopulated || !wordForm.isBlank(); // keep track of whether anything in this list is populated
+                tableModel.setValueAt(wordForm, yPos, 1);
                 decIdsToListLocation.put(pair.combinedId, yPos);
             } else {
                 tableModel.setValueAt(null, yPos, 1);
@@ -93,6 +96,14 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
             
             yPos++;
         }
+    }
+    
+    /**
+     * Returns true if any value in this panel's list is auto-populated
+     * @return 
+     */
+    public boolean isAutoPopulated() {
+        return autoPopulated;
     }
     
     private void setupRowHeight() {

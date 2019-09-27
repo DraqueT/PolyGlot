@@ -42,6 +42,7 @@ public class ConjugationManagerTest {
     
     @Test
     public void testZeroDimNoExtra() throws Exception {
+        System.out.println("testZeroDimNoExtra");
         core.readFile(PGTUtil.TESTRESOURCES + "zero_dim_zero_extra_zero_dep.pgd");
         DeclensionManager decMan = core.getDeclensionManager();
         ConWord word = core.getWordCollection().getWordNodes().get(0);
@@ -56,6 +57,7 @@ public class ConjugationManagerTest {
     
     @Test
     public void testOneDimNoExtra() throws Exception {
+        System.out.println("testOneDimNoExtra");
         core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
         DeclensionManager decMan = core.getDeclensionManager();
         ConWord word = core.getWordCollection().getWordNodes().get(0);
@@ -70,6 +72,7 @@ public class ConjugationManagerTest {
     
     @Test
     public void testOneDimNoExtraFourDep() throws Exception {
+        System.out.println("testOneDimNoExtraFourDep");
         core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_four_dep.pgd");
         DeclensionManager decMan = core.getDeclensionManager();
         ConWord word = core.getWordCollection().getWordNodes().get(0);
@@ -86,6 +89,7 @@ public class ConjugationManagerTest {
     
     @Test
     public void testOneDimNoExtraNoDep() throws Exception {
+        System.out.println("testOneDimNoExtraNoDep");
         core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
         DeclensionManager decMan = core.getDeclensionManager();
         ConWord word = core.getWordCollection().getWordNodes().get(0);
@@ -100,6 +104,7 @@ public class ConjugationManagerTest {
     
     @Test
     public void testTwoDimOneExtraNoDep() throws Exception {
+        System.out.println("testTwoDimOneExtraNoDep");
         core.readFile(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep.pgd");
         DeclensionManager decMan = core.getDeclensionManager();
         ConWord word = core.getWordCollection().getWordNodes().get(0);
@@ -116,6 +121,7 @@ public class ConjugationManagerTest {
     
     @Test
     public void testTwoDimOneExtraNoDepOneDisabled() throws Exception {
+        System.out.println("testTwoDimOneExtraNoDepOneDisabled");
         core.readFile(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep_one_disabled.pgd");
         DeclensionManager decMan = core.getDeclensionManager();
         ConWord word = core.getWordCollection().getWordNodes().get(0);
@@ -132,6 +138,7 @@ public class ConjugationManagerTest {
     
     @Test
     public void testTwoDimNoExtraNoDep() throws Exception {
+        System.out.println("testTwoDimOneExtraNoDepOneDisabled");
         core.readFile(PGTUtil.TESTRESOURCES + "two_dim_zero_extra_zero_dep.pgd");
         DeclensionManager decMan = core.getDeclensionManager();
         ConWord word = core.getWordCollection().getWordNodes().get(0);
