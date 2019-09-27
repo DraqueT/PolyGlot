@@ -51,6 +51,7 @@ public final class ScrDeclensionsGrids extends PDialog {
     private final DeclensionManager decMan;
     private final Map<String, String> labelMap = new HashMap<>();
     private boolean closeWithoutSave = false;
+    private boolean autoPopulated = false;
     Window depVals = null;
     
     /**
@@ -69,7 +70,7 @@ public final class ScrDeclensionsGrids extends PDialog {
         populateDecIdToValues();
         buildWindowBody();
         setupListeners();
-        chkAutogenOverride.setSelected(word.isOverrideAutoDeclen());
+        chkAutogenOverride.setSelected(word.isOverrideAutoDeclen() || !autoPopulated);
 }
     
     /**
@@ -169,6 +170,7 @@ public final class ScrDeclensionsGrids extends PDialog {
                     PDeclensionGridPanel gridPanel 
                             = new PDeclensionGridPanel(partialDim, dimX, dimY, word.getWordTypeId(), core, word);
                     pnlTabDeclensions.addTab(gridPanel.getTabName(), gridPanel);
+                    autoPopulated = autoPopulated || gridPanel.isAutoPopulated();
                 });
 
                 // add singleton values when appropriate
@@ -176,6 +178,7 @@ public final class ScrDeclensionsGrids extends PDialog {
                 if (!singletons.isEmpty()) {
                     PDeclensionListPanel listPanel = new PDeclensionListPanel(singletons, core, word, false);
                     pnlTabDeclensions.addTab(listPanel.getTabName(), listPanel);
+                    autoPopulated = listPanel.isAutoPopulated();
                 }
             }
         } else {
@@ -188,6 +191,7 @@ public final class ScrDeclensionsGrids extends PDialog {
                     = new PDeclensionListPanel(completeList, core, word, true);
             
             pnlTabDeclensions.addTab(listPanel.getTabName(), listPanel);
+            autoPopulated = listPanel.isAutoPopulated();
         }
         
         btnDeprecated.setVisible(decMan.wordHasDeprecatedForms(word));
