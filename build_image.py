@@ -70,7 +70,7 @@ def main(args):
         os.system('echo off')
     
     if fullBuild or 'docs' in args:
-        injectReadme()
+        injectDocs()
     if fullBuild or 'build' in args:
         build()
     if fullBuild or 'clean' in args or "image" in args:
@@ -357,9 +357,11 @@ def getVersion():
         
     return data
 
-def injectReadme():
+# Injects readme (with resources), example dictionaries, etc.
+def injectDocs():
     print('Injecting documentation...')
 
+    # readme and resources...
     extension = '.zip'
     if osString == winString:
         readmeLocation = 'assets\\assets\\org\\DarisaDesigns\\readme'
@@ -370,6 +372,19 @@ def injectReadme():
         os.remove(readmeLocation + extension)
 
     shutil.make_archive(readmeLocation, 'zip', 'docs')
+
+    # example dictionaries
+    if osString == winString:
+        sourceLocation = 'packaging_files\\example_lexicons'
+        dictLocation = 'assets\\assets\\org\\DarisaDesigns\\exlex'
+    else:
+        sourceLocation = 'packaging_files/example_lexicons'
+        dictLocation = 'assets/assets/org/DarisaDesigns/exlex'
+
+    if path.exists(sourceLocation + extension):
+        os.remove(readmeLocation + extension)
+
+    shutil.make_archive(dictLocation, 'zip', sourceLocation)
 
 def printHelp():
     print("""

@@ -42,7 +42,6 @@ public class PCellRenderer implements TableCellRenderer {
     private final Font myFont;
     private Color background = Color.white;
     private DocumentListener docListener;
-    private Object lastValue = "";
     private final DictCore core;
     private final boolean useConFont;
     private final double fontSize;
@@ -75,7 +74,6 @@ public class PCellRenderer implements TableCellRenderer {
         
         if (value != null) {
             editor.setText(value.toString());
-            lastValue = value;
         }
         
         if (myFont != null) {

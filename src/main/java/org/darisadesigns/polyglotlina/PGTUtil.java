@@ -61,6 +61,7 @@ public class PGTUtil {
     public static final String VERSION_LOCATION = "/assets/org/DarisaDesigns/version";
     public static final String PGT_VERSION = getVersion();
     public static final String HELP_FILE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/readme.zip";
+    public static final String EXAMPLE_LANGUAGE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/exlex.zip";
     public static final String HELP_FILE_NAME = "readme.html";
 
     // properties on words

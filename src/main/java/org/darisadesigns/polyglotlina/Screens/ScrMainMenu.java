@@ -73,8 +73,9 @@ import org.darisadesigns.polyglotlina.Java8Bridge;
 import org.darisadesigns.polyglotlina.WebInterface;
 
 /**
- * Primary window for PolyGlot interface. Main running class that instantiates core and handles other windows/UI.
- * Depends on DictCore for all heavy logical lifting behind the scenes.
+ * Primary window for PolyGlot interface. Main running class that instantiates
+ * core and handles other windows/UI. Depends on DictCore for all heavy logical
+ * lifting behind the scenes.
  *
  * @author draque.thompson
  */
@@ -90,7 +91,8 @@ public final class ScrMainMenu extends PFrame {
     /**
      * Creates new form ScrMainMenu
      *
-     * @param overridePath Path PolyGlot should treat as home directory (blank if default)
+     * @param overridePath Path PolyGlot should treat as home directory (blank
+     * if default)
      * @param _core DictCore menus run on
      */
     public ScrMainMenu(String overridePath, DictCore _core) {
@@ -99,7 +101,7 @@ public final class ScrMainMenu extends PFrame {
         core.setRootWindow(this);
         toDoTree = new PToDoTree(core);
         cacheLexicon = ScrLexicon.run(core, this);
-        
+
         initComponents();
         setupEasterEgg();
 
@@ -115,15 +117,47 @@ public final class ScrMainMenu extends PFrame {
 
         newFile(false);
         core.getPropertiesManager().setOverrideProgramPath(overridePath);
-        
+
         setupButtonPopouts();
         setupToDo();
         populateRecentOpened();
+        populateExampleLanguages();
         checkJavaVersion();
         super.setSize(super.getPreferredSize());
         addBindingsToPanelComponents(this.getRootPane());
     }
-    
+
+    /**
+     * Populates help menu with example dictionary files.
+     */
+    private void populateExampleLanguages() {
+        try {
+            File exLangFolder = IOHandler.unzipResourceToTempLocation(PGTUtil.EXAMPLE_LANGUAGE_ARCHIVE_LOCATION);
+
+            for (File exampleLang : exLangFolder.listFiles()) {
+                final String title = exampleLang.getName().replace("_", " ").replace(".pgd", "");
+                final String location = exampleLang.getAbsolutePath();
+
+                JMenuItem mnuExample = new JMenuItem(title);
+                mnuExample.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        // only open if save/cancel test is passed
+                        if (!saveOrCancelTest()) {
+                            return;
+                        }
+
+                        setFile(location);
+                    }
+                });
+                
+                mnuExLex.add(mnuExample);
+            }
+        } catch (IOException e) {
+            InfoBox.error("Resource Error", "Failed to load example dictionaries.", this);
+            IOHandler.writeErrorLog(e, "Failed to load example dictionaries.");
+        }
+    }
+
     /**
      * Warns user if they are using a beta version (based on beta warning file)
      */
@@ -132,44 +166,46 @@ public final class ScrMainMenu extends PFrame {
             InfoBox.warning("BETA VERSION", "You are using a beta version of PolyGlot. Please proceed with caution!", this);
         }
     }
-    
+
     @Override
     public void saveAllValues() {
         if (curWindow != null) {
             curWindow.saveAllValues();
         }
-        
+
         cacheLexicon.saveAllValues();
     }
-    
+
     /**
      * Externally visible method for enabling logograph menu button
-     * @param enable 
+     *
+     * @param enable
      */
     public void setEnabledLogoButton(boolean enable) {
         btnLogos.setEnabled(enable);
-        
-        if(((PButton)btnLogos).isActiveSelected() && !enable) {
+
+        if (((PButton) btnLogos).isActiveSelected() && !enable) {
             changeToLexicon();
         }
     }
-    
+
     public boolean isEnabledLogoButton() {
         return btnLogos.isEnabled();
     }
 
     /**
      * For the purposes of startup with file
+     *
      * @param switchTo
-     * @return 
+     * @return
      */
     public Window openLexicon(boolean switchTo) {
         cacheLexicon.updateAllValues(core);
-        
+
         if (switchTo) {
             changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
         }
-        
+
         return cacheLexicon;
     }
 
@@ -177,7 +213,7 @@ public final class ScrMainMenu extends PFrame {
     public void dispose() {
         this.dispose(true);
     }
-    
+
     private void dispose(boolean doExit) {
         if (doExit) { // skip saving file if not exiting program...
             // only exit if save/cancel test is passed and current window is legal to close
@@ -190,11 +226,11 @@ public final class ScrMainMenu extends PFrame {
                 curWindow.dispose();
             }
         }
-        
+
         killAllChildren();
 
         super.dispose();
-        
+
         if (doExit) { // skip saving options if not exiting program...
             core.getOptionsManager().setScreenPosition(getClass().getName(), getLocation());
             core.getOptionsManager().setToDoBarPosition(pnlToDoSplit.getDividerLocation());
@@ -210,7 +246,7 @@ public final class ScrMainMenu extends PFrame {
             System.exit(0);
         }
     }
-    
+
     /**
      * Kills all children. Hiding under the covers won't save them.
      */
@@ -218,12 +254,13 @@ public final class ScrMainMenu extends PFrame {
         for (Window child : childWindows) {
             child.dispose();
         }
-        
+
         childWindows.clear();
     }
 
     /**
-     * Checks to make certain Java is a high enough version. Informs user and quits otherwise.
+     * Checks to make certain Java is a high enough version. Informs user and
+     * quits otherwise.
      */
     private void checkJavaVersion() {
         String javaVersion = System.getProperty("java.version");
@@ -343,7 +380,7 @@ public final class ScrMainMenu extends PFrame {
         if (getCurFileName().length() == 0) {
             return false;
         }
-        
+
         core.getOptionsManager().pushRecentFile(getCurFileName());
         populateRecentOpened();
         saveAllValues();
@@ -476,10 +513,6 @@ public final class ScrMainMenu extends PFrame {
         setTitle(title);
     }
 
-    private void viewAbout() {
-        ScrAbout.run(core);
-    }
-
     /**
      * opens dictionary file
      */
@@ -500,7 +533,7 @@ public final class ScrMainMenu extends PFrame {
             if (!saveOrCancelTest()) {
                 return;
             }
-            
+
             fileName = chooser.getSelectedFile().getAbsolutePath();
             core = new DictCore(core);
             setFile(fileName);
@@ -560,11 +593,11 @@ public final class ScrMainMenu extends PFrame {
         }
 
         try {
-            Java8Bridge.exportExcelDict(fileName, core, 
-                    InfoBox.actionConfirmation("Excel Export", 
-                            "Export all declensions? (Separates parts of speech into individual tabs)", 
+            Java8Bridge.exportExcelDict(fileName, core,
+                    InfoBox.actionConfirmation("Excel Export",
+                            "Export all declensions? (Separates parts of speech into individual tabs)",
                             core.getRootWindow()));
-            
+
             InfoBox.info("Export Status", "Dictionary exported to " + fileName + ".", core.getRootWindow());
         } catch (IOException | InterruptedException e) {
             IOHandler.writeErrorLog(e);
@@ -575,7 +608,8 @@ public final class ScrMainMenu extends PFrame {
     /**
      * Prompts user for a location and exports font within PGD to given path
      *
-     * @param exportCharis set to true to export charis, false to export con font
+     * @param exportCharis set to true to export charis, false to export con
+     * font
      */
     public void exportFont(boolean exportCharis) {
         JFileChooser chooser = new JFileChooser();
@@ -596,8 +630,8 @@ public final class ScrMainMenu extends PFrame {
         if (!fileName.contains(".")) {
             fileName += ".ttf";
         }
-        
-        if (IOHandler.fileExists(fileName) 
+
+        if (IOHandler.fileExists(fileName)
                 && !InfoBox.actionConfirmation("Overwrite Confirmation", "File will be overwritten. Continue?", this)) {
             return;
         }
@@ -646,7 +680,8 @@ public final class ScrMainMenu extends PFrame {
     /**
      * Retrieves currently selected word (if any) from ScrLexicon
      *
-     * @return current word selected in scrLexicon, null otherwise (or if lexicon is not visible)
+     * @return current word selected in scrLexicon, null otherwise (or if
+     * lexicon is not visible)
      */
     public ConWord getCurrentWord() {
         ConWord ret = null;
@@ -674,77 +709,79 @@ public final class ScrMainMenu extends PFrame {
         ((PButton) btnPhonology).setActiveSelected(false);
         ((PButton) btnQuiz).setActiveSelected(false);
     }
-    
+
     private void setupToDo() {
         int toDoPosition = core.getOptionsManager().getToDoBarPosition();
-        
+
         javax.swing.JScrollPane jScrollPane = new javax.swing.JScrollPane();
         toDoTree = new PToDoTree(core);
         toDoTree.setToolTipText("To-Do list. Right click to add, remove, or rename tasks. Tasks can contain subtasks.");
-        
+
         toDoTree.setSelectionModel(null);
         jScrollPane.setViewportView(toDoTree);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(pnlToDo);
         pnlToDo.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
         );
-        
+
         if (toDoPosition >= 0) {
             pnlToDoSplit.setDividerLocation(toDoPosition);
         }
-        
+
         populateToDo();
     }
-    
+
     private void populateToDo() {
         toDoTree.setRootVisible(false);
         toDoTree.setModel(new PToDoTreeModel(ToDoTreeNode.createToDoTreeNode(core.getToDoManager().getRoot())));
-        ((DefaultTreeModel)toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode)toDoTree.getModel().getRoot());
+        ((DefaultTreeModel) toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode) toDoTree.getModel().getRoot());
     }
-    
+
     private void setupEasterEgg() {
         class EnterKeyListener implements KeyEventPostProcessor {
+
             String lastChars = "------------------------------";
+
             @Override
             public boolean postProcessKeyEvent(KeyEvent e) {
-                if(e != null && e.getKeyCode() == 0) {
+                if (e != null && e.getKeyCode() == 0) {
                     lastChars = lastChars.substring(1, lastChars.length());
                     lastChars = lastChars + e.getKeyChar();
-                    
-                    if(lastChars.toLowerCase().endsWith("what did you see last tuesday")) {
+
+                    if (lastChars.toLowerCase().endsWith("what did you see last tuesday")) {
                         InfoBox.info("Coded Response", "A pink elephant.", null);
                     } else if (lastChars.toLowerCase().endsWith("this is the forest primeval")) {
                         InfoBox.info("Bearded with moss", "The murmuring pines and the hemlocks.", null);
                     } else if (lastChars.toLowerCase().endsWith("it can't outlast you")) {
                         InfoBox.info("Just human...", "Yes it can. You're not a kukun.", null);
-                    } else if (lastChars.toLowerCase().endsWith("who's draque") 
+                    } else if (lastChars.toLowerCase().endsWith("who's draque")
                             || lastChars.toLowerCase().endsWith("who is draque")) {
                         ScrEasterEgg.run(core.getRootWindow());
                     } else if (lastChars.endsWith("uuddlrlrba")) {
                         InfoBox.info("コナミコマンド", "30の命を与えます。", null);
                     }
                 }
-                
+
                 return false;
             }
-        }        
+        }
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventPostProcessor(new EnterKeyListener());
     }
-    
+
     public void setWordSelectedById(Integer id) {
         if (cacheLexicon != null) {
             cacheLexicon.setWordSelectedById(id);
         }
     }
-    
+
     /**
      * Performs all actions necessary for changing the viewed panel
      *
@@ -821,81 +858,109 @@ public final class ScrMainMenu extends PFrame {
 
         genTitle();
     }
-    
+
     /**
      * Switches to first active menu button
      */
     private void selectFirstAvailableButton() {
         openLexicon();
     }
-    
+
     private void setupButtonPopouts() {
         // not all buttons support this feature, but those that don't should still display it in grey
-        setupButtonPopout((PButton)btnLexicon, () -> {return null;}, false);
-        setupButtonPopout((PButton)btnPos, () -> {return ScrTypes.run(core);}, true);
-        setupButtonPopout((PButton)btnClasses, () -> {return new ScrWordClasses(core);}, true);
-        setupButtonPopout((PButton)btnGrammar, () -> {return new ScrGrammarGuide(core);}, true);
-        setupButtonPopout((PButton)btnLogos, () -> {return new ScrLogoDetails(core);}, true);
-        setupButtonPopout((PButton)btnPhonology, () -> {return new ScrPhonology(core);}, true);
-        setupButtonPopout((PButton)btnProp, () -> {return new ScrLangProps(core);}, true);
-        setupButtonPopout((PButton)btnQuiz, () -> {return null;}, false);
+        setupButtonPopout((PButton) btnLexicon, () -> {
+            return null;
+        }, false);
+        setupButtonPopout((PButton) btnPos, () -> {
+            return ScrTypes.run(core);
+        }, true);
+        setupButtonPopout((PButton) btnClasses, () -> {
+            return new ScrWordClasses(core);
+        }, true);
+        setupButtonPopout((PButton) btnGrammar, () -> {
+            return new ScrGrammarGuide(core);
+        }, true);
+        setupButtonPopout((PButton) btnLogos, () -> {
+            return new ScrLogoDetails(core);
+        }, true);
+        setupButtonPopout((PButton) btnPhonology, () -> {
+            return new ScrPhonology(core);
+        }, true);
+        setupButtonPopout((PButton) btnProp, () -> {
+            return new ScrLangProps(core);
+        }, true);
+        setupButtonPopout((PButton) btnQuiz, () -> {
+            return null;
+        }, false);
     }
-    
+
     /**
-     * 
+     *
      * @param button
      * @param cachedWindow
-     * @param setNewWindow 
+     * @param setNewWindow
      */
     private void setupButtonPopout(final PButton button, Supplier<Window> setNewWindow, boolean _enable) {
         final JPopupMenu buttonMenu = new JPopupMenu();
         final JMenuItem popOut = new JMenuItem("Pop Window Out");
         final boolean enable = _enable;
-        
+
         if (enable) {
             button.setToolTipText(button.getToolTipText() + " (right click to pop window out)");
             popOut.setToolTipText("Pops " + button.getText() + " into independant window.");
         } else {
             popOut.setToolTipText(button.getText() + " cannot be popped out.");
         }
-        
-        popOut.addActionListener(new ActionListener(){
+
+        popOut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Window w = setNewWindow.get();
                 button.setEnabled(false);
-                w.addWindowListener(new WindowListener(){
+                w.addWindowListener(new WindowListener() {
                     @Override
-                    public void windowOpened(WindowEvent e) {}
+                    public void windowOpened(WindowEvent e) {
+                    }
+
                     @Override
-                    public void windowClosing(WindowEvent e) {}
+                    public void windowClosing(WindowEvent e) {
+                    }
+
                     @Override
                     public void windowClosed(WindowEvent e) {
                         childWindows.remove(w);
                         button.setEnabled(true);
                     }
+
                     @Override
-                    public void windowIconified(WindowEvent e) {}
+                    public void windowIconified(WindowEvent e) {
+                    }
+
                     @Override
-                    public void windowDeiconified(WindowEvent e) {}
+                    public void windowDeiconified(WindowEvent e) {
+                    }
+
                     @Override
-                    public void windowActivated(WindowEvent e) {}
+                    public void windowActivated(WindowEvent e) {
+                    }
+
                     @Override
-                    public void windowDeactivated(WindowEvent e) {}
+                    public void windowDeactivated(WindowEvent e) {
+                    }
                 });
                 w.setVisible(true);
                 w.toFront();
                 childWindows.add(w);
-                
+
                 if (button.isActiveSelected()) {
                     selectFirstAvailableButton();
                 }
             }
         });
-        
+
         buttonMenu.add(popOut);
-        
-        button.addMouseListener(new MouseListener(){
+
+        button.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.isPopupTrigger()
@@ -913,32 +978,35 @@ public final class ScrMainMenu extends PFrame {
             }
 
             @Override
-            public void mouseReleased(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {
+            }
 
             @Override
-            public void mouseEntered(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {
+            }
 
             @Override
-            public void mouseExited(MouseEvent e) {}
-            
+            public void mouseExited(MouseEvent e) {
+            }
+
             private void doPop(MouseEvent e) {
                 popOut.setEnabled(button.isEnabled() && enable);
                 buttonMenu.show(e.getComponent(), e.getX(), e.getY());
             }
         });
     }
-    
+
     private void openLexicon() {
         cacheLexicon.updateAllValues(core);
-        changeScreen(cacheLexicon, cacheLexicon.getWindow(), (PButton)btnLexicon);
+        changeScreen(cacheLexicon, cacheLexicon.getWindow(), (PButton) btnLexicon);
     }
-    
+
     @Override
     public void updateAllValues(DictCore _core) {
         if (curWindow != null) {
             curWindow.updateAllValues(_core);
         }
-        
+
         if (cacheLexicon != null) {
             cacheLexicon.updateAllValues(_core);
         }
@@ -956,7 +1024,8 @@ public final class ScrMainMenu extends PFrame {
     }
 
     /**
-     * For now, always returns true... shouldn't ever be any upstream window, regardless.
+     * For now, always returns true... shouldn't ever be any upstream window,
+     * regardless.
      *
      * @return
      */
@@ -964,15 +1033,15 @@ public final class ScrMainMenu extends PFrame {
     public boolean canClose() {
         return true;
     }
-    
+
     public String getCurFileName() {
         return curFileName;
     }
-    
+
     public void printToPdf() {
         ScrPrintToPDF.run(core);
     }
-    
+
     /**
      * Loads new menu screen with old core and disposes self
      */
@@ -983,10 +1052,11 @@ public final class ScrMainMenu extends PFrame {
         newMenu.selectFirstAvailableButton();
         this.dispose(false);
     }
-    
+
     /**
-     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
-     * content of this method is always regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -1049,6 +1119,7 @@ public final class ScrMainMenu extends PFrame {
         mnuHelp = new javax.swing.JMenu();
         mnuAbout = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
+        mnuExLex = new javax.swing.JMenu();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenuItem8 = new javax.swing.JMenuItem();
 
@@ -1452,6 +1523,10 @@ public final class ScrMainMenu extends PFrame {
             }
         });
         mnuHelp.add(mnuChkUpdate);
+
+        mnuExLex.setText("Example Languages");
+        mnuExLex.setToolTipText("Languages with exmples to copy from");
+        mnuHelp.add(mnuExLex);
         mnuHelp.add(jSeparator3);
 
         jMenuItem8.setText("Check for Updates");
@@ -1524,7 +1599,7 @@ public final class ScrMainMenu extends PFrame {
     private void mnuImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFileActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrExcelImport.run(core, this);
-        cacheLexicon.refreshWordList(-1); 
+        cacheLexicon.refreshWordList(-1);
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuImportFileActionPerformed
 
@@ -1543,11 +1618,11 @@ public final class ScrMainMenu extends PFrame {
         if (InfoBox.yesNoCancel("Continue Operation?", "The statistics report can"
                 + " take a long time to complete, depending on the complexity\n"
                 + "of your conlang. Continue?", core.getRootWindow()) == JOptionPane.YES_OPTION) {
-            
+
             if (!WebInterface.isInternetConnected()) {
                 InfoBox.warning("No Net Connection", "No network connection detected. Google generated graphs will not be rendered.", this);
             }
-            
+
             core.buildLanguageReport();
 
             // test whether con-font family is installed on computer
@@ -1626,27 +1701,39 @@ public final class ScrMainMenu extends PFrame {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         mnuLexFamilies.setEnabled(false);
         ScrFamilies s = new ScrFamilies(core, this);
-        s.addWindowListener(new WindowListener(){
+        s.addWindowListener(new WindowListener() {
             @Override
-            public void windowOpened(WindowEvent e) {}
+            public void windowOpened(WindowEvent e) {
+            }
+
             @Override
-            public void windowClosing(WindowEvent e) {}
+            public void windowClosing(WindowEvent e) {
+            }
+
             @Override
             public void windowClosed(WindowEvent e) {
                 mnuLexFamilies.setEnabled(true);
             }
+
             @Override
-            public void windowIconified(WindowEvent e) {}
+            public void windowIconified(WindowEvent e) {
+            }
+
             @Override
-            public void windowDeiconified(WindowEvent e) {}
+            public void windowDeiconified(WindowEvent e) {
+            }
+
             @Override
-            public void windowActivated(WindowEvent e) {}
+            public void windowActivated(WindowEvent e) {
+            }
+
             @Override
-            public void windowDeactivated(WindowEvent e) {}
+            public void windowDeactivated(WindowEvent e) {
+            }
         });
         s.setVisible(true);
         setCursor(Cursor.getDefaultCursor());
-        
+
     }//GEN-LAST:event_mnuLexFamiliesActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -1673,12 +1760,12 @@ public final class ScrMainMenu extends PFrame {
         s.setLocation(getLocation());
         s.setVisible(true);
     }
-    
+
     private void mnuImportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFontActionPerformed
         JFileChooser chooser = new JFileChooser();
         String fileName;
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf", "otf", "ttc", "dfont");
-        
+
         chooser.setDialogTitle("Import Font");
         chooser.setFileFilter(filter);
         chooser.setCurrentDirectory(new File("."));
@@ -1689,12 +1776,12 @@ public final class ScrMainMenu extends PFrame {
         } else {
             return;
         }
-        
-        Double fontSize = InfoBox.doubleInputDialog("Font Size", 
-                "Enter a numeric value for font size.", 
-                "Please provide a numeric value (default 12.0) for font size.", 
+
+        Double fontSize = InfoBox.doubleInputDialog("Font Size",
+                "Enter a numeric value for font size.",
+                "Please provide a numeric value (default 12.0) for font size.",
                 this);
-        
+
         if (fontSize == null) {
             return;
         }
@@ -1707,7 +1794,7 @@ public final class ScrMainMenu extends PFrame {
             InfoBox.error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage(), this);
         } catch (FontFormatException e) {
             IOHandler.writeErrorLog(e);
-            InfoBox.error("Font Format Error", "Unable to read " + fileName + " due to: " 
+            InfoBox.error("Font Format Error", "Unable to read " + fileName + " due to: "
                     + e.getLocalizedMessage(), this);
         }
     }//GEN-LAST:event_mnuImportFontActionPerformed
@@ -1760,6 +1847,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuAbout;
     private javax.swing.JMenuItem mnuCheckLexicon;
     private javax.swing.JMenuItem mnuChkUpdate;
+    private javax.swing.JMenu mnuExLex;
     private javax.swing.JMenuItem mnuExit;
     private javax.swing.JMenuItem mnuExportFont;
     private javax.swing.JMenuItem mnuExportToExcel;

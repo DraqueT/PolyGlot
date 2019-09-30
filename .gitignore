@@ -1,8 +1,9 @@
+/installer*/
 *.ini
 *.log
-nbproject
-build
-target
 appimage
+build
+exlex.zip
+nbproject
 readme.zip
-/installer*/
+target
