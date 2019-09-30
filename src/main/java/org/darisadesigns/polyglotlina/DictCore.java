@@ -63,7 +63,6 @@ import org.xml.sax.SAXException;
  */
 public class DictCore {
     
-    private boolean isBeta = false;
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
     private DeclensionManager declensionMgr;
@@ -83,7 +82,6 @@ public class DictCore {
     private ScrMainMenu rootWindow;
     private Object clipBoard;
     private boolean curLoading = false;
-    private final Map<String, Integer> versionHierarchy = new HashMap<>();
     private Instant lastSaveTime = Instant.MIN;
 
     /**
@@ -110,7 +108,6 @@ public class DictCore {
     
     private void initializeDictCore() {
         try {
-            isBeta = PolyGlot.testIsBeta();
             wordCollection = new ConWordCollection(this);
             typeCollection = new TypeCollection(this);
             declensionMgr = new DeclensionManager(this);
@@ -136,8 +133,7 @@ public class DictCore {
             wordPropCollection.setAlphaOrder(alphaOrder);
             rootWindow = null;
             
-            populateVersionHierarchy();
-            validateVersion();
+            PGTUtil.validateVersion();
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("CORE ERROR", "Error creating language core: " + e.getLocalizedMessage(), null);
@@ -355,22 +351,14 @@ public class DictCore {
     }
     
     /**
-     * Returns true if running a beta build of PolyGlot
-     * @return 
-     */
-    public boolean isBeta() {
-        return isBeta;
-    }
-    
-    /**
      * Used for getting the display version (potentially different than the internal version due to betas, etc.)
      * @return 
      */
     public String getDisplayVersion() {
         String ret = PGTUtil.PGT_VERSION;
         
-        if (isBeta) {
-            ret = "BETA (last release: " + ret + ")";
+        if (PGTUtil.IS_BETA) {
+            ret = ret + " BETA (last release: " + ret + ")";
         }
         
         return ret;
@@ -696,72 +684,10 @@ public class DictCore {
     }
     
     /**
-     * 
-     * @param version
-     * @return 
-     */
-    public int getVersionHierarchy(String version) {
-        int ret = -1;
-        
-        if (versionHierarchy.containsKey(version)) {
-            ret = versionHierarchy.get(version);
-        }
-        
-        return ret;
-    }
-    
-    private void validateVersion() throws Exception {
-        if (!versionHierarchy.containsKey(PGTUtil.PGT_VERSION)) {
-            throw new Exception("ERROR: CURRENT VERSION NOT ACCOUNTED FOR IN VERSION HISTORY.");
-        }
-    }
-    
-    /**
      * Returns current file's full path
      * @return 
      */
     public String getCurFileName() {
         return rootWindow.getCurFileName();
-    }
-    
-    private void populateVersionHierarchy() {
-        versionHierarchy.put("0", 0);
-        versionHierarchy.put("0.5", 1);
-        versionHierarchy.put("0.5.1", 2);
-        versionHierarchy.put("0.6", 3);
-        versionHierarchy.put("0.6.1", 4);
-        versionHierarchy.put("0.6.5", 5);
-        versionHierarchy.put("0.7", 6);
-        versionHierarchy.put("0.7.5", 7);
-        versionHierarchy.put("0.7.6", 8);
-        versionHierarchy.put("0.7.6.1", 9);
-        versionHierarchy.put("0.8", 10);
-        versionHierarchy.put("0.8.1", 11);
-        versionHierarchy.put("0.8.1.1", 12);
-        versionHierarchy.put("0.8.1.2", 13);
-        versionHierarchy.put("0.8.5", 14);
-        versionHierarchy.put("0.9", 15);
-        versionHierarchy.put("0.9.1", 16);
-        versionHierarchy.put("0.9.2", 17);
-        versionHierarchy.put("0.9.9", 18);
-        versionHierarchy.put("0.9.9.1", 19);
-        versionHierarchy.put("1.0", 20);
-        versionHierarchy.put("1.0.1", 21);
-        versionHierarchy.put("1.1", 22);
-        versionHierarchy.put("1.2", 23);
-        versionHierarchy.put("1.2.1", 24);
-        versionHierarchy.put("1.2.2", 25);
-        versionHierarchy.put("1.3", 26);
-        versionHierarchy.put("1.4", 27);
-        versionHierarchy.put("2.0", 28);
-        versionHierarchy.put("2.1", 29);
-        versionHierarchy.put("2.2", 30);
-        versionHierarchy.put("2.3", 31);
-        versionHierarchy.put("2.3.1", 32);
-        versionHierarchy.put("2.3.2", 33);
-        versionHierarchy.put("2.3.3", 34);
-        versionHierarchy.put("2.4", 35);
-        versionHierarchy.put("2.5", 36);
-        versionHierarchy.put("3.0", 37);
     }
 }

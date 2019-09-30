@@ -79,12 +79,12 @@ public class CustHandlerFactory {
         // test for version number in pgd file, set to 0 if none found (pre 0.6)
         Node versionNode = doc.getDocumentElement().getElementsByTagName(PGTUtil.PGVERSION_XID).item(0);
         String versionNumber = versionNode == null ? "0" : versionNode.getTextContent();
-        int fileVersionHierarchy = core.getVersionHierarchy(versionNumber);
+        int fileVersionHierarchy = PGTUtil.getVersionHierarchy(versionNumber);
         
         if (fileVersionHierarchy == -1) {
             throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
                         + "written with a newer version with additional features: Ver " + versionNumber + ".");
-        } else if (fileVersionHierarchy < core.getVersionHierarchy("0.7.5")) {
+        } else if (fileVersionHierarchy < PGTUtil.getVersionHierarchy("0.7.5")) {
             throw new Exception("Version " + versionNumber + " no longer supported. Load/save with older version of"
                         + "PolyGlot (0.7.5 through 1.2) to upconvert.");
         }
@@ -1161,7 +1161,7 @@ public class CustHandlerFactory {
             @Override
             public void endDocument() {
                 // Version 2.3 implemented class filters for conj rules. Default to all on.
-                if (versionHierarchy < core.getVersionHierarchy("2.2")) {
+                if (versionHierarchy < PGTUtil.getVersionHierarchy("2.2")) {
                     core.getDeclensionManager().setAllDeclensionRulesToAllClasses();
                 }
             }

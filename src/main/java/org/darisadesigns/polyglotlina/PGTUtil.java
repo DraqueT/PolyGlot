@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import org.darisadesigns.polyglotlina.Screens.ScrFamilies;
@@ -52,6 +53,7 @@ public class PGTUtil {
 
     private static File java8BridgeLocation = null;
     private static File errorDirectory;
+    private static  final Map<String, Integer> VERSION_HIERARCHY;
     public static final String DICTIONARY_XID = "dictionary";
     public static final String PGVERSION_XID = "PolyGlotVer";
     public static final String DICTIONARY_SAVE_DATE = "DictSaveDate";
@@ -59,7 +61,8 @@ public class PGTUtil {
     public static final String POLYGLOT_FILE_SUFFIX = "pgd";
     public static final String TMP_SAVE_FILE = "xPOLYGLOT_TMPx.pgd";
     public static final String VERSION_LOCATION = "/assets/org/DarisaDesigns/version";
-    public static final String PGT_VERSION = getVersion();
+    public static final String PGT_VERSION;
+    public static final boolean IS_BETA;
     public static final String HELP_FILE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/readme.zip";
     public static final String EXAMPLE_LANGUAGE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/exlex.zip";
     public static final String HELP_FILE_NAME = "readme.html";
@@ -483,6 +486,57 @@ public class PGTUtil {
 
         IS_OSX = isOSX();
         IS_WINDOWS = isWindows();
+        
+        // sets version number and beta status
+        String version = getVersion();
+        if (version.contains("B")) {
+            IS_BETA = true;
+            PGT_VERSION = version.replace("B", "");
+        } else {
+            IS_BETA = false;
+            PGT_VERSION = version;
+        }
+        
+        // populate version hierarchy
+        VERSION_HIERARCHY = new HashMap<>();
+        VERSION_HIERARCHY.put("0", 0);
+        VERSION_HIERARCHY.put("0.5", 1);
+        VERSION_HIERARCHY.put("0.5.1", 2);
+        VERSION_HIERARCHY.put("0.6", 3);
+        VERSION_HIERARCHY.put("0.6.1", 4);
+        VERSION_HIERARCHY.put("0.6.5", 5);
+        VERSION_HIERARCHY.put("0.7", 6);
+        VERSION_HIERARCHY.put("0.7.5", 7);
+        VERSION_HIERARCHY.put("0.7.6", 8);
+        VERSION_HIERARCHY.put("0.7.6.1", 9);
+        VERSION_HIERARCHY.put("0.8", 10);
+        VERSION_HIERARCHY.put("0.8.1", 11);
+        VERSION_HIERARCHY.put("0.8.1.1", 12);
+        VERSION_HIERARCHY.put("0.8.1.2", 13);
+        VERSION_HIERARCHY.put("0.8.5", 14);
+        VERSION_HIERARCHY.put("0.9", 15);
+        VERSION_HIERARCHY.put("0.9.1", 16);
+        VERSION_HIERARCHY.put("0.9.2", 17);
+        VERSION_HIERARCHY.put("0.9.9", 18);
+        VERSION_HIERARCHY.put("0.9.9.1", 19);
+        VERSION_HIERARCHY.put("1.0", 20);
+        VERSION_HIERARCHY.put("1.0.1", 21);
+        VERSION_HIERARCHY.put("1.1", 22);
+        VERSION_HIERARCHY.put("1.2", 23);
+        VERSION_HIERARCHY.put("1.2.1", 24);
+        VERSION_HIERARCHY.put("1.2.2", 25);
+        VERSION_HIERARCHY.put("1.3", 26);
+        VERSION_HIERARCHY.put("1.4", 27);
+        VERSION_HIERARCHY.put("2.0", 28);
+        VERSION_HIERARCHY.put("2.1", 29);
+        VERSION_HIERARCHY.put("2.2", 30);
+        VERSION_HIERARCHY.put("2.3", 31);
+        VERSION_HIERARCHY.put("2.3.1", 32);
+        VERSION_HIERARCHY.put("2.3.2", 33);
+        VERSION_HIERARCHY.put("2.3.3", 34);
+        VERSION_HIERARCHY.put("2.4", 35);
+        VERSION_HIERARCHY.put("2.5", 36);
+        VERSION_HIERARCHY.put("3.0", 37);
     }
 
     /**
@@ -641,5 +695,20 @@ public class PGTUtil {
         }
         
         return "ERROR";
+    }
+    
+     /**
+     * Gets hierarchical status placement of PolyGlot's version
+     * @param version
+     * @return lower numbers are lower 
+     */
+    public static int getVersionHierarchy(String version) {
+        return VERSION_HIERARCHY.get(version);
+    }
+    
+    public static void validateVersion() throws Exception {
+        if (!VERSION_HIERARCHY.containsKey(PGT_VERSION)) {
+            throw new Exception("ERROR: CURRENT VERSION NOT ACCOUNTED FOR IN VERSION HISTORY.");
+        }
     }
 }
