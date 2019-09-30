@@ -233,7 +233,7 @@ public class PolyGlot {
      * Sets version to display as beta
      */
     private static void conditionalBetaSetup() {
-        if (testIsBeta()) {
+        if (PGTUtil.IS_BETA) {
             InfoBox.warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.", null);
         }
     }
@@ -265,50 +265,21 @@ public class PolyGlot {
      * @return 
      */
     private static boolean canStart() {
-        String startProblems = "";
+//        String startProblems = "";
         boolean ret = true;
         
-        // Test for minimum version of Java (8)
-        String jVer = System.getProperty("java.version");
-        if (jVer.startsWith("1.5") || jVer.startsWith("1.6") || jVer.startsWith("1.7")) {
-            startProblems += "Unable to start PolyGlot without Java 8 or higher.\n";
-        }
-
-        // keep people from running PolyGlot from within a zip file...
-        if (System.getProperty("user.dir").toLowerCase().startsWith("c:\\windows\\system")) {
-            startProblems += "PolyGlot cannot be run from within a zip archive. Please unzip all files to a folder.\n";
-        }
-
-        try {
-            // Test for JavaFX and inform user that it is not present, they cannot run PolyGlot
-            ScrMainMenu.class.getClassLoader().loadClass("javafx.embed.swing.JFXPanel");
-        } catch (ClassNotFoundException e) {
-            IOHandler.writeErrorLog(e);
-            startProblems += "Unable to load Java FX. Download and install to use PolyGlot ";
-            
-            if (PGTUtil.IS_OSX) {
-                startProblems += "The default Java Virtual Machine for OSX does not include JFX. Please download from java.com/en/download/";
-            } else if (PGTUtil.IS_WINDOWS) {
-                startProblems += "The version of Java you are using does not include JFX.  Please download from java.com/en/download/";
-            } else {
-                startProblems += "(JavaFX not included in some builds of Java for Linux).\n";
-            }
-        }
+        // Currently nothing left to test for... Leaving for sake of possible future utility
         
-        if (startProblems.length() != 0) {
-            InfoBox.error("Unable to start PolyGlot", startProblems, null);
-            ret = false;
-        }
+//        if (startProblems.length() != 0) {
+//            InfoBox.error("Unable to start PolyGlot", startProblems, null);
+//            ret = false;
+//        }
         
         return ret;
     }
     
         private static boolean shouldUseOSInegration(String args[]) {
         return args == null || args.length < 3 || !args[2].equals(PGTUtil.TRUE);
-    }
-
-    public static boolean testIsBeta() {
-        return IOHandler.fileExists("lib/BETA_WARNING.txt");
     }
     
     /**

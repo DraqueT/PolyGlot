@@ -78,8 +78,8 @@ public class ScrUpdateAlert extends PDialog {
         List<ConditionalMessage> condMessages = getConditionalMessages(doc);
         List<ConditionalMessage> urgentMessages = getUrgentMessages(condMessages);
         setupButtons(doc.getElementsByTagName("LinkButtons").item(0));
-        int upstreamVer = core.getVersionHierarchy(ver);
-        int selfVer = core.getVersionHierarchy(PGTUtil.PGT_VERSION);
+        int upstreamVer = PGTUtil.getVersionHierarchy(ver);
+        int selfVer = PGTUtil.getVersionHierarchy(PGTUtil.PGT_VERSION);
 
         if (!urgentMessages.isEmpty()) { // prioritize urgent messages first
             this.setTitle("--URGENT POLYGLOT ALERT--");
@@ -92,7 +92,7 @@ public class ScrUpdateAlert extends PDialog {
             setVisible(true);
         //} else if (!ver.equals(core.getVersion())) { // next, handle update alerts
         } else if (upstreamVer > selfVer // need update if upstream version newer
-                || (core.isBeta() && upstreamVer == selfVer)) { // also need update if upstream version is non-beta of current ver
+                || (PGTUtil.IS_BETA && upstreamVer == selfVer)) { // also need update if upstream version is non-beta of current ver
             this.setTitle("PolyGlot " + ver + " available");
             jTextPane1.setText(message.getTextContent());
             txtVersion.setText("New Version: " + ver);
@@ -109,7 +109,7 @@ public class ScrUpdateAlert extends PDialog {
         } else {
             if (verbose) { // if in verbose mode (user selected update) inform user they're good to go
                 // custom message if user is on a beta copy of PolyGlot
-                if (core.isBeta()) {
+                if (PGTUtil.IS_BETA) {
                     InfoBox.info("Update Status", "You're up to date on a beta build branched from the most recent release candidate ("
                             + core.getDisplayVersion() + ")", core.getRootWindow());
                 } else {
