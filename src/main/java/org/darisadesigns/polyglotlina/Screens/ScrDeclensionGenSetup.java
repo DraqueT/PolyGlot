@@ -110,6 +110,11 @@ public final class ScrDeclensionGenSetup extends PDialog {
 
     @Override
     public void dispose() {
+        if (this.isDisposed()) {
+            // this is sometimes called DOZENS of times. WHY?
+            return;
+        }
+        
         if (tblTransforms.getCellEditor() != null) {
             tblTransforms.getCellEditor().stopCellEditing();
         }
