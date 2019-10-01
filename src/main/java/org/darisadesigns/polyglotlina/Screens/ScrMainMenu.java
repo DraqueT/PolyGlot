@@ -49,14 +49,20 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
@@ -122,9 +128,68 @@ public final class ScrMainMenu extends PFrame {
         setupToDo();
         populateRecentOpened();
         populateExampleLanguages();
+        populateSwadeshMenu();
         checkJavaVersion();
         super.setSize(super.getPreferredSize());
         addBindingsToPanelComponents(this.getRootPane());
+    }
+    
+    /**
+     * Populates Swadesh menu list with both predefined lists and the option to import one
+     */
+    private void populateSwadeshMenu() {
+        final DictCore finalCore = core;
+        mnuSwadesh.removeAll();
+        
+        for (String list : PGTUtil.SWADESH_LISTS) {
+            String menuName = list.replace("_", " ");
+            final String finalLocation = PGTUtil.SWADESH_LOCATION + list;
+            
+            JMenuItem nextList = new JMenuItem("Load " + menuName);
+            nextList.setToolTipText("Loads words from " + menuName + " into your lexicon.");
+            nextList.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    URL swadUrl = ScrMainMenu.class.getResource(finalLocation);
+                    try (BufferedInputStream bs = new BufferedInputStream(swadUrl.openStream())) {
+                        finalCore.getWordCollection().loadSwadesh(bs, true);
+                        updateAllValues(finalCore);
+                    } catch (Exception ex) {
+                        InfoBox.error("Unable to load internal resrouce: ", finalLocation, curWindow);
+                        IOHandler.writeErrorLog(ex, "Resrource read error on open.");
+                    }
+                }
+            });
+            
+            mnuSwadesh.add(nextList);
+        }
+        
+        JMenuItem customImport = new JMenuItem("Load Custom Swadesh");
+        customImport.setToolTipText("Loads words from custom Swadesh list into your lexicon.");
+        customImport.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser chooser = new JFileChooser();
+                chooser.setMultiSelectionEnabled(false);
+                chooser.setDialogTitle("Selet line delimited Swadesh list.");
+                
+                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    File file = chooser.getSelectedFile();
+                    try (InputStream is = new FileInputStream(file);
+                            BufferedInputStream bs = new BufferedInputStream(is)) {
+                        finalCore.getWordCollection().loadSwadesh(bs, true);
+                        updateAllValues(finalCore);
+                    } catch (Exception ex) {
+                        InfoBox.error("Swadesh Load Error", 
+                                "Could not load selected Swadesh List. Please make certain it is formatted correctly (newline separated)", null);
+                        IOHandler.writeErrorLog(ex, "Swadesh load error");
+                    }
+                }
+                
+            }
+        });
+        
+        mnuSwadesh.add(customImport);
     }
 
     /**
@@ -1011,6 +1076,8 @@ public final class ScrMainMenu extends PFrame {
             cacheLexicon.updateAllValues(_core);
         }
         core = _core;
+        
+        populateSwadeshMenu();
     }
 
     @Override
@@ -1112,6 +1179,7 @@ public final class ScrMainMenu extends PFrame {
         mnuLangStats = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         mnuIPAChart = new javax.swing.JMenuItem();
+        mnuSwadesh = new javax.swing.JMenu();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         mnuOptions = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
@@ -1481,6 +1549,10 @@ public final class ScrMainMenu extends PFrame {
             }
         });
         mnuTools.add(mnuIPAChart);
+
+        mnuSwadesh.setText("Swadesh Lists");
+        mnuSwadesh.setToolTipText("You can import Swadesh lists here");
+        mnuTools.add(mnuSwadesh);
         mnuTools.add(jSeparator6);
 
         mnuOptions.setText("Options");
@@ -1866,6 +1938,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuRevertion;
     private javax.swing.JMenuItem mnuSaveAs;
     private javax.swing.JMenuItem mnuSaveLocal;
+    private javax.swing.JMenu mnuSwadesh;
     private javax.swing.JMenu mnuTools;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideButtons;

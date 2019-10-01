@@ -19,6 +19,11 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -113,6 +118,39 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
         Collections.sort(retList);
         return retList;
+    }
+    
+    /**
+     * Loads Swadesh list from buffered input stream.Presumes that list is line separated.Lines PREFIXED with the # character will be skipped.
+     * If it appears in the middle of a line, it will be parsed regularly.
+     * @param bs
+     * @throws java.io.IOException 
+     * @throws java.lang.Exception 
+     */
+    public void loadSwadesh(BufferedInputStream bs, boolean showPrompt) throws IOException, Exception {
+        BufferedReader r = new BufferedReader(new InputStreamReader(bs, StandardCharsets.UTF_8));
+        String line;
+        
+        if (!showPrompt || InfoBox.actionConfirmation("Import Swadesh List?", 
+                "This will import all the words defined within this swadesh list into your lexicon. Continue?", 
+                core.getRootWindow())) {
+            for (int i = 0; (line = r.readLine()) != null; i++) {
+                if (line.startsWith("#")) {
+                    continue;
+                }
+                
+                // even out the lines so they appear in proper order. if a list is over 1k entries... that is too many. I'll fix it if people complain. X|
+                String swadeshNum = Integer.toString(i);
+                while (swadeshNum.length() < 3) {
+                    swadeshNum = "0" + swadeshNum;
+                }
+
+                ConWord newWord = new ConWord();
+                newWord.setValue("#" + swadeshNum + ": " + line.toUpperCase());
+                newWord.setLocalWord(line);
+                this.addWord(newWord);
+            }
+        }
     }
 
     /**
