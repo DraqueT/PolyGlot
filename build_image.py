@@ -26,8 +26,8 @@ winString = "Windows"
 # LINUX BUILD CONSTANTS
 # update the JFX and packager locations for your Linux build
 
-JAVAFX_LOCATION_LINUX = "/home/osboxes/.m2/repository/org/openjfx"
-JAVA_PACKAGER_LOCATION_LINUX = "/usr/Java/jdk-14/bin" # this will go away once Java 14 drops officially...
+JAVAFX_LOCATION_LINUX = "/home/polyglot/.m2/repository/org/openjfx"
+JAVA_PACKAGER_LOCATION_LINUX = "/usr/lib/jvm/jdk-14/bin" # this will go away once Java 14 drops officially...
 
 
 ###############################
@@ -401,6 +401,7 @@ To target particular steps, use any combination of the following arguments:
     stored in the target folder.
     
     clean - Wipes the product of build.
+
     image - From the built jar files (which must exist), creates a runnable image. This image is platform dependent.
     Produced files stored in the build folder.
     
