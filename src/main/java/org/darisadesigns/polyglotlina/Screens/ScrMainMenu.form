@@ -171,6 +171,12 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuIPAChartActionPerformed"/>
               </Events>
             </MenuItem>
+            <Menu class="javax.swing.JMenu" name="mnuSwadesh">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Swadesh Lists"/>
+                <Property name="toolTipText" type="java.lang.String" value="You can import Swadesh lists here"/>
+              </Properties>
+            </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator6">
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuOptions">

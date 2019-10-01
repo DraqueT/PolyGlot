@@ -233,7 +233,7 @@ public class PolyGlot {
      * Sets version to display as beta
      */
     private static void conditionalBetaSetup() {
-        if (PGTUtil.IS_BETA) {
+        if (PGTUtil.IS_BETA && !PGTUtil.isInJUnitTest()) { // This requires user interaction and is not covered by the test
             InfoBox.warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.", null);
         }
     }

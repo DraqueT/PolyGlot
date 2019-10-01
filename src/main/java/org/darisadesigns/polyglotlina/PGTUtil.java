@@ -34,7 +34,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import org.darisadesigns.polyglotlina.Screens.ScrFamilies;
@@ -66,6 +68,8 @@ public class PGTUtil {
     public static final String HELP_FILE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/readme.zip";
     public static final String EXAMPLE_LANGUAGE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/exlex.zip";
     public static final String HELP_FILE_NAME = "readme.html";
+    public static final String SWADESH_LOCATION = "/assets/org/DarisaDesigns/swadesh/";
+    public static final String[] SWADESH_LISTS = new String[]{"Original_Swadesh", "Modern_Swadesh"};
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";
@@ -710,5 +714,20 @@ public class PGTUtil {
         if (!VERSION_HIERARCHY.containsKey(PGT_VERSION)) {
             throw new Exception("ERROR: CURRENT VERSION NOT ACCOUNTED FOR IN VERSION HISTORY.");
         }
+    }
+    
+    /**
+     * Returns true if in JUnit test. USE SPARINGLY.
+     * @return 
+     */
+    public static boolean isInJUnitTest() {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        List<StackTraceElement> list = Arrays.asList(stackTrace);
+        for (StackTraceElement element : list) {
+            if (element.getClassName().startsWith("org.junit.")) {
+                return true;
+            }           
+        }
+        return false;
     }
 }
