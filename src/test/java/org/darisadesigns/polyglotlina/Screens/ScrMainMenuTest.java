@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina.Screens;
 
 // TODO: Most of these tests
 
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -37,15 +38,24 @@ import org.junit.jupiter.api.Test;
  */
 public class ScrMainMenuTest {
     final ScrMainMenu mainMenu;
+    final boolean headless = GraphicsEnvironment.isHeadless();
     
     public ScrMainMenuTest() {
-        mainMenu = new ScrMainMenu("", new DictCore());
+        if (!headless) {
+            mainMenu = new ScrMainMenu("", new DictCore());
+        } else {
+            mainMenu = null;
+        }
     }
     
     @Test
     public void testManyOpensAndClosesLexCountMaintained() throws SecurityException, 
             NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, 
             InvocationTargetException, ParserConfigurationException, TransformerException, IOException {
+        if (headless) {
+            return;
+        }
+        
         final String testFileName = PGTUtil.TESTRESOURCES + "earien_TEST.pgd";
         Method setFileMethod = mainMenu.getClass().getDeclaredMethod("setFile", String.class);
         setFileMethod.setAccessible(true);
@@ -75,6 +85,10 @@ public class ScrMainMenuTest {
      * This one does actually open a browser window. Sorry about that.
      */
     public void testOpenHelp() throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        if (headless) {
+            return;
+        }
+        
         Method method = ScrMainMenu.class.getDeclaredMethod("openHelp");
         method.setAccessible(true);
         method.invoke(mainMenu);
