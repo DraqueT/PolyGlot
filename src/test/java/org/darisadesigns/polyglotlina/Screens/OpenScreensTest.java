@@ -18,6 +18,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import org.junit.jupiter.api.Test;
 public class OpenScreensTest {
     private final File errors;
     private final DictCore core;
+    private final boolean headless = GraphicsEnvironment.isHeadless(); // testing this in a headless environment makes no sense
     
     public OpenScreensTest() throws IOException {
         core = new DictCore();
@@ -49,6 +51,10 @@ public class OpenScreensTest {
     
     @Test
     public void testPTextInputDialog() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testPTextInputDialog");
         PTextInputDialog s = new PTextInputDialog(new ScrAbout(core), core, "", "");
         s.dispose();
@@ -58,6 +64,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrAbout () throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrAbout");
         ScrAbout s = new ScrAbout(core);
         s.dispose();
@@ -67,6 +77,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrDeclensionGenSetup() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrDeclensionGenSetup");
         ScrDeclensionGenSetup s = new ScrDeclensionGenSetup(core, core.getTypes().getNodes().get(0).getId());
         s.dispose();
@@ -76,6 +90,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrDeclensionSetup() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrDeclensionSetup");
         ScrDeclensionSetup s = new ScrDeclensionSetup(core, core.getTypes().getNodes().get(0).getId());
         s.dispose();
@@ -85,6 +103,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrDeclensionGrids() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrDeclensionGrids");
         ScrDeclensionsGrids s = new ScrDeclensionsGrids(core, core.getWordCollection().getWordNodes().get(0));
         s.setCloseWithoutSave(true);
@@ -95,6 +117,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrDeprecatedDeclensions() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrDeprecatedDeclensions");
         ScrDeprecatedDeclensions s = new ScrDeprecatedDeclensions(core, core.getWordCollection().getWordNodes().get(0));
         s.dispose();
@@ -104,6 +130,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrEasterEgg() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrEasterEgg");
         ScrEasterEgg s = new ScrEasterEgg();
         s.dispose();
@@ -113,6 +143,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrEtymRoots() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrEtymRoots");
         for (ConWord word : core.getWordCollection().getWordNodes()) {
             ScrEtymRoots s = new ScrEtymRoots(core, null, word);
@@ -124,6 +158,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrExcelImport() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrExcelImport");
         ScrExcelImport s = new ScrExcelImport(core, null);
         s.dispose();
@@ -133,6 +171,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrFamilies() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrFamilies");
         ScrFamilies s = new ScrFamilies(core, null);
         s.dispose();
@@ -142,6 +184,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrGrammarGuide() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrGrammarGuide");
         ScrGrammarGuide s = new ScrGrammarGuide(core);
         s.dispose();
@@ -151,6 +197,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrIPARefChart() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrIPARefChart");
         ScrIPARefChart s = new ScrIPARefChart(core);
         s.dispose();
@@ -160,6 +210,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrIpaTranslator() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrIpaTranslator");
         ScrIpaTranslator s = new ScrIpaTranslator(core);
         s.dispose();
@@ -169,6 +223,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrLangProps() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrLangProps");
         ScrLangProps s = new ScrLangProps(core);
         s.dispose();
@@ -178,6 +236,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrLexicon() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrLexicon");
         ScrLexicon s = new ScrLexicon(core, null);
         s.dispose();
@@ -187,6 +249,10 @@ public class OpenScreensTest {
 
         @Test
     public void testScrLexiconProblemDisplay() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrLexiconProblemDisplay");
         List<LexiconProblemNode> problemNodes = new ArrayList<>();
         problemNodes.add(new LexiconProblemNode(new ConWord(), "PROBLEM"));
@@ -198,6 +264,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrLogoDetails() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrLogoDetails");
         ScrLogoDetails s = new ScrLogoDetails(core);
         s.dispose();
@@ -207,6 +277,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrLogoQuickView() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrLogoQuickView");
         ScrLogoQuickView s = new ScrLogoQuickView(core, core.getWordCollection().getWordNodes().get(0));
         s.dispose();
@@ -216,6 +290,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrMainMenu() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrMainMenu");
         ScrMainMenu s = new ScrMainMenu("", new DictCore());
         s.updateAllValues(core);
@@ -226,6 +304,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrOptions() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrOptions");
         ScrOptions s = new ScrOptions(core);
         s.dispose();
@@ -235,6 +317,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrPhonology() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrPhonology");
         ScrPhonology s = new ScrPhonology(core);
         s.dispose();
@@ -244,6 +330,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrPrintToPDF() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrPrintToPDF");
         ScrPrintToPDF s = new ScrPrintToPDF(core);
         s.dispose();
@@ -253,6 +343,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrProgressMenu() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrProgressMenu");
         ScrProgressMenu s = new ScrProgressMenu("TEST", 1, false, false);
         s.dispose();
@@ -262,6 +356,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrQuickWordEntry() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrQuickWordEntry");
         ScrQuickWordEntry s = new ScrQuickWordEntry(core, null);
         s.dispose();
@@ -271,6 +369,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrReversion() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrReversion");
         ScrReversion s = new ScrReversion(core);
         s.dispose();
@@ -280,6 +382,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrTypes() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrTypes");
         ScrTypes s = new ScrTypes(core);
         s.dispose();
@@ -289,6 +395,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrUpdateAlert() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrUpdateAlert");
         ScrUpdateAlert s = new ScrUpdateAlert(false, core);
         s.dispose();
@@ -298,6 +408,10 @@ public class OpenScreensTest {
     
     @Test
     public void testScrWordClasses() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testScrWordClasses");
         ScrWordClasses s = new ScrWordClasses(core);
         s.dispose();
@@ -306,6 +420,10 @@ public class OpenScreensTest {
     }
     
     private void testExceptions(String scrName) throws Exception {
+        if (headless) {
+            return;
+        }
+        
         if (errors.exists()) {
             errors.delete();
             throw new Exception("Errors opening or closing " + scrName);
