@@ -52,6 +52,7 @@ JAR_W_DEP = "PolyGlotLinA-3.0-jar-with-dependencies.jar"
 JAR_WO_DEP = "PolyGlotLinA-3.0.jar"
 JAVAFX_VER = "12.0.2"
 POLYGLOT_VERSION = '' # set in main for timing reasons
+JAVA_HOME = '' # set in main for timing reasons
 
 
 
@@ -60,6 +61,23 @@ POLYGLOT_VERSION = '' # set in main for timing reasons
 ######################################
 
 def main(args):
+    global POLYGLOT_VERSION
+    global JAVA_HOME
+
+    # allows for override of java home (virtual environments make this necessary at times)
+    if '-java-home-o' in args:
+        command_index = args.index('-java-home-o')
+        print('JAVA_HOME overriden to: ' + args[command_index + 1])
+    	JAVA_HOME = args[command_index + 1]
+        del args[command_index + 1]
+        del args[command_index]
+    else:
+        JAVA_HOME = os.getenv('JAVA_HOME')
+
+    if not JAVA_HOME is not None:
+        print('JAVA_HOME must be set. If necessary, use -java-home-o command to override')
+        return
+
     fullBuild = (len(args) == 1) # length of 1 means no arguments (full build)
     POLYGLOT_VERSION = getVersion()
     
@@ -83,7 +101,7 @@ def main(args):
         dist()
         
     print('Done!')
-    
+
 def build():
     if osString == linString:
         buildLinux()
@@ -140,14 +158,15 @@ def cleanLinux():
     os.system('rm -rf build')
     
 def imageLinux():
+    print('POLYGLOT_VERSION: ' + POLYGLOT_VERSION)
     print('creating jmod based on jar built without dependencies...')
     os.system('mkdir target/mods')
-    os.system('$JAVA_HOME/bin/jmod create ' +
+    os.system(JAVA_HOME + '/bin/jmod create ' +
         '--class-path target/' + JAR_WO_DEP + ' ' +
         '--main-class org.darisadesigns.polyglotlina.PolyGlot target/mods/PolyGlot.jmod')
 
     print('creating runnable image...')
-    command = ('$JAVA_HOME/bin/jlink ' +
+    command = (JAVA_HOME + '/bin/jlink ' +
         '--module-path "module_injected_jars/:' +
         'target/mods:' +
         JAVAFX_LOCATION_LINUX + '/javafx-graphics/' + JAVAFX_VER + '/:' +
@@ -155,7 +174,7 @@ def imageLinux():
         JAVAFX_LOCATION_LINUX + '/javafx-media/' + JAVAFX_VER + '/:' +
         JAVAFX_LOCATION_LINUX + '/javafx-swing/' + JAVAFX_VER + '/:' +
         JAVAFX_LOCATION_LINUX + '/javafx-controls/' + JAVAFX_VER + '/:' +
-        '$JAVA_HOME/jmods" ' +
+        JAVA_HOME + '/jmods" ' +
         '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
         '--output "build/image/" ' +
         '--compress=2 ' +
@@ -214,12 +233,12 @@ def cleanOsx():
 def imageOsx():
     print('creating jmod based on jar built without dependencies...')
     os.system('mkdir target/mods')
-    os.system('$JAVA_HOME/bin/jmod create ' +
+    os.system(JAVA_HOME + '/bin/jmod create ' +
         '--class-path target/' + JAR_WO_DEP + ' ' +
         '--main-class org.darisadesigns.polyglotlina.PolyGlot target/mods/PolyGlot.jmod')
 
     print('creating runnable image...')
-    os.system('$JAVA_HOME/bin/jlink ' +
+    os.system(JAVA_HOME + '/bin/jlink ' +
         '--module-path "module_injected_jars/:' +
         'target/mods:' +
         JAVAFX_LOCATION_OSX + '/javafx-graphics/' + JAVAFX_VER + '/:' +
@@ -392,29 +411,25 @@ def printHelp():
 #       PolyGlot Build Script
 #################################################
 
-To use this utility, simply execute this script with no arguments to run the entire application construction sequence.
-To target particular steps, use any combination of the following arguments:
+To use this utility, simply execute this script with no arguments to run the entire application construction sequence. To target particular steps, use any combination of the following arguments:
 
-    docs - Zips and injects documentation into the application assets.
+    docs : Zips and injects documentation into the application assets.
 
-    build - Performs a maven build. creates both the jar with and the jar without dependencies included. Produced files
-    stored in the target folder.
+    build : Performs a maven build. creates both the jar with and the jar without dependencies included. Produced files stored in the target folder.
     
-    clean - Wipes the product of build.
+    clean : Wipes the product of build.
 
-    image - From the built jar files (which must exist), creates a runnable image. This image is platform dependent.
-    Produced files stored in the build folder.
+    image : From the built jar files (which must exist), creates a runnable image. This image is platform dependent. Produced files stored in the build folder.
     
-    pack - Packs the image (which must exist) into a distributable application. This is platform dependent. Produced
-    files stored in the appimage folder.
+    pack : Packs the image (which must exist) into a distributable application. This is platform dependent. Produced files stored in the appimage folder.
     
-    dist - Creates distribution files for the packed application (which must exist). This is platform dependent.
-    Produced files stores in the installer folder.
+    dist : Creates distribution files for the packed application (which must exist). This is platform dependent. Produced files stores in the installer folder.
 
-Example: python build_image.py image pack
+    -java-home-o <jdk-path> : Overrides JAVA_HOME. Useful for stubborn VMs that will not normally recognize environment variables.
 
-The above will presume that the maven build has already taken place. It will use the produced jar files to create a 
-runnable image, then from that image, create a packed application for the platform you are currently running.
+Example: python build_image.py image pack -java-home-o /usr/lib/jvm/jdk-14
+
+The above will presume that the maven build has already taken place. It will use the produced jar files to create a runnable image, then from that image, create a packed application for the platform you are currently running. The JAVA_HOME path is overridden to point to /usr/lib/jvm/jdk-14.
 """)
 
 if __name__ == "__main__":
