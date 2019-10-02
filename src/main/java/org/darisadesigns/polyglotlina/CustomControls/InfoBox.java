@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.DEFAULT_OPTION;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 public class InfoBox extends JFrame {
 
@@ -226,15 +227,19 @@ public class InfoBox extends JFrame {
     }
 
     private void doError(String title, String message, Window parent) {
-        Object[] option = {OK};        
-        POptionPane.showOptionDialog(parent, message, title, DEFAULT_OPTION,
-                         JOptionPane.ERROR_MESSAGE, null, option, null);
+        if (!PGTUtil.isForceSuppressDialogs()) {
+            Object[] option = {OK};        
+            POptionPane.showOptionDialog(parent, message, title, DEFAULT_OPTION,
+                             JOptionPane.ERROR_MESSAGE, null, option, null);
+        }
     }
 
     private void doWarning(String title, String message, Window parent) {
-        Object[] option = {OK};        
-        POptionPane.showOptionDialog(parent, message, title, DEFAULT_OPTION,
-                         JOptionPane.WARNING_MESSAGE, null, option, null);
+        if (!PGTUtil.isForceSuppressDialogs()) {
+            Object[] option = {OK};
+            POptionPane.showOptionDialog(parent, message, title, DEFAULT_OPTION,
+                             JOptionPane.WARNING_MESSAGE, null, option, null);
+        }
     }
 
     private void doInfo(String title, String message, Window parent) {

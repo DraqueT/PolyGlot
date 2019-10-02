@@ -49,12 +49,14 @@ public class FormattedTextHelperTest {
     private final static String BLUE = "blue";
     
     public FormattedTextHelperTest() throws Exception {
+        System.out.println("FormattedTextHelperTest");
         core = new DictCore();
         core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
     }
     
     @Test
     public void testHTMLLineBreakParseNoBreaks() {
+        System.out.println("testHTMLLineBreakParseNoBreaks");
         String testVal = "golly gee";
         String expectedVal = "golly gee";
         String result = FormattedTextHelper.HTMLLineBreakParse(testVal);
@@ -64,6 +66,7 @@ public class FormattedTextHelperTest {
     
     @Test
     public void testHTMLLineBreakParseBr() {
+        System.out.println("testHTMLLineBreakParseBr");
         String testVal = "<br>golly gee";
         String expectedVal = "<br>golly gee";
         String result = FormattedTextHelper.HTMLLineBreakParse(testVal);
@@ -73,6 +76,7 @@ public class FormattedTextHelperTest {
     
     @Test
     public void testHTMLLineBreakParseNewlineThenBr() {
+        System.out.println("testHTMLLineBreakParseNewlineThenBr");
         String testVal = "x\n<br>golly gee";
         String expectedVal = "x<br><br>golly gee";
         String result = FormattedTextHelper.HTMLLineBreakParse(testVal);
@@ -82,6 +86,7 @@ public class FormattedTextHelperTest {
     
     @Test
     public void testHTMLLineBreakParseBrThenNewline() {
+        System.out.println("testHTMLLineBreakParseBrThenNewline");
         String testVal = "<br>\ngolly gee";
         String expectedVal = "<br>golly gee";
         String result = FormattedTextHelper.HTMLLineBreakParse(testVal);
@@ -91,6 +96,7 @@ public class FormattedTextHelperTest {
 
     @Test
     public void testRestoreFromString() throws Exception {
+        System.out.println("testRestoreFromString");
         String testVal = "<font face=\"Lucida Grande\"size=\"12\"color=\"black\">Lodenkur is a language that technically does not have pronunciation in any way that we are able to perceive. It is a language \"spoken\" via radio frequency, similar to what we might think of as telepathy. This having been said, it is useful to have a way to speak and vocalize this language in a more familiar way, as a helpful mnemonic to remember vocabulary and to allow better interaction with it. Below is an attempt to convert this it a more human-friendly form.  </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"18\"color=\"black\">A Basic Explanation of Characters</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\">	There are two types of characters, the tonal and the non-tonal. Tonal characters can be pronounced in one of three ways. The first comes with no special markers, and is flat. The second has a marker on the left side. This is pronounced with a rising tone. The third has a marker on the right side. This is pronounced with a descending tone. </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\">Flat Characters:  </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">1234567890</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\">Rising Tone Characters: </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">qwertyuiop</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\">Falling Tone Characters: </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">asdfghjkl;</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\">	The second type of characters are not tonal. They are pronounced in ways the precludes rising or falling tone. In KLA, you will never see more than two of these consecutively, as this would be difficult or impossible to pronounce. </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\">Non-Tonal Characters: </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">zxcvb</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\">Pronunciation </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\">	Below is a basic pronunciation guide for each of the characters. These pronunciations do not account for tone, which is explained in greater detail later in this document. Rising and falling tones do not affect the pronunciation of characters. All pronunciations are in IPA style. </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">z</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : t - t - (today) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">x</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : th - θ (theigh) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">1</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : ha - hɑː (hall) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">2</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : wa - wɑː (water) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">3</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : no - noʊ (no) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">4</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : reh - ʀə (red) (note: french, guttural R) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">5</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : lo - loʊ (load) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">6</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : ku - kuː (cocoon) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">7</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : mi - miː (me) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">8</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : de - dɛ (debt) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">9</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : ya - jæ (yak) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">0</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : si - siː (see) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">c</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : sh - ʃ (shy) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">v</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : f - f (fan) </font><font face=\"Kukun_Linear_A\"size=\"18\"color=\"black\">b</font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> : ng - ŋ (sang) </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\">	Neutral tone is typically segmented by sentence. A speaker has their \"neutral\" voice tone, which is where each sentence begins. A character that is atonal or flat will leave the speaker's voice in the tone in which it began. A character with rising or falling tone however, will raise or lower the speaker's tone before the character is pronounced. This new tone replaces the base tone as the speaker continues. This results in a lyrical sound to speech, tone rising and falling through phrases and sentences. </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\"> </font><font face=\"Lucida Grande\"size=\"12\"color=\"black\">	In cases where the tone is too low or too high for a speaker to continue, they may return to the neutral tone between words by leaving a stressed pause between the words, although this is considered indicitive of poorly considered phrasing. Typically a speaker should manage this themselves. Tone may be raised or lowered as much as the speaker likes on an appropriate character, and the meaning remains the same. In this way, a speaker should take care that their words do not tonally escape them. Sentences tend to rise in tone as they continue, rather than dipping or staying in the same tonal position.</font>";
         JTextPane pane = new JTextPane();
         FormattedTextHelper.restoreFromString(testVal, pane, core);
@@ -99,6 +105,7 @@ public class FormattedTextHelperTest {
 
     @Test
     public void testGetSectionTextFontSpecifec() {
+        System.out.println("testGetSectionTextFontSpecifec");
         GrammarChapNode chap = core.getGrammarManager().getChapters().get(0);
         
         String sectionText = ((GrammarSectionNode)chap.getFirstChild()).getSectionText();
@@ -127,6 +134,7 @@ public class FormattedTextHelperTest {
 
     @Test
     public void testStorageFormat() throws Exception {
+        System.out.println("testStorageFormat");
         PGrammarPane pane = new PGrammarPane(core);
         GrammarChapNode chap = core.getGrammarManager().getChapters().get(0);
         String sectionText = ((GrammarSectionNode)chap.getChildAt(1)).getSectionText();
@@ -137,6 +145,7 @@ public class FormattedTextHelperTest {
 
     @Test
     public void testColorToText() {
+        System.out.println("testColorToText");
         assertEquals(FormattedTextHelper.colorToText(Color.black), BLACK);
         assertEquals(FormattedTextHelper.colorToText(Color.red), RED);
         assertEquals(FormattedTextHelper.colorToText(Color.green), GREEN);
@@ -147,6 +156,7 @@ public class FormattedTextHelperTest {
 
     @Test
     public void testTextToColor() {
+        System.out.println("testTextToColor");
         assertEquals(FormattedTextHelper.textToColor(BLACK), Color.black);
         assertEquals(FormattedTextHelper.textToColor(RED), Color.red);
         assertEquals(FormattedTextHelper.textToColor(GREEN), Color.green);
@@ -157,6 +167,7 @@ public class FormattedTextHelperTest {
 
     @Test
     public void testHTMLLineBreakParse() {
+        System.out.println("testHTMLLineBreakParse");
         String initial = "hello!\nto you!";
         String expected = "hello!<br>to you!";
         
@@ -165,6 +176,7 @@ public class FormattedTextHelperTest {
 
     @Test
     public void testGetTextBody() {
+        System.out.println("testGetTextBody");
         String initial = "<html><head>adhgvasdjvsh</head><body>Zip zop!<br>Have a hyperlink! <a href =\"poop\">here!</a></body></html>";
         String expected = "Zip zop!Have a hyperlink! here!";
         assertEquals(FormattedTextHelper.getTextBody(initial), expected);

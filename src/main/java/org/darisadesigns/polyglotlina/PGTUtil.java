@@ -55,6 +55,7 @@ public class PGTUtil {
 
     private static File java8BridgeLocation = null;
     private static File errorDirectory;
+    private static boolean forceSuppressDialogs = false;
     private static  final Map<String, Integer> VERSION_HIERARCHY;
     public static final String DICTIONARY_XID = "dictionary";
     public static final String PGVERSION_XID = "PolyGlotVer";
@@ -729,5 +730,13 @@ public class PGTUtil {
             }           
         }
         return false;
+    }
+
+    public static boolean isForceSuppressDialogs() {
+        return forceSuppressDialogs;
+    }
+
+    public static void setForceSuppressDialogs(boolean _forceSuppressDialogs) {
+        forceSuppressDialogs = _forceSuppressDialogs;
     }
 }
