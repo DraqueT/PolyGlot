@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import java.awt.GraphicsEnvironment;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.junit.jupiter.api.Test;
 
@@ -28,13 +29,16 @@ import org.junit.jupiter.api.Test;
  */
 public class ScrUpdateAlertTest {
     private final DictCore core = new DictCore();
+    private final boolean headless = GraphicsEnvironment.isHeadless();
     private ScrUpdateAlert updateAlert;
     
     public ScrUpdateAlertTest() {
-        try {
-            updateAlert = new ScrUpdateAlert(false, core);
-        } catch (Exception e) {
-            // Instantiation tested elsewhere, skip errors here.
+        if (!headless) {
+            try {
+                updateAlert = new ScrUpdateAlert(false, core);
+            } catch (Exception e) {
+                // Instantiation tested elsewhere, skip errors here.
+            }
         }
     }
 
@@ -44,6 +48,10 @@ public class ScrUpdateAlertTest {
      */
     @Test
     public void testTestRun() throws Exception {
+        if (headless) {
+            return;
+        }
+        
         updateAlert.testRun();
         updateAlert.dispose();
     }

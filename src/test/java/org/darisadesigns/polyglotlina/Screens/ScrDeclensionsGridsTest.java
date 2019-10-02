@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -33,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author draque
  */
 public class ScrDeclensionsGridsTest {
-    
+    final boolean headless = GraphicsEnvironment.isHeadless();
     DictCore core;
     ConWord oneDimPop;
     ConWord OneDimNopop;
@@ -54,6 +55,10 @@ public class ScrDeclensionsGridsTest {
     
     @Test
     public void testOneDimPopAutoPopCheck() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        if (headless) {
+            return;
+        }
+        
         ScrDeclensionsGrids screen = ScrDeclensionsGrids.run(core, oneDimPop);
         Class<?> classs = screen.getClass();
         Field field = classs.getDeclaredField("autoPopulated");
@@ -65,6 +70,10 @@ public class ScrDeclensionsGridsTest {
     
     @Test
     public void testOneDimNopopAutoPopCheck() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        if (headless) {
+            return;
+        }
+        
         ScrDeclensionsGrids screen = ScrDeclensionsGrids.run(core, OneDimNopop);
         Class<?> classs = screen.getClass();
         Field field = classs.getDeclaredField("autoPopulated");
@@ -76,6 +85,10 @@ public class ScrDeclensionsGridsTest {
     
     @Test
     public void testTwoDimPopAutoPopCheck() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        if (headless) {
+            return;
+        }
+        
         ScrDeclensionsGrids screen = ScrDeclensionsGrids.run(core, TwoDimPop);
         Class<?> classs = screen.getClass();
         Field field = classs.getDeclaredField("autoPopulated");
@@ -87,6 +100,10 @@ public class ScrDeclensionsGridsTest {
     
     @Test
     public void testTwoDimNopopAutoPopCheck() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        if (headless) {
+            return;
+        }
+        
         ScrDeclensionsGrids screen = ScrDeclensionsGrids.run(core, TwoDimNopop);
         Class<?> classs = screen.getClass();
         Field field = classs.getDeclaredField("autoPopulated");
