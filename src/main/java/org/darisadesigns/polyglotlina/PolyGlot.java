@@ -57,8 +57,13 @@ public class PolyGlot {
      * args[0] = open file path (blank if none) 
      * args[1] = working directory of PolyGlot (blank if none)
      * args[2] = set to PGTUtils.True to skip OS Integration
+     * args[3] = set to PGTUtiles.True to suppress error/warning dialogs, though not thrown errors (testing purposes)
      */
     public static void main(final String args[]) {
+        if (args.length > 3 && args[3].equals(PGTUtil.TRUE)) {
+            PGTUtil.setForceSuppressDialogs(true);
+        }
+        
         try {
             boolean osIntegration = shouldUseOSInegration(args);
             

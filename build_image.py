@@ -354,7 +354,7 @@ def getVersion():
 
     with open(location, 'r') as myfile:
         data = myfile.read()
-        
+
     return data
 
 # Injects readme (with resources), example dictionaries, etc.
