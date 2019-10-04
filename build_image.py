@@ -68,7 +68,7 @@ def main(args):
     if '-java-home-o' in args:
         command_index = args.index('-java-home-o')
         print('JAVA_HOME overriden to: ' + args[command_index + 1])
-    	JAVA_HOME = args[command_index + 1]
+        JAVA_HOME = args[command_index + 1]
         del args[command_index + 1]
         del args[command_index]
     else:
