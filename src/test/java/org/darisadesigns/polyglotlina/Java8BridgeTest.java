@@ -121,6 +121,19 @@ public class Java8BridgeTest {
             byte[] expBytes = Files.readAllBytes(expectedFile.toPath());
             byte[] resBytes = Files.readAllBytes(result.toPath());
 
+            // windows expected file will be in crlf (due to git translation of file)... gotta sanitize.
+            int carRet = 13;
+            if (os.toLowerCase().contains("win")) {
+                int index = 0; 
+                for (int k = 0; k < expBytes.length; k++) {
+                   if (expBytes[k] != carRet) {
+                      expBytes[index++] = expBytes[k];
+                   }
+                }
+                
+               expBytes = Arrays.copyOf(expBytes, index); 
+            }
+            
             assertTrue(Arrays.equals(expBytes, resBytes));
         }  
     }
