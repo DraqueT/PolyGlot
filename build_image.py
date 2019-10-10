@@ -242,6 +242,7 @@ def distLinux():
         '--icon packaging_files/PolyGlot0.png')
 
     os.system(command)
+    copyInstaller('installer/polyglot_1.0-1_amd64.deb')
 
 
 ######################################
