@@ -17,9 +17,12 @@ from os import path
 import shutil
 
 osString = platform.system()
-linString = "Linux"
-osxString = "Darwin"
-winString = "Windows"
+linString = 'Linux'
+osxString = 'Darwin'
+winString = 'Windows'
+copyDestination = ''
+failFile = ''
+separatorCharacter = '/'
 
 
 ###############################
@@ -28,6 +31,7 @@ winString = "Windows"
 
 JAVAFX_LOCATION_LINUX = "/home/polyglot/.m2/repository/org/openjfx"
 JAVA_PACKAGER_LOCATION_LINUX = "/usr/lib/jvm/jdk-14/bin" # this will go away once Java 14 drops officially...
+LIN_INS_NAME = 'PolyGlot-Ins-Lin.db'
 
 
 ###############################
@@ -35,7 +39,8 @@ JAVA_PACKAGER_LOCATION_LINUX = "/usr/lib/jvm/jdk-14/bin" # this will go away onc
 
 # update the JFX and packager locations for your OSX build
 JAVAFX_LOCATION_OSX = "/Users/draque/.m2/repository/org/openjfx"
-JAVA_PACKAGER_LOCATION_OSX = "/Users/draque/NetBeansProjects/jdk_14_packaging/Contents/Home/bin"  # this will go away once Java 14 drops officially...
+JAVA_PACKAGER_LOCATION_OSX = "/Users/draque/NetBeansProjects/jdk_14_packaging/Contents/Home/bin" # this will go away once Java 14 drops officially...
+OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
 
 
 ###############################
@@ -43,7 +48,8 @@ JAVA_PACKAGER_LOCATION_OSX = "/Users/draque/NetBeansProjects/jdk_14_packaging/Co
 # update the JFX and packager locations for your Windows build
 
 JAVAFX_LOCATION_WIN = 'C:\\Users\\user\\.m2\\repository\\org\\openjfx'
-JAVA_PACKAGER_LOCATION_WIN = 'C:\\Java\\jdk-14\\bin'
+JAVA_PACKAGER_LOCATION_WIN = 'C:\\Java\\jdk-14\\bin'  # this will go away once Java 14 drops officially...
+WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 
 ###############################
 # UNIVERSAL BUILD CONSTANTS
@@ -63,12 +69,20 @@ JAVA_HOME = '' # set in main for timing reasons
 def main(args):
     global POLYGLOT_VERSION
     global JAVA_HOME
+    global failFile
+    global copyDestination
+    global separatorCharacter
+    
+    if osString == winString:
+        separatorCharacter = '\\'
 
     # allows for override of java home (virtual environments make this necessary at times)
     if '-java-home-o' in args:
         command_index = args.index('-java-home-o')
         print('JAVA_HOME overriden to: ' + args[command_index + 1])
         JAVA_HOME = args[command_index + 1]
+        
+        # remove args after consuming
         del args[command_index + 1]
         del args[command_index]
     else:
@@ -77,6 +91,19 @@ def main(args):
     if not JAVA_HOME is not None:
         print('JAVA_HOME must be set. If necessary, use -java-home-o command to override')
         return
+        
+    if '-copyDestination' in args:
+        command_index = args.index('-copyDestination')
+        print('Destination for final install file set to: ' + args[command_index + 1])
+        copyDestination = args[command_index + 1]
+        
+        # failure message file created here, deleted at end of process conditionally upon success
+        failFile = copyDestination + separatorCharacter + osString + "_BUILD_FAILED"
+        open(failFile, 'a').close()
+        
+        # remove args after consuming
+        del args[command_index + 1]
+        del args[command_index]
 
     fullBuild = (len(args) == 1) # length of 1 means no arguments (full build)
     POLYGLOT_VERSION = getVersion()
@@ -287,6 +314,8 @@ def distOsx():
         '--icon "PolyGlot.app" 200 250 ' +
         '"installer/PolyGlot-Ins.dmg" ' +
         '"appimage/"')
+        
+    copyInstaller('installer/PolyGlot-Ins.dmg')
 
 
 ######################################
@@ -358,7 +387,9 @@ def distWin():
         '--description "PolyGlot is a spoken language construction toolkit."' +
         ' --icon packaging_files/win/PolyGlot0.ico')
     os.system(command)
-    os.system('ren installer\PolyGlot-1.0.exe PolyGlot-Ins.exe')
+    
+    if copyDestination != "":
+        copyInstaller('installer\PolyGlot-1.0.exe')
 
 
 ####################################
@@ -404,6 +435,23 @@ def injectDocs():
         os.remove(readmeLocation + extension)
 
     shutil.make_archive(dictLocation, 'zip', sourceLocation)
+    
+# Copies installer file to final destination and removes error indicator file
+def copyInstaller(source):
+    if path.exists(source):
+        if osString == winString:
+            insFile = WIN_INS_NAME
+        elif osString == linString:
+            insFile = LIN_INS_NAME
+        elif osString == osxString:
+            insFile = OSX_INS_NAME
+
+        destination = copyDestination + separatorCharacter + insFile
+        print('Copying installer to ' + destination)
+        shutil.copy(source, destination)
+    
+        # only remove failure signal once process is successful
+        os.remove(failFile)
 
 def printHelp():
     print("""
@@ -426,6 +474,8 @@ To use this utility, simply execute this script with no arguments to run the ent
     dist : Creates distribution files for the packed application (which must exist). This is platform dependent. Produced files stores in the installer folder.
 
     -java-home-o <jdk-path> : Overrides JAVA_HOME. Useful for stubborn VMs that will not normally recognize environment variables.
+    
+    -copyDestination <destination-path> : sets location for the final created installer file to be copied to (ignored if distribution not built)
 
 Example: python build_image.py image pack -java-home-o /usr/lib/jvm/jdk-14
 
