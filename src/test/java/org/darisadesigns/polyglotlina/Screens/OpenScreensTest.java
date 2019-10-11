@@ -82,7 +82,7 @@ public class OpenScreensTest {
         }
         
         System.out.println("testScrDeclensionGenSetup");
-        ScrDeclensionGenSetup s = new ScrDeclensionGenSetup(core, core.getTypes().getNodes().get(0).getId());
+        ScrDeclensionGenClassic s = new ScrDeclensionGenClassic(core, core.getTypes().getNodes().get(0).getId(), null);
         s.dispose();
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());

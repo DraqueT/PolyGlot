@@ -190,7 +190,7 @@ public final class ScrDeprecatedDeclensions extends PDialog {
     }
 
     private void saveDeclension() {
-        core.clearAllDeclensionsWord(word.getId());
+        core.getDeclensionManager().clearAllDeclensionsWord(word.getId());
         Set<Entry<String, JTextField>> saveSet = fieldMap.entrySet();
 
         saveSet.stream().filter((entry) -> entry.getValue().getText().trim().length() != 0)

@@ -24,6 +24,7 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.PGTUtil.WindowMode;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Window;
@@ -178,5 +179,14 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
      */
     public void hardDispose()  {
         super.dispose();
+    }
+    
+    /**
+     * Gets root visual component if dialog. Override to display something other than
+     * root pane.
+     * @return 
+     */
+    public Component getWindow() {
+        return this.getRootPane();
     }
 }

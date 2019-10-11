@@ -48,23 +48,27 @@ public class DeclensionManagerTest {
      */
     @Test
     public void testIsCombinedDeclSurpressed() {
+        System.out.println("testIsCombinedDeclSurpressed");
         assertTrue(decMan.isCombinedDeclSurpressed(",3,", 3));
     }
 
     @Test
     public void testSetCombinedDeclSurpressed() {
+        System.out.println("testSetCombinedDeclSurpressed");
         decMan.setCombinedDeclSurpressed(",3,", 4, false);
         assertFalse(decMan.isCombinedDeclSurpressed(",3,", 4));
     }
 
     @Test
     public void testSetCombinedDeclSurpressedRaw() {
+        System.out.println("testSetCombinedDeclSurpressedRaw");
         decMan.setCombinedDeclSurpressedRaw("4,TESTVAL", false);
         assertFalse(decMan.isCombinedDeclSurpressed("TESTVAL", 4));
     }
 
     @Test
     public void testAddDeclensionGenRule() {
+        System.out.println("testAddDeclensionGenRule");
         DeclensionGenRule rule = new DeclensionGenRule();
         rule.setCombinationId("COMBID");
         rule.setName("TESTNAME");
@@ -78,6 +82,7 @@ public class DeclensionManagerTest {
 
     @Test
     public void testWipeDeclensionGenRules() {
+        System.out.println("testWipeDeclensionGenRules");
         DeclensionGenRule rule = new DeclensionGenRule();
         rule.setCombinationId("COMBID");
         rule.setName("TESTNAME");
@@ -91,6 +96,7 @@ public class DeclensionManagerTest {
 
     @Test
     public void testDeleteDeclensionGenRule() {
+        System.out.println("testDeleteDeclensionGenRule");
         DeclensionGenRule rule = new DeclensionGenRule();
         rule.setCombinationId("COMBID");
         rule.setName("TESTNAME");
@@ -104,6 +110,7 @@ public class DeclensionManagerTest {
 
     @Test
     public void testGetDeclensionRulesForType() {
+        System.out.println("testGetDeclensionRulesForType");
         DeclensionGenRule rule1 = new DeclensionGenRule();
         rule1.setCombinationId("COMBID");
         rule1.setName("TESTNAME");
@@ -130,6 +137,7 @@ public class DeclensionManagerTest {
      */
     @Test
     public void testDeleteRulesFromDeclensionTemplatesInitial() throws IOException {
+        System.out.println("testDeleteRulesFromDeclensionTemplatesInitial");
         DictCore subCore = new DictCore();
         subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
         int expectedInitialSize = 8;
@@ -140,6 +148,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testDeleteRulesFromDeclensionTemplatesDelPast() throws IOException {
+        System.out.println("testDeleteRulesFromDeclensionTemplatesDelPast");
         DictCore subCore = new DictCore();
         subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
         int expectedFinalSize = 6;
@@ -154,6 +163,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testDeleteRulesFromDeclensionTemplatesDelFemale() throws IOException {
+        System.out.println("testDeleteRulesFromDeclensionTemplatesDelFemale");
         DictCore subCore = new DictCore();
         subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
         int expectedFinalSize = 6;
@@ -172,6 +182,7 @@ public class DeclensionManagerTest {
      */
     @Test
     public void testBulkDeleteRuleFromDeclensionTemplates() throws IOException {
+        System.out.println("testBulkDeleteRuleFromDeclensionTemplates");
         DictCore subCore = new DictCore();
         subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
         int expectedFinalSize = 5;
@@ -186,6 +197,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testBulkDeleteRuleFromDeclensionTemplatesMultiSelect() throws IOException {
+        System.out.println("testBulkDeleteRuleFromDeclensionTemplatesMultiSelect");
         DictCore subCore = new DictCore();
         subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
         List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
@@ -196,6 +208,22 @@ public class DeclensionManagerTest {
         rulesToDelete.add(decManSub.getDeclensionRulesForType(2).get(1));
         decManSub.bulkDeleteRuleFromDeclensionTemplates(2, rulesToDelete);
         assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+    }
+    
+    @Test
+    public void testDeleteRuleByTypeIdAndCombinedId() throws IOException {
+        System.out.println("testDeleteRuleByTypeIdAndCombinedId");
+        DictCore subCore = new DictCore();
+        subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+        int typeId = 2;
+        String combinedDeclensionId = ",2,2,";
+        int expectedResultSize = 5;
+        
+        DeclensionManager decManSub = subCore.getDeclensionManager();
+        
+        decManSub.deleteDeclensionGenRules(typeId, combinedDeclensionId);
+        List<DeclensionGenRule> result = decManSub.getDeclensionRulesForType(typeId);
+        assertEquals(result.size(), expectedResultSize);
     }
 
     // TODO: all tests blelow this point

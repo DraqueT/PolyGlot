@@ -37,6 +37,7 @@ public class PRadioButton extends JRadioButton {
 
     public PRadioButton(DictCore _core) {
         core = _core;
+        this.setFont(core.getPropertiesManager().getFontMenu());
     }
     
     /**

@@ -22,7 +22,6 @@ package org.darisadesigns.polyglotlina;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
 import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.PronunciationMgr;
@@ -47,8 +46,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -590,25 +587,6 @@ public class DictCore {
         headerElement = doc.createElement(PGTUtil.DICTIONARY_SAVE_DATE);
         headerElement.appendChild(doc.createTextNode(saveTime.toString()));
         rootElement.appendChild(headerElement);
-    }
-
-    /**
-     * Clears all declensions from word
-     *
-     * @param wordId ID of word to clear of all declensions
-     */
-    public void clearAllDeclensionsWord(Integer wordId) {
-        declensionMgr.clearAllDeclensionsWord(wordId);
-    }
-
-    /**
-     * Returns declension template (and ONLY template) for given POS/template id
-     * @param typeId
-     * @param templateId
-     * @return 
-     */
-    public DeclensionNode getDeclensionTemplate(Integer typeId, Integer templateId) {
-        return declensionMgr.getDeclensionTemplate(typeId, templateId);
     }
 
     /**

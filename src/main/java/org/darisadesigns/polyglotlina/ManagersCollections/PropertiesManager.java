@@ -69,6 +69,7 @@ public class PropertiesManager {
     private final Map<String, String> charRep = new HashMap<>();
     private final DictCore core;
     private Double kerningSpace = 0.0;
+    private boolean useSimplifiedConjugations = false;
 
     public PropertiesManager(DictCore _core) throws IOException {
         alphaOrder = new PAlphaMap<>();
@@ -669,6 +670,11 @@ public class PropertiesManager {
         wordValue.appendChild(doc.createTextNode(kerningSpace.toString()));
         propContainer.appendChild(wordValue);
         
+        // store option to use simplified conjugation autogeneration
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_USE_SIMPLIFIED_CONJ);
+        wordValue.appendChild(doc.createTextNode(isUseSimplifiedConjugations() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        propContainer.appendChild(wordValue);
+        
         // store all replacement pairs
         wordValue = doc.createElement(PGTUtil.LANG_PROP_CHAR_REP_CONTAINER_XID);
         for (Entry<String, String> pair : getAllCharReplacements()) {
@@ -834,5 +840,19 @@ public class PropertiesManager {
             IOHandler.writeErrorLog(e);
             throw new Exception("Unable to refresh fonts: " + e.getLocalizedMessage());
         }
+    }
+
+    /**
+     * @return the useSimplifiedConjugations
+     */
+    public boolean isUseSimplifiedConjugations() {
+        return useSimplifiedConjugations;
+    }
+
+    /**
+     * @param useSimplifiedConjugations the useSimplifiedConjugations to set
+     */
+    public void setUseSimplifiedConjugations(boolean useSimplifiedConjugations) {
+        this.useSimplifiedConjugations = useSimplifiedConjugations;
     }
 }

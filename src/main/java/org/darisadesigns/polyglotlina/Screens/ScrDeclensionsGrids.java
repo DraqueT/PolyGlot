@@ -242,7 +242,7 @@ public final class ScrDeclensionsGrids extends PDialog {
     }
     
     private void saveValues() {
-        core.clearAllDeclensionsWord(word.getId());
+        core.getDeclensionManager().clearAllDeclensionsWord(word.getId());
         
         if (chkAutogenOverride.isSelected()) {
             int count = pnlTabDeclensions.getTabCount();

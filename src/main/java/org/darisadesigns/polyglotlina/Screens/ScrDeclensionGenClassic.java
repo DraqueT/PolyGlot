@@ -37,10 +37,12 @@ import org.darisadesigns.polyglotlina.CustomControls.PTable;
 import org.darisadesigns.polyglotlina.Nodes.DeclensionDimension;
 import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -68,9 +70,10 @@ import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
  *
  * @author draque
  */
-public final class ScrDeclensionGenSetup extends PDialog {
+public final class ScrDeclensionGenClassic extends PDialog {
 
     final String depRulesLabel = "DEPRECATED RULES";
+    final Window parent;
     final int typeId;
     DefaultListModel<Object> decListModel;
     DefaultListModel<Object> rulesModel;
@@ -84,10 +87,12 @@ public final class ScrDeclensionGenSetup extends PDialog {
      *
      * @param _core dictionary core
      * @param _typeId ID of type to pull rules for
+     * @param _parent
      */
-    public ScrDeclensionGenSetup(DictCore _core, int _typeId) {
+    public ScrDeclensionGenClassic(DictCore _core, int _typeId, Window _parent) {
         core = _core;
         typeId = _typeId;
+        parent = _parent;
         depRulesList = core.getDeclensionManager().getAllDepGenerationRules(_typeId);
 
         initComponents();
@@ -100,12 +105,6 @@ public final class ScrDeclensionGenSetup extends PDialog {
         populateCombinedDecl();
         pnlApplyClasses.setVisible(false);
         pnlApplyClasses.setVisible(true);
-    }
-
-    @Override
-
-    public final void setModal(boolean _modal) {
-        super.setModal(_modal);
     }
 
     @Override
@@ -167,7 +166,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
         }
 
         if (!ret) {
-            InfoBox.error("Unable to Close With Error", userMessage, this);
+            InfoBox.error("Unable to Close With Error", userMessage, parent);
         }
 
         return ret;
@@ -186,30 +185,6 @@ public final class ScrDeclensionGenSetup extends PDialog {
             Font setFont = core.getPropertiesManager().getFontCon();
             txtRuleRegex.setFont(setFont);
         }
-    }
-
-    /**
-     * Opens screen declension window
-     *
-     * @param _core dictionary core
-     * @param _typeId type ID to open window for
-     * @return a copy of itself
-     */
-    public static ScrDeclensionGenSetup run(DictCore _core, int _typeId) {
-        ScrDeclensionGenSetup s = new ScrDeclensionGenSetup(_core, _typeId);
-        s.setModal(true);
-
-        List<DeclensionPair> decs = _core.getDeclensionManager().getAllCombinedIds(_typeId);
-
-        if (decs.isEmpty()) {
-            InfoBox.warning("No Declensions Exist", "Please set up some conjucations/declensions for \""
-                    + _core.getTypes().getNodeById(_typeId).getValue() + "\" before setting up automatic patterns.", _core.getRootWindow());
-            s.dispose();
-        } else {
-            s.setVisible(true);
-        }
-
-        return s;
     }
 
     /**
@@ -612,7 +587,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
         
         message += "\nto all word forms for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
         
-        return InfoBox.actionConfirmation("Confirm Rule Copy", message, this);
+        return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
     }
     
     public boolean verifyDeleteRulesToDimension(int decId, int dimId, List<DeclensionGenRule> rules) {
@@ -626,7 +601,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
         
         message += "\nfrom all word forms for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
         
-        return InfoBox.actionConfirmation("Confirm Rule Copy", message, this);
+        return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
     }
     
     public boolean verifyBulkDeleteRule(List<DeclensionGenRule> rules) {
@@ -638,7 +613,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
         
         message += "Continue?";
         
-        return InfoBox.actionConfirmation("Confirm Rule Copy", message, this);
+        return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
     }
     
     /**
@@ -798,7 +773,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
      * deletes currently selected rule
      */
     private void deleteRule() {
-        if (!InfoBox.deletionConfirmation(this)) {
+        if (!InfoBox.deletionConfirmation(parent)) {
             return;
         }
 
@@ -831,7 +806,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
      * deletes currently selected transform from currently selected rule
      */
     private void deleteTransform() {
-        if (!InfoBox.deletionConfirmation(this)) {
+        if (!InfoBox.deletionConfirmation(parent)) {
             return;
         }
 
@@ -958,6 +933,11 @@ public final class ScrDeclensionGenSetup extends PDialog {
         selectedIndicies[0] = selectedIndicies[selectedIndicies.length - 1] + 1;
         lstRules.setSelectedIndices(selectedIndicies);
     }
+    
+    @Override
+    public Component getWindow() {
+        return jPanel2;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -998,7 +978,6 @@ public final class ScrDeclensionGenSetup extends PDialog {
         jButton4.setFont(core.getPropertiesManager().getFontMenu());
         btnDeleteTransform = new PAddRemoveButton("-");
         pnlApplyClasses = new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId));
-        jButton5 = new PButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Conjugation/Declension Autogeneration Setup");
@@ -1015,7 +994,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
             public Object getElementAt(int i) { return strings[i]; }
         });
         lstCombinedDec.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstCombinedDec.setToolTipText("Combined Conjugations/Declensions");
+        lstCombinedDec.setToolTipText("This lists every possible form of this part of speech.");
         lstCombinedDec.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstCombinedDecValueChanged(evt);
@@ -1237,7 +1216,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addGap(9, 9, 9)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(60, 60, 60)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1277,32 +1256,17 @@ public final class ScrDeclensionGenSetup extends PDialog {
                 .addContainerGap())
         );
 
-        jButton5.setText("OK");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton5)))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
-                .addContainerGap())
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -1393,10 +1357,6 @@ public final class ScrDeclensionGenSetup extends PDialog {
         moveTransformDown();
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        dispose();
-    }//GEN-LAST:event_jButton5ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddRule;
     private javax.swing.JButton btnAddTransform;
@@ -1407,7 +1367,6 @@ public final class ScrDeclensionGenSetup extends PDialog {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -122,6 +122,7 @@ public class PGTUtil {
     public static final String LANG_PROP_USE_LOCAL_LEX_XID = "langPropUseLocalLexicon";
     public static final String LANG_PROP_KERN_VAL_XID = "langPropKerningValue";
     public static final String LANG_PROP_OVERRIDE_REGEX_FONT_XID = "langPropOverrideRegexFont";
+    public static final String LANG_PROP_USE_SIMPLIFIED_CONJ = "langPropUseSimplifiedConjugations"; // blangPropSimpConj
 
     // character replacement pair values
     public static final String LANG_PROP_CHAR_REP_CONTAINER_XID = "langPropCharRep";
