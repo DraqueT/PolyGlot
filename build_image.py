@@ -31,7 +31,7 @@ separatorCharacter = '/'
 
 JAVAFX_LOCATION_LINUX = "/home/polyglot/.m2/repository/org/openjfx"
 JAVA_PACKAGER_LOCATION_LINUX = "/usr/lib/jvm/jdk-14/bin" # this will go away once Java 14 drops officially...
-LIN_INS_NAME = 'PolyGlot-Ins-Lin.db'
+LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 
 
 ###############################
@@ -240,9 +240,10 @@ def distLinux():
         '--copyright "2014-2019 Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
         '--icon packaging_files/PolyGlot0.png')
-
     os.system(command)
-    copyInstaller('installer/polyglot_1.0-1_amd64.deb')
+    
+    if copyDestination != "":
+        copyInstaller('installer/polyglot_1.0-1_amd64.deb')
 
 
 ######################################
@@ -316,7 +317,8 @@ def distOsx():
         '"installer/PolyGlot-Ins.dmg" ' +
         '"appimage/"')
         
-    copyInstaller('installer/PolyGlot-Ins.dmg')
+    if copyDestination != "":
+        copyInstaller('installer/PolyGlot-Ins.dmg')
 
 
 ######################################

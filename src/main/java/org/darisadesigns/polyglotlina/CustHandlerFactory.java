@@ -148,6 +148,7 @@ public class CustHandlerFactory {
             boolean blangPropEnforceRTL = false;
             boolean blangPropLocalLangName = false;
             boolean blangPropAuthCopyright = false;
+            boolean blangPropSimpConj = false;
             boolean bwordClassDefMan = false;
             boolean bwordClassProcMan = false;
             boolean bwordClassPattern = false;
@@ -284,6 +285,8 @@ public class CustHandlerFactory {
                     blangPropEnforceRTL = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_AUTH_COPYRIGHT_XID)) {
                     blangPropAuthCopyright = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_USE_SIMPLIFIED_CONJ)) {
+                    blangPropSimpConj = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_LOCAL_NAME_XID)) {
                     blangPropLocalLangName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_AUTODECLOVERRIDE_XID)) {
@@ -578,6 +581,8 @@ public class CustHandlerFactory {
                     blangPropEnforceRTL = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_AUTH_COPYRIGHT_XID)) {
                     blangPropAuthCopyright = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_USE_SIMPLIFIED_CONJ)) {
+                    blangPropSimpConj = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_LOCAL_NAME_XID)) {
                     blangPropLocalLangName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_ID_XID)) {
@@ -975,6 +980,8 @@ public class CustHandlerFactory {
                 } else if (blangPropAuthCopyright) {
                     propertiesManager.setCopyrightAuthorInfo(propertiesManager.getCopyrightAuthorInfo()
                             + new String(ch, start, length));
+                } else if (blangPropSimpConj) {
+                    propertiesManager.setUseSimplifiedConjugations(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (blangPropLocalLangName) {
                     propertiesManager.setLocalLangName(propertiesManager.getLocalLangName()
                             + new String(ch, start, length));

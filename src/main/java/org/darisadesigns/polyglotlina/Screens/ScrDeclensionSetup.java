@@ -336,7 +336,7 @@ public final class ScrDeclensionSetup extends PDialog {
         List<DeclensionNode> declesionTemplates = new ArrayList<>();
 
         for (int i : lstDeclensionList.getSelectedIndices()) {
-            DeclensionNode curNodeToCopy = core.getDeclensionTemplate(myType.getId(), 
+            DeclensionNode curNodeToCopy = core.getDeclensionManager().getDeclensionTemplate(myType.getId(), 
                     scrToCoreDeclensions.get(i));
             
             DeclensionNode copyNode = new DeclensionNode(-1);
@@ -409,7 +409,7 @@ public final class ScrDeclensionSetup extends PDialog {
         }
 
         Integer nodeId = scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
-        DeclensionNode delFrom = core.getDeclensionTemplate(myType.getId(), nodeId);
+        DeclensionNode delFrom = core.getDeclensionManager().getDeclensionTemplate(myType.getId(), nodeId);
         Integer delDimId = (Integer) tblDimensions.getModel().getValueAt(tblDimensions.getSelectedRow(), 2);
         delFrom.deleteDimension(delDimId);
 
@@ -879,7 +879,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
         if (decId != null && decId != -1) {
             try {
-                curDec = core.getDeclensionTemplate(myType.getId(), decId);
+                curDec = core.getDeclensionManager().getDeclensionTemplate(myType.getId(), decId);
             } catch (Exception e) {
                 IOHandler.writeErrorLog(e);
                 InfoBox.error("Declension Population Error", "Unable to populate declension.\n\n"

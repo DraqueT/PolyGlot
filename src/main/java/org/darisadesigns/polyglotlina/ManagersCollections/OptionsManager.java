@@ -31,7 +31,7 @@ import java.util.Map;
 import javax.swing.UIManager;
 
 /**
- * This contains, loads and saves the options for PolyGlot
+ * This contains, loads and saves the options for PolyGlot (NOT for individual languages)
  *
  * @author draque
  */
