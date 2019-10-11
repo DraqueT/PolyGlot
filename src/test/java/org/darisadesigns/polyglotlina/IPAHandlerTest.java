@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import java.awt.GraphicsEnvironment;
 import java.lang.reflect.Field;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,32 @@ public class IPAHandlerTest {
     }
 
     @Test
-    public void testPlayAllSounds() throws Exception {
+    public void testPlaySounds() throws NoSuchFieldException, Exception {
+        // do not test in headless environment (hangs on 100% CPU consumption)
+        if (!GraphicsEnvironment.isHeadless()) {
+            System.out.println("test sound playback");
+            IPAHandler handler = new IPAHandler(null);
+
+            Class<?> classs = handler.getClass();
+            Field field = classs.getDeclaredField("charMap");
+            field.setAccessible(true);
+            Map<String, String> charMap = (Map<String, String>)field.get(handler);
+
+            field = classs.getDeclaredField("soundRecorder");
+            field.setAccessible(true);
+            SoundRecorder soundRecorder = (SoundRecorder)field.get(handler);
+
+            // only test playing the first sounds of each library (just test the rest exist)
+            String firstSound = (String)charMap.values().toArray()[0];
+            soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
+            soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
+        } else {
+            System.out.println("HEADLESS SKIP: test sound playback");
+        }
+    }
+    
+    @Test
+    public void testAllSoundsExist() throws Exception {
         System.out.println("test all sound assets");
         IPAHandler handler = new IPAHandler(null);
         
@@ -53,7 +79,7 @@ public class IPAHandlerTest {
         // only test playing the first sounds of each library (just test the rest exist)
         String firstSound = (String)charMap.values().toArray()[0];
         soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
-        soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
+        soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
         
         for (String soundName : charMap.values()) {
             String sound = "";

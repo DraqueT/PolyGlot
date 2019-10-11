@@ -85,12 +85,12 @@ public class ScrMainMenuTest {
      * This one does actually open a browser window. Sorry about that.
      */
     public void testOpenHelp() throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (headless) {
-            return;
+        if (!headless) {
+            Method method = ScrMainMenu.class.getDeclaredMethod("openHelp");
+            method.setAccessible(true);
+            method.invoke(mainMenu);
+        } else {
+            System.out.println("HEADLESS SKIP: openHelp");
         }
-        
-        Method method = ScrMainMenu.class.getDeclaredMethod("openHelp");
-        method.setAccessible(true);
-        method.invoke(mainMenu);
     }
 }
