@@ -53,6 +53,7 @@ public class IPAHandlerTest {
             // only test playing the first sounds of each library (just test the rest exist)
             String firstSound = (String)charMap.values().toArray()[0];
             soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
+            soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
         } else {
             System.out.println("HEADLESS SKIP: test sound playback");
         }
@@ -74,11 +75,6 @@ public class IPAHandlerTest {
         
         String results = "";
         String expectedResults = "";
-        
-        // only test playing the first sounds of each library (just test the rest exist)
-        String firstSound = (String)charMap.values().toArray()[0];
-        soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
-        soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
         
         for (String soundName : charMap.values()) {
             String sound = "";
