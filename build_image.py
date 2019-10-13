@@ -376,9 +376,11 @@ def packWin():
     os.system(command)
 
 def distWin():
+    packageLocation = 'installer\PolyGlot-1.0.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
-    # If this does not work correctly, install WiX Toolset: https://wixtoolset.org/releases/
+
+    # If missing, install WiX Toolset: https://wixtoolset.org/releases/
     command = (JAVA_PACKAGER_LOCATION_WIN + '\\jpackage ' + 
         '--runtime-image build\\image ' +
         '--win-shortcut ' +
@@ -392,10 +394,15 @@ def distWin():
         '--copyright "2014-2019 Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit."' +
         ' --icon packaging_files/win/PolyGlot0.ico')
-    os.system(command)
+
+    for x in range(3):
+        # for some reason, this fails randomly. Something to do with Windows security? Try up to three times.
+        if path.exists(packageLocation):
+            break
+        os.system(command)
     
     if copyDestination != "":
-        copyInstaller('installer\PolyGlot-1.0.exe')
+        copyInstaller(packageLocation)
 
 # injects current time into file which lives in PolyGlot resources
 def injectBuildDate():
