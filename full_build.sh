@@ -4,46 +4,6 @@
 
 START=$(date +%s)
 
-# OSX Build/upload
-if [ "$#" -eq 0 ] || [ "$1" == "osx" ]; then
-    echo "Starting OSX build process..."
-    git pull
-    python build_image.py -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas"
-    echo "OSX build process complete."
-fi
-
-# Linux Build/upload
-if [ "$#" -eq 0 ] || [ "$1" == "lin" ]; then
-    echo "Starting Ubuntu build process..."
-    VBoxManage startvm "PolyGlotBuildUbuntu" --type headless
-    echo "Waiting 40 seconds for target machine to start up..."
-    sleep 5
-    echo "Waiting 35 seconds for target machine to start up..."
-    sleep 5
-    echo "Waiting 30 seconds for target machine to start up..."
-    sleep 5
-    echo "Waiting 25 seconds for target machine to start up..."
-    sleep 5
-    echo "Waiting 20 seconds for target machine to start up..."
-    sleep 5
-    echo "Waiting 15 seconds for target machine to start up..."
-    sleep 5
-    echo "Waiting 10 seconds for target machine to start up..."
-    sleep 5
-    echo "Waiting 05 seconds for target machine to start up..."
-    sleep 5
-    VBoxManage guestcontrol "PolyGlotBuildUbuntu" \
-       run --exe "/home/polyglot/NetBeansProjects/auto_polyglot_build.sh" \
-       --username polyglot \
-       --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass
-    echo "Waiting for Ubuntu machine to power down..."
-    until $(VBoxManage showvminfo --machinereadable PolyGlotBuildUbuntu | grep -q ^VMState=.poweroff.)
-    do
-        sleep 2
-    done
-    echo "Linux build process complete."
-fi
-
 # Windows Build/upload
 if [ "$#" -eq 0 ] || [ "$1" == "win" ]; then
     echo "Starting Windows build process..."
@@ -80,6 +40,47 @@ if [ "$#" -eq 0 ] || [ "$1" == "win" ]; then
     done
     echo "Windows build process complete."
 fi
+
+# Linux Build/upload
+if [ "$#" -eq 0 ] || [ "$1" == "lin" ]; then
+    echo "Starting Ubuntu build process..."
+    VBoxManage startvm "PolyGlotBuildUbuntu" --type headless
+    echo "Waiting 40 seconds for target machine to start up..."
+    sleep 5
+    echo "Waiting 35 seconds for target machine to start up..."
+    sleep 5
+    echo "Waiting 30 seconds for target machine to start up..."
+    sleep 5
+    echo "Waiting 25 seconds for target machine to start up..."
+    sleep 5
+    echo "Waiting 20 seconds for target machine to start up..."
+    sleep 5
+    echo "Waiting 15 seconds for target machine to start up..."
+    sleep 5
+    echo "Waiting 10 seconds for target machine to start up..."
+    sleep 5
+    echo "Waiting 05 seconds for target machine to start up..."
+    sleep 5
+    VBoxManage guestcontrol "PolyGlotBuildUbuntu" \
+       run --exe "/home/polyglot/NetBeansProjects/auto_polyglot_build.sh" \
+       --username polyglot \
+       --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass
+    echo "Waiting for Ubuntu machine to power down..."
+    until $(VBoxManage showvminfo --machinereadable PolyGlotBuildUbuntu | grep -q ^VMState=.poweroff.)
+    do
+        sleep 2
+    done
+    echo "Linux build process complete."
+fi
+
+# OSX Build/upload
+if [ "$#" -eq 0 ] || [ "$1" == "osx" ]; then
+    echo "Starting OSX build process..."
+    git pull
+    python build_image.py -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas"
+    echo "OSX build process complete."
+fi
+
 
 END=$(date +%s)
 DIFF=$(echo "$END - $START" | bc)

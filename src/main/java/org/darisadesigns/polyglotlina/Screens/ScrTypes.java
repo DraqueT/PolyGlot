@@ -88,7 +88,11 @@ public final class ScrTypes extends PFrame {
 
     @Override
     public void updateAllValues(DictCore _core) {
-        // do nothing
+        core = _core;
+        
+        populateTypes();
+        populateProperties();
+        setupListeners();
     }
 
     @Override
