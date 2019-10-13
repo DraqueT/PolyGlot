@@ -10,11 +10,12 @@
 #
 ##############################################################################
 
+import datetime
 import platform
-import sys
 import os
 from os import path
 import shutil
+import sys
 
 osString = platform.system()
 linString = 'Linux'
@@ -130,12 +131,14 @@ def main(args):
     print('Done!')
 
 def build():
-    if osString == linString:
-        buildLinux()
-    elif osString == osxString:
-        buildOsx()
-    elif osString == winString:
-        buildWin()
+    print('Injecting build date/time...')
+    injectBuildDate()
+#     if osString == linString:
+#         buildLinux()
+#     elif osString == osxString:
+#         buildOsx()
+#     elif osString == winString:
+#         buildWin()
     
 def clean():
     if osString == linString:
@@ -394,6 +397,17 @@ def distWin():
     if copyDestination != "":
         copyInstaller('installer\PolyGlot-1.0.exe')
 
+# injects current time into file which lives in PolyGlot resources
+def injectBuildDate():
+    buildTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+    filePath = 'assets/assets/org/DarisaDesigns/buildDate'
+    
+    if (osString == winString):
+        filePath = filePath.replace('/', '\\')
+    
+    f = open(filePath, 'w')
+    f.write(buildTime)
+    f.close()
 
 ####################################
 #       UTIL FUNCTIONALITY

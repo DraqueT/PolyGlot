@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -53,10 +54,9 @@ import org.darisadesigns.polyglotlina.Screens.ScrQuizGenDialog;
  */
 public class PGTUtil {
 
-    private static File java8BridgeLocation = null;
-    private static File errorDirectory;
-    private static boolean forceSuppressDialogs = false;
+    // CONSTANTS
     private static  final Map<String, Integer> VERSION_HIERARCHY;
+    public static final String BUILD_DATE_TIME;
     public static final String DICTIONARY_XID = "dictionary";
     public static final String PGVERSION_XID = "PolyGlotVer";
     public static final String DICTIONARY_SAVE_DATE = "DictSaveDate";
@@ -70,6 +70,7 @@ public class PGTUtil {
     public static final String EXAMPLE_LANGUAGE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/exlex.zip";
     public static final String HELP_FILE_NAME = "readme.html";
     public static final String SWADESH_LOCATION = "/assets/org/DarisaDesigns/swadesh/";
+    public static final String BUILD_DATE_TIME_LOCATION = "/assets/org/DarisaDesigns/buildDate";
     public static final String[] SWADESH_LISTS = new String[]{"Original_Swadesh", "Modern_Swadesh"};
 
     // properties on words
@@ -543,7 +544,25 @@ public class PGTUtil {
         VERSION_HIERARCHY.put("2.4", 35);
         VERSION_HIERARCHY.put("2.5", 36);
         VERSION_HIERARCHY.put("3.0", 37);
+        
+        // Gather build date/time from resources (if it does not exist, ignore)
+        URL buildDate = PGTUtil.class.getResource(BUILD_DATE_TIME_LOCATION);
+        String buildDateString = "";
+        if (buildDate != null) {
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(buildDate.openStream(), StandardCharsets.UTF_8));
+                buildDateString = br.readLine();
+            } catch (IOException ex) {
+                buildDateString = "BUILD DATE FILE NOT PRESENT";
+            }
+        }
+        BUILD_DATE_TIME = buildDateString;
     }
+    
+    // ENVIRONMENT VARIABLES
+    private static File java8BridgeLocation = null;
+    private static File errorDirectory;
+    private static boolean forceSuppressDialogs = false;
 
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to
