@@ -61,8 +61,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
@@ -75,6 +73,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultTreeModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Java8Bridge;
 import org.darisadesigns.polyglotlina.WebInterface;
 
@@ -604,6 +603,7 @@ public final class ScrMainMenu extends PFrame {
             setFile(fileName);
             core.getOptionsManager().pushRecentFile(fileName);
             populateRecentOpened();
+            updateAllChildValues(core);
         }
 
         genTitle();
@@ -1075,9 +1075,21 @@ public final class ScrMainMenu extends PFrame {
         if (cacheLexicon != null) {
             cacheLexicon.updateAllValues(_core);
         }
+        
         core = _core;
         
+        updateAllChildValues(_core);
         populateSwadeshMenu();
+    }
+    
+    private void updateAllChildValues(DictCore _core) {
+        for (Window win : childWindows) {
+            if (win instanceof PFrame) {
+                ((PFrame)win).updateAllValues(_core);
+            } else if (win instanceof PDialog) {
+                ((PDialog)win).updateAllValues(_core);
+            }
+        }
     }
 
     @Override
