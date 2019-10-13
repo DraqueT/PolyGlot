@@ -50,7 +50,7 @@ public class ScrAbout extends PDialog {
                 + "purposes. Please don't sell this or call it your own, but feel free to "
                 + "use and modify the code found on the open source repository for PolyGlot.\n\n"
                 + "HomePage: http://draquet.github.io/PolyGlot/\nGitHub Repository: "
-                + "https://github.com/DraqueT/PolyGlot");
+                + "https://github.com/DraqueT/PolyGlot\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME);
     }
     
     @Override
