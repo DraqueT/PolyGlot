@@ -21,7 +21,6 @@ import sys
 buildResult = ''
 copyDestination = ''
 failFile = ''
-successFile = ''
 osString = platform.system()
 
 linString = 'Linux'
@@ -79,7 +78,6 @@ def main(args):
     global failFile
     global copyDestination
     global separatorCharacter
-    global successFile
     
     if osString == winString:
         separatorCharacter = '\\'
@@ -107,7 +105,6 @@ def main(args):
         
         # failure message file created here, deleted at end of process conditionally upon success
         failFile = copyDestination + separatorCharacter + osString + "_BUILD_FAILED"
-        successFile = copyDestination + separatorCharacter + osString + "_BUILD_SUCCESS"
         open(failFile, 'a').close()
         
         # remove args after consuming
@@ -187,7 +184,6 @@ def dist():
 ######################################
 
 def buildLinux():
-    global buildResult
     print('cleaning/testing/compiling...')
     os.system('mvn clean package')
     
@@ -338,11 +334,8 @@ def distOsx():
 ######################################
 
 def buildWin():
-    global buildResult
     print('cleaning/testing/compiling...')
-    result = subprocess.check_output(['mvn', '-l'])
-    buildResult = buildResult + '\n' + result
-    #os.system('mvn clean package')
+    os.system('mvn clean package')
     
 def cleanWin():
     print('cleaning build paths...')
@@ -350,94 +343,44 @@ def cleanWin():
     os.system('rmdir build /s /q')
     
 def imageWin():
-    global buildResult
     print('creating jmod based on jar built without dependencies...')
     os.system('mkdir target\mods')
-    
-    result = subprocess.check_output([
-        JAVA_PACKAGER_LOCATION_WIN + '\\jmod',
-        'create',
-        '--class-path',
-        'target\\' + JAR_WO_DEP,
-        '--main-class',
-        'org.darisadesigns.polyglotlina.PolyGlot',
-        'target\mods\PolyGlot.jmod'
-    ])
-    buildResult = buildResult + '\n' + result
-#     os.system(JAVA_PACKAGER_LOCATION_WIN + '\\jmod create ' +
-#         '--class-path target\\' + JAR_WO_DEP +
-#         ' --main-class org.darisadesigns.polyglotlina.PolyGlot ' +
-#         'target\mods\PolyGlot.jmod')
+    os.system(JAVA_PACKAGER_LOCATION_WIN + '\\jmod create ' +
+        '--class-path target\\' + JAR_WO_DEP +
+        ' --main-class org.darisadesigns.polyglotlina.PolyGlot ' +
+        'target\mods\PolyGlot.jmod')
 
     print('creating runnable image...')
-    result = subprocess.check_output([
-        '%JAVA_HOME%\\bin\\jlink',
-        '--module-path',
-        '"module_injected_jars;' +
-            'target\\mods;' +
-            JAVAFX_LOCATION_WIN + '\\javafx-graphics\\' + JAVAFX_VER + ';' +
-            JAVAFX_LOCATION_WIN + '\\javafx-base\\' + JAVAFX_VER + ';' +
-            JAVAFX_LOCATION_WIN + '\\javafx-media\\' + JAVAFX_VER + ';' +
-            JAVAFX_LOCATION_WIN + '\\javafx-swing\\' + JAVAFX_VER + ';' +
-            JAVAFX_LOCATION_WIN + '\\javafx-controls\\' + JAVAFX_VER + ';' +
-            '%JAVA_HOME%\jmods" ',
-        '--add-modules',
-        '"org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec"',
-        '--output',
-        '"build\\image"',
-        '--compress=2',
-        '--launcher',
-        'PolyGlot=org.darisadesigns.polyglotlina.polyglot'
-    ])
-#     command = ('%JAVA_HOME%\\bin\\jlink ' +
-#         '--module-path "module_injected_jars;' +
-#         'target\\mods;' +
-#         JAVAFX_LOCATION_WIN + '\\javafx-graphics\\' + JAVAFX_VER + ';' +
-#         JAVAFX_LOCATION_WIN + '\\javafx-base\\' + JAVAFX_VER + ';' +
-#         JAVAFX_LOCATION_WIN + '\\javafx-media\\' + JAVAFX_VER + ';' +
-#         JAVAFX_LOCATION_WIN + '\\javafx-swing\\' + JAVAFX_VER + ';' +
-#         JAVAFX_LOCATION_WIN + '\\javafx-controls\\' + JAVAFX_VER + ';' +
-#         '%JAVA_HOME%\jmods" ' +
-#         '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
-#         '--output "build\image" ' +
-#         '--compress=2 ' +
-#         '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
-#     os.system(command)
-    buildResult = buildResult + '\n' + result
+    command = ('%JAVA_HOME%\\bin\\jlink ' +
+        '--module-path "module_injected_jars;' +
+        'target\\mods;' +
+        JAVAFX_LOCATION_WIN + '\\javafx-graphics\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION_WIN + '\\javafx-base\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION_WIN + '\\javafx-media\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION_WIN + '\\javafx-swing\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION_WIN + '\\javafx-controls\\' + JAVAFX_VER + ';' +
+        '%JAVA_HOME%\jmods" ' +
+        '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
+        '--output "build\image" ' +
+        '--compress=2 ' +
+        '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
+    os.system(command)
 
 def packWin():
-    global buildResult
     print('Packing Windows app...')
     os.system('rmdir /s /q appimage')
-    result = subprocess.check_output([
-        JAVA_PACKAGER_LOCATION_WIN + '\\jpackage ',
-        '--runtime-image',
-        'build\\image',
-        '--output',
-        'appimage',
-        '--name',
-        'PolyGLot',
-        '--module',
-        'org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot',
-        '--icon',
-        'packaging_files/win/PolyGlot0.ico',
-        '--app-version',
-        '"' + POLYGLOT_VERSION + '"'
-    ])
-    buildResult = buildResult + '\n' + result
-#     command = (JAVA_PACKAGER_LOCATION_WIN + '\\jpackage ' +
-#         '--runtime-image build\\image ' +
-#         '--output appimage ' +
-#         '--name PolyGlot ' +
-#         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
-#         '--copyright "2014-2019 Draque Thompson" ' +
-#         '--description "PolyGlot is a spoken language construction toolkit." ' +
-#         '--icon packaging_files/win/PolyGlot0.ico ' +
-#         '--app-version "' + POLYGLOT_VERSION + '"')
-#     os.system(command)
+    command = (JAVA_PACKAGER_LOCATION_WIN + '\\jpackage ' +
+        '--runtime-image build\\image ' +
+        '--output appimage ' +
+        '--name PolyGlot ' +
+        '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
+        '--copyright "2014-2019 Draque Thompson" ' +
+        '--description "PolyGlot is a spoken language construction toolkit." ' +
+        '--icon packaging_files/win/PolyGlot0.ico ' +
+        '--app-version "' + POLYGLOT_VERSION + '"')
+    os.system(command)
 
 def distWin():
-    global buildResult
     packageLocation = 'installer\PolyGlot-1.0.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
@@ -454,46 +397,17 @@ def distWin():
         '--name PolyGlot ' +
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
         '--copyright "2014-2019 Draque Thompson" ' +
-        '--description "PolyGlot is a spoken language construction toolkit." ' +
-        '--icon packaging_files/win/PolyGlot0.ico')
+        '--description "PolyGlot is a spoken language construction toolkit."' +
+        ' --icon packaging_files/win/PolyGlot0.ico')
 
     for x in range(3):
         # for some reason, this fails randomly. Something to do with Windows security? Try up to three times.
-        result = subprocess.check_output([
-            JAVA_PACKAGER_LOCATION_WIN + '\\jpackage,
-            '--runtime-image',
-            'build\\image',
-            '--win-shortcut',
-            '--win-menu',
-            '--win-dir-chooser',
-            '--package-type',
-            'exe',
-            '--file-associations',
-            'packaging_files\\win\\file_types_win.prop',
-            '--output',
-            'installer',
-            '--name',
-            'PolyGlot',
-            '--module',
-            'org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot',
-            '--copyright',
-            '"2014-2019 Draque Thompson"',
-            '--description',
-            '"PolyGlot is a spoken language construction toolkit."',
-            '--icon',
-            'packaging_files/win/PolyGlot0.ico'
-        ])
-        buildResult = buildResult + '\n' result
         if path.exists(packageLocation):
             break
-#         os.system(command)
+        os.system(command)
     
     if copyDestination != "":
         copyInstaller(packageLocation)
-
-####################################
-#       UTIL FUNCTIONALITY
-####################################
 
 # injects current time into file which lives in PolyGlot resources
 def injectBuildDate():
@@ -506,6 +420,10 @@ def injectBuildDate():
     f = open(filePath, 'w')
     f.write(buildTime)
     f.close()
+
+####################################
+#       UTIL FUNCTIONALITY
+####################################
 
 def getVersion():
     if osString == winString:
@@ -549,8 +467,6 @@ def injectDocs():
     
 # Copies installer file to final destination and removes error indicator file
 def copyInstaller(source):
-    global buildResult
-    
     if path.exists(source):
         if osString == winString:
             insFile = WIN_INS_NAME
@@ -565,14 +481,6 @@ def copyInstaller(source):
     
         # only remove failure signal once process is successful
         os.remove(failFile)
-        f = open(successFile, 'w') 
-    else:
-        os.remove(successFile)
-        f = open(failFile, 'w')
-        
-    f = open(failFile, 'w')
-    f.write(buildResult)
-    f.close()
 
 def printHelp():
     print("""
