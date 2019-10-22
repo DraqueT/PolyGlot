@@ -39,10 +39,9 @@ public class DeclensionManagerTest {
     
     public DeclensionManagerTest() throws Exception {
         core = new DictCore();
+        core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         debugCore = new DictCore();
         debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
-        
-        loadTestLodenkur();
     }
 
     /**
@@ -475,9 +474,6 @@ public class DeclensionManagerTest {
         int resultRules = rules.size();
         
         assertEquals(expectedRules, resultRules);
-        
-        // reload file to restore state
-        loadTestLodenkur();
     }
     
     @Test
@@ -774,8 +770,4 @@ public class DeclensionManagerTest {
 //    @Test
 //    public void testWordHasDeprecatedForms() {
 //    }
-    
-    private void loadTestLodenkur() throws IOException {
-        core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-    }
 }
