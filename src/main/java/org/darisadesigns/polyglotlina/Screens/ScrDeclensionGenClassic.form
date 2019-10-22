@@ -489,7 +489,7 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId))"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId), true)"/>
               </AuxValues>
 
               <Layout>

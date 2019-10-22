@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson
+ * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -46,16 +46,24 @@ public class PClassCheckboxPanel extends JPanel {
     private GridBagConstraints gbc;
     private final PClassCheckboxPanel parent = this;
     private PCheckBox allCheckBox = null;
+    private final boolean includeAll;
     
-    public PClassCheckboxPanel(DictCore _core, TypeNode _type) {
+    /**
+     * 
+     * @param _core
+     * @param _type
+     * @param _includeAll Controls whether "All" checkbox is included
+     */
+    public PClassCheckboxPanel(DictCore _core, TypeNode _type, boolean _includeAll) {
         core = _core;
         type = _type;
+        includeAll = _includeAll;
         this.init();
     }
     
     private void init() {
         // this should not be displayed if there are no classes for this type
-        if (rule != null &&core.getWordClassCollection().getClassesForType(type.getId()).isEmpty()) {
+        if (rule != null && core.getWordClassCollection().getClassesForType(type.getId()).isEmpty()) {
             this.setVisible(false);
         } else if (rule != null) {
             applyClassesCheckboxes.clear();
@@ -96,20 +104,26 @@ public class PClassCheckboxPanel extends JPanel {
     private void createCheckBoxes() {
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        this.addCheckBox("All", 
-                "Apply to all classes", 
-                (ItemEvent e) -> {
-                        PCheckBox thisBox = (PCheckBox)e.getSource();
-                        if (thisBox.isSelected()) {
-                            rule.addClassToFilterList(-1, -1);
-                            uncheckDisableClassChecks();
-                        } else {
-                            rule.removeClassFromFilterList(-1, -1);
-                            setEnabledClassChecks(true);
-                        }
-                    },
-                -1, -1);
-                        
+        
+        if (includeAll) {
+            this.addCheckBox("All", 
+                    "Apply to all classes", 
+                    (ItemEvent e) -> {
+                            PCheckBox thisBox = (PCheckBox)e.getSource();
+                            if (thisBox.isSelected()) {
+                                rule.addClassToFilterList(-1, -1);
+                                uncheckDisableClassChecks();
+                            } else {
+                                rule.removeClassFromFilterList(-1, -1);
+                                setEnabledClassChecks(true);
+                            }
+                        },
+                    -1, -1);
+        } else {
+            // if not used, set to dummy value which is not in menu
+            allCheckBox = new PCheckBox(core);
+        }
+
         core.getWordClassCollection().getClassesForType(type.getId()).forEach((wordClass)->{
             wordClass.getValues().forEach((classValue)->{
                 this.addCheckBox(classValue.getValue(), 

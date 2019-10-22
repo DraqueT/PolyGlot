@@ -46,6 +46,7 @@ import org.w3c.dom.Element;
 public class DeclensionManager {
 
     private final DictCore core;
+    private final List<String> decGenDebug = new ArrayList<>();
 
     public DeclensionManager(DictCore _core) {
         core = _core;
@@ -287,10 +288,10 @@ public class DeclensionManager {
         int typeId = word.getWordTypeId();
         
         if (generationRules.containsKey(typeId)) {
-            List<DeclensionGenRule> itRules = generationRules.get(word.getWordTypeId());
+            List<DeclensionGenRule> decRules = generationRules.get(word.getWordTypeId());
             int missingId = 0; //used for missing index values (index system bolton)
 
-            for (DeclensionGenRule curRule : itRules) {
+            for (DeclensionGenRule curRule : decRules) {
                 if (curRule.getIndex() == 0 || curRule.getIndex() == missingId) {
                     missingId++;
                     curRule.setIndex(missingId);
@@ -298,9 +299,7 @@ public class DeclensionManager {
                     missingId = curRule.getIndex();
                 }
 
-                if (curRule.doesRuleApplyToWord(word)) {
-                    ret.add(curRule);
-                }
+                ret.add(curRule);
             }
         }
 
@@ -322,40 +321,55 @@ public class DeclensionManager {
      *
      * @param word to transform
      * @param combinedId combined ID of word form to create
-     * @param base base word string
      * @return new word value if exists, empty string otherwise
      * @throws java.lang.Exception on bad regex
      */
-    public String declineWord(ConWord word, String combinedId, String base) throws Exception {
-        Iterator<DeclensionGenRule> typeRules = getDeclensionRules(word).iterator();
-        String ret = "";
+    public String declineWord(ConWord word, String combinedId) throws Exception {
+        List<DeclensionGenRule> rules = getDeclensionRules(word);
+        decGenDebug.clear();
+        decGenDebug.add("APPLIED RULES BREAKDOWN:\n");
+        String ret = word.getValue();
 
-        while (typeRules.hasNext()) {
-            DeclensionGenRule curRule = typeRules.next();
-
+        for (DeclensionGenRule curRule : rules) {
+            boolean ruleAppliesCombId = curRule.getCombinationId().equals(combinedId);
+            boolean ruleAppliesToWord = curRule.doesRuleApplyToWord(word);
+            
+            String debugString = "--------------------------------------\n";
+            
             // skip all entries not applicable to this particular combined word ID
-            if (!curRule.getCombinationId().equals(combinedId) || !curRule.doesRuleApplyToWord(word)) {
+            if (!ruleAppliesCombId) {
+                continue;
+            } else if (!ruleAppliesToWord) {
+                debugString += curRule.getDebugString();
+                decGenDebug.add(debugString);
                 continue;
             }
+            
+            debugString += curRule.getDebugString();
 
-            // apply transforms within rule if rule matches current base
-            if (base.matches(curRule.getRegex())) {
-                List<DeclensionGenTransform> transforms = curRule.getTransforms();
+            List<DeclensionGenTransform> transforms = curRule.getTransforms();
 
-                for (DeclensionGenTransform curTrans : transforms) {
-                    try {
-                        base = base.replaceAll(curTrans.regex, curTrans.replaceText);
-                    } catch (Exception e) {
-                        throw new Exception("Unable to create declension/conjugation "
-                                + "due to malformed regex (modify in Parts of Speech->Autogeneration): "
-                                + e.getLocalizedMessage());
-                    }
-
-                    ret = base;
+            for (DeclensionGenTransform curTrans : transforms) {
+                try {
+                    String orig = ret;
+                    ret = ret.replaceAll(curTrans.regex, curTrans.replaceText);
+                    debugString += "    -------------------------\n"
+                            + "    Transformation:\n"
+                            + "        Regex: \"" + curTrans.regex + "\"\n"
+                            + "        Text: \"" + curTrans.replaceText + "\"\n" 
+                            + "        Effect: " + orig + " -> " + ret + "\n";
+                } catch (Exception e) {
+                    throw new Exception("Unable to create declension/conjugation "
+                            + "due to malformed regex (modify in Parts of Speech->Autogeneration): "
+                            + e.getLocalizedMessage());
                 }
             }
+            
+            decGenDebug.add(debugString);
         }
 
+        // if rules are empty, no transformation took place: return blank string
+        ret = rules.isEmpty() ? "" : ret;
         return ret;
     }
 
@@ -1232,5 +1246,13 @@ public class DeclensionManager {
      */
     public boolean wordHasDeprecatedForms(ConWord word) {
         return !getDeprecatedForms(word).isEmpty();
+    }
+    
+    /**
+     * Fetches debug values for the most recently created declension
+     * @return 
+     */
+    public List<String> getDecGenDebug() {
+        return new ArrayList<>(decGenDebug);
     }
 }

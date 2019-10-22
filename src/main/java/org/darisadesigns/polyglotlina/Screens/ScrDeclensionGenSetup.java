@@ -20,9 +20,10 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -31,7 +32,6 @@ import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  * The is the wrapper class which displays either the classic or simplified view
@@ -43,6 +43,7 @@ public class ScrDeclensionGenSetup extends PDialog {
 
     private PDialog curDialog;
     private final int typeId;
+    private ScrTestWordConj child;
 
     /**
      * Creates new form ScrDeclensionGenSetup
@@ -55,6 +56,26 @@ public class ScrDeclensionGenSetup extends PDialog {
         core = _core;
         initComponents();
         setupRadioButtons();
+        setupListeners();
+        
+        this.setTitle("Conjugation/Declension Autogeneration Setup: " 
+                + core.getTypes().getNodeById(typeId).getValue());
+    }
+    
+    private void setupListeners() {
+        this.addWindowFocusListener(new WindowFocusListener() {
+            public void windowGainedFocus(WindowEvent e) {
+                // do nothing
+            }
+
+            public void windowLostFocus(WindowEvent e) {
+                if (curDialog instanceof ScrDeclensionGenClassic) {
+                    ((ScrDeclensionGenClassic)curDialog).saveVolatileValues();
+                } else if (curDialog instanceof ScrDeclensionGenSimple) {
+                    ((ScrDeclensionGenSimple)curDialog).saveRule();
+                }
+            }
+        });
     }
 
     private void setupRadioButtons() {
@@ -157,7 +178,6 @@ public class ScrDeclensionGenSetup extends PDialog {
      */
     public static ScrDeclensionGenSetup run(DictCore _core, int _typeId) {
         ScrDeclensionGenSetup s = new ScrDeclensionGenSetup(_core, _typeId);
-        s.setModal(true);
 
         List decs = _core.getDeclensionManager().getAllCombinedIds(_typeId);
 
@@ -171,6 +191,18 @@ public class ScrDeclensionGenSetup extends PDialog {
 
         return s;
     }
+    
+    public String getCurSelectedCombId() {
+        String ret;
+        
+        if (curDialog instanceof ScrDeclensionGenClassic) {
+            ret = ((ScrDeclensionGenClassic)curDialog).getCurSelectedCombId();
+        } else {
+            ret = ((ScrDeclensionGenSimple)curDialog).getCurSelectedCombId();
+        }
+        
+        return ret;
+    }
 
     @Override
     public void updateAllValues(DictCore _core) {
@@ -179,6 +211,9 @@ public class ScrDeclensionGenSetup extends PDialog {
 
     @Override
     public void dispose() {
+        if (child != null && !child.isDisposed()) {
+            child.dispose();
+        }
         curDialog.dispose();
         super.dispose();
     }
@@ -195,6 +230,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         rdoClassic = new PRadioButton(core);
         rdoSimplified = new PRadioButton(core);
+        jButton2 = new PButton(core);
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new PButton(core);
 
@@ -209,6 +245,14 @@ public class ScrDeclensionGenSetup extends PDialog {
         rdoSimplified.setText("Simplified Setup");
         rdoSimplified.setToolTipText("Use the simplified autoconjugation setup. If you have only one pattern per wordform, this is easier to use.");
 
+        jButton2.setText("Test");
+        jButton2.setToolTipText("Open Conjugation/Declension Test Window");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -218,13 +262,16 @@ public class ScrDeclensionGenSetup extends PDialog {
                 .addComponent(rdoClassic, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rdoSimplified)
-                .addContainerGap(328, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 247, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(rdoClassic)
-                .addComponent(rdoSimplified))
+                .addComponent(rdoSimplified)
+                .addComponent(jButton2))
         );
 
         jPanel2.setMinimumSize(new java.awt.Dimension(0, 0));
@@ -237,7 +284,7 @@ public class ScrDeclensionGenSetup extends PDialog {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 318, Short.MAX_VALUE)
+            .addGap(0, 312, Short.MAX_VALUE)
         );
 
         jButton1.setText("OK");
@@ -274,8 +321,18 @@ public class ScrDeclensionGenSetup extends PDialog {
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if (child == null || child.isDisposed()) {
+            child = new ScrTestWordConj(core, typeId, this);
+            child.setVisible(true);
+        } else {
+            child.toFront();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton rdoClassic;

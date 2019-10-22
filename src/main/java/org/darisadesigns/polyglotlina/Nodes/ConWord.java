@@ -200,6 +200,10 @@ public class ConWord extends DictNode {
         this.setEtymNotes(set.getEtymNotes());
     }
     
+    /**
+     * Fetches word's dictionary core. WARNING: VALUE MAY BE NULL.
+     * @return 
+     */
     public DictCore getCore() {
         return core;
     }

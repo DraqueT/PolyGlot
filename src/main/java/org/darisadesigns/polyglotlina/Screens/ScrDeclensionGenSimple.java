@@ -58,6 +58,11 @@ public class ScrDeclensionGenSimple extends PDialog {
         populateRule();
         setupListeners();
     }
+    
+    public String getCurSelectedCombId() {
+        DeclensionPair curPair = lstCombinedDec.getSelectedValue();
+        return curPair == null ? "" : curPair.combinedId;
+    }
 
     private void setupListeners() {
         DocumentListener listener = new DocumentListener() {
@@ -88,9 +93,8 @@ public class ScrDeclensionGenSimple extends PDialog {
      * Deletes all existing rules from current combined ID and replaces with
      * single displayed rule.
      *
-     * @param combinedId
      */
-    private void saveRule() {
+    public void saveRule() {
         DeclensionPair curPair = lstCombinedDec.getSelectedValue();
 
         if (curPair != null) {

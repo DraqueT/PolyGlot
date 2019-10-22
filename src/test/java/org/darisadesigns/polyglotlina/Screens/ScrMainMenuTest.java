@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson
+ * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -75,7 +75,7 @@ public class ScrMainMenuTest {
             mainMenu.getCore().writeFile(testFileName);
             
         }
-        
+
         File testFile = new File(testFileName);
         testFile.delete();
     }
