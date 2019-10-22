@@ -237,7 +237,7 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
             ret = node == null ? "" : node.getValue();
         } else {
             try {
-                ret = decMan.declineWord(word, fullDecId, word.getValue());
+                ret = decMan.declineWord(word, fullDecId);
             } catch (Exception e) {
                 IOHandler.writeErrorLog(e);
                 ret = "ERROR!";

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson
+ * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.DeclensionGenRule;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,12 +35,14 @@ import org.junit.jupiter.api.Test;
  */
 public class DeclensionManagerTest {
     final DictCore core;
-    final DeclensionManager decMan;
+    final DictCore debugCore;
     
     public DeclensionManagerTest() throws Exception {
         core = new DictCore();
-        core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-        decMan = core.getDeclensionManager();
+        debugCore = new DictCore();
+        debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+        
+        loadTestLodenkur();
     }
 
     /**
@@ -49,12 +52,16 @@ public class DeclensionManagerTest {
     @Test
     public void testIsCombinedDeclSurpressed() {
         System.out.println("testIsCombinedDeclSurpressed");
+        DeclensionManager decMan = core.getDeclensionManager();
+        
         assertTrue(decMan.isCombinedDeclSurpressed(",3,", 3));
     }
 
     @Test
     public void testSetCombinedDeclSurpressed() {
         System.out.println("testSetCombinedDeclSurpressed");
+        DeclensionManager decMan = core.getDeclensionManager();
+        
         decMan.setCombinedDeclSurpressed(",3,", 4, false);
         assertFalse(decMan.isCombinedDeclSurpressed(",3,", 4));
     }
@@ -62,6 +69,8 @@ public class DeclensionManagerTest {
     @Test
     public void testSetCombinedDeclSurpressedRaw() {
         System.out.println("testSetCombinedDeclSurpressedRaw");
+        DeclensionManager decMan = core.getDeclensionManager();
+        
         decMan.setCombinedDeclSurpressedRaw("4,TESTVAL", false);
         assertFalse(decMan.isCombinedDeclSurpressed("TESTVAL", 4));
     }
@@ -69,6 +78,8 @@ public class DeclensionManagerTest {
     @Test
     public void testAddDeclensionGenRule() {
         System.out.println("testAddDeclensionGenRule");
+        DeclensionManager decMan = core.getDeclensionManager();
+        
         DeclensionGenRule rule = new DeclensionGenRule();
         rule.setCombinationId("COMBID");
         rule.setName("TESTNAME");
@@ -83,6 +94,8 @@ public class DeclensionManagerTest {
     @Test
     public void testWipeDeclensionGenRules() {
         System.out.println("testWipeDeclensionGenRules");
+        DeclensionManager decMan = core.getDeclensionManager();
+        
         DeclensionGenRule rule = new DeclensionGenRule();
         rule.setCombinationId("COMBID");
         rule.setName("TESTNAME");
@@ -97,6 +110,8 @@ public class DeclensionManagerTest {
     @Test
     public void testDeleteDeclensionGenRule() {
         System.out.println("testDeleteDeclensionGenRule");
+        DeclensionManager decMan = core.getDeclensionManager();
+        
         DeclensionGenRule rule = new DeclensionGenRule();
         rule.setCombinationId("COMBID");
         rule.setName("TESTNAME");
@@ -111,6 +126,8 @@ public class DeclensionManagerTest {
     @Test
     public void testGetDeclensionRulesForType() {
         System.out.println("testGetDeclensionRulesForType");
+        DeclensionManager decMan = core.getDeclensionManager();
+        
         DeclensionGenRule rule1 = new DeclensionGenRule();
         rule1.setCombinationId("COMBID");
         rule1.setName("TESTNAME");
@@ -225,19 +242,265 @@ public class DeclensionManagerTest {
         List<DeclensionGenRule> result = decManSub.getDeclensionRulesForType(typeId);
         assertEquals(result.size(), expectedResultSize);
     }
-
-    // TODO: all tests blelow this point
     
-//    @Test
-//    public void testGetAllDepGenerationRules() {
-//    }
-//    
-//    @Test
-//    public void testGetDeclensionRules() {
-//    }
-//
+    @Test
+    public void testNoCoreWordDeclensionException() throws IOException {
+        System.out.println("testNoCoreWordDeclensionException");
+        DictCore subCore = new DictCore();
+        ConWord noCoreWord = new ConWord();
+        String expectedMessage = "Words without populated dictionary cores cannot be tested.";
+        
+        subCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+        noCoreWord.setValue("hi");
+        noCoreWord.setWordTypeId(2);
+        
+        Throwable threw = assertThrows(NullPointerException.class, () -> {
+            subCore.getDeclensionManager().declineWord(noCoreWord, "");
+        });
+        
+        String resultMessage = threw.getLocalizedMessage();
+        assertEquals(expectedMessage, resultMessage);
+    }
+    
+    @Test
+    public void testConjDebugBasic() throws IOException, Exception {
+        System.out.println("Test Conj Debug Basic");
+        String expectdResult = 
+                "APPLIED RULES BREAKDOWN:\n" +
+                "--------------------------------------\n" +
+                "Rule: past-all\n" +
+                "    value: hi matches regex: \".*\". Rule will be applied.\n" +
+                "    -------------------------\n" +
+                "    Transformation:\n" +
+                "        Regex: \"^\"\n" +
+                "        Text: \"ALL\"\n" +
+                "        Effect: hi -> ALLhi\n" +
+                "--------------------------------------\n" +
+                "Rule: past-true\n" +
+                "    Word's class does not match filter values for rule. Rule will not be applied.\n" +
+                "--------------------------------------\n" +
+                "Rule: past-false\n" +
+                "    Word's class does not match filter values for rule. Rule will not be applied.\n" +
+                "";
+        ConWord word = new ConWord();
+        
+        word.setValue("hi");
+        word.setWordTypeId(2);
+        word.setCore(debugCore);
+        debugCore.getDeclensionManager().declineWord(word, ",2,");
+        
+        String result = "";
+        
+        for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+            result += debugString;
+        }
+        
+        assertEquals(result, expectdResult);
+    }
+
+    @Test
+    public void testConjDebugClassValOne() throws IOException, Exception {
+        System.out.println("Test Conj Debug class value 1");
+        String expectdResult = 
+                "APPLIED RULES BREAKDOWN:\n" +
+                "--------------------------------------\n" +
+                "Rule: past-all\n" +
+                "    value: hi matches regex: \".*\". Rule will be applied.\n" +
+                "    -------------------------\n" +
+                "    Transformation:\n" +
+                "        Regex: \"^\"\n" +
+                "        Text: \"ALL\"\n" +
+                "        Effect: hi -> ALLhi\n" +
+                "--------------------------------------\n" +
+                "Rule: past-true\n" +
+                "    value: hi matches regex: \".*\". Rule will be applied.\n" +
+                "    -------------------------\n" +
+                "    Transformation:\n" +
+                "        Regex: \"$\"\n" +
+                "        Text: \"TRUE\"\n" +
+                "        Effect: ALLhi -> ALLhiTRUE\n" +
+                "--------------------------------------\n" +
+                "Rule: past-false\n" +
+                "    Word's class does not match filter values for rule. Rule will not be applied.\n" +
+                "";
+        ConWord word = new ConWord();
+        
+        word.setValue("hi");
+        word.setWordTypeId(2);
+        word.setCore(debugCore);
+        word.setClassValue(2, 0); // class val #1
+        debugCore.getDeclensionManager().declineWord(word, ",2,");
+        
+        String result = "";
+        
+        for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+            result += debugString;
+        }
+        
+        assertEquals(result, expectdResult);
+    }
+    
+    @Test
+    public void testConjDebugClassValTwo() throws IOException, Exception {
+        System.out.println("Test Conj Debug class value 2");
+        String expectdResult = 
+                "APPLIED RULES BREAKDOWN:\n" +
+                "--------------------------------------\n" +
+                "Rule: past-all\n" +
+                "    value: hi matches regex: \".*\". Rule will be applied.\n" +
+                "    -------------------------\n" +
+                "    Transformation:\n" +
+                "        Regex: \"^\"\n" +
+                "        Text: \"ALL\"\n" +
+                "        Effect: hi -> ALLhi\n" +
+                "--------------------------------------\n" +
+                "Rule: past-true\n" +
+                "    Word's class does not match filter values for rule. Rule will not be applied.\n" +
+                "--------------------------------------\n" +
+                "Rule: past-false\n" +
+                "    value: hi matches regex: \".*\". Rule will be applied.\n" +
+                "    -------------------------\n" +
+                "    Transformation:\n" +
+                "        Regex: \"$\"\n" +
+                "        Text: \"FALSE\"\n" +
+                "        Effect: ALLhi -> ALLhiFALSE\n" +
+                "";
+        ConWord word = new ConWord();
+        
+        word.setValue("hi");
+        word.setWordTypeId(2);
+        word.setCore(debugCore);
+        word.setClassValue(2, 2); // class val #2
+        debugCore.getDeclensionManager().declineWord(word, ",2,");
+        
+        String result = "";
+        
+        for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+            result += debugString;
+        }
+        
+        assertEquals(result, expectdResult);
+    }
+    
+    @Test
+    public void testConjFilterNegagiveMultiTransformDebug() throws IOException, Exception {
+        System.out.println("Test Conj Debug Filtering against rule");
+        String expectdResult = 
+                "APPLIED RULES BREAKDOWN:\n" +
+                "--------------------------------------\n" +
+                "Rule: FILTER_START_A\n" +
+                "    value: hi does not match regex: \"A.*\". Rule will not be applied.\n" +
+                "--------------------------------------\n" +
+                "Rule: MULTI-TRANS\n" +
+                "    value: hi matches regex: \".*\". Rule will be applied.\n" +
+                "    -------------------------\n" +
+                "    Transformation:\n" +
+                "        Regex: \"$\"\n" +
+                "        Text: \"-1\"\n" +
+                "        Effect: hi -> hi-1\n" +
+                "    -------------------------\n" +
+                "    Transformation:\n" +
+                "        Regex: \"$\"\n" +
+                "        Text: \"-2\"\n" +
+                "        Effect: hi-1 -> hi-1-2\n" +
+                "";
+        ConWord word = new ConWord();
+        
+        word.setValue("hi");
+        word.setWordTypeId(2);
+        word.setCore(debugCore);
+        debugCore.getDeclensionManager().declineWord(word, ",3,");
+        
+        String result = "";
+        
+        for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+            result += debugString;
+        }
+        
+        assertEquals(result, expectdResult);
+    }
+    
+    @Test
+    public void testConjFilterPositiveMultiTransformDebug() throws IOException, Exception {
+        System.out.println("Test Conj Debug Filtering against rule");
+        String expectdResult = 
+                "APPLIED RULES BREAKDOWN:\n" +
+                "--------------------------------------\n" +
+                "Rule: FILTER_START_A\n" +
+                "    value: Ahi matches regex: \"A.*\". Rule will be applied.\n" +
+                "    -------------------------\n" +
+                "    Transformation:\n" +
+                "        Regex: \"^\"\n" +
+                "        Text: \"START_A\"\n" +
+                "        Effect: Ahi -> START_AAhi\n" +
+                "--------------------------------------\n" +
+                "Rule: MULTI-TRANS\n" +
+                "    value: Ahi matches regex: \".*\". Rule will be applied.\n" +
+                "    -------------------------\n" +
+                "    Transformation:\n" +
+                "        Regex: \"$\"\n" +
+                "        Text: \"-1\"\n" +
+                "        Effect: START_AAhi -> START_AAhi-1\n" +
+                "    -------------------------\n" +
+                "    Transformation:\n" +
+                "        Regex: \"$\"\n" +
+                "        Text: \"-2\"\n" +
+                "        Effect: START_AAhi-1 -> START_AAhi-1-2\n" +
+                "";
+        ConWord word = new ConWord();
+        
+        word.setValue("Ahi");
+        word.setWordTypeId(2);
+        word.setCore(debugCore);
+        debugCore.getDeclensionManager().declineWord(word, ",3,");
+        
+        String result = "";
+        
+        for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+            result += debugString;
+        }
+        
+        assertEquals(result, expectdResult);
+    }
+    
+    @Test
+    public void testGetAllDepGenerationRules() throws IOException {
+        System.out.println("testGetAllDepGenerationRules");
+        int typeId = 4; // verbs
+        int expectedRules = 13;
+        DeclensionManager decMan = core.getDeclensionManager();
+        decMan.addDeclensionToTemplate(typeId, "ZIM-ZAM!");
+        List<DeclensionGenRule> rules = core.getDeclensionManager().getAllDepGenerationRules(typeId);
+        
+        int resultRules = rules.size();
+        
+        assertEquals(expectedRules, resultRules);
+        
+        // reload file to restore state
+        loadTestLodenkur();
+    }
+    
+    @Test
+    public void testGetDeclensionRules() {
+        System.out.println("testGetDeclensionRules");
+        ConWord word = new ConWord();
+        int expectedRuleCount = 13;
+        String expectedFirstRuleName = "Past, Cert, Pos rule";
+        word.setCore(core);
+        word.setWordTypeId(4); // verb
+        word.setValue("er5");
+        
+        List<DeclensionGenRule> rules = core.getDeclensionManager().getDeclensionRules(word);
+        int resultRuleCount = rules.size();
+        String resultFirstRuleName = rules.get(0).getName();
+        
+        assertEquals(expectedRuleCount, resultRuleCount);
+        assertEquals(expectedFirstRuleName, resultFirstRuleName);
+    }
+
 //    @Test
 //    public void testDeclineWord() throws Exception {
+//        // Tested extensively in declension debug tests    
 //    }
 //
 //    @Test
@@ -512,4 +775,7 @@ public class DeclensionManagerTest {
 //    public void testWordHasDeprecatedForms() {
 //    }
     
+    private void loadTestLodenkur() throws IOException {
+        core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+    }
 }

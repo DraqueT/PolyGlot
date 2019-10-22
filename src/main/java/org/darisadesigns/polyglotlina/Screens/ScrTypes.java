@@ -39,6 +39,8 @@ import javax.swing.event.DocumentListener;
 import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.IOHandler;
 import java.awt.Component;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import javax.swing.JComponent;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
 
@@ -639,9 +641,38 @@ public final class ScrTypes extends PFrame {
         }
 
         Window window = ScrDeclensionGenSetup.run(core, curNode.getId());
-        if (window != null) {
-            childFrames.add(window);
-        }
+        
+        core.getRootWindow().setVisible(false);
+        window.addWindowListener(new WindowListener() {
+                    @Override
+                    public void windowOpened(WindowEvent e) {
+                    }
+
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                    }
+
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        core.getRootWindow().setVisible(true);
+                    }
+
+                    @Override
+                    public void windowIconified(WindowEvent e) {
+                    }
+
+                    @Override
+                    public void windowDeiconified(WindowEvent e) {
+                    }
+
+                    @Override
+                    public void windowActivated(WindowEvent e) {
+                    }
+
+                    @Override
+                    public void windowDeactivated(WindowEvent e) {
+                    }
+                });
     }//GEN-LAST:event_btnAutogenActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -121,9 +121,9 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
     }
     
     /**
-     * Loads Swadesh list from buffered input stream.Presumes that list is line separated.Lines PREFIXED with the # character will be skipped.
-     * If it appears in the middle of a line, it will be parsed regularly.
+     * Loads Swadesh list from buffered input stream.Presumes that list is line separated.Lines PREFIXED with the # character will be skipped.If it appears in the middle of a line, it will be parsed regularly.
      * @param bs
+     * @param showPrompt
      * @throws java.io.IOException 
      * @throws java.lang.Exception 
      */
@@ -656,7 +656,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                 try {
                     DeclensionPair curPair = decIt.next();
                     String declension = core.getDeclensionManager()
-                            .declineWord(word, curPair.combinedId, word.getValue());
+                            .declineWord(word, curPair.combinedId);
 
                     if (!declension.trim().isEmpty()
                             && (declension.matches(matchText)

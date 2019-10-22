@@ -107,6 +107,18 @@ public final class ScrDeclensionGenClassic extends PDialog {
         pnlApplyClasses.setVisible(true);
     }
 
+    public String getCurSelectedCombId() {
+        String ret = "";
+        
+        DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+        
+        if (curPair != null) {
+            ret = curPair.combinedId;
+        }
+        
+        return ret;
+    }
+    
     @Override
     public void dispose() {
         if (this.isDisposed()) {
@@ -114,15 +126,22 @@ public final class ScrDeclensionGenClassic extends PDialog {
             return;
         }
         
+        saveVolatileValues();
+
+        if (canClose()) {
+            super.dispose();
+        }
+    }
+    
+    /**
+     * Forces save of any values that may be displayed but are not yet committed.
+     */
+    public void saveVolatileValues() {
         if (tblTransforms.getCellEditor() != null) {
             tblTransforms.getCellEditor().stopCellEditing();
         }
 
         saveTransPairs(lstRules.getSelectedIndex());
-
-        if (canClose()) {
-            super.dispose();
-        }
     }
 
     /**
@@ -977,7 +996,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         jButton4 = new PButton(core);
         jButton4.setFont(core.getPropertiesManager().getFontMenu());
         btnDeleteTransform = new PAddRemoveButton("-");
-        pnlApplyClasses = new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId));
+        pnlApplyClasses = new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId), true);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Conjugation/Declension Autogeneration Setup");

@@ -42,6 +42,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
     private List<DeclensionGenTransform> transformations = new ArrayList<>();
     private final Map<Integer, Integer> applyToClasses = new HashMap<>();
     private DeclensionGenTransform transBuffer = new DeclensionGenTransform();
+    private String debugString = "";
     
     /**
      * Gets current declension transform buffer
@@ -57,6 +58,21 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
     public void insertTransBuffer() {
         addTransform(transBuffer);
         transBuffer = new DeclensionGenTransform();
+    }
+    
+    /**
+     * Gets all entry pairs for classes/class values this rule applies to
+     * @return 
+     */
+    public Entry<Integer, Integer>[] getApplicableClasses() {
+        Object[] classVals = applyToClasses.entrySet().toArray();
+        Entry[] ret = new Entry[classVals.length];
+        
+        for (int i = 0; i < classVals.length; i++) {
+            ret[i] = (Entry)classVals[i];
+        }
+        
+        return (Entry[])ret;
     }
     
     /**
@@ -197,37 +213,6 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
     }
     
     /**
-     * Tests whether a word should have this rule applied to it. First tests based on the part of speech (type)
-     * Second tests on class of word. -1 in applyToClasses means "apply to all"
-     * @param word word to test rule for
-     * @return true if rule should be applied to word
-     */
-    public boolean doesRuleApplyToWord(ConWord word) {
-        boolean ret = false;
-        boolean wordTypeHasClasses = 
-                !word.getCore().getWordClassCollection().getClassesForType(word.getWordTypeId()).isEmpty();
-        
-        // if -1 opresent in this rule, apply to all. Otherwise test against word classes. Skips mismatching PoS
-        if (typeId == word.getWordTypeId() && (!wordTypeHasClasses || applyToClasses.containsKey(-1))) {
-            ret = true;
-        } else if (typeId == word.getWordTypeId()) {
-            ret = true;
-            
-            // if a word does not match all of the entries in the required classes, reject
-            for (Entry<Integer, Integer> curEntry : applyToClasses.entrySet()) {
-                int classId = curEntry.getKey();
-                
-                if (!word.wordHasClassValue(classId, curEntry.getValue())) {
-                    ret = false;
-                    break;
-                }
-            }
-        }
-        
-        return ret;
-    }
-    
-    /**
      * organizes by index number
      * @param _compare node to compare
      * @return 
@@ -277,6 +262,59 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
             ret = true;
         } else if (applyToClasses.containsKey(classId)) {
             ret = applyToClasses.get(classId).equals(valueId);
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Tests whether a word should have this rule applied to it. First tests based on the part of speech (type)
+     * Second tests on class of word. -1 in applyToClasses means "apply to all"
+     * Will throw null pointer exception if words with unpopulated dictionary cores are passed in
+     * @param word word to test rule for
+     * @return true if rule should be applied to word
+     */
+    public boolean doesRuleApplyToWord(ConWord word) {
+        if (word.getCore() == null) {
+            throw new NullPointerException("Words without populated dictionary cores cannot be tested.");
+        }
+        
+        boolean ret = false;
+        boolean wordTypeHasClasses = 
+                !word.getCore().getWordClassCollection().getClassesForType(word.getWordTypeId()).isEmpty();
+        int wordTypeId = word.getWordTypeId();
+        
+        debugString = "Rule: " + name + "\n";
+        
+        // if -1 opresent in this rule, apply to all. Otherwise test against word classes. Skips mismatching PoS
+        if (typeId == wordTypeId && (!wordTypeHasClasses || applyToClasses.containsKey(-1))) {
+            ret = true;
+        } else if (typeId == wordTypeId) {
+            ret = true;
+            
+            // if a word does not match all of the entries in the required classes, reject
+            for (Entry<Integer, Integer> curEntry : applyToClasses.entrySet()) {
+                int classId = curEntry.getKey();
+                
+                if (!word.wordHasClassValue(classId, curEntry.getValue())) {
+                    debugString += "    Word's class does not match filter values for rule. Rule will not be applied.\n";
+                    ret = false;
+                    break;
+                }
+            }
+        } else {
+            debugString += "    Rule PoS " 
+                    + word.getCore().getTypes().getNodeById(typeId).getValue()
+                    + " does not match word PoS "
+                    + word.getCore().getTypes().getNodeById(wordTypeId).getValue() + "\n";
+        }
+        
+        // test word against regex
+        if (ret && word.getValue().matches(regex)) {
+            debugString += "    value: " + word.getValue() + " matches regex: \"" + regex + "\". Rule will be applied.\n";
+        } else if (ret) {
+            debugString += "    value: " + word.getValue() + " does not match regex: \"" + regex + "\". Rule will not be applied.\n";
+            ret = false;
         }
         
         return ret;
@@ -370,5 +408,13 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         });
         
         ruleNode.appendChild(applyToClassesEntry);
+    }
+
+    /**
+     * Fetches the debug string, which includes human readable information regarding latest word transformations
+     * @return 
+     */
+    public String getDebugString() {
+        return debugString;
     }
 }

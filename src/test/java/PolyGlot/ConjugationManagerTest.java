@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, DThompson
+ * Copyright (c) 2018-2019, Draqu Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -181,7 +181,7 @@ public class ConjugationManagerTest {
         
         for (DeclensionPair pair : pairs) {
             if (!decMan.isCombinedDeclSurpressed(pair.combinedId, word.getWordTypeId())) {
-                finalForms.add(decMan.declineWord(word, pair.combinedId, word.getValue()));
+                finalForms.add(decMan.declineWord(word, pair.combinedId));
             }
         }
         
