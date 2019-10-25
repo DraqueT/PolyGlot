@@ -79,9 +79,22 @@ def main(args):
     global copyDestination
     global separatorCharacter
     
+    skip_steps = []
+    
     if osString == winString:
         separatorCharacter = '\\'
 
+    # gather list of steps marked to be skipped
+    while '-skip' in args:
+        command_index = args.index('-skip')
+        skip_steps.append(args[command_index + 1])
+        
+        print("Skipping: " + args[command_index + 1] + " step.")
+        
+        # remove args after consuming
+        del args[command_index + 1]
+        del args[command_index]
+    
     # allows for override of java home (virtual environments make this necessary at times)
     if '-java-home-o' in args:
         command_index = args.index('-java-home-o')
@@ -120,17 +133,17 @@ def main(args):
     if osString == winString:
         os.system('echo off')
     
-    if fullBuild or 'docs' in args:
+    if (fullBuild and 'docs' not in skip_steps) or 'docs' in args:
         injectDocs()
-    if fullBuild or 'build' in args:
+    if (fullBuild and 'build' not in skip_steps) or 'build' in args:
         build()
-    if fullBuild or 'clean' in args or "image" in args:
+    if (fullBuild and 'clean' not in skip_steps) or 'clean' in args or 'image' in args:
         clean()
-    if fullBuild or 'image' in args:
+    if (fullBuild and 'image' not in skip_steps) or 'image' in args:
         image()
-    if fullBuild or 'pack' in args:
+    if (fullBuild and 'pack' not in skip_steps) or 'pack' in args:
         pack()
-    if fullBuild or 'dist' in args:
+    if (fullBuild and 'dist' not in skip_steps) or 'dist' in args:
         dist()
         
     print('Done!')
@@ -400,11 +413,7 @@ def distWin():
         '--description "PolyGlot is a spoken language construction toolkit."' +
         ' --icon packaging_files/win/PolyGlot0.ico')
 
-    for x in range(3):
-        # for some reason, this fails randomly. Something to do with Windows security? Try up to three times.
-        if path.exists(packageLocation):
-            break
-        os.system(command)
+    os.system(command)
     
     if copyDestination != "":
         copyInstaller(packageLocation)
@@ -505,6 +514,8 @@ To use this utility, simply execute this script with no arguments to run the ent
     -java-home-o <jdk-path> : Overrides JAVA_HOME. Useful for stubborn VMs that will not normally recognize environment variables.
     
     -copyDestination <destination-path> : sets location for the final created installer file to be copied to (ignored if distribution not built)
+    
+    -skip <step> : skips the given step (can be used multiple times)
 
 Example: python build_image.py image pack -java-home-o /usr/lib/jvm/jdk-14
 
