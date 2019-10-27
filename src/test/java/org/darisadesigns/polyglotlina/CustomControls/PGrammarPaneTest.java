@@ -19,11 +19,9 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
+import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -41,14 +39,21 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PGrammarPaneTest {
     
     private final DictCore core;
+    private final boolean headless = GraphicsEnvironment.isHeadless();
     
     public PGrammarPaneTest() {
+        
         System.out.println("PGrammarPaneTest");
         core = new DictCore();
     }
 
     @Test
     public void testPasteRegular() {
+        // do not run test in headless mode (paste explodes without UI)
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testPasteRegular");
         
         String sourceText = "This is a test! Yeehaw!";
@@ -65,6 +70,11 @@ public class PGrammarPaneTest {
     
     @Test
     public void testPasteTabSanitize() {
+        // do not run test in headless mode (paste explodes without UI)
+        if (headless) {
+            return;
+        }
+        
         System.out.println("testPasteTabSanitize");
         String sourceText = "This is a test!	Yeehaw!";
         String expectedResult = "This is a test!    Yeehaw!";
