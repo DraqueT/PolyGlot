@@ -148,6 +148,7 @@ public class PGrammarPane extends JTextPane {
     @Override
     protected void processKeyEvent(KeyEvent e) {
         if (e != null) {
+            // prevents tab character from being added (causes GlyphVectorPainter to go wonky otherwise)
             if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyChar() == KeyEvent.VK_TAB) {
                 tabKeyHit();
                 e.consume();
@@ -222,9 +223,11 @@ public class PGrammarPane extends JTextPane {
             }
         } else if (ClipboardHandler.isClipboardString()) {
             try {
-                // sanitize contents to plain text
+                // sanitize contents to plain text with tabs converted to four spaces
                 ClipboardHandler board = new ClipboardHandler();
-                board.setClipboardContents(board.getClipboardText());
+                String clipText = board.getClipboardText();
+                clipText = clipText.replaceAll("\t", "    ");
+                board.setClipboardContents(clipText);
                 super.paste();
             } catch (Exception e) {
                 IOHandler.writeErrorLog(e);
