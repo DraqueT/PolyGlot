@@ -28,6 +28,7 @@ import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -39,18 +40,24 @@ public class OpenScreensTest {
     private final DictCore core;
     private final boolean headless = GraphicsEnvironment.isHeadless(); // testing this in a headless environment makes no sense
     
-    public OpenScreensTest() throws IOException {
+    public OpenScreensTest() {
         core = new DictCore();
-        core.readFile(PGTUtil.TESTRESOURCES + "basic_lang.pgd");
-        
         errors = IOHandler.gettErrorLogFile();
-        if (errors.exists()) {
-            errors.delete();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "basic_lang.pgd");
+
+            if (errors.exists()) {
+                errors.delete();
+            }
+        } catch (IOException | IllegalStateException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
         }
     }
     
     @Test
-    public void testPTextInputDialog() throws Exception {
+    public void testPTextInputDialog() {
         if (headless) {
             return;
         }
@@ -63,7 +70,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrAbout () throws Exception {
+    public void testScrAbout () {
         if (headless) {
             return;
         }
@@ -76,7 +83,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrDeclensionGenSetup() throws Exception {
+    public void testScrDeclensionGenSetup() {
         if (headless) {
             return;
         }
@@ -89,7 +96,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrDeclensionSetup() throws Exception {
+    public void testScrDeclensionSetup() {
         if (headless) {
             return;
         }
@@ -102,7 +109,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrDeclensionGrids() throws Exception {
+    public void testScrDeclensionGrids() {
         if (headless) {
             return;
         }
@@ -116,7 +123,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrDeprecatedDeclensions() throws Exception {
+    public void testScrDeprecatedDeclensions() {
         if (headless) {
             return;
         }
@@ -129,7 +136,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrEasterEgg() throws Exception {
+    public void testScrEasterEgg() {
         if (headless) {
             return;
         }
@@ -142,7 +149,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrEtymRoots() throws Exception {
+    public void testScrEtymRoots() {
         if (headless) {
             return;
         }
@@ -157,7 +164,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrExcelImport() throws Exception {
+    public void testScrExcelImport() {
         if (headless) {
             return;
         }
@@ -170,7 +177,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrFamilies() throws Exception {
+    public void testScrFamilies() {
         if (headless) {
             return;
         }
@@ -183,7 +190,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrGrammarGuide() throws Exception {
+    public void testScrGrammarGuide() {
         if (headless) {
             return;
         }
@@ -196,7 +203,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrIPARefChart() throws Exception {
+    public void testScrIPARefChart() {
         if (headless) {
             return;
         }
@@ -209,7 +216,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrIpaTranslator() throws Exception {
+    public void testScrIpaTranslator() {
         if (headless) {
             return;
         }
@@ -222,7 +229,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrLangProps() throws Exception {
+    public void testScrLangProps() {
         if (headless) {
             return;
         }
@@ -235,7 +242,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrLexicon() throws Exception {
+    public void testScrLexicon() {
         if (headless) {
             return;
         }
@@ -248,7 +255,7 @@ public class OpenScreensTest {
     }
 
         @Test
-    public void testScrLexiconProblemDisplay() throws Exception {
+    public void testScrLexiconProblemDisplay() {
         if (headless) {
             return;
         }
@@ -263,7 +270,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrLogoDetails() throws Exception {
+    public void testScrLogoDetails() {
         if (headless) {
             return;
         }
@@ -276,7 +283,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrLogoQuickView() throws Exception {
+    public void testScrLogoQuickView() {
         if (headless) {
             return;
         }
@@ -289,7 +296,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrMainMenu() throws Exception {
+    public void testScrMainMenu() {
         if (headless) {
             return;
         }
@@ -303,7 +310,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrOptions() throws Exception {
+    public void testScrOptions() {
         if (headless) {
             return;
         }
@@ -316,7 +323,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrPhonology() throws Exception {
+    public void testScrPhonology() {
         if (headless) {
             return;
         }
@@ -329,7 +336,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrPrintToPDF() throws Exception {
+    public void testScrPrintToPDF() {
         if (headless) {
             return;
         }
@@ -342,7 +349,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrProgressMenu() throws Exception {
+    public void testScrProgressMenu() {
         if (headless) {
             return;
         }
@@ -355,7 +362,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrQuickWordEntry() throws Exception {
+    public void testScrQuickWordEntry() {
         if (headless) {
             return;
         }
@@ -368,7 +375,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrReversion() throws Exception {
+    public void testScrReversion() {
         if (headless) {
             return;
         }
@@ -381,7 +388,7 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrTypes() throws Exception {
+    public void testScrTypes() {
         if (headless) {
             return;
         }
@@ -394,20 +401,26 @@ public class OpenScreensTest {
     }
     
     @Test
-    public void testScrUpdateAlert() throws Exception {
+    public void testScrUpdateAlert() {
         if (headless) {
             return;
         }
         
         System.out.println("testScrUpdateAlert");
-        ScrUpdateAlert s = new ScrUpdateAlert(false, core);
-        s.dispose();
         
-        testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
+        try {
+            ScrUpdateAlert s = new ScrUpdateAlert(false, core);
+            s.dispose();
+
+            testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testScrWordClasses() throws Exception {
+    public void testScrWordClasses() {
         if (headless) {
             return;
         }
@@ -419,14 +432,14 @@ public class OpenScreensTest {
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
     }
     
-    private void testExceptions(String scrName) throws Exception {
+    private void testExceptions(String scrName) {
         if (headless) {
             return;
         }
         
         if (errors.exists()) {
             errors.delete();
-            throw new Exception("Errors opening or closing " + scrName);
+            fail("Errors opening or closing " + scrName);
         }
     }
 }

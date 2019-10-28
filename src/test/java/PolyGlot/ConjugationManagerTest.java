@@ -18,10 +18,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package PolyGlot;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.DeclensionManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.DeclensionPair;
@@ -41,121 +43,156 @@ public class ConjugationManagerTest {
     }
     
     @Test
-    public void testZeroDimNoExtra() throws Exception {
-        System.out.println("testZeroDimNoExtra");
-        core.readFile(PGTUtil.TESTRESOURCES + "zero_dim_zero_extra_zero_dep.pgd");
-        DeclensionManager decMan = core.getDeclensionManager();
-        ConWord word = core.getWordCollection().getWordNodes().get(0);
-        
-        assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), 0);
-        assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
-        assertEquals(decMan.getDeprecatedForms(word).size(), 0);
-        assertEquals(decMan.getSingletonDeclensionList(word.getId()).size(), 0);
-        assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
-        assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
+    public void testZeroDimNoExtra() {
+        try {
+            System.out.println("testZeroDimNoExtra");
+            core.readFile(PGTUtil.TESTRESOURCES + "zero_dim_zero_extra_zero_dep.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            ConWord word = core.getWordCollection().getWordNodes().get(0);
+
+            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), 0);
+            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(decMan.getDeprecatedForms(word).size(), 0);
+            assertEquals(decMan.getSingletonDeclensionList(word.getId()).size(), 0);
+            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            fail(e);
+        }
     }
     
     @Test
-    public void testOneDimNoExtra() throws Exception {
-        System.out.println("testOneDimNoExtra");
-        core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
-        DeclensionManager decMan = core.getDeclensionManager();
-        ConWord word = core.getWordCollection().getWordNodes().get(0);
-        List<String> expectedForms = Arrays.asList("testa", "testb");
-        
-        assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
-        assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
-        assertEquals(decMan.getDeprecatedForms(word).size(), 0);
-        assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
-        assertTrue(allFormsPresent(decMan, word, expectedForms));
+    public void testOneDimNoExtra() {
+        try {
+            System.out.println("testOneDimNoExtra");
+            core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            ConWord word = core.getWordCollection().getWordNodes().get(0);
+            List<String> expectedForms = Arrays.asList("testa", "testb");
+
+            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
+            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(decMan.getDeprecatedForms(word).size(), 0);
+            assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
+            assertTrue(allFormsPresent(decMan, word, expectedForms));
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            fail(e);
+        }
     }
     
     @Test
-    public void testOneDimNoExtraFourDep() throws Exception {
-        System.out.println("testOneDimNoExtraFourDep");
-        core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_four_dep.pgd");
-        DeclensionManager decMan = core.getDeclensionManager();
-        ConWord word = core.getWordCollection().getWordNodes().get(0);
-        List<String> expectedForms = Arrays.asList("testa", "testb");
-        List<String> expectedDeprecated = Arrays.asList("testaczzz", "testbczzz", "testadzzz", "testbdzzz");
-        
-        assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
-        assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 4);
-        assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
-        assertEquals(decMan.getWordDeclensions(word.getId()).size(), 4);
-        assertTrue(allFormsPresent(decMan, word, expectedForms));
-        assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
+    public void testOneDimNoExtraFourDep() {
+        try{
+            System.out.println("testOneDimNoExtraFourDep");
+            core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_four_dep.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            ConWord word = core.getWordCollection().getWordNodes().get(0);
+            List<String> expectedForms = Arrays.asList("testa", "testb");
+            List<String> expectedDeprecated = Arrays.asList("testaczzz", "testbczzz", "testadzzz", "testbdzzz");
+
+            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
+            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 4);
+            assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
+            assertEquals(decMan.getWordDeclensions(word.getId()).size(), 4);
+            assertTrue(allFormsPresent(decMan, word, expectedForms));
+            assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            fail(e);
+        }
     }
     
     @Test
-    public void testOneDimNoExtraNoDep() throws Exception {
-        System.out.println("testOneDimNoExtraNoDep");
-        core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
-        DeclensionManager decMan = core.getDeclensionManager();
-        ConWord word = core.getWordCollection().getWordNodes().get(0);
-        List<String> expectedForms = Arrays.asList("testa", "testb");
-        
-        assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
-        assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
-        assertEquals(decMan.getDeprecatedForms(word).size(), 0);
-        assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
-        assertTrue(allFormsPresent(decMan, word, expectedForms));
+    public void testOneDimNoExtraNoDep() {
+        try {
+            System.out.println("testOneDimNoExtraNoDep");
+            core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            ConWord word = core.getWordCollection().getWordNodes().get(0);
+            List<String> expectedForms = Arrays.asList("testa", "testb");
+
+            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
+            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(decMan.getDeprecatedForms(word).size(), 0);
+            assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
+            assertTrue(allFormsPresent(decMan, word, expectedForms));
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            fail(e);
+        }
     }
     
     @Test
-    public void testTwoDimOneExtraNoDep() throws Exception {
-        System.out.println("testTwoDimOneExtraNoDep");
-        core.readFile(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep.pgd");
-        DeclensionManager decMan = core.getDeclensionManager();
-        ConWord word = core.getWordCollection().getWordNodes().get(0);
-        List<String> expectedForms = Arrays.asList("testac", "testad", "testbc", "testbd", "testEXTRA");
-        List<String> expectedDeprecated = Arrays.asList();
-        
-        assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
-        assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
-        assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
-        assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
-        assertTrue(allFormsPresent(decMan, word, expectedForms));
-        assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
+    public void testTwoDimOneExtraNoDep() {
+        try{ 
+            System.out.println("testTwoDimOneExtraNoDep");
+            core.readFile(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            ConWord word = core.getWordCollection().getWordNodes().get(0);
+            List<String> expectedForms = Arrays.asList("testac", "testad", "testbc", "testbd", "testEXTRA");
+            List<String> expectedDeprecated = Arrays.asList();
+
+            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
+            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
+            assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
+            assertTrue(allFormsPresent(decMan, word, expectedForms));
+            assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            fail(e);
+        }
     }
     
     @Test
-    public void testTwoDimOneExtraNoDepOneDisabled() throws Exception {
-        System.out.println("testTwoDimOneExtraNoDepOneDisabled");
-        core.readFile(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep_one_disabled.pgd");
-        DeclensionManager decMan = core.getDeclensionManager();
-        ConWord word = core.getWordCollection().getWordNodes().get(0);
-        List<String> expectedForms = Arrays.asList("testac", "testad", "testbc", "testEXTRA");
-        List<String> expectedDeprecated = Arrays.asList();
-        
-        assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size() + 1); // includes surpressed form
-        assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
-        assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
-        assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
-        assertTrue(allFormsPresent(decMan, word, expectedForms));
-        assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
+    public void testTwoDimOneExtraNoDepOneDisabled() {
+        try{
+            System.out.println("testTwoDimOneExtraNoDepOneDisabled");
+            core.readFile(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep_one_disabled.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            ConWord word = core.getWordCollection().getWordNodes().get(0);
+            List<String> expectedForms = Arrays.asList("testac", "testad", "testbc", "testEXTRA");
+            List<String> expectedDeprecated = Arrays.asList();
+
+            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size() + 1); // includes surpressed form
+            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
+            assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
+            assertTrue(allFormsPresent(decMan, word, expectedForms));
+            assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            fail(e);
+        }
     }
     
     @Test
-    public void testTwoDimNoExtraNoDep() throws Exception {
-        System.out.println("testTwoDimOneExtraNoDepOneDisabled");
-        core.readFile(PGTUtil.TESTRESOURCES + "two_dim_zero_extra_zero_dep.pgd");
-        DeclensionManager decMan = core.getDeclensionManager();
-        ConWord word = core.getWordCollection().getWordNodes().get(0);
-        List<String> expectedForms = Arrays.asList("testac", "testad", "testbc", "testbd");
-        List<String> expectedDeprecated = Arrays.asList();
-        
-        assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
-        assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
-        assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
-        assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
-        assertTrue(allFormsPresent(decMan, word, expectedForms));
-        assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
+    public void testTwoDimNoExtraNoDep() {
+        try {
+            System.out.println("testTwoDimOneExtraNoDepOneDisabled");
+            core.readFile(PGTUtil.TESTRESOURCES + "two_dim_zero_extra_zero_dep.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            ConWord word = core.getWordCollection().getWordNodes().get(0);
+            List<String> expectedForms = Arrays.asList("testac", "testad", "testbc", "testbd");
+            List<String> expectedDeprecated = Arrays.asList();
+
+            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
+            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
+            assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
+            assertTrue(allFormsPresent(decMan, word, expectedForms));
+            assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            fail(e);
+        }
     }
     
     public boolean allDeprecatedFormsPresent(DeclensionManager decMan, 
             ConWord word, 
-            List<String> expectedForms) throws Exception {
+            List<String> expectedForms) {
         boolean ret = true;
         List<String> depForms = new ArrayList<>();
         

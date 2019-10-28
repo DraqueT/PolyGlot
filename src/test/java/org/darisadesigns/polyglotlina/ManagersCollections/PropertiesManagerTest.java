@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.IOHandler;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -38,30 +39,39 @@ public class PropertiesManagerTest {
 
     /**
      * Test of getAlphaOrder method, of class PropertiesManager.
-     * @throws java.lang.Exception
      */
     @Test
-    public void testGetAlphaOrder() throws Exception {
+    public void testGetAlphaOrder() {
         System.out.println("getAlphaOrder");
         PropertiesManager instance = core.getPropertiesManager();
-        instance.setAlphaOrder("a");
-        PAlphaMap<String, Integer> expResult = new PAlphaMap<>();
-        expResult.put("a", 0);
-        PAlphaMap result = instance.getAlphaOrder();
         
-        assertEquals(expResult, result);
+        try {
+            instance.setAlphaOrder("a");
+            PAlphaMap<String, Integer> expResult = new PAlphaMap<>();
+            expResult.put("a", 0);
+            PAlphaMap result = instance.getAlphaOrder();
+
+            assertEquals(expResult, result);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
 
     /**
      * Test of setAlphaOrder method, of class PropertiesManager.
-     * @throws java.lang.Exception
      */
     @Test
-    public void testSetAlphaOrder_String_No_Dupes_Commas() throws Exception {
+    public void testSetAlphaOrder_String_No_Dupes_Commas() {
         System.out.println("testSetAlphaOrder_String_No_Dupes_Commas");
         String order = "a,aa,b,bb,ab";
         PropertiesManager instance = core.getPropertiesManager();
-        instance.setAlphaOrder(order);
+        try {
+            instance.setAlphaOrder(order);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     /**
@@ -82,22 +92,25 @@ public class PropertiesManagerTest {
     
     /**
      * Test of setAlphaOrder method, of class PropertiesManager.
-     * @throws java.lang.Exception
      */
     @Test
-    public void testSetAlphaOrder_String_No_Dupes_No_Commas() throws Exception {
+    public void testSetAlphaOrder_String_No_Dupes_No_Commas() {
         System.out.println("testSetAlphaOrder_String_No_Dupes_No_Commas");
         String order = "abcdefg";
         PropertiesManager instance = core.getPropertiesManager();
-        instance.setAlphaOrder(order);
+        try {
+            instance.setAlphaOrder(order);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     /**
      * Test of setAlphaOrder method, of class PropertiesManager.
-     * @throws java.lang.Exception
      */
     @Test
-    public void testSetAlphaOrder_String_Dupes_No_Commas() throws Exception {
+    public void testSetAlphaOrder_String_Dupes_No_Commas() {
         System.out.println("testSetAlphaOrder_String_Dupes_No_Commas");
         String order = "abcdefa";
         PropertiesManager instance = core.getPropertiesManager();
@@ -111,26 +124,36 @@ public class PropertiesManagerTest {
 
     /**
      * Test of setAlphaOrder method, of class PropertiesManager.
-     * @throws java.lang.Exception
      */
     @Test
-    public void testSetAlphaOrder_String_dupes_boolean_override() throws Exception {
+    public void testSetAlphaOrder_String_dupes_boolean_override() {
         System.out.println("testSetAlphaOrder_String_dupes_boolean_override");
         String order = "a,b,a";
         PropertiesManager instance = core.getPropertiesManager();
-        instance.setAlphaOrder(order, true);
+        
+        try {
+            instance.setAlphaOrder(order, true);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     /**
      * Test of setAlphaOrder method, of class PropertiesManager.
-     * @throws java.lang.Exception
      */
     @Test
-    public void testSetAlphaOrder_String_no_dupes_boolean_override() throws Exception {
+    public void testSetAlphaOrder_String_no_dupes_boolean_override() {
         System.out.println("testSetAlphaOrder_String_no_dupes_boolean_override");
         String order = "a,b,c";
         PropertiesManager instance = core.getPropertiesManager();
-        instance.setAlphaOrder(order, true);
+        
+        try {
+            instance.setAlphaOrder(order, true);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     /**
@@ -151,27 +174,37 @@ public class PropertiesManagerTest {
     
     /**
      * Test of setAlphaOrder method, of class PropertiesManager.
-     * @throws java.lang.Exception
      */
     @Test
-    public void testSetAlphaOrder_String_no_dupes_boolean_no_override() throws Exception {
+    public void testSetAlphaOrder_String_no_dupes_boolean_no_override() {
         System.out.println("testSetAlphaOrder_String_no_dupes_boolean_no_override");
         String order = "a,b,c";
         PropertiesManager instance = core.getPropertiesManager();
-        instance.setAlphaOrder(order, false);
+        
+        try {
+            instance.setAlphaOrder(order, false);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
 
     /**
      * Test of getAlphaPlainText method, of class PropertiesManager.
-     * @throws java.lang.Exception
      */
     @Test
-    public void testGetAlphaPlainText() throws Exception {
+    public void testGetAlphaPlainText() {
         System.out.println("getAlphaPlainText");
         PropertiesManager instance = core.getPropertiesManager();
         String expResult = "a,b,c,d,e";
-        instance.setAlphaOrder(expResult);
-        String result = instance.getAlphaPlainText();
-        assertEquals(expResult, result);
+        
+        try {
+            instance.setAlphaOrder(expResult);
+            String result = instance.getAlphaPlainText();
+            assertEquals(expResult, result);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
 }

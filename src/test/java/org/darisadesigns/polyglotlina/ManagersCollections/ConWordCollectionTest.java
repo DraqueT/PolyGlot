@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import java.io.IOException;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -36,9 +37,15 @@ public class ConWordCollectionTest {
     
     DictCore badLexEntriesCore;
     
-    public ConWordCollectionTest() throws IOException {
+    public ConWordCollectionTest() {
         badLexEntriesCore = new DictCore();
-        badLexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_lex_problems.pgd");
+        
+        try {
+            badLexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_lex_problems.pgd");
+        } catch (IOException | IllegalStateException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
 
     /**

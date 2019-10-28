@@ -44,23 +44,29 @@ public class Java8BridgeTest {
     }
 
     @BeforeAll
-    public static void setUpClass() throws Exception {
+    public static void setUpClass() {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         cleanup();
     }
 
     @Test
-    public void testGetNewJavaBridgeLocation() throws Exception {
+    public void testGetNewJavaBridgeLocation() {
         System.out.println("getNewJavaBridgeLocation");
-        File result = Java8Bridge.getNewJavaBridgeLocation();
-        assertTrue(result.exists());
+        
+        try {
+            File result = Java8Bridge.getNewJavaBridgeLocation();
+            assertTrue(result.exists());
+        } catch (IOException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
 
     @Test
-    public void testExportPdf() throws Exception {
+    public void testExportPdf() {
         // no current way to open/test contents of PDF, so just make sure it is created without error
         System.out.println("exportPdf");
         String target = OUTPUT;
@@ -76,13 +82,18 @@ public class Java8BridgeTest {
         boolean printGrammar = false;
         boolean printWordEtymologies = false;
         boolean printAllConjugations = false;
-        Java8Bridge.exportPdf(target, coverImage, foreward, printConLocal, printLocalCon, printOrtho, subTitleText, titleText, printPageNumber, printGlossKey, printGrammar, printWordEtymologies, printAllConjugations, core);
         
-        assertTrue(new File(OUTPUT).exists());
+        try {
+            Java8Bridge.exportPdf(target, coverImage, foreward, printConLocal, printLocalCon, printOrtho, subTitleText, titleText, printPageNumber, printGlossKey, printGrammar, printWordEtymologies, printAllConjugations, core);
+            assertTrue(new File(OUTPUT).exists());
+        } catch (IOException | InterruptedException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
 
     @Test
-    public void testExcelToCvs() throws Exception {
+    public void testExcelToCvs() {
         System.out.println("excelToCvs");
         String expectedContents = "\"COL 1\",\"COL 2\",\"COL 3\"\n" +
             "\"A\",\"AA\",\"AAA\"\n" +
@@ -97,45 +108,55 @@ public class Java8BridgeTest {
         String excelFile = PGTUtil.TESTRESOURCES + "excelImport.xlsx";
         int sheetNumber = 0;
         
-        File result = Java8Bridge.excelToCvs(excelFile, sheetNumber);
-        String outputContents = readFile(result.getAbsolutePath());
-        
-        assertTrue(result.exists());
-        assertEquals(outputContents, expectedContents);
+        try {
+            File result = Java8Bridge.excelToCvs(excelFile, sheetNumber);
+            String outputContents = readFile(result.getAbsolutePath());
+
+            assertTrue(result.exists());
+            assertEquals(outputContents, expectedContents);
+        } catch (IOException | InterruptedException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
  
     @Test
-    public void testExportExcelDict() throws Exception {
+    public void testExportExcelDict() {
         System.out.println("exportExcelDict");
         String os = System.getProperty("os.name").toLowerCase();
         
-        core.readFile(PGTUtil.TESTRESOURCES + "excel_exp_test.pgd");
-        boolean separateDeclensions = true;
-        Java8Bridge.exportExcelDict(OUTPUT, core, separateDeclensions);
-        File tmpExcel = new File(OUTPUT);
-        
-        for (int i = 0 ; i < 6; i++) {
-            File expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_check_" + i + ".csv");
-            File result = Java8Bridge.excelToCvs(tmpExcel.getAbsolutePath(), i);
-            
-            byte[] expBytes = Files.readAllBytes(expectedFile.toPath());
-            byte[] resBytes = Files.readAllBytes(result.toPath());
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "excel_exp_test.pgd");
+            boolean separateDeclensions = true;
+            Java8Bridge.exportExcelDict(OUTPUT, core, separateDeclensions);
+            File tmpExcel = new File(OUTPUT);
 
-            // windows expected file will be in crlf (due to git translation of file)... gotta sanitize.
-            int carRet = 13;
-            if (os.toLowerCase().contains("win")) {
-                int index = 0; 
-                for (int k = 0; k < expBytes.length; k++) {
-                   if (expBytes[k] != carRet) {
-                      expBytes[index++] = expBytes[k];
-                   }
+            for (int i = 0 ; i < 6; i++) {
+                File expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_check_" + i + ".csv");
+                File result = Java8Bridge.excelToCvs(tmpExcel.getAbsolutePath(), i);
+
+                byte[] expBytes = Files.readAllBytes(expectedFile.toPath());
+                byte[] resBytes = Files.readAllBytes(result.toPath());
+
+                // windows expected file will be in crlf (due to git translation of file)... gotta sanitize.
+                int carRet = 13;
+                if (os.toLowerCase().contains("win")) {
+                    int index = 0; 
+                    for (int k = 0; k < expBytes.length; k++) {
+                       if (expBytes[k] != carRet) {
+                          expBytes[index++] = expBytes[k];
+                       }
+                    }
+
+                   expBytes = Arrays.copyOf(expBytes, index); 
                 }
-                
-               expBytes = Arrays.copyOf(expBytes, index); 
+
+                assertTrue(Arrays.equals(expBytes, resBytes));
             }
-            
-            assertTrue(Arrays.equals(expBytes, resBytes));
-        }  
+        } catch (IOException | IllegalStateException | InterruptedException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     private void cleanup() {
@@ -143,7 +164,7 @@ public class Java8BridgeTest {
         core = new DictCore();
     }
     
-    private String readFile(String fileIn) throws FileNotFoundException, IOException {
+    private String readFile(String fileIn) {
         String ret = "";
         
         try (BufferedReader reader = new BufferedReader(new FileReader(fileIn))) {
@@ -159,6 +180,9 @@ public class Java8BridgeTest {
             }
         } catch (FileNotFoundException e) {
             ret = null;
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
         }
         
         return ret;

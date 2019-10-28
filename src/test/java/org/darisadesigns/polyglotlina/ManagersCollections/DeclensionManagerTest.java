@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.DeclensionGenRule;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -37,11 +38,17 @@ public class DeclensionManagerTest {
     final DictCore core;
     final DictCore debugCore;
     
-    public DeclensionManagerTest() throws Exception {
+    public DeclensionManagerTest() {
         core = new DictCore();
-        core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         debugCore = new DictCore();
-        debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+        } catch (IOException | IllegalStateException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
 
     /**
@@ -149,120 +156,159 @@ public class DeclensionManagerTest {
     
     /**
      * Test of deleteRulesFromDeclensionTemplates method, of class DeclensionManager.
-     * @throws java.io.IOException
      */
     @Test
-    public void testDeleteRulesFromDeclensionTemplatesInitial() throws IOException {
+    public void testDeleteRulesFromDeclensionTemplatesInitial() {
         System.out.println("testDeleteRulesFromDeclensionTemplatesInitial");
         DictCore subCore = new DictCore();
-        subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
-        int expectedInitialSize = 8;
         
-        DeclensionManager decManSub = subCore.getDeclensionManager();
-        assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedInitialSize);
+        try {
+            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            int expectedInitialSize = 8;
+
+            DeclensionManager decManSub = subCore.getDeclensionManager();
+            assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedInitialSize);
+        } catch (IOException | IllegalStateException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testDeleteRulesFromDeclensionTemplatesDelPast() throws IOException {
+    public void testDeleteRulesFromDeclensionTemplatesDelPast() {
         System.out.println("testDeleteRulesFromDeclensionTemplatesDelPast");
         DictCore subCore = new DictCore();
-        subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
-        int expectedFinalSize = 6;
         
-        DeclensionManager decManSub = subCore.getDeclensionManager();
-        DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
-        List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
-        rulesToDelete.add(toDelete);
-        decManSub.deleteRulesFromDeclensionTemplates(2, 1, 2, rulesToDelete);
-        assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+        try {
+            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            int expectedFinalSize = 6;
+
+            DeclensionManager decManSub = subCore.getDeclensionManager();
+            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
+            List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+            rulesToDelete.add(toDelete);
+            decManSub.deleteRulesFromDeclensionTemplates(2, 1, 2, rulesToDelete);
+            assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+        } catch (IOException | IllegalStateException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testDeleteRulesFromDeclensionTemplatesDelFemale() throws IOException {
+    public void testDeleteRulesFromDeclensionTemplatesDelFemale() {
         System.out.println("testDeleteRulesFromDeclensionTemplatesDelFemale");
         DictCore subCore = new DictCore();
-        subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
-        int expectedFinalSize = 6;
         
-        DeclensionManager decManSub = subCore.getDeclensionManager();
-        DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
-        List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
-        rulesToDelete.add(toDelete);
-        decManSub.deleteRulesFromDeclensionTemplates(2, 0, 3, rulesToDelete);
-        assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+        try {
+            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            int expectedFinalSize = 6;
+
+            DeclensionManager decManSub = subCore.getDeclensionManager();
+            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
+            List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+            rulesToDelete.add(toDelete);
+            decManSub.deleteRulesFromDeclensionTemplates(2, 0, 3, rulesToDelete);
+            assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+        } catch (IOException | IllegalStateException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
 
     /**
      * Test of bulkDeleteRuleFromDeclensionTemplates method, of class DeclensionManager.
-     * @throws java.io.IOException
      */
     @Test
-    public void testBulkDeleteRuleFromDeclensionTemplates() throws IOException {
+    public void testBulkDeleteRuleFromDeclensionTemplates() {
         System.out.println("testBulkDeleteRuleFromDeclensionTemplates");
         DictCore subCore = new DictCore();
-        subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
-        int expectedFinalSize = 5;
         
-        DeclensionManager decManSub = subCore.getDeclensionManager();
-        DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
-        List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
-        rulesToDelete.add(toDelete);
-        decManSub.bulkDeleteRuleFromDeclensionTemplates(2, rulesToDelete);
-        assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+        try {
+            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            int expectedFinalSize = 5;
+
+            DeclensionManager decManSub = subCore.getDeclensionManager();
+            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
+            List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+            rulesToDelete.add(toDelete);
+            decManSub.bulkDeleteRuleFromDeclensionTemplates(2, rulesToDelete);
+            assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+        } catch (IOException | IllegalStateException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testBulkDeleteRuleFromDeclensionTemplatesMultiSelect() throws IOException {
+    public void testBulkDeleteRuleFromDeclensionTemplatesMultiSelect() {
         System.out.println("testBulkDeleteRuleFromDeclensionTemplatesMultiSelect");
         DictCore subCore = new DictCore();
-        subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
-        List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
-        int expectedFinalSize = 4;
         
-        DeclensionManager decManSub = subCore.getDeclensionManager();
-        rulesToDelete.add(decManSub.getDeclensionRulesForType(2).get(2));
-        rulesToDelete.add(decManSub.getDeclensionRulesForType(2).get(1));
-        decManSub.bulkDeleteRuleFromDeclensionTemplates(2, rulesToDelete);
-        assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+        try {
+            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+            int expectedFinalSize = 4;
+
+            DeclensionManager decManSub = subCore.getDeclensionManager();
+            rulesToDelete.add(decManSub.getDeclensionRulesForType(2).get(2));
+            rulesToDelete.add(decManSub.getDeclensionRulesForType(2).get(1));
+            decManSub.bulkDeleteRuleFromDeclensionTemplates(2, rulesToDelete);
+            assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+        } catch (IOException | IllegalStateException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testDeleteRuleByTypeIdAndCombinedId() throws IOException {
+    public void testDeleteRuleByTypeIdAndCombinedId() {
         System.out.println("testDeleteRuleByTypeIdAndCombinedId");
         DictCore subCore = new DictCore();
-        subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
-        int typeId = 2;
-        String combinedDeclensionId = ",2,2,";
-        int expectedResultSize = 5;
         
-        DeclensionManager decManSub = subCore.getDeclensionManager();
-        
-        decManSub.deleteDeclensionGenRules(typeId, combinedDeclensionId);
-        List<DeclensionGenRule> result = decManSub.getDeclensionRulesForType(typeId);
-        assertEquals(result.size(), expectedResultSize);
+        try {
+            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            int typeId = 2;
+            String combinedDeclensionId = ",2,2,";
+            int expectedResultSize = 5;
+
+            DeclensionManager decManSub = subCore.getDeclensionManager();
+
+            decManSub.deleteDeclensionGenRules(typeId, combinedDeclensionId);
+            List<DeclensionGenRule> result = decManSub.getDeclensionRulesForType(typeId);
+            assertEquals(result.size(), expectedResultSize);
+        } catch (IOException | IllegalStateException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testNoCoreWordDeclensionException() throws IOException {
+    public void testNoCoreWordDeclensionException() {
         System.out.println("testNoCoreWordDeclensionException");
         DictCore subCore = new DictCore();
         ConWord noCoreWord = new ConWord();
         String expectedMessage = "Words without populated dictionary cores cannot be tested.";
         
-        subCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
-        noCoreWord.setValue("hi");
-        noCoreWord.setWordTypeId(2);
-        
-        Throwable threw = assertThrows(NullPointerException.class, () -> {
-            subCore.getDeclensionManager().declineWord(noCoreWord, "");
-        });
-        
-        String resultMessage = threw.getLocalizedMessage();
-        assertEquals(expectedMessage, resultMessage);
+        try {
+            subCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+            noCoreWord.setValue("hi");
+            noCoreWord.setWordTypeId(2);
+
+            Throwable threw = assertThrows(NullPointerException.class, () -> {
+                subCore.getDeclensionManager().declineWord(noCoreWord, "");
+            });
+
+            String resultMessage = threw.getLocalizedMessage();
+            assertEquals(expectedMessage, resultMessage);
+        } catch (IOException | IllegalStateException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testConjDebugBasic() throws IOException, Exception {
+    public void testConjDebugBasic() {
         System.out.println("Test Conj Debug Basic");
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
@@ -286,19 +332,25 @@ public class DeclensionManagerTest {
         word.setValue("hi");
         word.setWordTypeId(2);
         word.setCore(debugCore);
-        debugCore.getDeclensionManager().declineWord(word, ",2,");
         
-        String result = "";
-        
-        for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
-            result += debugString;
+        try {
+            debugCore.getDeclensionManager().declineWord(word, ",2,");
+
+            String result = "";
+
+            for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+                result += debugString;
+            }
+
+            assertEquals(result, expectdResult);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
         }
-        
-        assertEquals(result, expectdResult);
     }
 
     @Test
-    public void testConjDebugClassValOne() throws IOException, Exception {
+    public void testConjDebugClassValOne() {
         System.out.println("Test Conj Debug class value 1");
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
@@ -328,19 +380,25 @@ public class DeclensionManagerTest {
         word.setWordTypeId(2);
         word.setCore(debugCore);
         word.setClassValue(2, 0); // class val #1
-        debugCore.getDeclensionManager().declineWord(word, ",2,");
         
-        String result = "";
-        
-        for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
-            result += debugString;
+        try {
+            debugCore.getDeclensionManager().declineWord(word, ",2,");
+
+            String result = "";
+
+            for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+                result += debugString;
+            }
+
+            assertEquals(result, expectdResult);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
         }
-        
-        assertEquals(result, expectdResult);
     }
     
     @Test
-    public void testConjDebugClassValTwo() throws IOException, Exception {
+    public void testConjDebugClassValTwo() {
         System.out.println("Test Conj Debug class value 2");
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
@@ -370,19 +428,25 @@ public class DeclensionManagerTest {
         word.setWordTypeId(2);
         word.setCore(debugCore);
         word.setClassValue(2, 2); // class val #2
-        debugCore.getDeclensionManager().declineWord(word, ",2,");
         
-        String result = "";
-        
-        for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
-            result += debugString;
+        try {
+            debugCore.getDeclensionManager().declineWord(word, ",2,");
+
+            String result = "";
+
+            for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+                result += debugString;
+            }
+
+            assertEquals(result, expectdResult);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
         }
-        
-        assertEquals(result, expectdResult);
     }
     
     @Test
-    public void testConjFilterNegagiveMultiTransformDebug() throws IOException, Exception {
+    public void testConjFilterNegagiveMultiTransformDebug() {
         System.out.println("Test Conj Debug Filtering against rule");
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
@@ -408,19 +472,25 @@ public class DeclensionManagerTest {
         word.setValue("hi");
         word.setWordTypeId(2);
         word.setCore(debugCore);
-        debugCore.getDeclensionManager().declineWord(word, ",3,");
         
-        String result = "";
-        
-        for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
-            result += debugString;
+        try {
+            debugCore.getDeclensionManager().declineWord(word, ",3,");
+
+            String result = "";
+
+            for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+                result += debugString;
+            }
+
+            assertEquals(result, expectdResult);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
         }
-        
-        assertEquals(result, expectdResult);
     }
     
     @Test
-    public void testConjFilterPositiveMultiTransformDebug() throws IOException, Exception {
+    public void testConjFilterPositiveMultiTransformDebug() {
         System.out.println("Test Conj Debug Filtering against rule");
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
@@ -451,19 +521,25 @@ public class DeclensionManagerTest {
         word.setValue("Ahi");
         word.setWordTypeId(2);
         word.setCore(debugCore);
-        debugCore.getDeclensionManager().declineWord(word, ",3,");
         
-        String result = "";
-        
-        for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
-            result += debugString;
+        try {
+            debugCore.getDeclensionManager().declineWord(word, ",3,");
+
+            String result = "";
+
+            for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+                result += debugString;
+            }
+
+            assertEquals(result, expectdResult);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
         }
-        
-        assertEquals(result, expectdResult);
     }
     
     @Test
-    public void testGetAllDepGenerationRules() throws IOException {
+    public void testGetAllDepGenerationRules() {
         System.out.println("testGetAllDepGenerationRules");
         int typeId = 4; // verbs
         int expectedRules = 13;
@@ -495,7 +571,7 @@ public class DeclensionManagerTest {
     }
 
 //    @Test
-//    public void testDeclineWord() throws Exception {
+//    public void testDeclineWord() {
 //        // Tested extensively in declension debug tests    
 //    }
 //

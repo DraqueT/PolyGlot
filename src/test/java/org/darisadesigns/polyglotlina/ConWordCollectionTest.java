@@ -36,7 +36,7 @@ public class ConWordCollectionTest {
     }
     
     @Test
-    public void loadSwadeshTestRealFile() throws Exception {
+    public void loadSwadeshTestRealFile() {
         String searchValue = "#002: YOU";
         String expectedValue = "#002: YOU (2.SG! 1952 THOU & YE)";
         int expectedSize = 100;
@@ -46,19 +46,25 @@ public class ConWordCollectionTest {
         ConWordCollection words = core.getWordCollection();
         BufferedInputStream bs = new BufferedInputStream(
                 ConWordCollection.class.getResourceAsStream(PGTUtil.SWADESH_LOCATION + PGTUtil.SWADESH_LISTS[0]));
-        words.loadSwadesh(bs, false);
-        ConWord filterWord = new ConWord();
-        filterWord.setValue(searchValue);
-        List<ConWord> foundWords = words.filteredList(filterWord);
         
-        int resultLexSize = words.getWordCount();
-        int resultFoundSize = foundWords.size();
-        
-        assertEquals(resultLexSize, expectedSize);
-        assertEquals(resultFoundSize, expectedFoundWords);
-        
-        String resultWordVal = foundWords.get(0).getValue();
-        assertEquals(resultWordVal, expectedValue);
+        try {
+            words.loadSwadesh(bs, false);
+            ConWord filterWord = new ConWord();
+            filterWord.setValue(searchValue);
+            List<ConWord> foundWords = words.filteredList(filterWord);
+
+            int resultLexSize = words.getWordCount();
+            int resultFoundSize = foundWords.size();
+
+            assertEquals(resultLexSize, expectedSize);
+            assertEquals(resultFoundSize, expectedFoundWords);
+
+            String resultWordVal = foundWords.get(0).getValue();
+            assertEquals(resultWordVal, expectedValue);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test

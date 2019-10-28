@@ -45,25 +45,30 @@ public class IOHandlerTest {
     }
     
     @Test
-    public void testWriteErrorLogBasic() throws IOException {
+    public void testWriteErrorLogBasic() {
         IOHandler.writeErrorLog(new Exception("This is a test."));
         File myLog = new File(PGTUtil.getErrorDirectory().getAbsolutePath() 
                 + File.separator + PGTUtil.ERROR_LOG_FILE);
         
         assertTrue(myLog.exists());
         
-        Scanner logScanner = new Scanner(myLog).useDelimiter("\\Z");
-        String contents = logScanner.hasNext() ? logScanner.next() : "";
-        
-        assertTrue(contents.contains("This is a test.-java.lang.Exception"));
-        assertTrue(contents.contains("java.lang.Exception: This is a test."));
-        assertTrue(contents.contains("PolyGlot.IOHandlerTest.testWriteErrorLogBasic(IOHandlerTest.java"));
+        try {
+            Scanner logScanner = new Scanner(myLog).useDelimiter("\\Z");
+            String contents = logScanner.hasNext() ? logScanner.next() : "";
+
+            assertTrue(contents.contains("This is a test.-java.lang.Exception"));
+            assertTrue(contents.contains("java.lang.Exception: This is a test."));
+            assertTrue(contents.contains("PolyGlot.IOHandlerTest.testWriteErrorLogBasic(IOHandlerTest.java"));
+        } catch (FileNotFoundException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
         
         wipeErrorLog();
     }
     
     @Test
-    public void testWriteMultipleErrorLogs() throws IOException {
+    public void testWriteMultipleErrorLogs() {
         IOHandler.writeErrorLog(new Exception("This is a test."));
         File myLog = new File(PGTUtil.ERROR_LOG_FILE);
         long logLenFirst = myLog.length() - 1;
@@ -75,47 +80,71 @@ public class IOHandlerTest {
     }
     
     @Test
-    public void testWriteErrorLogsMaxLength() throws FileNotFoundException {
+    public void testWriteErrorLogsMaxLength() {
         for (int i = 0; i < 20; i++) {
             IOHandler.writeErrorLog(new Exception("This is a test: " + i));
         }
         
-        int logLength = IOHandler.getErrorLog().length();
-        int systemInfoLength = IOHandler.getSystemInformation().length();
+        try {
+            int logLength = IOHandler.getErrorLog().length();
+            int systemInfoLength = IOHandler.getSystemInformation().length();
+
+            // off by one due to concatination effect when adding system info (newline)
+            assertTrue(logLength == PGTUtil.MAX_LOG_CHARACTERS + systemInfoLength + 1);
+        } catch (FileNotFoundException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
         
-        // off by one due to concatination effect when adding system info (newline)
-        assertTrue(logLength == PGTUtil.MAX_LOG_CHARACTERS + systemInfoLength + 1);        
         wipeErrorLog();
     }
     
     @Test
-    public void testWriteErrorLogAccountsForCause() throws FileNotFoundException {
+    public void testWriteErrorLogAccountsForCause() {
         String testErrorString = "UR INPUTS & OUTPUTS!";
         String bubblingException = "Bubbobbula!";
         IOException testException = new IOException(testErrorString);
         IOHandler.writeErrorLog(new Exception(bubblingException, testException));
-        String log = IOHandler.getErrorLog();
         
-        assertTrue(log.contains(testErrorString));
-        assertTrue(log.contains(bubblingException));
+        try {
+            String log = IOHandler.getErrorLog();
+
+            assertTrue(log.contains(testErrorString));
+            assertTrue(log.contains(bubblingException));
+        } catch (FileNotFoundException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testGoodConsoleCommand() throws InterruptedException {
+    public void testGoodConsoleCommand() {
         System.out.println("Testing good console command");
-        String[] result = IOHandler.runAtConsole(new String[]{"java", "--version"});
         
-        assertTrue(!result[0].isEmpty()); // various versions of Java return every damned thing you can imagine... just test that it's SOMETHING
-        assertTrue(result[1].isEmpty());
+        try {
+            String[] result = IOHandler.runAtConsole(new String[]{"java", "--version"});
+
+            assertTrue(!result[0].isEmpty()); // various versions of Java return every damned thing you can imagine... just test that it's SOMETHING
+            assertTrue(result[1].isEmpty());
+        } catch (InterruptedException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testBadConsoleCommand() throws InterruptedException {
+    public void testBadConsoleCommand() {
         System.out.println("Testing bad console command");
-        String[] result = IOHandler.runAtConsole(new String[]{"WAT", "AM", "COMAND?!"});
         
-        assertTrue(result[0].isEmpty());
-        assertTrue(!result[1].isEmpty()); // different errors for different systems, but should be SOMETHING
+        try {
+            String[] result = IOHandler.runAtConsole(new String[]{"WAT", "AM", "COMAND?!"});
+
+            assertTrue(result[0].isEmpty());
+            assertTrue(!result[1].isEmpty()); // different errors for different systems, but should be SOMETHING
+        } catch (InterruptedException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
@@ -131,16 +160,22 @@ public class IOHandlerTest {
     }
     
     @Test
-    public void testInputStreamToByteArray() throws FileNotFoundException, IOException {
+    public void testInputStreamToByteArray() {
         System.out.println("Testing input stream to byte array");
-        byte[] expectedResult = "!@)*\ntest\n".getBytes();
-        InputStream is = new FileInputStream(PGTUtil.TESTRESOURCES + "inputTest.txt");
-        byte[] result = IOHandler.streamToBytArray(is);
-        assertTrue(java.util.Arrays.equals(expectedResult, result));
+        
+        try {
+            byte[] expectedResult = "!@)*\ntest\n".getBytes();
+            InputStream is = new FileInputStream(PGTUtil.TESTRESOURCES + "inputTest.txt");
+            byte[] result = IOHandler.streamToBytArray(is);
+            assertTrue(java.util.Arrays.equals(expectedResult, result));
+        } catch (IOException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void iniFile() throws Exception {
+    public void iniFile() {
         System.out.println("write/read of ini file");
         try {
             String testScreenName = "Silly Sergal Merp Screen";
@@ -185,7 +220,8 @@ public class IOHandlerTest {
             assertEquals(opt.getScreenSize(testScreenName), expectedScreenDimension);
             assertEquals(opt.getToDoBarPosition(), toDoBarPositionExpected);
         } catch (Exception e) {
-            throw e;
+            IOHandler.writeErrorLog(e);
+            fail(e);
         } finally {
             // clean up
             new File(PGTUtil.TESTRESOURCES + PGTUtil.POLYGLOT_INI).delete();
