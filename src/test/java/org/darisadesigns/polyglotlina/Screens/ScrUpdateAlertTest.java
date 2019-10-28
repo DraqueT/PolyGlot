@@ -21,6 +21,8 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import java.awt.GraphicsEnvironment;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.IOHandler;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -44,15 +46,19 @@ public class ScrUpdateAlertTest {
 
     /**
      * Test of testRun method, of class ScrUpdateAlert.
-     * @throws java.lang.Exception
      */
     @Test
-    public void testTestRun() throws Exception {
+    public void testTestRun() {
         if (headless) {
             return;
         }
         
-        updateAlert.testRun();
-        updateAlert.dispose();
+        try {
+            updateAlert.testRun();
+            updateAlert.dispose();
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
 }

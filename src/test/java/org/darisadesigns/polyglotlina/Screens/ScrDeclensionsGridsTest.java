@@ -23,6 +23,7 @@ import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -41,75 +42,104 @@ public class ScrDeclensionsGridsTest {
     ConWord TwoDimPop;
     ConWord TwoDimNopop;
     
-    public ScrDeclensionsGridsTest() throws IOException {
+    public ScrDeclensionsGridsTest() {
         core = new DictCore();
-        core.readFile(PGTUtil.TESTRESOURCES + "conj_autopop_check_test.pgd");
         
-        ConWordCollection words = core.getWordCollection();
-        
-        oneDimPop = words.getNodeById(3);
-        OneDimNopop = words.getNodeById(4);
-        TwoDimPop = words.getNodeById(5);
-        TwoDimNopop = words.getNodeById(6);
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "conj_autopop_check_test.pgd");
+
+            ConWordCollection words = core.getWordCollection();
+
+            oneDimPop = words.getNodeById(3);
+            OneDimNopop = words.getNodeById(4);
+            TwoDimPop = words.getNodeById(5);
+            TwoDimNopop = words.getNodeById(6);
+        } catch (IOException | IllegalStateException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testOneDimPopAutoPopCheck() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    public void testOneDimPopAutoPopCheck() {
         if (headless) {
             return;
         }
         
-        ScrDeclensionsGrids screen = ScrDeclensionsGrids.run(core, oneDimPop);
-        Class<?> classs = screen.getClass();
-        Field field = classs.getDeclaredField("autoPopulated");
-        field.setAccessible(true);
-        boolean autoPop = (boolean)field.get(screen);
-        
-        assertTrue(autoPop);
+        try {
+            ScrDeclensionsGrids screen = ScrDeclensionsGrids.run(core, oneDimPop);
+            Class<?> classs = screen.getClass();
+            Field field = classs.getDeclaredField("autoPopulated");
+            field.setAccessible(true);
+            boolean autoPop = (boolean)field.get(screen);
+            
+            assertTrue(autoPop);
+        } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testOneDimNopopAutoPopCheck() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    public void testOneDimNopopAutoPopCheck() {
         if (headless) {
             return;
         }
         
         ScrDeclensionsGrids screen = ScrDeclensionsGrids.run(core, OneDimNopop);
         Class<?> classs = screen.getClass();
-        Field field = classs.getDeclaredField("autoPopulated");
-        field.setAccessible(true);
-        boolean autoPop = (boolean)field.get(screen);
         
-        assertFalse(autoPop);
+        try {
+            Field field = classs.getDeclaredField("autoPopulated");
+            field.setAccessible(true);
+            boolean autoPop = (boolean)field.get(screen);
+
+            assertFalse(autoPop);
+        } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testTwoDimPopAutoPopCheck() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    public void testTwoDimPopAutoPopCheck() {
         if (headless) {
             return;
         }
         
         ScrDeclensionsGrids screen = ScrDeclensionsGrids.run(core, TwoDimPop);
         Class<?> classs = screen.getClass();
-        Field field = classs.getDeclaredField("autoPopulated");
-        field.setAccessible(true);
-        boolean autoPop = (boolean)field.get(screen);
         
-        assertTrue(autoPop);
+        try {
+            Field field = classs.getDeclaredField("autoPopulated");
+            field.setAccessible(true);
+            boolean autoPop = (boolean)field.get(screen);
+
+            assertTrue(autoPop);
+        } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test
-    public void testTwoDimNopopAutoPopCheck() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    public void testTwoDimNopopAutoPopCheck() {
         if (headless) {
             return;
         }
         
         ScrDeclensionsGrids screen = ScrDeclensionsGrids.run(core, TwoDimNopop);
         Class<?> classs = screen.getClass();
-        Field field = classs.getDeclaredField("autoPopulated");
-        field.setAccessible(true);
-        boolean autoPop = (boolean)field.get(screen);
         
-        assertFalse(autoPop);
+        try {
+            Field field = classs.getDeclaredField("autoPopulated");
+            field.setAccessible(true);
+            boolean autoPop = (boolean)field.get(screen);
+
+            assertFalse(autoPop);
+        } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
 }

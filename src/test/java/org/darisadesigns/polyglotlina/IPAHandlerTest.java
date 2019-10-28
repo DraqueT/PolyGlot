@@ -35,12 +35,42 @@ public class IPAHandlerTest {
     }
 
     @Test
-    public void testPlaySounds() throws NoSuchFieldException, Exception {
+    public void testPlaySounds() {
         // do not test in headless environment (hangs on 100% CPU consumption)
         if (!GraphicsEnvironment.isHeadless()) {
             System.out.println("test sound playback");
             IPAHandler handler = new IPAHandler(null);
 
+            try {
+                Class<?> classs = handler.getClass();
+                Field field = classs.getDeclaredField("charMap");
+                field.setAccessible(true);
+                Map<String, String> charMap = (Map<String, String>)field.get(handler);
+
+                field = classs.getDeclaredField("soundRecorder");
+                field.setAccessible(true);
+                SoundRecorder soundRecorder = (SoundRecorder)field.get(handler);
+
+                // only test playing the first sounds of each library (just test the rest exist)
+                String firstSound = (String)charMap.values().toArray()[0];
+            
+                soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
+                soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
+            } catch (Exception e) {
+                IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+                fail(e);
+            }
+        } else {
+            System.out.println("HEADLESS SKIP: test sound playback");
+        }
+    }
+    
+    @Test
+    public void testAllSoundsExist() {
+        System.out.println("test all sound assets");
+        IPAHandler handler = new IPAHandler(null);
+        
+        try {
             Class<?> classs = handler.getClass();
             Field field = classs.getDeclaredField("charMap");
             field.setAccessible(true);
@@ -50,57 +80,38 @@ public class IPAHandlerTest {
             field.setAccessible(true);
             SoundRecorder soundRecorder = (SoundRecorder)field.get(handler);
 
-            // only test playing the first sounds of each library (just test the rest exist)
-            String firstSound = (String)charMap.values().toArray()[0];
-            soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
-            soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
-        } else {
-            System.out.println("HEADLESS SKIP: test sound playback");
-        }
-    }
-    
-    @Test
-    public void testAllSoundsExist() throws Exception {
-        System.out.println("test all sound assets");
-        IPAHandler handler = new IPAHandler(null);
-        
-        Class<?> classs = handler.getClass();
-        Field field = classs.getDeclaredField("charMap");
-        field.setAccessible(true);
-        Map<String, String> charMap = (Map<String, String>)field.get(handler);
-        
-        field = classs.getDeclaredField("soundRecorder");
-        field.setAccessible(true);
-        SoundRecorder soundRecorder = (SoundRecorder)field.get(handler);
-        
-        String results = "";
-        String expectedResults = "";
-        
-        for (String soundName : charMap.values()) {
-            String sound = "";
-            try {
-                System.out.println(PGTUtil.UCLA_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX);
-                sound = PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX;
-                assertNotEquals(sound, null);
-            } catch (Exception e) {
-                System.out.println("FAILED: " + sound);
-                results += sound + e.getLocalizedMessage() + "\n";
+            String results = "";
+            String expectedResults = "";
+
+            for (String soundName : charMap.values()) {
+                String sound = "";
+                try {
+                    System.out.println(PGTUtil.UCLA_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX);
+                    sound = PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX;
+                    assertNotEquals(sound, null);
+                } catch (Exception e) {
+                    System.out.println("FAILED: " + sound);
+                    results += sound + e.getLocalizedMessage() + "\n";
+                }
             }
-        }
-        
-        for (String soundName : charMap.values()) {
-            String sound = "";
-            try {
-                System.out.println(PGTUtil.WIKI_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX);
-                sound = PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX;
-                assertNotEquals(sound, null);
-            } catch (Exception e) {
-                System.out.println("FAILED: " + sound);
-                results += sound + e.getLocalizedMessage() + "\n";
+
+            for (String soundName : charMap.values()) {
+                String sound = "";
+                try {
+                    System.out.println(PGTUtil.WIKI_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX);
+                    sound = PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX;
+                    assertNotEquals(sound, null);
+                } catch (Exception e) {
+                    System.out.println("FAILED: " + sound);
+                    results += sound + e.getLocalizedMessage() + "\n";
+                }
             }
+
+            assertEquals(expectedResults, results);
+        } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
         }
-        
-        assertEquals(expectedResults, results);
     }
     
 }

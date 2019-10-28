@@ -29,7 +29,9 @@ import java.lang.reflect.Method;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -49,14 +51,14 @@ public class ScrMainMenuTest {
     }
     
     @Test
-    public void testManyOpensAndClosesLexCountMaintained() throws SecurityException, 
-            NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, 
-            InvocationTargetException, ParserConfigurationException, TransformerException, IOException {
+    public void testManyOpensAndClosesLexCountMaintained() {
         if (headless) {
             return;
         }
         
         final String testFileName = PGTUtil.TESTRESOURCES + "earien_TEST.pgd";
+        
+        try {
         Method setFileMethod = mainMenu.getClass().getDeclaredMethod("setFile", String.class);
         setFileMethod.setAccessible(true);
         
@@ -73,10 +75,15 @@ public class ScrMainMenuTest {
                 throw new AssertionError("Run: " + i + "->" + curLexCount + " != " + correctLexiconCount);
             }
             mainMenu.getCore().writeFile(testFileName);
-            
         }
-
-        File testFile = new File(testFileName);
-        testFile.delete();
+        } catch (IOException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException 
+                | SecurityException | InvocationTargetException | ParserConfigurationException 
+                | TransformerException e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        } finally {
+            File testFile = new File(testFileName);
+            testFile.delete();
+        }
     }
 }
