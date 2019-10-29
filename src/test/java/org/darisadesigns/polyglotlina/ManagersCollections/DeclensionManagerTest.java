@@ -20,12 +20,14 @@
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.DeclensionGenRule;
+import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -568,6 +570,49 @@ public class DeclensionManagerTest {
         
         assertEquals(expectedRuleCount, resultRuleCount);
         assertEquals(expectedFirstRuleName, resultFirstRuleName);
+    }
+    
+    @Test
+    public void testSmoothDeclensionRuleIndex() {
+        System.out.println("testSmoothDeclensionRuleIndex");
+        
+        DictCore subCore = new DictCore();
+        DeclensionManager decMan = subCore.getDeclensionManager();
+        TypeNode noun = new TypeNode();
+        
+        noun.setValue("noun");
+        
+        try {
+            int nounId = subCore.getTypes().addNode(noun);
+
+            DeclensionGenRule rule = new DeclensionGenRule();
+            rule.setIndex(1);
+            rule.setTypeId(nounId);
+            decMan.addDeclensionGenRule(rule);
+            rule = new DeclensionGenRule();
+            rule.setIndex(3);
+            rule.setTypeId(nounId);
+            decMan.addDeclensionGenRule(rule);
+            rule = new DeclensionGenRule();
+            rule.setIndex(4);
+            rule.setTypeId(nounId);
+            decMan.addDeclensionGenRule(rule);
+
+            Method smoothRules = DeclensionManager.class.getDeclaredMethod("smoothRules");
+            smoothRules.setAccessible(true);
+            smoothRules.invoke(decMan, new Object[0]);
+
+            List<DeclensionGenRule> rules = decMan.getDeclensionRulesForType(nounId);
+
+            // assert that rules have been changed from 1, 3, 4 -> 1, 2, 3
+            assertEquals(rules.size(), 3);
+            assertEquals(rules.get(0).getIndex(), 1);
+            assertEquals(rules.get(1).getIndex(), 2);
+            assertEquals(rules.get(2).getIndex(), 3);
+        } catch (Exception e) {
+            fail(e);
+            IOHandler.writeErrorLog(e);
+        }
     }
 
 //    @Test

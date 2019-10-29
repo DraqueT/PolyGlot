@@ -126,7 +126,7 @@ public class DeclensionManager {
 
         for (List<DeclensionGenRule> list : generationRules.values()) {
             for (DeclensionGenRule curRule : list) {
-                // adds to return value only if rule matches ID, and is orphaned
+                // adds to return value only if rule matches ID but is orphaned
                 if (curRule.getIndex() == 0) {
                     highestIndex++;
                     curRule.setIndex(highestIndex);
@@ -192,6 +192,22 @@ public class DeclensionManager {
     }
 
     /**
+     * Ensures all rules have contiguous indicies. Run prior to generating XML for save
+     */
+    private void smoothRules() {
+        generationRules.values().forEach((ruleList) -> {
+            Collections.sort(ruleList);
+            int newIndex = 1;
+            
+            for (DeclensionGenRule rule : ruleList) {
+                rule.setIndex(newIndex);
+                
+                newIndex++;
+            }
+        });
+    }
+    
+    /**
      * Deletes rule based on unique regex value
      *
      * @param delRule rule to delete
@@ -241,13 +257,6 @@ public class DeclensionManager {
         }
 
         Collections.sort(ret);
-
-        // ensure that all rules cave continguous IDs before returning
-        int i = 1;
-        for (DeclensionGenRule curRule : ret) {
-            curRule.setIndex(i);
-            i++;
-        }
 
         return ret;
     }
@@ -1050,6 +1059,9 @@ public class DeclensionManager {
         Set<Entry<Integer, List<DeclensionNode>>> declensionSet;
         Element declensionCollection = doc.createElement(PGTUtil.DECLENSION_COLLECTION_XID);
         rootElement.appendChild(declensionCollection);
+        
+        // ensure rule IDs are contiguous before save
+        this.smoothRules();
 
         // record declension templates
         declensionSet = dTemplates.entrySet();
