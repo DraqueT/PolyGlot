@@ -95,6 +95,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -131,6 +132,8 @@ public final class ScrLexicon extends PFrame {
      * @param _menuParent
      */
     public ScrLexicon(DictCore _core, ScrMainMenu _menuParent) {
+        super(_core);
+        
         defTypeValue.setValue("-- Part of Speech --");
         defTypeValue.setId(-1);
 
@@ -138,7 +141,6 @@ public final class ScrLexicon extends PFrame {
         defRootValue.setId(-1);
 
         menuParent = _menuParent;
-        core = _core;
         fxPanel = new JFXPanel();
         txtRom = new PTextField(core, true, "-- Romanization --");
         txtRom.setToolTipText("Romanized representation of word");
@@ -197,7 +199,7 @@ public final class ScrLexicon extends PFrame {
         boolean ret = true;
 
         // error box only populated with word has illegal values
-        if (txtErrorBox.getText().length() != 0 && !chkRuleOverride.isSelected()) {
+        if (!txtErrorBox.getText().isEmpty() && !chkRuleOverride.isSelected()) {
             ret = false;
             InfoBox.warning("Illegal word.", "Please correct or delete currently selected word "
                     + "or select the rule override before exiting lexicon.", core.getRootWindow());
@@ -303,8 +305,6 @@ public final class ScrLexicon extends PFrame {
                             JComboBox combo = (JComboBox) component;
                             combo.setSelectedItem(((WordClass) core.getWordClassCollection()
                                     .getNodeById(curProp.getKey())).getValueById(curProp.getValue()));
-                        } else if (component instanceof PTextField) {
-                            // class property has since been turned into a dropdown field: do nothing
                         }
                     } catch (Exception e) {
                         IOHandler.writeErrorLog(e);
@@ -319,9 +319,7 @@ public final class ScrLexicon extends PFrame {
                     JComponent component = classPropMap.get(curProp.getKey());
 
                     try {
-                        if (component instanceof JComboBox) {
-                            // class property has since been turned into a free text field: do nothing
-                        } else if (component instanceof PTextField) {
+                        if (component instanceof PTextField) {
                             PTextField textField = (PTextField) component;
                             textField.setText(curProp.getValue());
                         }
@@ -334,7 +332,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Sets up the romanization field. Should be run after setupClassPanel, as it utilizes the class pannel space
+     * Sets up the romanization field. Should be run after setupClassPanel, as it utilizes the class panel space
      */
     private void setupRomField() {
         if (core.getRomManager().isEnabled()) {
@@ -384,7 +382,7 @@ public final class ScrLexicon extends PFrame {
         // empty map of all class information before filling it again
         classPropMap.clear();
 
-        // create dropdown for each class that applies to the curren word
+        // create dropdown for each class that applies to the current word
         for (WordClass curProp : propList) {
             final int classId = curProp.getId();
 
@@ -609,7 +607,7 @@ public final class ScrLexicon extends PFrame {
                 Thread.sleep(500); // wait for interrupt from user...
                 if (txtConWord.getText().isEmpty()
                         && lstLexicon.getSelectedIndex() != -1) {
-                    return; // prevents freezing scenario with if new word made beore thread continues
+                    return; // prevents freezing scenario with if new word made before thread continues
                 }
                 filterLexicon();
                 lstLexicon.setSelectedIndex(0);
@@ -643,10 +641,10 @@ public final class ScrLexicon extends PFrame {
                 filterType = ((TypeNode) cmbTypeSrc.getValue()).getId();
             }
 
-            ret = txtConSrc.getText().length() == 0
-                    && txtDefSrc.getText().length() == 0
-                    && txtLocalSrc.getText().length() == 0
-                    && txtProcSrc.getText().length() == 0
+            ret = txtConSrc.getText().isEmpty()
+                    && txtDefSrc.getText().isEmpty()
+                    && txtLocalSrc.getText().isEmpty()
+                    && txtProcSrc.getText().isEmpty()
                     && filterType == defTypeValue.getId()
                     && cmbRootSrc.getValue().toString().equals(defRootValue.getValue());
         }
@@ -662,9 +660,14 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        int filterType = cmbTypeSrc.getValue().equals(defTypeValue)
-                ? 0 : ((TypeNode) cmbTypeSrc.getValue()).getId();
+        int filterType;
 
+        if (cmbTypeSrc.getValue().equals(defTypeValue)) {
+            filterType = 0;
+        } else {
+            filterType = ((TypeNode) cmbTypeSrc.getValue()).getId();
+        }
+        
         saveValuesTo(getCurrentWord());
 
         if (isFilterBlank()) {
@@ -773,8 +776,7 @@ public final class ScrLexicon extends PFrame {
     /**
      * Sets lexicon tab's currently displayed word legality (highlighted fields, error message, etc.)
      *
-     * @param results current word
-     * @param disableElements whether to disable control elements on fail
+     * @param testWord current word
      */
     private void setWordLegality(ConWord testWord) {
         if (testWord == null) {
@@ -784,7 +786,6 @@ public final class ScrLexicon extends PFrame {
         }
 
         ConWord results = core.getWordCollection().testWordLegality(testWord);
-        boolean isLegal = true;
 
         txtErrorBox.setText("");
 
@@ -800,7 +801,7 @@ public final class ScrLexicon extends PFrame {
             }
         }
 
-        isLegal = isLegal && addErrorBoxMessage(txtConWord, results.getValue());
+        boolean isLegal = addErrorBoxMessage(txtConWord, results.getValue());
         isLegal = isLegal && addErrorBoxMessage(txtLocalWord, results.getLocalWord());
         isLegal = isLegal && addErrorBoxMessage(txtProc, procLegality);
         isLegal = isLegal && addErrorBoxMessage(txtConWord, results.getDefinition());
@@ -823,11 +824,13 @@ public final class ScrLexicon extends PFrame {
      */
     private boolean addErrorBoxMessage(JComponent element, String message) {
         Color bColor = new JTextField().getBackground();
-        Color hColor = core.getRequiredColor();
+        Color hColor = PGTUtil.COLOR_REQUIRED_LEX_COLOR;
         boolean ret = true;
 
-        if (message.length() != 0) {
-            if (txtErrorBox.getText().length() != 0) {
+        if (message.isEmpty()) {
+            element.setBackground(bColor);
+        } else {
+            if (!txtErrorBox.getText().isEmpty()) {
                 txtErrorBox.setText(txtErrorBox.getText() + "\n");
             }
 
@@ -839,8 +842,6 @@ public final class ScrLexicon extends PFrame {
             }
 
             ret = false;
-        } else {
-            element.setBackground(bColor);
         }
 
         return ret;
@@ -916,10 +917,10 @@ public final class ScrLexicon extends PFrame {
                     public void updateItem(Object item,
                             boolean empty) {
                         super.updateItem(item, empty);
-                        if (item != null && (item instanceof ConWord || item instanceof ConWordDisplay)) {
+                        if (item instanceof ConWord || item instanceof ConWordDisplay) {
                             setFont(core.getPropertiesManager().getFXFont());
                             setText(item.toString());
-                        } else if (item != null && item instanceof EtyExternalParent) {
+                        } else if (item instanceof EtyExternalParent) {
                             setFont(font);
                             setText(item.toString());
                         } else {
@@ -988,7 +989,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Filters on illegel words. Does NOT respect "override" marker. This is to allow users to easily see what words are
+     * Filters on illegal words. Does NOT respect "override" marker. This is to allow users to easily see what words are
      * causing uniqueness errors, even if they themselves are legal via exception.
      */
     private void applyIllegalFilter() {
@@ -1013,7 +1014,7 @@ public final class ScrLexicon extends PFrame {
     public void dispose() {
         boolean canClose = true;
 
-        if (txtErrorBox.getText().length() != 0
+        if (!txtErrorBox.getText().isEmpty()
                 && !chkRuleOverride.isSelected()) {
             InfoBox.warning("Illegal Word",
                     "Currently selected word is illegal. Please correct, or mark rule override.", core.getRootWindow());
@@ -1188,7 +1189,7 @@ public final class ScrLexicon extends PFrame {
                     if (enableProcGen) {
                         try {
                             tip = core.getPronunciationMgr().getPronunciation(curWord.getValue());
-                            if (tip.length() == 0) {
+                            if (tip.isEmpty()) {
                                 tip = curWord.getPronunciation();
                             }
                         } catch (Exception ex) {
@@ -1196,17 +1197,17 @@ public final class ScrLexicon extends PFrame {
                             setProcError(ex.getLocalizedMessage());
                         }
                     }
-                    if (tip.length() == 0) {
+                    if (tip.isEmpty()) {
                         tip = curWord.getLocalWord();
                     }
-                    if (tip.length() == 0) {
+                    if (tip.isEmpty()) {
                         tip = curWord.getValue();
                     }
                     if (curType != null && (curType.getId() != 0 || core.getPropertiesManager().isTypesMandatory())) {
-                        tip += " : " + (curType.getGloss().length() == 0
+                        tip += " : " + (curType.getGloss().isEmpty()
                                 ? curType.getValue() : curType.getGloss());
                     }
-                    if (curWord.getDefinition().length() != 0) {
+                    if (!curWord.getDefinition().isEmpty()) {
                         tip += " : " + WebInterface.getTextFromHtml(curWord.getDefinition());
                     }
 
@@ -1331,10 +1332,10 @@ public final class ScrLexicon extends PFrame {
                     namePopulating = false;
                 }
                 txtDefinition.setText(curWord.getDefinition());
-                txtLocalWord.setText(curWord.getLocalWord().length() == 0
+                txtLocalWord.setText(curWord.getLocalWord().isEmpty()
                         ? ((PTextField) txtLocalWord).getDefaultValue() : curWord.getLocalWord());
                 if (enableProcGen) {
-                    txtProc.setText(curWord.getPronunciation().length() == 0
+                    txtProc.setText(curWord.getPronunciation().isEmpty()
                             ? ((PTextField) txtProc).getDefaultValue() : curWord.getPronunciation());
                 }
                 TypeNode type = curWord.getWordTypeId() == 0 ? null : core.getTypes().getNodeById(curWord.getWordTypeId());
@@ -1466,8 +1467,7 @@ public final class ScrLexicon extends PFrame {
     }
 
     public static ScrLexicon run(DictCore _core, ScrMainMenu _scrMainMenu) {
-        final ScrLexicon s = new ScrLexicon(_core, _scrMainMenu);
-        return s;
+        return new ScrLexicon(_core, _scrMainMenu);
     }
 
     /**
@@ -1528,8 +1528,11 @@ public final class ScrLexicon extends PFrame {
         saveWord.setRulesOverride(chkRuleOverride.isSelected());
         Object curType = cmbType.getSelectedItem();
         if (curType != null) {
-            saveWord.setWordTypeId(curType.equals(defTypeValue)
-                    ? 0 : ((TypeNode) curType).getId());
+            if (curType.equals(defTypeValue)) {
+                saveWord.setWordTypeId(0);
+            } else {
+                saveWord.setWordTypeId(((TypeNode) curType).getId());
+            }
         }
 
         // save all class values
@@ -1557,7 +1560,7 @@ public final class ScrLexicon extends PFrame {
         int curSelection = lstLexicon.getSelectedIndex();
         ConWord curWord = getCurrentWord();
 
-        if (curSelection == -1) {
+        if (curSelection == -1 || curWord == null) {
             return;
         }
 
@@ -1673,7 +1676,6 @@ public final class ScrLexicon extends PFrame {
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
      * content of this method is always regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -2099,7 +2101,7 @@ public final class ScrLexicon extends PFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnEtymologyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEtymologyActionPerformed
-        new ScrEtymRoots(core, menuParent, getCurrentWord()).setVisible(true);
+        new ScrEtymRoots(core, getCurrentWord()).setVisible(true);
     }//GEN-LAST:event_btnEtymologyActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

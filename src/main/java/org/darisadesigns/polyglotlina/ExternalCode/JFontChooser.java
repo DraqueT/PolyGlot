@@ -100,7 +100,7 @@ public class JFontChooser extends JComponent
 
     private String[] fontStyleNames = null;
     private String[] fontFamilyNames = null;
-    private String[] fontSizeStrings = null;
+    private String[] fontSizeStrings;
     private JTextField fontFamilyTextField = null;
     private JTextField fontStyleTextField = null;
     private JTextField fontSizeTextField = null;
@@ -339,7 +339,6 @@ public class JFontChooser extends JComponent
      * Set the family name of the selected font.
      * @param name  the family name of the selected font. 
      *
-     * @see getSelectedFontFamily
      **/
     public void setSelectedFontFamily(String name)
     {
@@ -415,11 +414,6 @@ public class JFontChooser extends JComponent
         setSelectedFontSize(font.getSize());
     }
 
-    public String getVersionString()
-    {
-        return ("Version");
-    }
-
     /**
      *  Show font selection dialog.
      *  @param parent Dialog's Parent component.
@@ -460,7 +454,7 @@ public class JFontChooser extends JComponent
         @Override
         public void valueChanged(ListSelectionEvent e)
         {
-            if (e.getValueIsAdjusting() == false)
+            if (!e.getValueIsAdjusting())
             {
                 JList list = (JList) e.getSource();
                 String selectedValue = (String) list.getSelectedValue();
@@ -541,7 +535,7 @@ public class JFontChooser extends JComponent
 
     protected class ListSearchTextFieldDocumentHandler implements DocumentListener
     {
-        JList targetList;
+        final JList targetList;
 
         public ListSearchTextFieldDocumentHandler(JList targetList)
         {
@@ -576,12 +570,12 @@ public class JFontChooser extends JComponent
             }
             catch (BadLocationException e)
             {
-                InfoBox.error("Font Selectino Problem", "There was a problem with your font: "
+                InfoBox.error("Font Selection Problem", "There was a problem with your font: "
                         + e.getLocalizedMessage(), core.getRootWindow());
                 //e.printStackTrace();
             }
 
-            if (newValue.length() > 0)
+            if (!newValue.isEmpty())
             {
                 int index = targetList.getNextMatch(newValue, 0, Position.Bias.Forward);
                 if (index < 0)

@@ -36,7 +36,7 @@ import javax.imageio.ImageIO;
  */
 public class ImageCollection extends DictionaryCollection<ImageNode> {
     public ImageCollection() {
-        bufferNode = new ImageNode();
+        super(new ImageNode());
     }
     
     @Override
@@ -59,7 +59,7 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
      * @return ImageNode inserted into collection with populated image
      * @throws IOException on file read error
      */
-    public ImageNode openNewImage(Window parent) throws IOException, Exception {
+    public ImageNode openNewImage(Window parent) throws Exception {
         ImageNode image = null;
         try {
             BufferedImage buffImg = IOHandler.openImage(parent);
@@ -120,6 +120,6 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
     
     @Override
     public ImageNode getBuffer() {
-        return (ImageNode)bufferNode;
+        return bufferNode;
     }
 }

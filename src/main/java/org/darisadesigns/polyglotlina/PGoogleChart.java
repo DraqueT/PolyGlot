@@ -29,14 +29,14 @@ import java.util.Map;
  * particular charts, like pie, bar, graph, etc.
  * @author DThompson
  */
-abstract public class PGoogleChart {
+public abstract class PGoogleChart {
     protected final String caption;
     protected final Map<String, List<Double>> chartVals;
     
     
-    abstract public String getBuildHTML();
+    public abstract String getBuildHTML();
     
-    abstract public String getDisplayHTML();
+    public abstract String getDisplayHTML();
 
     /**
      * Creates chart object. Caption is what chart will be labeled.
@@ -66,7 +66,7 @@ abstract public class PGoogleChart {
     /**
      * Gets name of function to draw chart
      *
-     * @return function name without parenthases
+     * @return function name without parentheses
      */
     public String getFunctionName() {
         return caption.replace(" ", "");

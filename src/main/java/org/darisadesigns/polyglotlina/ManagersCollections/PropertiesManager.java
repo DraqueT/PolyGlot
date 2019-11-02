@@ -44,7 +44,7 @@ import org.w3c.dom.Element;
 public class PropertiesManager {
     private String overrideProgramPath = "";
     private Font conFont = null;
-    private Integer conFontStyle = 0;
+    private Integer conFontStyle = Font.PLAIN;
     private Integer conFontSize = 12;
     private double localFontSize = 12;
     private final PAlphaMap<String, Integer> alphaOrder;
@@ -58,7 +58,6 @@ public class PropertiesManager {
     private boolean localUniqueness = false;
     private boolean overrideRegexFont = false;
     private boolean ignoreCase = false;
-    private boolean enableRomanization = false;
     private boolean disableProcRegex = false;
     private boolean enforceRTL = false;
     private boolean useLocalWordLex = false;
@@ -117,9 +116,7 @@ public class PropertiesManager {
      * @param character character for replacement values to be wiped for
      */
     public void delCharacterReplacement(String character) {
-        if (charRep.containsKey(character)) {
-            charRep.remove(character);
-        }
+        charRep.remove(character);
     }
     
     /**
@@ -147,7 +144,7 @@ public class PropertiesManager {
      * @return
      */
     public Font getFontMenu() {
-        return charisUnicode.deriveFont(0, (float)core.getOptionsManager().getMenuFontSize());
+        return charisUnicode.deriveFont(Font.PLAIN, (float)core.getOptionsManager().getMenuFontSize());
     }
     
     public Font getFontLocal() {
@@ -155,7 +152,7 @@ public class PropertiesManager {
     }
     
     public Font getFontLocal(double size) {
-        return localFont.deriveFont(0, (float)size);
+        return localFont.deriveFont(Font.PLAIN, (float)size);
     }
     
     public void setLocalFont(Font _localFont) {
@@ -177,14 +174,14 @@ public class PropertiesManager {
     }
     
     /**
-     * Gets PolyGlot's cannonical directory, regardless of what the OS returns
+     * Gets PolyGlot's canonical directory, regardless of what the OS returns
      * @return working directory
      */
     // TODO: JAVA 12 UPGRADE: Make certain this works properly (it doesn't)
-    public File getCannonicalDirectory() {
+    public File getCanonicalDirectory() {
         File ret;
         
-        if (overrideProgramPath.length() == 0) {
+        if (overrideProgramPath.isEmpty()) {
             ret = IOHandler.getBaseProgramPath();
         } else {
             ret = new File(overrideProgramPath);
@@ -327,10 +324,6 @@ public class PropertiesManager {
         } catch (Exception e) {
             throw new Exception ("Unable to find or set font: " + _fontFamily + " due to: \n");
         }
-    }
-
-    public void setFontCon(Font _font) {
-        setFontCon(_font, getFontStyle(), getFontSize());
     }
     
     /**
@@ -722,20 +715,6 @@ public class PropertiesManager {
     }
 
     /**
-     * @return the enableRomanization
-     */
-    public boolean isEnableRomanization() {
-        return enableRomanization;
-    }
-
-    /**
-     * @param enableRomanization the enableRomanization to set
-     */
-    public void setEnableRomanization(boolean enableRomanization) {
-        this.enableRomanization = enableRomanization;
-    }
-
-    /**
      * @return the kerningSpace
      */
     public Double getKerningSpace() {
@@ -778,7 +757,7 @@ public class PropertiesManager {
                 }
             }
             
-            // if not blanked, the last characte never matched
+            // if not blanked, the last character never matched
             if (!currentCharacter.isEmpty()) {
                 ret = false;
             }

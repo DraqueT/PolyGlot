@@ -54,7 +54,7 @@ public final class PToDoTree extends JTree {
     private HashMap<TreePath, ToDoNode> nodesCheckingState;
     private HashSet<TreePath> checkedPaths = new HashSet<>();
     private final DictCore core;
-    TreePath clickedPath;
+    private TreePath clickedPath;
 
     public PToDoTree(DictCore _core) {
         super();
@@ -179,7 +179,7 @@ public final class PToDoTree extends JTree {
         });
     }
 
-    public class CheckChangeEvent extends EventObject {
+    public static class CheckChangeEvent extends EventObject {
         public CheckChangeEvent(Object source) {
             super(source);          
         }       
@@ -200,7 +200,7 @@ public final class PToDoTree extends JTree {
   }
     
     public interface CheckChangeEventListener extends EventListener {
-        public void checkStateChanged(CheckChangeEvent event);
+        void checkStateChanged(CheckChangeEvent event);
     }
 
     public void addCheckChangeEventListener(CheckChangeEventListener listener) {

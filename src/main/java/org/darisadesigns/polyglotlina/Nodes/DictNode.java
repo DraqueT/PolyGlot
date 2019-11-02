@@ -27,16 +27,26 @@ import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
  * @author draque
  */
 public abstract class DictNode implements Comparable<DictNode> {
-    protected String value = "";
-    protected Integer id = 0;    
+    protected String value;
+    protected Integer id;    
     private PAlphaMap<String, Integer> alphaOrder = new PAlphaMap<>(); // used for alphabetic ordering of nodes
 
+    public DictNode() {
+        value = "";
+        id = 0;
+    }
+    
+    public DictNode(int _id) {
+        id = _id;
+        value = "";
+    }
+    
     /**
      * Sets a node equal to the argument node
      *
      * @param _node Node to set all values equal to.
      */
-    abstract public void setEqual(DictNode _node) throws ClassCastException;
+    public abstract void setEqual(DictNode _node) throws ClassCastException;
 
     public void setId(Integer _id) {
         id = _id;
@@ -96,7 +106,7 @@ public abstract class DictNode implements Comparable<DictNode> {
                     String mePrefix = me.substring(0, i);
 
                     if (alphaOrder.containsKey(mePrefix)) {
-                        meAlpha = (int) alphaOrder.get(mePrefix);
+                        meAlpha = alphaOrder.get(mePrefix);
                         break;
                     }
                 }
@@ -105,7 +115,7 @@ public abstract class DictNode implements Comparable<DictNode> {
                     String compPrefix = comp.substring(0, i);
 
                     if (alphaOrder.containsKey(compPrefix)) {
-                        compAlpha = (int) alphaOrder.get(compPrefix);
+                        compAlpha = alphaOrder.get(compPrefix);
                         preLen = compPrefix.length(); // record length for substring truncation if current patterns are equal
                         break;
                     }
@@ -145,6 +155,6 @@ public abstract class DictNode implements Comparable<DictNode> {
 
     @Override
     public String toString() {
-        return value.length() == 0 ? " " : value;
+        return value.isEmpty() ? " " : value;
     }
 }

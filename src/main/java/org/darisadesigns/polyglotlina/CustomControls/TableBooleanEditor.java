@@ -34,15 +34,10 @@ import javax.swing.table.TableCellEditor;
  * @author draque
  */
 public class TableBooleanEditor extends AbstractCellEditor implements TableCellEditor {
-    JComponent component = new JCheckBox();
-    ActionListener docListener;
+    private final JComponent component = new JCheckBox();
 
     public void setDocuListener(ActionListener _listener) {
-        docListener = _listener;
-        ((JCheckBox) component).addActionListener(docListener);
-    }
-    
-    public TableBooleanEditor() {
+        ((JCheckBox) component).addActionListener(_listener);
     }
 
     public Component tableColumnEditor(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
@@ -66,10 +61,5 @@ public class TableBooleanEditor extends AbstractCellEditor implements TableCellE
     @Override
     public Object getCellEditorValue() {
         return ((JCheckBox) component).isSelected();
-    }
-    
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 }

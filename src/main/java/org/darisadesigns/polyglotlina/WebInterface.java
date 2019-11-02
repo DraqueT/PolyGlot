@@ -43,7 +43,7 @@ import org.jsoup.Jsoup;
  *
  * @author draque
  */
-public class WebInterface {
+public final class WebInterface {
 
     /**
      * Checks for updates to PolyGlot
@@ -76,13 +76,11 @@ public class WebInterface {
             throw new Exception("Update file not found or has been moved. Please check for updates manually at PolyGlot homepage.");
         }
 
-        if (xmlText.length() != 0) {
+        if (!xmlText.isEmpty()) {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             InputSource is = new InputSource(new StringReader(xmlText));
-            Document doc = builder.parse(is);
-
-            ret = doc;
+            ret = builder.parse(is);
         }
 
         return ret;
@@ -156,11 +154,10 @@ public class WebInterface {
      * representing all of the items in the HTML. Consumers are responsible for
      * identifying objects.
      * @param html HTML to extract from
-     * @param core dictionary core
      * @return 
      * @throws java.io.IOException 
      */
-    public static List<Object> getElementsHTMLBody(String html, DictCore core) throws IOException {
+    public static List<Object> getElementsHTMLBody(String html) throws IOException {
         List<Object> ret = new ArrayList<>();
         String body = html.replaceAll(".*<body>", "");
         body = body.replaceAll("</body>.*", "");
@@ -180,7 +177,7 @@ public class WebInterface {
             } else {
                 // this is plaintext
                 String add = token.trim();
-                if (add.length() != 0) {
+                if (!add.isEmpty()) {
                     ret.add(add + " ");
                 }
             }
@@ -195,13 +192,13 @@ public class WebInterface {
      */
     public static boolean isInternetConnected() {
         String address = "www.google.com";
-        int port = 80;
-        int timeout = 5000;
+        final int PORT = 80;
+        final int TIMEOUT = 5000;
         boolean ret = false;
         
         try {
             try (Socket soc = new Socket()) {
-                soc.connect(new InetSocketAddress(address, port), timeout);
+                soc.connect(new InetSocketAddress(address, PORT), TIMEOUT);
             }
             ret = true;
         } catch (IOException e) {
@@ -210,4 +207,6 @@ public class WebInterface {
         
         return ret;
     }
+
+    private WebInterface() {}
 }

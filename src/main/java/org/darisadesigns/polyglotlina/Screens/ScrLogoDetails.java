@@ -78,7 +78,6 @@ public class ScrLogoDetails extends PFrame {
     private boolean selectOnlyMode = false;
     private boolean curPopulating = false;
     private ScrLogoQuickView quickView = null;
-    private LogoNode singleModeLogo;
 
     /**
      * Creates new form ScrLogoDetails
@@ -86,7 +85,7 @@ public class ScrLogoDetails extends PFrame {
      * @param _core
      */
     public ScrLogoDetails(DictCore _core) {
-        core = _core;
+        super(_core);
         createNew(_core, -1);
     }
 
@@ -97,7 +96,7 @@ public class ScrLogoDetails extends PFrame {
      * @param logoId
      */
     public ScrLogoDetails(DictCore _core, int logoId) {
-        core = _core;
+        super(_core);
         createNew(_core, logoId);
     }
     
@@ -118,7 +117,7 @@ public class ScrLogoDetails extends PFrame {
                 btnDelLogo.setToolTipText(btnDelLogo.getToolTipText() + " (CTRL -)");
             }
         } else {
-            singleModeLogo = (LogoNode) core.getLogoCollection().getNodeById(logoId);
+            LogoNode singleModeLogo = (LogoNode) core.getLogoCollection().getNodeById(logoId);
             List<LogoNode> list = new ArrayList<>();
             list.add(singleModeLogo);
 
@@ -413,7 +412,7 @@ public class ScrLogoDetails extends PFrame {
         }
 
         // interpret blank field as 0 to avoid error below
-        if (txtStrokes.getText().length() == 0) {
+        if (txtStrokes.getText().isEmpty()) {
             curNode.setStrokes(0);
             return;
         }
@@ -486,11 +485,11 @@ public class ScrLogoDetails extends PFrame {
      * lock
      *
      * @param nodeIndex
-     * @param overridePopulationLock
+     * @param overridePopulatingLock
      */
     private void saveRads(int nodeIndex, boolean overridePopulatingLock) {
         // catches case of saving on a delete (obviously bad)
-        if (nodeIndex >= ((DefaultListModel) lstLogos.getModel()).getSize()
+        if (nodeIndex >= lstLogos.getModel().getSize()
                 || nodeIndex < 0) {
             return;
         }
@@ -531,7 +530,7 @@ public class ScrLogoDetails extends PFrame {
      */
     private void saveReadings(int nodeIndex, boolean overridePopulatingLock) {
         // catches case of saving on a delete (obviously bad)
-        if (nodeIndex >= ((DefaultListModel) lstLogos.getModel()).getSize()
+        if (nodeIndex >= lstLogos.getModel().getSize()
                 || nodeIndex < 0) {
             return;
         }
@@ -551,7 +550,7 @@ public class ScrLogoDetails extends PFrame {
         List<String> readList = new ArrayList<>();
 
         for (int i = 0; i < tblReadings.getModel().getRowCount(); i++) {
-            String curReading = (String) ((DefaultTableModel) tblReadings.getModel()).getValueAt(i, 0);
+            String curReading = (String) tblReadings.getModel().getValueAt(i, 0);
 
             readList.add(curReading);
         }
@@ -606,15 +605,15 @@ public class ScrLogoDetails extends PFrame {
         saveRads(lstLogos.getSelectedIndex());
         saveReadings(lstLogos.getSelectedIndex());
 
-        if (fltNotes.getText().trim().length() == 0
-                && fltRadical.getText().trim().length() == 0
-                && fltReading.getText().trim().length() == 0
-                && fltRelatedWord.getText().trim().length() == 0
-                && fltStrokes.getText().trim().length() == 0) {
+        if (fltNotes.getText().trim().isEmpty()
+                && fltRadical.getText().trim().isEmpty()
+                && fltReading.getText().trim().isEmpty()
+                && fltRelatedWord.getText().trim().isEmpty()
+                && fltStrokes.getText().trim().isEmpty()) {
             populateLogographs();
         }
 
-        int strokes = fltStrokes.getText().trim().length() == 0
+        int strokes = fltStrokes.getText().trim().isEmpty()
                 ? 0 : Integer.parseInt(fltStrokes.getText());
 
         populateLogographs(core.getLogoCollection().getFilteredList(
@@ -633,7 +632,7 @@ public class ScrLogoDetails extends PFrame {
      * @return true if valid, false otherwise
      */
     private boolean checkStrokeFilter() {
-        if (fltStrokes.getText().length() != 0) {
+        if (!fltStrokes.getText().isEmpty()) {
             try {
                 Integer.parseInt(fltStrokes.getText());
             } catch (NumberFormatException e) {
@@ -741,11 +740,11 @@ public class ScrLogoDetails extends PFrame {
 
         while (radIt.hasNext()) {
             try {
-                LogoNode radNode = (LogoNode) radIt.next();
+                LogoNode radNode = radIt.next();
                 radModel.addElement(radNode);
             } catch (Exception e) {
                 // do nothing
-                // IOHandler.writeErrorLog(e);
+                IOHandler.writeErrorLog(e);
             }
         }
 
@@ -753,7 +752,7 @@ public class ScrLogoDetails extends PFrame {
 
         // Populate readings
         Iterator<String> procIt = curNode.getReadings().iterator();
-// TODO: figure out a way to make this respect RTL languages... maybe just insert char here? and cut at save time? Messy but effective...
+        // TODO: figure out a way to make this respect RTL languages... maybe just insert char here? and cut at save time? Messy but effective...
 
         DefaultTableModel procModel = new DefaultTableModel();
         procModel.addColumn("Readings");
@@ -958,7 +957,6 @@ public class ScrLogoDetails extends PFrame {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

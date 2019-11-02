@@ -30,7 +30,6 @@ import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
-import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -57,9 +56,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -98,7 +95,7 @@ import org.xml.sax.SAXException;
  *
  * @author draque
  */
-public class IOHandler {
+public final class IOHandler {
 
     /**
      * Opens and returns image from URL given (can be file path)
@@ -109,30 +106,6 @@ public class IOHandler {
      */
     public static BufferedImage getImage(String filePath) throws IOException {
         return ImageIO.read(new File(filePath));
-    }
-
-    /**
-     * Queries user for image file, and returns it
-     *
-     * @param parent the parent window from which this is called
-     * @return the image chosen by the user, null if canceled
-     * @throws IOException If the image cannot be opened for some reason
-     */
-    public static BufferedImage openImageFile(Component parent) throws IOException {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Open Images");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "gif", "jpg", "jpeg", "bmp", "png", "wbmp");
-        chooser.setFileFilter(filter);
-        String fileName;
-        chooser.setCurrentDirectory(new File("."));
-
-        if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
-            fileName = chooser.getSelectedFile().getAbsolutePath();
-        } else {
-            return null;
-        }
-
-        return getImage(fileName);
     }
 
     /**
@@ -148,9 +121,7 @@ public class IOHandler {
         File tmpFile = File.createTempFile("POLYGLOT", ".html");
         Files.write(tmpFile.toPath(), contents.getBytes());
         tmpFile.deleteOnExit();
-        URI ret = createURIFromFullPath(tmpFile.getAbsolutePath());
-
-        return ret;
+        return createURIFromFullPath(tmpFile.getAbsolutePath());
     }
 
     public static URI createURIFromFullPath(String path) throws URISyntaxException, IOException {
@@ -178,7 +149,7 @@ public class IOHandler {
         return uri;
     }
 
-    public static byte[] getByteArrayFromFile(File file) throws FileNotFoundException, IOException {
+    public static byte[] getByteArrayFromFile(File file) throws IOException {
         try (InputStream inputStream = new FileInputStream(file)) {
             return streamToBytArray(inputStream);
         }
@@ -205,13 +176,13 @@ public class IOHandler {
     }
 
     /**
-     * Used for snagging cachable versions of files
+     * Used for snagging catchable versions of files
      *
      * @param filePath path of file to fetch as byte array
      * @return byte array of file at given path
      * @throws java.io.FileNotFoundException
      */
-    public static byte[] getFileByteArray(String filePath) throws FileNotFoundException, IOException {
+    public static byte[] getFileByteArray(String filePath) throws IOException {
         byte[] ret;
         final File toByteArrayFile = new File(filePath);
 
@@ -233,7 +204,7 @@ public class IOHandler {
     public static CustHandler getHandlerFromFile(String _fileName, DictCore _core) throws IOException {
         CustHandler ret = null;
 
-        if (IOHandler.isFileZipArchive(_fileName)) {
+        if (isFileZipArchive(_fileName)) {
             try (ZipFile zipFile = new ZipFile(_fileName)) {
                 ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
                 try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
@@ -465,7 +436,7 @@ public class IOHandler {
      * @return true is passed file is a zip archive
      * @throws java.io.FileNotFoundException
      */
-    public static boolean isFileZipArchive(String _fileName) throws FileNotFoundException, IOException {
+    public static boolean isFileZipArchive(String _fileName) throws IOException {
         File file = new File(_fileName);
 
         // ignore directories and files too small to possibly be archives
@@ -496,13 +467,13 @@ public class IOHandler {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
             StringBuilder sb = new StringBuilder();
-            sb.append(writer.getBuffer().toString());
-            byte[] xmlData = sb.toString().getBytes("UTF-8");
+            sb.append(writer.getBuffer());
+            byte[] xmlData = sb.toString().getBytes(StandardCharsets.UTF_8);
 
             final File f = makeTempSaveFile(core);
 
             try (FileOutputStream fileOutputStream = new FileOutputStream(f)) {
-                try (ZipOutputStream out = new ZipOutputStream(fileOutputStream, Charset.forName("ISO-8859-1"))) {
+                try (ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
                     ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME);
                     out.putNextEntry(e);
 
@@ -528,7 +499,6 @@ public class IOHandler {
                     writeLog += writePriorStatesToArchive(out, core);
 
                     out.finish();
-                    out.close();
                 }
             }
 
@@ -552,7 +522,7 @@ public class IOHandler {
             core.getReversionManager().addVersion(xmlData, saveTime);
         }
 
-        if (writeLog.length() != 0) {
+        if (!writeLog.isEmpty()) {
             InfoBox.warning("File Save Issues", "Problems encountered when saving file " + _fileName + writeLog, null);
         }
     }
@@ -587,11 +557,10 @@ public class IOHandler {
         try {
             out.putNextEntry(new ZipEntry(PGTUtil.REVERSION_SAVE_PATH));
 
-            for (Integer i = 0; i < reversionList.size(); i++) {
+            for (int i = 0; i < reversionList.size(); i++) {
                 ReversionNode node = reversionList.get(i);
 
-                out.putNextEntry(new ZipEntry(PGTUtil.REVERSION_SAVE_PATH + PGTUtil.REVERSION_BASE_FILE_NAME
-                        + i.toString()));
+                out.putNextEntry(new ZipEntry(PGTUtil.REVERSION_SAVE_PATH + PGTUtil.REVERSION_BASE_FILE_NAME + i));
                 out.write(node.value);
                 out.closeEntry();
             }
@@ -611,19 +580,19 @@ public class IOHandler {
                 for (LogoNode curNode : logoNodes) {
                     try {
                         out.putNextEntry(new ZipEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
-                                + curNode.getId().toString() + ".png"));
+                                + curNode.getId() + ".png"));
 
                         BufferedImage write = PGTUtil.toBufferedImage(curNode.getLogoGraph());
                         ImageIO.write(write, "png", out);
 
                         out.closeEntry();
                     } catch (IOException e) {
-                        IOHandler.writeErrorLog(e);
+                        writeErrorLog(e);
                         writeLog += "\nUnable to save logograph: " + e.getLocalizedMessage();
                     }
                 }
             } catch (IOException e) {
-                IOHandler.writeErrorLog(e);
+                writeErrorLog(e);
                 writeLog += "\nUnable to save Logographs: " + e.getLocalizedMessage();
             }
         }
@@ -646,17 +615,17 @@ public class IOHandler {
 
                     try {
                         out.putNextEntry(new ZipEntry(PGTUtil.GRAMMAR_SOUNDS_SAVE_PATH
-                                + curId.toString() + ".raw"));
+                                + curId + ".raw"));
                         out.write(curSound);
                         out.closeEntry();
                     } catch (IOException e) {
-                        IOHandler.writeErrorLog(e);
+                        writeErrorLog(e);
                         writeLog += "\nUnable to save sound: " + e.getLocalizedMessage();
                     }
 
                 }
             } catch (IOException e) {
-                IOHandler.writeErrorLog(e);
+                writeErrorLog(e);
                 writeLog += "\nUnable to save sounds: " + e.getLocalizedMessage();
             }
         }
@@ -672,18 +641,18 @@ public class IOHandler {
                 for (ImageNode curNode : imageNodes) {
                     try {
                         out.putNextEntry(new ZipEntry(PGTUtil.IMAGES_SAVE_PATH
-                                + curNode.getId().toString() + ".png"));
+                                + curNode.getId() + ".png"));
 
                         ImageIO.write(curNode.getImage(), "png", out);
 
                         out.closeEntry();
                     } catch (IOException e) {
-                        IOHandler.writeErrorLog(e);
+                        writeErrorLog(e);
                         writeLog += "\nUnable to save image: " + e.getLocalizedMessage();
                     }
                 }
             } catch (IOException e) {
-                IOHandler.writeErrorLog(e);
+                writeErrorLog(e);
                 writeLog += "\nUnable to save Images: " + e.getLocalizedMessage();
             }
         }
@@ -732,7 +701,7 @@ public class IOHandler {
      * @throws java.io.IOException
      */
     public static void loadImageAssets(ImageCollection imageCollection,
-            String fileName) throws IOException, Exception {
+            String fileName) throws Exception {
         try (ZipFile zipFile = new ZipFile(fileName)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
             ZipEntry entry;
@@ -768,25 +737,6 @@ public class IOHandler {
     }
 
     /**
-     * Encapsulates image loading to keep IO within IOHandler class
-     *
-     * @param fileName path of image
-     * @return buffered image loaded
-     * @throws IOException on file read error
-     */
-    public BufferedImage fetchImageFromLocation(String fileName) throws IOException {
-        try (InputStream imageStream = new FileInputStream(fileName)) {
-            return ImageIO.read(imageStream);
-        }
-    }
-
-    public static byte[] getBufferedImageByteArray(BufferedImage bufferedImage) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(bufferedImage, "png", baos);
-        return baos.toByteArray();
-    }
-
-    /**
      * loads all images into their logographs from archive and images into the
      * generalized image collection
      *
@@ -801,7 +751,7 @@ public class IOHandler {
             while (it.hasNext()) {
                 LogoNode curNode = it.next();
                 ZipEntry imgEntry = zipFile.getEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
-                        + curNode.getId().toString() + ".png");
+                        + curNode.getId() + ".png");
 
                 BufferedImage img;
                 try (InputStream imageStream = zipFile.getInputStream(imgEntry)) {
@@ -822,11 +772,11 @@ public class IOHandler {
     public static void loadReversionStates(ReversionManager reversionManager,
             String fileName) throws IOException {
         try (ZipFile zipFile = new ZipFile(fileName)) {
-            Integer i = 0;
+            int i = 0;
             DictCore tmpCore;
 
             ZipEntry reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
-                    + PGTUtil.REVERSION_BASE_FILE_NAME + i.toString());
+                    + PGTUtil.REVERSION_BASE_FILE_NAME + i);
 
             while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
                 tmpCore = new DictCore();
@@ -835,7 +785,7 @@ public class IOHandler {
                         tmpCore.getLastSaveTime());
                 i++;
                 reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
-                        + PGTUtil.REVERSION_BASE_FILE_NAME + i.toString());
+                        + PGTUtil.REVERSION_BASE_FILE_NAME + i);
             }
 
             // remember to load latest state in addition to all prior ones
@@ -856,10 +806,6 @@ public class IOHandler {
      */
     public static void exportFont(String exportPath, String dictionaryPath) throws IOException {
         try (ZipFile zipFile = new ZipFile(dictionaryPath)) {
-            if (zipFile == null) {
-                throw new IOException("Dictionary must be saved before font can be exported.");
-            }
-
             // ensure export file has the proper extension
             if (!exportPath.toLowerCase().endsWith(".ttf")) {
                 exportPath += ".ttf";
@@ -899,7 +845,7 @@ public class IOHandler {
      * Loads any related grammar recordings into the passed grammar manager via
      * id
      *
-     * @param _fileName name of file to load sound recordings from
+     * @param fileName name of file to load sound recordings from
      * @param grammarManager grammar manager to populate with sounds
      * @throws Exception on sound load errors
      */
@@ -920,7 +866,7 @@ public class IOHandler {
                     }
 
                     String soundPath = PGTUtil.GRAMMAR_SOUNDS_SAVE_PATH
-                            + curNode.getRecordingId().toString() + ".raw";
+                            + curNode.getRecordingId() + ".raw";
                     ZipEntry soundEntry = zipFile.getEntry(soundPath);
 
                     byte[] sound = null;
@@ -928,10 +874,10 @@ public class IOHandler {
                     try (InputStream soundStream = zipFile.getInputStream(soundEntry)) {
                         sound = streamToBytArray(soundStream);
                     } catch (IOException e) {
-                        IOHandler.writeErrorLog(e);
+                        writeErrorLog(e);
                         loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
                     } catch (Exception e) {
-                        IOHandler.writeErrorLog(e);
+                        writeErrorLog(e);
                         loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
                     }
 
@@ -944,7 +890,7 @@ public class IOHandler {
             }
         }
 
-        if (loadLog.length() != 0) {
+        if (!loadLog.isEmpty()) {
             throw new Exception(loadLog);
         }
     }
@@ -969,7 +915,7 @@ public class IOHandler {
 
         try (Writer f0 = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(core.getWorkingDirectory().getAbsolutePath()
-                        + File.separator + PGTUtil.POLYGLOT_INI), "UTF-8"))) {
+                        + File.separator + PGTUtil.POLYGLOT_INI), StandardCharsets.UTF_8))) {
             OptionsManager opMan = core.getOptionsManager();
             String newLine = System.getProperty("line.separator");
             String nextLine;
@@ -1018,7 +964,7 @@ public class IOHandler {
                     + (opMan.isAnimateWindows() ? PGTUtil.TRUE : PGTUtil.FALSE);
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.OPTIONS_MENU_FONT_SIZE + "=" + Double.toString(opMan.getMenuFontSize());
+            nextLine = PGTUtil.OPTIONS_MENU_FONT_SIZE + "=" + opMan.getMenuFontSize();
             f0.write(nextLine + newLine);
 
             nextLine = PGTUtil.OPTIONS_NIGHT_MODE + "="
@@ -1030,34 +976,6 @@ public class IOHandler {
 
             nextLine = PGTUtil.OPTIONS_TODO_DIV_LOCATION + "=" + opMan.getToDoBarPosition();
             f0.write(nextLine + newLine);
-        }
-    }
-
-    /**
-     * Gets Unicode compatible font as byte array
-     *
-     * @return byte array of font's file
-     * @throws FileNotFoundException if this throws, something is wrong
-     * internally
-     * @throws IOException if this throws, something is wrong internally
-     */
-    public byte[] getUnicodeFontByteArray() throws FileNotFoundException, IOException {
-        try (InputStream localStream = this.getClass().getResourceAsStream(PGTUtil.UNICODE_FONT_LOCATION)) {
-            return streamToBytArray(localStream);
-        }
-    }
-
-    /**
-     * Gets Unicode compatible font as byte array
-     *
-     * @return byte array of font's file
-     * @throws FileNotFoundException if this throws, something is wrong
-     * internally
-     * @throws IOException if this throws, something is wrong internally
-     */
-    public byte[] getUnicodeFontItalicByteArray() throws FileNotFoundException, IOException {
-        try (InputStream localStream = this.getClass().getResourceAsStream(PGTUtil.UNICODE_FONT_ITALIC_LOCATION)) {
-            return streamToBytArray(localStream);
         }
     }
 
@@ -1100,7 +1018,7 @@ public class IOHandler {
             }
         }
 
-        if (!ret.exists()) {
+        if (ret  != null && !ret.exists()) {
             ret = null;
         }
 
@@ -1180,14 +1098,14 @@ public class IOHandler {
         }
     }
     
-    public static File gettErrorLogFile() {
+    public static File getErrorLogFile() {
         return new File(PGTUtil.getErrorDirectory().getAbsolutePath() 
                 + File.separator + PGTUtil.ERROR_LOG_FILE);
     }
     
     public static String getErrorLog() throws FileNotFoundException {
         String ret = "";
-        File errorLog = gettErrorLogFile();
+        File errorLog = getErrorLogFile();
 
         if (errorLog.exists()) {
             Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z");
@@ -1225,46 +1143,6 @@ public class IOHandler {
         }
 
         return ret;
-    }
-    
-    /**
-     * Unzips given archive to destination
-     *
-     * @param archive
-     * @param destination
-     * @throws java.io.IOException If target archive, location does not exist,
-     * target is not a recognized format, or on un-packaging error
-     */
-    public static void unzipToLocation(File archive, Path destination) throws IOException {
-        if (!archive.exists()) {
-            throw new IOException("File: " + archive.getAbsolutePath() + " does not exist.");
-        } else if (isFileZipArchive(archive.getAbsolutePath())) {
-            try (ZipFile file = new ZipFile(archive)) {
-                FileSystem fileSystem = FileSystems.getDefault();
-                Enumeration<? extends ZipEntry> entries = file.entries();
-
-                while (entries.hasMoreElements()) {
-                    ZipEntry entry = entries.nextElement();
-
-                    if (entry.isDirectory()) {
-                        Files.createDirectories(fileSystem.getPath(destination + File.separator + entry.getName()));
-                    } else {
-                        InputStream is = file.getInputStream(entry);
-                        BufferedInputStream bis = new BufferedInputStream(is);
-                        String uncompressedFileName = destination + File.separator + entry.getName();
-                        Path uncompressedFilePath = fileSystem.getPath(uncompressedFileName);
-                        Files.createFile(uncompressedFilePath);
-                        try (FileOutputStream fileOutput = new FileOutputStream(uncompressedFileName)) {
-                            while (bis.available() > 0) {
-                                fileOutput.write(bis.read());
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            throw new IOException("File: " + archive.getAbsolutePath() + " is not an archive.");
-        }
     }
 
     public static File unzipResourceToTempLocation(String resourceLocation)throws IOException {
@@ -1307,9 +1185,8 @@ public class IOHandler {
      *
      * @param arguments command to run as [0], with arguments following
      * @return String array with two entries. [0] = Output, [1] = Error Output
-     * @throws InterruptedException
      */
-    public static String[] runAtConsole(String[] arguments) throws InterruptedException {
+    public static String[] runAtConsole(String[] arguments) {
         String output = "";
         String error = "";
 
@@ -1346,15 +1223,10 @@ public class IOHandler {
     public static String getTerminalJavaVersion() {
         String ret = "";
         String[] command = {PGTUtil.JAVA8_JAVA_COMMAND, PGTUtil.JAVA8_VERSION_ARG};
-        try {
             String[] result = runAtConsole(command);
 
-            // only return result if no error
-            if (result[1].isEmpty()) {
-                ret = result[0];
-            }
-        } catch (InterruptedException e) {
-            writeErrorLog(e, "Unable to run terminal command: " + Arrays.toString(command));
+        if (result[1].isEmpty()) {
+            ret = result[0];
         }
 
         return ret;
@@ -1368,4 +1240,6 @@ public class IOHandler {
     public static boolean isJavaAvailableInTerminal() {
         return !getTerminalJavaVersion().isEmpty();
     }
+
+    private IOHandler() {}
 }

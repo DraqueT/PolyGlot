@@ -90,7 +90,7 @@ public class IOHandlerTest {
             int systemInfoLength = IOHandler.getSystemInformation().length();
 
             // off by one due to concatination effect when adding system info (newline)
-            assertTrue(logLength == PGTUtil.MAX_LOG_CHARACTERS + systemInfoLength + 1);
+            assertEquals(logLength, PGTUtil.MAX_LOG_CHARACTERS + systemInfoLength + 1);
         } catch (FileNotFoundException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -120,37 +120,25 @@ public class IOHandlerTest {
     @Test
     public void testGoodConsoleCommand() {
         System.out.println("Testing good console command");
-        
-        try {
-            String[] result = IOHandler.runAtConsole(new String[]{"java", "--version"});
+        String[] result = IOHandler.runAtConsole(new String[]{"java", "--version"});
 
-            assertTrue(!result[0].isEmpty()); // various versions of Java return every damned thing you can imagine... just test that it's SOMETHING
-            assertTrue(result[1].isEmpty());
-        } catch (InterruptedException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
-            fail(e);
-        }
+        assertTrue(!result[0].isEmpty()); // various versions of Java return every damned thing you can imagine... just test that it's SOMETHING
+        assertTrue(result[1].isEmpty());
     }
     
     @Test
     public void testBadConsoleCommand() {
         System.out.println("Testing bad console command");
-        
-        try {
-            String[] result = IOHandler.runAtConsole(new String[]{"WAT", "AM", "COMAND?!"});
+        String[] result = IOHandler.runAtConsole(new String[]{"WAT", "AM", "COMAND?!"});
 
-            assertTrue(result[0].isEmpty());
-            assertTrue(!result[1].isEmpty()); // different errors for different systems, but should be SOMETHING
-        } catch (InterruptedException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
-            fail(e);
-        }
+        assertTrue(result[0].isEmpty());
+        assertTrue(!result[1].isEmpty()); // different errors for different systems, but should be SOMETHING
     }
     
     @Test
     public void testGetTerminalJavaVersion() {
         System.out.println("getTerminalJavaVersion");
-        assertTrue(!IOHandler.getTerminalJavaVersion().isEmpty());
+        assertFalse(IOHandler.getTerminalJavaVersion().isEmpty());
     }
     
     @Test

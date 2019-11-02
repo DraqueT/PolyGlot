@@ -31,7 +31,7 @@ import javax.swing.JList;
 public class PList<N> extends JList<N> {
     private DictCore core;
     private boolean isConFont;
-    boolean ignoreRepaint = false;
+    private boolean ignoreRepaint = false;
     
     public PList(DictCore _core, boolean _isConFont) {        
         core = _core;
@@ -48,7 +48,7 @@ public class PList<N> extends JList<N> {
             return;
         }
         
-        if (core != null) { // initial paint happens before initilization complete
+        if (core != null) { // initial paint happens before initialization complete
             Font testFont = core.getPropertiesManager().getFontCon();
             ignoreRepaint = true;
             if (isConFont) {

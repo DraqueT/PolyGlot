@@ -509,7 +509,7 @@ public class IPAHandler {
      * @throws Exception on any playback error, unknown IPA character, unknown IPA sound library
      */
     private void playChar(String c, IPALibrary ipaLibrary) throws Exception {
-        if (c.length() == 0) {
+        if (c.isEmpty()) {
             return;
         }
 
@@ -554,7 +554,7 @@ public class IPAHandler {
         
         public final String label;
         
-        private IPALibrary(String label) {
+        IPALibrary(String label) {
             this.label = label;
         }
         

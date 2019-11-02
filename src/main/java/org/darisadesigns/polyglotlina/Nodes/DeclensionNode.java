@@ -42,6 +42,10 @@ public class DeclensionNode extends DictNode {
     private final Map<Integer, DeclensionDimension> dimensions = new HashMap<>();
     private DeclensionDimension buffer = new DeclensionDimension(-1);
     
+    public DeclensionNode(Integer _declensionId) {
+        super(_declensionId);
+    }
+    
     /**
      * gets dimensional buffer
      * @return current buffer
@@ -125,24 +129,11 @@ public class DeclensionNode extends DictNode {
     }
     
     /**
-     * eliminates all dimensions from node
-     */
-    public void clearDimensions() {
-        dimensions.clear();
-    }
-    
-    /**
      * Deletes a dimension from this declension (it rhymes!)
      * @param id id of dimension to be deleted
      */
     public void deleteDimension(Integer id) {
-        if (dimensions.containsKey(id)) {
-            dimensions.remove(id);
-        }
-    }
-        
-    public DeclensionNode(Integer _declentionId) {
-        id = _declentionId;
+        dimensions.remove(id);
     }
     
     public void setNotes(String _notes) {
@@ -189,7 +180,7 @@ public class DeclensionNode extends DictNode {
     public String getCombinedDimId() {
         String ret = combinedDimId;
         if (dimensionless) {
-            // normal dimensional ids are comma delimited with guranteed commas before and after. This should be unique.
+            // normal dimensional ids are comma delimited with guaranteed commas before and after. This should be unique.
             ret = id.toString();
         }
         

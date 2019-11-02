@@ -23,7 +23,6 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.AWTEvent;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -37,19 +36,12 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import javax.accessibility.Accessible;
 import javax.swing.AbstractAction;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.KeyStroke;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListModel;
 import javax.swing.plaf.basic.ComboPopup;
 
 public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> implements MouseListener {
@@ -122,7 +114,7 @@ public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> imp
         if (model instanceof PDefaultComboBoxModel) {
             super.setModel(model);
         } else {
-            throw new IllegalArgumentException("PCheckCombobox requires a PDefaultComboBoxModel model.");
+            throw new IllegalArgumentException("PCheckComboBox requires a PDefaultComboBoxModel model.");
         }    
     }
     
@@ -223,7 +215,7 @@ public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> imp
         }
         
         String text = getCheckedItemString();
-        if (text.length() > 0) { // 0 length text makes bounding box explode
+        if (!text.isEmpty()) { // 0 length text makes bounding box explode
             FontMetrics fm = antiAlias.getFontMetrics(getFont());
             Rectangle2D rec = fm.getStringBounds(text, antiAlias);
             int stringW = (int) Math.round(rec.getWidth());
@@ -266,47 +258,5 @@ public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> imp
         }
         
         return ret.isEmpty() ? "Select Values" : ret;
-    }
-}
-
-class PCheckBoxCellRenderer<E extends PCheckableItem> implements ListCellRenderer<E> {
-
-    private final JLabel label;
-    private final PCheckBox check;
-    private final DictCore core;
-
-    public PCheckBoxCellRenderer(DictCore _core) {
-        core = _core;
-        label = new JLabel(" ");
-        check = new PCheckBox(core);
-    }
-
-    @Override
-    public Component getListCellRendererComponent(JList<? extends E> list, E value, int index, boolean isSelected, boolean cellHasFocus) {
-        if (index < 0) {
-            String txt = getCheckedItemString(list.getModel());
-            label.setText(txt.isEmpty() ? " " : txt);
-            return label;
-        } else {
-            check.setText(Objects.toString(value, ""));
-            check.setSelected(value.isSelected());
-            if (isSelected) {
-                check.setBackground(list.getSelectionBackground());
-                check.setForeground(list.getSelectionForeground());
-            } else {
-                check.setBackground(list.getBackground());
-                check.setForeground(list.getForeground());
-            }
-            return check;
-        }
-    }
-
-    private static <E extends PCheckableItem> String getCheckedItemString(ListModel<E> model) {
-        return IntStream.range(0, model.getSize())
-                .mapToObj(model::getElementAt)
-                .filter(PCheckableItem::isSelected)
-                .map(Objects::toString)
-                .sorted()
-                .collect(Collectors.joining(", "));
     }
 }

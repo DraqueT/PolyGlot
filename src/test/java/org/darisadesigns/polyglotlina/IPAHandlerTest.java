@@ -30,9 +30,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author draque
  */
 public class IPAHandlerTest {
-    
-    public IPAHandlerTest() {
-    }
 
     @Test
     public void testPlaySounds() {
@@ -42,12 +39,12 @@ public class IPAHandlerTest {
             IPAHandler handler = new IPAHandler(null);
 
             try {
-                Class<?> classs = handler.getClass();
-                Field field = classs.getDeclaredField("charMap");
+                Class<?> myClass = handler.getClass();
+                Field field = myClass.getDeclaredField("charMap");
                 field.setAccessible(true);
                 Map<String, String> charMap = (Map<String, String>)field.get(handler);
 
-                field = classs.getDeclaredField("soundRecorder");
+                field = myClass.getDeclaredField("soundRecorder");
                 field.setAccessible(true);
                 SoundRecorder soundRecorder = (SoundRecorder)field.get(handler);
 
@@ -78,7 +75,6 @@ public class IPAHandlerTest {
 
             field = classs.getDeclaredField("soundRecorder");
             field.setAccessible(true);
-            SoundRecorder soundRecorder = (SoundRecorder)field.get(handler);
 
             String results = "";
             String expectedResults = "";

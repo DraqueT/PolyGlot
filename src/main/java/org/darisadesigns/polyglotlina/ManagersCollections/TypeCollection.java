@@ -20,17 +20,13 @@
 
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.DictNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -39,10 +35,15 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class TypeCollection extends DictionaryCollection<TypeNode> {
-    final DictCore core;
+    private final DictCore core;
 
+    public TypeCollection(DictCore _core) {
+        super(new TypeNode());
+        core = _core;
+    }
+    
     public TypeNode getBufferType() {
-        return (TypeNode) bufferNode;
+        return bufferNode;
     }
     
     @Override
@@ -60,93 +61,6 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
         bufferNode = new TypeNode();
         
         return super.addNode(_addType);
-    }
-    
-    public TypeCollection(DictCore _core) {
-        bufferNode = new TypeNode();
-        core = _core;
-}
-
-    /**
-     * Tests whether type based requirements met for word
-     *
-     * @param word word to check
-     * @return empty if no problems, string with problem description otherwise
-     */
-    public String typeRequirementsMet(ConWord word) {
-        String ret = "";
-
-        TypeNode type = this.getNodeById(word.getWordTypeId());
-
-        // all requirements met if no type set at all.
-        if (type != null) {
-            String procVal;
-            
-            try {
-                procVal = word.getPronunciation();
-            } catch (Exception e) {
-                // IOHandler.writeErrorLog(e);
-                procVal = "<ERROR>";
-            }
-            
-            if (type.isDefMandatory() && word.getDefinition().length() == 0) {
-                ret = type.getValue() + " requires a definition.";
-            } else if (type.isProcMandatory() && procVal.length() == 0) {
-                ret = type.getValue() + " requires a pronunciation.";
-            }
-        }
-
-        return ret;
-    }
-    
-    /**
-     * This is a method used for finding nodes by name. Only for use when loading
-     * old PolyGlot files. DO NOT rely on names for uniqueness moving forward.
-     * @param name name of part of speech to search for
-     * @return matching part of speech. Throws error otherwise
-     * @throws java.lang.Exception if not found
-     */
-    public TypeNode findByName(String name) throws Exception {
-       TypeNode ret = null;
-       
-       for (Object n : nodeMap.values()) {
-           TypeNode curNode = (TypeNode)n;
-           if (curNode.getValue().toLowerCase().equals(name.toLowerCase())) {
-               ret = curNode;
-               break;
-           }
-       }
-       
-       if (ret == null) {
-           throw new Exception("Unable to find part of speech: " + name);
-       }
-       return ret; 
-    }
-
-    /**
-     * Finds/returns type (if extant) by name
-     *
-     * @param _name
-     * @return found type node, null otherwise
-     */
-    public TypeNode findTypeByName(String _name) {
-        TypeNode ret = null;
-
-        if (_name.length() != 0) {
-            Iterator<Entry<Integer, TypeNode>> it = nodeMap.entrySet().iterator();
-            Entry<Integer, TypeNode> curEntry;
-
-            while (it.hasNext()) {
-                curEntry = it.next();
-
-                if (curEntry.getValue().getValue().toLowerCase().equals(_name.toLowerCase())) {
-                    ret = curEntry.getValue();
-                    break;
-                }
-            }
-        }
-
-        return ret;
     }
 
     /**
@@ -220,24 +134,6 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
         Collections.sort(retList);
 
         return retList;
-    }
-
-    public boolean nodeExists(String findType) {
-        boolean ret = false;
-        Iterator<Map.Entry<Integer, TypeNode>> searchList = nodeMap.entrySet()
-                .iterator();
-
-        while (searchList.hasNext()) {
-            Map.Entry<Integer, TypeNode> curEntry = searchList.next();
-            TypeNode curType = curEntry.getValue();
-
-            if (curType.getValue().equals(findType)) {
-                ret = true;
-                break;
-            }
-        }
-
-        return ret;
     }
     
     public boolean nodeExists(int id) {

@@ -66,13 +66,13 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      */
     public Entry<Integer, Integer>[] getApplicableClasses() {
         Object[] classVals = applyToClasses.entrySet().toArray();
-        Entry[] ret = new Entry[classVals.length];
+        Entry<Integer, Integer>[] ret = new Entry[classVals.length];
         
         for (int i = 0; i < classVals.length; i++) {
-            ret[i] = (Entry)classVals[i];
+            ret[i] = (Entry<Integer, Integer>)classVals[i];
         }
         
-        return (Entry[])ret;
+        return ret;
     }
     
     /**
@@ -115,7 +115,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         boolean ret = true;
         
         if (this != o) {
-            if (o != null && o instanceof DeclensionGenRule) {
+            if (o instanceof DeclensionGenRule) {
                 DeclensionGenRule comp = (DeclensionGenRule)o;
                 ret = this.typeId == comp.typeId
                         && this.regex.equals(comp.regex)
@@ -241,16 +241,6 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      * Returns true if this rule applies to a word of a given class. -1 indicates a test for cases of no class
      * @param classId word class to test
      * @param valueId value of word class to test
-     * @return true if the rule should apply to this class value
-     */
-    public boolean doesRuleApplyToClassValue(Integer classId, Integer valueId) {
-        return this.doesRuleApplyToClassValue(classId, valueId, false);
-    }
-    
-    /**
-     * Returns true if this rule applies to a word of a given class. -1 indicates a test for cases of no class
-     * @param classId word class to test
-     * @param valueId value of word class to test
      * @param overrideDefault set to true if ignoring "All" value (-1)
      * @return true if the rule should apply to this class value
      */
@@ -286,7 +276,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         
         debugString = "Rule: " + name + "\n";
         
-        // if -1 opresent in this rule, apply to all. Otherwise test against word classes. Skips mismatching PoS
+        // if -1 present in this rule, apply to all. Otherwise test against word classes. Skips mismatching PoS
         if (typeId == wordTypeId && (!wordTypeHasClasses || applyToClasses.containsKey(-1))) {
             ret = true;
         } else if (typeId == wordTypeId) {
@@ -332,9 +322,8 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
             wipeClassFilter();
             applyToClasses.put(classId, -1);
         } else if (!applyToClasses.containsKey(classId)) {
-            if (applyToClasses.containsKey(-1)) { // cannot contain both All and any other selection
-                applyToClasses.remove(-1);
-            }
+            // cannot contain both All and any other selection
+            applyToClasses.remove(-1);
             applyToClasses.put(classId, valueId);
         } else {
             applyToClasses.replace(classId, valueId);
@@ -402,8 +391,8 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         // record each class value to apply this rule to
         applyToClasses.entrySet().forEach((curEntry) -> {
             Element applyToClassValue = doc.createElement(PGTUtil.DEC_GEN_RULE_APPLY_TO_CLASS_VALUE_XID);
-            applyToClassValue.appendChild(doc.createTextNode(curEntry.getKey().toString() 
-                    + "," + curEntry.getValue().toString()));
+            applyToClassValue.appendChild(doc.createTextNode(curEntry.getKey()
+                    + "," + curEntry.getValue()));
             applyToClassesEntry.appendChild(applyToClassValue);
         });
         

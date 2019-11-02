@@ -33,7 +33,7 @@ import javax.xml.transform.TransformerException;
  *
  * @author draque
  */
-public class Java8Bridge {
+public final class Java8Bridge {
 
     public static File getNewJavaBridgeLocation() throws IOException {
         Path tmpDirectory = Files.createTempDirectory("PolyGlot");
@@ -54,7 +54,7 @@ public class Java8Bridge {
             boolean printGrammar,
             boolean printWordEtymologies,
             boolean printAllConjugations,
-            DictCore core) throws IOException, InterruptedException {
+            DictCore core) throws IOException {
         
         File bridge = PGTUtil.getJava8BridgeLocation();
         File tmpLangFile = createTmpLangFile(core);
@@ -92,10 +92,9 @@ public class Java8Bridge {
      * @param sheetNumber sheet number to convert
      * @return csv file temp path to created csv file
      * @throws IOException
-     * @throws InterruptedException 
      */
     public static File excelToCvs(String excelFile, int sheetNumber)
-            throws IOException, InterruptedException {
+            throws IOException {
         File bridge = PGTUtil.getJava8BridgeLocation();
         File tmpTarget = File.createTempFile("PolyGlotTmp", ".csv");
         
@@ -126,10 +125,9 @@ public class Java8Bridge {
      * @param separateDeclensions whether to separate parts of speech into
      * separate pages for declension values
      * @throws java.io.IOException
-     * @throws java.lang.InterruptedException
      */
     public static void exportExcelDict(String fileName, DictCore core,
-            boolean separateDeclensions) throws IOException, InterruptedException {
+            boolean separateDeclensions) throws IOException {
         if (!IOHandler.isJavaAvailableInTerminal()) {
             throw new IOException("Java runtime missing.");
         }
@@ -156,7 +154,7 @@ public class Java8Bridge {
         }
     }
 
-    public class OutputInterceptor extends PrintStream {
+    public static class OutputInterceptor extends PrintStream {
         private String intercepted = "";
 
         public OutputInterceptor(OutputStream out) {
@@ -167,10 +165,6 @@ public class Java8Bridge {
         public void print(String s) {
             super.print(s);
             intercepted += s;
-        }
-
-        public String getIntercepted() {
-            return intercepted;
         }
     }
     
@@ -185,4 +179,6 @@ public class Java8Bridge {
         
         return ret;
     }
+
+    private Java8Bridge() {}
 }

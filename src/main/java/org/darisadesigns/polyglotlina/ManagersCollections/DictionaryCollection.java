@@ -42,17 +42,21 @@ public abstract class DictionaryCollection<N> {
 
     private int highestNodeId = 1;
 
+    public DictionaryCollection(N _bufferNode) {
+        bufferNode = _bufferNode;
+    }
+    
     /**
      * Clears value of collection's current buffer
      *
      */
-    abstract public void clear();
+    public abstract void clear();
     
     /**
      * Returns an error type node with not-found information of an appropriate type
-     * @return nout-found node
+     * @return not-found node
      */
-    abstract public Object notFoundNode();
+    public abstract Object notFoundNode();
     
     public int addNode(DictNode _addType) throws Exception {
         int ret;
@@ -65,26 +69,26 @@ public abstract class DictionaryCollection<N> {
 
         return ret;
     }
-    
+
     /**
      * @param _id ID of node to replace
-     * @param _modNode Node to replace prior word with
+     * @param _modNode Node to replace prior node with
      * @throws Exception Throws exception when ID matches no node in collection
      */
     public void modifyNode(Integer _id, N _modNode) throws Exception {
         if (!nodeMap.containsKey(_id)) {
-            throw new Exception("No node with id: " + _id.toString()
+            throw new Exception("No node with id: " + _id
                     + "; cannot modify value.");
         }
         if (_id < 1) {
             throw new Exception("Id can never be less than 1.");
         }
-        
+
         DictNode myNode = (DictNode)_modNode;
 
         myNode.setId(_id);
         myNode.setAlphaOrder(alphaOrder);
-        
+
         nodeMap.remove(_id);
         nodeMap.put(myNode.getId(), _modNode);
     }
@@ -105,11 +109,11 @@ public abstract class DictionaryCollection<N> {
      */
     public Object getNodeById(Integer _id) {
         Object ret;
-        
-        if (!nodeMap.containsKey(_id)) {
-            ret = this.notFoundNode();
-        } else {
+
+        if (nodeMap.containsKey(_id)) {
             ret = nodeMap.get(_id);
+        } else {
+            ret = this.notFoundNode();
         }
 
         return ret;
@@ -121,7 +125,7 @@ public abstract class DictionaryCollection<N> {
      */
     public void deleteNodeById(Integer _id) throws Exception {
         if (!nodeMap.containsKey(_id)) {
-            throw new Exception("Word with ID: " + _id.toString()
+            throw new Exception("Word with ID: " + _id
                     + " not found.");
         }
 
@@ -166,24 +170,21 @@ public abstract class DictionaryCollection<N> {
      */
     protected Integer insert(Integer _id, N _buffer) throws Exception {
         DictNode myBuffer = (DictNode) _buffer;
+
+        if (nodeMap.containsKey(_id)) {
+            throw new Exception("Duplicate ID " + _id + " for collection object: " + myBuffer.getValue());
+        } else if (_id < 1) {
+            throw new Exception("Collection node ID may never be zero or less.");
+        } else if (_id == null) {
+            throw new Exception("ID cannot be null.");
+        }
+
+        // sets highest word ID, if current id is higher
+        highestNodeId = _id > highestNodeId ? _id : highestNodeId;
         myBuffer.setId(_id);
         myBuffer.setAlphaOrder(alphaOrder);
 
-        if (nodeMap.containsKey(_id)) {
-            throw new Exception("Duplicate ID " + _id.toString() + " for collection object: " + myBuffer.getValue());
-        }
-        if (_id < 1) {
-            throw new Exception("Collection node ID may never be zero or less.");
-        }
-
         nodeMap.put(_id, _buffer);
-
-        if (_id != null) {
-            // sets highest word ID, if current id is higher
-            highestNodeId = _id > highestNodeId ? _id : highestNodeId;
-        } else {
-            throw new Exception("ID cannot be null.");
-        }
 
         return _id;
     }
@@ -212,7 +213,7 @@ public abstract class DictionaryCollection<N> {
             allValues.remove(nodeMap.get(exclude));
         }
         
-        // randommize order...
+        // randomize order...
         Collections.shuffle(allValues, new Random(System.nanoTime()));
         
         // can't return more than exist in the collection

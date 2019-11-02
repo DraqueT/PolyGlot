@@ -36,7 +36,6 @@ import org.w3c.dom.Element;
  * @author Draque Thompson
  */
 public class WordClass extends DictNode {
-    private WordClassCollection parent;
     private final Map<Integer, WordClassValue> values = new HashMap<>();
     private final List<Integer> applyTypes = new ArrayList<>();
     private boolean freeText = false;
@@ -51,7 +50,7 @@ public class WordClass extends DictNode {
     /**
      * Returns true if existing value ID is passed, false otherwise
      * @param valId value id to check
-     * @return existance of value id
+     * @return existence of value id
      */
     public boolean isValid(Integer valId) {
         return values.containsKey(valId);
@@ -102,9 +101,7 @@ public class WordClass extends DictNode {
      * @param _typeId ID of type
      */
     public void deleteApplyType(Integer _typeId) {
-        if (applyTypes.contains(_typeId)) {
-            applyTypes.remove(_typeId);
-        }
+        applyTypes.remove(_typeId);
     }
     
     /**
@@ -143,10 +140,6 @@ public class WordClass extends DictNode {
         }
         
         values.remove(valueId);
-        
-        if (parent != null) {
-            parent.classValueDeleted(this.id, valueId);
-        }
     }
     
     public WordClassValue getValueById(int _id) throws Exception {
@@ -213,10 +206,6 @@ public class WordClass extends DictNode {
         this.freeText = freeText;
     }
     
-    public void setParent(WordClassCollection _parent) {
-        parent = _parent;
-    }
-    
     public void writeXML(Document doc, Element rootElement) {
         Element classElement = doc.createElement(PGTUtil.CLASS_XID);
 
@@ -238,7 +227,7 @@ public class WordClass extends DictNode {
         // generates element with all type IDs of types this class applies to
         String applyTypesRec = "";
         for (Integer typeId : this.getApplyTypes()) {
-            if (applyTypesRec.length() != 0) {
+            if (!applyTypesRec.isEmpty()) {
                 applyTypesRec += ",";
             }
 

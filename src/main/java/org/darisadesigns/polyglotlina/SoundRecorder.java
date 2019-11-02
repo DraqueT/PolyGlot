@@ -62,10 +62,10 @@ public class SoundRecorder {
     private final Window parentWindow;
     private JButton playPauseBut;
     private JButton recordBut;
-    ImageIcon playUp;
-    ImageIcon playDown;
-    ImageIcon recUp;
-    ImageIcon recDown;
+    private ImageIcon playUp;
+    private ImageIcon playDown;
+    private ImageIcon recUp;
+    private ImageIcon recDown;
 
     /**
      * Instantiates recorder with default format
@@ -129,9 +129,9 @@ public class SoundRecorder {
         int channels = 1;
         boolean signed = true;
         boolean bigEndian = true;
-        AudioFormat format = new AudioFormat(sampleRate, sampleSizeInBits,
+
+        return new AudioFormat(sampleRate, sampleSizeInBits,
                 channels, signed, bigEndian);
-        return format;
     }
 
     /**
@@ -154,7 +154,7 @@ public class SoundRecorder {
      * @throws javax.sound.sampled.LineUnavailableException if no audio input
      * line
      */
-    public void beginRecording() throws LineUnavailableException, Exception {
+    public void beginRecording() throws Exception {
         sound = null;
         killPlay = true;
         try {
@@ -185,7 +185,7 @@ public class SoundRecorder {
         // 8000 is the typical rate, but I wanted to get increments of 1/100 second
         int bufferSize = 80; //(int) format.getSampleRate() * format.getFrameSize();
 
-        final byte buffer[] = new byte[bufferSize];
+        final byte[] buffer = new byte[bufferSize];
         out = new ByteArrayOutputStream();
 
         curRecording = true;
@@ -223,7 +223,7 @@ public class SoundRecorder {
             } catch (IOException e) {
                 //e.printStackTrace();
                 IOHandler.writeErrorLog(e);
-                InfoBox.error("Recording wrror: ", "Unable to record: "
+                InfoBox.error("Recording error: ", "Unable to record: "
                         + e.getLocalizedMessage(), parentWindow);
             }
             line.close();
@@ -266,8 +266,7 @@ public class SoundRecorder {
      * @throws javax.sound.sampled.LineUnavailableException on no output line
      * @throws java.io.IOException on no output line
      */
-    @SuppressWarnings("SleepWhileHoldingLock")
-    public void playPause() throws LineUnavailableException, IOException {
+    public void playPause() throws IOException {
         // kill any recording session before initilizing playback
         if (isRecording()) {
             endRecording();
@@ -310,7 +309,7 @@ public class SoundRecorder {
                 while ((count
                         = ais.read(buffer, 0, buffer.length)) != -1) {
                     if (count > 0) {
-                        while (playing == false) { // if paused, wait until unpaused
+                        while (!playing) { // if paused, wait until unpaused
                             // suppression for this warning is nonfunctional. Very annoying.
                             Thread.sleep(timeToDie);
                             playPauseBut.setIcon(playUp);
@@ -460,7 +459,7 @@ public class SoundRecorder {
      *
      * @param filePath path to load MP3
      */
-    private void playAudio(String filePath) throws Exception {
+    private void playAudio(String filePath) {
         final int BUFFER_SIZE = 128000;
         AudioInputStream astream;
         AudioFormat audioFormat;

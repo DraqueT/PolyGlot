@@ -55,9 +55,9 @@ import javax.swing.text.JTextComponent;
 public final class PTextField extends JTextField {
 
     private DictCore core;
-    boolean skipRepaint = false;
-    boolean curSetText = false;
-    boolean overrideFont = false;
+    private boolean skipRepaint = false;
+    private boolean curSetText = false;
+    private boolean overrideFont = false;
     private SwingWorker worker = null;
     private String defText;
     private EventListenerList tmpListenerList = null;
@@ -68,10 +68,10 @@ public final class PTextField extends JTextField {
      * Init for PDialogs
      *
      * @param _core dictionary core
-     * @param _overideFont true overrides ConFont, false sets to default
+     * @param _overrideFont true overrides ConFont, false sets to default
      * @param _defText default text that will display in grey if otherwise empty
      */
-    public PTextField(DictCore _core, boolean _overideFont, String _defText) {
+    public PTextField(DictCore _core, boolean _overrideFont, String _defText) {
         // remove change listener to add custom one
         DefaultBoundedRangeModel pVis = (DefaultBoundedRangeModel) this.getHorizontalVisibility();
         for (ChangeListener chlist : pVis.getChangeListeners()) {
@@ -84,12 +84,12 @@ public final class PTextField extends JTextField {
         setupListeners();
         setForeground(Color.lightGray);
         setupRightClickMenu();
-        this.setOverrideFont(_overideFont);
+        this.setOverrideFont(_overrideFont);
         setText(defText);
         setupLook();
     }
     
-    public final void setupLook() {
+    public void setupLook() {
         VisualStyleManager sMan = core.getVisualStyleManager();
         
         if (this.isEnabled()) {
@@ -115,15 +115,11 @@ public final class PTextField extends JTextField {
     public void setOverrideFont(boolean _overrideFont) {
         overrideFont = _overrideFont;
 
-        if (!overrideFont) {
-            setFont(core.getPropertiesManager().getFontCon());
+        if (overrideFont) {
+            setFont(core.getPropertiesManager().getFontLocal().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
         } else {
-            setFont(core.getPropertiesManager().getFontLocal().deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+            setFont(core.getPropertiesManager().getFontCon());
         }
-    }
-
-    public boolean getOverrideFont() {
-        return overrideFont;
     }
 
     public void setCore(DictCore _core) {
@@ -132,7 +128,7 @@ public final class PTextField extends JTextField {
     }
 
     @Override
-    public final void setForeground(Color _color) {
+    public void setForeground(Color _color) {
         super.setForeground(_color);
     }
 
@@ -179,10 +175,11 @@ public final class PTextField extends JTextField {
                 });
             }
 
+            @SuppressWarnings("SizeReplaceableByIsEmpty")
             @Override
             public void focusLost(FocusEvent e) {
                 SwingUtilities.invokeLater(() -> {
-                    if (getSuperText().length() == 0) {
+                    if (getSuperText().isEmpty()) {
                         setText(defText);
                         setForeground(Color.lightGray);
                     }
@@ -221,7 +218,7 @@ public final class PTextField extends JTextField {
     public static void handleCharacterReplacement(DictCore core, KeyEvent e, JTextComponent target) {
         Character c = e.getKeyChar();
         String repString = core.getPropertiesManager().getCharacterReplacement(c.toString());
-        if (repString.length() != 0) {
+        if (!repString.isEmpty()) {
             try {
                 e.consume();
                 ClipboardHandler cb = new ClipboardHandler();
@@ -250,12 +247,6 @@ public final class PTextField extends JTextField {
             worker = PGTools.getFlashWorker(this, _flashColor, isBack);
             worker.execute();
         }
-    }
-
-    // Overridden to meet code standards
-    @Override
-    public final BoundedRangeModel getHorizontalVisibility() {
-        return super.getHorizontalVisibility();
     }
 
     class PScrollRepainter implements ChangeListener, Serializable {
@@ -324,10 +315,10 @@ public final class PTextField extends JTextField {
     }
 
     @Override
-    public final void setText(String t) {
+    public void setText(String t) {
         curSetText = true;
         try {
-            if (t.length() == 0 && !this.hasFocus()) {
+            if (t.isEmpty() && !this.hasFocus()) {
                 super.setText(defText);
             } else {
                 super.setText(t);
@@ -339,7 +330,7 @@ public final class PTextField extends JTextField {
             IOHandler.writeErrorLog(e);
         }
 
-        if (isDefaultText() && !defText.equals("")) {
+        if (isDefaultText() && !defText.isEmpty()) {
             float menuFontSize = (float)core.getOptionsManager().getMenuFontSize();
             setFont(core.getPropertiesManager().getFontLocal().deriveFont(menuFontSize));
             setForeground(Color.lightGray);

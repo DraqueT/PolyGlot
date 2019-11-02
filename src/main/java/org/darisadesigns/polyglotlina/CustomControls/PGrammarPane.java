@@ -199,21 +199,18 @@ public class PGrammarPane extends JTextPane {
         // might handle more types in the future
         if (ClipboardHandler.isClipboardImage()) {
             try {
-                Object imageObject = ClipboardHandler.getClipboardImage();
+                Image imageObject = ClipboardHandler.getClipboardImage();
                 BufferedImage image;
                 if (imageObject instanceof BufferedImage) {
                     image = (BufferedImage)imageObject;
-                } else if (imageObject instanceof Image) {
-                    Image imageImage = (Image)imageObject;
-                    image = new BufferedImage(imageImage.getWidth(null), 
-                            imageImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                } else {
+                    image = new BufferedImage(imageObject.getWidth(null),
+                            imageObject.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
                     // Draw the image on to the buffered image
                     Graphics2D bGr = image.createGraphics();
-                    bGr.drawImage(imageImage, 0, 0, null);
+                    bGr.drawImage(imageObject, 0, 0, null);
                     bGr.dispose();
-                } else {
-                    throw new Exception("Unrecognized image format.");
                 }
                 ImageNode imageNode = core.getImageCollection().getFromBufferedImage(image);
                 addImage(imageNode);
@@ -257,7 +254,7 @@ public class PGrammarPane extends JTextPane {
                     if (p0 != p1) {
                         doc.remove(p0, p1 - p0);
                     }
-                    if (content != null && content.length() > 0) {
+                    if (content != null && !content.isEmpty()) {
                         doc.insertString(p0, content, attr);
                     }
                 }

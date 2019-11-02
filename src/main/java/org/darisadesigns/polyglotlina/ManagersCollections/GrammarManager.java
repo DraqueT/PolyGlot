@@ -122,12 +122,11 @@ public class GrammarManager {
         
         if (ret == -1) {
             for (ret = 0; soundMap.containsKey(ret); ret++){}
-            soundMap.put(ret, newRec);
         } else {
             soundMap.remove(ret);
-            soundMap.put(ret, newRec);
         }
-        
+        soundMap.put(ret, newRec);
+
         return ret;
     }
     

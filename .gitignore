@@ -1,3 +1,4 @@
+.idea
 /installer*/
 *.ini
 *.log
@@ -5,5 +6,6 @@ appimage
 build
 buildDate
 nbproject
+PolyGlotLinA.iml
 readme.zip
 target

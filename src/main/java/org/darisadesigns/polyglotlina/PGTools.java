@@ -27,7 +27,7 @@ import javax.swing.SwingWorker;
  *
  * @author draque
  */
-public class PGTools {
+public final class PGTools {
 
     /**
      * gets a worker that can make a given component flash
@@ -37,12 +37,12 @@ public class PGTools {
      * @param isBack whether display color is background (rather than foreground)
      * @return SwingWorker that will make given component flash if run
      */
-    @SuppressWarnings("SleepWhileHoldingLock")
+    // TODO: Review if this class is even needed... could move flash elsewhere
     public static SwingWorker getFlashWorker(final JComponent flashMe, final Color flashColor, final boolean isBack) {
         // this will pop out in its own little thread...
-        final SwingWorker worker = new SwingWorker() {
+        return new SwingWorker() {
             @Override
-            protected Object doInBackground() throws Exception {
+            protected Object doInBackground() {
                 Color originColor;
                 if (isBack) {
                     originColor = flashMe.getBackground();
@@ -78,7 +78,7 @@ public class PGTools {
                 return null;
             }
         };
-
-        return worker;
     }
+
+    private PGTools() {}
 }

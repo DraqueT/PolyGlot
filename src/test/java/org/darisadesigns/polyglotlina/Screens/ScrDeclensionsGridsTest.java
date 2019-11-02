@@ -35,12 +35,12 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author draque
  */
 public class ScrDeclensionsGridsTest {
-    final boolean headless = GraphicsEnvironment.isHeadless();
-    DictCore core;
-    ConWord oneDimPop;
-    ConWord OneDimNopop;
-    ConWord TwoDimPop;
-    ConWord TwoDimNopop;
+    private final boolean headless = GraphicsEnvironment.isHeadless();
+    private final DictCore core;
+    private ConWord oneDimPop;
+    private ConWord OneDimNopop;
+    private ConWord TwoDimPop;
+    private ConWord TwoDimNopop;
     
     public ScrDeclensionsGridsTest() {
         core = new DictCore();

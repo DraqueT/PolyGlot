@@ -133,10 +133,9 @@ public final class ClipboardHandler implements ClipboardOwner {
      * restores clipboard contents from cache
      */
     public void restoreClipboard() {
-        if (cachedContents == null)
+        if (cachedContents != null)
         {
-            return;
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(cachedContents, null);
         }
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(cachedContents, null);
     }
 }

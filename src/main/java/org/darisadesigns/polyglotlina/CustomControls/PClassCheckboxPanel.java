@@ -173,10 +173,10 @@ public class PClassCheckboxPanel extends JPanel {
         this.add(check, gbc);
         
         // do not add the "all" checkbox (with -1 ID) to the apply all list
-        if (classId != -1) {
-            applyClassesCheckboxes.add(check);
-        } else {
+        if (classId == -1) {
             allCheckBox = check;
+        } else {
+            applyClassesCheckboxes.add(check);
         }
         
         gbc.weightx = 9999;

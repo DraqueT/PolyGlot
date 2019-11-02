@@ -110,7 +110,7 @@ public class PGoogleBarChart extends PGoogleChart {
             
             dataSet = e.getValue().stream().map((datum) -> 
             {
-                return Integer.toString(datum.intValue()) + ",";        
+                return datum.intValue() + ",";
             }).reduce(dataSet, String::concat);
             
             dataSet = dataSet.substring(0, dataSet.length()-1); // remove trailing comma...
@@ -170,13 +170,6 @@ public class PGoogleBarChart extends PGoogleChart {
      */
     public void setLabels(String[] labels) {
         this.labels = labels;
-    }
-
-    /**
-     * @return the conFontName
-     */
-    public String getConFontName() {
-        return conFontName;
     }
 
     /**

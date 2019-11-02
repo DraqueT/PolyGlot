@@ -46,9 +46,9 @@ import javax.swing.table.TableCellEditor;
  */
 public final class PCellEditor extends AbstractCellEditor implements TableCellEditor, Cloneable {
     private final JComponent component = new JTextField();
-    Font myFont;
-    DocumentListener docListener;
-    private boolean ignoreListenerSilenceing = false;
+    private final Font myFont;
+    private DocumentListener docListener;
+    private boolean ignoreListenerSilencing = false;
     private final boolean useConFont;
     private final DictCore core;
 
@@ -83,7 +83,7 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
 
     public Component tableColumnEditor(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
         ((JTextField) component).setText((String) value);
-        ((JTextField) component).setFont(myFont);
+        component.setFont(myFont);
 
         return component;
     }
@@ -114,11 +114,11 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
     }
 
     private void setValue(JTextField curComp, String value) {
-        if (ignoreListenerSilenceing) {
-            curComp.setText((String) value);
+        if (ignoreListenerSilencing) {
+            curComp.setText(value);
         } else {
             curComp.getDocument().removeDocumentListener(docListener);
-            curComp.setText((String) value);
+            curComp.setText(value);
             curComp.getDocument().addDocumentListener(docListener);
         }
     }
@@ -146,18 +146,18 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public PCellEditor clone() throws CloneNotSupportedException {
         JTextField myTextField = (JTextField)component;
         myTextField.setFont(myFont);
         
         PCellEditor clone = (PCellEditor)super.clone();
-        this.setupTextFieldListener(clone.getTextFieldComponent());
+        setupTextFieldListener(clone.getTextFieldComponent());
         return clone;
     }
     
     /**
      * Adds relevant keylisteners to passed text field
-     * @param _textField 
+     * @param textField
      */
     private void setupTextFieldListener(final JTextField textField) {
         // handle character replacement
@@ -227,20 +227,13 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
     }
 
     /**
-     * @return the ignoreListenerSilenceing
+     * @param ignoreListenerSilencing the ignoreListenerSilencing to set
      */
-    public boolean isIgnoreListenerSilenceing() {
-        return ignoreListenerSilenceing;
+    public void setIgnoreListenerSilencing(boolean ignoreListenerSilencing) {
+        this.ignoreListenerSilencing = ignoreListenerSilencing;
     }
 
-    /**
-     * @param ignoreListenerSilenceing the ignoreListenerSilenceing to set
-     */
-    public void setIgnoreListenerSilenceing(boolean ignoreListenerSilenceing) {
-        this.ignoreListenerSilenceing = ignoreListenerSilenceing;
-    }
-    
     public void setBackground(Color bg) {
-        component.setBackground(Color.gray);
+        component.setBackground(bg);
     }
 }

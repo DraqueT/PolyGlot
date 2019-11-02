@@ -30,7 +30,7 @@ import javax.swing.DefaultListModel;
  * @author draque
  */
 public class PListModelLexicon extends DefaultListModel<ConWordDisplay> {
-    Map<Integer, ConWordDisplay> wordToDisplay = new HashMap<>();
+    private final Map<Integer, ConWordDisplay> wordToDisplay = new HashMap<>();
     
     @Override
     public void addElement(ConWordDisplay element) {

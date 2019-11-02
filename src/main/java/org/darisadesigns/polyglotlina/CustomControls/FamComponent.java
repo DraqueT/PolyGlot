@@ -26,7 +26,7 @@ import java.awt.Component;
  *
  * @author draque
  */
-public class FamComponent extends Component{
+public class FamComponent extends Component {
     private final ConWord word;
     
     public FamComponent(ConWord _word) {

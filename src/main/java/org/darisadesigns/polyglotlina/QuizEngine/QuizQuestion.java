@@ -111,12 +111,10 @@ public class QuizQuestion extends DictNode {
      */
     public String getQuestionValue() throws Exception {
         String ret;
-        
-        if (value.length() != 0) {
-            ret = value;
-        } else {
+
+        if (value.isEmpty()) {
             if (source instanceof ConWord) {
-                ConWord ansWord = (ConWord)source;
+                ConWord ansWord = (ConWord) source;
                 ret = "What is this word's ";
                 String qEnd = "";
                 switch (type) {
@@ -137,22 +135,24 @@ public class QuizQuestion extends DictNode {
                         break;
                     case Classes:
                         for (Entry<Integer, Integer> curEntry : ansWord.getClassValues()) {
-                            if (qEnd.length() != 0) {
+                            if (!qEnd.isEmpty()) {
                                 qEnd += "/";
                             }
-                            
+
                             qEnd += core.getWordClassCollection().getNodeById(curEntry.getKey());
                         }
-                        
+
                         qEnd += " classification?";
                         break;
                     default:
-                        throw  new Exception("Unhandled type: " + type);
+                        throw new Exception("Unhandled type: " + type);
                 }
                 ret += qEnd;
             } else {
                 ret = "UNSUPPORTED TYPE: " + answer.getClass().getName();
             }
+        } else {
+            ret = value;
         }
         
         return ret;
@@ -200,10 +200,8 @@ public class QuizQuestion extends DictNode {
                     case Classes:
                         Set<Entry<Integer, Integer>> propClasses = propWord.getClassValues();
                         Set<Entry<Integer, Integer>> ansClasses = ansWord.getClassValues();
-                        
-                        if (propClasses.size() != ansClasses.size()) {
-                            ret = false;
-                        } else {
+
+                        if (propClasses.size() == ansClasses.size()) {
                             ret = true;
                             for (Entry<Integer, Integer> e : propClasses) {
                                 if (!Objects.equals(ansWord.getClassValue(e.getKey()), e.getValue())) {
@@ -211,6 +209,8 @@ public class QuizQuestion extends DictNode {
                                     break;
                                 }
                             }
+                        } else {
+                            ret = false;
                         }
                         break;
                     default:
@@ -265,14 +265,14 @@ public class QuizQuestion extends DictNode {
     }
 
     /**
-     * @return the userAnwer
+     * @return the userAnswer
      */
     public DictNode getUserAnswer() {
         return userAnswer;
     }
 
     /**
-     * @param userAnswer the userAnwer to set
+     * @param userAnswer the userAnswer to set
      */
     public void setUserAnswer(DictNode userAnswer) {
         this.userAnswer = userAnswer;

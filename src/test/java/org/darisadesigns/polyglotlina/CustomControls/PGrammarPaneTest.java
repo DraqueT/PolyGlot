@@ -102,6 +102,7 @@ public class PGrammarPaneTest {
         } catch (Exception e) {
             errorMessage = e.getLocalizedMessage();
             IOHandler.writeErrorLog(e, errorMessage);
+            success = false;
         }
         
         assertTrue(success, errorMessage);

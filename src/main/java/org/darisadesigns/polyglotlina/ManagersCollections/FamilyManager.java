@@ -37,18 +37,10 @@ import org.w3c.dom.Element;
 public class FamilyManager {
     private FamNode famRoot = null;
     private FamNode buffer;
-    DictCore core;
+    private final DictCore core;
     
     public FamilyManager(DictCore _core) {
         core = _core;
-    }
-    
-    /**
-     * Returns dict core for use in nodes
-     * @return dictionary core
-     */
-    public DictCore getCore() {
-        return core;
     }
     
     /**

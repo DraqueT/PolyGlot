@@ -80,9 +80,6 @@ public class PFontHandler {
                                 return;
                             }
 
-                            // TODO: Ripped out for Java 12... remove entirely if no consequences.
-//                            font = wrapFont(font);
-
                             byte[] cachedFont = IOHandler.getByteArrayFromFile(tempFile);
 
                             if (isConFont) {
@@ -104,29 +101,6 @@ public class PFontHandler {
     }
 
     /**
-     * Performs wrapping operations on fonts (such as enabling ligatures) and
-     * returns the wrapped font
-     *
-     * @param font
-     * @return
-     */
-    // TODO: Ripped out for Java 12... remove entirely if no consequences. (in particular look for kerning compatibility issues)
-//    private static Font wrapFont(Font _font) {
-//        Font font = PGTUtil.addFontAttribute(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON, _font);
-//        return PGTUtil.addFontAttribute(TextAttribute.KERNING, TextAttribute.KERNING_ON, font);
-//    }
-
-    /**
-     * returns byte array to store font
-     * @param font
-     * @return
-     * @throws Exception on file read error
-     */
-    public static byte[] getFontFileArray(Font font) throws Exception {
-        return Files.readAllBytes(getFontFile(font).toPath());
-    }
-
-    /**
      * Attempts to load the given font from the OS's font folder (due to Java's
      * ligature problems)
      *
@@ -138,8 +112,6 @@ public class PFontHandler {
         try {
             File fontFile = getFontFile(font);
             if (fontFile != null && fontFile.exists()) {
-                // TODO: Ripped out for Java 12... remove entirely if no consequences.
-                //ret = wrapFont(Font.createFont(Font.TRUETYPE_FONT, fontFile));
                 ret = Font.createFont(Font.TRUETYPE_FONT, fontFile);
             }
         } catch (Exception e) {
@@ -160,30 +132,28 @@ public class PFontHandler {
     public static File getFontFile(Font font) throws Exception {
         File ret = null;
 
-        if (font == null) {
-            return ret;
-        }
+        if (font != null) {
+            if (System.getProperty("os.name").startsWith("Mac")) {
+                ret = getFontFromLocation("/Library/Fonts/", font);
 
-        if (System.getProperty("os.name").startsWith("Mac")) {
-            ret = PFontHandler.getFontFromLocation("/Library/Fonts/", font);
+                if (ret == null) {
+                    ret = getFontFromLocation("/System/Library/Fonts/", font);
+                }
 
-            if (ret == null) {
-                ret = PFontHandler.getFontFromLocation("/System/Library/Fonts/", font);
+                if (ret == null) {
+                    ret = getFontFromLocation(System.getProperty("user.home")
+                            + "/Library/Fonts/", font);
+                }
+            } else if (System.getProperty("os.name").startsWith("Win")) {
+                ret = getFontFromLocation(System.getenv("WINDIR") + "\\Fonts", font);
+            } else if (System.getProperty("os.name").indexOf("nix") > 0
+                    || System.getProperty("os.name").indexOf("bunt") > 0
+                    || System.getProperty("os.name").indexOf("fed") > 0
+                    || System.getProperty("os.name").indexOf("nux") > 0) {
+                ret = getFontFromLocation("/usr/share/fonts", font);
+            } else {
+                throw new Exception("Unknown OS; unable to retrieve font.");
             }
-
-            if (ret == null) {
-                ret = PFontHandler.getFontFromLocation(System.getProperty("user.home")
-                        + "/Library/Fonts/", font);
-            }
-        } else if (System.getProperty("os.name").startsWith("Win")) {
-            ret = getFontFromLocation(System.getenv("WINDIR") + "\\Fonts", font);
-        } else if (System.getProperty("os.name").indexOf("nix") > 0
-                || System.getProperty("os.name").indexOf("bunt") > 0
-                || System.getProperty("os.name").indexOf("fed") > 0
-                || System.getProperty("os.name").indexOf("nux") > 0) {
-            ret = getFontFromLocation("/usr/share/fonts", font);
-        } else {
-            throw new Exception("Unknown OS; unable to retrieve font.");
         }
 
         return ret;
@@ -206,35 +176,33 @@ public class PFontHandler {
         List<File> matches = new ArrayList<>();
         File ret = null;
 
-        if (listOfFiles.length == 0) {
-            return null;
-        }
+        if (listOfFiles != null && listOfFiles.length > 0) {
+            // inspect all files and subdirectories to find matches
+            for (File listOfFile : listOfFiles) {
+                if (listOfFile.isFile()) {
+                    File fontFile = loadFont(listOfFile.getPath(), font);
 
-        // inspect all files and subdirectories to find matches
-        for (File listOfFile : listOfFiles) {
-            if (listOfFile.isFile()) {
-                File fontFile = loadFont(listOfFile.getPath(), font);
+                    if (fontFile != null) {
+                        matches.add(fontFile);
+                    }
+                } else if (listOfFile.isDirectory()) {
+                    File fontFile = getFontFromLocation(path + "/"
+                            + listOfFile.getName(), font);
 
-                if (fontFile != null) {
-                    matches.add(fontFile);
-                }
-            } else if (listOfFile.isDirectory()) {
-                File fontFile = getFontFromLocation(path + "/"
-                        + listOfFile.getName(), font);
-
-                if (fontFile != null) {
-                    matches.add(fontFile);
+                    if (fontFile != null) {
+                        matches.add(fontFile);
+                    }
                 }
             }
-        }
 
-        // return only most recently modified match
-        for (File match : matches) {
-            if (ret == null) {
-                ret = match;
-            } else {
-                if (match.lastModified() > ret.lastModified()) {
+            // return only most recently modified match
+            for (File match : matches) {
+                if (ret == null) {
                     ret = match;
+                } else {
+                    if (match.lastModified() > ret.lastModified()) {
+                        ret = match;
+                    }
                 }
             }
         }
@@ -253,7 +221,7 @@ public class PFontHandler {
         File fontFile = new File(path);
         File ret = null;
 
-        // unrecgnized types won't be loaded
+        // unrecognized types won't be loaded
         if (path.toLowerCase().endsWith(".ttf")
                 || path.toLowerCase().endsWith(".otf")
                 || path.toLowerCase().endsWith(".ttc")
@@ -262,8 +230,7 @@ public class PFontHandler {
                 Font f = Font.createFont(Font.TRUETYPE_FONT, fontFile);
 
                 // if names match, set ret to return file
-                if (f.getFamily().equals(testFont.getFamily())
-                        || f.getFamily().equals(testFont.getFamily())) {
+                if (f.getFamily().equals(testFont.getFamily())) {
                     ret = fontFile;
                 }
 
@@ -272,11 +239,9 @@ public class PFontHandler {
                 // disabling logging until Java bug corrected.
                 // IOHandler.writeErrorLog(e, path);
                 // null detected and message bubbled to user elsewhere
-                ret = null;
             } catch (IOException e) {
                 IOHandler.writeErrorLog(e, path);
                 // null detected and message bubbled to user elsewhere
-                ret = null;
             }
         }
 
@@ -293,12 +258,10 @@ public class PFontHandler {
      */
     public static Font getFontFromFile(String filePath) throws FontFormatException, IOException {
         File fontFile = new File(filePath);
-        // TODO: Ripped out for Java 12... remove entirely if no consequences.
-        //return wrapFont(Font.createFont(Font.TRUETYPE_FONT, fontFile));
         return Font.createFont(Font.TRUETYPE_FONT, fontFile);
     }
 
-    public static String writeFont(ZipOutputStream out, Font ouputFont, byte[] cachedFont, DictCore core, boolean isConFont) {
+    public static String writeFont(ZipOutputStream out, Font outputFont, byte[] cachedFont, DictCore core, boolean isConFont) {
         String writeLog = "";
         try {
             // only search for font if the cached font is null
@@ -306,7 +269,7 @@ public class PFontHandler {
                 // embed font in PGD archive if applicable
                 File fontFile = null;
                 try {
-                    fontFile = PFontHandler.getFontFile(ouputFont);
+                    fontFile = getFontFile(outputFont);
                 } catch (Exception e) {
                     IOHandler.writeErrorLog(e);
                     writeLog += "\nerror: " + e.getLocalizedMessage();
@@ -393,36 +356,6 @@ public class PFontHandler {
     }
 
     /**
-     * ditto
-     *
-     * @return
-     * @throws java.io.IOException
-     */
-    public static Font getCharisUnicodeFontBoldInitial() throws IOException {
-        return new PFontHandler().getCharisUnicodeFontInternal(PGTUtil.UNICODE_FONT_BOLD_LOCATION);
-    }
-
-    /**
-     * ditto
-     *
-     * @return
-     * @throws java.io.IOException
-     */
-    public static Font getCharisUnicodeFontItalicInitial() throws IOException {
-        return new PFontHandler().getCharisUnicodeFontInternal(PGTUtil.UNICODE_FONT_ITALIC_LOCATION);
-    }
-
-    /**
-     * ditto
-     *
-     * @return
-     * @throws java.io.IOException
-     */
-    public static Font getCharisUnicodeFontBoldItalicInitial() throws IOException {
-        return new PFontHandler().getCharisUnicodeFontInternal(PGTUtil.UNICODE_FONT_BOLD_ITALIC_LOCATION);
-    }
-
-    /**
      * Fetches and returns unicode compatible font NOTE 1: this is a non-static
      * method due to an input stream restriction NOTE 2: this is the default
      * conlang font in PolyGlot
@@ -430,7 +363,7 @@ public class PFontHandler {
      * @return Charis unicode compatible font
      */
     private Font getCharisUnicodeFontInternal(String location) throws IOException {
-        Font ret = null;
+        Font ret;
         try (InputStream tmp = this.getClass().getResourceAsStream(location)) {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ret = Font.createFont(Font.TRUETYPE_FONT, tmp);
@@ -477,7 +410,7 @@ public class PFontHandler {
      * @throws java.io.IOException if unable to load font
      */
     private Font getMenuFontInternal() throws IOException {
-        Font ret = null;
+        Font ret;
         try (InputStream tmp = this.getClass().getResourceAsStream(PGTUtil.BUTTON_FONT_LOCATION)) {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ret = Font.createFont(Font.TRUETYPE_FONT, tmp);

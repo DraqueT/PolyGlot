@@ -59,10 +59,10 @@ public final class PTextPane extends JTextPane {
     private DictCore core;
     private final boolean overrideFont;
 
-    public PTextPane(DictCore _core, boolean _overideFont, String _defText) {
+    public PTextPane(DictCore _core, boolean _overrideFont, String _defText) {
         core = _core;
         defText = _defText;
-        overrideFont = _overideFont;
+        overrideFont = _overrideFont;
         this.setContentType("text/html");
         setupRightClickMenu();
 
@@ -118,21 +118,18 @@ public final class PTextPane extends JTextPane {
             }
         } else if (ClipboardHandler.isClipboardImage()) {
             try {
-                Object imageObject = ClipboardHandler.getClipboardImage();
+                Image imageObject = ClipboardHandler.getClipboardImage();
                 BufferedImage image;
                 if (imageObject instanceof BufferedImage) {
                     image = (BufferedImage)imageObject;
-                } else if (imageObject instanceof Image) {
-                    Image imageImage = (Image)imageObject;
-                    image = new BufferedImage(imageImage.getWidth(null), 
-                            imageImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                } else {
+                    image = new BufferedImage(imageObject.getWidth(null),
+                            imageObject.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
                     // Draw the image on to the buffered image
                     Graphics2D bGr = image.createGraphics();
-                    bGr.drawImage(imageImage, 0, 0, null);
+                    bGr.drawImage(imageObject, 0, 0, null);
                     bGr.dispose();
-                } else {
-                    throw new Exception("Unrecognized image format.");
                 }
                 
                 ImageNode imageNode = core.getImageCollection().getFromBufferedImage(image);
@@ -146,10 +143,11 @@ public final class PTextPane extends JTextPane {
         }
     }
 
+    @SuppressWarnings("SizeReplaceableByIsEmpty")
     @Override
-    public final void setText(String t) {
+    public void setText(String t) {
         try {
-            if (t.length() == 0 && !this.hasFocus()) {
+            if (t.isEmpty() && !this.hasFocus()) {
                 super.setText(defText);
             } else {
                 super.setText(t);
@@ -331,7 +329,7 @@ public final class PTextPane extends JTextPane {
             ret = !body.contains("<img src");
             if (ret) {
                 body = body.replaceAll("<.*?>", "");
-                ret = body.trim().length() == 0;
+                ret = body.trim().isEmpty();
             }
         } catch (Exception e) {
             // questionable use of try catch... 
@@ -351,7 +349,7 @@ public final class PTextPane extends JTextPane {
 
     private void setupListeners() {
         // if blank, this field is being used for something more complex: no listeners
-        if (defText.length() != 0) {
+        if (!defText.isEmpty()) {
             FocusListener listener = new FocusListener() {
                 @Override
                 public void focusGained(FocusEvent e) {
@@ -364,7 +362,7 @@ public final class PTextPane extends JTextPane {
 
                 @Override
                 public void focusLost(FocusEvent e) {
-                    if (isEmpty() && defText.length() != 0) {
+                    if (isEmpty() && !defText.isEmpty()) {
                         setText(defText);
                         setForeground(Color.lightGray);
                     }
@@ -381,7 +379,7 @@ public final class PTextPane extends JTextPane {
                 public void keyTyped(KeyEvent e) {
                     Character c = e.getKeyChar();
                     String repString = core.getPropertiesManager().getCharacterReplacement(c.toString());
-                    if (repString.length() != 0) {
+                    if (!repString.isEmpty()) {
                         try {
                             e.consume();
                             ClipboardHandler cb = new ClipboardHandler();

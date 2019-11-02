@@ -27,10 +27,7 @@ import org.junit.jupiter.api.Test;
  * @author draque
  */
 public class DeclensionGenRuleTest {
-    
-    public DeclensionGenRuleTest() {
-    }
-    
+
     @Test
     public void setEqual() {
         System.out.println("test set equals function");

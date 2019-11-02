@@ -46,6 +46,15 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
     private final Map<Integer, ArrayList<Integer>> wordToLogo;
     private final DictCore core;
     
+    public LogoCollection(DictCore _core) {
+        super(new LogoNode());
+        
+        wordToLogo = new HashMap<>();
+        logoToWord = new HashMap<>();
+        
+        core = _core;
+    }
+    
     /**
      * Adds relation between logograph and word
      * @param word
@@ -99,14 +108,6 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         
         super.deleteNodeById(_id);
     }
-    
-    public LogoCollection(DictCore _core) {
-        wordToLogo = new HashMap<>();
-        logoToWord = new HashMap<>();
-        bufferNode = new LogoNode();
-        
-        core = _core;
-    }
        
     /**
      * Gets all logographs in language
@@ -141,15 +142,15 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         while (it.hasNext()) {
             LogoNode curNode = it.next();
 
-            if (reading.trim().length() != 0 && !curNode.containsReading(reading, ignoreCase)) {
+            if (!reading.trim().isEmpty() && !curNode.containsReading(reading, ignoreCase)) {
                 continue;
-            } else if (radical.trim().length() != 0 && !curNode.containsRadicalString(radical, ignoreCase)) {
+            } else if (!radical.trim().isEmpty() && !curNode.containsRadicalString(radical, ignoreCase)) {
                 continue;
             } else if (strokes != 0 && strokes != curNode.getStrokes()) {
                 continue;
-            } else if (relWord.trim().length() != 0 && !logoRelatedToWord(curNode, relWord)) {
+            } else if (!relWord.trim().isEmpty() && !logoRelatedToWord(curNode, relWord)) {
                 continue;
-            } else if (notes.trim().length() != 0 && 
+            } else if (!notes.trim().isEmpty() &&
                     ((ignoreCase && !curNode.getNotes().toLowerCase().contains(notes.toLowerCase())) 
                             || !curNode.getNotes().contains(notes))) {
                 continue;                
@@ -202,7 +203,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         }
         
         while (it != null && it.hasNext()) {
-            LogoNode curNode = (LogoNode)nodeMap.get(it.next());
+            LogoNode curNode = nodeMap.get(it.next());
             retList.add(curNode);
         }
         
@@ -279,11 +280,11 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
             String wordIds = "";
             
             while (relIt.hasNext()) {
-                wordIds += ("," + relIt.next().toString());
+                wordIds += ("," + relIt.next());
             }
             
             // only add if there is one more more relation
-            if (wordIds.length() != 0) {
+            if (!wordIds.isEmpty()) {
                 Element node = doc.createElement(PGTUtil.LOGO_WORD_RELATION_XID);
                 // node is encoded with the logograph ID first, followed by all related words IDs
                 node.appendChild(doc.createTextNode(logoId + wordIds));
@@ -293,7 +294,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
     }
     
     public LogoNode getBufferNode() {
-        return (LogoNode)bufferNode;
+        return bufferNode;
     }
     
     @Override
@@ -313,7 +314,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      */
     public void loadLogoRelations(String relations) throws Exception {
         String[] ids = relations.split(",");
-        LogoNode relNode = null;
+        LogoNode relNode;
         String loadLog = "";
         
         try {
@@ -328,9 +329,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         
         for (int i = 1; i < ids.length; i++) {
             try {
-                ConWord word = (ConWord)core.getWordCollection().getNodeById(
-                        Integer.parseInt(ids[i]));
-                
+                ConWord word = core.getWordCollection().getNodeById(Integer.parseInt(ids[i]));
                 addWordLogoRelation(word, relNode);
             } catch (NumberFormatException e) {
                 IOHandler.writeErrorLog(e);
@@ -338,7 +337,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
             }
         }
         
-        if (loadLog.length() != 0) {
+        if (!loadLog.isEmpty()) {
             throw new Exception("\nLogograph load errors:");
         }
     }
@@ -360,7 +359,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
             }
         }
         
-        if (loadLog.length() != 0) {
+        if (!loadLog.isEmpty()) {
             throw new Exception("Problem loading radicals:\n" + loadLog);
         }
     }

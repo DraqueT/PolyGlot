@@ -116,11 +116,6 @@ public class PCellRenderer implements TableCellRenderer {
         
         return editor;
     }
-    
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
       
     public void setDocuListener(DocumentListener _listener) {
         docListener = _listener;

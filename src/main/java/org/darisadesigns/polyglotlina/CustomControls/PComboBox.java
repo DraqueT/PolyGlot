@@ -41,9 +41,8 @@ import javax.swing.SwingWorker;
 public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     private SwingWorker worker = null;
     private boolean mouseOver = false;
-    private final DictCore core;
-    public PComboBox(DictCore _core) {
-        core = _core;
+
+    public PComboBox(DictCore core) {
         setupListeners();
         
         // default font to Charis
@@ -90,7 +89,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         } 
         Object selectedItem = getSelectedItem();
         String text = selectedItem == null ? "" : getSelectedItem().toString();
-        if (text.length() > 0) { // 0 length text makes bounding box explode
+        if (!text.isEmpty()) { // 0 length text makes bounding box explode
             FontMetrics fm = antiAlias.getFontMetrics(getFont());
             Rectangle2D rec = fm.getStringBounds(text, antiAlias);
             int stringW = (int) Math.round(rec.getWidth());

@@ -124,8 +124,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
         try {
             sync(v);
             String docText = v.getDocument().getText(p0,p1-p0);
-            int[] justificationData = getJustificationData(v);
-            float width = getTabbedTextWidth(v, docText, x, exp, p0, justificationData);
+            float width = getTabbedTextWidth(v, docText, x, exp, p0, null);
             return width;
         } catch (BadLocationException e) {
             //e.printStackTrace();
@@ -181,10 +180,9 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
                 // determine the x coordinate to render the glyphs
                 int x = alloc.x;
                 int p = v.getStartOffset();
-                int[] justificationData = getJustificationData(v);
                 if (p != p0) {
                     localText = v.getDocument().getText(p, p0-p);
-                    float width = getTabbedTextWidth(v, localText, x, expander, p, justificationData);
+                    float width = getTabbedTextWidth(v, localText, x, expander, p, null);
                     x += width;
                 }
 
@@ -201,11 +199,11 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
                     Shape savedClip = g.getClip();
                     ((Graphics2D)g).clip(s);
                     x=v.modelToView(v.getStartOffset(), a, Position.Bias.Forward).getBounds().x;
-                    drawTabbedText(v, localText, x, y, g, expander,p0, justificationData);
+                    drawTabbedText(v, localText, x, y, g, expander,p0, null);
                     g.setClip(savedClip);
                 }
                 else {
-                    drawTabbedText(v, localText, x, y, g, expander,p0, justificationData);                
+                    drawTabbedText(v, localText, x, y, g, expander,p0, null);                
                 }
             }
 
@@ -235,8 +233,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
             } else if ((pos >= p0) && (pos <= p1)) {
                 // determine range to the left of the position
                 docText = v.getDocument().getText(p0, pos-p0);
-                int[] justificationData = getJustificationData(v);
-                int width = (int)getTabbedTextWidth(v, docText, alloc.x, expander, p0, justificationData);
+                int width = (int)getTabbedTextWidth(v, docText, alloc.x, expander, p0, null);
                 ret = new Rectangle(alloc.x + width, alloc.y, 0, (int)getHeight(v));
             }
         }
@@ -275,8 +272,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
                 int p1 = v.getEndOffset();
                 TabExpander expander = v.getTabExpander();
                 String docText = v.getDocument().getText(p0, p1-p0);
-                int[] justificationData = getJustificationData(v);
-                int offs = getTabbedTextOffset(v, docText, alloc.x, (int) x, expander, p0, true,justificationData);
+                int offs = getTabbedTextOffset(v, docText, alloc.x, (int) x, expander, p0, true, null);
                 int retValue = p0 + offs;
                 if(retValue == p1) {
                     // No need to return backward bias as GlyphPainter1 is used for
@@ -322,8 +318,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
             sync(v);
             TabExpander expander = v.getTabExpander();
             String s = v.getDocument().getText(p0, v.getEndOffset()-p0);
-            int[] justificationData = getJustificationData(v);
-            int index = getTabbedTextOffset(v,s, (int)x, (int)(x+len), expander, p0, false, justificationData);
+            int index = getTabbedTextOffset(v,s, (int)x, (int)(x+len), expander, p0, false, null);
             int p1 = p0 + index;
             ret = p1;
         } catch (BadLocationException e) {
@@ -333,36 +328,6 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
         }
 
         return ret;
-    }
-
-    @SuppressWarnings("unchecked") // not my code - surpress
-    private int[] getJustificationData(GlyphView v) {
-//        View parent = v.getParent();
-//        int [] ret = null;
-//
-//        //use reflection to get the data
-//        Class pClass = parent.getClass();
-//        if (pClass.isAssignableFrom(ParagraphView.class.getDeclaredClasses()[0])) {
-//            try {
-//                Field f=pClass.getDeclaredField("justificationData");
-//                if (f!=null) {
-//                    f.setAccessible(true);
-//                    ret=(int[])f.get(parent);
-//                    
-//                    if (ret != null) {
-//                        System.out.println(ret);
-//                    }
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        return ret;
-        // Illegally reflecting to access a value that is null in all cases that 
-        // PolyGlot would use it in. Justified text cannot be added to the only
-        // place that uses this code.
-        return null;
     }
 
     float getTabbedTextWidth(View view, String txtStr, float x,
@@ -590,7 +555,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
             }
             if ((x >= currX) && (x < nextX)) {
                 // found the hit position... return the appropriate side
-                if ((round == false) || ((x - currX) < (nextX - x))) {
+                if ((!round) || ((x - currX) < (nextX - x))) {
                     return i - txtOffset;
                 } else {
                     return i + 1 - txtOffset;

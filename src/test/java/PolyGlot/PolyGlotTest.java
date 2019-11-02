@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.PolyGlot;
 import org.junit.jupiter.api.Test;
@@ -28,9 +29,6 @@ import org.junit.jupiter.api.Test;
  * @author draque
  */
 public class PolyGlotTest {
-    
-    public PolyGlotTest() {
-    }
 
     /**
      * Test of main method, of class DictCore opens with no errors without
@@ -38,8 +36,14 @@ public class PolyGlotTest {
      */
     @Test
     public void testMainNoFile() {
-        String[] args = {"", "", PGTUtil.TRUE};
-        PolyGlot.main(args);
+        System.out.println("testMainNoFile");
+        try {
+            String[] args = {"", "", PGTUtil.TRUE};
+            PolyGlot.main(args);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
+            //e.printStackTrace();
+        }
     }
     
     /**
@@ -48,8 +52,14 @@ public class PolyGlotTest {
      */
     @Test
     public void testMainWithFile() {
-        String[] args = new String[]{PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd", "", PGTUtil.TRUE};
-        PolyGlot.main(args);
+        System.out.println("testMainWithFile");
+        try {
+            String[] args = {PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd", "", PGTUtil.TRUE};
+            PolyGlot.main(args);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
+            //e.printStackTrace();
+        }
     }
     
     /**
@@ -59,7 +69,13 @@ public class PolyGlotTest {
      */
     @Test
     public void testMainWithMissingFile() {
-        String[] args = new String[]{PGTUtil.TESTRESOURCES + "MISSING_FILE.pgd", "", PGTUtil.TRUE, PGTUtil.TRUE};
-        PolyGlot.main(args);
+        System.out.println("testMainWithMissingFile");
+        try {
+            String[] args = {PGTUtil.TESTRESOURCES + "MISSING_FILE.pgd", "", PGTUtil.TRUE, PGTUtil.TRUE};
+            PolyGlot.main(args);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
+            //e.printStackTrace();
+        }
     }
 }

@@ -30,7 +30,7 @@ import javax.swing.tree.MutableTreeNode;
  */
 public class FamTreeNode extends DefaultMutableTreeNode {
 
-    FamNode famNode;
+    private FamNode famNode;
 
     /**
      * constructs any child FamTreeNode

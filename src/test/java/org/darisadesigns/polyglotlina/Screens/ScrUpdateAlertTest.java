@@ -30,14 +30,13 @@ import org.junit.jupiter.api.Test;
  * @author DThompson
  */
 public class ScrUpdateAlertTest {
-    private final DictCore core = new DictCore();
     private final boolean headless = GraphicsEnvironment.isHeadless();
     private ScrUpdateAlert updateAlert;
     
     public ScrUpdateAlertTest() {
         if (!headless) {
             try {
-                updateAlert = new ScrUpdateAlert(false, core);
+                updateAlert = new ScrUpdateAlert(false, new DictCore());
             } catch (Exception e) {
                 // Instantiation tested elsewhere, skip errors here.
             }

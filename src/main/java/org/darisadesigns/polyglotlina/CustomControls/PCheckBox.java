@@ -36,9 +36,9 @@ import javax.swing.JCheckBox;
  * @author draque.thompson
  */
 public class PCheckBox extends JCheckBox implements MouseListener {
-    boolean mouseOver = false;
-    boolean clicked = false;
-    DictCore core;
+    private boolean mouseOver = false;
+    private boolean clicked = false;
+    private final DictCore core;
     
     public PCheckBox(DictCore _core) {
         core = _core == null ? new DictCore() : _core;

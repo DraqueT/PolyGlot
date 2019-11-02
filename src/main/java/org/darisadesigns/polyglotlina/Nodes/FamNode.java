@@ -32,7 +32,7 @@ import java.util.List;
 public class FamNode extends DictNode {
     private final List<FamNode> subNodes = new ArrayList<>();
     private final List<ConWord> words = new ArrayList<>();
-    final private FamNode parent;
+    private final FamNode parent;
     private String notes = "";
     private final FamilyManager manager;
 
@@ -130,15 +130,7 @@ public class FamNode extends DictNode {
         List<ConWord> ret = new ArrayList<>();
         manager.removeDeadWords(this, words);
         
-        
-        Iterator<ConWord> convert = words.iterator();
-        
-        while (convert.hasNext()) {
-            ConWord curWord = convert.next();
-            
-            ret.add(curWord);
-        }
-        
+        ret.addAll(words);
         Collections.sort(ret);
         
         return ret.iterator();

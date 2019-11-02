@@ -170,7 +170,7 @@ public class QuizFactory {
                             WordClass wordProp = (WordClass) core.getWordClassCollection().getNodeById(curEntry.getKey());
                             WordClassValue valueNode = wordProp.getValueById(curEntry.getValue());
 
-                            if (choiceNode.getValue().length() != 0) {
+                            if (!choiceNode.getValue().isEmpty()) {
                                 choiceNode.setValue(choiceNode.getValue() + ", ");
                             }
 
@@ -189,7 +189,7 @@ public class QuizFactory {
                         WordClass curProp = (WordClass) core.getWordClassCollection().getNodeById(curEntry.getKey());
                         WordClassValue curVal = curProp.getValueById(curEntry.getValue());
 
-                        if (valAnswer.getValue().length() != 0) {
+                        if (!valAnswer.getValue().isEmpty()) {
                             valAnswer.setValue(valAnswer.getValue() + ", ");
                         }
 
@@ -198,7 +198,7 @@ public class QuizFactory {
                     valAnswer.setId(0);
 
                     // handle case of words with no class
-                    if (valAnswer.getValue().length() == 0) {
+                    if (valAnswer.getValue().isEmpty()) {
                         valAnswer.setValue("No Class");
                     }
 
