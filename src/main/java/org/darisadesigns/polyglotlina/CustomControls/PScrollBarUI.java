@@ -37,12 +37,9 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
  * @author draque.thompson
  */
 public class PScrollBarUI extends BasicScrollBarUI {
-    private PArrowButton increase;
-    private PArrowButton decrease;
     private boolean vertical;
-    Color highlight = Color.decode("707070");
-    Color shadow = PGTUtil.COLOR_ENABLED_BG;
-    Color darkShadow = Color.decode("303030");
+    private final Color shadow = PGTUtil.COLOR_ENABLED_BG;
+    private final Color darkShadow = Color.decode("303030");
     
     public static ComponentUI createUI(JComponent c) {
         return new PScrollBarUI(c);
@@ -56,15 +53,13 @@ public class PScrollBarUI extends BasicScrollBarUI {
     protected JButton createDecreaseButton(int orientation) {
         vertical = (orientation == SwingConstants.NORTH 
                 || orientation == SwingConstants.SOUTH);
-        
-        decrease = new PArrowButton(orientation);
-        return decrease;
+
+        return new PArrowButton(orientation);
     }
 
     @Override
     protected JButton createIncreaseButton(int orientation) {
-        increase = new PArrowButton(orientation);
-        return increase;
+        return new PArrowButton(orientation);
     }
     
     @Override

@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
  */
 public class PropertiesManagerTest {
     
-    DictCore core;
+    private final DictCore core;
     
     public PropertiesManagerTest() {
         core = new DictCore();

@@ -70,7 +70,7 @@ public class DeclensionManager {
     private DeclensionGenRule ruleBuffer = new DeclensionGenRule();
 
     public boolean isCombinedDeclSurpressed(String _combId, Integer _typeId) {
-        String storeId = _typeId.toString() + "," + _combId;
+        String storeId = _typeId + "," + _combId;
 
         if (!combSettings.containsKey(storeId)) {
             return false;
@@ -79,25 +79,25 @@ public class DeclensionManager {
         return combSettings.get(storeId);
     }
 
-    public void setCombinedDeclSurpressed(String _combId, Integer _typeId, boolean _surpress) {
-        String storeId = _typeId.toString() + "," + _combId;
+    public void setCombinedDeclSuppressed(String _combId, Integer _typeId, boolean _suppress) {
+        String storeId = _typeId + "," + _combId;
 
-        if (!combSettings.containsKey(storeId)) {
-            combSettings.put(storeId, _surpress);
+        if (combSettings.containsKey(storeId)) {
+            combSettings.replace(storeId, _suppress);
         } else {
-            combSettings.replace(storeId, _surpress);
+            combSettings.put(storeId, _suppress);
         }
     }
 
     /**
-     * This sets the surpression data raw. Should only be used when loading from
+     * This sets the suppression data raw. Should only be used when loading from
      * a file
      *
      * @param _completeId complete, raw ID of data
-     * @param _surpress surpression value
+     * @param _suppress suppression value
      */
-    public void setCombinedDeclSurpressedRaw(String _completeId, boolean _surpress) {
-        combSettings.put(_completeId, _surpress);
+    public void setCombinedDeclSuppressedRaw(String _completeId, boolean _suppress) {
+        combSettings.put(_completeId, _suppress);
     }
 
     /**
@@ -186,13 +186,11 @@ public class DeclensionManager {
      * @param typeId ID of type to wipe
      */
     public void wipeDeclensionGenRules(int typeId) {
-        if (generationRules.containsKey(typeId)) {
-            generationRules.remove(typeId);
-        }
+        generationRules.remove(typeId);
     }
 
     /**
-     * Ensures all rules have contiguous indicies. Run prior to generating XML for save
+     * Ensures all rules have contiguous indices. Run prior to generating XML for save
      */
     private void smoothRules() {
         generationRules.values().forEach((ruleList) -> {
@@ -229,7 +227,7 @@ public class DeclensionManager {
     public void deleteDeclensionGenRules(int typeId, String combinedId) {
         if (generationRules.containsKey(typeId)) {
             List<DeclensionGenRule> rules = generationRules.get(typeId);
-            List<DeclensionGenRule> iter = new ArrayList(rules);
+            List<DeclensionGenRule> iter = new ArrayList<>(rules);
             
             // iterate on copy of array to avoid concurrent modification
             for (DeclensionGenRule rule : iter) {
@@ -314,7 +312,7 @@ public class DeclensionManager {
 
         Collections.sort(ret);
 
-        // ensure that all rules cave continguous IDs before returning
+        // ensure that all rules cave contiguous IDs before returning
         int i = 1;
         for (DeclensionGenRule curRule : ret) {
             curRule.setIndex(i);
@@ -394,10 +392,6 @@ public class DeclensionManager {
         deleteDeclension(wordId, declensionId, dList);
     }
 
-    public void updateDeclensionWord(Integer wordId, Integer declensionId, DeclensionNode declension) {
-        updateDeclension(wordId, declensionId, declension, dList);
-    }
-
     /**
      * sets all declensions to deprecated state
      *
@@ -434,7 +428,7 @@ public class DeclensionManager {
      */
     public DeclensionNode getDeclension(Integer typeId, Integer declensionId) {
         DeclensionNode ret = null;
-        List<DeclensionNode> decList = (List<DeclensionNode>) dTemplates.get(typeId);
+        List<DeclensionNode> decList = dTemplates.get(typeId);
 
         // only search farther if declension itself actually exists
         if (decList != null) {
@@ -546,24 +540,13 @@ public class DeclensionManager {
     }
 
     /**
-     * Gets a declension node based on positional index (rather than ID)
-     *
-     * @param typeId
-     * @param index
-     * @return
-     */
-    public DeclensionNode getDeclentionTemplateByIndex(int typeId, int index) {
-        return dTemplates.get(typeId).get(index);
-    }
-
-    /**
-     * Same as above, but SKIPS indecies of singleton declensions
+     * Same as above, but SKIPS indices of singleton declensions
      *
      * @param typeId
      * @param index
      * @return null if none found
      */
-    public DeclensionNode getDimensionalDeclentionTemplateByIndex(int typeId, int index) {
+    public DeclensionNode getDimensionalDeclensionTemplateByIndex(int typeId, int index) {
         DeclensionNode ret = null;
         List<DeclensionNode> nodes = dTemplates.get(typeId);
 
@@ -609,8 +592,8 @@ public class DeclensionManager {
             while (dimIt.hasNext()) {
                 DeclensionDimension curDim = dimIt.next();
 
-                ret.addAll(getAllCombinedDimensionalIds(depth + 1, curId + curDim.getId().toString() + ",",
-                        curLabel + (curLabel.length() == 0 ? "" : " ") + curDim.getValue(), declensionList));
+                ret.addAll(getAllCombinedDimensionalIds(depth + 1, curId + curDim.getId() + ",",
+                        curLabel + (curLabel.isEmpty() ? "" : " ") + curDim.getValue(), declensionList));
             }
         }
 
@@ -669,7 +652,7 @@ public class DeclensionManager {
     }
 
     public DeclensionNode getDeclensionTemplate(Integer typeId, Integer templateId) {
-        List<DeclensionNode> searchList = (List<DeclensionNode>) dTemplates.get(typeId);
+        List<DeclensionNode> searchList = dTemplates.get(typeId);
         Iterator search = searchList.iterator();
         DeclensionNode ret = null;
 
@@ -683,15 +666,6 @@ public class DeclensionManager {
         }
 
         return ret;
-    }
-
-    /**
-     * Clears all declensions from word
-     *
-     * @param typeId ID of word to clear of all declensions
-     */
-    public void clearAllDeclensionsTemplate(Integer typeId) {
-        clearAllDeclensions(typeId, dTemplates);
     }
 
     public void setBufferId(Integer _bufferId) {
@@ -759,7 +733,7 @@ public class DeclensionManager {
         topId++;
 
         if (idToDecNodes.containsKey(typeId)) {
-            wordList = (List<DeclensionNode>) idToDecNodes.get(typeId);
+            wordList = idToDecNodes.get(typeId);
         } else {
             wordList = new ArrayList<>();
             idToDecNodes.put(typeId, wordList);
@@ -792,7 +766,7 @@ public class DeclensionManager {
         deleteDeclensionFromWord(relId, declensionId);
 
         if (list.containsKey(relId)) {
-            wordList = (List<DeclensionNode>) list.get(relId);
+            wordList = list.get(relId);
         } else {
             wordList = new ArrayList<>();
             list.put(relId, wordList);
@@ -824,7 +798,7 @@ public class DeclensionManager {
         DeclensionNode ret = null;
 
         if (dList.containsKey(wordId)) {
-            for (DeclensionNode test : (List<DeclensionNode>) dList.get(wordId)) {
+            for (DeclensionNode test : dList.get(wordId)) {
                 if (dimId.equals(test.getCombinedDimId())) {
                     ret = test;
                     break;
@@ -865,7 +839,7 @@ public class DeclensionManager {
     public void deleteDeclension(Integer typeId, Integer declensionId, Map<Integer, List<DeclensionNode>> list) {
         if (list.containsKey(typeId)) {
             List<DeclensionNode> copyTo = new ArrayList<>();
-            Iterator<DeclensionNode> copyFrom = ((List<DeclensionNode>) list.get(typeId)).iterator();
+            Iterator<DeclensionNode> copyFrom = list.get(typeId).iterator();
 
             while (copyFrom.hasNext()) {
                 DeclensionNode curNode = copyFrom.next();
@@ -880,7 +854,7 @@ public class DeclensionManager {
             list.remove(typeId);
 
             // if unpopulated, allow to not exist. Cleaner.
-            if (copyTo.size() > 0) {
+            if (!copyTo.isEmpty()) {
                 list.put(typeId, copyTo);
             }
         }
@@ -892,7 +866,7 @@ public class DeclensionManager {
             Map<Integer, List<DeclensionNode>> list) {
         if (list.containsKey(typeId)) {
             List<DeclensionNode> copyTo = new ArrayList<>();
-            Iterator<DeclensionNode> copyFrom = ((List<DeclensionNode>) list.get(typeId)).iterator();
+            Iterator<DeclensionNode> copyFrom = list.get(typeId).iterator();
 
             while (copyFrom.hasNext()) {
                 DeclensionNode curNode = copyFrom.next();
@@ -918,9 +892,7 @@ public class DeclensionManager {
      * @param wordId ID of word to clear of all declensions
      */
     private void clearAllDeclensions(Integer wordId, Map list) {
-        if (list.containsKey(wordId)) {
-            list.remove(wordId);
-        }
+        list.remove(wordId);
     }
 
     /**
@@ -1002,7 +974,7 @@ public class DeclensionManager {
         List<DeclensionNode> ret = new ArrayList<>();
 
         if (list.containsKey(relatedId)) {
-            ret = (List<DeclensionNode>) list.get(relatedId);
+            ret = list.get(relatedId);
         }
 
         return ret;
@@ -1042,7 +1014,7 @@ public class DeclensionManager {
      * @param removeVals values to clear from word
      */
     public void removeDeclensionValues(Integer wordId, Collection<DeclensionNode> removeVals) {
-        List<DeclensionNode> wordList = (List<DeclensionNode>) dList.get(wordId);
+        List<DeclensionNode> wordList = dList.get(wordId);
 
         removeVals.forEach((remNode) -> {
             wordList.remove(remNode);
@@ -1099,7 +1071,7 @@ public class DeclensionManager {
             Element curAttrib;
             // This section will have to be slightly rewritten if the combined settings become more complex
             curAttrib = doc.createElement(PGTUtil.DEC_COMBINED_ID_XID);
-            curAttrib.appendChild(doc.createTextNode((String) pairs.getKey()));
+            curAttrib.appendChild(doc.createTextNode(pairs.getKey()));
             curCombForm.appendChild(curAttrib);
             curAttrib = doc.createElement(PGTUtil.DEC_COMBINED_SURPRESS_XID);
             curAttrib.appendChild(doc.createTextNode(pairs.getValue() ? PGTUtil.TRUE : PGTUtil.FALSE));
@@ -1170,7 +1142,7 @@ public class DeclensionManager {
             int decId, int dimId,
             List<DeclensionGenRule> rulesToDelete) {
 
-        List<DeclensionGenRule> rules = new ArrayList(this.getDeclensionRulesForType(typeId));
+        List<DeclensionGenRule> rules = new ArrayList<>(this.getDeclensionRulesForType(typeId));
         
         for (DeclensionGenRule rule : rules) {
             if (combDimIdMatches(decId, dimId, rule.getCombinationId())) {
@@ -1190,7 +1162,7 @@ public class DeclensionManager {
      * @param rulesToDelete rules in this pos to delete
      */
     public void bulkDeleteRuleFromDeclensionTemplates(int typeId, List<DeclensionGenRule> rulesToDelete) {
-        List<DeclensionGenRule> rules = new ArrayList(this.getDeclensionRulesForType(typeId));
+        List<DeclensionGenRule> rules = new ArrayList<>(this.getDeclensionRulesForType(typeId));
 
         for (DeclensionGenRule rule : rules) {
             for (DeclensionGenRule ruleDelete : rulesToDelete) {

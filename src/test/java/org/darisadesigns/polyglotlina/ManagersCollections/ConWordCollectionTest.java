@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
  */
 public class ConWordCollectionTest {
     
-    DictCore badLexEntriesCore;
+    private final DictCore badLexEntriesCore;
     
     public ConWordCollectionTest() {
         badLexEntriesCore = new DictCore();
@@ -115,7 +115,7 @@ public class ConWordCollectionTest {
     }
     
     @Test
-    public void testMissingPOSWithoRequirement() {
+    public void testMissingPOSWithoutRequirement() {
         DictCore core = new DictCore();
         ConWord test = new ConWord();
         

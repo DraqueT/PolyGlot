@@ -60,7 +60,7 @@ public class EtymologyManager {
      * not already exist.
      * @param parent the parent
      * @param child the child
-     * @throws IllegalLoopException if relationship creates looping dependancy
+     * @throws IllegalLoopException if relationship creates looping dependency
      */
     public void addRelation(Integer parent, Integer child) throws IllegalLoopException {
         ConWordCollection collection = core.getWordCollection();
@@ -74,29 +74,29 @@ public class EtymologyManager {
         if (!collection.exists(parent) || !collection.exists(child)) {
             return;
         }
-        
-        if (!parentToChild.containsKey(parent)) {
-            List<Integer> newList = new ArrayList<>();
-            newList.add(child);
-            parentToChild.put(parent, newList);
-        } else {
+
+        if (parentToChild.containsKey(parent)) {
             List<Integer> myList = parentToChild.get(parent);
-            
+
             if (!myList.contains(child)) {
                 myList.add(child);
             }
-        }
-        
-        if (!childToParent.containsKey(child)) {
-            List<Integer> newList = new ArrayList<>();
-            newList.add(parent);
-            childToParent.put(child, newList);
         } else {
+            List<Integer> newList = new ArrayList<>();
+            newList.add(child);
+            parentToChild.put(parent, newList);
+        }
+
+        if (childToParent.containsKey(child)) {
             List<Integer> myList = childToParent.get(child);
-            
+
             if (!myList.contains(parent)) {
                 myList.add(parent);
             }
+        } else {
+            List<Integer> newList = new ArrayList<>();
+            newList.add(parent);
+            childToParent.put(child, newList);
         }
     }
     
@@ -168,27 +168,27 @@ public class EtymologyManager {
     public void addExternalRelation(EtyExternalParent parent, Integer child) {
         // return immediately if child does not exist
         if (core.getWordCollection().exists(child)) {
-            if (!extParentToChild.containsKey(parent.getUniqueId())) {
-                List<Integer> myList = new ArrayList<>();
-                myList.add(child);
-                extParentToChild.put(parent.getUniqueId(), myList);
-                allExtParents.put(parent.getUniqueId(), parent);
-            } else {
+            if (extParentToChild.containsKey(parent.getUniqueId())) {
                 List<Integer> myList = extParentToChild.get(parent.getUniqueId());
                 if (!myList.contains(child)) {
                     myList.add(child);
                 }
-            }
-            
-            if (!childToExtParent.containsKey(child)) {
-                Map<String, EtyExternalParent> myMap = new HashMap<>();
-                myMap.put(parent.getUniqueId(), parent);
-                childToExtParent.put(child, myMap);
             } else {
+                List<Integer> myList = new ArrayList<>();
+                myList.add(child);
+                extParentToChild.put(parent.getUniqueId(), myList);
+                allExtParents.put(parent.getUniqueId(), parent);
+            }
+
+            if (childToExtParent.containsKey(child)) {
                 Map<String, EtyExternalParent> myMap = childToExtParent.get(child);
                 if (!myMap.containsKey(parent.getUniqueId())) {
                     myMap.put(parent.getUniqueId(), parent);
                 }
+            } else {
+                Map<String, EtyExternalParent> myMap = new HashMap<>();
+                myMap.put(parent.getUniqueId(), parent);
+                childToExtParent.put(child, myMap);
             }
         }
     }
@@ -198,9 +198,7 @@ public class EtymologyManager {
         if (core.getWordCollection().exists(child)) {
             if (extParentToChild.containsKey(parent.getUniqueId())) {
                 List<Integer> myList = extParentToChild.get(parent.getUniqueId());
-                if (myList.contains(child)) {
-                    myList.remove(child);
-                }
+                myList.remove(child);
                 
                 if (myList.isEmpty()) {
                     allExtParents.remove(getExtListParentValue(parent));
@@ -209,24 +207,8 @@ public class EtymologyManager {
             
             if (childToExtParent.containsKey(child)) {
                 Map<String, EtyExternalParent> myMap = childToExtParent.get(child);
-                
-                if (myMap.containsKey(parent.getUniqueId())) {
-                    myMap.remove(parent.getUniqueId());
-                }
+                myMap.remove(parent.getUniqueId());
             }
-        }
-    }
-    
-    /**
-     * Add external parent to total list if it does not already exist.
-     * No corrolary to remove, as this is regenerated at every load. Old 
-     * values will fall away at this point.
-     * @param parent Parent to add to list.
-     */
-    private void addExtParentToList(EtyExternalParent parent) {
-        String parentId = parent.getUniqueId();
-        if (!allExtParents.containsKey(parentId)) {
-            allExtParents.put(parent.getUniqueId(), parent);
         }
     }
     
@@ -259,17 +241,12 @@ public class EtymologyManager {
     public void delRelation(Integer parentId, Integer childId) {
         if (parentToChild.containsKey(parentId)) {
             List<Integer> myList = parentToChild.get(parentId);
-            
-            if (myList.contains(childId)) {
-                myList.remove(childId);
-            }
+            myList.remove(childId);
         }
         
         if (childToParent.containsKey(childId)) {
             List<Integer> myList = childToParent.get(childId);
-            if (myList.contains(parentId)) {
-                myList.remove(parentId);
-            }
+            myList.remove(parentId);
         }
     }
     
@@ -285,7 +262,7 @@ public class EtymologyManager {
         
         // we only need to record the relationship one way, the bidirection will be regenerated
         for (Entry<Integer, List<Integer>> curEntry : parentToChild.entrySet()) {
-            // skip nonexistant words
+            // skip nonexistent words
             if (!wordCollection.exists(curEntry.getKey())) {
                 continue;
             }
@@ -350,7 +327,6 @@ public class EtymologyManager {
     /**
      * Tests whether a child->parent addition creates an illegal loop.
      * Recursive.
-     * @param parentId current value to check against (begin with self)
      * @param childId bottommost child ID being checked
      * @return true if illegal due to loop, false otherwise
      */
@@ -362,7 +338,7 @@ public class EtymologyManager {
                 ret = selectedParent.equals(childId) 
                         || createsLoopParent(selectedParent, childId);
                 
-                // break on single loop occurance and return
+                // break on single loop occurrence and return
                 if (ret) {
                     break;
                 }
@@ -387,7 +363,7 @@ public class EtymologyManager {
         for (Integer childId : this.getChildren(curWordId)) {
             ret = parentId.equals(childId) && createsLoopChild(parentId, childId);
             
-            // break on single loop occurance and return
+            // break on single loop occurrence and return
             if (ret) {
                 break;
             }
@@ -464,20 +440,9 @@ public class EtymologyManager {
         }
     }
     
-    public class IllegalLoopException extends Exception {
+    public static class IllegalLoopException extends Exception {
         public IllegalLoopException(String message) {
             super(message);
         }
-    }
-    
-    /**
-     * Tests whether word has any etymological relevance
-     * @param word
-     * @return true if parents or children to this word
-     */
-    public boolean hasEtymology(ConWord word) {
-        return childToParent.containsKey(word.getId()) // if word has parents
-                || parentToChild.containsKey(word.getId()) // if word has children
-                || (childToExtParent.containsKey(word.getId()) && !childToExtParent.get(word.getId()).isEmpty()); // if word has external parents
     }
 }

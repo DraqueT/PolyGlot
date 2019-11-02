@@ -35,7 +35,6 @@ import org.w3c.dom.Element;
  * 
  * @author draque
  */
-@SuppressWarnings( "deprecation" )
 public class GrammarChapNode extends DefaultMutableTreeNode {
 
     private String name = "";
@@ -66,7 +65,7 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
     
     @Override
     /**
-     * Overriden to prevent unwanted removals
+     * Overridden to prevent unwanted removals
      */
     public void remove(MutableTreeNode node) {
         // do nothing (preserves tree)
@@ -95,7 +94,7 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
     @SuppressWarnings("UseOfObsoleteCollectionType")
     private Enumeration internalChildren(String filter) {
         Enumeration ret;
-        if (filter.length() == 0 || children == null) {
+        if (filter.isEmpty() || children == null) {
             ret = super.children();
         } else if (children.elementAt(0) instanceof GrammarSectionNode) {
             java.util.Vector<GrammarSectionNode> v = new java.util.Vector<>();

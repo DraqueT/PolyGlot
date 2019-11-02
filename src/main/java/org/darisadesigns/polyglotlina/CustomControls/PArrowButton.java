@@ -32,9 +32,9 @@ import javax.swing.plaf.UIResource;
 public class PArrowButton extends JButton {
 
     private final int direction;
-    Color shadow = Color.decode("505050");
-    Color highlight = Color.decode("707070");
-    Color darkShadow = Color.decode("303030");
+    private final Color shadow = Color.decode("505050");
+    private final Color highlight = Color.decode("707070");
+    private final Color darkShadow = Color.decode("303030");
 
     public PArrowButton(int _direction) {
         direction = _direction;

@@ -51,21 +51,21 @@ import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
  * Starts up PolyGlot and does testing for OS/platform that would be inappropriate elsewhere
  * @author Draque Thompson
  */
-public class PolyGlot {
+public final class PolyGlot {
     /**
      * @param args the command line arguments: 
      * args[0] = open file path (blank if none) 
      * args[1] = working directory of PolyGlot (blank if none)
      * args[2] = set to PGTUtils.True to skip OS Integration
-     * args[3] = set to PGTUtiles.True to suppress error/warning dialogs, though not thrown errors (testing purposes)
+     * args[3] = set to PGTUtils.True to suppress error/warning dialogs, though not thrown errors (testing purposes)
      */
-    public static void main(final String args[]) {
+    public static void main(final String[] args) {
         if (args.length > 3 && args[3].equals(PGTUtil.TRUE)) {
             PGTUtil.setForceSuppressDialogs(true);
         }
         
         try {
-            boolean osIntegration = shouldUseOSInegration(args);
+            boolean osIntegration = shouldUseOSIntegration(args);
             
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (osIntegration) {
@@ -91,12 +91,9 @@ public class PolyGlot {
                     String overridePath = args.length > 1 ? args[1] : "";
                     ScrMainMenu s = null;
 
-                    // TODO: JAVA 12 UPGRADE - see whether this is necessary any more
-                    System.getProperties().setProperty("Dsun.java2d.dpiaware", "false");
-
                     if (canStart()) {
                         try {
-                            // separated due to serious nature of Thowable vs Exception
+                            // separated due to serious nature of Throwable vs Exception
                              DictCore core = new DictCore();
                                         
                             try {
@@ -159,7 +156,7 @@ public class PolyGlot {
                                     FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
                                     chooser.setFileFilter(filter);
                                     chooser.setApproveButtonText("Recover");
-                                    chooser.setCurrentDirectory(core.getPropertiesManager().getCannonicalDirectory());
+                                    chooser.setCurrentDirectory(core.getPropertiesManager().getCanonicalDirectory());
                                     
                                     String fileName;
 
@@ -209,7 +206,7 @@ public class PolyGlot {
                             InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
                                     + e.getMessage() + "\n"
                                             + "Problem with top level PolyGlot arguments.", null);
-                        } catch (Exception e) { // split up for logical clarity... migt want to differn
+                        } catch (Exception e) { // split up for logical clarity... might want to differentiate
                             IOHandler.writeErrorLog(e);
                             InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
                                     + e.getMessage() + "\n"
@@ -283,7 +280,7 @@ public class PolyGlot {
         return ret;
     }
     
-        private static boolean shouldUseOSInegration(String args[]) {
+    private static boolean shouldUseOSIntegration(String[] args) {
         return args == null || args.length < 3 || !args[2].equals(PGTUtil.TRUE);
     }
     
@@ -320,4 +317,6 @@ public class PolyGlot {
             }
         });
     }
+
+    private PolyGlot() {}
 }

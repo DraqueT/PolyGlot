@@ -89,13 +89,6 @@ public class PRadioButton extends JRadioButton {
     }
 
     /**
-     * @return the type
-     */
-    public QuestionType getType() {
-        return type;
-    }
-
-    /**
      * @param type the type to set
      */
     public void setType(QuestionType type) {

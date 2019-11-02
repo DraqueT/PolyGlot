@@ -33,9 +33,14 @@ import java.util.Random;
  */
 public class Quiz extends DictionaryCollection<QuizQuestion> {
     private final DictCore core;
-    List<QuizQuestion> quizList = null;
+    private List<QuizQuestion> quizList = null;
     int quizPos = -1; // start at -1 because initial next() call bumps to 0
-    QuizQuestion curQuestion;
+    private QuizQuestion curQuestion;
+    
+    public Quiz(DictCore _core) {
+        super(new QuizQuestion(_core));
+        core = _core;
+    }
     
     public int getLength() {
         return quizList.size();
@@ -48,10 +53,6 @@ public class Quiz extends DictionaryCollection<QuizQuestion> {
      */
     public int getCurQuestion() {
         return quizPos;
-    }
-    
-    public Quiz(DictCore _core) {
-        core = _core;
     }
     
     @Override

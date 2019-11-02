@@ -64,7 +64,7 @@ public class DeclensionGenTransform {
         boolean ret = true;
         
         if (this != o) {
-            if (o != null && o instanceof DeclensionGenTransform) {
+            if (o instanceof DeclensionGenTransform) {
                 DeclensionGenTransform comp = (DeclensionGenTransform)o;
                 ret = this.regex.equals(comp.regex) 
                         && this.replaceText.equals(comp.replaceText);

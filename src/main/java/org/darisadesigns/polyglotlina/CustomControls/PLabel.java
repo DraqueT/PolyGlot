@@ -20,6 +20,8 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.PGTUtil;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -38,10 +40,7 @@ import javax.swing.JLabel;
  * @author draque.thompson
  */
 public final class PLabel extends JLabel {
-
-    public int MIN_FONT_SIZE = 3;
-    public int MAX_FONT_SIZE = 240;
-    Graphics g;
+    private Graphics g;
     boolean resize = false;
     private final DictCore core;
 
@@ -59,7 +58,7 @@ public final class PLabel extends JLabel {
         init();
     }
 
-    protected final void init() {
+    protected void init() {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -69,16 +68,16 @@ public final class PLabel extends JLabel {
     }
 
     public void adaptLabelFont(JLabel l) {
-        if (g == null || resize == false) {
+        if (g == null || !resize) {
             return;
         }
         Rectangle r = l.getBounds();
-        int fontSize = MIN_FONT_SIZE;
+        int fontSize = PGTUtil.PLABEL_MIN_FONT_SIZE;
         Font f = l.getFont();
 
         Rectangle r1 = new Rectangle();
         Rectangle r2 = new Rectangle();
-        while (fontSize < MAX_FONT_SIZE) {
+        while (fontSize < PGTUtil.PLABEL_MAX_FONT_SIZE) {
             r1.setSize(getTextSize(l, f.deriveFont(f.getStyle(), fontSize)));
             r2.setSize(getTextSize(l, f.deriveFont(f.getStyle(), fontSize + 2)));
             if (r.contains(r1) && !r.contains(r2)) {
@@ -112,25 +111,5 @@ public final class PLabel extends JLabel {
 
     public void setResize(boolean _resize) {
         resize = _resize;
-    }
-
-    public boolean isResize() {
-        return resize;
-    }
-
-    public int getMIN_FONT_SIZE() {
-        return MIN_FONT_SIZE;
-    }
-
-    public void setMIN_FONT_SIZE(int MIN_FONT_SIZE) {
-        this.MIN_FONT_SIZE = MIN_FONT_SIZE;
-    }
-
-    public int getMAX_FONT_SIZE() {
-        return MAX_FONT_SIZE;
-    }
-
-    public void setMAX_FONT_SIZE(int MAX_FONT_SIZE) {
-        this.MAX_FONT_SIZE = MAX_FONT_SIZE;
     }
 }

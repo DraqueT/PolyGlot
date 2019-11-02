@@ -43,12 +43,6 @@ public class GrammarSectionNode extends DefaultMutableTreeNode {
         manager = _manager;
     }
     
-    
-    @Override
-    public Enumeration children() {
-        return super.children();
-    }
-    
     public void setName(String _name) {
         name = _name;
     }

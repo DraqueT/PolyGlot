@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, draque
+ * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -37,14 +37,10 @@ import org.junit.jupiter.api.BeforeAll;
  */
 public class Java8BridgeTest {
     private DictCore core;
-    private final static String OUTPUT = "testFile";
+    private static final String OUTPUT = "testFile";
     
     public Java8BridgeTest() {
         core = new DictCore();
-    }
-
-    @BeforeAll
-    public static void setUpClass() {
     }
 
     @AfterEach
@@ -69,7 +65,6 @@ public class Java8BridgeTest {
     public void testExportPdf() {
         // no current way to open/test contents of PDF, so just make sure it is created without error
         System.out.println("exportPdf");
-        String target = OUTPUT;
         String coverImage = PGTUtil.TESTRESOURCES + "test.jpg";
         String foreward = "blap";
         boolean printConLocal = false;
@@ -84,7 +79,7 @@ public class Java8BridgeTest {
         boolean printAllConjugations = false;
         
         try {
-            Java8Bridge.exportPdf(target, coverImage, foreward, printConLocal, printLocalCon, printOrtho, subTitleText, titleText, printPageNumber, printGlossKey, printGrammar, printWordEtymologies, printAllConjugations, core);
+            Java8Bridge.exportPdf(OUTPUT, coverImage, foreward, printConLocal, printLocalCon, printOrtho, subTitleText, titleText, printPageNumber, printGlossKey, printGrammar, printWordEtymologies, printAllConjugations, core);
             assertTrue(new File(OUTPUT).exists());
         } catch (IOException | InterruptedException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());

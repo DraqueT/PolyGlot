@@ -65,42 +65,12 @@ public class PronunciationMgr {
     }
 
     /**
-     * Returns index of pronunciation
-     *
-     * @param node to search for
-     * @return node's index, -1 = not found
-     */
-    public int getProcIndex(PronunciationNode node) {
-        int ret = -1;
-
-        for (int i = 0; i < pronunciations.size(); i++) {
-            if (node.equals(pronunciations.get(i))) {
-                ret = i;
-                break;
-            }
-        }
-
-        return ret;
-    }
-
-    /**
      * Inserts a node at an arbitrary position
      *
      * @param index position to insert
      * @param newNode node to be inserted
      */
     public void addAtPosition(int index, PronunciationNode newNode) {
-        pronunciations.add(index, newNode);
-    }
-
-    /**
-     * replaces the pronunciation node at given index
-     *
-     * @param index index to modify
-     * @param newNode new node
-     */
-    public void modifyProc(int index, PronunciationNode newNode) {
-        pronunciations.remove(index);
         pronunciations.add(index, newNode);
     }
 
@@ -174,7 +144,7 @@ public class PronunciationMgr {
     public String getPronunciationInternal(String base) throws Exception {
         String ret = "";
 
-        // -base.length() fed as initial depth to ensure that longer words cannot be artificaially labeled as breaking max depth
+        // -base.length() fed as initial depth to ensure that longer words cannot be artificially labeled as breaking max depth
         List<PronunciationNode> procCycle = getPronunciationElements(base, -base.length());
         for (PronunciationNode curProc : procCycle) {
             ret += curProc.getPronunciation();
@@ -192,19 +162,18 @@ public class PronunciationMgr {
      * @throws java.lang.Exception if malformed regex expression encountered
      */
     public List<PronunciationNode> getPronunciationElements(String base) throws Exception {
-        // -base.length() fed as initial depth to ensure that longer words cannot be artificaially labeled as breaking max depth
+        // -base.length() fed as initial depth to ensure that longer words cannot be artificially labeled as breaking max depth
         return getPronunciationElements(base, -base.length());
     }
     
     protected String getToolLabel() {
-        return "Pronuncation Manager";
+        return "Pronunciation Manager";
     }
 
     /**
      * returns pronunciation objects of a given word
      *
      * @param base word to find pronunciation objects of
-     * @param isFirst set to true if first iteration.
      * @return pronunciation object list. If no perfect match found, empty
      * string returned
      */
@@ -217,7 +186,7 @@ public class PronunciationMgr {
         }
         
         // return blank for empty string
-        if (base.length() == 0 || !finder.hasNext()) {
+        if (base.isEmpty() || !finder.hasNext()) {
             return ret;
         }
 
@@ -276,10 +245,10 @@ public class PronunciationMgr {
                 String origPattern = pattern;
 
                 // make pattern a starting pattern if not already, if it is already, allow it to accept following strings
-                if (!pattern.startsWith("^")) {
-                    pattern = "^(" + pattern + ").*";
-                } else {
+                if (pattern.startsWith("^")) {
                     pattern = "^(" + pattern.substring(1) + ").*";
+                } else {
+                    pattern = "^(" + pattern + ").*";
                 }
 
                 Pattern findString = Pattern.compile(pattern);
@@ -289,7 +258,7 @@ public class PronunciationMgr {
                     String leadingChars = matcher.group(1);
 
                     // if a user has entered an empty pattern... just continue.
-                    if (leadingChars.length() == 0) {
+                    if (leadingChars.isEmpty()) {
                         continue;
                     }
                     List<PronunciationNode> temp

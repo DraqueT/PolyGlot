@@ -30,6 +30,6 @@ public interface PDeclensionPanelInterface {
      * Gets map of all declined word forms. Key = combined ID, value = word form
      * @return 
      */
-    public abstract Map<String, String> getAllDecValues();
-    public abstract String getTabName();
+    Map<String, String> getAllDecValues();
+    String getTabName();
 }

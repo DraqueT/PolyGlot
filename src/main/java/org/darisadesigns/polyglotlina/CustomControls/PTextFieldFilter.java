@@ -33,11 +33,9 @@ import javax.swing.text.DocumentFilter;
 public class PTextFieldFilter extends DocumentFilter {
     
     private final DictCore core;
-    private final FilterType type;
     
-    public PTextFieldFilter(DictCore _core, FilterType _type) {
+    public PTextFieldFilter(DictCore _core) {
         core = _core;
-        type = _type;
     }
 
     @Override
@@ -61,11 +59,11 @@ public class PTextFieldFilter extends DocumentFilter {
         boolean ret = true;
         
         // blank must always be allowed
-        if (text.length() != 0) {
+        if (!text.isEmpty()) {
             try {
                 Double.parseDouble(text);
             } catch (NumberFormatException e) {
-                // non programatic exception
+                // exception from user interaction, do not record
                 // IOHandler.writeErrorLog(e);
                 ret = false;
             }
@@ -106,9 +104,5 @@ public class PTextFieldFilter extends DocumentFilter {
             InfoBox.warning("Numbers Only", "This field allows only numeric values.", 
                     core.getRootWindow());
         }
-    }
-    
-    public enum FilterType {
-        Double, Int
     }
 }

@@ -57,15 +57,5 @@ public class PGDocument extends DefaultStyledDocument {
         
         return ret;
     }
-    
-    public void testInsert(int start) {
-        LeafElement a = (LeafElement)this.createLeafElement(getDefaultRootElement(), null, BUFFER_SIZE_DEFAULT, BUFFER_SIZE_DEFAULT);
-        try {            
-            a.getDocument().insertString(start, "<img src=\"" + "https://www.topatoco.com/images/three-five.png" + "\">", null);
-        } catch (BadLocationException e) {
-            // do nothing
-            // IOHandler.writeErrorLog(e);
-        }
-    }
 }
 

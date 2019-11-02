@@ -54,7 +54,7 @@ public class PButton extends JButton implements MouseListener {
     }
     
     /**
-     * Sets whether button is actively selected (pressed down persistively)
+     * Sets whether button is actively selected (pressed down persistently)
      * @param _activeSelected 
      */
     public void setActiveSelected(boolean _activeSelected) {
@@ -62,7 +62,7 @@ public class PButton extends JButton implements MouseListener {
     }
     
     /**
-     * Returns whether button is actively selected (pressed down persistively)
+     * Returns whether button is actively selected (pressed down persistently)
      * @return 
      */
     public boolean isActiveSelected() {

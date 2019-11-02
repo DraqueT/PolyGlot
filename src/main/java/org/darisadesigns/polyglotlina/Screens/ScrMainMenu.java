@@ -88,10 +88,10 @@ public final class ScrMainMenu extends PFrame {
 
     private PToDoTree toDoTree;
     private PFrame curWindow = null;
-    private ScrLexicon cacheLexicon;
+    private final ScrLexicon cacheLexicon;
     private String curFileName = "";
     private Image backGround;
-    private List<Window> childWindows = new ArrayList<>();
+    private final List<Window> childWindows = new ArrayList<>();
 
     /**
      * Creates new form ScrMainMenu
@@ -101,8 +101,8 @@ public final class ScrMainMenu extends PFrame {
      * @param _core DictCore menus run on
      */
     public ScrMainMenu(String overridePath, DictCore _core) {
-        super();
-        core = _core;
+        super(_core);
+
         core.setRootWindow(this);
         toDoTree = new PToDoTree(core);
         cacheLexicon = ScrLexicon.run(core, this);
@@ -170,7 +170,7 @@ public final class ScrMainMenu extends PFrame {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setMultiSelectionEnabled(false);
-                chooser.setDialogTitle("Selet line delimited Swadesh list.");
+                chooser.setDialogTitle("Select line delimited Swadesh list.");
                 
                 if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                     File file = chooser.getSelectedFile();
@@ -408,10 +408,12 @@ public final class ScrMainMenu extends PFrame {
      * @return true to signal continue, false to signal stop
      */
     private boolean saveOrCancelTest() {
+        boolean ret = true;
+        
         // if there's a current dictionary loaded, prompt user to save before creating new
         if (core != null
                 && !core.getWordCollection().getWordNodes().isEmpty()) {
-            Integer saveFirst = InfoBox.yesNoCancel("Save First?",
+            int saveFirst = InfoBox.yesNoCancel("Save First?",
                     "Save current dictionary before performing action?", core.getRootWindow());
 
             if (saveFirst == JOptionPane.YES_OPTION) {
@@ -419,15 +421,15 @@ public final class ScrMainMenu extends PFrame {
 
                 // if the file didn't save (usually due to a last minute cancel) don't continue.
                 if (!saved) {
-                    return false;
+                    ret = false;
                 }
             } else if (saveFirst == JOptionPane.CANCEL_OPTION
                     || saveFirst == JOptionPane.DEFAULT_OPTION) {
-                return false;
+                ret = false;
             }
         }
 
-        return true;
+        return ret;
     }
 
     /**
@@ -436,20 +438,25 @@ public final class ScrMainMenu extends PFrame {
      * @return true if file saved, false otherwise
      */
     public boolean saveFile() {
-        if (getCurFileName().length() == 0) {
+        boolean ret;
+        
+        if (getCurFileName().isEmpty()) {
             saveFileAs();
         }
 
         // if it still is blank, the user has hit cancel on the save as dialog
-        if (getCurFileName().length() == 0) {
-            return false;
-        }
+        if (getCurFileName().isEmpty()) {
+            ret = false;
+        } else {
+            core.getOptionsManager().pushRecentFile(getCurFileName());
+            populateRecentOpened();
+            saveAllValues();
+            genTitle();
 
-        core.getOptionsManager().pushRecentFile(getCurFileName());
-        populateRecentOpened();
-        saveAllValues();
-        genTitle();
-        return doWrite(getCurFileName());
+            ret = doWrite(getCurFileName());
+        }
+        
+        return ret;
     }
 
     /**
@@ -502,7 +509,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
         if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getPropertiesManager().getCannonicalDirectory());
+            chooser.setCurrentDirectory(core.getPropertiesManager().getCanonicalDirectory());
         } else {
             chooser.setCurrentDirectory(IOHandler.getDirectoryFromPath(curFileName));
             chooser.setSelectedFile(IOHandler.getFileFromPath(curFileName));
@@ -522,7 +529,7 @@ public final class ScrMainMenu extends PFrame {
         }
 
         if (IOHandler.fileExists(fileName)) {
-            Integer overWrite = InfoBox.yesNoCancel("Overwrite Dialog",
+            int overWrite = InfoBox.yesNoCancel("Overwrite Dialog",
                     "Overwrite existing file? " + fileName, core.getRootWindow());
 
             if (overWrite == JOptionPane.NO_OPTION) {
@@ -542,7 +549,7 @@ public final class ScrMainMenu extends PFrame {
      *
      * @param performTest whether the UI ask for confirmation
      */
-    final public void newFile(boolean performTest) {
+    public void newFile(boolean performTest) {
         if (performTest && !saveOrCancelTest()) {
             return;
         }
@@ -563,13 +570,13 @@ public final class ScrMainMenu extends PFrame {
     public void genTitle() {
         String title = "PolyGlot";
 
-        if (curWindow != null && curWindow.getTitle().length() != 0) {
+        if (curWindow != null && !curWindow.getTitle().isEmpty()) {
             title += "-" + curWindow.getTitle();
             String langName = core.getPropertiesManager().getLangName();
 
-            if (langName.length() != 0) {
+            if (!langName.isEmpty()) {
                 title += " : " + langName;
-            } else if (getCurFileName().length() != 0) {
+            } else if (!getCurFileName().isEmpty()) {
                 title += " : " + getCurFileName();
             }
         }
@@ -587,7 +594,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setFileFilter(filter);
         String fileName;
         if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getPropertiesManager().getCannonicalDirectory());
+            chooser.setCurrentDirectory(core.getPropertiesManager().getCanonicalDirectory());
         } else {
             chooser.setCurrentDirectory(IOHandler.getDirectoryFromPath(curFileName));
         }
@@ -643,7 +650,7 @@ public final class ScrMainMenu extends PFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        chooser.setCurrentDirectory(core.getPropertiesManager().getCannonicalDirectory());
+        chooser.setCurrentDirectory(core.getPropertiesManager().getCanonicalDirectory());
 
         String fileName;
 
@@ -664,7 +671,7 @@ public final class ScrMainMenu extends PFrame {
                             core.getRootWindow()));
 
             InfoBox.info("Export Status", "Dictionary exported to " + fileName + ".", core.getRootWindow());
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             IOHandler.writeErrorLog(e);
             InfoBox.info("Export Problem", e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -818,7 +825,7 @@ public final class ScrMainMenu extends PFrame {
             public boolean postProcessKeyEvent(KeyEvent e) {
                 if (e != null && e.getKeyCode() == 0) {
                     lastChars = lastChars.substring(1, lastChars.length());
-                    lastChars = lastChars + e.getKeyChar();
+                    lastChars += e.getKeyChar();
 
                     if (lastChars.toLowerCase().endsWith("what did you see last tuesday")) {
                         InfoBox.info("Coded Response", "A pink elephant.", null);
@@ -884,16 +891,9 @@ public final class ScrMainMenu extends PFrame {
             }
 
             Insets insets = getInsets();
-            try {
-                this.setSizeSmooth(dim.width + pnlSideButtons.getWidth() + insets.left + insets.right,
-                        dim.height + insets.bottom + insets.top,
-                        true);
-            } catch (InterruptedException e) {
-                IOHandler.writeErrorLog(e);
-                InfoBox.error("Resize Error",
-                        "Unable to run resize animation: " + e.getLocalizedMessage(),
-                        core.getRootWindow());
-            }
+            
+            this.setSizeSmooth(dim.width + pnlSideButtons.getWidth() + insets.left + insets.right,
+                    dim.height + insets.bottom + insets.top);
         }
 
         // set new screen
@@ -962,8 +962,8 @@ public final class ScrMainMenu extends PFrame {
     /**
      *
      * @param button
-     * @param cachedWindow
      * @param setNewWindow
+     * @param _enable
      */
     private void setupButtonPopout(final PButton button, Supplier<Window> setNewWindow, boolean _enable) {
         final JPopupMenu buttonMenu = new JPopupMenu();
@@ -1137,7 +1137,6 @@ public final class ScrMainMenu extends PFrame {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

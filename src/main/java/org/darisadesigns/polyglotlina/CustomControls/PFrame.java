@@ -73,7 +73,14 @@ public abstract class PFrame extends JFrame implements FocusListener {
     private boolean firstVisible = true;
     private boolean curResizing;
 
-    public PFrame() {
+    public PFrame(DictCore _core) {
+        core = _core;
+        this.addWindowStateListener(this::setWindowState);
+    }
+    
+    public PFrame(DictCore _core, WindowMode _mode) {
+        core = _core;
+        mode = _mode;
         this.addWindowStateListener(this::setWindowState);
     }
 
@@ -256,6 +263,7 @@ public abstract class PFrame extends JFrame implements FocusListener {
         this.rootPane.add(mnuPublish);
 
         mnuSave.addActionListener((java.awt.event.ActionEvent evt) -> {
+            // TODO: When moving this to ScrMainMenu, remove the call to coresave (it just calls back to ScreenMainMenu)
             core.coreSave();
         });
         this.rootPane.add(mnuSave);
@@ -370,10 +378,9 @@ public abstract class PFrame extends JFrame implements FocusListener {
      *
      * @param width new width of element
      * @param height new height of element
-     * @param wait whether to wait on animation finishing before continuing
      * @throws java.lang.InterruptedException
      */
-    public void setSizeSmooth(final int width, final int height, boolean wait) throws InterruptedException {
+    public void setSizeSmooth(final int width, final int height) {
         final int numFrames = 20; // total number of frames to animate
         final int msDelay = 20; // ms delay between frames
         final int initialX = this.getWidth();

@@ -40,19 +40,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.ImageIcon;
-import org.darisadesigns.polyglotlina.Screens.ScrFamilies;
-import org.darisadesigns.polyglotlina.Screens.ScrGrammarGuide;
-import org.darisadesigns.polyglotlina.Screens.ScrIPARefChart;
-import org.darisadesigns.polyglotlina.Screens.ScrLexicon;
-import org.darisadesigns.polyglotlina.Screens.ScrLogoDetails;
-import org.darisadesigns.polyglotlina.Screens.ScrQuizGenDialog;
 
 /**
  * This contains various constant vales in PolyGlot
  *
  * @author draque
  */
-public class PGTUtil {
+public final class PGTUtil {
 
     // CONSTANTS
     private static  final Map<String, Integer> VERSION_HIERARCHY;
@@ -62,7 +56,6 @@ public class PGTUtil {
     public static final String DICTIONARY_SAVE_DATE = "DictSaveDate";
     public static final String MAIN_MENU_IMAGE = "/assets/org/DarisaDesigns/ImageAssets/PolyGlotBG.png";
     public static final String POLYGLOT_FILE_SUFFIX = "pgd";
-    public static final String TMP_SAVE_FILE = "xPOLYGLOT_TMPx.pgd";
     public static final String VERSION_LOCATION = "/assets/org/DarisaDesigns/version";
     public static final String PGT_VERSION;
     public static final boolean IS_BETA;
@@ -71,7 +64,7 @@ public class PGTUtil {
     public static final String HELP_FILE_NAME = "readme.html";
     public static final String SWADESH_LOCATION = "/assets/org/DarisaDesigns/swadesh/";
     public static final String BUILD_DATE_TIME_LOCATION = "/assets/org/DarisaDesigns/buildDate";
-    public static final String[] SWADESH_LISTS = new String[]{"Original_Swadesh", "Modern_Swadesh"};
+    public static final String[] SWADESH_LISTS = {"Original_Swadesh", "Modern_Swadesh"};
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";
@@ -240,7 +233,6 @@ public class PGTUtil {
     public static final String TODO_NODE_XID = "ToDoNodeHead";
     public static final String TODO_NODE_DONE_XID = "ToDoNodeDone";
     public static final String TODO_NODE_LABEL_XID = "ToDoNodeLabel";
-    public static final String TODO_NODE_COLOR_XID = "ToDoNodeColor";
     public static final String TODO_ROOT_XID = "ToDoRoot";
 
     // constants for PolyGlot options found in PolyGlot.ini
@@ -285,7 +277,6 @@ public class PGTUtil {
     public static final String ERROR_LOG_FILE = "PolyGlot_error.log";
     public static final String EMPTY_FILE = "<EMPTY>";
     public static final String TEMP_FILE = "xxTEMPPGTFILExx";
-    public static final String POLYGLOT_FONT = "PolyGlot";
     public static final String CONLANG_FONT = "PolyGlotConlangGrammarFont";
     public static final String POLYGLOT_INI = "PolyGlot.ini";
     public static final String POLYGLOT_WORKINGDIRECTORY = "PolyGlot";
@@ -323,16 +314,7 @@ public class PGTUtil {
     public static final String DISPLAY_NAME = "PolyGlot";
 
     // web locations
-    public static final String HOMEPAGE_URL = "http://draquet.github.io/PolyGlot/";
     public static final String UPDATE_FILE_URL = "https://drive.google.com/uc?export=download&id=0B2RMQ7sRXResN3VwLTAwTFE0ZlE";
-
-    // screen names when they're required as constants...
-    public static final String LEXICON_SCR_NAME;
-    public static final String GRAMMAR_SCR_NAME;
-    public static final String LOGO_SCR_NAME;
-    public static final String FAMILY_SCR_NAME;
-    public static final String IPA_REF_CHART_NAME;
-    public static final String QUIZ_GEN_DIALOG_SCR_NAME;
 
     // numeric constants...
     public static final Integer NUM_MENU_FLASHES = 4;
@@ -342,6 +324,8 @@ public class PGTUtil {
     public static final int DEFAULT_MAX_ROLLBACK_NUM = 10;
     public static final int MAX_FILE_PATH_LENGTH = 1000;
     public static final int MAX_LOG_CHARACTERS = 25000;
+    public static final int PLABEL_MIN_FONT_SIZE = 3;
+    public static final int PLABEL_MAX_FONT_SIZE = 240;
 
     // color constants
     public static final Color COLOR_DISABLED_BG;
@@ -377,6 +361,7 @@ public class PGTUtil {
     public static final Color COLOR_CHECKBOX_HOVER_DISABLED;
     public static final Color COLOR_CHECKBOX_CLICKED_DISABLED;
     public static final Color COLOR_CHECKBOX_FIELD_BACK_DISABLED;
+    public static final Color COLOR_REQUIRED_LEX_COLOR;
 
     // visual style constants
     public static final int CHECKBOX_ROUNDING = 3;
@@ -457,6 +442,7 @@ public class PGTUtil {
         COLOR_CHECKBOX_HOVER_DISABLED = Color.darkGray;
         COLOR_CHECKBOX_CLICKED_DISABLED = Color.darkGray;
         COLOR_CHECKBOX_FIELD_BACK_DISABLED = Color.gray;
+        COLOR_REQUIRED_LEX_COLOR = new Color(255, 204, 204);
 
         // loads default font on system error (never came up, but for completeness...)
         Font tmpFont;
@@ -468,13 +454,6 @@ public class PGTUtil {
             tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
         }
         MENU_FONT = tmpFont;
-
-        LEXICON_SCR_NAME = ScrLexicon.class.getName();
-        GRAMMAR_SCR_NAME = ScrGrammarGuide.class.getName();
-        LOGO_SCR_NAME = ScrLogoDetails.class.getName();
-        FAMILY_SCR_NAME = ScrFamilies.class.getName();
-        IPA_REF_CHART_NAME = ScrIPARefChart.class.getName();
-        QUIZ_GEN_DIALOG_SCR_NAME = ScrQuizGenDialog.class.getName();
 
         ADD_BUTTON_ICON = new ImageIcon(new ImageIcon(
                 PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/add_button.png"))
@@ -573,16 +552,6 @@ public class PGTUtil {
     }
 
     /**
-     * Encapsulates a string in RTL characters, setting back to LTR after
-     *
-     * @param encapsulate string to encapsulate
-     * @return encapsulated string
-     */
-    public static String encapsulateRTL(String encapsulate) {
-        return RTL_CHARACTER + encapsulate + LTR_MARKER;
-    }
-
-    /**
      * Strips string of RTL and LTR markers
      *
      * @param strip string to strip
@@ -656,7 +625,7 @@ public class PGTUtil {
      * @return
      */
     public static File getDefaultDirectory() {
-        File ret = new File(System.getProperty("user.home") + File.separator + PGTUtil.POLYGLOT_WORKINGDIRECTORY);
+        File ret = new File(System.getProperty("user.home") + File.separator + POLYGLOT_WORKINGDIRECTORY);
 
         if (!ret.exists()) {
             ret.mkdir();
@@ -676,10 +645,6 @@ public class PGTUtil {
         }
 
         return errorDirectory;
-    }
-
-    public static void setErrorDirectory(File _errorDirectory) {
-        errorDirectory = _errorDirectory;
     }
 
     /**
@@ -759,4 +724,6 @@ public class PGTUtil {
     public static void setForceSuppressDialogs(boolean _forceSuppressDialogs) {
         forceSuppressDialogs = _forceSuppressDialogs;
     }
+
+    private PGTUtil() {}
 }

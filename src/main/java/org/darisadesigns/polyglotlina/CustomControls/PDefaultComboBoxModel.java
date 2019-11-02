@@ -29,13 +29,13 @@ import javax.swing.DefaultComboBoxModel;
  * @param <E>
  */
 public class PDefaultComboBoxModel<E> extends DefaultComboBoxModel<E> {
-    Map<String, Object> identityMap = new HashMap<>();
+    public final Map<String, Object> identityMap = new HashMap<>();
     
     public PDefaultComboBoxModel() {
         super();
     }
     
-    public PDefaultComboBoxModel(final E items[]) {
+    public PDefaultComboBoxModel(final E[] items) {
         super(items);
         
         if (items.length > 0 && items[0] instanceof PCheckableItem) {

@@ -143,7 +143,7 @@ public class DictCore {
      * @return either name of conlang or "Conlang"
      */
     public String conLabel() {
-        return propertiesManager.getLangName().length() == 0
+        return propertiesManager.getLangName().isEmpty()
                 ? "Conlang"
                 : propertiesManager.getLangName();
     }
@@ -155,7 +155,7 @@ public class DictCore {
      * @return either name of local language or "Local Lang"
      */
     public String localLabel() {
-        return propertiesManager.getLocalLangName().length() == 0
+        return propertiesManager.getLocalLangName().isEmpty()
                 ? "Local Lang"
                 : propertiesManager.getLocalLangName();
     }
@@ -208,12 +208,10 @@ public class DictCore {
      */
     public File getWorkingDirectory() {
         String overridePath = propertiesManager.getOverrideProgramPath();
-        
-        File ret = overridePath.isEmpty() ? 
+
+        return overridePath.isEmpty() ?
                 PGTUtil.getDefaultDirectory() : 
                 new File(overridePath);
-        
-        return ret;
     }
 
     /**
@@ -246,14 +244,14 @@ public class DictCore {
      * Pushes save signal to main interface menu
      */
     public void coreSave() {
-        ((ScrMainMenu) rootWindow).saveFile();
+        rootWindow.saveFile();
     }
 
     /**
      * Pushes save signal to main interface menu
      */
     public void coreOpen() {
-        ((ScrMainMenu) rootWindow).open();
+        rootWindow.open();
     }
 
     /**
@@ -262,7 +260,7 @@ public class DictCore {
      * @param performTest whether to prompt user to save
      */
     public void coreNew(boolean performTest) {
-        ((ScrMainMenu) rootWindow).newFile(performTest);
+        rootWindow.newFile(performTest);
     }
 
     /**
@@ -279,7 +277,7 @@ public class DictCore {
      * @param _core new core to push
      */
     public void pushUpdateWithCore(DictCore _core) {
-        StackTraceElement stack[] = Thread.currentThread().getStackTrace();
+        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
 
         // prevent recursion (exclude check of top method, obviously)
         for (int i = (stack.length - 1); i > 1; i--) {
@@ -302,15 +300,6 @@ public class DictCore {
      */
     public PFrame getRootWindow() {
         return rootWindow;
-    }
-
-    /**
-     * Gets proper color for fields marked as required
-     *
-     * @return
-     */
-    public Color getRequiredColor() {
-        return new Color(255, 204, 204);
     }
 
     /**
@@ -488,11 +477,11 @@ public class DictCore {
 
         curLoading = false;
 
-        if (errorLog.trim().length() != 0) {
+        if (!errorLog.trim().isEmpty()) {
             throw new IOException(errorLog);
         }
 
-        if (warningLog.trim().length() != 0) {
+        if (!warningLog.trim().isEmpty()) {
             throw new IllegalStateException(warningLog);
         }
     }
@@ -503,7 +492,7 @@ public class DictCore {
      * @param fileName 
      * @throws java.io.IOException 
      */
-    public void revertToState(byte[] revision, String fileName) throws IOException, Exception {
+    public void revertToState(byte[] revision, String fileName) throws Exception {
         DictCore revDict = new DictCore(this);
         revDict.readFile(fileName, revision);
         
@@ -546,7 +535,7 @@ public class DictCore {
      * @throws java.io.FileNotFoundException
      */
     public void writeFile(String _fileName)
-            throws ParserConfigurationException, TransformerException, FileNotFoundException, IOException {
+            throws ParserConfigurationException, TransformerException, IOException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
         Instant newSaveTime = Instant.now();

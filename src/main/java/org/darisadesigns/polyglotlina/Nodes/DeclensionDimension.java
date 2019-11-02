@@ -30,12 +30,12 @@ import org.w3c.dom.Element;
  */
 public class DeclensionDimension extends DictNode {
     
-    public DeclensionDimension(Integer _id) {
-        id = _id;
+    public DeclensionDimension(Integer id) {
+        super(id);
     }
     
     public DeclensionDimension() {
-        id = -1;
+        super(-1);
     }
     
     @Override

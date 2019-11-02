@@ -62,7 +62,8 @@ public final class ScrPhonology extends PFrame {
      * @param _core
      */
     public ScrPhonology(DictCore _core) {
-        core = _core;
+        super(_core);
+        
         initComponents();
 
         populateProcs();
@@ -97,11 +98,6 @@ public final class ScrPhonology extends PFrame {
         btnDownRom.setFont(charis);
         btnUpProc.setFont(charis);
         btnUpRom.setFont(charis);
-    }
-
-    @Override
-    public final JRootPane getRootPane() {
-        return super.getRootPane();
     }
 
     private void enableRomanization(boolean enable) {
@@ -232,15 +228,15 @@ public final class ScrPhonology extends PFrame {
     /**
      * Tests whether the replacement table contains duplicates
      *
-     * @param checkRow row to be checked
+     * @param value value to be checked
      * @return true if dups, false otherwise
      */
     private boolean checkRepRepeats(String value) {
         boolean ret = false;
 
-        if (value.length() != 0) {
+        if (!value.isEmpty()) {
             for (int i = 0; i < tblRep.getRowCount(); i++) {
-                if (value.equals((String) tblRep.getModel().getValueAt(i, 0))) {
+                if (value.equals(tblRep.getModel().getValueAt(i, 0))) {
                     ret = true;
                     break;
                 }
@@ -339,7 +335,7 @@ public final class ScrPhonology extends PFrame {
     private void setupProcTable() {
         DefaultTableModel procTableModel = new DefaultTableModel();
         procTableModel.addColumn("Character(s)");
-        procTableModel.addColumn("Pronuncation");
+        procTableModel.addColumn("Pronunciation");
         tblProcs.setModel(procTableModel); // TODO: find way to make tblProcs display RTL order when appropriate Maybe something on my custom cell editor
         
         procTableModel.addTableModelListener((TableModelEvent e) -> {
@@ -384,7 +380,7 @@ public final class ScrPhonology extends PFrame {
 
         TableColumn column = tblRep.getColumnModel().getColumn(0);
         final PCellEditor editChar = new PCellEditor(false, core);
-        editChar.setIgnoreListenerSilenceing(true);
+        editChar.setIgnoreListenerSilencing(true);
         editChar.setDocuListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
@@ -404,12 +400,11 @@ public final class ScrPhonology extends PFrame {
             private void doSave(DocumentEvent e) {
                 final String value = editChar.getCellEditorValue().toString();
 
-                if (curPopulating) {
-                } else if (value.length() > 1) {
+                if (!curPopulating && value.length() > 1) {
                     SwingUtilities.invokeLater(() -> {
-                        editChar.setIgnoreListenerSilenceing(false);
+                        editChar.setIgnoreListenerSilencing(false);
                         editChar.setValue(value.substring(0, 1));
-                        editChar.setIgnoreListenerSilenceing(true);
+                        editChar.setIgnoreListenerSilencing(true);
                         InfoBox.warning("Single Character Only", "Replacement characters can only be 1 character long.", core.getRootWindow());
                     });
                 } else {
@@ -422,7 +417,7 @@ public final class ScrPhonology extends PFrame {
 
         column = tblRep.getColumnModel().getColumn(1);
         PCellEditor valueEdit = new PCellEditor(useConFont, core);
-        valueEdit.setIgnoreListenerSilenceing(true);
+        valueEdit.setIgnoreListenerSilencing(true);
         valueEdit.setDocuListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -538,7 +533,7 @@ public final class ScrPhonology extends PFrame {
             String repChar = tblRep.getValueAt(i, 0).toString();
             String value = tblRep.getValueAt(i, 1).toString();
 
-            if (repChar.length() == 0) {
+            if (repChar.isEmpty()) {
                 continue;
             }
 
@@ -582,7 +577,7 @@ public final class ScrPhonology extends PFrame {
      * delete currently selected pronunciation (with confirmation)
      */
     private void deleteProc() {
-        Integer curRow = tblProcs.getSelectedRow();
+        int curRow = tblProcs.getSelectedRow();
 
         if (curRow == -1
                 || !InfoBox.deletionConfirmation(core.getRootWindow())) {
@@ -618,7 +613,7 @@ public final class ScrPhonology extends PFrame {
      * delete currently selected pronunciation (with confirmation)
      */
     private void deleteRom() {
-        Integer curRow = tblRom.getSelectedRow();
+        int curRow = tblRom.getSelectedRow();
 
         if (curRow == -1
                 || !InfoBox.deletionConfirmation(core.getRootWindow())) {
@@ -638,7 +633,7 @@ public final class ScrPhonology extends PFrame {
      * moves selected pronunciation down one priority slot
      */
     private void moveProcUp() {
-        Integer curRow = tblProcs.getSelectedRow();
+        int curRow = tblProcs.getSelectedRow();
 
         if (curRow == -1) {
             return;
@@ -648,10 +643,10 @@ public final class ScrPhonology extends PFrame {
 
         populateProcs();
 
-        if (curRow != 0) {
-            tblProcs.setRowSelectionInterval(curRow - 1, curRow - 1);
-        } else {
+        if (curRow == 0) {
             tblProcs.setRowSelectionInterval(curRow, curRow);
+        } else {
+            tblProcs.setRowSelectionInterval(curRow - 1, curRow - 1);
         }
     }
 
@@ -659,7 +654,7 @@ public final class ScrPhonology extends PFrame {
      * moves selected pronunciation down one priority slot
      */
     private void moveRomUp() {
-        Integer curRow = tblRom.getSelectedRow();
+        int curRow = tblRom.getSelectedRow();
 
         if (curRow == -1) {
             return;
@@ -669,10 +664,10 @@ public final class ScrPhonology extends PFrame {
 
         populateRoms();
 
-        if (curRow != 0) {
-            tblRom.setRowSelectionInterval(curRow - 1, curRow - 1);
-        } else {
+        if (curRow == 0) {
             tblRom.setRowSelectionInterval(curRow, curRow);
+        } else {
+            tblRom.setRowSelectionInterval(curRow - 1, curRow - 1);
         }
     }
 
@@ -680,7 +675,7 @@ public final class ScrPhonology extends PFrame {
      * moves selected pronunciation up one priority slot
      */
     private void moveProcDown() {
-        Integer curRow = tblProcs.getSelectedRow();
+        int curRow = tblProcs.getSelectedRow();
 
         if (curRow == -1) {
             return;
@@ -690,10 +685,10 @@ public final class ScrPhonology extends PFrame {
 
         populateProcs();
 
-        if (curRow != tblProcs.getRowCount() - 1) {
-            tblProcs.setRowSelectionInterval(curRow + 1, curRow + 1);
-        } else {
+        if (curRow == tblProcs.getRowCount() - 1) {
             tblProcs.setRowSelectionInterval(curRow, curRow);
+        } else {
+            tblProcs.setRowSelectionInterval(curRow + 1, curRow + 1);
         }
     }
 
@@ -701,7 +696,7 @@ public final class ScrPhonology extends PFrame {
      * moves selected pronunciation up one priority slot
      */
     private void moveRomDown() {
-        Integer curRow = tblRom.getSelectedRow();
+        int curRow = tblRom.getSelectedRow();
 
         if (curRow == -1) {
             return;
@@ -711,10 +706,10 @@ public final class ScrPhonology extends PFrame {
 
         populateRoms();
 
-        if (curRow != tblRom.getRowCount() - 1) {
-            tblRom.setRowSelectionInterval(curRow + 1, curRow + 1);
-        } else {
+        if (curRow == tblRom.getRowCount() - 1) {
             tblRom.setRowSelectionInterval(curRow, curRow);
+        } else {
+            tblRom.setRowSelectionInterval(curRow + 1, curRow + 1);
         }
     }
 
@@ -723,7 +718,6 @@ public final class ScrPhonology extends PFrame {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

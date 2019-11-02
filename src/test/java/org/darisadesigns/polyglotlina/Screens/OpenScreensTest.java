@@ -42,7 +42,7 @@ public class OpenScreensTest {
     
     public OpenScreensTest() {
         core = new DictCore();
-        errors = IOHandler.gettErrorLogFile();
+        errors = IOHandler.getErrorLogFile();
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "basic_lang.pgd");
@@ -156,7 +156,7 @@ public class OpenScreensTest {
         
         System.out.println("testScrEtymRoots");
         for (ConWord word : core.getWordCollection().getWordNodes()) {
-            ScrEtymRoots s = new ScrEtymRoots(core, null, word);
+            ScrEtymRoots s = new ScrEtymRoots(core, word);
             s.dispose();
         }
         

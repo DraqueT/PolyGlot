@@ -45,6 +45,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -62,7 +63,8 @@ public final class ScrQuickWordEntry extends PDialog {
      * @param _parent parent dictionary interface
      */
     public ScrQuickWordEntry(DictCore _core, ScrLexicon _parent) {
-        core = _core;
+        super(_core);
+        
         parent = _parent;
 
         initComponents();
@@ -70,15 +72,15 @@ public final class ScrQuickWordEntry extends PDialog {
         blankWord();
 
         // conword is always required and is initially selected
-        txtConWord.setBackground(core.getRequiredColor());
+        txtConWord.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
         txtConWord.requestFocus();
 
         if (core.getPropertiesManager().isLocalMandatory()) {
-            txtLocalWord.setBackground(core.getRequiredColor());
+            txtLocalWord.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
             chkLocal.setEnabled(false);
         }
         if (core.getPropertiesManager().isTypesMandatory()) {
-            cmbType.setForeground(core.getRequiredColor());
+            cmbType.setForeground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
             chkType.setEnabled(false);
         }
 
@@ -149,7 +151,7 @@ public final class ScrQuickWordEntry extends PDialog {
         String proc = "";
         
         try {
-            core.getPronunciationMgr()
+            proc  = core.getPronunciationMgr()
                 .getPronunciation(txtConWord.getText());
         } catch (Exception e) {
             // user error
@@ -158,7 +160,7 @@ public final class ScrQuickWordEntry extends PDialog {
                     + e.getLocalizedMessage(), this);
         }
 
-        if (proc.length() != 0) {
+        if (!proc.isEmpty()) {
             txtProc.setText(proc);
         }
     }
@@ -214,16 +216,16 @@ public final class ScrQuickWordEntry extends PDialog {
         String testResults = "";
 
         if (!test.getValue().isEmpty()) {
-            ((PTextField) txtConWord).makeFlash(core.getRequiredColor(), true);
+            ((PTextField) txtConWord).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
             testResults += test.getValue();
         }
         if (!test.getLocalWord().isEmpty()) {
-            ((PTextField) txtLocalWord).makeFlash(core.getRequiredColor(), true);
+            ((PTextField) txtLocalWord).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
             testResults += ("\n" + test.getLocalWord());
         }
         try {
             if (!test.getPronunciation().isEmpty()) {
-                ((PTextField) txtProc).makeFlash(core.getRequiredColor(), true);
+                ((PTextField) txtProc).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
                 testResults += ("\n" + test.getPronunciation());
             }
         } catch (Exception e) {
@@ -232,21 +234,21 @@ public final class ScrQuickWordEntry extends PDialog {
         }
         if (!test.getDefinition().isEmpty()) {
             // errors having to do with type patterns returned in def field.
-            ((PComboBox) cmbType).makeFlash(core.getRequiredColor(), true);
+            ((PComboBox) cmbType).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
             testResults += ("\n" + test.getDefinition());
         }
         if (!test.typeError.isEmpty()) {
-            ((PComboBox) cmbType).makeFlash(core.getRequiredColor(), true);
+            ((PComboBox) cmbType).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
             testResults += ("\n" + test.typeError);
         }
         if (core.getPropertiesManager().isWordUniqueness()
                 && core.getWordCollection().testWordValueExists(txtConWord.getText())) {
-            ((PTextField) txtConWord).makeFlash(core.getRequiredColor(), true);
+            ((PTextField) txtConWord).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
             testResults += ("\nConWords set to enforced unique: this local exists elsewhere.");
         }
         if (core.getPropertiesManager().isLocalUniqueness()
                 && core.getWordCollection().testLocalValueExists(txtLocalWord.getText())) {
-            ((PTextField) txtLocalWord).makeFlash(core.getRequiredColor(), true);
+            ((PTextField) txtLocalWord).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
             testResults += ("\nLocal words set to enforced unique: this work exists elsewhere.");
         }
 
@@ -306,7 +308,7 @@ public final class ScrQuickWordEntry extends PDialog {
         // empty map of all class information before filling it again
         classComboMap.clear();
 
-        // create dropdown for each class that applies to the curren word
+        // create dropdown for each class that applies to the current word
         for (WordClass curProp : propList) {
             if (curProp.isFreeText()) {
                 PTextField textField = new PTextField(core, false, "-- " + curProp.getValue() + " --");
@@ -384,7 +386,6 @@ public final class ScrQuickWordEntry extends PDialog {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

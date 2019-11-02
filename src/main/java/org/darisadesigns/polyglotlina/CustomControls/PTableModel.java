@@ -34,7 +34,7 @@ public class PTableModel extends DefaultTableModel {
     @Override
     @SuppressWarnings("UseOfObsoleteCollectionType")
     public void setValueAt(Object aValue, int row, int column) {
-        java.util.Vector rowVector = (java.util.Vector)dataVector.elementAt(row);
+        java.util.Vector rowVector = dataVector.elementAt(row);
         DictNode node = (DictNode)rowVector.get(column);
         node.setValue(aValue.toString());
         fireTableCellUpdated(row, column);

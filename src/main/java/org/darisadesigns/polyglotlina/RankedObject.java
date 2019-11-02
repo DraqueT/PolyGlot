@@ -21,17 +21,17 @@
 package org.darisadesigns.polyglotlina;
 
 /**
- * Used to rank any given object by numeric value. WHY ISN'T THIS IN JAVA 
- * BY DEFAULT???
+ * Used to rank any given object by numeric value.
  * @author draque
+ * @param <N>
  */
-public class RankedObject implements Comparable<RankedObject>{
+public class RankedObject<N> implements Comparable<RankedObject>{
     private final int rank;
     private int LOWER = -1;
     private int HIGHER = 1;
-    Object holder;
+    private final N holder;
     
-    public RankedObject(Object _holder, int _rank) {
+    public RankedObject(N _holder, int _rank) {
         holder = _holder;        
         rank = _rank;
     }
@@ -40,7 +40,7 @@ public class RankedObject implements Comparable<RankedObject>{
         return rank;
     }
     
-    public Object getHolder() {
+    public N getHolder() {
         return holder;
     }
     

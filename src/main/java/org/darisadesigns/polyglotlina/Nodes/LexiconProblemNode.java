@@ -24,8 +24,8 @@ package org.darisadesigns.polyglotlina.Nodes;
  * @author draque
  */
 public class LexiconProblemNode implements Comparable<LexiconProblemNode>{
-    public ConWord problemWord;
-    public String description;
+    public final ConWord problemWord;
+    public final String description;
     
     public LexiconProblemNode(ConWord _problemWord, String _description) {
         problemWord = _problemWord;

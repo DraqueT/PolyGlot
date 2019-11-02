@@ -145,9 +145,6 @@ public class PToolTipUI extends ToolTipUI
         
         c.setSize(size);
         c.getParent().setSize(size);
-        if (c.getParent().getParent() != null) {
-            //c.getParent().getParent().setSize(size);
-        }
 
         Insets insets = c.getInsets();
         Rectangle paintTextR = new Rectangle(
@@ -178,7 +175,7 @@ public class PToolTipUI extends ToolTipUI
                                            insets.top+insets.bottom);
         String text = ((JToolTip)c).getTipText();
 
-        if (text != null && text.length() != 0) {
+        if (text != null && !text.isEmpty()) {
             prefSize.width += fm.stringWidth(text);
             prefSize.height += fm.getHeight();
         }
@@ -206,7 +203,7 @@ public class PToolTipUI extends ToolTipUI
     }
 
     /**
-     * Invoked when the <code>JCompoment</code> associated with the
+     * Invoked when the <code>JComponent</code> associated with the
      * <code>JToolTip</code> has changed, or at initialization time. This
      * should update any state dependant upon the <code>JComponent</code>.
      *

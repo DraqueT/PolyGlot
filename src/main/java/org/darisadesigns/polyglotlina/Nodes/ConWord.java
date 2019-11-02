@@ -57,12 +57,11 @@ public class ConWord extends DictNode {
     public String typeError = ""; // used only for returning error state
 
     public ConWord() {
-        value = "";
+        super();
         localWord = "";
         typeId = 0;
         definition = "";
         pronunciation = "";
-        id = -1;
         procOverride = false;
         autoDeclensionOverride = false;
         rulesOverride = false;
@@ -85,11 +84,11 @@ public class ConWord extends DictNode {
             checkProc = "Regex error: " + e.getLocalizedMessage();
         }
         
-        return checkValue.getValue().length() == 0 &&
-                checkValue.getDefinition().length() == 0 &&
-                checkValue.getLocalWord().length() == 0 &&
-                checkProc.length() == 0 &&
-                checkValue.typeError.length() == 0;
+        return checkValue.getValue().isEmpty() &&
+                checkValue.getDefinition().isEmpty() &&
+                checkValue.getLocalWord().isEmpty() &&
+                checkProc.isEmpty() &&
+                checkValue.typeError.isEmpty();
     }
 
     public boolean isRulesOverride() {
@@ -135,7 +134,7 @@ public class ConWord extends DictNode {
     /**
      * Tests whether this word has a class value applied to it. 
      * @param classId class id to test
-     * @param valueId value id withi class to test
+     * @param valueId value id with class to test
      * @return true if class + value appear on word
      */
     public boolean wordHasClassValue(int classId, int valueId) {
@@ -253,7 +252,7 @@ public class ConWord extends DictNode {
 
     public void setLocalWord(String _localWord) {
         if (parentCollection != null) {
-            parentCollection.extertalBalanceWordCounts(id, value, _localWord);
+            parentCollection.externalBalanceWordCounts(id, value, _localWord);
         }
         
         this.localWord = _localWord.trim();
@@ -262,7 +261,7 @@ public class ConWord extends DictNode {
     @Override
     public void setValue(String _value) {
         if (parentCollection != null) {
-            parentCollection.extertalBalanceWordCounts(id, _value, localWord);
+            parentCollection.externalBalanceWordCounts(id, _value, localWord);
         }        
         super.setValue(_value.replace(PGTUtil.RTL_CHARACTER, "").replace(PGTUtil.LTR_MARKER, ""));
     }
@@ -303,7 +302,7 @@ public class ConWord extends DictNode {
         boolean ret = true;
 
         // There might be no local translation, but the constructed word must exist
-        ret = ret && (value.length() != 0);
+        ret = ret && (!value.isEmpty());
 
         return ret;
     }
@@ -327,7 +326,7 @@ public class ConWord extends DictNode {
         
         if (!procOverride && core != null) {
             String gen = core.getPronunciationMgr().getPronunciation(value);
-            if (gen.length() != 0) {
+            if (gen.isEmpty()) {
                 ret = gen;
             }
         }
@@ -346,9 +345,8 @@ public class ConWord extends DictNode {
      * @param valueId ID of value to set the class to
      */
     public void setClassValue(int classId, int valueId) {
-        if (classValues.containsKey(classId)) {
-            classValues.remove(classId);
-        } 
+        classValues.remove(classId);
+        
         if (valueId != -1) {
             classValues.put(classId, valueId);
         }
@@ -451,69 +449,69 @@ public class ConWord extends DictNode {
     public void writeXML(Document doc, Element rootElement) {
         Element wordNode = doc.createElement(PGTUtil.WORD_XID);
 
-            Element wordValue = doc.createElement(PGTUtil.WORD_ID_XID);
-            Integer wordId = this.getId();
-            wordValue.appendChild(doc.createTextNode(wordId.toString()));
-            wordNode.appendChild(wordValue);
+        Element wordValue = doc.createElement(PGTUtil.WORD_ID_XID);
+        Integer wordId = this.getId();
+        wordValue.appendChild(doc.createTextNode(wordId.toString()));
+        wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.LOCALWORD_XID);
-            wordValue.appendChild(doc.createTextNode(this.getLocalWord()));
-            wordNode.appendChild(wordValue);
+        wordValue = doc.createElement(PGTUtil.LOCALWORD_XID);
+        wordValue.appendChild(doc.createTextNode(this.getLocalWord()));
+        wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.CONWORD_XID);
-            wordValue.appendChild(doc.createTextNode(this.getValue()));
-            wordNode.appendChild(wordValue);
+        wordValue = doc.createElement(PGTUtil.CONWORD_XID);
+        wordValue.appendChild(doc.createTextNode(this.getValue()));
+        wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.WORD_POS_ID_XID);
-            wordValue.appendChild(doc.createTextNode(this.getWordTypeId().toString()));
-            wordNode.appendChild(wordValue);
+        wordValue = doc.createElement(PGTUtil.WORD_POS_ID_XID);
+        wordValue.appendChild(doc.createTextNode(this.getWordTypeId().toString()));
+        wordNode.appendChild(wordValue);
 
-            try {
-                wordValue = doc.createElement(PGTUtil.WORD_PROC_XID);
-                wordValue
-                        .appendChild(doc.createTextNode(this.getPronunciation()));
-                wordNode.appendChild(wordValue);
-            } catch (Exception e) {
-                // Do nothing. Users are made aware of this issue elsewhere.
-                // IOHandler.writeErrorLog(e);
-            }
+        try {
+            wordValue = doc.createElement(PGTUtil.WORD_PROC_XID);
+            wordValue
+                    .appendChild(doc.createTextNode(this.getPronunciation()));
+            wordNode.appendChild(wordValue);
+        } catch (Exception e) {
+            // Do nothing. Users are made aware of this issue elsewhere.
+            // IOHandler.writeErrorLog(e);
+        }
 
-            wordValue = doc.createElement(PGTUtil.WORD_DEF_XID);
-            wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getDefinition())));
-            wordNode.appendChild(wordValue);
+        wordValue = doc.createElement(PGTUtil.WORD_DEF_XID);
+        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getDefinition())));
+        wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.WORD_PROCOVERRIDE_XID);
-            wordValue.appendChild(doc.createTextNode(this.isProcOverride() ? PGTUtil.TRUE : PGTUtil.FALSE));
-            wordNode.appendChild(wordValue);
+        wordValue = doc.createElement(PGTUtil.WORD_PROCOVERRIDE_XID);
+        wordValue.appendChild(doc.createTextNode(this.isProcOverride() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.WORD_AUTODECLOVERRIDE_XID);
-            wordValue.appendChild(doc.createTextNode(this.isOverrideAutoDeclen() ? PGTUtil.TRUE : PGTUtil.FALSE));
-            wordNode.appendChild(wordValue);
+        wordValue = doc.createElement(PGTUtil.WORD_AUTODECLOVERRIDE_XID);
+        wordValue.appendChild(doc.createTextNode(this.isOverrideAutoDeclen() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.WORD_RULEORVERRIDE_XID);
-            wordValue.appendChild(doc.createTextNode(this.isRulesOverride() ? PGTUtil.TRUE : PGTUtil.FALSE));
-            wordNode.appendChild(wordValue);
+        wordValue = doc.createElement(PGTUtil.WORD_RULEORVERRIDE_XID);
+        wordValue.appendChild(doc.createTextNode(this.isRulesOverride() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.WORD_CLASSCOLLECTION_XID);
-            for (Entry<Integer, Integer> entry : this.getClassValues()) {
-                Element classVal = doc.createElement(PGTUtil.WORD_CLASS_AND_VALUE_XID);
-                classVal.appendChild(doc.createTextNode(entry.getKey() + "," + entry.getValue()));
-                wordValue.appendChild(classVal);
-            }
-            wordNode.appendChild(wordValue);
+        wordValue = doc.createElement(PGTUtil.WORD_CLASSCOLLECTION_XID);
+        for (Entry<Integer, Integer> entry : this.getClassValues()) {
+            Element classVal = doc.createElement(PGTUtil.WORD_CLASS_AND_VALUE_XID);
+            classVal.appendChild(doc.createTextNode(entry.getKey() + "," + entry.getValue()));
+            wordValue.appendChild(classVal);
+        }
+        wordNode.appendChild(wordValue);
 
-            wordValue = doc.createElement(PGTUtil.WORD_CLASS_TEXT_VAL_COLLECTION_XID);
-            for (Entry<Integer, String> entry : this.getClassTextValues()) {
-                Element classVal = doc.createElement(PGTUtil.WORD_CLASS_TEXT_VAL_XID);
-                classVal.appendChild(doc.createTextNode(entry.getKey() + "," + entry.getValue()));
-                wordValue.appendChild(classVal);
-            }
-            wordNode.appendChild(wordValue);
-            
-            wordValue = doc.createElement(PGTUtil.WORD_ETY_NOTES_XID);
-            wordValue.appendChild(doc.createTextNode(this.getEtymNotes()));
-            wordNode.appendChild(wordValue);
-            
-            rootElement.appendChild(wordNode);
+        wordValue = doc.createElement(PGTUtil.WORD_CLASS_TEXT_VAL_COLLECTION_XID);
+        for (Entry<Integer, String> entry : this.getClassTextValues()) {
+            Element classVal = doc.createElement(PGTUtil.WORD_CLASS_TEXT_VAL_XID);
+            classVal.appendChild(doc.createTextNode(entry.getKey() + "," + entry.getValue()));
+            wordValue.appendChild(classVal);
+        }
+        wordNode.appendChild(wordValue);
+
+        wordValue = doc.createElement(PGTUtil.WORD_ETY_NOTES_XID);
+        wordValue.appendChild(doc.createTextNode(this.getEtymNotes()));
+        wordNode.appendChild(wordValue);
+
+        rootElement.appendChild(wordNode);
     }
 }

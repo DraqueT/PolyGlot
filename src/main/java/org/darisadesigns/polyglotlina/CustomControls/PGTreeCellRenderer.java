@@ -47,20 +47,15 @@ public class PGTreeCellRenderer extends DefaultTreeCellRenderer {
                 && !expanded) {
             setIcon((Icon) UIManager.get("Tree.closedIcon"));
         } else if (node instanceof GrammarSectionNode) {
-            setIcon((Icon) new ImageIcon(getClass().getResource(PGTUtil.TREE_NODE_IMAGE)));
+            setIcon(new ImageIcon(getClass().getResource(PGTUtil.TREE_NODE_IMAGE)));
         } else if (expanded) {
             setIcon((Icon) UIManager.get("Tree.openIcon"));
         } else if (!expanded && !leaf) {
             setIcon((Icon) UIManager.get("Tree.closedIcon"));
         } else {
-            setIcon((Icon) new ImageIcon(getClass().getResource(PGTUtil.TREE_NODE_IMAGE)));
+            setIcon(new ImageIcon(getClass().getResource(PGTUtil.TREE_NODE_IMAGE)));
         }
         
         return this;
-    }
-    
-    @Override
-    public String getText() {
-        return super.getText();
     }
 }

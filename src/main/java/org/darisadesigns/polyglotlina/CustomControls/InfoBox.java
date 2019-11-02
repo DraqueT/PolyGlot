@@ -23,8 +23,7 @@ package org.darisadesigns.polyglotlina.CustomControls;
  *
  * @author draque
  */
-import java.awt.HeadlessException;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -53,8 +52,7 @@ public class InfoBox extends JFrame {
 
             @Override
             public int hashCode() {
-                int hash = 7;
-                return hash;
+                return 7;
             }
         };
         YES = new PButton() {
@@ -66,8 +64,7 @@ public class InfoBox extends JFrame {
 
             @Override
             public int hashCode() {
-                int hash = 7;
-                return hash;
+                return 7;
             }
         };
 
@@ -80,8 +77,7 @@ public class InfoBox extends JFrame {
 
             @Override
             public int hashCode() {
-                int hash = 7;
-                return hash;
+                return 7;
             }
         };
         CANCEL = new PButton() {
@@ -93,33 +89,32 @@ public class InfoBox extends JFrame {
 
             @Override
             public int hashCode() {
-                int hash = 7;
-                return hash;
+                return 7;
             }
         };
 
         OK.setText("OK");
         OK.addActionListener((ActionEvent e) -> {
-            JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
+            JOptionPane pane = (JOptionPane) ((Component) e.getSource()).getParent().getParent();
             // set the value of the option pane
             pane.setValue(JOptionPane.OK_OPTION);
         });
         
         YES.setText("Yes");
         YES.addActionListener((ActionEvent e) -> {
-            JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
+            JOptionPane pane = (JOptionPane) ((Component) e.getSource()).getParent().getParent();
             pane.setValue(JOptionPane.YES_OPTION);
         });
 
         NO.setText("No");
         NO.addActionListener((ActionEvent e) -> {
-            JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
+            JOptionPane pane = (JOptionPane) ((Component) e.getSource()).getParent().getParent();
             pane.setValue(JOptionPane.NO_OPTION);
         });
 
         CANCEL.setText("Cancel");
         CANCEL.addActionListener((ActionEvent e) -> {
-            JOptionPane pane = (JOptionPane) ((JPanel) ((JComponent) e.getSource()).getParent()).getParent();
+            JOptionPane pane = (JOptionPane) ((Component) e.getSource()).getParent().getParent();
             pane.setValue(JOptionPane.CANCEL_OPTION);
         });
     }
@@ -202,8 +197,8 @@ public class InfoBox extends JFrame {
             } catch (HeadlessException | NumberFormatException e) {
                 // TODO: this message should be passed in rather than hardcoded here. It is particular to fonts.
                 warningMessage = warningMessage.isEmpty() ? "Please input numeric value." : warningMessage;
-                InfoBox.warning("Incorrect Input", warningMessage, parent);
-                ret = InfoBox.doubleInputDialog(title, message, warningMessage, parent);
+                warning("Incorrect Input", warningMessage, parent);
+                ret = doubleInputDialog(title, message, warningMessage, parent);
             }
         }
         

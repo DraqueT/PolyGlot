@@ -42,7 +42,7 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
     private final DictCore core;
 
     public WordClassCollection(DictCore _core) {
-        bufferNode = new WordClass();
+        super(new WordClass());
         core = _core;
     }
 
@@ -83,10 +83,9 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
         List<WordClass> ret = new ArrayList<>();
 
         nodeMap.values().forEach((prop) -> {
-        WordClass curProp = (WordClass)prop;
-            if (curProp.appliesToType(classId)
-                    || curProp.appliesToType(-1)) { // -1 is class "all"
-                ret.add(curProp);
+            if (prop.appliesToType(classId)
+                    || prop.appliesToType(-1)) { // -1 is class "all"
+                ret.add(prop);
             }
         });
 
@@ -106,22 +105,10 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
 
         // creates each class
         nodeMap.values().forEach((curClass) -> {
-            ((WordClass)curClass).writeXML(doc, wordClasses);
+            curClass.writeXML(doc, wordClasses);
         });
 
         rootElement.appendChild(wordClasses);
-    }
-
-    /**
-     * Gets random assortment of word class combinations based. Number of
-     * combinations limited by parameters and by number of combinations
-     * available
-     *
-     * @param numRandom number of entries to return
-     * @return randomly generated combinations of word classes
-     */
-    public List<List<PEntry<Integer, Integer>>> getRandomPropertyCombinations(int numRandom) {
-        return getRandomPropertyCombinations(numRandom, null);
     }
 
     /**
@@ -140,7 +127,7 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
 
         Collections.shuffle(comboCache, new Random(System.nanoTime()));
 
-        if (comboCache != null && comboCache.size() > 0) {
+        if (comboCache != null && !comboCache.isEmpty()) {
             for (int i = 0; (i - offset) < numRandom && i + offset < comboCache.size(); i++) {
                 if (propCombEqual(comboCache.get(i + offset), new ArrayList<>(excludeWord.getClassValues()))) {
                     offset++;
@@ -225,13 +212,12 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
     public boolean isValid(Integer classId, Integer valId) {
         boolean ret = true;
 
-        if (!nodeMap.containsKey(classId)) {
-            ret = false;
-        } else {
-            WordClass prop = (WordClass) nodeMap.get(classId);
-            if (!prop.isValid(valId)) {
+        if (nodeMap.containsKey(classId)) {
+            if (!nodeMap.get(classId).isValid(valId)) {
                 ret = false;
             }
+        } else {
+            ret = false;
         }
 
         return ret;

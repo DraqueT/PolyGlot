@@ -30,7 +30,7 @@ import java.util.HashMap;
  * @param <V>
  */
 public class PAlphaMap<K, V> extends HashMap<K, V> {
-    int longestEntry = 0;
+    private int longestEntry = 0;
     
     /**
      *
@@ -46,7 +46,7 @@ public class PAlphaMap<K, V> extends HashMap<K, V> {
             longestEntry = keyLen;
         }
         
-        return (V)super.put((K)key, (V)orderVal);
+        return super.put(key, orderVal);
     }
     
     public int getLongestEntry() {

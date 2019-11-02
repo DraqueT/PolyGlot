@@ -100,12 +100,6 @@ public class LogoNode extends DictNode {
         }
     }
 
-    public void removeRadical(LogoNode radicalId) {
-        if (radicals.contains(radicalId)) {
-            radicals.remove(radicalId);
-        }
-    }
-
     public List<LogoNode> getRadicals() {
         return radicals;
     }
@@ -117,12 +111,6 @@ public class LogoNode extends DictNode {
     public void addReading(String reading) {
         if (!readings.contains(reading)) {
             readings.add(reading);
-        }
-    }
-
-    public void removeReading(String reading) {
-        if (readings.contains(reading)) {
-            readings.remove(reading);
         }
     }
 
@@ -189,7 +177,7 @@ public class LogoNode extends DictNode {
         Iterator<LogoNode> it = radicals.iterator();
 
         while (it.hasNext()) {
-            if (ret.length() != 0) {
+            if (!ret.isEmpty()) {
                 ret += ",";
             }
 
@@ -249,7 +237,7 @@ public class LogoNode extends DictNode {
      * @throws java.lang.Exception on load error
      */
     public void loadRadicalRelations(Map<Integer, LogoNode> nodeMap) throws Exception {
-        if (tmpRads.length() == 0) {
+        if (tmpRads.isEmpty()) {
             return;
         }
 
@@ -260,14 +248,14 @@ public class LogoNode extends DictNode {
         for (String radId : radIds) {
             try {
                 int nodeId = Integer.parseInt(radId);
-                addRadical((LogoNode) nodeMap.get(nodeId));
+                addRadical(nodeMap.get(nodeId));
             } catch (NumberFormatException e) {
                 loadLog += "\nlogograph error: " + e.getLocalizedMessage();
                 // IOHandler.writeErrorLog(e);
             }
         }
         
-        if (loadLog.length() != 0) {
+        if (!loadLog.isEmpty()) {
             throw new Exception("Logograph load error(s):" + loadLog);
         }
     }

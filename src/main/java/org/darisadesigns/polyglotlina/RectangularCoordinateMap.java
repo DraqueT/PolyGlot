@@ -71,21 +71,21 @@ public class RectangularCoordinateMap<K> {
                     && x <= rect.rightEdge
                     && y >= rect.topEdge
                     && y <= rect.bottomEdge) {
-                ret = (K)rect.target;
+                ret = rect.target;
             } 
         }
         
         return ret;
     }
     
-    private class Rectangle<K> {
+    private static class Rectangle<L> {
         public final int leftEdge;
         public final int rightEdge;
         public final int topEdge;
         public final int bottomEdge;
-        public final K target;
+        public final L target;
         
-        public Rectangle(int _leftEdge, int _rightEdge, int _topEdge, int _bottomEdge, K _target) {
+        public Rectangle(int _leftEdge, int _rightEdge, int _topEdge, int _bottomEdge, L _target) {
             leftEdge = _leftEdge;
             rightEdge = _rightEdge;
             topEdge = _topEdge;

@@ -32,8 +32,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author draque
  */
 public class ConWordCollectionTest {
-    public ConWordCollectionTest() {
-    }
     
     @Test
     public void loadSwadeshTestRealFile() {

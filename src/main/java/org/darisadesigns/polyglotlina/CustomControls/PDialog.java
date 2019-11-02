@@ -41,13 +41,22 @@ import javax.swing.JDialog;
  */
 public abstract class PDialog extends JDialog implements FocusListener, WindowFocusListener {
     private boolean isDisposed = false;
-    protected WindowMode mode = WindowMode.STANDARD;
+    protected final WindowMode mode = WindowMode.STANDARD;
     private boolean skipCenter = false;
     private boolean hasFocus = false;
     protected DictCore core;
     protected boolean firstVisible = true;
     protected boolean ignoreInitialResize = false;
-        
+       
+    public PDialog(DictCore _core) {
+        core = _core;
+    }
+    
+    public PDialog(DictCore _core, boolean _firstVisible) {
+        core = _core;
+        firstVisible = _firstVisible;
+    }
+    
     /**
      * Returns current running mode of window
      * @return 

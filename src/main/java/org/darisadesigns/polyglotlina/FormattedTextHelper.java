@@ -41,18 +41,18 @@ import javax.swing.text.StyleConstants;
  *
  * @author draque
  */
-public class FormattedTextHelper {
-    private final static String FINDBODY = "<body>";
-    private final static String FINDBODYEND = "</body>";
-    private final static String BLACK = "black";
-    private final static String RED = "red";
-    private final static String GRAY = "gray";
-    private final static String GREEN = "green";
-    private final static String YELLOW = "yellow";
-    private final static String BLUE = "blue";
-    private final static String COLOR = "color";
-    private final static String FACE = "face";
-    private final static String SIZE = "size";
+public final class FormattedTextHelper {
+    private static final String FINDBODY = "<body>";
+    private static final String FINDBODYEND = "</body>";
+    private static final String BLACK = "black";
+    private static final String RED = "red";
+    private static final String GRAY = "gray";
+    private static final String GREEN = "green";
+    private static final String YELLOW = "yellow";
+    private static final String BLUE = "blue";
+    private static final String COLOR = "color";
+    private static final String FACE = "face";
+    private static final String SIZE = "size";
 
     /**
      * Restores to the JTextPane the formatted text values encoded in the saved
@@ -104,7 +104,7 @@ public class FormattedTextHelper {
                     if (core.getPropertiesManager().isEnforceRTL()) {
                         nextNode = PGTUtil.LTR_MARKER + nextNode;
                     }
-                    if (font.length() != 0) {
+                    if (!font.isEmpty()) {
                         StyleConstants.setFontFamily(aset, font);
                     }
                 }
@@ -115,7 +115,7 @@ public class FormattedTextHelper {
                 
                 StyleConstants.setForeground(aset, fontColor);
                 
-                if (nextNode.length() != 0){
+                if (!nextNode.isEmpty()){
                     doc.insertString(doc.getLength(), nextNode, aset);
                 }
             }
@@ -154,7 +154,7 @@ public class FormattedTextHelper {
                     nextNode = PGTUtil.LTR_MARKER + nextNode;
                 }
                 
-                if (nextNode.length() != 0){
+                if (!nextNode.isEmpty()){
                     conFont.awtFont = font.equals(core.getPropertiesManager().getFontCon().getFamily()) ? 
                             core.getPropertiesManager().getFontCon() : new JLabel().getFont();
                     Entry<String, PFontInfo> temp = new SecEntry<>(nextNode, conFont);
@@ -297,7 +297,7 @@ public class FormattedTextHelper {
      * @return encoded values of pane
      * @throws BadLocationException if unable to create string format
      */
-    public static String storageFormat(JTextPane pane) throws BadLocationException, Exception {
+    public static String storageFormat(JTextPane pane) throws Exception {
         String ret = storeFormatRecurse(pane.getDocument().getDefaultRootElement(), pane);
         return ret.replace(PGTUtil.RTL_CHARACTER, "").replace(PGTUtil.LTR_MARKER, "");
     }
@@ -309,7 +309,7 @@ public class FormattedTextHelper {
      * @return string format value of current node and its children
      * @throws BadLocationException if unable to create string format
      */
-    private static String storeFormatRecurse(Element e, JTextPane pane) throws BadLocationException, Exception {
+    private static String storeFormatRecurse(Element e, JTextPane pane) throws Exception {
         String ret = "";
         int ec = e.getElementCount();
 
@@ -474,5 +474,8 @@ public class FormattedTextHelper {
             this.fontInfo = value;
             return old;
         }
+    }
+
+    private FormattedTextHelper() {
     }
 }

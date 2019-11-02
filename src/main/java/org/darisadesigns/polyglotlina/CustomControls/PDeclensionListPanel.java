@@ -84,14 +84,14 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
     private void populateTableModelValues(DefaultTableModel tableModel) {
         int yPos = 0;
         for (DeclensionPair pair : declensionPairs) {
-            // if surpressed, add null value
-            if (!decMan.isCombinedDeclSurpressed(pair.combinedId, word.getWordTypeId())) {
+            // if suppressed, add null value
+            if (decMan.isCombinedDeclSurpressed(pair.combinedId, word.getWordTypeId())) {
+                tableModel.setValueAt(null, yPos, 1);
+            } else {
                 String wordForm = getWordForm(pair.combinedId);
                 autoPopulated = autoPopulated || !wordForm.isBlank(); // keep track of whether anything in this list is populated
                 tableModel.setValueAt(wordForm, yPos, 1);
                 decIdsToListLocation.put(pair.combinedId, yPos);
-            } else {
-                tableModel.setValueAt(null, yPos, 1);
             }
             
             yPos++;
@@ -137,7 +137,6 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
     /**
      * Populates table model with labels in the first row (uneditable)
      * @param tableModel
-     * @param yNode 
      */
     private void populateLabels(DefaultTableModel tableModel) {
         Object[] rowLabels = getLabels();
@@ -151,7 +150,7 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
         TableColumn column = table.getColumnModel().getColumn(0);
         PCellEditor editor = new PCellEditor(false, core);
         PCellRenderer renderer = new PCellRenderer(false, core);
-        editor.setBackground(Color.lightGray);
+        editor.setBackground(Color.gray);
         renderer.setBackground(Color.lightGray);
         column.setCellEditor(editor);
         column.setCellRenderer(renderer);
@@ -169,7 +168,7 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
         Object[] columnLabels = {"Wordform", "Value"};
         Object[] rowLabels = getLabels();
         
-        DefaultTableModel ret = new DefaultTableModel(columnLabels, rowLabels.length){
+        return new DefaultTableModel(columnLabels, rowLabels.length){
             @Override 
             public boolean isCellEditable(int row, int column)
             {
@@ -177,8 +176,6 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
                 return column != 0 && this.getValueAt(row, column) != null;
             }
         };
-        
-        return ret;
     }
     
     private Object[] getLabels() {

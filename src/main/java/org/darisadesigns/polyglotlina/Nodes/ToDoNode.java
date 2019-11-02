@@ -32,7 +32,7 @@ import org.w3c.dom.Element;
 public class ToDoNode {
     private String value;
     private ToDoNode parent;
-    private boolean isDone = false;
+    private boolean isDone;
     private final List<ToDoNode> children = new ArrayList<>();
     
     public ToDoNode(ToDoNode _parent, String _value, boolean _isDone) {
@@ -81,31 +81,11 @@ public class ToDoNode {
     }
     
     /**
-     * moves node up unless already at top
-     */
-    public void moveUp() {
-        if (parent != null) {
-            parent.moveChildUp(this);
-        }
-    }
-    
-    /**
-     * Moves node down unless already at bottom
-     */
-    public void moveDown() {
-        if (parent != null) {
-            parent.moveChildDown(this);
-        }
-    }
-    
-    /**
      * Deletes child from list if it is present
      * @param delNode 
      */
     protected void deleteChild(ToDoNode delNode) {
-        if (children.contains(delNode)) {
-            children.remove(delNode);
-        }
+        children.remove(delNode);
     }
     
     /**

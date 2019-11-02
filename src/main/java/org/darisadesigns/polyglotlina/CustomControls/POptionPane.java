@@ -66,7 +66,7 @@ public class POptionPane extends JOptionPane {
             Object message, String title, int optionType, int messageType,
             Icon icon, Object[] options, Object initialValue)
             throws HeadlessException {
-        Window parentWindow = POptionPane.getWindowForComponent(parentComponent);
+        Window parentWindow = getWindowForComponent(parentComponent);
         boolean parentIsModal = parentWindow instanceof Dialog 
                 && ((Dialog)parentWindow).isModal();
         int ret = CLOSED_OPTION;
@@ -165,7 +165,7 @@ public class POptionPane extends JOptionPane {
         return dialog;
     }
 
-    static Window getWindowForComponent(Component parentComponent)
+    public static Window getWindowForComponent(Component parentComponent)
             throws HeadlessException {
         if (parentComponent == null) {
             return getRootFrame();
@@ -173,7 +173,7 @@ public class POptionPane extends JOptionPane {
         if (parentComponent instanceof Frame || parentComponent instanceof Dialog) {
             return (Window) parentComponent;
         }
-        return POptionPane.getWindowForComponent(parentComponent.getParent());
+        return getWindowForComponent(parentComponent.getParent());
     }
 
     private void initDialog(final JDialog dialog, int style, Component parentComponent) {

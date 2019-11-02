@@ -39,8 +39,8 @@ import org.junit.jupiter.api.Test;
  * @author DThompson
  */
 public class ScrMainMenuTest {
-    final ScrMainMenu mainMenu;
-    final boolean headless = GraphicsEnvironment.isHeadless();
+    private final ScrMainMenu mainMenu;
+    private final boolean headless = GraphicsEnvironment.isHeadless();
     
     public ScrMainMenuTest() {
         if (!headless) {

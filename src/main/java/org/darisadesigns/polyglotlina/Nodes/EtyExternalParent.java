@@ -62,7 +62,7 @@ public class EtyExternalParent extends DictNode {
     
     @Override
     public String toString() {
-        return value + (externalLanguage.length() == 0 ? "" 
+        return value + (externalLanguage.isEmpty() ? ""
                 : " (" + externalLanguage + ")");
     }
 

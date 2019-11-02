@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draqu Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -18,7 +18,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package PolyGlot;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

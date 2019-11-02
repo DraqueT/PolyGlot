@@ -70,7 +70,7 @@ public class DeclensionManagerTest {
         System.out.println("testSetCombinedDeclSurpressed");
         DeclensionManager decMan = core.getDeclensionManager();
         
-        decMan.setCombinedDeclSurpressed(",3,", 4, false);
+        decMan.setCombinedDeclSuppressed(",3,", 4, false);
         assertFalse(decMan.isCombinedDeclSurpressed(",3,", 4));
     }
 
@@ -79,7 +79,7 @@ public class DeclensionManagerTest {
         System.out.println("testSetCombinedDeclSurpressedRaw");
         DeclensionManager decMan = core.getDeclensionManager();
         
-        decMan.setCombinedDeclSurpressedRaw("4,TESTVAL", false);
+        decMan.setCombinedDeclSuppressedRaw("4,TESTVAL", false);
         assertFalse(decMan.isCombinedDeclSurpressed("TESTVAL", 4));
     }
 

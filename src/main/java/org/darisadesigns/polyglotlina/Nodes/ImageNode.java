@@ -83,7 +83,7 @@ public class ImageNode extends DictNode {
         
         // create tmp file if none exists
         if (tmpFile == null || !tmpFile.exists()) {
-            tmpFile = File.createTempFile(id.toString() + "_polyGlotImage", ".png");
+            tmpFile = File.createTempFile(id + "_polyGlotImage", ".png");
             ImageIO.write(image, "PNG", new FileOutputStream(tmpFile));
         }
         

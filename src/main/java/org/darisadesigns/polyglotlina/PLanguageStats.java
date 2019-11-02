@@ -36,7 +36,7 @@ import java.util.Map;
  *
  * @author DThompson
  */
-public class PLanguageStats {
+public final class PLanguageStats {
 
     /**
      * Builds report on words in ConLang. Potentially computationally expensive.
@@ -65,7 +65,7 @@ public class PLanguageStats {
             thread.join();
         } catch (InterruptedException e) {
             IOHandler.writeErrorLog(e);
-            InfoBox.error("Language Stat Error", "Unable to generate langauge statistics: " + e.getLocalizedMessage(), core.getRootWindow());
+            InfoBox.error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage(), core.getRootWindow());
         }
         
         return ret[0];
@@ -84,13 +84,12 @@ public class PLanguageStats {
         Map<String, Integer> wordStart = new HashMap<>();
         Map<String, Integer> wordEnd = new HashMap<>();
         Map<String, Integer> characterCombos2 = new HashMap<>();
-        Integer highestCombo2 = 0;
-        Map<String, Integer> characterCombos3 = new HashMap<>();
+        int highestCombo2 = 0;
         Map<Integer, Integer> typeCountByWord = new HashMap<>();
         Map<String, Integer> phonemeCount = new HashMap<>();
         Map<String, Integer> charCount = new HashMap<>();
         Map<String, Integer> phonemeCombo2 = new HashMap<>();
-        Integer wordCount = core.getWordCollection().getWordNodes().size();
+        int wordCount = core.getWordCollection().getWordNodes().size();
         String allChars = core.getPropertiesManager().getAlphaPlainText();
         String alphabet = core.getPropertiesManager().getAlphaPlainText();
 
@@ -112,7 +111,7 @@ public class PLanguageStats {
                 }
             }
 
-            if (alphabet.length() == 0) {
+            if (alphabet.isEmpty()) {
                 alphabet = allChars;
             }
 
@@ -161,7 +160,7 @@ public class PLanguageStats {
                         phonemeCount.put(phonArray.get(i).getPronunciation(), 1);
                     }
 
-                    // grab combo if there are additinal phonemes, otherwise you're done
+                    // grab combo if there are additional phonemes, otherwise you're done
                     if (i + 1 < phonArray.size()) {
                         String curCombo = phonArray.get(i).getPronunciation() + " "
                                 + phonArray.get(i + 1).getPronunciation();
@@ -177,7 +176,7 @@ public class PLanguageStats {
                 }
             }
 
-            // caupture all individual characters
+            // capture all individual characters
             for (int i = 0; i < curValueLength; i++) {
                 String curChar = curValue.substring(i, i + 1);
 
@@ -238,8 +237,8 @@ public class PLanguageStats {
         charStatBar.setConFontName(core.getPropertiesManager().getFontCon().getFamily());
         for (char c : alphabet.toCharArray()) {
             String character = Character.toString(c);
-            Double starting = 0.0;
-            Double count = 0.0;
+            double starting = 0.0;
+            double count = 0.0;
 
             if (wordStart.containsKey(character)) {
                 starting = (double) wordStart.get(character);
@@ -276,7 +275,7 @@ public class PLanguageStats {
 
         ret += charStatBar.getDisplayHTML();
         
-        // buid grid of 2 letter combos
+        // build grid of 2 letter combos
         char[] alphaGrid = core.getPropertiesManager().getAlphaPlainText().toCharArray();
         ret += formatPlain("Heat map of letter combination frequency:<br>", core);
         ret += "<table border=\"1\">";
@@ -304,14 +303,14 @@ public class PLanguageStats {
                 int blue = 255 - red;
                 ret += "<td bgcolor=\"#" + Integer.toHexString(red)
                         + Integer.toHexString(blue) + Integer.toHexString(blue) + "\")>"
-                        + formatCon(Character.toString(x) + Character.toString(y), core) + formatPlain(":"
-                        + comboValue.toString(), core) + "</td>";
+                        + formatCon(Character.toString(x) + y, core) + formatPlain(":"
+                        + comboValue, core) + "</td>";
             }
             ret += "</tr>";
         }
         ret += "</table>" + formatPlain("<br><br>", core);
 
-        // buid grid of 2 phoneme combos if no pronunciation recursion
+        // build grid of 2 phoneme combos if no pronunciation recursion
         progress.iterateTask("Building phoneme combo grid...");
         if (!core.getPronunciationMgr().isRecurse()) {
             ret += formatPlain("Heat map of phoneme combination frequency:<br>", core);
@@ -338,12 +337,12 @@ public class PLanguageStats {
                         }
                     }
 
-                    Integer red = (255 / highestCombo2) * comboValue;
-                    Integer blue = 255 - red;
+                    int red = (255 / highestCombo2) * comboValue;
+                    int blue = 255 - red;
                     ret += "<td bgcolor=\"#" + Integer.toHexString(red)
                             + Integer.toHexString(blue) + Integer.toHexString(blue) + "\")>"
                             + formatPlain(x.getPronunciation() + y.getPronunciation() + ":"
-                                    + comboValue.toString(), core) + "</td>";
+                                    + comboValue, core) + "</td>";
                 }
                 ret += "</tr>";
             }
@@ -365,4 +364,6 @@ public class PLanguageStats {
 
         return ret;
     }
+
+    private PLanguageStats() {}
 }

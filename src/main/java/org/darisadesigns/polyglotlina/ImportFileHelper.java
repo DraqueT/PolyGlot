@@ -116,7 +116,7 @@ public class ImportFileHelper {
             // add conword
             columnList = Arrays.asList(iConWord.split(","));
             for (String entry : columnList) {
-                if (entry == null || entry.length() == 0) {
+                if (entry == null || entry.isEmpty()) {
                     continue;
                 }
 
@@ -127,7 +127,7 @@ public class ImportFileHelper {
                     continue;
                 }
 
-                if (newWord.getValue().trim().length() == 0) {
+                if (newWord.getValue().trim().isEmpty()) {
                     newWord.setValue(row.get(cellNum).trim());
                 } else {
                     newWord.setValue(newWord.getValue() + ", " + row.get(cellNum).trim());
@@ -135,14 +135,14 @@ public class ImportFileHelper {
             }
 
             // if conword is blank, continue. Bare minimum for imported word is a conword value.
-            if (newWord.getValue().trim().length() == 0) {
+            if (newWord.getValue().trim().isEmpty()) {
                 continue;
             }
 
             // add definition
             columnList = Arrays.asList(iDefinition.split(","));
             for (String entry : columnList) {
-                if (entry == null || entry.length() == 0) {
+                if (entry == null || entry.isEmpty()) {
                     continue;
                 }
 
@@ -153,7 +153,7 @@ public class ImportFileHelper {
                     continue;
                 }
 
-                if (newWord.getDefinition().trim().length() == 0) {
+                if (newWord.getDefinition().trim().isEmpty()) {
                     newWord.setDefinition(row.get(cellNum).trim());
                 } else {
                     newWord.setDefinition(newWord.getDefinition() + "\n\n" + row.get(cellNum).trim());
@@ -163,7 +163,7 @@ public class ImportFileHelper {
             // add classes
             columnList = Arrays.asList(iClass.split(","));
             for (String entry : columnList) {
-                if (entry == null || entry.length() == 0) {
+                if (entry == null || entry.isEmpty()) {
                     continue;
                 }
 
@@ -174,7 +174,7 @@ public class ImportFileHelper {
                     continue;
                 }
 
-                String className = "CLASS" + cellNum.toString(); // guarantee unique name for user to rename later (based on column)
+                String className = "CLASS" + cellNum; // guarantee unique name for user to rename later (based on column)
                 WordClass wordProp = null;
 
                 // find class
@@ -216,7 +216,7 @@ public class ImportFileHelper {
             // add local word
             columnList = Arrays.asList(iLocalWord.split(","));
             for (String entry : columnList) {
-                if (entry == null || entry.length() == 0) {
+                if (entry == null || entry.isEmpty()) {
                     continue;
                 }
 
@@ -227,7 +227,7 @@ public class ImportFileHelper {
                     continue;
                 }
 
-                if (newWord.getLocalWord().trim().length() == 0) {
+                if (newWord.getLocalWord().trim().isEmpty()) {
                     newWord.setLocalWord(row.get(cellNum).trim());
                 } else {
                     newWord.setLocalWord(newWord.getLocalWord() + ", " + row.get(cellNum).trim());
@@ -237,7 +237,7 @@ public class ImportFileHelper {
             // add pronunciation
             columnList = Arrays.asList(iPronunciation.split(","));
             for (String entry : columnList) {
-                if (entry == null || entry.length() == 0) {
+                if (entry == null || entry.isEmpty()) {
                     continue;
                 }
 
@@ -248,7 +248,7 @@ public class ImportFileHelper {
                     continue;
                 }
 
-                if (newWord.getPronunciation().trim().length() == 0) {
+                if (newWord.getPronunciation().trim().isEmpty()) {
                     newWord.setPronunciation(row.get(cellNum).trim());
                 } else {
                     newWord.setPronunciation(newWord.getPronunciation() + ", " + row.get(cellNum).trim());
@@ -258,7 +258,7 @@ public class ImportFileHelper {
             // add type
             columnList = Arrays.asList(iType.split(","));
             for (String entry : columnList) {
-                if (entry == null || entry.length() == 0) {
+                if (entry == null || entry.isEmpty()) {
                     continue;
                 }
 
@@ -294,8 +294,6 @@ public class ImportFileHelper {
      * Collects all rows from given CSV file and returns string input values
      *
      * @param inputFile path of file to read
-     * @param csvPreference user pref regarding CSV (comma, semicolon, or tab
-     * delimited)
      * @return List of rows
      * @throws FileNotFoundException if CSV does not exist
      * @throws IOException if read error
@@ -305,7 +303,7 @@ public class ImportFileHelper {
         
         try (
             Reader reader = Files.newBufferedReader(Paths.get(inputFile));
-            CSVParser csvParser = new CSVParser(reader, format);
+            CSVParser csvParser = new CSVParser(reader, format)
         ) {
             for (CSVRecord csvRecord : csvParser) {
                 List<String> row = new ArrayList<>();
@@ -340,7 +338,7 @@ public class ImportFileHelper {
         Integer ret;
 
         try {
-            // initialy, try to parse as int, if failure there, try to parse as column letters
+            // initially, try to parse as int, if failure there, try to parse as column letters
             try {
                 ret = Integer.valueOf(entry.trim());
             } catch (NumberFormatException e) {
@@ -383,13 +381,13 @@ public class ImportFileHelper {
      * @throws Exception if string length != 1, or not a letter
      */
     private static int getLetterValue(String letter) throws Exception {
-        int ret = 0;
+        int ret;
 
-        if (letter.length() > 1 || letter.length() == 0) {
+        if (letter.length() != 1) {
             throw new Exception("Invalid character: " + letter);
         }
 
-        Character c = letter.toUpperCase().charAt(0);
+        char c = letter.toUpperCase().charAt(0);
 
         switch (c) {
             case 'A':

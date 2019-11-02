@@ -29,17 +29,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public class CustHandler extends DefaultHandler{
         protected String errorLog = "";
         protected String warningLog = "";
-	
-        public void setErrorLog(String _errorLog) {
-            errorLog = _errorLog;
-        }
         
         public String getErrorLog() {
             return errorLog;
-        }
-        
-        public void setWarningLog(String _warning) {
-            warningLog = _warning;
         }
         
         public String getWarningLog() {

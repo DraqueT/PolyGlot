@@ -56,7 +56,7 @@ import org.xml.sax.SAXException;
  *
  * @author draque
  */
-public class CustHandlerFactory {
+public final class CustHandlerFactory {
 
     /**
      * Creates appropriate handler to read file (based on version of PolyGlot
@@ -89,7 +89,7 @@ public class CustHandlerFactory {
                         + "PolyGlot (0.7.5 through 1.2) to upconvert.");
         }
 
-        return CustHandlerFactory.get075orHigherHandler(core, fileVersionHierarchy);
+        return get075orHigherHandler(core, fileVersionHierarchy);
     }
 
     private static CustHandler get075orHigherHandler(final DictCore core, final int versionHierarchy) {
@@ -217,17 +217,14 @@ public class CustHandlerFactory {
             String combinedDecId = "";
             String tmpString; // used mostly for converting deprecated values (as they no longer have placeholder points)
 
-            DeclensionManager declensionMgr = core.getDeclensionManager();
-            PronunciationMgr pronuncMgr = core.getPronunciationMgr();
-            RomanizationManager romanizationMgr = core.getRomManager();
-            PropertiesManager propertiesManager = core.getPropertiesManager();
-            FamilyManager famMgr = core.getFamManager();
+            final DeclensionManager declensionMgr = core.getDeclensionManager();
+            final PronunciationMgr pronuncMgr = core.getPronunciationMgr();
+            final RomanizationManager romanizationMgr = core.getRomManager();
+            final PropertiesManager propertiesManager = core.getPropertiesManager();
+            final FamilyManager famMgr = core.getFamManager();
 
             @Override
-            public void startElement(String uri, String localName,
-                    String qName, Attributes attributes)
-                    throws SAXException {
-
+            public void startElement(String uri, String localName, String qName, Attributes attributes) {
                 if (qName.equalsIgnoreCase(PGTUtil.DICTIONARY_SAVE_DATE)) {
                     blastSave = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_XID)) {
@@ -410,7 +407,7 @@ public class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_ID_XID)) {
                     bclassId = true;
                     // the buffer should not default to "apply to all."
-                    ((WordClass)core.getWordClassCollection().getBuffer()).deleteApplyType(-1);
+                    core.getWordClassCollection().getBuffer().deleteApplyType(-1);
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_NAME_XID)) {
                     bclassName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_APPLY_TYPES_XID)) {
@@ -740,7 +737,7 @@ public class CustHandlerFactory {
                     bclassFreeText = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_VALUES_NODE_XID)) {
                     try {
-                        ((WordClass) core.getWordClassCollection().getBuffer()).insert();
+                        core.getWordClassCollection().getBuffer().insert();
                     } catch (Exception e) {
                         IOHandler.writeErrorLog(e);
                         warningLog += "\nWord class load error: " + e.getLocalizedMessage();
@@ -794,7 +791,7 @@ public class CustHandlerFactory {
             }
 
             @Override
-            public void characters(char ch[], int start, int length)
+            public void characters(char[] ch, int start, int length)
                     throws SAXException {
 
                 if (blastSave) {
@@ -1045,7 +1042,7 @@ public class CustHandlerFactory {
                 } else if (bcombinedFormId) {
                     combinedDecId += new String(ch, start, length);
                 } else if (bcombinedFormSurpress) {
-                    core.getDeclensionManager().setCombinedDeclSurpressedRaw(combinedDecId,
+                    core.getDeclensionManager().setCombinedDeclSuppressedRaw(combinedDecId,
                             new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (blogoStrokes) {
                     try {
@@ -1097,11 +1094,11 @@ public class CustHandlerFactory {
                 } else if (bclassId) {
                     core.getWordClassCollection().getBuffer().setId(Integer.parseInt(new String(ch, start, length)));
                 } else if (bclassName) {
-                    WordClass buffer = (WordClass) core.getWordClassCollection().getBuffer();
+                    WordClass buffer = core.getWordClassCollection().getBuffer();
                     buffer.setValue(buffer.getValue() + new String(ch, start, length));
                 } else if (bclassApplyTypes) {
                     String types = new String(ch, start, length);
-                    WordClass buffer = (WordClass) core.getWordClassCollection().getBuffer();
+                    WordClass buffer = core.getWordClassCollection().getBuffer();
                     for (String curType : types.split(",")) {
                         int typeId = Integer.parseInt(curType);
                         buffer.addApplyType(typeId);
@@ -1109,14 +1106,14 @@ public class CustHandlerFactory {
                 } else if (bclassFreeText) {
                     String freeText = new String(ch, start, length);                    
                     if (freeText.equals(PGTUtil.TRUE)) {
-                        ((WordClass) core.getWordClassCollection().getBuffer()).setFreeText(true);
+                        core.getWordClassCollection().getBuffer().setFreeText(true);
                     } else {
-                        ((WordClass) core.getWordClassCollection().getBuffer()).setFreeText(false);
+                        core.getWordClassCollection().getBuffer().setFreeText(false);
                     }
                 } else if (bclassValueId) {
-                    ((WordClass) core.getWordClassCollection().getBuffer()).buffer.setId(Integer.parseInt(new String(ch, start, length)));
+                    core.getWordClassCollection().getBuffer().buffer.setId(Integer.parseInt(new String(ch, start, length)));
                 } else if (bclassValueName) {
-                    WordClassValue value = ((WordClass) core.getWordClassCollection().getBuffer()).buffer;
+                    WordClassValue value = core.getWordClassCollection().getBuffer().buffer;
                     value.setValue(value.getValue() + new String(ch, start, length));
                 } else if (bcharRepChar) {
                     // can only pull single character, so no need to concatinate
@@ -1174,4 +1171,6 @@ public class CustHandlerFactory {
             }
         };
     }
+
+    private CustHandlerFactory() {}
 }
