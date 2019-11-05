@@ -112,7 +112,7 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
             java.util.Vector<GrammarChapNode> v = new java.util.Vector<>();
             
             for (GrammarChapNode curNode : (GrammarChapNode[]) children.toArray()) {
-                if (curNode.getName().toLowerCase().contains(filter.toLowerCase())) {
+                if (curNode.name.toLowerCase().contains(filter.toLowerCase())) {
                     v.add(curNode);
                 }
             }
@@ -160,7 +160,7 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
             rootElement.appendChild(chapNode);
 
             Element chapElement = doc.createElement(PGTUtil.GRAMMAR_CHAPTER_NAME_XID);
-            chapElement.appendChild(doc.createTextNode(this.getName()));
+            chapElement.appendChild(doc.createTextNode(this.name));
             chapNode.appendChild(chapElement);
             
             chapElement = doc.createElement(PGTUtil.GRAMMAR_SECTIONS_LIST_XID);

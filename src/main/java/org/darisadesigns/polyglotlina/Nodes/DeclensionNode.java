@@ -150,6 +150,7 @@ public class DeclensionNode extends DictNode {
 
     }
 
+    // TODO: this is a bad practice. Find a way around this and eliminate
     protected Map<Integer, DeclensionDimension> getRawDimensions() {
         return dimensions;
     }
@@ -200,7 +201,7 @@ public class DeclensionNode extends DictNode {
         wordNode.appendChild(nodeValue);
 
         nodeValue = doc.createElement(PGTUtil.DECLENSION_NOTES_XID);
-        nodeValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getNotes())));
+        nodeValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.notes)));
         wordNode.appendChild(nodeValue);
 
         nodeValue = doc.createElement(PGTUtil.DECLENSION_IS_TEMPLATE_XID);
@@ -212,7 +213,7 @@ public class DeclensionNode extends DictNode {
         wordNode.appendChild(nodeValue);
         
         nodeValue = doc.createElement(PGTUtil.DECLENSION_IS_DIMENSIONLESS_XID);
-        nodeValue.appendChild(doc.createTextNode(this.isDimensionless() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        nodeValue.appendChild(doc.createTextNode(this.dimensionless ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(nodeValue);
 
         // record dimensions of declension
@@ -235,7 +236,7 @@ public class DeclensionNode extends DictNode {
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.DECLENSION_NOTES_XID);
-        wordValue.appendChild(doc.createTextNode(this.getNotes()));
+        wordValue.appendChild(doc.createTextNode(this.notes));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.DECLENSION_RELATED_ID_XID);
@@ -259,15 +260,40 @@ public class DeclensionNode extends DictNode {
         
         DeclensionNode node = (DeclensionNode) _node;
         
-        this.setNotes(node.getNotes());
+        this.setNotes(node.notes);
         this.setValue(node.getValue());
-        this.setCombinedDimId(node.getCombinedDimId());
+        this.combinedDimId = node.getCombinedDimId();
         this.setDimensionless(node.dimensionless);
 
-        node.getRawDimensions().entrySet().forEach((entry) -> {
+        node.dimensions.entrySet().forEach((entry) -> {
             DeclensionDimension copyOfDim = new DeclensionDimension(entry.getKey());
             copyOfDim.setEqual(entry.getValue());
             dimensions.put(entry.getKey(), copyOfDim);
         });
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp != null && getClass() == comp.getClass()) {
+            DeclensionNode c = (DeclensionNode)comp;
+            
+            ret = value.equals(c.value);
+            ret = ret && notes.equals(c.notes);
+            ret = ret && combinedDimId.equals(c.combinedDimId);
+            ret = ret && dimensionless == c.dimensionless;
+            ret = ret && highestDimension == c.highestDimension;
+            ret = ret && dimensions.equals(c.dimensions);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

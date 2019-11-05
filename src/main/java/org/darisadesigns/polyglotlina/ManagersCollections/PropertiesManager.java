@@ -236,7 +236,7 @@ public class PropertiesManager {
     
     public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
         setFontCon(PFontHandler.getFontFromFile(fontPath).deriveFont(conFontStyle, conFontSize), conFontStyle, conFontSize);
-        setCachedFont(IOHandler.getFileByteArray(fontPath));
+        cachedConFont = IOHandler.getFileByteArray(fontPath);
     }
 
     public void setOverrideProgramPath(String override) {
@@ -322,7 +322,7 @@ public class PropertiesManager {
 
             setFontConRaw(newFont);
         } catch (Exception e) {
-            throw new Exception ("Unable to find or set font: " + _fontFamily + " due to: \n");
+            throw new Exception ("Unable to find or set font: " + _fontFamily + " due to: \n", e);
         }
     }
     
@@ -359,7 +359,7 @@ public class PropertiesManager {
     public void setFontConRaw(Font fontCon) {
         // null cached font if being set to new font
         if (conFont != null && !conFont.getFamily().equals(fontCon.getFamily())) {
-            setCachedFont(null);
+            cachedConFont = null;
         }
 
         conFont = fontCon == null ? charisUnicode : fontCon;
@@ -580,12 +580,12 @@ public class PropertiesManager {
 
         // store font style
         wordValue = doc.createElement(PGTUtil.LANG_PROP_FONT_STYLE_XID);
-        wordValue.appendChild(doc.createTextNode(getFontStyle().toString()));
+        wordValue.appendChild(doc.createTextNode(conFontStyle.toString()));
         propContainer.appendChild(wordValue);
 
         // store font size
         wordValue = doc.createElement(PGTUtil.LANG_PROP_FONT_SIZE_XID);
-        wordValue.appendChild(doc.createTextNode(getFontSize().toString()));
+        wordValue.appendChild(doc.createTextNode(conFontSize.toString()));
         propContainer.appendChild(wordValue);
         
         // store font size for local language font
@@ -595,57 +595,57 @@ public class PropertiesManager {
 
         // store name for conlang
         wordValue = doc.createElement(PGTUtil.LANG_PROP_LANG_NAME_XID);
-        wordValue.appendChild(doc.createTextNode(getLangName()));
+        wordValue.appendChild(doc.createTextNode(langName));
         propContainer.appendChild(wordValue);
 
         // store alpha order for conlang
         wordValue = doc.createElement(PGTUtil.LANG_PROP_ALPHA_ORDER_XID);
-        wordValue.appendChild(doc.createTextNode(getAlphaPlainText()));
+        wordValue.appendChild(doc.createTextNode(alphaPlainText));
         propContainer.appendChild(wordValue);
 
         // store option for mandatory Types
         wordValue = doc.createElement(PGTUtil.LANG_PROP_TYPE_MAND_XID);
-        wordValue.appendChild(doc.createTextNode(isTypesMandatory() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(typesMandatory ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for mandatory Local word
         wordValue = doc.createElement(PGTUtil.LANG_PROP_LOCAL_MAND_XID);
-        wordValue.appendChild(doc.createTextNode(isLocalMandatory() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(localMandatory ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for unique local word
         wordValue = doc.createElement(PGTUtil.LANG_PROP_LOCAL_UNIQUE_XID);
-        wordValue.appendChild(doc.createTextNode(isLocalUniqueness() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(localUniqueness ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for unique conwords
         wordValue = doc.createElement(PGTUtil.LANG_PROP_WORD_UNIQUE_XID);
-        wordValue.appendChild(doc.createTextNode(isWordUniqueness() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(wordUniqueness ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for ignoring case
         wordValue = doc.createElement(PGTUtil.LANG_PROP_IGNORE_CASE_XID);
-        wordValue.appendChild(doc.createTextNode(isIgnoreCase() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(ignoreCase ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for disabling regex or pronunciations
         wordValue = doc.createElement(PGTUtil.LANG_PROP_DISABLE_PROC_REGEX);
-        wordValue.appendChild(doc.createTextNode(isDisableProcRegex() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(disableProcRegex ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for enforcing RTL in conlang
         wordValue = doc.createElement(PGTUtil.LANG_PROP_ENFORCE_RTL_XID);
-        wordValue.appendChild(doc.createTextNode(isEnforceRTL() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(enforceRTL ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
         
         // store option for overriding the regex display font
         wordValue = doc.createElement(PGTUtil.LANG_PROP_OVERRIDE_REGEX_FONT_XID);
-        wordValue.appendChild(doc.createTextNode(isOverrideRegexFont() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(overrideRegexFont ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for displaying local words in lexicon
         wordValue = doc.createElement(PGTUtil.LANG_PROP_USE_LOCAL_LEX_XID);
-        wordValue.appendChild(doc.createTextNode(isUseLocalWordLex() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(useLocalWordLex ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for Author and copyright info
@@ -665,7 +665,7 @@ public class PropertiesManager {
         
         // store option to use simplified conjugation autogeneration
         wordValue = doc.createElement(PGTUtil.LANG_PROP_USE_SIMPLIFIED_CONJ);
-        wordValue.appendChild(doc.createTextNode(isUseSimplifiedConjugations() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(useSimplifiedConjugations ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
         
         // store all replacement pairs
@@ -807,7 +807,7 @@ public class PropertiesManager {
             if (updatedConFont != null) {
                 conFont = PFontHandler.getFontFromFile(updatedConFont.getAbsolutePath());
                 conFont = conFont.deriveFont(conFontStyle, conFontSize);
-                setCachedFont(IOHandler.getByteArrayFromFile(updatedConFont));
+                cachedConFont = IOHandler.getByteArrayFromFile(updatedConFont);
             }
             
             if (updatedLocalFont != null) {

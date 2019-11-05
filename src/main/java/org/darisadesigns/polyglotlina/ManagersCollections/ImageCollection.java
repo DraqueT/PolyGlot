@@ -70,7 +70,7 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
                 insert(image);
             }
         } catch (IOException e) {
-            throw new IOException("Problem loading image: " + e.getLocalizedMessage());
+            throw new IOException("Problem loading image: " + e.getLocalizedMessage(), e);
         }
         return image;
     }
@@ -116,10 +116,5 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
         }
         
         return emptyImage;
-    }
-    
-    @Override
-    public ImageNode getBuffer() {
-        return bufferNode;
     }
 }

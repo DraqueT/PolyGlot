@@ -39,10 +39,8 @@ import org.darisadesigns.polyglotlina.ManagersCollections.ToDoManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.WordClassCollection;
 import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
-import java.awt.Color;
 import java.awt.FontFormatException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.Instant;
@@ -243,6 +241,7 @@ public class DictCore {
     /**
      * Pushes save signal to main interface menu
      */
+    // TODO: Eliminate this. This is a bad practice.
     public void coreSave() {
         rootWindow.saveFile();
     }
@@ -340,7 +339,7 @@ public class DictCore {
      * Used for getting the display version (potentially different than the internal version due to betas, etc.)
      * @return 
      */
-    public String getDisplayVersion() {
+    public static String getDisplayVersion() {
         String ret = PGTUtil.PGT_VERSION;
         
         if (PGTUtil.IS_BETA) {
@@ -420,7 +419,7 @@ public class DictCore {
         try {
             IOHandler.loadImageAssets(imageCollection, _fileName);
         } catch (Exception e) {
-            throw new IOException("Image loading error: " + e.getLocalizedMessage());
+            throw new IOException("Image loading error: " + e.getLocalizedMessage(), e);
         }
 
         try {
@@ -444,7 +443,7 @@ public class DictCore {
             errorLog += handler.getErrorLog();
             warningLog += handler.getWarningLog();
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            throw new IOException(e.getMessage());
+            throw new IOException(e.getMessage(), e);
         }
 
         try {
@@ -492,7 +491,7 @@ public class DictCore {
      * @param fileName 
      * @throws java.io.IOException 
      */
-    public void revertToState(byte[] revision, String fileName) throws Exception {
+    public void revertToState(byte[] revision, String fileName) throws IOException{
         DictCore revDict = new DictCore(this);
         revDict.readFile(fileName, revision);
         
@@ -546,12 +545,12 @@ public class DictCore {
         doc.appendChild(rootElement);
 
         // collect XML representation of all dictionary elements
-        this.writeXMLHeader(doc, rootElement, newSaveTime);
+        DictCore.writeXMLHeader(doc, rootElement, newSaveTime);
         propertiesManager.writeXML(doc, rootElement);
         wordPropCollection.writeXML(doc, rootElement);
         typeCollection.writeXML(doc, rootElement);
         wordCollection.writeXML(doc, rootElement);
-        getEtymologyManager().writeXML(doc, rootElement);
+        etymologyManager.writeXML(doc, rootElement);
         declensionMgr.writeXML(doc, rootElement);
         pronuncMgr.writeXML(doc, rootElement);
         romMgr.writeXML(doc, rootElement);
@@ -565,10 +564,10 @@ public class DictCore {
         // have IOHandler write constructed document to file
         IOHandler.writeFile(_fileName, doc, this, newSaveTime);
         
-        setLastSaveTime(newSaveTime);
+        lastSaveTime = newSaveTime;
     }
     
-    private void writeXMLHeader(Document doc, Element rootElement, Instant saveTime) {
+    private static void writeXMLHeader(Document doc, Element rootElement, Instant saveTime) {
         Element headerElement = doc.createElement(PGTUtil.PGVERSION_XID);
         headerElement.appendChild(doc.createTextNode(PGTUtil.PGT_VERSION));
         rootElement.appendChild(headerElement);

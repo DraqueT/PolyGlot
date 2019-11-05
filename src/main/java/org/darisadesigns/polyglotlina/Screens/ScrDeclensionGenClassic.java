@@ -72,7 +72,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
  */
 public final class ScrDeclensionGenClassic extends PDialog {
 
-    private final String depRulesLabel = "DEPRECATED RULES";
+    private final static String depRulesLabel = "DEPRECATED RULES";
     private final Window parent;
     private final int typeId;
     private DefaultListModel<Object> decListModel;

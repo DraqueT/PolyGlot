@@ -34,7 +34,7 @@ import java.util.Random;
  * @author draque
  * @param <N> Type of node
  */
-public abstract class DictionaryCollection<N> {
+public abstract class DictionaryCollection<N extends DictNode> {
 
     protected PAlphaMap<String, Integer> alphaOrder;
     protected final Map<Integer, N> nodeMap = new HashMap<>();
@@ -58,12 +58,12 @@ public abstract class DictionaryCollection<N> {
      */
     public abstract Object notFoundNode();
     
-    public int addNode(DictNode _addType) throws Exception {
+    public int addNode(N _addType) throws Exception {
         int ret;
         
         clear();
         
-        ((DictNode)bufferNode).setEqual(_addType);
+        bufferNode.setEqual(_addType);
 
         ret = this.insert(bufferNode);
 

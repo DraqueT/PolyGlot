@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
-import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;

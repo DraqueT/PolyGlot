@@ -20,6 +20,7 @@
 // This is the type which all nodes and storage types extend.
 package org.darisadesigns.polyglotlina.Nodes;
 
+import java.util.Objects;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 
 /**
@@ -31,6 +32,17 @@ public abstract class DictNode implements Comparable<DictNode> {
     protected Integer id;    
     private PAlphaMap<String, Integer> alphaOrder = new PAlphaMap<>(); // used for alphabetic ordering of nodes
 
+    @Override
+    abstract public boolean equals(Object comp);
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.value);
+        hash = 83 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+    
     public DictNode() {
         value = "";
         id = 0;
@@ -155,6 +167,7 @@ public abstract class DictNode implements Comparable<DictNode> {
 
     @Override
     public String toString() {
+        // TODO: This is not great. Consider whether this can be addressed. Its behavior might be too unpredictable to change at this point.
         return value.isEmpty() ? " " : value;
     }
 }

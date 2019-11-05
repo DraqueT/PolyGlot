@@ -540,7 +540,7 @@ public final class PGTUtil {
     
     // ENVIRONMENT VARIABLES
     private static File java8BridgeLocation = null;
-    private static File errorDirectory;
+    private static File errorDirectory = null;
     private static boolean forceSuppressDialogs = false;
 
     /**

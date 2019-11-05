@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson
+ * Copyright (c) 2016-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,8 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
-import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.ManagersCollections.WordClassCollection;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +40,12 @@ public class WordClass extends DictNode {
     private int topId = 0;
     public WordClassValue buffer = new WordClassValue();
     
+    // TODO: if -1 is in applyTypes, it applies to all. This is wholly encoded in the display.
+    // Refactor so that if -1 is added as an apply type, all other types are removed. If a
+    // value other than -1 is added, -1 should be removed. if -1 is present when apply type
+    // is tested, it should always return true. Remove this logic from the UI layer.
+    // This will break the test for WordClass. Update the expected XML accordingly.
+    
     public WordClass() {
         // default to apply to all
         applyTypes.add(-1);
@@ -57,23 +61,18 @@ public class WordClass extends DictNode {
     }
     
     @Override
-    public void setEqual(DictNode _node) throws ClassCastException {
+    public void setEqual(DictNode _node) {
         if (!(_node instanceof WordClass)) {
             throw new ClassCastException("Object not of type WordPropValueNode");
         }
         WordClass copyProp = (WordClass)_node;
         
         this.value = copyProp.getValue();
-        
-        copyProp.getValues().forEach((node) -> {
-            try {
-                addValue(node.getValue(), node.getId());
-            } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
-                throw new ClassCastException("Problem setting class value: " 
-                        + e.getLocalizedMessage());
-            }
-        });
+        this.values.clear();
+        this.values.putAll(copyProp.values);
+        this.applyTypes.clear();
+        this.applyTypes.addAll(copyProp.applyTypes);
+        this.freeText = copyProp.freeText;
     }
     
     /**
@@ -221,7 +220,7 @@ public class WordClass extends DictNode {
 
         // Is Text Override
         classValue = doc.createElement(PGTUtil.CLASS_IS_FREETEXT_XID);
-        classValue.appendChild(doc.createTextNode(this.isFreeText() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        classValue.appendChild(doc.createTextNode(this.freeText ? PGTUtil.TRUE : PGTUtil.FALSE));
         classElement.appendChild(classValue);
 
         // generates element with all type IDs of types this class applies to
@@ -245,5 +244,28 @@ public class WordClass extends DictNode {
         classElement.appendChild(classValue);
 
         rootElement.appendChild(classElement);
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp != null && getClass() == comp.getClass()) {
+            WordClass c = (WordClass) comp;
+            
+            ret = value.equals(c.value);
+            ret = ret && values.equals(c.values);
+            ret = ret && applyTypes.equals(c.applyTypes);
+            ret = ret && freeText == c.freeText;
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

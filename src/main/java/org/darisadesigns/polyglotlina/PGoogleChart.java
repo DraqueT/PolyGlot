@@ -43,7 +43,7 @@ public abstract class PGoogleChart {
      *
      * @param _caption caption for piechart
      */
-    public PGoogleChart(String _caption) {
+    protected PGoogleChart(String _caption) {
         caption = _caption;
         chartVals = new HashMap<>();
     }

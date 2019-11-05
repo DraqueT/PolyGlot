@@ -210,14 +210,14 @@ public final class IOHandler {
                 try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
                     ret = CustHandlerFactory.getCustHandler(ioStream, _core);
                 } catch (Exception e) {
-                    throw new IOException(e.getLocalizedMessage());
+                    throw new IOException(e.getLocalizedMessage(), e);
                 }
             }
         } else {
             try (InputStream ioStream = new FileInputStream(_fileName)) {
                 ret = CustHandlerFactory.getCustHandler(ioStream, _core);
             } catch (Exception e) {
-                throw new IOException(e.getLocalizedMessage());
+                throw new IOException(e.getLocalizedMessage(), e);
             }
         }
 
@@ -237,7 +237,7 @@ public final class IOHandler {
         try {
             return CustHandlerFactory.getCustHandler(new ByteArrayInputStream(byteArray), _core);
         } catch (Exception e) {
-            throw new IOException(e.getLocalizedMessage());
+            throw new IOException(e.getLocalizedMessage(), e);
         }
     }
 
@@ -515,8 +515,8 @@ public final class IOHandler {
             try {
                 copyFile(f.toPath(), finalFile.toPath(), true);
                 f.delete(); // wipe temp file if successful
-            } catch (IOException ex) {
-                throw new IOException("Unable to save file: " + ex.getMessage());
+            } catch (IOException e) {
+                throw new IOException("Unable to save file: " + e.getMessage(), e);
             }
 
             core.getReversionManager().addVersion(xmlData, saveTime);
@@ -565,7 +565,7 @@ public final class IOHandler {
                 out.closeEntry();
             }
         } catch (IOException e) {
-            throw new IOException("Unable to create reversion files.");
+            throw new IOException("Unable to create reversion files.", e);
         }
 
         return writeLog;

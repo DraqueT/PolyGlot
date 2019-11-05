@@ -27,7 +27,6 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URI;
@@ -112,10 +111,10 @@ public class ScrUpdateAlert extends PDialog {
                 // custom message if user is on a beta copy of PolyGlot
                 if (PGTUtil.IS_BETA) {
                     InfoBox.info("Update Status", "You're up to date on a beta build branched from the most recent release candidate ("
-                            + core.getDisplayVersion() + ")", core.getRootWindow());
+                            + DictCore.getDisplayVersion() + ")", core.getRootWindow());
                 } else {
                     InfoBox.info("Update Status", "You're up to date and on the newest version: "
-                        + core.getDisplayVersion() + ".", core.getRootWindow());
+                        + DictCore.getDisplayVersion() + ".", core.getRootWindow());
                 }
             }            
             this.setVisible(false);

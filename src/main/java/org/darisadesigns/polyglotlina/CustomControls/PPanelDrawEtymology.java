@@ -53,7 +53,7 @@ public final class PPanelDrawEtymology extends JPanel {
     private FontMetrics charisFontMetrics;
     private int curYDepth = 0;
     private int lowestDepth = 0;
-    private final int xWordSpaceBuffer = 20;
+    private final static int xWordSpaceBuffer = 20;
     private RectangularCoordinateMap<ConWord> wordMap = new RectangularCoordinateMap<>();
 
     public PPanelDrawEtymology(DictCore _core, ConWord _word) {
@@ -443,8 +443,8 @@ public final class PPanelDrawEtymology extends JPanel {
         
         // only paint if greater than one (no etymology otherwise)
         if (columnWidth.size() > 1) {
-            this.setSize(getCalcWidth(),getCalcHeight());             
-            ret = new BufferedImage(getCalcWidth(),getCalcHeight(), BufferedImage.TYPE_INT_ARGB);
+            this.setSize(getCalcWidth(), curYDepth);
+            ret = new BufferedImage(getCalcWidth(), curYDepth, BufferedImage.TYPE_INT_ARGB);
             paint(ret.getGraphics());
         }
         temp.setVisible(false);

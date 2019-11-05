@@ -27,19 +27,12 @@ public class EtyExternalParent extends DictNode {
     
     private String externalLanguage = "";
     private String definition = "";
-
+    
     /**
      * @return the externalWord
      */
     public String getExternalWord() {
         return value;
-    }
-
-    /**
-     * @param externalWord the externalWord to set
-     */
-    public void setExternalWord(String externalWord) {
-        this.value = externalWord;
     }
 
     /**
@@ -84,13 +77,35 @@ public class EtyExternalParent extends DictNode {
     public void setEqual(DictNode _node) throws ClassCastException {
         if (_node instanceof EtyExternalParent) {
             EtyExternalParent node = (EtyExternalParent)_node;
-            definition = node.getDefinition();
-            externalLanguage = node.getExternalLanguage();
+            definition = node.definition;
+            externalLanguage = node.externalLanguage;
+            value = node.value;
         } else if (_node != null) {
             throw new ClassCastException("Type: " 
                     + _node.getClass().getCanonicalName() 
                     + " cannot be explicitly converted to " 
                     + getClass().getCanonicalName() + ".");
         }
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp != null && getClass() == comp.getClass()) {
+            EtyExternalParent c = (EtyExternalParent)comp;
+            ret = value.equals(c.value);
+            ret = ret && externalLanguage.equals(c.externalLanguage);
+            ret = ret && definition.equals(c.definition);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

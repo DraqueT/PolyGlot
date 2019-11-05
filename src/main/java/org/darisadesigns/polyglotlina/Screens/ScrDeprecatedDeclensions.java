@@ -149,12 +149,12 @@ public final class ScrDeprecatedDeclensions extends PDialog {
         TypeNode wordType = _core.getTypes().getNodeById(_word.getWordTypeId());
         
         final ScrDeprecatedDeclensions s = new ScrDeprecatedDeclensions(_core, _word);
-        s.setConWord(_word);
-        s.setConFont(_core.getPropertiesManager().getFontCon());
+        s.word = _word;
+        s.conFont = _core.getPropertiesManager().getFontCon();
         if (wordType == null) {
-            s.setWordType(-1);
+            s.typeId = -1;
         } else {
-            s.setWordType(wordType.getId());
+            s.typeId = wordType.getId();
         }
         s.getAllWordDeclensions();
         s.buildForm();        

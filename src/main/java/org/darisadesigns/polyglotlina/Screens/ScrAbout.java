@@ -43,7 +43,7 @@ public class ScrAbout extends PDialog {
         setModal(true);
         super.getRootPane().getContentPane().setBackground(Color.white);
 
-        txtAbout.setText("PolyGlot ver. " + core.getDisplayVersion() + "\n\nPolyGlot is "
+        txtAbout.setText("PolyGlot ver. " + DictCore.getDisplayVersion() + "\n\nPolyGlot is "
                 + "copyright Draque Thompson 2014-" + Calendar.getInstance().get(Calendar.YEAR)
                 + ". It is licensed under the Creative Commons "
                 + "Attribution-Noncommercial 4.0 International Public License, so it is free "

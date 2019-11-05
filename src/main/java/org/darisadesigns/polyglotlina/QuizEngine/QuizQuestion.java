@@ -60,9 +60,9 @@ public class QuizQuestion extends DictNode {
      */
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
-        multipleChoices = ((QuizQuestion)_node).multipleChoices;
-        answer = ((QuizQuestion)_node).getAnswer();
-        type = ((QuizQuestion)_node).getType();
+        multipleChoices = new ArrayList<>(((QuizQuestion)_node).multipleChoices);
+        answer = ((QuizQuestion) _node).answer;
+        type = ((QuizQuestion) _node).type;
         source = ((QuizQuestion)_node).source;
     }
     
@@ -284,5 +284,38 @@ public class QuizQuestion extends DictNode {
     
     public enum Answered {
         Unanswered, Correct, Incorrect
+    }
+    
+    /**
+     * Compares question equality. NOTE: Answer state NOT considered. This includes both
+     * whether the question has been answered and what the user's given answer was.
+     * 
+     * @param comp
+     * @return 
+     */
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp != null && getClass() == comp.getClass()) {
+            QuizQuestion c = (QuizQuestion)comp;
+            
+            ret = multipleChoices.equals(c.multipleChoices);
+            ret = ret && answer.equals(c.answer);
+            ret = ret && type.equals(c.type);
+            ret = ret && source.equals(c.source);
+            // Answer state not considered when testing equality.
+            //ret = ret && userAnswer.equals(c.userAnswer);
+            //ret = ret && answered == c.answered;
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

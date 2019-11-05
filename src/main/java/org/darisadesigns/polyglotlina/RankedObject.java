@@ -57,7 +57,7 @@ public class RankedObject<N> implements Comparable<RankedObject>{
     // does not handle equal values. Returning 0 would merge, and this is undesirable.
     @Override
     public int compareTo(RankedObject _compare) {        
-        if (_compare.getRank() > this.getRank()) {
+        if (_compare.rank > this.rank) {
             return LOWER;
         }
         else {

@@ -36,7 +36,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
-import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -249,7 +248,7 @@ public final class PTextField extends JTextField {
         }
     }
 
-    class PScrollRepainter implements ChangeListener, Serializable {
+    public class PScrollRepainter implements ChangeListener, Serializable {
 
         @Override
         public void stateChanged(ChangeEvent e) {

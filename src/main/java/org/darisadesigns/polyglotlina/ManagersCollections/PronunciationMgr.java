@@ -179,7 +179,7 @@ public class PronunciationMgr {
      */
     private List<PronunciationNode> getPronunciationElements(String base, int depth) throws Exception {
         List<PronunciationNode> ret = new ArrayList<>();
-        Iterator<PronunciationNode> finder = getPronunciations().iterator();
+        Iterator<PronunciationNode> finder = pronunciations.iterator();
 
         if (depth > PGTUtil.MAX_PROC_RECURSE) {
             throw new Exception("Max recursions for " + getToolLabel() + " exceeded.");
@@ -276,7 +276,7 @@ public class PronunciationMgr {
                     } catch (IndexOutOfBoundsException e) {
                         throw new Exception("The pronunciation pair " + curNode.getValue() + "->"
                                 + curNode.getPronunciation() + " is generating a regex error. Please correct."
-                                + "\nError: " + e.getLocalizedMessage() + e.getClass().getName());
+                                + "\nError: " + e.getLocalizedMessage() + e.getClass().getName(), e);
                     }
                 }
             }

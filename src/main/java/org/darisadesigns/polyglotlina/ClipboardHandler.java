@@ -56,9 +56,10 @@ public final class ClipboardHandler implements ClipboardOwner {
      *
      * @return any text found on the Clipboard; if none found, return an empty
      * String.
-     * @throws java.lang.Exception
+     * @throws java.awt.datatransfer.UnsupportedFlavorException
+     * @throws java.io.IOException
      */
-    public String getClipboardText() throws Exception {
+    public static String getClipboardText() throws UnsupportedFlavorException, IOException {
         String result = "";
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         Transferable contents = clipboard.getContents(null);
@@ -66,8 +67,8 @@ public final class ClipboardHandler implements ClipboardOwner {
         if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             try {
                 result = (String) contents.getTransferData(DataFlavor.stringFlavor);
-            } catch (UnsupportedFlavorException | IOException e) {
-                throw new Exception("Clipboard error: " + e.getLocalizedMessage());
+            } catch (IOException e) {
+                throw new IOException("Clipboard error: " + e.getLocalizedMessage(), e);
             }
         }
         return result;
@@ -108,7 +109,7 @@ public final class ClipboardHandler implements ClipboardOwner {
             try {
                 ret = (Image)contents.getTransferData(DataFlavor.imageFlavor);
             } catch (UnsupportedFlavorException | IOException e) {
-                throw new Exception("Clipboard error: " + e.getLocalizedMessage());
+                throw new Exception("Clipboard error: " + e.getLocalizedMessage(), e);
             }
         }
         
@@ -125,7 +126,7 @@ public final class ClipboardHandler implements ClipboardOwner {
             cachedContents = clip.getContents(null);
             
         } catch (HeadlessException e) {
-            throw new Exception("System busy, unable to perform action: " + e.getLocalizedMessage());
+            throw new Exception("System busy, unable to perform action: " + e.getLocalizedMessage(), e);
         }
     }
     
@@ -133,8 +134,7 @@ public final class ClipboardHandler implements ClipboardOwner {
      * restores clipboard contents from cache
      */
     public void restoreClipboard() {
-        if (cachedContents != null)
-        {
+        if (cachedContents != null) {
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(cachedContents, null);
         }
     }

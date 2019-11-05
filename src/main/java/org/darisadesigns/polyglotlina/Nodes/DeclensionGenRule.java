@@ -83,13 +83,13 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      */
     public void setEqual(DeclensionGenRule r, boolean setTypeAndComb) {
         if (setTypeAndComb) {
-            typeId = r.getTypeId();
-            combinationId = r.getCombinationId();
+            typeId = r.typeId;
+            combinationId = r.combinationId;
         }
-        name = r.getName();
-        regex = r.getRegex();
+        name = r.name;
+        regex = r.regex;
         transformations.clear();
-        r.getTransforms().stream().map((copyFrom) -> {
+        r.transformations.stream().map((copyFrom) -> {
             DeclensionGenTransform copyTo = new DeclensionGenTransform();
             copyTo.setEqual(copyFrom);
             return copyTo;
@@ -97,7 +97,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
             transformations.add(copyTo);
         });
         
-        for (Entry<Integer, Integer> classEntry : r.getClassFilterList().entrySet()) {
+        for (Entry<Integer, Integer> classEntry : r.applyToClasses.entrySet()) {
             this.addClassToFilterList(classEntry.getKey(), classEntry.getValue());
         }
     }
@@ -222,7 +222,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         final int BEFORE = -1;
         final int EQUAL = 0;
         final int AFTER = 1;
-        int compIndex = _compare.getIndex();
+        int compIndex = _compare.index;
         int ret;
         
         
@@ -363,26 +363,26 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         rootElement.appendChild(ruleNode);
 
         Element wordValue = doc.createElement(PGTUtil.DEC_GEN_RULE_COMB_XID);
-        wordValue.appendChild(doc.createTextNode(this.getCombinationId()));
+        wordValue.appendChild(doc.createTextNode(this.combinationId));
         ruleNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.DEC_GEN_RULE_NAME_XID);
-        wordValue.appendChild(doc.createTextNode(this.getName()));
+        wordValue.appendChild(doc.createTextNode(this.name));
         ruleNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.DEC_GEN_RULE_REGEX_XID);
-        wordValue.appendChild(doc.createTextNode(this.getRegex()));
+        wordValue.appendChild(doc.createTextNode(this.regex));
         ruleNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.DEC_GEN_RULE_TYPE_XID);
-        wordValue.appendChild(doc.createTextNode(Integer.toString(this.getTypeId())));
+        wordValue.appendChild(doc.createTextNode(Integer.toString(this.typeId)));
         ruleNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.DEC_GEN_RULE_INDEX_XID);
-        wordValue.appendChild(doc.createTextNode(Integer.toString(this.getIndex())));
+        wordValue.appendChild(doc.createTextNode(Integer.toString(this.index)));
         ruleNode.appendChild(wordValue);
 
-        this.getTransforms().forEach((curTransform) -> {
+        this.transformations.forEach((curTransform) -> {
             curTransform.writeXML(doc, ruleNode);
         });
         

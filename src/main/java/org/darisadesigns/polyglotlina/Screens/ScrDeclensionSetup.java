@@ -70,6 +70,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
     private Map<Integer, Integer> scrToCoreDeclensions = new HashMap<>();
     private TypeNode myType;
+    private int typeId;
     private boolean curPopulating = false;
     private final DefaultListModel<String> declListModel;
 
@@ -81,6 +82,7 @@ public final class ScrDeclensionSetup extends PDialog {
      */
     public ScrDeclensionSetup(DictCore _core, Integer _typeId) {
         super(_core);
+        typeId = _typeId;
         
         initComponents();
         try {
@@ -107,16 +109,6 @@ public final class ScrDeclensionSetup extends PDialog {
     }
 
     @Override
-    public void setModal(boolean _modal) {
-        super.setModal(_modal);
-    }
-
-    @Override
-    public void setTitle(String _title) {
-        super.setTitle(_title);
-    }
-
-    @Override
     public void updateAllValues(DictCore _core) {
         // No values to update due to modal nature of window
     }
@@ -135,7 +127,7 @@ public final class ScrDeclensionSetup extends PDialog {
      * @return boolean as to whether it is legal to close the window.
      */
     private boolean canClose() {
-        Iterator<DeclensionNode> decIt = core.getDeclensionManager().getDimensionalDeclensionListTemplate(myType.getId()).iterator();
+        Iterator<DeclensionNode> decIt = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId).iterator();
 
         while (decIt.hasNext()) {
             DeclensionNode curDec = decIt.next();
