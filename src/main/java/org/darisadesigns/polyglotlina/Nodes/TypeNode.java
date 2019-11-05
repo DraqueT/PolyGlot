@@ -85,9 +85,9 @@ public class TypeNode extends DictNode {
 
         this.setId(set.getId());
         this.setValue(set.getValue());
-        this.setDefMandatory(set.isDefMandatory());
-        this.setProcMandatory(set.isProcMandatory());
-        this.setGloss(set.getGloss());
+        this.defMandatory = set.defMandatory;
+        this.procMandatory = set.procMandatory;
+        this.gloss = set.gloss;
     }
 
     /**
@@ -131,23 +131,23 @@ public class TypeNode extends DictNode {
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.POS_NOTES_XID);
-        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getNotes())));
+        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.notes)));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.POS_DEF_MAN_XID);
-        wordValue.appendChild(doc.createTextNode(this.isDefMandatory() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(this.defMandatory ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.POS_PROC_MAN_XID);
-        wordValue.appendChild(doc.createTextNode(this.isProcMandatory() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(this.procMandatory ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.POS_PATTERN_XID);
-        wordValue.appendChild(doc.createTextNode(this.getPattern()));
+        wordValue.appendChild(doc.createTextNode(this.regexPattern));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.POS_GLOSS_XID);
-        wordValue.appendChild(doc.createTextNode(this.getGloss()));
+        wordValue.appendChild(doc.createTextNode(this.gloss));
         wordNode.appendChild(wordValue);
         
         rootElement.appendChild(wordNode);

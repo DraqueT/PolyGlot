@@ -110,7 +110,7 @@ public final class ScrLexicon extends PFrame {
     private final JFXPanel fxPanel;
     private final TypeNode defTypeValue = new TypeNode();
     private final EtyExternalParent defRootValue = new EtyExternalParent();
-    private final String defLexValue = "List of Conlang Words";
+    private final static String defLexValue = "List of Conlang Words";
     private TextField txtConSrc;
     private TextField txtLocalSrc;
     private TextField txtProcSrc;

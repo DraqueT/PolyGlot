@@ -474,14 +474,14 @@ public final class CustHandlerFactory {
                                     + ") is a malformed entry.");
                         }
                     } catch (Exception e) {
-                        throw new SAXException("Word insertion error: " + e.getLocalizedMessage());
+                        throw new SAXException("Word insertion error: " + e.getLocalizedMessage(), e);
                     }
                 } else if (qName.equalsIgnoreCase(PGTUtil.POS_XID)) {
                     // insertion for word types is much simpler
                     try {
                         core.getTypes().insert(wCId);
                     } catch (Exception e) {
-                        throw new SAXException("Type insertion error: " + e.getLocalizedMessage());
+                        throw new SAXException("Type insertion error: " + e.getLocalizedMessage(), e);
                     }
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
                     pronuncMgr.addPronunciation(proBuffer);
@@ -915,7 +915,7 @@ public final class CustHandlerFactory {
                         propertiesManager.setAlphaOrder(propertiesManager.getAlphaPlainText()
                                 + new String(ch, start, length), true);
                     } catch (Exception e) {
-                        throw new SAXException("Load error: " + e.getLocalizedMessage());
+                        throw new SAXException("Load error: " + e.getLocalizedMessage(), e);
                     }
                 } else if (bDecId) {
                     declensionMgr.setBufferId(Integer.parseInt(new String(ch, start, length)));
@@ -1147,7 +1147,7 @@ public final class CustHandlerFactory {
                     betyChildExternals = false;
                 } else if (betyExternalWordValue) {
                     EtyExternalParent ext = core.getEtymologyManager().getBufferExtParent();
-                    ext.setExternalWord(ext.getExternalWord() + new String(ch, start, length));
+                    ext.setValue(ext.getExternalWord() + new String(ch, start, length));
                 } else if (betyExternalWordOrigin) {
                     EtyExternalParent ext = core.getEtymologyManager().getBufferExtParent();
                     ext.setExternalLanguage(ext.getExternalLanguage() + new String(ch, start, length));

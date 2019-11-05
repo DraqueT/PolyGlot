@@ -34,32 +34,6 @@ public class ImageNode extends DictNode {
     private File tmpFile = null;
     
     /**
-     * Sets image equal to.
-     * Only sets equal the buffered image and the id. Nothing else.
-     * @param _node
-     * @throws ClassCastException 
-     */
-    @Override
-    public void setEqual(DictNode _node) throws ClassCastException {
-        if (!(_node instanceof ImageNode)) {
-            String name = _node == null ? "null" : _node.getClass().getName();
-            throw new ClassCastException("Cannot convert type: " 
-                    + name + " to type ImageNode.");
-        }
-        ImageNode tmpNode = (ImageNode)_node;
-        
-        image = tmpNode.getImage();
-        id = tmpNode.getId();
-    }
-
-    /**
-     * @return the image
-     */
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    /**
      * @param _image the image to set
      */
     public void setImage(BufferedImage _image) {
@@ -88,5 +62,52 @@ public class ImageNode extends DictNode {
         }
         
         return tmpFile.getAbsolutePath();
+    }
+    
+    /**
+     * Sets image equal to.
+     * Only sets equal the buffered image and the id. Nothing else.
+     * @param _node
+     * @throws ClassCastException 
+     */
+    @Override
+    public void setEqual(DictNode _node) throws ClassCastException {
+        if (!(_node instanceof ImageNode)) {
+            String name = _node == null ? "null" : _node.getClass().getName();
+            throw new ClassCastException("Cannot convert type: " 
+                    + name + " to type ImageNode.");
+        }
+        ImageNode tmpNode = (ImageNode)_node;
+        
+        image = tmpNode.image;
+        id = tmpNode.getId();
+    }
+
+    /**
+     * @return the image
+     */
+    public BufferedImage getImage() {
+        return image;
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp != null && getClass() == comp.getClass()) {
+            ImageNode c = (ImageNode)comp;
+            
+            ret = (image == c.image && image == null) || image.equals(c.image);
+            ret = ret && value.equals(c.value);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

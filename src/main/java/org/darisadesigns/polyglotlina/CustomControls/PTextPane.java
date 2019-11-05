@@ -110,7 +110,7 @@ public final class PTextPane extends JTextPane {
             try {
                 // sanitize contents to plain text
                 ClipboardHandler board = new ClipboardHandler();
-                board.setClipboardContents(board.getClipboardText());
+                board.setClipboardContents(ClipboardHandler.getClipboardText());
                 super.paste();
             } catch (Exception e) {
                 IOHandler.writeErrorLog(e);

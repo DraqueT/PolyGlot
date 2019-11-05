@@ -368,7 +368,7 @@ public class DeclensionManager {
                 } catch (Exception e) {
                     throw new Exception("Unable to create declension/conjugation "
                             + "due to malformed regex (modify in Parts of Speech->Autogeneration): "
-                            + e.getLocalizedMessage());
+                            + e.getLocalizedMessage(), e);
                 }
             }
             
@@ -1046,7 +1046,7 @@ public class DeclensionManager {
         }
 
         // record word declensions
-        declensionSet = getDeclensionMap().entrySet();
+        declensionSet = dList.entrySet();
         for (Entry<Integer, List<DeclensionNode>> e : declensionSet) {
             final Integer relatedId = e.getKey();
 

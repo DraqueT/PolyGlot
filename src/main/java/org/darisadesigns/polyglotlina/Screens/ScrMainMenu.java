@@ -440,20 +440,20 @@ public final class ScrMainMenu extends PFrame {
     public boolean saveFile() {
         boolean ret;
         
-        if (getCurFileName().isEmpty()) {
+        if (curFileName.isEmpty()) {
             saveFileAs();
         }
 
         // if it still is blank, the user has hit cancel on the save as dialog
-        if (getCurFileName().isEmpty()) {
+        if (curFileName.isEmpty()) {
             ret = false;
         } else {
-            core.getOptionsManager().pushRecentFile(getCurFileName());
+            core.getOptionsManager().pushRecentFile(curFileName);
             populateRecentOpened();
             saveAllValues();
             genTitle();
 
-            ret = doWrite(getCurFileName());
+            ret = doWrite(curFileName);
         }
         
         return ret;
@@ -477,14 +477,14 @@ public final class ScrMainMenu extends PFrame {
                 | TransformerException e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Save Error", "Unable to save to file: "
-                    + getCurFileName() + "\n\n" + e.getMessage(), core.getRootWindow());
+                    + curFileName + "\n\n" + e.getMessage(), core.getRootWindow());
         }
 
         setCursor(Cursor.getDefaultCursor());
 
         if (cleanSave) {
             InfoBox.info("Success", "Dictionary saved to: "
-                    + getCurFileName() + ".", core.getRootWindow());
+                    + curFileName + ".", core.getRootWindow());
         }
 
         return cleanSave;
@@ -577,7 +577,7 @@ public final class ScrMainMenu extends PFrame {
             if (!langName.isEmpty()) {
                 title += " : " + langName;
             } else if (!getCurFileName().isEmpty()) {
-                title += " : " + getCurFileName();
+                title += " : " + curFileName;
             }
         }
 
@@ -712,7 +712,7 @@ public final class ScrMainMenu extends PFrame {
             if (exportCharis) {
                 IOHandler.exportCharisFont(fileName);
             } else {
-                IOHandler.exportFont(fileName, getCurFileName());
+                IOHandler.exportFont(fileName, curFileName);
             }
             InfoBox.info("Export Success", "Font exported to: " + fileName, core.getRootWindow());
         } catch (IOException e) {

@@ -88,11 +88,11 @@ public class FamTreeNode extends DefaultMutableTreeNode {
     @Override
     public void insert(MutableTreeNode child, int index) {
         // only modify node if new. ID = 0 indicates loading from existing tree
-        if (((FamTreeNode) child).getNode().getId() == 1) {
-            famNode.addNode(((FamTreeNode) child).getNode());
+        if (((FamTreeNode) child).famNode.getId() == 1) {
+            famNode.addNode(((FamTreeNode) child).famNode);
             
             // once read, this is no longer a new node
-            ((FamTreeNode) child).getNode().setId(0);
+            ((FamTreeNode) child).famNode.setId(0);
         }
 
         super.insert(child, index);

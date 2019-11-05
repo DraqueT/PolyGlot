@@ -67,7 +67,7 @@ public final class WebInterface {
                 }
             }
         } catch (MalformedURLException e) {
-            throw new MalformedURLException("Server unavailable or not found.");
+            throw new Exception("Server unavailable or not found.", e);
         } catch (IOException e) {
             throw new IOException("Update file not found or has been moved. Please check for updates manually at PolyGlot homepage.", e);
         }
@@ -118,7 +118,7 @@ public final class WebInterface {
                 ImageNode image = (ImageNode)core.getImageCollection().getNodeById(imageId);
                 html = html.replace("<img src=\""+ regPath + "\">", "<img src=\"file:///"+ image.getImagePath() + "\">");
             } catch (IOException | NumberFormatException e) {
-                throw new Exception("problem loading image : " + e.getLocalizedMessage());
+                throw new Exception("problem loading image : " + e.getLocalizedMessage(), e);
             }
         }
         

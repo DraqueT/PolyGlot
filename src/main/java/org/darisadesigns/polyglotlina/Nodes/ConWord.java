@@ -55,7 +55,7 @@ public class ConWord extends DictNode {
     private final Map<Integer, String> classTextValues = new HashMap<>();
     private Object filterEtyParent;
     public String typeError = ""; // used only for returning error state
-
+    
     public ConWord() {
         super();
         localWord = "";
@@ -85,8 +85,8 @@ public class ConWord extends DictNode {
         }
         
         return checkValue.getValue().isEmpty() &&
-                checkValue.getDefinition().isEmpty() &&
-                checkValue.getLocalWord().isEmpty() &&
+                checkValue.definition.isEmpty() &&
+                checkValue.localWord.isEmpty() &&
                 checkProc.isEmpty() &&
                 checkValue.typeError.isEmpty();
     }
@@ -173,17 +173,17 @@ public class ConWord extends DictNode {
         }
                 
         ConWord set = (ConWord) _set;
-        set.setCore(core);
+        set.core = core;
         
         this.setValue(set.getValue());
-        this.setLocalWord(set.getLocalWord());
-        this.setWordTypeId(set.getWordTypeId());
-        this.setDefinition(set.getDefinition());
+        this.setLocalWord(set.localWord);
+        this.typeId = set.getWordTypeId();
+        this.definition = set.definition;
         try {
-            this.setPronunciation(set.getPronunciation());
+            this.pronunciation = set.getPronunciation();
         } catch (Exception e) {
             // IOHandler.writeErrorLog(e);
-            this.setPronunciation("<ERROR>");
+            this.pronunciation = "<ERROR>";
         }
         this.setId(set.getId());
         List<Entry<Integer, Integer>> precLock = new ArrayList<>(set.getClassValues()); // avoid read/write collisions
@@ -194,9 +194,40 @@ public class ConWord extends DictNode {
         textLock.forEach((entry) -> {
             this.setClassTextValue(entry.getKey(), entry.getValue());
         });
-        this.setProcOverride(set.isProcOverride());
-        this.setOverrideAutoDeclen(set.isOverrideAutoDeclen());
-        this.setEtymNotes(set.getEtymNotes());
+        this.procOverride = set.procOverride;
+        this.autoDeclensionOverride = set.autoDeclensionOverride;
+        this.etymNotes = set.etymNotes;
+        this.rulesOverride = set.rulesOverride;
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp != null && getClass() == comp.getClass()) {
+            ConWord c = (ConWord) comp;
+            
+            ret = value.equals(c.value);
+            ret = ret && localWord.equals(c.localWord);
+            ret = ret && typeId == c.typeId;
+            ret = ret && definition.equals(c.definition);
+            ret = ret && pronunciation.equals(c.pronunciation);
+            ret = ret && etymNotes.equals(c.etymNotes);
+            ret = ret && procOverride == c.procOverride;
+            ret = ret && autoDeclensionOverride == c.autoDeclensionOverride;
+            ret = ret && rulesOverride == c.rulesOverride;
+            ret = ret && classValues.equals(c.classValues);
+            ret = ret && classTextValues.equals(c.classTextValues);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
     
     /**
@@ -208,6 +239,7 @@ public class ConWord extends DictNode {
     }
     
     public void setCore(DictCore _core) {
+        // TODO: can I set parent = core.getConWordCollection() here? Investigate. Probably do this.
         core = _core;
     }
     
@@ -224,7 +256,7 @@ public class ConWord extends DictNode {
         {
             ret = super.toString();
         } else {
-            ret = '\u202e' + super.toString();
+            ret = PGTUtil.RTL_CHARACTER + super.toString();
         }
         
         return ret;
@@ -455,7 +487,7 @@ public class ConWord extends DictNode {
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.LOCALWORD_XID);
-        wordValue.appendChild(doc.createTextNode(this.getLocalWord()));
+        wordValue.appendChild(doc.createTextNode(this.localWord));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.CONWORD_XID);
@@ -477,19 +509,19 @@ public class ConWord extends DictNode {
         }
 
         wordValue = doc.createElement(PGTUtil.WORD_DEF_XID);
-        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getDefinition())));
+        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.definition)));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.WORD_PROCOVERRIDE_XID);
-        wordValue.appendChild(doc.createTextNode(this.isProcOverride() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(this.procOverride ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.WORD_AUTODECLOVERRIDE_XID);
-        wordValue.appendChild(doc.createTextNode(this.isOverrideAutoDeclen() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(this.autoDeclensionOverride ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.WORD_RULEORVERRIDE_XID);
-        wordValue.appendChild(doc.createTextNode(this.isRulesOverride() ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(this.rulesOverride ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.WORD_CLASSCOLLECTION_XID);
@@ -509,7 +541,7 @@ public class ConWord extends DictNode {
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.WORD_ETY_NOTES_XID);
-        wordValue.appendChild(doc.createTextNode(this.getEtymNotes()));
+        wordValue.appendChild(doc.createTextNode(this.etymNotes));
         wordNode.appendChild(wordValue);
 
         rootElement.appendChild(wordNode);

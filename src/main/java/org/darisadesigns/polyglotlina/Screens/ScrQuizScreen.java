@@ -175,7 +175,7 @@ public final class ScrQuizScreen extends PFrame {
 
                 // on button selection, record user choice and right/wrong status
                 choice.addActionListener((ActionEvent e) -> {
-                    QuizQuestion question1 = getCurQuestion();
+                    QuizQuestion question1 = curQuestion;
                     if (choice.getValue().getId().equals(question1.getAnswer().getId())) {
                         question1.setAnswered(QuizQuestion.Answered.Correct);
                         question1.setUserAnswer(question1.getAnswer());

@@ -20,13 +20,13 @@
 
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Nodes.DictNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.darisadesigns.polyglotlina.DictCore;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -57,7 +57,7 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
     }
 
     @Override
-    public int addNode(DictNode _addType) throws Exception {
+    public int addNode(TypeNode _addType) throws Exception {
         bufferNode = new TypeNode();
         
         return super.addNode(_addType);

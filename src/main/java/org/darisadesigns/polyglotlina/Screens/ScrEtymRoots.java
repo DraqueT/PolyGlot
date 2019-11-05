@@ -62,12 +62,13 @@ public final class ScrEtymRoots extends PDialog {
         
         word = _word;
 
+        initComponents();
+
         if (_word == null) {
             this.dispose();
             return;
         }
 
-        initComponents();
         this.setModal(true);
         setupParentsPanels();
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -196,7 +197,7 @@ public final class ScrEtymRoots extends PDialog {
                 InfoBox.error("Blank word not allowed", "At minimum, a value for the external parent's word must be provided.", this);
             } else {
                 EtyExternalParent newParent = new EtyExternalParent();
-                newParent.setExternalWord(values.get(0).getText());
+                newParent.setValue(values.get(0).getText());
                 newParent.setExternalLanguage(values.get(1).getText());
                 newParent.setDefinition(values.get(2).getText());
 

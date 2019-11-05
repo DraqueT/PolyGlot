@@ -320,7 +320,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         try {
             relNode = (LogoNode)getNodeById(Integer.parseInt(ids[0]));
         } catch (NumberFormatException e) {
-            throw new Exception("Unable to load logograph relations.");
+            throw new Exception("Unable to load logograph relations.", e);
         }
         
         if (relNode == null) {

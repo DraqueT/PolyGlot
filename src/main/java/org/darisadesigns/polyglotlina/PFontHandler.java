@@ -28,7 +28,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -92,7 +91,7 @@ public class PFontHandler {
                         } catch (FontFormatException e) {
                             throw new FontFormatException("Could not load language font. Possible incompatible font: " + e.getMessage());
                         } catch (IOException e) {
-                            throw new IOException("Could not load language font. I/O exception: " + e.getMessage());
+                            throw new IOException("Could not load language font. I/O exception: " + e.getMessage(), e);
                         }
                     }
                 }
@@ -374,7 +373,7 @@ public class PFontHandler {
 
         } catch (IOException | FontFormatException e) {
             throw new IOException("Unable to load Charis (" + location + "): "
-                    + e.getLocalizedMessage());
+                    + e.getLocalizedMessage(), e);
         }
 
         return ret;
@@ -419,7 +418,7 @@ public class PFontHandler {
                 ge.registerFont(ret);
             }
         } catch (Exception e) {
-            throw new IOException("Unable to load button font.");
+            throw new IOException("Unable to load button font.", e);
         }
 
         return ret;

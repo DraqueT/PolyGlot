@@ -222,7 +222,7 @@ public class PGrammarPane extends JTextPane {
             try {
                 // sanitize contents to plain text with tabs converted to four spaces
                 ClipboardHandler board = new ClipboardHandler();
-                String clipText = board.getClipboardText();
+                String clipText = ClipboardHandler.getClipboardText();
                 clipText = clipText.replaceAll("\t", "    ");
                 board.setClipboardContents(clipText);
                 super.paste();

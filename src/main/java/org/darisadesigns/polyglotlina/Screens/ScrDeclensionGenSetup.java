@@ -39,7 +39,7 @@ import org.darisadesigns.polyglotlina.DictCore;
  *
  * @author Draque Thompson
  */
-public class ScrDeclensionGenSetup extends PDialog {
+public final class ScrDeclensionGenSetup extends PDialog {
 
     private PDialog curDialog;
     private final int typeId;

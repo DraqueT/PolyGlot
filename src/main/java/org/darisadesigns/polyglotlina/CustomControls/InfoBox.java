@@ -30,7 +30,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.DEFAULT_OPTION;
-import javax.swing.JPanel;
+
 import javax.swing.UIManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 

@@ -40,7 +40,7 @@ public class PronunciationNode extends DictNode {
     }
 
     public boolean equals(PronunciationNode test) {
-        return (pronunciation.equals(test.getPronunciation())
+        return (pronunciation.equals(test.pronunciation)
                 && value.equals(test.getValue()));
     }
     
@@ -52,7 +52,7 @@ public class PronunciationNode extends DictNode {
         
         PronunciationNode node = (PronunciationNode) _node;
         
-        this.setPronunciation(node.getPronunciation());
+        this.pronunciation = node.pronunciation;
         this.setValue(node.getValue());
         this.setId(node.getId());
     }
@@ -65,9 +65,29 @@ public class PronunciationNode extends DictNode {
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.PRO_GUIDE_PHON_XID);
-        wordValue.appendChild(doc.createTextNode(this.getPronunciation()));
+        wordValue.appendChild(doc.createTextNode(this.pronunciation));
         wordNode.appendChild(wordValue);
         
         rootElement.appendChild(wordNode);
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp != null && getClass() == comp.getClass()) {
+            PronunciationNode c = (PronunciationNode)comp;
+            ret = value.equals(c.value);
+            ret = ret && pronunciation.equals(c.pronunciation);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

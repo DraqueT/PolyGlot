@@ -452,9 +452,9 @@ public final class FormattedTextHelper {
         return ret.replaceAll("<.*?>", "");
     }
     
-    static class SecEntry<K, V> implements Entry<K, V> {
-        final K key;
-        V fontInfo;        
+    public static class SecEntry<K, V> implements Entry<K, V> {
+        private final K key;
+        private V fontInfo;
         public SecEntry(K _key, V _fontInfo) {
             key = _key;
             fontInfo = _fontInfo;

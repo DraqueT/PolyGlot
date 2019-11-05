@@ -30,7 +30,7 @@ import javax.swing.JRadioButton;
  * 
  * @author draque.thompson
  */
-public class PRadioButton extends JRadioButton {
+public final class PRadioButton extends JRadioButton {
     private DictNode value = null;
     private QuestionType type;
     private final DictCore core;

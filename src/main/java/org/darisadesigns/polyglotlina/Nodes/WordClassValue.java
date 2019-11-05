@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson
+ * Copyright (c) 2016-2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -52,4 +52,24 @@ public class WordClassValue extends DictNode {
 
         rootElement.appendChild(valueNode);
      }
+     
+     @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp != null && getClass() == comp.getClass()) {
+            WordClassValue c = (WordClassValue)comp;
+            ret = id.equals(c.id);
+            ret = ret && value.equals(c.value);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

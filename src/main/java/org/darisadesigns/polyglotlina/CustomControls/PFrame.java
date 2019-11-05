@@ -73,7 +73,7 @@ public abstract class PFrame extends JFrame implements FocusListener {
     private boolean firstVisible = true;
     private boolean curResizing;
 
-    public PFrame(DictCore _core) {
+    protected PFrame(DictCore _core) {
         core = _core;
         this.addWindowStateListener(this::setWindowState);
     }
@@ -389,7 +389,7 @@ public abstract class PFrame extends JFrame implements FocusListener {
         final float yDif = height - initialY;
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-        setCurResizing(true);
+        curResizing = true;
 
         executorService.scheduleAtFixedRate(new Runnable() {
             int framesRun = 0;

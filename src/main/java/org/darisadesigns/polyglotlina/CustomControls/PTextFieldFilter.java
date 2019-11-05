@@ -39,16 +39,16 @@ public class PTextFieldFilter extends DocumentFilter {
     }
 
     @Override
-    public void insertString(FilterBypass fb, int offset, String string,
+    public void insertString(FilterBypass fb, int offset, String insert,
             AttributeSet attr) throws BadLocationException {
 
         Document doc = fb.getDocument();
         StringBuilder sb = new StringBuilder();
         sb.append(doc.getText(0, doc.getLength()));
-        sb.insert(offset, string);
+        sb.insert(offset, insert);
 
         if (test(sb.toString())) {
-            super.insertString(fb, offset, string, attr);
+            super.insertString(fb, offset, insert, attr);
         } else {
             InfoBox.warning("Numbers Only", "This field allows only numeric values.", 
                     core.getRootWindow());

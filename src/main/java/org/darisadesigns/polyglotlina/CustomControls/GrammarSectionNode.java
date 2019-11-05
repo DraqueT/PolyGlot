@@ -21,7 +21,7 @@ package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import java.util.Enumeration;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -81,7 +81,7 @@ public class GrammarSectionNode extends DefaultMutableTreeNode {
         Element secNode = doc.createElement(PGTUtil.GRAMMAR_SECTION_NODE_XID);
                 
         Element secElement = doc.createElement(PGTUtil.GRAMMAR_SECTION_NAME_XID);
-        secElement.appendChild(doc.createTextNode(this.getName()));
+        secElement.appendChild(doc.createTextNode(this.name));
         secNode.appendChild(secElement);
 
         secElement = doc.createElement(PGTUtil.GRAMMAR_SECTION_RECORDING_XID);
@@ -89,7 +89,7 @@ public class GrammarSectionNode extends DefaultMutableTreeNode {
         secNode.appendChild(secElement);
 
         secElement = doc.createElement(PGTUtil.GRAMMAR_SECTION_TEXT_XID);
-        secElement.appendChild(doc.createTextNode(this.getSectionText()));
+        secElement.appendChild(doc.createTextNode(this.sectionText));
         secNode.appendChild(secElement);
 
         rootElement.appendChild(secNode);

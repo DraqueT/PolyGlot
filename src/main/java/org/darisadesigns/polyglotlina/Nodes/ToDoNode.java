@@ -45,7 +45,7 @@ public class ToDoNode {
         boolean ret = true;
         
         for (ToDoNode curNode : children) {
-            ret = ret && curNode.isDone() && curNode.allChildrenDone();
+            ret = ret && curNode.isDone && curNode.allChildrenDone();
         }
         
         return ret;
@@ -63,7 +63,7 @@ public class ToDoNode {
     }
     
     public void addChild(ToDoNode child) {
-        child.setParent(this);
+        child.parent = this;
         children.add(child);
     }
     

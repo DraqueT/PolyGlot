@@ -599,7 +599,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                 retValues.insert(curWord.getId());
             } catch (Exception e) {
                 // IOHandler.writeErrorLog(e);
-                throw new Exception("FILTERING ERROR: " + e.getMessage());
+                throw new Exception("FILTERING ERROR: " + e.getMessage(), e);
             }
         }
 
@@ -1089,7 +1089,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
        @Override
        public int compareTo(ConWordDisplay _compare) {
            String myLocalWord = conWord.getLocalWord();
-           String compareLocalWord = _compare.getConWord().getLocalWord();
+           String compareLocalWord = _compare.conWord.getLocalWord();
            int ret;
 
            if (core.getPropertiesManager().isUseLocalWordLex()) {
@@ -1099,7 +1099,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                     ret = myLocalWord.compareTo(compareLocalWord);
                }
            } else {
-               ret = conWord.compareTo(_compare.getConWord());
+               ret = conWord.compareTo(_compare.conWord);
            }
 
            return ret;

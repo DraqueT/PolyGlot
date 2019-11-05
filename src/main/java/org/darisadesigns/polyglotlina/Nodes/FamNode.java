@@ -35,7 +35,7 @@ public class FamNode extends DictNode {
     private final FamNode parent;
     private String notes = "";
     private final FamilyManager manager;
-
+    
     /**
      * sets notes
      * @param _notes new notes
@@ -127,10 +127,9 @@ public class FamNode extends DictNode {
      * @return iterator of all words in immediate family
      */
     public Iterator<ConWord> getWords() {
-        List<ConWord> ret = new ArrayList<>();
         manager.removeDeadWords(this, words);
-        
-        ret.addAll(words);
+
+        List<ConWord> ret = new ArrayList<>(words);
         Collections.sort(ret);
         
         return ret.iterator();
@@ -211,5 +210,29 @@ public class FamNode extends DictNode {
      */
     public void removeChild(FamNode _child) {
         subNodes.remove(_child);
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp != null && getClass() == comp.getClass()) {
+            FamNode c = (FamNode)comp;
+            
+            ret = value.equals(c.value);
+            ret = ret && subNodes.equals(c.subNodes);
+            ret = ret && words.equals(c.words);
+            ret = ret && parent == c.parent; // test IDENTITY here, rather than contents
+            ret = ret && notes.equals(c.notes);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

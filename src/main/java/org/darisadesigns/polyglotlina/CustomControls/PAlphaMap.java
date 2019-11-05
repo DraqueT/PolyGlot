@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Provides alphabetical ordering map- compatible with multi-unicode character,
@@ -29,8 +30,9 @@ import java.util.HashMap;
  * @param <K>
  * @param <V>
  */
-public class PAlphaMap<K, V> extends HashMap<K, V> {
+public class PAlphaMap<K, V> {
     private int longestEntry = 0;
+    private final HashMap<K, V> delegate = new HashMap<>();
     
     /**
      *
@@ -38,7 +40,6 @@ public class PAlphaMap<K, V> extends HashMap<K, V> {
      * @param orderVal Order in alphabet of of alpha
      * @return 
      */
-    @Override
     public V put(K key, V orderVal) {
         java.lang.String sKey = (java.lang.String)key;
         int keyLen = sKey.length();
@@ -46,10 +47,50 @@ public class PAlphaMap<K, V> extends HashMap<K, V> {
             longestEntry = keyLen;
         }
         
-        return super.put(key, orderVal);
+        return delegate.put(key, orderVal);
     }
     
     public int getLongestEntry() {
         return longestEntry;
+    }
+    
+    public boolean isEmpty() {
+        return delegate.isEmpty();
+    }
+    
+    public boolean containsKey(K key) {
+        return delegate.containsKey(key);
+    }
+    
+    public V get(K key) {
+        return delegate.get(key);
+    }
+    
+    public void clear() {
+        delegate.clear();
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (comp instanceof PAlphaMap) {
+            ret = ((PAlphaMap)comp).getLongestEntry() == longestEntry
+                    && ((PAlphaMap)comp).getDelegate().equals(delegate);
+        }
+        
+        return ret;
+    }
+
+    public HashMap<K, V> getDelegate() {
+        return delegate;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + this.longestEntry;
+        hash = 59 * hash + Objects.hashCode(this.delegate);
+        return hash;
     }
 }

@@ -22,8 +22,6 @@ package org.darisadesigns.polyglotlina.CustomControls;
 import java.awt.Font;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.AbstractDocument.LeafElement;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.StyleConstants;
 
 /**

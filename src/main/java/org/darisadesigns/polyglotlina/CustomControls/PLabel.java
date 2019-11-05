@@ -41,7 +41,7 @@ import javax.swing.JLabel;
  */
 public final class PLabel extends JLabel {
     private Graphics g;
-    boolean resize = false;
+    private boolean resize = false;
     private final DictCore core;
 
     public PLabel(String text, DictCore _core) {

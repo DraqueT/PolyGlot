@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson
+ * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -27,10 +27,20 @@ action.
 Once this is used elsewhere in code, delete this example, as it will be evident
 how to use it there.
  */
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
-import java.awt.*;
-import javax.swing.*;
 
 public final class ExampleCheckboxDropdown extends JPanel {
 

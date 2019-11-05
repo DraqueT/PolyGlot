@@ -24,7 +24,9 @@ import org.darisadesigns.polyglotlina.WebInterface;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.PixelGrabber;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -242,7 +244,7 @@ public class LogoNode extends DictNode {
         }
 
         String loadLog = "";
-        
+
         String[] radIds = tmpRads.split(",");
 
         for (String radId : radIds) {
@@ -254,7 +256,7 @@ public class LogoNode extends DictNode {
                 // IOHandler.writeErrorLog(e);
             }
         }
-        
+
         if (!loadLog.isEmpty()) {
             throw new Exception("Logograph load error(s):" + loadLog);
         }
@@ -268,17 +270,17 @@ public class LogoNode extends DictNode {
         if (!(_node instanceof LogoNode)) {
             throw new ClassCastException("Object not of type LogoNode");
         }
-        
+
         LogoNode setNode = (LogoNode) _node;
-        radicals = setNode.radicals;
-        readings = setNode.readings;
-        logoGraph = setNode.getLogoGraph();
-        notes = setNode.getNotes();
+        radicals = new ArrayList<>(setNode.radicals);
+        readings = new ArrayList<>(setNode.readings);
+        logoGraph = setNode.logoGraph;
+        notes = setNode.notes;
         value = setNode.value;
         strokes = setNode.getStrokes();
         id = setNode.getId();
     }
-    
+
     public void writeXML(Document doc, Element rootElement) {
         Element logoElement = doc.createElement(PGTUtil.LOGOGRAPH_NODE_XID);
         Element node;
@@ -292,11 +294,11 @@ public class LogoNode extends DictNode {
         logoElement.appendChild(node);
 
         node = doc.createElement(PGTUtil.LOGO_IS_RADICAL_XID);
-        node.appendChild(doc.createTextNode(this.isRadical()? PGTUtil.TRUE :PGTUtil.FALSE));
+        node.appendChild(doc.createTextNode(this.isRadical ? PGTUtil.TRUE : PGTUtil.FALSE));
         logoElement.appendChild(node);
 
         node = doc.createElement(PGTUtil.LOGO_NOTES_XID);
-        node.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.getNotes())));
+        node.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.notes)));
         logoElement.appendChild(node);
 
         node = doc.createElement(PGTUtil.LOGO_RADICAL_LIST_XID);
@@ -307,7 +309,7 @@ public class LogoNode extends DictNode {
         node.appendChild(doc.createTextNode(this.getStrokes().toString()));
         logoElement.appendChild(node);
 
-        Iterator<String> readIt = this.getReadings().iterator();
+        Iterator<String> readIt = this.readings.iterator();
         while (readIt.hasNext()) {
             String curReading = readIt.next();
 
@@ -317,5 +319,62 @@ public class LogoNode extends DictNode {
         }
 
         rootElement.appendChild(logoElement);
+    }
+
+    /**
+     * Tests pixel for pixel equality of images
+     * @param image1
+     * @param image2
+     * @return 
+     */
+    private boolean imagesEqual(Image image1, Image image2) {
+        boolean ret;
+        try {
+            PixelGrabber grabImage1Pixels = new PixelGrabber(image1, 0, 0, -1, -1, false);
+            PixelGrabber grabImage2Pixels = new PixelGrabber(image2, 0, 0, -1, -1, false);
+
+            int[] image1Data = null;
+
+            if (grabImage1Pixels.grabPixels()) {
+                image1Data = (int[]) grabImage1Pixels.getPixels();
+            }
+
+            int[] image2Data = null;
+
+            if (grabImage2Pixels.grabPixels()) {
+                image2Data = (int[]) grabImage2Pixels.getPixels();
+            }
+
+            ret = Arrays.equals(image1Data, image2Data);
+        } catch (InterruptedException e) {
+            ret = false;
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+
+        if (this == comp) {
+            ret = true;
+        } else if (comp != null && getClass() == comp.getClass()) {
+            LogoNode c = (LogoNode) comp;
+
+            ret = value.equals(c.value);
+            ret = ret && notes.equals(c.notes);
+            ret = ret && imagesEqual(logoGraph, c.logoGraph);
+            ret = ret && isRadical == c.isRadical;
+            ret = ret && radicals.equals(c.radicals);
+            ret = ret && readings.equals(c.readings);
+        }
+
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

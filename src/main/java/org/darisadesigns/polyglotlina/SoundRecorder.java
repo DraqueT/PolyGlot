@@ -56,7 +56,7 @@ public class SoundRecorder {
     private JSlider slider;
     private JTextField timer;
     private final AudioFormat format;
-    private final int timeToDie = 100;
+    private final static int timeToDie = 100;
     private String playThread = "";
     private String recordThread = "";
     private final Window parentWindow;
@@ -205,7 +205,7 @@ public class SoundRecorder {
             float BPS = (format.getSampleRate()
                     * format.getSampleSizeInBits()) / 8;
 
-            while (parent.isRecording()) {
+            while (parent.curRecording) {
                 int count = line.read(buffer, 0, buffer.length);
                 if (count > 0) {
                     out.write(buffer, 0, count);
@@ -268,7 +268,7 @@ public class SoundRecorder {
      */
     public void playPause() throws IOException {
         // kill any recording session before initilizing playback
-        if (isRecording()) {
+        if (curRecording) {
             endRecording();
         }
 
@@ -341,7 +341,7 @@ public class SoundRecorder {
                         sourceLine.write(buffer, 0, count);
 
                         if (slider != null) {
-                            double percentPlayed = 1.0 - (((double) (totalCycles - cycles)) / (double) totalCycles);
+                            double percentPlayed = 1.0 - (((double) (totalCycles - cycles)) / totalCycles);
                             slider.setValue((int) (percentPlayed * slider.getMaximum()));
                         }
 
