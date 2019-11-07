@@ -924,19 +924,19 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * move rule down in list
      */
     private void moveRuleDown() {
-        int[] selectedIndicies = lstRules.getSelectedIndices();
+        int[] selectedIndices = lstRules.getSelectedIndices();
         int firstIndex;
 
         // return if nothing selected, or last selection would be placed out of scope
         if (lstRules.getSelectedIndex() == -1
-                || selectedIndicies[0] + selectedIndicies.length >= lstRules.getModel().getSize()) {
+                || selectedIndices[0] + selectedIndices.length >= lstRules.getModel().getSize()) {
             return;
         }
 
         DefaultListModel lstModel = (DefaultListModel) lstRules.getModel();
-        DeclensionGenRule bottom = (DeclensionGenRule) lstModel.getElementAt(selectedIndicies[selectedIndicies.length - 1] + 1);
+        DeclensionGenRule bottom = (DeclensionGenRule) lstModel.getElementAt(selectedIndices[selectedIndices.length - 1] + 1);
 
-        firstIndex = ((DeclensionGenRule) lstModel.getElementAt(selectedIndicies[0])).getIndex();
+        firstIndex = ((DeclensionGenRule) lstModel.getElementAt(selectedIndices[0])).getIndex();
 
         for (int index : lstRules.getSelectedIndices()) {
             DeclensionGenRule curRule = (DeclensionGenRule) lstModel.getElementAt(index);
@@ -948,8 +948,8 @@ public final class ScrDeclensionGenClassic extends PDialog {
 
         populateRules();
 
-        selectedIndicies[0] = selectedIndicies[selectedIndicies.length - 1] + 1;
-        lstRules.setSelectedIndices(selectedIndicies);
+        selectedIndices[0] = selectedIndices[selectedIndices.length - 1] + 1;
+        lstRules.setSelectedIndices(selectedIndices);
     }
     
     @Override

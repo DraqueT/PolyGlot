@@ -46,8 +46,8 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
         buffer = new GrammarSectionNode(parentManager);
     }
 
-    public GrammarChapNode(String name, GrammarManager _parentManager) {
-        super(name);
+    public GrammarChapNode(String _name, GrammarManager _parentManager) {
+        super(_name);
         parentManager = _parentManager;
     }
 

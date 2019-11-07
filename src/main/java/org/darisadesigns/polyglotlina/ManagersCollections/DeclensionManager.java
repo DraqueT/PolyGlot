@@ -120,7 +120,7 @@ public class DeclensionManager {
         for (List<DeclensionGenRule> list : generationRules.values()) {
             for (DeclensionGenRule curRule : list) {
                 int curRuleIndex = curRule.getIndex();
-                highestIndex = highestIndex > curRuleIndex ? highestIndex : curRuleIndex;
+                highestIndex = Math.max(highestIndex, curRuleIndex);
             }
         }
 

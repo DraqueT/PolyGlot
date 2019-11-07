@@ -600,7 +600,7 @@ public class DeclensionManagerTest {
 
             Method smoothRules = DeclensionManager.class.getDeclaredMethod("smoothRules");
             smoothRules.setAccessible(true);
-            smoothRules.invoke(decMan, new Object[0]);
+            smoothRules.invoke(decMan);
 
             List<DeclensionGenRule> rules = decMan.getDeclensionRulesForType(nounId);
 

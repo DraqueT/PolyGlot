@@ -208,8 +208,8 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         return index;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setIndex(int _index) {
+        this.index = _index;
     }
     
     /**

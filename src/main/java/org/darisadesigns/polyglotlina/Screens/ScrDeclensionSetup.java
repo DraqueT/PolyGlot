@@ -88,6 +88,7 @@ public final class ScrDeclensionSetup extends PDialog {
         try {
             myType = _core.getTypes().getNodeById(_typeId);
             this.setTitle("Declensions/Conjugations for type: " + myType.getValue());
+            btnClearDep.setToolTipText(btnClearDep.getToolTipText() + myType.getValue());
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Part of Speech Error",
@@ -95,8 +96,6 @@ public final class ScrDeclensionSetup extends PDialog {
                     + _typeId + " " + e.getMessage(), core.getRootWindow());
             this.dispose();
         }
-
-        btnClearDep.setToolTipText(btnClearDep.getToolTipText() + myType.getValue());
 
         declListModel = new DefaultListModel<>();
         lstDeclensionList.setModel(declListModel);
@@ -325,7 +324,7 @@ public final class ScrDeclensionSetup extends PDialog {
     }
     
     private void copyConjToClipboard() {
-        List<DeclensionNode> declesionTemplates = new ArrayList<>();
+        List<DeclensionNode> declensionTemplates = new ArrayList<>();
 
         for (int i : lstDeclensionList.getSelectedIndices()) {
             DeclensionNode curNodeToCopy = core.getDeclensionManager().getDeclensionTemplate(myType.getId(), 
@@ -333,10 +332,10 @@ public final class ScrDeclensionSetup extends PDialog {
             
             DeclensionNode copyNode = new DeclensionNode(-1);
             copyNode.setEqual(curNodeToCopy);
-            declesionTemplates.add(copyNode);
+            declensionTemplates.add(copyNode);
         }
 
-        core.setClipBoard(declesionTemplates);
+        core.setClipBoard(declensionTemplates);
     }
 
     private void pasteConjFromClipboard() {
@@ -349,7 +348,7 @@ public final class ScrDeclensionSetup extends PDialog {
             return;
         }
         
-        ArrayList<DeclensionNode> conjNodes = (ArrayList)fromClipBoard;
+        Iterable<DeclensionNode> conjNodes = (ArrayList)fromClipBoard;
         DeclensionManager decMan = core.getDeclensionManager();
         
         try {

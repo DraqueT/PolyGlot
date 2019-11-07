@@ -124,7 +124,7 @@ public final class ScrEtymRoots extends PDialog {
             }
             p.setToolTipText(toolTipString);
             delButton.setText("-");
-            delButton.setToolTipText("Remove external arent from etymological lineage");
+            delButton.setToolTipText("Remove external parent from etymological lineage");
             delButton.addActionListener((ActionEvent e) -> {
                 delExtParent((EtyExternalParent) p.getAssociatedObject());
             });

@@ -23,10 +23,11 @@ package org.darisadesigns.polyglotlina.CustomControls;
  *
  * @author draque
  */
-import java.awt.*;
+import java.awt.Component;
+import java.awt.HeadlessException;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import javax.swing.Icon;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.DEFAULT_OPTION;
@@ -155,7 +156,7 @@ public class InfoBox extends JFrame {
      */
     public static boolean actionConfirmation(String title, String message, Window parent) {
         PButton[] buttons = {YES, NO};
-        int option = POptionPane.showOptionDialog(parent,
+        int option = POptionPane.internalShowOptionDialog(parent,
                 message,
                 title,
                 JOptionPane.YES_NO_OPTION,
@@ -209,7 +210,7 @@ public class InfoBox extends JFrame {
         int ret;
         PButton[] option = {YES, NO, CANCEL};
 
-        ret = POptionPane.showOptionDialog(parent, 
+        ret = POptionPane.internalShowOptionDialog(parent, 
                 message, 
                 title, 
                 JOptionPane.YES_NO_CANCEL_OPTION, 
@@ -224,7 +225,7 @@ public class InfoBox extends JFrame {
     private void doError(String title, String message, Window parent) {
         if (!PGTUtil.isForceSuppressDialogs()) {
             Object[] option = {OK};        
-            POptionPane.showOptionDialog(parent, message, title, DEFAULT_OPTION,
+            POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
                              JOptionPane.ERROR_MESSAGE, null, option, null);
         }
     }
@@ -232,14 +233,14 @@ public class InfoBox extends JFrame {
     private void doWarning(String title, String message, Window parent) {
         if (!PGTUtil.isForceSuppressDialogs()) {
             Object[] option = {OK};
-            POptionPane.showOptionDialog(parent, message, title, DEFAULT_OPTION,
+            POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
                              JOptionPane.WARNING_MESSAGE, null, option, null);
         }
     }
 
     private void doInfo(String title, String message, Window parent) {
         Object[] option = {OK};        
-        POptionPane.showOptionDialog(parent, message, title, DEFAULT_OPTION,
+        POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
                          JOptionPane.INFORMATION_MESSAGE, null, option, null);
     }
 }

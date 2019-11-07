@@ -1455,7 +1455,7 @@ public class ScrLogoDetails extends PFrame {
      */
     public void setWordFetchMode(boolean fetch) {
         if (fetch) {
-            setTitle("Ascociate Logograph with Selected Conword");
+            setTitle("Asscociate Logograph with Selected Conword");
         }
 
         btnAddLogo.setEnabled(!fetch);

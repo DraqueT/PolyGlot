@@ -110,7 +110,7 @@ public final class ScrLexicon extends PFrame {
     private final JFXPanel fxPanel;
     private final TypeNode defTypeValue = new TypeNode();
     private final EtyExternalParent defRootValue = new EtyExternalParent();
-    private final static String defLexValue = "List of Conlang Words";
+    private final static String DEF_LEX_VALUE = "List of Conlang Words";
     private TextField txtConSrc;
     private TextField txtLocalSrc;
     private TextField txtProcSrc;
@@ -506,9 +506,9 @@ public final class ScrLexicon extends PFrame {
         }
     }
 
-    private void initFX(JFXPanel fxPanel) {
+    private void initFX(JFXPanel _fxPanel) {
         Scene scene = createScene();
-        fxPanel.setScene(scene);
+        _fxPanel.setScene(scene);
     }
 
     private Scene createScene() {
@@ -1059,7 +1059,6 @@ public final class ScrLexicon extends PFrame {
      * Sets up all document listeners
      */
     private void setupListeners() {
-        final Window parent = this;
         gridTitlePane.heightProperty()
                 .addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             int contentHeight = newValue.intValue();
@@ -1213,7 +1212,7 @@ public final class ScrLexicon extends PFrame {
 
                     theList.setToolTipText(tip);
                 } else {
-                    theList.setToolTipText(defLexValue);
+                    theList.setToolTipText(DEF_LEX_VALUE);
                 }
             }
         });

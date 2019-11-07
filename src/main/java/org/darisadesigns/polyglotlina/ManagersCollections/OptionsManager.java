@@ -199,16 +199,16 @@ public class OptionsManager {
     /**
      * @param animateWindows the animateWindows to set
      */
-    public void setAnimateWindows(boolean animateWindows) {
-        this.animateWindows = animateWindows;
+    public void setAnimateWindows(boolean _animateWindows) {
+        this.animateWindows = _animateWindows;
     }
 
     public boolean isNightMode() {
         return nightMode;
     }
 
-    public void setNightMode(boolean nightMode) {
-        this.nightMode = nightMode;
+    public void setNightMode(boolean _nightMode) {
+        this.nightMode = _nightMode;
     }
 
     public int getMaxReversionCount() {
@@ -224,8 +224,8 @@ public class OptionsManager {
         return toDoBarPosition;
     }
 
-    public void setToDoBarPosition(int toDoBarPosition) {
-        this.toDoBarPosition = toDoBarPosition;
+    public void setToDoBarPosition(int _toDoBarPosition) {
+        this.toDoBarPosition = _toDoBarPosition;
     }
     
     public void setCore(DictCore _core) {

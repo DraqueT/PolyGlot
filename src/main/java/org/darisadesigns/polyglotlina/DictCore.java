@@ -545,7 +545,7 @@ public class DictCore {
         doc.appendChild(rootElement);
 
         // collect XML representation of all dictionary elements
-        DictCore.writeXMLHeader(doc, rootElement, newSaveTime);
+        writeXMLHeader(doc, rootElement, newSaveTime);
         propertiesManager.writeXML(doc, rootElement);
         wordPropCollection.writeXML(doc, rootElement);
         typeCollection.writeXML(doc, rootElement);

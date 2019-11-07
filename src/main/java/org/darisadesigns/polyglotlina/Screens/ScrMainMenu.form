@@ -190,13 +190,13 @@
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuRevertion">
+            <MenuItem class="javax.swing.JMenuItem" name="mnuReversion">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Revert Language"/>
                 <Property name="toolTipText" type="java.lang.String" value="Allows reversion to an earlier save state of your language file."/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuRevertionActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuReversionActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>

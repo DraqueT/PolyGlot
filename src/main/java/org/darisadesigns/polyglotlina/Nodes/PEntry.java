@@ -31,9 +31,9 @@ public final class PEntry<K, V> implements Map.Entry<K, V> {
     private final K key;
     private V value;
 
-    public PEntry(K key, V value) {
-        this.key = key;
-        this.value = value;
+    public PEntry(K _key, V _value) {
+        this.key = _key;
+        this.value = _value;
     }
 
     @Override
@@ -47,13 +47,23 @@ public final class PEntry<K, V> implements Map.Entry<K, V> {
     }
 
     @Override
-    public V setValue(V value) {
+    public V setValue(V _value) {
         V old = this.value;
-        this.value = value;
+        this.value = _value;
         return old;
     }
     
-    public boolean equals(PEntry test) {
-        return this.key.equals(test.key) && this.value.equals(test.value);
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp != null && getClass() == comp.getClass()) {
+            PEntry c = (PEntry)comp;
+            ret = this.key.equals(c.key) && this.value.equals(c.value);
+        }
+        
+        return ret;
     }
 }

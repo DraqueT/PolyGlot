@@ -29,9 +29,9 @@ public class PCheckableItem {
     private boolean selected;
     public final String identity;
 
-    public PCheckableItem(String text, boolean selected, String _identity) {
-        this.text = text;
-        this.selected = selected;
+    public PCheckableItem(String _text, boolean _selected, String _identity) {
+        this.text = _text;
+        this.selected = _selected;
         this.identity = _identity;
     }
 
@@ -39,8 +39,8 @@ public class PCheckableItem {
         return selected;
     }
 
-    public void setSelected(boolean selected) {
-        this.selected = selected;
+    public void setSelected(boolean _selected) {
+        this.selected = _selected;
     }
 
     @Override

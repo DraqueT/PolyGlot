@@ -74,9 +74,9 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
     public Integer insert(Integer _id) throws Exception {
         Integer ret;
 
-        TypeNode insWord = new TypeNode();
-        insWord.setEqual(bufferNode);
-        insWord.setId(_id);
+        TypeNode insType = new TypeNode();
+        insType.setEqual(bufferNode);
+        insType.setId(_id);
 
         ret = super.insert(_id, bufferNode);
 

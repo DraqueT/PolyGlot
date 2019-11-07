@@ -168,24 +168,19 @@ public class ConWord extends DictNode {
             throw new ClassCastException("Object not of type ConWord");
         }
         
-        if (core == null) {
+        ConWord set = (ConWord) _set;
+        
+        // tight coupling between conword and core due to word classes causes this... might refactor later (high risk)
+        if (core == null || set.core == null) {
             throw new ClassCastException("Core must be initialized in conword to use method SetEqual");
         }
-                
-        ConWord set = (ConWord) _set;
-        set.core = core;
         
-        this.setValue(set.getValue());
+        this.value = set.value;
         this.setLocalWord(set.localWord);
-        this.typeId = set.getWordTypeId();
+        this.typeId = set.typeId;
         this.definition = set.definition;
-        try {
-            this.pronunciation = set.getPronunciation();
-        } catch (Exception e) {
-            // IOHandler.writeErrorLog(e);
-            this.pronunciation = "<ERROR>";
-        }
-        this.setId(set.getId());
+        this.pronunciation = set.pronunciation;
+        this.id = set.id;
         List<Entry<Integer, Integer>> precLock = new ArrayList<>(set.getClassValues()); // avoid read/write collisions
         precLock.forEach((entry) -> {
             this.setClassValue(entry.getKey(), entry.getValue());
@@ -343,8 +338,8 @@ public class ConWord extends DictNode {
         return definition;
     }
 
-    public void setDefinition(String definition) {
-        this.definition = definition;
+    public void setDefinition(String _definition) {
+        this.definition = _definition;
     }
 
     /**
@@ -366,8 +361,8 @@ public class ConWord extends DictNode {
         return ret;
     }
 
-    public void setPronunciation(String pronunciation) {
-        this.pronunciation = pronunciation;
+    public void setPronunciation(String _pronunciation) {
+        this.pronunciation = _pronunciation;
     }
     
     /**
@@ -458,10 +453,10 @@ public class ConWord extends DictNode {
     }
 
     /**
-     * @param etymNotes the etymNotes to set
+     * @param _etymNotes the etymNotes to set
      */
-    public void setEtymNotes(String etymNotes) {
-        this.etymNotes = etymNotes;
+    public void setEtymNotes(String _etymNotes) {
+        this.etymNotes = _etymNotes;
     }
 
     /**
@@ -472,10 +467,10 @@ public class ConWord extends DictNode {
     }
 
     /**
-     * @param filterEtyParent the filterEtyParent to set
+     * @param _filterEtyParent the filterEtyParent to set
      */
-    public void setFilterEtyParent(Object filterEtyParent) {
-        this.filterEtyParent = filterEtyParent;
+    public void setFilterEtyParent(Object _filterEtyParent) {
+        this.filterEtyParent = _filterEtyParent;
     }
     
     public void writeXML(Document doc, Element rootElement) {

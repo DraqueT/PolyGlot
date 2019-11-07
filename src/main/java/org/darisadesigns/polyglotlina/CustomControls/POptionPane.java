@@ -47,6 +47,12 @@ import static javax.swing.JOptionPane.getRootFrame;
 import javax.swing.JRootPane;
 import javax.swing.UIManager;
 
+// TODO: This class is poorly written and largely copy/pasted from POptionPane,
+// which is very bad practice. Consider heavy refactoring after identifying all
+// custom elements to be recreated in better written fashion.
+//
+// Known features: always on top
+
 /**
  * Much code pulled up from JOptionPane so that I could make that damned thing
  * set to always on top if I wanted to. No other easy way to do it that I could
@@ -56,17 +62,17 @@ import javax.swing.UIManager;
  */
 public class POptionPane extends JOptionPane {
     
-    public POptionPane(Object message, int messageType, int optionType,
-            Icon icon, Object[] options, Object initialValue) {
-        super(message, messageType, optionType, icon, options, initialValue);
+    public POptionPane(Object _message, int _messageType, int _optionType,
+            Icon _icon, Object[] _options, Object _initialValue) {
+        super(_message, _messageType, _optionType, _icon, _options, _initialValue);
         
     }
 
-    public static int showOptionDialog(final Component parentComponent,
+    public static int internalShowOptionDialog(final Component parentComponent,
             Object message, String title, int optionType, int messageType,
             Icon icon, Object[] options, Object initialValue)
             throws HeadlessException {
-        Window parentWindow = getWindowForComponent(parentComponent);
+        Window parentWindow = internalGetWindowForComponent(parentComponent);
         boolean parentIsModal = parentWindow instanceof Dialog 
                 && ((Dialog)parentWindow).isModal();
         int ret = CLOSED_OPTION;
@@ -78,7 +84,7 @@ public class POptionPane extends JOptionPane {
         pane.setComponentOrientation(((parentComponent == null)
                 ? getRootFrame() : parentComponent).getComponentOrientation());
 
-        int style = styleFromMessageType(messageType);
+        int style = internalStyleFromMessageType(messageType);
         JDialog dialog = pane.createDialog(parentWindow, parentComponent, title, style);
         dialog.setAlwaysOnTop(true);
         dialog.setModal(true);
@@ -131,7 +137,7 @@ public class POptionPane extends JOptionPane {
         }
     }
 
-    private static int styleFromMessageType(int messageType) {
+    private static int internalStyleFromMessageType(int messageType) {
         switch (messageType) {
             case ERROR_MESSAGE:
                 return JRootPane.ERROR_DIALOG;
@@ -160,12 +166,12 @@ public class POptionPane extends JOptionPane {
         }
 
         dialog.setAlwaysOnTop(true);
-        initDialog(dialog, style, parentComponent);
+        internalinitDialog(dialog, style, parentComponent);
 
         return dialog;
     }
 
-    public static Window getWindowForComponent(Component parentComponent)
+    private static Window internalGetWindowForComponent(Component parentComponent)
             throws HeadlessException {
         if (parentComponent == null) {
             return getRootFrame();
@@ -173,10 +179,10 @@ public class POptionPane extends JOptionPane {
         if (parentComponent instanceof Frame || parentComponent instanceof Dialog) {
             return (Window) parentComponent;
         }
-        return getWindowForComponent(parentComponent.getParent());
+        return internalGetWindowForComponent(parentComponent.getParent());
     }
 
-    private void initDialog(final JDialog dialog, int style, Component parentComponent) {
+    private void internalinitDialog(final JDialog dialog, int style, Component parentComponent) {
         dialog.setComponentOrientation(this.getComponentOrientation());
         Container contentPane = dialog.getContentPane();
 

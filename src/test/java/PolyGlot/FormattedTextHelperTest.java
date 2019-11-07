@@ -131,7 +131,7 @@ public class FormattedTextHelperTest {
         GrammarChapNode chap = core.getGrammarManager().getChapters().get(0);
         
         String sectionText = ((GrammarSectionNode)chap.getFirstChild()).getSectionText();
-        List<Entry<String, PFontInfo>> results = FormattedTextHelper.getSectionTextFontSpecifec(sectionText, core);
+        List<Entry<String, PFontInfo>> results = FormattedTextHelper.getSectionTextFontSpecific(sectionText, core);
         Entry<String, PFontInfo> title = results.get(0);
         Entry<String, PFontInfo> lodenkurExample = results.get(6);
         

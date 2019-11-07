@@ -37,8 +37,8 @@ public class FamTreeNode extends DefaultMutableTreeNode {
      *
      * @param parent
      */
-    public FamTreeNode(FamNode parent) {
-        famNode = new FamNode(parent, parent.getManager());
+    public FamTreeNode(FamNode _parent) {
+        famNode = new FamNode(_parent, _parent.getManager());
     }
 
     /**
@@ -78,11 +78,11 @@ public class FamTreeNode extends DefaultMutableTreeNode {
     }
 
     @Override
-    public void setUserObject(Object userObject) {
-        if (userObject instanceof String) {
-            famNode.setValue((String) userObject);
+    public void setUserObject(Object _userObject) {
+        if (_userObject instanceof String) {
+            famNode.setValue((String) _userObject);
         }
-        super.setUserObject(userObject);
+        super.setUserObject(_userObject);
     }
 
     @Override

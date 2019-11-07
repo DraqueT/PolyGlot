@@ -132,11 +132,6 @@ public final class ScrLogoQuickView extends PFrame {
     }
     
     @Override
-    public void setTitle(String _title) {
-        super.setTitle(_title);
-    }
-    
-    @Override
     public void updateAllValues(DictCore _core) {
         if (core != _core) {
             // this window by its very nature is for single words. Close on load of new dictionary.

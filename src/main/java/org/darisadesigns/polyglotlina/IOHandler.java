@@ -163,16 +163,16 @@ public final class IOHandler {
      * @throws IOException
      */
     public static byte[] streamToBytArray(InputStream is) throws IOException {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+            int nRead;
+            byte[] data = new byte[16384];
 
-        int nRead;
-        byte[] data = new byte[16384];
+            while ((nRead = is.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
 
-        while ((nRead = is.read(data, 0, data.length)) != -1) {
-            buffer.write(data, 0, nRead);
+            return buffer.toByteArray();
         }
-
-        return buffer.toByteArray();
     }
 
     /**
@@ -1051,12 +1051,12 @@ public final class IOHandler {
      * @param comment
      */
     public static void writeErrorLog(Throwable exception, String comment) {
+        String curContents = "";
         String errorMessage = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
         errorMessage += "-" + exception.getLocalizedMessage() + "-" + exception.getClass().getName();
         Throwable rootCause = ExceptionUtils.getRootCause(exception);
         rootCause = rootCause == null ? exception : rootCause;
         errorMessage += "\n" + ExceptionUtils.getStackTrace(rootCause);
-        BufferedWriter writer;
 
         if (!comment.isEmpty()) {
             errorMessage = comment + ":\n" + errorMessage;
@@ -1066,34 +1066,27 @@ public final class IOHandler {
                 + File.separator + PGTUtil.ERROR_LOG_FILE);
 
         try {
-            String output;
-
             if (errorLog.exists()) {
-                Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z");
-                String contents = logScanner.hasNext() ? logScanner.next() : "";
+                try (Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
+                    curContents = logScanner.hasNext() ? logScanner.next() : "";
+                    int length = curContents.length();
+                    int newLength = length + errorMessage.length();
 
-                writer = new BufferedWriter(new FileWriter(errorLog));
-                int length = contents.length();
-                int newLength = length + errorMessage.length();
-
-                if (newLength > PGTUtil.MAX_LOG_CHARACTERS) {
-                    contents = contents.substring(newLength - PGTUtil.MAX_LOG_CHARACTERS);
+                    if (newLength > PGTUtil.MAX_LOG_CHARACTERS) {
+                        curContents = curContents.substring(newLength - PGTUtil.MAX_LOG_CHARACTERS);
+                    }
                 }
-
-                output = contents + errorMessage + "\n";
-            } else {
-                writer = new BufferedWriter(new FileWriter(errorLog));
-                output = errorMessage + "\n";
             }
-
-            output = getSystemInformation() + "\n" + output;
-
-            System.out.println("Writing error to: " + errorLog.getAbsolutePath());
-            writer.write(output);
-            writer.close();
+        
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(errorLog))) {
+                String output = getSystemInformation() + "\n" + curContents + errorMessage + "\n";
+                System.out.println("Writing error to: " + errorLog.getAbsolutePath());
+                writer.write(output);
+            }
         } catch (IOException e) {
             // Fail silently. This fails almost exclusively due to being run in write protected folder, caught elsewhere
             // do not log to written file for obvious reasons (causes further write failure)
+            // WHY DO PEOPLE INSTALL THIS TO WRITE PROTECTED FOLDERS AND SYSTEM32. WHY.
             // IOHandler.writeErrorLog(e);
         }
     }
@@ -1108,8 +1101,9 @@ public final class IOHandler {
         File errorLog = getErrorLogFile();
 
         if (errorLog.exists()) {
-            Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z");
-            ret = logScanner.hasNext() ? logScanner.next() : "";
+            try (Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
+                ret = logScanner.hasNext() ? logScanner.next() : "";
+            }
         }
         return ret;
     }
@@ -1195,18 +1189,16 @@ public final class IOHandler {
             System.out.println(Arrays.toString(arguments));
 
             // get general output
-            InputStream is = p.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output += line;
-            }
-
-            // get error output
-            is = p.getErrorStream();
-            reader = new BufferedReader(new InputStreamReader(is));
-            while ((line = reader.readLine()) != null) {
-                error += line;
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                    BufferedReader errorReader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    output += line;
+                }
+                
+                while ((line = errorReader.readLine()) != null) {
+                    error += line;
+                }
             }
         } catch (IOException e) {
             error = e.getLocalizedMessage();

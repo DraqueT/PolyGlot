@@ -157,8 +157,8 @@ public final class Java8Bridge {
     public static class OutputInterceptor extends PrintStream {
         private String intercepted = "";
 
-        public OutputInterceptor(OutputStream out) {
-            super(out, true);
+        public OutputInterceptor(OutputStream _out) {
+            super(_out, true);
         }
 
         @Override

@@ -35,9 +35,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.swing.ImageIcon;
 
@@ -528,8 +526,7 @@ public final class PGTUtil {
         URL buildDate = PGTUtil.class.getResource(BUILD_DATE_TIME_LOCATION);
         String buildDateString = "";
         if (buildDate != null) {
-            try {
-                BufferedReader br = new BufferedReader(new InputStreamReader(buildDate.openStream(), StandardCharsets.UTF_8));
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(buildDate.openStream(), StandardCharsets.UTF_8))) {
                 buildDateString = br.readLine();
             } catch (IOException ex) {
                 buildDateString = "BUILD DATE FILE NOT PRESENT";
@@ -676,15 +673,17 @@ public final class PGTUtil {
      * @return 
      */
     private static String getVersion() {
-        try {
-            URL versionUrl = PGTUtil.class.getResource(VERSION_LOCATION);
-            BufferedReader br = new BufferedReader(new InputStreamReader(versionUrl.openStream()));
+        String ret = "ERROR";
+        
+        URL versionUrl = PGTUtil.class.getResource(VERSION_LOCATION);
+        
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(versionUrl.openStream()))) {
             return br.readLine();
         } catch (IOException e) {
             InfoBox.error("PolyGlot Load Error", "Unable to load version file.", null);
         }
         
-        return "ERROR";
+        return ret;
     }
     
      /**
@@ -708,7 +707,7 @@ public final class PGTUtil {
      */
     public static boolean isInJUnitTest() {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        List<StackTraceElement> list = Arrays.asList(stackTrace);
+        StackTraceElement[] list = stackTrace;
         for (StackTraceElement element : list) {
             if (element.getClassName().startsWith("org.junit.")) {
                 return true;

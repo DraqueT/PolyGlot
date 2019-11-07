@@ -30,8 +30,8 @@ import org.w3c.dom.Element;
  */
 public class DeclensionDimension extends DictNode {
     
-    public DeclensionDimension(Integer id) {
-        super(id);
+    public DeclensionDimension(Integer _id) {
+        super(_id);
     }
     
     public DeclensionDimension() {
@@ -65,7 +65,7 @@ public class DeclensionDimension extends DictNode {
         if (this == comp) {
             ret = true;
         } else if (comp != null && getClass() == comp.getClass()) {
-            ret = this.value.equals(((DeclensionDimension)comp).value);
+            ret = this.value.equals(((DictNode) comp).value);
         }
         
         return ret;

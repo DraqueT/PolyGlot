@@ -31,13 +31,13 @@ import org.apache.commons.lang3.NotImplementedException;
 public final class ToDoTreeNode extends DefaultMutableTreeNode {
     /**
      * marked private because construction requires preprocessing logic
-     * @param userObject 
+     * @param _userObject 
      */
-    private ToDoTreeNode(Object userObject) {
-        super(userObject);
+    private ToDoTreeNode(Object _userObject) {
+        super(_userObject);
         
         if (parent instanceof ToDoTreeNode) {
-            ((ToDoNode)userObject).setParent(((ToDoTreeNode)this.getParent()).getNode());
+            ((ToDoNode)_userObject).setParent(((ToDoTreeNode)this.getParent()).getNode());
         }
     }
     

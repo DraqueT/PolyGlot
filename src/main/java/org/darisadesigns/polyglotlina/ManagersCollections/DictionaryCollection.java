@@ -42,7 +42,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
 
     private int highestNodeId = 1;
 
-    public DictionaryCollection(N _bufferNode) {
+    protected DictionaryCollection(N _bufferNode) {
         bufferNode = _bufferNode;
     }
     
@@ -84,7 +84,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
             throw new Exception("Id can never be less than 1.");
         }
 
-        DictNode myNode = (DictNode)_modNode;
+        DictNode myNode = _modNode;
 
         myNode.setId(_id);
         myNode.setAlphaOrder(alphaOrder);
@@ -169,7 +169,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
      * @throws Exception if unable to insert
      */
     protected Integer insert(Integer _id, N _buffer) throws Exception {
-        DictNode myBuffer = (DictNode) _buffer;
+        DictNode myBuffer = _buffer;
 
         if (nodeMap.containsKey(_id)) {
             throw new Exception("Duplicate ID " + _id + " for collection object: " + myBuffer.getValue());
@@ -217,7 +217,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
         Collections.shuffle(allValues, new Random(System.nanoTime()));
         
         // can't return more than exist in the collection
-        numRandom = numRandom > allValues.size() ? allValues.size() : numRandom;
+        numRandom = Math.min(numRandom, allValues.size());
         // select from list to return
         for (int i = 0; i < numRandom; i++) {
             ret.add(allValues.get(i));

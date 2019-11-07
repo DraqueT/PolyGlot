@@ -132,8 +132,8 @@ public class DeclensionNode extends DictNode {
      * Deletes a dimension from this declension (it rhymes!)
      * @param id id of dimension to be deleted
      */
-    public void deleteDimension(Integer id) {
-        dimensions.remove(id);
+    public void deleteDimension(Integer _id) {
+        dimensions.remove(_id);
     }
     
     public void setNotes(String _notes) {
@@ -160,11 +160,11 @@ public class DeclensionNode extends DictNode {
      * @param id id of declension dimension
      * @return declension dimension if it exists, null otherwise
      */
-    public DeclensionDimension getDeclensionDimensionById(int id) {
+    public DeclensionDimension getDeclensionDimensionById(int _id) {
         DeclensionDimension ret = null;
         
-        if (dimensions.containsKey(id)) {
-            ret = dimensions.get(id);
+        if (dimensions.containsKey(_id)) {
+            ret = dimensions.get(_id);
         }
         
         return ret;

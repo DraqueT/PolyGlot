@@ -82,8 +82,8 @@ public class RomanizationManager extends PronunciationMgr {
     /**
      * @param enabled the enabled status to set
      */
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setEnabled(boolean _enabled) {
+        this.enabled = _enabled;
     }
     
     @Override

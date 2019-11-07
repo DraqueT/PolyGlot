@@ -109,14 +109,14 @@ public class PArrowButton extends JButton {
          * @param x the x coordinate
          * @param y the y coordinate
          * @param size the size of the triangle to draw
-         * @param direction the direction in which to draw the arrow;
+         * @param _direction the direction in which to draw the arrow;
          *        one of {@code SwingConstants.NORTH},
          *        {@code SwingConstants.SOUTH}, {@code SwingConstants.EAST} or
          *        {@code SwingConstants.WEST}
          * @param isEnabled whether or not the arrow is drawn enabled
          */
         public void paintTriangle(Graphics g, int x, int y, int size,
-                                        int direction, boolean isEnabled) {
+                                        int _direction, boolean isEnabled) {
             Color oldColor = g.getColor();
             int mid, i, j;
 
@@ -130,7 +130,7 @@ public class PArrowButton extends JButton {
             else
                 g.setColor(shadow);
 
-            switch(direction)       {
+            switch(_direction)       {
             case NORTH:
                 for(i = 0; i < size; i++)      {
                     g.drawLine(mid-i, i, mid+i, i);

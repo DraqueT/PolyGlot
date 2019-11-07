@@ -26,12 +26,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.EventObject;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -52,7 +47,7 @@ import javax.swing.tree.TreePath;
 public final class PToDoTree extends JTree {
     private final PToDoTree selfPointer = this;
     private HashMap<TreePath, ToDoNode> nodesCheckingState;
-    private HashSet<TreePath> checkedPaths = new HashSet<>();
+    private AbstractCollection<TreePath> checkedPaths = new HashSet<>();
     private final DictCore core;
     private TreePath clickedPath;
 
@@ -180,8 +175,8 @@ public final class PToDoTree extends JTree {
     }
 
     public static class CheckChangeEvent extends EventObject {
-        public CheckChangeEvent(Object source) {
-            super(source);          
+        public CheckChangeEvent(Object _source) {
+            super(_source);
         }       
     }
 
@@ -265,7 +260,7 @@ public final class PToDoTree extends JTree {
     private final class CheckBoxCellRenderer extends JPanel implements TreeCellRenderer {    
         private final PCheckBox checkBox;
         
-        public CheckBoxCellRenderer() {
+        CheckBoxCellRenderer() {
             super();           
 
             this.setLayout(new BorderLayout());
@@ -295,7 +290,7 @@ public final class PToDoTree extends JTree {
     }
 
     // When a node is checked/unchecked, updating the states of the predecessors
-    protected void updatePredecessorsWithCheckMode(TreePath tp, boolean check) {
+    private void updatePredecessorsWithCheckMode(TreePath tp, boolean check) {
         TreePath parentPath = tp.getParentPath();
         // If it is the root, stop the recursive calls and return
         if (parentPath == null) {
@@ -320,7 +315,7 @@ public final class PToDoTree extends JTree {
     }
 
     // Recursively checks/unchecks a subtree
-    protected void checkSubTree(TreePath tp, boolean check) {
+    private void checkSubTree(TreePath tp, boolean check) {
         ToDoNode cn = nodesCheckingState.get(tp);
         cn.setDone(check);
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp.getLastPathComponent();

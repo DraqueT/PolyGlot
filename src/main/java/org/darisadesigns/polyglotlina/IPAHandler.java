@@ -554,8 +554,8 @@ public class IPAHandler {
         
         public final String label;
         
-        IPALibrary(String label) {
-            this.label = label;
+        IPALibrary(String _label) {
+            this.label = _label;
         }
         
         @Override

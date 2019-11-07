@@ -35,7 +35,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 public class PGTreeCellRenderer extends DefaultTreeCellRenderer {
 
     @Override
-    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean _selected, boolean expanded, boolean leaf, int row, boolean _hasFocus) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 
         setText(value.toString());

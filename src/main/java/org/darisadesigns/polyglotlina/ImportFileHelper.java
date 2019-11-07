@@ -98,12 +98,12 @@ public class ImportFileHelper {
         importCSV(csvFile.getAbsolutePath(), CSVFormat.EXCEL);
     }
 
-    private void importCSV(String inputFile, CSVFormat format) throws Exception {
+    private void importCSV(String inputFile, CSVFormat _format) throws Exception {
         if (!quoteChar.isEmpty()) {
-            format = format.withQuote(quoteChar.charAt(0));
+            _format = _format.withQuote(quoteChar.charAt(0));
         }
         
-        List<List<String>> rows = getRows(inputFile, format);
+        List<List<String>> rows = getRows(inputFile, _format);
         
         if (bFirstLineLabels) {
             rows.remove(0);

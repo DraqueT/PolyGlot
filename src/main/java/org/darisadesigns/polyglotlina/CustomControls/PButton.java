@@ -74,7 +74,7 @@ public class PButton extends JButton implements MouseListener {
     }
     
     @Override
-    public final void addMouseListener(MouseListener l) {
+    public synchronized final void addMouseListener(MouseListener l) {
         super.addMouseListener(l);
     }
 

@@ -333,7 +333,7 @@ public class ScrPrintToPDF extends PDialog {
         }
         
         if (new File(txtSavePath.getText()).exists()
-                && JOptionPane.showConfirmDialog(this, "File already exists. Overwrite?", "Overwite Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+                && JOptionPane.showConfirmDialog(this, "File already exists. Overwrite?", "Overwrite Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
             return;
         }
         
@@ -362,7 +362,7 @@ public class ScrPrintToPDF extends PDialog {
                     }
                 }
             } else {
-                InfoBox.info("Print Success", "Sucessfully printed to " + txtSavePath.getText(), core.getRootWindow());
+                InfoBox.info("Print Success", "Successfully printed to " + txtSavePath.getText(), core.getRootWindow());
             }
             
             this.dispose();
