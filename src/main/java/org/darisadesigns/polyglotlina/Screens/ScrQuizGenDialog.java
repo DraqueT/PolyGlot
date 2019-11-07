@@ -256,7 +256,7 @@ public final class ScrQuizGenDialog extends PFrame {
         });
 
         chkLocalQuiz.setText("-UPDATE VIA CODE-");
-        chkLocalQuiz.setToolTipText("Conlang equivlent of local language words");
+        chkLocalQuiz.setToolTipText("Conlang equivalent of local language words");
 
         chkConlangQuiz.setText("-UPDATE VIA CODE-");
         chkConlangQuiz.setToolTipText("The conlang equivalent of local language words");

@@ -344,7 +344,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
         int endJustifiableContent = 0;
         if (justificationData != null) {
             int offset = - startOffset + txtOffset;
-            View parent = null;
+            View parent;
             if (view != null && (parent = view.getParent()) != null) {
                 offset += parent.getStartOffset();
             }
@@ -401,7 +401,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
         int endJustifiableContent = 0;
         if (justificationData != null) {
             int offset = - startOffset + txtOffset;
-            View parent = null;
+            View parent;
             if (view != null && (parent = view.getParent()) != null) {
                 offset += parent.getStartOffset();
             }
@@ -439,7 +439,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
                 flushIndex = i + 1;
                 if (txt[i] == '\t') {
                     if (e != null) {
-                        nextX = e.nextTabStop((float) nextX, startOffset + i - txtOffset);
+                        nextX = e.nextTabStop(nextX, startOffset + i - txtOffset);
                     } else {
                         nextX += (spaceVector.getGlyphPosition(1).getX());
                     }
@@ -519,7 +519,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
         int endJustifiableContent = 0;
         if (justificationData != null) {
             int offset = - startOffset + txtOffset;
-            View parent = null;
+            View parent;
             if (view != null && (parent = view.getParent()) != null) {
                 offset += parent.getStartOffset();
             }
@@ -538,7 +538,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
             )){
                 if (txt[i] == '\t') {
                     if (e != null) {
-                        nextX = (int) e.nextTabStop((float) nextX,
+                        nextX = (int) e.nextTabStop(nextX,
                                 startOffset + i - txtOffset);
                     } else {
                         nextX += (spaceVector.getGlyphPosition(1).getX());

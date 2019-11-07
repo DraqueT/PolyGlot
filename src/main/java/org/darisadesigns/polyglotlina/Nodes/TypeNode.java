@@ -28,7 +28,6 @@ import org.w3c.dom.Element;
  * This represents a part of speech. Apologies for the naming scheme. "Type" doesn't really fit.
  * @author draque
  */
-@SuppressWarnings("EqualsAndHashcode")
 public class TypeNode extends DictNode {
 
     private String notes = "";
@@ -98,10 +97,10 @@ public class TypeNode extends DictNode {
     }
 
     /**
-     * @param procMandatory the procMandatory to set
+     * @param _procMandatory the procMandatory to set
      */
-    public void setProcMandatory(boolean procMandatory) {
-        this.procMandatory = procMandatory;
+    public void setProcMandatory(boolean _procMandatory) {
+        this.procMandatory = _procMandatory;
     }
 
     /**
@@ -112,10 +111,10 @@ public class TypeNode extends DictNode {
     }
 
     /**
-     * @param defMandatory the defMandatory to set
+     * @param _defMandatory the defMandatory to set
      */
-    public void setDefMandatory(boolean defMandatory) {
-        this.defMandatory = defMandatory;
+    public void setDefMandatory(boolean _defMandatory) {
+        this.defMandatory = _defMandatory;
     }
 
     public void writeXML(Document doc, Element rootElement) {

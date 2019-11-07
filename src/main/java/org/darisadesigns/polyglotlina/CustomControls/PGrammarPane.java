@@ -29,6 +29,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -182,7 +183,7 @@ public class PGrammarPane extends JTextPane {
             inputAttributes.removeAttributes(inputAttributes);
             StyleConstants.setIcon(inputAttributes, new ImageIcon(image.getImagePath()));
             inputAttributes.addAttribute(PGTUtil.IMAGE_ID_ATTRIBUTE, image.getId());
-            replaceSelection(" ", false);
+            imageReplaceSelection(" ");
             inputAttributes.removeAttributes(inputAttributes);
         } catch (IOException e) {
             IOHandler.writeErrorLog(e);
@@ -200,20 +201,23 @@ public class PGrammarPane extends JTextPane {
         if (ClipboardHandler.isClipboardImage()) {
             try {
                 Image imageObject = ClipboardHandler.getClipboardImage();
-                BufferedImage image;
-                if (imageObject instanceof BufferedImage) {
-                    image = (BufferedImage)imageObject;
-                } else {
-                    image = new BufferedImage(imageObject.getWidth(null),
-                            imageObject.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                
+                if (imageObject != null) {
+                    BufferedImage image;
+                    if (imageObject instanceof BufferedImage) {
+                        image = (BufferedImage)imageObject;
+                    } else {
+                        image = new BufferedImage(imageObject.getWidth(null),
+                                imageObject.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
-                    // Draw the image on to the buffered image
-                    Graphics2D bGr = image.createGraphics();
-                    bGr.drawImage(imageObject, 0, 0, null);
-                    bGr.dispose();
+                        // Draw the image on to the buffered image
+                        Graphics2D bGr = image.createGraphics();
+                        bGr.drawImage(imageObject, 0, 0, null);
+                        bGr.dispose();
+                    }
+                    ImageNode imageNode = core.getImageCollection().getFromBufferedImage(image);
+                    addImage(imageNode);
                 }
-                ImageNode imageNode = core.getImageCollection().getFromBufferedImage(image);
-                addImage(imageNode);
             } catch (Exception e) {
                 IOHandler.writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
@@ -226,7 +230,7 @@ public class PGrammarPane extends JTextPane {
                 clipText = clipText.replaceAll("\t", "    ");
                 board.setClipboardContents(clipText);
                 super.paste();
-            } catch (Exception e) {
+            } catch (UnsupportedFlavorException | IOException e) {
                 IOHandler.writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
             }
@@ -235,11 +239,7 @@ public class PGrammarPane extends JTextPane {
         }
     }
 
-    private void replaceSelection(String content, boolean checkEditable) {
-        if (checkEditable && !isEditable()) {
-            UIManager.getLookAndFeel().provideErrorFeedback(PGrammarPane.this);
-            return;
-        }
+    private void imageReplaceSelection(String content) {
         Document doc = getStyledDocument();
         if (doc != null) {
             try {

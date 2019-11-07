@@ -180,54 +180,53 @@ public class SoundRecorder {
 
         final SoundRecorder parent = this;
         final DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-        final TargetDataLine line = (TargetDataLine) AudioSystem.getLine(info);
+        try ( TargetDataLine line = (TargetDataLine) AudioSystem.getLine(info)) {
+            // 8000 is the typical rate, but I wanted to get increments of 1/100 second
+            int bufferSize = 80; //(int) format.getSampleRate() * format.getFrameSize();
 
-        // 8000 is the typical rate, but I wanted to get increments of 1/100 second
-        int bufferSize = 80; //(int) format.getSampleRate() * format.getFrameSize();
+            final byte[] buffer = new byte[bufferSize];
+            out = new ByteArrayOutputStream();
 
-        final byte[] buffer = new byte[bufferSize];
-        out = new ByteArrayOutputStream();
+            curRecording = true;
+            recordBut.setIcon(recDown);
 
-        curRecording = true;
-        recordBut.setIcon(recDown);
+            line.open(format);
+            line.start();
 
-        line.open(format);
-        line.start();
+            resetUIValues();
 
-        resetUIValues();
+            if (soundThread != null && soundThread.isAlive()) {
+                soundThread.interrupt();
+            }
 
-        if (soundThread != null && soundThread.isAlive()) {
-            soundThread.interrupt();
-        }
+            soundThread = new Thread(() -> {
+                int bytesRecorded = 0;
+                float BPS = (format.getSampleRate()
+                        * format.getSampleSizeInBits()) / 8;
 
-        soundThread = new Thread(() -> {
-            int bytesRecorded = 0;
-            float BPS = (format.getSampleRate()
-                    * format.getSampleSizeInBits()) / 8;
+                while (parent.curRecording) {
+                    int count = line.read(buffer, 0, buffer.length);
+                    if (count > 0) {
+                        out.write(buffer, 0, count);
+                    }
 
-            while (parent.curRecording) {
-                int count = line.read(buffer, 0, buffer.length);
-                if (count > 0) {
-                    out.write(buffer, 0, count);
+                    bytesRecorded += buffer.length;
+                    float seconds = bytesRecorded / BPS;
+                    timer.setText(getTimerValue(seconds));
                 }
 
-                bytesRecorded += buffer.length;
-                float seconds = bytesRecorded / BPS;
-                timer.setText(getTimerValue(seconds));
-            }
+                recordBut.setIcon(recUp);
 
-            recordBut.setIcon(recUp);
-
-            try {
-                out.close();
-            } catch (IOException e) {
-                //e.printStackTrace();
-                IOHandler.writeErrorLog(e);
-                InfoBox.error("Recording error: ", "Unable to record: "
-                        + e.getLocalizedMessage(), parentWindow);
-            }
-            line.close();
-        });
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                    IOHandler.writeErrorLog(e);
+                    InfoBox.error("Recording error: ", "Unable to record: "
+                            + e.getLocalizedMessage(), parentWindow);
+                }
+            });
+        }
 
         recordThread = soundThread.toString();
         soundThread.start();
@@ -263,7 +262,6 @@ public class SoundRecorder {
     /**
      * Plays sound that has been recorded
      *
-     * @throws javax.sound.sampled.LineUnavailableException on no output line
      * @throws java.io.IOException on no output line
      */
     public void playPause() throws IOException {
@@ -275,10 +273,6 @@ public class SoundRecorder {
         if (sound == null) {
             return;
         }
-
-        final InputStream input = new ByteArrayInputStream(sound);
-        final AudioInputStream ais = new AudioInputStream(input,
-                format, sound.length / format.getFrameSize());
 
         final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
@@ -296,7 +290,9 @@ public class SoundRecorder {
         playPauseBut.setIcon(playDown);
 
         soundThread = new Thread(() -> {
-            try (SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info)) {
+            try (InputStream input = new ByteArrayInputStream(sound);
+                    AudioInputStream ais = new AudioInputStream(input, format, sound.length / format.getFrameSize());  
+                    SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info)) {
                 sourceLine.open(format);
                 sourceLine.start();
 
@@ -318,9 +314,6 @@ public class SoundRecorder {
                                 killPlay = false;
                                 playing = false;
                                 sourceLine.drain();
-                                sourceLine.close();
-                                ais.close();
-                                input.close();
                                 return;
                             }
                         }
@@ -331,9 +324,6 @@ public class SoundRecorder {
                             killPlay = false;
                             playing = false;
                             sourceLine.drain();
-                            sourceLine.close();
-                            ais.close();
-                            input.close();
                             playPauseBut.setIcon(playUp);
                             return;
                         }
@@ -359,9 +349,6 @@ public class SoundRecorder {
 
                 playing = false;
                 sourceLine.drain();
-                sourceLine.close();
-                ais.close();
-                input.close();
             } catch (LineUnavailableException | IOException | InterruptedException e) {
                 //e.printStackTrace();
                 IOHandler.writeErrorLog(e);
@@ -461,13 +448,11 @@ public class SoundRecorder {
      */
     private void playAudio(String filePath) {
         final int BUFFER_SIZE = 128000;
-        AudioInputStream astream;
         AudioFormat audioFormat;
         SourceDataLine sourceLine = null;
 
-        try {
-            InputStream istream = SoundRecorder.class.getResource(filePath).openStream();
-            astream = AudioSystem.getAudioInputStream(istream);
+        try ( InputStream istream = SoundRecorder.class.getResource(filePath).openStream();  
+                AudioInputStream astream = AudioSystem.getAudioInputStream(istream)) {
             audioFormat = astream.getFormat();
 
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);

@@ -229,8 +229,8 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
     /**
      * @param ignoreListenerSilencing the ignoreListenerSilencing to set
      */
-    public void setIgnoreListenerSilencing(boolean ignoreListenerSilencing) {
-        this.ignoreListenerSilencing = ignoreListenerSilencing;
+    public void setIgnoreListenerSilencing(boolean _ignoreListenerSilencing) {
+        this.ignoreListenerSilencing = _ignoreListenerSilencing;
     }
 
     public void setBackground(Color bg) {

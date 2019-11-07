@@ -38,8 +38,8 @@ public class PGoogleBarChart extends PGoogleChart {
     /**
      * @param leftYAxisLabel the leftYAxisLabel to set
      */
-    public void setLeftYAxisLabel(String leftYAxisLabel) {
-        this.leftYAxisLabel = leftYAxisLabel;
+    public void setLeftYAxisLabel(String _leftYAxisLabel) {
+        this.leftYAxisLabel = _leftYAxisLabel;
     }
 
     /**
@@ -52,8 +52,8 @@ public class PGoogleBarChart extends PGoogleChart {
     /**
      * @param rightYAxisLabel the rightYAxisLabel to set
      */
-    public void setRightYAxisLabel(String rightYAxisLabel) {
-        this.rightYAxisLabel = rightYAxisLabel;
+    public void setRightYAxisLabel(String _rightYAxisLabel) {
+        this.rightYAxisLabel = _rightYAxisLabel;
     }
 
     private String leftYAxisLabel = "";
@@ -79,8 +79,8 @@ public class PGoogleBarChart extends PGoogleChart {
      * @param values
      */
     @Override
-    public void addVal(String[] labels, Double[] values) {
-        super.addVal(labels, values);
+    public void addVal(String[] _labels, Double[] values) {
+        super.addVal(_labels, values);
     }
 
     @Override
@@ -168,14 +168,14 @@ public class PGoogleBarChart extends PGoogleChart {
     /**
      * @param labels the labels to set
      */
-    public void setLabels(String[] labels) {
-        this.labels = labels;
+    public void setLabels(String[] _labels) {
+        this.labels = _labels;
     }
 
     /**
      * @param conFontName the conFontName to set
      */
-    public void setConFontName(String conFontName) {
-        this.conFontName = conFontName;
+    public void setConFontName(String _conFontName) {
+        this.conFontName = _conFontName;
     }
 }

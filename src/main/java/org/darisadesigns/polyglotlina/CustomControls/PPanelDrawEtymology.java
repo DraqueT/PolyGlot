@@ -109,7 +109,7 @@ public final class PPanelDrawEtymology extends JPanel {
         if (curNode.isExternal ) {
             int wordSize = charisFontMetrics.stringWidth(curNode.extWordValue);
             int originSize = charisFontMetrics.stringWidth(curNode.extWordOrigin);
-            mySize = (wordSize > originSize ? wordSize : originSize) + xWordSpaceBuffer;
+            mySize = (Math.max(wordSize, originSize)) + xWordSpaceBuffer;
         } else {
             mySize = conFontMetrics.stringWidth(curNode.word.getValue()) + xWordSpaceBuffer;
         }
@@ -180,11 +180,11 @@ public final class PPanelDrawEtymology extends JPanel {
             parentNode.depth = curNode.depth - 1;
             parentNode.children.add(curNode);
             curNode.parents.add(parentNode);
-            lowestDepth = lowestDepth > curNode.depth-1 ? curNode.depth-1 : lowestDepth;
+            lowestDepth = Math.min(lowestDepth, curNode.depth - 1);
         });
 
         // make certain to update the lowest depth if needed
-        lowestDepth = lowestDepth > curNode.depth ? curNode.depth : lowestDepth;
+        lowestDepth = Math.min(lowestDepth, curNode.depth);
 
         // sort in order of node depth
         Collections.sort(curNode.children);

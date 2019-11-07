@@ -45,8 +45,8 @@ public class EtyExternalParent extends DictNode {
     /**
      * @param externalLanguage the externalLanguage to set
      */
-    public void setExternalLanguage(String externalLanguage) {
-        this.externalLanguage = externalLanguage;
+    public void setExternalLanguage(String _externalLanguage) {
+        this.externalLanguage = _externalLanguage;
     }
     
     public String getUniqueId() {
@@ -69,8 +69,8 @@ public class EtyExternalParent extends DictNode {
     /**
      * @param definition the definition to set
      */
-    public void setDefinition(String definition) {
-        this.definition = definition;
+    public void setDefinition(String _definition) {
+        this.definition = _definition;
     }
 
     @Override

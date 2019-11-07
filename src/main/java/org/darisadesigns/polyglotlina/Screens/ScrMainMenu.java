@@ -154,8 +154,8 @@ public final class ScrMainMenu extends PFrame {
                         finalCore.getWordCollection().loadSwadesh(bs, true);
                         updateAllValues(finalCore);
                     } catch (Exception ex) {
-                        InfoBox.error("Unable to load internal resrouce: ", finalLocation, curWindow);
-                        IOHandler.writeErrorLog(ex, "Resrource read error on open.");
+                        InfoBox.error("Unable to load internal resource: ", finalLocation, curWindow);
+                        IOHandler.writeErrorLog(ex, "Resource read error on open.");
                     }
                 }
             });
@@ -197,24 +197,27 @@ public final class ScrMainMenu extends PFrame {
     private void populateExampleLanguages() {
         try {
             File exLangFolder = IOHandler.unzipResourceToTempLocation(PGTUtil.EXAMPLE_LANGUAGE_ARCHIVE_LOCATION);
+            File[] files = exLangFolder.listFiles();
 
-            for (File exampleLang : exLangFolder.listFiles()) {
-                final String title = exampleLang.getName().replace("_", " ").replace(".pgd", "");
-                final String location = exampleLang.getAbsolutePath();
+            if (files != null) {
+                for (File exampleLang : files) {
+                    final String title = exampleLang.getName().replace("_", " ").replace(".pgd", "");
+                    final String location = exampleLang.getAbsolutePath();
 
-                JMenuItem mnuExample = new JMenuItem(title);
-                mnuExample.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        // only open if save/cancel test is passed
-                        if (!saveOrCancelTest()) {
-                            return;
+                    JMenuItem mnuExample = new JMenuItem(title);
+                    mnuExample.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            // only open if save/cancel test is passed
+                            if (!saveOrCancelTest()) {
+                                return;
+                            }
+
+                            setFile(location);
                         }
+                    });
 
-                        setFile(location);
-                    }
-                });
-                
-                mnuExLex.add(mnuExample);
+                    mnuExLex.add(mnuExample);
+                }
             }
         } catch (IOException e) {
             InfoBox.error("Resource Error", "Failed to load example dictionaries.", this);
@@ -824,7 +827,7 @@ public final class ScrMainMenu extends PFrame {
             @Override
             public boolean postProcessKeyEvent(KeyEvent e) {
                 if (e != null && e.getKeyCode() == 0) {
-                    lastChars = lastChars.substring(1, lastChars.length());
+                    lastChars = lastChars.substring(1);
                     lastChars += e.getKeyChar();
 
                     if (lastChars.toLowerCase().endsWith("what did you see last tuesday")) {
@@ -972,7 +975,7 @@ public final class ScrMainMenu extends PFrame {
 
         if (enable) {
             button.setToolTipText(button.getToolTipText() + " (right click to pop window out)");
-            popOut.setToolTipText("Pops " + button.getText() + " into independant window.");
+            popOut.setToolTipText("Pops " + button.getText() + " into independent window.");
         } else {
             popOut.setToolTipText(button.getText() + " cannot be popped out.");
         }
@@ -984,33 +987,33 @@ public final class ScrMainMenu extends PFrame {
                 button.setEnabled(false);
                 w.addWindowListener(new WindowListener() {
                     @Override
-                    public void windowOpened(WindowEvent e) {
+                    public void windowOpened(WindowEvent ex) {
                     }
 
                     @Override
-                    public void windowClosing(WindowEvent e) {
+                    public void windowClosing(WindowEvent ex) {
                     }
 
                     @Override
-                    public void windowClosed(WindowEvent e) {
+                    public void windowClosed(WindowEvent ex) {
                         childWindows.remove(w);
                         button.setEnabled(true);
                     }
 
                     @Override
-                    public void windowIconified(WindowEvent e) {
+                    public void windowIconified(WindowEvent ex) {
                     }
 
                     @Override
-                    public void windowDeiconified(WindowEvent e) {
+                    public void windowDeiconified(WindowEvent ex) {
                     }
 
                     @Override
-                    public void windowActivated(WindowEvent e) {
+                    public void windowActivated(WindowEvent ex) {
                     }
 
                     @Override
-                    public void windowDeactivated(WindowEvent e) {
+                    public void windowDeactivated(WindowEvent ex) {
                     }
                 });
                 w.setVisible(true);
@@ -1194,7 +1197,7 @@ public final class ScrMainMenu extends PFrame {
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         mnuOptions = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
-        mnuRevertion = new javax.swing.JMenuItem();
+        mnuReversion = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
         mnuAbout = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
@@ -1207,7 +1210,6 @@ public final class ScrMainMenu extends PFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PolyGlot Language Construction Toolkit");
         setBackground(new java.awt.Color(255, 255, 255));
-        setMaximumSize(new java.awt.Dimension(4000, 4000));
 
         pnlToDoSplit.setBackground(new java.awt.Color(255, 255, 255));
         pnlToDoSplit.setDividerLocation(675);
@@ -1576,14 +1578,14 @@ public final class ScrMainMenu extends PFrame {
         mnuTools.add(mnuOptions);
         mnuTools.add(jSeparator7);
 
-        mnuRevertion.setText("Revert Language");
-        mnuRevertion.setToolTipText("Allows reversion to an earlier save state of your language file.");
-        mnuRevertion.addActionListener(new java.awt.event.ActionListener() {
+        mnuReversion.setText("Revert Language");
+        mnuReversion.setToolTipText("Allows reversion to an earlier save state of your language file.");
+        mnuReversion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuRevertionActionPerformed(evt);
+                mnuReversionActionPerformed(evt);
             }
         });
-        mnuTools.add(mnuRevertion);
+        mnuTools.add(mnuReversion);
 
         jMenuBar1.add(mnuTools);
 
@@ -1714,7 +1716,7 @@ public final class ScrMainMenu extends PFrame {
             if (!Arrays.asList(g.getAvailableFontFamilyNames()).contains(conFontFamily)) {
                 // prompt user to install font (either Charis or their chosen con-font) if not currently on system
                 InfoBox.warning("Font Not Installed",
-                        "The font used for your language is not installe on this computer.\n"
+                        "The font used for your language is not installed on this computer.\n"
                         + "This may result in the statistics page appearing incorrectly.\n"
                         + "Please select a path to save font to, install from this location, "
                         + "and re-run the statistics option.", this);
@@ -1889,9 +1891,9 @@ public final class ScrMainMenu extends PFrame {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnQuizActionPerformed
 
-    private void mnuRevertionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRevertionActionPerformed
+    private void mnuReversionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuReversionActionPerformed
         new ScrReversion(core).setVisible(true);
-    }//GEN-LAST:event_mnuRevertionActionPerformed
+    }//GEN-LAST:event_mnuReversionActionPerformed
 
     private void mnuCheckLexiconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCheckLexiconActionPerformed
         core.getWordCollection().checkLexicon(true);
@@ -1946,7 +1948,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuOptions;
     private javax.swing.JMenuItem mnuPublish;
     private javax.swing.JMenu mnuRecents;
-    private javax.swing.JMenuItem mnuRevertion;
+    private javax.swing.JMenuItem mnuReversion;
     private javax.swing.JMenuItem mnuSaveAs;
     private javax.swing.JMenuItem mnuSaveLocal;
     private javax.swing.JMenu mnuSwadesh;

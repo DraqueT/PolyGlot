@@ -29,10 +29,10 @@ import javax.swing.tree.TreeNode;
  */
 public class PToDoTreeModel extends DefaultTreeModel {
     
-    public PToDoTreeModel(TreeNode root) {
-        super(root);
+    public PToDoTreeModel(TreeNode _root) {
+        super(_root);
         
-        populateTree((ToDoTreeNode)root);
+        populateTree((ToDoTreeNode)_root);
     }
     
     private void populateTree(ToDoTreeNode treeNode) {

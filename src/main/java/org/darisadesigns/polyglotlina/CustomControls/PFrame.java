@@ -78,14 +78,14 @@ public abstract class PFrame extends JFrame implements FocusListener {
         this.addWindowStateListener(this::setWindowState);
     }
     
-    public PFrame(DictCore _core, WindowMode _mode) {
+    protected PFrame(DictCore _core, WindowMode _mode) {
         core = _core;
         mode = _mode;
         this.addWindowStateListener(this::setWindowState);
     }
 
     @Override
-    public final void addWindowStateListener(WindowStateListener listener) {
+    public synchronized final void addWindowStateListener(WindowStateListener listener) {
         super.addWindowStateListener(listener);
     }
 
@@ -330,7 +330,7 @@ public abstract class PFrame extends JFrame implements FocusListener {
                 }
 
                 if (core == null && !(this instanceof ScrMainMenu)) {
-                    InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", core.getRootWindow());
+                    InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", null);
                 }
             }
 

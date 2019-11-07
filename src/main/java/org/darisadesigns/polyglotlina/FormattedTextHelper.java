@@ -73,7 +73,7 @@ public final class FormattedTextHelper {
             String nextNode = getNextNode(remaining);
             Font conFont = core.getPropertiesManager().getFontCon();
             
-            remaining = remaining.substring(nextNode.length(), remaining.length());
+            remaining = remaining.substring(nextNode.length());
             
             if (nextNode.startsWith("<font")) {
                 
@@ -129,7 +129,7 @@ public final class FormattedTextHelper {
      * @param core
      * @return ordered list of text
      */
-    public static List<Entry<String, PFontInfo>> getSectionTextFontSpecifec(String savedVal, DictCore core) {
+    public static List<Entry<String, PFontInfo>> getSectionTextFontSpecific(String savedVal, DictCore core) {
         String remaining = savedVal;
         String font = "";
         List<Entry<String, PFontInfo>> ret = new ArrayList<>();
@@ -139,7 +139,7 @@ public final class FormattedTextHelper {
             String nextNode = getNextNode(remaining);
             conFont.awtFont = core.getPropertiesManager().getFontCon();
             
-            remaining = remaining.substring(nextNode.length(), remaining.length());
+            remaining = remaining.substring(nextNode.length());
             
             if (nextNode.startsWith("<font")) {                
                 font = extractFamily(nextNode);
@@ -278,10 +278,8 @@ public final class FormattedTextHelper {
                 pos = posEnd;
             } else if (posEnd == -1) {
                 pos = posStart;
-            } else if (posStart < posEnd) {
-                pos = posStart;
             } else {
-                pos = posEnd;
+                pos = Math.min(posStart, posEnd);
             }
             
             ret = fromText.substring(0, pos);

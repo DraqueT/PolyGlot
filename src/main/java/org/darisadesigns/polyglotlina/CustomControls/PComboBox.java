@@ -88,7 +88,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
             antiAlias.setColor(Color.decode("#909090"));
         } 
         Object selectedItem = getSelectedItem();
-        String text = selectedItem == null ? "" : getSelectedItem().toString();
+        String text = selectedItem == null ? "" : selectedItem.toString();
         if (!text.isEmpty()) { // 0 length text makes bounding box explode
             FontMetrics fm = antiAlias.getFontMetrics(getFont());
             Rectangle2D rec = fm.getStringBounds(text, antiAlias);

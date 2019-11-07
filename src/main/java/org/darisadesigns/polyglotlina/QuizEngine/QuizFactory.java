@@ -124,7 +124,7 @@ public class QuizFactory {
         Collections.shuffle(wordList, new Random(System.nanoTime()));
 
         // make certain the number of questions never exceeds the number of words available
-        numQuestions = wordList.size() < numQuestions ? wordList.size() : numQuestions;
+        numQuestions = Math.min(wordList.size(), numQuestions);
         Random randGen = new Random();
 
         // make certain word properties have all combos built before making quiz

@@ -143,7 +143,6 @@ public final class PTextPane extends JTextPane {
         }
     }
 
-    @SuppressWarnings("SizeReplaceableByIsEmpty")
     @Override
     public void setText(String t) {
         try {
@@ -310,7 +309,7 @@ public final class PTextPane extends JTextPane {
     public boolean isDefaultText() {
         String body = super.getText();
         body = body.substring(0, body.indexOf("</body>"));
-        body = body.substring(body.indexOf("<body>") + 6, body.length());
+        body = body.substring(body.indexOf("<body>") + 6);
         return body.trim().equals(defText);
     }
     
@@ -325,7 +324,7 @@ public final class PTextPane extends JTextPane {
         try{
             String body = super.getText();
             body = body.substring(0, body.indexOf("</body>"));
-            body = body.substring(body.lastIndexOf("<body>") + 6, body.length());
+            body = body.substring(body.lastIndexOf("<body>") + 6);
             ret = !body.contains("<img src");
             if (ret) {
                 body = body.replaceAll("<.*?>", "");
@@ -446,7 +445,7 @@ public final class PTextPane extends JTextPane {
         } else if (core.getPropertiesManager().isEnforceRTL() && !overrideFont
                 && ret.contains(bodyS) && ret.contains(bodyE)) {
             String body = ret.substring(0, ret.indexOf(bodyE));
-            body = body.substring(body.lastIndexOf(bodyS) + bodyS.length(), body.length());
+            body = body.substring(body.lastIndexOf(bodyS) + bodyS.length());
             String start = ret.substring(0, ret.indexOf(bodyS) + bodyS.length());
             String end = ret.substring(ret.indexOf(bodyE));
             ret = start + PGTUtil.RTL_CHARACTER + body.trim() + end;

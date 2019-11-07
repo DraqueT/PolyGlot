@@ -59,9 +59,8 @@ public final class WebInterface {
         try {
             url = new URL(PGTUtil.UPDATE_FILE_URL);
 
-            try (InputStream is = url.openStream()) {
-                Scanner s = new Scanner(is);
-
+            try (InputStream is = url.openStream();
+                    Scanner s = new Scanner(is)) {
                 while (s.hasNext()) {
                     xmlText += s.nextLine();
                 }

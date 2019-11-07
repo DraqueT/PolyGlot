@@ -180,7 +180,7 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
         WordClass curProp = props.get(depth);
 
         curProp.getValues().forEach((curVal) -> {
-            ArrayList<PEntry<Integer, Integer>> newList = new ArrayList<>(curList);
+            List<PEntry<Integer, Integer>> newList = new ArrayList<>(curList);
             newList.add(new PEntry<>(curProp.getId(), curVal.getId()));
 
             // if at max depth, cease recursion

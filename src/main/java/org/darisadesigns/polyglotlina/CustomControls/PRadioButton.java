@@ -50,8 +50,8 @@ public final class PRadioButton extends JRadioButton {
     /**
      * @param value the value to set
      */
-    public void setValue(DictNode value) {
-        this.value = value;
+    public void setValue(DictNode _value) {
+        this.value = _value;
     }
     
     @Override
@@ -91,7 +91,7 @@ public final class PRadioButton extends JRadioButton {
     /**
      * @param type the type to set
      */
-    public void setType(QuestionType type) {
-        this.type = type;
+    public void setType(QuestionType _type) {
+        this.type = _type;
     }
 }

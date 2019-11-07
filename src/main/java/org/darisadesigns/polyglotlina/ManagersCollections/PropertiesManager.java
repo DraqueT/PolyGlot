@@ -130,7 +130,7 @@ public class PropertiesManager {
      * Gets all character replacement pairs
      * @return iterator of map entries with two strings apiece
      */
-    public ArrayList<Entry<String, String>> getAllCharReplacements() {
+    public Iterable<Entry<String, String>> getAllCharReplacements() {
         return new ArrayList<>(charRep.entrySet());
     }
 
@@ -474,8 +474,8 @@ public class PropertiesManager {
     /**
      * @param langName the langName to set
      */
-    public void setLangName(String langName) {
-        this.langName = langName;
+    public void setLangName(String _langName) {
+        this.langName = _langName;
     }
 
     /**
@@ -488,8 +488,8 @@ public class PropertiesManager {
     /**
      * @param typesMandatory the typesMandatory to set
      */
-    public void setTypesMandatory(boolean typesMandatory) {
-        this.typesMandatory = typesMandatory;
+    public void setTypesMandatory(boolean _typesMandatory) {
+        this.typesMandatory = _typesMandatory;
     }
 
     /**
@@ -502,8 +502,8 @@ public class PropertiesManager {
     /**
      * @param localMandatory the localMandatory to set
      */
-    public void setLocalMandatory(boolean localMandatory) {
-        this.localMandatory = localMandatory;
+    public void setLocalMandatory(boolean _localMandatory) {
+        this.localMandatory = _localMandatory;
     }
 
     /**
@@ -516,8 +516,8 @@ public class PropertiesManager {
     /**
      * @param wordUniqueness the wordUniqueness to set
      */
-    public void setWordUniqueness(boolean wordUniqueness) {
-        this.wordUniqueness = wordUniqueness;
+    public void setWordUniqueness(boolean _wordUniqueness) {
+        this.wordUniqueness = _wordUniqueness;
     }
 
     /**
@@ -530,8 +530,8 @@ public class PropertiesManager {
     /**
      * @param localUniqueness the localUniqueness to set
      */
-    public void setLocalUniqueness(boolean localUniqueness) {
-        this.localUniqueness = localUniqueness;
+    public void setLocalUniqueness(boolean _localUniqueness) {
+        this.localUniqueness = _localUniqueness;
     }
 
     public String buildPropertiesReportTitle() {
@@ -696,8 +696,8 @@ public class PropertiesManager {
     /**
      * @param localLangName the localLangName to set
      */
-    public void setLocalLangName(String localLangName) {
-        this.localLangName = localLangName;
+    public void setLocalLangName(String _localLangName) {
+        this.localLangName = _localLangName;
     }
 
     /**
@@ -710,8 +710,8 @@ public class PropertiesManager {
     /**
      * @param copyrightAuthorInfo the copyrightAuthorInfo to set
      */
-    public void setCopyrightAuthorInfo(String copyrightAuthorInfo) {
-        this.copyrightAuthorInfo = copyrightAuthorInfo;
+    public void setCopyrightAuthorInfo(String _copyrightAuthorInfo) {
+        this.copyrightAuthorInfo = _copyrightAuthorInfo;
     }
 
     /**
@@ -724,8 +724,8 @@ public class PropertiesManager {
     /**
      * @param kerningSpace the kerningSpace to set
      */
-    public void setKerningSpace(Double kerningSpace) {
-        this.kerningSpace = kerningSpace;
+    public void setKerningSpace(Double _kerningSpace) {
+        this.kerningSpace = _kerningSpace;
     }
     
     /**
@@ -776,8 +776,8 @@ public class PropertiesManager {
     /**
      * @param overrideRegexFont the overrideRegexFont to set
      */
-    public void setOverrideRegexFont(boolean overrideRegexFont) {
-        this.overrideRegexFont = overrideRegexFont;
+    public void setOverrideRegexFont(boolean _overrideRegexFont) {
+        this.overrideRegexFont = _overrideRegexFont;
     }
 
     /**
@@ -790,8 +790,8 @@ public class PropertiesManager {
     /**
      * @param useLocalWordLex the useLocalWordLex to set
      */
-    public void setUseLocalWordLex(boolean useLocalWordLex) {
-        this.useLocalWordLex = useLocalWordLex;
+    public void setUseLocalWordLex(boolean _useLocalWordLex) {
+        this.useLocalWordLex = _useLocalWordLex;
     }
     
     /**
@@ -831,7 +831,7 @@ public class PropertiesManager {
     /**
      * @param useSimplifiedConjugations the useSimplifiedConjugations to set
      */
-    public void setUseSimplifiedConjugations(boolean useSimplifiedConjugations) {
-        this.useSimplifiedConjugations = useSimplifiedConjugations;
+    public void setUseSimplifiedConjugations(boolean _useSimplifiedConjugations) {
+        this.useSimplifiedConjugations = _useSimplifiedConjugations;
     }
 }

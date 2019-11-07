@@ -174,7 +174,6 @@ public final class PTextField extends JTextField {
                 });
             }
 
-            @SuppressWarnings("SizeReplaceableByIsEmpty")
             @Override
             public void focusLost(FocusEvent e) {
                 SwingUtilities.invokeLater(() -> {
@@ -456,8 +455,8 @@ public final class PTextField extends JTextField {
     /**
      * @param contentId Sets the ID for whatever content this field holds
      */
-    public void setContentId(Integer contentId) {
-        this.contentId = contentId;
+    public void setContentId(Integer _contentId) {
+        this.contentId = _contentId;
     }
 
     /**
@@ -470,7 +469,7 @@ public final class PTextField extends JTextField {
     /**
      * @param associatedObject the associatedObject to set
      */
-    public void setAssociatedObject(Object associatedObject) {
-        this.associatedObject = associatedObject;
+    public void setAssociatedObject(Object _associatedObject) {
+        this.associatedObject = _associatedObject;
     }
 }

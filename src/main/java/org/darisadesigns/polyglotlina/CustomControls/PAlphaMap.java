@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -82,7 +83,7 @@ public class PAlphaMap<K, V> {
         return ret;
     }
 
-    public HashMap<K, V> getDelegate() {
+    public Map<K, V> getDelegate() {
         return delegate;
     }
     

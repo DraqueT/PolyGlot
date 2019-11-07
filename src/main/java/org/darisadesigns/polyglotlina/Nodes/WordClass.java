@@ -164,22 +164,22 @@ public class WordClass extends DictNode {
     /**
      * Inserts value with ID (only use on file loading)
      * @param name
-     * @param id
+     * @param _id
      * @return value created
      * @throws Exception if ID already exists
      */
-    public WordClassValue addValue(String name, int id) throws Exception {
-        if (values.containsKey(id)) {
-            throw new Exception("Cannot insert value: " + name + " Id: " + id + " into " + this.value + " (already exists).");
+    public WordClassValue addValue(String name, int _id) throws Exception {
+        if (values.containsKey(_id)) {
+            throw new Exception("Cannot insert value: " + name + " Id: " + _id + " into " + this.value + " (already exists).");
         }
         
         WordClassValue ret = new WordClassValue();
-        ret.setId(id);
+        ret.setId(_id);
         ret.setValue(name);
-        values.put(id, ret);
+        values.put(_id, ret);
         
-        if (id >= topId) {
-            topId = id + 1;
+        if (_id >= topId) {
+            topId = _id + 1;
         }
         
         return ret;
@@ -199,10 +199,10 @@ public class WordClass extends DictNode {
      * Sets whether or not this represents a free text field, rather than a
      * multi-selection with predefined values
      * 
-     * @param freeText freetext value
+     * @param _freeText freetext value
      */
-    public void setFreeText(boolean freeText) {
-        this.freeText = freeText;
+    public void setFreeText(boolean _freeText) {
+        this.freeText = _freeText;
     }
     
     public void writeXML(Document doc, Element rootElement) {

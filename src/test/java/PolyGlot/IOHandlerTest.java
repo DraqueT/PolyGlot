@@ -52,8 +52,7 @@ public class IOHandlerTest {
         
         assertTrue(myLog.exists());
         
-        try {
-            Scanner logScanner = new Scanner(myLog).useDelimiter("\\Z");
+        try (Scanner logScanner = new Scanner(myLog).useDelimiter("\\Z")) {
             String contents = logScanner.hasNext() ? logScanner.next() : "";
 
             assertTrue(contents.contains("This is a test.-java.lang.Exception"));
@@ -89,7 +88,7 @@ public class IOHandlerTest {
             int logLength = IOHandler.getErrorLog().length();
             int systemInfoLength = IOHandler.getSystemInformation().length();
 
-            // off by one due to concatination effect when adding system info (newline)
+            // off by one due to concatenation effect when adding system info (newline)
             assertEquals(logLength, PGTUtil.MAX_LOG_CHARACTERS + systemInfoLength + 1);
         } catch (FileNotFoundException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
@@ -129,7 +128,7 @@ public class IOHandlerTest {
     @Test
     public void testBadConsoleCommand() {
         System.out.println("Testing bad console command");
-        String[] result = IOHandler.runAtConsole(new String[]{"WAT", "AM", "COMAND?!"});
+        String[] result = IOHandler.runAtConsole(new String[]{"WAT", "AM", "COMMAND?!"});
 
         assertTrue(result[0].isEmpty());
         assertTrue(!result[1].isEmpty()); // different errors for different systems, but should be SOMETHING

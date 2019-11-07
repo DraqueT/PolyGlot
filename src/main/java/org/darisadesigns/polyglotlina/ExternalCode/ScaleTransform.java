@@ -12,8 +12,8 @@ public final class ScaleTransform implements TextShapeTransform {
     private float y=0;
     private float ascent =0;
 
-    public ScaleTransform(float yScale) {
-        this.yScale = yScale;
+    public ScaleTransform(float _yScale) {
+        this.yScale = _yScale;
     }
     
     public AffineTransform getTransform(View gv, AffineTransform original) {
@@ -29,23 +29,23 @@ public final class ScaleTransform implements TextShapeTransform {
         return y;
     }
 
-    public void setY(float y) {
-        this.y = y;
+    public void setY(float _y) {
+        this.y = _y;
     }
 
     public float getYScale() {
         return yScale;
     }
 
-    public void setYScale(float yScale) {
-        this.yScale = yScale;
+    public void setYScale(float _yScale) {
+        this.yScale = _yScale;
     }
 
     public float getAscent() {
         return ascent;
     }
 
-    public void setAscent(float ascent) {
-        this.ascent = ascent;
+    public void setAscent(float _ascent) {
+        this.ascent = _ascent;
     }
 }

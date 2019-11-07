@@ -33,7 +33,7 @@ import org.darisadesigns.polyglotlina.DictCore;
  *
  * @author draque
  */
-class PCheckBoxCellRenderer<E extends PCheckableItem> implements ListCellRenderer<E> {
+public class PCheckBoxCellRenderer<E extends PCheckableItem> implements ListCellRenderer<E> {
 
     private final JLabel label;
     private final PCheckBox check;

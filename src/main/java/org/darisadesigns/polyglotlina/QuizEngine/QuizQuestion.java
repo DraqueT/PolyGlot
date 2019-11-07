@@ -246,8 +246,8 @@ public class QuizQuestion extends DictNode {
     /**
      * @param source the source to set
      */
-    public void setSource(DictNode source) {
-        this.source = source;
+    public void setSource(DictNode _source) {
+        this.source = _source;
     }
 
     /**
@@ -260,8 +260,8 @@ public class QuizQuestion extends DictNode {
     /**
      * @param answered the answered to set
      */
-    public void setAnswered(Answered answered) {
-        this.answered = answered;
+    public void setAnswered(Answered _answered) {
+        this.answered = _answered;
     }
 
     /**
@@ -274,8 +274,8 @@ public class QuizQuestion extends DictNode {
     /**
      * @param userAnswer the userAnswer to set
      */
-    public void setUserAnswer(DictNode userAnswer) {
-        this.userAnswer = userAnswer;
+    public void setUserAnswer(DictNode _userAnswer) {
+        this.userAnswer = _userAnswer;
     }
  
     public enum QuestionType {
@@ -304,7 +304,7 @@ public class QuizQuestion extends DictNode {
             
             ret = multipleChoices.equals(c.multipleChoices);
             ret = ret && answer.equals(c.answer);
-            ret = ret && type.equals(c.type);
+            ret = ret && type == c.type;
             ret = ret && source.equals(c.source);
             // Answer state not considered when testing equality.
             //ret = ret && userAnswer.equals(c.userAnswer);

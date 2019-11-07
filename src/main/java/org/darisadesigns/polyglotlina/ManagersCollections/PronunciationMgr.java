@@ -222,7 +222,7 @@ public class PronunciationMgr {
 
                 if (comp.equals(pattern)) {
                     List<PronunciationNode> temp
-                            = getPronunciationElements(base.substring(pattern.length(), base.length()), depth + 1);
+                            = getPronunciationElements(base.substring(pattern.length()), depth + 1);
 
                     // if lengths are equal, success! return. If unequal and no further match found-failure
                     if (pattern.length() == base.length() || !temp.isEmpty()) {
@@ -262,7 +262,7 @@ public class PronunciationMgr {
                         continue;
                     }
                     List<PronunciationNode> temp
-                            = getPronunciationElements(base.substring(leadingChars.length(), base.length()), depth + 1);
+                            = getPronunciationElements(base.substring(leadingChars.length()), depth + 1);
 
                     try {
                         if (leadingChars.length() == base.length() || !temp.isEmpty()) {
@@ -316,8 +316,8 @@ public class PronunciationMgr {
     /**
      * @param recurse the recurse to set
      */
-    public void setRecurse(boolean recurse) {
-        this.recurse = recurse;
+    public void setRecurse(boolean _recurse) {
+        this.recurse = _recurse;
     }
     
     /**

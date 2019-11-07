@@ -43,12 +43,12 @@ public abstract class DictNode implements Comparable<DictNode> {
         return hash;
     }
     
-    public DictNode() {
+    protected DictNode() {
         value = "";
         id = 0;
     }
     
-    public DictNode(int _id) {
+    protected DictNode(int _id) {
         id = _id;
         value = "";
     }
@@ -114,7 +114,7 @@ public abstract class DictNode implements Comparable<DictNode> {
                 int compAlpha = -1;
                 int preLen = 0;
 
-                for (int i = meLen > longest ? longest : meLen; i >= 0; i--) {
+                for (int i = Math.min(meLen, longest); i >= 0; i--) {
                     String mePrefix = me.substring(0, i);
 
                     if (alphaOrder.containsKey(mePrefix)) {
@@ -123,7 +123,7 @@ public abstract class DictNode implements Comparable<DictNode> {
                     }
                 }
                 
-                for (int i = compLen > longest ? longest : compLen; i >= 0; i--) {
+                for (int i = Math.min(compLen, longest); i >= 0; i--) {
                     String compPrefix = comp.substring(0, i);
 
                     if (alphaOrder.containsKey(compPrefix)) {

@@ -126,27 +126,28 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      * @throws java.lang.Exception 
      */
     public void loadSwadesh(BufferedInputStream bs, boolean showPrompt) throws IOException, Exception {
-        BufferedReader r = new BufferedReader(new InputStreamReader(bs, StandardCharsets.UTF_8));
         String line;
         
-        if (!showPrompt || InfoBox.actionConfirmation("Import Swadesh List?", 
-                "This will import all the words defined within this Swadesh list into your lexicon. Continue?",
-                core.getRootWindow())) {
-            for (int i = 0; (line = r.readLine()) != null; i++) {
-                if (line.startsWith("#")) {
-                    continue;
-                }
-                
-                // even out the lines so they appear in proper order. if a list is over 1k entries... that is too many. I'll fix it if people complain. X|
-                String swadeshNum = Integer.toString(i);
-                while (swadeshNum.length() < 3) {
-                    swadeshNum = "0" + swadeshNum;
-                }
+        try (BufferedReader r = new BufferedReader(new InputStreamReader(bs, StandardCharsets.UTF_8))) {
+            if (!showPrompt || InfoBox.actionConfirmation("Import Swadesh List?", 
+                    "This will import all the words defined within this Swadesh list into your lexicon. Continue?",
+                    core.getRootWindow())) {
+                for (int i = 0; (line = r.readLine()) != null; i++) {
+                    if (line.startsWith("#")) {
+                        continue;
+                    }
 
-                ConWord newWord = new ConWord();
-                newWord.setValue("#" + swadeshNum + ": " + line.toUpperCase());
-                newWord.setLocalWord(line);
-                this.addWord(newWord);
+                    // even out the lines so they appear in proper order. if a list is over 1k entries... that is too many. I'll fix it if people complain. X|
+                    String swadeshNum = Integer.toString(i);
+                    while (swadeshNum.length() < 3) {
+                        swadeshNum = "0" + swadeshNum;
+                    }
+
+                    ConWord newWord = new ConWord();
+                    newWord.setValue("#" + swadeshNum + ": " + line.toUpperCase());
+                    newWord.setLocalWord(line);
+                    this.addWord(newWord);
+                }
             }
         }
     }
@@ -749,6 +750,10 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      */
     public int addWord(ConWord _addWord) throws Exception {
         int ret;
+        if (_addWord.getCore() == null) {
+            _addWord.setCore(core);
+        }
+        
         bufferNode.setEqual(_addWord);
 
         ret = insert();

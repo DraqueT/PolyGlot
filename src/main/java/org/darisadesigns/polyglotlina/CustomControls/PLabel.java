@@ -58,7 +58,7 @@ public final class PLabel extends JLabel {
         init();
     }
 
-    protected void init() {
+    private void init() {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -101,9 +101,9 @@ public final class PLabel extends JLabel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics _g) {
         // turn on anti-alias mode
-        Graphics2D antiAlias = (Graphics2D) g;
+        Graphics2D antiAlias = (Graphics2D) _g;
         antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         super.paintComponent(antiAlias);
         this.g = antiAlias;
