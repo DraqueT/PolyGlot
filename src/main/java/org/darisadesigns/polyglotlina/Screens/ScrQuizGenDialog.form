@@ -282,7 +282,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Definitions of conlang words"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkProcQuiz">
@@ -291,7 +291,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Pronunciation of conlang words"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkClassQuiz">
@@ -303,7 +303,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkClassQuizActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkTypeQuiz">
@@ -315,7 +315,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkTypeQuizActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkLocalQuiz">
@@ -324,7 +324,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Conlang equivlent of local language words"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkConlangQuiz">
@@ -333,7 +333,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="The conlang equivalent of local language words"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
           </SubComponents>

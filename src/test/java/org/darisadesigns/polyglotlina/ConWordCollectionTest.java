@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import TestResources.DummyCore;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -40,7 +41,7 @@ public class ConWordCollectionTest {
         int expectedSize = 100;
         int expectedFoundWords = 1;
         
-        DictCore core = new DictCore();
+        DictCore core = DummyCore.newCore();
         ConWordCollection words = core.getWordCollection();
         BufferedInputStream bs = new BufferedInputStream(
                 ConWordCollection.class.getResourceAsStream(PGTUtil.SWADESH_LOCATION + PGTUtil.SWADESH_LISTS[0]));
@@ -67,7 +68,7 @@ public class ConWordCollectionTest {
     
     @Test
     public void loadSwadeshTestMissingFile() {
-        DictCore core = new DictCore();
+        DictCore core = DummyCore.newCore();
         ConWordCollection words = core.getWordCollection();
         String expectedMessage = "Stream closed";
         

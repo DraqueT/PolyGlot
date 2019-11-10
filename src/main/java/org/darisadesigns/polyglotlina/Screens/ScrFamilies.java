@@ -432,7 +432,7 @@ public final class ScrFamilies extends PFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         treFam = new PTree(core);
         jPanel1 = new javax.swing.JPanel();
-        chkInclSubFam = new PCheckBox(core);
+        chkInclSubFam = new PCheckBox(nightMode, menuFontSize);
         jScrollPane3 = new javax.swing.JScrollPane();
         lstWords = new javax.swing.JList<>();
         jLabel1 = new PLabel("", core);

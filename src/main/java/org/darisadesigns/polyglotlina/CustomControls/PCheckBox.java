@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -30,6 +29,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JCheckBox;
+import org.darisadesigns.polyglotlina.ManagersCollections.VisualStyleManager;
 
 /**
  * Custom PolyGlot implementation of checkbox
@@ -38,13 +38,13 @@ import javax.swing.JCheckBox;
 public class PCheckBox extends JCheckBox implements MouseListener {
     private boolean mouseOver = false;
     private boolean clicked = false;
-    private final DictCore core;
+    private final boolean nightMode;
     
-    public PCheckBox(DictCore _core) {
-        core = _core == null ? new DictCore() : _core;
+    public PCheckBox(boolean _nightMode, double fontSize) {
+        nightMode = _nightMode;
         
-        float fontSize = (float)core.getOptionsManager().getMenuFontSize();
-        super.setFont(PGTUtil.MENU_FONT.deriveFont(fontSize));
+        //float fontSize = (float)core.getOptionsManager().getMenuFontSize();
+        super.setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));
         
         setupListeners();
     }
@@ -56,12 +56,13 @@ public class PCheckBox extends JCheckBox implements MouseListener {
     @Override
     public void paint(Graphics g) {
         boolean enabled = this.isEnabled();
-        Color selected = core.getVisualStyleManager().getCheckBoxSelected(enabled);
-        Color backGround = core.getVisualStyleManager().getCheckBoxBG(enabled);
-        Color outline = core.getVisualStyleManager().getCheckBoxOutline(enabled);
-        Color hover = core.getVisualStyleManager().getCheckBoxHover(enabled);
-        Color click = core.getVisualStyleManager().getCheckBoxClicked(enabled);
-        Color fieldBack = core.getVisualStyleManager().getCheckBoxFieldBack(enabled);
+        
+        Color selected = VisualStyleManager.getCheckBoxSelected(enabled, nightMode);
+        Color backGround = VisualStyleManager.getCheckBoxBG(enabled, nightMode);
+        Color outline = VisualStyleManager.getCheckBoxOutline(enabled, nightMode);
+        Color hover = VisualStyleManager.getCheckBoxHover(enabled, nightMode);
+        Color click = VisualStyleManager.getCheckBoxClicked(enabled, nightMode);
+        Color fieldBack = VisualStyleManager.getCheckBoxFieldBack(enabled, nightMode);
         int rounding = PGTUtil.CHECKBOX_ROUNDING;
         int thisHeight = this.getHeight();
         

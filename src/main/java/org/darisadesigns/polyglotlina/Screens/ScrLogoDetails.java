@@ -983,7 +983,7 @@ public class ScrLogoDetails extends PFrame {
         btnDelReading = new PAddRemoveButton("-");
         btnAddRad = new PAddRemoveButton("+");
         btnDelRad = new PAddRemoveButton("-");
-        chkIsRad = new PCheckBox(core);
+        chkIsRad = new PCheckBox(nightMode, menuFontSize);
         txtName = new PTextField(core, false, "-- Name --");
         jLabel12 = new PLabel("", core);
         txtStrokes = new javax.swing.JTextField();

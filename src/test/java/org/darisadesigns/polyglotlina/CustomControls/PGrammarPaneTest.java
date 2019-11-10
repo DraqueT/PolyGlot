@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
+import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -44,7 +45,7 @@ public class PGrammarPaneTest {
     public PGrammarPaneTest() {
         
         System.out.println("PGrammarPaneTest");
-        core = new DictCore();
+        core = DummyCore.newCore();
     }
 
     @Test

@@ -39,7 +39,6 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
-import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
 
 public final class ExampleCheckboxDropdown extends JPanel {
@@ -62,7 +61,7 @@ public final class ExampleCheckboxDropdown extends JPanel {
         p.add(new JComboBox<>(m));
         p.add(Box.createVerticalStrut(20));
         p.add(new JLabel("CheckedComboBox:"));
-        p.add(new PCheckedComboBox<>(new PDefaultComboBoxModel<>(m), new DictCore()));
+        p.add(new PCheckedComboBox<>(new PDefaultComboBoxModel<>(m), false, 12));
 
         add(p, BorderLayout.NORTH);
         setPreferredSize(new Dimension(320, 240));

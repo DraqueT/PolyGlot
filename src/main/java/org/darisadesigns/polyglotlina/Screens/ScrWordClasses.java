@@ -138,7 +138,7 @@ public final class ScrWordClasses extends PFrame {
         gbc.weighty = 1;
         
         if (types.hasNext()) {
-            final PCheckBox checkAll = new PCheckBox(core);
+            final PCheckBox checkAll = new PCheckBox(nightMode, menuFontSize);
             checkAll.setText("All");
 
             checkAll.addItemListener(new ItemListener() {
@@ -174,7 +174,7 @@ public final class ScrWordClasses extends PFrame {
         while (types.hasNext()) {
             TypeNode curNode = types.next();
             final int typeId = curNode.getId();
-            final PCheckBox checkType = new PCheckBox(core);
+            final PCheckBox checkType = new PCheckBox(nightMode, menuFontSize);
             
             checkType.setText(curNode.getValue());
             checkType.addItemListener(new ItemListener() {
@@ -408,7 +408,7 @@ public final class ScrWordClasses extends PFrame {
         pnlTypes = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblValues = new javax.swing.JTable();
-        chkFreeText = new PCheckBox(core);
+        chkFreeText = new PCheckBox(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Word Classes");

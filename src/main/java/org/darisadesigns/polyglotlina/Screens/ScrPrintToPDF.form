@@ -248,7 +248,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to include a dictionary with lookup by native words"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkConLocal">
@@ -258,7 +258,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to include a dictionary with lookup by constructed words"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkOrtho">
@@ -268,7 +268,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Include character and pronunciation guides"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkGrammar">
@@ -278,7 +278,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Include text from the grammar section of your library"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkLogographs">
@@ -288,7 +288,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkPageNum">
@@ -298,7 +298,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Prints page number on each page of PDF"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkGloss">
@@ -308,7 +308,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Prints a key for part of speech glosses"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkEtymology">
@@ -316,7 +316,7 @@
                 <Property name="text" type="java.lang.String" value="Print Etymology Trees"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core);"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkPrintConjugations">
@@ -325,7 +325,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="If checked, words will have a list of all conjugated forms printed under their definitions."/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
           </SubComponents>

@@ -27,20 +27,20 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
-import org.darisadesigns.polyglotlina.DictCore;
 
 /**
  *
  * @author draque
+ * @param <E>
  */
 public class PCheckBoxCellRenderer<E extends PCheckableItem> implements ListCellRenderer<E> {
 
     private final JLabel label;
     private final PCheckBox check;
 
-    public PCheckBoxCellRenderer(DictCore core) {
+    public PCheckBoxCellRenderer(boolean nightMode, double fontSize) {
         label = new JLabel(" ");
-        check = new PCheckBox(core);
+        check = new PCheckBox(nightMode, fontSize);
     }
 
     @Override

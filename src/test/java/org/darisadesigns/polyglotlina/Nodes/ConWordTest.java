@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
+import TestResources.DummyCore;
 import TestResources.TestResources;
 import java.io.IOException;
 import java.util.Arrays;
@@ -47,7 +48,7 @@ public class ConWordTest {
     
     public ConWordTest() {
         word = new ConWord();
-        core = new DictCore();
+        core = DummyCore.newCore();
         word.setCore(core);
         word.setParent(core.getWordCollection());
 

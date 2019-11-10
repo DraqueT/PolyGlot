@@ -269,7 +269,7 @@
                         <Property name="toolTipText" type="java.lang.String" value="Select this to override auto pronunciation generation for this word."/>
                       </Properties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
                       </AuxValues>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="chkRuleOverride">
@@ -281,7 +281,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkRuleOverrideActionPerformed"/>
                       </Events>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
                       </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="btnDeclensions">

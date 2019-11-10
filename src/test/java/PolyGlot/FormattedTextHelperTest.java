@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import TestResources.DummyCore;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class FormattedTextHelperTest {
     
     public FormattedTextHelperTest() {
         System.out.println("FormattedTextHelperTest");
-        core = new DictCore();
+        core = DummyCore.newCore();
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException e) {

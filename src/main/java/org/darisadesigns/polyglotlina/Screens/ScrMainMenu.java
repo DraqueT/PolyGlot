@@ -89,18 +89,15 @@ public final class ScrMainMenu extends PFrame {
     private PToDoTree toDoTree;
     private PFrame curWindow = null;
     private final ScrLexicon cacheLexicon;
-    private String curFileName = "";
     private Image backGround;
     private final List<Window> childWindows = new ArrayList<>();
 
     /**
      * Creates new form ScrMainMenu
      *
-     * @param overridePath Path PolyGlot should treat as home directory (blank
-     * if default)
      * @param _core DictCore menus run on
      */
-    public ScrMainMenu(String overridePath, DictCore _core) {
+    public ScrMainMenu(DictCore _core) {
         super(_core);
 
         core.setRootWindow(this);
@@ -111,7 +108,7 @@ public final class ScrMainMenu extends PFrame {
         setupEasterEgg();
 
         try {
-            backGround = ImageIO.read(getClass().getResource(PGTUtil.MAIN_MENU_IMAGE));
+            backGround = ImageIO.read(getClass().getResource(PGTUtil.MAIN_MENU_IMAGE)); // TODO: why does this take so long to run? Investigate.
             jLabel1.setFont(PGTUtil.MENU_FONT.deriveFont(45f));
         } catch (IOException e) {
             IOHandler.writeErrorLog(e);
@@ -120,9 +117,8 @@ public final class ScrMainMenu extends PFrame {
                     core.getRootWindow());
         }
 
-        newFile(false);
-        core.getPropertiesManager().setOverrideProgramPath(overridePath);
-
+        updateAllValues(core);
+        genTitle();
         setupButtonPopouts();
         setupToDo();
         populateRecentOpened();
@@ -281,7 +277,7 @@ public final class ScrMainMenu extends PFrame {
         this.dispose(true);
     }
 
-    private void dispose(boolean doExit) {
+    public void dispose(boolean doExit) {
         if (doExit) { // skip saving file if not exiting program...
             // only exit if save/cancel test is passed and current window is legal to close
             if (!saveOrCancelTest() || (curWindow != null && !curWindow.canClose())) {
@@ -303,7 +299,7 @@ public final class ScrMainMenu extends PFrame {
             core.getOptionsManager().setToDoBarPosition(pnlToDoSplit.getDividerLocation());
 
             try {
-                IOHandler.saveOptionsIni(core);
+                core.saveOptionsIni();
             } catch (IOException e) {
                 // save error likely due to inability to write to disk, disable logging
                 // IOHandler.writeErrorLog(e);
@@ -374,17 +370,10 @@ public final class ScrMainMenu extends PFrame {
     }
 
     public void setFile(String fileName) {
-        // some wrappers communicate empty files like this
-        if (fileName.equals(PGTUtil.EMPTY_FILE)
-                || fileName.isEmpty()) {
-            return;
-        }
-
-        core = new DictCore(core);
+        core =core.getNewCore();
 
         try {
             core.readFile(fileName);
-            curFileName = fileName;
 
             if (curWindow == null) {
                 cacheLexicon.updateAllValues(core);
@@ -392,7 +381,7 @@ public final class ScrMainMenu extends PFrame {
             }
         } catch (IOException e) {
             IOHandler.writeErrorLog(e);
-            core = new DictCore(core); // don't allow partial loads
+            core = core.getNewCore(); // don't allow partial loads
             InfoBox.error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage(), core.getRootWindow());
         } catch (IllegalStateException e) {
@@ -442,6 +431,7 @@ public final class ScrMainMenu extends PFrame {
      */
     public boolean saveFile() {
         boolean ret;
+        String curFileName = core.getCurFileName();
         
         if (curFileName.isEmpty()) {
             saveFileAs();
@@ -470,6 +460,7 @@ public final class ScrMainMenu extends PFrame {
      */
     private boolean doWrite(final String _fileName) {
         boolean cleanSave = false;
+        String curFileName = core.getCurFileName();
 
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -507,12 +498,14 @@ public final class ScrMainMenu extends PFrame {
      */
     private boolean saveFileAs() {
         JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Save Dictionary");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
+        String curFileName = core.getCurFileName();
+        
+        chooser.setDialogTitle("Save Dictionary");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
         if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getPropertiesManager().getCanonicalDirectory());
+            chooser.setCurrentDirectory(core.getWorkingDirectory());
         } else {
             chooser.setCurrentDirectory(IOHandler.getDirectoryFromPath(curFileName));
             chooser.setSelectedFile(IOHandler.getFileFromPath(curFileName));
@@ -542,7 +535,7 @@ public final class ScrMainMenu extends PFrame {
             }
         }
 
-        curFileName = fileName;
+        core.setCurFileName(fileName);
         // TODO: refactor to single exit point
         return true;
     }
@@ -557,12 +550,10 @@ public final class ScrMainMenu extends PFrame {
             return;
         }
 
-        core = new DictCore(core);
+        core = core.getNewCore();
         updateAllValues(core);
-        curFileName = "";
 
         genTitle();
-        updateAllValues(core);
 
         if (curWindow == null && performTest) {
             cacheLexicon.updateAllValues(core);
@@ -572,6 +563,7 @@ public final class ScrMainMenu extends PFrame {
 
     public void genTitle() {
         String title = "PolyGlot";
+        String curFileName = core.getCurFileName();
 
         if (curWindow != null && !curWindow.getTitle().isEmpty()) {
             title += "-" + curWindow.getTitle();
@@ -579,7 +571,7 @@ public final class ScrMainMenu extends PFrame {
 
             if (!langName.isEmpty()) {
                 title += " : " + langName;
-            } else if (!getCurFileName().isEmpty()) {
+            } else if (!curFileName.isEmpty()) {
                 title += " : " + curFileName;
             }
         }
@@ -588,16 +580,17 @@ public final class ScrMainMenu extends PFrame {
     }
 
     /**
-     * opens dictionary file
+     * opens Language file
      */
     public void open() {
+        String curFileName = core.getCurFileName();
         JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Open Dictionary");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
+        chooser.setDialogTitle("Open Language File");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Languages", "pgd");
         chooser.setFileFilter(filter);
         String fileName;
         if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getPropertiesManager().getCanonicalDirectory());
+            chooser.setCurrentDirectory(core.getWorkingDirectory());
         } else {
             chooser.setCurrentDirectory(IOHandler.getDirectoryFromPath(curFileName));
         }
@@ -609,7 +602,6 @@ public final class ScrMainMenu extends PFrame {
             }
 
             fileName = chooser.getSelectedFile().getAbsolutePath();
-            core = new DictCore(core);
             setFile(fileName);
             core.getOptionsManager().pushRecentFile(fileName);
             populateRecentOpened();
@@ -653,7 +645,7 @@ public final class ScrMainMenu extends PFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        chooser.setCurrentDirectory(core.getPropertiesManager().getCanonicalDirectory());
+        chooser.setCurrentDirectory(core.getWorkingDirectory());
 
         String fileName;
 
@@ -715,7 +707,7 @@ public final class ScrMainMenu extends PFrame {
             if (exportCharis) {
                 IOHandler.exportCharisFont(fileName);
             } else {
-                IOHandler.exportFont(fileName, curFileName);
+                IOHandler.exportFont(fileName, core.getCurFileName());
             }
             InfoBox.info("Export Success", "Font exported to: " + fileName, core.getRootWindow());
         } catch (IOException e) {
@@ -930,7 +922,7 @@ public final class ScrMainMenu extends PFrame {
     /**
      * Switches to first active menu button
      */
-    private void selectFirstAvailableButton() {
+    public void selectFirstAvailableButton() {
         openLexicon();
     }
 
@@ -1116,23 +1108,8 @@ public final class ScrMainMenu extends PFrame {
         return true;
     }
 
-    public String getCurFileName() {
-        return curFileName;
-    }
-
     public void printToPdf() {
         ScrPrintToPDF.run(core);
-    }
-
-    /**
-     * Loads new menu screen with old core and disposes self
-     */
-    public void refreshMainMenu() {
-        ScrMainMenu newMenu = new ScrMainMenu(core.getPropertiesManager().getOverrideProgramPath(), core);
-        this.setVisible(false);
-        newMenu.setVisible(true);
-        newMenu.selectFirstAvailableButton();
-        this.dispose(false);
     }
 
     /**

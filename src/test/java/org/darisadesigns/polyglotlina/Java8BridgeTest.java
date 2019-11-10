@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import TestResources.DummyCore;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,7 +30,6 @@ import java.util.Arrays;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeAll;
 
 /**
  *
@@ -40,7 +40,7 @@ public class Java8BridgeTest {
     private static final String OUTPUT = "testFile";
     
     public Java8BridgeTest() {
-        core = new DictCore();
+        core = DummyCore.newCore();
     }
 
     @AfterEach
@@ -156,7 +156,7 @@ public class Java8BridgeTest {
     
     private void cleanup() {
         new File(OUTPUT).delete();
-        core = new DictCore();
+        core = DummyCore.newCore();
     }
     
     private String readFile(String fileIn) {

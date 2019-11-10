@@ -261,10 +261,12 @@ public final class PToDoTree extends JTree {
         private final PCheckBox checkBox;
         
         CheckBoxCellRenderer() {
-            super();           
+            super();      
 
+            boolean nightMode = core.getOptionsManager().isNightMode();
+            double fontSize = core.getOptionsManager().getMenuFontSize();
             this.setLayout(new BorderLayout());
-            checkBox = new PCheckBox(core);
+            checkBox = new PCheckBox(nightMode, fontSize);
             add(checkBox, BorderLayout.CENTER);
             setOpaque(false);
         }

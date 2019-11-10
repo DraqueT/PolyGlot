@@ -200,7 +200,7 @@ public class ScrDeclensionGenSimple extends PDialog {
         txtReplace = new PTextField(core, core.getPropertiesManager().isOverrideRegexFont(), "Replacement Text");
         btnPrefix = new PButton(core);
         btnPostfix = new PButton(core);
-        chkDisableForm = new PCheckBox(core);
+        chkDisableForm = new PCheckBox(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 

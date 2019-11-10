@@ -280,10 +280,10 @@ public final class IOHandler {
     /**
      * Deletes options file
      *
-     * @param core
+     * @param workingDirectory
      */
-    public static void deleteIni(DictCore core) {
-        File f = new File(core.getWorkingDirectory().getAbsolutePath() + File.separator + PGTUtil.POLYGLOT_INI);
+    public static void deleteIni(String workingDirectory) {
+        File f = new File(workingDirectory + File.separator + PGTUtil.POLYGLOT_INI);
         if (!f.exists()) {
             return;
         }
@@ -299,23 +299,21 @@ public final class IOHandler {
     }
 
     /**
-     * Loads all option data from ini file, if none, ignore. One will be created
-     * on exit.
+     * Loads all option data from ini file, if none, ignore.One will be created
+ on exit.
      *
-     * @param core dictionary core
+     * @param opMan
+     * @param workingDirectory
      * @throws IOException on failure to open existing file
      */
-    public static void loadOptionsIni(DictCore core) throws Exception {
-        OptionsManager opMan = core.getOptionsManager();
-        File f = new File(core.getWorkingDirectory().getAbsolutePath() 
-                + File.separator + PGTUtil.POLYGLOT_INI);
+    public static void loadOptionsIni(OptionsManager opMan, String workingDirectory) throws Exception {
+        File f = new File(workingDirectory + File.separator + PGTUtil.POLYGLOT_INI);
         if (!f.exists() || f.isDirectory()) {
             return;
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(
-                core.getWorkingDirectory().getAbsolutePath()
-                        + File.separator + PGTUtil.POLYGLOT_INI))) {
+                workingDirectory + File.separator + PGTUtil.POLYGLOT_INI))) {
             String loadProblems = "";
 
             for (String line; (line = br.readLine()) != null;) {
@@ -380,7 +378,7 @@ public final class IOHandler {
                         opMan.setNightMode(bothVal[1].equals(PGTUtil.TRUE));
                         break;
                     case PGTUtil.OPTIONS_REVERSIONS_COUNT:
-                        opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
+                        opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]), null);
                         break;
                     case PGTUtil.OPTIONS_TODO_DIV_LOCATION:
                         opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));
@@ -456,7 +454,7 @@ public final class IOHandler {
         return test == 0x504b0304;
     }
 
-    public static void writeFile(String _fileName, Document doc, DictCore core, Instant saveTime)
+    public static void writeFile(String _fileName, Document doc, DictCore core, File workingDirectory, Instant saveTime)
             throws IOException, TransformerException {
         File finalFile = new File(_fileName);
         String writeLog = "";
@@ -470,7 +468,7 @@ public final class IOHandler {
             sb.append(writer.getBuffer());
             byte[] xmlData = sb.toString().getBytes(StandardCharsets.UTF_8);
 
-            final File f = makeTempSaveFile(core);
+            final File f = makeTempSaveFile(workingDirectory);
 
             try (FileOutputStream fileOutputStream = new FileOutputStream(f)) {
                 try (ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
@@ -505,10 +503,11 @@ public final class IOHandler {
             // attempt to open file in dummy core. On success, copy file to end
             // destination, on fail, delete file and inform user by bubbling error
             try {
-                DictCore test = new DictCore();
+                // pass null shell class because this will ultimately be discarded
+                DictCore test = new DictCore(PolyGlot.getTestShell());
                 test.readFile(f.getAbsolutePath());
 
-            } catch (IOException | IllegalStateException ex) {
+            } catch (Exception ex) {
                 throw new IOException(ex);
             }
 
@@ -527,8 +526,8 @@ public final class IOHandler {
         }
     }
     
-    private static File makeTempSaveFile(DictCore core) {
-        final File ret = new File(core.getWorkingDirectory() + File.separator + PGTUtil.TEMP_FILE);
+    private static File makeTempSaveFile(File workingDirectory) {
+        final File ret = new File(workingDirectory + File.separator + PGTUtil.TEMP_FILE);
         if (ret.exists()) { // If PolyGlot is open and working, user has already been alerted and ignored it.
             ret.delete();
         }
@@ -542,11 +541,11 @@ public final class IOHandler {
     
     /**
      * Gets temporary save file if one exists, null otherwise
-     * @param core
+     * @param workingDirectory
      * @return 
      */
-    public static File getTempSaveFileIfExists(DictCore core) {
-        File ret = new File(core.getWorkingDirectory() + File.separator + PGTUtil.TEMP_FILE);
+    public static File getTempSaveFileIfExists(File workingDirectory) {
+        File ret = new File(workingDirectory + File.separator + PGTUtil.TEMP_FILE);
         return ret.exists() ? ret : null;
     }
 
@@ -779,10 +778,8 @@ public final class IOHandler {
                     + PGTUtil.REVERSION_BASE_FILE_NAME + i);
 
             while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
-                tmpCore = new DictCore();
-
                 reversionManager.addVersionToEnd(streamToBytArray(zipFile.getInputStream(reversion)),
-                        tmpCore.getLastSaveTime());
+                        Instant.MIN); // TODO: remove Instant.MIN here and in method sig or extrac and inject it properly
                 i++;
                 reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
                         + PGTUtil.REVERSION_BASE_FILE_NAME + i);
@@ -790,10 +787,8 @@ public final class IOHandler {
 
             // remember to load latest state in addition to all prior ones
             reversion = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
-            tmpCore = new DictCore();
-
             reversionManager.addVersionToEnd(streamToBytArray(zipFile.getInputStream(reversion)),
-                    tmpCore.getLastSaveTime());
+                    Instant.MIN); // TODO: remove Instant.MIN here and in method sig or extrac and inject it properly
         }
     }
 
@@ -908,21 +903,21 @@ public final class IOHandler {
     /**
      * Saves ini file with polyglot options
      *
-     * @param core
+     * @param workingDirectory
+     * @param opMan
      * @throws IOException on failure or lack of permission to write
      */
-    public static void saveOptionsIni(DictCore core) throws IOException {
+    public static void saveOptionsIni(String workingDirectory, OptionsManager opMan) throws IOException {
 
         try (Writer f0 = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(core.getWorkingDirectory().getAbsolutePath()
+                new FileOutputStream(workingDirectory
                         + File.separator + PGTUtil.POLYGLOT_INI), StandardCharsets.UTF_8))) {
-            OptionsManager opMan = core.getOptionsManager();
             String newLine = System.getProperty("line.separator");
             String nextLine;
 
-            if (!testCanWrite(core.getWorkingDirectory().getAbsolutePath() + File.separator + PGTUtil.POLYGLOT_INI)) {
+            if (!testCanWrite(workingDirectory + File.separator + PGTUtil.POLYGLOT_INI)) {
                 throw new IOException("Unable to save settings. Polyglot does not have permission to write to folder: "
-                        + core.getWorkingDirectory().getAbsolutePath()
+                        + workingDirectory
                         + ". This is most common when running from Program Files in Windows.");
             }
 

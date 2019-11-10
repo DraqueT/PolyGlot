@@ -215,7 +215,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to enforce selection of a part of speech on each created word."/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkLocalMandatory">
@@ -224,7 +224,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to enforce mandatory values for local word equivalents."/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkWordUniqueness">
@@ -233,7 +233,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to enforce mandatory uniqueness of each word"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkLocalUniqueness">
@@ -242,7 +242,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to enforce mandatory uniqueness for local word equivalents."/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkIgnoreCase">
@@ -251,7 +251,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Ignore character casing through PolyGlot. (only applies to western characters)"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkDisableProcRegex">
@@ -260,7 +260,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Disable regex features in orthograpy. (this allows for ignoring case properly)"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkEnforceRTL">
@@ -272,7 +272,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkEnforceRTLActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
@@ -290,7 +290,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="This overrides the font of all display elements within PolyGlot to show a default font (if your script makes regexes hard to work with)"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkUseLocalWordLex">
@@ -299,7 +299,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Display the local word rather than the conlang word in the lexicon display"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
           </SubComponents>
