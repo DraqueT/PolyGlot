@@ -46,6 +46,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 
 /**
  *
@@ -728,8 +729,8 @@ public final class ScrPhonology extends PFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblRom = new javax.swing.JTable();
         btnDownRom = new PButton(core);
-        chkEnableRom = new javax.swing.JCheckBox();
-        chkRomRecurse = new javax.swing.JCheckBox();
+        chkEnableRom = new PCheckBox(nightMode, menuFontSize);
+        chkRomRecurse = new PCheckBox(nightMode, menuFontSize);
         pnlOrthography = new javax.swing.JPanel();
         jLabel1 = new PLabel("", core);
         btnAddProc = new PAddRemoveButton("+");
@@ -738,7 +739,7 @@ public final class ScrPhonology extends PFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProcs = new javax.swing.JTable();
         btnDownProc = new PButton(core);
-        chkPhonRecurse = new javax.swing.JCheckBox();
+        chkPhonRecurse = new PCheckBox(nightMode, menuFontSize);
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new PLabel("", core);
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -845,10 +846,9 @@ public final class ScrPhonology extends PFrame {
                                 .addComponent(btnDelRom, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(pnlRomanizationLayout.createSequentialGroup()
-                                .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(chkEnableRom)
-                                    .addComponent(chkRomRecurse))
-                                .addGap(0, 26, Short.MAX_VALUE)))
+                                .addComponent(chkRomRecurse)
+                                .addGap(0, 53, Short.MAX_VALUE))
+                            .addComponent(chkEnableRom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlRomanizationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnDownRom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)

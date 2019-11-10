@@ -42,10 +42,7 @@ public class PCheckBox extends JCheckBox implements MouseListener {
     
     public PCheckBox(boolean _nightMode, double fontSize) {
         nightMode = _nightMode;
-        
-        //float fontSize = (float)core.getOptionsManager().getMenuFontSize();
         super.setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));
-        
         setupListeners();
     }
     
