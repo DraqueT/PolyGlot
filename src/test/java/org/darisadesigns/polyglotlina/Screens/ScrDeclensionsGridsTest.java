@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -43,7 +44,7 @@ public class ScrDeclensionsGridsTest {
     private ConWord TwoDimNopop;
     
     public ScrDeclensionsGridsTest() {
-        core = new DictCore();
+        core = DummyCore.newCore();
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "conj_autopop_check_test.pgd");

@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.QuizEngine;
 
+import TestResources.DummyCore;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ public class QuizQuestionTest {
     public QuizQuestionTest() {
         System.out.println("QuizQuestionText");
         
-        questionTest = new QuizQuestion(new DictCore());
+        questionTest = new QuizQuestion(DummyCore.newCore());
         
         answer = new ConWord();
         answer.setValue("BALYOO");
@@ -49,7 +50,7 @@ public class QuizQuestionTest {
     @Test
     public void testSetEqual() {
         System.out.println("QuizQuestionText:testSetEqual");
-        QuizQuestion copy = new QuizQuestion(new DictCore());
+        QuizQuestion copy = new QuizQuestion(DummyCore.newCore());
         copy.setEqual(questionTest);
         assertEquals(copy, questionTest);
     }
@@ -69,7 +70,7 @@ public class QuizQuestionTest {
     public void testEquals() {
         System.out.println("QuizQuestionText:testEquals");
         
-        QuizQuestion copyQ = new QuizQuestion(new DictCore());
+        QuizQuestion copyQ = new QuizQuestion(DummyCore.newCore());
         
         ConWord copyA = new ConWord();
         copyA.setValue("BALYOO");
@@ -86,7 +87,7 @@ public class QuizQuestionTest {
     public void testNotEquals() {
         System.out.println("QuizQuestionText:testEquals");
         
-        QuizQuestion copyQ = new QuizQuestion(new DictCore());
+        QuizQuestion copyQ = new QuizQuestion(DummyCore.newCore());
         
         ConWord copyA = new ConWord();
         copyA.setValue("WRONGZZZ");

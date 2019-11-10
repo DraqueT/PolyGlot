@@ -414,8 +414,8 @@ public final class ScrTypes extends PFrame {
         btnAutogen = new PButton(core);
         txtErrorBox = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        chkDefMand = new PCheckBox(core);
-        chkProcMand = new PCheckBox(core);
+        chkDefMand = new PCheckBox(nightMode, menuFontSize);
+        chkProcMand = new PCheckBox(nightMode, menuFontSize);
         txtGloss = new PTextField(core, true, "-- Part of Speech Gloss --");
         jScrollPane3 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Notes --");
@@ -441,7 +441,7 @@ public final class ScrTypes extends PFrame {
         txtTypePattern.setToolTipText("Regex pattern which words of this type must conform to");
 
         btnSetup.setText("Conjugations/Declensions Setup");
-        btnSetup.setToolTipText("Create declension and conjugation dimensions here.");
+        btnSetup.setToolTipText("Create declension and conjugation dimensins here.");
         btnSetup.setEnabled(false);
         btnSetup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

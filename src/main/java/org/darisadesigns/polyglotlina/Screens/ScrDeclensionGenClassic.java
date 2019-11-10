@@ -72,7 +72,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
  */
 public final class ScrDeclensionGenClassic extends PDialog {
 
-    private final static String depRulesLabel = "DEPRECATED RULES";
+    private final static String DEP_RULES_LABEL = "DEPRECATED RULES";
     private final Window parent;
     private final int typeId;
     private DefaultListModel<Object> decListModel;
@@ -214,7 +214,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         rulesModel.clear();
 
         // population of rules works differently if deprecated rules are selected
-        if (lstCombinedDec.getSelectedValue().equals(depRulesLabel)) {
+        if (lstCombinedDec.getSelectedValue().equals(DEP_RULES_LABEL)) {
             depRulesList = core.getDeclensionManager().getAllDepGenerationRules(typeId);
 
             depRulesList.forEach((curRule) -> {
@@ -333,7 +333,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         });
 
         if (!depRulesList.isEmpty()) {
-            decListModel.addElement(depRulesLabel);
+            decListModel.addElement(DEP_RULES_LABEL);
         }
 
         lstCombinedDec.setSelectedIndex(0);
@@ -974,7 +974,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         lstRules = new PList(core, false);
         btnAddRule = new PAddRemoveButton("+");
         btnDeleteRule = new PAddRemoveButton("-");
-        chkDisableWordform = new PCheckBox(core);
+        chkDisableWordform = new PCheckBox(nightMode, menuFontSize);
         jButton1 = new PButton(core);
         jButton1.setFont(core.getPropertiesManager().getFontMenu())
         ;

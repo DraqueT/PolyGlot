@@ -18,6 +18,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class OpenScreensTest {
     private final boolean headless = GraphicsEnvironment.isHeadless(); // testing this in a headless environment makes no sense
     
     public OpenScreensTest() {
-        core = new DictCore();
+        core = DummyCore.newCore();
         errors = IOHandler.getErrorLogFile();
         
         try {
@@ -302,7 +303,7 @@ public class OpenScreensTest {
         }
         
         System.out.println("testScrMainMenu");
-        ScrMainMenu s = new ScrMainMenu("", new DictCore());
+        ScrMainMenu s = new ScrMainMenu(DummyCore.newCore());
         s.updateAllValues(core);
         s.hardDispose();
         

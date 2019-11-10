@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina.Screens;
 
 // TODO: Most of these tests
 
+import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +29,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -44,7 +44,7 @@ public class ScrMainMenuTest {
     
     public ScrMainMenuTest() {
         if (!headless) {
-            mainMenu = new ScrMainMenu("", new DictCore());
+            mainMenu = new ScrMainMenu(DummyCore.newCore());
         } else {
             mainMenu = null;
         }

@@ -202,7 +202,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Select to enforce definition text for this par of speech."/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="chkProcMand">
@@ -211,7 +211,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Select to enforce pronunciation text for this par of speech."/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(core)"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
                   </AuxValues>
                 </Component>
               </SubComponents>

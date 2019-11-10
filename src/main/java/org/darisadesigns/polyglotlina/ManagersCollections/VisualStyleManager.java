@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -34,57 +33,49 @@ import javax.swing.UIManager;
  * @author DThompson
  */
 public class VisualStyleManager {
-    private final DictCore core;
-    private final UIDefaults uiOverrides;
     
-    public VisualStyleManager(DictCore _core) {
-        core = _core;
-        uiOverrides = generateUIDefaultOverrides();
+    private VisualStyleManager() {
     }
     
     // color of regular text
-    public Color getTextColor() {
-        return core.getOptionsManager().isNightMode() ?
+    public static Color getTextColor(boolean isNightMode) {
+        return isNightMode ?
                 PGTUtil.COLOR_TEXT_NIGHT:
                 PGTUtil.COLOR_TEXT;
     }
     
     // color of regular text background
-    public Color getTextBGColor() {
-        return core.getOptionsManager().isNightMode() ?
+    public static Color getTextBGColor(boolean isNightMode) {
+        return isNightMode ?
                 PGTUtil.COLOR_TEXT_BG_NIGHT:
                 PGTUtil.COLOR_TEXT_BG;
     }
     
     // color of default value text
-    public Color getDefaultTextColor() {
-        return core.getOptionsManager().isNightMode() ?
+    public static Color getDefaultTextColor(boolean isNightMode) {
+        return isNightMode ?
                 PGTUtil.COLOR_DEFAULT_TEXT_NIGHT:
                 PGTUtil.COLOR_DEFAULT_TEXT;
     }
     
     // color of disabled text
-    public Color getDisabledTextColor() {
-        return core.getOptionsManager().isNightMode() ?
+    public static Color getDisabledTextColor(boolean isNightMode) {
+        return isNightMode ?
                 PGTUtil.COLOR_TEXT_DISABLED_NIGHT:
                 PGTUtil.COLOR_TEXT_DISABLED;
     }
     
     // color of disabled text BG
-    public Color getDisabledTextColorBG() {
-        return core.getOptionsManager().isNightMode() ?
+    public static Color getDisabledTextColorBG(boolean isNightMode) {
+        return isNightMode ?
                 PGTUtil.COLOR_TEXT_DISABLED_BG_NIGHT:
                 PGTUtil.COLOR_TEXT_DISABLED_BG;
     }
     
-    public UIDefaults getUIOverrides() {
-        return uiOverrides;
-    }
-    
-    public Color getCheckBoxSelected(boolean isEnabled) {
+    public static Color getCheckBoxSelected(boolean isEnabled, boolean isNightMode) {
         Color ret = PGTUtil.COLOR_CHECKBOX_SELECTED_DISABLED;
         
-        if (isEnabled && core.getOptionsManager().isNightMode()) {
+        if (isEnabled && isNightMode) {
             ret = PGTUtil.COLOR_CHECKBOX_SELECTED_NIGHT;
         } else if (isEnabled) {
             ret = PGTUtil.COLOR_CHECKBOX_SELECTED;
@@ -93,10 +84,10 @@ public class VisualStyleManager {
         return ret;
     }
     
-    public Color getCheckBoxBG(boolean isEnabled) {
+    public static Color getCheckBoxBG(boolean isEnabled, boolean isNightMode) {
         Color ret = PGTUtil.COLOR_CHECKBOX_BG_DISABLED;
         
-        if (isEnabled && core.getOptionsManager().isNightMode()) {
+        if (isEnabled && isNightMode) {
             ret = PGTUtil.COLOR_CHECKBOX_BG_NIGHT;
         } else if (isEnabled) {
             ret = PGTUtil.COLOR_CHECKBOX_BG;
@@ -105,10 +96,10 @@ public class VisualStyleManager {
         return ret;
     }
     
-    public Color getCheckBoxOutline(boolean isEnabled) {
+    public static Color getCheckBoxOutline(boolean isEnabled, boolean isNightMode) {
         Color ret = PGTUtil.COLOR_CHECKBOX_OUTLINE_DISABLED;
         
-        if (isEnabled && core.getOptionsManager().isNightMode()) {
+        if (isEnabled && isNightMode) {
             ret = PGTUtil.COLOR_CHECKBOX_OUTLINE_NIGHT;
         } else if (isEnabled) {
             ret = PGTUtil.COLOR_CHECKBOX_OUTLINE;
@@ -117,10 +108,10 @@ public class VisualStyleManager {
         return ret;
     }
     
-    public Color getCheckBoxHover(boolean isEnabled) {
+    public static Color getCheckBoxHover(boolean isEnabled, boolean isNightMode) {
         Color ret = PGTUtil.COLOR_CHECKBOX_HOVER_DISABLED;
         
-        if (isEnabled && core.getOptionsManager().isNightMode()) {
+        if (isEnabled && isNightMode) {
             ret = PGTUtil.COLOR_CHECKBOX_HOVER_NIGHT;
         } else if (isEnabled) {
             ret = PGTUtil.COLOR_CHECKBOX_HOVER;
@@ -129,10 +120,10 @@ public class VisualStyleManager {
         return ret;
     }
     
-    public Color getCheckBoxClicked(boolean isEnabled) {
+    public static Color getCheckBoxClicked(boolean isEnabled, boolean isNightMode) {
         Color ret = PGTUtil.COLOR_CHECKBOX_CLICKED_DISABLED;
         
-        if (isEnabled && core.getOptionsManager().isNightMode()) {
+        if (isEnabled && isNightMode) {
             ret = PGTUtil.COLOR_CHECKBOX_CLICKED_NIGHT;
         } else if (isEnabled) {
             ret = PGTUtil.COLOR_CHECKBOX_CLICKED;
@@ -142,10 +133,10 @@ public class VisualStyleManager {
     }
     
     
-    public Color getCheckBoxFieldBack(boolean isEnabled) {
+    public static Color getCheckBoxFieldBack(boolean isEnabled, boolean isNightMode) {
         Color ret = PGTUtil.COLOR_CHECKBOX_FIELD_BACK_DISABLED;
         
-        if (isEnabled && core.getOptionsManager().isNightMode()) {
+        if (isEnabled && isNightMode) {
             ret = PGTUtil.COLOR_CHECKBOX_FIELD_BACK_NIGHT;
         } else if (isEnabled) {
             ret = PGTUtil.COLOR_CHECKBOX_FIELD_BACK;
@@ -154,20 +145,19 @@ public class VisualStyleManager {
         return ret;
     }
         
-    private UIDefaults generateUIDefaultOverrides() {
+    public static UIDefaults generateUIOverrides(boolean isNightMode) {
         UIDefaults overrides = new UIDefaults();
         UIManager.put("TextField.inactiveBackground",Color.red);
         overrides.put("TextField[Disabled].backgroundPainter", (Painter<JTextField>) 
                 (Graphics2D g, JTextField field, int width, int height) -> {
-            if (core.getOptionsManager().isNightMode()) {
+            if (isNightMode) {
                 g.setColor(Color.darkGray);
-                //Insets insets = field.getInsets();
                 g.fill(new Rectangle(1, 1, width-2, height-2));
             }
         });
         overrides.put("TextField[Disabled].borderPainter", (Painter<JTextField>) 
                 (Graphics2D g, JTextField field, int width, int height) -> {
-            if (core.getOptionsManager().isNightMode()) {
+            if (isNightMode) {
                 g.setColor(Color.gray);
             } else {
                 g.setColor(Color.lightGray);
@@ -179,7 +169,7 @@ public class VisualStyleManager {
         });
         overrides.put("TextArea[Disabled].backgroundPainter", (Painter<JTextField>) 
                 (Graphics2D g, JTextField field, int width, int height) -> {
-            if (core.getOptionsManager().isNightMode()) {
+            if (isNightMode) {
                 g.setColor(Color.darkGray);
                 //Insets insets = field.getInsets();
                 g.fill(new Rectangle(1, 1, width-2, height-2));
@@ -187,7 +177,7 @@ public class VisualStyleManager {
         });
         overrides.put("TextArea[Disabled].borderPainter", (Painter<JTextField>) 
                 (Graphics2D g, JTextField field, int width, int height) -> {
-            if (core.getOptionsManager().isNightMode()) {
+            if (isNightMode) {
                 g.setColor(Color.gray);
             } else {
                 g.setColor(Color.lightGray);
@@ -199,7 +189,7 @@ public class VisualStyleManager {
         });
         overrides.put("TextPane[Disabled].backgroundPainter", (Painter<JTextField>) 
                 (Graphics2D g, JTextField field, int width, int height) -> {
-            if (core.getOptionsManager().isNightMode()) {
+            if (isNightMode) {
                 g.setColor(Color.darkGray);
                 //Insets insets = field.getInsets();
                 g.fill(new Rectangle(1, 1, width-2, height-2));
@@ -207,7 +197,7 @@ public class VisualStyleManager {
         });
         overrides.put("TextPane[Disabled].borderPainter", (Painter<JTextField>) 
                 (Graphics2D g, JTextField field, int width, int height) -> {
-            if (core.getOptionsManager().isNightMode()) {
+            if (isNightMode) {
                 g.setColor(Color.gray);
             } else {
                 g.setColor(Color.lightGray);

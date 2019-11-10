@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.AWTEvent;
 import java.awt.Color;
@@ -48,17 +47,20 @@ public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> imp
 
     private boolean keepOpen;
     private transient ActionListener listener;
-    private final DictCore core;
+    private final boolean nightMode;
+    private final double fontSize;
     private boolean mouseOver = false;
 
-    public PCheckedComboBox(DictCore _core) {
+    public PCheckedComboBox(boolean _nightMode, double _fontSize) {
         super();
-        core = _core;
+        nightMode = _nightMode;
+        fontSize = _fontSize;
     }
 
-    public PCheckedComboBox(ComboBoxModel<E> model, DictCore _core) {
+    public PCheckedComboBox(ComboBoxModel<E> model, boolean _nightMode, double _fontSize) {
         super(model);
-        core = _core;
+        nightMode = _nightMode;
+        fontSize = _fontSize;
     }
 
     @Override
@@ -77,7 +79,7 @@ public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> imp
                 keepOpen = true;
             }
         };
-        setRenderer(new PCheckBoxCellRenderer<>(core));
+        setRenderer(new PCheckBoxCellRenderer<>(nightMode, fontSize));
         addActionListener(listener);
         getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "checkbox-select");
         getActionMap().put("checkbox-select", new AbstractAction() {

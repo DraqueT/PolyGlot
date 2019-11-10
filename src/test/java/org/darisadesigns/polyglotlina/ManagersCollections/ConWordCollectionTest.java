@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
+import TestResources.DummyCore;
 import java.io.IOException;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -38,7 +39,7 @@ public class ConWordCollectionTest {
     private final DictCore badLexEntriesCore;
     
     public ConWordCollectionTest() {
-        badLexEntriesCore = new DictCore();
+        badLexEntriesCore = DummyCore.newCore();
         
         try {
             badLexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_lex_problems.pgd");
@@ -84,7 +85,7 @@ public class ConWordCollectionTest {
     
     @Test
     public void testMissingConWord() {
-        DictCore core = new DictCore();
+        DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();
         
         ConWord results = core.getWordCollection().testWordLegality(test);
@@ -94,7 +95,7 @@ public class ConWordCollectionTest {
     
     @Test
     public void testMissingLocalWordWithRequirement() {
-        DictCore core = new DictCore();
+        DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();
         
         core.getPropertiesManager().setLocalMandatory(true);
@@ -106,7 +107,7 @@ public class ConWordCollectionTest {
     
     @Test
     public void testMissingLocalWordNoRequirement() {
-        DictCore core = new DictCore();
+        DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();
         
         ConWord results = core.getWordCollection().testWordLegality(test);
@@ -116,7 +117,7 @@ public class ConWordCollectionTest {
     
     @Test
     public void testMissingPOSWithoutRequirement() {
-        DictCore core = new DictCore();
+        DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();
         
         core.getPropertiesManager().setTypesMandatory(true);
@@ -127,7 +128,7 @@ public class ConWordCollectionTest {
     
     @Test
     public void testMissingPOSNoRequirement() {
-        DictCore core = new DictCore();
+        DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();
         
         ConWord results = core.getWordCollection().testWordLegality(test);

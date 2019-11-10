@@ -42,6 +42,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.UIDefaults;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
@@ -89,21 +90,21 @@ public final class PTextField extends JTextField {
     }
     
     public void setupLook() {
-        VisualStyleManager sMan = core.getVisualStyleManager();
+        boolean nightMode = core.getOptionsManager().isNightMode();
         
         if (this.isEnabled()) {
             if (isDefaultText()) {
-                setForeground(sMan.getDefaultTextColor());
+                setForeground(VisualStyleManager.getDefaultTextColor(nightMode));
             } else {
-                setForeground(sMan.getTextColor());
+                setForeground(VisualStyleManager.getTextColor(nightMode));
             }
-            setBackground(sMan.getTextBGColor());
+            setBackground(VisualStyleManager.getTextBGColor(nightMode));
         } else {
-            setForeground(sMan.getDisabledTextColor());
+            setForeground(VisualStyleManager.getDisabledTextColor(nightMode));
             setBackground(Color.black);
         }
         
-        this.putClientProperty("Nimbus.Overrides", core.getVisualStyleManager().getUIOverrides());
+        this.putClientProperty("Nimbus.Overrides", core.getUiDefaults());
     }
     
     @Override
@@ -453,7 +454,7 @@ public final class PTextField extends JTextField {
     }
 
     /**
-     * @param contentId Sets the ID for whatever content this field holds
+     * @param _contentId Sets the ID for whatever content this field holds
      */
     public void setContentId(Integer _contentId) {
         this.contentId = _contentId;
@@ -467,7 +468,7 @@ public final class PTextField extends JTextField {
     }
 
     /**
-     * @param associatedObject the associatedObject to set
+     * @param _associatedObject the associatedObject to set
      */
     public void setAssociatedObject(Object _associatedObject) {
         this.associatedObject = _associatedObject;

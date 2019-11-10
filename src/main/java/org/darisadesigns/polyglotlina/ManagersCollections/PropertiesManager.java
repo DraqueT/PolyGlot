@@ -42,7 +42,6 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class PropertiesManager {
-    private String overrideProgramPath = "";
     private Font conFont = null;
     private Integer conFontStyle = Font.PLAIN;
     private Integer conFontSize = 12;
@@ -174,23 +173,6 @@ public class PropertiesManager {
     }
     
     /**
-     * Gets PolyGlot's canonical directory, regardless of what the OS returns
-     * @return working directory
-     */
-    // TODO: JAVA 12 UPGRADE: Make certain this works properly (it doesn't)
-    public File getCanonicalDirectory() {
-        File ret;
-        
-        if (overrideProgramPath.isEmpty()) {
-            ret = IOHandler.getBaseProgramPath();
-        } else {
-            ret = new File(overrideProgramPath);
-        }
-        
-        return ret;
-    }
-
-    /**
      * Gets the java FX version of an AWT font
      *
      * @return javafx font
@@ -237,18 +219,6 @@ public class PropertiesManager {
     public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
         setFontCon(PFontHandler.getFontFromFile(fontPath).deriveFont(conFontStyle, conFontSize), conFontStyle, conFontSize);
         cachedConFont = IOHandler.getFileByteArray(fontPath);
-    }
-
-    public void setOverrideProgramPath(String override) {
-        if (override.equals(PGTUtil.EMPTY_FILE)) {
-            overrideProgramPath = "";
-        } else {
-            overrideProgramPath = override;
-        }
-    }
-
-    public String getOverrideProgramPath() {
-        return overrideProgramPath;
     }
 
     public void setDisableProcRegex(boolean _disableProcRegex) {
@@ -472,7 +442,7 @@ public class PropertiesManager {
     }
 
     /**
-     * @param langName the langName to set
+     * @param _langName the langName to set
      */
     public void setLangName(String _langName) {
         this.langName = _langName;
@@ -486,7 +456,7 @@ public class PropertiesManager {
     }
 
     /**
-     * @param typesMandatory the typesMandatory to set
+     * @param _typesMandatory the typesMandatory to set
      */
     public void setTypesMandatory(boolean _typesMandatory) {
         this.typesMandatory = _typesMandatory;
@@ -500,7 +470,7 @@ public class PropertiesManager {
     }
 
     /**
-     * @param localMandatory the localMandatory to set
+     * @param _localMandatory the localMandatory to set
      */
     public void setLocalMandatory(boolean _localMandatory) {
         this.localMandatory = _localMandatory;
@@ -514,7 +484,7 @@ public class PropertiesManager {
     }
 
     /**
-     * @param wordUniqueness the wordUniqueness to set
+     * @param _wordUniqueness the wordUniqueness to set
      */
     public void setWordUniqueness(boolean _wordUniqueness) {
         this.wordUniqueness = _wordUniqueness;
@@ -528,7 +498,7 @@ public class PropertiesManager {
     }
 
     /**
-     * @param localUniqueness the localUniqueness to set
+     * @param _localUniqueness the localUniqueness to set
      */
     public void setLocalUniqueness(boolean _localUniqueness) {
         this.localUniqueness = _localUniqueness;
@@ -694,7 +664,7 @@ public class PropertiesManager {
     }
 
     /**
-     * @param localLangName the localLangName to set
+     * @param _localLangName the localLangName to set
      */
     public void setLocalLangName(String _localLangName) {
         this.localLangName = _localLangName;
@@ -708,7 +678,7 @@ public class PropertiesManager {
     }
 
     /**
-     * @param copyrightAuthorInfo the copyrightAuthorInfo to set
+     * @param _copyrightAuthorInfo the copyrightAuthorInfo to set
      */
     public void setCopyrightAuthorInfo(String _copyrightAuthorInfo) {
         this.copyrightAuthorInfo = _copyrightAuthorInfo;
@@ -722,7 +692,7 @@ public class PropertiesManager {
     }
 
     /**
-     * @param kerningSpace the kerningSpace to set
+     * @param _kerningSpace the kerningSpace to set
      */
     public void setKerningSpace(Double _kerningSpace) {
         this.kerningSpace = _kerningSpace;
@@ -774,7 +744,7 @@ public class PropertiesManager {
     }
 
     /**
-     * @param overrideRegexFont the overrideRegexFont to set
+     * @param _overrideRegexFont the overrideRegexFont to set
      */
     public void setOverrideRegexFont(boolean _overrideRegexFont) {
         this.overrideRegexFont = _overrideRegexFont;
@@ -788,7 +758,7 @@ public class PropertiesManager {
     }
 
     /**
-     * @param useLocalWordLex the useLocalWordLex to set
+     * @param _useLocalWordLex the useLocalWordLex to set
      */
     public void setUseLocalWordLex(boolean _useLocalWordLex) {
         this.useLocalWordLex = _useLocalWordLex;
@@ -829,7 +799,7 @@ public class PropertiesManager {
     }
 
     /**
-     * @param useSimplifiedConjugations the useSimplifiedConjugations to set
+     * @param _useSimplifiedConjugations the useSimplifiedConjugations to set
      */
     public void setUseSimplifiedConjugations(boolean _useSimplifiedConjugations) {
         this.useSimplifiedConjugations = _useSimplifiedConjugations;

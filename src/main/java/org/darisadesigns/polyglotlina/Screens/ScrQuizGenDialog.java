@@ -146,12 +146,12 @@ public final class ScrQuizGenDialog extends PFrame {
         jLabel2 = new PLabel("", core);
         txtNumQuestions = new javax.swing.JTextField();
         jLabel3 = new PLabel("", core);
-        chkDefQuiz = new PCheckBox(core);
-        chkProcQuiz = new PCheckBox(core);
-        chkClassQuiz = new PCheckBox(core);
-        chkTypeQuiz = new PCheckBox(core);
-        chkLocalQuiz = new PCheckBox(core);
-        chkConlangQuiz = new PCheckBox(core);
+        chkDefQuiz = new PCheckBox(nightMode, menuFontSize);
+        chkProcQuiz = new PCheckBox(nightMode, menuFontSize);
+        chkClassQuiz = new PCheckBox(nightMode, menuFontSize);
+        chkTypeQuiz = new PCheckBox(nightMode, menuFontSize);
+        chkLocalQuiz = new PCheckBox(nightMode, menuFontSize);
+        chkConlangQuiz = new PCheckBox(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Quiz Generator");
@@ -256,7 +256,7 @@ public final class ScrQuizGenDialog extends PFrame {
         });
 
         chkLocalQuiz.setText("-UPDATE VIA CODE-");
-        chkLocalQuiz.setToolTipText("Conlang equivalent of local language words");
+        chkLocalQuiz.setToolTipText("Conlang equivlent of local language words");
 
         chkConlangQuiz.setText("-UPDATE VIA CODE-");
         chkConlangQuiz.setToolTipText("The conlang equivalent of local language words");

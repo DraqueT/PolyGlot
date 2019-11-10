@@ -18,6 +18,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package PolyGlot;
+import TestResources.DummyCore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +39,7 @@ public class ConjugationManagerTest {
     final DictCore core;
 
     public ConjugationManagerTest() {
-        core = new DictCore();
+        core = DummyCore.newCore();
     }
     
     @Test

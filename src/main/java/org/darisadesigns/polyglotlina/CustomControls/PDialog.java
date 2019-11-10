@@ -47,14 +47,20 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     protected DictCore core;
     protected boolean firstVisible = true;
     protected boolean ignoreInitialResize = false;
+    protected final double menuFontSize;
+    protected final boolean nightMode;
        
     public PDialog(DictCore _core) {
         core = _core;
+        menuFontSize = core.getOptionsManager().getMenuFontSize();
+        nightMode = core.getOptionsManager().isNightMode();
     }
     
     public PDialog(DictCore _core, boolean _firstVisible) {
         core = _core;
         firstVisible = _firstVisible;
+        menuFontSize = core.getOptionsManager().getMenuFontSize();
+        nightMode = core.getOptionsManager().isNightMode();
     }
     
     /**

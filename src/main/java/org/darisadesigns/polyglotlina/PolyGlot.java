@@ -35,15 +35,19 @@ import java.awt.desktop.QuitResponse;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import javax.swing.InputMap;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.Screens.ScrAbout;
 import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
 
@@ -52,6 +56,18 @@ import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
  * @author Draque Thompson
  */
 public final class PolyGlot {
+    private final OptionsManager optionsManager;
+    private final String overrideProgramPath;
+    private Object clipBoard;
+    private UIDefaults uiDefaults;
+    
+    private PolyGlot(String overridePath) throws Exception {
+        overrideProgramPath = overridePath;
+        optionsManager = new OptionsManager();
+        IOHandler.loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
+        refreshUiDefaults();
+    }
+    
     /**
      * @param args the command line arguments: 
      * args[0] = open file path (blank if none) 
@@ -94,18 +110,22 @@ public final class PolyGlot {
                     if (canStart()) {
                         try {
                             // separated due to serious nature of Throwable vs Exception
-                             DictCore core = new DictCore();
+                            
+                            PolyGlot polyGlot = new PolyGlot(overridePath);
+                            DictCore core = new DictCore(polyGlot);
+                             
+                            // TODO: Set working directory here
                                         
                             try {
-                                IOHandler.loadOptionsIni(core);
+                                IOHandler.loadOptionsIni(polyGlot.optionsManager, polyGlot.getWorkingDirectory().getAbsolutePath());
                             } catch (Exception ex) {
                                 IOHandler.writeErrorLog(ex);
                                 InfoBox.error("Options Load Error", "Unable to load options file or file corrupted:\n"
                                         + ex.getLocalizedMessage(), core.getRootWindow());
-                                IOHandler.deleteIni(core);
+                                IOHandler.deleteIni(polyGlot.getWorkingDirectory().getAbsolutePath());
                             }
                             
-                            s = new ScrMainMenu(overridePath, core);
+                            s = new ScrMainMenu(core);
                             s.checkForUpdates(false);
                             s.setVisible(true);
 
@@ -131,7 +151,7 @@ public final class PolyGlot {
                                 desk.setAboutHandler(new AboutHandler(){
                                     @Override
                                     public void handleAbout(AboutEvent e) { 
-                                        ScrAbout.run(new DictCore());
+                                        ScrAbout.run(new DictCore(polyGlot));
                                     }
                                 });
                                 
@@ -147,7 +167,7 @@ public final class PolyGlot {
                             }
                             
                             // if a recovery file exists, query user for action
-                            File recovery = IOHandler.getTempSaveFileIfExists(core);
+                            File recovery = IOHandler.getTempSaveFileIfExists(polyGlot.getWorkingDirectory());
                             if (recovery != null) {
                                 if (InfoBox.yesNoCancel("Recovery File Detected", 
                                         "PolyGlot appears to have shut down mid save. Would you like to recover the file?", s) == JOptionPane.YES_OPTION) {    
@@ -156,7 +176,7 @@ public final class PolyGlot {
                                     FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
                                     chooser.setFileFilter(filter);
                                     chooser.setApproveButtonText("Recover");
-                                    chooser.setCurrentDirectory(core.getPropertiesManager().getCanonicalDirectory());
+                                    chooser.setCurrentDirectory(polyGlot.getCanonicalDirectory());
                                     
                                     String fileName;
 
@@ -228,6 +248,12 @@ public final class PolyGlot {
             InfoBox.error("PolyGlot Error", "A serious error has occurred: " + e.getLocalizedMessage(), null);
             throw e;
         }
+    }
+    
+    public DictCore getNewCore(ScrMainMenu rootWindow) {
+        DictCore ret = new DictCore(this);
+        ret.setRootWindow(rootWindow);
+        return ret;
     }
     
     /**
@@ -318,5 +344,79 @@ public final class PolyGlot {
         });
     }
 
-    private PolyGlot() {}
+    /**
+     * Gets PolyGlot's canonical directory, regardless of what the OS returns
+     * @return working directory
+     */
+    // TODO: JAVA 12 UPGRADE: Make certain this works properly (it doesn't)
+    // TODO: analyze why both this and getWorkingDirectory both exist
+    public File getCanonicalDirectory() {
+        File ret;
+        
+        if (overrideProgramPath.isEmpty()) {
+            ret = IOHandler.getBaseProgramPath();
+        } else {
+            ret = new File(overrideProgramPath);
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Retrieves working directory of PolyGlot
+     *
+     * @return current working directory
+     */
+    public File getWorkingDirectory() {
+        return overrideProgramPath.isEmpty() ?
+                PGTUtil.getDefaultDirectory() : 
+                new File(overrideProgramPath);
+    }
+
+    public String getOverrideProgramPath() {
+        return overrideProgramPath;
+    }
+    
+    public OptionsManager getOptionsManager() {
+        return optionsManager;
+    }
+    
+    public void saveOptionsIni() throws IOException {
+        IOHandler.saveOptionsIni(getWorkingDirectory().getAbsolutePath(), optionsManager);
+    }
+    
+    /**
+     * Clipboard can be used to hold any object
+     *
+     * @param c object to hold
+     */
+    public void setClipBoard(Object c) {
+        clipBoard = c;
+    }
+
+    /**
+     * Retrieves object held in clipboard, even if null, regardless of type
+     *
+     * @return contents of clipboard
+     */
+    public Object getClipBoard() {
+        return clipBoard;
+    }
+    
+    public UIDefaults getUiDefaults() {
+        return uiDefaults;
+    }
+    
+    public void refreshUiDefaults() {
+        uiDefaults = VisualStyleManager.generateUIOverrides(optionsManager.isNightMode());
+    }
+    
+    /**
+     * Creates and returns testing shell to be used in file veracity tests (IOHandler writing of files)
+     * @return 
+     * @throws java.io.IOException 
+     */
+    public static PolyGlot getTestShell() throws IOException, Exception {
+        return new PolyGlot(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath());
+    }
 }

@@ -72,15 +72,21 @@ public abstract class PFrame extends JFrame implements FocusListener {
     protected int frameState = -1;
     private boolean firstVisible = true;
     private boolean curResizing;
+    protected final double menuFontSize;
+    protected final boolean nightMode;
 
     protected PFrame(DictCore _core) {
         core = _core;
+        menuFontSize = core.getOptionsManager().getMenuFontSize();
+        nightMode = core.getOptionsManager().isNightMode();
         this.addWindowStateListener(this::setWindowState);
     }
     
     protected PFrame(DictCore _core, WindowMode _mode) {
         core = _core;
         mode = _mode;
+        menuFontSize = core.getOptionsManager().getMenuFontSize();
+        nightMode = core.getOptionsManager().isNightMode();
         this.addWindowStateListener(this::setWindowState);
     }
 

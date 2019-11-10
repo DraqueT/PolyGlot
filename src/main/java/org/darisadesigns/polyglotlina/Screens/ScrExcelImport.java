@@ -77,7 +77,7 @@ public class ScrExcelImport extends PDialog {
         jLabel1 = new PLabel("", core);
         btnBrowse = new PButton(core);
         jPanel1 = new javax.swing.JPanel();
-        chkFirstLabels = new PCheckBox(core);
+        chkFirstLabels = new PCheckBox(nightMode, menuFontSize);
         jLabel2 = new PLabel("", core);
         jLabel3 = new PLabel("", core);
         jLabel4 = new PLabel("", core);
@@ -158,14 +158,14 @@ public class ScrExcelImport extends PDialog {
 
         txtDefinition.setToolTipText("Column number of definition");
 
-        txtPronunciation.setToolTipText("Column number of pronunciation");
+        txtPronunciation.setToolTipText("Column number of pronuncation");
 
         txtClass.setToolTipText("Column number(s) for word class values (for example, gender)");
 
         jLabel11.setText("Excel Sheet");
 
         txtExcelSheet.setText("0");
-        txtExcelSheet.setToolTipText("Sheet of excel document to import");
+        txtExcelSheet.setToolTipText("Sheet of excel doument to import");
 
         jLabel10.setText("Delimiter");
 
@@ -173,7 +173,7 @@ public class ScrExcelImport extends PDialog {
         cmbPreferences.setToolTipText("Set the delimiter to comma, semicolon, or tab (only matters for CSV imports)");
 
         jTextPane1.setContentType("text/html"); // NOI18N
-        jTextPane1.setText("<html>Columns may be addressed numerically or alphabetically. <b>If numerically, begin with 0.</b>  <br><br>Map the columns within the target Excel/CSV file to their related fields within the conlang dictionary.   <br><br>If the “First row is labels” box is selected, the first row of the grid will be ignored.  <br><br>To map multiple columns to a single field (generally multiple to definition), simply add the row numbers separated by a comma.  <br><br>The delimiter is the character separating entries if you are importing from a CSV. Leave blank to default to a comma.  <br><br>If you don't know what \\\"Excel Sheet\\\" means, or are using a CSV leave it at 0. </html>");
+        jTextPane1.setText("<html>Columns may be addressed numerically or alphabetically. <b>If numerically, begin with 0.</b>  <br><br>Map the columns within the target Excel/CSV file to their related fields within the conlang dictionary.   <br><br>If the “First row is labels” box is selected, the first row of the grid will be ignored.  <br><br>To map multiple columns to a single field (generally multiple to definition), simply add the row numbers separated by a comma.  <br><br>The dilimiter is the character separating entries if you are importing from a CSV. Leave blank to default to a comma.  <br><br>If you don't know what \\\"Excel Sheet\\\" means, or are using a CSV leave it at 0. </html>");
         jTextPane1.setToolTipText("");
         jScrollPane2.setViewportView(jTextPane1);
 

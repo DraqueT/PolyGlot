@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
+import TestResources.DummyCore;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
@@ -34,7 +35,7 @@ public class PropertiesManagerTest {
     private final DictCore core;
     
     public PropertiesManagerTest() {
-        core = new DictCore();
+        core = DummyCore.newCore();
     }
 
     /**

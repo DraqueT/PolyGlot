@@ -1687,8 +1687,8 @@ public final class ScrLexicon extends PFrame {
         txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Word --");
         cmbType = new PComboBox(core);
         txtProc = new PTextField(core, true, "-- Pronunciation --");
-        chkProcOverride = new PCheckBox(core);
-        chkRuleOverride = new PCheckBox(core);
+        chkProcOverride = new PCheckBox(nightMode, menuFontSize);
+        chkRuleOverride = new PCheckBox(nightMode, menuFontSize);
         btnDeclensions = new PButton(core);
         btnLogographs = new PButton(core);
         jScrollPane1 = new javax.swing.JScrollPane();

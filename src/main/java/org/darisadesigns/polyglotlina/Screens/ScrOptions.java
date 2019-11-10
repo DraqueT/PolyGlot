@@ -72,19 +72,24 @@ public final class ScrOptions extends PDialog {
     @Override
     public void dispose() {
         if (testWarnClose()) {
+            OptionsManager options = core.getOptionsManager();
+            
             double fontSize = Double.parseDouble(txtTextFontSize.getText());
+            double fontSizeOriginal = options.getMenuFontSize();
+            boolean nightModeOriginal = options.isNightMode();
             int maxReversion = Integer.parseInt(txtRevisionNumbers.getText());
             maxReversion = maxReversion > -1 ? maxReversion : 1;
-            OptionsManager options = core.getOptionsManager();
+            
             options.setAnimateWindows(chkResize.isSelected());
             options.setNightMode(chkNightMode.isSelected());
             options.setMenuFontSize(fontSize);
-            options.setMaxReversionCount(maxReversion);
-
-            if (core.getRootWindow() != null) {
-                ((ScrMainMenu)core.getRootWindow()).refreshMainMenu();
+            options.setMaxReversionCount(maxReversion, core);
+            
+            // only refresh if font size changed or night mode setting switched
+            if (fontSizeOriginal != fontSize|| nightModeOriginal != chkNightMode.isSelected()) {
+                core.refreshMainMenu();
             }
-
+            
             super.dispose();
         }
     }
@@ -119,10 +124,10 @@ public final class ScrOptions extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        chkResize = new PCheckBox(core);
+        chkResize = new PCheckBox(nightMode, menuFontSize);
         jLabel1 = new PLabel("", core);
         txtTextFontSize = new javax.swing.JTextField();
-        chkNightMode = new PCheckBox(core);
+        chkNightMode = new PCheckBox(nightMode, menuFontSize);
         jLabel2 = new PLabel("", core);
         txtRevisionNumbers = new javax.swing.JTextField();
         btnOk = new PButton();

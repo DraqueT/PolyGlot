@@ -121,7 +121,9 @@ public class PClassCheckboxPanel extends JPanel {
                     -1, -1);
         } else {
             // if not used, set to dummy value which is not in menu
-            allCheckBox = new PCheckBox(core);
+            boolean nightMode = core.getOptionsManager().isNightMode();
+            double fontSize = core.getOptionsManager().getMenuFontSize();
+            allCheckBox = new PCheckBox(nightMode, fontSize);
         }
 
         core.getWordClassCollection().getClassesForType(type.getId()).forEach((wordClass)->{
@@ -156,8 +158,10 @@ public class PClassCheckboxPanel extends JPanel {
     private void addCheckBox(String title, String toolTip, ItemListener listener, int classId, int valueId) {
         gbc.weightx = 1;
         gbc.gridx = 0;
+        boolean nightMode = core.getOptionsManager().isNightMode();
+        double fontSize = core.getOptionsManager().getMenuFontSize();
         
-        final PCheckBox check = new PCheckBox(core) {
+        final PCheckBox check = new PCheckBox(nightMode, fontSize) {
             @Override
             public void repaint() {
                 this.setSize(parent.getWidth(), 20);

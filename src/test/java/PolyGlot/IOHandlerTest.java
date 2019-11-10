@@ -19,6 +19,7 @@
  */
 package PolyGlot;
 
+import TestResources.DummyCore;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
@@ -176,12 +177,11 @@ public class IOHandlerTest {
             int toDoBarPositionExpected = 666;
 
             // create test core to set values in...
-            DictCore core = new DictCore();
-            core.getPropertiesManager().setOverrideProgramPath(PGTUtil.TESTRESOURCES);
+            DictCore core = DummyCore.newCore();
             OptionsManager opt = core.getOptionsManager();
 
             opt.setAnimateWindows(animatedExpected);
-            opt.setMaxReversionCount(reversionCountExpected);
+            opt.setMaxReversionCount(reversionCountExpected, core);
             opt.setMenuFontSize(menuFontExpected);
             opt.setNightMode(nightModeExpected);
             opt.setScreenPosition(testScreenName, expectedScreenPosition);
@@ -189,15 +189,14 @@ public class IOHandlerTest {
             opt.setToDoBarPosition(toDoBarPositionExpected);
 
             // save values to disk...
-            IOHandler.saveOptionsIni(core);
+            IOHandler.saveOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
 
             // create new core to load saved values into...
-            core = new DictCore();
-            core.getPropertiesManager().setOverrideProgramPath(PGTUtil.TESTRESOURCES);
+            core = DummyCore.newCore();
             opt = core.getOptionsManager();
             
             // relaod saved values...
-            IOHandler.loadOptionsIni(core);
+            IOHandler.loadOptionsIni(opt, core.getWorkingDirectory().getAbsolutePath());
             
             assertEquals(opt.isAnimateWindows(), animatedExpected);
             assertEquals(opt.getMaxReversionCount(), reversionCountExpected);

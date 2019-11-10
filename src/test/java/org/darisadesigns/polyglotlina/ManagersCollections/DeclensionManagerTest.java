@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
+import TestResources.DummyCore;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -41,8 +42,8 @@ public class DeclensionManagerTest {
     final DictCore debugCore;
     
     public DeclensionManagerTest() {
-        core = new DictCore();
-        debugCore = new DictCore();
+        core = DummyCore.newCore();
+        debugCore = DummyCore.newCore();
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
@@ -162,7 +163,7 @@ public class DeclensionManagerTest {
     @Test
     public void testDeleteRulesFromDeclensionTemplatesInitial() {
         System.out.println("testDeleteRulesFromDeclensionTemplatesInitial");
-        DictCore subCore = new DictCore();
+        DictCore subCore = DummyCore.newCore();
         
         try {
             subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
@@ -179,7 +180,7 @@ public class DeclensionManagerTest {
     @Test
     public void testDeleteRulesFromDeclensionTemplatesDelPast() {
         System.out.println("testDeleteRulesFromDeclensionTemplatesDelPast");
-        DictCore subCore = new DictCore();
+        DictCore subCore = DummyCore.newCore();
         
         try {
             subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
@@ -200,7 +201,7 @@ public class DeclensionManagerTest {
     @Test
     public void testDeleteRulesFromDeclensionTemplatesDelFemale() {
         System.out.println("testDeleteRulesFromDeclensionTemplatesDelFemale");
-        DictCore subCore = new DictCore();
+        DictCore subCore = DummyCore.newCore();
         
         try {
             subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
@@ -224,7 +225,7 @@ public class DeclensionManagerTest {
     @Test
     public void testBulkDeleteRuleFromDeclensionTemplates() {
         System.out.println("testBulkDeleteRuleFromDeclensionTemplates");
-        DictCore subCore = new DictCore();
+        DictCore subCore = DummyCore.newCore();
         
         try {
             subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
@@ -245,7 +246,7 @@ public class DeclensionManagerTest {
     @Test
     public void testBulkDeleteRuleFromDeclensionTemplatesMultiSelect() {
         System.out.println("testBulkDeleteRuleFromDeclensionTemplatesMultiSelect");
-        DictCore subCore = new DictCore();
+        DictCore subCore = DummyCore.newCore();
         
         try {
             subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
@@ -266,7 +267,7 @@ public class DeclensionManagerTest {
     @Test
     public void testDeleteRuleByTypeIdAndCombinedId() {
         System.out.println("testDeleteRuleByTypeIdAndCombinedId");
-        DictCore subCore = new DictCore();
+        DictCore subCore = DummyCore.newCore();
         
         try {
             subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
@@ -288,7 +289,7 @@ public class DeclensionManagerTest {
     @Test
     public void testNoCoreWordDeclensionException() {
         System.out.println("testNoCoreWordDeclensionException");
-        DictCore subCore = new DictCore();
+        DictCore subCore = DummyCore.newCore();
         ConWord noCoreWord = new ConWord();
         String expectedMessage = "Words without populated dictionary cores cannot be tested.";
         
@@ -576,7 +577,7 @@ public class DeclensionManagerTest {
     public void testSmoothDeclensionRuleIndex() {
         System.out.println("testSmoothDeclensionRuleIndex");
         
-        DictCore subCore = new DictCore();
+        DictCore subCore = DummyCore.newCore();
         DeclensionManager decMan = subCore.getDeclensionManager();
         TypeNode noun = new TypeNode();
         
