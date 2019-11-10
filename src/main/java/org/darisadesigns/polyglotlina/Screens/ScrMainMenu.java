@@ -41,6 +41,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -68,6 +69,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultTreeModel;
@@ -86,6 +88,11 @@ import org.darisadesigns.polyglotlina.WebInterface;
  */
 public final class ScrMainMenu extends PFrame {
 
+    private final JMenuItem accelPublish = new JMenuItem();
+    private final JMenuItem accelSave = new JMenuItem();
+    private final JMenuItem accelNew = new JMenuItem();
+    private final JMenuItem accelExit = new JMenuItem();
+    private final JMenuItem accelOpen = new JMenuItem();
     private PToDoTree toDoTree;
     private PFrame curWindow = null;
     private final ScrLexicon cacheLexicon;
@@ -120,6 +127,7 @@ public final class ScrMainMenu extends PFrame {
         updateAllValues(core);
         genTitle();
         setupButtonPopouts();
+        setupAccelerators();
         setupToDo();
         populateRecentOpened();
         populateExampleLanguages();
@@ -1110,6 +1118,52 @@ public final class ScrMainMenu extends PFrame {
 
     public void printToPdf() {
         ScrPrintToPDF.run(core);
+    }
+    
+    /**
+     * sets menu accelerators and menu item text to reflect this
+     */
+    public void setupAccelerators() {
+        accelPublish.addActionListener((ActionEvent e) -> {
+            ScrPrintToPDF.run(core);
+        });
+        this.rootPane.add(accelPublish);
+
+        accelSave.addActionListener((java.awt.event.ActionEvent evt) -> {
+            // TODO: When moving this to ScrMainMenu, remove the call to coresave (it just calls back to ScreenMainMenu)
+            core.coreSave();
+        });
+        this.rootPane.add(accelSave);
+
+        accelNew.addActionListener((java.awt.event.ActionEvent evt) -> {
+            core.coreNew(true);
+        });
+        this.rootPane.add(accelNew);
+
+        accelOpen.addActionListener((java.awt.event.ActionEvent evt) -> {
+            core.coreOpen();
+        });
+        this.rootPane.add(accelOpen);
+
+        accelExit.addActionListener((java.awt.event.ActionEvent evt) -> {
+            dispose();
+        });
+        this.rootPane.add(accelExit);
+
+        String OS = System.getProperty("os.name");
+        if (OS.startsWith("Mac")) {
+            accelSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.META_DOWN_MASK));
+            accelNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.META_DOWN_MASK));
+            accelExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.META_DOWN_MASK));
+            accelOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.META_DOWN_MASK));
+            accelPublish.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.META_DOWN_MASK));
+        } else {
+            accelSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
+            accelNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
+            accelExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
+            accelOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
+            accelPublish.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
+        }
     }
 
     /**

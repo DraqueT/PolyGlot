@@ -24,19 +24,15 @@ import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.PGTUtil.WindowMode;
 import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
-import org.darisadesigns.polyglotlina.Screens.ScrPrintToPDF;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import java.util.concurrent.Executors;
@@ -45,12 +41,10 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.KeyStroke;
 
 /**
  * superclass for JFrame windows in PolyGlot. Includes setup instructions for
@@ -60,11 +54,6 @@ import javax.swing.KeyStroke;
  */
 public abstract class PFrame extends JFrame implements FocusListener {
 
-    private final JMenuItem mnuPublish = new JMenuItem();
-    private final JMenuItem mnuSave = new JMenuItem();
-    private final JMenuItem mnuNew = new JMenuItem();
-    private final JMenuItem mnuExit = new JMenuItem();
-    private final JMenuItem mnuOpen = new JMenuItem();
     protected DictCore core;
     private boolean isDisposed = false;
     private boolean ignoreCenter = false;
@@ -208,7 +197,6 @@ public abstract class PFrame extends JFrame implements FocusListener {
             addBindingToComponent((JComponent) curObject);
             JRootPane root = (JRootPane) curObject;
             Component[] components = root.getComponents();
-            setupAccelerators();
 
             for (Component c : components) {
                 addBindingsToPanelComponents(c);
@@ -259,52 +247,6 @@ public abstract class PFrame extends JFrame implements FocusListener {
         core = _core;
     }
 
-    /**
-     * sets menu accelerators and menu item text to reflect this
-     */
-    public void setupAccelerators() {
-        mnuPublish.addActionListener((ActionEvent e) -> {
-            ScrPrintToPDF.run(core);
-        });
-        this.rootPane.add(mnuPublish);
-
-        mnuSave.addActionListener((java.awt.event.ActionEvent evt) -> {
-            // TODO: When moving this to ScrMainMenu, remove the call to coresave (it just calls back to ScreenMainMenu)
-            core.coreSave();
-        });
-        this.rootPane.add(mnuSave);
-
-        mnuNew.addActionListener((java.awt.event.ActionEvent evt) -> {
-            core.coreNew(true);
-        });
-        this.rootPane.add(mnuNew);
-
-        mnuOpen.addActionListener((java.awt.event.ActionEvent evt) -> {
-            core.coreOpen();
-        });
-        this.rootPane.add(mnuOpen);
-
-        mnuExit.addActionListener((java.awt.event.ActionEvent evt) -> {
-            dispose();
-        });
-        this.rootPane.add(mnuExit);
-
-        String OS = System.getProperty("os.name");
-        if (OS.startsWith("Mac")) {
-            mnuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.META_DOWN_MASK));
-            mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.META_DOWN_MASK));
-            mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.META_DOWN_MASK));
-            mnuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.META_DOWN_MASK));
-            mnuPublish.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.META_DOWN_MASK));
-        } else {
-            mnuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
-            mnuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
-            mnuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
-            mnuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
-            mnuPublish.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
-        }
-    }
-
     @Override
     public void focusGained(FocusEvent fe) {
         // Do nothing
@@ -343,8 +285,6 @@ public abstract class PFrame extends JFrame implements FocusListener {
             super.getRootPane().getContentPane().setBackground(Color.white);
             firstVisible = false;
         }
-
-        setupAccelerators();
 
         super.setVisible(visible);
 
