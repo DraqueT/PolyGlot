@@ -107,7 +107,7 @@ public final class ScrEtymRoots extends PDialog {
         core.getEtymologyManager().getWordExternalParents(word.getId()).stream().map((extPar) -> {
             JPanel miniPanel = new JPanel();
             final PTextField p = new PTextField(core, true, "");
-            PButton delButton = new PButton(core);
+            PButton delButton = new PButton(nightMode, menuFontSize);
             p.setEditable(false);
             if (extPar.getExternalLanguage().isEmpty()) {
                 p.setText(extPar.getExternalWord());
@@ -140,7 +140,7 @@ public final class ScrEtymRoots extends PDialog {
         });
 
         // create and add button to add new external parents
-        PButton addButton = new PButton(core);
+        PButton addButton = new PButton(nightMode, menuFontSize);
         addButton.setText("+");
         addButton.setToolTipText("Add new etymological parent to lineage");
         final Window parentScreen = this;
@@ -223,7 +223,7 @@ public final class ScrEtymRoots extends PDialog {
         core.getEtymologyManager().getWordParentsIds(word.getId()).forEach((parentId) -> {
             JPanel miniPanel = new JPanel();
             final PTextField textField = new PTextField(core, false, "");
-            PButton delButton = new PButton(core);
+            PButton delButton = new PButton(nightMode, menuFontSize);
 
             // this field holds the text from a parent value
             textField.setEditable(false);
@@ -253,7 +253,7 @@ public final class ScrEtymRoots extends PDialog {
         });
 
         //create new dropdown for potential additional parent to be added
-        final PComboBox<Object> newParentBox = new PComboBox<>(core);
+        final PComboBox<Object> newParentBox = new PComboBox<>(core.getPropertiesManager().getFontMenu());
         newParentBox.setToolTipText("Add new parent to word here.");
         newParentBox.setFont(core.getPropertiesManager().getFontCon());
         DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
@@ -302,21 +302,21 @@ public final class ScrEtymRoots extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblWord = new PLabel(word.getValue(), core);
-        jLabel1 = new javax.swing.JLabel();
+        lblWord = new PLabel(word.getValue(), menuFontSize);
+        jLabel1 = new PLabel("", menuFontSize);
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtEtyFamily = new javax.swing.JTextArea();
-        jLabel4 = new javax.swing.JLabel();
+        jLabel4 = new PLabel("", menuFontSize);
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Etymological Notes --");
         pnlParentsInt = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jLabel2 = new PLabel("", menuFontSize);
+        jLabel3 = new PLabel("", menuFontSize);
         pnlParentsExt = new javax.swing.JPanel();
-        jButton1 = new PButton(core);
+        btnOK = new PButton(nightMode, menuFontSize);
 
         setTitle("Etymology Setup and Graphical Tree");
         setMinimumSize(new java.awt.Dimension(0, 425));
@@ -426,10 +426,10 @@ public final class ScrEtymRoots extends PDialog {
 
         jSplitPane1.setLeftComponent(jPanel2);
 
-        jButton1.setText("OK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnOK.setText("OK");
+        btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnOKActionPerformed(evt);
             }
         });
 
@@ -446,7 +446,7 @@ public final class ScrEtymRoots extends PDialog {
             .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addComponent(btnOK))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -457,15 +457,15 @@ public final class ScrEtymRoots extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1))
+                .addComponent(btnOK))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnOKActionPerformed
 
     @Override
     public void updateAllValues(DictCore _core) {
@@ -479,7 +479,7 @@ public final class ScrEtymRoots extends PDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnOK;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

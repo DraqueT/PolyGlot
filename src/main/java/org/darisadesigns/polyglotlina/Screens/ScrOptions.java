@@ -107,7 +107,7 @@ public final class ScrOptions extends PDialog {
 
     private void setOptions() {
         ((PlainDocument) txtTextFontSize.getDocument())
-                .setDocumentFilter(new PTextFieldFilter(core));
+                .setDocumentFilter(new PTextFieldFilter(core.getRootWindow()));
 
         chkResize.setSelected(core.getOptionsManager().isAnimateWindows());
         chkNightMode.setSelected(core.getOptionsManager().isNightMode());
@@ -125,10 +125,10 @@ public final class ScrOptions extends PDialog {
 
         jPanel1 = new javax.swing.JPanel();
         chkResize = new PCheckBox(nightMode, menuFontSize);
-        jLabel1 = new PLabel("", core);
+        jLabel1 = new PLabel("", menuFontSize);
         txtTextFontSize = new javax.swing.JTextField();
         chkNightMode = new PCheckBox(nightMode, menuFontSize);
-        jLabel2 = new PLabel("", core);
+        jLabel2 = new PLabel("", menuFontSize);
         txtRevisionNumbers = new javax.swing.JTextField();
         btnOk = new PButton();
 

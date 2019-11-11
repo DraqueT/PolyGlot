@@ -228,11 +228,11 @@ public final class ScrDeclensionGenSetup extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        rdoClassic = new PRadioButton(core);
-        rdoSimplified = new PRadioButton(core);
-        jButton2 = new PButton(core);
+        rdoClassic = new PRadioButton(core.getPropertiesManager().getFontCon(), menuFontSize, nightMode);
+        rdoSimplified = new PRadioButton(core.getPropertiesManager().getFontCon(), menuFontSize, nightMode);
+        btnTestWord = new PButton(nightMode, menuFontSize);
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new PButton(core);
+        btnOK = new PButton(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -245,11 +245,11 @@ public final class ScrDeclensionGenSetup extends PDialog {
         rdoSimplified.setText("Simplified Setup");
         rdoSimplified.setToolTipText("Use the simplified autoconjugation setup. If you have only one pattern per wordform, this is easier to use.");
 
-        jButton2.setText("Test");
-        jButton2.setToolTipText("Open Conjugation/Declension Test Window");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnTestWord.setText("Test");
+        btnTestWord.setToolTipText("Open Conjugation/Declension Test Window");
+        btnTestWord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnTestWordActionPerformed(evt);
             }
         });
 
@@ -263,7 +263,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rdoSimplified)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 247, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(btnTestWord)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -271,7 +271,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(rdoClassic)
                 .addComponent(rdoSimplified)
-                .addComponent(jButton2))
+                .addComponent(btnTestWord))
         );
 
         jPanel2.setMinimumSize(new java.awt.Dimension(0, 0));
@@ -287,10 +287,10 @@ public final class ScrDeclensionGenSetup extends PDialog {
             .addGap(0, 312, Short.MAX_VALUE)
         );
 
-        jButton1.setText("OK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnOK.setText("OK");
+        btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnOKActionPerformed(evt);
             }
         });
 
@@ -302,7 +302,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addComponent(btnOK))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -311,28 +311,28 @@ public final class ScrDeclensionGenSetup extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1))
+                .addComponent(btnOK))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnOKActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnTestWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestWordActionPerformed
         if (child == null || child.isDisposed()) {
             child = new ScrTestWordConj(core, typeId, this);
             child.setVisible(true);
         } else {
             child.toFront();
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnTestWordActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnOK;
+    private javax.swing.JButton btnTestWord;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton rdoClassic;

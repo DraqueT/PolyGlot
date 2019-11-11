@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.DictCore;
+import java.awt.Font;
 import javax.swing.JTree;
 
 /**
@@ -27,8 +27,9 @@ import javax.swing.JTree;
  * @author draque.thompson
  */
 public class PTree extends JTree {
-    public PTree(DictCore _core) {
-        super.setFont(_core.getPropertiesManager().getFontLocal());
+    public PTree(Font menuFont, double fontSize, boolean nightMode) { // nightmode included for future expansion
+        //super.setFont(_core.getPropertiesManager().getFontLocal());
+        super.setFont(menuFont.deriveFont((float)fontSize));
         super.setCellRenderer(new PGTreeCellRenderer());
     }
 }

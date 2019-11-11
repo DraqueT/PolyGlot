@@ -666,6 +666,8 @@ public class JFontChooser extends JComponent
 
     protected JDialog createDialog(Component parent)
     {
+        double menuFontSize = core.getOptionsManager().getMenuFontSize();
+        boolean nightMode = core.getOptionsManager().isNightMode();
         Frame frame = parent instanceof Frame ? (Frame) parent
             : (Frame) SwingUtilities.getAncestorOfClass(Frame.class, parent);
         JDialog dialog = new JDialog(frame, ("Select Font"), true);
@@ -674,10 +676,10 @@ public class JFontChooser extends JComponent
         Action okAction = new DialogOKAction(dialog);
         Action cancelAction = new DialogCancelAction(dialog);
 
-        PButton okButton = new PButton(core);
+        PButton okButton = new PButton(nightMode, menuFontSize);
         okButton.setAction(okAction);
         okButton.setFont(DEFAULT_FONT);
-        PButton cancelButton = new PButton(core);
+        PButton cancelButton = new PButton(nightMode, menuFontSize);
         cancelButton.setAction(cancelAction);
         cancelButton.setFont(DEFAULT_FONT);
 

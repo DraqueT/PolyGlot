@@ -19,10 +19,10 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.PGTools;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -42,11 +42,9 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     private SwingWorker worker = null;
     private boolean mouseOver = false;
 
-    public PComboBox(DictCore core) {
+    public PComboBox(Font font) {
         setupListeners();
-        
-        // default font to Charis
-        super.setFont(core.getPropertiesManager().getFontMenu());
+        super.setFont(font);
     }
 
     /**

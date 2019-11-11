@@ -108,7 +108,7 @@ public final class ScrMainMenu extends PFrame {
         super(_core);
 
         core.setRootWindow(this);
-        toDoTree = new PToDoTree(core);
+        toDoTree = new PToDoTree(nightMode, menuFontSize);
         cacheLexicon = ScrLexicon.run(core, this);
 
         initComponents();
@@ -789,7 +789,7 @@ public final class ScrMainMenu extends PFrame {
         int toDoPosition = core.getOptionsManager().getToDoBarPosition();
 
         javax.swing.JScrollPane jScrollPane = new javax.swing.JScrollPane();
-        toDoTree = new PToDoTree(core);
+        toDoTree = new PToDoTree(nightMode, menuFontSize);
         toDoTree.setToolTipText("To-Do list. Right click to add, remove, or rename tasks. Tasks can contain subtasks.");
 
         toDoTree.setSelectionModel(null);
@@ -1179,14 +1179,14 @@ public final class ScrMainMenu extends PFrame {
         pnlToDo = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         pnlSideButtons = new javax.swing.JPanel();
-        btnLexicon = new PButton(core);
-        btnPos = new PButton(core);
-        btnClasses = new PButton(core);
-        btnGrammar = new PButton(core);
-        btnLogos = new PButton(core);
-        btnProp = new PButton(core);
-        btnPhonology = new PButton(core);
-        btnQuiz = new PButton(core);
+        btnLexicon = new PButton(nightMode, menuFontSize);
+        btnPos = new PButton(nightMode, menuFontSize);
+        btnClasses = new PButton(nightMode, menuFontSize);
+        btnGrammar = new PButton(nightMode, menuFontSize);
+        btnLogos = new PButton(nightMode, menuFontSize);
+        btnProp = new PButton(nightMode, menuFontSize);
+        btnPhonology = new PButton(nightMode, menuFontSize);
+        btnQuiz = new PButton(nightMode, menuFontSize);
         pnlMain = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -1196,9 +1196,9 @@ public final class ScrMainMenu extends PFrame {
                 }
             }
         };
-        jButton1 = new PButton(core);
-        jButton2 = new PButton(core);
-        jLabel1 = new PLabel("", core);
+        jButton1 = new PButton(nightMode, menuFontSize);
+        jButton2 = new PButton(nightMode, menuFontSize);
+        jLabel1 = new PLabel("", menuFontSize);
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();

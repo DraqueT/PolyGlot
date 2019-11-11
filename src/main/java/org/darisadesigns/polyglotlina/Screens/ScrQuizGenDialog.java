@@ -134,18 +134,18 @@ public final class ScrQuizGenDialog extends PFrame {
     private void initComponents() {
 
         jPanel3 = new javax.swing.JPanel();
-        btnQuiz = new PButton(core);
+        btnQuiz = new PButton(nightMode, menuFontSize);
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         txtFilterConWord = new PTextField(core, false, "-- " + core.conLabel() + " Filter --");
         txtFilterLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Filter --");
-        cmbFilterType = new PComboBox(core);
+        cmbFilterType = new PComboBox(core.getPropertiesManager().getFontMenu());
         txtFilterProc = new PTextField(core, true, "-- Pronunciation Filter --");
-        btnClearFilter = new PButton(core);
-        jLabel1 = new PLabel("", core);
-        jLabel2 = new PLabel("", core);
+        btnClearFilter = new PButton(nightMode, menuFontSize);
+        jLabel1 = new PLabel("", menuFontSize);
+        jLabel2 = new PLabel("", menuFontSize);
         txtNumQuestions = new javax.swing.JTextField();
-        jLabel3 = new PLabel("", core);
+        jLabel3 = new PLabel("", menuFontSize);
         chkDefQuiz = new PCheckBox(nightMode, menuFontSize);
         chkProcQuiz = new PCheckBox(nightMode, menuFontSize);
         chkClassQuiz = new PCheckBox(nightMode, menuFontSize);

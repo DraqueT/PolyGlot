@@ -89,7 +89,7 @@ public final class ScrDeprecatedDeclensions extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnOk = new PButton(core);
+        btnOk = new PButton(nightMode, menuFontSize);
         scrDeclensions = new javax.swing.JScrollPane();
         pnlDeclensions = new javax.swing.JPanel();
 

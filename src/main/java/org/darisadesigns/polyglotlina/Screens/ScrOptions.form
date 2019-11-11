@@ -124,7 +124,7 @@
             <Property name="text" type="java.lang.String" value="Default Font Size"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, menuFontSize)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtTextFontSize">
@@ -143,7 +143,7 @@
             <Property name="toolTipText" type="java.lang.String" value="The max number of prior versions to save in your PGD files. 0 is unlimited (can lead to large files )."/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, menuFontSize)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtRevisionNumbers">

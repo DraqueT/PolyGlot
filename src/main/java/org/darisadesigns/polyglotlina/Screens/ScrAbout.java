@@ -72,7 +72,7 @@ public class ScrAbout extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAbout = new javax.swing.JTextArea();
-        jButton1 = new PButton(core);
+        jButton1 = new PButton(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About PolyGlot");

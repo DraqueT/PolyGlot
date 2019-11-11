@@ -63,7 +63,7 @@ public final class ScrQuizScreen extends PFrame {
     public ScrQuizScreen(Quiz _quiz, DictCore _core) {
         super(_core);
         
-        lblQNode = new PLabel("", PLabel.CENTER, core);
+        lblQNode = new PLabel("", PLabel.CENTER, menuFontSize);
         initComponents();
         quiz = _quiz;
 
@@ -169,7 +169,7 @@ public final class ScrQuizScreen extends PFrame {
             gbc.weightx = 9999;
 
             question.getChoices().forEach((choiceNode) -> {
-                final PRadioButton choice = new PRadioButton(core);
+                final PRadioButton choice = new PRadioButton(core.getPropertiesManager().getFontCon(), menuFontSize, nightMode);
                 choice.setValue(choiceNode);
                 choice.setType(question.getType());
 
@@ -301,13 +301,13 @@ public final class ScrQuizScreen extends PFrame {
         grpAnswerSelection = new javax.swing.ButtonGroup();
         pnlChoices = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        lblQuestion = new PLabel("", PLabel.CENTER, core);
+        lblQuestion = new PLabel("", PLabel.CENTER, menuFontSize);
         jPanel3 = new javax.swing.JPanel();
-        btnForward = new PButton(core);
-        btnBackward = new PButton(core);
+        btnForward = new PButton(nightMode, menuFontSize);
+        btnBackward = new PButton(nightMode, menuFontSize);
         lblAnsStat = new javax.swing.JLabel();
-        lblQNum = new PLabel("", core);
-        jLabel1 = new PLabel("", core);
+        lblQNum = new PLabel("", menuFontSize);
+        jLabel1 = new PLabel("", menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PolyGlot Quiz");

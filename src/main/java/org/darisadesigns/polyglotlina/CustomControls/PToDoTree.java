@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ToDoNode;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -48,12 +47,15 @@ public final class PToDoTree extends JTree {
     private final PToDoTree selfPointer = this;
     private HashMap<TreePath, ToDoNode> nodesCheckingState;
     private AbstractCollection<TreePath> checkedPaths = new HashSet<>();
-    private final DictCore core;
     private TreePath clickedPath;
+    private final boolean nightMode;
+    private final double fontSize;
 
-    public PToDoTree(DictCore _core) {
+    public PToDoTree(boolean _nightMode, double _fontSize) {
         super();
-        core = _core;
+        nightMode = _nightMode;
+        fontSize = _fontSize;
+        
         // Disabling toggling by double-click
         this.setToggleClickCount(0);
         // Overriding cell renderer by new one defined above
@@ -97,7 +99,7 @@ public final class PToDoTree extends JTree {
                     (ToDoTreeNode)this.getModel().getRoot()
                     : (ToDoTreeNode)clickedPath.getLastPathComponent();
             
-            String toDoLabel = InfoBox.stringInputDialog("ToDo Label", "Create ToDo Label", core.getRootWindow());
+            String toDoLabel = InfoBox.stringInputDialog("ToDo Label", "Create ToDo Label", null);
             
             if (toDoLabel != null && !toDoLabel.isEmpty()) {
                 ToDoTreeNode childNode = ToDoTreeNode.createToDoTreeNode(new ToDoNode(null, toDoLabel, false));
@@ -127,7 +129,7 @@ public final class PToDoTree extends JTree {
             if (clickedPath != null) {
                 String toDoLabel = InfoBox.stringInputDialog("New Todo Label", 
                                 "What would you like the new label to be?", 
-                                core.getRootWindow());
+                                null);
                 
                 if (toDoLabel != null && !toDoLabel.isEmpty()) {
                     ToDoTreeNode clickedNode = (ToDoTreeNode)clickedPath.getLastPathComponent();
@@ -263,8 +265,6 @@ public final class PToDoTree extends JTree {
         CheckBoxCellRenderer() {
             super();      
 
-            boolean nightMode = core.getOptionsManager().isNightMode();
-            double fontSize = core.getOptionsManager().getMenuFontSize();
             this.setLayout(new BorderLayout());
             checkBox = new PCheckBox(nightMode, fontSize);
             add(checkBox, BorderLayout.CENTER);

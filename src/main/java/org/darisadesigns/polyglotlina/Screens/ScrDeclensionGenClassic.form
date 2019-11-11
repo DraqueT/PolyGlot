@@ -87,7 +87,7 @@
             <Property name="text" type="java.lang.String" value="Conjugation/Declensions"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, menuFontSize)"/>
           </AuxValues>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -115,7 +115,7 @@
                 <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstCombinedDecValueChanged"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(core, false)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(core.getPropertiesManager().getFontLocal())"/>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
               </AuxValues>
             </Component>
@@ -152,8 +152,8 @@
                       </Group>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jButton2" alignment="0" min="-2" pref="40" max="-2" attributes="0"/>
-                          <Component id="jButton1" alignment="0" min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="btnMoveRuleDown" alignment="0" min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="btnMoveRuleUp" alignment="0" min="-2" pref="40" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="pnlApplyClasses" min="-2" max="-2" attributes="0"/>
@@ -180,9 +180,9 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="pnlApplyClasses" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnMoveRuleUp" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnMoveRuleDown" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -203,7 +203,7 @@
                 <Property name="text" type="java.lang.String" value="Rules"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, menuFontSize)"/>
               </AuxValues>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane2">
@@ -230,7 +230,7 @@
                     <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstRulesValueChanged"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(core, false)"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(core.getPropertiesManager().getFontLocal())"/>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
                   </AuxValues>
                 </Component>
@@ -273,7 +273,7 @@
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton1">
+            <Component class="javax.swing.JButton" name="btnMoveRuleUp">
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x2191;"/>
                 <Property name="toolTipText" type="java.lang.String" value="Move rule up"/>
@@ -288,22 +288,22 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMoveRuleUpActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton1.setFont(core.getPropertiesManager().getFontMenu())&#xa;"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize);&#xa;btnMoveRuleUp.setFont(core.getPropertiesManager().getFontMenu())&#xa;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="btnMoveRuleDown">
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x2193;"/>
                 <Property name="toolTipText" type="java.lang.String" value="Move rule down"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMoveRuleDownActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton2.setFont(core.getPropertiesManager().getFontMenu())"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize);&#xa;btnMoveRuleDown.setFont(core.getPropertiesManager().getFontMenu())"/>
               </AuxValues>
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel3">
@@ -335,8 +335,8 @@
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jButton3" alignment="1" min="-2" pref="40" max="-2" attributes="0"/>
-                                      <Component id="jButton4" alignment="1" min="-2" pref="40" max="-2" attributes="0"/>
+                                      <Component id="btnMoveTransformUp" alignment="1" min="-2" pref="40" max="-2" attributes="0"/>
+                                      <Component id="btnMoveTransformDown" alignment="1" min="-2" pref="40" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -355,9 +355,9 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnMoveTransformUp" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnMoveTransformDown" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="sclTransforms" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -394,7 +394,7 @@
                     <Property name="text" type="java.lang.String" value="Transformations"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, core)"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, menuFontSize)"/>
                   </AuxValues>
                 </Component>
                 <Container class="javax.swing.JScrollPane" name="sclTransforms">
@@ -442,28 +442,28 @@
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PAddRemoveButton(&quot;+&quot;)"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JButton" name="jButton3">
+                <Component class="javax.swing.JButton" name="btnMoveTransformUp">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x2191;"/>
                     <Property name="toolTipText" type="java.lang.String" value="Move Transform Up"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMoveTransformUpActionPerformed"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton3.setFont(core.getPropertiesManager().getFontMenu())"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize);&#xa;btnMoveTransformUp.setFont(core.getPropertiesManager().getFontMenu())"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JButton" name="jButton4">
+                <Component class="javax.swing.JButton" name="btnMoveTransformDown">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x2193;"/>
                     <Property name="toolTipText" type="java.lang.String" value="Move TransformDown"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMoveTransformDownActionPerformed"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(core);&#xa;jButton4.setFont(core.getPropertiesManager().getFontMenu())"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize);&#xa;btnMoveTransformDown.setFont(core.getPropertiesManager().getFontMenu())"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnDeleteTransform">

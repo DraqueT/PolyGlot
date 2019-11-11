@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.DictCore;
+//import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Font;
 import javax.swing.JList;
 
@@ -29,40 +29,13 @@ import javax.swing.JList;
  * @param <N>
  */
 public class PList<N> extends JList<N> {
-    private DictCore core;
-    private boolean isConFont;
-    private boolean ignoreRepaint = false;
     
-    public PList(DictCore _core, boolean _isConFont) {        
-        core = _core;
-        isConFont = _isConFont;
-    }
+//    public PList(DictCore _core, boolean _isConFont) {        
+//        core = _core;
+//        isConFont = _isConFont;
+//    }
     
-    public void setCore(DictCore _core) {
-        core = _core;
-    }
-
-    @Override
-    public void repaint() {
-        if (ignoreRepaint) {
-            return;
-        }
-        
-        if (core != null) { // initial paint happens before initialization complete
-            Font testFont = core.getPropertiesManager().getFontCon();
-            ignoreRepaint = true;
-            if (isConFont) {
-                setFont(testFont);
-            } else {
-                setFont(core.getPropertiesManager().getFontLocal());
-            }
-            ignoreRepaint = false;
-        }
-        
-        super.repaint(); 
-    }
-    
-    public void setConFont(boolean _isConFont) {
-        isConFont = _isConFont;
+    public PList(Font _font) {
+        setFont(_font);
     }
 }

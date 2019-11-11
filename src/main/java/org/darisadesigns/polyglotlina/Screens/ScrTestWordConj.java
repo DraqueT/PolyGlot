@@ -53,7 +53,7 @@ public final class ScrTestWordConj extends PDialog {
         initComponents();
         
         classes.setTypeId(_typeId);
-        ((PClassCheckboxPanel)pnlClasses).setRule(classes);
+        ((PClassCheckboxPanel)pnlClasses).setRule(classes, core);
         pnlClasses.setToolTipText("Set any classes for test word here.");
         pnlClasses.setEnabled(true);
         this.setAlwaysOnTop(true);

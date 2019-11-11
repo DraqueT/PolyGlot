@@ -58,7 +58,7 @@ public final class ScrReversion extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new PButton(core);
+        jButton1 = new PButton(nightMode, menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
         lstReversions = new javax.swing.JList<>();
 

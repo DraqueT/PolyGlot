@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 - 2019, Draque Thompson
+ * Copyright (c) 2017 - 2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -47,9 +46,8 @@ public class PButton extends JButton implements MouseListener {
         setupListeners();
     }
     
-    public PButton(DictCore _core) {
-        float fontSize = (float)_core.getOptionsManager().getMenuFontSize();
-        super.setFont(PGTUtil.MENU_FONT.deriveFont(fontSize));        
+    public PButton(boolean nightMode, double fontSize) { // nightmode included for future progress
+        super.setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));        
         setupListeners();
     }
     
