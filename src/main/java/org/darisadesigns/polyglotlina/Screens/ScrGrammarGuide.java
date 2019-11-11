@@ -247,10 +247,10 @@ public final class ScrGrammarGuide extends PFrame {
         txtName = new PTextField(core, true, "-- Name --");
         jPanel3 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        cmbFonts = new PComboBox(core);
+        cmbFonts = new PComboBox(core.getPropertiesManager().getFontMenu());
         txtFontSize = new javax.swing.JTextField();
-        cmbFontColor = new PComboBox(core);
-        btnApply = new PButton(core);
+        cmbFontColor = new PComboBox(core.getPropertiesManager().getFontMenu());
+        btnApply = new PButton(nightMode, menuFontSize);
         panSection = new javax.swing.JScrollPane();
         txtSection = new PGrammarPane(core);
         jPanel4 = new javax.swing.JPanel();
@@ -262,12 +262,12 @@ public final class ScrGrammarGuide extends PFrame {
         txtTimer = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        treChapList = new PTree(core);
+        treChapList = new PTree(core.getPropertiesManager().getFontLocal(), menuFontSize, nightMode);
         txtSearch = new PTextField(core, true, "-- Search --");
-        jLabel1 = new PLabel("", core);
+        jLabel1 = new PLabel("", menuFontSize);
         btnAddSection = new PAddRemoveButton("+");
         btnDelete = new PAddRemoveButton("-");
-        btnAddChapter = new PButton(core);
+        btnAddChapter = new PButton(nightMode, menuFontSize);
         btnMoveNodeDown = new PButton();
         btnMoveNodeUp = new PButton();
 

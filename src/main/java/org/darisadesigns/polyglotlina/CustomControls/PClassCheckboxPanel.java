@@ -39,7 +39,6 @@ import javax.swing.JPanel;
  * @author DThompson
  */
 public class PClassCheckboxPanel extends JPanel {
-    private final DictCore core;
     private DeclensionGenRule rule = new DeclensionGenRule();
     private final List<PCheckBox> applyClassesCheckboxes = new ArrayList<>();
     private final TypeNode type;
@@ -47,21 +46,24 @@ public class PClassCheckboxPanel extends JPanel {
     private final PClassCheckboxPanel parent = this;
     private PCheckBox allCheckBox = null;
     private final boolean includeAll;
+    private final boolean nightMode;
+    private final double fontSize;
     
     /**
      * 
-     * @param _core
+     * @param core
      * @param _type
      * @param _includeAll Controls whether "All" checkbox is included
      */
-    public PClassCheckboxPanel(DictCore _core, TypeNode _type, boolean _includeAll) {
-        core = _core;
+    public PClassCheckboxPanel(DictCore core, TypeNode _type, boolean _includeAll) {
         type = _type;
         includeAll = _includeAll;
-        this.init();
+        nightMode = core.getOptionsManager().isNightMode();
+        fontSize = core.getOptionsManager().getMenuFontSize();
+        this.init(core);
     }
     
-    private void init() {
+    private void init(DictCore core) {
         // this should not be displayed if there are no classes for this type
         if (rule != null && core.getWordClassCollection().getClassesForType(type.getId()).isEmpty()) {
             this.setVisible(false);
@@ -78,12 +80,12 @@ public class PClassCheckboxPanel extends JPanel {
             gbc.gridy = 0;
             gbc.anchor = GridBagConstraints.NORTH;
 
-            PLabel label = new PLabel("Match by Class Value", core);
+            PLabel label = new PLabel("Match by Class Value", core.getPropertiesManager().getFontSize());
             label.setSize(30, 20);
             label.setVerticalAlignment(javax.swing.SwingConstants.TOP);
             label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             this.add(label, gbc);
-            this.createCheckBoxes();
+            this.createCheckBoxes(core);
             this.createBottomSpacer();
             // below is sloppy, but checkboxes all paint on top of one another without this for some reason...
             this.setVisible(false);
@@ -101,7 +103,7 @@ public class PClassCheckboxPanel extends JPanel {
         this.setPreferredSize(new Dimension(150, gbc.gridy * 20));
     }
     
-    private void createCheckBoxes() {
+    private void createCheckBoxes(DictCore core) {
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         
@@ -121,8 +123,6 @@ public class PClassCheckboxPanel extends JPanel {
                     -1, -1);
         } else {
             // if not used, set to dummy value which is not in menu
-            boolean nightMode = core.getOptionsManager().isNightMode();
-            double fontSize = core.getOptionsManager().getMenuFontSize();
             allCheckBox = new PCheckBox(nightMode, fontSize);
         }
 
@@ -139,7 +139,7 @@ public class PClassCheckboxPanel extends JPanel {
                                     PCheckBox thisBox = (PCheckBox)e.getSource();
                                     if (thisBox.isSelected()) {
                                         rule.addClassToFilterList(thisClassId, classValueId);
-                                        init();
+                                        init(core);
                                     } else {
                                         rule.removeClassFromFilterList(thisClassId, classValueId);
                                     }
@@ -158,8 +158,6 @@ public class PClassCheckboxPanel extends JPanel {
     private void addCheckBox(String title, String toolTip, ItemListener listener, int classId, int valueId) {
         gbc.weightx = 1;
         gbc.gridx = 0;
-        boolean nightMode = core.getOptionsManager().isNightMode();
-        double fontSize = core.getOptionsManager().getMenuFontSize();
         
         final PCheckBox check = new PCheckBox(nightMode, fontSize) {
             @Override
@@ -207,9 +205,9 @@ public class PClassCheckboxPanel extends JPanel {
         });
     }
     
-    public void setRule(DeclensionGenRule _rule) {
+    public void setRule(DeclensionGenRule _rule, DictCore core) {
         this.rule = _rule;
-        this.init();
+        this.init(core);
     }
     
     @Override

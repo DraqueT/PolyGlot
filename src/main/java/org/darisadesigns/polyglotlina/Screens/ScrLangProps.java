@@ -264,7 +264,7 @@ public class ScrLangProps extends PFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        btnChangeFont = new PButton(core);
+        btnChangeFont = new PButton(nightMode, menuFontSize);
         txtFont = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         chkTypesMandatory = new PCheckBox(nightMode, menuFontSize);
@@ -274,17 +274,17 @@ public class ScrLangProps extends PFrame {
         chkIgnoreCase = new PCheckBox(nightMode, menuFontSize);
         chkDisableProcRegex = new PCheckBox(nightMode, menuFontSize);
         chkEnforceRTL = new PCheckBox(nightMode, menuFontSize);
-        jLabel2 = new PLabel("", core);
+        jLabel2 = new PLabel("", menuFontSize);
         chkOverrideRegexFont = new PCheckBox(nightMode, menuFontSize);
         chkUseLocalWordLex = new PCheckBox(nightMode, menuFontSize);
         jPanel4 = new javax.swing.JPanel();
-        jLabel1 = new PLabel("", core);
-        jLabel3 = new PLabel("", core);
+        jLabel1 = new PLabel("", menuFontSize);
+        jLabel3 = new PLabel("", menuFontSize);
         txtKerning = new javax.swing.JFormattedTextField(decimalFormat);
-        jButton1 = new PButton(core);
+        btnFontLocal = new PButton(nightMode, menuFontSize);
         txtLocalFont = new javax.swing.JTextField();
         txtAlphaOrder = new PTextField(core, false, "-- Alphabetical Order --");
-        btnFontRefresh = new PButton(core);
+        btnFontRefresh = new PButton(nightMode, menuFontSize);
         jPanel5 = new javax.swing.JPanel();
         txtLangName = new PTextField(core, true, "-- Language Name --");
         txtLocalLanguage = new PTextField(core, true, "-- Local Language --");
@@ -432,10 +432,10 @@ public class ScrLangProps extends PFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        jButton1.setText("Local Font");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnFontLocal.setText("Local Font");
+        btnFontLocal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnFontLocalActionPerformed(evt);
             }
         });
 
@@ -476,7 +476,7 @@ public class ScrLangProps extends PFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btnFontRefresh, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnFontLocal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtLocalFont)))
                 .addContainerGap())
@@ -489,7 +489,7 @@ public class ScrLangProps extends PFrame {
                     .addComponent(txtFont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btnFontLocal)
                     .addComponent(txtLocalFont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnFontRefresh)
@@ -565,9 +565,9 @@ public class ScrLangProps extends PFrame {
         testRTLWarning();
     }//GEN-LAST:event_chkEnforceRTLActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnFontLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFontLocalActionPerformed
         setLocalFont(fontDialog());
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnFontLocalActionPerformed
 
     private void txtAlphaOrderFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAlphaOrderFocusLost
         checkAlphaContainsRegexCharacters();
@@ -594,6 +594,7 @@ public class ScrLangProps extends PFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChangeFont;
+    private javax.swing.JButton btnFontLocal;
     private javax.swing.JButton btnFontRefresh;
     private javax.swing.JCheckBox chkDisableProcRegex;
     private javax.swing.JCheckBox chkEnforceRTL;
@@ -604,7 +605,6 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JCheckBox chkTypesMandatory;
     private javax.swing.JCheckBox chkUseLocalWordLex;
     private javax.swing.JCheckBox chkWordUniqueness;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

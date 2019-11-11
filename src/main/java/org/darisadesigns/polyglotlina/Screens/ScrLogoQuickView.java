@@ -299,10 +299,10 @@ public final class ScrLogoQuickView extends PFrame {
 
         lblLogoPic = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstLogos = new PList(core, true);
+        lstLogos = new PList(core.getPropertiesManager().getFontCon());
         btnAdd = new PAddRemoveButton("+");
         btnDel = new PAddRemoveButton("-");
-        jButton1 = new PButton(core);
+        btnOK = new PButton(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -335,10 +335,10 @@ public final class ScrLogoQuickView extends PFrame {
             }
         });
 
-        jButton1.setText("OK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnOK.setText("OK");
+        btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnOKActionPerformed(evt);
             }
         });
 
@@ -358,7 +358,7 @@ public final class ScrLogoQuickView extends PFrame {
                     .addComponent(lblLogoPic, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(btnOK)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -373,7 +373,7 @@ public final class ScrLogoQuickView extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(btnOK, javax.swing.GroupLayout.Alignment.TRAILING)))
         );
 
         pack();
@@ -403,14 +403,14 @@ public final class ScrLogoQuickView extends PFrame {
         delLogo();
     }//GEN-LAST:event_btnDelActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         if (logoParent != null) {
             logoParent.addRadFromQuickview();
         }
         
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnOKActionPerformed
 
     /**
      * selects given logograph if it exists in the current list
@@ -445,7 +445,7 @@ public final class ScrLogoQuickView extends PFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDel;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnOK;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblLogoPic;
     private javax.swing.JList<LogoNode> lstLogos;

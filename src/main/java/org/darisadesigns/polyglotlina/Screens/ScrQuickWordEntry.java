@@ -322,7 +322,7 @@ public final class ScrQuickWordEntry extends PDialog {
                 pnlClasses.add(textField, gbc);
                 classComboMap.put(curProp.getId(), textField); // dropbox mapped to related class ID.
             } else {
-                final PComboBox<Object> classBox = new PComboBox<>(core);
+                final PComboBox<Object> classBox = new PComboBox<>(core.getPropertiesManager().getFontMenu());
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 comboModel.addElement("-- " + curProp.getValue() + " --");
@@ -368,13 +368,13 @@ public final class ScrQuickWordEntry extends PDialog {
         }
         if (propList.isEmpty()) {
             // must include at least one item (even a dummy) to resize for some reason
-            PComboBox blank = new PComboBox(core);
+            PComboBox blank = new PComboBox(core.getPropertiesManager().getFontMenu());
             blank.setEnabled(false);
             pnlClasses.add(blank, gbc);
             pnlClasses.setPreferredSize(new Dimension(9999, 0));
         } else {
             pnlClasses.setMaximumSize(new Dimension(99999, 99999));
-            pnlClasses.setPreferredSize(new Dimension(9999, propList.size() * new PComboBox(core).getPreferredSize().height));
+            pnlClasses.setPreferredSize(new Dimension(9999, propList.size() * new PComboBox(core.getPropertiesManager().getFontMenu()).getPreferredSize().height));
         }
 
         pnlClasses.repaint();
@@ -398,12 +398,12 @@ public final class ScrQuickWordEntry extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, "-- " + core.conLabel() + " word --");
         txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " word --");
-        cmbType = new PComboBox(core);
+        cmbType = new PComboBox(core.getPropertiesManager().getFontMenu());
         txtProc = new PTextField(core, true, "-- Pronunciation --");
         pnlClasses = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDefinition = new PTextPane(core, true, "-- Definition --");
-        btnDone = new PButton(core);
+        btnDone = new PButton(nightMode, menuFontSize);
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -412,7 +412,7 @@ public final class ScrQuickWordEntry extends PDialog {
         setMinimumSize(new java.awt.Dimension(335, 406));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(1));
+        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jPanel1.setMinimumSize(new java.awt.Dimension(265, 57));
 
         chkLocal.setSelected(true);
@@ -492,7 +492,7 @@ public final class ScrQuickWordEntry extends PDialog {
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(1));
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         cmbType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbType.addActionListener(new java.awt.event.ActionListener() {

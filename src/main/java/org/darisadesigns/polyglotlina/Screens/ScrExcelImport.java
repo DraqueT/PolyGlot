@@ -74,17 +74,17 @@ public class ScrExcelImport extends PDialog {
     private void initComponents() {
 
         txtFileName = new javax.swing.JTextField();
-        jLabel1 = new PLabel("", core);
-        btnBrowse = new PButton(core);
+        jLabel1 = new PLabel("", menuFontSize);
+        btnBrowse = new PButton(nightMode, menuFontSize);
         jPanel1 = new javax.swing.JPanel();
         chkFirstLabels = new PCheckBox(nightMode, menuFontSize);
-        jLabel2 = new PLabel("", core);
-        jLabel3 = new PLabel("", core);
-        jLabel4 = new PLabel("", core);
-        jLabel5 = new PLabel("", core);
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new PLabel("", core);
-        jLabel8 = new javax.swing.JLabel();
+        jLabel2 = new PLabel("", menuFontSize);
+        jLabel3 = new PLabel("", menuFontSize);
+        jLabel4 = new PLabel("", menuFontSize);
+        jLabel5 = new PLabel("", menuFontSize);
+        jLabel6 = new PLabel("", menuFontSize);
+        jLabel7 = new PLabel("", menuFontSize);
+        jLabel8 = new PLabel("", menuFontSize);
         jLabel9 = new javax.swing.JLabel();
         txtConWord = new javax.swing.JTextField();
         txtLocalWord = new javax.swing.JTextField();
@@ -92,16 +92,16 @@ public class ScrExcelImport extends PDialog {
         txtDefinition = new javax.swing.JTextField();
         txtPronunciation = new javax.swing.JTextField();
         txtClass = new javax.swing.JTextField();
-        jLabel11 = new PLabel("", core);
+        jLabel11 = new PLabel("", menuFontSize);
         txtExcelSheet = new javax.swing.JTextField();
-        jLabel10 = new PLabel("", core);
-        cmbPreferences = new PComboBox<Delimiter>(core);
+        jLabel10 = new PLabel("", menuFontSize);
+        cmbPreferences = new PComboBox<Delimiter>(core.getPropertiesManager().getFontMenu());
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        jLabel12 = new javax.swing.JLabel();
-        cmbQuoteChar = new javax.swing.JComboBox<>();
-        btnImport = new PButton(core);
-        btnCancel = new PButton(core);
+        jLabel12 = new PLabel("", menuFontSize);
+        cmbQuoteChar = new PComboBox<>(core.getPropertiesManager().getFontMenu());
+        btnImport = new PButton(nightMode, menuFontSize);
+        btnCancel = new PButton(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import From External Format");

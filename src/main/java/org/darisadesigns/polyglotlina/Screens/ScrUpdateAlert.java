@@ -286,7 +286,7 @@ public class ScrUpdateAlert extends PDialog {
 
             buttonMap.put(nameNode.getTextContent(), linkNode.getTextContent());
 
-            PButton newButton = new PButton(core);
+            PButton newButton = new PButton(nightMode, menuFontSize);
             newButton.addActionListener((ActionEvent e) -> {
                 JButton thisButton = (JButton) e.getSource();
                 String link = buttonMap.get(thisButton.getText());
@@ -349,7 +349,7 @@ public class ScrUpdateAlert extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        txtVersion = new PLabel("", core);
+        txtVersion = new PLabel("", core.getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);

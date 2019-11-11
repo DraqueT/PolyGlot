@@ -139,7 +139,7 @@ public class PropertiesManager {
     
     /**
      * Gets unicode charis font. Defaults/hard coded to size 12
-     *
+     * 
      * @return
      */
     public Font getFontMenu() {

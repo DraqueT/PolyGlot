@@ -722,26 +722,26 @@ public final class ScrPhonology extends PFrame {
     private void initComponents() {
 
         pnlRomanization = new javax.swing.JPanel();
-        jLabel2 = new PLabel("", core);
+        jLabel2 = new PLabel("", menuFontSize);
         btnAddRom = new PAddRemoveButton("+");
         btnDelRom = new PAddRemoveButton("-");
-        btnUpRom = new PButton(core);
+        btnUpRom = new PButton(nightMode, menuFontSize);
         jScrollPane3 = new javax.swing.JScrollPane();
         tblRom = new javax.swing.JTable();
-        btnDownRom = new PButton(core);
+        btnDownRom = new PButton(nightMode, menuFontSize);
         chkEnableRom = new PCheckBox(nightMode, menuFontSize);
         chkRomRecurse = new PCheckBox(nightMode, menuFontSize);
         pnlOrthography = new javax.swing.JPanel();
-        jLabel1 = new PLabel("", core);
+        jLabel1 = new PLabel("", menuFontSize);
         btnAddProc = new PAddRemoveButton("+");
         btnDelProc = new PAddRemoveButton("-");
-        btnUpProc = new PButton(core);
+        btnUpProc = new PButton(nightMode, menuFontSize);
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProcs = new javax.swing.JTable();
-        btnDownProc = new PButton(core);
+        btnDownProc = new PButton(nightMode, menuFontSize);
         chkPhonRecurse = new PCheckBox(nightMode, menuFontSize);
         jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new PLabel("", core);
+        jLabel3 = new PLabel("", menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRep = new javax.swing.JTable();
         btnAddCharRep = new PAddRemoveButton("+");

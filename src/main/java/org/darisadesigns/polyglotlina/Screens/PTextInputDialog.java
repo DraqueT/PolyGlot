@@ -142,8 +142,8 @@ public final class PTextInputDialog extends PDialog {
 
         txtDialog = new javax.swing.JLabel();
         pnlTextFields = new javax.swing.JPanel();
-        jButton1 = new PButton(core);
-        jButton2 = new PButton(core);
+        jButton1 = new PButton(nightMode, menuFontSize);
+        jButton2 = new PButton(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(416, 2));

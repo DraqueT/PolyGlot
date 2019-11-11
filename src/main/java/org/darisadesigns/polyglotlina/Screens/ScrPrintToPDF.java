@@ -75,10 +75,10 @@ public class ScrPrintToPDF extends PDialog {
 
         jPanel1 = new javax.swing.JPanel();
         txtSavePath = new PTextField(core, true, "-- Save to File --");
-        btnSelectSavePath = new PButton(core);
+        btnSelectSavePath = new PButton(nightMode, menuFontSize);
         txtImageLocation = new PTextField(core, true, "-- Cover Image --");
-        btnSelectImagePath = new PButton(core);
-        jLabel4 = new PLabel("", core);
+        btnSelectImagePath = new PButton(nightMode, menuFontSize);
+        jLabel4 = new PLabel("", menuFontSize);
         jPanel2 = new javax.swing.JPanel();
         chkLocalCon = new PCheckBox(nightMode, menuFontSize);
         chkConLocal = new PCheckBox(nightMode, menuFontSize);
@@ -93,8 +93,8 @@ public class ScrPrintToPDF extends PDialog {
         txtSubtitle = new PTextField(core, true, "-- Title --");
         jScrollPane2 = new javax.swing.JScrollPane();
         txtForeword = new PTextPane(core, true, "-- Author Foreword --");
-        btnPrint = new PButton(core);
-        btnCancel = new PButton(core);
+        btnPrint = new PButton(nightMode, menuFontSize);
+        btnCancel = new PButton(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PDF Print Options");

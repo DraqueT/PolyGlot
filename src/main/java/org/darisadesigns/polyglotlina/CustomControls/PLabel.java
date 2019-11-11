@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 import java.awt.Dimension;
@@ -42,19 +41,16 @@ import javax.swing.JLabel;
 public final class PLabel extends JLabel {
     private Graphics g;
     private boolean resize = false;
-    private final DictCore core;
 
-    public PLabel(String text, DictCore _core) {
+    public PLabel(String text, double fontSize) {
         super(text);
-        core = _core;
-        setFont(getFont().deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+        setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));
         init();
     }
     
-    public PLabel(String text, int alignment, DictCore _core) {
+    public PLabel(String text, int alignment, double fontSize) {
         super(text, alignment);
-        core = _core;
-        setFont(getFont().deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+        setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));
         init();
     }
 

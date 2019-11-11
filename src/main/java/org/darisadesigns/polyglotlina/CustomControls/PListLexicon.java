@@ -19,7 +19,8 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.DictCore;
+
+import java.awt.Font;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.ConWordDisplay;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 
@@ -28,8 +29,8 @@ import org.darisadesigns.polyglotlina.Nodes.ConWord;
  * @author draque
  */
 public class PListLexicon extends PList<ConWordDisplay> {
-    public PListLexicon(DictCore _core, boolean _isConFont) {        
-        super(_core, _isConFont);
+    public PListLexicon(Font font) {
+        super(font);
     }
     
     @Override

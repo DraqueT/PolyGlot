@@ -67,7 +67,7 @@ public class ScrIPARefChart extends PFrame {
         jPanel4 = new javax.swing.JPanel();
         lblOtherSymbols = new javax.swing.JLabel();
         txtIPAChars = new javax.swing.JTextField();
-        cmbIpaLibSelect = new PComboBox<IPALibrary>(core);
+        cmbIpaLibSelect = new PComboBox<IPALibrary>(core.getPropertiesManager().getFontMenu());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("IPA Pronunciation/Character Guide");

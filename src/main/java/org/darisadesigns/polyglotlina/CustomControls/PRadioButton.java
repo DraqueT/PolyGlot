@@ -19,12 +19,13 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.DictCore;
+import java.awt.Font;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.DictNode;
 import org.darisadesigns.polyglotlina.QuizEngine.QuizQuestion.QuestionType;
 import javax.swing.JRadioButton;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  * 
@@ -33,11 +34,15 @@ import javax.swing.JRadioButton;
 public final class PRadioButton extends JRadioButton {
     private DictNode value = null;
     private QuestionType type;
-    private final DictCore core;
+    private final Font conFont;
+    private final double menuFontSize;
+    private final boolean nightMode;
 
-    public PRadioButton(DictCore _core) {
-        core = _core;
-        this.setFont(core.getPropertiesManager().getFontMenu());
+    public PRadioButton(Font _conFont, double _menuFontSize, boolean _nightMode) { // nightmode left for future enhancements
+        conFont = _conFont;
+        menuFontSize = _menuFontSize;
+        nightMode = _nightMode;
+        this.setFont(PGTUtil.MENU_FONT.deriveFont((float)menuFontSize));
     }
     
     /**
@@ -48,7 +53,7 @@ public final class PRadioButton extends JRadioButton {
     }
 
     /**
-     * @param value the value to set
+     * @param _value the value to set
      */
     public void setValue(DictNode _value) {
         this.value = _value;
@@ -61,7 +66,7 @@ public final class PRadioButton extends JRadioButton {
         if (!(type == null || value == null)) {
             switch (type) {
                 case ConEquiv:
-                    setFont(core.getPropertiesManager().getFontCon());
+                    setFont(conFont);
                 case PoS:
                 case Classes:
                     ret = value.getValue();
@@ -89,7 +94,7 @@ public final class PRadioButton extends JRadioButton {
     }
 
     /**
-     * @param type the type to set
+     * @param _type the type to set
      */
     public void setType(QuestionType _type) {
         this.type = _type;

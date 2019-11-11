@@ -259,7 +259,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         curPopulating = true;
 
         DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
-        ((PClassCheckboxPanel)pnlApplyClasses).setRule(curRule);
+        ((PClassCheckboxPanel)pnlApplyClasses).setRule(curRule, core);
         
         if (curRule == null || lstRules.getSelectedIndices().length > 1) {
             txtRuleName.setText("");
@@ -784,7 +784,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         txtRuleRegex.setText(".*");
         populateTransforms();
         enableTransformEditing(true);
-        ((PClassCheckboxPanel)pnlApplyClasses).setRule(newRule);
+        ((PClassCheckboxPanel)pnlApplyClasses).setRule(newRule, core);
     }
 
     /**
@@ -965,34 +965,34 @@ public final class ScrDeclensionGenClassic extends PDialog {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new PLabel("", core);
+        jLabel1 = new PLabel("", menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstCombinedDec = new PList(core, false);
+        lstCombinedDec = new PList(core.getPropertiesManager().getFontLocal());
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new PLabel("", core);
+        jLabel2 = new PLabel("", menuFontSize);
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstRules = new PList(core, false);
+        lstRules = new PList(core.getPropertiesManager().getFontLocal());
         btnAddRule = new PAddRemoveButton("+");
         btnDeleteRule = new PAddRemoveButton("-");
         chkDisableWordform = new PCheckBox(nightMode, menuFontSize);
-        jButton1 = new PButton(core);
-        jButton1.setFont(core.getPropertiesManager().getFontMenu())
+        btnMoveRuleUp = new PButton(nightMode, menuFontSize);
+        btnMoveRuleUp.setFont(core.getPropertiesManager().getFontMenu())
         ;
-        jButton2 = new PButton(core);
-        jButton2.setFont(core.getPropertiesManager().getFontMenu());
+        btnMoveRuleDown = new PButton(nightMode, menuFontSize);
+        btnMoveRuleDown.setFont(core.getPropertiesManager().getFontMenu());
         jPanel3 = new javax.swing.JPanel();
         txtRuleName = new PTextField(core, true, "-- Name --");
         txtRuleRegex = new PTextField(core,
             core.getPropertiesManager().isOverrideRegexFont(),
             "-- Filter Regex --");
-        jLabel3 = new PLabel("", core);
+        jLabel3 = new PLabel("", menuFontSize);
         sclTransforms = new javax.swing.JScrollPane();
         tblTransforms = new PTable(core);
         btnAddTransform = new PAddRemoveButton("+");
-        jButton3 = new PButton(core);
-        jButton3.setFont(core.getPropertiesManager().getFontMenu());
-        jButton4 = new PButton(core);
-        jButton4.setFont(core.getPropertiesManager().getFontMenu());
+        btnMoveTransformUp = new PButton(nightMode, menuFontSize);
+        btnMoveTransformUp.setFont(core.getPropertiesManager().getFontMenu());
+        btnMoveTransformDown = new PButton(nightMode, menuFontSize);
+        btnMoveTransformDown.setFont(core.getPropertiesManager().getFontMenu());
         btnDeleteTransform = new PAddRemoveButton("-");
         pnlApplyClasses = new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId), true);
 
@@ -1060,22 +1060,22 @@ public final class ScrDeclensionGenClassic extends PDialog {
             }
         });
 
-        jButton1.setText("↑");
-        jButton1.setToolTipText("Move rule up");
-        jButton1.setMaximumSize(new java.awt.Dimension(40, 29));
-        jButton1.setMinimumSize(new java.awt.Dimension(40, 29));
-        jButton1.setPreferredSize(new java.awt.Dimension(40, 29));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnMoveRuleUp.setText("↑");
+        btnMoveRuleUp.setToolTipText("Move rule up");
+        btnMoveRuleUp.setMaximumSize(new java.awt.Dimension(40, 29));
+        btnMoveRuleUp.setMinimumSize(new java.awt.Dimension(40, 29));
+        btnMoveRuleUp.setPreferredSize(new java.awt.Dimension(40, 29));
+        btnMoveRuleUp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnMoveRuleUpActionPerformed(evt);
             }
         });
 
-        jButton2.setText("↓");
-        jButton2.setToolTipText("Move rule down");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnMoveRuleDown.setText("↓");
+        btnMoveRuleDown.setToolTipText("Move rule down");
+        btnMoveRuleDown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnMoveRuleDownActionPerformed(evt);
             }
         });
 
@@ -1116,19 +1116,19 @@ public final class ScrDeclensionGenClassic extends PDialog {
             }
         });
 
-        jButton3.setText("↑");
-        jButton3.setToolTipText("Move Transform Up");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnMoveTransformUp.setText("↑");
+        btnMoveTransformUp.setToolTipText("Move Transform Up");
+        btnMoveTransformUp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnMoveTransformUpActionPerformed(evt);
             }
         });
 
-        jButton4.setText("↓");
-        jButton4.setToolTipText("Move TransformDown");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnMoveTransformDown.setText("↓");
+        btnMoveTransformDown.setToolTipText("Move TransformDown");
+        btnMoveTransformDown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnMoveTransformDownActionPerformed(evt);
             }
         });
 
@@ -1160,8 +1160,8 @@ public final class ScrDeclensionGenClassic extends PDialog {
                             .addComponent(sclTransforms, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnMoveTransformUp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnMoveTransformDown, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -1175,9 +1175,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton3)
+                        .addComponent(btnMoveTransformUp)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4))
+                        .addComponent(btnMoveTransformDown))
                     .addComponent(sclTransforms, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1215,8 +1215,8 @@ public final class ScrDeclensionGenClassic extends PDialog {
                     .addComponent(chkDisableWordform))
                 .addGap(3, 3, 3)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnMoveRuleDown, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMoveRuleUp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlApplyClasses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1239,9 +1239,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pnlApplyClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnMoveRuleUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton2)))))
+                                .addComponent(btnMoveRuleDown)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddRule)
@@ -1358,32 +1358,32 @@ public final class ScrDeclensionGenClassic extends PDialog {
                 && lstRules.getSelectedIndex() != -1);
     }//GEN-LAST:event_chkDisableWordformActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnMoveRuleUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveRuleUpActionPerformed
         moveRuleUp();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnMoveRuleUpActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnMoveRuleDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveRuleDownActionPerformed
         moveRuleDown();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnMoveRuleDownActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnMoveTransformUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveTransformUpActionPerformed
         moveTransformUp();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnMoveTransformUpActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnMoveTransformDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveTransformDownActionPerformed
         moveTransformDown();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnMoveTransformDownActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddRule;
     private javax.swing.JButton btnAddTransform;
     private javax.swing.JButton btnDeleteRule;
     private javax.swing.JButton btnDeleteTransform;
+    private javax.swing.JButton btnMoveRuleDown;
+    private javax.swing.JButton btnMoveRuleUp;
+    private javax.swing.JButton btnMoveTransformDown;
+    private javax.swing.JButton btnMoveTransformUp;
     private javax.swing.JCheckBox chkDisableWordform;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

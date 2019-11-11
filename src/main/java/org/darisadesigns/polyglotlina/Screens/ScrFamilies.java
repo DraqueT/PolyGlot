@@ -430,12 +430,12 @@ public final class ScrFamilies extends PFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        treFam = new PTree(core);
+        treFam = new PTree(core.getPropertiesManager().getFontLocal(), menuFontSize, nightMode);
         jPanel1 = new javax.swing.JPanel();
         chkInclSubFam = new PCheckBox(nightMode, menuFontSize);
         jScrollPane3 = new javax.swing.JScrollPane();
         lstWords = new javax.swing.JList<>();
-        jLabel1 = new PLabel("", core);
+        jLabel1 = new PLabel("", menuFontSize);
         btnAddWord = new PAddRemoveButton("+");
         btnDelWord = new PAddRemoveButton("-");
         txtFamName = new PTextField(core, true, "-- Name --");

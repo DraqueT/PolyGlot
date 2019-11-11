@@ -194,12 +194,12 @@ public class ScrDeclensionGenSimple extends PDialog {
         jLabel1 = new javax.swing.JLabel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstCombinedDec = new PList(core, false);
+        lstCombinedDec = new PList(core.getPropertiesManager().getFontLocal());
         jPanel2 = new javax.swing.JPanel();
         txtRegex = new PTextField(core, core.getPropertiesManager().isOverrideRegexFont(), "Replacement Regex");
         txtReplace = new PTextField(core, core.getPropertiesManager().isOverrideRegexFont(), "Replacement Text");
-        btnPrefix = new PButton(core);
-        btnPostfix = new PButton(core);
+        btnPrefix = new PButton(nightMode, menuFontSize);
+        btnPostfix = new PButton(nightMode, menuFontSize);
         chkDisableForm = new PCheckBox(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);

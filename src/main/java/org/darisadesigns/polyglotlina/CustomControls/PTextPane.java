@@ -32,6 +32,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -40,6 +41,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import javax.swing.InputMap;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -112,17 +114,17 @@ public final class PTextPane extends JTextPane {
                 ClipboardHandler board = new ClipboardHandler();
                 board.setClipboardContents(ClipboardHandler.getClipboardText());
                 super.paste();
-            } catch (Exception e) {
+            } catch (UnsupportedFlavorException | IOException e) {
                 IOHandler.writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else if (ClipboardHandler.isClipboardImage()) {
             try {
                 Image imageObject = ClipboardHandler.getClipboardImage();
-                BufferedImage image;
+                BufferedImage image = null;
                 if (imageObject instanceof BufferedImage) {
                     image = (BufferedImage)imageObject;
-                } else {
+                } else if (imageObject != null) {
                     image = new BufferedImage(imageObject.getWidth(null),
                             imageObject.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
@@ -130,10 +132,14 @@ public final class PTextPane extends JTextPane {
                     Graphics2D bGr = image.createGraphics();
                     bGr.drawImage(imageObject, 0, 0, null);
                     bGr.dispose();
+                } else {
+                    InfoBox.error("Paste Error", "Unable to paste image. Object is null.", null);
                 }
                 
-                ImageNode imageNode = core.getImageCollection().getFromBufferedImage(image);
-                addImage(imageNode);
+                if (image != null) {
+                    ImageNode imageNode = core.getImageCollection().getFromBufferedImage(image);
+                    addImage(imageNode);
+                }
             } catch (Exception e) {
                 IOHandler.writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());

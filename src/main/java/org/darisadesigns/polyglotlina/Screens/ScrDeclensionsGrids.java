@@ -301,8 +301,8 @@ public final class ScrDeclensionsGrids extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cmbDimX = new PComboBox(core);
-        cmbDimY = new PComboBox(core);
+        cmbDimX = new PComboBox(core.getPropertiesManager().getFontMenu());
+        cmbDimY = new PComboBox(core.getPropertiesManager().getFontMenu());
         pnlTabDeclensions = new javax.swing.JTabbedPane();
         chkAutogenOverride = new javax.swing.JCheckBox();
         btnOk = new javax.swing.JButton();
@@ -314,9 +314,9 @@ public final class ScrDeclensionsGrids extends PDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Conjugations/Declensions");
 
-        cmbDimX.setToolTipText("Rows in wordform grids will be based on this conjugation/declension dimension");
+        cmbDimX.setToolTipText("Rows in wordform grids will be based on this donjugation/declension dimension");
 
-        cmbDimY.setToolTipText("Columns in wordform grids will be based on this conjugation/declension dimension");
+        cmbDimY.setToolTipText("Columns in wordform grids will be based on this donjugation/declension dimension");
 
         chkAutogenOverride.setText("Autogen Override");
         chkAutogenOverride.setToolTipText("Check to override autogeneration of declension forms (if autogeneration patterns exist)");

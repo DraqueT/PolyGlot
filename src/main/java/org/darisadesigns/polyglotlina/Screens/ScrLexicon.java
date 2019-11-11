@@ -27,7 +27,6 @@ import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.CustomControls.PFocusTraversalPolicy;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PList;
 import org.darisadesigns.polyglotlina.CustomControls.PListLexicon;
 import org.darisadesigns.polyglotlina.CustomControls.PListModelLexicon;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
@@ -245,8 +244,10 @@ public final class ScrLexicon extends PFrame {
 
             ConWord curWord = getCurrentWord();
             saveValuesTo(curWord);
-            ((PList) lstLexicon).setCore(core);
-            ((PList) lstLexicon).setConFont(!core.getPropertiesManager().isUseLocalWordLex());
+            Font listFont = core.getPropertiesManager().isUseLocalWordLex() ?
+                    core.getPropertiesManager().getFontLocal() :
+                    core.getPropertiesManager().getFontCon();
+            lstLexicon.setFont(listFont);
             setupComboBoxesSwing();
             curPopulating = localPopulating;
             forceUpdate = false;
@@ -421,7 +422,7 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classText, gbc);
                 classPropMap.put(curProp.getId(), classText); // text box mapped to related class ID.
             } else {
-                final JComboBox<Object> classBox = new PComboBox<>(core);
+                final JComboBox<Object> classBox = new PComboBox<>(core.getPropertiesManager().getFontMenu());
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 comboModel.addElement("-- " + curProp.getValue() + " --");
@@ -1685,24 +1686,24 @@ public final class ScrLexicon extends PFrame {
         jPanel3 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, "-- ConWord --");
         txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Word --");
-        cmbType = new PComboBox(core);
+        cmbType = new PComboBox(core.getPropertiesManager().getFontMenu());
         txtProc = new PTextField(core, true, "-- Pronunciation --");
         chkProcOverride = new PCheckBox(nightMode, menuFontSize);
         chkRuleOverride = new PCheckBox(nightMode, menuFontSize);
-        btnDeclensions = new PButton(core);
-        btnLogographs = new PButton(core);
+        btnDeclensions = new PButton(nightMode, menuFontSize);
+        btnLogographs = new PButton(nightMode, menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
         txtErrorBox = new javax.swing.JTextPane();
         pnlClasses = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         txtDefinition = new PTextPane(core, true, "-- Definition --");
-        btnEtymology = new PButton(core);
+        btnEtymology = new PButton(nightMode, menuFontSize);
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        lstLexicon = new PListLexicon(core, true);
+        lstLexicon = new PListLexicon(core.getPropertiesManager().getFontCon());
         btnAddWord = new PAddRemoveButton("+");
         btnDelWord = new PAddRemoveButton("-");
-        jButton1 = new PButton(core);
+        jButton1 = new PButton(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lexicon");

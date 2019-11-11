@@ -523,12 +523,12 @@ public final class ScrDeclensionSetup extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new PLabel("", core);
+        jLabel1 = new PLabel("", menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstDeclensionList = new PList(core, false);
+        lstDeclensionList = new PList(core.getPropertiesManager().getFontLocal());
         jPanel2 = new javax.swing.JPanel();
         txtDeclensionName = new PTextField(core, true, "-- Name --");//PTextField(core, true, "-- Name --");
-        jLabel3 = new PLabel("", core);
+        jLabel3 = new PLabel("", menuFontSize);
         btnAddDimension = new PAddRemoveButton("+");
         btnDelDimension = new PAddRemoveButton("-");
         sclDimensions = new javax.swing.JScrollPane();
@@ -538,8 +538,8 @@ public final class ScrDeclensionSetup extends PDialog {
         chkNonDimensional = new javax.swing.JCheckBox();
         btnDeleteDeclension = new PAddRemoveButton("-");
         btnAddDeclension = new PAddRemoveButton("+");
-        jButton1 = new PButton(core);
-        btnClearDep = new PButton(core);
+        btnOK = new PButton(nightMode, menuFontSize);
+        btnClearDep = new PButton(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -587,7 +587,9 @@ public final class ScrDeclensionSetup extends PDialog {
                 "Dimension", "Mandatory"
             }
         ) {
-            Class[] types = {String.class, Boolean.class};
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Boolean.class
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
@@ -667,10 +669,10 @@ public final class ScrDeclensionSetup extends PDialog {
             }
         });
 
-        jButton1.setText("OK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnOK.setText("OK");
+        btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnOKActionPerformed(evt);
             }
         });
 
@@ -703,7 +705,7 @@ public final class ScrDeclensionSetup extends PDialog {
                                 .addGap(10, 10, 10)
                                 .addComponent(btnClearDep)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1))))
+                                .addComponent(btnOK))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -726,7 +728,7 @@ public final class ScrDeclensionSetup extends PDialog {
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
+                            .addComponent(btnOK)
                             .addComponent(btnClearDep))))
                 .addContainerGap())
         );
@@ -765,9 +767,9 @@ public final class ScrDeclensionSetup extends PDialog {
         delDimension();
     }//GEN-LAST:event_btnDelDimensionActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnOKActionPerformed
 
     private void btnClearDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearDepActionPerformed
         if (InfoBox.yesNoCancel("Wipe All Deprecated Declensions?", 
@@ -1074,8 +1076,8 @@ public final class ScrDeclensionSetup extends PDialog {
     private javax.swing.JButton btnClearDep;
     private javax.swing.JButton btnDelDimension;
     private javax.swing.JButton btnDeleteDeclension;
+    private javax.swing.JButton btnOK;
     private javax.swing.JCheckBox chkNonDimensional;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
