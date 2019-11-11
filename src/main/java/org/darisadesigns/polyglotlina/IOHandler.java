@@ -331,7 +331,9 @@ public final class IOHandler {
 
                 switch (bothVal[0]) {
                     case PGTUtil.OPTIONS_LAST_FILES:
-                        opMan.getLastFiles().addAll(Arrays.asList(bothVal[1].split(",")));
+                        for (String last : bothVal[1].split(",")) {
+                            opMan.pushRecentFile(last);
+                        }
                         break;
                     case PGTUtil.OPTIONS_SCREENS_OPEN:
                         for (String screen : bothVal[1].split(",")) {
@@ -907,7 +909,7 @@ public final class IOHandler {
      * @param opMan
      * @throws IOException on failure or lack of permission to write
      */
-    public static void saveOptionsIni(String workingDirectory, OptionsManager opMan) throws IOException {
+    public static void writeOptionsIni(String workingDirectory, OptionsManager opMan) throws IOException {
 
         try (Writer f0 = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(workingDirectory
@@ -922,7 +924,13 @@ public final class IOHandler {
             }
 
             nextLine = PGTUtil.OPTIONS_LAST_FILES + "=";
+            int lastFileCount = 0;
             for (String file : opMan.getLastFiles()) {
+                if(lastFileCount > PGTUtil.OPTIONS_NUM_LAST_FILES) {
+                    break;
+                }
+                
+                lastFileCount++;
                 // only write to ini if 1) the max file path length is not absurd/garbage, and 2) the file exists
                 if (file.length() < PGTUtil.MAX_FILE_PATH_LENGTH && new File(file).exists()) {
                     if (nextLine.endsWith("=")) {
