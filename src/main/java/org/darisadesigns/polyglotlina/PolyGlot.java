@@ -382,7 +382,7 @@ public final class PolyGlot {
     }
     
     public void saveOptionsIni() throws IOException {
-        IOHandler.saveOptionsIni(getWorkingDirectory().getAbsolutePath(), optionsManager);
+        IOHandler.writeOptionsIni(getWorkingDirectory().getAbsolutePath(), optionsManager);
     }
     
     /**

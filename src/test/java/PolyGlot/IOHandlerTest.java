@@ -189,7 +189,7 @@ public class IOHandlerTest {
             opt.setToDoBarPosition(toDoBarPositionExpected);
 
             // save values to disk...
-            IOHandler.saveOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
+            IOHandler.writeOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
 
             // create new core to load saved values into...
             core = DummyCore.newCore();
