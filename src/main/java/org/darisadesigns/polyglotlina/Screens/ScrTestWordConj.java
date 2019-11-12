@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import java.util.Map.Entry;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PClassCheckboxPanel;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
@@ -109,13 +110,13 @@ public final class ScrTestWordConj extends PDialog {
 
         pnlClasses = new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId), false);
         txtTestWord = new PTextField(core, false, "base test word");
-        jButton1 = new javax.swing.JButton();
+        jButton1 = new PButton(nightMode, menuFontSize);
         txtTestForm = new PTextField(core, false, "generated wordform");
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDebug = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Test Conjugation/Declensions");
+        setTitle("Test Conjugation/Declension");
         setMaximumSize(new java.awt.Dimension(585, 2147483647));
         setMinimumSize(new java.awt.Dimension(585, 0));
 

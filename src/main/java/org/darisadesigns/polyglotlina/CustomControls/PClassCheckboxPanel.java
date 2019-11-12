@@ -80,7 +80,7 @@ public class PClassCheckboxPanel extends JPanel {
             gbc.gridy = 0;
             gbc.anchor = GridBagConstraints.NORTH;
 
-            PLabel label = new PLabel("Match by Class Value", core.getPropertiesManager().getFontSize());
+            PLabel label = new PLabel("Match by Class Value", core.getOptionsManager().getMenuFontSize());
             label.setSize(30, 20);
             label.setVerticalAlignment(javax.swing.SwingConstants.TOP);
             label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -162,7 +162,7 @@ public class PClassCheckboxPanel extends JPanel {
         final PCheckBox check = new PCheckBox(nightMode, fontSize) {
             @Override
             public void repaint() {
-                this.setSize(this.getWidth(), 20);
+                this.setSize(parent.getWidth(), 20);
                 super.repaint();
             }
         };
