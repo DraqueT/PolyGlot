@@ -162,7 +162,7 @@ public class PClassCheckboxPanel extends JPanel {
         final PCheckBox check = new PCheckBox(nightMode, fontSize) {
             @Override
             public void repaint() {
-                this.setSize(parent.getWidth(), 20);
+                this.setSize(this.getWidth(), 20);
                 super.repaint();
             }
         };

@@ -40,6 +40,7 @@ import javax.swing.DefaultComboBoxModel;
 import org.darisadesigns.polyglotlina.CustomControls.PDeclensionPanelInterface;
 import java.awt.Window;
 import javax.swing.JOptionPane;
+import org.darisadesigns.polyglotlina.CustomControls.PButton;
 
 /**
  *
@@ -305,11 +306,11 @@ public final class ScrDeclensionsGrids extends PDialog {
         cmbDimY = new PComboBox(core.getPropertiesManager().getFontMenu());
         pnlTabDeclensions = new javax.swing.JTabbedPane();
         chkAutogenOverride = new javax.swing.JCheckBox();
-        btnOk = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
+        btnOk = new PButton(nightMode, menuFontSize);
+        btnCancel = new PButton(nightMode, menuFontSize);
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        btnDeprecated = new javax.swing.JButton();
+        btnDeprecated = new PButton(nightMode, menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Conjugations/Declensions");

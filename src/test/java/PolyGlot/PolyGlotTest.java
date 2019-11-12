@@ -29,6 +29,15 @@ import org.junit.jupiter.api.Test;
  * @author draque
  */
 public class PolyGlotTest {
+    
+    /**
+     * Used primarily for profiling
+     * @param args
+     */
+    public static void main(String[] args) {
+        PolyGlotTest test = new PolyGlotTest();
+        test.testMainNoFile();
+    }
 
     /**
      * Test of main method, of class DictCore opens with no errors without

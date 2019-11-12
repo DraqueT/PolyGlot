@@ -21,40 +21,24 @@ package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
  * @author DThompson
  */
-public class PTable extends JTable {
+public final class PTable extends JTable {
     private final DictCore core;
     
     public PTable(DictCore _core) {
         core = _core;
-    }
-    
-    @Override
-    public void paint(Graphics g) {
-        // ensure headers use proper font/size
-        if (core != null) {
-            Font font = core.getPropertiesManager().getFontLocal();
-            this.getTableHeader().setFont(font);
-            g.setFont(font);
-        }
         
-        super.paint(g);
-    }
-    
-    @Override
-    public void repaint() {
-        // ensure headers use proper font/size
         if (core != null) {
-            this.getTableHeader().setFont(core.getPropertiesManager().getFontLocal());
+            Font font = PGTUtil.MENU_FONT.deriveFont((float)core.getOptionsManager().getMenuFontSize());
+            this.getTableHeader().setFont(font);
         }
-        super.repaint();
     }
     
     @Override
