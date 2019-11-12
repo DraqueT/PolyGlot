@@ -1172,7 +1172,6 @@ public class ScrLogoDetails extends PFrame {
 
         txtStrokes.setToolTipText("Number of strokes to write logograph");
 
-        btnLoadImage.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnLoadImage.setText("Load Image");
         btnLoadImage.setToolTipText("Load image for logograph from file");
         btnLoadImage.addActionListener(new java.awt.event.ActionListener() {
@@ -1202,7 +1201,6 @@ public class ScrLogoDetails extends PFrame {
         jScrollPane3.setMinimumSize(new java.awt.Dimension(0, 23));
         jScrollPane3.setViewportView(txtNotes);
 
-        btnClipboard.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnClipboard.setText("Clipboard");
         btnClipboard.setToolTipText("Copy logograph image from clipboard");
         btnClipboard.addActionListener(new java.awt.event.ActionListener() {

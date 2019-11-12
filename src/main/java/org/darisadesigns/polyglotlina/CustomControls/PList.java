@@ -30,12 +30,11 @@ import javax.swing.JList;
  */
 public class PList<N> extends JList<N> {
     
-//    public PList(DictCore _core, boolean _isConFont) {        
-//        core = _core;
-//        isConFont = _isConFont;
-//    }
-    
     public PList(Font _font) {
         setFont(_font);
+    }
+    
+    public PList(Font _font, double fontSize) {
+        setFont(_font.deriveFont((float)fontSize));
     }
 }
