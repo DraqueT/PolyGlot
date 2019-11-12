@@ -30,7 +30,7 @@
         <!-- Static navbar -->
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="container">
-                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 2.5</a> </div>
+                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 3.0</a> </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="https://github.com/DraqueT/PolyGlot">GitHub Page</a><br>
@@ -52,7 +52,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-10 col-lg-offset-1 centered"> <img src="assets/PolyGlot%20Logo.png" alt="PolyGlot">
-                        <h1>Version 2.5</h1>
+                        <h1>Version 3.0</h1>
                         <!-- POLYGLOT STUFF START -->
                         
                             <table style="width:100%">
@@ -67,7 +67,7 @@
                                         &nbsp;&nbsp;&nbsp; <a href="#-_Word_Types">- Parts of Speech</a><br>
                                         &nbsp;&nbsp;&nbsp; <a href="#-_ConjugationsDeclensions">-
                                             Conjugations/Declensions</a><br>
-                                        &nbsp;&nbsp;&nbsp; <a href="#-_Autogeneration_of">- Autogeneration of
+                                        &nbsp;&nbsp;&nbsp; <a href="#-_Autogeneration_of">- Auto-generation of
                                             Conjugations/Declensions</a><br>
                                         &nbsp;&nbsp;&nbsp; <a href="#CLASSES">- Word Classes</a><br>
                                         &nbsp;&nbsp;&nbsp; <a href="#-_Word_Quickentry">- Word Quickentry</a><br>
@@ -80,6 +80,7 @@
                                         &nbsp;&nbsp;&nbsp; <a href="#-_Images">- Images in Text</a><br>
                                         &nbsp;&nbsp;&nbsp; <a href="#-_Family_Window">- Family Window</a><br>
                                         &nbsp;&nbsp;&nbsp; <a href="#-_Check_Lexicon">- Using the Check Lexicon Tool</a><br>
+                                        &nbsp;&nbsp;&nbsp; <a href="#-_Swadesh_Lists">- Importing Swadesh Lists</a><br>
                                         <a href="#IMPORTING_FROM_EXCEL">3---- Importing and Exporting to/from
                                             Excel or CSV</a><br>
                                         <a href="#ETYMOLOGY">4---- Etymology Engine</a><br>
@@ -111,127 +112,77 @@
                             post them on <a href="https://github.com/DraqueT/PolyGlot/issues">PolyGlot's issues page</a>!</div>
 
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
-                        <div align ="left"><br>Heyo, everyone! I've got a new version of PolyGlot with some nice new 
-                            features to share! This release includes some big stability/quality of life improvements, 
-                            most notably for Windows users with high resolution monitors (it's not tiny any more!) and 
-                            the ability to pop most windows out from the main program window. As always, I hope these 
-                            modifications help increase efficiency and ease of working on your languages! Further 
-                            details regarding new features and fixed bugs below. Enjoy, everyone!
+                        <div align ="left"><br>Hey, all! Welcome to version 3.0 of PolyGlot! I have put a massive amount of effort into this one, so I hope that everyone enjoys it. Two elements have been my focus this time more than anything else. 
+                            <br><br>
+                            1) PolyGlot is now upgraded past Java 8. This means that I can not compile to runnable images, and you will no longer have to worry about having Java on your system* to run the program. It can now be run after it is downloaded, regardless of whether you have the JVM installed. It also fixes a lot of bugs surrounding fonts and general OS integration that have been left to languish in Java 8. This will make for a much smoother ride as we go forward. It also means that you will need to download the correct version PolyGlot for your OS, so please be aware. The dmg file is for OSX, the deb file for Linux, and the exe for Windows. Each may be used to install for your respective system.
+                            <br><br>
+                            2) I have done a LOT of work on the Auto Conjugation system. There were a couple of frustrating bugs that have been ironed out, but there is also a significant new feature. The Simplified Auto-conjugation window is now available to be selected. If you have a single transformation per word form that is applied universally, then this feature will make life many, many times simpler for you. Additionally, there are buttons on this screen which will automatically set up prefix and postfix style conjugation patterns in regex for you. On both the Simplified and Classic Auto-conjugation screens is a menu button which opens the conjugation test window. This will allow you to apply the selected rule to any text it is given, with debug-information below which lays out the exact path PolyGlot took to conjugate your word. For anyone looking to create complex conjugation rules, this tool should be invaluable.
+                            <br><br>
+                            Additional features include an integrated Swadesh list import tool and a recovery tool. The Swadesh import feature will allow you to pull template words into your lexicon which are based on a list of very basic words. Additionally, you may write your own list which can be read and populated from later. The recovery tool protects your files in the case that your computer loses power or freezes just as it is saving your work. If this happens, you will be prompted to load from a local recovery file the next time PolyGlot opens.
+                            <br><br>
+                            * With the exception of print to PDF and CSV functionality. The libraries used for this are firmly entrenched in J8, though I am hoping it will eventually move forward.
                         <br><br>
                         </div>
                         FEATURES:
                         <div align ="left"><ul>
-                                <li>Added the IPA Translator tool (quickly change large swathes of text into IPA format)</li>
-                                <li>Added "Refresh Font" button to Language Properties page (if a created font loses synch with the OS)</li>
-                                <li>Added an example dictionary with conjugated infixes</li>
-                                <li>By right clicking, most windows can now be popped out of the main window if desired</li>
-                                <li>Added additional IPA sound library for those who prefer alternate readings</li>
-                                <li>Added "Delete From Dimensions" option for conjugation rules to speed complex rule editing</li>
-                                <li>Added option to override custom fonts for fields which accept regex values</li>
-                                <li>Users can now re-order chapters</li>
-                                <li>Lexicon can now display/order base on local language rather than conlang values</li>
-                                <li>Significant additional OS integration, particularly for OSX</li>
-                                <li>More verbose warnings per OS if JFX not installed</li>
-                                <li>Errors now written to log file to help with user-assisted debugging in the future</li>
-                                <li>Massive code cleanup under the hood</li>
+                                <li>Swadesh import list tool added</li>
+                                <li>Simplified Auto-conjugation Window implemented</li>
+                                <li>Conjugation test window implemented</li>
+                                <li>Conjugation rules debugging tool added (makes complex rules worlds easier to create)</li>
+                                <li>Platform dependent installers implemented</li>
+                                <li>Mid-save-freeze recovery system added</li>
+                                <li>More advanced CSV styes supported (quote encapsulation, etc.)</li>
+                                <li>Went through all labels and displays to find typos (yikes. way too many)</li>
+                                <li>Auto-gen Override automatically selected if no conjugation rules exist for word</li>
+                                <li>Save dialog appears at more reasonable time when opening new file (if one is already open)</li>
+                                <li>Upgraded to Java 12.</li>
+                                <li>Build time added to about screen</li>
+                                <li>Created packaging system/instruction readme to make it easier for other devs looking to work on PolyGlot</li>
+                                <li>Increase code compliance/clean up nonstandard naming schemes</li>
+                                <li>Expanded testing significantly</li>
+                                <li>Massive refactors/code cleanup under the hood... hopefully will help make future bugs less frequent and easier to find</li>
                                 <!––Secret Codes:
                                 what did you see last tuesday
                                 Who is Draque
                                 this is the forest primeval
                                 it can't outlast you
-                                -->
+                                uuddlrlrba
+                                ––>
                             </ul></div>
                         <br><br>
                         BUGS FIXED:
                         <div align="left">
                             <ul>
-                                <li>WINDOWS APP SCALING FINALLY SUPPORTED (please start via the frontend)</li>
-                                <li>Old versions of installed fonts were often selected if multiple versions present</li>
-                                <li>When printing to PDF, images no longer obscure text</li>
-                                <li>under certain circumstances, mandatory conjugation requirements could be impossible to fulfill</li>
-                                <li>Certain singleton conjugation labels could cause saving errors</li>
-                                <li>Recorded save time for reversion records broke under certain circumstances</li>
-                                <li>Transformations for conjugations would sometimes fail to copy</li>
-                                <li>Improper behavior of classes/class values</li>
-                                <li>Disabled wordforms no longer printed to PDF</li>
-                                <li>Conjugation rules sometimes threw errors when copies were attempted</li>
-                                <li>When printing to PDF, currently selected values saved prior to print</li>
-                                <li>Unicode alphabets now supported properly in tool-tips</li>
+                                <li>Lexicon "Conjugations" call changes Conjugation/Declension Auto-generation Rule Order</li>
+                                <li>Combo box text will print over edge of box if too long</li>
+                                <li>PolyGlot sometimes fails to save user selected font after having been loaded properly (displays correctly until closed/reopened)</li>
+                                <li>Reversion of complex conjugation rules on close of window</li>
+                                <li>Add/remove buttons have swapped position on Grammar chapter list...</li>
+                                <li>Hitting Ctrl+S to save results in PolyGlot saving two times</li>
+                                <li>Font size in menu Options not functioning properly</li>
+                                <li>Description text in Print to PDF menu remains gray even after it has been updated by user</li>
+                                <li>Margin click in IPA tool erases characters</li>
+                                <li>HTML is printed into PDFs under certain circumstances</li>
+                                <li>Significant problems with logography section. Lots of old/bad code ripped out/replaced.</li>
+                                <li>Load image from clipboard in logography section broken on OSX</li>
+                                <li>Correct conlang label in grammar section dropdown (always says "Charis," regardless of user selected font)</li>
+                                <li>Screen refresh on load of file does not fire on some screens</li>
+                                <li>Pasting tab character into grammar text field persistently breaks its contents</li>
+                                <li>Checkboxes on phonology screen did not respect style or font size of PolyGlot/user options</li>
+                                <li>Ctrl + S caused PolyGlot to save file twice</li>
+                                <li>Some menus ignored user selected menu font size</li>
                             </ul>
                         </div>
                         
 
                         <a name="INSTALLATION"></a>
                         <h1>INSTALLATION</h1><br>
-                        <div align ="left">PolyGlot is a Java program, and requires the Java Virtual Machine 1.8
-                            or higher to run. This is available for free at <a href="https://java.com/en/download/index.jsp">https://java.com/en/download/index.jsp</a>.
-                            PolyGlot will run on any version of Java newer than Java 1.8, but it is
-                            recommended that you have the highest version your operating system
-                            will support. NOTE: Most operating systems should be able to unzip files,
-                            but programs such as <a href="http://www.7-zip.org/">7Zip</a> are available online for free.<br>
-                            PolyGlot <span style="font-style: italic;">MUST</span> be
-                            unzipped to function correctly. It cannot be run from within the zip
-                            file that you've downloaded, and many of its functions will fail in
-                            unpredictable ways if you attempt to run it directly from the zip file.</div>
+                        <div align ="left">As of version 3.0, the installation of PolyGlot has become mostly automated. Simply 
+                        download the appropriate installer for your operating system (Windows: exe, Linux: deb, OSX:dmg) and open 
+                        to install! PolyGlot no longer has a frontend, and to run the base program, there is no need to install 
+                        Java at all (although for some features, a java runtime may be required).</div>
                         <br><br>
-                        WINDOWS:
-                        <br>
-                        <div align ="left">If Java is installed, you only need to unzip the contents of the
-                            PolyGlot program to a folder and double click the frontend executable file.
-                            This will associate PGT filetypes with the frontend so that double clicking
-                            opens them correctly. <br><br>
-                            <span style="font-weight: bold;">NOTE FOR WINDOWS USERS WITH WINRAR</span>:
-                            WinRAR tends to associate itself with jar files as archives. This keeps them
-                            from executing properly. Follow these instructions to correct the issue.<br></div>
-                        <div align ="left"><ul>
-                                <li>Open WinRAR</li>
-                                <li>Click Options->Settings</li>
-                                <li>Click the Integration tab</li>
-                                <li>Under "Associate WinRAR with," <i>un</i>check the JAR checkbox</li>
-                                <li>Click OK and close WinRAR.</li>
-                            </ul>
-                            After this, simply double click PolyGlot.jar and it should open up for you!</div>
-                        <br><br>
-                        MAC:<br>
-                        <div align="left">Unzip PlyGlot into a folder and double click PolyGlot.jar to run!</div>
-                        <br><br>
-                        LINUX:<br>
-                        Due to library changes, PolyGlot is not current compatible with Linux. 
-                        Starting with v 2.6, PolyGlot is set to be upgraded to Java 12, which should correct this.
-                        I apologize for any inconvenience to Linux users.
-                        <div align ="left" style="text-decoration:line-through;">
-                            Simply unzip the files where you like and run! For convenience, there is a script
-                            which opens PolyGlot included.
-
-                            <br><br>
-                            <span style="font-weight: bold;">NOTE FOR LINUX USERS</span>: Before
-                            using PolyGlot, most users of Linux will have to make the jar file
-                            executable. To do this, open a command prompt, navigate to the folder
-                            you have extracted PolyGlot to, and enter the following line: "chmod +x
-                            PolyGlot.jar". Depending on your settings, you may need to enter your
-                            admin password to do this.<br>
-                            <br>
-                            Additionally, some builds of Linux come with OpenJDK 7, which does not
-                            include JavaFX (a necessary component for PolyGlot's interface). Please
-                            upgrade to OpenJDK 8 if you're using Linux and still on 7. This can be
-                            done through the Package Manager and search for JavaFX or the full
-                            name, java-openjfx.<br>
-                            <br>
-                            An example <i>PolyGlot.desktop</i> file is provided, and can be copied
-                            in <i>~/.local/share/applications/</i> so that PolyGlot can be launched
-                            from the menu or application launcher. The paths of files in entries
-                            <i>Exec</i> and <i>Icon</i> must be adapter to the location where you
-                            installed PolyGlot.
-                            <br>
-                            <span style="font-weight: bold;">NOTE FOR ARCH LINUX USERS: </span>You
-                            must install JFX manually to properly use PolyGlot.<br>
-                            <br><span style="font-weight: bold;">NOTE FOR FEDORA USERS: </span>
-                            Alternate versions of openJDK/openJFK must be used for PolyGlot to work correctly.
-                             Use the line below in a terminal.
-                            <br>sudo dnf install java-1.8.0-openjdk-openjfx<br>
-                        </div>
-
-
+                        
                         <a name="BASIC_FUNCTIONALITY"></a><h1>BASIC FUNCTIONALITY</h1>
                         <br>
                         <br>
@@ -244,7 +195,7 @@
                         <br>
                         <br>
                         <div align ="left">Most of the windows can be optionally popped out to be worked on
-                        independantly. This can be very helpful when looking to use both the lexicon and 
+                        independently. This can be very helpful when looking to use both the lexicon and
                         grammar guides together to translate a section of text. To do so, simply right click 
                         on the a given module's menu button and click the "Pop Window Out" option.</div><br>
                         <img alt="" src="assets/MainMenu2.png">
@@ -254,7 +205,7 @@
                             have an Excel sheet with a language that preexists, you can skip to
                             section 2, which goes over how to import them. Otherwise, keep reading
                             to see how to start your dictionary! Below is the screen you'll see
-                            most often when editing your wordlist. I have loaded Lodenkur, my own
+                            most often when editing your word list. I have loaded Lodenkur, my own
                             conlang, as an example.<br></div>
                         <br>
                         <img alt="" src="assets/Lex1.png"><br>
@@ -314,7 +265,7 @@
                         <div align ="left">In this module, you define your language's parts of 
                             speech. . Every word you create in
                             PolyGlot may be assigned a type from the list that you define. Nouns, verbs,
-                            adjectives and anay other types of words your language uses should
+                            adjectives and any other types of words your language uses should
                             be created here. Once created, they will populate in the drop down
                             boxes of the main screen. You can name the types and add notes as is
                             appropriate. Types can be added and deleted with the respective buttons
@@ -336,7 +287,7 @@
                             the rule that verbs must end with the character for "lo" in Lodenkur.<br>
                             <br>
                             The Conjugations/Declensions setup and the Conjugations/Declensions
-                            Autogeneration are advanced features covered in the next section of
+                            Auto-generation are advanced features covered in the next section of
                             this guide.<br>
                             <br>
 
@@ -398,7 +349,7 @@
                             <br><br>
                             NOTE: Entire conjugations can be copy/pasted from one part of speech to another
                             by right clicking on them or in the white space of the conjugation list, saving 
-                            significant time in languages with complex and related conjugational setups.
+                            significant time in languages with complex and related conjugation setups.
                         </div>
                         <br>
 
@@ -429,7 +380,7 @@
                         <img alt="" src="assets/conj5.png"><br>
                         <div align ="left">
                             Here, every word form defined for a word's part of speech can be seen. If 
-                            autogeneration of the forms is defined, each space should be filled in with the 
+                            auto-generation of the forms is defined, each space should be filled in with the 
                             appropriately generated word form. To the top of the screen, the dimensions for 
                             the columns and the rows may be selected (if there are two or more dimensions). 
                             If there are three or more dimensions, the dimensions not chosen in either of the 
@@ -437,8 +388,8 @@
                             are displayed on their own tab, as are deprecated forms which had previously been 
                             saved.
                             
-                            If you wish to override autogeneration rules for a word that is an exception, select 
-                            the Autogen Override check box to the lower left, and edit the existing values as 
+                            If you wish to override auto-generation rules for a word that is an exception, select 
+                            the Auto-gen Override check box to the lower left, and edit the existing values as 
                             you see fit.<br>
                             <br></div>
                         <br><br>
@@ -462,10 +413,10 @@
                             dimensional forms such as tense.
                         </div>
 
-                        <a name="-_Autogeneration_of"></a><div align ="left"><h1>Autogeneration of
+                        <a name="-_Autogeneration_of"></a><div align ="left"><h1>Auto-generation of
                                 Conjugations/Declensions</h1><br>
                             One of the more complex features to
-                            PolyGlot is the Autogeneration system for conjugations and declensions.
+                            PolyGlot is the Auto-generation system for conjugations and declensions.
                             This section goes through a basic setup to create a conjugation system.
                             The dictionary used here as an example is included along with PolyGlot
                             as the file exampleAutoGen.pgt. For those of you unfamiliar with
@@ -478,16 +429,59 @@
                         <br>
                         <img alt="" src="assets/Types3.png"><br>
                         <br>
-                        <div align ="left">Before autogeneration rules can be created, conjugations/declensions
+                        <div align ="left">Before auto-generation rules can be created, conjugations/declensions
                             for a type must exist (as explained in <a href="readme.html#-_ConjugationsDeclensions">Conjugations/Declensions</a>).
                             Once this is done, go to the Types tab, select the part of speech to
-                            create autogeneration rules for, and click the <span style="font-weight: bold;">Conj/Decl Autogeneration</span> button.<br></div>
-
+                            create auto-generation rules for, and click the <span style="font-weight: bold;">Conj/Decl Auto-generation</span> button.<br></div>
                         <br>
                         <br>
+                        <img alt="" src="assets/autoGen8.png"><br>
+                        <br>
+                        <div align ="left">
+                            Before continuing, consider how much complexity you will need for your word forms. Is conjugation a one step affair in your language?
+                            Is it a simple swap of one pattern on the end or beginning of your words? If so, consider using the Simplified version of the 
+                            auto-generation tool, which can be switched to by clicking the radio button illustrated above (which exists on the top of the 
+                            auto-generation window).
+                        </div>
+                        <h2>Simplified Auto-Generation Setup</h2> <br>
+                        <br><br>
+                        <img src="assets/autoGen13.png" alt="">
+                        <br>
+                        <div align="left">
+                            The Simplified Auto-Generation screen allows for fast and simple creation of basic auto-conjugation settings. If your language has 
+                            simple rules for the generation of word forms, you may find this tool less cumbersome than the classic view. The left side of the 
+                            window is taken up by a list of all conjugations. Only past and present exist in the example given. To the right are a few options.
+                            
+                            <br><br>First is the <b>Disable Wordform</b> checkbox. Selecting this tells PolyGlot to ignore this particular conjugation. This can 
+                            be useful in cases where conjugations are created dimensionally in ways that you do not need. For example, perhaps both tense and 
+                            certainty of actions are encoded in your language, but all actions in the past have positive certainty. In this case, you would 
+                            select Disable Wordform for the conjugation past-uncertain.
+                            
+                            <br><br>Second is the <b>Regex Pattern</b> field. Regex (regular expressions) represent a powerful tool which can identify patterns. These
+                            are used in PolyGlot. Simple prefix/suffix cases are covered here, but if you would like to get more ambitious, please check out 
+                            the links in <a href="readme.html#ADDITIONAL_RESOURCES">Additional Resources</a>. Here, the "$" character is placed in the regex field.
+                            This character represents the end of a word, so it will result in a suffix being added.
+                            
+                            <br><br>The last field is the <b>Replacement Text</b> field. Text placed here will replace any parts of the original word which match the
+                            regex pattern above. Here, the very end of the word (which does not include any characters) will be replaced with "-PASTO". Because the $ 
+                            character only matches the end of a word itself rather than characters within it, it will add "-PASTO" as a suffix when conjugating the 
+                            past tense.
+                            
+                            <br><br>The two buttons on the bottom are <b>Prefix Template</b> and <b>Postfix Template</b>. These will populate the regex field with a
+                            pattern telling PolyGlot to conjugate the currently selected conjugation/declension by either adding the replacement text to the beginning 
+                            or the end of a base word, respectively.
+                        </div>
+                        <h2>Classic Auto-Generation Setup</h2><br>
+                        <br><br>
                         <img alt="" src="assets/autoGen2.png"><br>
                         <br>
-                        <div align ="left">A number of controls are presented here. In the leftmost column, you see
+                        <div align ="left">The Classic Auto-Generation setup is significantly more complex than the simplified menu. 
+                            It is both more powerful and has a steeper learning curve. If your language has complex conjugation or
+                            declension rules however, this will give you the power you need to implement it. If you are using the Classic
+                            Auto-Generation, please also take note of the <a href="#CONJTEST">Test Menu</a>. It will prove invaluable to making certain that your 
+                            rules behave in the manner which you expect them to.<br><br>
+                            
+                            A number of controls are presented here. In the leftmost column, you see
                             every possible conjugation of the selected word type (verb in this
                             example case). The verb selected to create a conjugation rule is past tense
                             verbs that are certain and positive. Every possible combination of conjugations
@@ -506,7 +500,7 @@
                             to help remember what precisely it applies to. The
                             rule regex immediately below its name dictates which words the rule applies to.
                             In the example, I use the regex ".*" which applies to everything. If you used the match
-                            regex ".*ru$", the rule would only be aplied to rules ending with "ru". Regex is a
+                            regex ".*ru$", the rule would only be applied to rules ending with "ru". Regex is a
                             very powerful system, but can be confusing at first. There are links at the end of this
                             document which lead to helpful guides with it if you are unfamiliar.<br>
 
@@ -555,14 +549,8 @@
                         <img alt="" src="assets/autoGen6.png"><br>
                         <br>
                         <div align ="left">Here, all of the forms for the word "walk" have been automatically
-                            generated.<br></div>
-                        <br>
-                        <br>
-                        <img alt="" src="assets/autoGen7.png"><br>
-                        <br>
-
-                        <div align ="left">If you would like to turn off autogeneration for a particular word
-                            which is a unique exception, click the <span style="font-weight: bold;">Autogen
+                            generated. If you would like to turn off auto-generation for a particular word
+                            which is a unique exception, click the <span style="font-weight: bold;">Auto-gen
                                 Override</span> check box on the word's Conjugations/Declensions screen.<br></div>
 
                         <br><br><img alt="" src="assets/conj9.png" height=500 width=750><br>
@@ -575,6 +563,37 @@
                             To apply it to specific class values, deselect all and select the values to filter for. NOTE: 
                             <b>every</b> value checked must match for the rule's transformations to be applied to a given 
                             word.
+                        </div><br>
+                        <a name ="CONJTEST"></a>
+                        <h2>Auto-Generation Test Menu</h2><br>
+                        <img src="assets/autoConj10.png" alt="">
+                        <br>
+                        <div align="left">
+                            The auto-generation test menu is an invaluable too when creating more complex conjugation and 
+                            declension rules. It provides both a test bed for the generation process and complex debug
+                            output to show you exactly what is taking place when the new word forms are generated. To access
+                            this menu, click the Test button in the upper right-hand corner of the Auto-Conjugation Setup
+                            window.<br><br>
+                            In the example setup, there are two conjugations: past and present. Shown are rules for the past 
+                            conjugation. Selected is the rule "male starts with b." The match class value is set to male, and 
+                            the regex match is set to "b.*", so this rule will apply only to words of class male that start with
+                            the character 'b'. Within the rule are three transformation rules. First, appending "-PASTO" to the 
+                            end of the word. Second, replacing the 'b' that the word begins with with "MALE-". Third, replacing
+                            the trailing 'O' character (added by the first transformation) with a '-'.<br><br>
+                            Clicking the Test button will allow us to test the entire past conjugation.
+                        </div><br><br>
+                        <img src="assets/autoConj11.png" alt="">
+                        <br>
+                        <div align="left">
+                            In the example above, the test case "butt" was entered into the Test Conjugation/Declension window.
+                            The word was set to "male" in the match by class value panel. This lets PolyGlot know to treat
+                            your test word's gender class as male. When the -> Test -> button is clicked, your word will be 
+                            conjugated and placed in the text field to the right. We can see that the new word form has
+                            been generated as "MALE-utt-PAST-".<br><br>
+                            Below this is the applied rules breakdown. This gives detailed information on each rule that was or 
+                            was not applied. It will tell you why a rule was or was not applied. Additionally, it will walk through
+                            the application and results of every transformation, allowing you to see exactly how your final word
+                            form was generated.
                         </div>
                         
                         <a name ="CLASSES"></a><h1>Word Classes</h1><br>
@@ -686,12 +705,6 @@
                             can import them directly from the menu. Simply click Tools->Import 
                             Font, and PolyGlot will load it without the need to install it to your 
                             OS at all.<br><br>
-                            <span style="font-weight:bold; color:red">WARNING:</span><br>
-                            If you create a custom font/script, remember to uninstall old copies
-                            of the font when moving to a new version. PolyGlot cannot detect
-                            the difference between multiple different versions of your font
-                            with the same name in your OS' font folder, and having multiple
-                            versions with the same name can lead to erratic behavior.<br><br>
                             <span style="font-weight:bold; color:red">LINUX WARNING:</span><br>
                             If you use a font with ligatures, please use the manual load option
                             (tools->import font) to import your font. Due to a persistent bug in
@@ -701,7 +714,7 @@
                             <br>
                             - Local Font<br>
                             This will allow you to change the font that your local language is 
-                            displayed in. In some cases, certain dicratic marks are useful to 
+                            displayed in. In some cases, certain diacritic marks are useful to
                             have access to when creating romanizations or other scenarios.
                             <br><br>
                             - Refresh Fonts<br>
@@ -734,14 +747,14 @@
                         <br>
                         <br>
                         <br>
-                        <img src="assets/langProp2.png"><br>
+                        <img src="assets/langProp2.png" alt=""><br>
                         <div align ="left"><br>
                             The last element of the Properties tab is the language check box
                             settings. Here, you can tell PolyGlot to enforce rules within your
                             lexicon.<br>
                             <ul>
                                 <li>If <span style="font-weight: bold;">Part of Speech Mandatory</span> is
-                                    selected, all words must have a type set to be saved. </li>
+                                    selected, all words must have a part of speech set to be saved. </li>
                                 <li>If <span style="font-weight: bold;">Word Uniqueness </span>is set, homonyms
                                     within your conlang will be forbidden.</li>
                                 <li>To disable regex functionality in the pronunciations (thereby allowing ignore case to
@@ -825,7 +838,7 @@
                             checked.<br></div>
                         <br>
                         <br>
-                        <img style="width: 841px; height: 669px;" alt="" src="assets/thes6.png"><br>
+                        <img style="" alt="" src="assets/thes6.png"><br>
                         <br>
                         <div align ="left">Of note is that when a word is selected in the Families Window, it
                             will be auto-selected in the dictionary lexicon. This can be useful for
@@ -855,6 +868,20 @@
                             entry represents an exception to your rules.
                         </div>
                         
+                        <a name="-_Swadesh_Lists"></a><h1>Importing Swadesh Lists</h1>
+                        <br> <img style="" alt="" src="assets/swadesh1.png"> <br>
+                        <div align="left">
+                            The Swadesh List tool can be helpful when beginning a language and looking for a place to start. Swadesh lists are lists 
+                            of the most fundamental words in many early languages. If these are completed, deriving newer words and expanding your
+                            language may prove to be much easier. PolyGlot comes with a few predefined Swadesh lists. Selecting Tools->Swadesh Lists 
+                            and selecting either Original or Modern will automatically copy a series of words to your lexicon which are empty, save
+                            for their local language fields being filled in with the English values.<br><br>
+                            Additionally, you may choose to load a custom Swadesh list. If this option is selected, an open file dialog will appear. 
+                            Simply select any line delimited plaintext or unicode text file to import. (Note: Comma delimited will not work correctly, 
+                            these files must be delimited by a new line or carriage return between each word to be imported).
+                        </div>
+                        
+                        
                         <a name="IMPORTING_FROM_EXCEL"></a><h1>Importing/Exporting to/from Excel (or CSV files)</h1>
                         <br>
 
@@ -864,13 +891,13 @@
                             PolyGlot library! If you have a conlang that is currently stored in an
                             excel or CSV file, you can import it via the excel/CSV import tool included in
                             PolyGlot. To access this tool, click Tools-&gt;Import From File Sheet
-                            in the
-                            menu.<br>
+                            in the menu. As of PolyGlot 3.0, all csv features outlined in standardized
+                            csv formatting are supported.<br>
                             <br>
-
-                            <br>
-                            <br>
-                            The screen that appears has a number of different fields and options.<br></div>
+                            NOTE: CSV functionality requires Java 8 installation due to library limitations. 
+                            This will likely be changed in the future, but if you use this functionality without
+                            Java 8 installed, you will be prompted to install it.<br><br>
+                            </div>
                         <img alt="" src="assets/excelImport.png"><br>
                         <br>
                         <br>
@@ -954,11 +981,11 @@
                         </div>
                         
                         
-                        <a name="PHONOLOGY"></a><h1>Phonemic Orthology</h1><br>
+                        <a name="PHONOLOGY"></a><h1>Phonemic Orthography</h1><br>
                         <img src="assets/pron1.png"><br>
                         <br>
 
-                        <div align ="left">The above image shows the Phonemic Orthology guide. 
+                        <div align ="left">The above image shows the Phonemic Orthography guide.
                         This can be found by clicking the Phonology and Text menu button on the
                         left of PolyGlot's menu. It is the first of the three menus. New rows can
                         be added with the Add button, and selected columns can be deleted with
@@ -1079,19 +1106,17 @@
                             as Chinese, which associate multiple readings with a single character,
                             and build more complex characters out of radicals. Once created, these
                             characters can be tied directly to words in a lexicon. It is found on the 
-                            left as one of the main modules in PolyGlot.<br>
-                            NOTE: Images in this section are from earlier versions of PolyGlot, but the
-                            functionality has remained identical.</div>
+                            left as one of the main modules in PolyGlot.<br></div>
                         <br>
                         <br>
-                        <img style="width: 621px; height: 638px;" alt="" src="assets/logo2.png"><br>
+                        <img style="" alt="" src="assets/logo2.png"><br>
                         <br>
                         <div align ="left">The logograph dictionary if very similar to the Lexicon in PolyGlot.
                             The list to the left displays all currently created logographs, and can
                             be added to/deleted from with the <span style="font-weight: bold;">+</span>/<span style="font-weight: bold;">-</span> buttons. The <span style="font-weight: bold;">Name</span> and <span style="font-weight: bold;">Notes</span>
 
                             fields have the same function as those in the Lexicon. The
-                            Filter/Search fileds in the top are applied in real time, as with the
+                            Filter/Search fields in the top are applied in real time, as with the
                             Lexicon.<br>
                             <br>
                             The <span style="font-weight: bold;">Strokes</span> field accepts only
@@ -1112,8 +1137,9 @@
                             words to which an association with the logograph has been added.<br>
                             <br>
                             Logographs are created based on user defined images. To load an image
-                            into a logograph's properties, create a new logograph in the <span style="font-weight: bold;">Logograph List</span> and click the Load
-                            Image button. The same button can be used to replace an existing image.<br>
+                            into a logograph's properties, create a new logograph in the <span style="font-weight: bold;">Logograph List</span> and click the <b>Load
+                                Image</b> button. The same button can be used to replace an existing image. Additionally, the <b>Clipboard</b> button can be used 
+                                to load an image as a logograph directly from the clipboard.<br>
                             <br>
                             Under <span style="font-weight: bold;">Radicals</span>, clicking the <span style="font-weight: bold;">+</span> button once will bring up the
                             Logograph Radicals selection tool. Once this is open, clicking <span style="font-weight: bold;">+ </span>a second time will result in the
@@ -1121,21 +1147,21 @@
 
                         <br>
                         <br>
-                        <img style="width: 959px; height: 640px;" alt="" src="assets/logo3.png"><br>
+                        <img style="" alt="" src="assets/logo3.png"><br>
                         <br>
                         <div align ="left">Here, three test logographs have been entered, and using the
                             Logographic Radicals selector (opened the first time <span style="font-weight: bold;">+</span> was clicked), the radicals TEST 1
                             and TEST 2, which make up TEST 3 have been added to the logograph.<br></div>
                         <br>
                         <br>
-                        <img style="width: 444px; height: 582px;" alt="" src="assets/logo4.png"><br>
+                        <img style="" alt="" src="assets/logo4.png"><br>
                         <br>
                         <div align ="left">To associate logographs with a word, click on the <span style="font-weight: bold;">Logographs</span> button while the word is
                             selected in the <span style="font-weight: bold;">Lexicon</span>.<br></div>
 
                         <br>
                         <br>
-                        <img style="width: 955px; height: 640px;" alt="" src="assets/logo5.png"><br>
+                        <img style="" alt="" src="assets/logo5.png"><br>
                         <br>
                         <div align ="left">The <span style="font-weight: bold;">Associated Logographs</span>
                             window (left) will appear after the <span style="font-weight: bold;">Logographs</span>
@@ -1167,7 +1193,11 @@
                             distribute anything with it to ensure that the PDF displays correctly
                             on any given computer. As a note, sound files included in the grammar
                             section currently cannot be embedded in the PDF. This is being looked
-                            into for future releases.<br></div>
+                            into for future releases.<br><br>
+                            NOTE: CSV functionality requires Java 8 installation due to library limitations. 
+                            This will likely be changed in the future, but if you use this functionality without
+                            Java 8 installed, you will be prompted to install it.<br>
+                        </div>
                         <br>
 
                         <img src="assets/PRINTpDF1.png"><br>
@@ -1456,7 +1486,6 @@
                                 <br>
                                 PolyGlot uses the <a href="https://super-csv.github.io/super-csv/index.html">SuperCSV</a> library (dev led by Kasper Graversen)
                                 <br><br>
-                                PolyGlot uses EasyOGG by Kevin Glass (found <a href="http://www.cokeandcode.com/main/code/">here</a>)<br>
                                 This program is free to distribute. Neither it nor its internal code may be sold for a profit or bundled with
                                 for profit software. Basically, don't be a dick about this.<br>
                                 <br>
