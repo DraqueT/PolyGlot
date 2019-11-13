@@ -27,7 +27,6 @@ import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
@@ -37,17 +36,14 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.swing.ImageIcon;
-import javax.swing.InputMap;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
-import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
-import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -64,23 +60,7 @@ public class PGrammarPane extends JTextPane {
     public PGrammarPane(DictCore _core) {
         core = _core;
         setupRightClickMenu();
-        setEditorKit(new GlyphVectorEditorKit()); // TODO: This is causing access violations that will make trouble in Java 13+. Deal with it at some point.
-        setupCopyPaste();
-    }
-    
-    /**
-     * Due to setting editor kit, need to create input map manually
-     */
-    private void setupCopyPaste() {
-        if (System.getProperty("os.name").startsWith("Mac")) {
-            int mask = KeyEvent.META_DOWN_MASK;
-
-            InputMap im = this.getInputMap();
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | mask), DefaultEditorKit.copyAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | mask), DefaultEditorKit.pasteAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | mask), DefaultEditorKit.cutAction);
-            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | mask), DefaultEditorKit.selectAllAction);
-        }
+        setEditorKit(new GlyphVectorEditorKit());
     }
 
     private void setupRightClickMenu() {
