@@ -56,7 +56,7 @@ public class SoundRecorder {
     private JSlider slider;
     private JTextField timer;
     private final AudioFormat format;
-    private final static int timeToDie = 100;
+    private final static int TIME_TO_DIE = 100;
     private String playThread = "";
     private String recordThread = "";
     private final Window parentWindow;
@@ -158,8 +158,8 @@ public class SoundRecorder {
         sound = null;
         killPlay = true;
         try {
-            Thread.sleep(timeToDie);
-        } // max amount of time before player kills self
+            Thread.sleep(TIME_TO_DIE);
+        } // max amount of time before player kills self // max amount of time before player kills self
         catch (InterruptedException e) {
             // if it's interrupted, it's fine. The recording will end.
             // IOHandler.writeErrorLog(e);
@@ -180,26 +180,26 @@ public class SoundRecorder {
 
         final SoundRecorder parent = this;
         final DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-        try ( TargetDataLine line = (TargetDataLine) AudioSystem.getLine(info)) {
-            // 8000 is the typical rate, but I wanted to get increments of 1/100 second
-            int bufferSize = 80; //(int) format.getSampleRate() * format.getFrameSize();
+        
+        // 8000 is the typical rate, but I wanted to get increments of 1/100 second
+        int bufferSize = 80; //(int) format.getSampleRate() * format.getFrameSize();
 
-            final byte[] buffer = new byte[bufferSize];
-            out = new ByteArrayOutputStream();
+        final byte[] buffer = new byte[bufferSize];
+        out = new ByteArrayOutputStream();
 
-            curRecording = true;
-            recordBut.setIcon(recDown);
+        curRecording = true;
+        recordBut.setIcon(recDown);
 
-            line.open(format);
-            line.start();
+        resetUIValues();
 
-            resetUIValues();
+        if (soundThread != null && soundThread.isAlive()) {
+            soundThread.interrupt();
+        }
 
-            if (soundThread != null && soundThread.isAlive()) {
-                soundThread.interrupt();
-            }
-
-            soundThread = new Thread(() -> {
+        soundThread = new Thread(() -> {
+            try (TargetDataLine line = (TargetDataLine) AudioSystem.getLine(info)) {
+                line.open(format);
+                line.start();
                 int bytesRecorded = 0;
                 float BPS = (format.getSampleRate()
                         * format.getSampleSizeInBits()) / 8;
@@ -217,16 +217,12 @@ public class SoundRecorder {
 
                 recordBut.setIcon(recUp);
 
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    //e.printStackTrace();
-                    IOHandler.writeErrorLog(e);
-                    InfoBox.error("Recording error: ", "Unable to record: "
-                            + e.getLocalizedMessage(), parentWindow);
-                }
-            });
-        }
+                out.close();
+            } catch (LineUnavailableException | IOException e) {
+                IOHandler.writeErrorLog(e);
+                InfoBox.error("Recording Error", "Unable to initialize recording: " + e.getLocalizedMessage(), parentWindow);
+            }
+        });
 
         recordThread = soundThread.toString();
         soundThread.start();
@@ -247,8 +243,8 @@ public class SoundRecorder {
 
         // wait for recording thread to die
         try {
-            Thread.sleep(timeToDie);
-        } // longest time for thread to die
+            Thread.sleep(TIME_TO_DIE);
+        } // longest time for thread to die // longest time for thread to die
         catch (InterruptedException e) {
             // do nothing
             // IOHandler.writeErrorLog(e);
@@ -307,7 +303,7 @@ public class SoundRecorder {
                     if (count > 0) {
                         while (!playing) { // if paused, wait until unpaused
                             // suppression for this warning is nonfunctional. Very annoying.
-                            Thread.sleep(timeToDie);
+                            Thread.sleep(TIME_TO_DIE);
                             playPauseBut.setIcon(playUp);
 
                             if (killPlay) { // immediately ends playing process

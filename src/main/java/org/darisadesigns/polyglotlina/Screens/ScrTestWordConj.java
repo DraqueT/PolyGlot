@@ -143,6 +143,7 @@ public final class ScrTestWordConj extends PDialog {
             }
         });
 
+        txtTestForm.setEditable(false);
         txtTestForm.setToolTipText("Conjugated/declined word form appears here.");
 
         txtDebug.setEditable(false);
