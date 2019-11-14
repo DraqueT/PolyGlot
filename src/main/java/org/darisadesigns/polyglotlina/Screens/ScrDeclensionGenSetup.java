@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -218,6 +219,46 @@ public final class ScrDeclensionGenSetup extends PDialog {
         curDialog.dispose();
         super.dispose();
     }
+    
+    private void popoutTester() {
+        if (child == null || child.isDisposed()) {
+            child = new ScrTestWordConj(core, typeId, this);
+            child.setVisible(true);
+            child.addWindowListener(new WindowListener() {
+                    @Override
+                    public void windowOpened(WindowEvent ex) {
+                    }
+
+                    @Override
+                    public void windowClosing(WindowEvent ex) {
+                    }
+
+                    @Override
+                    public void windowClosed(WindowEvent ex) {
+                        btnTestWord.setEnabled(true);
+                    }
+
+                    @Override
+                    public void windowIconified(WindowEvent ex) {
+                    }
+
+                    @Override
+                    public void windowDeiconified(WindowEvent ex) {
+                    }
+
+                    @Override
+                    public void windowActivated(WindowEvent ex) {
+                    }
+
+                    @Override
+                    public void windowDeactivated(WindowEvent ex) {
+                    }
+                });
+            btnTestWord.setEnabled(false);
+        } else {
+            child.toFront();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -322,12 +363,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void btnTestWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestWordActionPerformed
-        if (child == null || child.isDisposed()) {
-            child = new ScrTestWordConj(core, typeId, this);
-            child.setVisible(true);
-        } else {
-            child.toFront();
-        }
+        popoutTester();
     }//GEN-LAST:event_btnTestWordActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
