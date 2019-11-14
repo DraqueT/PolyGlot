@@ -151,8 +151,13 @@ public class PClassCheckboxPanel extends JPanel {
         });
         
         // if this is the default rule without any rule set, disable checkboxes
-        setEnabledClassChecks(rule.getTypeId() != -1);
         allCheckBox.setEnabled(rule.getTypeId() != -1);
+        
+        if (allCheckBox.isSelected()) {
+            uncheckDisableClassChecks();
+        } else {
+            setEnabledClassChecks(rule.getTypeId() != -1);
+        }
     }
     
     private void addCheckBox(String title, String toolTip, ItemListener listener, int classId, int valueId) {
