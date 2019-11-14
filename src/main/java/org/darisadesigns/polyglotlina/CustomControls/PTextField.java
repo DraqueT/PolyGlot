@@ -80,12 +80,18 @@ public final class PTextField extends JTextField {
 
         core = _core;
         defText = _defText;
+        overrideFont = _overrideFont;
         setupListeners();
         setForeground(Color.lightGray);
         setupRightClickMenu();
-        this.setOverrideFont(_overrideFont);
         setText(defText);
         setupLook();
+        
+        if (overrideFont) {
+            setFont(core.getPropertiesManager().getFontLocal().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
+        } else {
+            setFont(core.getPropertiesManager().getFontCon());
+        }
     }
     
     public void setupLook() {
@@ -111,19 +117,8 @@ public final class PTextField extends JTextField {
         super.setBackground(b);
     }
 
-    public void setOverrideFont(boolean _overrideFont) {
-        overrideFont = _overrideFont;
-
-        if (overrideFont) {
-            setFont(core.getPropertiesManager().getFontLocal().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
-        } else {
-            setFont(core.getPropertiesManager().getFontCon());
-        }
-    }
-
     public void setCore(DictCore _core) {
         core = _core;
-        setOverrideFont(overrideFont);
     }
 
     @Override
