@@ -243,7 +243,6 @@ def packLinux():
         '--description "PolyGlot is a spoken language construction toolkit." ' +
         '--icon packaging_files/PolyGlot0.png' +
         '--app-version ' + POLYGLOT_VERSION + ' ' +
-        '--linux-app-release ' + POLYGLOT_VERSION + ' ' +
         '--linux-app-category Education ' +
         '--linux-bundle-name PolyGlot ' +
         '--linux-deb-maintainer draquemail@gmail.com') 
