@@ -27,6 +27,7 @@ import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.font.TextAttribute;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -180,11 +181,13 @@ public class PropertiesManager {
     public javafx.scene.text.Font getFXFont() {
         javafx.scene.text.Font ret;
 
-        if (conFont == null) {
-            ret = (new javafx.scene.control.TextField()).getFont();
-        } else {
+        if (cachedConFont != null) { // first try to load from cached file...
+            ret = javafx.scene.text.Font.loadFont(new ByteArrayInputStream(cachedConFont), conFontSize);
+        } else if (conFont != null) { // second try to load from registered OS fonts...
             java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(conFont);
             ret = javafx.scene.text.Font.font(conFont.getFamily(), conFontSize);
+        } else { // last default to menu standard
+            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), core.getOptionsManager().getMenuFontSize());
         }
 
         return ret;
