@@ -241,9 +241,12 @@ def packLinux():
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
         '--copyright "2014-2019 Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
-        '--icon packaging_files/PolyGlot0.png') 
-        # adding version number in Linux with modular build currently broken in jpackage. Check back after J14 release...
-        # '--app-version ' + POLYGLOT_VERSION)
+        '--icon packaging_files/PolyGlot0.png' +
+        '--app-version ' + POLYGLOT_VERSION + ' ' +
+        '--linux-app-release ' + POLYGLOT_VERSION + ' ' +
+        '--linux-app-category Education ' +
+        '--linux-bundle-name PolyGlot ' +
+        '--linux-deb-maintainer draquemail@gmail.com') 
 
     os.system(command)
     
