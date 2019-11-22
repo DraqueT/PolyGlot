@@ -150,4 +150,7 @@ fi
 DIFF=$(echo "$END - $START" | bc)
 echo "Total time spent: "$DIFF" seconds"
 
+LINECOUNT=$(git ls-files | grep ".java" | xargs wc -l | grep -o '[0-9]\+ total')
+echo "Java lines built: $LINECOUNT"
+
 echo "Full build process complete!"
