@@ -39,6 +39,8 @@ import org.darisadesigns.polyglotlina.IOHandler;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -51,6 +53,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.JFXPanel;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Control;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -69,15 +86,25 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.PFontHandler;
 
 /**
  *
  * @author draque
  */
 public class ScrLogoDetails extends PFrame {
+    private static final String FILTER_LABEL = "Logograph Filter";
     private boolean selectOnlyMode = false;
     private boolean curPopulating = false;
     private ScrLogoQuickView quickView = null;
+    private TextField fltStrokes;
+    private TextField fltRadical;
+    private TextField fltReading;
+    private TextField fltRelatedWord;
+    private TextField fltNotes;
+    private final JFXPanel fxPanel;
+    private TitledPane gridTitlePane = null;
+    private Thread filterThread = null;
 
     /**
      * Creates new form ScrLogoDetails
@@ -86,6 +113,7 @@ public class ScrLogoDetails extends PFrame {
      */
     public ScrLogoDetails(DictCore _core) {
         super(_core);
+        fxPanel = new JFXPanel();
         createNew(_core, -1);
     }
 
@@ -97,6 +125,7 @@ public class ScrLogoDetails extends PFrame {
      */
     public ScrLogoDetails(DictCore _core, int logoId) {
         super(_core);
+        fxPanel = new JFXPanel();
         createNew(_core, logoId);
     }
     
@@ -129,8 +158,124 @@ public class ScrLogoDetails extends PFrame {
         }
         
         populateLogoProps();
+        setupFilterMenu();
         setupListeners();
         super.getRootPane().getContentPane().setBackground(Color.white);
+    }
+    
+    private void setupFilterMenu() {
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.gridheight = GridBagConstraints.RELATIVE;
+        c.gridwidth = GridBagConstraints.RELATIVE;
+
+        jPanel1.setLayout(new GridLayout());
+        jPanel1.add(fxPanel, c);
+        jPanel1.setBackground(Color.white);
+        fxPanel.setBackground(Color.white);
+        
+        final CountDownLatch latch = new CountDownLatch(1);
+        Platform.setImplicitExit(false);
+        Platform.runLater(() -> {
+            fxPanel.setScene(createScene());
+            latch.countDown();
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            IOHandler.writeErrorLog(e);
+            InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), core.getRootWindow());
+        }
+        
+        gridTitlePane.setTooltip(new Tooltip(FILTER_LABEL));
+    }
+    
+    private Scene createScene() {
+        Group root = new Group();
+        Scene scene = new Scene(root);
+        root.getChildren().add(createSearchPanel());
+
+        return scene;
+    }
+    
+    private TitledPane createSearchPanel() {
+        GridPane grid = new GridPane();
+        javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), core.getOptionsManager().getMenuFontSize());
+        javafx.scene.text.Font conFont = core.getPropertiesManager().getFXFont();
+        
+        gridTitlePane = new TitledPane();
+        gridTitlePane.setFont(font);
+        
+        grid.setPrefWidth(4000);
+        fltRelatedWord = new TextField();
+        fltRelatedWord.setPromptText("Filter by related word...");
+        fltRelatedWord.setFont(font);
+        fltRelatedWord.setTooltip(new Tooltip("Filter based on words related to logographs"));
+        fltStrokes = new TextField();
+        fltStrokes.setPromptText("Fileter Stroke Count...");
+        fltStrokes.setFont(font);
+        fltStrokes.setTooltip(new Tooltip("Filter based on number of strokes"));
+        fltRadical = new TextField();
+        fltRadical.setPromptText("Filter by Radical...");
+        fltRadical.setFont(conFont);
+        fltRadical.setTooltip(new Tooltip("Filter based on a radical contained in your logograph"));
+        fltReading = new TextField();
+        fltReading.setPromptText("Filter on Reading...");
+        fltReading.setFont(conFont);
+        fltReading.setTooltip(new Tooltip("Filter based on logograph reading"));
+        fltNotes = new TextField();
+        fltNotes.setPromptText("Filter on Notes...");
+        fltNotes.setFont(font);
+        fltNotes.setTooltip(new Tooltip("Filter based on logograph notes"));
+        
+
+        grid.setVgap(4);
+        grid.setPadding(new Insets(5, 5, 5, 5));
+        grid.add(new Label("Related Word: "), 0, 0);
+        grid.add(fltRelatedWord, 1, 0);
+        grid.add(new Label("Strokes: "), 0, 1);
+        grid.add(fltStrokes, 1, 1);
+        grid.add(new Label("Radical: "), 0, 2);
+        grid.add(fltRadical, 1, 2);
+        grid.setPadding(new Insets(5, 5, 5, 5));
+        grid.add(new Label("            "), 2, 0); // adds spacing
+        grid.add(new Label("Reading: "), 3, 0);
+        grid.add(fltReading, 4, 0);
+        grid.add(new Label("Notes: "), 3, 1);
+        grid.add(fltNotes, 4, 1);
+
+        javafx.scene.control.Button srcButton = new javafx.scene.control.Button("Filter");
+        srcButton.setOnAction((javafx.event.ActionEvent t) -> {
+            runFilter();
+        });
+        grid.add(srcButton, 4, 2);
+        
+        // sets up button to clear filter
+        javafx.scene.control.Button clearButton = new javafx.scene.control.Button("Clear Filter");
+        clearButton.setOnAction((javafx.event.ActionEvent t) -> {
+            clearFilterInternal();
+            runFilter();
+        });
+        grid.add(clearButton, 4, 3);
+        
+        gridTitlePane.setText("Search/Filter");
+        gridTitlePane.setContent(grid);
+        gridTitlePane.setExpanded(false);
+
+        return gridTitlePane;
+    }
+    
+    /**
+     * Should only be called from logic within the filter pane Does not close filter, and is guaranteed running inside
+     * fxProcess, so no latch logic necessary.
+     */
+    private void clearFilterInternal() {
+        fltNotes.setText("");
+        fltRadical.setText("");
+        fltReading.setText("");
+        fltRelatedWord.setText("");
+        fltStrokes.setText("");
     }
 
     @Override
@@ -246,92 +391,19 @@ public class ScrLogoDetails extends PFrame {
                 updateStrokes();
             }
         });
-        fltStrokes.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                if (checkStrokeFilter()) {
-                    runFilter();
-                }
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                if (checkStrokeFilter()) {
-                    runFilter();
-                }
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                if (checkStrokeFilter()) {
-                    runFilter();
-                }
-            }
+        
+        gridTitlePane.heightProperty()
+                .addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            int contentHeight = newValue.intValue();
+            jPanel1.setSize(jPanel1.getSize().width, contentHeight);
+            fxPanel.setSize(fxPanel.getSize().width, contentHeight);
         });
-        fltRadical.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                runFilter();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                runFilter();
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                runFilter();
-            }
-        });
-        fltReading.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                runFilter();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                runFilter();
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                runFilter();
-            }
-        });
-        fltRelatedWord.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                runFilter();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                runFilter();
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                runFilter();
-            }
-        });
-        fltNotes.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                runFilter();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                runFilter();
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                runFilter();
-            }
-        });
+        
+        addFilterListeners(fltNotes);
+        addFilterListeners(fltRadical);
+        addFilterListeners(fltReading);
+        addFilterListeners(fltRelatedWord);
+        addFilterListeners(fltStrokes);
 
         final JPopupMenu ruleMenu = new JPopupMenu();
         final JMenuItem pasteImage = new JMenuItem("Paste Image");
@@ -354,6 +426,21 @@ public class ScrLogoDetails extends PFrame {
                 if (e.isPopupTrigger() && txtName.isEnabled()) {
                     pasteImage.setEnabled(true);
                     ruleMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
+    }
+    
+    /**
+     * Adds appropriate listeners to filter fields (java FX Control objects)
+     *
+     * @param field field to add listener to
+     */
+    private void addFilterListeners(final Control field) {
+        field.setOnKeyPressed(new EventHandler<javafx.scene.input.KeyEvent>() {
+            public void handle(javafx.scene.input.KeyEvent ke) {
+                if (ke.getCode() == KeyCode.ENTER) {
+                    runFilter();
                 }
             }
         });
@@ -427,7 +514,7 @@ public class ScrLogoDetails extends PFrame {
             java.awt.EventQueue.invokeLater(() -> {
                 curPopulating = true;
                 txtStrokes.setText("");
-                InfoBox.info("Type mismatch", "Strokes field compatible with integer values only", core.getRootWindow());
+                InfoBox.info("Type mismatch", "Please enter only numeric values into strokes field.", core.getRootWindow());
                 curPopulating = false;
             });
         }
@@ -567,11 +654,11 @@ public class ScrLogoDetails extends PFrame {
         btnAddLogo.setEnabled(!set);
         btnClipboard.setEnabled(!set);
         btnDelLogo.setEnabled(!set);
-        fltNotes.setEnabled(!set);
-        fltRadical.setEnabled(!set);
-        fltReading.setEnabled(!set);
-        fltRelatedWord.setEnabled(!set);
-        fltStrokes.setEnabled(!set);
+        fltNotes.setEditable(!set);
+        fltRadical.setEditable(!set);
+        fltReading.setEditable(!set);
+        fltRelatedWord.setEditable(!set);
+        fltStrokes.setEditable(!set);
     }
 
     /**
@@ -595,12 +682,32 @@ public class ScrLogoDetails extends PFrame {
 
         lstRelWords.setModel(wordModel);
     }
+    
+    /**
+     * Runs filter on timed thread to avoid overabundance of filters and prevent filtering overlaps. Run this instead of
+     * filterLexicon().
+     */
+    private void runFilter() {
+        if (checkStrokeFilter()) {
+            if (filterThread != null
+                    && filterThread.isAlive()) {
+                filterThread.interrupt();
+            }
+
+            filterThread = new Thread(() -> {
+                filterLogographs();
+            });
+
+            Platform.runLater(filterThread::start);
+            gridTitlePane.setExpanded(false);
+        }
+    }
 
     /**
      * Applies filter to logograph list, or populates normally if nothing to
      * filter on
      */
-    private void runFilter() {
+    private void filterLogographs() {
         // before modifying any values, save...
         saveRads(lstLogos.getSelectedIndex());
         saveReadings(lstLogos.getSelectedIndex());
@@ -611,6 +718,12 @@ public class ScrLogoDetails extends PFrame {
                 && fltRelatedWord.getText().trim().isEmpty()
                 && fltStrokes.getText().trim().isEmpty()) {
             populateLogographs();
+            
+            gridTitlePane.setTooltip(new Tooltip(FILTER_LABEL));
+            gridTitlePane.setTextFill(javafx.scene.paint.Color.BLACK);
+        } else {
+            gridTitlePane.setTooltip(new Tooltip(FILTER_LABEL + " ACTIVE"));
+            gridTitlePane.setTextFill(javafx.scene.paint.Color.BLUEVIOLET);
         }
 
         int strokes = fltStrokes.getText().trim().isEmpty()
@@ -632,6 +745,8 @@ public class ScrLogoDetails extends PFrame {
      * @return true if valid, false otherwise
      */
     private boolean checkStrokeFilter() {
+        boolean ret = true;
+        
         if (!fltStrokes.getText().isEmpty()) {
             try {
                 Integer.parseInt(fltStrokes.getText());
@@ -646,11 +761,11 @@ public class ScrLogoDetails extends PFrame {
                     curPopulating = false;
                 });
 
-                return false;
+                ret = false;
             }
         }
 
-        return true;
+        return ret;
     }
 
     /**
@@ -960,17 +1075,11 @@ public class ScrLogoDetails extends PFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLayeredPane1 = new javax.swing.JLayeredPane();
         jPanel1 = new javax.swing.JPanel();
-        fltRelatedWord = new PTextField(core, false, "-- Related Word --");
-        fltStrokes = new PTextField(core, true, "-- Strokes --");
-        jLabel3 = new PLabel("", menuFontSize);
-        fltReading = new PTextField(core, false, "-- Reading --");
-        fltNotes = new PTextField(core, true, "-- Notes --");
-        fltRadical = new PTextField(core, false, "-- Radical --");
+        jLabel6 = new PLabel("", menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
         lstLogos = new PList(core.getPropertiesManager().getFontCon());
-        btnAddLogo = new PAddRemoveButton("+");
-        btnDelLogo = new PAddRemoveButton("-");
         jPanel2 = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -994,64 +1103,30 @@ public class ScrLogoDetails extends PFrame {
         txtNotes = new PTextPane(core, true, "-- Notes --");
         btnClipboard = new PButton(nightMode, menuFontSize);
         jTextField5 = new javax.swing.JTextField();
-        jLabel6 = new PLabel("", menuFontSize);
+        btnAddLogo = new PAddRemoveButton("+");
+        btnDelLogo = new PAddRemoveButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Logograph Details");
         setBackground(new java.awt.Color(255, 255, 255));
 
+        jLayeredPane1.setBackground(new java.awt.Color(255, 255, 255));
+
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        fltRelatedWord.setToolTipText("Filter on related words");
-
-        fltStrokes.setToolTipText("Filter by number of strokes");
-
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("<HTML><b>FILTER/SEARCH</b>");
-
-        fltReading.setToolTipText("Filter by reading");
-
-        fltNotes.setToolTipText("Filter on text in notes");
-
-        fltRadical.setToolTipText("Filter by radical name");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fltRelatedWord)
-                            .addComponent(fltStrokes)
-                            .addComponent(fltRadical, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(fltReading, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
-                            .addComponent(fltNotes))))
-                .addContainerGap())
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fltRelatedWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fltReading, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fltStrokes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fltNotes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fltRadical, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+            .addGap(0, 19, Short.MAX_VALUE)
         );
+
+        jLabel6.setText("Logographs");
+        jLabel6.setToolTipText("");
 
         lstLogos.setModel(new javax.swing.AbstractListModel<Object>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -1065,22 +1140,6 @@ public class ScrLogoDetails extends PFrame {
             }
         });
         jScrollPane1.setViewportView(lstLogos);
-
-        btnAddLogo.setToolTipText("New logograph");
-        btnAddLogo.setPreferredSize(new java.awt.Dimension(40, 29));
-        btnAddLogo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddLogoActionPerformed(evt);
-            }
-        });
-
-        btnDelLogo.setToolTipText("Delete selected logograph");
-        btnDelLogo.setPreferredSize(new java.awt.Dimension(40, 29));
-        btnDelLogo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDelLogoActionPerformed(evt);
-            }
-        });
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -1243,7 +1302,7 @@ public class ScrLogoDetails extends PFrame {
                                 .addComponent(btnClipboard, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnAddReading, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                                 .addComponent(btnDelReading, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1284,7 +1343,7 @@ public class ScrLogoDetails extends PFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1301,51 +1360,83 @@ public class ScrLogoDetails extends PFrame {
         jTextField5.setDoubleBuffered(true);
         jTextField5.setEnabled(false);
 
-        jLabel6.setText("Logographs");
-        jLabel6.setToolTipText("");
+        btnAddLogo.setToolTipText("New logograph");
+        btnAddLogo.setPreferredSize(new java.awt.Dimension(40, 29));
+        btnAddLogo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddLogoActionPerformed(evt);
+            }
+        });
+
+        btnDelLogo.setToolTipText("Delete selected logograph");
+        btnDelLogo.setPreferredSize(new java.awt.Dimension(40, 29));
+        btnDelLogo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelLogoActionPerformed(evt);
+            }
+        });
+
+        jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DRAG_LAYER);
+        jLayeredPane1.setLayer(jLabel6, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jTextField5, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(btnAddLogo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(btnDelLogo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(83, 83, 83))
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jLayeredPane1Layout.createSequentialGroup()
+                                .addComponent(btnAddLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnDelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAddLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnDelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(btnAddLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnDelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField5)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(6, 6, 6))))
+            .addComponent(jLayeredPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addComponent(jLayeredPane1)
         );
 
         pack();
@@ -1505,16 +1596,11 @@ public class ScrLogoDetails extends PFrame {
     private javax.swing.JButton btnDelReading;
     private javax.swing.JButton btnLoadImage;
     private javax.swing.JCheckBox chkIsRad;
-    private javax.swing.JTextField fltNotes;
-    private javax.swing.JTextField fltRadical;
-    private javax.swing.JTextField fltReading;
-    private javax.swing.JTextField fltRelatedWord;
-    private javax.swing.JTextField fltStrokes;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
