@@ -53,7 +53,7 @@ public final class PPanelDrawEtymology extends JPanel {
     private FontMetrics charisFontMetrics;
     private int curYDepth = 0;
     private int lowestDepth = 0;
-    private final static int xWordSpaceBuffer = 20;
+    private final static int X_WORD_SPACE_BUFFER = 20;
     private RectangularCoordinateMap<ConWord> wordMap = new RectangularCoordinateMap<>();
 
     public PPanelDrawEtymology(DictCore _core, ConWord _word) {
@@ -109,9 +109,9 @@ public final class PPanelDrawEtymology extends JPanel {
         if (curNode.isExternal ) {
             int wordSize = charisFontMetrics.stringWidth(curNode.extWordValue);
             int originSize = charisFontMetrics.stringWidth(curNode.extWordOrigin);
-            mySize = (Math.max(wordSize, originSize)) + xWordSpaceBuffer;
+            mySize = (Math.max(wordSize, originSize)) + X_WORD_SPACE_BUFFER;
         } else {
-            mySize = conFontMetrics.stringWidth(curNode.word.getValue()) + xWordSpaceBuffer;
+            mySize = conFontMetrics.stringWidth(curNode.word.getValue()) + X_WORD_SPACE_BUFFER;
         }
 
         if (columnWidth.containsKey(curDepth)) {
@@ -136,7 +136,7 @@ public final class PPanelDrawEtymology extends JPanel {
      */
     private void calcColumnWidthChildren(EtymologyPrintingNode curNode) {
         Integer curDepth = curNode.depth;
-        Integer mySize = conFontMetrics.stringWidth(curNode.word.getValue()) + xWordSpaceBuffer;
+        Integer mySize = conFontMetrics.stringWidth(curNode.word.getValue()) + X_WORD_SPACE_BUFFER;
 
         if (columnWidth.containsKey(curDepth)) {
             // the maximum width of each depth is saved, as each is one "column" in the visual display
