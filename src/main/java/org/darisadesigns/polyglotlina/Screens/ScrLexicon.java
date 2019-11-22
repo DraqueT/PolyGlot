@@ -64,6 +64,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -77,6 +78,10 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 import javax.swing.AbstractAction;
@@ -102,6 +107,7 @@ import org.darisadesigns.polyglotlina.PGTUtil;
  */
 public final class ScrLexicon extends PFrame {
 
+    private static final String FILTER_LABEL = "Lexicon Filter";
     private ScrLogoQuickView logoQuick = null;
     private final Map<Integer, JComponent> classPropMap = new HashMap<>();
     private TitledPane gridTitlePane = null;
@@ -493,7 +499,7 @@ public final class ScrLexicon extends PFrame {
         final CountDownLatch latch = new CountDownLatch(1);
         Platform.setImplicitExit(false);
         Platform.runLater(() -> {
-            initFX(fxPanel);
+            fxPanel.setScene(createScene());
             setupComboBoxesFX();
             setFonts();
             latch.countDown();
@@ -505,11 +511,8 @@ public final class ScrLexicon extends PFrame {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), core.getRootWindow());
         }
-    }
-
-    private void initFX(JFXPanel _fxPanel) {
-        Scene scene = createScene();
-        _fxPanel.setScene(scene);
+        
+        gridTitlePane.setTooltip(new Tooltip(FILTER_LABEL));
     }
 
     private Scene createScene() {
@@ -517,7 +520,7 @@ public final class ScrLexicon extends PFrame {
         Scene scene = new Scene(root);
         root.getChildren().add(createSearchPanel());
 
-        return (scene);
+        return scene;
     }
 
     /**
@@ -604,23 +607,18 @@ public final class ScrLexicon extends PFrame {
         }
 
         filterThread = new Thread(() -> {
-            try {
-                Thread.sleep(500); // wait for interrupt from user...
-                if (txtConWord.getText().isEmpty()
-                        && lstLexicon.getSelectedIndex() != -1) {
-                    return; // prevents freezing scenario with if new word made before thread continues
-                }
-                filterLexicon();
-                lstLexicon.setSelectedIndex(0);
-                lstLexicon.ensureIndexIsVisible(0);
-                populateProperties();
-            } catch (InterruptedException e) {
-                // do nothing: interruption is due to additional user input
-                // IOHandler.writeErrorLog(e);
+            if (txtConWord.getText().isEmpty()
+                    && lstLexicon.getSelectedIndex() != -1) {
+                return; // prevents freezing scenario if new word made before thread continues
             }
+            filterLexicon();
+            lstLexicon.setSelectedIndex(0);
+            lstLexicon.ensureIndexIsVisible(0);
+            populateProperties();
         });
 
         Platform.runLater(filterThread::start);
+        gridTitlePane.setExpanded(false);
     }
     
     /**
@@ -675,6 +673,9 @@ public final class ScrLexicon extends PFrame {
             populateLexicon();
             lstLexicon.setSelectedIndex(0);
             lstLexicon.ensureIndexIsVisible(0);
+            
+            gridTitlePane.setTooltip(new Tooltip(FILTER_LABEL));
+            gridTitlePane.setTextFill(javafx.scene.paint.Color.BLACK);
 
             // refresh lexicon if it was already filtered. Do nothing otherwise
             if (lstLexicon.getModel().getSize() < core.getWordCollection().getWordCount()) {
@@ -685,6 +686,9 @@ public final class ScrLexicon extends PFrame {
                 return;
             }
         }
+        
+        gridTitlePane.setTooltip(new Tooltip(FILTER_LABEL + " ACTIVE"));
+        gridTitlePane.setTextFill(javafx.scene.paint.Color.BLUEVIOLET);
 
         ConWord filter = new ConWord();
 
@@ -882,7 +886,7 @@ public final class ScrLexicon extends PFrame {
      */
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
-        final javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), 12);
+        final javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), core.getOptionsManager().getMenuFontSize());
 
         grid.setPrefWidth(4000);
         txtConSrc = new TextField();
@@ -961,13 +965,20 @@ public final class ScrLexicon extends PFrame {
         gridTitlePane.setContent(grid);
         gridTitlePane.setExpanded(false);
 
+        // TODO: THIS SCHITT
+        javafx.scene.control.Button srcButton = new javafx.scene.control.Button("Filter");
+        srcButton.setOnAction((javafx.event.ActionEvent t) -> {
+            runFilter();
+        });
+        grid.add(srcButton, 4, 3);
+        
         // sets up button to clear filter
         javafx.scene.control.Button clearButton = new javafx.scene.control.Button("Clear Filter");
         clearButton.setOnAction((javafx.event.ActionEvent t) -> {
             clearFilterInternal();
             runFilter();
         });
-        grid.add(clearButton, 4, 3);
+        grid.add(clearButton, 4, 4);
 
         return gridTitlePane;
     }
@@ -1218,7 +1229,10 @@ public final class ScrLexicon extends PFrame {
             }
         });
 
-        addPropertyListeners(cmbType, defTypeValue.getValue());
+        // TODO: Remove property listener - change filter listener to add fire filter when user hits enter
+        // TODO: Add filter closes jfx panel
+        // TODO: Add filter button?
+        //addPropertyListeners(cmbType, defTypeValue.getValue());
         addFilterListeners(txtConSrc);
         addFilterListeners(txtDefSrc);
         addFilterListeners(txtLocalSrc);
@@ -1266,21 +1280,13 @@ public final class ScrLexicon extends PFrame {
      * @param field field to add listener to
      */
     private void addFilterListeners(final Control field) {
-        if (field instanceof TextField) {
-            field.addEventHandler(EventType.ROOT, (Event evt) -> {
-                Object type1 = evt.getEventType();
-                if (type1.toString().equals(javafx.scene.input.KeyEvent.KEY_PRESSED.toString())) {
+        field.setOnKeyPressed(new EventHandler<javafx.scene.input.KeyEvent>() {
+            public void handle(javafx.scene.input.KeyEvent ke) {
+                if (ke.getCode() == KeyCode.ENTER) {
                     runFilter();
                 }
-            });
-        } else if (field instanceof ComboBox) {
-            field.addEventHandler(EventType.ROOT, (Event evt) -> {
-                Object type1 = evt.getEventType();
-                if (type1.toString().equals(javafx.scene.control.ComboBoxBase.ON_HIDING.toString())) {
-                    runFilter();
-                }
-            });
-        }
+            }
+        });
     }
 
     /**
