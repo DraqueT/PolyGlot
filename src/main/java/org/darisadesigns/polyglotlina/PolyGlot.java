@@ -24,13 +24,9 @@ import java.awt.Desktop;
 import java.awt.Taskbar;
 import java.awt.Toolkit;
 import java.awt.desktop.AboutEvent;
-import java.awt.desktop.AboutHandler;
 import java.awt.desktop.PreferencesEvent;
-import java.awt.desktop.PreferencesHandler;
 import java.awt.desktop.PrintFilesEvent;
-import java.awt.desktop.PrintFilesHandler;
 import java.awt.desktop.QuitEvent;
-import java.awt.desktop.QuitHandler;
 import java.awt.desktop.QuitResponse;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -134,32 +130,20 @@ public final class PolyGlot {
                                 Desktop desk = Desktop.getDesktop();
                                 final ScrMainMenu staticScr = s;
                                 
-                                desk.setQuitHandler(new QuitHandler(){
-                                    @Override
-                                    public void handleQuitRequestWith(QuitEvent e, QuitResponse response) {
-                                        staticScr.dispose();
-                                    }
+                                desk.setQuitHandler((QuitEvent e, QuitResponse response) -> {
+                                    staticScr.dispose();
                                 });
                                 
-                                desk.setPreferencesHandler(new PreferencesHandler(){
-                                    @Override
-                                    public void handlePreferences(PreferencesEvent e) {
-                                        staticScr.showOptions();
-                                    }
+                                desk.setPreferencesHandler((PreferencesEvent e) -> {
+                                    staticScr.showOptions();
                                 });
 
-                                desk.setAboutHandler(new AboutHandler(){
-                                    @Override
-                                    public void handleAbout(AboutEvent e) { 
-                                        ScrAbout.run(new DictCore(polyGlot));
-                                    }
+                                desk.setAboutHandler((AboutEvent e) -> {
+                                    ScrAbout.run(new DictCore(polyGlot));
                                 });
                                 
-                                desk.setPrintFileHandler(new PrintFilesHandler(){
-                                    @Override
-                                    public void printFiles(PrintFilesEvent e) {
-                                        staticScr.printToPdf();
-                                    }
+                                desk.setPrintFileHandler((PrintFilesEvent e) -> {
+                                    staticScr.printToPdf();
                                 });
                             } else if (PGTUtil.IS_WINDOWS && osIntegration) {
                                 // TODO: review if needed

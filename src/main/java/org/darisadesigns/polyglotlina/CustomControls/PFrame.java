@@ -69,6 +69,7 @@ public abstract class PFrame extends JFrame implements FocusListener {
         menuFontSize = core.getOptionsManager().getMenuFontSize();
         nightMode = core.getOptionsManager().isNightMode();
         this.addWindowStateListener(this::setWindowState);
+        this.setupOS();
     }
     
     protected PFrame(DictCore _core, WindowMode _mode) {
@@ -77,11 +78,21 @@ public abstract class PFrame extends JFrame implements FocusListener {
         menuFontSize = core.getOptionsManager().getMenuFontSize();
         nightMode = core.getOptionsManager().isNightMode();
         this.addWindowStateListener(this::setWindowState);
+        this.setupOS();
     }
 
     @Override
     public synchronized final void addWindowStateListener(WindowStateListener listener) {
         super.addWindowStateListener(listener);
+    }
+    
+    /**
+     * Sets up an OS specific display properties
+     */
+    private void setupOS() {
+        if (PGTUtil.IS_LINUX) {
+            this.setIconImage(PGTUtil.POLYGLOT_ICON.getImage());
+        }
     }
 
     /**
@@ -324,7 +335,6 @@ public abstract class PFrame extends JFrame implements FocusListener {
      *
      * @param width new width of element
      * @param height new height of element
-     * @throws java.lang.InterruptedException
      */
     public void setSizeSmooth(final int width, final int height) {
         final int numFrames = 20; // total number of frames to animate
