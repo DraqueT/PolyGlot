@@ -54,6 +54,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         core = _core;
         menuFontSize = core.getOptionsManager().getMenuFontSize();
         nightMode = core.getOptionsManager().isNightMode();
+        this.setupOS();
     }
     
     public PDialog(DictCore _core, boolean _firstVisible) {
@@ -61,6 +62,16 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         firstVisible = _firstVisible;
         menuFontSize = core.getOptionsManager().getMenuFontSize();
         nightMode = core.getOptionsManager().isNightMode();
+        this.setupOS();
+    }
+    
+    /**
+     * Sets up an OS specific display properties
+     */
+    private void setupOS() {
+        if (PGTUtil.IS_LINUX) {
+            this.setIconImage(PGTUtil.POLYGLOT_ICON.getImage());
+        }
     }
     
     /**

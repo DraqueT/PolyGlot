@@ -404,6 +404,7 @@ public final class PGTUtil {
 
     public static final boolean IS_OSX;
     public static final boolean IS_WINDOWS;
+    public static final boolean IS_LINUX;
 
     // one time set for code driven static values
     static {
@@ -470,6 +471,7 @@ public final class PGTUtil {
 
         IS_OSX = isOSX();
         IS_WINDOWS = isWindows();
+        IS_LINUX = isLinux();
         
         // sets version number and beta status
         String version = getVersion();
@@ -584,6 +586,10 @@ public final class PGTUtil {
 
     private static boolean isWindows() {
         return System.getProperty("os.name").startsWith("Win");
+    }
+    
+    private static boolean isLinux() {
+        return System.getProperty("os.name").contains("Linux");
     }
 
     /**
