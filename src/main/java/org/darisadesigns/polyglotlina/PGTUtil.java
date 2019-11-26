@@ -523,6 +523,7 @@ public final class PGTUtil {
         VERSION_HIERARCHY.put("2.4", 35);
         VERSION_HIERARCHY.put("2.5", 36);
         VERSION_HIERARCHY.put("3.0", 37);
+        VERSION_HIERARCHY.put("3.0.1", 38);
         
         // Gather build date/time from resources (if it does not exist, ignore)
         URL buildDate = PGTUtil.class.getResource(BUILD_DATE_TIME_LOCATION);
@@ -698,7 +699,13 @@ public final class PGTUtil {
      * @return lower numbers are lower 
      */
     public static int getVersionHierarchy(String version) {
-        return VERSION_HIERARCHY.get(version);
+        int ret = 9999; // version not found is presumed to be higher than any given version in records
+        
+        if (VERSION_HIERARCHY.containsKey(version)) {
+            ret = VERSION_HIERARCHY.get(version);
+        }
+        
+        return ret;
     }
     
     public static void validateVersion() throws Exception {
