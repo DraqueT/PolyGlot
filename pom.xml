@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.DarisaDesigns</groupId>
     <artifactId>PolyGlotLinA</artifactId>
-    <version>3.0.1</version>
+    <version>3.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>12</maven.compiler.source>
