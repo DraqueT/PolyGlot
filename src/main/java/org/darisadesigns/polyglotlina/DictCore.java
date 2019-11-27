@@ -471,6 +471,11 @@ public class DictCore {
         if (!warningLog.trim().isEmpty()) {
             throw new IllegalStateException(warningLog);
         }
+        
+        // do not run in headless environments...
+        if (rootWindow != null) {
+            refreshMainMenu();
+        }
     }
     
     /**

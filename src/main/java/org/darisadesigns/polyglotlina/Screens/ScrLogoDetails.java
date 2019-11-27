@@ -210,7 +210,7 @@ public class ScrLogoDetails extends PFrame {
         grid.setPrefWidth(4000);
         fltRelatedWord = new TextField();
         fltRelatedWord.setPromptText("Filter by related word...");
-        fltRelatedWord.setFont(font);
+        fltRelatedWord.setFont(conFont);
         fltRelatedWord.setTooltip(new Tooltip("Filter based on words related to logographs"));
         fltStrokes = new TextField();
         fltStrokes.setPromptText("Fileter Stroke Count...");
