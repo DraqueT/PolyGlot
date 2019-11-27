@@ -17,6 +17,7 @@ from os import path
 import shutil
 import subprocess
 import sys
+from xml.dom import minidom
 
 buildResult = ''
 copyDestination = ''
@@ -60,11 +61,12 @@ WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 ###############################
 # UNIVERSAL BUILD CONSTANTS
 # You will not need to change these
-JAR_W_DEP = "PolyGlotLinA-3.0-jar-with-dependencies.jar"
-JAR_WO_DEP = "PolyGlotLinA-3.0.jar"
-JAVAFX_VER = "12.0.2"
+JAR_W_DEP = '' # set in main for timing reasons
+JAR_WO_DEP = ' '# set in main for timing reasons
+JAVAFX_VER = '12.0.2'
 POLYGLOT_VERSION = '' # set in main for timing reasons
 JAVA_HOME = '' # set in main for timing reasons
+IS_RELEASE = False
 
 
 
@@ -75,9 +77,13 @@ JAVA_HOME = '' # set in main for timing reasons
 def main(args):
     global POLYGLOT_VERSION
     global JAVA_HOME
+    global IS_RELEASE
+    global JAR_W_DEP
+    global JAR_WO_DEP
     global failFile
     global copyDestination
     global separatorCharacter
+    
     
     skip_steps = []
     
@@ -107,6 +113,15 @@ def main(args):
     else:
         JAVA_HOME = os.getenv('JAVA_HOME')
 
+    # detects if marked for release
+    if '-release' in args:
+        command_index = args.index('-release')
+        print('RELEASE BUILD')
+        IS_RELEASE = True
+        del args[command_index]
+    else:
+        print('BETA BUILD')
+    
     if not JAVA_HOME is not None:
         print('JAVA_HOME must be set. If necessary, use -java-home-o command to override')
         return
@@ -126,6 +141,9 @@ def main(args):
 
     fullBuild = (len(args) == 1) # length of 1 means no arguments (full build)
     POLYGLOT_VERSION = getVersion()
+    updateVersionResource(POLYGLOT_VERSION)
+    JAR_W_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '-jar-with-dependencies.jar'
+    JAR_WO_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '.jar'
     
     if 'help' in args or '-help' in args or '--help' in args:
         printHelp()
@@ -436,16 +454,28 @@ def injectBuildDate():
 #       UTIL FUNCTIONALITY
 ####################################
 
+# fetches version from pom file
 def getVersion():
+    mydoc = minidom.parse('pom.xml')
+    versionItems = mydoc.getElementsByTagName('version')
+    
+    return versionItems[0].firstChild.data
+
+def updateVersionResource(versionString):
+    global IS_RELEASE
+    
     if osString == winString:
         location = 'assets\\assets\\org\\DarisaDesigns\\version'
     else:
         location = 'assets/assets/org/DarisaDesigns/version'
-
-    with open(location, 'r') as myfile:
-        data = myfile.read()
-
-    return data
+    
+    os.remove(location)
+    
+    with open(location, 'w+') as versionFile:
+        if IS_RELEASE:
+            versionFile.write(versionString)
+        else:
+            versionFile.write(versionString + 'B')
 
 # Injects readme (with resources), example dictionaries, etc.
 def injectDocs():
@@ -518,6 +548,8 @@ To use this utility, simply execute this script with no arguments to run the ent
     -copyDestination <destination-path> : sets location for the final created installer file to be copied to (ignored if distribution not built)
     
     -skip <step> : skips the given step (can be used multiple times)
+    
+    -release: marks build as release build. Otherwise will be build as beta
 
 Example: python build_image.py image pack -java-home-o /usr/lib/jvm/jdk-14
 
