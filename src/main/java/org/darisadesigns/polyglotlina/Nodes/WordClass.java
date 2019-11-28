@@ -40,12 +40,6 @@ public class WordClass extends DictNode {
     private int topId = 0;
     public WordClassValue buffer = new WordClassValue();
     
-    // TODO: if -1 is in applyTypes, it applies to all. This is wholly encoded in the display.
-    // Refactor so that if -1 is added as an apply type, all other types are removed. If a
-    // value other than -1 is added, -1 should be removed. if -1 is present when apply type
-    // is tested, it should always return true. Remove this logic from the UI layer.
-    // This will break the test for WordClass. Update the expected XML accordingly.
-    
     public WordClass() {
         // default to apply to all
         applyTypes.add(-1);

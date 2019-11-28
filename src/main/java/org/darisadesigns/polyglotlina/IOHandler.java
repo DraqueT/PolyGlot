@@ -562,7 +562,7 @@ public final class IOHandler {
                 ReversionNode node = reversionList.get(i);
 
                 out.putNextEntry(new ZipEntry(PGTUtil.REVERSION_SAVE_PATH + PGTUtil.REVERSION_BASE_FILE_NAME + i));
-                out.write(node.value);
+                out.write(node.getValue());
                 out.closeEntry();
             }
         } catch (IOException e) {
@@ -661,27 +661,6 @@ public final class IOHandler {
     }
 
     /**
-     * Returns the default path of PolyGlot's running directory NOTE: If the
-     * path is overridden, in the properties manager, use that. This returns
-     * only what the OS tells PolyGlot it is running under (not always
-     * trustworthy)
-     *
-     * @return default path
-     */
-    public static File getBaseProgramPath() {
-        File ret = new File(System.getProperty("user.dir"));
-
-//        try {
-//            ret = new File(IOHandler.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-//        } catch (URISyntaxException | IllegalArgumentException e) {
-//            IOHandler.writeErrorLog(e, "Unable to get base program path");
-//        }
-        System.out.println(ret.getAbsolutePath());
-
-        return ret;
-    }
-
-    /**
      * Tests whether a file at a particular location exists. Wrapped to avoid IO
      * code outside this file
      *
@@ -774,14 +753,12 @@ public final class IOHandler {
             String fileName) throws IOException {
         try (ZipFile zipFile = new ZipFile(fileName)) {
             int i = 0;
-            DictCore tmpCore;
 
             ZipEntry reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
                     + PGTUtil.REVERSION_BASE_FILE_NAME + i);
 
             while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
-                reversionManager.addVersionToEnd(streamToBytArray(zipFile.getInputStream(reversion)),
-                        Instant.MIN); // TODO: remove Instant.MIN here and in method sig or extrac and inject it properly
+                reversionManager.addVersionToEnd(streamToBytArray(zipFile.getInputStream(reversion)));
                 i++;
                 reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
                         + PGTUtil.REVERSION_BASE_FILE_NAME + i);
@@ -789,8 +766,7 @@ public final class IOHandler {
 
             // remember to load latest state in addition to all prior ones
             reversion = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
-            reversionManager.addVersionToEnd(streamToBytArray(zipFile.getInputStream(reversion)),
-                    Instant.MIN); // TODO: remove Instant.MIN here and in method sig or extrac and inject it properly
+            reversionManager.addVersionToEnd(streamToBytArray(zipFile.getInputStream(reversion)));
         }
     }
 

@@ -25,7 +25,6 @@ import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import org.darisadesigns.polyglotlina.PGTools;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -237,7 +236,7 @@ public final class PTextField extends JTextField {
      */
     public void makeFlash(Color _flashColor, boolean isBack) {
         if (worker == null || worker.isDone()) {
-            worker = PGTools.getFlashWorker(this, _flashColor, isBack);
+            worker = PGTUtil.getFlashWorker(this, _flashColor, isBack);
             worker.execute();
         }
     }

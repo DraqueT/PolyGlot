@@ -160,7 +160,7 @@ public final class PolyGlot {
                                     FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
                                     chooser.setFileFilter(filter);
                                     chooser.setApproveButtonText("Recover");
-                                    chooser.setCurrentDirectory(polyGlot.getCanonicalDirectory());
+                                    chooser.setCurrentDirectory(polyGlot.getWorkingDirectory());
                                     
                                     String fileName;
 
@@ -326,24 +326,6 @@ public final class PolyGlot {
                 IOHandler.writeErrorLog(e, "Unable to get input map for: " + UIElement);
             }
         });
-    }
-
-    /**
-     * Gets PolyGlot's canonical directory, regardless of what the OS returns
-     * @return working directory
-     */
-    // TODO: JAVA 12 UPGRADE: Make certain this works properly (it doesn't)
-    // TODO: analyze why both this and getWorkingDirectory both exist
-    public File getCanonicalDirectory() {
-        File ret;
-        
-        if (overrideProgramPath.isEmpty()) {
-            ret = IOHandler.getBaseProgramPath();
-        } else {
-            ret = new File(overrideProgramPath);
-        }
-        
-        return ret;
     }
     
     /**

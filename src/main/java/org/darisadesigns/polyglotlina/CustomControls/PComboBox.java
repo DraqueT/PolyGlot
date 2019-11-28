@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.PGTUtil;
-import org.darisadesigns.polyglotlina.PGTools;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -54,7 +53,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
      */
     public void makeFlash(Color _flashColor, boolean isBack) {
         if (worker == null || worker.isDone()) {
-            worker = PGTools.getFlashWorker(this, _flashColor, isBack);
+            worker = PGTUtil.getFlashWorker(this, _flashColor, isBack);
             worker.execute();
         }
     }

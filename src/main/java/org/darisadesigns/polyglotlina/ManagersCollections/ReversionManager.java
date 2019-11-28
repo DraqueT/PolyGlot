@@ -46,8 +46,7 @@ public class ReversionManager {
      * @param saveTime The time at which this was saved
      */
     public void addVersion(byte[] addVersion, Instant saveTime) {
-        ReversionNode reversion = new ReversionNode(addVersion, this);
-        reversion.saveTime = saveTime;
+        ReversionNode reversion = new ReversionNode(addVersion, saveTime);
         reversionList.add(0, reversion);
         
         int maxVersions = core.getOptionsManager().getMaxReversionCount();
@@ -59,11 +58,9 @@ public class ReversionManager {
     /**
      * Adds a version to the end of the list. (used when loading from file)
      * @param addVersion byte array of raw XML of language file
-     * @param saveTime
      */
-    public void addVersionToEnd(byte[] addVersion, Instant saveTime) {
-        ReversionNode reg = new ReversionNode(addVersion, this);
-        reg.saveTime = saveTime;
+    public void addVersionToEnd(byte[] addVersion) {
+        ReversionNode reg = new ReversionNode(addVersion);
         reversionList.add(reg);
     }
 

@@ -20,10 +20,10 @@
 package org.darisadesigns.polyglotlina.Nodes;
 
 import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -39,35 +39,65 @@ import org.xml.sax.SAXException;
  * @author DThompson
  */
 public class ReversionNode implements Comparable<ReversionNode> {
-    public final byte[] value;
-    public Instant saveTime;
-    public final ReversionManager parent;
-        
-    public ReversionNode(byte[] _value, ReversionManager _parent) {
+    private final byte[] value;
+    private Instant saveTime;
+
+    public ReversionNode(byte[] _value) {
         value = _value;
-        parent = _parent;
+        saveTime = Instant.MIN;
+        
+        populateTimeFromDoc();
+    }
+    
+    public ReversionNode(byte[] _value, Instant _saveTime) {
+        value = _value;
+        saveTime = _saveTime;
+    }
+    
+    /**
+     * Isolates lengthy process in individual thread
+     */
+    private void populateTimeFromDoc() {
+        new Thread() {
+            public void run() {
+                saveTime = getLastSaveTimeFromRawDoc();
+            }
+        }.start();
+    }
+    
+    private Instant getLastSaveTimeFromRawDoc() {
+        Instant ret;
+        
+        try {
+            InputStream is = new ByteArrayInputStream(value);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc;
+            doc = dBuilder.parse(is);
+            doc.getDocumentElement().normalize();
+            Node timeNode = doc.getElementsByTagName(PGTUtil.DICTIONARY_SAVE_DATE).item(0);
+            
+            if (timeNode != null) {
+                ret = Instant.parse(timeNode.getTextContent());
+            } else {
+                ret = Instant.MIN;
+            }
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            IOHandler.writeErrorLog(e);
+            ret = Instant.MIN;
+        }
+        
+        return ret;
     }
     
     @Override
     public String toString() {
         String ret = "saved: ";
         
-        try {
-            // First time load for these, the saveTime won't be populated...
-            if (saveTime.equals(Instant.MIN)) {
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                factory.setNamespaceAware(true);
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                Document tmpDoc = builder.parse(new ByteArrayInputStream(value));
-
-                Node saveNode = tmpDoc.getElementsByTagName(PGTUtil.DICTIONARY_SAVE_DATE).item(0);
-                saveTime = Instant.parse(saveNode.getTextContent());
-            } else {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
-                ret += formatter.format(saveTime);
-            }
-        } catch (SAXException | IOException | ParserConfigurationException e) {
-            IOHandler.writeErrorLog(e);
+        if (!saveTime.equals(Instant.MIN)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
+            ret += formatter.format(saveTime);
+        } else {
             ret += "<UNKNOWN TIME>";
         }
         
@@ -78,5 +108,9 @@ public class ReversionNode implements Comparable<ReversionNode> {
     public int compareTo(ReversionNode o) {
         // returns in reverse order
         return -this.saveTime.compareTo(o.saveTime);
+    }
+    
+    public byte[] getValue () {
+        return value;
     }
 }

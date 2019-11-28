@@ -166,7 +166,6 @@ public final class ScrDeclensionsGrids extends PDialog {
                     InfoBox.warning("Dimension Selection", "Please select differing Row and Column values.", this);
             }
             else {
-                // TODO: Disabled cells should be light grey to indicate this
                 // get all partial dim ID patterns (sans X & Y dims)/feed to grid panel class
                 getPanelPartialDimIds().forEach((partialDim)->{
                     PDeclensionGridPanel gridPanel 
