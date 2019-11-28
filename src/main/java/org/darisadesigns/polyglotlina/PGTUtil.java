@@ -38,6 +38,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.SwingWorker;
 
 /**
  * This contains various constant vales in PolyGlot
@@ -735,6 +737,56 @@ public final class PGTUtil {
 
     public static void setForceSuppressDialogs(boolean _forceSuppressDialogs) {
         forceSuppressDialogs = _forceSuppressDialogs;
+    }
+    
+    /**
+     * gets a worker that can make a given component flash
+     *
+     * @param flashMe component to make flash
+     * @param flashColor color to use for flashing
+     * @param isBack whether display color is background (rather than foreground)
+     * @return SwingWorker that will make given component flash if run
+     */
+    public static SwingWorker getFlashWorker(final JComponent flashMe, final Color flashColor, final boolean isBack) {
+        // this will pop out in its own little thread...
+        return new SwingWorker() {
+            @Override
+            protected Object doInBackground() {
+                Color originColor;
+                if (isBack) {
+                    originColor = flashMe.getBackground();
+                } else {
+                    originColor = flashMe.getForeground();
+                }
+
+                Color requiredColor = flashColor.equals(originColor)
+                        ? Color.white : flashColor;
+
+                try {
+                    for (int i = 0; i < PGTUtil.NUM_MENU_FLASHES; i++) {
+                        if (isBack) {
+                            flashMe.setBackground(requiredColor);
+                        } else {
+                            flashMe.setEnabled(false);
+                        }
+                        // suppression for this is broken. Super annoying.
+                        Thread.sleep(PGTUtil.MENU_FLASH_SLEEP);
+                        if (isBack) {
+                            flashMe.setBackground(originColor);
+                        } else {
+                            flashMe.setEnabled(true);
+                        }
+                        Thread.sleep(PGTUtil.MENU_FLASH_SLEEP);
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    // catch of thread interrupt not logworthy
+                    // IOHandler.writeErrorLog(e);
+                }
+
+                return null;
+            }
+        };
     }
 
     private PGTUtil() {}

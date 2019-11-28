@@ -25,7 +25,6 @@ import org.darisadesigns.polyglotlina.FormattedTextHelper;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import org.darisadesigns.polyglotlina.PGTools;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -157,7 +156,7 @@ public final class PTextPane extends JTextPane {
      */
     public void makeFlash(Color _flashColor, boolean isBack) {
         if (worker == null || worker.isDone()) {
-            worker = PGTools.getFlashWorker(this, _flashColor, isBack);
+            worker = PGTUtil.getFlashWorker(this, _flashColor, isBack);
             worker.execute();
         }
     }

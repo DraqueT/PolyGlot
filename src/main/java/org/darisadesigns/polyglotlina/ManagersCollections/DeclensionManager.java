@@ -47,10 +47,12 @@ public class DeclensionManager {
 
     private final DictCore core;
     private final List<String> decGenDebug = new ArrayList<>();
-
-    public DeclensionManager(DictCore _core) {
-        core = _core;
-    }
+    private Integer topId = 0;
+    private boolean bufferDecTemp = false;
+    private Integer bufferRelId = -1;
+    private DeclensionNode buffer = new DeclensionNode(-1);
+    private final Map<Integer, List<DeclensionGenRule>> generationRules = new HashMap<>();
+    private DeclensionGenRule ruleBuffer = new DeclensionGenRule();
 
     // Integer is ID of related word, list is list of declension nodes
     private final Map<Integer, List<DeclensionNode>> dList = new HashMap<>();
@@ -62,13 +64,10 @@ public class DeclensionManager {
     // change the boolean here to an object which will store them
     private final Map<String, Boolean> combSettings = new HashMap<>();
 
-    private Integer topId = 0;
-    private boolean bufferDecTemp = false;
-    private Integer bufferRelId = -1;
-    private DeclensionNode buffer = new DeclensionNode(-1);
-    private final Map<Integer, List<DeclensionGenRule>> generationRules = new HashMap<>();
-    private DeclensionGenRule ruleBuffer = new DeclensionGenRule();
-
+    public DeclensionManager(DictCore _core) {
+        core = _core;
+    }
+    
     public boolean isCombinedDeclSurpressed(String _combId, Integer _typeId) {
         String storeId = _typeId + "," + _combId;
 

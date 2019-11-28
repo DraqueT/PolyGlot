@@ -234,7 +234,12 @@ public class ConWord extends DictNode {
     }
     
     public void setCore(DictCore _core) {
-        // TODO: can I set parent = core.getConWordCollection() here? Investigate. Probably do this.
+        if (core != null) {
+            parentCollection = core.getWordCollection();
+        } else {
+            parentCollection = null;
+        }
+        
         core = _core;
     }
     

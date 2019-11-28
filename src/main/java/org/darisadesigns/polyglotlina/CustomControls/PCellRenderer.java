@@ -47,7 +47,7 @@ public class PCellRenderer implements TableCellRenderer {
     private final double fontSize;
 
     public PCellRenderer(boolean _useConFont, DictCore _core) {
-        core = _core; 
+        core = _core;
         useConFont = _useConFont;
         Integer preSize = core.getPropertiesManager().getFontSize();
         preSize = preSize == null ? 0 : preSize;

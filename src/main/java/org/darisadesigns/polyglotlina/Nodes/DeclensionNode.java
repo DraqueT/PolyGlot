@@ -130,7 +130,7 @@ public class DeclensionNode extends DictNode {
     
     /**
      * Deletes a dimension from this declension (it rhymes!)
-     * @param id id of dimension to be deleted
+     * @param _id id of dimension to be deleted
      */
     public void deleteDimension(Integer _id) {
         dimensions.remove(_id);
@@ -149,15 +149,10 @@ public class DeclensionNode extends DictNode {
         return dimensions.values();
 
     }
-
-    // TODO: this is a bad practice. Find a way around this and eliminate
-    protected Map<Integer, DeclensionDimension> getRawDimensions() {
-        return dimensions;
-    }
     
     /**
      * Selects and returns a declension dimension by its id if it exists
-     * @param id id of declension dimension
+     * @param _id id of declension dimension
      * @return declension dimension if it exists, null otherwise
      */
     public DeclensionDimension getDeclensionDimensionById(int _id) {

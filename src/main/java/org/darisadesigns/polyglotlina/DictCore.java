@@ -228,14 +228,6 @@ public class DictCore {
     /**
      * Pushes save signal to main interface menu
      */
-    // TODO: Eliminate this. This is a bad practice.
-    public void coreSave() {
-        rootWindow.saveFile();
-    }
-
-    /**
-     * Pushes save signal to main interface menu
-     */
     public void coreOpen() {
         rootWindow.open();
     }

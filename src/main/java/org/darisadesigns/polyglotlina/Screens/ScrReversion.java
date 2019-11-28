@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import java.io.IOException;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
@@ -110,10 +111,10 @@ public final class ScrReversion extends PDialog {
         if (reversion != null && InfoBox.actionConfirmation("Confirm Revert", "This action will revert to the state of "
                 + "this language " + reversion.toString() + ".\n Are you sure you would like to continue?", this)) {
             try {
-                core.revertToState(reversion.value, core.getCurFileName());
+                core.revertToState(reversion.getValue(), core.getCurFileName());
                 InfoBox.info("Successful Reversion", "Reversion Successful!", this);
                 this.dispose();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 IOHandler.writeErrorLog(e);
                 InfoBox.error("Unable to Revert", "Unable to revert to prior version: " 
                         + e.getLocalizedMessage(), this);

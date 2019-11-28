@@ -115,7 +115,7 @@ public final class ScrMainMenu extends PFrame {
         setupEasterEgg();
 
         try {
-            backGround = ImageIO.read(getClass().getResource(PGTUtil.MAIN_MENU_IMAGE)); // TODO: why does this take so long to run? Investigate.
+            backGround = ImageIO.read(getClass().getResource(PGTUtil.MAIN_MENU_IMAGE));
             jLabel1.setFont(PGTUtil.MENU_FONT.deriveFont(45f));
         } catch (IOException e) {
             IOHandler.writeErrorLog(e);
@@ -442,7 +442,7 @@ public final class ScrMainMenu extends PFrame {
         String curFileName = core.getCurFileName();
         
         if (curFileName.isEmpty()) {
-            saveFileAs();
+            saveFileAsDialog();
         }
 
         // if it still is blank, the user has hit cancel on the save as dialog
@@ -500,11 +500,13 @@ public final class ScrMainMenu extends PFrame {
     }
 
     /**
-     * saves file as particular filename
+     * Provides dialog for Save As, and returns boolean to determine whether 
+     * file save should take place. DOES NOT SAVE.
      *
      * @return true if file saved, false otherwise
      */
-    private boolean saveFileAs() {
+    private boolean saveFileAsDialog() {
+        boolean ret = false;
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
         String curFileName = core.getCurFileName();
@@ -523,29 +525,25 @@ public final class ScrMainMenu extends PFrame {
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
-        } else {
-            return false;
-        }
+            // if user has not provided an extension, add one
+            if (!fileName.contains(".pgd")) {
+                fileName += ".pgd";
+            }
 
-        // if user has not provided an extension, add one
-        if (!fileName.contains(".pgd")) {
-            fileName += ".pgd";
-        }
+            if (IOHandler.fileExists(fileName)) {
+                int overWrite = InfoBox.yesNoCancel("Overwrite Dialog",
+                        "Overwrite existing file? " + fileName, core.getRootWindow());
 
-        if (IOHandler.fileExists(fileName)) {
-            int overWrite = InfoBox.yesNoCancel("Overwrite Dialog",
-                    "Overwrite existing file? " + fileName, core.getRootWindow());
-
-            if (overWrite == JOptionPane.NO_OPTION) {
-                return saveFileAs();
-            } else if (overWrite == JOptionPane.CANCEL_OPTION) {
-                return false;
+                if (overWrite == JOptionPane.NO_OPTION) {
+                    ret = saveFileAsDialog();
+                }
+            } else {
+                core.setCurFileName(fileName);
+                ret = true;
             }
         }
-
-        core.setCurFileName(fileName);
-        // TODO: refactor to single exit point
-        return true;
+        
+        return ret;
     }
 
     /**
@@ -1130,8 +1128,7 @@ public final class ScrMainMenu extends PFrame {
         this.rootPane.add(accelPublish);
 
         accelSave.addActionListener((java.awt.event.ActionEvent evt) -> {
-            // TODO: When moving this to ScrMainMenu, remove the call to coresave (it just calls back to ScreenMainMenu)
-            core.coreSave();
+            saveFile();
         });
         this.rootPane.add(accelSave);
 
@@ -1692,7 +1689,7 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_mnuSaveLocalActionPerformed
 
     private void mnuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveAsActionPerformed
-        if (saveFileAs()) {
+        if (saveFileAsDialog()) {
             saveFile();
         }
     }//GEN-LAST:event_mnuSaveAsActionPerformed

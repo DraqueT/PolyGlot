@@ -19,10 +19,13 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
+import java.awt.Color;
 import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
@@ -31,9 +34,15 @@ import org.darisadesigns.polyglotlina.PGTUtil;
  */
 public final class PTable extends JTable {
     private final DictCore core;
+    private final PCellEditor disabledEd;
+    private final PCellRenderer disabledRend;
     
     public PTable(DictCore _core) {
         core = _core;
+        disabledEd = new PCellEditor(false, core);
+        disabledRend = new PCellRenderer(false, core);
+        disabledEd.setBackground(Color.gray);
+        disabledRend.setBackground(Color.darkGray);
         
         if (core != null) {
             Font font = PGTUtil.MENU_FONT.deriveFont((float)core.getOptionsManager().getMenuFontSize());
@@ -67,5 +76,27 @@ public final class PTable extends JTable {
         }
         
         return tip.isEmpty() ? super.getToolTipText(e) : tip;
+    }
+    
+    @Override
+    public TableCellRenderer getCellRenderer(int row, int column) {
+        TableCellRenderer ret = disabledRend;
+        
+        if (this.getValueAt(row, column) != null) {
+            ret = super.getCellRenderer(row, column);
+        }
+        
+        return ret;
+    }
+    
+    @Override
+    public TableCellEditor getCellEditor(int row, int column) {
+        TableCellEditor ret = cellEditor;
+        
+        if (this.getValueAt(row, column) != null) {
+            ret = super.getCellEditor(row, column);
+        }
+        
+        return ret;
     }
 }

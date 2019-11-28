@@ -167,7 +167,6 @@ public abstract class DictNode implements Comparable<DictNode> {
 
     @Override
     public String toString() {
-        // TODO: This is not great. Consider whether this can be addressed. Its behavior might be too unpredictable to change at this point.
         return value.isEmpty() ? " " : value;
     }
 }

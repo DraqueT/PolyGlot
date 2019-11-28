@@ -196,7 +196,6 @@ public class InfoBox extends JFrame {
             try {
                 ret = Double.parseDouble(inputString);
             } catch (HeadlessException | NumberFormatException e) {
-                // TODO: this message should be passed in rather than hardcoded here. It is particular to fonts.
                 warningMessage = warningMessage.isEmpty() ? "Please input numeric value." : warningMessage;
                 warning("Incorrect Input", warningMessage, parent);
                 ret = doubleInputDialog(title, message, warningMessage, parent);
