@@ -107,46 +107,22 @@ public final class IOHandler {
     public static BufferedImage getImage(String filePath) throws IOException {
         return ImageIO.read(new File(filePath));
     }
-
+    
     /**
-     * Creates a temporary file with the contents handed in the arguments and
-     * returns its URL location.
+     * Creates and returns a temporary file with the contents specified.
+     * File will be deleted on exit of PolyGlot.
      *
      * @param contents Contents to put in file.
-     * @return
-     * @throws java.io.IOException
-     * @throws java.net.URISyntaxException
+     * @param extension extension name for tmp file (defaults to tmp if none given)
+     * @return Temporary file with specified contents
+     * @throws IOException on write error
      */
-    public static URI createTmpURL(String contents) throws IOException, URISyntaxException {
-        File tmpFile = File.createTempFile("POLYGLOT", ".html");
-        Files.write(tmpFile.toPath(), contents.getBytes());
-        tmpFile.deleteOnExit();
-        return createURIFromFullPath(tmpFile.getAbsolutePath());
-    }
-
-    public static URI createURIFromFullPath(String path) throws URISyntaxException, IOException {
-        String OS = System.getProperty("os.name");
-        URI uri;
-
-        if (OS.startsWith("Windows")) {
-            String relLocation = path;
-            relLocation = "file:///" + relLocation;
-            relLocation = relLocation.replaceAll(" ", "%20");
-            relLocation = relLocation.replaceAll("\\\\", "/");
-            uri = new URI(relLocation);
-        } else if (OS.startsWith("Mac")) {
-            String relLocation;
-            relLocation = path;
-            relLocation = "file://" + relLocation;
-            relLocation = relLocation.replaceAll(" ", "%20");
-            uri = new URI(relLocation);
-        } else {
-            // TODO: Implement this for Linux
-            throw new IOException("This is not yet implemented for OS: " + OS
-                    + ". Please open readme.html in the application directory");
-        }
-
-        return uri;
+    public static File createTmpFileWithContents(String contents, String extension) throws IOException {
+        File ret = File.createTempFile("POLYGLOT", extension);
+        Files.write(ret.toPath(), contents.getBytes());
+        ret.deleteOnExit();
+        
+        return ret;
     }
 
     public static byte[] getByteArrayFromFile(File file) throws IOException {

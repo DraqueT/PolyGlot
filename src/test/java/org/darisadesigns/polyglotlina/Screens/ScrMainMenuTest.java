@@ -59,23 +59,23 @@ public class ScrMainMenuTest {
         final String testFileName = PGTUtil.TESTRESOURCES + "earien_TEST.pgd";
         
         try {
-        Method setFileMethod = mainMenu.getClass().getDeclaredMethod("setFile", String.class);
-        setFileMethod.setAccessible(true);
-        
-        setFileMethod.invoke(mainMenu, PGTUtil.TESTRESOURCES +  "earien_ORIGINAL.pgd");
-        int correctLexiconCount = mainMenu.getCore().getWordCollection().getWordCount();
-        mainMenu.getCore().writeFile(testFileName);
-        
-        for (int i = 0; i < 10 ; i++) {
-            setFileMethod.invoke(mainMenu, testFileName);
-            int curLexCount = mainMenu.getCore().getWordCollection().getWordCount();
-            try {
-                assert(curLexCount == correctLexiconCount);
-            } catch (AssertionError e) {
-                throw new AssertionError("Run: " + i + "->" + curLexCount + " != " + correctLexiconCount);
-            }
+            Method setFileMethod = mainMenu.getClass().getDeclaredMethod("setFile", String.class);
+            setFileMethod.setAccessible(true);
+
+            setFileMethod.invoke(mainMenu, PGTUtil.TESTRESOURCES +  "earien_ORIGINAL.pgd");
+            int correctLexiconCount = mainMenu.getCore().getWordCollection().getWordCount();
             mainMenu.getCore().writeFile(testFileName);
-        }
+
+            for (int i = 0; i < 10 ; i++) {
+                setFileMethod.invoke(mainMenu, testFileName);
+                int curLexCount = mainMenu.getCore().getWordCollection().getWordCount();
+                try {
+                    assert(curLexCount == correctLexiconCount);
+                } catch (AssertionError e) {
+                    throw new AssertionError("Run: " + i + "->" + curLexCount + " != " + correctLexiconCount);
+                }
+                mainMenu.getCore().writeFile(testFileName);
+            }
         } catch (IOException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException 
                 | SecurityException | InvocationTargetException | ParserConfigurationException 
                 | TransformerException e) {
