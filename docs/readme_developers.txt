@@ -24,7 +24,7 @@ This will show you how to package PolyGlot for OSX, Windows, and Linux.
 
 1) Download the JDK14 preview and drop it in a folder somewhere. (Maybe it's no longer a preview as you read this! :D)
 2) Open build_image.py in a text editor.
-3) Change the value of JAVAFX_LOCATION_<OS> to wherever jfx got dumped (you can get this by looking at the properties of any of the jfx dependencies)
+3) ONLY IF YOUR MAVEN USES A CUSTOM DEPENDENCY DIRECTORY - Change the value of JAVAFX_LOCATION_<OS> to wherever jfx got dumped (you can get this by looking at the properties of any of the jfx dependencies)
 	- the end of the location should read "openjfx." Do NOT copy the full path of one of the dependencies, or it will not work.
         - there are separate variables for each OS, as I presume the directory structures of the environments you build on will differ.
 4) Change the value of JAVA_PACKAGER_LOCATION_<OS> to the JDK14 bin folder (this step will vanish once J14 is officially released)

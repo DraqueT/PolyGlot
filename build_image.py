@@ -12,11 +12,12 @@
 
 import datetime
 import platform
+import getpass
 import os
-from os import path
 import shutil
 import subprocess
 import sys
+from os import path
 from xml.dom import minidom
 
 buildResult = ''
@@ -36,7 +37,7 @@ separatorCharacter = '/'
 # LINUX BUILD CONSTANTS
 # update the JFX and packager locations for your Linux build
 
-JAVAFX_LOCATION_LINUX = "/home/polyglot/.m2/repository/org/openjfx"
+JAVAFX_LOCATION_LINUX = '/home/' + getpass.getuser() + '/.m2/repository/org/openjfx' # Update if your version of Maven is configured to store dependencies in custom location
 JAVA_PACKAGER_LOCATION_LINUX = "/usr/lib/jvm/jdk-14/bin" # this will go away once Java 14 drops officially...
 LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 
@@ -45,7 +46,7 @@ LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 # OSX BUILD CONSTANTS
 
 # update the JFX and packager locations for your OSX build
-JAVAFX_LOCATION_OSX = "/Users/draque/.m2/repository/org/openjfx"
+JAVAFX_LOCATION_OSX = '/Users/' + getpass.getuser() + '/.m2/repository/org/openjfx' # Update if your version of Maven is configured to store dependencies in custom location
 JAVA_PACKAGER_LOCATION_OSX = "/Users/draque/NetBeansProjects/jdk_14_packaging/Contents/Home/bin" # this will go away once Java 14 drops officially...
 OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
 
@@ -54,7 +55,7 @@ OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
 # WINDOWS BUILD CONSTANTS
 # update the JFX and packager locations for your Windows build
 
-JAVAFX_LOCATION_WIN = 'C:\\Users\\user\\.m2\\repository\\org\\openjfx'
+JAVAFX_LOCATION_WIN = 'C:\\Users\\' + getpass.getuser() + '\\.m2\\repository\\org\\openjfx' # Update if your version of Maven is configured to store dependencies in custom location
 JAVA_PACKAGER_LOCATION_WIN = 'C:\\Java\\jdk-14\\bin'  # this will go away once Java 14 drops officially...
 WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 
@@ -62,8 +63,8 @@ WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 # UNIVERSAL BUILD CONSTANTS
 # You will not need to change these
 JAR_W_DEP = '' # set in main for timing reasons
-JAR_WO_DEP = ' '# set in main for timing reasons
-JAVAFX_VER = '12.0.2'
+JAR_WO_DEP = '' # set in main for timing reasons
+JAVAFX_VER = '' # set in main for timing reasons
 POLYGLOT_VERSION = '' # set in main for timing reasons
 JAVA_HOME = '' # set in main for timing reasons
 IS_RELEASE = False
@@ -80,6 +81,7 @@ def main(args):
     global IS_RELEASE
     global JAR_W_DEP
     global JAR_WO_DEP
+    global JAVAFX_VER
     global failFile
     global copyDestination
     global separatorCharacter
@@ -145,6 +147,7 @@ def main(args):
     updateVersionResource(POLYGLOT_VERSION)
     JAR_W_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '-jar-with-dependencies.jar'
     JAR_WO_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '.jar'
+    JAVAFX_VER = getJfxVersion()
     
     if 'help' in args or '-help' in args or '--help' in args:
         printHelp()
@@ -457,7 +460,19 @@ def injectBuildDate():
 #       UTIL FUNCTIONALITY
 ####################################
 
-# fetches version from pom file
+# What it says on the tin
+def getJfxVersion():
+    ret = ''
+    mydoc = minidom.parse('pom.xml')
+    dependencies = mydoc.getElementsByTagName('dependency')
+    
+    for dependency in dependencies:
+        if (dependency.getElementsByTagName('groupId')[0].childNodes[0].nodeValue == 'org.openjfx'):
+            ret = dependency.getElementsByTagName('version')[0].childNodes[0].nodeValue
+            break
+    return ret
+
+# fetches version of PolyGlot from pom file
 def getVersion():
     mydoc = minidom.parse('pom.xml')
     versionItems = mydoc.getElementsByTagName('version')
