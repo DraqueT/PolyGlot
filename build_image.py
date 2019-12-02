@@ -141,6 +141,7 @@ def main(args):
 
     fullBuild = (len(args) == 1) # length of 1 means no arguments (full build)
     POLYGLOT_VERSION = getVersion()
+    print('Building Version: ' + POLYGLOT_VERSION)
     updateVersionResource(POLYGLOT_VERSION)
     JAR_W_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '-jar-with-dependencies.jar'
     JAR_WO_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '.jar'
@@ -253,17 +254,15 @@ def packLinux():
     os.system('rm -rf appimage')
 
     command = (JAVA_PACKAGER_LOCATION_LINUX + '/jpackage ' +
-        '--runtime-image build/image ' +
-        '--output appimage ' +
-        '--name PolyGlot ' +
-        '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
+        '--app-version ' + POLYGLOT_VERSION + ' ' +
         '--copyright "2014-2019 Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
-        '--icon packaging_files/PolyGlot0.png' +
-        '--app-version ' + POLYGLOT_VERSION + ' ' +
-        '--linux-app-category Education ' +
-        '--linux-bundle-name PolyGlot ' +
-        '--linux-deb-maintainer draquemail@gmail.com') 
+        '--icon packaging_files/PolyGlot0.png ' +
+#        '--java-options -splash:assets/assets/org/DarisaDesigns/ImageAssets/splash-image.png ' # splash feature currently borked: https://bugs.openjdk.java.net/browse/JDK-8208380
+        '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
+        '--name PolyGlot ' +
+        '--output appimage ' +
+        '--runtime-image build/image')
 
     os.system(command)
     
@@ -272,15 +271,19 @@ def distLinux():
     os.system('rm -rf installer')
     os.system('mkdir installer')
     command = (JAVA_PACKAGER_LOCATION_LINUX + '/jpackage ' +
-        '--package-type deb ' +
-        '--file-associations packaging_files/linux/file_types_linux.prop ' +
-        '--runtime-image build/image ' +
-        '--output installer ' +
-        '--name PolyGlot ' +
-        '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
+        '--app-version ' + POLYGLOT_VERSION + ' ' +
         '--copyright "2014-2019 Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
-        '--icon packaging_files/PolyGlot0.png')
+        '--file-associations packaging_files/linux/file_types_linux.prop ' +
+        '--icon packaging_files/PolyGlot0.png ' +
+#        '--java-options -splash:assets/assets/org/DarisaDesigns/ImageAssets/splash-image.png ' # splash feature currently borked: https://bugs.openjdk.java.net/browse/JDK-8208380
+        '--linux-bundle-name polyglot-linear-a ' +
+        '--linux-app-category Education ' +
+        '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
+        '--name PolyGlot ' +
+        '--output installer ' +
+        '--package-type deb ' +
+        '--runtime-image build/image')
     os.system(command)
     
     if copyDestination != "":
@@ -469,7 +472,8 @@ def updateVersionResource(versionString):
     else:
         location = 'assets/assets/org/DarisaDesigns/version'
     
-    os.remove(location)
+    if path.exists(location):
+        os.remove(location)
     
     with open(location, 'w+') as versionFile:
         if IS_RELEASE:

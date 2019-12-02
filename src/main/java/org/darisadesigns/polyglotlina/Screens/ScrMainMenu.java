@@ -32,6 +32,7 @@ import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FontFormatException;
 import java.awt.Frame;
@@ -75,6 +76,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultTreeModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Java8Bridge;
 import org.darisadesigns.polyglotlina.WebInterface;
@@ -106,12 +108,13 @@ public final class ScrMainMenu extends PFrame {
      */
     public ScrMainMenu(DictCore _core) {
         super(_core);
-
+        
+        initComponents();
+        
         core.setRootWindow(this);
         toDoTree = new PToDoTree(nightMode, menuFontSize);
         cacheLexicon = ScrLexicon.run(core, this);
 
-        initComponents();
         setupEasterEgg();
 
         try {
@@ -731,7 +734,16 @@ public final class ScrMainMenu extends PFrame {
     private void openHelp() throws IOException {
         File readmeDir = IOHandler.unzipResourceToTempLocation(PGTUtil.HELP_FILE_ARCHIVE_LOCATION);
         File readmeFile = new File(readmeDir.getAbsolutePath() + File.separator + PGTUtil.HELP_FILE_NAME);
-        java.awt.Desktop.getDesktop().browse(readmeFile.toURI());
+            
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            Desktop.getDesktop().browse(readmeFile.toURI());
+        } else if (PGTUtil.IS_LINUX) {
+            Desktop.getDesktop().open(readmeFile);
+        } else {
+            InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
+                    + "http://draquet.github.io/PolyGlot/readme.html\n(copied to clipboard for convenience)", this);
+            new ClipboardHandler().setClipboardContents("http://draquet.github.io/PolyGlot/readme.html");
+        }               
     }
 
     /**
