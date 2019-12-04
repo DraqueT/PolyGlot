@@ -418,7 +418,7 @@ def packWin():
     os.system(command)
 
 def distWin():
-    packageLocation = 'installer\PolyGlot-' + POLYGLOT_VERSION + '.exe'
+    packageLocation = 'installer\PolyGlot-1.0.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
 
