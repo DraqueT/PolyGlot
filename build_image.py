@@ -284,7 +284,7 @@ def distLinux():
     os.system(command)
     
     if copyDestination != "":
-        copyInstaller('installer/polyglot_1.0-1_amd64.deb')
+        copyInstaller('installer/polyglot_' + POLYGLOT_VERSION + '-1_amd64.deb')
 
 
 ######################################
@@ -418,7 +418,7 @@ def packWin():
     os.system(command)
 
 def distWin():
-    packageLocation = 'installer\PolyGlot-1.0.exe'
+    packageLocation = 'installer\PolyGlot-' + POLYGLOT_VERSION + '.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
 
@@ -550,6 +550,8 @@ def copyInstaller(source):
     
         # only remove failure signal once process is successful
         os.remove(failFile)
+    else:
+        print('Built installer missing: ' + source)
 
 def printHelp():
     print("""
