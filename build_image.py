@@ -12,7 +12,6 @@
 
 import datetime
 import platform
-import getpass
 import os
 import shutil
 import subprocess
@@ -32,12 +31,9 @@ winString = 'Windows'
 separatorCharacter = '/'
 
 
-
 ###############################
 # LINUX BUILD CONSTANTS
-# update the JFX and packager locations for your Linux build
-
-JAVAFX_LOCATION_LINUX = '/home/' + getpass.getuser() + '/.m2/repository/org/openjfx' # Update if your version of Maven is configured to store dependencies in custom location
+# update the packager location for your Linux build
 JAVA_PACKAGER_LOCATION_LINUX = "/usr/lib/jvm/jdk-14/bin" # this will go away once Java 14 drops officially...
 LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 
@@ -45,17 +41,14 @@ LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 ###############################
 # OSX BUILD CONSTANTS
 
-# update the JFX and packager locations for your OSX build
-JAVAFX_LOCATION_OSX = '/Users/' + getpass.getuser() + '/.m2/repository/org/openjfx' # Update if your version of Maven is configured to store dependencies in custom location
+# update the packager location for your OSX build
 JAVA_PACKAGER_LOCATION_OSX = "/Users/draque/NetBeansProjects/jdk_14_packaging/Contents/Home/bin" # this will go away once Java 14 drops officially...
 OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
 
 
 ###############################
 # WINDOWS BUILD CONSTANTS
-# update the JFX and packager locations for your Windows build
-
-JAVAFX_LOCATION_WIN = 'C:\\Users\\' + getpass.getuser() + '\\.m2\\repository\\org\\openjfx' # Update if your version of Maven is configured to store dependencies in custom location
+# update the packager location for your Windows build
 JAVA_PACKAGER_LOCATION_WIN = 'C:\\Java\\jdk-14\\bin'  # this will go away once Java 14 drops officially...
 WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 
@@ -85,7 +78,6 @@ def main(args):
     global failFile
     global copyDestination
     global separatorCharacter
-    
     
     skip_steps = []
     
@@ -235,15 +227,17 @@ def imageLinux():
         '--class-path target/' + JAR_WO_DEP + ' ' +
         '--main-class org.darisadesigns.polyglotlina.PolyGlot target/mods/PolyGlot.jmod')
 
+    JAVAFX_LOCATION = getJfxLocation()
+
     print('creating runnable image...')
     command = (JAVA_HOME + '/bin/jlink ' +
         '--module-path "module_injected_jars/:' +
         'target/mods:' +
-        JAVAFX_LOCATION_LINUX + '/javafx-graphics/' + JAVAFX_VER + '/:' +
-        JAVAFX_LOCATION_LINUX + '/javafx-base/' + JAVAFX_VER + '/:' +
-        JAVAFX_LOCATION_LINUX + '/javafx-media/' + JAVAFX_VER + '/:' +
-        JAVAFX_LOCATION_LINUX + '/javafx-swing/' + JAVAFX_VER + '/:' +
-        JAVAFX_LOCATION_LINUX + '/javafx-controls/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION + '/javafx-graphics/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION + '/javafx-base/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION + '/javafx-media/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION + '/javafx-swing/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION + '/javafx-controls/' + JAVAFX_VER + '/:' +
         JAVA_HOME + '/jmods" ' +
         '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
         '--output "build/image/" ' +
@@ -313,16 +307,18 @@ def imageOsx():
         '--class-path target/' + JAR_WO_DEP + ' ' +
         '--main-class org.darisadesigns.polyglotlina.PolyGlot target/mods/PolyGlot.jmod')
 
+    JAVAFX_LOCATION = getJfxLocation()
+
     print('creating runnable image...')
     os.system(JAVA_HOME + '/bin/jlink ' +
         '--module-path "module_injected_jars/:' +
         'target/mods:' +
-        JAVAFX_LOCATION_OSX + '/javafx-graphics/' + JAVAFX_VER + '/:' +
-        JAVAFX_LOCATION_OSX + '/javafx-base/' + JAVAFX_VER + '/:'+
-        JAVAFX_LOCATION_OSX + '/javafx-media/' + JAVAFX_VER + '/:' +
-        JAVAFX_LOCATION_OSX + '/javafx-swing/' + JAVAFX_VER + '/:' +
-        JAVAFX_LOCATION_OSX + '/javafx-controls/' + JAVAFX_VER + '/:' +
-        JAVAFX_LOCATION_OSX + '/jmods" ' +
+        JAVAFX_LOCATION + '/javafx-graphics/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION + '/javafx-base/' + JAVAFX_VER + '/:'+
+        JAVAFX_LOCATION + '/javafx-media/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION + '/javafx-swing/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION + '/javafx-controls/' + JAVAFX_VER + '/:' +
+        JAVAFX_LOCATION + '/jmods" ' +
         '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
         '--output "build/image/" ' +
         '--compress=2 ' +
@@ -389,15 +385,17 @@ def imageWin():
         ' --main-class org.darisadesigns.polyglotlina.PolyGlot ' +
         'target\mods\PolyGlot.jmod')
 
+    JAVAFX_LOCATION = getJfxLocation()
+
     print('creating runnable image...')
     command = ('%JAVA_HOME%\\bin\\jlink ' +
         '--module-path "module_injected_jars;' +
         'target\\mods;' +
-        JAVAFX_LOCATION_WIN + '\\javafx-graphics\\' + JAVAFX_VER + ';' +
-        JAVAFX_LOCATION_WIN + '\\javafx-base\\' + JAVAFX_VER + ';' +
-        JAVAFX_LOCATION_WIN + '\\javafx-media\\' + JAVAFX_VER + ';' +
-        JAVAFX_LOCATION_WIN + '\\javafx-swing\\' + JAVAFX_VER + ';' +
-        JAVAFX_LOCATION_WIN + '\\javafx-controls\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION + '\\javafx-graphics\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION + '\\javafx-base\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION + '\\javafx-media\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION + '\\javafx-swing\\' + JAVAFX_VER + ';' +
+        JAVAFX_LOCATION + '\\javafx-controls\\' + JAVAFX_VER + ';' +
         '%JAVA_HOME%\jmods" ' +
         '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
         '--output "build\image" ' +
@@ -459,6 +457,17 @@ def injectBuildDate():
 ####################################
 #       UTIL FUNCTIONALITY
 ####################################
+
+# handled here for timing reasons...
+def getJfxLocation():
+    ret = os.environ['HOME']
+
+    if (osString == winString):
+        ret += '\\.m2\\repository\\org\\openjfx'
+    elif (osString == osxString or osString == linString):
+        ret += '/.m2/repository/org/openjfx'
+
+    return ret
 
 # What it says on the tin
 def getJfxVersion():
