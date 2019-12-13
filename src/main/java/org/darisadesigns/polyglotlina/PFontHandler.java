@@ -103,13 +103,13 @@ public class PFontHandler {
      * Attempts to load the given font from the OS's font folder (due to Java's
      * ligature problems)
      *
-     * @param font
+     * @param fontFamily
      * @return returns loaded font file on success, null otherwise
      */
-    public static Font loadFontFromOSFileFolder(Font font) {
+    public static Font loadFontFromOSFileFolder(String fontFamily) {
         Font ret = null;
         try {
-            File fontFile = getFontFile(font);
+            File fontFile = getFontFile(fontFamily);
             if (fontFile != null && fontFile.exists()) {
                 ret = Font.createFont(Font.TRUETYPE_FONT, fontFile);
             }
@@ -124,40 +124,64 @@ public class PFontHandler {
     /**
      * gets the file of the current conlang font from the user's system
      *
-     * @param font the font to find a file for
+     * @param fontFamily the font to find a file for
      * @return the font's file if found, null otherwise
      * @throws java.lang.Exception for unrecognized OS
      */
-    public static File getFontFile(Font font) throws Exception {
+    public static File getFontFile(String fontFamily) throws Exception {
         File ret = null;
 
-        if (font != null) {
-            if (System.getProperty("os.name").startsWith("Mac")) {
-                ret = getFontFromLocation("/Library/Fonts/", font);
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            ret = getFontFromLocation(fontFamily, "/Library/Fonts/");
 
-                if (ret == null) {
-                    ret = getFontFromLocation("/System/Library/Fonts/", font);
-                }
-
-                if (ret == null) {
-                    ret = getFontFromLocation(System.getProperty("user.home")
-                            + "/Library/Fonts/", font);
-                }
-            } else if (System.getProperty("os.name").startsWith("Win")) {
-                ret = getFontFromLocation(System.getenv("WINDIR") + "\\Fonts", font);
-            } else if (System.getProperty("os.name").indexOf("nix") > 0
-                    || System.getProperty("os.name").indexOf("bunt") > 0
-                    || System.getProperty("os.name").indexOf("fed") > 0
-                    || System.getProperty("os.name").indexOf("nux") > 0) {
-                ret = getFontFromLocation("/usr/share/fonts", font);
-            } else {
-                throw new Exception("Unknown OS; unable to retrieve font.");
+            if (ret == null) {
+                ret = getFontFromLocation(fontFamily, "/System/Library/Fonts/");
             }
+
+            if (ret == null) {
+                ret = getFontFromLocation(fontFamily, 
+                        System.getProperty("user.home") + "/Library/Fonts/");
+            }
+        } else if (System.getProperty("os.name").startsWith("Win")) {
+            ret = getFontFromLocation(fontFamily, System.getenv("WINDIR") + "\\Fonts");
+        } else if (System.getProperty("os.name").indexOf("nix") > 0
+                || System.getProperty("os.name").indexOf("bunt") > 0
+                || System.getProperty("os.name").indexOf("fed") > 0
+                || System.getProperty("os.name").indexOf("nux") > 0) {
+            ret = getFontFromLocations(fontFamily, "/usr/share/fonts", "/usr/local/share", "~/.fonts");
+        } else {
+            throw new Exception("Unknown OS; unable to retrieve font.");
         }
 
         return ret;
     }
 
+    /**
+     * Returns a font's file based on the font and a path Recurses on any
+     * subdirectories found. Searches through multiple 
+     *
+     * In the case that multiple versions of the font are installed, the most
+     * recently modified version will be defaulted to
+     *
+     * @param paths paths to check for a font
+     * @param fontFamily font to check for
+     * @return the font's file, null otherwise
+     */
+    public static File getFontFromLocations(String fontFamily, String... paths) {
+        File ret = null;
+        
+        for (String path : paths) {
+            File match = getFontFromLocation(fontFamily, path);
+
+            if (ret == null || 
+                    (match != null && match.lastModified() > ret.lastModified())) {
+                ret = match;
+            }
+        }
+        
+        return ret;
+    }
+    
     /**
      * Returns a font's file based on the font and a path Recurses on any
      * subdirectories found.
@@ -166,10 +190,10 @@ public class PFontHandler {
      * recently modified version will be defaulted to
      *
      * @param path path to check for a font
-     * @param font font to check for
+     * @param fontFamily font to check for
      * @return the font's file, null otherwise
      */
-    private static File getFontFromLocation(String path, Font font) {
+    private static File getFontFromLocation(String fontFamily, String path) {
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
         List<File> matches = new ArrayList<>();
@@ -179,14 +203,14 @@ public class PFontHandler {
             // inspect all files and subdirectories to find matches
             for (File listOfFile : listOfFiles) {
                 if (listOfFile.isFile()) {
-                    File fontFile = loadFont(listOfFile.getPath(), font);
+                    File fontFile = loadFont(listOfFile.getPath(), fontFamily);
 
                     if (fontFile != null) {
                         matches.add(fontFile);
                     }
                 } else if (listOfFile.isDirectory()) {
-                    File fontFile = getFontFromLocation(path + "/"
-                            + listOfFile.getName(), font);
+                    File fontFile = getFontFromLocation(fontFamily, 
+                            path + "/" + listOfFile.getName());
 
                     if (fontFile != null) {
                         matches.add(fontFile);
@@ -213,10 +237,10 @@ public class PFontHandler {
      * compares testfont to loaded file. returns file if it represents the font
      *
      * @param path full path of file to test
-     * @param testFont font to test against
+     * @param fontFamily font family to search
      * @return file if path leads to passed font, null otherwise
      */
-    private static File loadFont(String path, Font testFont) {
+    private static File loadFont(String path, String fontFamily) {
         File fontFile = new File(path);
         File ret = null;
 
@@ -229,7 +253,7 @@ public class PFontHandler {
                 Font f = Font.createFont(Font.TRUETYPE_FONT, fontFile);
 
                 // if names match, set ret to return file
-                if (f.getFamily().equals(testFont.getFamily())) {
+                if (f.getFamily().equals(fontFamily)) {
                     ret = fontFile;
                 }
 
@@ -268,7 +292,9 @@ public class PFontHandler {
                 // embed font in PGD archive if applicable
                 File fontFile = null;
                 try {
-                    fontFile = getFontFile(outputFont);
+                    if (outputFont != null) {
+                        fontFile = getFontFile(outputFont.getFamily());
+                    }
                 } catch (Exception e) {
                     IOHandler.writeErrorLog(e);
                     writeLog += "\nerror: " + e.getLocalizedMessage();
