@@ -268,7 +268,11 @@ public class PropertiesManager {
      * @param _fontSize Size of font
      */
     public void setFontCon(Font _fontCon, Integer _fontStyle, Integer _fontSize) {
-        Font switchToFont = PFontHandler.loadFontFromOSFileFolder(_fontCon);
+        Font switchToFont = null;
+        
+        if (_fontCon != null) {
+            switchToFont = PFontHandler.loadFontFromOSFileFolder(_fontCon.getFamily());
+        }
         
         if (switchToFont == null) {
             switchToFont = _fontCon;
@@ -287,7 +291,7 @@ public class PropertiesManager {
      */
     public void setFontCon(String _fontFamily) throws Exception {
         try {
-            Font newFont = PFontHandler.loadFontFromOSFileFolder(Font.getFont(_fontFamily));
+            Font newFont = PFontHandler.loadFontFromOSFileFolder(_fontFamily);
 
             if (newFont == null) {
                 newFont = Font.getFont(_fontFamily);
@@ -774,8 +778,16 @@ public class PropertiesManager {
      */
     public void refreshFonts() throws Exception {
         try {
-            File updatedConFont = PFontHandler.getFontFile(conFont);
-            File updatedLocalFont = PFontHandler.getFontFile(localFont);
+            File updatedConFont = null;
+            File updatedLocalFont = null;
+            
+            if (conFont != null) {
+                updatedConFont = PFontHandler.getFontFile(conFont.getFamily());
+            }
+            
+            if (localFont != null) {
+                updatedLocalFont = PFontHandler.getFontFile(localFont.getFamily());
+            }
         
             if (updatedConFont != null) {
                 conFont = PFontHandler.getFontFromFile(updatedConFont.getAbsolutePath());
