@@ -668,16 +668,26 @@ public final class ScrMainMenu extends PFrame {
             fileName += ".xls";
         }
 
-        try {
-            Java8Bridge.exportExcelDict(fileName, core,
-                    InfoBox.actionConfirmation("Excel Export",
-                            "Export all declensions? (Separates parts of speech into individual tabs)",
-                            core.getRootWindow()));
+        if (!new File(fileName).exists() 
+                || InfoBox.actionConfirmation("Overwrite File?", "File with this name and location already exists. Continue/Overwrite?", this)) {
+            try {
+                Java8Bridge.exportExcelDict(fileName, core,
+                        InfoBox.actionConfirmation("Excel Export",
+                                "Export all declensions? (Separates parts of speech into individual tabs)",
+                                core.getRootWindow()));
 
-            InfoBox.info("Export Status", "Dictionary exported to " + fileName + ".", core.getRootWindow());
-        } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.info("Export Problem", e.getLocalizedMessage(), core.getRootWindow());
+                // only prompt user to open if Desktop supported
+                if (Desktop.isDesktopSupported()) {
+                    if (InfoBox.actionConfirmation("Export Sucess", "Dictionary exported to " + fileName + ".\nOpen now?", this)) {
+                        Desktop.getDesktop().open(new File(fileName));
+                    }
+                } else {
+                    InfoBox.info("Export Status", "Dictionary exported to " + fileName + ".", core.getRootWindow());
+                }
+            } catch (IOException e) {
+                IOHandler.writeErrorLog(e);
+                InfoBox.info("Export Problem", e.getLocalizedMessage(), core.getRootWindow());
+            }
         }
     }
 
