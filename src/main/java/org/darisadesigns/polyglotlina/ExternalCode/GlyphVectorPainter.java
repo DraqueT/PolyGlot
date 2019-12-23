@@ -16,11 +16,8 @@ import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-//import java.lang.reflect.Field;
 import javax.swing.text.BadLocationException;
-//import javax.swing.text.Element;
 import javax.swing.text.GlyphView;
-//import javax.swing.text.ParagraphView;
 import javax.swing.text.Position;
 import javax.swing.text.TabExpander;
 import javax.swing.text.View;
@@ -361,30 +358,47 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
                     && startJustifiableContent <= i
                     && i <= endJustifiableContent
             )) {
-                nextX += (glyphVector.getGlyphPosition(i).getX()-glyphVector.getGlyphPosition(i-charCount).getX());
+                // doesn't account for complex glyphs/constructed diacratics in windows. Skipping diacratic mark is an approximate solution.
+                if (glyphVector.getNumGlyphs() >= i) {
+                    nextX += (glyphVector.getGlyphPosition(i).getX() - glyphVector.getGlyphPosition(i-charCount).getX());
+                }
+                
                 charCount = 0;
                 if (txt[i] == '\t') {
                     if (e != null) {
                         nextX = e.nextTabStop(nextX, startOffset + i - txtOffset);
                     } else {
-                        nextX += (spaceVector.getGlyphPosition(1).getX());
+                        if (spaceVector.getNumGlyphs() >= 1) {
+                            nextX += (spaceVector.getGlyphPosition(1).getX());
+                        }
                     }
                 } else if (txt[i] == ' ') {
-                    nextX += (spaceVector.getGlyphPosition(1).getX()) + spaceAddon;
+                    if (spaceVector.getNumGlyphs() >= 1) {
+                        nextX += (spaceVector.getGlyphPosition(1).getX()) + spaceAddon;
+                    }
+                    
                     if (i <= spaceAddonLeftoverEnd) {
                         nextX++;
                     }
                 }
             } else if(txt[i] == '\n') {
-                // Ignore newlines, they take up space and we shouldn't be counting them.
-                nextX += (glyphVector.getGlyphPosition(i).getX()-glyphVector.getGlyphPosition(i-charCount).getX());
+                // doesn't account for complex glyphs/constructed diacratics in windows. Skipping diacratic mark is an approximate solution.
+                if (glyphVector.getNumGlyphs() >= i) {
+                    // Ignore newlines, they take up space and we shouldn't be counting them.
+                    nextX += (glyphVector.getGlyphPosition(i).getX() - glyphVector.getGlyphPosition(i-charCount).getX());
+                }
+                
                 charCount = 0;
             } else {
                 charCount++;
             }
         }
 
-        nextX += (glyphVector.getGlyphPosition(n).getX()-glyphVector.getGlyphPosition(n-charCount).getX());
+        // doesn't account for complex glyphs/constructed diacratics in windows. Skipping diacratic mark is an approximate solution.
+        if (glyphVector.getNumGlyphs() >= n) {
+            nextX += (glyphVector.getGlyphPosition(n).getX() - glyphVector.getGlyphPosition(n - charCount).getX());
+        }
+         
         return nextX - x;
     }
 
@@ -433,7 +447,11 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
                     ((Graphics2D)g).drawGlyphVector(glyphVector,x,y);
                     ((Graphics2D)g).setTransform(old);
                     //corrected position
-                    nextX += (glyphVector.getGlyphPosition(flushIndex+flushLen).getX()-glyphVector.getGlyphPosition(flushIndex).getX());
+                    // doesn't account for complex glyphs/constructed diacratics in windows. Skipping diacratic mark is an approximate solution.
+                    if (glyphVector.getNumGlyphs() >= flushIndex + flushLen) {
+                        nextX += (glyphVector.getGlyphPosition(flushIndex + flushLen).getX() - glyphVector.getGlyphPosition(flushIndex).getX());
+                    }
+                    
                     flushLen = 0;
                 }
                 flushIndex = i + 1;
@@ -466,7 +484,11 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
                     ((Graphics2D)g).drawGlyphVector(glyphVector,x,y);
                     ((Graphics2D)g).setTransform(old);
                     //corrected
-                    nextX += (glyphVector.getGlyphPosition(flushLen).getX()-glyphVector.getGlyphPosition(flushIndex).getX());
+                    // doesn't account for complex glyphs/constructed diacratics in windows. Skipping diacratic mark is an approximate solution.
+                    if (glyphVector.getNumGlyphs() >= flushLen && glyphVector.getNumGlyphs() >= flushIndex) {
+                        nextX += (glyphVector.getGlyphPosition(flushLen).getX() - glyphVector.getGlyphPosition(flushIndex).getX());
+                    }
+                    
                     flushLen = 0;
                 }
                 flushIndex = i + 1;
@@ -491,7 +513,10 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
             ((Graphics2D)g).setTransform(old);
 
             //corrected
-            nextX += (glyphVector.getGlyphPosition(flushLen).getX()-glyphVector.getGlyphPosition(flushIndex).getX());
+            // doesn't account for complex glyphs/constructed diacratics in windows. Skipping diacratic mark is an approximate solution.
+            if (glyphVector.getNumGlyphs() >= flushLen && glyphVector.getNumGlyphs() >= flushIndex) {
+                nextX += (glyphVector.getGlyphPosition(flushLen).getX()-glyphVector.getGlyphPosition(flushIndex).getX());
+            }
         }
         return nextX;
     }
@@ -551,11 +576,14 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
                     }
                 }
             } else {
-                nextX += (glyphVector.getGlyphPosition(i+1).getX()-glyphVector.getGlyphPosition(i).getX());
+                // doesn't account for complex glyphs/constructed diacratics in windows. Skipping diacratic mark is an approximate solution.
+                if (glyphVector.getNumGlyphs() >= i + 1) {
+                    nextX += (glyphVector.getGlyphPosition(i+1).getX() - glyphVector.getGlyphPosition(i).getX());
+                }
             }
             if ((x >= currX) && (x < nextX)) {
                 // found the hit position... return the appropriate side
-                if ((!round) || ((x - currX) < (nextX - x))) {
+                if (!round || (x - currX) < (nextX - x)) {
                     return i - txtOffset;
                 } else {
                     return i + 1 - txtOffset;
