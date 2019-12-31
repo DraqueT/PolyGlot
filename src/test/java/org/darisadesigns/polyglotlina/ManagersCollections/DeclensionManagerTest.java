@@ -23,6 +23,7 @@ import TestResources.DummyCore;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
@@ -96,7 +97,7 @@ public class DeclensionManagerTest {
         rule.setTypeId(99);
         rule.setIndex(1);
         decMan.addDeclensionGenRule(rule);
-        List<DeclensionGenRule> rules = decMan.getDeclensionRulesForType(99);
+        List<DeclensionGenRule> rules = Arrays.asList(decMan.getDeclensionRulesForType(99));
         assertTrue(rules.contains(rule));
     }
 
@@ -113,7 +114,7 @@ public class DeclensionManagerTest {
         rule.setIndex(1);
         decMan.addDeclensionGenRule(rule);
         decMan.wipeDeclensionGenRules(98);
-        assertTrue(decMan.getDeclensionRulesForType(98).isEmpty());
+        assertEquals(0, decMan.getDeclensionRulesForType(98).length);
     }
 
     @Test
@@ -129,7 +130,7 @@ public class DeclensionManagerTest {
         rule.setIndex(1);
         decMan.addDeclensionGenRule(rule);
         decMan.deleteDeclensionGenRule(rule);
-        assertFalse(decMan.getDeclensionRulesForType(97).contains(rule));
+        assertFalse(Arrays.asList(decMan.getDeclensionRulesForType(97)).contains(rule));
     }
 
     @Test
@@ -152,7 +153,7 @@ public class DeclensionManagerTest {
         rule2.setIndex(1);
         decMan.addDeclensionGenRule(rule2);
         
-        List<DeclensionGenRule> rules = decMan.getDeclensionRulesForType(96);
+        List<DeclensionGenRule> rules = Arrays.asList(decMan.getDeclensionRulesForType(96));
 
         assertTrue(rules.contains(rule1) && rules.contains(rule2));
     }
@@ -170,7 +171,7 @@ public class DeclensionManagerTest {
             int expectedInitialSize = 8;
 
             DeclensionManager decManSub = subCore.getDeclensionManager();
-            assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedInitialSize);
+            assertEquals(expectedInitialSize, decManSub.getDeclensionRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -187,11 +188,11 @@ public class DeclensionManagerTest {
             int expectedFinalSize = 6;
 
             DeclensionManager decManSub = subCore.getDeclensionManager();
-            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
+            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2)[2];
             List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
             rulesToDelete.add(toDelete);
             decManSub.deleteRulesFromDeclensionTemplates(2, 1, 2, rulesToDelete);
-            assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+            assertEquals(expectedFinalSize, decManSub.getDeclensionRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -208,11 +209,11 @@ public class DeclensionManagerTest {
             int expectedFinalSize = 6;
 
             DeclensionManager decManSub = subCore.getDeclensionManager();
-            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
+            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2)[2];
             List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
             rulesToDelete.add(toDelete);
             decManSub.deleteRulesFromDeclensionTemplates(2, 0, 3, rulesToDelete);
-            assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+            assertEquals(expectedFinalSize, decManSub.getDeclensionRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -232,11 +233,11 @@ public class DeclensionManagerTest {
             int expectedFinalSize = 5;
 
             DeclensionManager decManSub = subCore.getDeclensionManager();
-            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2).get(2);
+            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2)[2];
             List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
             rulesToDelete.add(toDelete);
             decManSub.bulkDeleteRuleFromDeclensionTemplates(2, rulesToDelete);
-            assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+            assertEquals(expectedFinalSize, decManSub.getDeclensionRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -254,10 +255,10 @@ public class DeclensionManagerTest {
             int expectedFinalSize = 4;
 
             DeclensionManager decManSub = subCore.getDeclensionManager();
-            rulesToDelete.add(decManSub.getDeclensionRulesForType(2).get(2));
-            rulesToDelete.add(decManSub.getDeclensionRulesForType(2).get(1));
+            rulesToDelete.add(decManSub.getDeclensionRulesForType(2)[2]);
+            rulesToDelete.add(decManSub.getDeclensionRulesForType(2)[1]);
             decManSub.bulkDeleteRuleFromDeclensionTemplates(2, rulesToDelete);
-            assertEquals(decManSub.getDeclensionRulesForType(2).size(), expectedFinalSize);
+            assertEquals(expectedFinalSize, decManSub.getDeclensionRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -278,7 +279,7 @@ public class DeclensionManagerTest {
             DeclensionManager decManSub = subCore.getDeclensionManager();
 
             decManSub.deleteDeclensionGenRules(typeId, combinedDeclensionId);
-            List<DeclensionGenRule> result = decManSub.getDeclensionRulesForType(typeId);
+            List<DeclensionGenRule> result = Arrays.asList(decManSub.getDeclensionRulesForType(typeId));
             assertEquals(result.size(), expectedResultSize);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
@@ -548,9 +549,9 @@ public class DeclensionManagerTest {
         int expectedRules = 13;
         DeclensionManager decMan = core.getDeclensionManager();
         decMan.addDeclensionToTemplate(typeId, "ZIM-ZAM!");
-        List<DeclensionGenRule> rules = core.getDeclensionManager().getAllDepGenerationRules(typeId);
+        DeclensionGenRule[] rules = core.getDeclensionManager().getAllDepGenerationRules(typeId);
         
-        int resultRules = rules.size();
+        int resultRules = rules.length;
         
         assertEquals(expectedRules, resultRules);
     }
@@ -565,9 +566,9 @@ public class DeclensionManagerTest {
         word.setWordTypeId(4); // verb
         word.setValue("er5");
         
-        List<DeclensionGenRule> rules = core.getDeclensionManager().getDeclensionRules(word);
-        int resultRuleCount = rules.size();
-        String resultFirstRuleName = rules.get(0).getName();
+        DeclensionGenRule[] rules = core.getDeclensionManager().getDeclensionRules(word);
+        int resultRuleCount = rules.length;
+        String resultFirstRuleName = rules[0].getName();
         
         assertEquals(expectedRuleCount, resultRuleCount);
         assertEquals(expectedFirstRuleName, resultFirstRuleName);
@@ -603,13 +604,13 @@ public class DeclensionManagerTest {
             smoothRules.setAccessible(true);
             smoothRules.invoke(decMan);
 
-            List<DeclensionGenRule> rules = decMan.getDeclensionRulesForType(nounId);
+            DeclensionGenRule[] rules = decMan.getDeclensionRulesForType(nounId);
 
             // assert that rules have been changed from 1, 3, 4 -> 1, 2, 3
-            assertEquals(rules.size(), 3);
-            assertEquals(rules.get(0).getIndex(), 1);
-            assertEquals(rules.get(1).getIndex(), 2);
-            assertEquals(rules.get(2).getIndex(), 3);
+            assertEquals(3, rules.length);
+            assertEquals(1, rules[0].getIndex());
+            assertEquals(2, rules[1].getIndex());
+            assertEquals(3, rules[2].getIndex());
         } catch (Exception e) {
             fail(e);
             IOHandler.writeErrorLog(e);

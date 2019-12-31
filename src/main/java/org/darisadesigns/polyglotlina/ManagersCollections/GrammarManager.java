@@ -66,8 +66,8 @@ public class GrammarManager {
         buffer = new GrammarChapNode(this);
     }
     
-    public List<GrammarChapNode> getChapters() {
-        return chapters;
+    public GrammarChapNode[] getChapters() {
+        return chapters.toArray(new GrammarChapNode[0]);
     }
 
     /**

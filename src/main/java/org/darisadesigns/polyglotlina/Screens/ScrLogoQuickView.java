@@ -39,8 +39,6 @@ import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
-import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -191,13 +189,12 @@ public final class ScrLogoQuickView extends PFrame {
         lstLogos.setFont(font);
     }
 
-    private void populateLogos(List<LogoNode> logos) {
-        Iterator<LogoNode> it = logos.iterator();
+    private void populateLogos(LogoNode[] logos) {
 
         DefaultListModel<LogoNode> newModel = new DefaultListModel<>();
 
-        while (it.hasNext()) {
-            newModel.addElement(it.next());
+        for (LogoNode curNode : logos) {
+            newModel.addElement(curNode);
         }
 
         lstLogos.setModel(newModel);

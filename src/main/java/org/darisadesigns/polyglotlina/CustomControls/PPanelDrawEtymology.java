@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
 
 /**
  *
@@ -159,17 +160,17 @@ public final class PPanelDrawEtymology extends JPanel {
      * @param curNode node to populate parentage of
      */
     private void addEtTreeParents(EtymologyPrintingNode curNode) {
-        core.getEtymologyManager().getWordParentsIds(curNode.word.getId()).forEach((curParentId) -> {
+        for (Integer curParentId : core.getEtymologyManager().getWordParentsIds(curNode.word.getId())) {
             EtymologyPrintingNode parentNode = new EtymologyPrintingNode();
             parentNode.word = core.getWordCollection().getNodeById(curParentId);
             parentNode.depth = curNode.depth - 1;
             addEtTreeParents(parentNode);
             parentNode.children.add(curNode);
             curNode.parents.add(parentNode);
-        });
+        }
         
         // adds external parents
-        core.getEtymologyManager().getWordExternalParents(curNode.word.getId()).forEach((extPar) -> {
+        for (EtyExternalParent extPar : core.getEtymologyManager().getWordExternalParents(curNode.word.getId())) {
             EtymologyPrintingNode parentNode = new EtymologyPrintingNode();
             parentNode.isExternal = true;
             parentNode.extWordValue = extPar.getExternalWord();
@@ -181,7 +182,7 @@ public final class PPanelDrawEtymology extends JPanel {
             parentNode.children.add(curNode);
             curNode.parents.add(parentNode);
             lowestDepth = Math.min(lowestDepth, curNode.depth - 1);
-        });
+        }
 
         // make certain to update the lowest depth if needed
         lowestDepth = Math.min(lowestDepth, curNode.depth);
@@ -197,13 +198,13 @@ public final class PPanelDrawEtymology extends JPanel {
      */
     private void addEtTreeChildren(EtymologyPrintingNode curNode, int depth) {
         curNode.depth = depth;
-        core.getEtymologyManager().getChildren(curNode.word.getId()).forEach((curChildId) -> {
+        for (Integer curChildId : core.getEtymologyManager().getChildren(curNode.word.getId())) {
             EtymologyPrintingNode childNode = new EtymologyPrintingNode();
             childNode.word = core.getWordCollection().getNodeById(curChildId);
             addEtTreeChildren(childNode, depth + 1);
             curNode.children.add(childNode);
             childNode.parents.add(curNode);
-        });
+        }
 
         // sort in order of node depth
         Collections.sort(curNode.children);

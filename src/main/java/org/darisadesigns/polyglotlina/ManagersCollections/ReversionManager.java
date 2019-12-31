@@ -64,9 +64,9 @@ public class ReversionManager {
         reversionList.add(reg);
     }
 
-    public List<ReversionNode> getReversionList() {
+    public ReversionNode[] getReversionList() {
         Collections.sort(reversionList);
-        return reversionList;
+        return reversionList.toArray(new ReversionNode[0]);
     }
     
     public int getMaxReversionsCount() {

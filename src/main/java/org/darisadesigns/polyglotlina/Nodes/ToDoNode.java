@@ -122,8 +122,8 @@ public class ToDoNode {
         }
     }
     
-    public List<ToDoNode> getChildren() {
-        return children;
+    public ToDoNode[] getChildren() {
+        return children.toArray(new ToDoNode[0]);
     }
     
     public boolean isDone() {

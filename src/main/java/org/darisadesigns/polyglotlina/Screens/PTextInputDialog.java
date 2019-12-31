@@ -128,8 +128,8 @@ public final class PTextInputDialog extends PDialog {
     /**
      * @return text fields in the same order they were added to the dialog
      */
-    public List<PTextField> getOrderedFields() {
-        return retVal;
+    public PTextField[] getOrderedFields() {
+        return retVal.toArray(new PTextField[0]);
     }
 
     /**

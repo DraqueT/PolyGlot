@@ -527,13 +527,13 @@ public final class IOHandler {
 
     private static String writePriorStatesToArchive(ZipOutputStream out, DictCore core) throws IOException {
         String writeLog = "";
-        List<ReversionNode> reversionList = core.getReversionManager().getReversionList();
+        ReversionNode[] reversionList = core.getReversionManager().getReversionList();
 
         try {
             out.putNextEntry(new ZipEntry(PGTUtil.REVERSION_SAVE_PATH));
 
-            for (int i = 0; i < reversionList.size(); i++) {
-                ReversionNode node = reversionList.get(i);
+            for (int i = 0; i < reversionList.length; i++) {
+                ReversionNode node = reversionList[i];
 
                 out.putNextEntry(new ZipEntry(PGTUtil.REVERSION_SAVE_PATH + PGTUtil.REVERSION_BASE_FILE_NAME + i));
                 out.write(node.getValue());
@@ -548,8 +548,8 @@ public final class IOHandler {
 
     private static String writeLogoNodesToArchive(ZipOutputStream out, DictCore core) {
         String writeLog = "";
-        List<LogoNode> logoNodes = core.getLogoCollection().getAllLogos();
-        if (!logoNodes.isEmpty()) {
+        LogoNode[] logoNodes = core.getLogoCollection().getAllLogos();
+        if (logoNodes.length != 0) {
             try {
                 out.putNextEntry(new ZipEntry(PGTUtil.LOGOGRAPH_SAVE_PATH));
                 for (LogoNode curNode : logoNodes) {
@@ -609,8 +609,8 @@ public final class IOHandler {
 
     private static String writeImagesToArchive(ZipOutputStream out, DictCore core) {
         String writeLog = "";
-        List<ImageNode> imageNodes = core.getImageCollection().getAllImages();
-        if (!imageNodes.isEmpty()) {
+        ImageNode[] imageNodes = core.getImageCollection().getAllImages();
+        if (imageNodes.length != 0) {
             try {
                 out.putNextEntry(new ZipEntry(PGTUtil.IMAGES_SAVE_PATH));
                 for (ImageNode curNode : imageNodes) {
@@ -700,10 +700,8 @@ public final class IOHandler {
      */
     public static void loadLogographs(LogoCollection logoCollection,
             String fileName) throws Exception {
-        Iterator<LogoNode> it = logoCollection.getAllLogos().iterator();
         try (ZipFile zipFile = new ZipFile(fileName)) {
-            while (it.hasNext()) {
-                LogoNode curNode = it.next();
+            for (LogoNode curNode : logoCollection.getAllLogos()) {
                 ZipEntry imgEntry = zipFile.getEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                         + curNode.getId() + ".png");
 
@@ -800,11 +798,7 @@ public final class IOHandler {
         String loadLog = "";
 
         try (ZipFile zipFile = new ZipFile(fileName)) {
-            Iterator<GrammarChapNode> chapIt = grammarManager.getChapters().iterator();
-
-            while (chapIt.hasNext()) {
-                GrammarChapNode curChap = chapIt.next();
-
+            for (GrammarChapNode curChap : grammarManager.getChapters()) {
                 for (int i = 0; i < curChap.getChildCount(); i++) {
                     GrammarSectionNode curNode = (GrammarSectionNode) curChap.getChildAt(i);
 

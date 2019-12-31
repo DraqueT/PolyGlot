@@ -29,6 +29,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -59,9 +60,9 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
      * @param _word word for which forms are being generated
      * @param _onlyTab true if this is the only tab being displayed
      */
-    public PDeclensionListPanel(List<DeclensionPair> _declensionPairs, DictCore _core, ConWord _word, boolean _onlyTab) {
+    public PDeclensionListPanel(DeclensionPair[] _declensionPairs, DictCore _core, ConWord _word, boolean _onlyTab) {
         core = _core;
-        declensionPairs = _declensionPairs;
+        declensionPairs = Arrays.asList(_declensionPairs);
         word = _word;
         onlyTab = _onlyTab;
         table = new PTable(core);

@@ -300,7 +300,7 @@ public final class PToDoTree extends JTree {
         }       
         ToDoNode parentCheckedNode = nodesCheckingState.get(parentPath);  
         parentCheckedNode.setDone(false);
-        if (!parentCheckedNode.getChildren().isEmpty()) {
+        if (parentCheckedNode.getChildren().length != 0) {
             if (parentCheckedNode.allChildrenDone()) {
                 parentCheckedNode.setDone(true);
             } else {

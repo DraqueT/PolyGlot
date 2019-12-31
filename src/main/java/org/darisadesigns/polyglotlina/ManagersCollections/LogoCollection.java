@@ -98,12 +98,10 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
     @Override
     public void deleteNodeById(Integer _id) throws Exception {
         LogoNode logo = (LogoNode)getNodeById(_id);
-        Iterator<ConWord> it = getLogoWords(logo).iterator();
+        ConWord[] words = getLogoWords(logo);
         
-        while (it.hasNext()) {
-            ConWord word = it.next();
-            
-            removeWordLogoRelation(word, logo);
+        for (ConWord curWord : words) {
+            removeWordLogoRelation(curWord, logo);
         }
         
         super.deleteNodeById(_id);
@@ -113,12 +111,12 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      * Gets all logographs in language
      * @return list of all logographs
      */
-    public List<LogoNode> getAllLogos() {
+    public LogoNode[] getAllLogos() {
         List<LogoNode> retList = new ArrayList<>(nodeMap.values());
 
         Collections.sort(retList);
 
-        return retList;
+        return retList.toArray(new LogoNode[0]);
     }
     
     /**
@@ -130,18 +128,16 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      * @param notes filter by string found in notes
      * @return 
      */
-    public List<LogoNode> getFilteredList(String reading, 
+    public LogoNode[] getFilteredList(String reading, 
             String relWord, 
             String radical, 
             int strokes, 
             String notes) {
         List<LogoNode> retList = new ArrayList<>();
-        Iterator<LogoNode> it = getAllLogos().iterator();
+        LogoNode[] logoNodes = getAllLogos();
         boolean ignoreCase = core.getPropertiesManager().isIgnoreCase();
         
-        while (it.hasNext()) {
-            LogoNode curNode = it.next();
-
+        for (LogoNode curNode : logoNodes) {
             if (!reading.trim().isEmpty() && !curNode.containsReading(reading, ignoreCase)) {
                 continue;
             } else if (!radical.trim().isEmpty() && !curNode.containsRadicalString(radical, ignoreCase)) {
@@ -159,7 +155,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
             retList.add(curNode);
         }
         
-        return retList;
+        return retList.toArray(new LogoNode[0]);
     }
     
     /**
@@ -193,7 +189,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      * @param conWord word to search on
      * @return list of related logographs
      */
-    public List<LogoNode> getWordLogos(ConWord conWord) {
+    public LogoNode[] getWordLogos(ConWord conWord) {
         List<LogoNode> retList = new ArrayList<>();
         List<Integer> initialList = wordToLogo.get(conWord.getId());
         Iterator<Integer> it = null;
@@ -207,7 +203,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
             retList.add(curNode);
         }
         
-        return retList;
+        return retList.toArray(new LogoNode[0]);
     }
     
     /**
@@ -215,7 +211,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      * @param logoNode logogram to search on
      * @return list of related words
      */
-    public List<ConWord> getLogoWords(LogoNode logoNode) {
+    public ConWord[] getLogoWords(LogoNode logoNode) {
         List<ConWord> retList = new ArrayList<>();
         List<Integer>initialList = logoToWord.get(logoNode.getId());
         Iterator<Integer> it = null;
@@ -229,14 +225,14 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
             retList.add(curNode);
         }
         
-        return retList;
+        return retList.toArray(new ConWord[0]);
     }
     
     /**
      * returns list of only logonodes which are radicals
      * @return 
      */
-    public List<LogoNode> getRadicals() {
+    public LogoNode[] getRadicals() {
         List<LogoNode> retList = new ArrayList<>();
         Iterator<LogoNode> it = new ArrayList<>(nodeMap.values()).iterator();
 
@@ -249,7 +245,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         
         Collections.sort(retList);
 
-        return retList;
+        return retList.toArray(new LogoNode[0]);
     }
     
     /**
@@ -265,9 +261,9 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         Element logoCollection = doc.createElement(PGTUtil.LOGOGRAPHS_COLLECTION_XID);
         logoRoot.appendChild(logoCollection);
         
-        getAllLogos().forEach((logo)->{
-            logo.writeXML(doc, logoCollection);
-        });
+        for (LogoNode curNode : getAllLogos()) {
+            curNode.writeXML(doc, logoCollection);
+        }
         
         // write all logo->word relations to XML (reverse will be inferred on load)
         Iterator<Entry<Integer, ArrayList<Integer>>> setIt = logoToWord.entrySet().iterator();

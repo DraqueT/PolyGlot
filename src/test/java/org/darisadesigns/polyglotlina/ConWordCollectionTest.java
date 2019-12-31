@@ -22,7 +22,6 @@ package org.darisadesigns.polyglotlina;
 import TestResources.DummyCore;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.List;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.junit.jupiter.api.Test;
@@ -50,15 +49,15 @@ public class ConWordCollectionTest {
             words.loadSwadesh(bs, false);
             ConWord filterWord = new ConWord();
             filterWord.setValue(searchValue);
-            List<ConWord> foundWords = words.filteredList(filterWord);
+            ConWord[] foundWords = words.filteredList(filterWord);
 
             int resultLexSize = words.getWordCount();
-            int resultFoundSize = foundWords.size();
+            int resultFoundSize = foundWords.length;
 
             assertEquals(resultLexSize, expectedSize);
             assertEquals(resultFoundSize, expectedFoundWords);
 
-            String resultWordVal = foundWords.get(0).getValue();
+            String resultWordVal = foundWords[0].getValue();
             assertEquals(resultWordVal, expectedValue);
         } catch (Exception e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());

@@ -71,6 +71,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
@@ -82,6 +83,7 @@ import org.darisadesigns.polyglotlina.PGTUtil;
 public final class ScrGrammarGuide extends PFrame {
 
     private final String defTime;
+    private final GrammarManager gramMan;
     private SoundRecorder soundRecorder;
     private boolean isUpdating;
     private final ImageIcon playButtonUp;
@@ -100,6 +102,7 @@ public final class ScrGrammarGuide extends PFrame {
      */
     public ScrGrammarGuide(DictCore _core) {
         super(_core);
+        gramMan = core.getGrammarManager();
         
         isUpdating = false;
         defTime = "00:00:00";
@@ -145,7 +148,7 @@ public final class ScrGrammarGuide extends PFrame {
     }
     
     private void setupChapTreeModel() {
-        DefaultMutableTreeNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
+        DefaultMutableTreeNode rootNode = new GrammarChapNode("Root Node", gramMan);
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
         treChapList.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -1043,7 +1046,7 @@ public final class ScrGrammarGuide extends PFrame {
                 treChapList.setSelectionPath(new TreePath(model.getPathToRoot(parent)));
             } else if (selection instanceof GrammarChapNode) {
                 ((GrammarChapNode) root).doRemove((GrammarChapNode) selection);
-                core.getGrammarManager().removeChapter((GrammarChapNode) selection);
+                gramMan.removeChapter((GrammarChapNode) selection);
             }
 
             model.reload(root);
@@ -1096,21 +1099,21 @@ public final class ScrGrammarGuide extends PFrame {
         DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
         Object selection = treChapList.getLastSelectedPathComponent();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-        GrammarChapNode newNode = new GrammarChapNode(core.getGrammarManager());
+        GrammarChapNode newNode = new GrammarChapNode(gramMan);
         newNode.setName("NEW CHAPTER");
 
         if (selection instanceof GrammarSectionNode) {
             GrammarChapNode parent = (GrammarChapNode) ((GrammarSectionNode) selection).getParent();
             int index = root.getIndex(parent);
             model.insertNodeInto(newNode, root, index + 1);
-            core.getGrammarManager().addChapterAtIndex(newNode, index + 1);
+            gramMan.addChapterAtIndex(newNode, index + 1);
         } else if (selection instanceof GrammarChapNode) {
             int index = root.getIndex((GrammarChapNode) selection);
             model.insertNodeInto(newNode, root, index + 1);
-            core.getGrammarManager().addChapterAtIndex(newNode, index + 1);
+            gramMan.addChapterAtIndex(newNode, index + 1);
         } else {
             root.add(newNode);
-            core.getGrammarManager().addChapter(newNode);
+            gramMan.addChapter(newNode);
         }
 
         model.reload();
@@ -1126,14 +1129,14 @@ public final class ScrGrammarGuide extends PFrame {
         if (selection instanceof GrammarSectionNode) {
             GrammarChapNode parent = (GrammarChapNode) ((GrammarSectionNode) selection).getParent();
             int index = parent.getIndex((GrammarSectionNode) selection);
-            GrammarSectionNode newNode = core.getGrammarManager().getNewSection();
+            GrammarSectionNode newNode = gramMan.getNewSection();
             newNode.setName("NEW SECTION");
             model.insertNodeInto(newNode, parent, index + 1);
             model.reload();
             treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
         } else if (selection instanceof GrammarChapNode) {
             GrammarChapNode parent = (GrammarChapNode) selection;
-            GrammarSectionNode newNode = core.getGrammarManager().getNewSection();
+            GrammarSectionNode newNode = gramMan.getNewSection();
             newNode.setName("NEW SECTION");
             parent.add(newNode);
             model.reload();
@@ -1191,13 +1194,13 @@ public final class ScrGrammarGuide extends PFrame {
      * populates all grammar chapters and sections
      */
     private void populateSections() {
-        DefaultMutableTreeNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
+        DefaultMutableTreeNode rootNode = new GrammarChapNode("Root Node", gramMan);
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
 
-        core.getGrammarManager().getChapters().forEach((curChap) -> {
+        for (GrammarChapNode curChap : gramMan.getChapters()) {
             rootNode.add(curChap);
-        });
+        }
 
         treeModel.reload(rootNode);
         treChapList.setLargeModel(true);
@@ -1208,7 +1211,7 @@ public final class ScrGrammarGuide extends PFrame {
      */
     private void populateFromSearch() {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
-        GrammarChapNode rootNode = new GrammarChapNode("Root Node", core.getGrammarManager());
+        GrammarChapNode rootNode = new GrammarChapNode("Root Node", gramMan);
 
         if (((PTextField) txtSearch).isDefaultText() || txtSearch.getText().isEmpty()) {
             populateSections();
@@ -1217,8 +1220,8 @@ public final class ScrGrammarGuide extends PFrame {
 
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
-        core.getGrammarManager().getChapters().forEach((chapter) -> {
-            GrammarChapNode srcChap = new GrammarChapNode(core.getGrammarManager());
+        for (GrammarChapNode chapter : gramMan.getChapters()) {
+            GrammarChapNode srcChap = new GrammarChapNode(gramMan);
             srcChap.setName(chapter.getName());
 
             Enumeration sections = chapter.children(txtSearch.getText());
@@ -1230,7 +1233,7 @@ public final class ScrGrammarGuide extends PFrame {
             if (srcChap.children().hasMoreElements()) {
                 rootNode.add(srcChap);
             }
-        });
+        }
         
         treeModel.reload(rootNode);
     }

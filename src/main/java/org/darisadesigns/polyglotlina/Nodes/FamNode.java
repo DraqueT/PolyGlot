@@ -126,24 +126,24 @@ public class FamNode extends DictNode {
      * gets all words in immediate family
      * @return iterator of all words in immediate family
      */
-    public Iterator<ConWord> getWords() {
+    public ConWord[] getWords() {
         manager.removeDeadWords(this, words);
 
         List<ConWord> ret = new ArrayList<>(words);
         Collections.sort(ret);
         
-        return ret.iterator();
+        return ret.toArray(new ConWord[0]);
     }
     
     /**
      * returns all words within family and subfamilies
      * @return sorted list of ConWords
      */
-    public List<ConWord> getWordsIncludeSubs() {
+    public ConWord[] getWordsIncludeSubs() {
         List<ConWord> ret = getWordsIncludeSubsInternal();
         Collections.sort(ret);
         
-        return ret;
+        return ret.toArray(new ConWord[0]);
     }
     
     /**
@@ -180,10 +180,10 @@ public class FamNode extends DictNode {
      * gets all subnodes
      * @return alphabetically sorted iterator of all subnodes
      */
-    public List<FamNode> getNodes() {
+    public FamNode[] getNodes() {
         Collections.sort(subNodes);
         
-        return subNodes;
+        return subNodes.toArray(new FamNode[0]);
     }
     
     public void addNode(FamNode _node) {

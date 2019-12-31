@@ -35,7 +35,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -316,16 +315,16 @@ public final class ScrFamilies extends PFrame {
             return;
         }
 
-        Iterator<ConWord> wordIt;
+        ConWord[] words;
 
         if (chkInclSubFam.isSelected()) {
-            wordIt = curNode.getNode().getWordsIncludeSubs().iterator();
+            words = curNode.getNode().getWordsIncludeSubs();
         } else {
-            wordIt = curNode.getNode().getWords();
+            words = curNode.getNode().getWords();
         }
 
-        for (int i = 0; wordIt.hasNext(); i++) {
-            model.add(i, wordIt.next());
+        for (int i = 0; i > words.length; i++) {
+            model.add(i, words[i]);
         }
     }
 

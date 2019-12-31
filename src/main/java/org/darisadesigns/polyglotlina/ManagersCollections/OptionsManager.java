@@ -101,8 +101,8 @@ public class OptionsManager {
      * Retrieve screens up at time of last close
      * @return list of screens up
      */
-    public List<String> getLastScreensUp() {
-        return screensUp;
+    public String[] getLastScreensUp() {
+        return screensUp.toArray(new String[0]);
     }
     
     /**
@@ -163,8 +163,8 @@ public class OptionsManager {
      *
      * @return
      */
-    public List<String> getLastFiles() {
-        return lastFiles;
+    public String[] getLastFiles() {
+        return lastFiles.toArray(new String[0]);
     }
     
     /**

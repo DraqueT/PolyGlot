@@ -147,10 +147,8 @@ public class ScrLogoDetails extends PFrame {
             }
         } else {
             LogoNode singleModeLogo = (LogoNode) core.getLogoCollection().getNodeById(logoId);
-            List<LogoNode> list = new ArrayList<>();
-            list.add(singleModeLogo);
-
-            populateLogographs(list.iterator());
+            LogoNode[] list = {singleModeLogo};
+            populateLogographs(list);
 
             setSingleLogoMode(true);
             setTitle("Logograph Details/Modification");
@@ -672,12 +670,10 @@ public class ScrLogoDetails extends PFrame {
             return;
         }
 
-        Iterator<ConWord> it = core.getLogoCollection().getLogoWords(curNode).iterator();
-
         DefaultListModel<Object> wordModel = new DefaultListModel<>();
 
-        while (it.hasNext()) {
-            wordModel.addElement(it.next());
+        for (ConWord curWord : core.getLogoCollection().getLogoWords(curNode)) {
+            wordModel.addElement(curWord);
         }
 
         lstRelWords.setModel(wordModel);
@@ -734,7 +730,7 @@ public class ScrLogoDetails extends PFrame {
                 fltRelatedWord.getText(),
                 fltRadical.getText(),
                 strokes,
-                fltNotes.getText()).iterator());
+                fltNotes.getText()));
 
         populateLogoProps();
     }
@@ -782,7 +778,7 @@ public class ScrLogoDetails extends PFrame {
         if (mode == WindowMode.SINGLEVALUE) {
             populateLogoProps();
         } else {
-            populateLogographs(core.getLogoCollection().getAllLogos().iterator());
+            populateLogographs(core.getLogoCollection().getAllLogos());
         }
     }
 
@@ -791,12 +787,11 @@ public class ScrLogoDetails extends PFrame {
      *
      * @param it iterator of all logographs to populate
      */
-    private void populateLogographs(Iterator<LogoNode> it) {
+    private void populateLogographs(LogoNode[] logoNodes) {
         DefaultListModel<Object> logoModel = new DefaultListModel<>();
 
-        while (it.hasNext()) {
-            LogoNode curLog = it.next();
-            logoModel.addElement(curLog);
+        for (LogoNode curNode : logoNodes) {
+            logoModel.addElement(curNode);
         }
 
         curPopulating = true;
@@ -850,12 +845,10 @@ public class ScrLogoDetails extends PFrame {
         chkIsRad.setSelected(curNode.isRadical());
 
         // Populate radicals
-        Iterator<LogoNode> radIt = curNode.getRadicals().iterator();
         DefaultListModel<Object> radModel = new DefaultListModel<>();
 
-        while (radIt.hasNext()) {
+        for (LogoNode radNode : curNode.getRadicals()) {
             try {
-                LogoNode radNode = radIt.next();
                 radModel.addElement(radNode);
             } catch (Exception e) {
                 // do nothing
@@ -864,11 +857,9 @@ public class ScrLogoDetails extends PFrame {
         }
 
         lstRadicals.setModel(radModel);
-
-        // Populate readings
-        Iterator<String> procIt = curNode.getReadings().iterator();
+        
         // TODO: figure out a way to make this respect RTL languages... maybe just insert char here? and cut at save time? Messy but effective...
-
+        // Populate readings
         DefaultTableModel procModel = new DefaultTableModel();
         procModel.addColumn("Readings");
         tblReadings.setModel(procModel);
@@ -878,8 +869,8 @@ public class ScrLogoDetails extends PFrame {
         column.setCellEditor(new PCellEditor(true, core));
         column.setCellRenderer(new PCellRenderer(true, core));
 
-        while (procIt.hasNext()) {
-            Object[] newRow = {procIt.next()};
+        for (String curProc : curNode.getReadings()) {
+            Object[] newRow = {curProc};
             procModel.addRow(newRow);
         }
         tblReadings.setModel(procModel);

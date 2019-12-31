@@ -22,7 +22,6 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -45,7 +44,7 @@ public class RomanizationManager extends PronunciationMgr {
      */
     @Override
     public void writeXML(Document doc, Element rootElement) {
-        List<PronunciationNode> romGuide = getPronunciations();
+        PronunciationNode[] romGuide = getPronunciations();
         
         Element guideNode = doc.createElement(PGTUtil.ROM_GUIDE_XID);
         rootElement.appendChild(guideNode);
@@ -58,7 +57,7 @@ public class RomanizationManager extends PronunciationMgr {
         enabledNode.appendChild(doc.createTextNode(recurse ? PGTUtil.TRUE : PGTUtil.FALSE));
         guideNode.appendChild(enabledNode);
         
-        romGuide.forEach((PronunciationNode curNode) -> {
+        for (PronunciationNode curNode : romGuide) {
             Element romNode = doc.createElement(PGTUtil.ROM_GUIDE_NODE_XID);
             guideNode.appendChild(romNode);
             
@@ -69,19 +68,13 @@ public class RomanizationManager extends PronunciationMgr {
             Element procNode = doc.createElement(PGTUtil.ROM_GUIDE_PHON_XID);
             procNode.appendChild(doc.createTextNode(curNode.getPronunciation()));
             romNode.appendChild(procNode);
-        });
+        }
     }
 
-    /**
-     * @return the enabled
-     */
     public boolean isEnabled() {
         return enabled;
     }
 
-    /**
-     * @param enabled the enabled status to set
-     */
     public void setEnabled(boolean _enabled) {
         this.enabled = _enabled;
     }

@@ -42,6 +42,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import org.darisadesigns.polyglotlina.Nodes.DictNode;
 
 /**
  *
@@ -168,7 +169,7 @@ public final class ScrQuizScreen extends PFrame {
             gbc.anchor = GridBagConstraints.NORTHWEST;
             gbc.weightx = 9999;
 
-            question.getChoices().forEach((choiceNode) -> {
+            for (DictNode choiceNode : question.getChoices()) {
                 final PRadioButton choice = new PRadioButton(core.getPropertiesManager().getFontCon(), menuFontSize, nightMode);
                 choice.setValue(choiceNode);
                 choice.setType(question.getType());
@@ -203,7 +204,7 @@ public final class ScrQuizScreen extends PFrame {
                         curComp.setEnabled(false);
                     });
                 }
-            });
+            }
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Population Error", "Problem populating question: "

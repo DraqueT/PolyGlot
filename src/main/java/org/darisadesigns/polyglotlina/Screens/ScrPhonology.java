@@ -172,9 +172,9 @@ public final class ScrPhonology extends PFrame {
         // wipe current rows, repopulate from core
         setupProcTable();
 
-        core.getPronunciationMgr().getPronunciations().forEach((curNode) -> {
+        for (PronunciationNode curNode : core.getPronunciationMgr().getPronunciations()) {
             addProcWithValues(curNode.getValue(), curNode.getPronunciation());
-        });
+        }
         
         chkPhonRecurse.setSelected(core.getPronunciationMgr().isRecurse());
     }
@@ -186,9 +186,9 @@ public final class ScrPhonology extends PFrame {
         // wipe current rows, repopulate from core
         setupRomTable();
 
-        core.getRomManager().getPronunciations().forEach((curNode) -> {
+        for (PronunciationNode curNode : core.getRomManager().getPronunciations()) {
             addRomWithValues(curNode.getValue(), curNode.getPronunciation());
-        });
+        }
         
         chkRomRecurse.setSelected(core.getRomManager().isRecurse());
     }

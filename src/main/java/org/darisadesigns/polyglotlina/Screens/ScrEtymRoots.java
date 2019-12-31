@@ -37,6 +37,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -104,7 +105,8 @@ public final class ScrEtymRoots extends PDialog {
         gbc.fill = GridBagConstraints.BOTH;
         
         // Cycle through existing external parents and add them to the display
-        core.getEtymologyManager().getWordExternalParents(word.getId()).stream().map((extPar) -> {
+        List<EtyExternalParent> parents = Arrays.asList(core.getEtymologyManager().getWordExternalParents(word.getId()));
+        parents.stream().map((extPar) -> {
             JPanel miniPanel = new JPanel();
             final PTextField p = new PTextField(core, true, "");
             PButton delButton = new PButton(nightMode, menuFontSize);
@@ -189,17 +191,17 @@ public final class ScrEtymRoots extends PDialog {
      * @param values Values to add to external parent and associate to current
      * word
      */
-    private void addNewExtParent(List<PTextField> values) {
-        if (!values.isEmpty()) { // empty set means user clicked cancel
-            if (values.size() != 3) {
+    private void addNewExtParent(PTextField[] values) {
+        if (values.length > 0) { // empty set means user clicked cancel
+            if (values.length != 3) {
                 InfoBox.error("Wrong number number of values", "Wrong number of values provided to create external parent.", this);
-            } else if (values.get(0).getText().isEmpty()) {
+            } else if (values[0].getText().isEmpty()) {
                 InfoBox.error("Blank word not allowed", "At minimum, a value for the external parent's word must be provided.", this);
             } else {
                 EtyExternalParent newParent = new EtyExternalParent();
-                newParent.setValue(values.get(0).getText());
-                newParent.setExternalLanguage(values.get(1).getText());
-                newParent.setDefinition(values.get(2).getText());
+                newParent.setValue(values[0].getText());
+                newParent.setExternalLanguage(values[1].getText());
+                newParent.setDefinition(values[2].getText());
 
                 core.getEtymologyManager().addExternalRelation(newParent, word.getId());
             }
@@ -220,7 +222,7 @@ public final class ScrEtymRoots extends PDialog {
         gbc.fill = GridBagConstraints.BOTH;
 
         // populate all existing parents as noneditable text boxes with deletion buttons
-        core.getEtymologyManager().getWordParentsIds(word.getId()).forEach((parentId) -> {
+        for (Integer parentId : core.getEtymologyManager().getWordParentsIds(word.getId())) {
             JPanel miniPanel = new JPanel();
             final PTextField textField = new PTextField(core, false, "");
             PButton delButton = new PButton(nightMode, menuFontSize);
@@ -250,7 +252,7 @@ public final class ScrEtymRoots extends PDialog {
             miniPanel.add(delButton, gbc);
 
             pnlParentsInt.add(miniPanel, gbc);
-        });
+        }
 
         //create new dropdown for potential additional parent to be added
         final PComboBox<Object> newParentBox = new PComboBox<>(core.getPropertiesManager().getFontMenu());
@@ -260,9 +262,9 @@ public final class ScrEtymRoots extends PDialog {
         newParentBox.setModel(comboModel);
         newParentBox.setMaximumSize(new Dimension(99999, newParentBox.getPreferredSize().height));
         comboModel.addElement("");
-        core.getWordCollection().getWordNodes().forEach((newParent) -> {
+        for (ConWord newParent : core.getWordCollection().getWordNodes()) {
             comboModel.addElement(newParent);
-        });
+        }
 
         // on selection of a parent word, save to selected word and repaint
         newParentBox.addActionListener(new ActionListener() {

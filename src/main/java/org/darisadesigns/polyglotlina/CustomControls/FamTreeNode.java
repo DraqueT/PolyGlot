@@ -37,8 +37,8 @@ public class FamTreeNode extends DefaultMutableTreeNode {
      *
      * @param parent
      */
-    public FamTreeNode(FamNode _parent) {
-        famNode = new FamNode(_parent, _parent.getManager());
+    public FamTreeNode(FamNode parent) {
+        famNode = new FamNode(parent, parent.getManager());
     }
 
     /**
@@ -65,12 +65,12 @@ public class FamTreeNode extends DefaultMutableTreeNode {
     public void setAsRootNode(FamNode _myRoot) {
         setNode(_myRoot);
 
-        _myRoot.getNodes().forEach((curNode) -> {
+        for (FamNode curNode : _myRoot.getNodes()) {
             FamTreeNode treeNode = new FamTreeNode(_myRoot);
             treeNode.setAsRootNode(curNode);
 
             add(treeNode);
-        });
+        }
     }
 
     public FamNode getNode() {

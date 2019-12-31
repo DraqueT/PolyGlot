@@ -42,7 +42,6 @@ import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
 import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.time.Instant;
 import javax.swing.UIDefaults;
 import javax.xml.parsers.DocumentBuilder;

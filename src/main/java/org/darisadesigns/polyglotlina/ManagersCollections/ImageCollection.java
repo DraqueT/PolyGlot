@@ -26,8 +26,6 @@ import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.imageio.ImageIO;
 
 /**
@@ -48,8 +46,8 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
      * Gets list of all images
      * @return 
      */
-    public List<ImageNode> getAllImages() {
-        return new ArrayList<>(nodeMap.values());
+    public ImageNode[] getAllImages() {
+        return nodeMap.values().toArray(new ImageNode[0]);
     }
     
     /**

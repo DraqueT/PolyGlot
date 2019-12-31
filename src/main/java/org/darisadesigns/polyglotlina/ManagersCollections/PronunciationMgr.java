@@ -59,9 +59,9 @@ public class PronunciationMgr {
      *
      * @return list of PronunciationNodes
      */
-    public List<PronunciationNode> getPronunciations() {
+    public PronunciationNode[] getPronunciations() {
         // CORRECT FOR FILTERING/CREATION OF COPY OBJECT
-        return pronunciations;
+        return pronunciations.toArray(new PronunciationNode[0]);
     }
 
     /**
@@ -161,9 +161,9 @@ public class PronunciationMgr {
      * found
      * @throws java.lang.Exception if malformed regex expression encountered
      */
-    public List<PronunciationNode> getPronunciationElements(String base) throws Exception {
+    public PronunciationNode[] getPronunciationElements(String base) throws Exception {
         // -base.length() fed as initial depth to ensure that longer words cannot be artificially labeled as breaking max depth
-        return getPronunciationElements(base, -base.length());
+        return getPronunciationElements(base, -base.length()).toArray(new PronunciationNode[0]);
     }
     
     protected String getToolLabel() {
@@ -306,16 +306,10 @@ public class PronunciationMgr {
         });
     }
 
-    /**
-     * @return the recurse
-     */
     public boolean isRecurse() {
         return recurse;
     }
 
-    /**
-     * @param recurse the recurse to set
-     */
     public void setRecurse(boolean _recurse) {
         this.recurse = _recurse;
     }

@@ -118,13 +118,13 @@ public class ScrDeclensionGenSimple extends PDialog {
      * populates constructed declension list
      */
     private void populateCombinedDecl() {
-        List<DeclensionPair> decs = core.getDeclensionManager().getAllCombinedIds(typeId);
+        DeclensionPair[] decs = core.getDeclensionManager().getAllCombinedIds(typeId);
         DefaultListModel decListModel = new DefaultListModel<Object>();
         lstCombinedDec.setModel(decListModel);
 
-        decs.forEach((curPair) -> {
+        for (DeclensionPair curPair : decs) {
             decListModel.addElement(curPair);
-        });
+        }
 
         lstCombinedDec.setSelectedIndex(0);
     }
@@ -138,18 +138,18 @@ public class ScrDeclensionGenSimple extends PDialog {
                     .isCombinedDeclSurpressed(selected.combinedId, typeId));
             enableEditing(!chkDisableForm.isSelected());
 
-            List<DeclensionGenRule> rules
+            DeclensionGenRule[] rules
                     = core.getDeclensionManager().getDeclensionRulesForTypeAndCombId(typeId, selected.combinedId);
 
             txtRegex.setText("");
             txtReplace.setText("");
 
-            if (!rules.isEmpty()) {
+            if (rules.length != 0) {
                 // in the simplified display, there is only one rule/transform per combined ID
-                DeclensionGenRule rule = rules.get(0);
-                List<DeclensionGenTransform> transforms = rule.getTransforms();
-                if (!transforms.isEmpty()) {
-                    DeclensionGenTransform transform = transforms.get(0);
+                DeclensionGenRule rule = rules[0];
+                DeclensionGenTransform[] transforms = rule.getTransforms();
+                if (transforms.length != 0) {
+                    DeclensionGenTransform transform = transforms[0];
                     txtRegex.setText(transform.regex);
                     txtReplace.setText(transform.replaceText);
                 }
