@@ -102,8 +102,8 @@ public class LogoNode extends DictNode {
         }
     }
 
-    public List<LogoNode> getRadicals() {
-        return radicals;
+    public LogoNode[] getRadicals() {
+        return radicals.toArray(new LogoNode[0]);
     }
 
     public void setRadicals(List<LogoNode> _radicals) {
@@ -120,8 +120,8 @@ public class LogoNode extends DictNode {
         readings = _readings;
     }
 
-    public List<String> getReadings() {
-        return readings;
+    public String[] getReadings() {
+        return readings.toArray(new String[0]);
     }
 
     /**

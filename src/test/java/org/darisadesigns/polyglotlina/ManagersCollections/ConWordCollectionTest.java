@@ -21,7 +21,6 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import TestResources.DummyCore;
 import java.io.IOException;
-import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -56,27 +55,27 @@ public class ConWordCollectionTest {
     public void testCheckLexicon() {
         System.out.println("Test: checkLexicon");
         ConWordCollection instance = badLexEntriesCore.getWordCollection();
-        List<LexiconProblemNode> problems = instance.checkLexicon(false);
-        if (problems.size() != 4) {
+        LexiconProblemNode[] problems = instance.checkLexicon(false);
+        if (problems.length != 4) {
             fail("There should be 4 problems in this language file.");
         }
         
-        LexiconProblemNode curWord = problems.get(0);
+        LexiconProblemNode curWord = problems[0];
         assertEquals(curWord.problemWord.getValue(), "bad-pattern");
         assertEquals(curWord.description, "Word does not match enforced pattern for type: noun.");
         
-        curWord = problems.get(1);
+        curWord = problems[1];
         assertEquals(curWord.problemWord.getValue(), "bad-romanization-1-noun");
         assertEquals(curWord.description, "Word contains characters undefined in alphabet settings.\n" +
             "Word cannot be romanized properly (missing regex pattern).");
         
-        curWord = problems.get(2);
+        curWord = problems[2];
         assertEquals(curWord.problemWord.getValue(), "missing-POS-and-alphabet");
         assertEquals(curWord.description, "Types set to mandatory.\n" +
             "Word contains characters undefined in alphabet settings.\n" +
             "Word pronunciation cannot be generated properly (missing regex pattern).");
         
-        curWord = problems.get(3);
+        curWord = problems[3];
         assertEquals(curWord.problemWord.getValue(), "missing-local-noun");
         assertEquals(curWord.description, "Local Lang word set to mandatory.");
         

@@ -86,10 +86,10 @@ public class QuizQuestion extends DictNode {
      * Gets potential answers (if any) in randomized order
      * @return 
      */
-    public List<DictNode> getChoices() {
+    public DictNode[] getChoices() {
         long seed = System.nanoTime();
         Collections.shuffle(multipleChoices, new Random(seed));
-        return multipleChoices;
+        return multipleChoices.toArray(new DictNode[0]);
     }
     
     /**
@@ -243,9 +243,6 @@ public class QuizQuestion extends DictNode {
         return source;
     }
 
-    /**
-     * @param source the source to set
-     */
     public void setSource(DictNode _source) {
         this.source = _source;
     }
@@ -257,9 +254,6 @@ public class QuizQuestion extends DictNode {
         return answered;
     }
 
-    /**
-     * @param answered the answered to set
-     */
     public void setAnswered(Answered _answered) {
         this.answered = _answered;
     }
@@ -271,9 +265,6 @@ public class QuizQuestion extends DictNode {
         return userAnswer;
     }
 
-    /**
-     * @param userAnswer the userAnswer to set
-     */
     public void setUserAnswer(DictNode _userAnswer) {
         this.userAnswer = _userAnswer;
     }

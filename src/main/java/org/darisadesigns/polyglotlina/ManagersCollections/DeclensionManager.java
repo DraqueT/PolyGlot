@@ -28,6 +28,7 @@ import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
 import org.darisadesigns.polyglotlina.Nodes.DeclensionPair;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -105,15 +106,15 @@ public class DeclensionManager {
      * @param typeId type to get deprecated values for
      * @return list of all deprecated gen rules
      */
-    public List<DeclensionGenRule> getAllDepGenerationRules(int typeId) {
+    public DeclensionGenRule[] getAllDepGenerationRules(int typeId) {
         List<DeclensionGenRule> ret = new ArrayList<>();
-        List<DeclensionPair> typeRules = getAllCombinedIds(typeId);
+        DeclensionPair[] typeRules = getAllCombinedIds(typeId);
         Map<String, Integer> ruleMap = new HashMap<>();
 
         // creates searchable map of extant combination IDs
-        typeRules.forEach((curPair) -> {
+        for (DeclensionPair curPair : typeRules) {
             ruleMap.put(curPair.combinedId, 0);
-        });
+        }
 
         int highestIndex = 0;
         for (List<DeclensionGenRule> list : generationRules.values()) {
@@ -140,7 +141,7 @@ public class DeclensionManager {
         
         Collections.sort(ret);
 
-        return ret;
+        return ret.toArray(new DeclensionGenRule[0]);
     }
 
     /**
@@ -244,7 +245,7 @@ public class DeclensionManager {
      * account for class filtering)
      * @return list of rules
      */
-    public List<DeclensionGenRule> getDeclensionRulesForType(int typeId) {
+    public DeclensionGenRule[] getDeclensionRulesForType(int typeId) {
         List<DeclensionGenRule> ret;
 
         if (generationRules.containsKey(typeId)) {
@@ -255,7 +256,7 @@ public class DeclensionManager {
 
         Collections.sort(ret);
 
-        return ret;
+        return ret.toArray(new DeclensionGenRule[0]);
     }
     
     /**
@@ -266,9 +267,9 @@ public class DeclensionManager {
      * account for class filtering)
      * @return list of rules
      */
-    public List<DeclensionGenRule> getDeclensionRulesForTypeAndCombId(int typeId, String combinedId) {
+    public DeclensionGenRule[] getDeclensionRulesForTypeAndCombId(int typeId, String combinedId) {
         List<DeclensionGenRule> ret = new ArrayList<>();
-        List<DeclensionGenRule> typeRules = getDeclensionRulesForType(typeId);
+        DeclensionGenRule[] typeRules = getDeclensionRulesForType(typeId);
         
         for (DeclensionGenRule rule : typeRules) {
             if (rule.getCombinationId().equals(combinedId)) {
@@ -278,7 +279,7 @@ public class DeclensionManager {
         
         Collections.sort(ret);
         
-        return ret;
+        return ret.toArray(new DeclensionGenRule[0]);
     }
 
     /**
@@ -289,7 +290,7 @@ public class DeclensionManager {
      * classes/class values it has
      * @return list of rules
      */
-    public List<DeclensionGenRule> getDeclensionRules(ConWord word) {
+    public DeclensionGenRule[] getDeclensionRules(ConWord word) {
         List<DeclensionGenRule> ret = new ArrayList<>();
         int typeId = word.getWordTypeId();
         
@@ -318,7 +319,7 @@ public class DeclensionManager {
             i++;
         }
 
-        return ret;
+        return ret.toArray(new DeclensionGenRule[0]);
     }
 
     /**
@@ -331,7 +332,7 @@ public class DeclensionManager {
      * @throws java.lang.Exception on bad regex
      */
     public String declineWord(ConWord word, String combinedId) throws Exception {
-        List<DeclensionGenRule> rules = getDeclensionRules(word);
+        DeclensionGenRule[] rules = getDeclensionRules(word);
         decGenDebug.clear();
         decGenDebug.add("APPLIED RULES BREAKDOWN:\n");
         String ret = word.getValue();
@@ -353,7 +354,7 @@ public class DeclensionManager {
             
             debugString += curRule.getDebugString();
 
-            List<DeclensionGenTransform> transforms = curRule.getTransforms();
+            DeclensionGenTransform[] transforms = curRule.getTransforms();
 
             for (DeclensionGenTransform curTrans : transforms) {
                 try {
@@ -375,7 +376,8 @@ public class DeclensionManager {
         }
 
         // if rules are empty, no transformation took place: return blank string
-        ret = rules.isEmpty() ? "" : ret;
+        ret = rules.length == 0 ? "" : ret;
+        
         return ret;
     }
 
@@ -462,13 +464,13 @@ public class DeclensionManager {
      * @param typeId ID of type to fetch combined IDs for
      * @return list of labels and IDs
      */
-    public List<DeclensionPair> getAllCombinedIds(Integer typeId) {
-        List<DeclensionNode> dimensionalDeclensionNodes = getDimensionalDeclensionListTemplate(typeId);
+    public DeclensionPair[] getAllCombinedIds(Integer typeId) {
+        DeclensionNode[] dimensionalDeclensionNodes = getDimensionalDeclensionListTemplate(typeId);
         List<DeclensionNode> singletonDeclensionNodes = getSingletonDeclensionList(typeId, dTemplates);
         List<DeclensionPair> ret = getAllCombinedDimensionalIds(0, ",", "", dimensionalDeclensionNodes);
-        ret.addAll(getAllSingletonIds(singletonDeclensionNodes));
+        ret.addAll(Arrays.asList(getAllSingletonIds(singletonDeclensionNodes)));
 
-        return ret;
+        return ret.toArray(new DeclensionPair[0]);
     }
 
     /**
@@ -478,9 +480,9 @@ public class DeclensionManager {
      * @param typeId ID of type to fetch combined IDs for
      * @return list of labels and IDs
      */
-    public List<DeclensionPair> getDimensionalCombinedIds(Integer typeId) {
-        List<DeclensionNode> dimensionalDeclensionNodes = getDimensionalDeclensionListTemplate(typeId);
-        return getAllCombinedDimensionalIds(0, ",", "", dimensionalDeclensionNodes);
+    public DeclensionPair[] getDimensionalCombinedIds(Integer typeId) {
+        DeclensionNode[] dimensionalDeclensionNodes = getDimensionalDeclensionListTemplate(typeId);
+        return getAllCombinedDimensionalIds(0, ",", "", dimensionalDeclensionNodes).toArray(new DeclensionPair[0]);
     }
 
     /**
@@ -490,12 +492,12 @@ public class DeclensionManager {
      * @param typeId ID of type to fetch combined IDs for
      * @return list of labels and IDs
      */
-    public List<DeclensionPair> getSingletonCombinedIds(Integer typeId) {
+    public DeclensionPair[] getSingletonCombinedIds(Integer typeId) {
         List<DeclensionNode> singletonDeclensionNodes = getSingletonDeclensionList(typeId, dTemplates);
         return getAllSingletonIds(singletonDeclensionNodes);
     }
 
-    public List<DeclensionPair> getAllSingletonIds(List<DeclensionNode> declensionList) {
+    public DeclensionPair[] getAllSingletonIds(List<DeclensionNode> declensionList) {
         List<DeclensionPair> ret = new ArrayList<>();
 
         declensionList.forEach((curNode) -> {
@@ -503,7 +505,7 @@ public class DeclensionManager {
             ret.add(curPair);
         });
 
-        return ret;
+        return ret.toArray(new DeclensionPair[0]);
     }
 
     /**
@@ -572,19 +574,19 @@ public class DeclensionManager {
      * @param declensionList list of template declensions for type
      * @return list of currently constructed labels and ids
      */
-    private List<DeclensionPair> getAllCombinedDimensionalIds(int depth, String curId, String curLabel, List<DeclensionNode> declensionList) {
+    private List<DeclensionPair> getAllCombinedDimensionalIds(int depth, String curId, String curLabel, DeclensionNode[] declensionList) {
         List<DeclensionPair> ret = new ArrayList<>();
 
         // for the specific case that a word with no declension patterns has a deprecated declension
-        if (declensionList.isEmpty()) {
+        if (declensionList.length == 0) {
             return ret;
         }
 
-        if (depth >= declensionList.size()) {
+        if (depth >= declensionList.length) {
             ret.add(new DeclensionPair(curId, curLabel));
         } else {
 
-            DeclensionNode curNode = declensionList.get(depth);
+            DeclensionNode curNode = declensionList[depth];
             Collection<DeclensionDimension> dimensions = curNode.getDimensions();
             Iterator<DeclensionDimension> dimIt = dimensions.iterator();
 
@@ -608,8 +610,8 @@ public class DeclensionManager {
      * @param wordId
      * @return
      */
-    public List<DeclensionNode> getDimensionalDeclensionListWord(Integer wordId) {
-        return getDimensionalDeclensionList(wordId, dList);
+    public DeclensionNode[] getDimensionalDeclensionListWord(Integer wordId) {
+        return getDimensionalDeclensionList(wordId, dList).toArray(new DeclensionNode[0]);
     }
 
     /**
@@ -619,8 +621,8 @@ public class DeclensionManager {
      * @param typeId
      * @return
      */
-    public List<DeclensionNode> getDimensionalDeclensionListTemplate(Integer typeId) {
-        return getDimensionalDeclensionList(typeId, dTemplates);
+    public DeclensionNode[] getDimensionalDeclensionListTemplate(Integer typeId) {
+        return getDimensionalDeclensionList(typeId, dTemplates).toArray(new DeclensionNode[0]);
     }
 
     /**
@@ -630,8 +632,8 @@ public class DeclensionManager {
      * @param typeId
      * @return
      */
-    public List<DeclensionNode> getFullDeclensionListTemplate(Integer typeId) {
-        return getFullDeclensionList(typeId, dTemplates);
+    public DeclensionNode[] getFullDeclensionListTemplate(Integer typeId) {
+        return getFullDeclensionList(typeId, dTemplates).toArray(new DeclensionNode[0]);
     }
 
     public DeclensionNode addDeclensionToTemplate(Integer typeId, Integer declensionId, DeclensionNode declension) {
@@ -810,11 +812,11 @@ public class DeclensionManager {
 
     public String getCombNameFromCombId(int typeId, String combId) {
         String ret = "";
-        Iterator<DeclensionNode> it = getDimensionalDeclensionListTemplate(typeId).iterator();
+        DeclensionNode[] decNodes = getDimensionalDeclensionListTemplate(typeId);
         String[] splitIds = combId.split(",");
 
-        for (int i = 0; it.hasNext(); i++) {
-            DeclensionNode curNode = it.next();
+        for (int i = 0; i < decNodes.length; i++) {
+            DeclensionNode curNode = decNodes[i];
             int dimId = Integer.parseInt(splitIds[i + 1]);
             Iterator<DeclensionDimension> dimIt = curNode.getDimensions().iterator();
             DeclensionDimension curDim = null;
@@ -926,12 +928,14 @@ public class DeclensionManager {
      * declensions based on related ID and the list to be pulled from. The list
      * can either be the templates (related via typeId) or actual words, related
      * by wordId
+     * 
+     * NOTE: Currently used in single test... will keep for now for use in testing data integrity
      *
      * @param relatedId ID of related value
      * @return
      */
-    public List<DeclensionNode> getSingletonDeclensionList(Integer relatedId) {
-        return getSingletonDeclensionList(relatedId, dTemplates);
+    public DeclensionNode[] getSingletonDeclensionList(Integer relatedId) {
+        return getSingletonDeclensionList(relatedId, dTemplates).toArray(new DeclensionNode[0]);
     }
 
     /**
@@ -979,8 +983,8 @@ public class DeclensionManager {
         return ret;
     }
 
-    public List<DeclensionNode> getFullDeclensionListWord(Integer wordId) {
-        return getFullDeclensionList(wordId, dList);
+    public DeclensionNode[] getFullDeclensionListWord(Integer wordId) {
+        return getFullDeclensionList(wordId, dList).toArray(new DeclensionNode[0]);
     }
 
     /**
@@ -995,11 +999,9 @@ public class DeclensionManager {
     public Map<String, DeclensionNode> getWordDeclensions(Integer wordId) {
         Map<String, DeclensionNode> ret = new HashMap<>();
 
-        Iterator<DeclensionNode> decs = getDimensionalDeclensionListWord(wordId).iterator();
+        DeclensionNode[] decs = getDimensionalDeclensionListWord(wordId);
 
-        while (decs.hasNext()) {
-            DeclensionNode curNode = decs.next();
-
+        for (DeclensionNode curNode : decs) {
             ret.put(curNode.getCombinedDimId(), curNode);
         }
 
@@ -1100,7 +1102,7 @@ public class DeclensionManager {
             int decId, int dimId,
             List<DeclensionGenRule> rules,
             String selfCombId) {
-        List<DeclensionNode> allNodes = getDimensionalDeclensionListTemplate(typeId);
+        DeclensionNode[] allNodes = getDimensionalDeclensionListTemplate(typeId);
         List<DeclensionPair> decList = getAllCombinedDimensionalIds(0, ",", "", allNodes);
 
         decList.forEach((decPair) -> {
@@ -1141,7 +1143,7 @@ public class DeclensionManager {
             int decId, int dimId,
             List<DeclensionGenRule> rulesToDelete) {
 
-        List<DeclensionGenRule> rules = new ArrayList<>(this.getDeclensionRulesForType(typeId));
+        DeclensionGenRule[] rules = this.getDeclensionRulesForType(typeId);
         
         for (DeclensionGenRule rule : rules) {
             if (combDimIdMatches(decId, dimId, rule.getCombinationId())) {
@@ -1161,7 +1163,7 @@ public class DeclensionManager {
      * @param rulesToDelete rules in this pos to delete
      */
     public void bulkDeleteRuleFromDeclensionTemplates(int typeId, List<DeclensionGenRule> rulesToDelete) {
-        List<DeclensionGenRule> rules = new ArrayList<>(this.getDeclensionRulesForType(typeId));
+        DeclensionGenRule[] rules = this.getDeclensionRulesForType(typeId);
 
         for (DeclensionGenRule rule : rules) {
             for (DeclensionGenRule ruleDelete : rulesToDelete) {
@@ -1209,14 +1211,15 @@ public class DeclensionManager {
         Map<String, DeclensionNode> ret = new HashMap<>();
 
         // first get all values that exist for this word
-        getFullDeclensionListWord(word.getId()).forEach((node) -> {
-            ret.put(node.getCombinedDimId(), node);
-        });
+        for (DeclensionNode curNode : getFullDeclensionListWord(word.getId())) {
+            ret.put(curNode.getCombinedDimId(), curNode);
+        }
 
         // then remove all values which match existing combined type ids
-        getAllCombinedIds(word.getWordTypeId()).forEach((pair) -> {
-            ret.remove(pair.combinedId);
-        });
+        DeclensionPair[] allCombIds = getAllCombinedIds(word.getWordTypeId());
+        for (DeclensionPair curPair : allCombIds) {
+            ret.remove(curPair.combinedId);
+        }
 
         return ret;
     }
@@ -1235,7 +1238,7 @@ public class DeclensionManager {
      * Fetches debug values for the most recently created declension
      * @return 
      */
-    public List<String> getDecGenDebug() {
-        return new ArrayList<>(decGenDebug);
+    public String[] getDecGenDebug() {
+        return decGenDebug.toArray(new String[0]);
     }
 }

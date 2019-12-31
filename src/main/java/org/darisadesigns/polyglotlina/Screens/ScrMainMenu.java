@@ -358,10 +358,10 @@ public final class ScrMainMenu extends PFrame {
      */
     private void populateRecentOpened() {
         mnuRecents.removeAll();
-        List<String> lastFiles = core.getOptionsManager().getLastFiles();
+        String[] lastFiles = core.getOptionsManager().getLastFiles();
 
-        for (int i = lastFiles.size() - 1; i >= 0; i--) {
-            final String curFile = lastFiles.get(i);
+        for (int i = lastFiles.length - 1; i >= 0; i--) {
+            final String curFile = lastFiles[i];
             Path p = Paths.get(curFile);
             String fileName = p.getFileName().toString();
             JMenuItem lastFile = new JMenuItem();
@@ -414,8 +414,9 @@ public final class ScrMainMenu extends PFrame {
         boolean ret = true;
         
         // if there's a current dictionary loaded, prompt user to save before creating new
+        // TODO: this should roll back to a check in the core that looks at all manager objects
         if (core != null
-                && !core.getWordCollection().getWordNodes().isEmpty()) {
+                && core.getWordCollection().getWordNodes().length != 0) {
             int saveFirst = InfoBox.yesNoCancel("Save First?",
                     "Save current dictionary before performing action?", core.getRootWindow());
 

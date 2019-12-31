@@ -105,7 +105,9 @@ public class EtymologyManager {
      * external)
      * @return 
      */
-    public List<Object> getAllRoots() {
+    public Object[] getAllRoots() {
+        // TODO: External parents should be changed into an object that extends ConWord to avoid this returning a generic Object nonsense...
+        // #826
         List<Object> ret = new ArrayList<>();
         List<ConWord> parents = new ArrayList<>();
         
@@ -115,10 +117,9 @@ public class EtymologyManager {
         });
         
         ret.addAll(parents);
-        // TODO: add this back again when there's a good way to display multiple fonts in a single combobox
         ret.addAll(this.getExtParentList());
         
-        return ret;
+        return ret.toArray(new Object[0]);
     }
     
     /**
@@ -126,7 +127,7 @@ public class EtymologyManager {
      * @param wordId ID of word to retrieve children of
      * @return list of integer IDs of child words (empty list if none)
      */
-    public List<Integer> getChildren(Integer wordId) {
+    public Integer[] getChildren(Integer wordId) {
         List<Integer> ret;
         
         if (parentToChild.containsKey(wordId)) {
@@ -135,7 +136,7 @@ public class EtymologyManager {
             ret = new ArrayList<>();
         }
         
-        return ret;
+        return ret.toArray(new Integer[0]);
     }
     
     /**
@@ -143,10 +144,10 @@ public class EtymologyManager {
      * @param childId id of child to get parents of
      * @return all external parents of child (empty if none)
      */
-    public List<EtyExternalParent> getWordExternalParents(Integer childId) {
+    public EtyExternalParent[] getWordExternalParents(Integer childId) {
         return childToExtParent.containsKey(childId) ? 
-                new ArrayList<>(childToExtParent.get(childId).values()) : 
-                new ArrayList<>();
+                childToExtParent.get(childId).values().toArray(new EtyExternalParent[0]) : 
+                new EtyExternalParent[0];
     }
     
     /**
@@ -154,9 +155,9 @@ public class EtymologyManager {
      * @param childId id of child to query for parents
      * @return list of parent ids (empty if none)
      */
-    public List<Integer> getWordParentsIds(Integer childId) {
-        return childToParent.containsKey(childId) ? childToParent.get(childId) 
-                : new ArrayList<>();
+    public Integer[] getWordParentsIds(Integer childId) {
+        return childToParent.containsKey(childId) ? childToParent.get(childId).toArray(new Integer[0])
+                : new Integer[0];
     }
     
     /**

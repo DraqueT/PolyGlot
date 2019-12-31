@@ -26,10 +26,7 @@ import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Screens.ScrProgressMenu;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -89,15 +86,13 @@ public final class PLanguageStats {
         Map<String, Integer> phonemeCount = new HashMap<>();
         Map<String, Integer> charCount = new HashMap<>();
         Map<String, Integer> phonemeCombo2 = new HashMap<>();
-        int wordCount = core.getWordCollection().getWordNodes().size();
+        ConWord wordList[] = core.getWordCollection().getWordNodes();
         String allChars = core.getPropertiesManager().getAlphaPlainText();
         String alphabet = core.getPropertiesManager().getAlphaPlainText();
 
-        Iterator<ConWord> wordIt = core.getWordCollection().getWordNodes().iterator();
-
         // Put values into maps to count/record... 
-        while (wordIt.hasNext()) {
-            ConWord curWord = wordIt.next();
+        //while (wordIt.hasNext()) {
+        for (ConWord curWord : wordList) {
             final String curValue = curWord.getValue();
             final int curValueLength = curValue.length();
             final int curType = curWord.getWordTypeId();
@@ -138,7 +133,7 @@ public final class PLanguageStats {
 
             // only run if no pronunciation recursion.
             if (!core.getPronunciationMgr().isRecurse()) {
-                List<PronunciationNode> phonArray;
+                PronunciationNode[] phonArray;
 
                 // capture and record all phonemes in word and phoneme combinations
                 try {
@@ -148,22 +143,22 @@ public final class PLanguageStats {
                     // do nothing. This is just a report, users will be made aware
                     // of illegal pronunciation values elsewhere
                     // IOHandler.writeErrorLog(e);
-                    phonArray = new ArrayList<>();
+                    phonArray = new PronunciationNode[0];
                 }
 
-                for (int i = 0; i < phonArray.size(); i++) {
-                    if (phonemeCount.containsKey(phonArray.get(i).getPronunciation())) {
-                        int newValue = phonemeCount.get(phonArray.get(i).getPronunciation()) + 1;
-                        phonemeCount.remove(phonArray.get(i).getPronunciation());
-                        phonemeCount.put(phonArray.get(i).getPronunciation(), newValue);
+                for (int i = 0; i < phonArray.length; i++) {
+                    if (phonemeCount.containsKey(phonArray[i].getPronunciation())) {
+                        int newValue = phonemeCount.get(phonArray[i].getPronunciation()) + 1;
+                        phonemeCount.remove(phonArray[i].getPronunciation());
+                        phonemeCount.put(phonArray[i].getPronunciation(), newValue);
                     } else {
-                        phonemeCount.put(phonArray.get(i).getPronunciation(), 1);
+                        phonemeCount.put(phonArray[i].getPronunciation(), 1);
                     }
 
                     // grab combo if there are additional phonemes, otherwise you're done
-                    if (i + 1 < phonArray.size()) {
-                        String curCombo = phonArray.get(i).getPronunciation() + " "
-                                + phonArray.get(i + 1).getPronunciation();
+                    if (i + 1 < phonArray.length) {
+                        String curCombo = phonArray[i].getPronunciation() + " "
+                                + phonArray[i + 1].getPronunciation();
 
                         if (phonemeCombo2.containsKey(curCombo)) {
                             int newValue = phonemeCombo2.get(curCombo) + 1;
@@ -268,7 +263,7 @@ public final class PLanguageStats {
                 + "  <body style=\"font-family:" + core.getPropertiesManager().getFontLocal().getFamily() + ";\">\n"
                 + "    <center>---LANGUAGE STAT REPORT---</center><br><br>";
 
-        ret += formatPlain("Count of words in conlang lexicon: " + wordCount + "<br><br>", core);
+        ret += formatPlain("Count of words in conlang lexicon: " + wordList.length + "<br><br>", core);
 
         progress.iterateTask("Building charts...");
         ret += typesPie.getDisplayHTML();
@@ -316,18 +311,16 @@ public final class PLanguageStats {
             ret += formatPlain("Heat map of phoneme combination frequency:<br>", core);
             ret += "<table border=\"1\">";
             ret += "<tr>" + formatPlain("<td></td>", core);
-            Iterator<PronunciationNode> procIty = core.getPronunciationMgr().getPronunciations().iterator();
-            while (procIty.hasNext()) {
-                ret += "<td>" + formatPlain(formatPlain(procIty.next().getPronunciation(), core), core) + "</td>";
+            
+            for (PronunciationNode curNode : core.getPronunciationMgr().getPronunciations()) {
+                ret += "<td>" + formatPlain(formatPlain(curNode.getPronunciation(), core), core) + "</td>";
             }
             ret += "</tr>";
-            procIty = core.getPronunciationMgr().getPronunciations().iterator();
-            while (procIty.hasNext()) {
-                PronunciationNode y = procIty.next();
+            
+            for (PronunciationNode y : core.getPronunciationMgr().getPronunciations()) {
                 ret += "<tr><td>" + formatPlain(y.getPronunciation(), core) + "</td>";
-                Iterator<PronunciationNode> procItx = core.getPronunciationMgr().getPronunciations().iterator();
-                while (procItx.hasNext()) {
-                    PronunciationNode x = procItx.next();
+                
+                for (PronunciationNode x : core.getPronunciationMgr().getPronunciations()) {
                     String search = x.getPronunciation() + " " + y.getPronunciation();
                     Integer comboValue = 0;
                     if (phonemeCombo2.containsKey(search)) {
@@ -350,9 +343,7 @@ public final class PLanguageStats {
             
             // build display for phoneme count if no pronunciation recursion
             ret += formatPlain(" Breakdown of phonemes counted across all words:<br>", core);
-            Iterator<PronunciationNode> procLoop = core.getPronunciationMgr().getPronunciations().iterator();
-            while (procLoop.hasNext()) {
-                PronunciationNode curNode = procLoop.next();
+            for (PronunciationNode curNode : core.getPronunciationMgr().getPronunciations()) {
                 ret += formatPlain(curNode.getPronunciation() + " : "
                         + (phonemeCount.containsKey(curNode.getPronunciation())
                         ? phonemeCount.get(curNode.getPronunciation()) : formatPlain("0", core)) + "<br>", core);

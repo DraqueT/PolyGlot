@@ -175,8 +175,8 @@ public final class ScrDeprecatedDeclensions extends PDialog {
             InfoBox.info("Missing Part of Speech", "Word must have a part of Speech set, and declensions defined before using this feature.", core.getRootWindow());
             this.dispose();
         } else if ((core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId) == null
-                    || core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId).isEmpty())
-                && core.getDeclensionManager().getDimensionalDeclensionListWord(word.getId()).isEmpty()) {
+                    || core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId).length == 0)
+                && core.getDeclensionManager().getDimensionalDeclensionListWord(word.getId()).length == 0) {
             InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the Declensions button.", core.getRootWindow());
 

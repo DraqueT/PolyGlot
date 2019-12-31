@@ -102,8 +102,8 @@ public final class ScrDeclensionsGrids extends PDialog {
                     core.getRootWindow());
             ret = false;
         } else if ((decMan.getDimensionalDeclensionListTemplate(typeId) == null
-                    || decMan.getDimensionalDeclensionListTemplate(typeId).isEmpty())
-                && decMan.getDimensionalDeclensionListWord(word.getId()).isEmpty()) {
+                    || decMan.getDimensionalDeclensionListTemplate(typeId).length == 0)
+                && decMan.getDimensionalDeclensionListWord(word.getId()).length == 0) {
             InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the "
                             + "Declensions button.", core.getRootWindow());
@@ -123,7 +123,7 @@ public final class ScrDeclensionsGrids extends PDialog {
     }
     
     private void populateDecIdToValues() {
-        List<DeclensionPair> decTemplateList = decMan.getDimensionalCombinedIds(word.getWordTypeId());
+        DeclensionPair[] decTemplateList = decMan.getDimensionalCombinedIds(word.getWordTypeId());
         
         for (DeclensionPair curPair : decTemplateList) {
             // skip forms that have been suppressed
@@ -137,7 +137,7 @@ public final class ScrDeclensionsGrids extends PDialog {
     }
     
     private void setupDimDropdowns() {
-        List<DeclensionNode> declensionNodes = decMan.getDimensionalDeclensionListTemplate(word.getWordTypeId());
+        DeclensionNode[] declensionNodes = decMan.getDimensionalDeclensionListTemplate(word.getWordTypeId());
         DefaultComboBoxModel<DeclensionNode> modelX = new DefaultComboBoxModel<>();
         DefaultComboBoxModel<DeclensionNode> modelY = new DefaultComboBoxModel<>();
         cmbDimX.setModel(modelX);
@@ -148,7 +148,7 @@ public final class ScrDeclensionsGrids extends PDialog {
             modelY.addElement(node);
         }
         
-        if (declensionNodes.size() > 1) {
+        if (declensionNodes.length > 1) {
             cmbDimX.setSelectedIndex(0);
             cmbDimY.setSelectedIndex(1);
         }
@@ -175,8 +175,8 @@ public final class ScrDeclensionsGrids extends PDialog {
                 });
 
                 // add singleton values when appropriate
-                List<DeclensionPair> singletons = decMan.getSingletonCombinedIds(word.getWordTypeId());
-                if (!singletons.isEmpty()) {
+                DeclensionPair[] singletons = decMan.getSingletonCombinedIds(word.getWordTypeId());
+                if (singletons.length != 0) {
                     PDeclensionListPanel listPanel = new PDeclensionListPanel(singletons, core, word, false);
                     pnlTabDeclensions.addTab(listPanel.getTabName(), listPanel);
                     autoPopulated = listPanel.isAutoPopulated();
@@ -187,7 +187,7 @@ public final class ScrDeclensionsGrids extends PDialog {
             cmbDimY.setVisible(false);
             jLabel1.setVisible(false);
             jLabel2.setVisible(false);
-            List<DeclensionPair> completeList = decMan.getAllCombinedIds(word.getWordTypeId());
+            DeclensionPair[] completeList = decMan.getAllCombinedIds(word.getWordTypeId());
             PDeclensionListPanel listPanel 
                     = new PDeclensionListPanel(completeList, core, word, true);
             
@@ -199,7 +199,7 @@ public final class ScrDeclensionsGrids extends PDialog {
     }
     
     private boolean shouldRenderDimensional() {
-        return decMan.getDimensionalDeclensionListTemplate(word.getWordTypeId()).size() > 1;
+        return decMan.getDimensionalDeclensionListTemplate(word.getWordTypeId()).length > 1;
     }
     
     private String replaceDimensionByIndex(String dimensions, int index, String replacement) {

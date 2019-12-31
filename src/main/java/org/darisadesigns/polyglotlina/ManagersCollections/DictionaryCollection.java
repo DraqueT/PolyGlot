@@ -191,6 +191,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
     
     /**
      * Returns randomly selected nodes from the collection
+     * NOTE: returns as list because Java does not support generic arrays
      * @param numRandom number of nodes to select
      * @return Either the number of nodes requested, or the total number in the collection (if not enough)
      */
@@ -201,16 +202,18 @@ public abstract class DictionaryCollection<N extends DictNode> {
     /**
      * Returns randomly selected nodes from the collection, excluding a selected value
      * @param numRandom number of nodes to select
-     * @param exclude ID of element to exclude
+     * @param exclusions IDs of elements to exclude
      * @return Either the number of nodes requested, or the total number in the collection (if not enough)
      */
-    public List<N> getRandomNodes(int numRandom, Integer exclude) {
+    public List<N> getRandomNodes(int numRandom, Integer... exclusions) {
         List<N> ret = new ArrayList<>();
         List<N> allValues = new ArrayList<>(nodeMap.values());
         
         
-        if (nodeMap.containsKey(exclude)) {
-            allValues.remove(nodeMap.get(exclude));
+        for (Integer exclude : exclusions) {
+            if (nodeMap.containsKey(exclude)) {
+                allValues.remove(nodeMap.get(exclude));
+            }
         }
         
         // randomize order...

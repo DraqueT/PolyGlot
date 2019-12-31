@@ -110,8 +110,8 @@ public class WordClass extends DictNode {
      * Gets copy of list of apply types
      * @return list of int values (ids)
      */
-    public List<Integer> getApplyTypes() {
-        return new ArrayList<>(applyTypes);
+    public Integer[] getApplyTypes() {
+        return applyTypes.toArray(new Integer[0]);
     }
     
     /**

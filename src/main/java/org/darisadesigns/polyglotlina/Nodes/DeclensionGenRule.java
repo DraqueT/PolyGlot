@@ -156,8 +156,8 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      * gets all transformations for this rule
      * @return iterator of DeclensionGenTransform objects
      */
-    public List<DeclensionGenTransform> getTransforms() {
-        return transformations;
+    public DeclensionGenTransform[] getTransforms() {
+        return transformations.toArray(new DeclensionGenTransform[0]);
     }
     
     /**
@@ -270,8 +270,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         }
         
         boolean ret = false;
-        boolean wordTypeHasClasses = 
-                !word.getCore().getWordClassCollection().getClassesForType(word.getWordTypeId()).isEmpty();
+        boolean wordTypeHasClasses = word.getCore().getWordClassCollection().getClassesForType(word.getWordTypeId()).length != 0;
         int wordTypeId = word.getWordTypeId();
         
         debugString = "Rule: " + name + "\n";

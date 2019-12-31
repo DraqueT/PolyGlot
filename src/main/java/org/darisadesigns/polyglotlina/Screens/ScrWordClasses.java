@@ -39,7 +39,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import javax.swing.Box.Filler;
 import javax.swing.CellEditor;
@@ -128,7 +127,7 @@ public final class ScrWordClasses extends PFrame {
      * Sets up type checkboxes.
      */
     private void populateTypes() {
-        Iterator<TypeNode> types = core.getTypes().getNodes().iterator();
+        TypeNode[] types = core.getTypes().getNodes();
         GridBagConstraints gbc = new GridBagConstraints();
         
         pnlTypes.removeAll();
@@ -137,7 +136,7 @@ public final class ScrWordClasses extends PFrame {
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.weighty = 1;
         
-        if (types.hasNext()) {
+        if (types.length > 0) {
             final PCheckBox checkAll = new PCheckBox(nightMode, menuFontSize);
             checkAll.setText("All");
 
@@ -171,8 +170,7 @@ public final class ScrWordClasses extends PFrame {
             typeChecks.put(-1, checkAll);
         }
 
-        while (types.hasNext()) {
-            TypeNode curNode = types.next();
+        for (TypeNode curNode : types) {
             final int typeId = curNode.getId();
             final PCheckBox checkType = new PCheckBox(nightMode, menuFontSize);
             
@@ -231,9 +229,9 @@ public final class ScrWordClasses extends PFrame {
     private void populateWordProperties() {
         DefaultListModel<WordClass> listModel = new DefaultListModel<>();
 
-        core.getWordClassCollection().getAllWordClasses().forEach((curNode) -> {
+        for (WordClass curNode : core.getWordClassCollection().getAllWordClasses()) {
             listModel.addElement(curNode);
-        });
+        }
 
         lstProperties.setModel(listModel);
         lstProperties.setSelectedIndex(0);

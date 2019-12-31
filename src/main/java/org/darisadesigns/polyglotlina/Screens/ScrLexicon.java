@@ -56,8 +56,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Platform;
@@ -370,8 +370,7 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        List<WordClass> propList = core.getWordClassCollection()
-                .getClassesForType(setTypeId);
+        WordClass[] propList = core.getWordClassCollection().getClassesForType(setTypeId);
         pnlClasses.setPreferredSize(new Dimension(4000, 1));
 
         pnlClasses.setLayout(new GridBagLayout());
@@ -463,7 +462,7 @@ public final class ScrLexicon extends PFrame {
             }
         }
 
-        if (propList.isEmpty()) {
+        if (propList.length == 0) {
             // must include at least one item (even a dummy) to resize for some reason
             JComboBox dummy = new JComboBox();
             dummy.setEnabled(false);
@@ -473,7 +472,7 @@ public final class ScrLexicon extends PFrame {
             pnlClasses.setPreferredSize(new Dimension(4000, 0));
         } else {
             pnlClasses.setMaximumSize(new Dimension(4000, 4000));
-            pnlClasses.setPreferredSize(new Dimension(4000, propList.size() * new JComboBox().getPreferredSize().height));
+            pnlClasses.setPreferredSize(new Dimension(4000, propList.length * new JComboBox().getPreferredSize().height));
         }
 
         pnlClasses.repaint();
@@ -1286,9 +1285,9 @@ public final class ScrLexicon extends PFrame {
     private void setupComboBoxesSwing() {
         cmbType.removeAllItems();
         cmbType.addItem(defTypeValue);
-        core.getTypes().getNodes().forEach((curNode) -> {
+        for (TypeNode curNode : core.getTypes().getNodes()) {
             cmbType.addItem(curNode);
-        });
+        }
     }
 
     /**
@@ -1398,16 +1397,12 @@ public final class ScrLexicon extends PFrame {
         cmbTypeSrc.getItems().clear();
         cmbTypeSrc.getItems().add(defTypeValue);
         cmbTypeSrc.getSelectionModel().selectFirst();
-        core.getTypes().getNodes().forEach((curNode) -> {
-            cmbTypeSrc.getItems().add(curNode);
-        });
+        cmbTypeSrc.getItems().addAll(Arrays.asList(core.getTypes().getNodes()));
 
         cmbRootSrc.getItems().clear();
         cmbRootSrc.getItems().add(defRootValue);
         cmbRootSrc.getSelectionModel().selectFirst();
-        core.getEtymologyManager().getAllRoots().forEach((o) -> {
-            cmbRootSrc.getItems().add(o);
-        });
+        cmbRootSrc.getItems().addAll(Arrays.asList(core.getEtymologyManager().getAllRoots()));
     }
 
     /**
@@ -1435,7 +1430,7 @@ public final class ScrLexicon extends PFrame {
     /**
      * populates lexicon list with given iterator
      */
-    private void populateLexicon(List<ConWordDisplay> wordList) {
+    private void populateLexicon(ConWordDisplay[] wordList) {
         boolean localPopulating = curPopulating;
         curPopulating = true;
 

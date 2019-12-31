@@ -143,19 +143,16 @@ public class FamilyManager {
         curElement.appendChild(property);
         
         // save words
-        Iterator<ConWord> wordIt = curNode.getWords();
-        while (wordIt.hasNext()) {
-            ConWord curWord = wordIt.next();
-            
+        for (ConWord curWord : curNode.getWords()) {    
             property = doc.createElement(PGTUtil.FAM_WORD_XID);
             property.appendChild(doc.createTextNode(curWord.getId().toString()));
             curElement.appendChild(property);
         }
         
         // save subnodes
-        curNode.getNodes().forEach((child) -> {
+        for (FamNode child : curNode.getNodes()) {
             curElement.appendChild(writeToSaveXML(doc, child));
-        });
+        }
         
         return curElement;
     }

@@ -124,7 +124,7 @@ public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> imp
      * Gets all selected values from model
      * @return 
      */
-    public List<PCheckableItem> getCheckedValues() {
+    public PCheckableItem[] getCheckedValues() {
         List<PCheckableItem> ret = new ArrayList<>();
         PDefaultComboBoxModel myModel = (PDefaultComboBoxModel)dataModel;
         
@@ -138,14 +138,14 @@ public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> imp
             }
         }
         
-        return ret;
+        return ret.toArray(new PCheckableItem[0]);
     }
     
     /**
      * Gets all values from model
      * @return 
      */
-    public List<PCheckableItem> getAllValues() {
+    public PCheckableItem[] getAllValues() {
         List<PCheckableItem> ret = new ArrayList<>();
         PDefaultComboBoxModel myModel = (PDefaultComboBoxModel)dataModel;
         
@@ -155,7 +155,7 @@ public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> imp
             }
         }
         
-        return ret;
+        return ret.toArray(new PCheckableItem[0]);
     }
     
     /**

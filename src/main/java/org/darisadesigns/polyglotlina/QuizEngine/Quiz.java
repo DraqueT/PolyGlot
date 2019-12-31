@@ -64,11 +64,11 @@ public class Quiz extends DictionaryCollection<QuizQuestion> {
      * Gets list of questions in randomized order
      * @return 
      */
-    public List<QuizQuestion> getQuestions() {
+    public QuizQuestion[] getQuestions() {
         long seed = System.nanoTime();
         List<QuizQuestion> questions = new ArrayList<>(nodeMap.values());
         Collections.shuffle(questions, new Random(seed));
-        return questions;
+        return questions.toArray(new QuizQuestion[0]);
     }
     
     public int getQuizLength() {

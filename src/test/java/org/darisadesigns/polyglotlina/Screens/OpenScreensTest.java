@@ -90,7 +90,7 @@ public class OpenScreensTest {
         }
         
         System.out.println("testScrDeclensionGenSetup");
-        ScrDeclensionGenClassic s = new ScrDeclensionGenClassic(core, core.getTypes().getNodes().get(0).getId(), null);
+        ScrDeclensionGenClassic s = new ScrDeclensionGenClassic(core, core.getTypes().getNodes()[0].getId(), null);
         s.dispose();
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
@@ -103,7 +103,7 @@ public class OpenScreensTest {
         }
         
         System.out.println("testScrDeclensionSetup");
-        ScrDeclensionSetup s = new ScrDeclensionSetup(core, core.getTypes().getNodes().get(0).getId());
+        ScrDeclensionSetup s = new ScrDeclensionSetup(core, core.getTypes().getNodes()[0].getId());
         s.dispose();
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
@@ -116,7 +116,7 @@ public class OpenScreensTest {
         }
         
         System.out.println("testScrDeclensionGrids");
-        ScrDeclensionsGrids s = new ScrDeclensionsGrids(core, core.getWordCollection().getWordNodes().get(0));
+        ScrDeclensionsGrids s = new ScrDeclensionsGrids(core, core.getWordCollection().getWordNodes()[0]);
         s.setCloseWithoutSave(true);
         s.hardDispose();
         
@@ -130,7 +130,7 @@ public class OpenScreensTest {
         }
         
         System.out.println("testScrDeprecatedDeclensions");
-        ScrDeprecatedDeclensions s = new ScrDeprecatedDeclensions(core, core.getWordCollection().getWordNodes().get(0));
+        ScrDeprecatedDeclensions s = new ScrDeprecatedDeclensions(core, core.getWordCollection().getWordNodes()[0]);
         s.dispose();
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
@@ -290,7 +290,7 @@ public class OpenScreensTest {
         }
         
         System.out.println("testScrLogoQuickView");
-        ScrLogoQuickView s = new ScrLogoQuickView(core, core.getWordCollection().getWordNodes().get(0));
+        ScrLogoQuickView s = new ScrLogoQuickView(core, core.getWordCollection().getWordNodes()[0]);
         s.dispose();
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());

@@ -48,13 +48,13 @@ public class ConjugationManagerTest {
             System.out.println("testZeroDimNoExtra");
             core.readFile(PGTUtil.TESTRESOURCES + "zero_dim_zero_extra_zero_dep.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
-            ConWord word = core.getWordCollection().getWordNodes().get(0);
+            ConWord word = core.getWordCollection().getWordNodes()[0];
 
-            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), 0);
-            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(0, decMan.getAllCombinedIds(word.getWordTypeId()).length);
+            assertEquals(0, decMan.getDimensionalDeclensionListWord(word.getId()).length);
             assertEquals(decMan.getDeprecatedForms(word).size(), 0);
-            assertEquals(decMan.getSingletonDeclensionList(word.getId()).size(), 0);
-            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(0, decMan.getSingletonDeclensionList(word.getId()).length);
+            assertEquals(0, decMan.getDimensionalDeclensionListWord(word.getId()).length);
             assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
         } catch (Exception e) {
             IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
@@ -68,11 +68,11 @@ public class ConjugationManagerTest {
             System.out.println("testOneDimNoExtra");
             core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
-            ConWord word = core.getWordCollection().getWordNodes().get(0);
-            List<String> expectedForms = Arrays.asList("testa", "testb");
+            ConWord word = core.getWordCollection().getWordNodes()[0];
+            String[] expectedForms = {"testa", "testb"};
 
-            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
-            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(expectedForms.length, decMan.getAllCombinedIds(word.getWordTypeId()).length);
+            assertEquals(0, decMan.getDimensionalDeclensionListWord(word.getId()).length);
             assertEquals(decMan.getDeprecatedForms(word).size(), 0);
             assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
             assertTrue(allFormsPresent(decMan, word, expectedForms));
@@ -88,12 +88,12 @@ public class ConjugationManagerTest {
             System.out.println("testOneDimNoExtraFourDep");
             core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_four_dep.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
-            ConWord word = core.getWordCollection().getWordNodes().get(0);
-            List<String> expectedForms = Arrays.asList("testa", "testb");
+            ConWord word = core.getWordCollection().getWordNodes()[0];
+            String[] expectedForms = {"testa", "testb"};
             List<String> expectedDeprecated = Arrays.asList("testaczzz", "testbczzz", "testadzzz", "testbdzzz");
 
-            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
-            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 4);
+            assertEquals(expectedForms.length, decMan.getAllCombinedIds(word.getWordTypeId()).length);
+            assertEquals(4, decMan.getDimensionalDeclensionListWord(word.getId()).length);
             assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
             assertEquals(decMan.getWordDeclensions(word.getId()).size(), 4);
             assertTrue(allFormsPresent(decMan, word, expectedForms));
@@ -110,11 +110,11 @@ public class ConjugationManagerTest {
             System.out.println("testOneDimNoExtraNoDep");
             core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
-            ConWord word = core.getWordCollection().getWordNodes().get(0);
-            List<String> expectedForms = Arrays.asList("testa", "testb");
+            ConWord word = core.getWordCollection().getWordNodes()[0];
+            String[] expectedForms = {"testa", "testb"};
 
-            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
-            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(expectedForms.length, decMan.getAllCombinedIds(word.getWordTypeId()).length);
+            assertEquals(0, decMan.getDimensionalDeclensionListWord(word.getId()).length);
             assertEquals(decMan.getDeprecatedForms(word).size(), 0);
             assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
             assertTrue(allFormsPresent(decMan, word, expectedForms));
@@ -130,12 +130,12 @@ public class ConjugationManagerTest {
             System.out.println("testTwoDimOneExtraNoDep");
             core.readFile(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
-            ConWord word = core.getWordCollection().getWordNodes().get(0);
-            List<String> expectedForms = Arrays.asList("testac", "testad", "testbc", "testbd", "testEXTRA");
+            ConWord word = core.getWordCollection().getWordNodes()[0];
+            String[] expectedForms = {"testac", "testad", "testbc", "testbd", "testEXTRA"};
             List<String> expectedDeprecated = Arrays.asList();
 
-            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
-            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(expectedForms.length, decMan.getAllCombinedIds(word.getWordTypeId()).length);
+            assertEquals(0, decMan.getDimensionalDeclensionListWord(word.getId()).length);
             assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
             assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
             assertTrue(allFormsPresent(decMan, word, expectedForms));
@@ -152,12 +152,12 @@ public class ConjugationManagerTest {
             System.out.println("testTwoDimOneExtraNoDepOneDisabled");
             core.readFile(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep_one_disabled.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
-            ConWord word = core.getWordCollection().getWordNodes().get(0);
-            List<String> expectedForms = Arrays.asList("testac", "testad", "testbc", "testEXTRA");
+            ConWord word = core.getWordCollection().getWordNodes()[0];
+            String[] expectedForms = {"testac", "testad", "testbc", "testEXTRA"};
             List<String> expectedDeprecated = Arrays.asList();
 
-            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size() + 1); // includes surpressed form
-            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(expectedForms.length + 1, decMan.getAllCombinedIds(word.getWordTypeId()).length); // includes surpressed form
+            assertEquals(0, decMan.getDimensionalDeclensionListWord(word.getId()).length);
             assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
             assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
             assertTrue(allFormsPresent(decMan, word, expectedForms));
@@ -174,12 +174,12 @@ public class ConjugationManagerTest {
             System.out.println("testTwoDimOneExtraNoDepOneDisabled");
             core.readFile(PGTUtil.TESTRESOURCES + "two_dim_zero_extra_zero_dep.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
-            ConWord word = core.getWordCollection().getWordNodes().get(0);
-            List<String> expectedForms = Arrays.asList("testac", "testad", "testbc", "testbd");
+            ConWord word = core.getWordCollection().getWordNodes()[0];
+            String[] expectedForms = {"testac", "testad", "testbc", "testbd"};
             List<String> expectedDeprecated = Arrays.asList();
 
-            assertEquals(decMan.getAllCombinedIds(word.getWordTypeId()).size(), expectedForms.size());
-            assertEquals(decMan.getDimensionalDeclensionListWord(word.getId()).size(), 0);
+            assertEquals(expectedForms.length, decMan.getAllCombinedIds(word.getWordTypeId()).length);
+            assertEquals(0, decMan.getDimensionalDeclensionListWord(word.getId()).length);
             assertEquals(decMan.getDeprecatedForms(word).size(), expectedDeprecated.size());
             assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
             assertTrue(allFormsPresent(decMan, word, expectedForms));
@@ -210,10 +210,10 @@ public class ConjugationManagerTest {
         return ret;
     }
 
-    public boolean allFormsPresent(DeclensionManager decMan, ConWord word, List<String> forms) throws Exception {
+    public boolean allFormsPresent(DeclensionManager decMan, ConWord word, String[] forms) throws Exception {
         boolean ret = true;
         
-        List<DeclensionPair> pairs = decMan.getAllCombinedIds(word.getWordTypeId());
+        DeclensionPair[] pairs = decMan.getAllCombinedIds(word.getWordTypeId());
         List<String> finalForms = new ArrayList<>();
         
         for (DeclensionPair pair : pairs) {

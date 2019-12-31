@@ -80,7 +80,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
     private DefaultTableModel transModel;
     private boolean curPopulating = false;
     private boolean upDownPress = false;
-    private List<DeclensionGenRule> depRulesList;
+    private DeclensionGenRule[] depRulesList;
 
     /**
      * Creates new form scrSetupDeclGen
@@ -154,7 +154,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         boolean ret = true;
         String userMessage = "";
 
-        List<DeclensionGenRule> typeRules = core.getDeclensionManager().getDeclensionRulesForType(typeId);
+        DeclensionGenRule[] typeRules = core.getDeclensionManager().getDeclensionRulesForType(typeId);
 
         for (DeclensionGenRule curRule : typeRules) {
             try {
@@ -217,9 +217,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
         if (lstCombinedDec.getSelectedValue().equals(DEP_RULES_LABEL)) {
             depRulesList = core.getDeclensionManager().getAllDepGenerationRules(typeId);
 
-            depRulesList.forEach((curRule) -> {
+            for (DeclensionGenRule curRule : depRulesList) {
                 rulesModel.addElement(curRule);
-            });
+            }
 
             enableEditing(false);
         } else {
@@ -232,16 +232,16 @@ public final class ScrDeclensionGenClassic extends PDialog {
                 return;
             }
 
-            List<DeclensionGenRule> ruleList = core.getDeclensionManager().getDeclensionRulesForType(typeId);
+            DeclensionGenRule[] ruleList = core.getDeclensionManager().getDeclensionRulesForType(typeId);
 
             // only allow editing if there are actually rules to be populated... 
-            enableTransformEditing(!ruleList.isEmpty());
-
-            ruleList.stream()
-                    .filter((curRule) -> (curRule.getCombinationId().equals(curPair.combinedId)))
-                    .forEachOrdered((curRule) -> {
-                        rulesModel.addElement(curRule);
-                    });
+            enableTransformEditing(ruleList.length != 0);
+            
+            for (DeclensionGenRule curRule : ruleList) {
+                if (curRule.getCombinationId().equals(curPair.combinedId)) {
+                    rulesModel.addElement(curRule);
+                }
+            }
         }
 
         lstRules.setSelectedIndex(0);
@@ -312,12 +312,12 @@ public final class ScrDeclensionGenClassic extends PDialog {
             return;
         }
 
-        List<DeclensionGenTransform> curTransform = curRule.getTransforms();
+        DeclensionGenTransform[] curTransforms = curRule.getTransforms();
 
-        curTransform.forEach((curTrans) -> {
+        for (DeclensionGenTransform curTrans : curTransforms) {
             Object[] newRow = {curTrans.regex, curTrans.replaceText};
             transModel.addRow(newRow);
-        });
+        }
 
         tblTransforms.setModel(transModel);
     }
@@ -326,13 +326,13 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * populates constructed declension list
      */
     private void populateCombinedDecl() {
-        List<DeclensionPair> decs = core.getDeclensionManager().getAllCombinedIds(typeId);
+        DeclensionPair[] decs = core.getDeclensionManager().getAllCombinedIds(typeId);
 
-        decs.forEach((curPair) -> {
+        for (DeclensionPair curPair : decs) {
             decListModel.addElement(curPair);
-        });
+        }
 
-        if (!depRulesList.isEmpty()) {
+        if (depRulesList.length != 0) {
             decListModel.addElement(DEP_RULES_LABEL);
         }
 
@@ -513,7 +513,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
             private void setupPushToDimension(DeclensionPair selDec) {
                 pushToDimension.removeAll();                
                 
-                List<DeclensionNode> nodes = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId);
+                DeclensionNode[] nodes = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId);
                 List<Integer> ids = new ArrayList<>();
                 
                 for (String singleId : selDec.combinedId.split(",")) {
@@ -524,7 +524,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
 
                 for (int i = 0; i < ids.size() ; i++) {
                     int dimId = ids.get(i);
-                    DeclensionNode decNode = nodes.get(i);
+                    DeclensionNode decNode = nodes[i];
                     DeclensionDimension decDim = decNode.getDeclensionDimensionById(dimId);
                     if (decDim != null) {
                         final JMenuItem pushTo = new JMenuItem("Push To " + decDim.getValue());
@@ -541,7 +541,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
             private void setupDeleteFromDimension(DeclensionPair selDec) {
                 deleteFromDimension.removeAll();                
                 
-                List<DeclensionNode> nodes = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId);
+                DeclensionNode[] nodes = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId);
                 List<Integer> ids = new ArrayList<>();
                 
                 for (String singleId : selDec.combinedId.split(",")) {
@@ -552,7 +552,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
 
                 for (int i = 0; i < ids.size() ; i++) {
                     int dimId = ids.get(i);
-                    DeclensionNode decNode = nodes.get(i);
+                    DeclensionNode decNode = nodes[i];
                     DeclensionDimension decDim = decNode.getDeclensionDimensionById(dimId);
                     if (decDim != null) {
                         final JMenuItem deleteFrom = new JMenuItem("Delete From " + decDim.getValue());

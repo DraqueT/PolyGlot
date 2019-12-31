@@ -43,9 +43,9 @@ public final class ScrReversion extends PDialog {
         lstReversions.setModel(revModel);
         this.setModal(true);
         
-        core.getReversionManager().getReversionList().forEach((node) -> {
-            revModel.addElement(node);
-        });
+        for (ReversionNode curNode : core.getReversionManager().getReversionList()) {
+            revModel.addElement(curNode);
+        }
         
         if (core.getRootWindow() != null){
             this.setLocation(core.getRootWindow().getLocation());

@@ -26,6 +26,7 @@ import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -93,7 +94,7 @@ public class QuizFactory {
             boolean quizLocal, boolean partOfSpeech, boolean proc, boolean def,
             boolean wordClass, ConWord filter) throws Exception {
         Quiz ret = new Quiz(core);
-        List<ConWord> wordList;
+        ConWord[] wordList;
         List<QuizQuestion.QuestionType> quizOn = new ArrayList<>();
 
         if (quizLocal) {
@@ -121,17 +122,20 @@ public class QuizFactory {
             wordList = core.getWordCollection().filteredList(filter);
         }
 
-        Collections.shuffle(wordList, new Random(System.nanoTime()));
+        // shuffle by converting to list, then back...
+        List<ConWord> shuffleList = Arrays.asList(wordList);
+        Collections.shuffle(shuffleList, new Random(System.nanoTime()));
+        wordList = shuffleList.toArray(new ConWord[0]);
 
         // make certain the number of questions never exceeds the number of words available
-        numQuestions = Math.min(wordList.size(), numQuestions);
+        numQuestions = Math.min(wordList.length, numQuestions);
         Random randGen = new Random();
 
         // make certain word properties have all combos built before making quiz
         core.getWordClassCollection().buildComboCache();
 
         for (int i = 0; i < numQuestions; i++) {
-            ConWord curWord = wordList.get(i);
+            ConWord curWord = wordList[i];
             QuizQuestion.QuestionType questionType = quizOn.get(randGen.nextInt(quizOn.size()));
             QuizQuestion question = new QuizQuestion(core);
             question.setType(questionType);

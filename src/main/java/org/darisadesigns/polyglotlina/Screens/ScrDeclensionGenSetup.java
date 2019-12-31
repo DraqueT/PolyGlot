@@ -33,6 +33,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.Nodes.DeclensionPair;
 
 /**
  * The is the wrapper class which displays either the classic or simplified view
@@ -91,7 +92,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean simplifiedSelected = rdoSimplified.isSelected();
-                boolean rulesExist = !core.getDeclensionManager().getDeclensionRulesForType(typeId).isEmpty();
+                boolean rulesExist = core.getDeclensionManager().getDeclensionRulesForType(typeId).length != 0;
                 
                 // when switching from classic to simplified, warn users if rules are already defined
                 if (rulesExist && 
@@ -181,9 +182,9 @@ public final class ScrDeclensionGenSetup extends PDialog {
     public static ScrDeclensionGenSetup run(DictCore _core, int _typeId) {
         ScrDeclensionGenSetup s = new ScrDeclensionGenSetup(_core, _typeId);
 
-        List decs = _core.getDeclensionManager().getAllCombinedIds(_typeId);
+        DeclensionPair[] decs = _core.getDeclensionManager().getAllCombinedIds(_typeId);
 
-        if (decs.isEmpty()) {
+        if (decs.length == 0) {
             InfoBox.warning("No Declensions Exist", "Please set up some conjugations/declensions for \""
                     + _core.getTypes().getNodeById(_typeId).getValue() + "\" before setting up automatic patterns.", _core.getRootWindow());
             s.dispose();

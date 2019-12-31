@@ -72,9 +72,9 @@ public final class ScrQuizGenDialog extends PFrame {
     private void populateDropdowns() {
         DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<>();
         model.addElement("-- Part of Speech --");
-        core.getTypes().getNodes().forEach((curNode) -> {
+        for (TypeNode curNode : core.getTypes().getNodes()) {
             model.addElement(curNode);
-        });
+        }
         
         cmbFilterType.setModel(model);
     }
@@ -346,7 +346,7 @@ public final class ScrQuizGenDialog extends PFrame {
 
     private void chkClassQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkClassQuizActionPerformed
         // do not allow self to be checked if no classes exist
-        if (core.getWordClassCollection().getAllWordClasses().isEmpty()
+        if (core.getWordClassCollection().getAllWordClasses().length == 0
                 && chkClassQuiz.isSelected()) {
             InfoBox.warning("No Classes Exist", "No word classes exist.", core.getRootWindow());
             chkClassQuiz.setSelected(false);
@@ -359,7 +359,7 @@ public final class ScrQuizGenDialog extends PFrame {
 
     private void chkTypeQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkTypeQuizActionPerformed
         // do not allow self to be checked if no PoS exist
-        if (core.getTypes().getNodes().isEmpty()
+        if (core.getTypes().getNodes().length == 0
                 && chkTypeQuiz.isSelected()) {
             InfoBox.warning("No PoS Exist", "No parts of speech exist.", core.getRootWindow());
             chkTypeQuiz.setSelected(false);

@@ -39,7 +39,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
@@ -177,9 +176,9 @@ public final class ScrQuickWordEntry extends PDialog {
         final String defLabel = "-- Part of Speech --";
         cmbType.addItem(defLabel);
 
-        core.getTypes().getNodes().forEach((curType) -> {
-            cmbType.addItem(curType);
-        });
+        for (TypeNode curNode : core.getTypes().getNodes()) {
+            cmbType.addItem(curNode);
+        }
     }
 
     /**
@@ -292,8 +291,7 @@ public final class ScrQuickWordEntry extends PDialog {
      * @param setTypeId ID of class to set panel up for, -1 if no class selected
      */
     private void setupClassPanel(int setTypeId) {
-        List<WordClass> propList = core.getWordClassCollection()
-                .getClassesForType(setTypeId);
+        WordClass[] propList = core.getWordClassCollection().getClassesForType(setTypeId);
         pnlClasses.removeAll();
         pnlClasses.setPreferredSize(new Dimension(999999, 1));
 
@@ -366,7 +364,7 @@ public final class ScrQuickWordEntry extends PDialog {
                 classComboMap.put(curProp.getId(), classBox); // dropbox mapped to related class ID.
             }
         }
-        if (propList.isEmpty()) {
+        if (propList.length == 0) {
             // must include at least one item (even a dummy) to resize for some reason
             PComboBox blank = new PComboBox(core.getPropertiesManager().getFontMenu());
             blank.setEnabled(false);
@@ -374,7 +372,7 @@ public final class ScrQuickWordEntry extends PDialog {
             pnlClasses.setPreferredSize(new Dimension(9999, 0));
         } else {
             pnlClasses.setMaximumSize(new Dimension(99999, 99999));
-            pnlClasses.setPreferredSize(new Dimension(9999, propList.size() * new PComboBox(core.getPropertiesManager().getFontMenu()).getPreferredSize().height));
+            pnlClasses.setPreferredSize(new Dimension(9999, propList.length * new PComboBox(core.getPropertiesManager().getFontMenu()).getPreferredSize().height));
         }
 
         pnlClasses.repaint();

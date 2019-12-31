@@ -33,6 +33,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box.Filler;
 import javax.swing.JPanel;
+import org.darisadesigns.polyglotlina.Nodes.WordClass;
 
 /**
  *
@@ -65,7 +66,7 @@ public class PClassCheckboxPanel extends JPanel {
     
     private void init(DictCore core) {
         // this should not be displayed if there are no classes for this type
-        if (rule != null && core.getWordClassCollection().getClassesForType(type.getId()).isEmpty()) {
+        if (rule != null && core.getWordClassCollection().getClassesForType(type.getId()).length == 0) {
             this.setVisible(false);
         } else if (rule != null) {
             applyClassesCheckboxes.clear();
@@ -126,7 +127,7 @@ public class PClassCheckboxPanel extends JPanel {
             allCheckBox = new PCheckBox(nightMode, fontSize);
         }
 
-        core.getWordClassCollection().getClassesForType(type.getId()).forEach((wordClass)->{
+        for (WordClass wordClass : core.getWordClassCollection().getClassesForType(type.getId())) {
             wordClass.getValues().forEach((classValue)->{
                 this.addCheckBox(classValue.getValue(), 
                             "Apply to " + wordClass.getValue() + ":" + classValue.getValue(), 
@@ -148,7 +149,7 @@ public class PClassCheckboxPanel extends JPanel {
                         wordClass.getId(),
                         classValue.getId());
             });
-        });
+        }
         
         // if this is the default rule without any rule set, disable checkboxes
         allCheckBox.setEnabled(rule.getTypeId() != -1);

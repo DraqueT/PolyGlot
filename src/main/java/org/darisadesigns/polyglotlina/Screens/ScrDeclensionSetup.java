@@ -41,7 +41,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -126,10 +125,9 @@ public final class ScrDeclensionSetup extends PDialog {
      * @return boolean as to whether it is legal to close the window.
      */
     private boolean canClose() {
-        Iterator<DeclensionNode> decIt = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId).iterator();
+        DeclensionNode[] decNodes = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId);
 
-        while (decIt.hasNext()) {
-            DeclensionNode curDec = decIt.next();
+        for (DeclensionNode curDec : decNodes) {
             if (curDec.getDimensions().isEmpty()) {
                 InfoBox.error("Illegal Declension", "Declension \'" 
                         + curDec.getValue() 
@@ -1040,18 +1038,16 @@ public final class ScrDeclensionSetup extends PDialog {
         int setIndex = -1;
 
         curPopulating = true;
-
-        Iterator<DeclensionNode> declIt = core.getDeclensionManager()
-                .getFullDeclensionListTemplate(myType.getId()).iterator();
-        DeclensionNode curdec;
-
+        
         // relevant objects should be rebuilt
         scrToCoreDeclensions = new HashMap<>();
 
         declListModel.clear();
 
-        for (int i = 0; declIt.hasNext(); i++) {
-            curdec = declIt.next();
+        DeclensionNode[] decNodes = core.getDeclensionManager().getFullDeclensionListTemplate(myType.getId());
+        DeclensionNode curdec;
+        for (int i = 0; i < decNodes.length; i++) {
+            curdec = decNodes[i];
 
             declListModel.add(i, curdec.getValue());
             scrToCoreDeclensions.put(i, curdec.getId());

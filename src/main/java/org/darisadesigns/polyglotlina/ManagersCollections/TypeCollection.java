@@ -128,12 +128,12 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
      *
      * @return
      */
-    public List<TypeNode> getNodes() {
+    public TypeNode[] getNodes() {
         List<TypeNode> retList = new ArrayList<>(nodeMap.values());
 
         Collections.sort(retList);
 
-        return retList;
+        return retList.toArray(new TypeNode[0]);
     }
     
     public boolean nodeExists(int id) {
@@ -173,9 +173,9 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
     public void writeXML(Document doc, Element rootElement) {
         Element typeContainer = doc.createElement(PGTUtil.POS_COLLECTION_XID);
         
-        getNodes().forEach((curType) -> {
-            curType.writeXML(doc, typeContainer);
-        });
+        for (TypeNode curNode : getNodes()) {
+            curNode.writeXML(doc, typeContainer);
+        }
         
         rootElement.appendChild(typeContainer);
     }

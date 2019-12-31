@@ -46,12 +46,12 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
         core = _core;
     }
 
-    public List<WordClass> getAllWordClasses() {
+    public WordClass[] getAllWordClasses() {
         List<WordClass> retList = new ArrayList<>(nodeMap.values());
 
         Collections.sort(retList);
 
-        return retList;
+        return retList.toArray(new WordClass[0]);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
         return ret;
     }
 
-    public List<WordClass> getClassesForType(int classId) {
+    public WordClass[] getClassesForType(int classId) {
         List<WordClass> ret = new ArrayList<>();
 
         nodeMap.values().forEach((prop) -> {
@@ -90,7 +90,7 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
         });
 
         Collections.sort(ret);
-        return ret;
+        return ret.toArray(new WordClass[0]);
     }
 
     /**

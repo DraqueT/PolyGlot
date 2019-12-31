@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina.QuizEngine;
 
 import TestResources.DummyCore;
-import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,11 +58,11 @@ public class QuizQuestionTest {
     public void testAddChoice() {
         System.out.println("QuizQuestionText:testAddChoice");
         ConWord choice = new ConWord();
-        int expectedLength = questionTest.getChoices().size() + 1;
+        int expectedLength = questionTest.getChoices().length + 1;
         
         questionTest.addChoice(choice);
         
-        assertEquals(expectedLength, questionTest.getChoices().size());
+        assertEquals(expectedLength, questionTest.getChoices().length);
     }
 
     @Test
