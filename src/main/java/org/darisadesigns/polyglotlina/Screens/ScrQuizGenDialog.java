@@ -100,21 +100,29 @@ public final class ScrQuizGenDialog extends PFrame {
             filter.setWordTypeId(((TypeNode)cmbFilterType.getSelectedItem()).getId());
         }
         
-        try {
-            Quiz genQuiz = factory.generateLexicalQuiz(numQuestions, 
-                    chkConlangQuiz.isSelected(), 
-                    chkLocalQuiz.isSelected(), 
-                    chkTypeQuiz.isSelected(), 
-                    chkProcQuiz.isSelected(), 
-                    chkDefQuiz.isSelected(), 
-                    chkClassQuiz.isSelected(), 
-                    filter);
-            
-            ScrQuizScreen.run(genQuiz, core);
-            dispose();
-        } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), core.getRootWindow());
+        if(!chkConlangQuiz.isSelected() && 
+            !chkLocalQuiz.isSelected()&& 
+            !chkTypeQuiz.isSelected()&& 
+            !chkProcQuiz.isSelected()&& 
+            !chkDefQuiz.isSelected()&& 
+            !chkClassQuiz.isSelected()) {
+            InfoBox.warning("Quiz Generation Problem", "Please select at least one thing to quiz on!", this);
+        } else {
+            try {
+                Quiz genQuiz = factory.generateLexicalQuiz(numQuestions, 
+                        chkConlangQuiz.isSelected(), 
+                        chkLocalQuiz.isSelected(), 
+                        chkTypeQuiz.isSelected(), 
+                        chkProcQuiz.isSelected(), 
+                        chkDefQuiz.isSelected(), 
+                        chkClassQuiz.isSelected(), 
+                        filter);
+
+                ScrQuizScreen.run(genQuiz, core);
+            } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
+                InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), core.getRootWindow());
+            }
         }
     }
     

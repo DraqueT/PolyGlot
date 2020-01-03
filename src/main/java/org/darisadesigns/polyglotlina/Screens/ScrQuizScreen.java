@@ -74,16 +74,16 @@ public final class ScrQuizScreen extends PFrame {
         jPanel3.setLayout(new BorderLayout());
 
         if (!quiz.hasNext()) {
-            InfoBox.error("Empty Quiz", "Quiz has no questions. If generated, filter.", core.getRootWindow());
+            InfoBox.warning("Empty Quiz", "Quiz has no questions. Check filter\nto make sure it is not too restrictive.", core.getRootWindow());
+        } else {
+            nextQuestion();
+
+            // due to initialization process, this forces resize of tet in PLabel at appropriate time
+            SwingUtilities.invokeLater(() -> {
+                jPanel3.add(lblQNode);
+                jPanel3.repaint();
+            });
         }
-
-        nextQuestion();
-
-        // due to initialization process, this forces resize of tet in PLabel at appropriate time
-        SwingUtilities.invokeLater(() -> {
-            jPanel3.add(lblQNode);
-            jPanel3.repaint();
-        });
     }
 
     private void nextQuestion() {
@@ -439,7 +439,20 @@ public final class ScrQuizScreen extends PFrame {
      */
     public static ScrQuizScreen run(Quiz quiz, DictCore core) {
         ScrQuizScreen s = new ScrQuizScreen(quiz, core);
-        s.setVisible(true);
+        
+        
+        if (s.quiz.hasNext()) {
+            s.setVisible(true);
+            int height = s.getHeight();
+            int width = s.getWidth();
+            
+            // force size based rerender to ensure text appears at proper scale
+            s.setSize(height + 1, width);
+            s.setSize(height, width);
+        } else {
+            s.dispose();
+        }
+        
         return s;
     }
 

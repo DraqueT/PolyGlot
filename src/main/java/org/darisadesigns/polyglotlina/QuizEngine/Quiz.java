@@ -133,7 +133,9 @@ public class Quiz extends DictionaryCollection<QuizQuestion> {
             quizList = new ArrayList<>(nodeMap.values());
         }
         
-        return quizList.size() > quizPos;
+        int quizSize = quizList.size();
+        
+        return quizSize > 0 && quizSize > quizPos;
     }
     
     /**
