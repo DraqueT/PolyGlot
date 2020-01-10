@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -112,12 +112,12 @@ public final class ScrEtymRoots extends PDialog {
             PButton delButton = new PButton(nightMode, menuFontSize);
             p.setEditable(false);
             if (extPar.getExternalLanguage().isEmpty()) {
-                p.setText(extPar.getExternalWord());
+                p.setText(extPar.getValue());
             } else {
-                p.setText(extPar.getExternalWord() + " (" + extPar.getExternalLanguage() + ")");
+                p.setText(extPar.getValue() + " (" + extPar.getExternalLanguage() + ")");
             }
             p.setAssociatedObject(extPar);
-            String toolTipString = extPar.getExternalWord();
+            String toolTipString = extPar.getValue();
             if (!extPar.getExternalLanguage().isEmpty()) {
                 toolTipString += " - " + extPar.getExternalLanguage();
             }

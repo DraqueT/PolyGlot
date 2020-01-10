@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, Draque Thompson
+ * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -105,21 +105,17 @@ public class EtymologyManager {
      * external)
      * @return 
      */
-    public Object[] getAllRoots() {
-        // TODO: External parents should be changed into an object that extends ConWord to avoid this returning a generic Object nonsense...
-        // #826
-        List<Object> ret = new ArrayList<>();
-        List<ConWord> parents = new ArrayList<>();
+    public ConWord[] getAllRoots() {
+        List<ConWord> ret = new ArrayList<>();
         
         parentToChild.keySet().forEach((id) -> {
             ConWord curParent = core.getWordCollection().getNodeById(id);
-            parents.add(curParent);
+            ret.add(curParent);
         });
         
-        ret.addAll(parents);
         ret.addAll(this.getExtParentList());
-        
-        return ret.toArray(new Object[0]);
+        Collections.sort(ret);
+        return ret.toArray(new ConWord[0]);
     }
     
     /**
@@ -221,7 +217,7 @@ public class EtymologyManager {
      */
     private String getExtListParentValue(EtyExternalParent parent) {
         // TODO: REVISIT THIS: NEED TO USE ACTUAL OBJECT IN LIST TO ALLOW FOR FILTERING
-        return parent.getExternalWord() + " (" + parent.getExternalLanguage() + ")";
+        return parent.getValue() + " (" + parent.getExternalLanguage() + ")";
     }
     
     /**
@@ -292,7 +288,7 @@ public class EtymologyManager {
                 Element extParentNode = doc.createElement(PGTUtil.ETY_EXTERNAL_WORD_NODE_XID);
                 // record external word value
                 Element curElement = doc.createElement(PGTUtil.ETY_EXTERNAL_WORD_VALUE_XID);
-                curElement.appendChild(doc.createTextNode(parent.getExternalWord()));
+                curElement.appendChild(doc.createTextNode(parent.getValue()));
                 extParentNode.appendChild(curElement);
                 // record external word origin
                 curElement = doc.createElement(PGTUtil.ETY_EXTERNAL_WORD_ORIGIN_XID);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -43,7 +43,7 @@ public class ConWord extends DictNode {
     // so long as the conword is not blank, this can be blank
     private String localWord;
     private int typeId;
-    private String definition;
+    protected String definition;
     private String pronunciation;
     private String etymNotes;
     private boolean procOverride;
