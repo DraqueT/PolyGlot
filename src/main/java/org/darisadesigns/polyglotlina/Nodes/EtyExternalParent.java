@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+* Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -23,17 +23,9 @@ package org.darisadesigns.polyglotlina.Nodes;
  * This node represents an external etymological parent
  * @author DThompson
  */
-public class EtyExternalParent extends DictNode {
+public class EtyExternalParent extends ConWord {
     
     private String externalLanguage = "";
-    private String definition = "";
-    
-    /**
-     * @return the externalWord
-     */
-    public String getExternalWord() {
-        return value;
-    }
 
     /**
      * @return the externalLanguage
@@ -43,7 +35,7 @@ public class EtyExternalParent extends DictNode {
     }
 
     /**
-     * @param externalLanguage the externalLanguage to set
+     * @param _externalLanguage the externalLanguage to set
      */
     public void setExternalLanguage(String _externalLanguage) {
         this.externalLanguage = _externalLanguage;
@@ -57,20 +49,6 @@ public class EtyExternalParent extends DictNode {
     public String toString() {
         return value + (externalLanguage.isEmpty() ? ""
                 : " (" + externalLanguage + ")");
-    }
-
-    /**
-     * @return the definition
-     */
-    public String getDefinition() {
-        return definition;
-    }
-
-    /**
-     * @param definition the definition to set
-     */
-    public void setDefinition(String _definition) {
-        this.definition = _definition;
     }
 
     @Override

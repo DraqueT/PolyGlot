@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -1147,7 +1147,7 @@ public final class CustHandlerFactory {
                     betyChildExternals = false;
                 } else if (betyExternalWordValue) {
                     EtyExternalParent ext = core.getEtymologyManager().getBufferExtParent();
-                    ext.setValue(ext.getExternalWord() + new String(ch, start, length));
+                    ext.setValue(ext.getValue() + new String(ch, start, length));
                 } else if (betyExternalWordOrigin) {
                     EtyExternalParent ext = core.getEtymologyManager().getBufferExtParent();
                     ext.setExternalLanguage(ext.getExternalLanguage() + new String(ch, start, length));

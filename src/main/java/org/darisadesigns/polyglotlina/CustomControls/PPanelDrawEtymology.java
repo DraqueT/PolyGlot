@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, Draque Thompson
+ * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -40,6 +40,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
+import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 
 /**
  *
@@ -71,13 +72,26 @@ public final class PPanelDrawEtymology extends JPanel {
         String ret;
         
         if (tipWord != null) {
-            ret = WebInterface.getTextFromHtml(tipWord.getDefinition());
-            ret = ret.trim().isEmpty() ? tipWord.getLocalWord() : ret;
+            if (tipWord instanceof EtyExternalParent) {
+                ret = WebInterface.getTextFromHtml(tipWord.getDefinition());
+            } else {
+                ret = WebInterface.getTextFromHtml(tipWord.getDefinition());
+                ret = ret.trim().isEmpty() ? tipWord.getLocalWord() : ret;
+                
+                // include POS if available
+                if (tipWord.getWordTypeId() != 0) {
+                    TypeNode partOfSpeech = core.getTypes().getNodeById(tipWord.getWordTypeId());
+                    String gloss = partOfSpeech.getGloss();
+                    String posVal = gloss.isEmpty() ? partOfSpeech.getValue() : gloss;
+                    
+                    ret = posVal + " : " + ret;
+                }
+            }
         } else {
             ret = super.getToolTipText(event);
         }
         
-        return ret;
+        return ret.trim();
     }
 
     /**
@@ -108,8 +122,8 @@ public final class PPanelDrawEtymology extends JPanel {
         Integer mySize;
         
         if (curNode.isExternal ) {
-            int wordSize = charisFontMetrics.stringWidth(curNode.extWordValue);
-            int originSize = charisFontMetrics.stringWidth(curNode.extWordOrigin);
+            int wordSize = charisFontMetrics.stringWidth(curNode.word.getValue());
+            int originSize = charisFontMetrics.stringWidth(((EtyExternalParent)curNode.word).getExternalLanguage());
             mySize = (Math.max(wordSize, originSize)) + X_WORD_SPACE_BUFFER;
         } else {
             mySize = conFontMetrics.stringWidth(curNode.word.getValue()) + X_WORD_SPACE_BUFFER;
@@ -172,12 +186,8 @@ public final class PPanelDrawEtymology extends JPanel {
         // adds external parents
         for (EtyExternalParent extPar : core.getEtymologyManager().getWordExternalParents(curNode.word.getId())) {
             EtymologyPrintingNode parentNode = new EtymologyPrintingNode();
+            parentNode.word = extPar;
             parentNode.isExternal = true;
-            parentNode.extWordValue = extPar.getExternalWord();
-            if (!extPar.getExternalLanguage().isEmpty()) {
-                parentNode.extWordOrigin = "(" + extPar.getExternalLanguage() + ")";
-            }
-            
             parentNode.depth = curNode.depth - 1;
             parentNode.children.add(curNode);
             curNode.parents.add(parentNode);
@@ -240,7 +250,7 @@ public final class PPanelDrawEtymology extends JPanel {
         int xOffset = 0;
         int topParentHeight = 0;
         int bottomParentHeight = 0;
-        int halfTextHeight;
+        int textHeight;
         int myLineHeight;
         
         // recursively print all parents 
@@ -276,39 +286,53 @@ public final class PPanelDrawEtymology extends JPanel {
         }
 
         if (myNode.isExternal) {
+            textHeight = charisFontMetrics.getHeight();
+            
             g.setFont(core.getPropertiesManager().getFontLocal());
-            if (!myNode.extWordOrigin.isEmpty()) {
+            String extWordOrigin = ((EtyExternalParent)myNode.word).getExternalLanguage();
+            if (!extWordOrigin.isEmpty()) {
                 g.setColor(Color.gray);
-                g.drawString(myNode.extWordOrigin, xOffset, curYDepth);
+                g.drawString(extWordOrigin, xOffset, curYDepth);
                 g.setColor(Color.black);
-                curYDepth += (charisFontMetrics.getHeight() - 10);
+                curYDepth += (textHeight - 10);
             }
-            g.drawString(myNode.extWordValue, xOffset, curYDepth);
-            halfTextHeight = charisFontMetrics.getHeight() / 3;
-            myLineHeight = curYDepth - halfTextHeight;
-            curYDepth += charisFontMetrics.getHeight();
-        } else {
-            g.setFont(core.getPropertiesManager().getFontCon());
+            
             g.drawString(myNode.word.getValue(), xOffset, curYDepth);
-            halfTextHeight = conFontMetrics.getHeight() / 3;
-            myLineHeight = curYDepth - halfTextHeight;
+            myLineHeight = curYDepth - (textHeight / 3);
             
             try {
-                wordMap.addRectangle(xOffset, xOffset + conFontMetrics.stringWidth(myNode.word.getValue()), 
-                        curYDepth - conFontMetrics.getHeight(), curYDepth, myNode.word);
+                wordMap.addRectangle(xOffset, xOffset + charisFontMetrics.stringWidth(myNode.word.getValue()), 
+                        curYDepth - textHeight, curYDepth, myNode.word);
             } catch (Exception e) {
                 IOHandler.writeErrorLog(e);
                 InfoBox.error("Tooltip Generation error", "Error generating tooltip values: " 
                         + e.getLocalizedMessage(), core.getRootWindow());
             }
-            curYDepth += conFontMetrics.getHeight();
+            
+            curYDepth += textHeight;
+        } else {
+            g.setFont(core.getPropertiesManager().getFontCon());
+            g.drawString(myNode.word.getValue(), xOffset, curYDepth);
+            textHeight = conFontMetrics.getHeight();
+            myLineHeight = curYDepth - (textHeight / 3);
+            
+            try {
+                wordMap.addRectangle(xOffset, xOffset + conFontMetrics.stringWidth(myNode.word.getValue()), 
+                        curYDepth - textHeight, curYDepth, myNode.word);
+            } catch (Exception e) {
+                IOHandler.writeErrorLog(e);
+                InfoBox.error("Tooltip Generation error", "Error generating tooltip values: " 
+                        + e.getLocalizedMessage(), core.getRootWindow());
+            }
+            
+            curYDepth += textHeight;
         }
         
         g.setColor(Color.black);        
 
         // paint line leading to depth of child (guaranteed one or zero)
         if (!myNode.children.isEmpty()) {
-            String myText = myNode.isExternal ? myNode.extWordValue : myNode.word.getValue();
+            String myText = myNode.isExternal ? myNode.word.getValue() : myNode.word.getValue();
             int childDepth = myNode.children.get(0).getDepthMeasurement();
             int xStart;
             if (myNode.isExternal) {
@@ -403,8 +427,6 @@ public final class PPanelDrawEtymology extends JPanel {
         public final List<EtymologyPrintingNode> children = new ArrayList<>();
         public final List<EtymologyPrintingNode> parents = new ArrayList<>();
         public ConWord word = new ConWord();
-        public String extWordValue = "";
-        public String extWordOrigin = "";
         public int depth = 0;
         public boolean isExternal = false;
 
