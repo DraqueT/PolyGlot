@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson
+ * Copyright (c) 2019 - 2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -28,6 +28,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -158,23 +161,24 @@ public class PFontHandler {
 
     /**
      * Returns a font's file based on the font and a path Recurses on any
-     * subdirectories found. Searches through multiple 
-     *
-     * In the case that multiple versions of the font are installed, the most
-     * recently modified version will be defaulted to
+     * subdirectories found.Searches through multiple 
+
+ In the case that multiple versions of the font are installed, the most
+ recently modified version will be defaulted to
      *
      * @param paths paths to check for a font
      * @param fontFamily font to check for
      * @return the font's file, null otherwise
+     * @throws java.io.IOException
      */
-    public static File getFontFromLocations(String fontFamily, String... paths) {
+    public static File getFontFromLocations(String fontFamily, String... paths) throws IOException {
         File ret = null;
         
         for (String path : paths) {
             File match = getFontFromLocation(fontFamily, path);
 
             if (ret == null || 
-                    (match != null && match.lastModified() > ret.lastModified())) {
+                    (match != null && compareFreshness(match, ret))) {
                 ret = match;
             }
         }
@@ -192,8 +196,9 @@ public class PFontHandler {
      * @param path path to check for a font
      * @param fontFamily font to check for
      * @return the font's file, null otherwise
+     * * @throws java.io.IOException
      */
-    private static File getFontFromLocation(String fontFamily, String path) {
+    private static File getFontFromLocation(String fontFamily, String path) throws IOException {
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
         List<File> matches = new ArrayList<>();
@@ -223,13 +228,41 @@ public class PFontHandler {
                 if (ret == null) {
                     ret = match;
                 } else {
-                    if (match.lastModified() > ret.lastModified()) {
+                    if (compareFreshness(match, ret)) {
                         ret = match;
                     }
                 }
             }
         }
 
+        return ret;
+    }
+    
+    /**
+     * Compares "freshness" of files. First compares last modified. If the same
+     * (and running on Windows), also compares creation date. Returns true if 
+     * file a is fresher than file b.
+     * @param a
+     * @param b
+     * @return 
+     * * @throws java.io.IOException
+     */
+    private static boolean compareFreshness(File a, File b) throws IOException {
+        boolean ret = false;
+        long aModified = a.lastModified();
+        long bModified = b.lastModified();
+        
+        if (aModified == bModified && PGTUtil.IS_WINDOWS) {
+            FileTime aCreated = Files.readAttributes(a.toPath(), BasicFileAttributes.class).creationTime();
+            FileTime bCreated = Files.readAttributes(b.toPath(), BasicFileAttributes.class).creationTime();
+            
+            if (aCreated.compareTo(bCreated) > 0) {
+                ret = true;
+            }
+        } else if (aModified > bModified) {
+            ret = true;
+        }
+        
         return ret;
     }
 
