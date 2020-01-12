@@ -418,7 +418,7 @@ def packWin():
     os.system(command)
 
 def distWin():
-    packageLocation = 'installer\PolyGlot-1.0.exe'
+    packageLocation = 'installer\PolyGlot-1.0   .exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
 
@@ -460,7 +460,7 @@ def injectBuildDate():
 
 # handled here for timing reasons...
 def getJfxLocation():
-    ret = os.environ['HOME']
+    ret = os.path.expanduser('~')
 
     if (osString == winString):
         ret += '\\.m2\\repository\\org\\openjfx'
