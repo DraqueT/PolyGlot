@@ -44,15 +44,7 @@ public class PFontHandlerTest {
     public static void setupTests() {
         String path = PGTUtil.TESTRESOURCES + File.separator + "FontsAll" + File.separator + "Kukun_LinearA_V05.ttf";
         File file1 = new File(path);
-        File file2 = new File(path + "X");
-        try {
-            Files.copy(file1.toPath(), file2.toPath());
-            file1.delete();
-            Files.copy(file2.toPath(), file1.toPath());
-            file2.delete();
-        } catch (IOException e) {
-            fail(e);
-        }
+        file1.setLastModified(System.currentTimeMillis());
     }
 
     @Test
@@ -60,9 +52,12 @@ public class PFontHandlerTest {
         System.out.println("PFontHandlerTest.testGetFontFromLocationsAllSingleFolder");
         String expectedFileName = "Kukun_LinearA_V05.ttf";
         
-        File file = PFontHandler.getFontFromLocations(FONT_FAM, PGTUtil.TESTRESOURCES + File.separator + "FontsAll");
-        
-        assertEquals(file.getName(), expectedFileName);
+        try {
+            File file = PFontHandler.getFontFromLocations(FONT_FAM, PGTUtil.TESTRESOURCES + File.separator + "FontsAll");
+            assertEquals(expectedFileName, file.getName());
+        } catch (IOException e) {
+            fail(e);
+        }
     }
     
     @Test
@@ -70,30 +65,45 @@ public class PFontHandlerTest {
         System.out.println("PFontHandlerTest.testGetFontFromLocationsAllTwoFolders");
         String expectedFileName = "Kukun_LinearA_V05.ttf";
         
-        File file = PFontHandler.getFontFromLocations(FONT_FAM, 
-                PGTUtil.TESTRESOURCES + File.separator + "FontsPartial",
-                PGTUtil.TESTRESOURCES + File.separator + "FontsAll"
-        );
-        
-        assertEquals(file.getName(), expectedFileName);
+        File file;
+        try {
+            file = PFontHandler.getFontFromLocations(FONT_FAM, 
+                    PGTUtil.TESTRESOURCES + File.separator + "FontsPartial",
+                    PGTUtil.TESTRESOURCES + File.separator + "FontsAll"
+            );
+            
+            assertEquals(expectedFileName, file.getName());
+        } catch (IOException e) {
+            fail(e);
+        }
     }
     
     @Test
     public void testGetFontFromLocationsEmptyLocation() {
         System.out.println("PFontHandlerTest.testGetFontFromLocationsEmptyLocation");
-        File file = PFontHandler.getFontFromLocations(FONT_FAM, 
-                PGTUtil.TESTRESOURCES + File.separator + "EmptyFolder");
         
-        assertNull(file);
+        try {
+            File file = PFontHandler.getFontFromLocations(FONT_FAM, 
+                    PGTUtil.TESTRESOURCES + File.separator + "EmptyFolder");
+
+            assertNull(file);
+        } catch (IOException e) {
+            fail(e);
+        }
     }
     
     @Test
     public void testGetFontFromLocationsBadLocation() {
         System.out.println("PFontHandlerTest.testGetFontFromLocationsBadLocation");
-        File file = PFontHandler.getFontFromLocations(FONT_FAM, 
-                PGTUtil.TESTRESOURCES + File.separator + "BIBBITYBOBBITYBOO");
         
-        assertNull(file);
+        try {
+            File file = PFontHandler.getFontFromLocations(FONT_FAM, 
+                    PGTUtil.TESTRESOURCES + File.separator + "BIBBITYBOBBITYBOO");
+
+            assertNull(file);
+        } catch (IOException e) {
+            fail(e);
+        }
     }
 
 }
