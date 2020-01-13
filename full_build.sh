@@ -41,13 +41,13 @@ if [ "$#" -eq 0 ] || [ "$1" == "win" ]; then
     sleep 5
     if [ "$BUILD_STEP" == "" ] ; then
         VBoxManage guestcontrol "Windows 10" \
-            run --exe "C:\Users\user\Documents\NetBeansProjects\auto_polyglot_build.bat" \
+            run --exe "C:\Users\polyglot\Documents\NetBeansProjects\auto_polyglot_build.bat" \
             --username polyglot \
             --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass \
             --putenv "DISPLAY=:0"
     else
         VBoxManage guestcontrol "Windows 10" \
-            run --exe "C:\Users\user\Documents\NetBeansProjects\auto_polyglot_build.bat" \
+            run --exe "C:\Users\polyglot\Documents\NetBeansProjects\auto_polyglot_build.bat" \
             --username polyglot \
             --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass \
             --putenv "DISPLAY=:0" \
@@ -55,7 +55,7 @@ if [ "$#" -eq 0 ] || [ "$1" == "win" ]; then
     fi
     
     VBoxManage guestcontrol "Windows 10" \
-        run --exe "C:\Users\user\Documents\NetBeansProjects\auto_polyglot_build_shutdown.bat" \
+        run --exe "C:\Users\polyglot\Documents\NetBeansProjects\auto_polyglot_build_shutdown.bat" \
         --username polyglot \
         --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass \
         --putenv "DISPLAY=:0"
@@ -153,4 +153,14 @@ echo "Total time spent: "$DIFF" seconds"
 LINECOUNT=$(git ls-files | grep ".java" | xargs wc -l | grep -o '[0-9]\+ total')
 echo "Java lines built: $LINECOUNT"
 
+# Announce any build failures...
+if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Windows_BUILD_FAILED" ] &&  [ $WIN_BUILD_TIME != 0 ]; then
+    echo "Windows build failed."
+fi
+if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Linux_BUILD_FAILED" ] && [ $LIN_BUILD_TIME != 0 ]; then
+    echo "Linux build failed."
+fi
+if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Darwin_BUILD_FAILED" ] && [ $OSX_BUILD_TIME != 0 ]; then
+    echo "OSX build failed."
+fi
 echo "Full build process complete!"

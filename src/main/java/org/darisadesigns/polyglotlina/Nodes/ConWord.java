@@ -40,7 +40,6 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class ConWord extends DictNode {
-    // so long as the conword is not blank, this can be blank
     private String localWord;
     private int typeId;
     protected String definition;
@@ -358,7 +357,7 @@ public class ConWord extends DictNode {
         
         if (!procOverride && core != null) {
             String gen = core.getPronunciationMgr().getPronunciation(value);
-            if (gen.isEmpty()) {
+            if (!gen.isEmpty()) {
                 ret = gen;
             }
         }

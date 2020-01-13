@@ -50,7 +50,7 @@ public class Java8BridgeTest {
 
     @Test
     public void testGetNewJavaBridgeLocation() {
-        System.out.println("getNewJavaBridgeLocation");
+        System.out.println("Java8BridgeTest.getNewJavaBridgeLocation");
         
         try {
             File result = Java8Bridge.getNewJavaBridgeLocation();
@@ -64,7 +64,7 @@ public class Java8BridgeTest {
     @Test
     public void testExportPdf() {
         // no current way to open/test contents of PDF, so just make sure it is created without error
-        System.out.println("exportPdf");
+        System.out.println("Java8BridgeTest.exportPdf");
         String coverImage = PGTUtil.TESTRESOURCES + "test.jpg";
         String foreward = "blap";
         boolean printConLocal = false;
@@ -89,7 +89,7 @@ public class Java8BridgeTest {
 
     @Test
     public void testExcelToCvs() {
-        System.out.println("excelToCvs");
+        System.out.println("Java8BridgeTest.excelToCvs");
         String expectedContents = "\"COL 1\",\"COL 2\",\"COL 3\"\n" +
             "\"A\",\"AA\",\"AAA\"\n" +
             "\"B\"\n" +
@@ -117,7 +117,7 @@ public class Java8BridgeTest {
  
     @Test
     public void testExportExcelDict() {
-        System.out.println("exportExcelDict");
+        System.out.println("Java8BridgeTest.exportExcelDict");
         String os = System.getProperty("os.name").toLowerCase();
         
         try {

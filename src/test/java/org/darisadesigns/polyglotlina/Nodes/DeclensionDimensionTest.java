@@ -39,7 +39,7 @@ public class DeclensionDimensionTest {
 
     @Test
     public void testSetEqual() {
-        System.out.println("DeclensionDimenstion:testSetEqual");
+        System.out.println("DeclensionDimensionTest.testSetEqual");
         
         String expectedValue = "TESTVAL";
         DeclensionDimension source = new DeclensionDimension();
@@ -53,13 +53,14 @@ public class DeclensionDimensionTest {
 
     @Test
     public void testWriteXML() {
+        System.out.println("DeclensionDimensionTest.testWriteXML");
+        
         String expectedValue = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
                 + "<dictionary>"
                 + "<dimensionNode>"
                 + "<dimensionId>-1</dimensionId>"
                 + "<dimensionName>TESTVAL</dimensionName>"
                 + "</dimensionNode></dictionary>";
-        System.out.println("DeclensionDimenstion:testWriteXML");
         
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -80,7 +81,7 @@ public class DeclensionDimensionTest {
 
     @Test
     public void testEquals() {
-        System.out.println("DeclensionDimenstion:testEquals");
+        System.out.println("DeclensionDimensionTest.testEquals");
         
         DeclensionDimension testDim1 = new DeclensionDimension();
         DeclensionDimension testDim2 = new DeclensionDimension();
@@ -94,7 +95,7 @@ public class DeclensionDimensionTest {
     
     @Test
     public void testNotEquals() {
-        System.out.println("DeclensionDimenstion:testNotEquals");
+        System.out.println("DeclensionDimensionTest.testNotEquals");
         
         DeclensionDimension testDim1 = new DeclensionDimension();
         DeclensionDimension testDim2 = new DeclensionDimension();

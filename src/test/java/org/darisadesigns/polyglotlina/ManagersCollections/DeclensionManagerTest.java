@@ -61,7 +61,7 @@ public class DeclensionManagerTest {
      */
     @Test
     public void testIsCombinedDeclSurpressed() {
-        System.out.println("testIsCombinedDeclSurpressed");
+        System.out.println("DeclensionManagerTest.testIsCombinedDeclSurpressed");
         DeclensionManager decMan = core.getDeclensionManager();
         
         assertTrue(decMan.isCombinedDeclSurpressed(",3,", 3));
@@ -69,7 +69,7 @@ public class DeclensionManagerTest {
 
     @Test
     public void testSetCombinedDeclSurpressed() {
-        System.out.println("testSetCombinedDeclSurpressed");
+        System.out.println("DeclensionManagerTest.testSetCombinedDeclSurpressed");
         DeclensionManager decMan = core.getDeclensionManager();
         
         decMan.setCombinedDeclSuppressed(",3,", 4, false);
@@ -78,7 +78,7 @@ public class DeclensionManagerTest {
 
     @Test
     public void testSetCombinedDeclSurpressedRaw() {
-        System.out.println("testSetCombinedDeclSurpressedRaw");
+        System.out.println("DeclensionManagerTest.testSetCombinedDeclSurpressedRaw");
         DeclensionManager decMan = core.getDeclensionManager();
         
         decMan.setCombinedDeclSuppressedRaw("4,TESTVAL", false);
@@ -87,7 +87,7 @@ public class DeclensionManagerTest {
 
     @Test
     public void testAddDeclensionGenRule() {
-        System.out.println("testAddDeclensionGenRule");
+        System.out.println("DeclensionManagerTest.testAddDeclensionGenRule");
         DeclensionManager decMan = core.getDeclensionManager();
         
         DeclensionGenRule rule = new DeclensionGenRule();
@@ -103,7 +103,7 @@ public class DeclensionManagerTest {
 
     @Test
     public void testWipeDeclensionGenRules() {
-        System.out.println("testWipeDeclensionGenRules");
+        System.out.println("DeclensionManagerTest.testWipeDeclensionGenRules");
         DeclensionManager decMan = core.getDeclensionManager();
         
         DeclensionGenRule rule = new DeclensionGenRule();
@@ -119,7 +119,7 @@ public class DeclensionManagerTest {
 
     @Test
     public void testDeleteDeclensionGenRule() {
-        System.out.println("testDeleteDeclensionGenRule");
+        System.out.println("DeclensionManagerTest.testDeleteDeclensionGenRule");
         DeclensionManager decMan = core.getDeclensionManager();
         
         DeclensionGenRule rule = new DeclensionGenRule();
@@ -135,7 +135,7 @@ public class DeclensionManagerTest {
 
     @Test
     public void testGetDeclensionRulesForType() {
-        System.out.println("testGetDeclensionRulesForType");
+        System.out.println("DeclensionManagerTest.testGetDeclensionRulesForType");
         DeclensionManager decMan = core.getDeclensionManager();
         
         DeclensionGenRule rule1 = new DeclensionGenRule();
@@ -163,7 +163,7 @@ public class DeclensionManagerTest {
      */
     @Test
     public void testDeleteRulesFromDeclensionTemplatesInitial() {
-        System.out.println("testDeleteRulesFromDeclensionTemplatesInitial");
+        System.out.println("DeclensionManagerTest.testDeleteRulesFromDeclensionTemplatesInitial");
         DictCore subCore = DummyCore.newCore();
         
         try {
@@ -180,7 +180,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testDeleteRulesFromDeclensionTemplatesDelPast() {
-        System.out.println("testDeleteRulesFromDeclensionTemplatesDelPast");
+        System.out.println("DeclensionManagerTest.testDeleteRulesFromDeclensionTemplatesDelPast");
         DictCore subCore = DummyCore.newCore();
         
         try {
@@ -201,7 +201,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testDeleteRulesFromDeclensionTemplatesDelFemale() {
-        System.out.println("testDeleteRulesFromDeclensionTemplatesDelFemale");
+        System.out.println("DeclensionManagerTest.testDeleteRulesFromDeclensionTemplatesDelFemale");
         DictCore subCore = DummyCore.newCore();
         
         try {
@@ -225,7 +225,7 @@ public class DeclensionManagerTest {
      */
     @Test
     public void testBulkDeleteRuleFromDeclensionTemplates() {
-        System.out.println("testBulkDeleteRuleFromDeclensionTemplates");
+        System.out.println("DeclensionManagerTest.testBulkDeleteRuleFromDeclensionTemplates");
         DictCore subCore = DummyCore.newCore();
         
         try {
@@ -246,7 +246,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testBulkDeleteRuleFromDeclensionTemplatesMultiSelect() {
-        System.out.println("testBulkDeleteRuleFromDeclensionTemplatesMultiSelect");
+        System.out.println("DeclensionManagerTest.testBulkDeleteRuleFromDeclensionTemplatesMultiSelect");
         DictCore subCore = DummyCore.newCore();
         
         try {
@@ -267,7 +267,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testDeleteRuleByTypeIdAndCombinedId() {
-        System.out.println("testDeleteRuleByTypeIdAndCombinedId");
+        System.out.println("DeclensionManagerTest.testDeleteRuleByTypeIdAndCombinedId");
         DictCore subCore = DummyCore.newCore();
         
         try {
@@ -289,7 +289,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testNoCoreWordDeclensionException() {
-        System.out.println("testNoCoreWordDeclensionException");
+        System.out.println("DeclensionManagerTest.testNoCoreWordDeclensionException");
         DictCore subCore = DummyCore.newCore();
         ConWord noCoreWord = new ConWord();
         String expectedMessage = "Words without populated dictionary cores cannot be tested.";
@@ -313,7 +313,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testConjDebugBasic() {
-        System.out.println("Test Conj Debug Basic");
+        System.out.println("DeclensionManagerTest.Test Conj Debug Basic");
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
                 "--------------------------------------\n" +
@@ -355,7 +355,7 @@ public class DeclensionManagerTest {
 
     @Test
     public void testConjDebugClassValOne() {
-        System.out.println("Test Conj Debug class value 1");
+        System.out.println("DeclensionManagerTest.Test Conj Debug class value 1");
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
                 "--------------------------------------\n" +
@@ -403,7 +403,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testConjDebugClassValTwo() {
-        System.out.println("Test Conj Debug class value 2");
+        System.out.println("DeclensionManagerTest.Test Conj Debug class value 2");
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
                 "--------------------------------------\n" +
@@ -451,7 +451,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testConjFilterNegagiveMultiTransformDebug() {
-        System.out.println("Test Conj Debug Filtering against rule");
+        System.out.println("DeclensionManagerTest.Test Conj Debug Filtering against rule");
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
                 "--------------------------------------\n" +
@@ -495,7 +495,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testConjFilterPositiveMultiTransformDebug() {
-        System.out.println("Test Conj Debug Filtering against rule");
+        System.out.println("DeclensionManagerTest.Test Conj Debug Filtering against rule");
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
                 "--------------------------------------\n" +
@@ -544,7 +544,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testGetAllDepGenerationRules() {
-        System.out.println("testGetAllDepGenerationRules");
+        System.out.println("DeclensionManagerTest.testGetAllDepGenerationRules");
         int typeId = 4; // verbs
         int expectedRules = 13;
         DeclensionManager decMan = core.getDeclensionManager();
@@ -558,7 +558,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testGetDeclensionRules() {
-        System.out.println("testGetDeclensionRules");
+        System.out.println("DeclensionManagerTest.testGetDeclensionRules");
         ConWord word = new ConWord();
         int expectedRuleCount = 13;
         String expectedFirstRuleName = "Past, Cert, Pos rule";
@@ -576,7 +576,7 @@ public class DeclensionManagerTest {
     
     @Test
     public void testSmoothDeclensionRuleIndex() {
-        System.out.println("testSmoothDeclensionRuleIndex");
+        System.out.println("DeclensionManagerTest.testSmoothDeclensionRuleIndex");
         
         DictCore subCore = DummyCore.newCore();
         DeclensionManager decMan = subCore.getDeclensionManager();

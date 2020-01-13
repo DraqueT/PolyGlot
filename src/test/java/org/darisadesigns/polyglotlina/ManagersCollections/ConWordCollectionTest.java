@@ -53,7 +53,8 @@ public class ConWordCollectionTest {
      */
     @Test
     public void testCheckLexicon() {
-        System.out.println("Test: checkLexicon");
+        System.out.println("ConWordCollectionTest.checkLexicon");
+        
         ConWordCollection instance = badLexEntriesCore.getWordCollection();
         LexiconProblemNode[] problems = instance.checkLexicon(false);
         if (problems.length != 4) {
@@ -84,6 +85,8 @@ public class ConWordCollectionTest {
     
     @Test
     public void testMissingConWord() {
+        System.out.println("ConWordCollectionTest.testMissingConWord");
+        
         DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();
         
@@ -94,6 +97,8 @@ public class ConWordCollectionTest {
     
     @Test
     public void testMissingLocalWordWithRequirement() {
+        System.out.println("ConWordCollectionTest.testMissingLocalWordWithRequirement");
+        
         DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();
         
@@ -106,6 +111,8 @@ public class ConWordCollectionTest {
     
     @Test
     public void testMissingLocalWordNoRequirement() {
+        System.out.println("ConWordCollectionTest.testMissingLocalWordNoRequirement");
+        
         DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();
         
@@ -116,6 +123,8 @@ public class ConWordCollectionTest {
     
     @Test
     public void testMissingPOSWithoutRequirement() {
+        System.out.println("ConWordCollectionTest.testMissingPOSWithoutRequirement");
+        
         DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();
         
@@ -127,6 +136,8 @@ public class ConWordCollectionTest {
     
     @Test
     public void testMissingPOSNoRequirement() {
+        System.out.println("ConWordCollectionTest.testMissingPOSNoRequirement");
+        
         DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();
         
