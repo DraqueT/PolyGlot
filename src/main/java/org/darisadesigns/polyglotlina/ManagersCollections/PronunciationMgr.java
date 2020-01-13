@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -38,12 +38,11 @@ public class PronunciationMgr {
 
     private final DictCore core;
     protected boolean recurse = false;
-
+    private List<PronunciationNode> pronunciations = new ArrayList<>();
+    
     public PronunciationMgr(DictCore _core) {
         core = _core;
     }
-
-    private List<PronunciationNode> pronunciations = new ArrayList<>();
 
     /**
      * Sets list of pronunciations
@@ -322,5 +321,9 @@ public class PronunciationMgr {
      */
     public boolean isInUse() {
         return !pronunciations.isEmpty();
+    }
+    
+    public boolean isEmpty() {
+        return pronunciations.isEmpty();
     }
 }

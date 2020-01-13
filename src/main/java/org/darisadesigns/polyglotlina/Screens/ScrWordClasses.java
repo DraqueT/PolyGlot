@@ -50,9 +50,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
 
-// TODO: make correct element autoselect after hitting + for immediate editing
-// TODO: make proper choices when illegal value left in field
-
 /**
  *
  * @author draque.thompson
@@ -575,6 +572,7 @@ public final class ScrWordClasses extends PFrame {
 
     private void btnAddPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPropActionPerformed
         addWordProperty();
+        txtName.requestFocus();
     }//GEN-LAST:event_btnAddPropActionPerformed
 
     private void btnDelPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelPropActionPerformed

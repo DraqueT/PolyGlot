@@ -216,7 +216,6 @@ public class EtymologyManager {
      * @return 
      */
     private String getExtListParentValue(EtyExternalParent parent) {
-        // TODO: REVISIT THIS: NEED TO USE ACTUAL OBJECT IN LIST TO ALLOW FOR FILTERING
         return parent.getValue() + " (" + parent.getExternalLanguage() + ")";
     }
     
