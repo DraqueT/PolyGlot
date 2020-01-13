@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -77,7 +77,7 @@ public class DictCore {
     private boolean curLoading = false;
     private Instant lastSaveTime = Instant.MIN;
     private String curFileName = "";
-
+    
     /**
      * Language core initialization
      *
@@ -659,5 +659,21 @@ public class DictCore {
     
     public String getCurFileName() {
         return curFileName;
+    }
+    
+    /**
+     * Returns true if the language has no contents (blank language)
+     * @return 
+     */
+    public boolean isLanguageEmpty() {
+        return wordCollection.isEmpty()
+                && typeCollection.isEmpty()
+                && declensionMgr.isEmpty()
+                && pronuncMgr.isEmpty()
+                && romMgr.isEmpty()
+                && logoCollection.isEmpty()
+                && grammarManager.isEmpty()
+                && wordPropCollection.isEmpty()
+                && imageCollection.isEmpty();
     }
 }

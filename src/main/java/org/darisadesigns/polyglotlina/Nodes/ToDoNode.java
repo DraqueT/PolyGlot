@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -152,8 +152,6 @@ public class ToDoNode {
         Element writeNode = doc.createElement(PGTUtil.TODO_NODE_XID);
         Element nodeDone = doc.createElement(PGTUtil.TODO_NODE_DONE_XID);
         Element nodeLabel = doc.createElement(PGTUtil.TODO_NODE_LABEL_XID);
-        // TODO: Implement color
-        //Element nodeColor = doc.createElement(PGTUtil.ToDoNodeColorXID);
         
         nodeDone.appendChild(doc.createTextNode(this.isDone ? PGTUtil.TRUE : PGTUtil.FALSE));
         writeNode.appendChild(nodeDone);

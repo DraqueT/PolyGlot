@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -413,10 +413,7 @@ public final class ScrMainMenu extends PFrame {
     private boolean saveOrCancelTest() {
         boolean ret = true;
         
-        // if there's a current dictionary loaded, prompt user to save before creating new
-        // TODO: this should roll back to a check in the core that looks at all manager objects
-        if (core != null
-                && core.getWordCollection().getWordNodes().length != 0) {
+        if (core != null && !core.isLanguageEmpty()) {
             int saveFirst = InfoBox.yesNoCancel("Save First?",
                     "Save current dictionary before performing action?", core.getRootWindow());
 

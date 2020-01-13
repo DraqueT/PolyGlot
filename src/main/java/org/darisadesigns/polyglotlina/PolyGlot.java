@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -109,8 +109,6 @@ public final class PolyGlot {
                             
                             PolyGlot polyGlot = new PolyGlot(overridePath);
                             DictCore core = new DictCore(polyGlot);
-                             
-                            // TODO: Set working directory here
                                         
                             try {
                                 IOHandler.loadOptionsIni(polyGlot.optionsManager, polyGlot.getWorkingDirectory().getAbsolutePath());
@@ -146,7 +144,6 @@ public final class PolyGlot {
                                     staticScr.printToPdf();
                                 });
                             } else if (PGTUtil.IS_WINDOWS && osIntegration) {
-                                // TODO: review if needed
                                 s.setIconImage(PGTUtil.POLYGLOT_ICON.getImage());
                             }
                             

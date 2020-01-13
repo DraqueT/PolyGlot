@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -54,7 +54,7 @@ public class DeclensionManager {
     private DeclensionNode buffer = new DeclensionNode(-1);
     private final Map<Integer, List<DeclensionGenRule>> generationRules = new HashMap<>();
     private DeclensionGenRule ruleBuffer = new DeclensionGenRule();
-
+    
     // Integer is ID of related word, list is list of declension nodes
     private final Map<Integer, List<DeclensionNode>> dList = new HashMap<>();
 
@@ -601,7 +601,6 @@ public class DeclensionManager {
         return ret;
     }
 
-    // TODO: Do I need this at all? Can I have ONLY the full pull, rather than including dimensional?
     /**
      * Fetches list of declined/conjugated wordforms for a given word. Only
      * pulls dimensional values. Singletons like gerunds are not included Note:
@@ -1240,5 +1239,9 @@ public class DeclensionManager {
      */
     public String[] getDecGenDebug() {
         return decGenDebug.toArray(new String[0]);
+    }
+    
+    public boolean isEmpty() {
+        return generationRules.isEmpty();
     }
 }

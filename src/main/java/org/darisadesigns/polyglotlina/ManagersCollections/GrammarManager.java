@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, Draque Thompson
+ * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -164,5 +164,9 @@ public class GrammarManager {
         chapters.forEach((chapter)->{
             chapter.writeXML(doc, grammarRoot);
         });
+    }
+    
+    public boolean isEmpty() {
+        return chapters.isEmpty();
     }
 }

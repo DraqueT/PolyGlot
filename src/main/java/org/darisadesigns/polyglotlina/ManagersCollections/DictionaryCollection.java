@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -227,5 +227,9 @@ public abstract class DictionaryCollection<N extends DictNode> {
         }
         
         return ret;
+    }
+    
+    public boolean isEmpty() {
+        return nodeMap.isEmpty();
     }
 }
