@@ -35,7 +35,7 @@ public class IPAHandlerTest {
     public void testPlaySounds() {
         // do not test in headless environment (hangs on 100% CPU consumption)
         if (!GraphicsEnvironment.isHeadless()) {
-            System.out.println("test sound playback");
+            System.out.println("IPAHandlerTest.testPlaySounds");
             IPAHandler handler = new IPAHandler(null);
 
             try {
@@ -64,7 +64,7 @@ public class IPAHandlerTest {
     
     @Test
     public void testAllSoundsExist() {
-        System.out.println("test all sound assets");
+        System.out.println("IPAHandlerTest.testAllSoundsExist");
         IPAHandler handler = new IPAHandler(null);
         
         try {

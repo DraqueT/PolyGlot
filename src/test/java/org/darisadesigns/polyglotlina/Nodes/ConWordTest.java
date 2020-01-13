@@ -83,16 +83,10 @@ public class ConWordTest {
         }
     }
 
-//    @Test
-//    public void testSetEqual() {
-//        ConWord copy = new ConWord();
-//        copy.setCore(core);
-//        copy.setEqual(word);
-//        assertEquals(copy, word);
-//    }
-
     @Test
     public void testEquals() {
+        System.out.println("ConWordTest.testEquals");
+        
         ConWord copy = new ConWord();
         copy.setCore(core);
         copy.setParent(core.getWordCollection());
@@ -118,11 +112,120 @@ public class ConWordTest {
     
     @Test
     public void testNotEquals() {
+        System.out.println("ConWordTest.testNotEquals");
+        
         ConWord copy = new ConWord();
         copy.setCore(core);
         copy.setEqual(word);
         copy.setClassValue(4, 0);
         assertNotEquals(copy, word);
+    }
+    
+    @Test
+    public void testGetPronunciationSimple() {
+        System.out.println("ConWordTest.testGetPronunciationSimple");
+        
+        try {
+            String expectedResult = "b";
+
+            core.getPronunciationMgr().addPronunciation(new PronunciationNode("a", "b"));
+            word.setValue("a");
+            word.setPronunciation("TOBEREPLACED");
+            word.setProcOverride(false);
+
+            String result = word.getPronunciation();
+
+            assertEquals(expectedResult, result);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testGetPronunciationSimpleWithOverride() {
+        System.out.println("ConWordTest.testGetPronunciationSimple");
+        
+        try {
+            String expectedResult = "pronunciation";
+
+            core.getPronunciationMgr().addPronunciation(new PronunciationNode("a", "b"));
+            word.setValue("a");
+            word.setPronunciation(expectedResult);
+            word.setProcOverride(true);
+
+            String result = word.getPronunciation();
+
+            assertEquals(expectedResult, result);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testGetPronunciationRegex() {
+        System.out.println("ConWordTest.testGetPronunciationRegex");
+        
+        try {
+            String expectedResult = "BEGINNINGEND";
+
+            core.getPronunciationMgr().addPronunciation(new PronunciationNode("^a", "BEGINNING"));
+            core.getPronunciationMgr().addPronunciation(new PronunciationNode("a$", "END"));
+            core.getPropertiesManager().setDisableProcRegex(false);
+            word.setPronunciation("TOBEREPLACED");
+            word.setProcOverride(false);
+            word.setValue("aa");
+
+            String result = word.getPronunciation();
+
+            assertEquals(expectedResult, result);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testGetPronunciationRespectOrder() {
+        System.out.println("ConWordTest.testGetPronunciationRespectOrder");
+        
+        try {
+            String expectedResult = "BEGINNINGMIDMIDEND";
+
+            core.getPronunciationMgr().addPronunciation(new PronunciationNode("^a", "BEGINNING"));
+            core.getPronunciationMgr().addPronunciation(new PronunciationNode("a$", "END"));
+            core.getPronunciationMgr().addPronunciation(new PronunciationNode("a", "MID"));
+            core.getPropertiesManager().setDisableProcRegex(false);
+            word.setPronunciation("TOBEREPLACED");
+            word.setProcOverride(false);
+            word.setValue("aaaa");
+
+            String result = word.getPronunciation();
+
+            assertEquals(expectedResult, result);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testGetPronunciationRegexWithRegexDisabled() {
+        System.out.println("ConWordTest.testGetPronunciationRegexWithRegexDisabled");
+        
+        try {
+            String expectedResult = "BASEPRONUNCIATION";
+
+            core.getPronunciationMgr().addPronunciation(new PronunciationNode("^a", "BEGINNING"));
+            core.getPronunciationMgr().addPronunciation(new PronunciationNode("a$", "END"));
+            core.getPropertiesManager().setDisableProcRegex(true);
+            word.setValue("aa");
+            word.setPronunciation(expectedResult);
+            word.setProcOverride(false);
+
+            String result = word.getPronunciation();
+
+            assertEquals(expectedResult, result);
+        } catch (Exception e) {
+            fail(e);
+        }
     }
 
     // TODO: Maybe test this elsewhere, as this touches functionality from most node types...
@@ -132,6 +235,8 @@ public class ConWordTest {
     
     @Test
     public void testCompareTo() {
+        System.out.println("ConWordTest.testCompareTo");
+        
         ConWord before = new ConWord();
         ConWord after = new ConWord();
 
@@ -156,6 +261,8 @@ public class ConWordTest {
 
     @Test
     public void testWriteXML() {
+        System.out.println("ConWordTest.testWriteXML");
+        
         System.out.println("ConWordTest:testWriteXML");
         String expectedValue = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
                 + "<dictionary>"

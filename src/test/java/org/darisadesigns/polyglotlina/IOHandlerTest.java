@@ -17,7 +17,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package PolyGlot;
+package org.darisadesigns.polyglotlina;
 
 import TestResources.DummyCore;
 import java.awt.Dimension;
@@ -47,6 +47,8 @@ public class IOHandlerTest {
     
     @Test
     public void testWriteErrorLogBasic() {
+        System.out.println("IOHandlerTest.testWriteErrorLogBasic");
+        
         IOHandler.writeErrorLog(new Exception("This is a test."));
         File myLog = new File(PGTUtil.getErrorDirectory().getAbsolutePath() 
                 + File.separator + PGTUtil.ERROR_LOG_FILE);
@@ -58,7 +60,7 @@ public class IOHandlerTest {
 
             assertTrue(contents.contains("This is a test.-java.lang.Exception"));
             assertTrue(contents.contains("java.lang.Exception: This is a test."));
-            assertTrue(contents.contains("PolyGlot.IOHandlerTest.testWriteErrorLogBasic(IOHandlerTest.java"));
+            assertTrue(contents.contains("IOHandlerTest.testWriteErrorLogBasic(IOHandlerTest.java"));
         } catch (FileNotFoundException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -69,6 +71,8 @@ public class IOHandlerTest {
     
     @Test
     public void testWriteMultipleErrorLogs() {
+        System.out.println("IOHandlerTest.testWriteMultipleErrorLogs");
+        
         IOHandler.writeErrorLog(new Exception("This is a test."));
         File myLog = new File(PGTUtil.ERROR_LOG_FILE);
         long logLenFirst = myLog.length() - 1;
@@ -81,6 +85,8 @@ public class IOHandlerTest {
     
     @Test
     public void testWriteErrorLogsMaxLength() {
+        System.out.println("IOHandlerTest.testWriteErrorLogsMaxLength");
+        
         for (int i = 0; i < 20; i++) {
             IOHandler.writeErrorLog(new Exception("This is a test: " + i));
         }
@@ -101,6 +107,8 @@ public class IOHandlerTest {
     
     @Test
     public void testWriteErrorLogAccountsForCause() {
+        System.out.println("IOHandlerTest.testWriteErrorLogAccountsForCause");
+        
         String testErrorString = "UR INPUTS & OUTPUTS!";
         String bubblingException = "Bubbobbula!";
         IOException testException = new IOException(testErrorString);
@@ -119,7 +127,9 @@ public class IOHandlerTest {
     
     @Test
     public void testGoodConsoleCommand() {
-        System.out.println("Testing good console command");
+        System.out.println("IOHandlerTest.testGoodConsoleCommand");
+        
+        
         String[] result = IOHandler.runAtConsole(new String[]{"java", "--version"});
 
         assertTrue(!result[0].isEmpty()); // various versions of Java return every damned thing you can imagine... just test that it's SOMETHING
@@ -128,7 +138,9 @@ public class IOHandlerTest {
     
     @Test
     public void testBadConsoleCommand() {
-        System.out.println("Testing bad console command");
+        System.out.println("IOHandlerTest.testBadConsoleCommand");
+        
+        
         String[] result = IOHandler.runAtConsole(new String[]{"WAT", "AM", "COMMAND?!"});
 
         assertTrue(result[0].isEmpty());
@@ -137,19 +149,21 @@ public class IOHandlerTest {
     
     @Test
     public void testGetTerminalJavaVersion() {
-        System.out.println("getTerminalJavaVersion");
+        System.out.println("IOHandlerTest.testGetTerminalJavaVersion");
+        
         assertFalse(IOHandler.getTerminalJavaVersion().isEmpty());
     }
     
     @Test
     public void textIsJavaAvailableInTerminal() {
-        System.out.println("isJavaAvailableInTerminal");
+        System.out.println("IOHandlerTest.textIsJavaAvailableInTerminal");
+        
         assertTrue(IOHandler.isJavaAvailableInTerminal());
     }
     
     @Test
     public void testInputStreamToByteArray() {
-        System.out.println("Testing input stream to byte array");
+        System.out.println("IOHandlerTest.testInputStreamToByteArray");
         
         try {
             byte[] expectedResult = "!@)*\ntest\n".getBytes();
@@ -164,7 +178,8 @@ public class IOHandlerTest {
     
     @Test
     public void iniFile() {
-        System.out.println("write/read of ini file");
+        System.out.println("IOHandlerTest.iniFile");
+        
         try {
             String testScreenName = "Silly Sergal Merp Screen";
 

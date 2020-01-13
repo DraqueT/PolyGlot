@@ -35,6 +35,8 @@ public class ConWordCollectionTest {
     
     @Test
     public void loadSwadeshTestRealFile() {
+        System.out.println("ConWordCollectionTest.loadSwadeshTestRealFile");
+        
         String searchValue = "#002: YOU";
         String expectedValue = "#002: YOU (2.SG! 1952 THOU & YE)";
         int expectedSize = 100;
@@ -67,6 +69,8 @@ public class ConWordCollectionTest {
     
     @Test
     public void loadSwadeshTestMissingFile() {
+        System.out.println("ConWordCollectionTest.loadSwadeshTestMissingFile");
+        
         DictCore core = DummyCore.newCore();
         ConWordCollection words = core.getWordCollection();
         String expectedMessage = "Stream closed";

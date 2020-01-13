@@ -43,7 +43,7 @@ public class PropertiesManagerTest {
      */
     @Test
     public void testGetAlphaOrder() {
-        System.out.println("getAlphaOrder");
+        System.out.println("PropertiesManagerTest.getAlphaOrder");
         PropertiesManager instance = core.getPropertiesManager();
         
         try {
@@ -64,7 +64,7 @@ public class PropertiesManagerTest {
      */
     @Test
     public void testSetAlphaOrder_String_No_Dupes_Commas() {
-        System.out.println("testSetAlphaOrder_String_No_Dupes_Commas");
+        System.out.println("PropertiesManagerTest.testSetAlphaOrder_String_No_Dupes_Commas");
         String order = "a,aa,b,bb,ab";
         PropertiesManager instance = core.getPropertiesManager();
         try {
@@ -80,7 +80,7 @@ public class PropertiesManagerTest {
      */
     @Test
     public void testSetAlphaOrder_String_Dupes_Commas() {
-        System.out.println("testSetAlphaOrder_String_Dupes_Commas");
+        System.out.println("PropertiesManagerTest.testSetAlphaOrder_String_Dupes_Commas");
         String order = "a, aa, b, bb, ab, a";
         PropertiesManager instance = core.getPropertiesManager();
         try {
@@ -96,7 +96,7 @@ public class PropertiesManagerTest {
      */
     @Test
     public void testSetAlphaOrder_String_No_Dupes_No_Commas() {
-        System.out.println("testSetAlphaOrder_String_No_Dupes_No_Commas");
+        System.out.println("PropertiesManagerTest.testSetAlphaOrder_String_No_Dupes_No_Commas");
         String order = "abcdefg";
         PropertiesManager instance = core.getPropertiesManager();
         try {
@@ -112,7 +112,7 @@ public class PropertiesManagerTest {
      */
     @Test
     public void testSetAlphaOrder_String_Dupes_No_Commas() {
-        System.out.println("testSetAlphaOrder_String_Dupes_No_Commas");
+        System.out.println("PropertiesManagerTest.testSetAlphaOrder_String_Dupes_No_Commas");
         String order = "abcdefa";
         PropertiesManager instance = core.getPropertiesManager();
         try {
@@ -128,7 +128,7 @@ public class PropertiesManagerTest {
      */
     @Test
     public void testSetAlphaOrder_String_dupes_boolean_override() {
-        System.out.println("testSetAlphaOrder_String_dupes_boolean_override");
+        System.out.println("PropertiesManagerTest.testSetAlphaOrder_String_dupes_boolean_override");
         String order = "a,b,a";
         PropertiesManager instance = core.getPropertiesManager();
         
@@ -145,7 +145,7 @@ public class PropertiesManagerTest {
      */
     @Test
     public void testSetAlphaOrder_String_no_dupes_boolean_override() {
-        System.out.println("testSetAlphaOrder_String_no_dupes_boolean_override");
+        System.out.println("PropertiesManagerTest.testSetAlphaOrder_String_no_dupes_boolean_override");
         String order = "a,b,c";
         PropertiesManager instance = core.getPropertiesManager();
         
@@ -162,7 +162,7 @@ public class PropertiesManagerTest {
      */
     @Test
     public void testSetAlphaOrder_String_dupes_boolean_no_override() {
-        System.out.println("testSetAlphaOrder_String_dupes_boolean_no_override");
+        System.out.println("PropertiesManagerTest.testSetAlphaOrder_String_dupes_boolean_no_override");
         String order = "a,b,a";
         PropertiesManager instance = core.getPropertiesManager();
         try {
@@ -178,7 +178,7 @@ public class PropertiesManagerTest {
      */
     @Test
     public void testSetAlphaOrder_String_no_dupes_boolean_no_override() {
-        System.out.println("testSetAlphaOrder_String_no_dupes_boolean_no_override");
+        System.out.println("PropertiesManagerTest.testSetAlphaOrder_String_no_dupes_boolean_no_override");
         String order = "a,b,c";
         PropertiesManager instance = core.getPropertiesManager();
         
@@ -195,7 +195,7 @@ public class PropertiesManagerTest {
      */
     @Test
     public void testGetAlphaPlainText() {
-        System.out.println("getAlphaPlainText");
+        System.out.println("PropertiesManagerTest.getAlphaPlainText");
         PropertiesManager instance = core.getPropertiesManager();
         String expResult = "a,b,c,d,e";
         

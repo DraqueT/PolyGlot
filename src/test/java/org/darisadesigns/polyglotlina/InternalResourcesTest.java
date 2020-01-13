@@ -17,7 +17,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package PolyGlot;
+package org.darisadesigns.polyglotlina;
 
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -36,6 +36,8 @@ public class InternalResourcesTest {
     
     @Test
     public void testImageResources() {
+        System.out.println("InternalResourcesTest.testImageResources");
+        
         String problemFiles = "";
         String[] testImagePaths = {
             "/PolyGlot/ImageAssets/add_button.png",
@@ -74,6 +76,8 @@ public class InternalResourcesTest {
     
     @Test
     public void testFontResources() {
+        System.out.println("InternalResourcesTest.testFontResources");
+        
         String problemFiles = "";
         String[] fontFileLocations =  {PGTUtil.LCD_FONT_LOCATION,
             PGTUtil.UNICODE_FONT_LOCATION,

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -30,6 +30,19 @@ import org.w3c.dom.Element;
  */
 public class PronunciationNode extends DictNode {
     private String pronunciation = "";
+    
+    public PronunciationNode() {
+    }
+    
+    /**
+     * 
+     * @param pattern The pattern (regex compatible) to search for/transform
+     * @param _pronunciation The pronunciation to transform the pattern encountered to
+     */
+    public PronunciationNode(String pattern, String _pronunciation) {
+        value = pattern;
+        pronunciation = _pronunciation;
+    }
     
     public String getPronunciation() {
         return pronunciation;

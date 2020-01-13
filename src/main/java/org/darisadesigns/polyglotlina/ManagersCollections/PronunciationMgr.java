@@ -145,7 +145,7 @@ public class PronunciationMgr {
         String ret = "";
 
         // -base.length() fed as initial depth to ensure that longer words cannot be artificially labeled as breaking max depth
-        List<PronunciationNode> procCycle = getPronunciationElements(base, -base.length());
+        List<PronunciationNode> procCycle = getPronunciationElements(base, -base.length(), true);
         for (PronunciationNode curProc : procCycle) {
             ret += curProc.getPronunciation();
         }
@@ -163,7 +163,7 @@ public class PronunciationMgr {
      */
     public PronunciationNode[] getPronunciationElements(String base) throws Exception {
         // -base.length() fed as initial depth to ensure that longer words cannot be artificially labeled as breaking max depth
-        return getPronunciationElements(base, -base.length()).toArray(new PronunciationNode[0]);
+        return getPronunciationElements(base, -base.length(), true).toArray(new PronunciationNode[0]);
     }
     
     protected String getToolLabel() {
@@ -174,10 +174,12 @@ public class PronunciationMgr {
      * returns pronunciation objects of a given word
      *
      * @param base word to find pronunciation objects of
+     * @param depth current depth
+     * @param beginning true if beginning of word (cannot rely on depth)
      * @return pronunciation object list. If no perfect match found, empty
      * string returned
      */
-    private List<PronunciationNode> getPronunciationElements(String base, int depth) throws Exception {
+    private List<PronunciationNode> getPronunciationElements(String base, int depth, boolean beginning) throws Exception {
         List<PronunciationNode> ret = new ArrayList<>();
         Iterator<PronunciationNode> finder = pronunciations.iterator();
 
@@ -222,7 +224,7 @@ public class PronunciationMgr {
 
                 if (comp.equals(pattern)) {
                     List<PronunciationNode> temp
-                            = getPronunciationElements(base.substring(pattern.length()), depth + 1);
+                            = getPronunciationElements(base.substring(pattern.length()), depth + 1, false);
 
                     // if lengths are equal, success! return. If unequal and no further match found-failure
                     if (pattern.length() == base.length() || !temp.isEmpty()) {
@@ -237,7 +239,7 @@ public class PronunciationMgr {
             PronunciationNode curNode = finder.next();
             String pattern = curNode.getValue();
                 // skip if set as starting characters, but later in word
-                if (pattern.startsWith("^") && depth != 0) {
+                if (pattern.startsWith("^") && !beginning) {
                     continue;
                 }
 
@@ -262,7 +264,7 @@ public class PronunciationMgr {
                         continue;
                     }
                     List<PronunciationNode> temp
-                            = getPronunciationElements(base.substring(leadingChars.length()), depth + 1);
+                            = getPronunciationElements(base.substring(leadingChars.length()), depth + 1, false);
 
                     try {
                         if (leadingChars.length() == base.length() || !temp.isEmpty()) {

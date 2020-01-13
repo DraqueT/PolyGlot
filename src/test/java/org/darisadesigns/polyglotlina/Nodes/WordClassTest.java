@@ -92,15 +92,23 @@ public class WordClassTest {
     }
 
     @Test
-    public void testDeleteValue() throws Exception {
-        testClass.deleteValue(0);
-        assertEquals(1, testClass.getValues().size());
+    public void testDeleteValue() {
+        try {
+            testClass.deleteValue(0);
+            assertEquals(1, testClass.getValues().size());
+        } catch (Exception e) {
+            fail(e);
+        }
     }
 
     @Test
-    public void testGetValueById() throws Exception {
-        WordClassValue value = testClass.getValueById(2);
-        assertEquals("TEST2", value.value);
+    public void testGetValueById() {
+        try {
+            WordClassValue value = testClass.getValueById(2);
+            assertEquals("TEST2", value.value);
+        } catch (Exception e) {
+            fail(e);
+        }
     }
 
     @Test

@@ -44,7 +44,7 @@ public class PGrammarPaneTest {
     
     public PGrammarPaneTest() {
         
-        System.out.println("PGrammarPaneTest");
+        System.out.println("PGrammarPaneTest.PGrammarPaneTest");
         core = DummyCore.newCore();
     }
 
@@ -55,7 +55,7 @@ public class PGrammarPaneTest {
             return;
         }
         
-        System.out.println("testPasteRegular");
+        System.out.println("PGrammarPaneTest.testPasteRegular");
         
         String sourceText = "This is a test! Yeehaw!";
         String expectedResult = sourceText;
@@ -76,7 +76,7 @@ public class PGrammarPaneTest {
             return;
         }
         
-        System.out.println("testPasteTabSanitize");
+        System.out.println("PGrammarPaneTest.testPasteTabSanitize");
         String sourceText = "This is a test!	Yeehaw!";
         String expectedResult = "This is a test!    Yeehaw!";
         PGrammarPane pane = new PGrammarPane(core);
@@ -93,7 +93,7 @@ public class PGrammarPaneTest {
     public void testProcessKeyEvent() {
         boolean success = true;
         String errorMessage = "";
-        System.out.println("testPasteTabSanitize");
+        System.out.println("PGrammarPaneTest.testPasteTabSanitize");
         
         try {
             PGrammarPane pane = new PGrammarPane(core);
