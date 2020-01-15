@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -832,6 +832,7 @@ public final class ScrGrammarGuide extends PFrame {
                 String repString = core.getPropertiesManager().getCharacterReplacement(c.toString());
                 
                 // only run replacement logic if currently set to Conlang font
+                // replacement logic at form level because this text editor can handle multiple fonts simultaneously
                 if (!repString.isEmpty()
                         && cmbFonts.getSelectedItem().equals(core.getPropertiesManager().getFontCon().getName())) {
                     try {

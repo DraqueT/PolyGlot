@@ -464,15 +464,7 @@ public final class CustHandlerFactory {
                             .getBufferWord();
 
                     try {
-                        // if word is valid, save. Throw error otherwise
-                        if (curWord.checkValid()) {
-                            core.getWordCollection().insert(wId);
-                        } else {
-                            throw new Exception("Word ("
-                                    + curWord.getLocalWord() + " : "
-                                    + curWord.getValue()
-                                    + ") is a malformed entry.");
-                        }
+                        core.getWordCollection().insert(wId);
                     } catch (Exception e) {
                         throw new SAXException("Word insertion error: " + e.getLocalizedMessage(), e);
                     }

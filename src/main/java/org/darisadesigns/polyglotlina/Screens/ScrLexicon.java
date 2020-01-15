@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -204,7 +204,7 @@ public final class ScrLexicon extends PFrame {
         if (!txtErrorBox.getText().isEmpty() && !chkRuleOverride.isSelected()) {
             ret = false;
             InfoBox.warning("Illegal word.", "Please correct or delete currently selected word "
-                    + "or select the rule override before exiting lexicon.", core.getRootWindow());
+                    + "or select the rule override checkbox before exiting lexicon.", core.getRootWindow());
         }
 
         return ret;

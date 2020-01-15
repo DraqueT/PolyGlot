@@ -444,6 +444,7 @@ public final class ScrMainMenu extends PFrame {
         
         if (curFileName.isEmpty()) {
             saveFileAsDialog();
+            curFileName = core.getCurFileName();
         }
 
         // if it still is blank, the user has hit cancel on the save as dialog
@@ -537,6 +538,9 @@ public final class ScrMainMenu extends PFrame {
 
                 if (overWrite == JOptionPane.NO_OPTION) {
                     ret = saveFileAsDialog();
+                } else if (overWrite == JOptionPane.YES_OPTION) {
+                    core.setCurFileName(fileName);
+                    ret = true;
                 }
             } else {
                 core.setCurFileName(fileName);
