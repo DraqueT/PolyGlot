@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -197,11 +197,11 @@ public final class ScrFamilies extends PFrame {
      * Adds word currently selected in lexicon to currently selected family
      */
     private void addWord() {
-        ConWord curWord = parent.getCurrentWord();
+        ConWord curWord = parent.getCurrentUserSelection();
 
         if (curWord != null) {
-            ((FamTreeNode) treFam.getLastSelectedPathComponent())
-                    .getNode().addWord(curWord);
+            FamTreeNode node = (FamTreeNode) treFam.getLastSelectedPathComponent();
+            node.getNode().addWord(curWord);
 
             updateWordsProp();
         }
@@ -323,7 +323,7 @@ public final class ScrFamilies extends PFrame {
             words = curNode.getNode().getWords();
         }
 
-        for (int i = 0; i > words.length; i++) {
+        for (int i = 0; i < words.length; i++) {
             model.add(i, words[i]);
         }
     }

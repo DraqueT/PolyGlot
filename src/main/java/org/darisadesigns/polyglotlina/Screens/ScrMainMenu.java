@@ -775,12 +775,12 @@ public final class ScrMainMenu extends PFrame {
     }
 
     /**
-     * Retrieves currently selected word (if any) from ScrLexicon
+     * Retrieves current user selection (form dependent, and coded per each)
      *
      * @return current word selected in scrLexicon, null otherwise (or if
      * lexicon is not visible)
      */
-    public ConWord getCurrentWord() {
+    public ConWord getCurrentUserSelection() {
         ConWord ret = null;
 
         if (curWindow instanceof ScrLexicon) {
