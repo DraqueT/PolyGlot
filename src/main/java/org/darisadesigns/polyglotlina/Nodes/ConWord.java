@@ -324,20 +324,6 @@ public class ConWord extends DictNode {
         return typeId;
     }
 
-    /**
-     * Returns false if the word is invalid for any reason
-     *
-     * @return false if invalid
-     */
-    public boolean checkValid() {
-        boolean ret = true;
-
-        // There might be no local translation, but the constructed word must exist
-        ret = ret && (!value.isEmpty());
-
-        return ret;
-    }
-
     public String getDefinition() {      
         return definition;
     }
