@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
+import java.util.Objects;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
 import org.w3c.dom.Document;
@@ -67,11 +68,24 @@ public class TypeNode extends DictNode {
         if (o != null) {
             ret = o instanceof TypeNode;
             if (ret) {
-                ret = ((TypeNode) o).getId().equals(this.id);
+                TypeNode comp = (TypeNode)o;
+                ret = comp.getId().equals(this.id);
+                ret = ret && comp.getGloss().equals(this.gloss);
+                ret = ret && comp.getNotes().equals(this.notes);
+                ret = ret && comp.getPattern().equals(this.regexPattern);
+                ret = ret && comp.getValue().equals(this.value);
             }
         }
 
         return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 79 * hash + Objects.hashCode(this.regexPattern);
+        hash = 79 * hash + Objects.hashCode(this.gloss);
+        return hash;
     }
 
     @Override

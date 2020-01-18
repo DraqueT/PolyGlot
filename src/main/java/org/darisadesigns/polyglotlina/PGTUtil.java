@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -233,7 +233,6 @@ public final class PGTUtil {
     public static final String TODO_NODE_XID = "ToDoNodeHead";
     public static final String TODO_NODE_DONE_XID = "ToDoNodeDone";
     public static final String TODO_NODE_LABEL_XID = "ToDoNodeLabel";
-    public static final String TODO_ROOT_XID = "ToDoRoot";
 
     // constants for PolyGlot options found in PolyGlot.ini
     public static final int OPTIONS_NUM_LAST_FILES = 5;

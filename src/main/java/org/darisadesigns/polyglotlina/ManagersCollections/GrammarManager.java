@@ -23,9 +23,12 @@ import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -34,12 +37,13 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class GrammarManager {
-    private final List<GrammarChapNode> chapters = new ArrayList<>();
+    private final List<GrammarChapNode> chapters;
     private final Map<Integer, byte[]> soundMap;
     private GrammarChapNode buffer;
     
     public GrammarManager() {
         soundMap = new HashMap<>();
+        chapters = new ArrayList<>();
         buffer = new GrammarChapNode(this);
     }
     
@@ -168,5 +172,45 @@ public class GrammarManager {
     
     public boolean isEmpty() {
         return chapters.isEmpty();
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (comp == this) {
+            ret = true;
+        } else if (comp instanceof GrammarManager) {
+            GrammarManager compMan = (GrammarManager)comp;
+            
+            ret = chapters.equals(compMan.chapters);
+            
+            if (ret) {
+                for (Object o : soundMap.entrySet().toArray()) {
+                    Entry<Integer, byte[]> entry = (Entry<Integer, byte[]>)o;
+
+                    int id = entry.getKey();
+                    byte[] soundVal = entry.getValue();
+
+                    ret = compMan.soundMap.containsKey(id);
+
+                    if (ret) {
+                        ret = Arrays.equals(soundVal, compMan.soundMap.get(id));
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.chapters);
+        hash = 89 * hash + Objects.hashCode(this.soundMap);
+        return hash;
     }
 }

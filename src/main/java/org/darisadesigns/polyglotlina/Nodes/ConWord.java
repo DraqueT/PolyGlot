@@ -206,7 +206,7 @@ public class ConWord extends DictNode {
             ret = value.equals(c.value);
             ret = ret && localWord.equals(c.localWord);
             ret = ret && typeId == c.typeId;
-            ret = ret && definition.equals(c.definition);
+            ret = ret && WebInterface.archiveHTML(definition).equals(WebInterface.archiveHTML(c.definition));
             ret = ret && pronunciation.equals(c.pronunciation);
             ret = ret && etymNotes.equals(c.etymNotes);
             ret = ret && procOverride == c.procOverride;

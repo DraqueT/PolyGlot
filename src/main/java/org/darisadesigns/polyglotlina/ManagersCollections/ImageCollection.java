@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson
+ * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License

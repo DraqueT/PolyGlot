@@ -20,6 +20,11 @@
 package org.darisadesigns.polyglotlina;
 
 import TestResources.DummyCore;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
@@ -87,6 +92,27 @@ public class DictCoreTest {
             core.getTypes().addNode(new TypeNode());
             assertFalse(core.isLanguageEmpty());
         } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testSaveLanguageIntegrityDeep() {
+        // this tests the deep integrity of saved languages
+        System.out.println("DictCoreTest.testIsLanguageEmptyNoPOS");
+        
+        try {
+            DictCore origin = DummyCore.newCore();
+            DictCore target = DummyCore.newCore();
+            Path targetPath = Files.createTempFile("POLYGLOT", "pgt");
+            
+            origin.readFile(PGTUtil.TESTRESOURCES + "test_equality.pgd");
+            origin.writeFile(targetPath.toString());
+            target.readFile(targetPath.toString());
+            
+            assertEquals(origin, target, "Languge archive saving inconsistenies detected.");
+        } catch (Exception e) {
+            e.printStackTrace();
             fail(e);
         }
     }

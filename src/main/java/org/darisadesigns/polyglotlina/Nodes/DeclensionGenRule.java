@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -404,5 +405,34 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      */
     public String getDebugString() {
         return debugString;
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (comp == this) {
+            ret = true;
+        } else if (comp instanceof DeclensionGenRule) {
+            DeclensionGenRule compRule = (DeclensionGenRule)comp;
+            
+            ret = typeId == compRule.typeId;
+            ret = ret && (combinationId == null && compRule.combinationId == null) 
+                    || combinationId.equals(compRule.combinationId);
+            ret = ret && regex.equals(compRule.regex);
+            ret = ret && name.equals(compRule.name);
+            ret = ret && transformations.equals(compRule.transformations);
+            ret = ret && applyToClasses.equals(compRule.applyToClasses);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + this.typeId;
+        hash = 97 * hash + Objects.hashCode(this.combinationId);
+        return hash;
     }
 }

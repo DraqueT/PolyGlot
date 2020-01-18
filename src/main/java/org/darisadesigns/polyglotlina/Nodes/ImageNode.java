@@ -30,19 +30,21 @@ import javax.imageio.ImageIO;
  * @author Draque
  */
 public class ImageNode extends DictNode {
+
     private BufferedImage image = null;
     private File tmpFile = null;
-    
+
     /**
      * @param _image the image to set
      */
     public void setImage(BufferedImage _image) {
         image = _image;
     }
-    
+
     /**
-     * Gets path to temporary file in which image has been stored (if one exists)
-     * for consumption in HTML based text areas
+     * Gets path to temporary file in which image has been stored (if one
+     * exists) for consumption in HTML based text areas
+     *
      * @return path of image file
      * @throws java.io.IOException on file read error, or image not initialized
      */
@@ -50,35 +52,36 @@ public class ImageNode extends DictNode {
         if (image == null) {
             throw new IOException("Image not instantiated. Cannot generate path.");
         }
-        
+
         if (id == -1) {
             throw new IOException("Image not inserted into image collection (id = -1). Cannot generate path.");
         }
-        
+
         // create tmp file if none exists
         if (tmpFile == null || !tmpFile.exists()) {
             tmpFile = File.createTempFile(id + "_polyGlotImage", ".png");
             ImageIO.write(image, "PNG", new FileOutputStream(tmpFile));
         }
-        
+
         return tmpFile.getAbsolutePath();
     }
-    
+
     /**
-     * Sets image equal to.
-     * Only sets equal the buffered image and the id. Nothing else.
+     * Sets image equal to. Only sets equal the buffered image and the id.
+     * Nothing else.
+     *
      * @param _node
-     * @throws ClassCastException 
+     * @throws ClassCastException
      */
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
         if (!(_node instanceof ImageNode)) {
             String name = _node == null ? "null" : _node.getClass().getName();
-            throw new ClassCastException("Cannot convert type: " 
+            throw new ClassCastException("Cannot convert type: "
                     + name + " to type ImageNode.");
         }
-        ImageNode tmpNode = (ImageNode)_node;
-        
+        ImageNode tmpNode = (ImageNode) _node;
+
         image = tmpNode.image;
         id = tmpNode.getId();
     }
@@ -89,25 +92,44 @@ public class ImageNode extends DictNode {
     public BufferedImage getImage() {
         return image;
     }
-    
+
     @Override
     public boolean equals(Object comp) {
         boolean ret = false;
-        
+
         if (this == comp) {
             ret = true;
-        } else if (comp != null && getClass() == comp.getClass()) {
-            ImageNode c = (ImageNode)comp;
-            
-            ret = (image == c.image && image == null) || image.equals(c.image);
+        } else if (comp instanceof ImageNode) {
+            ImageNode c = (ImageNode) comp;
+
+            ret = (image == null && image == null) || bufferedImagesEqual(image, c.image);
             ret = ret && value.equals(c.value);
         }
-        
+
         return ret;
     }
 
     @Override
     public int hashCode() {
         return super.hashCode();
+    }
+
+    // compares two buffered images
+    private boolean bufferedImagesEqual(BufferedImage img1, BufferedImage img2) {
+        boolean ret = true;
+
+        if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) {
+            for (int x = 0; x < img1.getWidth() && ret; x++) {
+                for (int y = 0; y < img1.getHeight() && ret; y++) {
+                    if (img1.getRGB(x, y) != img2.getRGB(x, y)) {
+                        ret = false;
+                    }
+                }
+            }
+        } else {
+            ret = false;
+        }
+
+        return ret;
     }
 }

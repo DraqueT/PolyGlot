@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -231,5 +232,27 @@ public abstract class DictionaryCollection<N extends DictNode> {
     
     public boolean isEmpty() {
         return nodeMap.isEmpty();
+    }
+    
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (comp instanceof DictionaryCollection) {
+            DictionaryCollection dictComp = (DictionaryCollection) comp;
+            
+            ret = ((alphaOrder == null && dictComp.alphaOrder == null) || alphaOrder.equals(dictComp.alphaOrder));
+            ret = ret && nodeMap.equals(dictComp.nodeMap);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.nodeMap);
+        return hash;
     }
 }

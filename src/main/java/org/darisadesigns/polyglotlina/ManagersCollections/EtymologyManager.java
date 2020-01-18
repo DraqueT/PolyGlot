@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -440,5 +441,31 @@ public class EtymologyManager {
         public IllegalLoopException(String message) {
             super(message);
         }
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp instanceof EtymologyManager) {
+            EtymologyManager compEt = (EtymologyManager)comp;
+            
+            ret = parentToChild.equals(compEt.parentToChild);
+            ret = ret && childToParent.equals(compEt.childToParent);
+            ret = ret && extParentToChild.equals(compEt.extParentToChild);
+            ret = ret && childToExtParent.equals(compEt.childToExtParent);
+            ret = ret && allExtParents.equals(compEt.allExtParents);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.parentToChild);
+        return hash;
     }
 }

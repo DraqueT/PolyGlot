@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -60,17 +60,16 @@ public class DeclensionGenTransform {
     }
     
     @Override
-    public boolean equals(Object o) {
-        boolean ret = true;
+    public boolean equals(Object comp) {
+        boolean ret = false;
         
-        if (this != o) {
-            if (o instanceof DeclensionGenTransform) {
-                DeclensionGenTransform comp = (DeclensionGenTransform)o;
-                ret = this.regex.equals(comp.regex) 
-                        && this.replaceText.equals(comp.replaceText);
-            } else {
-                ret = false;
-            }
+        if (comp == this) {
+            ret = true;
+        } else if (comp instanceof DeclensionGenTransform) {
+            DeclensionGenTransform compDec = (DeclensionGenTransform)comp;
+            
+            ret = regex.equals(compDec.regex);
+            ret = ret && replaceText.equals(compDec.replaceText);
         }
         
         return ret;

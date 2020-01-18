@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -27,6 +27,7 @@ import org.darisadesigns.polyglotlina.WebInterface;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -155,5 +156,29 @@ public class FamilyManager {
         }
         
         return curElement;
+    }
+    
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp instanceof FamilyManager) {
+            FamilyManager compMan = (FamilyManager)comp;
+            ret = (famRoot == null && compMan.famRoot == null) 
+                    || famRoot.equals(compMan.famRoot); 
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 13 * hash + Objects.hashCode(this.famRoot);
+        hash = 13 * hash + Objects.hashCode(this.buffer);
+        return hash;
     }
 }

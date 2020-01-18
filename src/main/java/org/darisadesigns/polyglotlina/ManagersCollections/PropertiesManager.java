@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -818,5 +819,46 @@ public class PropertiesManager {
      */
     public void setUseSimplifiedConjugations(boolean _useSimplifiedConjugations) {
         this.useSimplifiedConjugations = _useSimplifiedConjugations;
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp instanceof PropertiesManager) {
+            PropertiesManager prop = (PropertiesManager) comp;
+            ret = ((conFont == null) && (prop.conFont == null)) || conFont.equals(prop.conFont)
+                    && conFontStyle.equals(prop.conFontStyle)
+                    && conFontSize.equals(prop.conFontSize)
+                    && localFontSize == prop.localFontSize
+                    && alphaPlainText.equals(prop.alphaPlainText)
+                    && langName.equals(prop.langName)
+                    && localLangName.equals(prop.localLangName)
+                    && copyrightAuthorInfo.equals(prop.copyrightAuthorInfo)
+                    && typesMandatory == prop.typesMandatory
+                    && localMandatory == prop.localMandatory
+                    && wordUniqueness == prop.wordUniqueness
+                    && localUniqueness == prop.localUniqueness
+                    && overrideRegexFont == prop.overrideRegexFont
+                    && ignoreCase == prop.ignoreCase
+                    && disableProcRegex == prop.disableProcRegex
+                    && enforceRTL == prop.enforceRTL
+                    && useLocalWordLex == prop.useLocalWordLex
+                    && localFont.equals(prop.localFont)
+                    && charRep.equals(prop.charRep)
+                    && kerningSpace.equals(prop.kerningSpace)
+                    && useSimplifiedConjugations == prop.useSimplifiedConjugations;
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 79 * hash + Objects.hashCode(this.langName);
+        return hash;
     }
 }

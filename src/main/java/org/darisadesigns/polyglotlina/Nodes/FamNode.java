@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -224,7 +224,6 @@ public class FamNode extends DictNode {
             ret = value.equals(c.value);
             ret = ret && subNodes.equals(c.subNodes);
             ret = ret && words.equals(c.words);
-            ret = ret && parent == c.parent; // test IDENTITY here, rather than contents
             ret = ret && notes.equals(c.notes);
         }
         
