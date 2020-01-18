@@ -43,6 +43,7 @@ import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Objects;
 import javax.swing.UIDefaults;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -68,7 +69,7 @@ public class DictCore {
     private FamilyManager famManager;
     private LogoCollection logoCollection;
     private GrammarManager grammarManager;
-    private WordClassCollection wordPropCollection;
+    private WordClassCollection wordClassCollection;
     private ImageCollection imageCollection;
     private EtymologyManager etymologyManager;
     private ReversionManager reversionManager;
@@ -107,7 +108,7 @@ public class DictCore {
             famManager = new FamilyManager(this);
             logoCollection = new LogoCollection(this);
             grammarManager = new GrammarManager();
-            wordPropCollection = new WordClassCollection(this);
+            wordClassCollection = new WordClassCollection(this);
             imageCollection = new ImageCollection();
             etymologyManager = new EtymologyManager(this);
             reversionManager = new ReversionManager(this);
@@ -118,7 +119,7 @@ public class DictCore {
             wordCollection.setAlphaOrder(alphaOrder);
             typeCollection.setAlphaOrder(alphaOrder);
             logoCollection.setAlphaOrder(alphaOrder);
-            wordPropCollection.setAlphaOrder(alphaOrder);
+            wordClassCollection.setAlphaOrder(alphaOrder);
             rootWindow = null;
             
             PGTUtil.validateVersion();
@@ -204,7 +205,7 @@ public class DictCore {
      * @return 
      */
     public WordClassCollection getWordClassCollection() {
-        return wordPropCollection;
+        return wordClassCollection;
     }
 
     /**
@@ -543,7 +544,7 @@ public class DictCore {
         // collect XML representation of all dictionary elements
         writeXMLHeader(doc, rootElement, newSaveTime);
         propertiesManager.writeXML(doc, rootElement);
-        wordPropCollection.writeXML(doc, rootElement);
+        wordClassCollection.writeXML(doc, rootElement);
         typeCollection.writeXML(doc, rootElement);
         wordCollection.writeXML(doc, rootElement);
         etymologyManager.writeXML(doc, rootElement);
@@ -673,7 +674,50 @@ public class DictCore {
                 && romMgr.isEmpty()
                 && logoCollection.isEmpty()
                 && grammarManager.isEmpty()
-                && wordPropCollection.isEmpty()
+                && wordClassCollection.isEmpty()
                 && imageCollection.isEmpty();
+    }
+    
+    /**
+     * Compares equality of languages.
+     * Does not compare save version.
+     * Does not compare filename.
+     * Does not compare last save time.
+     * Does not compare reversion states.
+     * 
+     * Depending on size of language, might take some time.
+     * @param comp
+     * @return 
+     */
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+
+        if (comp instanceof DictCore) {
+            DictCore compCore = (DictCore)comp;
+            
+            ret = wordCollection.equals(compCore.wordCollection)
+                    && typeCollection.equals(compCore.typeCollection)
+                    && declensionMgr.equals(compCore.declensionMgr)
+                    && propertiesManager.equals(compCore.propertiesManager)
+                    && pronuncMgr.equals(compCore.pronuncMgr)
+                    && romMgr.equals(compCore.romMgr)
+                    && famManager.equals(compCore.famManager)
+                    && logoCollection.equals(compCore.logoCollection)
+                    && grammarManager.equals(compCore.grammarManager)
+                    && wordClassCollection.equals(compCore.wordClassCollection)
+                    && imageCollection.equals(compCore.imageCollection)
+                    && etymologyManager.equals(compCore.etymologyManager)
+                    && toDoManager.equals(compCore.toDoManager);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 73 * hash + Objects.hashCode(this.propertiesManager);
+        return hash;
     }
 }

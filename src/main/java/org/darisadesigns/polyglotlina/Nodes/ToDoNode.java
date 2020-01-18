@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.Nodes;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -168,5 +169,29 @@ public class ToDoNode {
     
     public ToDoNode getParent() {
         return parent;
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp instanceof ToDoNode) {
+            ToDoNode compNode = (ToDoNode)comp;
+            
+            ret = isDone == compNode.isDone;
+            ret = ret && value.equals(compNode.value);
+            ret = ret && children.equals(compNode.children);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 43 * hash + Objects.hashCode(this.children);
+        return hash;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import javax.imageio.ImageIO;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -380,5 +381,30 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         emptyNode.setValue("LOGO NOT FOUND");
         
         return emptyNode;
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (comp == this) {
+            ret = true;
+        } else if (comp instanceof LogoCollection) {
+            LogoCollection compLog = (LogoCollection) comp;
+            
+            ret = logoToWord.equals(compLog.logoToWord)
+                    && wordToLogo.equals(compLog.wordToLogo)
+                    && super.equals(comp);
+        }
+            
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.logoToWord);
+        hash = 17 * hash + Objects.hashCode(this.wordToLogo);
+        return hash;
     }
 }

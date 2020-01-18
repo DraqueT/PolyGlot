@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -359,7 +359,7 @@ public class LogoNode extends DictNode {
 
         if (this == comp) {
             ret = true;
-        } else if (comp != null && getClass() == comp.getClass()) {
+        } else if (comp instanceof LogoNode) {
             LogoNode c = (LogoNode) comp;
 
             ret = value.equals(c.value);

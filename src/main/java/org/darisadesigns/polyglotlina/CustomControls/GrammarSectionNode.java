@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, Draque Thompson
+ * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,10 +19,12 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
+import java.util.Objects;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import org.darisadesigns.polyglotlina.WebInterface;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -93,5 +95,30 @@ public class GrammarSectionNode extends DefaultMutableTreeNode {
         secNode.appendChild(secElement);
 
         rootElement.appendChild(secNode);
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp instanceof GrammarSectionNode) {
+            GrammarSectionNode compSec = (GrammarSectionNode)comp;
+            
+            ret = WebInterface.archiveHTML(sectionText).equals(WebInterface.archiveHTML(compSec.sectionText));
+            ret = ret && name.equals(compSec.name);
+            ret = ret && recordingId == compSec.recordingId;
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.name);
+        hash = 47 * hash + this.recordingId;
+        return hash;
     }
 }

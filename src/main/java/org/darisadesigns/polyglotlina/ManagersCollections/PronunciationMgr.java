@@ -25,6 +25,7 @@ import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.w3c.dom.Document;
@@ -325,5 +326,29 @@ public class PronunciationMgr {
     
     public boolean isEmpty() {
         return pronunciations.isEmpty();
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp instanceof PronunciationMgr) {
+            PronunciationMgr compProp = (PronunciationMgr)comp;
+            
+            ret = recurse == compProp.recurse
+                    && pronunciations.equals(compProp.pronunciations);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + (this.recurse ? 1 : 0);
+        hash = 97 * hash + Objects.hashCode(this.pronunciations);
+        return hash;
     }
 }

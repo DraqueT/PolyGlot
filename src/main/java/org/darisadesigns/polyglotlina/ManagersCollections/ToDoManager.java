@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, DThompson
+ * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
+import java.util.Objects;
 import org.darisadesigns.polyglotlina.Nodes.ToDoNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.w3c.dom.Document;
@@ -34,7 +35,7 @@ public class ToDoManager {
     
     public ToDoNode getRoot() {
         if (root == null) {
-            root = new ToDoNode(null, PGTUtil.TODO_ROOT_XID, false);
+            root = new ToDoNode(null, "", false);
         }
         return root;
     }
@@ -74,5 +75,27 @@ public class ToDoManager {
     
     public void popBuffer() {
         bufferNode = bufferNode.getParent();
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (comp == this) {
+            ret = true;
+        } else if (comp instanceof ToDoManager) {
+            ToDoManager compMan = (ToDoManager)comp;
+            
+            ret = (root == null && compMan.root == null) || root.equals(compMan.root);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 19 * hash + Objects.hashCode(this.root);
+        return hash;
     }
 }

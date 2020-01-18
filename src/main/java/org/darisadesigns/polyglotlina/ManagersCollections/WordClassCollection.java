@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson
+ * Copyright (c) 2016-2020, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Random;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -238,5 +239,32 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
         WordClass emptyClass = new WordClass();
         emptyClass.setValue("CLASS NOT FOUND");
         return emptyClass;
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        /*
+        DictionaryCollection<WordClass> {
+        private List<List<PEntry<Integer, Integer>>> comboCache = null;
+        */
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp instanceof WordClassCollection) {
+            WordClassCollection compCol = (WordClassCollection)comp;
+            ret = ((comboCache == null && compCol.comboCache == null) || comboCache.equals(compCol.comboCache));
+            ret = ret && super.equals(comp);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.comboCache);
+        return hash;
     }
 }

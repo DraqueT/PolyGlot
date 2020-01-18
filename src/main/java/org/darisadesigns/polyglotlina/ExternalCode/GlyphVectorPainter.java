@@ -71,8 +71,18 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
     }
 
     private void checkKerning(GlyphView v) {
-        Float kValue=(Float)v.getElement().getAttributes().getAttribute(KEY_KERNING);
-        if (kValue!=null) {
+        Object testKVal = v.getElement().getAttributes().getAttribute(KEY_KERNING);
+        if (testKVal != null) {
+            float kValue;
+            
+            if (testKVal instanceof Double) {
+                kValue = ((Double)testKVal).floatValue();
+            } else if (testKVal instanceof Float) {
+                kValue = (Float)testKVal;
+            } else {
+                kValue = (float)testKVal;
+            }
+            
             for (int i=glyphVector.getNumGlyphs()-1; i>=0; i--) {
                 Point2D p=glyphVector.getGlyphPosition(i);
                 p.setLocation(p.getX() + i * kValue, p.getY());

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina.Nodes;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  *
@@ -65,5 +66,13 @@ public final class PEntry<K, V> implements Map.Entry<K, V> {
         }
         
         return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.key);
+        hash = 17 * hash + Objects.hashCode(this.value);
+        return hash;
     }
 }

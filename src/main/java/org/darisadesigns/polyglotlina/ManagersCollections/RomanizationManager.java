@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, Draque Thompson
+ * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -82,5 +82,26 @@ public class RomanizationManager extends PronunciationMgr {
     @Override
     protected String getToolLabel() {
         return "Romanization Manager";
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp instanceof RomanizationManager) {
+            ret = enabled == ((RomanizationManager) comp).enabled
+                    && super.equals(comp);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 17 * hash + (this.enabled ? 1 : 0);
+        return hash;
     }
 }

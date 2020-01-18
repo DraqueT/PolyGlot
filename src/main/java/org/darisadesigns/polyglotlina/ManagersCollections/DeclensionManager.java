@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -1243,5 +1244,31 @@ public class DeclensionManager {
     
     public boolean isEmpty() {
         return generationRules.isEmpty();
+    }
+    
+    @Override
+    public boolean equals(Object comp) {
+        boolean ret = false;
+        
+        if (this == comp) {
+            ret = true;
+        } else if (comp instanceof DeclensionManager) {
+            DeclensionManager compMan = (DeclensionManager)comp;
+            ret = (generationRules == null && compMan.generationRules == null) || generationRules.equals(compMan.generationRules);
+            ret = ret && ((dList == null && compMan.dList == null) || dList.equals(compMan.dList));
+            ret = ret && combSettings.equals(compMan.combSettings);
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.generationRules);
+        hash = 41 * hash + Objects.hashCode(this.dList);
+        hash = 41 * hash + Objects.hashCode(this.dTemplates);
+        hash = 41 * hash + Objects.hashCode(this.combSettings);
+        return hash;
     }
 }
