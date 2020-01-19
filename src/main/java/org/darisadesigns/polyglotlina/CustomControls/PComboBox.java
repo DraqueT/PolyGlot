@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017, Draque Thompson
+ * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -52,7 +52,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
      * @param isBack whether display color is background (rather than foreground)
      */
     public void makeFlash(Color _flashColor, boolean isBack) {
-        if (worker == null || worker.isDone()) {
+        if (worker == null || worker.isDone() && ! this.isFocusOwner()) {
             worker = PGTUtil.getFlashWorker(this, _flashColor, isBack);
             worker.execute();
         }
