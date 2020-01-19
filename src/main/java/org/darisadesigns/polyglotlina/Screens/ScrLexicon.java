@@ -2077,6 +2077,7 @@ public final class ScrLexicon extends PFrame {
             }
 
             setupRomField();
+            //setWordLegality();
         }
     }//GEN-LAST:event_cmbTypeActionPerformed
 

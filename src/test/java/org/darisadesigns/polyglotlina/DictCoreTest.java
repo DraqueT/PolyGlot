@@ -111,8 +111,7 @@ public class DictCoreTest {
             target.readFile(targetPath.toString());
             
             assertEquals(origin, target, "Languge archive saving inconsistenies detected.");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {
             fail(e);
         }
     }
