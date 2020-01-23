@@ -36,6 +36,7 @@ This will show you how to package PolyGlot for OSX, Windows, and Linux.
 6) If your system does not have python, install it. Windows and some versions of Linux may not. (type "python" and hit enter at the terminal)
 7) Enter "python build_image.py" in PolyGlot's base directory without the quotes
 	- If you open the script file, you'll see that it's segmented so that you can give arguments and just execute one section them at a time for convenience.
+        - You MUST build it first with this script. PolyGlot will fail to run if you try to run it from Netbeans before this. (necessary files are built in the Python file)
 
 PolyGlot will now build itself into a platform specific application for you! This can be run on machines regardless of whether they have Java installed, as it builds a Java runtime into the distribution.
 
