@@ -50,6 +50,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -1038,6 +1039,19 @@ public final class ScrMainMenu extends PFrame {
                     public void windowDeactivated(WindowEvent ex) {
                     }
                 });
+                
+                if (w instanceof PFrame) {
+                    ((PFrame)w).addWindowFocusListener(new WindowFocusListener() {
+                        public void windowGainedFocus(WindowEvent e) {
+                            
+                        }
+                        
+                        public void windowLostFocus(WindowEvent e) {
+                            ((PFrame)w).saveAllValues();
+                        }
+                    });
+                }
+                
                 w.setVisible(true);
                 w.toFront();
                 childWindows.add(w);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -32,6 +32,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -78,15 +80,22 @@ public final class ScrPhonology extends PFrame {
 
     @Override
     public void dispose() {
-        if (tblRep.getCellEditor() != null) {
-            tblRep.getCellEditor().stopCellEditing();
-        }
         saveAllValues();
         super.dispose();
     }
     
     @Override
     public void saveAllValues() {
+        if (tblRep.getCellEditor() != null) {
+            tblRep.getCellEditor().stopCellEditing();
+        }
+        if (tblProcs.getCellEditor() != null) {
+            tblProcs.getCellEditor().stopCellEditing();
+        }
+        if (tblRom.getCellEditor() != null) {
+            tblRom.getCellEditor().stopCellEditing();
+        }
+        
         saveProcGuide();
         saveRepTable();
         saveRomGuide();
@@ -259,31 +268,32 @@ public final class ScrPhonology extends PFrame {
         DefaultTableModel procTableModel = (DefaultTableModel) tblProcs.getModel();
         procTableModel.addRow(new Object[]{base, proc});
 
+        // TODO: Delete if not broken from this: #839
         // document listener to be fed into editor/renderers for cells...
-        DocumentListener docuListener = new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                saveProcGuide();
-            }
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                saveProcGuide();
-            }
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                saveProcGuide();
-            }
-        };
-
-        // set saving properties for first column editor
-        PCellEditor editor = (PCellEditor) tblProcs.getCellEditor(procTableModel.getRowCount() - 1, 0);
-        editor.setDocuListener(docuListener);
-        editor.setInitialValue(base);
-
-        // set saving properties for second column editor
-        editor = (PCellEditor) tblProcs.getCellEditor(procTableModel.getRowCount() - 1, 1);
-        editor.setDocuListener(docuListener);
-        editor.setInitialValue(proc);        
+//        DocumentListener docuListener = new DocumentListener() {
+//            @Override
+//            public void changedUpdate(DocumentEvent e) {
+//                saveProcGuide();
+//            }
+//            @Override
+//            public void removeUpdate(DocumentEvent e) {
+//                saveProcGuide();
+//            }
+//            @Override
+//            public void insertUpdate(DocumentEvent e) {
+//                saveProcGuide();
+//            }
+//        };
+//
+//        // set saving properties for first column editor
+//        PCellEditor editor = (PCellEditor) tblProcs.getCellEditor(procTableModel.getRowCount() - 1, 0);
+//        editor.setDocuListener(docuListener);
+//        editor.setInitialValue(base);
+//
+//        // set saving properties for second column editor
+//        editor = (PCellEditor) tblProcs.getCellEditor(procTableModel.getRowCount() - 1, 1);
+//        editor.setDocuListener(docuListener);
+//        editor.setInitialValue(proc);        
 
         curPopulating = populatingLocal;
     }
@@ -301,33 +311,34 @@ public final class ScrPhonology extends PFrame {
         DefaultTableModel romTableModel = (DefaultTableModel) tblRom.getModel();
         romTableModel.addRow(new Object[]{base, proc});
 
+        // TODO: Delete if doesn't break things #839
         // document listener to be fed into editor/renderers for cells...
-        DocumentListener docuListener = new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                saveRomGuide();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                saveRomGuide();
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                saveRomGuide();
-            }
-        };
-
-        // set saving properties for first column editor
-        PCellEditor editor = (PCellEditor) tblRom.getCellEditor(romTableModel.getRowCount() - 1, 0);
-        editor.setDocuListener(docuListener);
-        editor.setInitialValue(base);
-
-        // set saving properties for second column editor
-        editor = (PCellEditor) tblRom.getCellEditor(romTableModel.getRowCount() - 1, 1);
-        editor.setDocuListener(docuListener);
-        editor.setInitialValue(proc);
+//        DocumentListener docuListener = new DocumentListener() {
+//            @Override
+//            public void changedUpdate(DocumentEvent e) {
+//                saveRomGuide();
+//            }
+//
+//            @Override
+//            public void removeUpdate(DocumentEvent e) {
+//                saveRomGuide();
+//            }
+//
+//            @Override
+//            public void insertUpdate(DocumentEvent e) {
+//                saveRomGuide();
+//            }
+//        };
+//
+//        // set saving properties for first column editor
+//        PCellEditor editor = (PCellEditor) tblRom.getCellEditor(romTableModel.getRowCount() - 1, 0);
+//        editor.setDocuListener(docuListener);
+//        editor.setInitialValue(base);
+//
+//        // set saving properties for second column editor
+//        editor = (PCellEditor) tblRom.getCellEditor(romTableModel.getRowCount() - 1, 1);
+//        editor.setDocuListener(docuListener);
+//        editor.setInitialValue(proc);
 
         curPopulating = populatingLocal;
     }
@@ -338,9 +349,10 @@ public final class ScrPhonology extends PFrame {
         procTableModel.addColumn("Pronunciation");
         tblProcs.setModel(procTableModel); // TODO: find way to make tblProcs display RTL order when appropriate Maybe something on my custom cell editor
         
-        procTableModel.addTableModelListener((TableModelEvent e) -> {
-            saveProcGuide();
-        });
+        // TODO: Delete if not broken from this: #839
+//        procTableModel.addTableModelListener((TableModelEvent e) -> {
+//            saveProcGuide();
+//        });
         
         boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 
@@ -372,9 +384,11 @@ public final class ScrPhonology extends PFrame {
         tableModel.addColumn("Replacement");
 
         tblRep.setModel(tableModel); // TODO: find way to make rom display RTL order when appropriate Maybe something on my custom cell editor
-        tableModel.addTableModelListener((TableModelEvent e) -> {
-            saveRepTable();
-        });
+        
+        // TODO: Delete if this doesn't break #839
+//        tableModel.addTableModelListener((TableModelEvent e) -> {
+//            saveRepTable();
+//        });
         
         boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 
@@ -407,9 +421,11 @@ public final class ScrPhonology extends PFrame {
                         editChar.setIgnoreListenerSilencing(true);
                         InfoBox.warning("Single Character Only", "Replacement characters can only be 1 character long.", core.getRootWindow());
                     });
-                } else {
-                    saveRepTable();
                 }
+                // TODO: Delete if doesn't break things: #839
+//                else {
+//                    saveRepTable();
+//                }
             }
         });        
         column.setCellEditor(editChar);
@@ -418,22 +434,23 @@ public final class ScrPhonology extends PFrame {
         column = tblRep.getColumnModel().getColumn(1);
         PCellEditor valueEdit = new PCellEditor(useConFont, core);
         valueEdit.setIgnoreListenerSilencing(true);
-        valueEdit.setDocuListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                saveRepTable();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                saveRepTable();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                saveRepTable();
-            }
-        });
+        // TODO: Delete if doesn't break things #839
+//        valueEdit.setDocuListener(new DocumentListener() {
+//            @Override
+//            public void insertUpdate(DocumentEvent e) {
+//                saveRepTable();
+//            }
+//
+//            @Override
+//            public void removeUpdate(DocumentEvent e) {
+//                saveRepTable();
+//            }
+//
+//            @Override
+//            public void changedUpdate(DocumentEvent e) {
+//                saveRepTable();
+//            }
+//        });
         column.setCellEditor(valueEdit);
         column.setCellRenderer(new PCellRenderer(useConFont, core));
 
@@ -457,9 +474,10 @@ public final class ScrPhonology extends PFrame {
         romTableModel.addColumn("Romanization");
         tblRom.setModel(romTableModel); // TODO: find way to make rom display RTL order when appropriate Maybe something on my custom cell editor
 
-        romTableModel.addTableModelListener((TableModelEvent e) -> {
-            saveRomGuide();
-        });
+        // TODO: Delete if doesn't break anything #839
+//        romTableModel.addTableModelListener((TableModelEvent e) -> {
+//            saveRomGuide();
+//        });
         
         boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 
@@ -485,6 +503,11 @@ public final class ScrPhonology extends PFrame {
         procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.SHIFT_DOWN_MASK), "none");
     }
 
+    // TODO: THIS
+    // save on lose focus
+    // save on close
+    // do not save on field update
+    
     /**
      * Saves pronunciation guide to core
      */
@@ -1068,34 +1091,42 @@ public final class ScrPhonology extends PFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProcActionPerformed
+        saveAllValues();
         addProc();
     }//GEN-LAST:event_btnAddProcActionPerformed
 
     private void btnDelProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelProcActionPerformed
+        saveAllValues();
         deleteProc();
     }//GEN-LAST:event_btnDelProcActionPerformed
 
     private void btnUpProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpProcActionPerformed
+        saveAllValues();
         moveProcUp();
     }//GEN-LAST:event_btnUpProcActionPerformed
 
     private void btnDownProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownProcActionPerformed
+        saveAllValues();
         moveProcDown();
     }//GEN-LAST:event_btnDownProcActionPerformed
 
     private void btnAddRomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRomActionPerformed
+        saveAllValues();
         addRom();
     }//GEN-LAST:event_btnAddRomActionPerformed
 
     private void btnDelRomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelRomActionPerformed
+        saveAllValues();
         deleteRom();
     }//GEN-LAST:event_btnDelRomActionPerformed
 
     private void btnUpRomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpRomActionPerformed
+        saveAllValues();
         moveRomUp();
     }//GEN-LAST:event_btnUpRomActionPerformed
 
     private void btnDownRomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownRomActionPerformed
+        saveAllValues();
         moveRomDown();
     }//GEN-LAST:event_btnDownRomActionPerformed
 
@@ -1105,10 +1136,12 @@ public final class ScrPhonology extends PFrame {
     }//GEN-LAST:event_chkEnableRomActionPerformed
 
     private void btnAddCharRepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCharRepActionPerformed
+        saveAllValues();
         addRep();
     }//GEN-LAST:event_btnAddCharRepActionPerformed
 
     private void btnDelCharRepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelCharRepActionPerformed
+        saveAllValues();
         deleteRep();
     }//GEN-LAST:event_btnDelCharRepActionPerformed
 
