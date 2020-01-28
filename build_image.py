@@ -42,7 +42,7 @@ LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 # OSX BUILD CONSTANTS
 
 # update the packager location for your OSX build
-JAVA_PACKAGER_LOCATION_OSX = "/Users/draque/NetBeansProjects/jdk_14_packaging/Contents/Home/bin" # this will go away once Java 14 drops officially...
+JAVA_PACKAGER_LOCATION_OSX = "/Library/Java/JavaVirtualMachines/jdk-14.jdk/Contents/Home/bin" # this will go away once Java 14 drops officially...
 OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
 
 
