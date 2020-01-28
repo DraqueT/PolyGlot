@@ -36,7 +36,7 @@ import org.w3c.dom.Element;
  */
 public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
     private int typeId;
-    private int index;
+    private int index = -1;
     private String combinationId;
     private String regex = "";
     private String name = "";
@@ -44,6 +44,21 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
     private final Map<Integer, Integer> applyToClasses = new HashMap<>();
     private DeclensionGenTransform transBuffer = new DeclensionGenTransform();
     private String debugString = "";
+    
+    /**
+     * initializes new declension rule
+     * @param _typeId TypeID of type this rule applies to
+     * @param _combinationId the combined ID of the constructed declension rule applies to
+     */
+    public DeclensionGenRule(int _typeId, String _combinationId) {
+        typeId = _typeId;
+        combinationId = _combinationId;
+    }
+    
+    public DeclensionGenRule() {
+        typeId = -1;
+        combinationId = "";
+    }
     
     /**
      * Gets current declension transform buffer
@@ -128,21 +143,6 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         }
         
         return ret;
-    }
-    
-    /**
-     * initializes new declension rule
-     * @param _typeId TypeID of type this rule applies to
-     * @param _combinationId the combined ID of the constructed declension rule applies to
-     */
-    public DeclensionGenRule(int _typeId, String _combinationId) {
-        typeId = _typeId;
-        combinationId = _combinationId;
-    }
-    
-    public DeclensionGenRule() {
-        typeId = -1;
-        combinationId = "";
     }
     
     /**

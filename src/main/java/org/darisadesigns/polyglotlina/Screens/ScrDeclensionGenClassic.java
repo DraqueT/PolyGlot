@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -76,7 +76,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
     private final Window parent;
     private final int typeId;
     private DefaultListModel<Object> decListModel;
-    private DefaultListModel<Object> rulesModel;
+    private DefaultListModel<DeclensionGenRule> rulesModel;
     private DefaultTableModel transModel;
     private boolean curPopulating = false;
     private boolean upDownPress = false;
@@ -232,15 +232,14 @@ public final class ScrDeclensionGenClassic extends PDialog {
                 return;
             }
 
-            DeclensionGenRule[] ruleList = core.getDeclensionManager().getDeclensionRulesForType(typeId);
+            DeclensionGenRule[] ruleList = core.getDeclensionManager()
+                    .getDeclensionRulesForTypeAndCombId(typeId, curPair.combinedId);
 
             // only allow editing if there are actually rules to be populated... 
             enableTransformEditing(ruleList.length != 0);
             
             for (DeclensionGenRule curRule : ruleList) {
-                if (curRule.getCombinationId().equals(curPair.combinedId)) {
-                    rulesModel.addElement(curRule);
-                }
+                rulesModel.addElement(curRule);
             }
         }
 
@@ -372,7 +371,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         decListModel = new DefaultListModel<Object>();
         lstCombinedDec.setModel(decListModel);
 
-        rulesModel = new DefaultListModel<Object>();
+        rulesModel = new DefaultListModel<DeclensionGenRule>();
         lstRules.setModel(rulesModel);
 
         transModel = new DefaultTableModel();
@@ -778,7 +777,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         DeclensionGenRule newRule = new DeclensionGenRule(typeId, curPair.combinedId);
 
         core.getDeclensionManager().addDeclensionGenRule(newRule);
-        rulesModel.addElement(newRule);
+        populateRules();
         lstRules.setSelectedIndex(lstRules.getLastVisibleIndex());
         txtRuleName.setText("");
         txtRuleRegex.setText(".*");
@@ -897,59 +896,48 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * move rule up in list
      */
     private void moveRuleUp() {
-        int[] selectedIndices = lstRules.getSelectedIndices();
+        // Deprecated rules stored as String. Maybe address that or something.
+        if (lstCombinedDec.getSelectedValue() instanceof DeclensionPair
+                && lstRules.getSelectedIndex() != -1) {
+            int selectedIndex = lstRules.getSelectedIndex();
+            DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
 
-        if (lstRules.getSelectedIndex() <= 0) {
-            return;
+            if (selectedIndex > 0 && curPair != null) {
+                List<DeclensionGenRule> selectedRules = lstRules.getSelectedValuesList();
+                core.getDeclensionManager().moveRulesUp(typeId, curPair.combinedId, selectedRules);
+                populateRules();
+                int[] selectedIndicies = new int[selectedRules.size()];
+                for (int i = 0; i < selectedRules.size(); i++) {
+                    selectedIndicies[i] = selectedIndex - 1 + i;
+                }
+                lstRules.setSelectedIndices(selectedIndicies);
+            }
         }
-
-        DefaultListModel lstModel = (DefaultListModel) lstRules.getModel();
-        int lastIndex = 0;
-        DeclensionGenRule top = (DeclensionGenRule) lstModel.getElementAt(selectedIndices[0] - 1);
-
-        for (int index : selectedIndices) {
-            DeclensionGenRule curRule = (DeclensionGenRule) lstModel.getElementAt(index);
-            lastIndex = curRule.getIndex();
-            curRule.setIndex(curRule.getIndex() - 1);
-        }
-        top.setIndex(lastIndex);
-
-        populateRules();
-
-        selectedIndices[selectedIndices.length - 1] = selectedIndices[0] - 1;
-        lstRules.setSelectedIndices(selectedIndices);
     }
 
     /**
      * move rule down in list
      */
     private void moveRuleDown() {
-        int[] selectedIndices = lstRules.getSelectedIndices();
-        int firstIndex;
+        // Deprecated rules stored as String. Maybe address that or something.
+        if (lstCombinedDec.getSelectedValue() instanceof DeclensionPair 
+                && lstRules.getSelectedIndex() != -1) {
+            int[] fullSelection = lstRules.getSelectedIndices();
+            int topIndex = fullSelection[0];
+            int bottomIndex = fullSelection[fullSelection.length - 1];
+            DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
 
-        // return if nothing selected, or last selection would be placed out of scope
-        if (lstRules.getSelectedIndex() == -1
-                || selectedIndices[0] + selectedIndices.length >= lstRules.getModel().getSize()) {
-            return;
+            if (bottomIndex < lstRules.getLastVisibleIndex() && curPair != null) {
+                List<DeclensionGenRule> selectedRules = lstRules.getSelectedValuesList();
+                core.getDeclensionManager().moveRulesDown(typeId, curPair.combinedId, selectedRules);
+                populateRules();
+                int[] selectedIndicies = new int[selectedRules.size()];
+                for (int i = 0; i < selectedRules.size(); i++) {
+                    selectedIndicies[i] = topIndex + 1 + i;
+                }
+                lstRules.setSelectedIndices(selectedIndicies);
+            }
         }
-
-        DefaultListModel lstModel = (DefaultListModel) lstRules.getModel();
-        DeclensionGenRule bottom = (DeclensionGenRule) lstModel.getElementAt(selectedIndices[selectedIndices.length - 1] + 1);
-
-        firstIndex = ((DeclensionGenRule) lstModel.getElementAt(selectedIndices[0])).getIndex();
-
-        for (int index : lstRules.getSelectedIndices()) {
-            DeclensionGenRule curRule = (DeclensionGenRule) lstModel.getElementAt(index);
-            curRule.setIndex(curRule.getIndex() + 1);
-        }
-
-        // move bottom to top
-        bottom.setIndex(firstIndex);
-
-        populateRules();
-
-        selectedIndices[0] = selectedIndices[selectedIndices.length - 1] + 1;
-        lstRules.setSelectedIndices(selectedIndices);
     }
     
     @Override
@@ -1024,11 +1012,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
 
         jLabel2.setText("Rules");
 
-        lstRules.setModel(new javax.swing.AbstractListModel<Object>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+        lstRules.setModel(new DefaultListModel<DeclensionGenRule>());
         lstRules.setToolTipText("List of rules associated with the selected conjugation (right click to copy/paste)");
         lstRules.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -1393,7 +1377,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<Object> lstCombinedDec;
-    private javax.swing.JList<Object> lstRules;
+    private javax.swing.JList<DeclensionGenRule> lstRules;
     private javax.swing.JPanel pnlApplyClasses;
     private javax.swing.JScrollPane sclTransforms;
     private javax.swing.JTable tblTransforms;

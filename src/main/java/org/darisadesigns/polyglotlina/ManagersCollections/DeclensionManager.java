@@ -128,7 +128,7 @@ public class DeclensionManager {
         for (List<DeclensionGenRule> list : generationRules.values()) {
             for (DeclensionGenRule curRule : list) {
                 // adds to return value only if rule matches ID but is orphaned
-                if (curRule.getIndex() == 0) {
+                if (curRule.getIndex() == -1) {
                     highestIndex++;
                     curRule.setIndex(highestIndex);
                 }
@@ -176,6 +176,17 @@ public class DeclensionManager {
         } else {
             rules = new ArrayList<>();
             generationRules.put(typeId, rules);
+        }
+        
+        // only set index if not already set to value
+        if (newRule.getIndex() == -1) {
+            // give rule the next available index (0 if no current rules, last rule index + 1 otherwise)
+            if (rules.isEmpty()) {
+                newRule.setIndex(0);
+            } else {
+                Collections.sort(rules);
+                newRule.setIndex(rules.get(rules.size() - 1).getIndex() + 1);
+            }
         }
 
         rules.add(newRule);
@@ -238,6 +249,28 @@ public class DeclensionManager {
             }
         }
     }
+    
+     /**
+     * get list of all declension rules for a particular type/combined declension id
+     *
+     * @param typeId id of part of speech to collect all rules for (does not
+     * account for class filtering)
+     * @param combinedId the combinedId for the rules to fetch
+     * @return list of rules
+     */
+    public DeclensionGenRule[] getDeclensionRulesForDeclension(int typeId, String combinedId) {
+        List<DeclensionGenRule> ret = new ArrayList<DeclensionGenRule>();
+        
+        for (DeclensionGenRule curRule : getDeclensionRulesForType(typeId)) {
+            if (curRule.getCombinationId().equals(combinedId)) {
+                ret.add(curRule);
+            }
+        }
+        
+        Collections.sort(ret);
+        
+        return ret.toArray(new DeclensionGenRule[0]);
+    }
 
     /**
      * get list of all declension rules for a particular type
@@ -297,16 +330,8 @@ public class DeclensionManager {
         
         if (generationRules.containsKey(typeId)) {
             List<DeclensionGenRule> decRules = generationRules.get(word.getWordTypeId());
-            int missingId = 0; //used for missing index values (index system bolton)
 
             for (DeclensionGenRule curRule : decRules) {
-                if (curRule.getIndex() == 0 || curRule.getIndex() == missingId) {
-                    missingId++;
-                    curRule.setIndex(missingId);
-                } else {
-                    missingId = curRule.getIndex();
-                }
-
                 ret.add(curRule);
             }
         }
@@ -1114,7 +1139,6 @@ public class DeclensionManager {
                     newRule.setEqual(rule, false);
                     newRule.setTypeId(typeId);
                     newRule.setCombinationId(decPair.combinedId);
-                    newRule.setIndex(0);
 
                     addDeclensionGenRule(newRule);
 
@@ -1270,5 +1294,95 @@ public class DeclensionManager {
         hash = 41 * hash + Objects.hashCode(this.dTemplates);
         hash = 41 * hash + Objects.hashCode(this.combSettings);
         return hash;
+    }
+    
+    /**
+     * Moves set of rules up in priority
+     * @param typeId
+     * @param combId
+     * @param ruleBlock 
+     */
+    public void moveRulesUp(int typeId, String combId, List<DeclensionGenRule> ruleBlock) {
+        if (ruleBlock.size() == 0) {
+            return;
+        }
+        
+        List<DeclensionGenRule> formRules = new ArrayList<>();
+        
+        for (DeclensionGenRule curRule : generationRules.get(typeId)) {
+            if (curRule.getCombinationId().equals(combId)) {
+                formRules.add(curRule);
+            }
+        }
+        
+        Collections.sort(formRules);
+        
+        // find the rule BEFORE the first rule to be moved up
+        DeclensionGenRule beforeFirst = null;
+        for (int i = 0; i < formRules.size(); i ++) {
+            DeclensionGenRule curRule = formRules.get(i);
+            if (curRule.equals(ruleBlock.get(0))) {
+                // only set beforeFirst value if this is not already the first rule for this declension
+                if (i != 0) {
+                    beforeFirst = formRules.get(i - 1);
+                }
+            }
+        }
+        
+        // if beforeFirst is null, the rule block given is already first
+        if (beforeFirst != null) {
+            int lastIndex = ruleBlock.get(ruleBlock.size() - 1).getIndex();
+            for (int i = 0; i < ruleBlock.size(); i++) {
+                ruleBlock.get(i).setIndex(beforeFirst.getIndex() + i);
+            }
+            
+            // finally, take the rule which was previously above the block and give it the last index
+            beforeFirst.setIndex(lastIndex);
+        }
+    }
+    
+    /**
+     * Moves set of rules down in priority
+     * @param typeId
+     * @param combId
+     * @param ruleBlock 
+     */
+    public void moveRulesDown(int typeId, String combId, List<DeclensionGenRule> ruleBlock) {
+        if (ruleBlock.size() == 0) {
+            return;
+        }
+        
+        List<DeclensionGenRule> formRules = new ArrayList<>();
+        
+        for (DeclensionGenRule curRule : generationRules.get(typeId)) {
+            if (curRule.getCombinationId().equals(combId)) {
+                formRules.add(curRule);
+            }
+        }
+        
+        Collections.sort(formRules);
+        
+        // find the rule AFTER the last rule to be moved down
+        DeclensionGenRule afterLast = null;
+        for (int i = 0; i < formRules.size(); i ++) {
+            DeclensionGenRule curRule = formRules.get(i);
+            if (curRule.equals(ruleBlock.get(ruleBlock.size() - 1))) {
+                // only set afterList value if this is not already the last rule for this declension
+                if (i != (formRules.size() - 1)) {
+                    afterLast = formRules.get(i + 1);
+                }
+            }
+        }
+        
+        // if afterLast is null, the rule block given is already last
+        if (afterLast != null) {
+            int firstIndex = ruleBlock.get(0).getIndex();
+            for (int i = 0; i < ruleBlock.size(); i++) {
+                ruleBlock.get(i).setIndex(ruleBlock.get(i).getIndex() + 1);
+            }
+            
+            // finally, take the rule which was previously belo the block and give it the first index
+            afterLast.setIndex(firstIndex);
+        }
     }
 }

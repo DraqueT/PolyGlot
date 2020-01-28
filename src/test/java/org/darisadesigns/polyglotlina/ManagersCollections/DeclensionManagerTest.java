@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -616,281 +616,224 @@ public class DeclensionManagerTest {
             IOHandler.writeErrorLog(e);
         }
     }
+    
+    @Test
+    public void testGetDeclensionRulesForType_Two() {
+        System.out.println("DeclensionManagerTest.testGetDeclensionRulesForType_Two");
+        
+        DictCore core = DummyCore.newCore();
+        int expectedAllRulesCount = 8;
+        String[] expectedNameOrder = {"R1", "R2", "R3", "R4", "A1", "A2", "A3", "A4"};
+        int[] expectedIndexOrder = {1, 2, 3, 4, 5, 6, 7, 8};
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            
+            DeclensionGenRule[] allRules = decMan.getDeclensionRulesForType(2);
+            
+            assertEquals(expectedAllRulesCount, allRules.length);
+            
+            for (int i = 0; i < expectedNameOrder.length; i++) {
+                assertEquals(expectedNameOrder[i], allRules[i].getName());
+                assertEquals(expectedIndexOrder[i], allRules[i].getIndex());
+            }
+        } catch (IOException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testGetDeclensionRulesForTypeAndCombId() {
+        System.out.println("DeclensionManagerTest.testGetDeclensionRulesForTypeAndCombId");
 
-//    @Test
-//    public void testDeclineWord() {
-//        // Tested extensively in declension debug tests    
-//    }
-//
-//    @Test
-//    public void testGetDeclensionMap() {
-//    }
-//
-//    @Test
-//    public void testAddDeclensionToWord() {
-//    }
-//
-//    @Test
-//    public void testDeleteDeclensionFromWord() {
-//    }
-//
-//    @Test
-//    public void testUpdateDeclensionWord() {
-//    }
-//
-//    @Test
-//    public void testDeprecateAllDeclensions() {
-//    }
-//
-//    @Test
-//    public void testGetDeclension() {
-//    }
-//
-//    @Test
-//    public void testGetMandDims() {
-//    }
-//
-//    @Test
-//    public void testDeclensionRequirementsMet() {
-//    }
-//
-//    @Test
-//    public void testClearAllDeclensionsWord() {
-//    }
-//
-//    @Test
-//    public void testGetAllCombinedIds() {
-//    }
-//
-//    @Test
-//    public void testGetDeclensionListWord() {
-//    }
-//
-//    @Test
-//    public void testGetDimensionalDeclensionListTemplate() {
-//    }
-//
-//    @Test
-//    public void testGetFullDeclensionListTemplate() {
-//    }
-//
-//    @Test
-//    public void testAddDeclensionToTemplate_3args() {
-//    }
-//
-//    @Test
-//    public void testAddDeclensionToTemplate_Integer_String() {
-//    }
-//
-//    @Test
-//    public void testDeleteDeclensionFromTemplate() {
-//    }
-//
-//    @Test
-//    public void testUpdateDeclensionTemplate() {
-//    }
-//
-//    @Test
-//    public void testGetDeclensionTemplate() {
-//    }
-//
-//    @Test
-//    public void testClearAllDeclensionsTemplate() {
-//    }
-//
-//    @Test
-//    public void testSetBufferId() {
-//    }
-//
-//    @Test
-//    public void testSetBufferDecText() {
-//    }
-//
-//    @Test
-//    public void testGetBufferDecText() {
-//    }
-//
-//    @Test
-//    public void testSetBufferDecNotes() {
-//    }
-//
-//    @Test
-//    public void testGetBufferDecNotes() {
-//    }
-//
-//    @Test
-//    public void testSetBufferDecTemp() {
-//    }
-//
-//    @Test
-//    public void testSetBufferRelId() {
-//    }
-//
-//    @Test
-//    public void testGetBufferRelId() {
-//    }
-//
-//    @Test
-//    public void testIsBufferDecTemp() {
-//    }
-//
-//    @Test
-//    public void testInsertBuffer() {
-//    }
-//
-//    @Test
-//    public void testGetBuffer() {
-//    }
-//
-//    @Test
-//    public void testClearBuffer() {
-//    }
-//
-//    @Test
-//    public void testGetDeclensionByCombinedId() {
-//    }
-//
-//    @Test
-//    public void testGetCombNameFromCombId() {
-//    }
-//
-//    @Test
-//    public void testDeleteDeclension() {
-//    }
-//
-//    @Test
-//    public void testIsBufferDecMandatory() {
-//    }
-//
-//    @Test
-//    public void testSetBufferDecMandatory() {
-//    }
-//
-//    @Test
-//    public void testGetWordDeclensions() {
-//    }
-//
-//    @Test
-//    public void testRemoveDeclensionValues() {
-//    }
-//
-//    @Test
-//    public void testWriteXML() {
-//    }
-//
-//    @Test
-//    public void testSetAllDeclensionRulesToAllClasses() {
-//    }
-//
-//    /**
-//     * Test of getRuleBuffer method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetRuleBuffer() {
-//    }
-//
-//    /**
-//     * Test of insRuleBuffer method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testInsRuleBuffer() {
-//    }
-//
-//    /**
-//     * Test of getDimensionalCombinedIds method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetDimensionalCombinedIds() {
-//    }
-//
-//    /**
-//     * Test of getSingletonCombinedIds method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetSingletonCombinedIds() {
-//    }
-//
-//    /**
-//     * Test of getAllSingletonIds method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetAllSingletonIds() {
-//    }
-//
-//    /**
-//     * Test of getDimensionTemplateIndex method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetDimensionTemplateIndex() {
-//    }
-//
-//    /**
-//     * Test of getDeclentionTemplateByIndex method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetDeclentionTemplateByIndex() {
-//    }
-//
-//    /**
-//     * Test of getDimensionalDeclentionTemplateByIndex method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetDimensionalDeclentionTemplateByIndex() {
-//    }
-//
-//    /**
-//     * Test of getDimensionalDeclensionListWord method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetDimensionalDeclensionListWord() {
-//    }
-//
-//    /**
-//     * Test of getSingletonDeclensionList method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetSingletonDeclensionList() {
-//    }
-//
-//    /**
-//     * Test of getFullDeclensionListWord method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetFullDeclensionListWord() {
-//    }
-//
-//    /**
-//     * Test of copyRulesToDeclensionTemplates method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testCopyRulesToDeclensionTemplates() {
-//    }
-//
-//    /**
-//     * Test of getDeclensionLabel method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetDeclensionLabel() {
-//    }
-//
-//    /**
-//     * Test of getDeclensionValueLabel method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetDeclensionValueLabel() {
-//    }
-//
-//    /**
-//     * Test of getDeprecatedForms method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testGetDeprecatedForms() {
-//    }
-//
-//    /**
-//     * Test of wordHasDeprecatedForms method, of class DeclensionManager.
-//     */
-//    @Test
-//    public void testWordHasDeprecatedForms() {
-//    }
+        DictCore core = DummyCore.newCore();
+        int expectedAllRulesCount = 4;
+        String[] expectedNameOrder = {"R1", "R2", "R3", "R4"};
+        int[] expectedIndexOrder = {1, 2, 3, 4};
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            
+            DeclensionGenRule[] allRules = decMan.getDeclensionRulesForTypeAndCombId(2, ",2,2,");
+            
+            assertEquals(expectedAllRulesCount, allRules.length);
+            
+            for (int i = 0; i < expectedNameOrder.length; i++) {
+                assertEquals(expectedNameOrder[i], allRules[i].getName());
+                assertEquals(expectedIndexOrder[i], allRules[i].getIndex());
+            }
+        } catch (IOException e) {
+            fail(e);
+        }
+    }
+
+    @Test
+    public void testMoveRulesUp_OneRule() {
+        System.out.println("DeclensionManagerTest.testMoveRulesUp_OneRule");
+        
+        String[] expectedNameOrder = {"R1", "R2", "R4", "R3", "A1", "A2", "A3", "A4"};
+        int[] expectedIndexOrder = {1, 2, 3, 4, 5, 6, 7, 8};
+        String combId = ",2,2,";
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            
+            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            decMan.moveRulesUp(2, combId, Arrays.asList(rules[3]));
+            
+            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            
+            for (int i = 0; i < expectedNameOrder.length; i++) {
+                assertEquals(expectedNameOrder[i], resultRules[i].getName());
+                assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
+            }
+            
+        } catch (IOException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testMoveRulesUp_TwoRules() {
+        System.out.println("DeclensionManagerTest.testMoveRulesUp_TwoRules");
+        
+        String[] expectedNameOrder = {"R1", "R3", "R4", "R2", "A1", "A2", "A3", "A4"};
+        int[] expectedIndexOrder = {1, 2, 3, 4, 5, 6, 7, 8};
+        String combId = ",2,2,";
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            
+            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            decMan.moveRulesUp(2, combId, Arrays.asList(rules[2], rules[3]));
+            
+            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            
+            for (int i = 0; i < expectedNameOrder.length; i++) {
+                assertEquals(expectedNameOrder[i], resultRules[i].getName());
+                assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
+            }
+            
+        } catch (IOException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testMoveRulesUp_TwoRules_AlredayTop() {
+        System.out.println("DeclensionManagerTest.testMoveRulesUp_TwoRules_AlredayTop");
+        
+        String[] expectedNameOrder = {"R1", "R2", "R3", "R4", "A1", "A2", "A3", "A4"};
+        int[] expectedIndexOrder = {1, 2, 3, 4, 5, 6, 7, 8};
+        String combId = ",2,2,";
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            
+            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            decMan.moveRulesUp(2, combId, Arrays.asList(rules[0], rules[1]));
+            
+            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            
+            for (int i = 0; i < expectedNameOrder.length; i++) {
+                assertEquals(expectedNameOrder[i], resultRules[i].getName());
+                assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
+            }
+            
+        } catch (IOException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testMoveRulesDown_OneRule() {
+        System.out.println("DeclensionManagerTest.testMoveRulesDown_OneRule");
+        
+        String[] expectedNameOrder = {"R2", "R1", "R3", "R4", "A1", "A2", "A3", "A4"};
+        int[] expectedIndexOrder = {1, 2, 3, 4, 5, 6, 7, 8};
+        String combId = ",2,2,";
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            
+            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            decMan.moveRulesDown(2, combId, Arrays.asList(rules[0]));
+            
+            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            
+            for (int i = 0; i < expectedNameOrder.length; i++) {
+                assertEquals(expectedNameOrder[i], resultRules[i].getName());
+                assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
+            }
+            
+        } catch (IOException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testMoveRulesDown_TwoRules() {
+        System.out.println("DeclensionManagerTest.testMoveRulesDown_TwoRules");
+        
+        String[] expectedNameOrder = {"R1", "R4", "R2", "R3", "A1", "A2", "A3", "A4"};
+        int[] expectedIndexOrder = {1, 2, 3, 4, 5, 6, 7, 8};
+        String combId = ",2,2,";
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            
+            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            decMan.moveRulesDown(2, combId, Arrays.asList(rules[1], rules[2]));
+            
+            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            
+            for (int i = 0; i < expectedNameOrder.length; i++) {
+                assertEquals(expectedNameOrder[i], resultRules[i].getName());
+                assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
+            }
+            
+        } catch (IOException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testMoveRulesDown_TwoRules_AlredayBottom() {
+        System.out.println("DeclensionManagerTest.testMoveRulesDown_TwoRules_AlredayBottom");
+        
+        String[] expectedNameOrder = {"R1", "R2", "R3", "R4", "A1", "A2", "A3", "A4"};
+        int[] expectedIndexOrder = {1, 2, 3, 4, 5, 6, 7, 8};
+        String combId = ",2,2,";
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            DeclensionManager decMan = core.getDeclensionManager();
+            
+            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            decMan.moveRulesDown(2, combId, Arrays.asList(rules[2], rules[3]));
+            
+            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            
+            for (int i = 0; i < expectedNameOrder.length; i++) {
+                assertEquals(expectedNameOrder[i], resultRules[i].getName());
+                assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
+            }
+            
+        } catch (IOException e) {
+            fail(e);
+        }
+    }
 }
