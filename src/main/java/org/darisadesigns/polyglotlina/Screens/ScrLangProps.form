@@ -103,7 +103,7 @@
                   <Component id="txtAlphaOrder" min="-2" pref="39" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jPanel3" min="-2" pref="179" max="-2" attributes="0"/>
+                      <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                       <Component id="jPanel4" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -203,7 +203,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="chkUseLocalWordLex" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="17" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -250,6 +250,9 @@
                 <Property name="text" type="java.lang.String" value="Ignore Case"/>
                 <Property name="toolTipText" type="java.lang.String" value="Ignore character casing through PolyGlot. (only applies to western characters)"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkIgnoreCaseActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>
