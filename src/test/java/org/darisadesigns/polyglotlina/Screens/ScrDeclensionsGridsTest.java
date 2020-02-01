@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, draque
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -63,6 +63,8 @@ public class ScrDeclensionsGridsTest {
     
     @Test
     public void testOneDimPopAutoPopCheck() {
+        System.out.println("ScrDeclensionsGridsTest.testOneDimPopAutoPopCheck");
+        
         if (headless) {
             return;
         }
@@ -83,6 +85,8 @@ public class ScrDeclensionsGridsTest {
     
     @Test
     public void testOneDimNopopAutoPopCheck() {
+        System.out.println("ScrDeclensionsGridsTest.testOneDimNopopAutoPopCheck");
+        
         if (headless) {
             return;
         }
@@ -104,6 +108,8 @@ public class ScrDeclensionsGridsTest {
     
     @Test
     public void testTwoDimPopAutoPopCheck() {
+        System.out.println("ScrDeclensionsGridsTest.testTwoDimPopAutoPopCheck");
+        
         if (headless) {
             return;
         }
@@ -125,6 +131,8 @@ public class ScrDeclensionsGridsTest {
     
     @Test
     public void testTwoDimNopopAutoPopCheck() {
+        System.out.println("ScrDeclensionsGridsTest.testTwoDimNopopAutoPopCheck");
+        
         if (headless) {
             return;
         }

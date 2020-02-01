@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, draque
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -55,16 +55,22 @@ public class WordClassTest {
 
     @Test
     public void testIsValid() {
+        System.out.println("WordClassTest.testIsValid");
+        
         assertTrue(testClass.isValid(0));
     }
     
     @Test
     public void testIsNotValid() {
+        System.out.println("WordClassTest.testIsNotValid");
+        
         assertFalse(testClass.isValid(1));
     }
 
     @Test
     public void testSetEqual() {
+        System.out.println("WordClassTest.testSetEqual");
+        
         WordClass copy = new WordClass();
         copy.setEqual(testClass);
         assertEquals(copy, testClass);
@@ -72,27 +78,37 @@ public class WordClassTest {
 
     @Test
     public void testDeleteApplyType() {
+        System.out.println("WordClassTest.testDeleteApplyType");
+        
         testClass.deleteApplyType(0);
         assertFalse(testClass.appliesToType(0));
     }
 
     @Test
     public void testAppliesToType() {
+        System.out.println("WordClassTest.testAppliesToType");
+        
         assertTrue(testClass.appliesToType(1));
     }
     
     @Test
     public void testNotAppliesToType() {
+        System.out.println("WordClassTest.testNotAppliesToType");
+        
         assertFalse(testClass.appliesToType(0));
     }
 
     @Test
     public void testGetValues() {
+        System.out.println("WordClassTest.testGetValues");
+        
         assertEquals(2, testClass.getValues().size());
     }
 
     @Test
     public void testDeleteValue() {
+        System.out.println("WordClassTest.testDeleteValue");
+        
         try {
             testClass.deleteValue(0);
             assertEquals(1, testClass.getValues().size());
@@ -103,6 +119,8 @@ public class WordClassTest {
 
     @Test
     public void testGetValueById() {
+        System.out.println("WordClassTest.testGetValueById");
+        
         try {
             WordClassValue value = testClass.getValueById(2);
             assertEquals("TEST2", value.value);
@@ -113,6 +131,8 @@ public class WordClassTest {
 
     @Test
     public void testWriteXML() {
+        System.out.println("WordClassTest.testWriteXML");
+        
         String expectedValue = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
                 + "<dictionary>"
                 + "<wordGrammarClassNode>"
@@ -149,6 +169,8 @@ public class WordClassTest {
 
     @Test
     public void testEquals() {
+        System.out.println("WordClassTest.testEquals");
+        
         WordClass copy = new WordClass();
         
         try {
@@ -165,6 +187,8 @@ public class WordClassTest {
     
     @Test
     public void testNotEquals() {
+        System.out.println("WordClassTest.testNotEquals");
+        
         WordClass copy = new WordClass();
         
         try {

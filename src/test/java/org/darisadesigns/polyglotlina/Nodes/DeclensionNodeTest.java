@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, draque
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -47,7 +47,8 @@ public class DeclensionNodeTest {
     
     @Test
     public void testEquals() {
-        System.out.print("DeclensionNodeTest:testEquals");
+        System.out.print("DeclensionNodeTest.testEquals");
+        
         DeclensionNode compNode = new DeclensionNode(1);
         
         compNode.setCombinedDimId("combId");
@@ -60,7 +61,8 @@ public class DeclensionNodeTest {
     
     @Test
     public void testNotEquals() {
-        System.out.print("DeclensionNodeTest:testNotEquals");
+        System.out.print("DeclensionNodeTest.testNotEquals");
+        
         DeclensionNode compNode = new DeclensionNode(1);
         
         compNode.setCombinedDimId("combId");
@@ -73,7 +75,8 @@ public class DeclensionNodeTest {
 
     @Test
     public void testInsertBuffer() {
-        System.out.print("DeclensionNodeTest:testInsertBuffer");
+        System.out.print("DeclensionNodeTest.testInsertBuffer");
+        
         int expectedSize = 1;
         DeclensionDimension dim = new DeclensionDimension();
         dim.setValue("zot");
@@ -96,7 +99,8 @@ public class DeclensionNodeTest {
 
     @Test
     public void testInsertBufferBadId() {
-        System.out.print("DeclensionNodeTest:testInsertBufferBadId");
+        System.out.print("DeclensionNodeTest.testInsertBufferBadId");
+        
         String expectedMessage = "Dimension with ID -1 cannot be inserted.";
         DeclensionDimension dim = new DeclensionDimension();
         dim.setValue("zot");
@@ -112,7 +116,8 @@ public class DeclensionNodeTest {
     
     @Test
     public void testClearBuffer() {
-        System.out.print("DeclensionNodeTest:testClearBuffer");
+        System.out.print("DeclensionNodeTest.testClearBuffer");
+        
         DeclensionDimension dim = new DeclensionDimension();
         dim.setValue("zot");
         
@@ -124,7 +129,8 @@ public class DeclensionNodeTest {
 
     @Test
     public void testAddDimension() {
-        System.out.print("DeclensionNodeTest:testAddDimension");
+        System.out.print("DeclensionNodeTest.testAddDimension");
+        
         int expectedSize = 1;
         DeclensionDimension dim = new DeclensionDimension();
         dim.setValue("zot");
@@ -140,7 +146,8 @@ public class DeclensionNodeTest {
 
     @Test
     public void testDeleteDimension() {
-        System.out.print("DeclensionNodeTest:testDeleteDimension");
+        System.out.print("DeclensionNodeTest.testDeleteDimension");
+        
         int dimId = 0;
         DeclensionDimension dim = new DeclensionDimension();
         dim.setValue("zot");
@@ -160,7 +167,8 @@ public class DeclensionNodeTest {
 
     @Test
     public void testWriteXMLTemplate() {
-        System.out.print("DeclensionNodeTest:testWriteXMLTemplate");
+        System.out.print("DeclensionNodeTest.testWriteXMLTemplate");
+        
         String expectedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
                 +"<dictionary>"
                 + "<declensionNode>"
@@ -199,7 +207,8 @@ public class DeclensionNodeTest {
 
     @Test
     public void testWriteXMLWordDeclension() {
-        System.out.print("DeclensionNodeTest:testWriteXMLWordDeclension");
+        System.out.print("DeclensionNodeTest.testWriteXMLWordDeclension");
+        
         String expectedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
                 + "<dictionary>"
                 + "<declensionNode>"
@@ -238,7 +247,8 @@ public class DeclensionNodeTest {
 
     @Test
     public void testSetEqual() {
-        System.out.print("DeclensionNodeTest:testSetEqual");
+        System.out.print("DeclensionNodeTest.testSetEqual");
+        
         DeclensionNode node = new DeclensionNode(0);
         node.setEqual(testNode);
         assertTrue(node.equals(testNode));

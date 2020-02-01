@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -41,26 +41,30 @@ public class EtyExternalParentTest {
 
     @Test
     public void testGetUniqueId() {
-        System.out.println("EtyExternalParentTest:testGetUniqueId");
+        System.out.println("EtyExternalParentTes.:testGetUniqueId");
+        
         assertEquals("VALUEZOTTOPIA", testParent.getUniqueId());
     }
 
     @Test
     public void testToStringWithLanguage() {
-        System.out.println("EtyExternalParentTest:testToStringWithLanguage");
+        System.out.println("EtyExternalParentTest.testToStringWithLanguage");
+        
         assertEquals("VALUE (ZOTTOPIA)", testParent.toString());
     }
     
      @Test
     public void testToStringWithoutLanguage() {
-        System.out.println("EtyExternalParentTest:testToStringWithoutLanguage");
+        System.out.println("EtyExternalParentTest.testToStringWithoutLanguage");
+        
         testParent.setExternalLanguage("");
         assertEquals("VALUE", testParent.toString());
     }
 
     @Test
     public void testSetEqual() {
-        System.out.println("EtyExternalParentTest:testSetEqual");
+        System.out.println("EtyExternalParentTest.testSetEqual");
+        
         EtyExternalParent copy = new EtyExternalParent();
         copy.setEqual(testParent);
         assertEquals(copy, testParent);
@@ -68,7 +72,8 @@ public class EtyExternalParentTest {
 
     @Test
     public void testEquals() {
-        System.out.println("EtyExternalParentTest:testEquals");
+        System.out.println("EtyExternalParentTest.testEquals");
+        
         EtyExternalParent copy = new EtyExternalParent();
         copy.setDefinition("DEFINITION");
         copy.setExternalLanguage("ZOTTOPIA");
@@ -78,7 +83,8 @@ public class EtyExternalParentTest {
     
     @Test
     public void testNotEquals() {
-        System.out.println("EtyExternalParentTest:testEquals");
+        System.out.println("EtyExternalParentTest.testEquals");
+        
         EtyExternalParent copy = new EtyExternalParent();
         copy.setDefinition("DEFINITION");
         copy.setExternalLanguage("ZOTTOPIA");
