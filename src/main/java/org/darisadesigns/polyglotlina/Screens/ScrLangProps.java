@@ -326,6 +326,11 @@ public class ScrLangProps extends PFrame {
 
         chkIgnoreCase.setText("Ignore Case");
         chkIgnoreCase.setToolTipText("Ignore character casing through PolyGlot. (only applies to western characters)");
+        chkIgnoreCase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkIgnoreCaseActionPerformed(evt);
+            }
+        });
 
         chkDisableProcRegex.setText("Disable Orthographic Regex");
         chkDisableProcRegex.setToolTipText("Disable regex features in orthograpy. (this allows for ignoring case properly)");
@@ -396,7 +401,7 @@ public class ScrLangProps extends PFrame {
                     .addComponent(chkOverrideRegexFont))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkUseLocalWordLex)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -497,7 +502,7 @@ public class ScrLangProps extends PFrame {
                 .addComponent(txtAlphaOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -585,6 +590,14 @@ public class ScrLangProps extends PFrame {
         
         this.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnFontRefreshActionPerformed
+
+    private void chkIgnoreCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkIgnoreCaseActionPerformed
+        if (chkIgnoreCase.isSelected()) {
+            InfoBox.warning("Ignore Case Warning", 
+                    "This feature does not work with all charactrers, and can disrupt regex features. Please use with caution.", 
+                    core.getRootWindow());
+        }
+    }//GEN-LAST:event_chkIgnoreCaseActionPerformed
 
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
