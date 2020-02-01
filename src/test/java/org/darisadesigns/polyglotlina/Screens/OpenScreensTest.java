@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -59,6 +59,8 @@ public class OpenScreensTest {
     
     @Test
     public void testPTextInputDialog() {
+        System.out.println("OpenScreensTest.testPTextInputDialog");
+        
         if (headless) {
             return;
         }
@@ -72,6 +74,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrAbout () {
+        System.out.println("OpenScreensTest.testScrAbout");
+        
         if (headless) {
             return;
         }
@@ -85,6 +89,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrDeclensionGenSetup() {
+        System.out.println("OpenScreensTest.testScrDeclensionGenSetup");
+        
         if (headless) {
             return;
         }
@@ -98,6 +104,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrDeclensionSetup() {
+        System.out.println("OpenScreensTest.testScrDeclensionSetup");
+        
         if (headless) {
             return;
         }
@@ -111,6 +119,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrDeclensionGrids() {
+        System.out.println("OpenScreensTest.testScrDeclensionGrids");
+        
         if (headless) {
             return;
         }
@@ -125,6 +135,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrDeprecatedDeclensions() {
+        System.out.println("OpenScreensTest.testScrDeprecatedDeclensions");
+        
         if (headless) {
             return;
         }
@@ -138,6 +150,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrEasterEgg() {
+        System.out.println("OpenScreensTest.testScrEasterEgg");
+        
         if (headless) {
             return;
         }
@@ -151,6 +165,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrEtymRoots() {
+        System.out.println("OpenScreensTest.testScrEtymRoots");
+        
         if (headless) {
             return;
         }
@@ -166,6 +182,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrExcelImport() {
+        System.out.println("OpenScreensTest.testScrExcelImport");
+        
         if (headless) {
             return;
         }
@@ -179,6 +197,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrFamilies() {
+        System.out.println("OpenScreensTest.testScrFamilies");
+        
         if (headless) {
             return;
         }
@@ -192,6 +212,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrGrammarGuide() {
+        System.out.println("OpenScreensTest.testScrGrammarGuide");
+        
         if (headless) {
             return;
         }
@@ -205,6 +227,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrIPARefChart() {
+        System.out.println("OpenScreensTest.testScrIPARefChart");
+        
         if (headless) {
             return;
         }
@@ -218,6 +242,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrIpaTranslator() {
+        System.out.println("OpenScreensTest.testScrIpaTranslator");
+        
         if (headless) {
             return;
         }
@@ -231,6 +257,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrLangProps() {
+        System.out.println("OpenScreensTest.testScrLangProps");
+        
         if (headless) {
             return;
         }
@@ -244,6 +272,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrLexicon() {
+        System.out.println("OpenScreensTest.testScrLexicon");
+        
         if (headless) {
             return;
         }
@@ -257,6 +287,8 @@ public class OpenScreensTest {
 
         @Test
     public void testScrLexiconProblemDisplay() {
+        System.out.println("OpenScreensTest.testScrLexiconProblemDisplay");
+        
         if (headless) {
             return;
         }
@@ -272,6 +304,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrLogoDetails() {
+        System.out.println("OpenScreensTest.testScrLogoDetails");
+        
         if (headless) {
             return;
         }
@@ -285,6 +319,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrLogoQuickView() {
+        System.out.println("OpenScreensTest.testScrLogoQuickView");
+        
         if (headless) {
             return;
         }
@@ -298,6 +334,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrMainMenu() {
+        System.out.println("OpenScreensTest.testScrMainMenu");
+        
         if (headless) {
             return;
         }
@@ -312,6 +350,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrOptions() {
+        System.out.println("OpenScreensTest.testScrOptions");
+        
         if (headless) {
             return;
         }
@@ -325,6 +365,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrPhonology() {
+        System.out.println("OpenScreensTest.testScrPhonology");
+        
         if (headless) {
             return;
         }
@@ -338,6 +380,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrPrintToPDF() {
+        System.out.println("OpenScreensTest.testScrPrintToPDF");
+        
         if (headless) {
             return;
         }
@@ -351,6 +395,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrProgressMenu() {
+        System.out.println("OpenScreensTest.testScrProgressMenu");
+        
         if (headless) {
             return;
         }
@@ -364,6 +410,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrQuickWordEntry() {
+        System.out.println("OpenScreensTest.testScrQuickWordEntry");
+        
         if (headless) {
             return;
         }
@@ -377,6 +425,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrReversion() {
+        System.out.println("OpenScreensTest.testScrReversion");
+        
         if (headless) {
             return;
         }
@@ -390,6 +440,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrTypes() {
+        System.out.println("OpenScreensTest.testScrTypes");
+        
         if (headless) {
             return;
         }
@@ -403,6 +455,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrUpdateAlert() {
+        System.out.println("OpenScreensTest.testScrUpdateAlert");
+        
         if (headless) {
             return;
         }
@@ -422,6 +476,8 @@ public class OpenScreensTest {
     
     @Test
     public void testScrWordClasses() {
+        System.out.println("OpenScreensTest.testScrWordClasses");
+        
         if (headless) {
             return;
         }

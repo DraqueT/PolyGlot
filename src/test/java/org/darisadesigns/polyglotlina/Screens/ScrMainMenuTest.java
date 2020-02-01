@@ -52,6 +52,8 @@ public class ScrMainMenuTest {
     
     @Test
     public void testManyOpensAndClosesLexCountMaintained() {
+        System.out.println("ScrMainMenuTest.testManyOpensAndClosesLexCountMaintained");
+        
         if (headless) {
             return;
         }

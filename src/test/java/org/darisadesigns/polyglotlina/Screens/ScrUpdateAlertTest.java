@@ -48,6 +48,8 @@ public class ScrUpdateAlertTest {
      */
     @Test
     public void testTestRun() {
+        System.out.println("ScrUpdateAlertTest.testTestRun");
+        
         if (headless) {
             return;
         }

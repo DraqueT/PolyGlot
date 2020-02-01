@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -30,7 +30,7 @@ public class DeclensionGenRuleTest {
 
     @Test
     public void setEqual() {
-        System.out.println("test set equals function");
+        System.out.println("DeclensionGenRuleTest.setEqual");
         DeclensionGenRule a = getGenericRule();
         DeclensionGenRule b = new DeclensionGenRule();
         
@@ -41,7 +41,7 @@ public class DeclensionGenRuleTest {
 
     @Test
     public void testEqualsEmpty() {
-        System.out.println("test equals empty");
+        System.out.println("DeclensionGenRuleTest.testEqualsEmpty");
         DeclensionGenRule a = new DeclensionGenRule();
         DeclensionGenRule b = new DeclensionGenRule();
         
@@ -50,7 +50,7 @@ public class DeclensionGenRuleTest {
     
     @Test
     public void testEqualsPopulated() {
-        System.out.println("test equals populated");
+        System.out.println("DeclensionGenRuleTest.testEqualsPopulated");
         DeclensionGenRule a = getGenericRule();
         DeclensionGenRule b = getGenericRule();
         
@@ -59,7 +59,7 @@ public class DeclensionGenRuleTest {
     
     @Test
     public void testNotEqualsNull() {
-        System.out.println("test not equals null");
+        System.out.println("DeclensionGenRuleTest.testNotEqualsNull");
         DeclensionGenRule a = getGenericRule();
         DeclensionGenRule b = null;
         
@@ -68,7 +68,7 @@ public class DeclensionGenRuleTest {
     
     @Test
     public void testNotEqualsDiffType() {
-        System.out.println("test not equals diff type");
+        System.out.println("DeclensionGenRuleTest.testNotEqualsDiffType");
         DeclensionGenRule a = getGenericRule();
         Integer b = 5;
         
@@ -77,7 +77,7 @@ public class DeclensionGenRuleTest {
     
     @Test
     public void testNotEqualsDiffName() {
-        System.out.println("test not equals diff name");
+        System.out.println("DeclensionGenRuleTest.testNotEqualsDiffName");
         DeclensionGenRule a = getGenericRule();
         DeclensionGenRule b = getGenericRule();
         
@@ -88,7 +88,7 @@ public class DeclensionGenRuleTest {
     
     @Test
     public void testNotEqualsDiffRegex() {
-        System.out.println("test not equals diff Regex");
+        System.out.println("DeclensionGenRuleTest.testNotEqualsDiffRegex");
         DeclensionGenRule a = getGenericRule();
         DeclensionGenRule b = getGenericRule();
         
@@ -99,7 +99,7 @@ public class DeclensionGenRuleTest {
     
     @Test
     public void testNotEqualsDiffPOS() {
-        System.out.println("test not equals diff POS");
+        System.out.println("DeclensionGenRuleTest.testNotEqualsDiffPOS");
         DeclensionGenRule a = getGenericRule();
         DeclensionGenRule b = getGenericRule();
         
@@ -110,7 +110,8 @@ public class DeclensionGenRuleTest {
     
     @Test
     public void testNotEqualsDiffRules() {
-        System.out.println("test not equals diff Rules");
+        System.out.println("DeclensionGenRuleTest.testNotEqualsDiffRules");
+        
         DeclensionGenRule a = getGenericRule();
         DeclensionGenRule b = getGenericRule();
         

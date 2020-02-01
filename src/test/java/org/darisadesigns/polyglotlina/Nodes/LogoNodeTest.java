@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, draque
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -57,6 +57,8 @@ public class LogoNodeTest {
     
     @Test
     public void testAddRadical() {
+        System.out.println("LogoNodeTest.testAddRadical");
+        
         String expectedReading = "ZIMZAM!";
         System.out.println("LogoNodeTest:testAddRadical");
         LogoNode newRad = new LogoNode();
@@ -68,26 +70,26 @@ public class LogoNodeTest {
 
     @Test
     public void testContainsReading() {
-        System.out.println("LogoNodeTest:testContainsReading");
+        System.out.println("LogoNodeTest.testContainsReading");
         assertTrue(logoTest.containsReading("REEDING", true));
     }
     
     @Test
     public void testNotContainsReading() {
-        System.out.println("LogoNodeTest:testContainsReading");
+        System.out.println("LogoNodeTest.testContainsReading");
         assertFalse(logoTest.containsReading("I say good sir, are you literate?", true));
     }
 
     @Test
     public void testContainsRadicalString() {
-        System.out.println("LogoNodeTest:testContainsRadicalString");
+        System.out.println("LogoNodeTest.testContainsRadicalString");
         
         assertTrue(logoTest.containsRadicalString(radical.value, false));
     }
 
     @Test
     public void testSetEqual() {
-        System.out.println("LogoNodeTest:testSetEqual");
+        System.out.println("LogoNodeTest.testSetEqual");
         
         LogoNode copy = new LogoNode();
         copy.setEqual(logoTest);
@@ -96,7 +98,7 @@ public class LogoNodeTest {
 
     @Test
     public void testWriteXML() {
-        System.out.println("LogoNodeTest:testWriteXML");
+        System.out.println("LogoNodeTest.testWriteXML");
         
         String expectedValue = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
                 + "<dictionary>"
@@ -128,7 +130,8 @@ public class LogoNodeTest {
 
     @Test
     public void testEquals() {
-        System.out.println("LogoNodeTest:testEquals");
+        System.out.println("LogoNodeTest.testEquals");
+        
         LogoNode comp = new LogoNode();
         
         comp.setValue("VALUE");
@@ -142,7 +145,7 @@ public class LogoNodeTest {
     
     @Test
     public void testNotEquals() {
-        System.out.println("LogoNodeTest:testNotEquals");
+        System.out.println("LogoNodeTest.testNotEquals");
         
         LogoNode comp = new LogoNode();
         

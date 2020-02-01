@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, draque
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -48,7 +48,8 @@ public class QuizQuestionTest {
 
     @Test
     public void testSetEqual() {
-        System.out.println("QuizQuestionText:testSetEqual");
+        System.out.println("QuizQuestionText.testSetEqual");
+        
         QuizQuestion copy = new QuizQuestion(DummyCore.newCore());
         copy.setEqual(questionTest);
         assertEquals(copy, questionTest);
@@ -56,7 +57,8 @@ public class QuizQuestionTest {
 
     @Test
     public void testAddChoice() {
-        System.out.println("QuizQuestionText:testAddChoice");
+        System.out.println("QuizQuestionText.testAddChoice");
+        
         ConWord choice = new ConWord();
         int expectedLength = questionTest.getChoices().length + 1;
         
@@ -67,7 +69,7 @@ public class QuizQuestionTest {
 
     @Test
     public void testEquals() {
-        System.out.println("QuizQuestionText:testEquals");
+        System.out.println("QuizQuestionText.testEquals");
         
         QuizQuestion copyQ = new QuizQuestion(DummyCore.newCore());
         
@@ -84,7 +86,7 @@ public class QuizQuestionTest {
     
     @Test
     public void testNotEquals() {
-        System.out.println("QuizQuestionText:testEquals");
+        System.out.println("QuizQuestionText.testEquals");
         
         QuizQuestion copyQ = new QuizQuestion(DummyCore.newCore());
         

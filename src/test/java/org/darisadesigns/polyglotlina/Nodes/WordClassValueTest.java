@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, draque
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -39,7 +39,7 @@ import org.w3c.dom.Element;
 public class WordClassValueTest {
     @Test
     public void testWriteXML() {
-        System.out.println("WordClassValueTest:testWriteXML");
+        System.out.println("WordClassValueTest.testWriteXML");
         
         WordClassValue cv = new WordClassValue();
         
