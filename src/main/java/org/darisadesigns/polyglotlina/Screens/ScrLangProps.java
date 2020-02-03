@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -116,41 +116,13 @@ public class ScrLangProps extends PFrame {
 
     @Override
     public void dispose() {
-        saveAllProps();
+        saveAllValues();
         core.pushUpdate();
         super.dispose();
     }
     
     @Override
     public void saveAllValues() {
-        saveAllProps();
-    }
-
-    private void populateProperties() {
-        PropertiesManager propMan = core.getPropertiesManager();
-
-        txtLangName.setText(propMan.getLangName());
-        txtFont.setText(propMan.getFontCon().getFamily());
-        txtLocalFont.setText(propMan.getFontLocal().getFamily());
-        txtAlphaOrder.setText(propMan.getAlphaPlainText());
-        txtLocalLanguage.setText(propMan.getLocalLangName());
-        txtAuthorCopyright.setText(propMan.getCopyrightAuthorInfo());
-        chkDisableProcRegex.setSelected(propMan.isDisableProcRegex());
-        chkIgnoreCase.setSelected(propMan.isIgnoreCase());
-        chkLocalMandatory.setSelected(propMan.isLocalMandatory());
-        chkLocalUniqueness.setSelected(propMan.isLocalUniqueness());
-        chkTypesMandatory.setSelected(propMan.isTypesMandatory());
-        chkWordUniqueness.setSelected(propMan.isWordUniqueness());
-        chkEnforceRTL.setSelected(propMan.isEnforceRTL());
-        chkOverrideRegexFont.setSelected(propMan.isOverrideRegexFont());
-        chkUseLocalWordLex.setSelected(propMan.isUseLocalWordLex());
-        txtKerning.setValue(propMan.getKerningSpace());
-    }
-
-    /**
-     * saves all language properties
-     */
-    private void saveAllProps() {
         PropertiesManager propMan = core.getPropertiesManager();
 
         try {
@@ -172,6 +144,27 @@ public class ScrLangProps extends PFrame {
             IOHandler.writeErrorLog(e);
             InfoBox.warning("Properties Error", "Problem saving properties.\n" + e.getLocalizedMessage(), this);
         }
+    }
+
+    private void populateProperties() {
+        PropertiesManager propMan = core.getPropertiesManager();
+
+        txtLangName.setText(propMan.getLangName());
+        txtFont.setText(propMan.getFontCon().getFamily());
+        txtLocalFont.setText(propMan.getFontLocal().getFamily());
+        txtAlphaOrder.setText(propMan.getAlphaPlainText());
+        txtLocalLanguage.setText(propMan.getLocalLangName());
+        txtAuthorCopyright.setText(propMan.getCopyrightAuthorInfo());
+        chkDisableProcRegex.setSelected(propMan.isDisableProcRegex());
+        chkIgnoreCase.setSelected(propMan.isIgnoreCase());
+        chkLocalMandatory.setSelected(propMan.isLocalMandatory());
+        chkLocalUniqueness.setSelected(propMan.isLocalUniqueness());
+        chkTypesMandatory.setSelected(propMan.isTypesMandatory());
+        chkWordUniqueness.setSelected(propMan.isWordUniqueness());
+        chkEnforceRTL.setSelected(propMan.isEnforceRTL());
+        chkOverrideRegexFont.setSelected(propMan.isOverrideRegexFont());
+        chkUseLocalWordLex.setSelected(propMan.isUseLocalWordLex());
+        txtKerning.setValue(propMan.getKerningSpace());
     }
 
     /**
@@ -334,6 +327,11 @@ public class ScrLangProps extends PFrame {
 
         chkDisableProcRegex.setText("Disable Orthographic Regex");
         chkDisableProcRegex.setToolTipText("Disable regex features in orthograpy. (this allows for ignoring case properly)");
+        chkDisableProcRegex.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkDisableProcRegexActionPerformed(evt);
+            }
+        });
 
         chkEnforceRTL.setText("Enforce RTL");
         chkEnforceRTL.setToolTipText("Check this to force all conlang text to appear in RTL fashion through PolyGlot. This works even if the character set you are using is not typically RTL.");
@@ -598,6 +596,21 @@ public class ScrLangProps extends PFrame {
                     core.getRootWindow());
         }
     }//GEN-LAST:event_chkIgnoreCaseActionPerformed
+
+    private void chkDisableProcRegexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDisableProcRegexActionPerformed
+        // if this is selected, inform users that recursion cannot be used at the same time
+        if (chkDisableProcRegex.isSelected() 
+                && (core.getPronunciationMgr().isRecurse() 
+                || core.getRomManager().isRecurse())) {
+            if (InfoBox.actionConfirmation("Disable Regex?", "You have recursion enabled in the Phonology section. " 
+                    + "If you disable regex, this will also be disabled. Continue?", this)) {
+                core.getPronunciationMgr().setRecurse(false);
+                core.getRomManager().setRecurse(false);
+            } else {
+                chkDisableProcRegex.setSelected(false);
+            }
+        }
+    }//GEN-LAST:event_chkDisableProcRegexActionPerformed
 
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);

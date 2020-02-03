@@ -32,8 +32,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -44,7 +42,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
@@ -57,6 +54,10 @@ import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 public final class ScrPhonology extends PFrame {
 
     private boolean curPopulating = false;
+    private static String RECURSION_ENABLED_TOOLTIP 
+            = "Enable recursion if using lookahead or lookbehind. (more details in manual)";
+    private static String RECURSION_DISABLED_TOOLTIP 
+            = "Recursion requires regex. Reenable in language properties to enable this option.";
 
     /**
      * Creates new form scrPhonology
@@ -76,6 +77,7 @@ public final class ScrPhonology extends PFrame {
         chkEnableRom.setSelected(core.getRomManager().isEnabled());
         enableRomanization(chkEnableRom.isSelected());
         setupButtons();
+        setupRecursionEnabled();
     }
 
     @Override
@@ -115,7 +117,8 @@ public final class ScrPhonology extends PFrame {
         btnDelRom.setEnabled(enable);
         btnDownRom.setEnabled(enable);
         btnUpRom.setEnabled(enable);
-        chkRomRecurse.setEnabled(enable);
+        setupRecursionEnabled();
+        chkRomRecurse.setEnabled(chkRomRecurse.isEnabled() && enable);
     }
 
     /**
@@ -211,6 +214,23 @@ public final class ScrPhonology extends PFrame {
         core.getPropertiesManager().getAllCharReplacements().forEach((entry) -> {
             addRep(entry.getKey(), entry.getValue());
         });
+    }
+    
+    /**
+     * Performs logic to see whether recursion should be enabled and updates menu accordingly
+     */
+    private void setupRecursionEnabled() {
+        if (core.getPropertiesManager().isDisableProcRegex()) {
+            chkPhonRecurse.setEnabled(false);
+            chkPhonRecurse.setToolTipText(RECURSION_DISABLED_TOOLTIP);
+            chkRomRecurse.setEnabled(false);
+            chkRomRecurse.setToolTipText(RECURSION_DISABLED_TOOLTIP);
+        } else {
+            chkPhonRecurse.setEnabled(true);
+            chkPhonRecurse.setToolTipText(RECURSION_DISABLED_TOOLTIP);
+            chkRomRecurse.setEnabled(true);
+            chkRomRecurse.setToolTipText(RECURSION_DISABLED_TOOLTIP);
+        }
     }
 
     //private void addRep(Entry<String, String> entry) {
@@ -844,6 +864,7 @@ public final class ScrPhonology extends PFrame {
         });
 
         chkRomRecurse.setText("Recurse Patterns");
+        chkRomRecurse.setToolTipText("");
         chkRomRecurse.setEnabled(false);
         chkRomRecurse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -961,6 +982,7 @@ public final class ScrPhonology extends PFrame {
         });
 
         chkPhonRecurse.setText("Recurse Patterns");
+        chkPhonRecurse.setToolTipText("");
         chkPhonRecurse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkPhonRecurseActionPerformed(evt);
