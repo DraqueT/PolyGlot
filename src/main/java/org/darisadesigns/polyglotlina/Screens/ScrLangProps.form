@@ -262,6 +262,9 @@
                 <Property name="text" type="java.lang.String" value="Disable Orthographic Regex"/>
                 <Property name="toolTipText" type="java.lang.String" value="Disable regex features in orthograpy. (this allows for ignoring case properly)"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkDisableProcRegexActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
               </AuxValues>

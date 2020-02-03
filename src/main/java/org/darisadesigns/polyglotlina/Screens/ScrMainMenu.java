@@ -275,6 +275,7 @@ public final class ScrMainMenu extends PFrame {
      * @return
      */
     public Window openLexicon(boolean switchTo) {
+        saveAllValues();
         cacheLexicon.updateAllValues(core);
 
         if (switchTo) {
@@ -388,6 +389,7 @@ public final class ScrMainMenu extends PFrame {
             core.readFile(fileName);
 
             if (curWindow == null) {
+                saveAllValues();
                 cacheLexicon.updateAllValues(core);
                 changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
             }
@@ -568,6 +570,7 @@ public final class ScrMainMenu extends PFrame {
         genTitle();
 
         if (curWindow == null && performTest) {
+            saveAllValues();
             cacheLexicon.updateAllValues(core);
             changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
         }
@@ -1101,6 +1104,7 @@ public final class ScrMainMenu extends PFrame {
     }
 
     private void openLexicon() {
+        saveAllValues();
         cacheLexicon.updateAllValues(core);
         changeScreen(cacheLexicon, cacheLexicon.getWindow(), (PButton) btnLexicon);
     }
@@ -1712,6 +1716,7 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_btnLexiconActionPerformed
 
     private void btnPosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPosActionPerformed
+        saveAllValues();
         ScrTypes types = ScrTypes.run(core);
         changeScreen(types, types.getWindow(), (PButton) evt.getSource());
     }//GEN-LAST:event_btnPosActionPerformed
@@ -1820,6 +1825,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClassesActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
         ScrWordClasses s = new ScrWordClasses(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
@@ -1827,6 +1833,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnGrammarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrammarActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
         ScrGrammarGuide s = new ScrGrammarGuide(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
@@ -1834,7 +1841,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnLogosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogosActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
+        saveAllValues();
         ScrLogoDetails s = new ScrLogoDetails(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
@@ -1843,6 +1850,7 @@ public final class ScrMainMenu extends PFrame {
     private void btnPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropActionPerformed
 
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
         ScrLangProps s = new ScrLangProps(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
@@ -1897,6 +1905,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnPhonologyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhonologyActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
         ScrPhonology s = new ScrPhonology(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
@@ -1952,6 +1961,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuizActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
         ScrQuizGenDialog s = new ScrQuizGenDialog(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
