@@ -370,4 +370,33 @@ public class PronunciationMgr {
         hash = 97 * hash + Objects.hashCode(this.pronunciations);
         return hash;
     }
+    
+    /**
+     * Tests whether look-ahead or look-behind patterns are being used
+     * @return 
+     */
+    public boolean usingLookaheadsLookbacks() {
+        boolean ret = false;
+        
+        for (PronunciationNode curNode : pronunciations) {
+            String pattern = curNode.getValue();
+            
+            // checks for all positive and negative lookaheads and lookbehinds
+            if (isRegexLookaheadBehind(pattern)) {
+                ret = true;
+                break;
+            }
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Returns true if a given regex pattern passed in contains look-ahead or look-behinds
+     * @param testRegex
+     * @return 
+     */
+    public static boolean isRegexLookaheadBehind(String testRegex) {
+        return testRegex.matches(".*\\((\\?=|\\?\\!|\\?<=|\\?<!).+?\\).*");
+    }
 }

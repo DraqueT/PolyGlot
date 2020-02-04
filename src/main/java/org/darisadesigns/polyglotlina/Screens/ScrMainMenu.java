@@ -1283,7 +1283,6 @@ public final class ScrMainMenu extends PFrame {
 
         pnlToDoSplit.setBackground(new java.awt.Color(255, 255, 255));
         pnlToDoSplit.setDividerLocation(675);
-        pnlToDoSplit.setDividerSize(10);
 
         pnlToDo.setBackground(new java.awt.Color(255, 255, 255));
         pnlToDo.setToolTipText("");
@@ -1383,7 +1382,7 @@ public final class ScrMainMenu extends PFrame {
                     .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPhonology, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlSideButtonsLayout.setVerticalGroup(
             pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1446,7 +1445,7 @@ public final class ScrMainMenu extends PFrame {
                 .addComponent(jButton1)
                 .addGap(95, 95, 95)
                 .addComponent(jButton2)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1587,8 +1586,8 @@ public final class ScrMainMenu extends PFrame {
         });
         mnuTools.add(mnuImportFont);
 
-        mnuCheckLexicon.setText("Check Lexicon");
-        mnuCheckLexicon.setToolTipText("Checks lexicon for problems and inconsistencies.");
+        mnuCheckLexicon.setText("Check Language");
+        mnuCheckLexicon.setToolTipText("Checks language for problems and inconsistencies.");
         mnuCheckLexicon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuCheckLexiconActionPerformed(evt);

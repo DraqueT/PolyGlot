@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
@@ -30,15 +30,15 @@ import javax.swing.DefaultListModel;
  *
  * @author draque
  */
-public class ScrLexiconProblemDisplay extends PDialog {
+public class ScrLanguageProblemDisplay extends PDialog {
 
     private final ScrMainMenu main;
     /**
-     * Creates new form ScrLexiconProblemDisplay
+     * Creates new form ScrLanguageProblemDisplay
      * @param problems
      * @param _core
      */
-    public ScrLexiconProblemDisplay(List<LexiconProblemNode> problems, DictCore _core) {
+    public ScrLanguageProblemDisplay(List<LexiconProblemNode> problems, DictCore _core) {
         super(_core);
         main = (ScrMainMenu)core.getRootWindow();
         initComponents();
