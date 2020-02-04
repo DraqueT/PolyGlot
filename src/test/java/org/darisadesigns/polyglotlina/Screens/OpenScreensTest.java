@@ -296,7 +296,7 @@ public class OpenScreensTest {
         System.out.println("testScrLexiconProblemDisplay");
         List<LexiconProblemNode> problemNodes = new ArrayList<>();
         problemNodes.add(new LexiconProblemNode(new ConWord(), "PROBLEM"));
-        ScrLexiconProblemDisplay s = new ScrLexiconProblemDisplay(problemNodes, core);
+        ScrLanguageProblemDisplay s = new ScrLanguageProblemDisplay(problemNodes, core);
         s.dispose();
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());

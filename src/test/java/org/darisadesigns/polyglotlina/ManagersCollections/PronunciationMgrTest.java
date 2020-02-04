@@ -20,9 +20,7 @@
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import TestResources.DummyCore;
-import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ManagersCollections.PronunciationMgr;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -30,8 +28,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  *
@@ -209,5 +205,20 @@ public class PronunciationMgrTest {
         } catch (Exception e) {
             fail(e);
         }
+    }
+    
+    @Test
+    public void isRegexLookaheadBehind() {
+        assertTrue(PronunciationMgr.isRegexLookaheadBehind("This is a test (?=h) asdad"));
+        assertTrue(PronunciationMgr.isRegexLookaheadBehind("This is a test (?!h) asdad"));
+        assertTrue(PronunciationMgr.isRegexLookaheadBehind("This is a test (?<=h) asdad"));
+        assertTrue(PronunciationMgr.isRegexLookaheadBehind("This is a test (?<!h) asdad"));
+        
+        assertFalse(PronunciationMgr.isRegexLookaheadBehind("This is a test (\\?=h) asdad"));
+        assertFalse(PronunciationMgr.isRegexLookaheadBehind("This is a test (?\\=h) asdad"));
+        assertFalse(PronunciationMgr.isRegexLookaheadBehind("This is a test (\\?!h) asdad"));
+        assertFalse(PronunciationMgr.isRegexLookaheadBehind("This is a test (?<\\=h) asdad"));
+        assertFalse(PronunciationMgr.isRegexLookaheadBehind("This is a test (?\\<=h) asdad"));
+        assertFalse(PronunciationMgr.isRegexLookaheadBehind("This is a test (\\?<=h) asdad"));
     }
 }

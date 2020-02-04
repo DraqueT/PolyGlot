@@ -54,9 +54,9 @@ import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 public final class ScrPhonology extends PFrame {
 
     private boolean curPopulating = false;
-    private static String RECURSION_ENABLED_TOOLTIP 
+    private final static String RECURSION_ENABLED_TOOLTIP 
             = "Enable recursion if using lookahead or lookbehind. (more details in manual)";
-    private static String RECURSION_DISABLED_TOOLTIP 
+    private final static String RECURSION_DISABLED_TOOLTIP 
             = "Recursion requires regex. Reenable in language properties to enable this option.";
 
     /**
@@ -83,6 +83,17 @@ public final class ScrPhonology extends PFrame {
     @Override
     public void dispose() {
         saveAllValues();
+        
+        if (core.getRomManager().usingLookaheadsLookbacks() && !core.getRomManager().isRecurse()) {
+            InfoBox.warning("Possible Regex Issue", "It looks like your romanizations use lookahead or lookbehind patterns. "
+                    + "Please enable the recursion checkbox or these will not function correctly.", core.getRootWindow());
+        }
+        
+        if (core.getPronunciationMgr().usingLookaheadsLookbacks() && !core.getPronunciationMgr().isRecurse()) {
+            InfoBox.warning("Possible Regex Issue", "It looks like your pronunciations use lookahead or lookbehind patterns. "
+                    + "Please enable the recursion checkbox or these will not function correctly.", core.getRootWindow());
+        }
+        
         super.dispose();
     }
     
@@ -227,9 +238,9 @@ public final class ScrPhonology extends PFrame {
             chkRomRecurse.setToolTipText(RECURSION_DISABLED_TOOLTIP);
         } else {
             chkPhonRecurse.setEnabled(true);
-            chkPhonRecurse.setToolTipText(RECURSION_DISABLED_TOOLTIP);
+            chkPhonRecurse.setToolTipText(RECURSION_ENABLED_TOOLTIP);
             chkRomRecurse.setEnabled(true);
-            chkRomRecurse.setToolTipText(RECURSION_DISABLED_TOOLTIP);
+            chkRomRecurse.setToolTipText(RECURSION_ENABLED_TOOLTIP);
         }
     }
 
