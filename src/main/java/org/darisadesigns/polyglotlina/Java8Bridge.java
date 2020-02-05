@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -76,7 +76,8 @@ public final class Java8Bridge {
             (printLocalCon ? PGTUtil.TRUE : PGTUtil.FALSE),
             (printOrtho ? PGTUtil.TRUE : PGTUtil.FALSE),
             (printPageNumber ? PGTUtil.TRUE : PGTUtil.FALSE),
-            (printWordEtymologies ? PGTUtil.TRUE : PGTUtil.FALSE)
+            (printWordEtymologies ? PGTUtil.TRUE : PGTUtil.FALSE),
+            PGTUtil.PGT_VERSION
         };
         
         String[] result = IOHandler.runAtConsole(command);
