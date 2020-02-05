@@ -2,7 +2,7 @@
  * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
- * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
+ * Licensed under: MIT Licence
  * See LICENSE.TXT included with this code to read the full license agreement.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
