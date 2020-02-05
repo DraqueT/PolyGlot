@@ -1,11 +1,11 @@
 <#if licenseFirst??>
 ${licenseFirst}
 </#if>
-${licensePrefix}Copyright (c) ${date?date?string("yyyy")}, ${project.organization!user}
+${licensePrefix}Copyright (c) ${date?date?string("yyyy")}, Draque Thompson, draquemail@gmail.com
 ${licensePrefix}All rights reserved.
 ${licensePrefix?replace(" +$", "", "r")}
-${licensePrefix}Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
-${licensePrefix} See LICENSE.TXT included with this code to read the full license agreement.
+${licensePrefix}Licensed under: MIT License
+${licensePrefix}See LICENSE.TXT included with this code to read the full license agreement.
 
 ${licensePrefix}THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 ${licensePrefix}AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
