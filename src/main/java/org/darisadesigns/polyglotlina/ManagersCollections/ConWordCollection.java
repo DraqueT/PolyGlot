@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
- * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
+ * Licensed under: MIT Licence
  * See LICENSE.TXT included with this code to read the full license agreement.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
@@ -36,7 +36,7 @@ import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.RankedObject;
-import org.darisadesigns.polyglotlina.Screens.ScrLexiconProblemDisplay;
+import org.darisadesigns.polyglotlina.Screens.ScrLanguageProblemDisplay;
 import org.darisadesigns.polyglotlina.Screens.ScrProgressMenu;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -437,7 +437,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                 } else if (definition.contains(compare)) {
                     // definition contains is ranked third, and itself raked internally
                     // by match position
-                    definitionContains.add(new RankedObject<ConWord>(curWord, definition.indexOf(compare)));
+                    definitionContains.add(new RankedObject<>(curWord, definition.indexOf(compare)));
                 }
             }
 
@@ -950,7 +950,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         Collections.sort(problems);
         
         if (!problems.isEmpty() && display) {
-            new ScrLexiconProblemDisplay(problems, core).setVisible(true);
+            new ScrLanguageProblemDisplay(problems, core).setVisible(true);
         } else if (display) {
             InfoBox.info("Lexicon Check Results", "No problems found in lexicon!", core.getRootWindow());
         }

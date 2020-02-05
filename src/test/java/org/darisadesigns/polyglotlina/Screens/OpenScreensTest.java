@@ -2,8 +2,8 @@
  * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
- * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
- *  See LICENSE.TXT included with this code to read the full license agreement.
+ * Licensed under: MIT Licence
+ * See LICENSE.TXT included with this code to read the full license agreement.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -296,7 +296,7 @@ public class OpenScreensTest {
         System.out.println("testScrLexiconProblemDisplay");
         List<LexiconProblemNode> problemNodes = new ArrayList<>();
         problemNodes.add(new LexiconProblemNode(new ConWord(), "PROBLEM"));
-        ScrLexiconProblemDisplay s = new ScrLexiconProblemDisplay(problemNodes, core);
+        ScrLanguageProblemDisplay s = new ScrLanguageProblemDisplay(problemNodes, core);
         s.dispose();
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());

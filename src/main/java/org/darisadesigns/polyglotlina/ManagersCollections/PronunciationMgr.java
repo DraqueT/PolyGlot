@@ -2,7 +2,7 @@
  * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
- * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
+ * Licensed under: MIT Licence
  * See LICENSE.TXT included with this code to read the full license agreement.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
@@ -369,5 +369,34 @@ public class PronunciationMgr {
         hash = 97 * hash + (this.recurse ? 1 : 0);
         hash = 97 * hash + Objects.hashCode(this.pronunciations);
         return hash;
+    }
+    
+    /**
+     * Tests whether look-ahead or look-behind patterns are being used
+     * @return 
+     */
+    public boolean usingLookaheadsLookbacks() {
+        boolean ret = false;
+        
+        for (PronunciationNode curNode : pronunciations) {
+            String pattern = curNode.getValue();
+            
+            // checks for all positive and negative lookaheads and lookbehinds
+            if (isRegexLookaheadBehind(pattern)) {
+                ret = true;
+                break;
+            }
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Returns true if a given regex pattern passed in contains look-ahead or look-behinds
+     * @param testRegex
+     * @return 
+     */
+    public static boolean isRegexLookaheadBehind(String testRegex) {
+        return testRegex.matches(".*\\((\\?=|\\?\\!|\\?<=|\\?<!).+?\\).*");
     }
 }

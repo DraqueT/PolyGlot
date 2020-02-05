@@ -2,8 +2,8 @@
  * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
- * Licensed under: Creative Commons Attribution-NonCommercial 4.0 International Public License
- *  See LICENSE.TXT included with this code to read the full license agreement.
+ * Licensed under: MIT Licence
+ * See LICENSE.TXT included with this code to read the full license agreement.
 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -275,6 +275,7 @@ public final class ScrMainMenu extends PFrame {
      * @return
      */
     public Window openLexicon(boolean switchTo) {
+        saveAllValues();
         cacheLexicon.updateAllValues(core);
 
         if (switchTo) {
@@ -388,6 +389,7 @@ public final class ScrMainMenu extends PFrame {
             core.readFile(fileName);
 
             if (curWindow == null) {
+                saveAllValues();
                 cacheLexicon.updateAllValues(core);
                 changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
             }
@@ -568,6 +570,7 @@ public final class ScrMainMenu extends PFrame {
         genTitle();
 
         if (curWindow == null && performTest) {
+            saveAllValues();
             cacheLexicon.updateAllValues(core);
             changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
         }
@@ -1101,6 +1104,7 @@ public final class ScrMainMenu extends PFrame {
     }
 
     private void openLexicon() {
+        saveAllValues();
         cacheLexicon.updateAllValues(core);
         changeScreen(cacheLexicon, cacheLexicon.getWindow(), (PButton) btnLexicon);
     }
@@ -1279,7 +1283,6 @@ public final class ScrMainMenu extends PFrame {
 
         pnlToDoSplit.setBackground(new java.awt.Color(255, 255, 255));
         pnlToDoSplit.setDividerLocation(675);
-        pnlToDoSplit.setDividerSize(10);
 
         pnlToDo.setBackground(new java.awt.Color(255, 255, 255));
         pnlToDo.setToolTipText("");
@@ -1379,7 +1382,7 @@ public final class ScrMainMenu extends PFrame {
                     .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPhonology, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlSideButtonsLayout.setVerticalGroup(
             pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1442,7 +1445,7 @@ public final class ScrMainMenu extends PFrame {
                 .addComponent(jButton1)
                 .addGap(95, 95, 95)
                 .addComponent(jButton2)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1583,8 +1586,8 @@ public final class ScrMainMenu extends PFrame {
         });
         mnuTools.add(mnuImportFont);
 
-        mnuCheckLexicon.setText("Check Lexicon");
-        mnuCheckLexicon.setToolTipText("Checks lexicon for problems and inconsistencies.");
+        mnuCheckLexicon.setText("Check Language");
+        mnuCheckLexicon.setToolTipText("Checks language for problems and inconsistencies.");
         mnuCheckLexicon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuCheckLexiconActionPerformed(evt);
@@ -1712,6 +1715,7 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_btnLexiconActionPerformed
 
     private void btnPosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPosActionPerformed
+        saveAllValues();
         ScrTypes types = ScrTypes.run(core);
         changeScreen(types, types.getWindow(), (PButton) evt.getSource());
     }//GEN-LAST:event_btnPosActionPerformed
@@ -1820,6 +1824,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClassesActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
         ScrWordClasses s = new ScrWordClasses(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
@@ -1827,6 +1832,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnGrammarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrammarActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
         ScrGrammarGuide s = new ScrGrammarGuide(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
@@ -1834,7 +1840,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnLogosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogosActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
+        saveAllValues();
         ScrLogoDetails s = new ScrLogoDetails(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
@@ -1843,6 +1849,7 @@ public final class ScrMainMenu extends PFrame {
     private void btnPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropActionPerformed
 
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
         ScrLangProps s = new ScrLangProps(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
@@ -1897,6 +1904,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnPhonologyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhonologyActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
         ScrPhonology s = new ScrPhonology(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
@@ -1952,6 +1960,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuizActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
         ScrQuizGenDialog s = new ScrQuizGenDialog(core);
         changeScreen(s, s.getWindow(), (PButton) evt.getSource());
         setCursor(Cursor.getDefaultCursor());
