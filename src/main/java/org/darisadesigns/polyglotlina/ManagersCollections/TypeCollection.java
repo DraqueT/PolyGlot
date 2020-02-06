@@ -181,7 +181,7 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
     }
 
     @Override
-    public Object notFoundNode() {
+    public TypeNode notFoundNode() {
         TypeNode emptyNode = new TypeNode();
         emptyNode.setValue("POS NOT FOUND");
         emptyNode.setNotes("POT NOT FOUND");

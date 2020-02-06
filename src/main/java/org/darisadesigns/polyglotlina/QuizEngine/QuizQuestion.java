@@ -95,7 +95,7 @@ public class QuizQuestion extends DictNode {
     /**
      * DO NOT CALL THIS.
      * @return A BIG OL' DUMP.
-     * @throws ClassCastException EVERY DAMN TIME, FOOL.
+     * @throws UnsupportedOperationException EVERY DAMN TIME, FOOL.
      */
     @Override
     public String getValue() {
@@ -107,7 +107,7 @@ public class QuizQuestion extends DictNode {
      * set. Then ignores construction and uses override. Never includes text that 
      * might be written in the ConLang's font.
      * @return String form of posed question.
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception on unhandled question type
      */
     public String getQuestionValue() throws Exception {
         String ret;
@@ -149,7 +149,7 @@ public class QuizQuestion extends DictNode {
                 }
                 ret += qEnd;
             } else {
-                ret = "UNSUPPORTED TYPE: " + answer.getClass().getName();
+                ret = "UNSUPPORTED TYPE: " + (answer == null ? "NONE" : answer.getClass().getName());
             }
         } else {
             ret = value;

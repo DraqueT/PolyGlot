@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -43,7 +43,7 @@ public class ScrAbout extends PDialog {
         setModal(true);
         super.getRootPane().getContentPane().setBackground(Color.white);
 
-        txtAbout.setText("PolyGlot ver. " + DictCore.getDisplayVersion() + "\n\nPolyGlot is "
+        txtAbout.setText("PolyGlot ver. " + PGTUtil.getDisplayVersion() + "\n\nPolyGlot is "
                 + "copyright Draque Thompson 2014-" + Calendar.getInstance().get(Calendar.YEAR)
                 + ". It is licensed under the Creative Commons "
                 + "Attribution-Noncommercial 4.0 International Public License, so it is free "

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -43,6 +43,10 @@ public class Quiz extends DictionaryCollection<QuizQuestion> {
     }
     
     public int getLength() {
+        if (quizList == null) {
+            quizList = new ArrayList<>(nodeMap.values());
+        }
+        
         return quizList.size();
     }
     
@@ -108,7 +112,7 @@ public class Quiz extends DictionaryCollection<QuizQuestion> {
     }
     
     public void trimQuiz() {
-        for (Entry<Integer, QuizQuestion> o : nodeMap.entrySet()) {
+        for (Entry<Integer, QuizQuestion> o : nodeMap.entrySet().toArray(new Entry[0])) {
             QuizQuestion question = o.getValue();
             
             if (question.getAnswered() == QuizQuestion.Answered.Correct) {
@@ -135,35 +139,42 @@ public class Quiz extends DictionaryCollection<QuizQuestion> {
         
         int quizSize = quizList.size();
         
-        return quizSize > 0 && quizSize > quizPos;
+        return quizSize > 0 && (quizSize - 1) > quizPos;
     }
     
     /**
      * Gets next quiz question (if one exists)
-     * Will throw out of bounds exception if no
+     * Will throw exception if no
      * next question.
      * 
      * @return next quiz question
+     * @throws java.lang.Exception
      */
-    public QuizQuestion next() {
+    public QuizQuestion next() throws Exception {
         if (quizList == null) {
             quizList = new ArrayList<>(nodeMap.values());
         }
         
-        quizPos++;        
-        curQuestion = quizList.get(quizPos);        
+        quizPos++;
+        
+        try {
+            curQuestion = quizList.get(quizPos);
+        } catch (IndexOutOfBoundsException e) {
+            // force this to be handled explicitly
+            throw new Exception(e);
+        }
         
         return curQuestion;
     }
     
     /**
-     * Gets previous question. Throws null exception if quizList not initialized.
-     * Throws out of bounds exception if called while on first question
-     * @return 
+     * Gets previous question.Throws null exception if quizList not initialized. Throws out of bounds exception if called while on first question
+     * @return
+     * @throws java.lang.Exception 
      */
-    public QuizQuestion prev() {
-        if (quizPos == 0) {
-            throw new IndexOutOfBoundsException("You can't call this when on the first entry.");
+    public QuizQuestion prev() throws Exception {
+        if (quizPos == 0 || quizList == null) {
+            throw new Exception("You can't call this when on the first entry.");
         }
         
         quizPos--;
@@ -172,7 +183,7 @@ public class Quiz extends DictionaryCollection<QuizQuestion> {
     }
 
     @Override
-    public Object notFoundNode() {
+    public QuizQuestion notFoundNode() {
         QuizQuestion emptyQuestion = new QuizQuestion(core);
         emptyQuestion.setValue("QUESTION NOT FOUND");
         return emptyQuestion;

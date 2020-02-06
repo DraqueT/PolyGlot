@@ -367,7 +367,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
     }
 
     @Override
-    public Object notFoundNode() {
+    public LogoNode notFoundNode() {
         LogoNode emptyNode = new LogoNode();
         
         try {

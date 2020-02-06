@@ -57,7 +57,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
      * Returns an error type node with not-found information of an appropriate type
      * @return not-found node
      */
-    public abstract Object notFoundNode();
+    public abstract N notFoundNode();
     
     public int addNode(N _addType) throws Exception {
         int ret;
@@ -108,8 +108,8 @@ public abstract class DictionaryCollection<N extends DictNode> {
      * @param _id
      * @return 
      */
-    public Object getNodeById(Integer _id) {
-        Object ret;
+    public N getNodeById(Integer _id) {
+        N ret;
 
         if (nodeMap.containsKey(_id)) {
             ret = nodeMap.get(_id);

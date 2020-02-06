@@ -87,7 +87,12 @@ public final class ScrQuizScreen extends PFrame {
     }
 
     private void nextQuestion() {
-        setQuestion(quiz.next());
+        try {
+            setQuestion(quiz.next());
+        } catch (Exception e) {
+            InfoBox.error("Question Error", "Unable to move to next question: " + e.getLocalizedMessage(), this);
+            IOHandler.writeErrorLog(e);
+        }
     }
     
     @Override
@@ -96,7 +101,11 @@ public final class ScrQuizScreen extends PFrame {
     }
 
     private void backQuestion() {
-        setQuestion(quiz.prev());
+        try {
+            setQuestion(quiz.prev());
+        } catch (Exception e) {
+            InfoBox.error("Question Error", "Unable to move to previous question: " + e.getLocalizedMessage(), this);
+        }
     }
 
     private void finishQuiz() {
@@ -108,14 +117,8 @@ public final class ScrQuizScreen extends PFrame {
                     + " out of " + quizLen + " correct!", this);
             dispose();
         } else {
-            int retake = JOptionPane.showConfirmDialog(this, numRight
-                    + " out of " + quizLen + " correct. Retake?", "Quiz Complete", JOptionPane.YES_NO_OPTION);
-
-            if (retake == JOptionPane.YES_OPTION) {
-                int trim = JOptionPane.showConfirmDialog(this, "Quiz only on incorrectly answered questions?",
-                        "Trim Quiz?", JOptionPane.YES_NO_OPTION);
-
-                if (trim == JOptionPane.YES_OPTION) {
+            if (InfoBox.actionConfirmation("Quiz Complete", numRight + " out of " + quizLen + " correct. Retake?", this)) {
+                if (InfoBox.actionConfirmation("Trim Quiz?", "Quiz only on incorrectly answered questions?", this)) {
                     quiz.trimQuiz();
                 } else {
                     quiz.resetQuiz();

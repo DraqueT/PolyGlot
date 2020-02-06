@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -111,10 +111,10 @@ public class ScrUpdateAlert extends PDialog {
                 // custom message if user is on a beta copy of PolyGlot
                 if (PGTUtil.IS_BETA) {
                     InfoBox.info("Update Status", "You're up to date on a beta build branched from the most recent release candidate ("
-                            + DictCore.getDisplayVersion() + ")", core.getRootWindow());
+                            + PGTUtil.getDisplayVersion() + ")", core.getRootWindow());
                 } else {
                     InfoBox.info("Update Status", "You're up to date and on the newest version: "
-                        + DictCore.getDisplayVersion() + ".", core.getRootWindow());
+                        + PGTUtil.getDisplayVersion() + ".", core.getRootWindow());
                 }
             }            
             this.setVisible(false);

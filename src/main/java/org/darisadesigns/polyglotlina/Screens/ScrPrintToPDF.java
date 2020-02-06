@@ -333,7 +333,7 @@ public class ScrPrintToPDF extends PDialog {
         }
         
         if (new File(txtSavePath.getText()).exists()
-                && JOptionPane.showConfirmDialog(this, "File already exists. Overwrite?", "Overwrite Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+                && InfoBox.actionConfirmation("Overwrite Confirmation", "File already exists. Overwrite?", this)) {
             return;
         }
         
