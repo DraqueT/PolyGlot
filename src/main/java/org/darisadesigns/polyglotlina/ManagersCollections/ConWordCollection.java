@@ -852,7 +852,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
     }
     
     @Override
-    public Object notFoundNode() {
+    public ConWord notFoundNode() {
         ConWord notFound = new ConWord();
 
         notFound.setValue("WORD NOT FOUND");

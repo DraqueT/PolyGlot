@@ -787,6 +787,20 @@ public final class PGTUtil {
             }
         };
     }
+    
+    /**
+     * Used for getting the display version (potentially different than the internal version due to betas, etc.)
+     * @return 
+     */
+    public static String getDisplayVersion() {
+        String ret = PGTUtil.PGT_VERSION;
+        
+        if (PGTUtil.IS_BETA) {
+            ret = ret + " BETA (last release: " + ret + ")";
+        }
+        
+        return ret;
+    }
 
     private PGTUtil() {}
 }

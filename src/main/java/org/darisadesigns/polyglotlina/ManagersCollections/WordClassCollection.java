@@ -235,7 +235,7 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
     }
 
     @Override
-    public Object notFoundNode() {
+    public WordClass notFoundNode() {
         WordClass emptyClass = new WordClass();
         emptyClass.setValue("CLASS NOT FOUND");
         return emptyClass;

@@ -102,7 +102,7 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
     }
 
     @Override
-    public Object notFoundNode() {
+    public ImageNode notFoundNode() {
         ImageNode emptyImage = new ImageNode();
         
         try {
