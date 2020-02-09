@@ -73,6 +73,8 @@ public class QuizTest {
      */
     @Test
     public void testGetLength() {
+        System.out.println("QuizTest.testGetLength");
+        
         int expectedLength = 10;
         
         assertEquals(expectedLength, quiz.getLength());
@@ -83,6 +85,8 @@ public class QuizTest {
      */
     @Test
     public void testGetCurQuestion() {
+        System.out.println("QuizTest.testGetCurQuestion");
+        
         String expectedAnswerValue = "3 CON";
         
         try {
@@ -103,6 +107,8 @@ public class QuizTest {
      */
     @Test
     public void testClear() {
+        System.out.println("QuizTest.testClear");
+        
         String expectedBufferValue = "UNSUPPORTED TYPE: NONE";
         
         try {
@@ -121,6 +127,8 @@ public class QuizTest {
      */
     @Test
     public void testGetQuestions() {
+        System.out.println("QuizTest.testGetQuestions");
+        
         QuizQuestion[] questions = quiz.getQuestions();
         
         try {
@@ -137,6 +145,8 @@ public class QuizTest {
      */
     @Test
     public void testGetQuizLength() {
+        System.out.println("QuizTest.testGetQuizLength");
+        
         int expectedLength = 10;
         
         assertEquals(expectedLength, quiz.getQuizLength());
@@ -147,6 +157,8 @@ public class QuizTest {
      */
     @Test
     public void testGetNumCorrect() {
+        System.out.println("QuizTest.testGetNumCorrect");
+        
         int expectedResult = 2;
         
         QuizQuestion[] questions = quiz.getQuestions();
@@ -162,6 +174,8 @@ public class QuizTest {
      */
     @Test
     public void testResetQuiz() {
+        System.out.println("QuizTest.testResetQuiz");
+        
         int expectedPosition = -1;
         int expectedCorrect = 0;
         
@@ -194,6 +208,8 @@ public class QuizTest {
      */
     @Test
     public void testTrimQuiz() {
+        System.out.println("QuizTest.testTrimQuiz");
+        
         int expectedLength = 9;
         int expectedQuizLength = 9;
         
@@ -210,6 +226,18 @@ public class QuizTest {
      */
     @Test
     public void testHasNext() {
+        System.out.println("QuizTest.testHasNext");
+        
+        assertTrue(quiz.hasNext());
+    }
+    
+    /**
+     * Test of hasNext method, of class Quiz.
+     */
+    @Test
+    public void testHasNextFull() {
+        System.out.println("QuizTest.testHasNextFull");
+        
         try {
             for (int i = 0; i < quiz.getLength(); i++) {
                 assertTrue(quiz.hasNext());
@@ -224,6 +252,8 @@ public class QuizTest {
     
     @Test
     public void testExceptionNextOutOfBounds() {
+        System.out.println("QuizTest.testExceptionNextOutOfBounds");
+        
         String expectedMessage = "java.lang.IndexOutOfBoundsException: Index 10 out of bounds for length 10";
         
         Exception exception = assertThrows(Exception.class, () -> {
@@ -242,6 +272,8 @@ public class QuizTest {
      */
     @Test
     public void testPrev() {
+        System.out.println("QuizTest.testPrev");
+        
         String expectedValue = "0 CON";
         
         try {
@@ -258,6 +290,8 @@ public class QuizTest {
     
     @Test
     public void testPrevBeforeFirst() {
+        System.out.println("QuizTest.testPrevBeforeFirst");
+        
         String expectedMessage = "You can't call this when on the first entry.";
         
         Exception exception = assertThrows(Exception.class, () -> {
@@ -273,6 +307,8 @@ public class QuizTest {
     
     @Test
     public void testPrevInitial() {
+        System.out.println("QuizTest.testPrevInitial");
+        
         String expectedMessage = "You can't call this when on the first entry.";
         
         Exception exception = assertThrows(Exception.class, () -> {
@@ -290,6 +326,8 @@ public class QuizTest {
      */
     @Test
     public void testNotFoundNode() {
+        System.out.println("QuizTest.testNotFoundNode");
+        
         String expectedValue = "QUESTION NOT FOUND";
         
         try {

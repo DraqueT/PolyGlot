@@ -49,10 +49,7 @@ public class ReversionManager {
         ReversionNode reversion = new ReversionNode(addVersion, saveTime);
         reversionList.add(0, reversion);
         
-        int maxVersions = core.getOptionsManager().getMaxReversionCount();
-        if (reversionList.size() > maxVersions && maxVersions != 0) {
-            reversionList = reversionList.subList(0, maxVersions);
-        }
+        trimReversions();
     }
     
     /**
@@ -77,10 +74,10 @@ public class ReversionManager {
      * Trims reversions down to the max number allowed in the options
      */
     public void trimReversions() {
-        int maxReversions = core.getOptionsManager().getMaxReversionCount();
+        int maxVersions = core.getOptionsManager().getMaxReversionCount();
         
-        if (reversionList.size() > maxReversions) {
-            reversionList = reversionList.subList(0, maxReversions);
+        if (reversionList.size() > maxVersions && maxVersions != 0) {
+            reversionList = reversionList.subList(0, maxVersions);
         }
     }
 }

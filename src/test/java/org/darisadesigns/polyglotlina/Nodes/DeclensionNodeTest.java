@@ -253,4 +253,51 @@ public class DeclensionNodeTest {
         node.setEqual(testNode);
         assertTrue(node.equals(testNode));
     }
+    
+    @Test
+    public void testSetEqualWrongType() {
+        System.out.print("DeclensionNodeTest.testSetEqual");
+        
+        String expectedMessage = "Object not of type DeclensionNode";
+        
+        Exception exception = assertThrows(ClassCastException.class, () -> {
+            DeclensionNode node = new DeclensionNode(0);
+            node.setEqual(new ConWord());
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage,actualMessage);
+    }
+    
+    @Test
+    public void testGetDeclensionDimensionByIdExists() {
+        System.out.print("DeclensionNodeTest.testSetEqual");
+        
+        String expectedValue = "TESTO DEBESTO";
+        int dimId = 2;
+        
+        DeclensionNode node = new DeclensionNode(0);
+        DeclensionDimension dim = new DeclensionDimension(dimId);
+        dim.setValue(expectedValue);
+        node.addDimension(dim);
+        
+        String result = node.getDeclensionDimensionById(dimId).getValue();
+        
+        assertEquals(expectedValue, result);
+    }
+    
+    @Test
+    public void testGetDeclensionDimensionByIdNotExists() {
+        System.out.print("DeclensionNodeTest.testSetEqual");
+        
+        DeclensionNode node = new DeclensionNode(0);
+        assertNull(node.getDeclensionDimensionById(1));
+    }
+    
+    @Test
+    public void testHashCode() {
+        // just make sure it doesn't explode.
+        testNode.hashCode();
+    }
 }

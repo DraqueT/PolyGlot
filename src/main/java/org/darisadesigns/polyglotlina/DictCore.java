@@ -85,10 +85,6 @@ public class DictCore {
      * @param _polyGlot
      */
     public DictCore(PolyGlot _polyGlot) {
-        if (_polyGlot == null) {
-            System.out.println("ZOT");
-        }
-        
         polyGlot = _polyGlot;
         initializeDictCore();
     }
