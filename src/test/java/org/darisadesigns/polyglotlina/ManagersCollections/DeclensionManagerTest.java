@@ -627,7 +627,7 @@ public class DeclensionManagerTest {
         int[] expectedIndexOrder = {1, 2, 3, 4, 5, 6, 7, 8};
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
             
             DeclensionGenRule[] allRules = decMan.getDeclensionRulesForType(2);
@@ -653,7 +653,7 @@ public class DeclensionManagerTest {
         int[] expectedIndexOrder = {1, 2, 3, 4};
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
             
             DeclensionGenRule[] allRules = decMan.getDeclensionRulesForTypeAndCombId(2, ",2,2,");
@@ -679,7 +679,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
             
             DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
@@ -707,7 +707,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
             
             DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
@@ -735,7 +735,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
             
             DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
@@ -763,7 +763,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
             
             DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
@@ -791,7 +791,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
             
             DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
@@ -819,7 +819,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "TestReorderRules.pgd");
+            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             DeclensionManager decMan = core.getDeclensionManager();
             
             DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
