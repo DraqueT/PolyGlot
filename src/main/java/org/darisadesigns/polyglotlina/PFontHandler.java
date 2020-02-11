@@ -335,7 +335,7 @@ public class PFontHandler {
 
                 if (fontFile != null) {
                     try (FileInputStream fontInputStream = new FileInputStream(fontFile)) {
-                        byte[] fontBytes = IOHandler.streamToBytArray(fontInputStream);
+                        byte[] fontBytes = IOHandler.streamToByetArray(fontInputStream);
                         
                         if (isConFont) {
                             core.getPropertiesManager().setCachedFont(fontBytes);
