@@ -125,7 +125,7 @@ public final class IOHandler {
 
     public static byte[] getByteArrayFromFile(File file) throws IOException {
         try (InputStream inputStream = new FileInputStream(file)) {
-            return streamToBytArray(inputStream);
+            return streamToByetArray(inputStream);
         }
     }
 
@@ -136,7 +136,7 @@ public final class IOHandler {
      * @return raw byte representation of stream
      * @throws IOException
      */
-    public static byte[] streamToBytArray(InputStream is) throws IOException {
+    public static byte[] streamToByetArray(InputStream is) throws IOException {
         try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
             int nRead;
             byte[] data = new byte[16384];
@@ -161,7 +161,7 @@ public final class IOHandler {
         final File toByteArrayFile = new File(filePath);
 
         try (InputStream inputStream = new FileInputStream(toByteArrayFile)) {
-            ret = streamToBytArray(inputStream);
+            ret = streamToByetArray(inputStream);
         }
 
         return ret;
@@ -730,7 +730,7 @@ public final class IOHandler {
                     + PGTUtil.REVERSION_BASE_FILE_NAME + i);
 
             while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
-                reversionManager.addVersionToEnd(streamToBytArray(zipFile.getInputStream(reversion)));
+                reversionManager.addVersionToEnd(streamToByetArray(zipFile.getInputStream(reversion)));
                 i++;
                 reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
                         + PGTUtil.REVERSION_BASE_FILE_NAME + i);
@@ -738,7 +738,7 @@ public final class IOHandler {
 
             // remember to load latest state in addition to all prior ones
             reversion = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
-            reversionManager.addVersionToEnd(streamToBytArray(zipFile.getInputStream(reversion)));
+            reversionManager.addVersionToEnd(streamToByetArray(zipFile.getInputStream(reversion)));
         }
     }
 
@@ -813,7 +813,7 @@ public final class IOHandler {
                     byte[] sound = null;
 
                     try (InputStream soundStream = zipFile.getInputStream(soundEntry)) {
-                        sound = streamToBytArray(soundStream);
+                        sound = streamToByetArray(soundStream);
                     } catch (IOException e) {
                         writeErrorLog(e);
                         loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
@@ -1178,6 +1178,26 @@ public final class IOHandler {
      */
     public static boolean isJavaAvailableInTerminal() {
         return !getTerminalJavaVersion().isEmpty();
+    }
+    
+    /**
+     * Does what it says on the tin.Clear those carriage returns away.
+     * 
+     * @param filthyWithWindows 
+     * @return  
+     */
+    public static byte[] clearCarrigeReturns(byte[] filthyWithWindows) {
+        byte[] ret = new byte[filthyWithWindows.length];
+        int cleanCount = 0;
+        
+        for (byte test : filthyWithWindows) {
+            if (test != 13) {
+                ret[cleanCount] = test;
+                cleanCount++;
+            }
+        }
+        
+        return Arrays.copyOfRange(ret, 0, cleanCount);
     }
 
     private IOHandler() {}

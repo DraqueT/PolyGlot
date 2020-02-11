@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#   PolyGlot build script Copyright 2019 Draque Thompson
+#   PolyGlot build script Copyright 2019-2020 Draque Thompson
 #
 #   This script builds PolyGlot into a distributable package on Linux,
 #   OSX, and Windows. Windows does not come with Python installed by default.
@@ -418,7 +418,7 @@ def packWin():
     os.system(command)
 
 def distWin():
-    packageLocation = 'installer\PolyGlot-1.0   .exe'
+    packageLocation = 'installer\PolyGlot-1.0.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
 
