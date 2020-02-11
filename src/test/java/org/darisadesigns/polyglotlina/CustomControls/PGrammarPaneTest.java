@@ -32,6 +32,7 @@ import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assumptions;
 
 /**
  *
@@ -54,6 +55,9 @@ public class PGrammarPaneTest {
         if (headless) {
             return;
         }
+        
+        // TODO: figure out why windows tests are flakey (ancient machine running Windows virtual?)
+        Assumptions.assumeTrue(!PGTUtil.IS_WINDOWS);
         
         System.out.println("PGrammarPaneTest.testPasteRegular");
         

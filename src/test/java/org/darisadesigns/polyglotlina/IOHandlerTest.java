@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson
+ * Copyright (c) 2019-2020, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -28,10 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
-import org.darisadesigns.polyglotlina.PGTUtil;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -168,7 +165,7 @@ public class IOHandlerTest {
         try {
             byte[] expectedResult = "!@)*\ntest\n".getBytes();
             InputStream is = new FileInputStream(PGTUtil.TESTRESOURCES + "inputTest.txt");
-            byte[] result = IOHandler.streamToBytArray(is);
+            byte[] result = IOHandler.clearCarrigeReturns(IOHandler.streamToByetArray(is));
             assertTrue(java.util.Arrays.equals(expectedResult, result));
         } catch (IOException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
