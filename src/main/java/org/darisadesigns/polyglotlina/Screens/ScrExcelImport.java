@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -32,6 +32,9 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.csv.CSVFormat;
+import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
+import org.darisadesigns.polyglotlina.ImportFileHelper.DuplicateOption;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -73,6 +76,7 @@ public class ScrExcelImport extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGrpCopyChoice = new javax.swing.ButtonGroup();
         txtFileName = new javax.swing.JTextField();
         jLabel1 = new PLabel("", menuFontSize);
         btnBrowse = new PButton(nightMode, menuFontSize);
@@ -102,6 +106,17 @@ public class ScrExcelImport extends PDialog {
         cmbQuoteChar = new PComboBox<>(core.getPropertiesManager().getFontMenu());
         btnImport = new PButton(nightMode, menuFontSize);
         btnCancel = new PButton(nightMode, menuFontSize);
+        jPanel2 = new javax.swing.JPanel();
+        jLabel13 = new PLabel("Duplicate Handling", core.getOptionsManager().getMenuFontSize());
+        rdoImpAll = new PRadioButton(PGTUtil.MENU_FONT,
+            core.getOptionsManager().getMenuFontSize(),
+            core.getOptionsManager().isNightMode());
+        rdoIgnrDups = new PRadioButton(PGTUtil.MENU_FONT,
+            core.getOptionsManager().getMenuFontSize(),
+            core.getOptionsManager().isNightMode());
+        rdoOverwDups = new PRadioButton(PGTUtil.MENU_FONT,
+            core.getOptionsManager().getMenuFontSize(),
+            core.getOptionsManager().isNightMode());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import From External Format");
@@ -195,9 +210,9 @@ public class ScrExcelImport extends PDialog {
                             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,7 +237,7 @@ public class ScrExcelImport extends PDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtExcelSheet, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE))
+                        .addComponent(txtExcelSheet))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -271,7 +286,7 @@ public class ScrExcelImport extends PDialog {
                             .addComponent(cmbQuoteChar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
@@ -295,6 +310,52 @@ public class ScrExcelImport extends PDialog {
             }
         });
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel13.setText("Duplicate Handling");
+
+        btnGrpCopyChoice.add(rdoImpAll);
+        rdoImpAll.setSelected(true);
+        rdoImpAll.setText("Import All");
+        rdoImpAll.setToolTipText("Import all values, regardless of duplicates found.");
+
+        btnGrpCopyChoice.add(rdoIgnrDups);
+        rdoIgnrDups.setText("Ignore Duplicates");
+        rdoIgnrDups.setToolTipText("If duplicates exist in the import file, they will be ignored.");
+
+        btnGrpCopyChoice.add(rdoOverwDups);
+        rdoOverwDups.setText("Overwrite Duplicates");
+        rdoOverwDups.setToolTipText("If duplicates are found, existing values will be overwritten.");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel13)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(rdoImpAll)
+                .addGap(18, 18, 18)
+                .addComponent(rdoIgnrDups)
+                .addGap(18, 18, 18)
+                .addComponent(rdoOverwDups)
+                .addContainerGap(66, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rdoImpAll)
+                    .addComponent(rdoIgnrDups)
+                    .addComponent(rdoOverwDups)))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -302,11 +363,10 @@ public class ScrExcelImport extends PDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtFileName, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                        .addComponent(txtFileName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBrowse))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -315,6 +375,8 @@ public class ScrExcelImport extends PDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnImport)))
                 .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -325,7 +387,9 @@ public class ScrExcelImport extends PDialog {
                     .addComponent(jLabel1)
                     .addComponent(btnBrowse))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnImport)
@@ -382,11 +446,26 @@ public class ScrExcelImport extends PDialog {
         try {
             ImportFileHelper reader = new ImportFileHelper(core);
             CSVFormat format = ((Delimiter) cmbPreferences.getSelectedItem()).getFormat();
-            reader.setOptions(txtConWord.getText(), txtLocalWord.getText(),
-                    txtType.getText(), txtClass.getText(),
-                    txtDefinition.getText(), txtPronunciation.getText(), format,
-                    chkFirstLabels.isSelected(), true, 
-                    ((QuoteOptions)cmbQuoteChar.getSelectedItem()).getValue());
+            String quotOpt = ((QuoteOptions)cmbQuoteChar.getSelectedItem()).getValue();
+            DuplicateOption dupOpt = DuplicateOption.IMPORT_ALL;
+            
+            if (rdoIgnrDups.isSelected()) {
+                dupOpt = DuplicateOption.IGNORE_DUPES;
+            } else if (rdoOverwDups.isSelected()) {
+                dupOpt = DuplicateOption.OVERWRITE_DUPES;
+            }
+            
+            reader.setOptions(txtConWord.getText(), 
+                    txtLocalWord.getText(),
+                    txtType.getText(), 
+                    txtClass.getText(),
+                    txtDefinition.getText(), 
+                    txtPronunciation.getText(), 
+                    format,
+                    chkFirstLabels.isSelected(), 
+                    true, 
+                    quotOpt,
+                    dupOpt);
             reader.importFile(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
 
             if (parent != null) {
@@ -464,6 +543,7 @@ public class ScrExcelImport extends PDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnCancel;
+    private javax.swing.ButtonGroup btnGrpCopyChoice;
     private javax.swing.JButton btnImport;
     private javax.swing.JCheckBox chkFirstLabels;
     private javax.swing.JComboBox<Delimiter> cmbPreferences;
@@ -472,6 +552,7 @@ public class ScrExcelImport extends PDialog {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -481,8 +562,12 @@ public class ScrExcelImport extends PDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JRadioButton rdoIgnrDups;
+    private javax.swing.JRadioButton rdoImpAll;
+    private javax.swing.JRadioButton rdoOverwDups;
     private javax.swing.JTextField txtClass;
     private javax.swing.JTextField txtConWord;
     private javax.swing.JTextField txtDefinition;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -32,10 +32,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 
 public class ImportFileHelper {
 
@@ -50,14 +52,23 @@ public class ImportFileHelper {
     private boolean bFirstLineLabels;
     private boolean bCreateTypes;
     private String quoteChar;
+    private DuplicateOption dupOpt;
 
     public ImportFileHelper(DictCore _core) {
         core = _core;
     }
     
-    public void setOptions(String _iConWord, String _iLocalWord, String _iType,
-            String _iClass, String _iDefinition, String _iPronunciation,
-            CSVFormat _format, boolean _bFirstLineLabels, boolean _bCreateTypes, String _quoteChar) {
+    public void setOptions(String _iConWord, 
+            String _iLocalWord, 
+            String _iType,
+            String _iClass, 
+            String _iDefinition, 
+            String _iPronunciation,
+            CSVFormat _format, 
+            boolean _bFirstLineLabels, 
+            boolean _bCreateTypes, 
+            String _quoteChar,
+            DuplicateOption _dupOpt) {
         iConWord = _iConWord;
         iLocalWord = _iLocalWord;
         iType = _iType;
@@ -68,6 +79,7 @@ public class ImportFileHelper {
         bCreateTypes = _bCreateTypes;
         format = _format;
         quoteChar = _quoteChar;
+        dupOpt = _dupOpt;
     }
 
     /**
@@ -103,7 +115,9 @@ public class ImportFileHelper {
             _format = _format.withQuote(quoteChar.charAt(0));
         }
         
+        Map<String, List<ConWord>> valueMap = core.getWordCollection().getValueMapping();
         List<List<String>> rows = getRows(inputFile, _format);
+        ConWordCollection wordCollection = core.getWordCollection();
         
         if (bFirstLineLabels) {
             rows.remove(0);
@@ -286,7 +300,29 @@ public class ImportFileHelper {
                 core.getTypes().insert();
             }
 
-            core.getWordCollection().addWord(newWord);
+            switch (dupOpt) {
+                case IMPORT_ALL:
+                    wordCollection.addWord(newWord);
+                    break;
+                case IGNORE_DUPES:
+                    // only write if does not already exist
+                    if (!valueMap.containsKey(newWord.getValue())) {
+                        wordCollection.addWord(newWord);
+                    }
+                    break;
+                case OVERWRITE_DUPES:
+                    // remove all values that this word would duplicate then write
+                    if (valueMap.containsKey(newWord.getValue())) {
+                        for (ConWord oldWord : valueMap.get(newWord.getValue())) {
+                            wordCollection.deleteNodeById(oldWord.getId());
+                        }
+                    }
+                    
+                    wordCollection.addWord(newWord);
+                    break;
+                default:
+                    // do nothing
+            }
         }
     }
 
@@ -473,5 +509,11 @@ public class ImportFileHelper {
         }
 
         return ret;
+    }
+    
+    public enum DuplicateOption {
+        IMPORT_ALL, // import everything, ignoring duplicate values
+        IGNORE_DUPES, // duplicates found in import file are skipped
+        OVERWRITE_DUPES // duplicates found in import overwrite existing entries
     }
 }
