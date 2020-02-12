@@ -22,13 +22,17 @@ import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
+import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.QuizEngine.Quiz;
+import org.darisadesigns.polyglotlina.QuizEngine.QuizQuestion;
 import org.junit.jupiter.api.Assumptions;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
@@ -69,7 +73,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testPTextInputDialog");
         PTextInputDialog s = new PTextInputDialog(new ScrAbout(core), core, "", "");
         s.dispose();
         
@@ -84,7 +87,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrAbout");
         ScrAbout s = new ScrAbout(core);
         s.dispose();
         
@@ -99,8 +101,7 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrDeclensionGenSetup");
-        ScrDeclensionGenClassic s = new ScrDeclensionGenClassic(core, core.getTypes().getNodes()[0].getId(), null);
+        ScrDeclensionGenSetup s = new ScrDeclensionGenSetup(core, core.getTypes().getNodes()[0].getId());
         s.dispose();
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
@@ -114,7 +115,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrDeclensionSetup");
         ScrDeclensionSetup s = new ScrDeclensionSetup(core, core.getTypes().getNodes()[0].getId());
         s.dispose();
         
@@ -129,7 +129,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrDeclensionGrids");
         ScrDeclensionsGrids s = new ScrDeclensionsGrids(core, core.getWordCollection().getWordNodes()[0]);
         s.setCloseWithoutSave(true);
         s.hardDispose();
@@ -145,7 +144,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrDeprecatedDeclensions");
         ScrDeprecatedDeclensions s = new ScrDeprecatedDeclensions(core, core.getWordCollection().getWordNodes()[0]);
         s.dispose();
         
@@ -160,7 +158,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrEasterEgg");
         ScrEasterEgg s = new ScrEasterEgg();
         s.dispose();
         
@@ -175,7 +172,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrEtymRoots");
         for (ConWord word : core.getWordCollection().getWordNodes()) {
             ScrEtymRoots s = new ScrEtymRoots(core, word);
             s.dispose();
@@ -192,7 +188,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrExcelImport");
         ScrExcelImport s = new ScrExcelImport(core, null);
         s.dispose();
         
@@ -207,7 +202,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrFamilies");
         ScrFamilies s = new ScrFamilies(core, null);
         s.dispose();
         
@@ -222,7 +216,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrGrammarGuide");
         ScrGrammarGuide s = new ScrGrammarGuide(core);
         s.dispose();
         
@@ -237,7 +230,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrIPARefChart");
         ScrIPARefChart s = new ScrIPARefChart(core);
         s.dispose();
         
@@ -252,7 +244,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrIpaTranslator");
         ScrIpaTranslator s = new ScrIpaTranslator(core);
         s.dispose();
         
@@ -267,7 +258,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrLangProps");
         ScrLangProps s = new ScrLangProps(core);
         s.dispose();
         
@@ -282,7 +272,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrLexicon");
         ScrLexicon s = new ScrLexicon(core, null);
         s.dispose();
         
@@ -297,7 +286,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrLexiconProblemDisplay");
         List<LexiconProblemNode> problemNodes = new ArrayList<>();
         problemNodes.add(new LexiconProblemNode(new ConWord(), "PROBLEM"));
         ScrLanguageProblemDisplay s = new ScrLanguageProblemDisplay(problemNodes, core);
@@ -314,7 +302,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrLogoDetails");
         ScrLogoDetails s = new ScrLogoDetails(core);
         s.dispose();
         
@@ -329,7 +316,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrLogoQuickView");
         ScrLogoQuickView s = new ScrLogoQuickView(core, core.getWordCollection().getWordNodes()[0]);
         s.dispose();
         
@@ -344,7 +330,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrMainMenu");
         ScrMainMenu s = new ScrMainMenu(DummyCore.newCore());
         s.updateAllValues(core);
         s.hardDispose();
@@ -360,7 +345,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrOptions");
         ScrOptions s = new ScrOptions(core);
         s.dispose();
         
@@ -375,7 +359,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrPhonology");
         ScrPhonology s = new ScrPhonology(core);
         s.dispose();
         
@@ -390,7 +373,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrPrintToPDF");
         ScrPrintToPDF s = new ScrPrintToPDF(core);
         s.dispose();
         
@@ -405,7 +387,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrProgressMenu");
         ScrProgressMenu s = new ScrProgressMenu("TEST", 1, false, false);
         s.dispose();
         
@@ -420,7 +401,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrQuickWordEntry");
         ScrQuickWordEntry s = new ScrQuickWordEntry(core, null);
         s.dispose();
         
@@ -435,7 +415,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrReversion");
         ScrReversion s = new ScrReversion(core);
         s.dispose();
         
@@ -450,7 +429,6 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrTypes");
         ScrTypes s = new ScrTypes(core);
         s.dispose();
         
@@ -464,8 +442,6 @@ public class OpenScreensTest {
         if (headless) {
             return;
         }
-        
-        System.out.println("testScrUpdateAlert");
         
         try {
             ScrUpdateAlert s = new ScrUpdateAlert(false, core);
@@ -486,11 +462,91 @@ public class OpenScreensTest {
             return;
         }
         
-        System.out.println("testScrWordClasses");
         ScrWordClasses s = new ScrWordClasses(core);
         s.dispose();
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
+    }
+    
+    @Test
+    public void testScrQuizScreen() {
+        System.out.println("OpenScreensTest.testScrQuizScreen");
+        
+        if (headless) {
+            return;
+        }
+        
+        try {
+            Quiz testQuiz = new Quiz(core);
+            QuizQuestion testQuestion = new QuizQuestion(core);
+            testQuestion.addChoice(new ConWord());
+            testQuestion.setAnswer(new ConWord());
+            testQuestion.setType(QuizQuestion.QuestionType.Local);
+            testQuestion.setSource(new ConWord());
+            testQuiz.addNode(testQuestion);
+
+            ScrQuizScreen s = new ScrQuizScreen(testQuiz, core);
+            s.dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e);
+        }
+        
+        testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
+    }
+    
+    @Test
+    public void testScrTestWordConj() {
+        System.out.println("OpenScreensTest.testScrTestWordConj");
+        
+        if (headless) {
+            return;
+        }
+        
+        try {
+            int type = core.getTypes().addNode(new TypeNode());
+
+            ScrTestWordConj s = new ScrTestWordConj(core, type , null);
+            s.dispose();
+        } catch (Exception e) {
+            fail(e);
+        }
+        
+        testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
+    }
+    
+    @Test
+    public void testScrQuizGenDialog() {
+        System.out.println("OpenScreensTest.testScrQuizGenDialog");
+        
+        if (headless) {
+            return;
+        }
+        
+        ScrQuizGenDialog s = new ScrQuizGenDialog(core);
+        s.dispose();
+        
+        testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
+    }
+    
+    @Test
+    public void testScrDeclensionGenSimple() {
+        System.out.println("OpenScreensTest.testScrDeclensionGenSimple");
+        
+        if (headless) {
+            return;
+        }
+        
+        try {
+            int type = core.getTypes().addNode(new TypeNode());
+
+            ScrDeclensionGenSimple s = new ScrDeclensionGenSimple(core, type);
+            s.dispose();
+
+            testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
+        } catch (Exception e) {
+            fail(e);
+        }
     }
     
     private void testExceptions(String scrName) {
@@ -499,8 +555,16 @@ public class OpenScreensTest {
         }
         
         if (errors.exists()) {
+            String failState = "Errors opening or closing " + scrName + ": \n";
+            
+            try {
+                failState += new String (Files.readAllBytes(errors.toPath()));
+            } catch (IOException e) {
+                failState += "UNABLE TO READ ERROR LOG: " + e.getLocalizedMessage();
+            }
+            
             errors.delete();
-            fail("Errors opening or closing " + scrName);
+            fail(failState);
         }
     }
 }

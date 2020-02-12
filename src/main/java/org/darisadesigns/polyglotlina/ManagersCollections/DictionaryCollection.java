@@ -255,4 +255,31 @@ public abstract class DictionaryCollection<N extends DictNode> {
         hash = 37 * hash + Objects.hashCode(this.nodeMap);
         return hash;
     }
+    
+    /**
+     * Generates mapping of node's string values to node objects. Lists are returned
+     * rather than raw objects, as many collections allow for nodes with duplicate
+     * value fields.
+     * 
+     * @return Map of node value -> list of nodes with this value
+     */
+    public Map<String, List<N>> getValueMapping() {
+        Map<String, List<N>> ret = new HashMap<>();
+        
+        for (N node : nodeMap.values()) {
+            String nodeVal = node.getValue();
+            List<N> nodeList;
+            
+            if (ret.containsKey(nodeVal)) {
+                nodeList = ret.get(nodeVal);
+            } else {
+                nodeList = new ArrayList<>();
+                ret.put(nodeVal, nodeList);
+            }
+            
+            nodeList.add(node);
+        }
+        
+        return ret;
+    }
 }

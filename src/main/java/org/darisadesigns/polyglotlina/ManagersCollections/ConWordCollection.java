@@ -751,6 +751,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
             _addWord.setCore(core);
         }
         
+        this.clear();
         bufferNode.setEqual(_addWord);
 
         ret = insert();

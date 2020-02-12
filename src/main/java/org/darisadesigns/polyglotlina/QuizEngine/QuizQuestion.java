@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -37,7 +37,7 @@ import java.util.Set;
 public class QuizQuestion extends DictNode {
     protected List<DictNode> multipleChoices = new ArrayList<>();
     private DictNode answer;
-    private QuestionType type;
+    private QuestionType type = QuestionType.InitVal;
     private final DictCore core;
     private DictNode source;
     private DictNode userAnswer;
@@ -270,7 +270,7 @@ public class QuizQuestion extends DictNode {
     }
  
     public enum QuestionType {
-        Local, PoS, Proc, Def, Classes, ConEquiv
+        Local, PoS, Proc, Def, Classes, ConEquiv, InitVal
     }
     
     public enum Answered {
