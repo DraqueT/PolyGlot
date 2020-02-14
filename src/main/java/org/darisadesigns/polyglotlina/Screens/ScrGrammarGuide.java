@@ -106,14 +106,14 @@ public final class ScrGrammarGuide extends PFrame {
         
         isUpdating = false;
         defTime = "00:00:00";
-        playButtonUp = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.PLAY_BUTTON_UP)));
-        playButtonDown = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.PLAY_BUTTON_DOWN)));
-        recordButtonUp = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.RECORD_BUTTON_UP)));
-        recordButtonDown = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.RECORD_BUTTON_DOWN)));
-        addButton = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.ADD_BUTTON)));
-        addButtonPressed = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.ADD_BUTTON_PRESSED)));
-        deleteButton = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.DELETE_BUTTON)));
-        deleteButtonPressed = getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.DELETE_BUTTON_PRESSED)));
+        playButtonUp = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.PLAY_BUTTON_UP)));
+        playButtonDown = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.PLAY_BUTTON_DOWN)));
+        recordButtonUp = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.RECORD_BUTTON_UP)));
+        recordButtonDown = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.RECORD_BUTTON_DOWN)));
+        addButton = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.ADD_BUTTON)));
+        addButtonPressed = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.ADD_BUTTON_PRESSED)));
+        deleteButton = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.DELETE_BUTTON)));
+        deleteButtonPressed = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.DELETE_BUTTON_PRESSED)));
 
         initComponents();
         
@@ -707,10 +707,10 @@ public final class ScrGrammarGuide extends PFrame {
         btnRecordAudio.setText("");
         btnAddSection.setText("");
         btnDelete.setText("");
-        btnAddSection.setIcon(getButtonSizeIcon(addButton, 21, 21));
-        btnAddSection.setPressedIcon(getButtonSizeIcon(addButtonPressed, 21, 21));
-        btnDelete.setIcon(getButtonSizeIcon(deleteButton, 21, 21));
-        btnDelete.setPressedIcon(getButtonSizeIcon(deleteButtonPressed, 21, 21));
+        btnAddSection.setIcon(PGTUtil.getSizedIcon(addButton, 21, 21));
+        btnAddSection.setPressedIcon(PGTUtil.getSizedIcon(addButtonPressed, 21, 21));
+        btnDelete.setIcon(PGTUtil.getSizedIcon(deleteButton, 21, 21));
+        btnDelete.setPressedIcon(PGTUtil.getSizedIcon(deleteButtonPressed, 21, 21));
         btnAddSection.setContentAreaFilled(false);
         btnDelete.setContentAreaFilled(false);
     }
@@ -884,29 +884,6 @@ public final class ScrGrammarGuide extends PFrame {
             GrammarChapNode chapNode = (GrammarChapNode) node;
             chapNode.setName(txtName.getText());
         }
-    }
-
-    /**
-     * converts arbitrarily sized image to one appropriate for a button icon
-     * size
-     *
-     * @param rawImage image to shrink
-     * @return image of appropriate size
-     */
-    private ImageIcon getButtonSizeIcon(ImageIcon rawImage) {
-        return getButtonSizeIcon(rawImage, 30, 30);
-    }
-
-    /**
-     * converts an icon to a user defined size for buttons
-     *
-     * @param rawImage image to convert
-     * @param width new width
-     * @param height new height
-     * @return resized image
-     */
-    private ImageIcon getButtonSizeIcon(ImageIcon rawImage, int width, int height) {
-        return new ImageIcon(rawImage.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
     }
 
     /**

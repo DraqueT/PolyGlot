@@ -106,10 +106,9 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
     public ConWord[] illegalFilter() {
         List<ConWord> retList = new ArrayList<>();
 
-        nodeMap.values().stream().filter((word) -> !word.isWordLegal()).forEach((word) -> retList.add(word));
-        
         for (ConWord curWord : nodeMap.values()) {
-            if (!curWord.isWordLegal()) {
+            if ((!curWord.isWordLegal() && !curWord.isRulesOverride()) 
+                    && !retList.contains(curWord)) {
                 retList.add(curWord);
             }
         }
@@ -269,6 +268,9 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
     /**
      * Tests whether collection contains a particular conword
+     * 
+     * NOTE: This is from VERY OLD CODE and is KIND OF BAD. Always make certain 
+     * that the wordsets are balanced before using.
      *
      * @param word string value to search for
      * @return whether multiples of conword exists in the collection
@@ -779,6 +781,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      * @return text in plain tag
      */
     public static String formatCon(String toCon, DictCore core) {
+        // TODO: This is very bad. Strip this out at the same time that the language stats tool is rewritten. Use css style.
         String defaultFont = "face=\"" + core.getPropertiesManager().getFontCon().getFamily() + "\"";
         return "<font " + defaultFont + ">" + toCon + "</font>";
     }

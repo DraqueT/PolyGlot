@@ -801,6 +801,29 @@ public final class PGTUtil {
         
         return ret;
     }
+    
+    /**
+     * converts arbitrarily sized image to one appropriate for a button icon
+     * size
+     *
+     * @param rawImage image to shrink
+     * @return image of appropriate size
+     */
+    public static ImageIcon getButtonSizeIcon(ImageIcon rawImage) {
+        return getSizedIcon(rawImage, 30, 30);
+    }
+
+    /**
+     * converts an icon to a user defined size for buttons
+     *
+     * @param rawImage image to convert
+     * @param width new width
+     * @param height new height
+     * @return resized image
+     */
+    public static ImageIcon getSizedIcon(ImageIcon rawImage, int width, int height) {
+        return new ImageIcon(rawImage.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
+    }
 
     private PGTUtil() {}
 }

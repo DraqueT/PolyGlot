@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, draque
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -65,6 +65,7 @@ public class IPAHandlerTest {
     @Test
     public void testAllSoundsExist() {
         System.out.println("IPAHandlerTest.testAllSoundsExist");
+        
         IPAHandler handler = new IPAHandler(null);
         
         try {
@@ -110,4 +111,46 @@ public class IPAHandlerTest {
         }
     }
     
+    @Test
+    public void testPlayProcUcla() {
+        System.out.println("IPAHandlerTest.testPlayProcUcla");
+        
+        IPAHandler handler = new IPAHandler(null);
+        
+        try {
+            handler.playChar("a", IPAHandler.IPALibrary.UCLA_IPA);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testPlayProcWiki() {
+        System.out.println("IPAHandlerTest.testPlayProcWiki");
+        
+        IPAHandler handler = new IPAHandler(null);
+        
+        try {
+            handler.playChar("a", IPAHandler.IPALibrary.WIKI_IPA);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testyPlayProcBadChar() {
+        System.out.println("IPAHandlerTest.testyPlayProcBadChar");
+
+        String playChar = "¯\\_(ツ)_/¯";
+        String expectedMessage = "Unable to find character " + playChar + " in pronunciations.";
+        IPAHandler handler = new IPAHandler(null);
+        
+        Exception exception = assertThrows(Exception.class, () -> {
+            handler.playChar(playChar, IPAHandler.IPALibrary.WIKI_IPA);
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
+    }
 }
