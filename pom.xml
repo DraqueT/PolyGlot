@@ -122,6 +122,15 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.5</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*ExternalCode/*</exclude>
+                        <!--Consider how UI testing might be added in the future...-->
+                        <exclude>**/*Screens/*</exclude>
+                        <exclude>**/*CustomControls/*</exclude>
+                        <!--Consider how UI testing might be added in the future...-->
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>

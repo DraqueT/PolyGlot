@@ -76,6 +76,17 @@ public class SoundRecorder {
         format = getAudioFormat();
         parentWindow = _parent;
     }
+    
+    /**
+     * Instantiates recorder with custom format
+     *
+     * @param _format custom format for recorder
+     * @param _parent parent window (for error communication)
+     */
+    public SoundRecorder(AudioFormat _format, Window _parent) {
+        format = _format;
+        parentWindow = _parent;
+    }
 
     /**
      * Set buttons to be managed by Sound Recorder
@@ -99,17 +110,6 @@ public class SoundRecorder {
 
         playPauseBut.setIcon(playUp);
         recordBut.setIcon(recUp);
-    }
-
-    /**
-     * Instantiates recorder with custom format
-     *
-     * @param _format custom format for recorder
-     * @param _parent parent window (for error communication)
-     */
-    public SoundRecorder(AudioFormat _format, Window _parent) {
-        format = _format;
-        parentWindow = _parent;
     }
 
     public void setTimer(JTextField _timer) {
@@ -182,7 +182,7 @@ public class SoundRecorder {
         final DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
         
         // 8000 is the typical rate, but I wanted to get increments of 1/100 second
-        int bufferSize = 80; //(int) format.getSampleRate() * format.getFrameSize();
+        int bufferSize = 80;
 
         final byte[] buffer = new byte[bufferSize];
         out = new ByteArrayOutputStream();

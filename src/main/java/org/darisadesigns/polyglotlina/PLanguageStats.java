@@ -1,5 +1,5 @@
     /*
- * Copyright (c) 2017-2019, Draque Thompson
+ * Copyright (c) 2017-2020, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -49,7 +49,11 @@ public final class PLanguageStats {
             final int wordCount = core.getWordCollection().getWordCount();
             final ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);
             progress.setVisible(true);
-            progress.setLocation(core.getRootWindow().getLocation());
+            
+            // unnessecary to test UI positioning here (and no root window in tests)
+            if (core.getRootWindow() != null) {
+                progress.setLocation(core.getRootWindow().getLocation());
+            }
 
             Thread thread = new Thread(){
                 @Override
@@ -246,7 +250,7 @@ public final class PLanguageStats {
             charStatBar.addVal(new String[]{character}, new Double[]{starting, count});
         }
 
-        ret += "  <head>\n"
+        ret += "\n"
                 + "    <script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>\n"
                 + "    <script type=\"text/javascript\">\n"
                 + "      google.charts.load('current', {'packages':['corechart']});\n"
@@ -259,7 +263,6 @@ public final class PLanguageStats {
         ret += charStatBar.getBuildHTML();
         
         ret += "    </script>\n"
-                + "  </head>\n"
                 + "  <body style=\"font-family:" + core.getPropertiesManager().getFontLocal().getFamily() + ";\">\n"
                 + "    <center>---LANGUAGE STAT REPORT---</center><br><br>";
 

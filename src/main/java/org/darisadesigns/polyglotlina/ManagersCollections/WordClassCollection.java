@@ -126,6 +126,11 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
         List<List<PEntry<Integer, Integer>>> ret = new ArrayList<>();
         int offset = 0;
 
+        // combocache should generally be pre-built before something like this is done, but cover the contingency
+        if (comboCache == null) {
+            buildComboCache();
+        }
+        
         Collections.shuffle(comboCache, new Random(System.nanoTime()));
 
         if (comboCache != null && !comboCache.isEmpty()) {
@@ -244,11 +249,6 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
     @Override
     public boolean equals(Object comp) {
         boolean ret = false;
-        
-        /*
-        DictionaryCollection<WordClass> {
-        private List<List<PEntry<Integer, Integer>>> comboCache = null;
-        */
         
         if (this == comp) {
             ret = true;

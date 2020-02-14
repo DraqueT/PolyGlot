@@ -86,4 +86,149 @@ public class ConWordCollectionTest {
         
         assertEquals(resultMessage, expectedMessage);
     }
+    
+    @Test
+    public void testIllegalFilter() {
+        System.out.println("ConWordCollectionTest.loadSwadeshTestMissingFile");
+        int expectedRulesBroken = 7;
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            core.readFile(PGTUtil.TESTRESOURCES + "TestWordRules.pgd");
+
+            ConWord[] words = core.getWordCollection().illegalFilter();
+            
+            assertEquals(expectedRulesBroken, words.length);
+            assertEquals("LOCALCOPY1", words[0].getValue());
+            assertEquals("LOCALCOPY2", words[1].getValue());
+            assertEquals("NOLOCAL", words[2].getValue());
+            assertEquals("NO_POS", words[3].getValue());
+            assertEquals("Verb", words[4].getValue());
+            assertEquals("copy", words[5].getValue());
+            assertEquals("copy", words[6].getValue());
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void getWordsConOrder() {
+        System.out.println("ConWordCollectionTest.getWordsConOrder");
+        
+        DictCore core = DummyCore.newCore();
+        ConWordCollection lex = core.getWordCollection();
+        
+        try {
+            ConWord word = new ConWord();
+            word.setCore(core);
+            word.setValue("a");
+            word.setLocalWord("a");
+            lex.addNode(word);
+            word = new ConWord();
+            word.setCore(core);
+            word.setValue("b");
+            word.setLocalWord("b");
+            lex.addNode(word);
+            word = new ConWord();
+            word.setCore(core);
+            word.setValue("c");
+            word.setLocalWord("c");
+            lex.addNode(word);
+
+            core.getPropertiesManager().setAlphaOrder("c,b,a");
+
+            ConWord[] words = lex.getWordNodes();
+
+            assertEquals("c", words[0].getValue());
+            assertEquals("b", words[1].getValue());
+            assertEquals("a", words[2].getValue());
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void getWordsLocalOrder() {
+        System.out.println("ConWordCollectionTest.getWordsLocalOrder");
+        
+        DictCore core = DummyCore.newCore();
+        ConWordCollection lex = core.getWordCollection();
+        
+        try {
+            ConWord word = new ConWord();
+            word.setCore(core);
+            word.setValue("a");
+            word.setLocalWord("a");
+            lex.addNode(word);
+            word = new ConWord();
+            word.setCore(core);
+            word.setValue("b");
+            word.setLocalWord("b");
+            lex.addNode(word);
+            word = new ConWord();
+            word.setCore(core);
+            word.setValue("c");
+            word.setLocalWord("c");
+            lex.addNode(word);
+
+            core.getPropertiesManager().setAlphaOrder("c,b,a");
+
+            ConWord[] words = lex.getNodesLocalOrder();
+
+            assertEquals("a", words[0].getValue());
+            assertEquals("b", words[1].getValue());
+            assertEquals("c", words[2].getValue());
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testWordValueExists() {
+        System.out.println("ConWordCollectionTest.testWordValueExists");
+        
+        String conVal = "CONVAL";
+        String localVal = "LOCALVAL";
+        
+        DictCore core = DummyCore.newCore();
+        ConWord word = new ConWord();
+        
+        assertFalse(core.getWordCollection().testWordValueExists(conVal));
+        
+        word.setValue(conVal);
+        word.setLocalWord(localVal);
+        word.setCore(core);
+        
+        try {
+            core.getWordCollection().addWord(word);
+        } catch (Exception e) {
+            fail(e);
+        }
+        
+        assertTrue(core.getWordCollection().testWordValueExists(conVal));
+    }
+    
+    public void testLocalValueExists() {
+        System.out.println("ConWordCollectionTest.testLocalValueExists");
+        
+        String conVal = "CONVAL";
+        String localVal = "LOCALVAL";
+        
+        DictCore core = DummyCore.newCore();
+        ConWord word = new ConWord();
+        
+        assertFalse(core.getWordCollection().testLocalValueExists(localVal));
+        
+        word.setValue(conVal);
+        word.setLocalWord(localVal);
+        word.setCore(core);
+        
+        try {
+            core.getWordCollection().addNode(word);
+        } catch (Exception e) {
+            fail(e);
+        }
+        
+        assertTrue(core.getWordCollection().testLocalValueExists(localVal));
+    }
 }

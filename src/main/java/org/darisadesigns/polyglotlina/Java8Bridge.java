@@ -130,7 +130,7 @@ public final class Java8Bridge {
     public static void exportExcelDict(String fileName, DictCore core,
             boolean separateDeclensions) throws IOException {
         if (!IOHandler.isJavaAvailableInTerminal()) {
-            throw new IOException("Java runtime missing.");
+            throw new IOException("The Java runtime is required for this feature.\nPlease install from: www.java.com");
         }
         
         File bridge = PGTUtil.getJava8BridgeLocation();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson
+ * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -508,7 +508,7 @@ public class IPAHandler {
      * @param ipaLibrary library to use to play sound
      * @throws Exception on any playback error, unknown IPA character, unknown IPA sound library
      */
-    private void playChar(String c, IPALibrary ipaLibrary) throws Exception {
+    public void playChar(String c, IPALibrary ipaLibrary) throws Exception {
         if (c.isEmpty()) {
             return;
         }
