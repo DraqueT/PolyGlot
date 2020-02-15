@@ -407,10 +407,6 @@ public class DeclensionManager {
         return ret;
     }
 
-    public Map<Integer, List<DeclensionNode>> getDeclensionMap() {
-        return dList;
-    }
-
     public void addDeclensionToWord(Integer wordId, Integer declensionId, DeclensionNode declension) {
         addDeclension(wordId, declensionId, declension, dList);
     }

@@ -39,20 +39,8 @@ import org.junit.jupiter.api.Test;
  * @author DThompson
  */
 public class DeclensionManagerTest {
-    final DictCore core;
-    final DictCore debugCore;
     
     public DeclensionManagerTest() {
-        core = DummyCore.newCore();
-        debugCore = DummyCore.newCore();
-        
-        try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
-        } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
-            fail(e);
-        }
     }
 
     /**
@@ -62,6 +50,14 @@ public class DeclensionManagerTest {
     @Test
     public void testIsCombinedDeclSurpressed() {
         System.out.println("DeclensionManagerTest.testIsCombinedDeclSurpressed");
+        
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
         DeclensionManager decMan = core.getDeclensionManager();
         
         assertTrue(decMan.isCombinedDeclSurpressed(",3,", 3));
@@ -70,6 +66,15 @@ public class DeclensionManagerTest {
     @Test
     public void testSetCombinedDeclSurpressed() {
         System.out.println("DeclensionManagerTest.testSetCombinedDeclSurpressed");
+        
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         DeclensionManager decMan = core.getDeclensionManager();
         
         decMan.setCombinedDeclSuppressed(",3,", 4, false);
@@ -79,6 +84,15 @@ public class DeclensionManagerTest {
     @Test
     public void testSetCombinedDeclSurpressedRaw() {
         System.out.println("DeclensionManagerTest.testSetCombinedDeclSurpressedRaw");
+        
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         DeclensionManager decMan = core.getDeclensionManager();
         
         decMan.setCombinedDeclSuppressedRaw("4,TESTVAL", false);
@@ -88,6 +102,15 @@ public class DeclensionManagerTest {
     @Test
     public void testAddDeclensionGenRule() {
         System.out.println("DeclensionManagerTest.testAddDeclensionGenRule");
+        
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         DeclensionManager decMan = core.getDeclensionManager();
         
         DeclensionGenRule rule = new DeclensionGenRule();
@@ -104,6 +127,15 @@ public class DeclensionManagerTest {
     @Test
     public void testWipeDeclensionGenRules() {
         System.out.println("DeclensionManagerTest.testWipeDeclensionGenRules");
+        
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         DeclensionManager decMan = core.getDeclensionManager();
         
         DeclensionGenRule rule = new DeclensionGenRule();
@@ -120,6 +152,16 @@ public class DeclensionManagerTest {
     @Test
     public void testDeleteDeclensionGenRule() {
         System.out.println("DeclensionManagerTest.testDeleteDeclensionGenRule");
+        
+        DictCore core = DummyCore.newCore();
+        DictCore debugCore = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         DeclensionManager decMan = core.getDeclensionManager();
         
         DeclensionGenRule rule = new DeclensionGenRule();
@@ -136,6 +178,15 @@ public class DeclensionManagerTest {
     @Test
     public void testGetDeclensionRulesForType() {
         System.out.println("DeclensionManagerTest.testGetDeclensionRulesForType");
+        
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         DeclensionManager decMan = core.getDeclensionManager();
         
         DeclensionGenRule rule1 = new DeclensionGenRule();
@@ -313,7 +364,16 @@ public class DeclensionManagerTest {
     
     @Test
     public void testConjDebugBasic() {
-        System.out.println("DeclensionManagerTest.Test Conj Debug Basic");
+        System.out.println("DeclensionManagerTest.testConjDebugBasic");
+        
+        DictCore debugCore = DummyCore.newCore();
+        
+        try {
+            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
                 "--------------------------------------\n" +
@@ -355,7 +415,16 @@ public class DeclensionManagerTest {
 
     @Test
     public void testConjDebugClassValOne() {
-        System.out.println("DeclensionManagerTest.Test Conj Debug class value 1");
+        System.out.println("DeclensionManagerTest.testConjDebugClassValOne");
+        
+        DictCore debugCore = DummyCore.newCore();
+        
+        try {
+            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
                 "--------------------------------------\n" +
@@ -403,7 +472,16 @@ public class DeclensionManagerTest {
     
     @Test
     public void testConjDebugClassValTwo() {
-        System.out.println("DeclensionManagerTest.Test Conj Debug class value 2");
+        System.out.println("DeclensionManagerTest.testConjDebugClassValTwo");
+        
+        DictCore debugCore = DummyCore.newCore();
+        
+        try {
+            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
                 "--------------------------------------\n" +
@@ -451,7 +529,16 @@ public class DeclensionManagerTest {
     
     @Test
     public void testConjFilterNegagiveMultiTransformDebug() {
-        System.out.println("DeclensionManagerTest.Test Conj Debug Filtering against rule");
+        System.out.println("DeclensionManagerTest.testConjFilterNegagiveMultiTransformDebug");
+        
+        DictCore debugCore = DummyCore.newCore();
+        
+        try {
+            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
                 "--------------------------------------\n" +
@@ -495,7 +582,16 @@ public class DeclensionManagerTest {
     
     @Test
     public void testConjFilterPositiveMultiTransformDebug() {
-        System.out.println("DeclensionManagerTest.Test Conj Debug Filtering against rule");
+        System.out.println("DeclensionManagerTest.testConjFilterPositiveMultiTransformDebug");
+        
+        DictCore debugCore = DummyCore.newCore();
+        
+        try {
+            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         String expectdResult = 
                 "APPLIED RULES BREAKDOWN:\n" +
                 "--------------------------------------\n" +
@@ -545,6 +641,15 @@ public class DeclensionManagerTest {
     @Test
     public void testGetAllDepGenerationRules() {
         System.out.println("DeclensionManagerTest.testGetAllDepGenerationRules");
+        
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         int typeId = 4; // verbs
         int expectedRules = 13;
         DeclensionManager decMan = core.getDeclensionManager();
@@ -559,6 +664,15 @@ public class DeclensionManagerTest {
     @Test
     public void testGetDeclensionRules() {
         System.out.println("DeclensionManagerTest.testGetDeclensionRules");
+        
+        DictCore core = DummyCore.newCore();
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
+        
         ConWord word = new ConWord();
         int expectedRuleCount = 13;
         String expectedFirstRuleName = "Past, Cert, Pos rule";

@@ -191,23 +191,9 @@ public final class ScrLexicon extends PFrame {
         }
     }
 
-    /**
-     * Returns false & explains why if currently selected word is illegal
-     *
-     * @return if currently selected word is illegal
-     */
     @Override
     public boolean canClose() {
-        boolean ret = true;
-
-        // error box only populated with word has illegal values
-        if (!txtErrorBox.getText().isEmpty() && !chkRuleOverride.isSelected()) {
-            ret = false;
-            InfoBox.warning("Illegal word.", "Please correct or delete currently selected word "
-                    + "or select the rule override checkbox before exiting lexicon.", core.getRootWindow());
-        }
-
-        return ret;
+        return true;
     }
 
     @Override
@@ -1018,16 +1004,7 @@ public final class ScrLexicon extends PFrame {
 
     @Override
     public void dispose() {
-        boolean canClose = true;
-
-        if (!txtErrorBox.getText().isEmpty()
-                && !chkRuleOverride.isSelected()) {
-            InfoBox.warning("Illegal Word",
-                    "Currently selected word is illegal. Please correct, or mark rule override.", core.getRootWindow());
-            canClose = false;
-        }
-
-        if (canClose) {
+        if (this.canClose()) {
             saveAllValues();
             killLogoChild();
             super.dispose();
@@ -2077,7 +2054,7 @@ public final class ScrLexicon extends PFrame {
             }
 
             setupRomField();
-            //setWordLegality();
+            setWordLegality();
         }
     }//GEN-LAST:event_cmbTypeActionPerformed
 
