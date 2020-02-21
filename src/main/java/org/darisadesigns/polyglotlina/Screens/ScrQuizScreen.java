@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -39,7 +39,6 @@ import java.awt.event.ActionEvent;
 import java.util.Collections;
 import java.util.Objects;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import org.darisadesigns.polyglotlina.Nodes.DictNode;
@@ -444,7 +443,7 @@ public final class ScrQuizScreen extends PFrame {
         ScrQuizScreen s = new ScrQuizScreen(quiz, core);
         
         
-        if (s.quiz.hasNext()) {
+        if (!s.quiz.isEmpty()) {
             s.setVisible(true);
             int height = s.getHeight();
             int width = s.getWidth();
