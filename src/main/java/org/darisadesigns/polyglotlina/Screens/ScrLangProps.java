@@ -120,7 +120,7 @@ public class ScrLangProps extends PFrame {
         core.pushUpdate();
         super.dispose();
     }
-    
+
     @Override
     public void saveAllValues() {
         PropertiesManager propMan = core.getPropertiesManager();
@@ -192,14 +192,28 @@ public class ScrLangProps extends PFrame {
         txtAlphaOrder.setFont(conFont);
         txtFont.setText(conFont.getFamily());
 
-        testRTLWarning();      
+        try {
+            boolean synced = core.getPropertiesManager().syncCachedFontCon();
+
+            if (!synced) {
+                InfoBox.warning("Font Not Cached",
+                        "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
+                        + "To address this, please load your font manually via Tools->Import Font", core.getRootWindow());
+            }
+        } catch (Exception e) {
+            InfoBox.error("Font Caching Error",
+                    "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
+                    + "To address this, please load your font manually via Tools->Import Font\n\nError: " + e.getLocalizedMessage(), core.getRootWindow());
+        }
+
+        testRTLWarning();
     }
-    
+
     private void setLocalFont(Font localFont) {
         if (localFont != null) {
-            
+
             core.getPropertiesManager().setLocalFont(localFont, localFont.getSize2D());
-            
+
             txtLocalFont.setText(localFont.getFamily());
         }
     }
@@ -234,7 +248,7 @@ public class ScrLangProps extends PFrame {
     public Component getWindow() {
         return this.getRootPane();
     }
-    
+
     /**
      * Alerts user if their alphabetic order contains regex characters
      */
@@ -556,7 +570,7 @@ public class ScrLangProps extends PFrame {
     private void btnChangeFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeFontActionPerformed
         // Font not set manually because JAVA IS BROKEN. Gotta pull the binary for ligatures to load...
         Font selectedFont = fontDialog();
-        
+
         if (selectedFont != null) {
             setConFont(selectedFont, selectedFont.getStyle(), selectedFont.getSize());
         }
@@ -585,24 +599,24 @@ public class ScrLangProps extends PFrame {
             InfoBox.error("Font Refresh Failed", e.getLocalizedMessage(), this);
             IOHandler.writeErrorLog(e, "Top level exception caught here. See prior exception.");
         }
-        
+
         this.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnFontRefreshActionPerformed
 
     private void chkIgnoreCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkIgnoreCaseActionPerformed
         if (chkIgnoreCase.isSelected()) {
-            InfoBox.warning("Ignore Case Warning", 
-                    "This feature does not work with all charactrers, and can disrupt regex features. Please use with caution.", 
+            InfoBox.warning("Ignore Case Warning",
+                    "This feature does not work with all charactrers, and can disrupt regex features. Please use with caution.",
                     core.getRootWindow());
         }
     }//GEN-LAST:event_chkIgnoreCaseActionPerformed
 
     private void chkDisableProcRegexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDisableProcRegexActionPerformed
         // if this is selected, inform users that recursion cannot be used at the same time
-        if (chkDisableProcRegex.isSelected() 
-                && (core.getPronunciationMgr().isRecurse() 
+        if (chkDisableProcRegex.isSelected()
+                && (core.getPronunciationMgr().isRecurse()
                 || core.getRomManager().isRecurse())) {
-            if (InfoBox.actionConfirmation("Disable Regex?", "You have recursion enabled in the Phonology section. " 
+            if (InfoBox.actionConfirmation("Disable Regex?", "You have recursion enabled in the Phonology section. "
                     + "If you disable regex, this will also be disabled. Continue?", this)) {
                 core.getPronunciationMgr().setRecurse(false);
                 core.getRomManager().setRecurse(false);

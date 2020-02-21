@@ -260,6 +260,27 @@ public class PropertiesManager {
     }
 
     /**
+     * Synchronizes cached font with confont set. 
+     * @return true on success, false if no matching font found
+     * @throws java.lang.Exception on read error
+     */
+    public boolean syncCachedFontCon() throws Exception {
+        File fontFile = PFontHandler.getFontFile(conFont.getFamily());
+        cachedConFont = null;
+        if (fontFile.getName().toLowerCase().endsWith("ttc")) {
+            throw new Exception("PolyGlot does not currently support ttc (true type collection) caching or ligatures.");
+        } else if (fontFile.exists()) {
+            // set cached version
+            cachedConFont = IOHandler.getByteArrayFromFile(fontFile);
+            
+            // load font from binary location (superior due to ligature support from binaries)
+            conFont = PFontHandler.getFontFromFile(fontFile.getCanonicalPath());
+        }
+        
+        return cachedConFont != null;
+    }
+    
+    /**
      * Sets font. Cached font byte array will be cleared.
      * 
      * Will first try to re-load the font from OS font repository folder (due to ligature error in Java)
@@ -269,17 +290,7 @@ public class PropertiesManager {
      * @param _fontSize Size of font
      */
     public void setFontCon(Font _fontCon, Integer _fontStyle, Integer _fontSize) {
-        Font switchToFont = null;
-        
-        if (_fontCon != null) {
-            switchToFont = PFontHandler.loadFontFromOSFileFolder(_fontCon.getFamily());
-        }
-        
-        if (switchToFont == null) {
-            switchToFont = _fontCon;
-        }
-        
-        setFontConRaw(switchToFont);
+        setFontConRaw(_fontCon);
         setFontSize(_fontSize);
         setFontStyle(_fontStyle);
     }
@@ -550,11 +561,13 @@ public class PropertiesManager {
         
         rootElement.appendChild(propContainer);
 
-        // store font for Conlang words
-        wordValue = doc.createElement(PGTUtil.FONT_CON_XID);
-        Font curFont = getFontCon();
-        wordValue.appendChild(doc.createTextNode(curFont == null ? "" : curFont.getFamily()));
-        propContainer.appendChild(wordValue);
+        // store font for Conlang words ONLY if no cached font
+        if (cachedConFont == null) {
+            wordValue = doc.createElement(PGTUtil.FONT_CON_XID);
+            Font curFont = getFontCon();
+            wordValue.appendChild(doc.createTextNode(curFont == null ? "" : curFont.getFamily()));
+            propContainer.appendChild(wordValue);
+        }
 
         // store font style
         wordValue = doc.createElement(PGTUtil.LANG_PROP_FONT_STYLE_XID);
