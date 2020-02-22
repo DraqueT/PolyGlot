@@ -27,6 +27,7 @@ import org.darisadesigns.polyglotlina.Nodes.WordClass;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -334,7 +335,7 @@ public class ImportFileHelper {
      * @throws FileNotFoundException if CSV does not exist
      * @throws IOException if read error
      */
-    private List<List<String>> getRows(String inputFile, CSVFormat format) throws FileNotFoundException, IOException {
+    private List<List<String>> getRows(String inputFile, CSVFormat format) throws FileNotFoundException, IOException, MalformedInputException {
         List<List<String>> ret = new ArrayList<>();
         
         try (
