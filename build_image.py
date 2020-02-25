@@ -18,6 +18,7 @@ import subprocess
 import sys
 from os import path
 from xml.dom import minidom
+from datetime import date
 
 buildResult = ''
 copyDestination = ''
@@ -34,7 +35,6 @@ separatorCharacter = '/'
 ###############################
 # LINUX BUILD CONSTANTS
 # update the packager location for your Linux build
-JAVA_PACKAGER_LOCATION_LINUX = "/usr/lib/jvm/jdk-14/bin" # this will go away once Java 14 drops officially...
 LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 
 
@@ -61,6 +61,7 @@ JAVAFX_VER = '' # set in main for timing reasons
 POLYGLOT_VERSION = '' # set in main for timing reasons
 JAVA_HOME = '' # set in main for timing reasons
 IS_RELEASE = False
+CUR_YEAR = str(date.today().year)
 
 
 
@@ -247,39 +248,23 @@ def imageLinux():
     os.system(command)
     
 def packLinux():
-    print("packing Linux app...")
-    os.system('rm -rf appimage')
-
-    command = (JAVA_PACKAGER_LOCATION_LINUX + '/jpackage ' +
-        '--app-version ' + POLYGLOT_VERSION + ' ' +
-        '--copyright "2014-2019 Draque Thompson" ' +
-        '--description "PolyGlot is a spoken language construction toolkit." ' +
-        '--icon packaging_files/PolyGlot0.png ' +
-#        '--java-options -splash:assets/assets/org/DarisaDesigns/ImageAssets/splash-image.png ' # splash feature currently borked: https://bugs.openjdk.java.net/browse/JDK-8208380
-        '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
-        '--name PolyGlot ' +
-        '--output appimage ' +
-        '--runtime-image build/image')
-
-    os.system(command)
+    print("Packing Linux app unnecessary")
     
 def distLinux():
     print('Creating distribution deb...')
     os.system('rm -rf installer')
     os.system('mkdir installer')
-    command = (JAVA_PACKAGER_LOCATION_LINUX + '/jpackage ' +
+    command = (JAVA_HOME + '/bin/jpackage ' +
         '--app-version ' + POLYGLOT_VERSION + ' ' +
-        '--copyright "2014-2019 Draque Thompson" ' +
+        '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
         '--file-associations packaging_files/linux/file_types_linux.prop ' +
         '--icon packaging_files/PolyGlot0.png ' +
 #        '--java-options -splash:assets/assets/org/DarisaDesigns/ImageAssets/splash-image.png ' # splash feature currently borked: https://bugs.openjdk.java.net/browse/JDK-8208380
-        '--linux-bundle-name polyglot-linear-a ' +
+        '--linux-package-name polyglot-linear-a ' +
         '--linux-app-category Education ' +
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
-        '--name PolyGlot ' +
-        '--output installer ' +
-        '--package-type deb ' +
+        '--name "PolyGlot" ' +
         '--runtime-image build/image')
     os.system(command)
     
@@ -332,7 +317,7 @@ def packOsx():
         '--output appimage ' +
         '--name PolyGlot ' +
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
-        '--copyright "2014-2019 Draque Thompson" ' +
+        '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
         '--mac-bundle-identifier "PolyGlot" ' +
         '--mac-bundle-name "PolyGlot" ' +
@@ -411,7 +396,7 @@ def packWin():
         '--output appimage ' +
         '--name PolyGlot ' +
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
-        '--copyright "2014-2019 Draque Thompson" ' +
+        '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
         '--icon packaging_files/win/PolyGlot0.ico ' +
         '--app-version "' + POLYGLOT_VERSION + '"')
@@ -433,7 +418,7 @@ def distWin():
         '--output installer ' +
         '--name PolyGlot ' +
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
-        '--copyright "2014-2019 Draque Thompson" ' +
+        '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit."' +
         ' --icon packaging_files/win/PolyGlot0.ico')
 
