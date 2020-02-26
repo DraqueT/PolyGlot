@@ -1,5 +1,7 @@
 .idea
 /installer*/
+*.deb
+*.exe
 *.ini
 *.log
 appimage
