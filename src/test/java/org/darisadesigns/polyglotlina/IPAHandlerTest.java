@@ -24,6 +24,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assumptions;
 
 /**
  *
@@ -33,32 +34,29 @@ public class IPAHandlerTest {
 
     @Test
     public void testPlaySounds() {
-        // do not test in headless environment (hangs on 100% CPU consumption)
-        if (!GraphicsEnvironment.isHeadless()) {
-            System.out.println("IPAHandlerTest.testPlaySounds");
-            IPAHandler handler = new IPAHandler(null);
+        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless());
 
-            try {
-                Class<?> myClass = handler.getClass();
-                Field field = myClass.getDeclaredField("charMap");
-                field.setAccessible(true);
-                Map<String, String> charMap = (Map<String, String>)field.get(handler);
+        System.out.println("IPAHandlerTest.testPlaySounds");
+        IPAHandler handler = new IPAHandler(null);
 
-                field = myClass.getDeclaredField("soundRecorder");
-                field.setAccessible(true);
-                SoundRecorder soundRecorder = (SoundRecorder)field.get(handler);
+        try {
+            Class<?> myClass = handler.getClass();
+            Field field = myClass.getDeclaredField("charMap");
+            field.setAccessible(true);
+            Map<String, String> charMap = (Map<String, String>)field.get(handler);
 
-                // only test playing the first sounds of each library (just test the rest exist)
-                String firstSound = (String)charMap.values().toArray()[0];
-            
-                soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
-                soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
-            } catch (Exception e) {
-                IOHandler.writeErrorLog(e, e.getLocalizedMessage());
-                fail(e);
-            }
-        } else {
-            System.out.println("HEADLESS SKIP: test sound playback");
+            field = myClass.getDeclaredField("soundRecorder");
+            field.setAccessible(true);
+            SoundRecorder soundRecorder = (SoundRecorder)field.get(handler);
+
+            // only test playing the first sounds of each library (just test the rest exist)
+            String firstSound = (String)charMap.values().toArray()[0];
+
+            soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
+            soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
         }
     }
     
@@ -113,6 +111,8 @@ public class IPAHandlerTest {
     
     @Test
     public void testPlayProcUcla() {
+        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless());
+        
         System.out.println("IPAHandlerTest.testPlayProcUcla");
         
         IPAHandler handler = new IPAHandler(null);

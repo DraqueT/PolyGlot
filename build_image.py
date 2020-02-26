@@ -268,7 +268,7 @@ def distLinux():
     os.system(command)
     
     if copyDestination != "":
-        copyInstaller('installer/polyglot-linear-a_' + POLYGLOT_VERSION + '-1_amd64.deb')
+        copyInstaller('polyglot-linear-a_' + POLYGLOT_VERSION + '-1_amd64.deb')
 
 
 ######################################
