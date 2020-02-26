@@ -49,7 +49,6 @@ OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
 ###############################
 # WINDOWS BUILD CONSTANTS
 # update the packager location for your Windows build
-JAVA_PACKAGER_LOCATION_WIN = 'C:\\Java\\jdk-14\\bin'  # this will go away once Java 14 drops officially...
 WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 
 ###############################
@@ -365,7 +364,7 @@ def cleanWin():
 def imageWin():
     print('creating jmod based on jar built without dependencies...')
     os.system('mkdir target\mods')
-    os.system(JAVA_PACKAGER_LOCATION_WIN + '\\jmod create ' +
+    os.system('jmod create ' +
         '--class-path target\\' + JAR_WO_DEP +
         ' --main-class org.darisadesigns.polyglotlina.PolyGlot ' +
         'target\mods\PolyGlot.jmod')
@@ -373,7 +372,7 @@ def imageWin():
     JAVAFX_LOCATION = getJfxLocation()
 
     print('creating runnable image...')
-    command = ('%JAVA_HOME%\\bin\\jlink ' +
+    command = ('jlink ' +
         '--module-path "module_injected_jars;' +
         'target\\mods;' +
         JAVAFX_LOCATION + '\\javafx-graphics\\' + JAVAFX_VER + ';' +
@@ -389,38 +388,26 @@ def imageWin():
     os.system(command)
 
 def packWin():
-    print('Packing Windows app...')
-    os.system('rmdir /s /q appimage')
-    command = (JAVA_PACKAGER_LOCATION_WIN + '\\jpackage ' +
-        '--runtime-image build\\image ' +
-        '--output appimage ' +
-        '--name PolyGlot ' +
-        '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
-        '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
-        '--description "PolyGlot is a spoken language construction toolkit." ' +
-        '--icon packaging_files/win/PolyGlot0.ico ' +
-        '--app-version "' + POLYGLOT_VERSION + '"')
-    os.system(command)
+    print('No Packing Step on Windows.')
 
 def distWin():
-    packageLocation = 'installer\PolyGlot-1.0.exe'
+    packageLocation = 'PolyGlot-' + POLYGLOT_VERSION + '.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
 
     # If missing, install WiX Toolset: https://wixtoolset.org/releases/
-    command = (JAVA_PACKAGER_LOCATION_WIN + '\\jpackage ' + 
+    command = ('jpackage ' + 
         '--runtime-image build\\image ' +
         '--win-shortcut ' +
         '--win-menu ' +
         '--win-dir-chooser ' +
-        '--package-type exe ' +
         '--file-associations packaging_files\\win\\file_types_win.prop ' +
-        '--output installer ' +
         '--name PolyGlot ' +
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
         '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
-        '--description "PolyGlot is a spoken language construction toolkit."' +
-        ' --icon packaging_files/win/PolyGlot0.ico')
+        '--description "PolyGlot is a spoken language construction toolkit." ' +
+        '--app-version "' + POLYGLOT_VERSION + '" '
+        '--icon packaging_files/win/PolyGlot0.ico')
 
     os.system(command)
     
