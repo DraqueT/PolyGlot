@@ -33,8 +33,6 @@ public class QuizQuestionTest {
     private final ConWord answer;
     
     public QuizQuestionTest() {
-        System.out.println("QuizQuestionText");
-        
         questionTest = new QuizQuestion(DummyCore.newCore());
         
         answer = new ConWord();
@@ -48,7 +46,7 @@ public class QuizQuestionTest {
 
     @Test
     public void testSetEqual() {
-        System.out.println("QuizQuestionText.testSetEqual");
+        System.out.println("QuizQuestionTest.testSetEqual");
         
         QuizQuestion copy = new QuizQuestion(DummyCore.newCore());
         copy.setEqual(questionTest);
@@ -57,7 +55,7 @@ public class QuizQuestionTest {
 
     @Test
     public void testAddChoice() {
-        System.out.println("QuizQuestionText.testAddChoice");
+        System.out.println("QuizQuestionTest.testAddChoice");
         
         ConWord choice = new ConWord();
         int expectedLength = questionTest.getChoices().length + 1;
@@ -69,7 +67,7 @@ public class QuizQuestionTest {
 
     @Test
     public void testEquals() {
-        System.out.println("QuizQuestionText.testEquals");
+        System.out.println("QuizQuestionTest.testEquals");
         
         QuizQuestion copyQ = new QuizQuestion(DummyCore.newCore());
         
@@ -86,7 +84,7 @@ public class QuizQuestionTest {
     
     @Test
     public void testNotEquals() {
-        System.out.println("QuizQuestionText.testEquals");
+        System.out.println("QuizQuestionTest.testEquals");
         
         QuizQuestion copyQ = new QuizQuestion(DummyCore.newCore());
         
