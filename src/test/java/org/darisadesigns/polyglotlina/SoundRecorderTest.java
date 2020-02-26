@@ -19,13 +19,14 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import java.awt.Image;
+import java.awt.GraphicsEnvironment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assumptions;
 
 /**
  *
@@ -38,6 +39,10 @@ public class SoundRecorderTest {
 
     @Test
     public void testSoundRecordingSuite() {
+        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless());
+        
+        System.out.println("SoundRecorderTest.testSoundRecordingSuite");
+        
         ImageIcon playButtonUp = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.PLAY_BUTTON_UP)));
         ImageIcon playButtonDown = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.PLAY_BUTTON_DOWN)));
         ImageIcon recordButtonUp = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.RECORD_BUTTON_UP)));

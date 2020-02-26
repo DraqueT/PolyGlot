@@ -20,9 +20,11 @@
 package org.darisadesigns.polyglotlina;
 
 import TestResources.DummyCore;
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assumptions;
 
 /**
  *
@@ -31,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PLanguageStatsTest {
     
     public PLanguageStatsTest() {
+        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless());
     }
 
     /**
