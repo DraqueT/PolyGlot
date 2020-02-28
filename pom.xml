@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.DarisaDesigns</groupId>
     <artifactId>PolyGlotLinA</artifactId>
-    <version>3.0.1</version>
+    <version>3.1</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>12</maven.compiler.source>
@@ -90,12 +90,14 @@
             <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <scope>test</scope>
             <version>2.44.0</version>
         </dependency>
+        
         <dependency>
             <groupId>com.opera</groupId>
             <artifactId>operadriver</artifactId>
@@ -108,6 +110,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -118,17 +121,18 @@
     
     <build>
         <plugins>
-            <plugin>
+            <!-- Only use for analysis. Messes with Windows and Linux builds. -->
+<!--            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.5</version>
                 <configuration>
                     <excludes>
                         <exclude>**/*ExternalCode/*</exclude>
-                        <!--Consider how UI testing might be added in the future...-->
+                        Consider how UI testing might be added in the future...
                         <exclude>**/*Screens/*</exclude>
                         <exclude>**/*CustomControls/*</exclude>
-                        <!--Consider how UI testing might be added in the future...-->
+                        Consider how UI testing might be added in the future...
                     </excludes>
                 </configuration>
                 <executions>
@@ -145,7 +149,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <!--ASSEMBLY PLUGIN-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>

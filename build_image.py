@@ -42,7 +42,6 @@ LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 # OSX BUILD CONSTANTS
 
 # update the packager location for your OSX build
-JAVA_PACKAGER_LOCATION_OSX = "/Library/Java/JavaVirtualMachines/jdk-14.jdk/Contents/Home/bin" # this will go away once Java 14 drops officially...
 OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
 
 
@@ -155,8 +154,6 @@ def main(args):
         clean()
     if (fullBuild and 'image' not in skip_steps) or 'image' in args:
         image()
-    if (fullBuild and 'pack' not in skip_steps) or 'pack' in args:
-        pack()
     if (fullBuild and 'dist' not in skip_steps) or 'dist' in args:
         dist()
         
@@ -187,15 +184,6 @@ def image():
         imageOsx()
     elif osString == winString:
         imageWin()
-        
-    
-def pack():
-    if osString == linString:
-        packLinux()
-    elif osString == osxString:
-        packOsx()
-    elif osString == winString:
-        packWin()
     
 def dist():
     if osString == linString:
@@ -245,9 +233,6 @@ def imageLinux():
         '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
 
     os.system(command)
-    
-def packLinux():
-    print("Packing Linux app unnecessary")
     
 def distLinux():
     print('Creating distribution deb...')
@@ -308,44 +293,24 @@ def imageOsx():
         '--compress=2 ' +
         '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
     
-def packOsx():
-    print("Packing mac app...")
-    os.system('rm -rf appimage')
-    command = (JAVA_PACKAGER_LOCATION_OSX + '/jpackage ' +
+def distOsx():
+    print('Creating distribution package...')
+    command = (JAVA_HOME + '/bin/jpackage ' +
         '--runtime-image build/image ' +
-        '--output appimage ' +
+        '--icon "PolyGlot.app" ' +
         '--name PolyGlot ' +
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
         '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
-        '--mac-bundle-identifier "PolyGlot" ' +
-        '--mac-bundle-name "PolyGlot" ' +
+        '--mac-package-name "PolyGlot" ' +
         '--file-associations packaging_files/mac/file_types_mac.prop ' +
         '--icon packaging_files/mac/PolyGlot.icns ' +
         '--app-version "' + POLYGLOT_VERSION + '"')
 
     os.system(command)
-    
-def distOsx():
-    print('Creating distribution package...')
-    os.system('rm -rf installer')
-    os.system('mkdir installer')
-    # if this does not work correctly: brew install create-dmg
-    os.system('create-dmg ' +
-        '--volname "PolyGlot Installer" ' +
-        '--volicon "packaging_files/mac/PolyGlot.icns" ' +
-        '--app-drop-link 450 250 ' +
-        '--hide-extension "PolyGlot.app" ' +
-        '--background "packaging_files/mac/bg.png" ' +
-        '--window-pos 200 120 ' +
-        '--window-size 650 591 ' +
-        '--icon-size 120 ' +
-        '--icon "PolyGlot.app" 200 250 ' +
-        '"installer/PolyGlot-Ins.dmg" ' +
-        '"appimage/"')
-        
+      
     if copyDestination != "":
-        copyInstaller('installer/PolyGlot-Ins.dmg')
+        copyInstaller('PolyGlot-' + POLYGLOT_VERSION + '.dmg')
 
 
 ######################################
@@ -386,9 +351,6 @@ def imageWin():
         '--compress=2 ' +
         '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
     os.system(command)
-
-def packWin():
-    print('No Packing Step on Windows.')
 
 def distWin():
     packageLocation = 'PolyGlot-' + POLYGLOT_VERSION + '.exe'
@@ -541,9 +503,7 @@ To use this utility, simply execute this script with no arguments to run the ent
 
     image : From the built jar files (which must exist), creates a runnable image. This image is platform dependent. Produced files stored in the build folder.
     
-    pack : Packs the image (which must exist) into a distributable application. This is platform dependent. Produced files stored in the appimage folder.
-    
-    dist : Creates distribution files for the packed application (which must exist). This is platform dependent. Produced files stores in the installer folder.
+    dist : Creates distribution files for the application. This is platform dependent. Produced files stored in the installer folder.
 
     -java-home-o <jdk-path> : Overrides JAVA_HOME. Useful for stubborn VMs that will not normally recognize environment variables.
     
