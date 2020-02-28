@@ -1,6 +1,7 @@
 .idea
 /installer*/
 *.deb
+*.dmg
 *.exe
 *.ini
 *.log
