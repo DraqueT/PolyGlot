@@ -161,7 +161,7 @@ public final class ScrQuizScreen extends PFrame {
                     throw new Exception("Unhandled question type: " + question.getType());
             }
 
-            // force firing of resize code
+            // force firing of font resize code for question label
             lblQNode.adaptLabelFont(lblQNode);
 
             pnlChoices.removeAll();
@@ -172,7 +172,7 @@ public final class ScrQuizScreen extends PFrame {
             gbc.weightx = 9999;
 
             for (DictNode choiceNode : question.getChoices()) {
-                final PRadioButton choice = new PRadioButton(core.getPropertiesManager().getFontCon(), menuFontSize, nightMode);
+                final PRadioButton choice = new PRadioButton(core, nightMode);
                 choice.setValue(choiceNode);
                 choice.setType(question.getType());
 

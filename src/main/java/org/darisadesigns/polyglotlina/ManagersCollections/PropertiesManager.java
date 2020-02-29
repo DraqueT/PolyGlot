@@ -64,20 +64,15 @@ public class PropertiesManager {
     private boolean useLocalWordLex = false;
     private byte[] cachedConFont = null;
     private byte[] cachedLocalFont = null;
-    private final Font charisUnicode;
-    private Font localFont;
+    private Font localFont = PGTUtil.CHARIS_UNICODE;
     private final Map<String, String> charRep = new HashMap<>();
     private final DictCore core;
     private Double kerningSpace = 0.0;
     private boolean useSimplifiedConjugations = false;
 
-    public PropertiesManager(DictCore _core) throws IOException {
+    public PropertiesManager(DictCore _core) {
         alphaOrder = new PAlphaMap<>();
         core = _core;
-
-        // set default font to Charis, as it's unicode compatible
-        charisUnicode = PFontHandler.getCharisUnicodeFontInitial();
-        localFont = charisUnicode;
     }   
     
     /**
@@ -145,7 +140,7 @@ public class PropertiesManager {
      * @return
      */
     public Font getFontMenu() {
-        return charisUnicode.deriveFont(Font.PLAIN, (float)core.getOptionsManager().getMenuFontSize());
+        return PGTUtil.CHARIS_UNICODE.deriveFont(Font.PLAIN, (float)core.getOptionsManager().getMenuFontSize());
     }
     
     public Font getFontLocal() {
@@ -334,7 +329,7 @@ public class PropertiesManager {
         }
         
         return retFont == null ? 
-                charisUnicode.deriveFont((float)core.getOptionsManager().getMenuFontSize()) : 
+                PGTUtil.CHARIS_UNICODE.deriveFont((float)core.getOptionsManager().getMenuFontSize()) : 
                 retFont.deriveFont(conFontStyle, conFontSize);
     }
 
@@ -351,7 +346,7 @@ public class PropertiesManager {
             cachedConFont = null;
         }
 
-        conFont = fontCon == null ? charisUnicode : fontCon;
+        conFont = fontCon == null ? PGTUtil.CHARIS_UNICODE : fontCon;
     }
 
     /**
@@ -842,27 +837,27 @@ public class PropertiesManager {
             ret = true;
         } else if (comp instanceof PropertiesManager) {
             PropertiesManager prop = (PropertiesManager) comp;
-            ret = ((conFont == null) && (prop.conFont == null)) || conFont.equals(prop.conFont)
-                    && conFontStyle.equals(prop.conFontStyle)
-                    && conFontSize.equals(prop.conFontSize)
-                    && localFontSize == prop.localFontSize
-                    && alphaPlainText.equals(prop.alphaPlainText)
-                    && langName.equals(prop.langName)
-                    && localLangName.equals(prop.localLangName)
-                    && copyrightAuthorInfo.equals(prop.copyrightAuthorInfo)
-                    && typesMandatory == prop.typesMandatory
-                    && localMandatory == prop.localMandatory
-                    && wordUniqueness == prop.wordUniqueness
-                    && localUniqueness == prop.localUniqueness
-                    && overrideRegexFont == prop.overrideRegexFont
-                    && ignoreCase == prop.ignoreCase
-                    && disableProcRegex == prop.disableProcRegex
-                    && enforceRTL == prop.enforceRTL
-                    && useLocalWordLex == prop.useLocalWordLex
-                    && localFont.equals(prop.localFont)
-                    && charRep.equals(prop.charRep)
-                    && kerningSpace.equals(prop.kerningSpace)
-                    && useSimplifiedConjugations == prop.useSimplifiedConjugations;
+            ret = ((conFont == null) && (prop.conFont == null)) || conFont.equals(prop.conFont);
+            ret = ret && conFontStyle.equals(prop.conFontStyle);
+            ret = ret && conFontSize.equals(prop.conFontSize);
+            ret = ret && localFontSize == prop.localFontSize;
+            ret = ret && alphaPlainText.equals(prop.alphaPlainText);
+            ret = ret && langName.equals(prop.langName);
+            ret = ret && localLangName.equals(prop.localLangName);
+            ret = ret && copyrightAuthorInfo.equals(prop.copyrightAuthorInfo);
+            ret = ret && typesMandatory == prop.typesMandatory;
+            ret = ret && localMandatory == prop.localMandatory;
+            ret = ret && wordUniqueness == prop.wordUniqueness;
+            ret = ret && localUniqueness == prop.localUniqueness;
+            ret = ret && overrideRegexFont == prop.overrideRegexFont;
+            ret = ret && ignoreCase == prop.ignoreCase;
+            ret = ret && disableProcRegex == prop.disableProcRegex;
+            ret = ret && enforceRTL == prop.enforceRTL;
+            ret = ret && useLocalWordLex == prop.useLocalWordLex;
+            ret = ret && localFont.equals(prop.localFont);
+            ret = ret && charRep.equals(prop.charRep);
+            ret = ret && kerningSpace.equals(prop.kerningSpace);
+            ret = ret && useSimplifiedConjugations == prop.useSimplifiedConjugations;
         }
         
         return ret;

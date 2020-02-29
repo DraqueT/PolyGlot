@@ -109,14 +109,11 @@ public class ScrExcelImport extends PDialog {
         btnCancel = new PButton(nightMode, menuFontSize);
         jPanel2 = new javax.swing.JPanel();
         jLabel13 = new PLabel("Duplicate Handling", core.getOptionsManager().getMenuFontSize());
-        rdoImpAll = new PRadioButton(PGTUtil.MENU_FONT,
-            core.getOptionsManager().getMenuFontSize(),
+        rdoImpAll = new PRadioButton(core,
             core.getOptionsManager().isNightMode());
-        rdoIgnrDups = new PRadioButton(PGTUtil.MENU_FONT,
-            core.getOptionsManager().getMenuFontSize(),
+        rdoIgnrDups = new PRadioButton(core,
             core.getOptionsManager().isNightMode());
-        rdoOverwDups = new PRadioButton(PGTUtil.MENU_FONT,
-            core.getOptionsManager().getMenuFontSize(),
+        rdoOverwDups = new PRadioButton(core,
             core.getOptionsManager().isNightMode());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);

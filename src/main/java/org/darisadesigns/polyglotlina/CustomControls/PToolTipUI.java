@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, Draque Thompson
+ * Copyright (c) 2017-2020, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,8 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.PFontHandler;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -32,7 +30,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
 import javax.swing.LookAndFeel;
@@ -41,6 +38,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.ToolTipUI;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.View;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  * Custom tooltips. This class grabs hold of incoming ToolTip objects' size
@@ -53,18 +51,12 @@ public class PToolTipUI extends ToolTipUI
     private static final PToolTipUI SHARED_INSTANCE = new PToolTipUI();
     private static PropertyChangeListener sharedPropertyChangedListener;
     private PropertyChangeListener propertyChangeListener;
-    private Font font;
+    private final Font font;
     
     public PToolTipUI() {
         super();
         
-        try {
-            font = PFontHandler.getCharisUnicodeFontInitial().deriveFont((float)14.0);
-        } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Font error", "Unable to load tooltip font: " 
-                    + e.getLocalizedMessage(), null);
-        }
+        font = PGTUtil.CHARIS_UNICODE.deriveFont((float)14.0);
     }
 
     public static ComponentUI createUI(JComponent c) {

@@ -678,19 +678,19 @@ public class DictCore {
         if (comp instanceof DictCore) {
             DictCore compCore = (DictCore)comp;
             
-            ret = wordCollection.equals(compCore.wordCollection)
-                    && typeCollection.equals(compCore.typeCollection)
-                    && declensionMgr.equals(compCore.declensionMgr)
-                    && propertiesManager.equals(compCore.propertiesManager)
-                    && pronuncMgr.equals(compCore.pronuncMgr)
-                    && romMgr.equals(compCore.romMgr)
-                    && famManager.equals(compCore.famManager)
-                    && logoCollection.equals(compCore.logoCollection)
-                    && grammarManager.equals(compCore.grammarManager)
-                    && wordClassCollection.equals(compCore.wordClassCollection)
-                    && imageCollection.equals(compCore.imageCollection)
-                    && etymologyManager.equals(compCore.etymologyManager)
-                    && toDoManager.equals(compCore.toDoManager);
+            ret = wordCollection.equals(compCore.wordCollection);
+            ret = ret && typeCollection.equals(compCore.typeCollection);
+            ret = ret && declensionMgr.equals(compCore.declensionMgr);
+            ret = ret && propertiesManager.equals(compCore.propertiesManager);
+            ret = ret && pronuncMgr.equals(compCore.pronuncMgr);
+            ret = ret && romMgr.equals(compCore.romMgr);
+            ret = ret && famManager.equals(compCore.famManager);
+            ret = ret && logoCollection.equals(compCore.logoCollection);
+            ret = ret && grammarManager.equals(compCore.grammarManager);
+            ret = ret && wordClassCollection.equals(compCore.wordClassCollection);
+            ret = ret && imageCollection.equals(compCore.imageCollection);
+            ret = ret && etymologyManager.equals(compCore.etymologyManager);
+            ret = ret && toDoManager.equals(compCore.toDoManager);
         }
         
         return ret;
