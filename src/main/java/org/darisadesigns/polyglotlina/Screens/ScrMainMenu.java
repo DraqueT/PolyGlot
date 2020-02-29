@@ -139,6 +139,7 @@ public final class ScrMainMenu extends PFrame {
         checkJavaVersion();
         super.setSize(super.getPreferredSize());
         addBindingsToPanelComponents(this.getRootPane());
+        btnNewLang.setLocation(pnlMain.getSize().width/2, btnNewLang.getLocation().y);
     }
     
     /**
@@ -1235,11 +1236,12 @@ public final class ScrMainMenu extends PFrame {
                 }
             }
         };
-        jButton1 = new PButton(nightMode, menuFontSize);
-        jButton2 = new PButton(nightMode, menuFontSize);
+        btnOpenLang = new PButton(nightMode, menuFontSize);
+        btnOpenManual = new PButton(nightMode, menuFontSize);
         jLabel1 = new PLabel("", menuFontSize);
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        btnNewLang = new PButton(nightMode, menuFontSize);
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnuNewLocal = new javax.swing.JMenuItem();
@@ -1409,19 +1411,19 @@ public final class ScrMainMenu extends PFrame {
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
         pnlMain.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
-        jButton1.setText("OPEN LANGUAGE");
-        jButton1.setToolTipText("Open an existing language");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnOpenLang.setText("OPEN LANGUAGE");
+        btnOpenLang.setToolTipText("Open an existing language");
+        btnOpenLang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnOpenLangActionPerformed(evt);
             }
         });
 
-        jButton2.setText("OPEN MANUAL");
-        jButton2.setToolTipText("Open the PolyGlot manual");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnOpenManual.setText("OPEN MANUAL");
+        btnOpenManual.setToolTipText("Open the PolyGlot manual");
+        btnOpenManual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnOpenManualActionPerformed(evt);
             }
         });
 
@@ -1436,17 +1438,26 @@ public final class ScrMainMenu extends PFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("or simply begin work on the blank file currently loaded.");
 
+        btnNewLang.setText("NEW LANGUAGE");
+        btnNewLang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewLangActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMainLayout.createSequentialGroup()
-                .addGap(101, 101, 101)
-                .addComponent(jButton1)
-                .addGap(95, 95, 95)
-                .addComponent(jButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(btnOpenLang)
+                .addGap(41, 41, 41)
+                .addComponent(btnNewLang)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnOpenManual)
+                .addContainerGap())
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -1461,8 +1472,9 @@ public final class ScrMainMenu extends PFrame {
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(btnOpenManual)
+                    .addComponent(btnOpenLang)
+                    .addComponent(btnNewLang))
                 .addGap(118, 118, 118))
         );
 
@@ -1894,13 +1906,13 @@ public final class ScrMainMenu extends PFrame {
 
     }//GEN-LAST:event_mnuLexFamiliesActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnOpenLangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenLangActionPerformed
         mnuOpenLocalActionPerformed(evt);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnOpenLangActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnOpenManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenManualActionPerformed
         mnuAboutActionPerformed(evt);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnOpenManualActionPerformed
 
     private void btnPhonologyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhonologyActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -1978,17 +1990,22 @@ public final class ScrMainMenu extends PFrame {
         new ScrIpaTranslator(core).setVisible(true);
     }//GEN-LAST:event_mnuIpaTranslatorActionPerformed
 
+    private void btnNewLangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewLangActionPerformed
+        newFile(true);
+    }//GEN-LAST:event_btnNewLangActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
     private javax.swing.JButton btnLexicon;
     private javax.swing.JButton btnLogos;
+    private javax.swing.JButton btnNewLang;
+    private javax.swing.JButton btnOpenLang;
+    private javax.swing.JButton btnOpenManual;
     private javax.swing.JButton btnPhonology;
     private javax.swing.JButton btnPos;
     private javax.swing.JButton btnProp;
     private javax.swing.JButton btnQuiz;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
