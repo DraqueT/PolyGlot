@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson
+ * Copyright (c) 2019-2020, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -25,7 +25,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
-import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
@@ -270,8 +269,8 @@ public final class ScrDeclensionGenSetup extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        rdoClassic = new PRadioButton(core.getPropertiesManager().getFontCon(), menuFontSize, nightMode);
-        rdoSimplified = new PRadioButton(core.getPropertiesManager().getFontCon(), menuFontSize, nightMode);
+        rdoClassic = new PRadioButton(core, nightMode);
+        rdoSimplified = new PRadioButton(core, nightMode);
         btnTestWord = new PButton(nightMode, menuFontSize);
         jPanel2 = new javax.swing.JPanel();
         btnOK = new PButton(nightMode, menuFontSize);

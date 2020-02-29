@@ -402,6 +402,7 @@ public final class PGTUtil {
 
     // Fonts stored here to cache values single time
     public static final Font MENU_FONT;
+    public static final Font CHARIS_UNICODE;
 
     public static final boolean IS_OSX;
     public static final boolean IS_WINDOWS;
@@ -454,6 +455,16 @@ public final class PGTUtil {
             tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
         }
         MENU_FONT = tmpFont;
+        
+        try {
+            tmpFont = PFontHandler.getCharisUnicodeFontInitial();
+        } catch (IOException e) {
+            InfoBox.error("PolyGlot Load Error", "Unable to load Charis Unicode.", null);
+            IOHandler.writeErrorLog(e, "Initilization error (PGTUtil)");
+            tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
+        }
+        
+        CHARIS_UNICODE = tmpFont;
 
         ADD_BUTTON_ICON = new ImageIcon(new ImageIcon(
                 PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/add_button.png"))

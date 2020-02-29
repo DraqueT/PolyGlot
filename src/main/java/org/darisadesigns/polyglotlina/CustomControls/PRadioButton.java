@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson
+ * Copyright (c) 2016-2020, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,12 +19,12 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import java.awt.Font;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.DictNode;
 import org.darisadesigns.polyglotlina.QuizEngine.QuizQuestion.QuestionType;
 import javax.swing.JRadioButton;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
@@ -34,15 +34,13 @@ import org.darisadesigns.polyglotlina.PGTUtil;
 public final class PRadioButton extends JRadioButton {
     private DictNode value = null;
     private QuestionType type;
-    private final Font conFont;
-    private final double menuFontSize;
+    private final DictCore core;
     private final boolean nightMode;
 
-    public PRadioButton(Font _conFont, double _menuFontSize, boolean _nightMode) { // nightmode left for future enhancements
-        conFont = _conFont;
-        menuFontSize = _menuFontSize;
+    public PRadioButton(DictCore _core, boolean _nightMode) { // nightmode left for future enhancements
         nightMode = _nightMode;
-        this.setFont(PGTUtil.MENU_FONT.deriveFont((float)menuFontSize));
+        core = _core;
+        this.setFont(PGTUtil.MENU_FONT.deriveFont((float)core.getOptionsManager().getMenuFontSize()));
     }
     
     /**
@@ -66,7 +64,6 @@ public final class PRadioButton extends JRadioButton {
         if (!(type == null || value == null)) {
             switch (type) {
                 case ConEquiv:
-                    setFont(conFont);
                 case PoS:
                 case Classes:
                     ret = value.getValue();
@@ -97,6 +94,12 @@ public final class PRadioButton extends JRadioButton {
      * @param _type the type to set
      */
     public void setType(QuestionType _type) {
+        if (_type == QuestionType.ConEquiv) {
+            this.setFont(core.getPropertiesManager().getFontCon());
+        } else {
+            this.setFont(PGTUtil.CHARIS_UNICODE.deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+        }
+        
         this.type = _type;
     }
 }

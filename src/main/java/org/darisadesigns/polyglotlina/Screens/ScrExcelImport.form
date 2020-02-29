@@ -511,7 +511,7 @@
             <Property name="toolTipText" type="java.lang.String" value="Import all values, regardless of duplicates found."/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(PGTUtil.MENU_FONT,&#xa;        core.getOptionsManager().getMenuFontSize(),&#xa;        core.getOptionsManager().isNightMode())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core,&#xa;    core.getOptionsManager().isNightMode())"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdoIgnrDups">
@@ -523,7 +523,7 @@
             <Property name="toolTipText" type="java.lang.String" value="If duplicates exist in the import file, they will be ignored."/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(PGTUtil.MENU_FONT,&#xa;        core.getOptionsManager().getMenuFontSize(),&#xa;        core.getOptionsManager().isNightMode())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core,&#xa;    core.getOptionsManager().isNightMode())"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdoOverwDups">
@@ -535,7 +535,7 @@
             <Property name="toolTipText" type="java.lang.String" value="If duplicates are found, existing values will be overwritten."/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(PGTUtil.MENU_FONT,&#xa;        core.getOptionsManager().getMenuFontSize(),&#xa;        core.getOptionsManager().isNightMode())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core,&#xa;    core.getOptionsManager().isNightMode())"/>
           </AuxValues>
         </Component>
       </SubComponents>
