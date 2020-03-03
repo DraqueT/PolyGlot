@@ -46,6 +46,8 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -109,9 +111,9 @@ public final class ScrMainMenu extends PFrame {
      */
     public ScrMainMenu(DictCore _core) {
         super(_core);
-        
+
         initComponents();
-        
+
         core.setRootWindow(this);
         toDoTree = new PToDoTree(nightMode, menuFontSize);
         cacheLexicon = ScrLexicon.run(core, this);
@@ -139,27 +141,40 @@ public final class ScrMainMenu extends PFrame {
         checkJavaVersion();
         super.setSize(super.getPreferredSize());
         addBindingsToPanelComponents(this.getRootPane());
-        btnNewLang.setLocation(pnlMain.getSize().width/2, btnNewLang.getLocation().y);
+        setupStartButtonPositining();
     }
     
     /**
-     * Populates Swadesh menu list with both predefined lists and the option to import one
+     * ensures buttons are positioned in a way that doesn't look stupid
+     */
+    private void setupStartButtonPositining() {
+        pnlStartButtons.addComponentListener(new ComponentAdapter(){
+            @Override
+            public void componentResized(ComponentEvent e) {
+                btnNewLang.setLocation((pnlStartButtons.getWidth() - btnNewLang.getSize().width)/2, btnNewLang.getLocation().y);
+            }
+        });
+    }
+
+    /**
+     * Populates Swadesh menu list with both predefined lists and the option to
+     * import one
      */
     private void populateSwadeshMenu() {
         final DictCore finalCore = core;
         mnuSwadesh.removeAll();
-        
+
         for (String list : PGTUtil.SWADESH_LISTS) {
             String menuName = list.replace("_", " ");
             final String finalLocation = PGTUtil.SWADESH_LOCATION + list;
-            
+
             JMenuItem nextList = new JMenuItem("Load " + menuName);
             nextList.setToolTipText("Loads words from " + menuName + " into your lexicon.");
-            nextList.addActionListener(new ActionListener(){
+            nextList.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     URL swadUrl = ScrMainMenu.class.getResource(finalLocation);
-                    try (BufferedInputStream bs = new BufferedInputStream(swadUrl.openStream())) {
+                    try ( BufferedInputStream bs = new BufferedInputStream(swadUrl.openStream())) {
                         finalCore.getWordCollection().loadSwadesh(bs, true);
                         updateAllValues(finalCore);
                     } catch (Exception ex) {
@@ -168,35 +183,34 @@ public final class ScrMainMenu extends PFrame {
                     }
                 }
             });
-            
+
             mnuSwadesh.add(nextList);
         }
-        
+
         JMenuItem customImport = new JMenuItem("Load Custom Swadesh");
         customImport.setToolTipText("Loads words from custom Swadesh list into your lexicon.");
-        customImport.addActionListener(new ActionListener(){
+        customImport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setMultiSelectionEnabled(false);
                 chooser.setDialogTitle("Select line delimited Swadesh list.");
-                
+
                 if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                     File file = chooser.getSelectedFile();
-                    try (InputStream is = new FileInputStream(file);
-                            BufferedInputStream bs = new BufferedInputStream(is)) {
+                    try ( InputStream is = new FileInputStream(file);  BufferedInputStream bs = new BufferedInputStream(is)) {
                         finalCore.getWordCollection().loadSwadesh(bs, true);
                         updateAllValues(finalCore);
                     } catch (Exception ex) {
-                        InfoBox.error("Swadesh Load Error", 
+                        InfoBox.error("Swadesh Load Error",
                                 "Could not load selected Swadesh List. Please make certain it is formatted correctly (newline separated)", null);
                         IOHandler.writeErrorLog(ex, "Swadesh load error");
                     }
                 }
-                
+
             }
         });
-        
+
         mnuSwadesh.add(customImport);
     }
 
@@ -384,7 +398,7 @@ public final class ScrMainMenu extends PFrame {
     }
 
     public void setFile(String fileName) {
-        core =core.getNewCore();
+        core = core.getNewCore();
 
         try {
             core.readFile(fileName);
@@ -416,7 +430,7 @@ public final class ScrMainMenu extends PFrame {
      */
     private boolean saveOrCancelTest() {
         boolean ret = true;
-        
+
         if (core != null && !core.isLanguageEmpty()) {
             int saveFirst = InfoBox.yesNoCancel("Save First?",
                     "Save current dictionary before performing action?", core.getRootWindow());
@@ -445,7 +459,7 @@ public final class ScrMainMenu extends PFrame {
     public boolean saveFile() {
         boolean ret;
         String curFileName = core.getCurFileName();
-        
+
         if (curFileName.isEmpty()) {
             saveFileAsDialog();
             curFileName = core.getCurFileName();
@@ -462,7 +476,7 @@ public final class ScrMainMenu extends PFrame {
 
             ret = doWrite(curFileName);
         }
-        
+
         return ret;
     }
 
@@ -506,7 +520,7 @@ public final class ScrMainMenu extends PFrame {
     }
 
     /**
-     * Provides dialog for Save As, and returns boolean to determine whether 
+     * Provides dialog for Save As, and returns boolean to determine whether
      * file save should take place. DOES NOT SAVE.
      *
      * @return true if file saved, false otherwise
@@ -516,7 +530,7 @@ public final class ScrMainMenu extends PFrame {
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
         String curFileName = core.getCurFileName();
-        
+
         chooser.setDialogTitle("Save Dictionary");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
@@ -551,7 +565,7 @@ public final class ScrMainMenu extends PFrame {
                 ret = true;
             }
         }
-        
+
         return ret;
     }
 
@@ -675,7 +689,7 @@ public final class ScrMainMenu extends PFrame {
             fileName += ".xls";
         }
 
-        if (!new File(fileName).exists() 
+        if (!new File(fileName).exists()
                 || InfoBox.actionConfirmation("Overwrite File?", "File with this name and location already exists. Continue/Overwrite?", this)) {
             try {
                 Java8Bridge.exportExcelDict(fileName, core,
@@ -751,7 +765,7 @@ public final class ScrMainMenu extends PFrame {
     private void openHelp() throws IOException {
         File readmeDir = IOHandler.unzipResourceToTempLocation(PGTUtil.HELP_FILE_ARCHIVE_LOCATION);
         File readmeFile = new File(readmeDir.getAbsolutePath() + File.separator + PGTUtil.HELP_FILE_NAME);
-            
+
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
             Desktop.getDesktop().browse(readmeFile.toURI());
         } else if (PGTUtil.IS_LINUX) {
@@ -760,7 +774,7 @@ public final class ScrMainMenu extends PFrame {
             InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
                     + "http://draquet.github.io/PolyGlot/readme.html\n(copied to clipboard for convenience)", this);
             new ClipboardHandler().setClipboardContents("http://draquet.github.io/PolyGlot/readme.html");
-        }               
+        }
     }
 
     /**
@@ -921,7 +935,7 @@ public final class ScrMainMenu extends PFrame {
             }
 
             Insets insets = getInsets();
-            
+
             this.setSizeSmooth(dim.width + pnlSideButtons.getWidth() + insets.left + insets.right,
                     dim.height + insets.bottom + insets.top);
         }
@@ -1043,19 +1057,19 @@ public final class ScrMainMenu extends PFrame {
                     public void windowDeactivated(WindowEvent ex) {
                     }
                 });
-                
+
                 if (w instanceof PFrame) {
-                    ((PFrame)w).addWindowFocusListener(new WindowFocusListener() {
+                    ((PFrame) w).addWindowFocusListener(new WindowFocusListener() {
                         public void windowGainedFocus(WindowEvent e) {
-                            
+
                         }
-                        
+
                         public void windowLostFocus(WindowEvent e) {
-                            ((PFrame)w).saveAllValues();
+                            ((PFrame) w).saveAllValues();
                         }
                     });
                 }
-                
+
                 w.setVisible(true);
                 w.toFront();
                 childWindows.add(w);
@@ -1119,19 +1133,19 @@ public final class ScrMainMenu extends PFrame {
         if (cacheLexicon != null) {
             cacheLexicon.updateAllValues(_core);
         }
-        
+
         core = _core;
-        
+
         updateAllChildValues(_core);
         populateSwadeshMenu();
     }
-    
+
     private void updateAllChildValues(DictCore _core) {
         for (Window win : childWindows) {
             if (win instanceof PFrame) {
-                ((PFrame)win).updateAllValues(_core);
+                ((PFrame) win).updateAllValues(_core);
             } else if (win instanceof PDialog) {
-                ((PDialog)win).updateAllValues(_core);
+                ((PDialog) win).updateAllValues(_core);
             }
         }
     }
@@ -1160,7 +1174,7 @@ public final class ScrMainMenu extends PFrame {
     public void printToPdf() {
         ScrPrintToPDF.run(core);
     }
-    
+
     /**
      * sets menu accelerators and menu item text to reflect this
      */
@@ -1236,12 +1250,20 @@ public final class ScrMainMenu extends PFrame {
                 }
             }
         };
-        btnOpenLang = new PButton(nightMode, menuFontSize);
-        btnOpenManual = new PButton(nightMode, menuFontSize);
         jLabel1 = new PLabel("", menuFontSize);
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        btnNewLang = new PButton(nightMode, menuFontSize);
+        pnlStartButtons = new javax.swing.JPanel();
+        btnOpenLang = new PButton(nightMode, menuFontSize);
+        btnOpenManual = new PButton(nightMode, menuFontSize);
+        btnNewLang = new PButton(nightMode, menuFontSize) {
+            @Override
+            public void repaint() {
+                if (pnlStartButtons != null && btnNewLang != null) {
+                    btnNewLang.setLocation((pnlStartButtons.getWidth() - btnNewLang.getSize().width)/2, btnNewLang.getLocation().y);
+                }
+            }
+        };
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnuNewLocal = new javax.swing.JMenuItem();
@@ -1411,6 +1433,19 @@ public final class ScrMainMenu extends PFrame {
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
         pnlMain.setMaximumSize(new java.awt.Dimension(4000, 4000));
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Welcome to PolyGlot");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("From here, you can open an existing language file, open the PolyGlot manual,");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("or simply begin work on the blank file currently loaded.");
+
+        pnlStartButtons.setOpaque(false);
+
         btnOpenLang.setText("OPEN LANGUAGE");
         btnOpenLang.setToolTipText("Open an existing language");
         btnOpenLang.addActionListener(new java.awt.event.ActionListener() {
@@ -1427,17 +1462,6 @@ public final class ScrMainMenu extends PFrame {
             }
         });
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Welcome to PolyGlot");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("From here, you can open an existing language file, open the PolyGlot manual,");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("or simply begin work on the blank file currently loaded.");
-
         btnNewLang.setText("NEW LANGUAGE");
         btnNewLang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1445,21 +1469,34 @@ public final class ScrMainMenu extends PFrame {
             }
         });
 
-        javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
-        pnlMain.setLayout(pnlMainLayout);
-        pnlMainLayout.setHorizontalGroup(
-            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlMainLayout.createSequentialGroup()
-                .addContainerGap()
+        javax.swing.GroupLayout pnlStartButtonsLayout = new javax.swing.GroupLayout(pnlStartButtons);
+        pnlStartButtons.setLayout(pnlStartButtonsLayout);
+        pnlStartButtonsLayout.setHorizontalGroup(
+            pnlStartButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlStartButtonsLayout.createSequentialGroup()
                 .addComponent(btnOpenLang)
-                .addGap(41, 41, 41)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNewLang)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnOpenManual)
                 .addContainerGap())
+        );
+        pnlStartButtonsLayout.setVerticalGroup(
+            pnlStartButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlStartButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(btnOpenLang)
+                .addComponent(btnOpenManual)
+                .addComponent(btnNewLang))
+        );
+
+        javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
+        pnlMain.setLayout(pnlMainLayout);
+        pnlMainLayout.setHorizontalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlStartButtons, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1470,12 +1507,9 @@ public final class ScrMainMenu extends PFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnOpenManual)
-                    .addComponent(btnOpenLang)
-                    .addComponent(btnNewLang))
-                .addGap(118, 118, 118))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pnlStartButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(124, 124, 124))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -2047,6 +2081,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenu mnuTools;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideButtons;
+    private javax.swing.JPanel pnlStartButtons;
     private javax.swing.JPanel pnlToDo;
     private javax.swing.JSplitPane pnlToDoSplit;
     // End of variables declaration//GEN-END:variables

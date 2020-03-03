@@ -514,18 +514,10 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnOpenLang" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                          <Component id="btnNewLang" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="btnOpenManual" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
                       <Component id="jLabel2" pref="514" max="32767" attributes="0"/>
                       <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
                       <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
+                      <Component id="pnlStartButtons" alignment="1" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -537,42 +529,14 @@
                           <Component id="jLabel2" min="-2" pref="23" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="btnOpenManual" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnOpenLang" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnNewLang" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="118" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="pnlStartButtons" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="124" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JButton" name="btnOpenLang">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="OPEN LANGUAGE"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Open an existing language"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOpenLangActionPerformed"/>
-                  </Events>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
-                  </AuxValues>
-                </Component>
-                <Component class="javax.swing.JButton" name="btnOpenManual">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="OPEN MANUAL"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Open the PolyGlot manual"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOpenManualActionPerformed"/>
-                  </Events>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
-                  </AuxValues>
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel1">
                   <Properties>
                     <Property name="horizontalAlignment" type="int" value="0"/>
@@ -600,17 +564,72 @@
                     <Property name="text" type="java.lang.String" value="or simply begin work on the blank file currently loaded."/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JButton" name="btnNewLang">
+                <Container class="javax.swing.JPanel" name="pnlStartButtons">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="NEW LANGUAGE"/>
+                    <Property name="opaque" type="boolean" value="false"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNewLangActionPerformed"/>
-                  </Events>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
-                  </AuxValues>
-                </Component>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="btnOpenLang" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnNewLang" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btnOpenManual" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="btnOpenLang" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnOpenManual" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnNewLang" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JButton" name="btnOpenLang">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="OPEN LANGUAGE"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Open an existing language"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOpenLangActionPerformed"/>
+                      </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="btnOpenManual">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="OPEN MANUAL"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Open the PolyGlot manual"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOpenManualActionPerformed"/>
+                      </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="btnNewLang">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="NEW LANGUAGE"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNewLangActionPerformed"/>
+                      </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize) {&#xa;    @Override&#xa;    public void repaint() {&#xa;        if (pnlStartButtons != null &amp;&amp; btnNewLang != null) {&#xa;            btnNewLang.setLocation((pnlStartButtons.getWidth() - btnNewLang.getSize().width)/2, btnNewLang.getLocation().y);&#xa;        }&#xa;    }&#xa;}"/>
+                      </AuxValues>
+                    </Component>
+                  </SubComponents>
+                </Container>
               </SubComponents>
             </Container>
           </SubComponents>
