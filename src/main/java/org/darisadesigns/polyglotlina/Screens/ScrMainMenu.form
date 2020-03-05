@@ -620,6 +620,7 @@
                     <Component class="javax.swing.JButton" name="btnNewLang">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="NEW LANGUAGE"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Open blank new language file."/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNewLangActionPerformed"/>
