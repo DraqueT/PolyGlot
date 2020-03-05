@@ -1463,6 +1463,7 @@ public final class ScrMainMenu extends PFrame {
         });
 
         btnNewLang.setText("NEW LANGUAGE");
+        btnNewLang.setToolTipText("Open blank new language file.");
         btnNewLang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewLangActionPerformed(evt);
