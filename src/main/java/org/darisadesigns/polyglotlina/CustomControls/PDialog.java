@@ -69,7 +69,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
      * Sets up an OS specific display properties
      */
     private void setupOS() {
-        if (PGTUtil.IS_LINUX) {
+        if (PGTUtil.IS_LINUX || PGTUtil.IS_WINDOWS) {
             this.setIconImage(PGTUtil.POLYGLOT_ICON.getImage());
         }
     }
