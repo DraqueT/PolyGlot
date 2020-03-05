@@ -30,7 +30,7 @@
         <!-- Static navbar -->
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="container">
-                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 3.0</a> </div>
+                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 3.1</a> </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="https://github.com/DraqueT/PolyGlot">GitHub Page</a><br>
@@ -52,7 +52,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-10 col-lg-offset-1 centered"> <img src="assets/PolyGlot%20Logo.png" alt="PolyGlot">
-                        <h1>Version 3.0</h1>
+                        <h1>Version 3.1</h1>
                         <!-- POLYGLOT STUFF START -->
                         
                             <table style="width:100%">
@@ -112,36 +112,26 @@
                             post them on <a href="https://github.com/DraqueT/PolyGlot/issues">PolyGlot's issues page</a>!</div>
 
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
-                        <div align ="left"><br>Hey, all! Welcome to version 3.0 of PolyGlot! I have put a massive amount of effort into this one, so I hope that everyone enjoys it. Two elements have been my focus this time more than anything else. 
+                        <div align ="left"><br>Heyo, all! Welcome to version 3.1 of PolyGlot! This release focuses on bug fixes and quality of life for users. There are some fun new features, but overall I am hoping that this version will serve to smooth out the general experience of using PolyGlot. The upgrade past Java 8 involved rewriting massive amounts of the codebase, and some new bugs were introduced (all of which are hopefully quashed with this release!)
                             <br><br>
-                            1) PolyGlot is now upgraded past Java 8. This means that I can not compile to runnable images, and you will no longer have to worry about having Java on your system* to run the program. It can now be run after it is downloaded, regardless of whether you have the JVM installed. It also fixes a lot of bugs surrounding fonts and general OS integration that have been left to languish in Java 8. This will make for a much smoother ride as we go forward. It also means that you will need to download the correct version PolyGlot for your OS, so please be aware. The dmg file is for OSX, the deb file for Linux, and the exe for Windows. Each may be used to install for your respective system.
-                            <br><br>
-                            2) I have done a LOT of work on the Auto Conjugation system. There were a couple of frustrating bugs that have been ironed out, but there is also a significant new feature. The Simplified Auto-conjugation window is now available to be selected. If you have a single transformation per word form that is applied universally, then this feature will make life many, many times simpler for you. Additionally, there are buttons on this screen which will automatically set up prefix and postfix style conjugation patterns in regex for you. On both the Simplified and Classic Auto-conjugation screens is a menu button which opens the conjugation test window. This will allow you to apply the selected rule to any text it is given, with debug-information below which lays out the exact path PolyGlot took to conjugate your word. For anyone looking to create complex conjugation rules, this tool should be invaluable.
-                            <br><br>
-                            Additional features include an integrated Swadesh list import tool and a recovery tool. The Swadesh import feature will allow you to pull template words into your lexicon which are based on a list of very basic words. Additionally, you may write your own list which can be read and populated from later. The recovery tool protects your files in the case that your computer loses power or freezes just as it is saving your work. If this happens, you will be prompted to load from a local recovery file the next time PolyGlot opens.
-                            <br><br>
-                            * With the exception of print to PDF and CSV functionality. The libraries used for this are firmly entrenched in J8, though I am hoping it will eventually move forward.
-                        <br><br>
+                            
                         </div>
-                        FEATURES:
+                        NEW FEATURES:
                         <div align ="left"><ul>
-                                <li>Swadesh import list tool added</li>
-                                <li>Simplified Auto-conjugation Window implemented</li>
-                                <li>Conjugation test window implemented</li>
-                                <li>Conjugation rules debugging tool added (makes complex rules worlds easier to create)</li>
-                                <li>Platform dependent installers implemented</li>
-                                <li>Mid-save-freeze recovery system added</li>
-                                <li>More advanced CSV styes supported (quote encapsulation, etc.)</li>
-                                <li>Went through all labels and displays to find typos (yikes. way too many)</li>
-                                <li>Auto-gen Override automatically selected if no conjugation rules exist for word</li>
-                                <li>Save dialog appears at more reasonable time when opening new file (if one is already open)</li>
-                                <li>Upgraded to Java 12.</li>
-                                <li>Build time added to about screen</li>
-                                <li>Created packaging system/instruction readme to make it easier for other devs looking to work on PolyGlot</li>
-                                <li>Increase code compliance/clean up nonstandard naming schemes</li>
-                                <li>Expanded testing significantly</li>
-                                <li>Massive refactors/code cleanup under the hood... hopefully will help make future bugs less frequent and easier to find</li>
-                                <li>Quality of life adjustments made to lexicon filter</li>
+                                <li>License changed to MIT free use license</li>
+                                <li>Proper font support finally added for Linux</li>
+                                <li>Users now warned if PolyGlot cannot open a font binary when pulling from the host OS</li>
+                                <li>Option to open excel sheet on creation</li>
+                                <li>Warning added when "Ignore Case" option selected. It can create badness. Will likely be removed in later builds.</li>
+                                <li>Menu now prevents using recursion if regex is not enabled.</li>
+                                <li>Now warns user if look-ahead/look-behind regex used in phonology section when recursion is not enabled</li>
+                                <li>Option added to Ignore, overwrite, or add duplicate words on import of csv/tsv/excel lexicon</li>
+                                <li>Import tsv file compatibility added</li>
+                                <li>Eliminated annoying mandatory correction of illegal words on exit of lexicon</li>
+                                <li>Encoding errors on import of csv files handled more gracefully</li>
+                                <li>New language button added to welcome screen/made it look nicer</li>
+                                <li>Upgraded to Java 14 - Provides long term support.</li>
+                                <li>Simplified setup for dev work significantly</li>
                                 <!––Secret Codes:
                                 what did you see last tuesday
                                 Who is Draque
@@ -154,27 +144,20 @@
                         BUGS FIXED:
                         <div align="left">
                             <ul>
-                                <li>LINUX COMPATIBILITY RESTORED!</li>
-                                <li>Lexicon "Conjugations" call changes Conjugation/Declension Auto-generation Rule Order</li>
-                                <li>Combo box text will print over edge of box if too long</li>
-                                <li>PolyGlot sometimes fails to save user selected font after having been loaded properly (displays correctly until closed/reopened)</li>
-                                <li>Reversion of complex conjugation rules on close of window</li>
-                                <li>Add/remove buttons have swapped position on Grammar chapter list...</li>
-                                <li>Hitting Ctrl+S to save results in PolyGlot saving two times</li>
-                                <li>Font size in menu Options not functioning properly</li>
-                                <li>Description text in Print to PDF menu remains gray even after it has been updated by user</li>
-                                <li>Margin click in IPA tool erases characters</li>
-                                <li>HTML is printed into PDFs under certain circumstances</li>
-                                <li>Significant problems with logography section. Lots of old/bad code ripped out/replaced.</li>
-                                <li>Load image from clipboard in logography section broken on OSX</li>
-                                <li>Correct conlang label in grammar section dropdown (always says "Charis," regardless of user selected font)</li>
-                                <li>Screen refresh on load of file does not fire on some screens</li>
-                                <li>Pasting tab character into grammar text field persistently breaks its contents</li>
-                                <li>Checkboxes on phonology screen did not respect style or font size of PolyGlot/user options</li>
-                                <li>Ctrl + S caused PolyGlot to save file twice</li>
-                                <li>Some menus ignored user selected menu font size</li>
-                                <li>Character macros were applied to all fields instead of exclusively to conlang fields</li>
-                                <li>The search filter used to pop behind the menu at times</li>
+                                <li>On reordering, conjugation rules could become corrupted (apologies to anyone who lost work to this!)</li>
+                                <li>Conlang font sometimes failed to load for search bars in lexicon and logograph sections</li>
+                                <li>Open help menu item broken in Linux</li>
+                                <li>Etymology tree graphics not printing properly in print to PDF</li>
+                                <li>Accented characters causing grammar section to freeze up</li>
+                                <li>Trying to take an empty language quiz raises unhandled error</li>
+                                <li>"Begins with" regex character (^) ignored in phonology section when not using recursion</li>
+                                <li>Save As -> Overwrite not functioning properly</li>
+                                <li>Word legality not being re-checked when part of speech changed in Lexicon</li>
+                                <li>Lexical Family window failing to add words</li>
+                                <li>Cursor moved all the way to right any time orthography changed in table</li>
+                                <li>Printing version of PolyGlot displayed as "2.5" regardless of PolyGlot's version when printing to PDF</li>
+                                <li>Language quizzes failed to properly reset for retaking</li>
+                                <li>IPA characters failed to render properly in quizzes</li>
                             </ul>
                         </div>
                         
@@ -942,7 +925,7 @@
                             <br>
                             <br>
                             - Delimiter<br>
-                            &nbsp;&nbsp;&nbsp; The delimiter character is the character used to
+                            The delimiter character is the character used to
                             separate columns in a CSV file. If you are importing from an excel file
                             or the CSV file you're using has commas as delimiters, you may ignore
                             this field.<br>
@@ -950,10 +933,21 @@
                             <br>
                             - Excel Sheet<br>
                             <br>
-                            &nbsp;&nbsp; If you use multiple sheets for your dictionary, you will
+                            If you use multiple sheets for your dictionary, you will
                             have to import them one at a time. The sheet that you are importing
                             from is set here. If you do not use multiple sheets, simply leave it to
                             its default value of 0.<br>
+                            <br>
+                            
+                            <br>- Duplicate Handling<br>
+                            This setting allows you to control how PolyGlot handles duplicate values
+                            detected in the file being imported. Duplicates are based on the string
+                            value of conwords being imported. If <i>Import All</i> is selected, all
+                            values will be imported into your language file, regardless of whether
+                            they are duplicates. If <i>Ignore Duplicates</i> is selected, duplicates
+                            will be ignored and not imported. If <i>Overwrite Duplicates</i> is
+                            selected, words existing in your current language will be overwritten by
+                            the values found in the file you import.
                             <br>
                             </div>
 
