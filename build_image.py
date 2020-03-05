@@ -244,11 +244,11 @@ def distLinux():
         '--description "PolyGlot is a spoken language construction toolkit." ' +
         '--file-associations packaging_files/linux/file_types_linux.prop ' +
         '--icon packaging_files/PolyGlot0.png ' +
-#        '--java-options -splash:assets/assets/org/DarisaDesigns/ImageAssets/splash-image.png ' # splash feature currently borked: https://bugs.openjdk.java.net/browse/JDK-8208380
         '--linux-package-name polyglot-linear-a ' +
         '--linux-app-category Education ' +
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
         '--name "PolyGlot" ' +
+        '--license-file LICENSE.TXT ' +
         '--runtime-image build/image')
     os.system(command)
     
@@ -305,6 +305,7 @@ def distOsx():
         '--mac-package-name "PolyGlot" ' +
         '--file-associations packaging_files/mac/file_types_mac.prop ' +
         '--icon packaging_files/mac/PolyGlot.icns ' +
+        '--license-file LICENSE.TXT ' +
         '--app-version "' + POLYGLOT_VERSION + '"')
 
     os.system(command)
@@ -369,6 +370,7 @@ def distWin():
         '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
         '--app-version "' + POLYGLOT_VERSION + '" '
+        '--license-file LICENSE.TXT ' +
         '--icon packaging_files/win/PolyGlot0.ico')
 
     os.system(command)

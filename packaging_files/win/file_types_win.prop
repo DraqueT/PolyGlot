@@ -1,6 +1,4 @@
-# defines file type properties for windows build of PolyGlot
- 
 extension=pgd
-mime-type=application
+mime-type=application/zip
 icon=packaging_files\win\PolyGlot1.ico
-description=PolyGlot constructed language archive file
+description="PolyGlot constructed language archive file"
