@@ -1,6 +1,4 @@
-# defines file type properties for mac build of PolyGlot
- 
 extension=pgd
-mime-type=application
+mime-type=application/zip
 icon=PolyGlotFile.icns
-description=PolyGlot constructed language archive file
+description="PolyGlot constructed language archive file"
