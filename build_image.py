@@ -370,7 +370,7 @@ def distWin():
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
         '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
-        '--app-version "' + POLYGLOT_VERSION + '" '
+        '--app-version "' + POLYGLOT_VERSION + '" ' +
         '--license-file LICENSE.TXT ' +
         '--win-upgrade-uuid  ' + str(uuid.uuid4()) + ' ' + # Unique identifier to keep versioned installers from erroring in Windows
         '--icon packaging_files/win/PolyGlot0.ico')
