@@ -23,6 +23,7 @@ import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import org.darisadesigns.polyglotlina.IOHandler;
 import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -30,17 +31,22 @@ import org.junit.jupiter.api.Test;
  * @author DThompson
  */
 public class ScrUpdateAlertTest {
-    private final boolean headless = GraphicsEnvironment.isHeadless();
     private ScrUpdateAlert updateAlert;
     
     public ScrUpdateAlertTest() {
-        if (!headless) {
+        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless());
+        
             try {
                 updateAlert = new ScrUpdateAlert(false, DummyCore.newCore());
             } catch (Exception e) {
-                // Instantiation tested elsewhere, skip errors here.
+                boolean noConnection = e.getLocalizedMessage().contains("No Internet connection detected.");
+                
+                Assumptions.assumeFalse(noConnection);
+                
+                if (!noConnection) {
+                    fail(e);
+                }
             }
-        }
     }
 
     /**
@@ -49,11 +55,6 @@ public class ScrUpdateAlertTest {
     @Test
     public void testTestRun() {
         System.out.println("ScrUpdateAlertTest.testTestRun");
-        
-        if (headless) {
-            return;
-        }
-        
         try {
             updateAlert.testRun();
             updateAlert.dispose();
