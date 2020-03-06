@@ -372,7 +372,7 @@ def distWin():
         '--description "PolyGlot is a spoken language construction toolkit." ' +
         '--app-version "' + POLYGLOT_VERSION + '" '
         '--license-file LICENSE.TXT ' +
-        '--win-upgrade-uuid  ' + uuid.uuid4() + ' ' + # Unique identifier to keep versioned installers from erroring in Windows
+        '--win-upgrade-uuid  ' + str(uuid.uuid4()) + ' ' + # Unique identifier to keep versioned installers from erroring in Windows
         '--icon packaging_files/win/PolyGlot0.ico')
 
     os.system(command)
