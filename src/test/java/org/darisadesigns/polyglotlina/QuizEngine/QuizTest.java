@@ -300,7 +300,6 @@ public class QuizTest {
         });
 
         String resultMessage = exception.getMessage();
-        System.out.println(resultMessage);
 
         assertEquals(expectedMessage, resultMessage);
     }
