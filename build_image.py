@@ -258,7 +258,7 @@ def distLinux():
     os.system(command)
     
     if copyDestination != "":
-        copyInstaller('polyglot-linear-a_' + POLYGLOT_BUILD + '-1_amd64.deb')
+        copyInstaller('polyglot-linear-a_' + POLYGLOT_VERSION + '-1_amd64.deb')
 
 
 ######################################
@@ -316,7 +316,7 @@ def distOsx():
     os.system(command)
       
     if copyDestination != "":
-        copyInstaller('PolyGlot-' + POLYGLOT_BUILD + '.dmg')
+        copyInstaller('PolyGlot-' + POLYGLOT_VERSION + '.dmg')
 
 
 ######################################
@@ -359,7 +359,7 @@ def imageWin():
     os.system(command)
 
 def distWin():
-    packageLocation = 'PolyGlot-' + POLYGLOT_BUILD + '.exe'
+    packageLocation = 'PolyGlot-' + POLYGLOT_VERSION + '.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
 
