@@ -72,6 +72,7 @@ CUR_YEAR = str(date.today().year)
 
 def main(args):
     global POLYGLOT_VERSION
+    global POLYGLOT_BUILD
     global JAVA_HOME
     global IS_RELEASE
     global JAR_W_DEP
