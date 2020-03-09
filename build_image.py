@@ -258,7 +258,7 @@ def distLinux():
     os.system(command)
     
     if copyDestination != "":
-        copyInstaller('polyglot-linear-a_' + POLYGLOT_VERSION + '-1_amd64.deb')
+        copyInstaller('polyglot-linear-a_' + POLYGLOT_BUILD + '-1_amd64.deb')
 
 
 ######################################
@@ -435,7 +435,7 @@ def getBuildNum():
     ret = getVersion()
     
     if not IS_RELEASE:
-        ret = ret + '_' + str(int(time.time()))
+        ret = ret + '-' + str(int(time.time()))
 
     return ret
 
