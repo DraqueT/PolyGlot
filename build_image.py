@@ -59,6 +59,7 @@ JAR_W_DEP = '' # set in main for timing reasons
 JAR_WO_DEP = '' # set in main for timing reasons
 JAVAFX_VER = '' # set in main for timing reasons
 POLYGLOT_VERSION = '' # set in main for timing reasons
+POLYGLOT_BUILD = '' # set in main for timing reasons
 JAVA_HOME = '' # set in main for timing reasons
 IS_RELEASE = False
 CUR_YEAR = str(date.today().year)
@@ -136,6 +137,7 @@ def main(args):
 
     fullBuild = (len(args) == 1) # length of 1 means no arguments (full build)
     POLYGLOT_VERSION = getVersion()
+    POLYGLOT_BUILD = getBuildNum();
     print('Building Version: ' + POLYGLOT_VERSION)
     updateVersionResource(POLYGLOT_VERSION)
     JAR_W_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '-jar-with-dependencies.jar'
@@ -241,7 +243,7 @@ def distLinux():
     os.system('rm -rf installer')
     os.system('mkdir installer')
     command = (JAVA_HOME + '/bin/jpackage ' +
-        '--app-version ' + getBuildNum() + ' ' +
+        '--app-version ' + POLYGLOT_BUILD + ' ' +
         '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
         '--file-associations packaging_files/linux/file_types_linux.prop ' +
@@ -255,7 +257,7 @@ def distLinux():
     os.system(command)
     
     if copyDestination != "":
-        copyInstaller('polyglot-linear-a_' + getBuildNum() + '-1_amd64.deb')
+        copyInstaller('polyglot-linear-a_' + POLYGLOT_BUILD + '-1_amd64.deb')
 
 
 ######################################
@@ -308,12 +310,12 @@ def distOsx():
         '--file-associations packaging_files/mac/file_types_mac.prop ' +
         '--icon packaging_files/mac/PolyGlot.icns ' +
         '--license-file LICENSE.TXT ' +
-        '--app-version "' + getBuildNum() + '"')
+        '--app-version "' + POLYGLOT_BUILD + '"')
 
     os.system(command)
       
     if copyDestination != "":
-        copyInstaller('PolyGlot-' + getBuildNum() + '.dmg')
+        copyInstaller('PolyGlot-' + POLYGLOT_BUILD + '.dmg')
 
 
 ######################################
@@ -356,7 +358,7 @@ def imageWin():
     os.system(command)
 
 def distWin():
-    packageLocation = 'PolyGlot-' + getBuildNum() + '.exe'
+    packageLocation = 'PolyGlot-' + POLYGLOT_BUILD + '.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
 
@@ -371,7 +373,7 @@ def distWin():
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
         '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
-        '--app-version "' + getBuildNum() + '" ' +
+        '--app-version "' + POLYGLOT_BUILD + '" ' +
         '--license-file LICENSE.TXT ' +
         '--win-upgrade-uuid  ' + str(uuid.uuid4()) + ' ' + # Unique identifier to keep versioned installers from erroring in Windows
         '--icon packaging_files/win/PolyGlot0.ico')
