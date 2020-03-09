@@ -16,6 +16,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 import uuid
 from os import path
 from xml.dom import minidom
@@ -240,7 +241,7 @@ def distLinux():
     os.system('rm -rf installer')
     os.system('mkdir installer')
     command = (JAVA_HOME + '/bin/jpackage ' +
-        '--app-version ' + POLYGLOT_VERSION + ' ' +
+        '--app-version ' + getBuildNum() + ' ' +
         '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
         '--file-associations packaging_files/linux/file_types_linux.prop ' +
@@ -254,7 +255,7 @@ def distLinux():
     os.system(command)
     
     if copyDestination != "":
-        copyInstaller('polyglot-linear-a_' + POLYGLOT_VERSION + '-1_amd64.deb')
+        copyInstaller('polyglot-linear-a_' + getBuildNum() + '-1_amd64.deb')
 
 
 ######################################
@@ -307,12 +308,12 @@ def distOsx():
         '--file-associations packaging_files/mac/file_types_mac.prop ' +
         '--icon packaging_files/mac/PolyGlot.icns ' +
         '--license-file LICENSE.TXT ' +
-        '--app-version "' + POLYGLOT_VERSION + '"')
+        '--app-version "' + getBuildNum() + '"')
 
     os.system(command)
       
     if copyDestination != "":
-        copyInstaller('PolyGlot-' + POLYGLOT_VERSION + '.dmg')
+        copyInstaller('PolyGlot-' + getBuildNum() + '.dmg')
 
 
 ######################################
@@ -355,7 +356,7 @@ def imageWin():
     os.system(command)
 
 def distWin():
-    packageLocation = 'PolyGlot-' + POLYGLOT_VERSION + '.exe'
+    packageLocation = 'PolyGlot-' + getBuildNum() + '.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
 
@@ -370,7 +371,7 @@ def distWin():
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
         '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
-        '--app-version "' + POLYGLOT_VERSION + '" ' +
+        '--app-version "' + getBuildNum() + '" ' +
         '--license-file LICENSE.TXT ' +
         '--win-upgrade-uuid  ' + str(uuid.uuid4()) + ' ' + # Unique identifier to keep versioned installers from erroring in Windows
         '--icon packaging_files/win/PolyGlot0.ico')
@@ -425,6 +426,15 @@ def getVersion():
     versionItems = mydoc.getElementsByTagName('version')
     
     return versionItems[0].firstChild.data
+
+# for releases, this will match the version. For beta builds, a UTC timestamp is appended (OS registration reasons on install)
+def getBuildNum():
+    ret = getVersion()
+    
+    if not IS_RELEASE:
+        ret = ret + '_' + str(int(time.time()))
+
+    return ret
 
 def updateVersionResource(versionString):
     global IS_RELEASE
