@@ -30,9 +30,9 @@ if [ "$#" -eq 0 ] || [ "$1" == "win" ]; then
 #    echo "Waiting 05 seconds for target machine to start up..."
 #    sleep 5
 
-    if [ $(vboxmanage showvminfo "WinDev2001Eval" | grep -c "running (since") == 0] ; then
+    if [ $(vboxmanage showvminfo "WinDev2001Eval" | grep -c "running .since") == 0 ] ; then
         echo "Windows must be running to be built due to limitations in jpackage for Windows."
-        sleep 10
+        sleep 5
         exit
     else
         if [ "$BUILD_STEP" == "" ] ; then
