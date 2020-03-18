@@ -22,7 +22,6 @@ package org.darisadesigns.polyglotlina;
 import java.awt.Desktop;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.PronunciationMgr;
@@ -273,7 +272,7 @@ public class DictCore {
      *
      * @return
      */
-    public PFrame getRootWindow() {
+    public ScrMainMenu getRootWindow() {
         return rootWindow;
     }
 

@@ -46,7 +46,7 @@ import org.w3c.dom.Element;
 public class PropertiesManager {
     private Font conFont = null;
     private Integer conFontStyle = Font.PLAIN;
-    private Integer conFontSize = 12;
+    private double conFontSize = 12;
     private double localFontSize = 12;
     private final PAlphaMap<String, Integer> alphaOrder;
     private String alphaPlainText = "";
@@ -216,7 +216,8 @@ public class PropertiesManager {
     }
     
     public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
-        setFontCon(PFontHandler.getFontFromFile(fontPath).deriveFont(conFontStyle, conFontSize), conFontStyle, conFontSize);
+        setFontCon(PFontHandler.getFontFromFile(fontPath)
+                .deriveFont(conFontStyle, (float)conFontSize), conFontStyle, (float)conFontSize);
         cachedConFont = IOHandler.getFileByteArray(fontPath);
     }
 
@@ -284,7 +285,7 @@ public class PropertiesManager {
      * @param _fontStyle The style of the font (bold, underlined, etc.)
      * @param _fontSize Size of font
      */
-    public void setFontCon(Font _fontCon, Integer _fontStyle, Integer _fontSize) {
+    public void setFontCon(Font _fontCon, Integer _fontStyle, double _fontSize) {
         setFontConRaw(_fontCon);
         setFontSize(_fontSize);
         setFontStyle(_fontStyle);
@@ -330,7 +331,7 @@ public class PropertiesManager {
         
         return retFont == null ? 
                 PGTUtil.CHARIS_UNICODE.deriveFont((float)core.getOptionsManager().getMenuFontSize()) : 
-                retFont.deriveFont(conFontStyle, conFontSize);
+                retFont.deriveFont(conFontStyle, (float)conFontSize);
     }
 
     /**
@@ -361,13 +362,13 @@ public class PropertiesManager {
      */
     public void setFontStyle(Integer _fontStyle) {
         conFontStyle = _fontStyle;
-        conFont = conFont.deriveFont(conFontStyle, conFontSize);
+        conFont = conFont.deriveFont(conFontStyle, (float)conFontSize);
     }
 
     /**
      * @return the fontSize
      */
-    public Integer getFontSize() {
+    public double getFontSize() {
         return conFontSize;
     }
 
@@ -376,11 +377,9 @@ public class PropertiesManager {
      *
      * @param _fontSize the fontSize to set
      */
-    public void setFontSize(Integer _fontSize) {
-        if (_fontSize != null) {
-            conFontSize = _fontSize < 0 ? 12 : _fontSize;
-            conFont = conFont.deriveFont(conFontStyle, conFontSize);
-        }
+    public void setFontSize(double _fontSize) {
+        conFontSize = _fontSize < 0 ? 12 : _fontSize;
+        conFont = conFont.deriveFont(conFontStyle, (float)conFontSize);
     }
 
     /**
@@ -571,7 +570,7 @@ public class PropertiesManager {
 
         // store font size
         wordValue = doc.createElement(PGTUtil.LANG_PROP_FONT_SIZE_XID);
-        wordValue.appendChild(doc.createTextNode(conFontSize.toString()));
+        wordValue.appendChild(doc.createTextNode(Double.toString(conFontSize)));
         propContainer.appendChild(wordValue);
         
         // store font size for local language font
@@ -800,7 +799,7 @@ public class PropertiesManager {
         
             if (updatedConFont != null) {
                 conFont = PFontHandler.getFontFromFile(updatedConFont.getAbsolutePath());
-                conFont = conFont.deriveFont(conFontStyle, conFontSize);
+                conFont = conFont.deriveFont(conFontStyle, (float)conFontSize);
                 cachedConFont = IOHandler.getByteArrayFromFile(updatedConFont);
             }
             
@@ -839,7 +838,7 @@ public class PropertiesManager {
             PropertiesManager prop = (PropertiesManager) comp;
             ret = ((conFont == null) && (prop.conFont == null)) || conFont.equals(prop.conFont);
             ret = ret && conFontStyle.equals(prop.conFontStyle);
-            ret = ret && conFontSize.equals(prop.conFontSize);
+            ret = ret && conFontSize == prop.conFontSize;
             ret = ret && localFontSize == prop.localFontSize;
             ret = ret && alphaPlainText.equals(prop.alphaPlainText);
             ret = ret && langName.equals(prop.langName);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -311,7 +311,7 @@ public class ScrPrintToPDF extends PDialog {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF Documents", "pdf");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        chooser.setCurrentDirectory(new File("."));
+        chooser.setCurrentDirectory(core.getWorkingDirectory());
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             String fileName = chooser.getSelectedFile().getAbsolutePath();
@@ -333,7 +333,7 @@ public class ScrPrintToPDF extends PDialog {
         }
         
         if (new File(txtSavePath.getText()).exists()
-                && InfoBox.actionConfirmation("Overwrite Confirmation", "File already exists. Overwrite?", this)) {
+                && !InfoBox.actionConfirmation("Overwrite Confirmation", "File already exists. Overwrite?", this)) {
             return;
         }
         
@@ -381,7 +381,7 @@ public class ScrPrintToPDF extends PDialog {
                 "BMP", "bmp", "jpeg", "wbmp", "gif", "GIF", "png", "JPG", "jpg", "WBMP", "JPEG", "PNG");
         chooser.setFileFilter(filter);
         String fileName;
-        chooser.setCurrentDirectory(new File("."));
+        chooser.setCurrentDirectory(core.getWorkingDirectory());
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();

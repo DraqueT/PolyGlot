@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson
+ * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -201,7 +201,7 @@ public final class PTextPane extends JTextPane {
         insertImage.addActionListener((ActionEvent ae) -> {
             try {
                 ImageNode image = core.getImageCollection()
-                        .openNewImage((Window)parentPane.getTopLevelAncestor());
+                        .openNewImage((Window)parentPane.getTopLevelAncestor(), core.getWorkingDirectory());
                 if (image != null) {
                     // null node means user cancelled process
                     addImage(image);

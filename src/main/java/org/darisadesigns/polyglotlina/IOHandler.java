@@ -220,17 +220,18 @@ public final class IOHandler {
      * cancels.
      *
      * @param parent parent window of operation
+     * @param workingDirectory
      * @return buffered image selected by user
      * @throws IOException on file read error
      */
-    public static BufferedImage openImage(Window parent) throws IOException {
+    public static BufferedImage openImage(Window parent, File workingDirectory) throws IOException {
         BufferedImage ret = null;
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Select Image");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "jpeg", "tiff", "bmp", "png");
         chooser.setFileFilter(filter);
         String fileName;
-        chooser.setCurrentDirectory(new File("."));
+        chooser.setCurrentDirectory(workingDirectory);
 
         if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();

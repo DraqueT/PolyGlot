@@ -90,7 +90,7 @@ public final class PLanguageStats {
         Map<String, Integer> phonemeCount = new HashMap<>();
         Map<String, Integer> charCount = new HashMap<>();
         Map<String, Integer> phonemeCombo2 = new HashMap<>();
-        ConWord wordList[] = core.getWordCollection().getWordNodes();
+        ConWord[] wordList = core.getWordCollection().getWordNodes();
         String allChars = core.getPropertiesManager().getAlphaPlainText();
         String alphabet = core.getPropertiesManager().getAlphaPlainText();
 
