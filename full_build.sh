@@ -18,6 +18,7 @@ fi
 if [ "$#" -eq 0 ] || [ "$1" == "win" ]; then
     WIN_START_TIME=$(date +%s)
     echo "Starting Windows build process..."
+###### For whatever reason, jpackage will simply not function correctly unless the PC is booted up in advance
 #    VBoxManage startvm "WinDev2001Eval" --type gui
 #    echo "Waiting 25 seconds for target machine to start up..."
 #    sleep 5

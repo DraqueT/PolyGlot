@@ -311,12 +311,12 @@ def distOsx():
         '--file-associations packaging_files/mac/file_types_mac.prop ' +
         '--icon packaging_files/mac/PolyGlot.icns ' +
         '--license-file LICENSE.TXT ' +
-        '--app-version "' + POLYGLOT_BUILD + '"')
+        '--app-version "' + POLYGLOT_VERSION + '"')
 
     os.system(command)
       
     if copyDestination != "":
-        copyInstaller('PolyGlot-' + POLYGLOT_BUILD + '.dmg')
+        copyInstaller('PolyGlot-' + POLYGLOT_VERSION + '.dmg')
 
 
 ######################################
@@ -501,6 +501,7 @@ def copyInstaller(source):
     
         # only remove failure signal once process is successful
         os.remove(failFile)
+        os.remove(source)
     else:
         print('Built installer missing: ' + source)
 
