@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -51,7 +51,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Platform;
@@ -666,7 +665,7 @@ public class ScrLogoDetails extends PFrame {
         LogoNode curNode = (LogoNode) lstLogos.getSelectedValue();
 
         if (curNode == null) {
-            lstRelWords.setModel(new DefaultListModel<Object>());
+            lstRelWords.setModel(new DefaultListModel<>());
             return;
         }
 
@@ -785,7 +784,7 @@ public class ScrLogoDetails extends PFrame {
     /**
      * Populates logographs based on iterator
      *
-     * @param it iterator of all logographs to populate
+     * @param logoNodes all logographs to populate
      */
     private void populateLogographs(LogoNode[] logoNodes) {
         DefaultListModel<Object> logoModel = new DefaultListModel<>();
@@ -824,9 +823,9 @@ public class ScrLogoDetails extends PFrame {
             txtName.setText("");
             txtNotes.setText("");
             txtStrokes.setText("");
-            lstRadicals.setModel(new DefaultListModel<Object>());
+            lstRadicals.setModel(new DefaultListModel<>());
             tblReadings.setModel(new DefaultTableModel(new Object[]{"Readings"}, 0));
-            lstRelWords.setModel(new DefaultListModel<Object>());
+            lstRelWords.setModel(new DefaultListModel<>());
             chkIsRad.setSelected(false);
             lblLogo.setIcon(new ImageIcon(new LogoNode().getLogoGraph().getScaledInstance(
                     lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH)));
@@ -902,7 +901,7 @@ public class ScrLogoDetails extends PFrame {
                 "BMP", "bmp", "jpeg", "wbmp", "gif", "GIF", "png", "JPG", "jpg", "WBMP", "JPEG", "PNG");
         chooser.setFileFilter(filter);
         String fileName;
-        chooser.setCurrentDirectory(new File("."));
+        chooser.setCurrentDirectory(core.getWorkingDirectory());
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();

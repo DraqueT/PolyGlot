@@ -32,10 +32,7 @@ import javax.swing.text.DocumentFilter;
  */
 public class PTextFieldFilter extends DocumentFilter {
     
-    private final Window parent;
-    
-    public PTextFieldFilter(Window _parent) {
-        parent = _parent;
+    public PTextFieldFilter() {
     }
 
     @Override
@@ -49,8 +46,6 @@ public class PTextFieldFilter extends DocumentFilter {
 
         if (test(sb.toString())) {
             super.insertString(fb, offset, insert, attr);
-        } else {
-            InfoBox.warning("Numbers Only", "This field allows only numeric values.", parent);
         }
     }
 
@@ -82,8 +77,6 @@ public class PTextFieldFilter extends DocumentFilter {
 
         if (test(sb.toString())) {
             super.replace(fb, offset, length, text, attrs);
-        } else {
-            InfoBox.warning("Numbers Only", "This field allows only numeric values.", parent);
         }
 
     }
@@ -98,8 +91,6 @@ public class PTextFieldFilter extends DocumentFilter {
 
         if (test(sb.toString())) {
             super.remove(fb, offset, length);
-        } else {
-            InfoBox.warning("Numbers Only", "This field allows only numeric values.", parent);
         }
     }
 }

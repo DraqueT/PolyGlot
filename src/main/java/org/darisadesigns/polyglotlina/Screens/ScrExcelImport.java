@@ -35,7 +35,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.csv.CSVFormat;
 import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
 import org.darisadesigns.polyglotlina.ImportFileHelper.DuplicateOption;
-import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -426,7 +425,7 @@ public class ScrExcelImport extends PDialog {
 
     private void browseFile() {
         JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new File("."));
+        chooser.setCurrentDirectory(core.getWorkingDirectory());
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel/CSV Documents", "xls", "xlsx", "xlsm", "csv", "txt", "tsv");
         chooser.setFileFilter(filter);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {

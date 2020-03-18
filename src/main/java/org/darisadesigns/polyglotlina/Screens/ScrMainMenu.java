@@ -34,7 +34,6 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FontFormatException;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
@@ -107,8 +106,11 @@ public final class ScrMainMenu extends PFrame {
     /**
      * Creates new form ScrMainMenu
      *
+     * Note: Single time setup per app run requires handing self to other objects
+     * 
      * @param _core DictCore menus run on
      */
+    @SuppressWarnings("LeakingThisInConstructor")
     public ScrMainMenu(DictCore _core) {
         super(_core);
 
@@ -725,7 +727,7 @@ public final class ScrMainMenu extends PFrame {
 
         chooser.setDialogTitle("Export Font");
         chooser.setFileFilter(filter);
-        chooser.setCurrentDirectory(new File("."));
+        chooser.setCurrentDirectory(core.getWorkingDirectory());
         chooser.setApproveButtonText("Save");
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -1968,41 +1970,7 @@ public final class ScrMainMenu extends PFrame {
     }
 
     private void mnuImportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFontActionPerformed
-        JFileChooser chooser = new JFileChooser();
-        String fileName;
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf", "otf", "ttc", "dfont");
-
-        chooser.setDialogTitle("Import Font");
-        chooser.setFileFilter(filter);
-        chooser.setCurrentDirectory(new File("."));
-        chooser.setApproveButtonText("Open");
-
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            fileName = chooser.getSelectedFile().getAbsolutePath();
-        } else {
-            return;
-        }
-
-        Double fontSize = InfoBox.doubleInputDialog("Font Size",
-                "Enter a numeric value for font size.",
-                "Please provide a numeric value (default 12.0) for font size.",
-                this);
-
-        if (fontSize == null) {
-            return;
-        }
-
-        try {
-            core.getPropertiesManager().setFontFromFile(fileName);
-            core.getPropertiesManager().setFontSize(fontSize.intValue());
-            this.selectFirstAvailableButton();
-        } catch (IOException e) {
-            InfoBox.error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage(), this);
-        } catch (FontFormatException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Font Format Error", "Unable to read " + fileName + " due to: "
-                    + e.getLocalizedMessage(), this);
-        }
+        new ScrFontImportDialog(core).setVisible(true);
     }//GEN-LAST:event_mnuImportFontActionPerformed
 
     private void btnQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuizActionPerformed

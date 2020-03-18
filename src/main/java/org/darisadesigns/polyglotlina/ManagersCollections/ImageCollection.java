@@ -25,6 +25,7 @@ import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Window;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
@@ -54,13 +55,14 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
      * Pulls in new image from user selected file
      * Returns null if user cancels process
      * @param parent parent form
+     * @param workingDirectory
      * @return ImageNode inserted into collection with populated image
      * @throws IOException on file read error
      */
-    public ImageNode openNewImage(Window parent) throws Exception {
+    public ImageNode openNewImage(Window parent, File workingDirectory) throws Exception {
         ImageNode image = null;
         try {
-            BufferedImage buffImg = IOHandler.openImage(parent);
+            BufferedImage buffImg = IOHandler.openImage(parent, workingDirectory);
             
             if (buffImg != null) {
                 image = new ImageNode();

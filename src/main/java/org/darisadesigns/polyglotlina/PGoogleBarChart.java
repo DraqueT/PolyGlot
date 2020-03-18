@@ -36,7 +36,7 @@ public class PGoogleBarChart extends PGoogleChart {
     }
 
     /**
-     * @param leftYAxisLabel the leftYAxisLabel to set
+     * @param _leftYAxisLabel the leftYAxisLabel to set
      */
     public void setLeftYAxisLabel(String _leftYAxisLabel) {
         this.leftYAxisLabel = _leftYAxisLabel;
@@ -50,7 +50,7 @@ public class PGoogleBarChart extends PGoogleChart {
     }
 
     /**
-     * @param rightYAxisLabel the rightYAxisLabel to set
+     * @param _rightYAxisLabel the rightYAxisLabel to set
      */
     public void setRightYAxisLabel(String _rightYAxisLabel) {
         this.rightYAxisLabel = _rightYAxisLabel;
@@ -75,7 +75,7 @@ public class PGoogleBarChart extends PGoogleChart {
      * subsequent set should have 1 label and n - 1 values. It will not display
      * otherwise.
      *
-     * @param labels
+     * @param _labels
      * @param values
      */
     @Override
@@ -166,14 +166,14 @@ public class PGoogleBarChart extends PGoogleChart {
     }
 
     /**
-     * @param labels the labels to set
+     * @param _labels the labels to set
      */
     public void setLabels(String[] _labels) {
         this.labels = _labels;
     }
 
     /**
-     * @param conFontName the conFontName to set
+     * @param _conFontName the conFontName to set
      */
     public void setConFontName(String _conFontName) {
         this.conFontName = _conFontName;

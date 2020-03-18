@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -49,8 +49,7 @@ public class PCellRenderer implements TableCellRenderer {
     public PCellRenderer(boolean _useConFont, DictCore _core) {
         core = _core;
         useConFont = _useConFont;
-        Integer preSize = core.getPropertiesManager().getFontSize();
-        preSize = preSize == null ? 0 : preSize;
+        double preSize = core.getPropertiesManager().getFontSize();
         
         Font selectedFont = useConFont ? 
                 core.getPropertiesManager().getFontCon() : 

@@ -107,7 +107,7 @@ public final class ScrOptions extends PDialog {
 
     private void setOptions() {
         ((PlainDocument) txtTextFontSize.getDocument())
-                .setDocumentFilter(new PTextFieldFilter(core.getRootWindow()));
+                .setDocumentFilter(new PTextFieldFilter());
 
         chkResize.setSelected(core.getOptionsManager().isAnimateWindows());
         chkNightMode.setSelected(core.getOptionsManager().isNightMode());

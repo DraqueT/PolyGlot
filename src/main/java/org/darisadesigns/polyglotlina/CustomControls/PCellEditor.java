@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -55,8 +55,7 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
     public PCellEditor(boolean _useConFont, DictCore _core) {
         core = _core;
         useConFont = _useConFont;
-        Integer preSize = core.getPropertiesManager().getFontSize();
-        preSize = preSize == null ? 0 : preSize;
+        double preSize = core.getPropertiesManager().getFontSize();
         
         Font defFont = useConFont ? core.getPropertiesManager().getFontCon()
                 : core.getPropertiesManager().getFontLocal();
@@ -227,7 +226,7 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
     }
 
     /**
-     * @param ignoreListenerSilencing the ignoreListenerSilencing to set
+     * @param _ignoreListenerSilencing the ignoreListenerSilencing to set
      */
     public void setIgnoreListenerSilencing(boolean _ignoreListenerSilencing) {
         this.ignoreListenerSilencing = _ignoreListenerSilencing;
