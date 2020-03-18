@@ -80,10 +80,12 @@ public final class Java8Bridge {
             PGTUtil.PGT_VERSION
         };
         
-        String[] result = IOHandler.runAtConsole(command);
+        String[] results = IOHandler.runAtConsole(command);
         
-        if (result[1].contains("ERROR") || !new File(target).exists()) {
-            throw new IOException(result[1]);
+        for (String result : results) {
+            if (result.contains("ERROR") || !new File(target).exists()) {
+                throw new IOException(result);
+            }
         }
     }
 
