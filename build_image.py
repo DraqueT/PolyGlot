@@ -61,6 +61,7 @@ JAVAFX_VER = '' # set in main for timing reasons
 POLYGLOT_VERSION = '' # set in main for timing reasons
 POLYGLOT_BUILD = '' # set in main for timing reasons
 JAVA_HOME = '' # set in main for timing reasons
+SIGN_IDENTITY = '' # set in main for timing reasons
 IS_RELEASE = False
 CUR_YEAR = str(date.today().year)
 
@@ -74,6 +75,7 @@ def main(args):
     global POLYGLOT_VERSION
     global POLYGLOT_BUILD
     global JAVA_HOME
+    global SIGN_IDENTITY
     global IS_RELEASE
     global JAR_W_DEP
     global JAR_WO_DEP
@@ -93,6 +95,15 @@ def main(args):
         skip_steps.append(args[command_index + 1])
         
         print("Skipping: " + args[command_index + 1] + " step.")
+        
+        # remove args after consuming
+        del args[command_index + 1]
+        del args[command_index]
+
+    # allows specifying code signing identity for mac builds
+    if '-mac-sign-identity' in args:
+        command_index = args.index('-mac-sign-identity')
+        SIGN_IDENTITY = args[command_index + 1]
         
         # remove args after consuming
         del args[command_index + 1]
@@ -299,7 +310,7 @@ def imageOsx():
         '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
     
 def distOsx():
-    print('Creating distribution package...')
+    print('Creating app image...')
     command = (JAVA_HOME + '/bin/jpackage ' +
         '--runtime-image build/image ' +
         '--icon "PolyGlot.app" ' +
@@ -307,6 +318,7 @@ def distOsx():
         '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
         '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
         '--description "PolyGlot is a spoken language construction toolkit." ' +
+        '--type app-image ' +
         '--mac-package-name "PolyGlot" ' +
         '--file-associations packaging_files/mac/file_types_mac.prop ' +
         '--icon packaging_files/mac/PolyGlot.icns ' +
@@ -314,9 +326,38 @@ def distOsx():
         '--app-version "' + POLYGLOT_VERSION + '"')
 
     os.system(command)
-      
-    if copyDestination != "":
-        copyInstaller('PolyGlot-' + POLYGLOT_VERSION + '.dmg')
+
+    # Remove the extra copy of libjli.dylib which causes notarization to fail
+    os.remove('PolyGlot.app/Contents/runtime/Contents/MacOS/libjli.dylib')
+
+    if SIGN_IDENTITY:
+        print('Code signing app image...')
+        command = ('codesign ' +
+            '--force ' + # Overwrite existing signature
+            '--timestamp ' + # Embed secure timestamps
+            '--options runtime ' + # Enable hardened runtime
+            '--entitlements packaging_files/mac/entitlements.plist ' + # Add entitlements
+            '--sign "' + SIGN_IDENTITY + '" ' +
+            'PolyGlot.app')
+
+        os.system(command)
+    else:
+        print('No code signing identity specified, app image will not be signed')
+
+    if shutil.which('dmgbuild'):
+        print('Creating distribution package...')
+        command = ('dmgbuild ' +
+            '-s packaging_files/mac/dmg_settings.py ' +
+            'PolyGlot ' +
+            'PolyGlot-' + POLYGLOT_VERSION + '.dmg')
+        
+        os.system(command)
+
+        if copyDestination != "":
+            copyInstaller('PolyGlot-' + POLYGLOT_VERSION + '.dmg')
+    else:
+      print('\'dmgbuild\' does not exist in PATH, distribution packaging will be skipped')
+      print('Run \'pip install dmgbuild\' to install it')
 
 
 ######################################
@@ -525,6 +566,8 @@ To use this utility, simply execute this script with no arguments to run the ent
 
     -java-home-o <jdk-path> : Overrides JAVA_HOME. Useful for stubborn VMs that will not normally recognize environment variables.
     
+    -mac-sign-identity <identity> : Sign the Mac app image with the specified code signing identity.
+
     -copyDestination <destination-path> : sets location for the final created installer file to be copied to (ignored if distribution not built)
     
     -skip <step> : skips the given step (can be used multiple times)
