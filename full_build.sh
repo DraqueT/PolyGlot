@@ -112,7 +112,10 @@ if [ "$#" -eq 0 ] || [ "$1" == "osx" ]; then
     git pull
     
     if [ "$BUILD_STEP" == "" ] ; then
-        python build_image.py -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas"
+        # Apple signature must be provided here. Must have xcode installed and pull into keychain.
+        python build_image.py \
+            -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas" \
+            -mac-sign-identity "Apple Development: draquemail@gmail.com (A3YEXQ2CB4)"
     else
         python build_image.py "$BUILD_STEP" -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas"
     fi

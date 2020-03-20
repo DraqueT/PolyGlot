@@ -11,10 +11,10 @@
 ##############################################################################
 
 import datetime
+import distutils.spawn
 import platform
 import os
 import shutil
-import subprocess
 import sys
 import time
 import uuid
@@ -45,12 +45,14 @@ LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 
 # update the packager location for your OSX build
 OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
+SIGN_IDENTITY = '' # set in main for timing reasons
 
 
 ###############################
 # WINDOWS BUILD CONSTANTS
 # update the packager location for your Windows build
 WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
+
 
 ###############################
 # UNIVERSAL BUILD CONSTANTS
@@ -61,7 +63,6 @@ JAVAFX_VER = '' # set in main for timing reasons
 POLYGLOT_VERSION = '' # set in main for timing reasons
 POLYGLOT_BUILD = '' # set in main for timing reasons
 JAVA_HOME = '' # set in main for timing reasons
-SIGN_IDENTITY = '' # set in main for timing reasons
 IS_RELEASE = False
 CUR_YEAR = str(date.today().year)
 
@@ -311,6 +312,7 @@ def imageOsx():
     
 def distOsx():
     print('Creating app image...')
+    
     command = (JAVA_HOME + '/bin/jpackage ' +
         '--runtime-image build/image ' +
         '--icon "PolyGlot.app" ' +
@@ -322,13 +324,13 @@ def distOsx():
         '--mac-package-name "PolyGlot" ' +
         '--file-associations packaging_files/mac/file_types_mac.prop ' +
         '--icon packaging_files/mac/PolyGlot.icns ' +
-        '--license-file LICENSE.TXT ' +
         '--app-version "' + POLYGLOT_VERSION + '"')
 
     os.system(command)
 
     # Remove the extra copy of libjli.dylib which causes notarization to fail
-    os.remove('PolyGlot.app/Contents/runtime/Contents/MacOS/libjli.dylib')
+    if(path.exists('PolyGlot.app/Contents/runtime/Contents/MacOS/libjli.dylib')):
+        os.remove('PolyGlot.app/Contents/runtime/Contents/MacOS/libjli.dylib')
 
     if SIGN_IDENTITY:
         print('Code signing app image...')
@@ -344,20 +346,25 @@ def distOsx():
     else:
         print('No code signing identity specified, app image will not be signed')
 
-    if shutil.which('dmgbuild'):
+    if distutils.spawn.find_executable('dmgbuild'):
         print('Creating distribution package...')
         command = ('dmgbuild ' +
             '-s packaging_files/mac/dmg_settings.py ' +
             'PolyGlot ' +
             'PolyGlot-' + POLYGLOT_VERSION + '.dmg')
-        
+
         os.system(command)
 
         if copyDestination != "":
             copyInstaller('PolyGlot-' + POLYGLOT_VERSION + '.dmg')
+
     else:
-      print('\'dmgbuild\' does not exist in PATH, distribution packaging will be skipped')
-      print('Run \'pip install dmgbuild\' to install it')
+        print('\'dmgbuild\' does not exist in PATH, distribution packaging will be skipped')
+        print('Run \'pip install dmgbuild\' to install it')
+
+    # cleanup created app
+    if(path.exists('PolyGlot.app')):
+        shutil.rmtree('PolyGlot.app')
 
 
 ######################################
@@ -544,7 +551,7 @@ def copyInstaller(source):
         os.remove(failFile)
         os.remove(source)
     else:
-        print('Built installer missing: ' + source)
+        print('FAILURE: Built installer missing: ' + source)
 
 def printHelp():
     print("""
