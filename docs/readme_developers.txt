@@ -36,7 +36,7 @@ This will show you how to package PolyGlot for OSX, Windows, and Linux.
         - go to Turn Windows Features on or off
         - check the selection for .Net Framework 3.5 and hit OK/allow Windows to download files
         - the WiX install should work correctly now
-5.5) (OSX Only) install create-dmg (at terminal: "brew install create-dmg" or download from repository at https://github.com/andreyvit/create-dmg)
+5.5) (OSX Only) install dmgbuild (at terminal: "pip install dmgbuild")
 5.5) (Linux only) your system might not have the program fakeroot. Install it ("sudo apt install fakeroot")
 6) If your system does not have python, install it. Windows and some versions of Linux may not. (type "python" and hit enter at the terminal)
     - Remember to add the python directory to your path
