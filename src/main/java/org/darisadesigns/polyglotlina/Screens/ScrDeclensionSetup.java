@@ -397,7 +397,8 @@ public final class ScrDeclensionSetup extends PDialog {
 
         Integer nodeId = scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
         DeclensionNode delFrom = core.getDeclensionManager().getDeclensionTemplate(myType.getId(), nodeId);
-        Integer delDimId = (Integer) tblDimensions.getModel().getValueAt(tblDimensions.getSelectedRow(), 2);
+        Object o = tblDimensions.getModel().getValueAt(curRow, 1);
+        Integer delDimId = (Integer) o;
         delFrom.deleteDimension(delDimId);
 
         populateDimensions();
