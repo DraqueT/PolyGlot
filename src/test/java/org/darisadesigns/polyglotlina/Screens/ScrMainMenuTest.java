@@ -81,6 +81,7 @@ public class ScrMainMenuTest {
         } catch (IOException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException 
                 | SecurityException | InvocationTargetException | ParserConfigurationException 
                 | TransformerException e) {
+            e.printStackTrace();
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         } finally {

@@ -482,8 +482,19 @@ def getVersion():
 def getBuildNum():
     ret = getVersion()
     
-    if not IS_RELEASE:
-        ret = ret + '-' + str(int(time.time()))
+    if not IS_RELEASE and osString == winString:
+        # truncate build from version string if present
+        if ret.count('.') > 1:
+            ret = ret[0:ret.rfind('.')]
+        
+        if osString == winString:
+            # windows has max build num of 65535
+            autoBuildNum = int(time.time()) # base build on system time
+            autoBuildNum = autoBuildNum / 100 # truncate by 100 seconds (max of one build per 16 mins 40 seconds)
+            autoBuildNum = autoBuildNum % 65535 # reduce build to number between 0 - 65534
+            ret = ret + '.' + str(autoBuildNum)
+        else:
+            ret = ret + '.' + str(int(time.time()))
 
     return ret
 
