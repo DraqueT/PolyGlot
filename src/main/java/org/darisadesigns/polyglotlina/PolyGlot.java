@@ -65,16 +65,9 @@ public final class PolyGlot {
     }
     
     /**
-     * @param args the command line arguments: 
-     * args[0] = open file path (blank if none) 
-     * args[1] = working directory of PolyGlot (blank if none)
-     * args[2] = set to PGTUtils.True to suppress error/warning dialogs, though not thrown errors (testing purposes)
+     * @param args the command line arguments: open file path (blank if none), in chunks if spaces in path
      */
     public static void main(final String[] args) {
-        if (args.length > 2 && args[2].equals(PGTUtil.TRUE)) {
-            PGTUtil.setForceSuppressDialogs(true);
-        }
-        
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (PGTUtil.IS_OSX) {
@@ -95,14 +88,13 @@ public final class PolyGlot {
 
                 // catch all top level application killing throwables (and bubble up directly to ensure reasonable behavior)
                 try {
-                    String overridePath = args.length > 1 ? args[1] : "";
                     ScrMainMenu s = null;
 
                     if (canStart()) {
                         try {
                             // separated due to serious nature of Throwable vs Exception
                             
-                            PolyGlot polyGlot = new PolyGlot(overridePath);
+                            PolyGlot polyGlot = new PolyGlot("");
                             DictCore core = new DictCore(polyGlot);
                                         
                             try {
@@ -192,7 +184,22 @@ public final class PolyGlot {
                             
                             // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
                             if (args.length > 0 && recovery == null) {
-                                s.setFile(args[0]);
+                                String filePath = "";
+                                
+                                // file paths with spaces in their names are broken into multiple arguments. This is a best guess. (multiple spaces could exist)
+                                // TODO: Remove once this is fixed in Java
+                                for (String pathChunk : args) {
+                                    filePath += " " + pathChunk;
+                                }
+                                
+                                // arguments passed in by the OS choke on special charaters as of Java 14 release (jpackage issue, probably)
+                                // TODO: Remove once this is fixed in Java
+                                if (new File(filePath).exists()) {
+                                    s.setFile(filePath);
+                                } else {
+                                    InfoBox.warning("File Path Error", "Please retry opening this file by clicking File->Open from the menu.", null);
+                                }
+                                
                                 s.openLexicon(true);
                             }
                         } catch (ArrayIndexOutOfBoundsException e) {

@@ -19,9 +19,6 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.PGTUtil;
-import org.darisadesigns.polyglotlina.PolyGlot;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -29,15 +26,6 @@ import org.junit.jupiter.api.Test;
  * @author draque
  */
 public class PolyGlotTest {
-    
-    /**
-     * Used primarily for profiling
-     * @param args
-     */
-    public static void main(String[] args) {
-        PolyGlotTest test = new PolyGlotTest();
-        test.testMainNoFile();
-    }
 
     /**
      * Test of main method, of class DictCore opens with no errors without
@@ -47,7 +35,8 @@ public class PolyGlotTest {
     public void testMainNoFile() {
         System.out.println("PolyGlotTest.testMainNoFile");
         try {
-            String[] args = {"", PGTUtil.TRUE};
+            PGTUtil.setForceSuppressDialogs(true);
+            String[] args = {""};
             PolyGlot.main(args);
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
@@ -63,7 +52,25 @@ public class PolyGlotTest {
     public void testMainWithFile() {
         System.out.println("PolyGlotTest.testMainWithFile");
         try {
-            String[] args = {PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd", PGTUtil.TRUE};
+            PGTUtil.setForceSuppressDialogs(true);
+            String[] args = {PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd"};
+            PolyGlot.main(args);
+        } catch (Exception e) {
+            IOHandler.writeErrorLog(e);
+            //e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Test of main method, of class DictCore opens with no errors with input
+     * file.
+     */
+    @Test
+    public void testMainWithFileInTwoParts() {
+        System.out.println("PolyGlotTest.testMainWithFileInTwoParts");
+        try {
+            PGTUtil.setForceSuppressDialogs(true);
+            String[] args = {PGTUtil.TESTRESOURCES, "Lodenkur_TEST.pgd"};
             PolyGlot.main(args);
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
@@ -80,7 +87,8 @@ public class PolyGlotTest {
     public void testMainWithMissingFile() {
         System.out.println("PolyGlotTest.testMainWithMissingFile");
         try {
-            String[] args = {PGTUtil.TESTRESOURCES + "MISSING_FILE.pgd", PGTUtil.TRUE, PGTUtil.TRUE};
+            PGTUtil.setForceSuppressDialogs(true);
+            String[] args = {PGTUtil.TESTRESOURCES + "MISSING_FILE.pgd"};
             PolyGlot.main(args);
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
