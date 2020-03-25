@@ -407,7 +407,7 @@ def imageWin():
     os.system(command)
 
 def distWin():
-    packageLocation = 'PolyGlot-' + POLYGLOT_VERSION + '.exe'
+    packageLocation = 'PolyGlot-' + POLYGLOT_BUILD + '.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
 

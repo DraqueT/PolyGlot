@@ -288,7 +288,7 @@ public final class IOHandler {
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(
-                workingDirectory + File.separator + PGTUtil.POLYGLOT_INI))) {
+                workingDirectory + File.separator + PGTUtil.POLYGLOT_INI, StandardCharsets.UTF_8))) {
             String loadProblems = "";
 
             for (String line; (line = br.readLine()) != null;) {
