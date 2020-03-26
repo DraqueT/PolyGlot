@@ -45,10 +45,8 @@ public class ScrAbout extends PDialog {
 
         txtAbout.setText("PolyGlot ver. " + PGTUtil.getDisplayVersion() + "\n\nPolyGlot is "
                 + "copyright Draque Thompson 2014-" + Calendar.getInstance().get(Calendar.YEAR)
-                + ". It is licensed under the Creative Commons "
-                + "Attribution-Noncommercial 4.0 International Public License, so it is free "
-                + "to distribute, so long as my work is credited and it not used for commercial "
-                + "purposes. Please don't sell this or call it your own, but feel free to "
+                + ". It is licensed under the MIT Licence, so it is free "
+                + "to distribute. Please don't sell this or call it your own, but feel free to "
                 + "use and modify the code found on the open source repository for PolyGlot.\n\n"
                 + "HomePage: http://draquet.github.io/PolyGlot/\nGitHub Repository: "
                 + "https://github.com/DraqueT/PolyGlot\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME);
