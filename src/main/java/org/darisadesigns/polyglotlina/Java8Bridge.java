@@ -83,9 +83,13 @@ public final class Java8Bridge {
         String[] results = IOHandler.runAtConsole(command);
         
         for (String result : results) {
-            if (result.contains("ERROR") || !new File(target).exists()) {
-                throw new IOException(result);
+            if (result.toLowerCase().contains("error")) {
+                throw new IOException("Unable to print to PDF: " + result);
             }
+        }
+        
+        if (!new File(target).exists()) {
+            throw new IOException("Unable to print to PDF for unknown reasons. Please contact developer.");
         }
     }
 

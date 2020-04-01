@@ -2,13 +2,25 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.DarisaDesigns</groupId>
+    <name>PolyGlot Linear A</name>
     <artifactId>PolyGlotLinA</artifactId>
     <version>3.1.2</version>
+    <description>PolyGlot is a utility for creating and publishing spoken languages.</description>
+    <url>https://draquet.github.io/PolyGlot/</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
     </properties>
+    
+    <developers>
+        <developer>
+            <id>draquet</id>
+            <name>Draque Thompson</name>
+            <email>draquemail@gmail.com</email>
+        </developer>
+    </developers>
+    
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -122,7 +134,7 @@
     <build>
         <plugins>
             <!-- Only use for analysis. Messes with Windows and Linux builds. -->
-<!--            <plugin>
+            <!--            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.5</version>

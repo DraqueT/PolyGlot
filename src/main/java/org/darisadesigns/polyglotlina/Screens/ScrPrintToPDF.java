@@ -368,7 +368,7 @@ public class ScrPrintToPDF extends PDialog {
             this.dispose();
         } catch (IOException e) {
             IOHandler.writeErrorLog(e);
-            InfoBox.error("Save Error", "Unable to print to file: " + e.getMessage(), core.getRootWindow());
+            InfoBox.error("Save Error", e.getMessage(), core.getRootWindow());
         } finally {
             setCursor(Cursor.getDefaultCursor());
         }
