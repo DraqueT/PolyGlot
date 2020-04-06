@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -714,43 +715,60 @@ public class PropertiesManager {
     }
     
     /**
+     * Tests whether the alphabet covers all words in the lexicon
+     * @return 
+     */
+    public boolean isAlphabetComplete() {
+        boolean ret = true;
+        
+        for (ConWord word : core.getWordCollection().getWordNodes()) {
+            if (!testStringAgainstAlphabet(word.getValue())) {
+                ret = false;
+                break;
+            }
+        }
+        
+        return ret;
+    }
+    
+    /**
      * Tests whether all characters within word are covered by ordered alphabet
      * @param testString string to test
      * @return true if string comprised of only characters defined in alphabet or if no alphabet defined
      * order menu
      */
     public boolean testStringAgainstAlphabet(String testString) {
-        boolean ret = true;
         int longestChar = alphaOrder.getLongestEntry();
+        boolean ret = true;
+        
+        if (testString.equals("lulüto")) {
+            System.out.print("BLIZZAM");
+        }
         
         if (!alphaOrder.isEmpty()) {
             String currentCharacter = ""; // Linguistic character (can be made up of multiple string entries)
             
-            // loop on every character
             for (char c : testString.toCharArray()) {
+                if (c == ' ') { // spaces are skipped in all parsing
+                    continue;
+                }
+                
                 currentCharacter += c; // add current character to unmatched prior character (or set value if last character matched)
                 
                 // if current string longer than any recorded, fail
                 if (currentCharacter.length() > longestChar) {
                     ret = false;
                     break;
+                } else if (alphaOrder.containsKey(currentCharacter) 
+                        && testStringAgainstAlphabet(testString.substring(currentCharacter.length()))) {
+                    break;
                 }
-                
-                // if current character found, blank (otherwise loop to add)
-                if (alphaOrder.containsKey(currentCharacter)) {
-                    currentCharacter = "";
-                }
-            }
-            
-            // if not blanked, the last character never matched
-            if (!currentCharacter.isEmpty()) {
-                ret = false;
             }
         }
         
         return ret;
     }
-
+    
     /**
      * @return the overrideRegexFont
      */

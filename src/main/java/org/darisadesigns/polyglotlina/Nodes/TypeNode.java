@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -93,7 +93,7 @@ public class TypeNode extends DictNode {
         if (!(_node instanceof TypeNode)) {
             throw new ClassCastException("Object not of type TypeNode");
         }
-
+        
         TypeNode set = (TypeNode) _node;
 
         this.setId(set.getId());

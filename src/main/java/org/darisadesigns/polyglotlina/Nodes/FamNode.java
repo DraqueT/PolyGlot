@@ -32,7 +32,7 @@ import java.util.List;
 public class FamNode extends DictNode {
     private final List<FamNode> subNodes = new ArrayList<>();
     private final List<ConWord> words = new ArrayList<>();
-    private final FamNode parent;
+    private final FamNode parentNode;
     private String notes = "";
     private final FamilyManager manager;
     
@@ -48,8 +48,8 @@ public class FamNode extends DictNode {
      * Gets node's parent
      * @return FamNode representing node's parent. null if root
      */
-    public FamNode getParent() {
-        return parent;
+    public FamNode getParentNode() {
+        return parentNode;
     }
     
     /**
@@ -66,7 +66,7 @@ public class FamNode extends DictNode {
      * @param _manager a link to the parent manager
      */    
     public FamNode(FamNode _parent, FamilyManager _manager) {
-        parent = _parent;
+        parentNode = _parent;
         manager = _manager;
     }
     
@@ -77,7 +77,7 @@ public class FamNode extends DictNode {
      * @param _manager A link to the parent manager
      */
     public FamNode(FamNode _parent, String _value, FamilyManager _manager) {
-        parent = _parent;
+        parentNode = _parent;
         this.setValue(_value);
         manager = _manager;
     }
@@ -195,11 +195,11 @@ public class FamNode extends DictNode {
      * @return false if root
      */
     public boolean removeFromParent() {
-        if (parent == null) {
+        if (parentNode == null) {
             return false;
         }
         
-        parent.removeChild(this);
+        parentNode.removeChild(this);
         
         return true;
     }

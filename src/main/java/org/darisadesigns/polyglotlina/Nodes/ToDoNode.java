@@ -32,13 +32,13 @@ import org.w3c.dom.Element;
  */
 public class ToDoNode {
     private String value;
-    private ToDoNode parent;
+    private ToDoNode parentNode;
     private boolean isDone;
     private final List<ToDoNode> children = new ArrayList<>();
     
-    public ToDoNode(ToDoNode _parent, String _value, boolean _isDone) {
+    public ToDoNode(ToDoNode _parentNode, String _value, boolean _isDone) {
         value = _value;
-        parent = _parent;
+        parentNode = _parentNode;
         isDone = _isDone;
     }
     
@@ -64,20 +64,20 @@ public class ToDoNode {
     }
     
     public void addChild(ToDoNode child) {
-        child.parent = this;
+        child.parentNode = this;
         children.add(child);
     }
     
     public void setParent(ToDoNode _parent) {
-        parent = _parent;
+        parentNode = _parent;
     }
     
     /**
      * Deletes node
      */
     public void delete() {
-        if (parent != null) {
-            parent.deleteChild(this);
+        if (parentNode != null) {
+            parentNode.deleteChild(this);
         }
     }
     
@@ -168,7 +168,7 @@ public class ToDoNode {
     }
     
     public ToDoNode getParent() {
-        return parent;
+        return parentNode;
     }
     
     @Override

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.darisadesigns.polyglotlina.ManagersCollections.DictionaryCollection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -98,8 +99,13 @@ public class ConWord extends DictNode {
         rulesOverride = _rulesOverride;
     }
     
-    public void setParent(ConWordCollection _parent) {
-        parentCollection = _parent;
+    @Override
+    public void setParent(DictionaryCollection _parent) {
+        super.setParent(_parent);
+        
+        if (_parent instanceof ConWordCollection) {
+            parentCollection = (ConWordCollection)_parent;
+        }
     }
     
     /**
@@ -505,7 +511,7 @@ public class ConWord extends DictNode {
         wordValue.appendChild(doc.createTextNode(this.autoDeclensionOverride ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(wordValue);
 
-        wordValue = doc.createElement(PGTUtil.WORD_RULEORVERRIDE_XID);
+        wordValue = doc.createElement(PGTUtil.WORD_RULEOVERRIDE_XID);
         wordValue.appendChild(doc.createTextNode(this.rulesOverride ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(wordValue);
 

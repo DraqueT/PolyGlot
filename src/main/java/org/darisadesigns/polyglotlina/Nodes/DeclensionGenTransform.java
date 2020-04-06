@@ -76,7 +76,7 @@ public class DeclensionGenTransform {
     }
     
     public void writeXML(Document doc, Element rootElement) {
-        Element transNode = doc.createElement(PGTUtil.DEG_GEN_TRANS_XID);
+        Element transNode = doc.createElement(PGTUtil.DEC_GEN_TRANS_XID);
         rootElement.appendChild(transNode);
 
         Element wordValue = doc.createElement(PGTUtil.DEC_GEN_TRANS_REGEX_XID);

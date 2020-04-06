@@ -41,6 +41,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -64,6 +65,8 @@ public class ScrLangProps extends PFrame {
 
         initComponents();
         populateProperties();
+        setAlphaLegal();
+        
         txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
 
         txtKerning.getDocument().addDocumentListener(new DocumentListener() {
@@ -108,6 +111,20 @@ public class ScrLangProps extends PFrame {
         txtLocalFont.setToolTipText(core.localLabel() + " Font");
     }
 
+    // detects whether the alphabet covers all characters in words of the lexicon and sets screen up appropriately
+    private void setAlphaLegal() {
+        if (!core.getWordCollection().canSafelySort()) {            
+            txtAlphaOrder.setBackground(Color.red);
+            txtAlphaOrder.setToolTipText("There is a logical problem in your alphabetic ordering system. If using values greater than 2 characters, ensure that there can be no ambiguity in order.");
+        } else if (!core.getPropertiesManager().isAlphabetComplete()) {
+            txtAlphaOrder.setBackground(Color.red);
+            txtAlphaOrder.setToolTipText("Characters missing from Alpha Order. Please select Tools->Check Language to see which words contain unordered characters. (Note: some characters look the same, but are not!)");
+        } else {
+            txtAlphaOrder.setBackground(PGTUtil.COLOR_TEXT_BG);
+            txtAlphaOrder.setToolTipText("List of all characters in conlang in alphabetical order (both upper and lower case). Comma delimt if using character groups. (blank = default alpha)");
+        }
+    }
+    
     @Override
     public void updateAllValues(DictCore _core) {
         core = _core;
@@ -459,7 +476,7 @@ public class ScrLangProps extends PFrame {
         txtLocalFont.setToolTipText("Local Language Font");
         txtLocalFont.setEnabled(false);
 
-        txtAlphaOrder.setToolTipText("List of all characters in conlang in alphabetical order (both upper and lower case). Comma delimt if using character groups. (blank = default alpha)");
+        txtAlphaOrder.setToolTipText("");
         txtAlphaOrder.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtAlphaOrderFocusLost(evt);

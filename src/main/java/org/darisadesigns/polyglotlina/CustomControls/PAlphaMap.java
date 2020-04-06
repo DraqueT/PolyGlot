@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque
+ * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -32,6 +32,7 @@ import java.util.Objects;
  * @param <V>
  */
 public class PAlphaMap<K, V> {
+    private boolean missingChars = false;
     private int longestEntry = 0;
     private final HashMap<K, V> delegate = new HashMap<>();
     
@@ -69,6 +70,14 @@ public class PAlphaMap<K, V> {
     
     public void clear() {
         delegate.clear();
+    }
+    
+    public boolean isMissingChars() {
+        return missingChars;
+    }
+    
+    public void setMissingChars(boolean _missingChars) {
+        missingChars = _missingChars;
     }
     
     @Override

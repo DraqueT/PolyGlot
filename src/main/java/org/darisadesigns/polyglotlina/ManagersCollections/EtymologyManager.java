@@ -115,7 +115,7 @@ public class EtymologyManager {
         });
         
         ret.addAll(this.getExtParentList());
-        Collections.sort(ret);
+        core.getWordCollection().safeSort(ret);
         return ret.toArray(new ConWord[0]);
     }
     

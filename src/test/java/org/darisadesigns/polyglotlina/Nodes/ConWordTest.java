@@ -31,6 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -227,26 +228,25 @@ public class ConWordTest {
             fail(e);
         }
     }
-
-    // TODO: Maybe test this elsewhere, as this touches functionality from most node types...
-//    @Test
-//    public void testCheckValid() {
-//    }
     
     @Test
     public void testCompareTo() {
         System.out.println("ConWordTest.testCompareTo");
         
-        ConWord before = new ConWord();
-        ConWord after = new ConWord();
-
         PAlphaMap alphaOrder = new PAlphaMap();
         alphaOrder.put("b", 0);
         alphaOrder.put("a", 1);
+        
+        ConWordCollection collection = new ConWordCollection(core);
+        collection.setAlphaOrder(alphaOrder);
+        
+        ConWord before = new ConWord();
+        ConWord after = new ConWord();
+        before.setParent(collection);
+        after.setParent(collection);
 
         before.setValue("baaaa");
         after.setValue("aaaaa");
-        before.setAlphaOrder(alphaOrder);
 
         List<ConWord> orderMe = Arrays.asList(after, before);
 

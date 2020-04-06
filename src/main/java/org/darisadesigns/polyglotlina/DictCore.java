@@ -112,9 +112,7 @@ public class DictCore {
             PAlphaMap<String, Integer> alphaOrder = propertiesManager.getAlphaOrder();
 
             wordCollection.setAlphaOrder(alphaOrder);
-            typeCollection.setAlphaOrder(alphaOrder);
             logoCollection.setAlphaOrder(alphaOrder);
-            wordClassCollection.setAlphaOrder(alphaOrder);
             rootWindow = null;
             
             PGTUtil.validateVersion();
