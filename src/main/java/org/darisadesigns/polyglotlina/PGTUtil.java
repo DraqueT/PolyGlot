@@ -77,7 +77,7 @@ public final class PGTUtil {
     public static final String WORD_DEF_XID = "definition";
     public static final String WORD_AUTODECLOVERRIDE_XID = "autoDeclOverride";
     public static final String WORD_PROC_XID = "pronunciation";
-    public static final String WORD_RULEORVERRIDE_XID = "wordRuleOverride";
+    public static final String WORD_RULEOVERRIDE_XID = "wordRuleOverride";
     public static final String WORD_CLASSCOLLECTION_XID = "wordClassCollection";
     public static final String WORD_CLASS_AND_VALUE_XID = "wordClassification";
     public static final String WORD_CLASS_TEXT_VAL_COLLECTION_XID = "wordClassTextValueCollection";
@@ -172,7 +172,7 @@ public final class PGTUtil {
     public static final String DEC_GEN_RULE_APPLY_TO_CLASS_VALUE_XID = "decGenRuleApplyToClassValue";
 
     // autodeclension transform properties
-    public static final String DEG_GEN_TRANS_XID = "decGenTrans";
+    public static final String DEC_GEN_TRANS_XID = "decGenTrans";
     public static final String DEC_GEN_TRANS_REGEX_XID = "decGenTransRegex";
     public static final String DEC_GEN_TRANS_REPLACE_XID = "decGenTransReplace";
 

@@ -104,11 +104,11 @@ public class FamilyManager {
      * jumps to buffer parent, or does nothing if at root
      */
     public void bufferDone() {
-        if(buffer.getParent() == null) {
+        if(buffer.getParentNode() == null) {
             return;
         }
         
-        buffer = buffer.getParent();
+        buffer = buffer.getParentNode();
     }
     
     /**

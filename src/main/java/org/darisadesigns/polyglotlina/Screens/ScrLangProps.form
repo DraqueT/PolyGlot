@@ -396,7 +396,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtAlphaOrder">
           <Properties>
-            <Property name="toolTipText" type="java.lang.String" value="List of all characters in conlang in alphabetical order (both upper and lower case). Comma delimt if using character groups. (blank = default alpha)"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <Events>
             <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtAlphaOrderFocusLost"/>

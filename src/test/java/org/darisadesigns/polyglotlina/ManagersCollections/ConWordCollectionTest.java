@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson
+ * Copyright (c) 2019-2020, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -144,5 +144,71 @@ public class ConWordCollectionTest {
         ConWord results = core.getWordCollection().testWordLegality(test);
         
         assertEquals(results.getLocalWord(), "");
+    }
+    
+    @Test
+    public void testMissingCharsInAlphabet() {
+        System.out.println("ConWordCollectionTest.testMissingCharsInAlphabet");
+        
+        DictCore core = DummyCore.newCore();
+        String[] words = new String[]{"a", "b", "c", "d"};
+        
+        try {
+            for (String word : words) {
+                ConWord newWord = new ConWord();
+                newWord.setValue(word);
+                core.getWordCollection().addWord(newWord);
+            }
+
+            core.getPropertiesManager().setAlphaOrder("a,b,c");
+        } catch (Exception e) {
+            fail(e);
+        }
+        
+        assertFalse(core.getPropertiesManager().isAlphabetComplete());
+    }
+    
+    @Test
+    public void testNotMissingCharsInAlphabetMulticharVals() {
+        System.out.println("ConWordCollectionTest.testMissingCharsInAlphabetMulticharVals");
+        
+        DictCore core = DummyCore.newCore();
+        String[] words = new String[]{"abi", "b", "c", "d"};
+        
+        try {
+            for (String word : words) {
+                ConWord newWord = new ConWord();
+                newWord.setValue(word);
+                core.getWordCollection().addWord(newWord);
+            }
+
+            core.getPropertiesManager().setAlphaOrder("a,b,c,bi");
+        } catch (Exception e) {
+            fail(e);
+        }
+        
+        assertTrue(core.getPropertiesManager().isAlphabetComplete());
+    }
+    
+    @Test
+    public void testNoMissingCharsInAlphabet() {
+        System.out.println("ConWordCollectionTest.testNoMissingCharsInAlphabet");
+        
+        DictCore core = DummyCore.newCore();
+        String[] words = new String[]{"a", "b", "c", "d"};
+        
+        try {
+            for (String word : words) {
+                ConWord newWord = new ConWord();
+                newWord.setValue(word);
+                core.getWordCollection().addWord(newWord);
+            }
+
+            core.getPropertiesManager().setAlphaOrder("a,b,c,d");
+        } catch (Exception e) {
+            fail(e);
+        }
+        
+        assertTrue(core.getPropertiesManager().isAlphabetComplete());
     }
 }

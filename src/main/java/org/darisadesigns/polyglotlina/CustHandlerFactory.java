@@ -245,7 +245,7 @@ public final class CustHandlerFactory {
                     bdef = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_ETY_NOTES_XID)) {
                     bwordEtymNotes = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_RULEORVERRIDE_XID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_RULEOVERRIDE_XID)) {
                     bwordRuleOverride = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_AND_VALUE_XID)) {
                     bclassVal = true;
@@ -506,7 +506,7 @@ public final class CustHandlerFactory {
                     btypeId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_ID_XID)) {
                     bId = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_RULEORVERRIDE_XID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_RULEOVERRIDE_XID)) {
                     bwordRuleOverride = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_AND_VALUE_XID)) {
                     bclassVal = false;
@@ -647,7 +647,7 @@ public final class CustHandlerFactory {
                     bdecGenTransClassVal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_TYPE_XID)) {
                     bdecGenRuleType = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEG_GEN_TRANS_XID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_XID)) {
                     core.getDeclensionManager().getRuleBuffer().insertTransBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_REGEX_XID)) {
                     bdecGenTransRegex = false;

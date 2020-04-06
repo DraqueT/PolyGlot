@@ -37,7 +37,7 @@ import java.util.Random;
  */
 public abstract class DictionaryCollection<N extends DictNode> {
 
-    protected PAlphaMap<String, Integer> alphaOrder;
+    protected PAlphaMap<String, Integer> alphaOrder = new PAlphaMap<>();
     protected final Map<Integer, N> nodeMap = new HashMap<>();
     protected N bufferNode;
 
@@ -88,7 +88,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
         DictNode myNode = _modNode;
 
         myNode.setId(_id);
-        myNode.setAlphaOrder(alphaOrder);
+        myNode.setParent(this);
 
         nodeMap.remove(_id);
         nodeMap.put(myNode.getId(), _modNode);
@@ -183,7 +183,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
         // sets highest word ID, if current id is higher
         highestNodeId = _id > highestNodeId ? _id : highestNodeId;
         myBuffer.setId(_id);
-        myBuffer.setAlphaOrder(alphaOrder);
+        myBuffer.setParent(this);
 
         nodeMap.put(_id, _buffer);
 
@@ -281,5 +281,64 @@ public abstract class DictionaryCollection<N extends DictNode> {
         }
         
         return ret;
+    }
+    
+    /**
+     * Safely sorts a list of the collection
+     * (Accounts for possible failure due to incomplete/incoherent alphabet written by user)
+     * @param sort 
+     */
+    public void safeSort(List<N> sort) {
+        try {
+            alphaOrder.setMissingChars(false);
+            Collections.sort(sort);
+        } catch (Exception e) {
+            alphaOrder.setMissingChars(true);
+            Collections.sort(sort);
+        }
+    }
+    
+    /**
+     * Returns true if DictionaryCollection is able to sort safely
+     * Surpresses errors
+     * @return 
+     */
+    public boolean canSafelySort() {
+        boolean ret = false;
+        
+        try {
+            ret = canSafelySort(false);
+        } catch (Exception e) {
+            // do nothing. this is explicitly surpressing errors
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Returns true if DictionaryCollection is able to sort safely
+     * @param throwError
+     * @return 
+     * @throws java.lang.Exception 
+     */
+    public boolean canSafelySort(boolean throwError) throws Exception {
+        boolean ret = true;
+        
+        try {
+            Collections.sort(new ArrayList<>(nodeMap.values()));
+        } catch (Exception e) {
+            if (throwError) {
+                throw new Exception(e);
+                // planned exception, do not log
+            }
+            
+            ret = false;
+        }
+        
+        return ret;
+    }
+    
+    public PAlphaMap<String, Integer> getAlphaOrder() {
+        return alphaOrder;
     }
 }

@@ -268,7 +268,7 @@ public final class PTextField extends JTextField {
             return;
         }
         
-        setupLook();
+        //setupLook();
 
         try {
             PropertiesManager propMan = core.getPropertiesManager();
