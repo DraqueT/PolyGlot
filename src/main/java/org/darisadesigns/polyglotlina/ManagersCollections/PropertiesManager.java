@@ -739,13 +739,12 @@ public class PropertiesManager {
      */
     public boolean testStringAgainstAlphabet(String testString) {
         int longestChar = alphaOrder.getLongestEntry();
-        boolean ret = true;
+        boolean ret = false;
         
-        if (testString.equals("lulüto")) {
-            System.out.print("BLIZZAM");
-        }
-        
-        if (!alphaOrder.isEmpty()) {
+        // an empty string means having reached the end of the word without issue. Return true.
+        if (testString.isEmpty()) {
+            ret = true;
+        } else if (!alphaOrder.isEmpty()) {
             String currentCharacter = ""; // Linguistic character (can be made up of multiple string entries)
             
             for (char c : testString.toCharArray()) {
@@ -761,6 +760,7 @@ public class PropertiesManager {
                     break;
                 } else if (alphaOrder.containsKey(currentCharacter) 
                         && testStringAgainstAlphabet(testString.substring(currentCharacter.length()))) {
+                    ret = true;
                     break;
                 }
             }
