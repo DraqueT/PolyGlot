@@ -115,7 +115,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
     public LogoNode[] getAllLogos() {
         List<LogoNode> retList = new ArrayList<>(nodeMap.values());
 
-        Collections.sort(retList);
+        this.safeSort(retList);
 
         return retList.toArray(new LogoNode[0]);
     }
@@ -244,7 +244,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
             }
         }
         
-        Collections.sort(retList);
+        this.safeSort(retList);
 
         return retList.toArray(new LogoNode[0]);
     }

@@ -182,7 +182,7 @@ public class ConWordCollectionTest {
                 core.getWordCollection().addWord(newWord);
             }
 
-            core.getPropertiesManager().setAlphaOrder("a,b,c,bi");
+            core.getPropertiesManager().setAlphaOrder("a,b,c,d,bi");
         } catch (Exception e) {
             fail(e);
         }

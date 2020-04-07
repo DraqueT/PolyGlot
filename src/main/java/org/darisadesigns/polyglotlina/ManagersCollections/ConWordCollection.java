@@ -113,7 +113,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
             }
         }
 
-        Collections.sort(retList);
+        this.safeSort(retList);
         return retList.toArray(new ConWord[0]);
     }
     
@@ -687,7 +687,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
     public ConWord[] getWordNodes() {
         List<ConWord> retList = new ArrayList<>(nodeMap.values());
 
-        Collections.sort(retList);
+        this.safeSort(retList);
 
         return retList.toArray(new ConWord[0]);
     }
@@ -724,7 +724,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         });
 
         orderByLocal = true;
-        Collections.sort(retList);
+        this.safeSort(retList);
         orderByLocal = false;
 
         return retList.toArray(new ConWord[0]);
@@ -984,10 +984,25 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         }
         
         if (core.getPropertiesManager().isUseLocalWordLex()) {
-            Collections.sort(ret);
+            this.safeSortDisplay(ret);
         }
         
         return ret.toArray(new ConWordDisplay[0]);
+    }
+    
+    /**
+     * Safely sorts a list of the collection display. Workaround for tyical safesort on super
+     * (Accounts for possible failure due to incomplete/incoherent alphabet written by user)
+     * @param sort 
+     */
+    public void safeSortDisplay(List<ConWordDisplay> sort) {
+        try {
+            alphaOrder.setMissingChars(false);
+            Collections.sort(sort);
+        } catch (Exception e) {
+            alphaOrder.setMissingChars(true);
+            Collections.sort(sort);
+        }
     }
     
     /**
