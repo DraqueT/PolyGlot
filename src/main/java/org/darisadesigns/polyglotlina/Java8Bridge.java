@@ -87,8 +87,8 @@ public final class Java8Bridge {
             (printOrtho ? PGTUtil.TRUE : PGTUtil.FALSE),
             (printPageNumber ? PGTUtil.TRUE : PGTUtil.FALSE),
             (printWordEtymologies ? PGTUtil.TRUE : PGTUtil.FALSE),
-            PGTUtil.PGT_VERSION,
-            tmpFontFileLocation
+            tmpFontFileLocation,
+            PGTUtil.PGT_VERSION
         };
         
         String[] results = IOHandler.runAtConsole(command);
