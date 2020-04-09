@@ -58,6 +58,16 @@ public final class Java8Bridge {
         
         File bridge = PGTUtil.getJava8BridgeLocation();
         File tmpLangFile = createTmpLangFile(core);
+        File tmpFontFile = File.createTempFile("PolyGlotFont", ".ttf", core.getWorkingDirectory());
+        tmpFontFile.deleteOnExit();
+        
+        String tmpFontFileLocation = tmpFontFile.getCanonicalPath();
+        
+        try {
+            IOHandler.exportFont(tmpFontFileLocation, core.getCurFileName());
+        } catch (IOException e) {
+            tmpFontFileLocation = "";
+        }
         
         String[] command = {PGTUtil.JAVA8_JAVA_COMMAND,
             PGTUtil.JAVA8_JAR_ARG,
@@ -77,7 +87,8 @@ public final class Java8Bridge {
             (printOrtho ? PGTUtil.TRUE : PGTUtil.FALSE),
             (printPageNumber ? PGTUtil.TRUE : PGTUtil.FALSE),
             (printWordEtymologies ? PGTUtil.TRUE : PGTUtil.FALSE),
-            PGTUtil.PGT_VERSION
+            PGTUtil.PGT_VERSION,
+            tmpFontFileLocation
         };
         
         String[] results = IOHandler.runAtConsole(command);
