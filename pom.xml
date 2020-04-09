@@ -4,7 +4,7 @@
     <groupId>org.DarisaDesigns</groupId>
     <name>PolyGlot Linear A</name>
     <artifactId>PolyGlotLinA</artifactId>
-    <version>3.1.2</version>
+    <version>3.1.3</version>
     <description>PolyGlot is a utility for creating and publishing spoken languages.</description>
     <url>https://draquet.github.io/PolyGlot/</url>
     <properties>
@@ -213,4 +213,15 @@
             </resource>
         </resources>
     </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <configLocation>config/sun_checks.xml</configLocation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
