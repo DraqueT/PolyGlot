@@ -127,7 +127,7 @@ public class IOHandlerTest {
         System.out.println("IOHandlerTest.testGoodConsoleCommand");
         
         
-        String[] result = IOHandler.runAtConsole(new String[]{"java", "--version"});
+        String[] result = IOHandler.runAtConsole(new String[]{"java", "--version"}, false);
 
         assertTrue(!result[0].isEmpty()); // various versions of Java return every damned thing you can imagine... just test that it's SOMETHING
         assertTrue(result[1].isEmpty());
@@ -138,7 +138,7 @@ public class IOHandlerTest {
         System.out.println("IOHandlerTest.testBadConsoleCommand");
         
         
-        String[] result = IOHandler.runAtConsole(new String[]{"WAT", "AM", "COMMAND?!"});
+        String[] result = IOHandler.runAtConsole(new String[]{"WAT", "AM", "COMMAND?!"}, false);
 
         assertTrue(result[0].isEmpty());
         assertTrue(!result[1].isEmpty()); // different errors for different systems, but should be SOMETHING

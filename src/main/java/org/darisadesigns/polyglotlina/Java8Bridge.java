@@ -91,7 +91,7 @@ public final class Java8Bridge {
             PGTUtil.PGT_VERSION
         };
         
-        String[] results = IOHandler.runAtConsole(command);
+        String[] results = IOHandler.runAtConsole(command, true);
         
         for (String result : results) {
             if (result.toLowerCase().contains("error")) {
@@ -126,7 +126,7 @@ public final class Java8Bridge {
             Integer.toString(sheetNumber),
         };
         
-        String[] result = IOHandler.runAtConsole(command);
+        String[] result = IOHandler.runAtConsole(command, false);
         
         if (!result[1].isEmpty() || !tmpTarget.exists()) {
             throw new IOException(result[1]);
@@ -163,7 +163,7 @@ public final class Java8Bridge {
             (separateDeclensions ? PGTUtil.TRUE : PGTUtil.FALSE) // separate declensions
         };
         
-        String[] result = IOHandler.runAtConsole(command);
+        String[] result = IOHandler.runAtConsole(command, false);
         
         if (!result[1].isEmpty()) {
             throw new IOException("Unable to export to excel: " + result[1]);
