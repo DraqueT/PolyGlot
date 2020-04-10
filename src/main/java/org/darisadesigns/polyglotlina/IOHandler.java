@@ -1126,11 +1126,19 @@ public final class IOHandler {
      * Runs a command at the console, returning informational and error output.
      *
      * @param arguments command to run as [0], with arguments following
+     * @param addSpaces whether blank string argument values should be changed to a single space
+     * (some OSes will simply ignore arguments that are empty)
      * @return String array with two entries. [0] = Output, [1] = Error Output
      */
-    public static String[] runAtConsole(String[] arguments) {
+    public static String[] runAtConsole(String[] arguments, boolean addSpaces) {
         String output = "";
         String error = "";
+        
+        for (int i = 0; i < arguments.length; i++) {
+            if (arguments[i].isEmpty()) {
+                arguments[i] = " ";
+            }
+        }
 
         try {
             Process p = new ProcessBuilder(arguments).start();
@@ -1163,7 +1171,7 @@ public final class IOHandler {
     public static String getTerminalJavaVersion() {
         String ret = "";
         String[] command = {PGTUtil.JAVA8_JAVA_COMMAND, PGTUtil.JAVA8_VERSION_ARG};
-            String[] result = runAtConsole(command);
+            String[] result = runAtConsole(command, false);
 
         if (result[1].isEmpty()) {
             ret = result[0];
