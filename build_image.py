@@ -36,21 +36,17 @@ separatorCharacter = '/'
 
 ###############################
 # LINUX BUILD CONSTANTS
-# update the packager location for your Linux build
 LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 
 
 ###############################
 # OSX BUILD CONSTANTS
-
-# update the packager location for your OSX build
 OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
 SIGN_IDENTITY = '' # set in main for timing reasons
 
 
 ###############################
 # WINDOWS BUILD CONSTANTS
-# update the packager location for your Windows build
 WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 
 
