@@ -7,6 +7,12 @@ OSX_BUILD_TIME=0
 WIN_BUILD_TIME=0
 LIN_BUILD_TIME=0
 BUILD_STEP=""
+CONST_RELEASE="-release"
+CONST_WIN="win"
+CONST_WIN_VIRTUAL="WinDev2001Eval"
+CONST_LINUX="lin"
+CONST_LINUX_VIRTUAL="PolyGlotBuildUbuntu"
+CONST_OSX="osx"
 
 # if a build step is specified, capture it here (can only specify build step per platform)
 if [ "$2" != "" ]; then
@@ -14,12 +20,17 @@ if [ "$2" != "" ]; then
     echo "Platform: $1, Step: $2"
 fi
 
+# release tag means pass release to all builds
+if [ "$1" == "$CONST_RELEASE" ]; then
+    BUILD_STEP="$1"
+fi
+
 # Windows Build/upload
-if [ "$#" -eq 0 ] || [ "$1" == "win" ]; then
+if [ "$#" -eq 0 ] || [ "$1" == "$CONST_WIN" ] || [ "$1" == "$CONST_RELEASE" ]; then
     WIN_START_TIME=$(date +%s)
     echo "Starting Windows build process..."
 ###### For whatever reason, jpackage will simply not function correctly unless the PC is booted up in advance
-#    VBoxManage startvm "WinDev2001Eval" --type gui
+#    VBoxManage startvm "$CONST_WIN_VIRTUAL" --type gui
 #    echo "Waiting 25 seconds for target machine to start up..."
 #    sleep 5
 #    echo "Waiting 20 seconds for target machine to start up..."
@@ -31,31 +42,31 @@ if [ "$#" -eq 0 ] || [ "$1" == "win" ]; then
 #    echo "Waiting 05 seconds for target machine to start up..."
 #    sleep 5
 
-    if [ $(vboxmanage showvminfo "WinDev2001Eval" | grep -c "running .since") == 0 ] ; then
+    if [ $(vboxmanage showvminfo "$CONST_WIN_VIRTUAL" | grep -c "running .since") == 0 ] ; then
         echo "Windows must be running to be built due to limitations in jpackage for Windows."
         sleep 5
         exit
     else
         if [ "$BUILD_STEP" == "" ] ; then
-            VBoxManage guestcontrol "WinDev2001Eval" \
+            VBoxManage guestcontrol "$CONST_WIN_VIRTUAL" \
                 run --exe "C:\Users\polyglot\Documents\NetBeansProjects\auto_polyglot_build.bat" \
                 --username polyglot \
                 --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass
         else
-            VBoxManage guestcontrol "WinDev2001Eval" \
+            VBoxManage guestcontrol "$CONST_WIN_VIRTUAL" \
                 run --exe "C:\Users\polyglot\Documents\NetBeansProjects\auto_polyglot_build.bat" \
                 --username polyglot \
-                --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass
+                --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass \
                 -- auto_polyglot_build.bat/arg0 "$BUILD_STEP"
         fi
 
-        VBoxManage guestcontrol "WinDev2001Eval" \
+        VBoxManage guestcontrol "$CONST_WIN_VIRTUAL" \
             run --exe "C:\Users\polyglot\Documents\NetBeansProjects\auto_polyglot_build_shutdown.bat" \
             --username polyglot \
             --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass
 
         echo "Waiting for Windows machine to power down..."
-        until $(VBoxManage showvminfo --machinereadable "WinDev2001Eval" | grep -q ^VMState=.poweroff.)
+        until $(VBoxManage showvminfo --machinereadable "$CONST_WIN_VIRTUAL" | grep -q ^VMState=.poweroff.)
         do
             sleep 2
         done
@@ -68,10 +79,10 @@ if [ "$#" -eq 0 ] || [ "$1" == "win" ]; then
 fi
 
 # Linux Build/upload
-if [ "$#" -eq 0 ] || [ "$1" == "lin" ]; then
+if [ "$#" -eq 0 ] || [ "$1" == "$CONST_LINUX" ] || [ "$1" == "$CONST_RELEASE" ]; then
     LIN_START_TIME=$(date +%s)
     echo "Starting Ubuntu build process..."
-    VBoxManage startvm "PolyGlotBuildUbuntu" --type headless
+    VBoxManage startvm "$CONST_LINUX_VIRTUAL" --type headless
     echo "Waiting 25 seconds for target machine to start up..."
     sleep 5
     echo "Waiting 20 seconds for target machine to start up..."
@@ -83,12 +94,12 @@ if [ "$#" -eq 0 ] || [ "$1" == "lin" ]; then
     echo "Waiting 05 seconds for target machine to start up..."
     sleep 5
     if [ "$BUILD_STEP" == "" ] ; then
-        VBoxManage guestcontrol "PolyGlotBuildUbuntu" \
+        VBoxManage guestcontrol "$CONST_LINUX_VIRTUAL" \
             run --exe "/home/polyglot/NetBeansProjects/auto_polyglot_build.sh" \
             --username polyglot \
             --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass
     else
-        VBoxManage guestcontrol "PolyGlotBuildUbuntu" \
+        VBoxManage guestcontrol "$CONST_LINUX_VIRTUAL" \
             run --exe "/home/polyglot/NetBeansProjects/auto_polyglot_build.sh" \
             --username polyglot \
             --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass \
@@ -106,13 +117,13 @@ if [ "$#" -eq 0 ] || [ "$1" == "lin" ]; then
 fi
 
 # OSX Build/upload
-if [ "$#" -eq 0 ] || [ "$1" == "osx" ]; then
+if [ "$#" -eq 0 ] || [ "$1" == "$CONST_OSX" ] || [ "$1" == "$CONST_RELEASE" ]; then
     OSX_START_TIME=$(date +%s)
     echo "Starting OSX build process..."
     git pull
     
+    # Apple signature must be provided. Must have xcode installed and pull in from keychain.
     if [ "$BUILD_STEP" == "" ] ; then
-        # Apple signature must be provided here. Must have xcode installed and pull into keychain.
         python build_image.py \
             -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas" \
             -mac-sign-identity "Apple Development: draquemail@gmail.com (A3YEXQ2CB4)"
