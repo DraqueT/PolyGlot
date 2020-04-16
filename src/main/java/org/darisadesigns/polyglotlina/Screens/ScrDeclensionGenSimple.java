@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import java.awt.Component;
-import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -66,18 +65,21 @@ public class ScrDeclensionGenSimple extends PDialog {
 
     private void setupListeners() {
         DocumentListener listener = new DocumentListener() {
+            @Override
             public void insertUpdate(DocumentEvent e) {
                 if (!curPopulating) {
                     saveRule();
                 }
             }
 
+            @Override
             public void removeUpdate(DocumentEvent e) {
                 if (!curPopulating) {
                     saveRule();
                 }
             }
 
+            @Override
             public void changedUpdate(DocumentEvent e) {
                 if (!curPopulating) {
                     saveRule();
@@ -119,7 +121,7 @@ public class ScrDeclensionGenSimple extends PDialog {
      */
     private void populateCombinedDecl() {
         DeclensionPair[] decs = core.getDeclensionManager().getAllCombinedIds(typeId);
-        DefaultListModel decListModel = new DefaultListModel<Object>();
+        DefaultListModel decListModel = new DefaultListModel<>();
         lstCombinedDec.setModel(decListModel);
 
         for (DeclensionPair curPair : decs) {
@@ -193,41 +195,24 @@ public class ScrDeclensionGenSimple extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jSplitPane1 = new javax.swing.JSplitPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        lstCombinedDec = new PList(core.getPropertiesManager().getFontLocal(), menuFontSize);
         jPanel2 = new javax.swing.JPanel();
         txtRegex = new PTextField(core, core.getPropertiesManager().isOverrideRegexFont(), "Replacement Regex");
         txtReplace = new PTextField(core, core.getPropertiesManager().isOverrideRegexFont(), "Replacement Text");
         btnPrefix = new PButton(nightMode, menuFontSize);
         btnPostfix = new PButton(nightMode, menuFontSize);
         chkDisableForm = new PCheckBox(nightMode, menuFontSize);
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstCombinedDec = new PList(core.getPropertiesManager().getFontLocal(), menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         jLabel1.setText("Conjugation/Declensions");
 
         jSplitPane1.setBorder(null);
-        jSplitPane1.setDividerLocation(173);
+        jSplitPane1.setDividerLocation(160);
         jSplitPane1.setDividerSize(10);
         jSplitPane1.setMinimumSize(new java.awt.Dimension(0, 0));
-
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(23, 0));
-
-        lstCombinedDec.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstCombinedDec.setToolTipText("This lists every possible form of this part of speech.");
-        lstCombinedDec.setMaximumSize(new java.awt.Dimension(39, 0));
-        lstCombinedDec.setPreferredSize(new java.awt.Dimension(39, 0));
-        lstCombinedDec.setSize(new java.awt.Dimension(39, 0));
-        lstCombinedDec.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lstCombinedDecValueChanged(evt);
-            }
-        });
-        jScrollPane1.setViewportView(lstCombinedDec);
-
-        jSplitPane1.setLeftComponent(jScrollPane1);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -251,7 +236,7 @@ public class ScrDeclensionGenSimple extends PDialog {
             }
         });
 
-        chkDisableForm.setText("Disable Wordform");
+        chkDisableForm.setLabel("Disable Wordform");
         chkDisableForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkDisableFormActionPerformed(evt);
@@ -273,7 +258,7 @@ public class ScrDeclensionGenSimple extends PDialog {
                                 .addComponent(btnPostfix, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnPrefix, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(chkDisableForm))
-                        .addGap(0, 409, Short.MAX_VALUE)))
+                        .addGap(0, 497, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -289,10 +274,38 @@ public class ScrDeclensionGenSimple extends PDialog {
                 .addComponent(btnPrefix)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPostfix)
-                .addContainerGap(359, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jSplitPane1.setRightComponent(jPanel2);
+
+        lstCombinedDec.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstCombinedDec.setToolTipText("This lists every possible form of this part of speech.");
+        lstCombinedDec.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstCombinedDecValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(lstCombinedDec);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jSplitPane1.setLeftComponent(jPanel3);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -302,7 +315,7 @@ public class ScrDeclensionGenSimple extends PDialog {
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -365,6 +378,7 @@ public class ScrDeclensionGenSimple extends PDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JList<DeclensionPair> lstCombinedDec;
