@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Random;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -57,16 +58,12 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
     private static final String SPLIT_CHAR = ",";
     private final DictCore core;
-    private final Map<String, Integer> allConWords;
-    private final Map<String, Integer> allLocalWords;
     private boolean orderByLocal = false;
 
     public ConWordCollection(DictCore _core) {
         super(new ConWord());
 
         bufferNode.setCore(_core);
-        allConWords = new HashMap<>();
-        allLocalWords = new HashMap<>();
         core = _core;
     }
 
@@ -89,8 +86,6 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         bufferNode.setParent(this);
         bufferNode.setCore(core);
         ret = super.insert(_id, bufferNode);
-
-        balanceWordCounts(insWord, true);
 
         bufferNode = new ConWord();
         bufferNode.setCore(core);
@@ -153,11 +148,23 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
     /**
      * Checks whether word is legal and returns error reason if not
-     *
+     * DO NOT RUN IN LOOP. Instead use overridden version with cached count values
      * @param word word to check legality of
      * @return ConWord with any illegal entries saved as word values
      */
     public ConWord testWordLegality(ConWord word) {
+        return this.testWordLegality(word, this.getConWordCount(), this.getLocalCount());
+    }
+    
+    /**
+     * Checks whether word is legal and returns error reason if not
+     *
+     * @param word word to check legality of
+     * @param wordCount map of conword values to the number of times they appear in a word (use getConWordCount)
+     * @param localCount map of localword values to the number of times they appear in a word (use getLocalCount)
+     * @return ConWord with any illegal entries saved as word values
+     */
+    public ConWord testWordLegality(ConWord word, Map<String, Integer> wordCount, Map<String, Integer> localCount) {
         ConWord ret = new ConWord();
         String pronunciation = "";
         
@@ -180,13 +187,18 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
             ret.setLocalWord(core.localLabel() + " word set to mandatory.");
         }
 
-        if (core.getPropertiesManager().isWordUniqueness() && core.getWordCollection().containsWord(word.getValue())) {
+        if (core.getPropertiesManager().isWordUniqueness() 
+                && wordCount.containsKey(word.getValue())
+                && wordCount.get(word.getValue()) > 1) {
             ret.setValue(ret.getValue() + (ret.getValue().isEmpty() ? "" : "\n")
                     + core.conLabel() + " words set to enforced unique: this conword exists elsewhere.");
         }
 
-        if (core.getPropertiesManager().isLocalUniqueness() && !word.getLocalWord().isEmpty()
-                && core.getWordCollection().containsLocalMultiples(word.getLocalWord())) {
+        String localWord = word.getLocalWord();
+        if (core.getPropertiesManager().isLocalUniqueness() 
+                && !localWord.isEmpty()
+                && localCount.containsKey(localWord)
+                && localCount.get(localWord) > 1) {
             ret.setLocalWord(ret.getLocalWord() + (ret.getLocalWord().isEmpty() ? "" : "\n")
                     + core.localLabel() + " words set to enforced unique: this local exists elsewhere.");
         }
@@ -233,8 +245,6 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         bufferNode.setCore(core);
         ret = super.insert(bufferNode);
 
-        balanceWordCounts(bufferNode, true);
-
         bufferNode = new ConWord();
         bufferNode.setCore(core);
 
@@ -251,132 +261,108 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
     }
 
     /**
-     * Tests whether collection contains a particular local word
-     *
-     * @param local string value to search for
-     * @return whether multiples of local word exists in collection
-     */
-    public boolean containsLocalMultiples(String local) {
-        boolean ret = false;
-
-        if (allLocalWords.containsKey(local)) {
-            ret = allLocalWords.get(local) > 1;
-        }
-
-        return ret;
-    }
-
-    /**
-     * Tests whether collection contains a particular conword
-     * 
-     * NOTE: This is from VERY OLD CODE and is KIND OF BAD. Always make certain 
-     * that the wordsets are balanced before using.
-     *
-     * @param word string value to search for
-     * @return whether multiples of conword exists in the collection
-     */
-    public boolean containsWord(String word) {
-        boolean ret = false;
-
-        if (allConWords.containsKey(word)) {
-            ret = allConWords.get(word) > 1;
-        }
-
-        return ret;
-    }
-
-    /**
-     * Balances count of conwords and localwords (string values)
-     *
-     * @param insWord word to factor into counts
-     * @param additive true if adding, false if removing
-     */
-    private void balanceWordCounts(ConWord insWord, boolean additive) {
-        Integer curCount =  0;
-        if (allConWords.containsKey(insWord.getValue())) {
-            Integer tmp = allConWords.get(insWord.getValue());
-            if (tmp != null) {
-                curCount = tmp;
-            }
-        }
-
-        allConWords.remove(insWord.getValue());
-        allConWords.put(insWord.getValue(), curCount + (additive ? 1 : -1));
-
-        curCount =  0;
-        if (allLocalWords.containsKey(insWord.getLocalWord())) {
-            Integer tmp = allLocalWords.get(insWord.getLocalWord());
-            if (tmp != null) {
-                curCount = tmp;
-            }
-        }
-
-        allLocalWords.remove(insWord.getLocalWord());
-        allLocalWords.put(insWord.getLocalWord(), curCount + (additive ? 1 : -1));
-    }
-
-    /**
-     * Balances word counts when modifying word value or local word MUST BE RUN
-     * BEFORE PERSISTING NEW VALUES TO WORD
-     *
-     * @param id id of word to modify
-     * @param wordVal new conword value
-     * @param wordLoc new local word value
-     */
-    public void externalBalanceWordCounts(Integer id, String wordVal, String wordLoc) {
-        ConWord oldWord = getNodeById(id);
-        ConWord newWord = new ConWord();
-
-        newWord.setValue(wordVal);
-        newWord.setLocalWord(wordLoc);
-
-        balanceWordCounts(oldWord, false);
-        balanceWordCounts(newWord, true);
-    }
-
-    /**
      * Tests whether a value exists in the dictionary currently
+     * Do not use this within a loop.
      *
-     * @param word value to search for
+     * @param conWord value to search for
      * @return true if exists, false otherwise
      */
-    public boolean testWordValueExists(String word) {
-        return allConWords.containsKey(word) && allConWords.get(word) > 0;
+    public boolean testWordValueExists(String conWord) {
+        boolean ret = false;
+        
+        // don't bother checking blanks
+        if (conWord.isBlank()) {
+            ret = false;
+        } else {
+            for (ConWord word : this.nodeMap.values()) {
+                if (conWord.equals(word.getValue())) {
+                    ret = true;
+                }
+            }
+        }
+        
+        return ret;
     }
 
     /**
      * Tests whether a value exists in the dictionary currently
-     *
+     * Do not use this within a loop.
+     * 
      * @param local value to search for
      * @return true if exists, false otherwise
      */
     public boolean testLocalValueExists(String local) {
-        return allLocalWords.containsKey(local) && allLocalWords.get(local) > 0;
+        boolean ret = false;
+        
+        // don't bother checking blanks
+        if (local.isBlank()) {
+            ret = true;
+        } else {
+            for (ConWord word : this.nodeMap.values()) {
+                if (local.equals(word.getLocalWord())) {
+                    ret = true;
+                }
+            }
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Generates and returns map with strings to count of
+     * string occurrences within local words of the lexicon
+     * @return 
+     */
+    public Map<String, Integer> getLocalCount() {
+        Map<String, Integer> ret = new HashMap<>();
+        
+        for (ConWord word : this.nodeMap.values()) {
+            String local = word.getLocalWord();
+            if (ret.containsKey(local)) {
+                ret.replace(local, ret.get(local) + 1);
+            } else {
+                ret.put(local,1);
+            }
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Generates and returns map with strings to count of
+     * string occurrences within conlang words of the lexicon
+     * @return 
+     */
+    public Map<String, Integer> getConWordCount() {
+        Map<String, Integer> ret = new HashMap<>();
+        
+        for (ConWord word : this.nodeMap.values()) {
+            String local = word.getValue();
+            if (ret.containsKey(local)) {
+                ret.replace(local, ret.get(local) + 1);
+            } else {
+                ret.put(local,1);
+            }
+        }
+        
+        return ret;
     }
 
     /**
-     * Deletes word and balances all dependencies
+     * Deletes word and clears all declensions
      *
      * @param _id ID of word to delete
      * @throws Exception
      */
     @Override
     public void deleteNodeById(Integer _id) throws Exception {
-        ConWord deleteWord = this.getNodeById(_id);
-
-        balanceWordCounts(deleteWord, false);
         super.deleteNodeById(_id);
         core.getDeclensionManager().clearAllDeclensionsWord(_id);
     }
 
     @Override
     public void modifyNode(Integer _id, ConWord _modNode) throws Exception {
-        // do bookkeeping for word counts
-        ConWord oldWord = getNodeById(_id);
-        balanceWordCounts(oldWord, false);
-        balanceWordCounts(_modNode, true);
         _modNode.setCore(core);
-
         super.modifyNode(_id, _modNode);
     }
 
@@ -459,7 +445,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
         return ret.toArray(new ConWord[0]);
     }
-
+    
     /**
      * Uses conword passed as parameter to filter on the entire dictionary of
      * words, based on attributes set on the parameter. Returns iterator of all
@@ -885,6 +871,8 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                 progress.setLocation(core.getRootWindow().getLocation());
             }
 
+            Map<String, Integer> conWordCount = this.getConWordCount();
+            Map<String, Integer> localWordCount = this.getLocalCount();
 
             Thread thread = new Thread(){
                 @Override
@@ -894,7 +882,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
                         // check word legality (if not overridden)
                         if (!curWord.isRulesOverride()) {
-                            ConWord testLegal = testWordLegality(curWord);
+                            ConWord testLegal = testWordLegality(curWord, conWordCount, localWordCount);
 
                             problemString += testLegal.getValue().isEmpty() ? "" : testLegal.getValue() + "\n";
                             problemString += testLegal.typeError.isEmpty() ? "" : testLegal.typeError + "\n";

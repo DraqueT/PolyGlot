@@ -172,17 +172,14 @@ public final class ScrMainMenu extends PFrame {
 
             JMenuItem nextList = new JMenuItem("Load " + menuName);
             nextList.setToolTipText("Loads words from " + menuName + " into your lexicon.");
-            nextList.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    URL swadUrl = ScrMainMenu.class.getResource(finalLocation);
-                    try ( BufferedInputStream bs = new BufferedInputStream(swadUrl.openStream())) {
-                        finalCore.getWordCollection().loadSwadesh(bs, true);
-                        updateAllValues(finalCore);
-                    } catch (Exception ex) {
-                        InfoBox.error("Unable to load internal resource: ", finalLocation, curWindow);
-                        IOHandler.writeErrorLog(ex, "Resource read error on open.");
-                    }
+            nextList.addActionListener((ActionEvent evt)-> {
+                URL swadUrl = ScrMainMenu.class.getResource(finalLocation);
+                try ( BufferedInputStream bs = new BufferedInputStream(swadUrl.openStream())) {
+                    finalCore.getWordCollection().loadSwadesh(bs, true);
+                    updateAllValues(finalCore);
+                } catch (Exception ex) {
+                    InfoBox.error("Unable to load internal resource: ", finalLocation, curWindow);
+                    IOHandler.writeErrorLog(ex, "Resource read error on open.");
                 }
             });
 
@@ -230,15 +227,13 @@ public final class ScrMainMenu extends PFrame {
                     final String location = exampleLang.getAbsolutePath();
 
                     JMenuItem mnuExample = new JMenuItem(title);
-                    mnuExample.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                            // only open if save/cancel test is passed
-                            if (!saveOrCancelTest()) {
-                                return;
-                            }
-
-                            setFile(location);
+                    mnuExample.addActionListener((ActionEvent evt) -> {
+                        // only open if save/cancel test is passed
+                        if (!saveOrCancelTest()) {
+                            return;
                         }
+                        
+                        setFile(location);
                     });
 
                     mnuExLex.add(mnuExample);
@@ -1284,6 +1279,7 @@ public final class ScrMainMenu extends PFrame {
         mnuImportFont = new javax.swing.JMenuItem();
         mnuCheckLexicon = new javax.swing.JMenuItem();
         mnuIpaTranslator = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuLexFamilies = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
@@ -1652,6 +1648,14 @@ public final class ScrMainMenu extends PFrame {
             }
         });
         mnuTools.add(mnuIpaTranslator);
+
+        jMenuItem1.setText("Evolve Language");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        mnuTools.add(jMenuItem1);
         mnuTools.add(jSeparator1);
 
         mnuLexFamilies.setText("Lexical Families");
@@ -1997,6 +2001,10 @@ public final class ScrMainMenu extends PFrame {
         newFile(true);
     }//GEN-LAST:event_btnNewLangActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        new ScrEvolveLang(core).setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2014,6 +2022,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel3;
