@@ -447,6 +447,26 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
     }
     
     /**
+     * This evolves a lexicon based on user input. It cycles through the entire 
+     * lexicon and updates the values of words accordingly.
+     * 
+     * @param _filter filter conword used for filtering effects
+     * @param percent the chance that any given word will be evolved
+     * @param regex the regex to apply a transformation
+     * @param replacement the replacement text
+     * @throws java.lang.Exception on filter error
+     */
+    public void evolveLexicon(ConWord _filter, int percent, String regex, String replacement) throws Exception {
+        Random rand = new Random();
+        
+        for (ConWord word : filteredList(_filter)) {
+            if (rand.nextInt(99) < percent) {
+                word.setValue(word.getValue().replaceAll(regex, replacement));
+            }
+        }
+    }
+
+    /**
      * Uses conword passed as parameter to filter on the entire dictionary of
      * words, based on attributes set on the parameter. Returns iterator of all
      * words that match. As a note: the conword value of the filter parameter is
