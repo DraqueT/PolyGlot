@@ -288,18 +288,11 @@ public class ConWord extends DictNode {
     }
 
     public void setLocalWord(String _localWord) {
-        if (parentCollection != null) {
-            parentCollection.externalBalanceWordCounts(id, value, _localWord);
-        }
-        
         this.localWord = _localWord.trim();
     }
     
     @Override
     public void setValue(String _value) {
-        if (parentCollection != null) {
-            parentCollection.externalBalanceWordCounts(id, _value, localWord);
-        }        
         super.setValue(_value.replace(PGTUtil.RTL_CHARACTER, "").replace(PGTUtil.LTR_MARKER, ""));
     }
 
