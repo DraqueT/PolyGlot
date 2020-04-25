@@ -66,7 +66,7 @@ public class ScrLangProps extends PFrame {
         initComponents();
         populateProperties();
         setAlphaLegal();
-        
+
         txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
 
         txtKerning.getDocument().addDocumentListener(new DocumentListener() {
@@ -88,7 +88,8 @@ public class ScrLangProps extends PFrame {
             private void save() {
                 try {
                     core.getPropertiesManager().setKerningSpace(Double.parseDouble(txtKerning.getText()));
-                } catch (NumberFormatException e) {
+                }
+                catch (NumberFormatException e) {
                     // do nothing. This fails on non-numeric values, which is handled elsewhere
                     // IOHandler.writeErrorLog(e);
                 }
@@ -96,6 +97,7 @@ public class ScrLangProps extends PFrame {
         });
 
         super.getRootPane().getContentPane().setBackground(Color.white);
+        this.setupListeners();
     }
 
     /**
@@ -111,20 +113,63 @@ public class ScrLangProps extends PFrame {
         txtLocalFont.setToolTipText(core.localLabel() + " Font");
     }
 
-    // detects whether the alphabet covers all characters in words of the lexicon and sets screen up appropriately
-    private void setAlphaLegal() {
-        if (!core.getWordCollection().canSafelySort()) {            
-            txtAlphaOrder.setBackground(Color.red);
-            txtAlphaOrder.setToolTipText("There is a logical problem in your alphabetic ordering system. If using values greater than 2 characters, ensure that there can be no ambiguity in order.");
-        } else if (!core.getPropertiesManager().isAlphabetComplete()) {
-            txtAlphaOrder.setBackground(Color.red);
-            txtAlphaOrder.setToolTipText("Characters missing from Alpha Order. Please select Tools->Check Language to see which words contain unordered characters. (Note: some characters look the same, but are not!)");
-        } else {
+    private void setupListeners() {
+        txtAlphaOrder.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                this.doUpdate();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                this.doUpdate();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                this.doUpdate();
+            }
+
+            private void doUpdate() {
+                try {
+                    core.getPropertiesManager().setAlphaOrder(txtAlphaOrder.getText().trim());
+                }
+                catch (Exception e) {
+                    setAlphaProblems(e.getLocalizedMessage());
+                    return;
+                }
+                checkAlphaContainsRegexCharacters();
+                setAlphaLegal();
+            }
+        });
+    }
+
+    // sets problems for the alphabet order and makes appropriate ui updates
+    private void setAlphaProblems(String errors) {
+        if (errors.isBlank()) {
             txtAlphaOrder.setBackground(PGTUtil.COLOR_TEXT_BG);
             txtAlphaOrder.setToolTipText("List of all characters in conlang in alphabetical order (both upper and lower case). Comma delimt if using character groups. (blank = default alpha)");
+        } else {
+            txtAlphaOrder.setBackground(Color.red);
+            txtAlphaOrder.setToolTipText(errors);
         }
     }
     
+    // detects whether the alphabet covers all characters in words of the lexicon and sets screen up appropriately
+    private void setAlphaLegal() {
+        if (!txtAlphaOrder.getText().isBlank()) {
+            if (!core.getWordCollection().canSafelySort()) {
+                setAlphaProblems("There is a logical problem in your alphabetic ordering system. If using values greater than 2 characters, ensure that there can be no ambiguity in order.");
+            } else if (!core.getPropertiesManager().isAlphabetComplete()) {
+                setAlphaProblems("Characters missing from Alpha Order. Please select Tools->Check Language to see which words contain unordered characters. (Note: some characters look the same, but are not!)");
+            } else {
+                setAlphaProblems("");
+            }
+        } else {
+            setAlphaProblems("");
+        }
+    }
+
     @Override
     public void updateAllValues(DictCore _core) {
         core = _core;
@@ -141,25 +186,25 @@ public class ScrLangProps extends PFrame {
     @Override
     public void saveAllValues() {
         PropertiesManager propMan = core.getPropertiesManager();
+        propMan.setDisableProcRegex(chkDisableProcRegex.isSelected());
+        propMan.setIgnoreCase(chkIgnoreCase.isSelected());
+        propMan.setLangName(txtLangName.getText());
+        propMan.setCopyrightAuthorInfo(txtAuthorCopyright.getText());
+        propMan.setLocalLangName(txtLocalLanguage.getText());
+        propMan.setLocalMandatory(chkLocalMandatory.isSelected());
+        propMan.setLocalUniqueness(chkLocalUniqueness.isSelected());
+        propMan.setTypesMandatory(chkTypesMandatory.isSelected());
+        propMan.setWordUniqueness(chkWordUniqueness.isSelected());
+        propMan.setEnforceRTL(chkEnforceRTL.isSelected());
+        propMan.setOverrideRegexFont(chkOverrideRegexFont.isSelected());
+        propMan.setUseLocalWordLex(chkUseLocalWordLex.isSelected());
+        propMan.setKerningSpace(Double.parseDouble(txtKerning.getText()));
 
         try {
             propMan.setAlphaOrder(txtAlphaOrder.getText().trim());
-            propMan.setDisableProcRegex(chkDisableProcRegex.isSelected());
-            propMan.setIgnoreCase(chkIgnoreCase.isSelected());
-            propMan.setLangName(txtLangName.getText());
-            propMan.setCopyrightAuthorInfo(txtAuthorCopyright.getText());
-            propMan.setLocalLangName(txtLocalLanguage.getText());
-            propMan.setLocalMandatory(chkLocalMandatory.isSelected());
-            propMan.setLocalUniqueness(chkLocalUniqueness.isSelected());
-            propMan.setTypesMandatory(chkTypesMandatory.isSelected());
-            propMan.setWordUniqueness(chkWordUniqueness.isSelected());
-            propMan.setEnforceRTL(chkEnforceRTL.isSelected());
-            propMan.setOverrideRegexFont(chkOverrideRegexFont.isSelected());
-            propMan.setUseLocalWordLex(chkUseLocalWordLex.isSelected());
-            propMan.setKerningSpace(Double.parseDouble(txtKerning.getText()));
-        } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.warning("Properties Error", "Problem saving properties.\n" + e.getLocalizedMessage(), this);
+        }
+        catch (Exception e) {
+            // this is a user error, and they are informed elsewhere
         }
     }
 
@@ -217,7 +262,8 @@ public class ScrLangProps extends PFrame {
                         "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
                         + "To address this, please load your font manually via Tools->Import Font", core.getRootWindow());
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             InfoBox.error("Font Caching Error",
                     "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
                     + "To address this, please load your font manually via Tools->Import Font\n\nError: " + e.getLocalizedMessage(), core.getRootWindow());
@@ -604,7 +650,14 @@ public class ScrLangProps extends PFrame {
     }//GEN-LAST:event_btnFontLocalActionPerformed
 
     private void txtAlphaOrderFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAlphaOrderFocusLost
-        checkAlphaContainsRegexCharacters();
+//        try {
+//            core.getPropertiesManager().setAlphaOrder(txtAlphaOrder.getText().trim());
+//        }
+//        catch (Exception e) {
+//            // do nothing. Alerting the user here would cause a big headache. They will be alerted when they leave the tab
+//        }
+//        checkAlphaContainsRegexCharacters();
+//        setAlphaLegal();
     }//GEN-LAST:event_txtAlphaOrderFocusLost
 
     private void btnFontRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFontRefreshActionPerformed
@@ -612,7 +665,8 @@ public class ScrLangProps extends PFrame {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             core.getPropertiesManager().refreshFonts();
             txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             InfoBox.error("Font Refresh Failed", e.getLocalizedMessage(), this);
             IOHandler.writeErrorLog(e, "Top level exception caught here. See prior exception.");
         }
