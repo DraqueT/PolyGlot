@@ -296,13 +296,20 @@ public final class PLanguageStats {
                         comboValue = tmp;
                     }
                 }
+                
+                if (comboValue != 0) {
+                    System.out.println("ZOT");
+                }
 
                 int red = (255 / highestCombo2) * comboValue;
                 int blue = 255 - red;
-                ret += "<td bgcolor=\"#" + Integer.toHexString(red)
-                        + Integer.toHexString(blue) + Integer.toHexString(blue) + "\")>"
+                String format = "%02X"; // 2 digit hex format
+                ret += "<td bgcolor=\"#" + String.format(format, red)
+                        + String.format(format, blue) 
+                        + String.format(format, blue) + "\")>"
                         + formatCon(Character.toString(x) + y, core) + formatPlain(":"
                         + comboValue, core) + "</td>";
+
             }
             ret += "</tr>";
         }
