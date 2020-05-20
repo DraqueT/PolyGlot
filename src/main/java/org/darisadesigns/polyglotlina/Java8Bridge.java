@@ -26,8 +26,11 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 
 /**
  *
@@ -93,10 +96,27 @@ public final class Java8Bridge {
         
         String[] results = IOHandler.runAtConsole(command, true);
         
+        Set<String> warnings = new HashSet<>();
+        
         for (String result : results) {
-            if (result.toLowerCase().contains("error")) {
+            result = result.toLowerCase();
+            
+            if (result.contains("error")) {
                 throw new IOException("Unable to print to PDF: " + result);
+            } else if (result.contains("warning") && !warnings.contains(result)) {
+                warnings.add(result);
             }
+        }
+        
+        String warningString = "";
+        
+        for (String warning : warnings.toArray(new String[0])) {
+            warningString += warning + "\n";
+        }
+        
+        if (!warningString.isBlank()) {
+            InfoBox.warning("PDF Print Warnings", 
+                    "The following warnings were generated in the print process:\n" + warningString, null);
         }
         
         if (!new File(target).exists()) {

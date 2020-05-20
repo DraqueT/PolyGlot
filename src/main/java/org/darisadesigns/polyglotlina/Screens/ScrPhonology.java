@@ -297,34 +297,7 @@ public final class ScrPhonology extends PFrame {
         curPopulating = true;
 
         DefaultTableModel procTableModel = (DefaultTableModel) tblProcs.getModel();
-        procTableModel.addRow(new Object[]{base, proc});
-
-        // TODO: Delete if not broken from this: #839
-        // document listener to be fed into editor/renderers for cells...
-//        DocumentListener docuListener = new DocumentListener() {
-//            @Override
-//            public void changedUpdate(DocumentEvent e) {
-//                saveProcGuide();
-//            }
-//            @Override
-//            public void removeUpdate(DocumentEvent e) {
-//                saveProcGuide();
-//            }
-//            @Override
-//            public void insertUpdate(DocumentEvent e) {
-//                saveProcGuide();
-//            }
-//        };
-//
-//        // set saving properties for first column editor
-//        PCellEditor editor = (PCellEditor) tblProcs.getCellEditor(procTableModel.getRowCount() - 1, 0);
-//        editor.setDocuListener(docuListener);
-//        editor.setInitialValue(base);
-//
-//        // set saving properties for second column editor
-//        editor = (PCellEditor) tblProcs.getCellEditor(procTableModel.getRowCount() - 1, 1);
-//        editor.setDocuListener(docuListener);
-//        editor.setInitialValue(proc);        
+        procTableModel.addRow(new Object[]{base, proc});    
 
         curPopulating = populatingLocal;
     }
@@ -342,35 +315,6 @@ public final class ScrPhonology extends PFrame {
         DefaultTableModel romTableModel = (DefaultTableModel) tblRom.getModel();
         romTableModel.addRow(new Object[]{base, proc});
 
-        // TODO: Delete if doesn't break things #839
-        // document listener to be fed into editor/renderers for cells...
-//        DocumentListener docuListener = new DocumentListener() {
-//            @Override
-//            public void changedUpdate(DocumentEvent e) {
-//                saveRomGuide();
-//            }
-//
-//            @Override
-//            public void removeUpdate(DocumentEvent e) {
-//                saveRomGuide();
-//            }
-//
-//            @Override
-//            public void insertUpdate(DocumentEvent e) {
-//                saveRomGuide();
-//            }
-//        };
-//
-//        // set saving properties for first column editor
-//        PCellEditor editor = (PCellEditor) tblRom.getCellEditor(romTableModel.getRowCount() - 1, 0);
-//        editor.setDocuListener(docuListener);
-//        editor.setInitialValue(base);
-//
-//        // set saving properties for second column editor
-//        editor = (PCellEditor) tblRom.getCellEditor(romTableModel.getRowCount() - 1, 1);
-//        editor.setDocuListener(docuListener);
-//        editor.setInitialValue(proc);
-
         curPopulating = populatingLocal;
     }
 
@@ -379,11 +323,6 @@ public final class ScrPhonology extends PFrame {
         procTableModel.addColumn("Character(s)");
         procTableModel.addColumn("Pronunciation");
         tblProcs.setModel(procTableModel); // TODO: find way to make tblProcs display RTL order when appropriate Maybe something on my custom cell editor
-        
-        // TODO: Delete if not broken from this: #839
-//        procTableModel.addTableModelListener((TableModelEvent e) -> {
-//            saveProcGuide();
-//        });
         
         boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 
@@ -415,11 +354,6 @@ public final class ScrPhonology extends PFrame {
         tableModel.addColumn("Replacement");
 
         tblRep.setModel(tableModel); // TODO: find way to make rom display RTL order when appropriate Maybe something on my custom cell editor
-        
-        // TODO: Delete if this doesn't break #839
-//        tableModel.addTableModelListener((TableModelEvent e) -> {
-//            saveRepTable();
-//        });
         
         boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 
@@ -453,10 +387,6 @@ public final class ScrPhonology extends PFrame {
                         InfoBox.warning("Single Character Only", "Replacement characters can only be 1 character long.", core.getRootWindow());
                     });
                 }
-                // TODO: Delete if doesn't break things: #839
-//                else {
-//                    saveRepTable();
-//                }
             }
         });        
         column.setCellEditor(editChar);
@@ -465,23 +395,6 @@ public final class ScrPhonology extends PFrame {
         column = tblRep.getColumnModel().getColumn(1);
         PCellEditor valueEdit = new PCellEditor(useConFont, core);
         valueEdit.setIgnoreListenerSilencing(true);
-        // TODO: Delete if doesn't break things #839
-//        valueEdit.setDocuListener(new DocumentListener() {
-//            @Override
-//            public void insertUpdate(DocumentEvent e) {
-//                saveRepTable();
-//            }
-//
-//            @Override
-//            public void removeUpdate(DocumentEvent e) {
-//                saveRepTable();
-//            }
-//
-//            @Override
-//            public void changedUpdate(DocumentEvent e) {
-//                saveRepTable();
-//            }
-//        });
         column.setCellEditor(valueEdit);
         column.setCellRenderer(new PCellRenderer(useConFont, core));
 
@@ -504,11 +417,6 @@ public final class ScrPhonology extends PFrame {
         romTableModel.addColumn("Character(s)");
         romTableModel.addColumn("Romanization");
         tblRom.setModel(romTableModel); // TODO: find way to make rom display RTL order when appropriate Maybe something on my custom cell editor
-
-        // TODO: Delete if doesn't break anything #839
-//        romTableModel.addTableModelListener((TableModelEvent e) -> {
-//            saveRomGuide();
-//        });
         
         boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 

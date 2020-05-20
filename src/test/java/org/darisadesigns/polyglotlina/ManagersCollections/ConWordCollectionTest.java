@@ -21,8 +21,12 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import TestResources.DummyCore;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.TransformOptions;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -210,5 +214,116 @@ public class ConWordCollectionTest {
         }
         
         assertTrue(core.getPropertiesManager().isAlphabetComplete());
+    }
+    
+    @Test
+    public void testEvolveLanguageBasicReplaceAll() {
+        System.out.println("ConWordCollectionTest.testEvolveLanguageBasicReplaceAll");
+        
+        String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
+        String[] expectedVals = new String[]{"bbb", "bbz", "bzb", "zbb", "zzb", "zzz"};
+        
+        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.All);
+    }
+ 
+    @Test
+    public void testEvolveLanguageBasicReplaceFirstMiddle() {
+        System.out.println("ConWordCollectionTest.testEvolveLanguageBasicReplaceFirstMiddle");
+        
+        String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
+        String[] expectedVals = new String[]{"zza", "zab", "zbb", "bzb", "bbz", "bbb"};
+        
+        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.FirstAndMiddleInstances);
+    }
+    
+    @Test
+    public void testEvolveLanguageBasicReplaceFirst() {
+        System.out.println("ConWordCollectionTest.testEvolveLanguageBasicReplaceFirst");
+        
+        String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
+        String[] expectedVals = new String[]{"zaa", "zab", "zbb", "bzb", "bbz", "bbb"};
+        
+        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.FirstInstanceOnly);
+    }
+    
+    @Test
+    public void testEvolveLanguageBasicReplaceLast() {
+        System.out.println("ConWordCollectionTest.testEvolveLanguageBasicReplaceLast");
+        
+        String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
+        String[] expectedVals = new String[]{"aaz", "azb", "zbb", "bzb", "bbz", "bbb"};
+        
+        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.LastInsanceOnly);
+    }
+    
+    @Test
+    public void testEvolveLanguageBasicReplaceMiddleAndLast() {
+        System.out.println("ConWordCollectionTest.testEvolveLanguageBasicReplaceMiddleAndLast");
+        
+        String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
+        String[] expectedVals = new String[]{"azz", "azb", "zbb", "bzb", "bbz", "bbb"};
+        
+        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.MiddleAndLastInsances);
+    }
+    
+    @Test
+    public void testEvolveLanguageBasicReplaceMiddle() {
+        System.out.println("ConWordCollectionTest.testEvolveLanguageBasicReplaceMiddle");
+        
+        String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
+        String[] expectedVals = new String[]{"aza", "aab", "abb", "bab", "bba", "bbb"};
+        
+        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.MiddleInstancesOnly);
+    }
+    
+    @Test
+    public void testEvolveLanguageComplexAll() {
+        System.out.println("ConWordCollectionTest.testEvolveLanguageComplexAll");
+        
+        String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
+        String[] expectedVals = new String[]{"aaa", "z", "zb", "bz", "bba", "bbb"};
+        
+        this.evolveLanguageTest(words, expectedVals, "a+b", "z", TransformOptions.All);
+    }
+    
+    private void evolveLanguageTest(String[] words, 
+            String[] expectedVals,
+            String regex,
+            String replace,
+            TransformOptions transformOption) {
+        DictCore core = DummyCore.newCore();
+        Arrays.sort(expectedVals); // gonna be returned in alphabetic order...
+        
+        try {
+            for (String word : words) {
+                ConWord newWord = new ConWord();
+                newWord.setValue(word);
+                core.getWordCollection().addWord(newWord);
+            }
+
+        } catch (Exception e) {
+            fail(e);
+        }
+        
+        try {
+            core.getWordCollection().evolveLexicon(new ConWord(),
+                    100, 
+                    transformOption, 
+                    regex, 
+                    replace);
+        }
+        catch (Exception e) {
+            fail(e);
+        }
+        
+        List<String> resultVals = new ArrayList<>();
+        
+        for (ConWord word : core.getWordCollection().getWordNodes()) {
+            resultVals.add(word.getValue());
+        }
+        
+        String[] finalResults = resultVals.toArray(new String[0]);
+        
+        assertTrue(Arrays.equals(expectedVals, finalResults));
     }
 }
