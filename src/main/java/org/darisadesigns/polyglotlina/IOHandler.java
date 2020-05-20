@@ -765,7 +765,7 @@ public final class IOHandler {
                     Files.copy(copyStream, path, StandardCopyOption.REPLACE_EXISTING);
                 }
             } else {
-                throw new IOException("Custom font not found in PGD dictionary file.");
+                throw new IOException("Custom font not found in PGD language file.");
             }
         }
     }
