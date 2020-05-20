@@ -430,7 +430,7 @@ public final class ScrMainMenu extends PFrame {
 
         if (core != null && !core.isLanguageEmpty()) {
             int saveFirst = InfoBox.yesNoCancel("Save First?",
-                    "Save current dictionary before performing action?", core.getRootWindow());
+                    "Save current language before performing action?", core.getRootWindow());
 
             if (saveFirst == JOptionPane.YES_OPTION) {
                 boolean saved = saveFile();
@@ -502,7 +502,7 @@ public final class ScrMainMenu extends PFrame {
         setCursor(Cursor.getDefaultCursor());
 
         if (cleanSave) {
-            InfoBox.info("Success", "Dictionary saved to: "
+            InfoBox.info("Success", "Language saved to: "
                     + curFileName + ".", core.getRootWindow());
         }
 
@@ -528,7 +528,7 @@ public final class ScrMainMenu extends PFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
         String curFileName = core.getCurFileName();
 
-        chooser.setDialogTitle("Save Dictionary");
+        chooser.setDialogTitle("Save Language");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
         if (curFileName.isEmpty()) {
@@ -668,7 +668,7 @@ public final class ScrMainMenu extends PFrame {
      */
     private void exportToExcel() {
         JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Export Dictionary to Excel");
+        chooser.setDialogTitle("Export Language to Excel");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
@@ -696,11 +696,11 @@ public final class ScrMainMenu extends PFrame {
 
                 // only prompt user to open if Desktop supported
                 if (Desktop.isDesktopSupported()) {
-                    if (InfoBox.actionConfirmation("Export Sucess", "Dictionary exported to " + fileName + ".\nOpen now?", this)) {
+                    if (InfoBox.actionConfirmation("Export Sucess", "Language exported to " + fileName + ".\nOpen now?", this)) {
                         Desktop.getDesktop().open(new File(fileName));
                     }
                 } else {
-                    InfoBox.info("Export Status", "Dictionary exported to " + fileName + ".", core.getRootWindow());
+                    InfoBox.info("Export Status", "Language exported to " + fileName + ".", core.getRootWindow());
                 }
             } catch (IOException e) {
                 IOHandler.writeErrorLog(e);

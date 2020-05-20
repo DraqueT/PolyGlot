@@ -138,7 +138,7 @@ public final class PolyGlot {
                                 if (InfoBox.yesNoCancel("Recovery File Detected", 
                                         "PolyGlot appears to have shut down mid save. Would you like to recover the file?", s) == JOptionPane.YES_OPTION) {    
                                     JFileChooser chooser = new JFileChooser();
-                                    chooser.setDialogTitle("Recover Dictionary To");
+                                    chooser.setDialogTitle("Recover Language To");
                                     FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
                                     chooser.setFileFilter(filter);
                                     chooser.setApproveButtonText("Recover");

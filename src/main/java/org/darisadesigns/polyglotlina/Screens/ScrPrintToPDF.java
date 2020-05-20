@@ -307,7 +307,7 @@ public class ScrPrintToPDF extends PDialog {
 
     private void btnSelectSavePathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectSavePathActionPerformed
         JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Save Dictionary");
+        chooser.setDialogTitle("Save Language");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF Documents", "pdf");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
