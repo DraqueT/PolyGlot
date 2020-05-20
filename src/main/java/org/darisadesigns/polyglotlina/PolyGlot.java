@@ -195,7 +195,7 @@ public final class PolyGlot {
                                 // arguments passed in by the OS choke on special charaters as of Java 14 release (jpackage issue, probably)
                                 // TODO: Remove once this is fixed in Java
                                 if (new File(filePath).exists()) {
-                                    s.setFile(filePath);
+                                    s.setFile(filePath.trim());
                                 } else {
                                     InfoBox.warning("File Path Error", "Please retry opening this file by clicking File->Open from the menu.", null);
                                 }
