@@ -150,7 +150,7 @@ public class ScrLangProps extends PFrame {
             txtAlphaOrder.setBackground(PGTUtil.COLOR_TEXT_BG);
             txtAlphaOrder.setToolTipText("List of all characters in conlang in alphabetical order (both upper and lower case). Comma delimt if using character groups. (blank = default alpha)");
         } else {
-            txtAlphaOrder.setBackground(Color.red);
+            txtAlphaOrder.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
             txtAlphaOrder.setToolTipText(errors);
         }
     }
