@@ -1018,6 +1018,9 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                         // check word made up of defined characters (document if not)
                         if (!core.getPropertiesManager().testStringAgainstAlphabet(curWord.getValue())) {
                             problemString += "Word contains characters undefined in alphabet settings.\n";
+                            problemString += "Suspect characters:\"" 
+                                    + core.getPropertiesManager().findBadLetters(curWord.getValue())
+                                    + "\"\n";
                         }
 
                         // check word pronunciation can be generated (if pronunciations set up and not overridden)

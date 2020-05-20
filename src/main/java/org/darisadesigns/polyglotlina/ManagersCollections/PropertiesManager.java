@@ -770,6 +770,28 @@ public class PropertiesManager {
     }
     
     /**
+     * Attempts to find characters which are present in a word but missing from the alphabet
+     * @param search
+     * @return 
+     */
+    public String findBadLetters(String search) {
+        for (int curLength = 1; curLength < search.length(); curLength++) {
+            for (int pos = 0; pos + curLength < search.length(); pos++) {
+                // remove segment to test
+                String clearedString = search.substring(0, pos)
+                        + search.substring(pos + curLength, search.length() - 1);
+                
+                // if removed segment makes the string legal, it's likely the culprit
+                if (testStringAgainstAlphabet(clearedString)) {
+                    return search.substring(pos, pos + curLength);
+                }
+            }
+        }
+        
+        return "???";
+    }
+    
+    /**
      * @return the overrideRegexFont
      */
     public boolean isOverrideRegexFont() {

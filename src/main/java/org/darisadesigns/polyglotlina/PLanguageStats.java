@@ -296,10 +296,6 @@ public final class PLanguageStats {
                         comboValue = tmp;
                     }
                 }
-                
-                if (comboValue != 0) {
-                    System.out.println("ZOT");
-                }
 
                 int red = (255 / highestCombo2) * comboValue;
                 int blue = 255 - red;
