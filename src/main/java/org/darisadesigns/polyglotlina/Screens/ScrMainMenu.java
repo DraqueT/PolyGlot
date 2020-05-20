@@ -674,7 +674,8 @@ public final class ScrMainMenu extends PFrame {
         chooser.setApproveButtonText("Save");
         chooser.setCurrentDirectory(core.getWorkingDirectory());
 
-        String fileName;
+        String fileName = core.getCurFileName().replaceAll(".pgd", ".xls");
+        chooser.setSelectedFile(new File(fileName));
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
@@ -717,13 +718,14 @@ public final class ScrMainMenu extends PFrame {
      */
     public void exportFont(boolean exportCharis) {
         JFileChooser chooser = new JFileChooser();
-        String fileName;
+        String fileName = core.getCurFileName().replaceAll(".pgd", ".ttf");;
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf");
 
         chooser.setDialogTitle("Export Font");
         chooser.setFileFilter(filter);
         chooser.setCurrentDirectory(core.getWorkingDirectory());
         chooser.setApproveButtonText("Save");
+        chooser.setSelectedFile(new File(fileName));
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();

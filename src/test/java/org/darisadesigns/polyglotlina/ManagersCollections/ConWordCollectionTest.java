@@ -71,14 +71,16 @@ public class ConWordCollectionTest {
         
         curWord = problems[1];
         assertEquals(curWord.problemWord.getValue(), "bad-romanization-1-noun");
-        assertEquals(curWord.description, "Word contains characters undefined in alphabet settings.\n" +
-            "Word cannot be romanized properly (missing regex pattern).");
+        assertTrue(curWord.description.contains("Word contains characters undefined in alphabet settings."));
+        assertTrue(curWord.description.contains("Suspect characters:\"1\""));
+        assertTrue(curWord.description.contains("Word cannot be romanized properly (missing regex pattern)."));
         
         curWord = problems[2];
         assertEquals(curWord.problemWord.getValue(), "missing-POS-and-alphabet");
-        assertEquals(curWord.description, "Types set to mandatory.\n" +
-            "Word contains characters undefined in alphabet settings.\n" +
-            "Word pronunciation cannot be generated properly (missing regex pattern).");
+        assertTrue(curWord.description.contains("Types set to mandatory."));
+        assertTrue(curWord.description.contains("Word contains characters undefined in alphabet settings"));
+        assertTrue(curWord.description.contains("Suspect characters:\"POS\""));
+        assertTrue(curWord.description.contains("Word pronunciation cannot be generated properly (missing regex pattern)."));
         
         curWord = problems[3];
         assertEquals(curWord.problemWord.getValue(), "missing-local-noun");

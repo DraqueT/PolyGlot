@@ -309,12 +309,14 @@ public class ScrPrintToPDF extends PDialog {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Save Language");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF Documents", "pdf");
+        String fileName = core.getCurFileName().replaceAll(".pgd", ".pdf");;
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
         chooser.setCurrentDirectory(core.getWorkingDirectory());
+        chooser.setSelectedFile(new File(fileName));
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            String fileName = chooser.getSelectedFile().getAbsolutePath();
+            fileName = chooser.getSelectedFile().getAbsolutePath();
             if (!fileName.contains(".pdf")) {
                 fileName += ".pdf";
             }            
