@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, Draque Thompson
+ * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -86,7 +86,7 @@ public final class PTextField extends JTextField {
         setText(defText);
         setupLook();
         
-        if (overrideFont) {
+        if (overrideFont || !defText.isBlank()) {
             setFont(core.getPropertiesManager().getFontLocal().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
         } else {
             setFont(core.getPropertiesManager().getFontCon());

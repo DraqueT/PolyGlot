@@ -756,6 +756,18 @@ public final class PGTUtil {
     }
     
     /**
+     * Tests whether a regex pattern contains a lookahead or lookbehind
+     * @param regex
+     * @return true if given regex contains a lookahead or lookbehind
+     */
+    public static boolean regexContainsLookaheadOrBehind(String regex) {
+        return regex.contains("(?=")
+                || regex.contains("(?<=")
+                || regex.contains("(?!")
+                || regex.contains("(?<!");
+    }
+    
+    /**
      * gets a worker that can make a given component flash
      *
      * @param flashMe component to make flash

@@ -1383,6 +1383,7 @@ public final class ScrMainMenu extends PFrame {
         });
 
         btnQuiz.setText("Quiz Generator");
+        btnQuiz.setToolTipText("Generate quizzes to help gain mastery of languages");
         btnQuiz.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnQuizActionPerformed(evt);
@@ -1650,6 +1651,7 @@ public final class ScrMainMenu extends PFrame {
         mnuTools.add(mnuIpaTranslator);
 
         jMenuItem1.setText("Evolve Language");
+        jMenuItem1.setToolTipText("Modify large segments of vocabulary at once (regex compatible)");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);

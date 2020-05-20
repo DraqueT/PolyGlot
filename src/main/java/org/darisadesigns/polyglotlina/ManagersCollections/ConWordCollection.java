@@ -47,6 +47,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javafx.util.Pair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -447,22 +450,124 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
     }
     
     /**
-     * This evolves a lexicon based on user input. It cycles through the entire 
-     * lexicon and updates the values of words accordingly.
+     * This evolves a lexicon based on user input.It cycles through the entire 
+ lexicon and updates the values of words accordingly.
      * 
      * @param _filter filter conword used for filtering effects
      * @param percent the chance that any given word will be evolved
+     * @param instanceOption
      * @param regex the regex to apply a transformation
      * @param replacement the replacement text
+     * @return 
      * @throws java.lang.Exception on filter error
      */
-    public void evolveLexicon(ConWord _filter, int percent, String regex, String replacement) throws Exception {
+    public EvolutionPairs[] evolveLexicon(ConWord _filter, 
+            int percent, 
+            TransformOptions instanceOption, 
+            String regex, 
+            String replacement) throws Exception {
         Random rand = new Random();
+        List<EvolutionPairs> ret = new ArrayList<>();
         
         for (ConWord word : filteredList(_filter)) {
             if (rand.nextInt(99) < percent) {
-                word.setValue(word.getValue().replaceAll(regex, replacement));
+                String initVal = word.getValue();
+                String newVal = "";
+                
+                if (instanceOption == TransformOptions.All) {
+                    newVal = initVal.replaceAll(regex, replacement);
+                } else {
+                    List<String> segments = new ArrayList<>();
+                    
+                    if (PGTUtil.regexContainsLookaheadOrBehind(replacement)) {
+                        throw new Exception("Replacement patterns with lookahead or lookbehind patterns\nmust use \"All Instances\" option.");
+                    }
+
+                    // break string into segments
+                    Pattern p = Pattern.compile(regex);
+                    Matcher m = p.matcher(initVal);
+
+                    int lastIndexMatch = 0;
+
+                    while (m.find()) {
+                        segments.add(initVal.substring(lastIndexMatch, m.start()));
+                        segments.add(m.group());
+                        lastIndexMatch = m.end();
+                    }
+
+                    // add segments past last match
+                    segments.add(initVal.substring(lastIndexMatch));
+
+                    for (int i = 0; i < segments.size(); i++) {
+                        // only non transformational segments will have even indicies
+                        if (i % 2 == 0) {
+                            newVal += segments.get(i);
+                            continue;
+                        }
+
+                        boolean isFirst = i == 1;
+                        boolean isMiddle = i > 1 && i < segments.size() - 2; // -2 accounts for possibility of segment after last match
+                        boolean isLast = i == segments.size() - 2; 
+
+                        if (isFirst && (instanceOption == TransformOptions.FirstAndMiddleInstances
+                                    || instanceOption == TransformOptions.FirstInstanceOnly)
+                                || isMiddle && (instanceOption == TransformOptions.FirstAndMiddleInstances
+                                    || instanceOption == TransformOptions.MiddleAndLastInsances
+                                    || instanceOption == TransformOptions.MiddleInstancesOnly)
+                                || isLast && (instanceOption == TransformOptions.MiddleAndLastInsances
+                                    || instanceOption == TransformOptions.LastInsanceOnly)) {
+                            newVal += segments.get(i).replaceAll(regex, replacement);
+                        } else {
+                            newVal += segments.get(i);
+                        }
+                    }
+                }
+                
+                // if nothing generated in the new value or the two are identical, then simply continue without modifying anything
+                if (newVal.isBlank() || initVal.equals(newVal)) {
+                    continue;
+                }
+                
+                word.setValue(newVal);
+                ret.add(new EvolutionPairs(initVal, word.getValue()));
             }
+        }
+        
+        return ret.toArray(new EvolutionPairs[0]);
+    }
+    
+    /**
+     * FirstInstanceOnly: 
+     * LastInsanceOnly: 
+     * MiddleInstancesOnly: 
+     */
+    public enum TransformOptions {
+        All("All Instances"),
+        FirstInstanceOnly("First Instance Only"),
+        FirstAndMiddleInstances("First and Middle Instances"),
+        MiddleInstancesOnly("Middle Instances Only"),
+        MiddleAndLastInsances("Middle and Last Instances"),
+        LastInsanceOnly("Last Instance Only");
+        
+        private final String label;
+        
+        private TransformOptions(String _label) {
+            label = _label;
+        }
+        
+        @Override
+        public String toString() {
+            return label;
+        }
+    }
+    
+    public class EvolutionPairs {
+        public final String start;
+        public final String end;
+        
+        public EvolutionPairs(String _start, String _end) {
+            start = _start;
+            end = _end;
         }
     }
 

@@ -144,6 +144,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Evolve Language"/>
+                <Property name="toolTipText" type="java.lang.String" value="Modify large segments of vocabulary at once (regex compatible)"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
@@ -496,6 +497,7 @@
                 <Component class="javax.swing.JButton" name="btnQuiz">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Quiz Generator"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Generate quizzes to help gain mastery of languages"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnQuizActionPerformed"/>

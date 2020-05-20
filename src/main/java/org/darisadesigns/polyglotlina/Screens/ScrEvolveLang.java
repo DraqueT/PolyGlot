@@ -19,8 +19,20 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import javax.swing.DefaultComboBoxModel;
+import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.EvolutionPairs;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.TransformOptions;
+import org.darisadesigns.polyglotlina.Nodes.ConWord;
+import org.darisadesigns.polyglotlina.Nodes.TypeNode;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -35,8 +47,32 @@ public final class ScrEvolveLang extends PDialog {
     public ScrEvolveLang(DictCore _core) {
         super(_core);
         initComponents();
+        setupFilterBox();
         
         this.setModal(true);
+        this.setTitle("Evolve " + core.getPropertiesManager().getLangName());
+        this.setupTransformOptions();
+    }
+    
+    private void setupTransformOptions() {
+        cmbTransformOptions.addItem(TransformOptions.All);
+        cmbTransformOptions.addItem(TransformOptions.FirstInstanceOnly);
+        cmbTransformOptions.addItem(TransformOptions.FirstAndMiddleInstances);
+        cmbTransformOptions.addItem(TransformOptions.MiddleInstancesOnly);
+        cmbTransformOptions.addItem(TransformOptions.MiddleAndLastInsances);
+        cmbTransformOptions.addItem(TransformOptions.LastInsanceOnly);
+        cmbTransformOptions.setSelectedIndex(0);
+    }
+    
+    private void setupFilterBox() {
+        DefaultComboBoxModel<TypeNode> model = new DefaultComboBoxModel<>();
+        cmbPoS.setModel(model);
+        
+        model.addElement(new TypeNode());
+        
+        for (TypeNode pos : core.getTypes().getNodes()) {
+            model.addElement(pos);
+        }
     }
 
     /**
@@ -49,50 +85,59 @@ public final class ScrEvolveLang extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel1 = new PLabel("", core.getOptionsManager().getMenuFontSize());
+        txtConWordFilter = new PTextField(core, false, "ConWord Filter");
+        txtLocalWordFilter = new PTextField(core, true, core.getPropertiesManager().getLocalLangName() + " Filter");
+        cmbPoS = new PComboBox<TypeNode>(
+            core.getPropertiesManager().getFontLocal(),
+            "-- Part of Speech --");
         jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabel2 = new PLabel("", core.getOptionsManager().getMenuFontSize());
         sldApplyTo = new javax.swing.JSlider();
-        lblApplyTo = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        lblApplyTo = new PLabel("", core.getOptionsManager().getMenuFontSize());
+        txtPattern = new PTextField(core, false, "Target Pattern");
+        txtReplace = new PTextField(core, false, "Replacement");
+        cmbTransformOptions = new PComboBox<>(core.getPropertiesManager().getFontMenu());
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel4 = new PLabel("Use this tool to simulate linguistic drift.", PLabel.CENTER, core.getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
+        setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Filter");
+        jLabel1.setText("Filter (blank applies to all)");
         jLabel1.setToolTipText("");
 
-        jTextField1.setText("jTextField1");
+        txtConWordFilter.setToolTipText("Set filter for conword (regex compatible)");
 
-        jTextField2.setText("jTextField2");
+        txtLocalWordFilter.setToolTipText("Set filter for local langauge word (regex compatible)");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbPoS.setToolTipText("Part of Speech to filter on (if any)");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jTextField2)
-            .addComponent(jTextField1)
-            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(txtLocalWordFilter)
+            .addComponent(txtConWordFilter)
+            .addComponent(cmbPoS, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtConWordFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtLocalWordFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(cmbPoS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -100,6 +145,7 @@ public final class ScrEvolveLang extends PDialog {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Options");
 
+        sldApplyTo.setToolTipText("Percentage of words to apply this to (selected at random)");
         sldApplyTo.setValue(100);
         sldApplyTo.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -111,19 +157,22 @@ public final class ScrEvolveLang extends PDialog {
         lblApplyTo.setLabelFor(sldApplyTo);
         lblApplyTo.setText("Apply to: 100% of words");
 
-        jTextField3.setText("jTextField3");
+        txtPattern.setToolTipText("Pattern to search for/replace (regex compatible)");
 
-        jTextField4.setText("jTextField4");
+        txtReplace.setToolTipText("Replacement text (regex compatible)");
+
+        cmbTransformOptions.setToolTipText("Apply transform to all, first, middle, or last occurrences of patterns found in words (includive)");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(sldApplyTo, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+            .addComponent(sldApplyTo, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
             .addComponent(lblApplyTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jTextField3)
-            .addComponent(jTextField4)
+            .addComponent(cmbTransformOptions, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(txtPattern)
+            .addComponent(txtReplace)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,11 +183,31 @@ public final class ScrEvolveLang extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblApplyTo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cmbTransformOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 41, Short.MAX_VALUE))
+                .addComponent(txtPattern, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtReplace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jButton1.setText("OK");
+        jButton1.setToolTipText("Apply Language Evolution");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Cancel");
+        jButton2.setToolTipText("Exit menu without applying changes.");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Use this tool to simulate linguistic drift.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -146,14 +215,25 @@ public final class ScrEvolveLang extends PDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 87, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)))
         );
 
         pack();
@@ -163,21 +243,62 @@ public final class ScrEvolveLang extends PDialog {
         lblApplyTo.setText("Apply to: " + sldApplyTo.getValue() + "% of words");
     }//GEN-LAST:event_sldApplyToStateChanged
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (InfoBox.actionConfirmation("Apply Evolution Confirmation", "Really apply evolution rules? This will update words in your lexicon.", this)) {
+            try {
+                ConWord filter = new ConWord();
+                filter.setValue(txtConWordFilter.getText());
+                filter.setLocalWord(txtLocalWordFilter.getText());
+
+                if (!((PComboBox)cmbPoS).isDefaultValue()) {
+                    filter.setWordTypeId(((TypeNode)cmbPoS.getSelectedItem()).getId());
+                }
+                
+                String regex = txtPattern.getText();
+                String replace = txtReplace.getText();
+                
+                if (PGTUtil.regexContainsLookaheadOrBehind(replace)) {
+                    InfoBox.warning("Language Evolution", "Replacement patterns with lookahead or lookbehind patterns\nmust use \"All Instances\" option.", this);
+                }
+
+                EvolutionPairs[] result = core.getWordCollection().evolveLexicon(filter, 
+                        sldApplyTo.getValue(), 
+                        cmbTransformOptions.getItemAt(cmbTransformOptions.getSelectedIndex()),
+                        regex, 
+                        replace);
+                core.getRootWindow().updateAllValues(core);
+                new ScrEvolveReport(core, result).setVisible(true);
+                this.dispose();
+            } catch (Exception e) {
+                InfoBox.error("Evolution Error", "Problem evolving language: " + e.getLocalizedMessage(), this);
+                IOHandler.writeErrorLog(e);
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     @Override
     public void updateAllValues(DictCore _core) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<TypeNode> cmbPoS;
+    private javax.swing.JComboBox<TransformOptions> cmbTransformOptions;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JLabel lblApplyTo;
     private javax.swing.JSlider sldApplyTo;
+    private javax.swing.JTextField txtConWordFilter;
+    private javax.swing.JTextField txtLocalWordFilter;
+    private javax.swing.JTextField txtPattern;
+    private javax.swing.JTextField txtReplace;
     // End of variables declaration//GEN-END:variables
 }

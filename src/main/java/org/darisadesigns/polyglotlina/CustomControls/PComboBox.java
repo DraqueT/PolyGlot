@@ -40,10 +40,23 @@ import javax.swing.SwingWorker;
 public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     private SwingWorker worker = null;
     private boolean mouseOver = false;
+    private String defaultText = "";
 
     public PComboBox(Font font) {
         setupListeners();
         super.setFont(font);
+    }
+    
+    /**
+     * If default text is set, the first entry will be used as default (you are
+     * responsible for inserting an appropriately blank entry of type E)
+     * @param font
+     * @param _defaultText default selection text (no value)
+     */
+    public PComboBox(Font font, String _defaultText) {
+        setupListeners();
+        super.setFont(font);
+        defaultText = _defaultText;
     }
 
     /**
@@ -60,6 +73,10 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     
     private void setupListeners() {
         addMouseListener(this);
+    }
+    
+    public boolean isDefaultValue() {
+        return this.getSelectedIndex() == 0 && !defaultText.isEmpty();
     }
     
     @Override
@@ -86,6 +103,13 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         } 
         Object selectedItem = getSelectedItem();
         String text = selectedItem == null ? "" : selectedItem.toString();
+        
+        // display default text if appropriate
+        if (text.isBlank() && this.getSelectedIndex() == 0) {
+            text = defaultText;
+            antiAlias.setColor(Color.decode("#909090"));
+        }
+        
         if (!text.isEmpty()) { // 0 length text makes bounding box explode
             FontMetrics fm = antiAlias.getFontMetrics(getFont());
             Rectangle2D rec = fm.getStringBounds(text, antiAlias);
