@@ -160,12 +160,12 @@ echo "Java lines built: $LINECOUNT"
 
 # Announce any build failures...
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Windows_BUILD_FAILED" ] &&  [ $WIN_BUILD_TIME != 0 ]; then
-    echo "Windows build failed."
+    echo -e "\e[41mWindows build failed.\e[0m"
 fi
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Linux_BUILD_FAILED" ] && [ $LIN_BUILD_TIME != 0 ]; then
-    echo "Linux build failed."
+    echo -e "\e[41mLinux build failed.\e[0m"
 fi
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Darwin_BUILD_FAILED" ] && [ $OSX_BUILD_TIME != 0 ]; then
-    echo "OSX build failed."
+    echo -e "\e[41mOSX build failed.\e[0m"
 fi
 echo "Full build process complete!"
