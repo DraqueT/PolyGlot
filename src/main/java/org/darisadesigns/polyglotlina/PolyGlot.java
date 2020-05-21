@@ -60,7 +60,7 @@ public final class PolyGlot {
     private DictCore core;
     
     private PolyGlot(String overridePath) throws Exception {
-        overrideProgramPath = overridePath;
+        overrideProgramPath = overridePath; // TODO: In the future, figure out how this might be better set. In options?
         optionsManager = new OptionsManager();
         IOHandler.loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
         refreshUiDefaults();
