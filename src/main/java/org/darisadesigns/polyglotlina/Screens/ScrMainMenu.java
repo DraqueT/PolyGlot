@@ -66,6 +66,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -373,6 +374,8 @@ public final class ScrMainMenu extends PFrame {
     private void populateRecentOpened() {
         mnuRecents.removeAll();
         String[] lastFiles = core.getOptionsManager().getLastFiles();
+        DefaultListModel<RecentFile> mdlRecentOpened = new DefaultListModel<>();
+        lstRecentOpened.setModel(mdlRecentOpened);
 
         for (int i = lastFiles.length - 1; i >= 0; i--) {
             final String curFile = lastFiles[i];
@@ -390,7 +393,9 @@ public final class ScrMainMenu extends PFrame {
                 setFile(curFile);
                 populateRecentOpened();
             });
+            
             mnuRecents.add(lastFile);
+            mdlRecentOpened.addElement(new RecentFile(fileName, curFile));
         }
     }
 
@@ -1230,7 +1235,48 @@ public final class ScrMainMenu extends PFrame {
     public DictCore getCore() {
         return core;
     }
+    
+    /**
+     * This scales UI elements for the welcome window
+     */
+    private void scaleWelcomWindow() {
+        if (pnlStartButtons != null && btnNewLang != null) {
+            btnNewLang.setLocation((pnlStartButtons.getWidth() - btnNewLang.getSize().width)/2, btnNewLang.getLocation().y);
+        }
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        scaleWelcomWindow();
+    }
+    
+    private class RecentFile {
+        public final String fileName;
+        public final String path;
+        
+        public RecentFile(String _fileName, String _path) {
+            fileName = _fileName;
+            path = _path;
+        }
+        
+        @Override
+        public String toString() {
+            return fileName;
+        }
+    }
 
+    /**
+     * Opens selected recent file from list on welcome screen (if any selected)
+     */
+    private void openRecentFromList() {
+        if (lstRecentOpened.getSelectedIndex() != -1) {
+            setFile(lstRecentOpened.getSelectedValue().path);
+            openLexicon(true);
+            populateRecentOpened();
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1270,11 +1316,12 @@ public final class ScrMainMenu extends PFrame {
         btnNewLang = new PButton(nightMode, menuFontSize) {
             @Override
             public void repaint() {
-                if (pnlStartButtons != null && btnNewLang != null) {
-                    btnNewLang.setLocation((pnlStartButtons.getWidth() - btnNewLang.getSize().width)/2, btnNewLang.getLocation().y);
-                }
+                scaleWelcomWindow();
+                super.repaint();
             }
         };
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstRecentOpened = new javax.swing.JList<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnuNewLocal = new javax.swing.JMenuItem();
@@ -1440,7 +1487,7 @@ public final class ScrMainMenu extends PFrame {
                 .addComponent(btnProp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnQuiz)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(157, Short.MAX_VALUE))
         );
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -1503,27 +1550,41 @@ public final class ScrMainMenu extends PFrame {
                 .addComponent(btnNewLang))
         );
 
+        lstRecentOpened.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstRecentOpened.setToolTipText("Select a recently opened language to re-open it");
+        lstRecentOpened.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstRecentOpenedMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(lstRecentOpened);
+
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlStartButtons, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlMainLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
-                .addContainerGap(129, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlStartButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(124, 124, 124))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlStartButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -1964,7 +2025,12 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_mnuLexFamiliesActionPerformed
 
     private void btnOpenLangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenLangActionPerformed
-        mnuOpenLocalActionPerformed(evt);
+        // default to general Open menu of no prior language selected here
+        if (lstRecentOpened.getSelectedIndex() == -1) {
+            mnuOpenLocalActionPerformed(evt);
+        } else {
+            openRecentFromList();
+        }
     }//GEN-LAST:event_btnOpenLangActionPerformed
 
     private void btnOpenManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenManualActionPerformed
@@ -2021,6 +2087,13 @@ public final class ScrMainMenu extends PFrame {
         new ScrEvolveLang(core).setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void lstRecentOpenedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstRecentOpenedMouseClicked
+        // only run on double click
+        if (evt.getClickCount() == 2) {
+            openRecentFromList();
+        }
+    }//GEN-LAST:event_lstRecentOpenedMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2042,6 +2115,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -2049,6 +2123,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
+    private javax.swing.JList<RecentFile> lstRecentOpened;
     private javax.swing.JMenuItem mnuAbout;
     private javax.swing.JMenuItem mnuCheckLexicon;
     private javax.swing.JMenuItem mnuChkUpdate;
