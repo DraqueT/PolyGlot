@@ -425,7 +425,7 @@ public final class ScrMainMenu extends PFrame {
      *
      * @return true to signal continue, false to signal stop
      */
-    private boolean saveOrCancelTest() {
+    public boolean saveOrCancelTest() {
         boolean ret = true;
 
         if (core != null && !core.isLanguageEmpty()) {
@@ -629,13 +629,21 @@ public final class ScrMainMenu extends PFrame {
             }
 
             fileName = chooser.getSelectedFile().getAbsolutePath();
-            setFile(fileName);
-            core.getOptionsManager().pushRecentFile(fileName);
-            populateRecentOpened();
-            updateAllChildValues(core);
+            openFileFromPath(fileName);
         }
 
         genTitle();
+    }
+    
+    /**
+     * Opens a file from a given path
+     * @param path 
+     */
+    public void openFileFromPath(String path) {
+        setFile(path);
+        core.getOptionsManager().pushRecentFile(path);
+        populateRecentOpened();
+        updateAllChildValues(core);
     }
 
     /**
@@ -1217,6 +1225,10 @@ public final class ScrMainMenu extends PFrame {
             accelOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
             accelPublish.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
         }
+    }
+    
+    public DictCore getCore() {
+        return core;
     }
 
     /**

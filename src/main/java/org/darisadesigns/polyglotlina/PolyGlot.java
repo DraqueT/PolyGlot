@@ -32,6 +32,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import javax.swing.InputMap;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -56,6 +57,7 @@ public final class PolyGlot {
     private final String overrideProgramPath;
     private Object clipBoard;
     private UIDefaults uiDefaults;
+    private DictCore core;
     
     private PolyGlot(String overridePath) throws Exception {
         overrideProgramPath = overridePath;
@@ -114,6 +116,28 @@ public final class PolyGlot {
                             if (PGTUtil.IS_OSX) {
                                 Desktop desk = Desktop.getDesktop();
                                 final ScrMainMenu staticScr = s;
+                                
+                                desk.setOpenFileHandler(e -> {
+                                    List<File> files = e.getFiles();
+                                    
+                                    if (files.size() <= 0) {
+                                        return;
+                                    } else if (files.size() > 1) {
+                                        InfoBox.info("File Limit", "PolyGlot can only open a single file at once.\nOpening first selected file:"
+                                                + files.get(0).getName(), null);
+                                    }
+                                    
+                                    try {
+                                        // saveOrCancelTest to prevent accidental failure to save open languages
+                                        if (polyGlot.getCore().getRootWindow().saveOrCancelTest()) {
+                                            String filePath = files.get(0).getCanonicalPath();
+                                            polyGlot.getCore().getRootWindow().openFileFromPath(filePath);
+                                        }
+                                    } catch (IOException | IllegalStateException ex) {
+                                        InfoBox.error("File Read Error", "Unable to open file due to error:\n"
+                                                + ex.getLocalizedMessage(), null);
+                                    }
+                                });
                                 
                                 desk.setQuitHandler((QuitEvent e, QuitResponse response) -> {
                                     staticScr.dispose();
@@ -199,8 +223,11 @@ public final class PolyGlot {
                                 } else {
                                     InfoBox.warning("File Path Error", "Please retry opening this file by clicking File->Open from the menu.", null);
                                 }
-                                
-                                s.openLexicon(true);
+                            }
+                            
+                            // if a language has been loaded, open Lexicon
+                            if (!polyGlot.getCore().getCurFileName().isBlank() ) {
+                                polyGlot.getCore().getRootWindow().openLexicon(true);
                             }
                         } catch (ArrayIndexOutOfBoundsException e) {
                             IOHandler.writeErrorLog(e, "Problem with top level PolyGlot arguments.");
@@ -377,5 +404,13 @@ public final class PolyGlot {
      */
     public static PolyGlot getTestShell() throws IOException, Exception {
         return new PolyGlot(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath());
+    }
+
+    public DictCore getCore() {
+        return core;
+    }
+
+    public void setCore(DictCore _core) {
+        this.core = _core;
     }
 }
