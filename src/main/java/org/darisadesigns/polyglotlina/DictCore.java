@@ -85,6 +85,7 @@ public class DictCore {
      */
     public DictCore(PolyGlot _polyGlot) {
         polyGlot = _polyGlot;
+        polyGlot.setCore(this);
         initializeDictCore();
     }
     
