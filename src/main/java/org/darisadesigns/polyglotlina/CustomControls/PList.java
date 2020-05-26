@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, Draque Thompson
+ * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -36,5 +36,10 @@ public class PList<N> extends JList<N> {
     
     public PList(Font _font, double fontSize) {
         setFont(_font.deriveFont((float)fontSize));
+    }
+    
+    @Override
+    public final void setFont(Font _font) {
+        super.setFont(_font);
     }
 }

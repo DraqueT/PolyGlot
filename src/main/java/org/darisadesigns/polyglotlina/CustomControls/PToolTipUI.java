@@ -38,7 +38,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.ToolTipUI;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.View;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.PFontHandler;
 
 /**
  * Custom tooltips. This class grabs hold of incoming ToolTip objects' size
@@ -51,12 +51,9 @@ public class PToolTipUI extends ToolTipUI
     private static final PToolTipUI SHARED_INSTANCE = new PToolTipUI();
     private static PropertyChangeListener sharedPropertyChangedListener;
     private PropertyChangeListener propertyChangeListener;
-    private final Font font;
     
     public PToolTipUI() {
         super();
-        
-        font = PGTUtil.CHARIS_UNICODE.deriveFont((float)14.0);
     }
 
     public static ComponentUI createUI(JComponent c) {
@@ -123,21 +120,36 @@ public class PToolTipUI extends ToolTipUI
         return sharedPropertyChangedListener;
     }
 
+    /**
+     * To override font, override createToolTip() on component creating tooltip.
+     * On creation of ToolTip, change to desired font.
+     * @param g
+     * @param c 
+     */
     @Override
     public void paint(Graphics g, JComponent c) {
         String tipText = ((JToolTip)c).getTipText();
-        
         tipText = tipText == null ? "" : tipText;
-
+        String[] tipLines = tipText.split("\n");
+        Font font = c.getFont();
+        
+        g.setFont(font);
+        
+        FontMetrics metrics = g.getFontMetrics();
+        int fontHeight = metrics.getHeight();
+        int height = (fontHeight * tipLines.length) + 2;
+        int width = this.getWidestStringText(tipLines, metrics) + 10;
+        
         c.setFont(font.deriveFont(font.getSize()));
         ((JToolTip)c).setTipText(tipText);
-        g.setFont(font);
-        FontMetrics metrics = g.getFontMetrics();
-        Dimension size = new Dimension(metrics.stringWidth(tipText) + 2, metrics.getHeight() + 2);
+        
+        
+        Dimension size = new Dimension(width, height);
         
         c.setSize(size);
+        c.getParent().setPreferredSize(size);
         c.getParent().setSize(size);
-
+        
         Insets insets = c.getInsets();
         Rectangle paintTextR = new Rectangle(
             insets.left,
@@ -154,13 +166,31 @@ public class PToolTipUI extends ToolTipUI
             size.height - (insets.top + insets.bottom));
         
         g.setColor(Color.white);
-        g.drawString(tipText, paintTextR.x + 1,
-                paintTextR.y + metrics.getAscent());
+        
+        for (int i = 0 ; i < tipLines.length; i++) {
+            g.drawString(tipLines[i], paintTextR.x + 5,
+                    paintTextR.y + metrics.getAscent() + (i * (fontHeight)));
+        }
+    }
+    
+    /**
+     * Finds widest segment of text based on its rendering
+     * @param test 
+     */
+    private int getWidestStringText(String[] test, FontMetrics metrics) {
+        int ret = 0;
+        
+        for (String curLine : test) {
+            int curWidth = metrics.stringWidth(curLine);
+            ret = curWidth > ret ? curWidth : ret;
+        }
+        
+        return ret;
     }
 
     @Override
     public Dimension getPreferredSize(JComponent c) {
-        FontMetrics fm = c.getFontMetrics(font);
+        FontMetrics fm = c.getFontMetrics(c.getFont());
         Insets insets = c.getInsets();
 
         Dimension prefSize = new Dimension(insets.left+insets.right,
