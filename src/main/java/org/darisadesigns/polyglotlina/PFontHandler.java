@@ -23,6 +23,7 @@ import static org.darisadesigns.polyglotlina.IOHandler.isFileZipArchive;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,6 +36,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -119,6 +121,9 @@ public class PFontHandler {
             File fontFile = getFontFile(fontFamily);
             if (fontFile != null && fontFile.exists()) {
                 ret = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+                Map attributes = ret.getAttributes();
+                attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
+                ret = ret.deriveFont(attributes);
             }
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
@@ -288,6 +293,9 @@ public class PFontHandler {
                 || path.toLowerCase().endsWith(".dfont")) {
             try {
                 Font f = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+                Map attributes = f.getAttributes();
+                attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
+                f = f.deriveFont(attributes);
 
                 // if names match, set ret to return file
                 if (f.getFamily().equals(fontFamily)) {
@@ -318,7 +326,12 @@ public class PFontHandler {
      */
     public static Font getFontFromFile(String filePath) throws FontFormatException, IOException {
         File fontFile = new File(filePath);
-        return Font.createFont(Font.TRUETYPE_FONT, fontFile);
+        Font ret = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+        Map attributes = ret.getAttributes();
+        attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
+        ret = ret.deriveFont(attributes);
+        
+        return ret;
     }
 
     public static String writeFont(ZipOutputStream out, Font outputFont, byte[] cachedFont, DictCore core, boolean isConFont) {
