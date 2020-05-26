@@ -27,10 +27,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Scanner;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterAll;
 
 /**
  *
@@ -40,6 +43,12 @@ public class IOHandlerTest {
     
     public IOHandlerTest() {
         wipeErrorLog();
+    }
+    
+    @AfterAll
+    public static void cleanup() {
+        wipeErrorLog();
+        wipeTempSaveFiles();
     }
     
     @Test
@@ -226,7 +235,81 @@ public class IOHandlerTest {
         }
     }
     
-    private void wipeErrorLog() {
+    @Test
+    public void testMakeTempSaveFile(){
+        System.out.println("IOHandlerTest.testMakeTempSaveFile");
+        
+        try {
+            wipeTempSaveFiles();
+            Method m = IOHandler.class.getDeclaredMethod("makeTempSaveFile", File.class);
+            m.setAccessible(true);
+            File tmpFile = (File)m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            
+            assertEquals(tmpFile.getName(), PGTUtil.TEMP_FILE);
+        } catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testMakeTempSaveFile_Backup(){
+        System.out.println("IOHandlerTest.testMakeTempSaveFile_Backup");
+        
+        try {
+            wipeTempSaveFiles();
+            Method m = IOHandler.class.getDeclaredMethod("makeTempSaveFile", File.class);
+            m.setAccessible(true);
+            File tmpFile = (File)m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            tmpFile.createNewFile();
+            
+            m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            
+            m = IOHandler.class.getDeclaredMethod("getTempSaveFileIfExists", File.class);
+            m.setAccessible(true);
+            tmpFile = (File)m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            
+            assertTrue(tmpFile.getName().startsWith(PGTUtil.TEMP_FILE));
+            assertNotEquals(tmpFile.getName(), PGTUtil.TEMP_FILE);
+        } catch (IOException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void getTempSaveFileIfExists_Basic(){
+        System.out.println("IOHandlerTest.getTempSaveFileIfExists_Basic");
+        
+        try {
+            wipeTempSaveFiles();
+            Method m = IOHandler.class.getDeclaredMethod("makeTempSaveFile", File.class);
+            m.setAccessible(true);
+            File tmpFile = (File)m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            tmpFile.createNewFile();
+            
+            m = IOHandler.class.getDeclaredMethod("getTempSaveFileIfExists", File.class);
+            m.setAccessible(true);
+            tmpFile = (File)m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            
+            assertEquals(tmpFile.getName(), PGTUtil.TEMP_FILE);
+        } catch (IOException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+            fail(e);
+        }
+    }
+    
+    /**
+     * Wipes all test temp files
+     */
+    private static void wipeTempSaveFiles(){
+        File testDir = new File(PGTUtil.TESTRESOURCES);
+        
+        for (File test : testDir.listFiles()) {
+            if (test.getName().startsWith(PGTUtil.TEMP_FILE)) {
+                test.delete();
+            }
+        }
+    }
+    
+    private static void wipeErrorLog() {
         File log = new File(PGTUtil.ERROR_LOG_FILE);
         if (log.exists()) {
             log.delete();

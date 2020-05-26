@@ -445,9 +445,9 @@ public final class IOHandler {
             sb.append(writer.getBuffer());
             byte[] xmlData = sb.toString().getBytes(StandardCharsets.UTF_8);
 
-            final File f = makeTempSaveFile(workingDirectory);
+            final File tmpSaveLocation = makeTempSaveFile(workingDirectory);
 
-            try (FileOutputStream fileOutputStream = new FileOutputStream(f)) {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
                 try (ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
                     ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME);
                     out.putNextEntry(e);
@@ -482,15 +482,15 @@ public final class IOHandler {
             try {
                 // pass null shell class because this will ultimately be discarded
                 DictCore test = new DictCore(PolyGlot.getTestShell());
-                test.readFile(f.getAbsolutePath());
+                test.readFile(tmpSaveLocation.getAbsolutePath());
 
             } catch (Exception ex) {
                 throw new IOException(ex);
             }
 
             try {
-                copyFile(f.toPath(), finalFile.toPath(), true);
-                f.delete(); // wipe temp file if successful
+                copyFile(tmpSaveLocation.toPath(), finalFile.toPath(), true);
+                tmpSaveLocation.delete(); // wipe temp file if successful
             } catch (IOException e) {
                 throw new IOException("Unable to save file: " + e.getMessage(), e);
             }
@@ -503,11 +503,45 @@ public final class IOHandler {
         }
     }
     
+    /**
+     * Gets temporary file when saving PolyGlot archive. If temporary file already
+     * exists, backs file up based on current epoch second then creates a new temp
+     * file
+     * @param workingDirectory
+     * @return 
+     */
     private static File makeTempSaveFile(File workingDirectory) {
-        final File ret = new File(workingDirectory + File.separator + PGTUtil.TEMP_FILE);
-        if (ret.exists()) { // If PolyGlot is open and working, user has already been alerted and ignored it.
-            ret.delete();
+        File ret = new File(workingDirectory + File.separator + PGTUtil.TEMP_FILE);
+        
+        if (ret.exists()) {
+            File backupTemp = new File(ret.getAbsolutePath() + Instant.now().getEpochSecond());
+            ret.renameTo(backupTemp);
+            ret = new File(workingDirectory + File.separator + PGTUtil.TEMP_FILE);
         }
+        
+        return ret;
+    }
+    
+    /**
+     * Gets most recent temporary save file if one exists, null otherwise
+     * @param workingDirectory
+     * @return 
+     */
+    public static File getTempSaveFileIfExists(File workingDirectory) {
+        File ret = new File(workingDirectory + File.separator + PGTUtil.TEMP_FILE);
+        
+        // search for backed up tmp files (possible due to stranding) if basic does not exist
+        if (!ret.exists()) {
+            ret = null;
+            
+            for (File curFile : workingDirectory.listFiles()) {
+                if (curFile.getName().startsWith(PGTUtil.TEMP_FILE)) {
+                    ret = curFile;
+                    break;
+                }
+            }
+        }
+        
         return ret;
     }
     
@@ -516,16 +550,6 @@ public final class IOHandler {
         Files.copy(fromLocation, toLocation, option);
     }
     
-    /**
-     * Gets temporary save file if one exists, null otherwise
-     * @param workingDirectory
-     * @return 
-     */
-    public static File getTempSaveFileIfExists(File workingDirectory) {
-        File ret = new File(workingDirectory + File.separator + PGTUtil.TEMP_FILE);
-        return ret.exists() ? ret : null;
-    }
-
     private static String writePriorStatesToArchive(ZipOutputStream out, DictCore core) throws IOException {
         String writeLog = "";
         ReversionNode[] reversionList = core.getReversionManager().getReversionList();
@@ -1028,7 +1052,7 @@ public final class IOHandler {
         
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(errorLog))) {
                 String output = getSystemInformation() + "\n" + curContents + errorMessage + "\n";
-                System.out.println("Writing error to: " + errorLog.getAbsolutePath());
+//                System.out.println("Writing error to: " + errorLog.getAbsolutePath());
                 writer.write(output);
             }
         } catch (IOException e) {
@@ -1142,7 +1166,7 @@ public final class IOHandler {
 
         try {
             Process p = new ProcessBuilder(arguments).start();
-            System.out.println(Arrays.toString(arguments));
+//            System.out.println(Arrays.toString(arguments));
 
             // get general output
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
