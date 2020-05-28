@@ -183,7 +183,8 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
         } else if (comp instanceof GrammarChapNode) {
             GrammarChapNode compChap = (GrammarChapNode)comp;
             
-            ret = (children == null && compChap.children == null) || children.equals(compChap.children);
+            ret = (children == null && compChap.children == null) 
+                    || ( children != null && children.equals(compChap.children));
             ret = ret && name.equals(compChap.name);
         }
         
