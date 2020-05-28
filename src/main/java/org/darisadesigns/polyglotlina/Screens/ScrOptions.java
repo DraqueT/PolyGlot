@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -109,10 +109,14 @@ public final class ScrOptions extends PDialog {
         ((PlainDocument) txtTextFontSize.getDocument())
                 .setDocumentFilter(new PTextFieldFilter());
 
-        chkResize.setSelected(core.getOptionsManager().isAnimateWindows());
-        chkNightMode.setSelected(core.getOptionsManager().isNightMode());
-        txtTextFontSize.setText(Double.toString(core.getOptionsManager().getMenuFontSize()));
-        txtRevisionNumbers.setText(Integer.toString(core.getOptionsManager().getMaxReversionCount()));
+        updateAllValues(core);
+    }
+    
+    private void resetOptions() {
+        if (InfoBox.actionConfirmation("Verify Options Reset", "This will reset all options, including last saved file data, screen positions, screen sizes, etc.\n\nContinue?", this)) {
+            core.getOptionsManager().resetOptions();
+            updateAllValues(core);
+        }
     }
 
     /**
@@ -130,6 +134,7 @@ public final class ScrOptions extends PDialog {
         chkNightMode = new PCheckBox(nightMode, menuFontSize);
         jLabel2 = new PLabel("", menuFontSize);
         txtRevisionNumbers = new javax.swing.JTextField();
+        btnResetOptions = new PButton();
         btnOk = new PButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -152,6 +157,14 @@ public final class ScrOptions extends PDialog {
 
         txtRevisionNumbers.setToolTipText("The max number of prior versions to save in your PGD files. 0 is unlimited (can lead to large files ).");
 
+        btnResetOptions.setText("Reset Options");
+        btnResetOptions.setToolTipText("Resets all options to default values\\n(including last opened files, screen position, etc.)");
+        btnResetOptions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetOptionsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -173,6 +186,9 @@ public final class ScrOptions extends PDialog {
                         .addGap(0, 148, Short.MAX_VALUE))
                     .addComponent(chkNightMode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(btnResetOptions)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,7 +205,8 @@ public final class ScrOptions extends PDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtRevisionNumbers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(124, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
+                .addComponent(btnResetOptions))
         );
 
         btnOk.setText("OK");
@@ -221,13 +238,25 @@ public final class ScrOptions extends PDialog {
         dispose();
     }//GEN-LAST:event_btnOkActionPerformed
 
+    private void btnResetOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetOptionsActionPerformed
+        resetOptions();
+        super.dispose();
+        core.refreshMainMenu();
+    }//GEN-LAST:event_btnResetOptionsActionPerformed
+
     @Override
     public void updateAllValues(DictCore _core) {
-        // does nothing in this dialog
+        OptionsManager mgr = core.getOptionsManager();
+        
+        chkResize.setSelected(mgr.isAnimateWindows());
+        chkNightMode.setSelected(mgr.isNightMode());
+        txtTextFontSize.setText(Double.toString(mgr.getMenuFontSize()));
+        txtRevisionNumbers.setText(Integer.toString(mgr.getMaxReversionCount()));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;
+    private javax.swing.JButton btnResetOptions;
     private javax.swing.JCheckBox chkNightMode;
     private javax.swing.JCheckBox chkResize;
     private javax.swing.JLabel jLabel1;

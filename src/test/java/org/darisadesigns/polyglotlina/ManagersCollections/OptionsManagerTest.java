@@ -19,6 +19,10 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
+import TestResources.DummyCore;
+import java.awt.Dimension;
+import java.awt.Point;
+import org.darisadesigns.polyglotlina.PGTUtil;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,144 +35,30 @@ public class OptionsManagerTest {
     public OptionsManagerTest() {
     }
 
-    /**
-     * Test of getMenuFontSize method, of class OptionsManager.
-     */
     @Test
-    public void testGetMenuFontSize() {
+    public void testResetOptions() {
+        System.out.println("OptionsManagerTest.testResetOptions");
+        
+        OptionsManager mgr = new OptionsManager();
+        
+        mgr.setAnimateWindows(true);
+        mgr.setMaxReversionCount(999, DummyCore.newCore());
+        mgr.setMenuFontSize(20);
+        mgr.setNightMode(true);
+        mgr.setScreenPosition("ZIMZAM", new Point(999,999));
+        mgr.setScreenSize("ZIMZAM", new Dimension(999,999));
+        mgr.setToDoBarPosition(999);
+        mgr.pushRecentFile("BLEEPBLOOP");
+        
+        mgr.resetOptions();
+        
+        assertFalse(mgr.isAnimateWindows());
+        assertEquals(PGTUtil.DEFAULT_MAX_ROLLBACK_NUM, mgr.getMaxReversionCount());
+        assertEquals(PGTUtil.DEFAULT_FONT_SIZE, mgr.getMenuFontSize());
+        assertFalse(mgr.isNightMode());
+        assertTrue(mgr.getScreenPositions().isEmpty());
+        assertTrue(mgr.getScreenSizes().isEmpty());
+        assertEquals(-1, mgr.getToDoBarPosition());
+        assertEquals(0, mgr.getLastFiles().length);
     }
-
-    /**
-     * Test of setMenuFontSize method, of class OptionsManager.
-     */
-    @Test
-    public void testSetMenuFontSize() {
-    }
-
-    /**
-     * Test of getScreenPositions method, of class OptionsManager.
-     */
-    @Test
-    public void testGetScreenPositions() {
-    }
-
-    /**
-     * Test of getScreenSizes method, of class OptionsManager.
-     */
-    @Test
-    public void testGetScreenSizes() {
-    }
-
-    /**
-     * Test of addScreenUp method, of class OptionsManager.
-     */
-    @Test
-    public void testAddScreenUp() {
-    }
-
-    /**
-     * Test of getLastScreensUp method, of class OptionsManager.
-     */
-    @Test
-    public void testGetLastScreensUp() {
-    }
-
-    /**
-     * Test of setScreenPosition method, of class OptionsManager.
-     */
-    @Test
-    public void testSetScreenPosition() {
-    }
-
-    /**
-     * Test of setScreenSize method, of class OptionsManager.
-     */
-    @Test
-    public void testSetScreenSize() {
-    }
-
-    /**
-     * Test of getScreenPosition method, of class OptionsManager.
-     */
-    @Test
-    public void testGetScreenPosition() {
-    }
-
-    /**
-     * Test of getScreenSize method, of class OptionsManager.
-     */
-    @Test
-    public void testGetScreenSize() {
-    }
-
-    /**
-     * Test of getLastFiles method, of class OptionsManager.
-     */
-    @Test
-    public void testGetLastFiles() {
-    }
-
-    /**
-     * Test of pushRecentFile method, of class OptionsManager.
-     */
-    @Test
-    public void testPushRecentFile() {
-    }
-
-    /**
-     * Test of isAnimateWindows method, of class OptionsManager.
-     */
-    @Test
-    public void testIsAnimateWindows() {
-    }
-
-    /**
-     * Test of setAnimateWindows method, of class OptionsManager.
-     */
-    @Test
-    public void testSetAnimateWindows() {
-    }
-
-    /**
-     * Test of isNightMode method, of class OptionsManager.
-     */
-    @Test
-    public void testIsNightMode() {
-    }
-
-    /**
-     * Test of setNightMode method, of class OptionsManager.
-     */
-    @Test
-    public void testSetNightMode() {
-    }
-
-    /**
-     * Test of getMaxReversionCount method, of class OptionsManager.
-     */
-    @Test
-    public void testGetMaxReversionCount() {
-    }
-
-    /**
-     * Test of setMaxReversionCount method, of class OptionsManager.
-     */
-    @Test
-    public void testSetMaxReversionCount() {
-    }
-
-    /**
-     * Test of getToDoBarPosition method, of class OptionsManager.
-     */
-    @Test
-    public void testGetToDoBarPosition() {
-    }
-
-    /**
-     * Test of setToDoBarPosition method, of class OptionsManager.
-     */
-    @Test
-    public void testSetToDoBarPosition() {
-    }
-    
 }
