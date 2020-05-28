@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, draque
+ * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -48,6 +48,21 @@ public class OptionsManager {
     private int toDoBarPosition = -1;
 
     public OptionsManager() {
+    }
+    
+    /**
+     * Resets all options to their base values (including things like screen position/size)
+     */
+    public void resetOptions() {
+        animateWindows = false;
+        nightMode = false;
+        lastFiles.clear();
+        screenPos.clear();
+        screenSize.clear();
+        screensUp.clear();
+        menuFontSize = 0.0;
+        maxReversionCount = PGTUtil.DEFAULT_MAX_ROLLBACK_NUM;
+        toDoBarPosition = -1;
     }
     
     public double getMenuFontSize() {
