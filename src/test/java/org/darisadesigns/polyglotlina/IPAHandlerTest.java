@@ -81,11 +81,12 @@ public class IPAHandlerTest {
             for (String soundName : charMap.values()) {
                 String sound = "";
                 try {
-                    System.out.println(PGTUtil.UCLA_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX);
+                    // System.out.println(PGTUtil.UCLA_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX);
                     sound = PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX;
                     assertNotEquals(sound, null);
                 } catch (Exception e) {
-                    System.out.println("FAILED: " + sound);
+                    // System.out.println("FAILED: " + sound);
+                    fail(e);
                     results += sound + e.getLocalizedMessage() + "\n";
                 }
             }
@@ -93,11 +94,12 @@ public class IPAHandlerTest {
             for (String soundName : charMap.values()) {
                 String sound = "";
                 try {
-                    System.out.println(PGTUtil.WIKI_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX);
+                    // System.out.println(PGTUtil.WIKI_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX);
                     sound = PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + soundName + PGTUtil.WAV_SUFFIX;
                     assertNotEquals(sound, null);
                 } catch (Exception e) {
-                    System.out.println("FAILED: " + sound);
+                    // System.out.println("FAILED: " + sound);
+                    fail(e);
                     results += sound + e.getLocalizedMessage() + "\n";
                 }
             }
