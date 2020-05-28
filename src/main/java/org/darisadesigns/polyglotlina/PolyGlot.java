@@ -88,6 +88,8 @@ public final class PolyGlot {
 
             java.awt.EventQueue.invokeLater(() -> {
 
+                // TODO: remove canStart() test
+                // TODO: Consolodate this into single try/catch
                 // catch all top level application killing throwables (and bubble up directly to ensure reasonable behavior)
                 try {
                     ScrMainMenu s = null;
@@ -160,7 +162,7 @@ public final class PolyGlot {
                             File recovery = IOHandler.getTempSaveFileIfExists(polyGlot.getWorkingDirectory());
                             if (recovery != null) {
                                 if (InfoBox.yesNoCancel("Recovery File Detected", 
-                                        "PolyGlot appears to have shut down mid save. Would you like to recover the file?", s) == JOptionPane.YES_OPTION) {    
+                                        "PolyGlot appears to have shut down mid save. Would you like to recover the file?", s) == JOptionPane.YES_OPTION) {   
                                     JFileChooser chooser = new JFileChooser();
                                     chooser.setDialogTitle("Recover Language To");
                                     FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
@@ -296,6 +298,7 @@ public final class PolyGlot {
         UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
     }
     
+    // TODO: REMOVE THIS
     /**
      * Tests whether PolyGlot can start, informs user of startup problems.
      * @return 

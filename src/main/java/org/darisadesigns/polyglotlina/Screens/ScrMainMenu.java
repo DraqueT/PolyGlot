@@ -1027,7 +1027,7 @@ public final class ScrMainMenu extends PFrame {
         final boolean enable = _enable;
 
         if (enable) {
-            button.setToolTipText(button.getToolTipText() + " (right click to pop window out)");
+            button.setToolTipText(button.getToolTipText() + "\n(right click to pop window out)");
             popOut.setToolTipText("Pops " + button.getText() + " into independent window.");
         } else {
             popOut.setToolTipText(button.getText() + " cannot be popped out.");
