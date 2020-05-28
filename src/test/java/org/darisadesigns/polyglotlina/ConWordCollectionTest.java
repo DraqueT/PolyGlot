@@ -84,7 +84,7 @@ public class ConWordCollectionTest {
         
         String resultMessage = t.getLocalizedMessage();
         
-        assertEquals(resultMessage, expectedMessage);
+        assertEquals(expectedMessage, resultMessage);
     }
     
     @Test

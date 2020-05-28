@@ -341,6 +341,15 @@ public class ScrPrintToPDF extends PDialog {
         
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try{
+            // prevent printing if etymology is selected but there are illegal loops present
+            if (core.getEtymologyManager().checkAllForIllegalLoops().length > 0) {
+                String message = 
+                        "You have selected \"Print Etymology Trees\" with illegal loops present\n" +
+                        "in your lexicon's etymology. To print the trees, this must be corrected.\n"+ 
+                        "Please select Tools->Check Language to find/correct this problem.";
+                InfoBox.warning("Etymology Problem", message, this);
+            }
+            
             Java8Bridge.exportPdf(txtSavePath.getText(), 
                     txtImageLocation.getText(), 
                     ((PTextPane)txtForeword).getNakedText(), 
