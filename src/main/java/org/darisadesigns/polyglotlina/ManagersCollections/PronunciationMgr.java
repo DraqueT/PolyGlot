@@ -442,11 +442,13 @@ public class PronunciationMgr {
         for (String alphaChar : alphaValues) {
             List<String> retValues = new ArrayList<>();
             
-            for (PronunciationNode procNode : alphaAssociations.get(alphaChar)) {
-                for (String ipaChar : allIpaChars) {
-                    if (procNode.getPronunciation().contains(ipaChar) && !retValues.contains(ipaChar)) {
-                        retValues.add(ipaChar);
-                        retValues.add(procNode.getValue());
+            if (alphaAssociations.containsKey(alphaChar)) {
+                for (PronunciationNode procNode : alphaAssociations.get(alphaChar)) {
+                    for (String ipaChar : allIpaChars) {
+                        if (procNode.getPronunciation().contains(ipaChar) && !retValues.contains(ipaChar)) {
+                            retValues.add(ipaChar);
+                            retValues.add(procNode.getValue());
+                        }
                     }
                 }
             }

@@ -31,7 +31,6 @@ public class EtyExternalParentTest {
     private final EtyExternalParent testParent;
     
     public EtyExternalParentTest() {
-        System.out.println("EtyExternalParentTest");
         testParent = new EtyExternalParent();
         
         testParent.setDefinition("DEFINITION");

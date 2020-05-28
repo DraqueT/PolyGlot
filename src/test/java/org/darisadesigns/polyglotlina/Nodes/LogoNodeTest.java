@@ -41,7 +41,6 @@ public class LogoNodeTest {
     private final LogoNode radical;
     
     public LogoNodeTest() {
-        System.out.println("LogoNodeTest");
         logoTest = new LogoNode();
         radical = new LogoNode();
         
