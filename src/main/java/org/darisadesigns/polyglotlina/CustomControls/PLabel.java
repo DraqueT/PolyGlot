@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson
+ * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -31,6 +31,8 @@ import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.JLabel;
+import javax.swing.JToolTip;
+import javax.swing.ToolTipManager;
 
 /**
  * Extends Labels with some useful functionality. If resize set to true, ensures
@@ -41,11 +43,32 @@ import javax.swing.JLabel;
 public final class PLabel extends JLabel {
     private Graphics g;
     private boolean resize = false;
+    ToolTipAction toolTipAction;
+    
+    public void setToolTipAction(ToolTipAction _toolTipAction) {
+        toolTipAction = _toolTipAction;
+    }
+    
+    public interface ToolTipAction<PLabel> {
+        void setupToolTip(PLabel p);
+    }
 
+    @Override
+    public JToolTip createToolTip() {
+        JToolTip ret = super.createToolTip();
+        
+        toolTipAction.setupToolTip(this);
+        
+        return ret;
+    }
+    
     public PLabel(String text, double fontSize) {
         super(text);
         setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));
         init();
+        toolTipAction = (Object n) -> {};
+        ToolTipManager[] toolTipManager = this.getListeners(ToolTipManager.class);
+        System.out.print("ZOT");
     }
     
     public PLabel(String text, int alignment, double fontSize) {

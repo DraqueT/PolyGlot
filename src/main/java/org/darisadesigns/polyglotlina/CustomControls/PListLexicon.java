@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -31,6 +31,10 @@ import org.darisadesigns.polyglotlina.Nodes.ConWord;
 public class PListLexicon extends PList<ConWordDisplay> {
     public PListLexicon(Font font) {
         super(font);
+    }
+    
+    public Font conFontToolTip() {
+        return this.getFont();
     }
     
     @Override

@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.CustomControls;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Provides alphabetical ordering map- compatible with multi-unicode character,
@@ -102,5 +103,9 @@ public class PAlphaMap<K, V> {
         hash = 59 * hash + this.longestEntry;
         hash = 59 * hash + Objects.hashCode(this.delegate);
         return hash;
+    }
+    
+    public Set<K> keySet() {
+        return delegate.keySet();
     }
 }

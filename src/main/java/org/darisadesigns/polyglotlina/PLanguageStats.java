@@ -273,6 +273,22 @@ public final class PLanguageStats {
 
         ret += charStatBar.getDisplayHTML();
         
+        // build list of conlang characters and the IPA characters they express
+        ret += "<p>" + formatPlain("List of letters to IPA sounds which they can express", core) + "<br>";
+        
+        Map<String, String[]> charsToIpa = core.getPronunciationMgr().getIpaSoundsPerCharacter();
+        for (String key : charsToIpa.keySet()) {
+            ret += "<br>" + formatCon(key, core) + formatPlain(" : ", core); 
+            
+            String[] ipaChars = charsToIpa.get(key);
+            for (int i = 0; i < ipaChars.length; i += 2) {
+                String value = ipaChars[i];
+                ret += formatPlain(value, core) + " ";
+            }
+        }
+        
+        ret += "</p>";
+        
         // build grid of 2 letter combos
         char[] alphaGrid = core.getPropertiesManager().getAlphaPlainText().toCharArray();
         ret += formatPlain("Heat map of letter combination frequency:<br>", core);
