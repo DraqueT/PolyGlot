@@ -57,6 +57,41 @@ public class EtymologyManager {
     }
     
     /**
+     * Checks entire lexicon for illegal loops
+     * @return list of conwords with illegal loops. Empty if none.
+     */
+    public ConWord[] checkAllForIllegalLoops() {
+        List<ConWord> ret = new ArrayList<>();
+        ConWord[] allWords = core.getWordCollection().getWordNodes();
+        
+        for (ConWord curWord : allWords) {
+            if (checkLoopChildren(curWord.getId(), getChildren(curWord.getId()))) {
+                ret.add(curWord);
+            }
+        }
+        
+        return ret.toArray(new ConWord[0]);
+    }
+    
+    /**
+     * Recursively checks for any loops based on a top level parent
+     * @return true if illegal loop(s) present
+     */
+    private boolean checkLoopChildren(int topParentId, Integer[] childrenIds) {
+        boolean ret = false;
+        
+        for (int childId : childrenIds) {
+            if (createsLoop(topParentId, childId) 
+                    || checkLoopChildren(topParentId, getChildren(childId))) {
+                ret = true;
+                break;
+            }
+        }
+        
+        return ret;
+    }
+    
+    /**
      * Adds a parent->child relationship to two words if the relationship does
      * not already exist.
      * @param parent the parent
@@ -64,16 +99,30 @@ public class EtymologyManager {
      * @throws IllegalLoopException if relationship creates looping dependency
      */
     public void addRelation(Integer parent, Integer child) throws IllegalLoopException {
+        addRelation(parent, child, false);
+    }
+    
+    /**
+     * Adds a parent->child relationship to two words if the relationship does
+     * not already exist.
+     * @param parent the parent
+     * @param child the child
+     * @param overrideChecks force overriding of all checks (used primarily for testing)
+     * @throws IllegalLoopException if relationship creates looping dependency
+     */
+    public void addRelation(Integer parent, Integer child, boolean overrideChecks) throws IllegalLoopException {
         ConWordCollection collection = core.getWordCollection();
         
-        if (createsLoop(parent, child)) {
-            throw new IllegalLoopException("Parent/Child relation creates illegal loop."
-                    + " A word may never have itself in its own etymological lineage.");
-        }
-        
-        // fail silently if either doesn't exist        
-        if (!collection.exists(parent) || !collection.exists(child)) {
-            return;
+        if (!overrideChecks) {
+            if (createsLoop(parent, child)) {
+                throw new IllegalLoopException("Parent/Child relation creates illegal loop."
+                        + " A word may never have itself in its own etymological lineage.");
+            }
+
+            // fail silently if either doesn't exist        
+            if (!collection.exists(parent) || !collection.exists(child)) {
+                return;
+            }
         }
 
         if (parentToChild.containsKey(parent)) {
@@ -120,9 +169,9 @@ public class EtymologyManager {
     }
     
     /**
-     * Returns a list of children that a word has
+     * Returns an array of children that a word has
      * @param wordId ID of word to retrieve children of
-     * @return list of integer IDs of child words (empty list if none)
+     * @return list of integer IDs of child words (empty array if none)
      */
     public Integer[] getChildren(Integer wordId) {
         List<Integer> ret;

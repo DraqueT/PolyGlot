@@ -1002,6 +1002,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
             Thread thread = new Thread(){
                 @Override
                 public void run(){
+                    // cycle through each word individually, searching for problems
                     for (ConWord curWord : nodeMap.values()) {
                         String problemString = "";
 
@@ -1056,6 +1057,12 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                         if (display && progress != null) {
                             progress.iterateTask();
                         }
+                    }
+                    
+                    // gather any etymological loops (illegal, as word cannot be its own ancestor) and record them
+                    for (ConWord loopWord : core.getEtymologyManager().checkAllForIllegalLoops()) {
+                        problems.add(new LexiconProblemNode(loopWord, "This word is included in an illegal etymological loop. "
+                                + "Select the word in the lexicon then click the Etymology button to correct."));
                     }
                 }
             };
