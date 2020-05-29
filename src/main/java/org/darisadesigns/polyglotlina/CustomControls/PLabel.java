@@ -26,13 +26,14 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JToolTip;
-import javax.swing.ToolTipManager;
 
 /**
  * Extends Labels with some useful functionality. If resize set to true, ensures
@@ -41,40 +42,34 @@ import javax.swing.ToolTipManager;
  * @author draque.thompson
  */
 public final class PLabel extends JLabel {
-    private Graphics g;
-    private boolean resize = false;
-    ToolTipAction toolTipAction;
-    
-    public void setToolTipAction(ToolTipAction _toolTipAction) {
-        toolTipAction = _toolTipAction;
-    }
-    
-    public interface ToolTipAction<PLabel> {
-        void setupToolTip(PLabel p);
-    }
-
-    @Override
-    public JToolTip createToolTip() {
-        JToolTip ret = super.createToolTip();
-        
-        toolTipAction.setupToolTip(this);
-        
-        return ret;
-    }
     
     public PLabel(String text, double fontSize) {
         super(text);
         setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));
         init();
-        toolTipAction = (Object n) -> {};
-        ToolTipManager[] toolTipManager = this.getListeners(ToolTipManager.class);
-        System.out.print("ZOT");
+        toolTipAction = e -> "";
     }
     
     public PLabel(String text, int alignment, double fontSize) {
         super(text, alignment);
         setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));
         init();
+    }
+
+    public Font getToolTipOverrideFont() {
+        return toolTipOverrideFont;
+    }
+
+    public void setToolTipOverrideFont(Font _toolTipOverrideFont) {
+        this.toolTipOverrideFont = _toolTipOverrideFont;
+    }
+    private Graphics g;
+    private boolean resize = false;
+    private ToolTipAction toolTipAction;
+    private Font toolTipOverrideFont = null;
+    
+    public void setToolTipAction(ToolTipAction _toolTipAction) {
+        toolTipAction = _toolTipAction;
     }
 
     private void init() {
@@ -117,6 +112,32 @@ public final class PLabel extends JLabel {
         size.height = fm.getHeight();
 
         return size;
+    }
+    
+    @Override
+    public JToolTip createToolTip() {
+        JToolTip ret = super.createToolTip();
+        
+        if (toolTipOverrideFont != null) {
+            ret.setFont(toolTipOverrideFont);
+        }
+        
+        return ret;
+    }
+    
+    public interface ToolTipAction<MouseEvent> {
+        String setupToolTip(MouseEvent e);
+    }
+    
+    @Override
+    public String getToolTipText(MouseEvent e) {
+        String ret = toolTipAction.setupToolTip(e);
+        return ret.isBlank() ? null : ret;
+    }
+    
+    @Override
+    public Point getToolTipLocation(MouseEvent e) {
+        return new Point(e.getX() + 10, e.getY());
     }
 
     @Override

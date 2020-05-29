@@ -582,7 +582,7 @@ public final class ScrMainMenu extends PFrame {
         }
 
         core = core.getNewCore();
-        updateAllValues(core);
+        core.refreshMainMenu();
 
         genTitle();
 

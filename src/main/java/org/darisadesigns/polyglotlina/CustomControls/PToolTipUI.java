@@ -38,7 +38,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.ToolTipUI;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.View;
-import org.darisadesigns.polyglotlina.PFontHandler;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  * Custom tooltips. This class grabs hold of incoming ToolTip objects' size
@@ -140,7 +140,9 @@ public class PToolTipUI extends ToolTipUI
         int height = (fontHeight * tipLines.length) + 2;
         int width = this.getWidestStringText(tipLines, metrics) + 10;
         
-        c.setFont(font.deriveFont(font.getSize()));
+        int fontSize = font.getSize();
+        fontSize = fontSize == 0 ? PGTUtil.DEFAULT_FONT_SIZE.intValue() : fontSize;
+        c.setFont(font.deriveFont(fontSize));
         ((JToolTip)c).setTipText(tipText);
         
         

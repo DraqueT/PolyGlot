@@ -251,6 +251,13 @@ public class IPAHandler {
     }
 
     public String playVowelGetChar(int x, int y, IPALibrary ipaLibrary) throws Exception {
+        String ret = getVowelChar(x, y);
+        playChar(ret, ipaLibrary);
+
+        return ret;
+    }
+    
+    public String getVowelChar(int x, int y) {
         String ret = "";
 
         if (y > 67 && y < 102) {
@@ -322,13 +329,18 @@ public class IPAHandler {
                 ret = "ɒ";
             }
         }
-        
-        playChar(ret, ipaLibrary);
 
         return ret;
     }
 
     public String playPulConsGetChar(int x, int y, IPALibrary ipaLibrary) throws Exception {
+        String ret = getPulConsChar(x, y);
+        playChar(ret, ipaLibrary);
+
+        return ret;
+    }
+    
+    public String getPulConsChar(int x, int y) {
         String ret;
         int col = ((x - 182) / 28) + 1;
         int row = ((y - 80) / 29) + 1;
@@ -342,13 +354,18 @@ public class IPAHandler {
                 ret = "";
             }
         }
-        
-        playChar(ret, ipaLibrary);
 
         return ret;
     }
 
     public String playNonPulConsGetChar(int x, int y, IPALibrary ipaLibrary) throws Exception {
+        String ret = getNonPulConsChar(x, y);
+        playChar(ret, ipaLibrary);
+
+        return ret;
+    }
+    
+    public String getNonPulConsChar(int x, int y) {
         String ret = "*";
 
         if (y < 66 || y > 226 || x < 12 || x > 530 || (x > 353 && y > 194)) {
@@ -414,8 +431,6 @@ public class IPAHandler {
             }
         }
 
-        playChar(ret, ipaLibrary);
-
         return ret;
     }
 
@@ -428,6 +443,13 @@ public class IPAHandler {
      * @throws Exception on any playback error, unknown IPA character, unknown IPA sound library
      */
     public String playOtherGetChar(int x, int y, IPALibrary ipaLibrary) throws Exception {
+        String ret = getOtherChar(x, y);
+        playChar(ret, ipaLibrary);
+
+        return ret;
+    }
+    
+    public String getOtherChar(int x, int y) {
         String ret = "*";
 
         // returns blank if in a non-viable position
@@ -500,8 +522,6 @@ public class IPAHandler {
                 }
             }
         }
-
-        playChar(ret, ipaLibrary);
 
         return ret;
     }
