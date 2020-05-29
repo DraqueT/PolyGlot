@@ -29,10 +29,9 @@ import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.IPAHandler;
 import org.darisadesigns.polyglotlina.IPAHandler.IPALibrary;
 import java.awt.Component;
+import java.awt.event.MouseEvent;
 import java.util.Map;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JToolTip;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
@@ -61,12 +60,80 @@ public final class ScrIPARefChart extends PFrame {
      * Sets up tooltips for IPA label displays
      */
     private void setupToolTips() {
-        ((PLabel)lblVowels).setToolTipAction((Object n) -> {
-            if (n instanceof PLabel) {
-                PLabel tip = (PLabel)n;
+        lblVowels.setToolTipText(" ");
+        ((PLabel)lblVowels).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblVowels).setToolTipAction((e) -> {
+            String ret = "";
+            
+            if (e instanceof MouseEvent) {
+                MouseEvent event = (MouseEvent)e;
+                String ipa = handler.getVowelChar(event.getX(), event.getY());
                 
-                tip.setToolTipText("ZOT!");
+                if (ipaToChars.containsKey(ipa)) {
+                    for (String curChar : ipaToChars.get(ipa)) {
+                        ret += curChar + " ";
+                    }
+                }
             }
+                    
+            return ret;
+        });
+        
+        lblNonPulmonicConsonants.setToolTipText(" ");
+        ((PLabel)lblNonPulmonicConsonants).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblNonPulmonicConsonants).setToolTipAction((e) -> {
+            String ret = "";
+            
+            if (e instanceof MouseEvent) {
+                MouseEvent event = (MouseEvent)e;
+                String ipa = handler.getNonPulConsChar(event.getX(), event.getY());
+                
+                if (ipaToChars.containsKey(ipa)) {
+                    for (String curChar : ipaToChars.get(ipa)) {
+                        ret += curChar + " ";
+                    }
+                }
+            }
+                    
+            return ret;
+        });
+        
+        lblOtherSymbols.setToolTipText(" ");
+        ((PLabel)lblOtherSymbols).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblOtherSymbols).setToolTipAction((e) -> {
+            String ret = "";
+            
+            if (e instanceof MouseEvent) {
+                MouseEvent event = (MouseEvent)e;
+                String ipa = handler.getOtherChar(event.getX(), event.getY());
+                
+                if (ipaToChars.containsKey(ipa)) {
+                    for (String curChar : ipaToChars.get(ipa)) {
+                        ret += curChar + " ";
+                    }
+                }
+            }
+                    
+            return ret;
+        });
+        
+        lblPulmonicConsonants.setToolTipText(" ");
+        ((PLabel)lblPulmonicConsonants).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblPulmonicConsonants).setToolTipAction((e) -> {
+            String ret = "";
+            
+            if (e instanceof MouseEvent) {
+                MouseEvent event = (MouseEvent)e;
+                String ipa = handler.getPulConsChar(event.getX(), event.getY());
+                
+                if (ipaToChars.containsKey(ipa)) {
+                    for (String curChar : ipaToChars.get(ipa)) {
+                        ret += curChar + " ";
+                    }
+                }
+            }
+                    
+            return ret;
         });
     }
 
@@ -82,11 +149,11 @@ public final class ScrIPARefChart extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         lblVowels = new PLabel("", 0);
         jPanel2 = new javax.swing.JPanel();
-        lblPulmonicConsonants = new javax.swing.JLabel();
+        lblPulmonicConsonants = new PLabel("",0);
         jPanel3 = new javax.swing.JPanel();
-        lblNonPulmonicConsonants = new javax.swing.JLabel();
+        lblNonPulmonicConsonants = new PLabel("",0);
         jPanel4 = new javax.swing.JPanel();
-        lblOtherSymbols = new javax.swing.JLabel();
+        lblOtherSymbols = new PLabel("",0);
         txtIPAChars = new javax.swing.JTextField();
         cmbIpaLibSelect = new PComboBox<IPALibrary>(core.getPropertiesManager().getFontMenu());
         lblHover = new PLabel("Hover over an IPA character to display which characters in your language express it.", core.getOptionsManager().getMenuFontSize());
@@ -104,7 +171,7 @@ public final class ScrIPARefChart extends PFrame {
         jPanel1.setMaximumSize(new java.awt.Dimension(301, 455));
 
         lblVowels.setIcon(new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_VOWEL_IMAGE)));
-        lblVowels.setToolTipText("test");
+        lblVowels.setToolTipText("");
         lblVowels.setMaximumSize(new java.awt.Dimension(301, 455));
         lblVowels.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -134,6 +201,7 @@ public final class ScrIPARefChart extends PFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         lblPulmonicConsonants.setIcon(new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_PULMONIC_CONSONANT_IMAGE)));
+        lblPulmonicConsonants.setToolTipText("");
         lblPulmonicConsonants.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblPulmonicConsonantsMouseClicked(evt);

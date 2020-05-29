@@ -124,7 +124,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_VOWEL_IMAGE))" type="code"/>
                 </Property>
-                <Property name="toolTipText" type="java.lang.String" value="test"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[301, 455]"/>
                 </Property>
@@ -178,10 +178,14 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new javax.swing.ImageIcon(getClass().getResource(PGTUtil.IPA_PULMONIC_CONSONANT_IMAGE))" type="code"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblPulmonicConsonantsMouseClicked"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;,0)"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -229,6 +233,9 @@
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblNonPulmonicConsonantsMouseClicked"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;,0)"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -276,6 +283,9 @@
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblOtherSymbolsMouseClicked"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;,0)"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
