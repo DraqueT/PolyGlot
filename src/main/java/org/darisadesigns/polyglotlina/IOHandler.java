@@ -105,13 +105,14 @@ public final class IOHandler {
     public static BufferedImage getImage(String filePath) throws IOException {
         return ImageIO.read(new File(filePath));
     }
-    
+
     /**
-     * Creates and returns a temporary file with the contents specified.
-     * File will be deleted on exit of PolyGlot.
+     * Creates and returns a temporary file with the contents specified. File
+     * will be deleted on exit of PolyGlot.
      *
      * @param contents Contents to put in file.
-     * @param extension extension name for tmp file (defaults to tmp if none given)
+     * @param extension extension name for tmp file (defaults to tmp if none
+     * given)
      * @return Temporary file with specified contents
      * @throws IOException on write error
      */
@@ -119,7 +120,7 @@ public final class IOHandler {
         File ret = File.createTempFile("POLYGLOT", extension);
         Files.write(ret.toPath(), contents.getBytes());
         ret.deleteOnExit();
-        
+
         return ret;
     }
 
@@ -183,14 +184,16 @@ public final class IOHandler {
                 ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
                 try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
                     ret = CustHandlerFactory.getCustHandler(ioStream, _core);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     throw new IOException(e.getLocalizedMessage(), e);
                 }
             }
         } else {
             try (InputStream ioStream = new FileInputStream(_fileName)) {
                 ret = CustHandlerFactory.getCustHandler(ioStream, _core);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 throw new IOException(e.getLocalizedMessage(), e);
             }
         }
@@ -210,7 +213,8 @@ public final class IOHandler {
     public static CustHandler getHandlerFromByteArray(byte[] byteArray, DictCore _core) throws IOException {
         try {
             return CustHandlerFactory.getCustHandler(new ByteArrayInputStream(byteArray), _core);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new IOException(e.getLocalizedMessage(), e);
         }
     }
@@ -265,7 +269,8 @@ public final class IOHandler {
 
         try {
             f.delete();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             // can't write to folder, so don't bother trying to write log file...
             // IOHandler.writeErrorLog(e);
             InfoBox.error("Permissions Error", "PolyGlot lacks permissions to write to its native folder.\n"
@@ -275,7 +280,7 @@ public final class IOHandler {
 
     /**
      * Loads all option data from ini file, if none, ignore.One will be created
- on exit.
+     * on exit.
      *
      * @param opMan
      * @param workingDirectory
@@ -484,14 +489,16 @@ public final class IOHandler {
                 DictCore test = new DictCore(PolyGlot.getTestShell());
                 test.readFile(tmpSaveLocation.getAbsolutePath());
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 throw new IOException(ex);
             }
 
             try {
                 copyFile(tmpSaveLocation.toPath(), finalFile.toPath(), true);
                 tmpSaveLocation.delete(); // wipe temp file if successful
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 throw new IOException("Unable to save file: " + e.getMessage(), e);
             }
 
@@ -502,38 +509,40 @@ public final class IOHandler {
             InfoBox.warning("File Save Issues", "Problems encountered when saving file " + _fileName + writeLog, null);
         }
     }
-    
+
     /**
-     * Gets temporary file when saving PolyGlot archive. If temporary file already
-     * exists, backs file up based on current epoch second then creates a new temp
-     * file
+     * Gets temporary file when saving PolyGlot archive. If temporary file
+     * already exists, backs file up based on current epoch second then creates
+     * a new temp file
+     *
      * @param workingDirectory
-     * @return 
+     * @return
      */
     private static File makeTempSaveFile(File workingDirectory) {
         File ret = new File(workingDirectory + File.separator + PGTUtil.TEMP_FILE);
-        
+
         if (ret.exists()) {
             File backupTemp = new File(ret.getAbsolutePath() + Instant.now().getEpochSecond());
             ret.renameTo(backupTemp);
             ret = new File(workingDirectory + File.separator + PGTUtil.TEMP_FILE);
         }
-        
+
         return ret;
     }
-    
+
     /**
      * Gets most recent temporary save file if one exists, null otherwise
+     *
      * @param workingDirectory
-     * @return 
+     * @return
      */
     public static File getTempSaveFileIfExists(File workingDirectory) {
         File ret = new File(workingDirectory + File.separator + PGTUtil.TEMP_FILE);
-        
+
         // search for backed up tmp files (possible due to stranding) if basic does not exist
         if (!ret.exists()) {
             ret = null;
-            
+
             for (File curFile : workingDirectory.listFiles()) {
                 if (curFile.getName().startsWith(PGTUtil.TEMP_FILE)) {
                     ret = curFile;
@@ -541,15 +550,15 @@ public final class IOHandler {
                 }
             }
         }
-        
+
         return ret;
     }
-    
+
     public static void copyFile(Path fromLocation, Path toLocation, boolean replaceExisting) throws IOException {
         StandardCopyOption option = replaceExisting ? StandardCopyOption.REPLACE_EXISTING : StandardCopyOption.ATOMIC_MOVE;
         Files.copy(fromLocation, toLocation, option);
     }
-    
+
     private static String writePriorStatesToArchive(ZipOutputStream out, DictCore core) throws IOException {
         String writeLog = "";
         ReversionNode[] reversionList = core.getReversionManager().getReversionList();
@@ -564,7 +573,8 @@ public final class IOHandler {
                 out.write(node.getValue());
                 out.closeEntry();
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new IOException("Unable to create reversion files.", e);
         }
 
@@ -586,12 +596,14 @@ public final class IOHandler {
                         ImageIO.write(write, "png", out);
 
                         out.closeEntry();
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         writeErrorLog(e);
                         writeLog += "\nUnable to save logograph: " + e.getLocalizedMessage();
                     }
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 writeErrorLog(e);
                 writeLog += "\nUnable to save Logographs: " + e.getLocalizedMessage();
             }
@@ -618,13 +630,15 @@ public final class IOHandler {
                                 + curId + ".raw"));
                         out.write(curSound);
                         out.closeEntry();
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         writeErrorLog(e);
                         writeLog += "\nUnable to save sound: " + e.getLocalizedMessage();
                     }
 
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 writeErrorLog(e);
                 writeLog += "\nUnable to save sounds: " + e.getLocalizedMessage();
             }
@@ -646,12 +660,14 @@ public final class IOHandler {
                         ImageIO.write(curNode.getImage(), "png", out);
 
                         out.closeEntry();
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         writeErrorLog(e);
                         writeLog += "\nUnable to save image: " + e.getLocalizedMessage();
                     }
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 writeErrorLog(e);
                 writeLog += "\nUnable to save Images: " + e.getLocalizedMessage();
             }
@@ -839,10 +855,12 @@ public final class IOHandler {
 
                     try (InputStream soundStream = zipFile.getInputStream(soundEntry)) {
                         sound = streamToByetArray(soundStream);
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         writeErrorLog(e);
                         loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                         writeErrorLog(e);
                         loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
                     }
@@ -895,10 +913,10 @@ public final class IOHandler {
             nextLine = PGTUtil.OPTIONS_LAST_FILES + "=";
             int lastFileCount = 0;
             for (String file : opMan.getLastFiles()) {
-                if(lastFileCount > PGTUtil.OPTIONS_NUM_LAST_FILES) {
+                if (lastFileCount > PGTUtil.OPTIONS_NUM_LAST_FILES) {
                     break;
                 }
-                
+
                 lastFileCount++;
                 // only write to ini if 1) the max file path length is not absurd/garbage, and 2) the file exists
                 if (file.length() < PGTUtil.MAX_FILE_PATH_LENGTH && new File(file).exists()) {
@@ -964,7 +982,8 @@ public final class IOHandler {
         try {
             File file = new File(path);
             Desktop.getDesktop().open(file);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             // internal logic based on thrown exception due to specific use case. No logging required.
             // IOHandler.writeErrorLog(e);
             ret = false;
@@ -990,7 +1009,7 @@ public final class IOHandler {
             }
         }
 
-        if (ret  != null && !ret.exists()) {
+        if (ret != null && !ret.exists()) {
             ret = null;
         }
 
@@ -1034,7 +1053,7 @@ public final class IOHandler {
             errorMessage = comment + ":\n" + errorMessage;
         }
 
-        File errorLog = new File(PGTUtil.getErrorDirectory().getAbsolutePath() 
+        File errorLog = new File(PGTUtil.getErrorDirectory().getAbsolutePath()
                 + File.separator + PGTUtil.ERROR_LOG_FILE);
 
         try {
@@ -1049,25 +1068,26 @@ public final class IOHandler {
                     }
                 }
             }
-        
+
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(errorLog))) {
                 String output = getSystemInformation() + "\n" + curContents + errorMessage + "\n";
 //                System.out.println("Writing error to: " + errorLog.getAbsolutePath());
                 writer.write(output);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             // Fail silently. This fails almost exclusively due to being run in write protected folder, caught elsewhere
             // do not log to written file for obvious reasons (causes further write failure)
             // WHY DO PEOPLE INSTALL THIS TO WRITE PROTECTED FOLDERS AND SYSTEM32. WHY.
             // IOHandler.writeErrorLog(e);
         }
     }
-    
+
     public static File getErrorLogFile() {
-        return new File(PGTUtil.getErrorDirectory().getAbsolutePath() 
+        return new File(PGTUtil.getErrorDirectory().getAbsolutePath()
                 + File.separator + PGTUtil.ERROR_LOG_FILE);
     }
-    
+
     public static String getErrorLog() throws FileNotFoundException {
         String ret = "";
         File errorLog = getErrorLogFile();
@@ -1111,12 +1131,12 @@ public final class IOHandler {
         return ret;
     }
 
-    public static File unzipResourceToTempLocation(String resourceLocation)throws IOException {
+    public static File unzipResourceToTempLocation(String resourceLocation) throws IOException {
         Path tmpPath = Files.createTempDirectory(PGTUtil.DISPLAY_NAME);
         unzipResourceToDir(resourceLocation, tmpPath);
         return tmpPath.toFile();
     }
-    
+
     /**
      * Unzips an internal resource to a targeted path.Does not check header.
      *
@@ -1134,9 +1154,9 @@ public final class IOHandler {
                     extractTo.mkdir();
                 } else {
                     try (FileOutputStream out = new FileOutputStream(extractTo)) {
-                        int  nRead;
+                        int nRead;
                         byte[] data = new byte[16384];
-                        
+
                         while ((nRead = zin.read(data, 0, data.length)) != -1) {
                             out.write(data, 0, nRead);
                         }
@@ -1150,14 +1170,14 @@ public final class IOHandler {
      * Runs a command at the console, returning informational and error output.
      *
      * @param arguments command to run as [0], with arguments following
-     * @param addSpaces whether blank string argument values should be changed to a single space
-     * (some OSes will simply ignore arguments that are empty)
+     * @param addSpaces whether blank string argument values should be changed
+     * to a single space (some OSes will simply ignore arguments that are empty)
      * @return String array with two entries. [0] = Output, [1] = Error Output
      */
     public static String[] runAtConsole(String[] arguments, boolean addSpaces) {
         String output = "";
         String error = "";
-        
+
         for (int i = 0; i < arguments.length; i++) {
             if (arguments[i].isEmpty()) {
                 arguments[i] = " ";
@@ -1175,12 +1195,13 @@ public final class IOHandler {
                 while ((line = reader.readLine()) != null) {
                     output += line;
                 }
-                
+
                 while ((line = errorReader.readLine()) != null) {
                     error += line;
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             error = e.getLocalizedMessage();
         }
 
@@ -1195,10 +1216,18 @@ public final class IOHandler {
     public static String getTerminalJavaVersion() {
         String ret = "";
         String[] command = {PGTUtil.JAVA8_JAVA_COMMAND, PGTUtil.JAVA8_VERSION_ARG};
-            String[] result = runAtConsole(command, false);
+        String[] result = runAtConsole(command, false);
 
-        if (result[1].isEmpty()) {
-            ret = result[0];
+        if (result.length > 1) {
+            // gotta check for version with both the earlier and the later version arguments here
+            if (result[0].isEmpty() && result[1].isEmpty()) {
+                command = new String[]{PGTUtil.JAVA8_JAVA_COMMAND, PGTUtil.JAVA9P_VERSION_ARG};
+                result = runAtConsole(command, false);
+            }
+
+            if (result[1].isEmpty()) {
+                ret = result[0];
+            }
         }
 
         return ret;
@@ -1212,26 +1241,27 @@ public final class IOHandler {
     public static boolean isJavaAvailableInTerminal() {
         return !getTerminalJavaVersion().isEmpty();
     }
-    
+
     /**
      * Does what it says on the tin.Clear those carriage returns away.
-     * 
-     * @param filthyWithWindows 
-     * @return  
+     *
+     * @param filthyWithWindows
+     * @return
      */
     public static byte[] clearCarrigeReturns(byte[] filthyWithWindows) {
         byte[] ret = new byte[filthyWithWindows.length];
         int cleanCount = 0;
-        
+
         for (byte test : filthyWithWindows) {
             if (test != 13) {
                 ret[cleanCount] = test;
                 cleanCount++;
             }
         }
-        
+
         return Arrays.copyOfRange(ret, 0, cleanCount);
     }
 
-    private IOHandler() {}
+    private IOHandler() {
+    }
 }

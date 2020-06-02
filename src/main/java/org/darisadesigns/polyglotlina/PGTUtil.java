@@ -250,7 +250,8 @@ public final class PGTUtil {
     // Java 8 bridge constants
     public static final String JAVA8_JAVA_COMMAND = "java";
     public static final String JAVA8_JAR_ARG = "-jar";
-    public static final String JAVA8_VERSION_ARG = "--version";
+    public static final String JAVA8_VERSION_ARG = "-version";
+    public static final String JAVA9P_VERSION_ARG = "--version";
     public static final String JAVA8_BRIDGERESOURCE = "/assets/org/DarisaDesigns/java_8_bridge.zip";
     public static final String JAVA8_JAR = "PolyGlot_J8_Bridge.jar";
     public static final String JAVA8_JAR_FOLDER = "dist";
