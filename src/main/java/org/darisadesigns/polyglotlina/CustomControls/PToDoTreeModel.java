@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.Nodes.ToDoNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 /**
@@ -41,5 +42,19 @@ public class PToDoTreeModel extends DefaultTreeModel {
             treeNode.initialPopulateAdd(child);
             populateTree(child);
         }
+    }
+    
+    @Override
+    public void removeNodeFromParent(MutableTreeNode node) {
+        if (node instanceof ToDoTreeNode) {
+            ToDoTreeNode toNode = (ToDoTreeNode)node;
+            Object userObject = toNode.getUserObject();
+            if (userObject instanceof ToDoNode) {
+                ToDoNode userNode = (ToDoNode) userObject;
+                userNode.deleteFromParent();
+            }
+        }
+        
+        super.removeNodeFromParent(node);
     }
 }

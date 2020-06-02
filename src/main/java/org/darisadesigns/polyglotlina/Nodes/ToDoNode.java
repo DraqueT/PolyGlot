@@ -85,8 +85,17 @@ public class ToDoNode {
      * Deletes child from list if it is present
      * @param delNode 
      */
-    protected void deleteChild(ToDoNode delNode) {
+    public void deleteChild(ToDoNode delNode) {
         children.remove(delNode);
+    }
+    
+    /**
+     * Deletes this node from its parent
+     */
+    public void deleteFromParent() {
+        if (parentNode != null) {
+            parentNode.deleteChild(this);
+        }
     }
     
     /**
