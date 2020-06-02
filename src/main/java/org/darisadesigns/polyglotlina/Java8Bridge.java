@@ -59,6 +59,8 @@ public final class Java8Bridge {
             boolean printAllConjugations,
             DictCore core) throws IOException {
         
+        errorIfJavaUnavailableInTerminal();
+        
         File bridge = PGTUtil.getJava8BridgeLocation();
         File tmpLangFile = createTmpLangFile(core);
         File tmpFontFile = File.createTempFile("PolyGlotFont", ".ttf", core.getWorkingDirectory());
@@ -133,6 +135,9 @@ public final class Java8Bridge {
      */
     public static File excelToCvs(String excelFile, int sheetNumber)
             throws IOException {
+        
+        errorIfJavaUnavailableInTerminal();
+        
         File bridge = PGTUtil.getJava8BridgeLocation();
         File tmpTarget = File.createTempFile("PolyGlotTmp", ".csv");
         
@@ -166,9 +171,8 @@ public final class Java8Bridge {
      */
     public static void exportExcelDict(String fileName, DictCore core,
             boolean separateDeclensions) throws IOException {
-        if (!IOHandler.isJavaAvailableInTerminal()) {
-            throw new IOException("The Java runtime is required for this feature.\nPlease install from: www.java.com");
-        }
+        
+        errorIfJavaUnavailableInTerminal();
         
         File bridge = PGTUtil.getJava8BridgeLocation();
         File tmpLangFile = createTmpLangFile(core);
@@ -216,6 +220,16 @@ public final class Java8Bridge {
         }
         
         return ret;
+    }
+    
+    /**
+     * Throws error if no Java available in terminal.
+     * @throws IOException 
+     */
+    private static void errorIfJavaUnavailableInTerminal() throws IOException {
+        if (!IOHandler.isJavaAvailableInTerminal()) {
+            throw new IOException("The Java runtime is required for this feature.\nPlease install from: www.java.com");
+        }
     }
 
     private Java8Bridge() {}
