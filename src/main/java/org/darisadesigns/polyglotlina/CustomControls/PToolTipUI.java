@@ -149,7 +149,6 @@ public class PToolTipUI extends ToolTipUI
         Dimension size = new Dimension(width, height);
         
         c.setSize(size);
-        c.getParent().setPreferredSize(size);
         c.getParent().setSize(size);
         
         Insets insets = c.getInsets();
