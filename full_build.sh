@@ -14,6 +14,9 @@ CONST_LINUX="lin"
 CONST_LINUX_VIRTUAL="PolyGlotBuildUbuntu"
 CONST_OSX="osx"
 
+# ensure java home properly defined
+source ~/.bash_profile
+
 # if a build step is specified, capture it here (can only specify build step per platform)
 if [ "$2" != "" ]; then
     BUILD_STEP="$2"
@@ -160,12 +163,12 @@ echo "Java lines built: $LINECOUNT"
 
 # Announce any build failures...
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Windows_BUILD_FAILED" ] &&  [ $WIN_BUILD_TIME != 0 ]; then
-    echo -e "\e[41mWindows build failed.\e[0m"
+    echo -e "\x1B[41mWindows build failed.\x1B[0m"
 fi
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Linux_BUILD_FAILED" ] && [ $LIN_BUILD_TIME != 0 ]; then
-    echo -e "\e[41mLinux build failed.\e[0m"
+    echo -e "\x1B[41mLinux build failed.\x1B[0m"
 fi
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Darwin_BUILD_FAILED" ] && [ $OSX_BUILD_TIME != 0 ]; then
-    echo -e "\e[41mOSX build failed.\e[0m"
+    echo -e "\x1B[41mOSX build failed.\x1B[0m"
 fi
 echo "Full build process complete!"

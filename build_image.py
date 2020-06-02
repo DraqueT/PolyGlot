@@ -11,16 +11,16 @@
 ##############################################################################
 
 import datetime
+from datetime import date
 import distutils.spawn
-import platform
 import os
+from os import path
+import platform
 import shutil
 import sys
 import time
 import uuid
-from os import path
 from xml.dom import minidom
-from datetime import date
 
 buildResult = ''
 copyDestination = ''
@@ -126,10 +126,6 @@ def main(args):
         del args[command_index]
     else:
         print('BETA BUILD')
-    
-    if not JAVA_HOME is not None:
-        print('JAVA_HOME must be set. If necessary, use -java-home-o command to override')
-        return
         
     if '-copyDestination' in args:
         command_index = args.index('-copyDestination')
@@ -143,6 +139,10 @@ def main(args):
         # remove args after consuming
         del args[command_index + 1]
         del args[command_index]
+
+    if not JAVA_HOME is not None:
+        print('JAVA_HOME must be set. If necessary, use -java-home-o command to override')
+        return
 
     fullBuild = (len(args) == 1) # length of 1 means no arguments (full build)
     POLYGLOT_VERSION = getVersion()
