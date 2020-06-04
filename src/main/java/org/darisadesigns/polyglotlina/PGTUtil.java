@@ -316,6 +316,7 @@ public final class PGTUtil {
 
     // web locations
     public static final String UPDATE_FILE_URL = "https://drive.google.com/uc?export=download&id=0B2RMQ7sRXResN3VwLTAwTFE0ZlE";
+    public static final String HELP_FILE_URL = "http://draquet.github.io/PolyGlot/readme.html";
 
     // numeric constants...
     public static final Integer NUM_MENU_FLASHES = 4;

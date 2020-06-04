@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,6 +19,8 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import java.awt.Desktop;
+import java.io.File;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +28,8 @@ import java.io.StringReader;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.jsoup.Jsoup;
 
 /**
@@ -205,6 +210,36 @@ public final class WebInterface {
         }
         
         return ret;
+    }
+    
+    /**
+     * Tell the OS to open a browser and go to a given web address.(distinct behavior in Linux due to lack of certain features)
+     * @param url
+     * @throws java.io.IOException 
+     */
+    public static void browseToLocation(String url) throws IOException {
+        if (PGTUtil.IS_WINDOWS) {
+            try {
+                URI help = new URI(url);
+                Desktop.getDesktop().browse(help);
+            }
+            catch (URISyntaxException e) {
+                IOHandler.writeErrorLog(e);
+                InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
+                    + url + "\n(copied to your clipboard for convenience)", null);
+                new ClipboardHandler().setClipboardContents(url);
+            }
+        } else if (PGTUtil.IS_OSX) {
+            Runtime runtime = Runtime.getRuntime();
+            runtime.exec("open " + url);
+        } else if (PGTUtil.IS_LINUX) {
+            Runtime runtime = Runtime.getRuntime();
+            runtime.exec("xdg-open " + url);
+        } else {
+            InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
+                    + url + "\n(copied to your clipboard for convenience)", null);
+            new ClipboardHandler().setClipboardContents(url);
+        }
     }
 
     private WebInterface() {}
