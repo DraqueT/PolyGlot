@@ -81,6 +81,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.Java8Bridge;
 import org.darisadesigns.polyglotlina.WebInterface;
 
@@ -989,110 +990,122 @@ public final class ScrMainMenu extends PFrame {
 
     private void setupButtonPopouts() {
         // not all buttons support this feature, but those that don't should still display it in grey
-        setupButtonPopout((PButton) btnLexicon, () -> {
+        setupDropdownMenu((PButton) btnLexicon, () -> {
             return null;
-        }, false);
-        setupButtonPopout((PButton) btnPos, () -> {
+        }, HelpHandler.LEXICON_HELP, false);
+        setupDropdownMenu((PButton) btnPos, () -> {
             return ScrTypes.run(core);
-        }, true);
-        setupButtonPopout((PButton) btnClasses, () -> {
+        }, HelpHandler.PARTSOFSPEECH_HELP, true);
+        setupDropdownMenu((PButton) btnClasses, () -> {
             return new ScrWordClasses(core);
-        }, true);
-        setupButtonPopout((PButton) btnGrammar, () -> {
+        }, HelpHandler.LEXICALCLASSES_HELP, true);
+        setupDropdownMenu((PButton) btnGrammar, () -> {
             return new ScrGrammarGuide(core);
-        }, true);
-        setupButtonPopout((PButton) btnLogos, () -> {
+        }, HelpHandler.GRAMMAR_HELP, true);
+        setupDropdownMenu((PButton) btnLogos, () -> {
             return new ScrLogoDetails(core);
-        }, true);
-        setupButtonPopout((PButton) btnPhonology, () -> {
+        }, HelpHandler.LOGOGRAPHS_HELP, true);
+        setupDropdownMenu((PButton) btnPhonology, () -> {
             return new ScrPhonology(core);
-        }, true);
-        setupButtonPopout((PButton) btnProp, () -> {
+        }, HelpHandler.PHONOLOGY_HELP, true);
+        setupDropdownMenu((PButton) btnProp, () -> {
             return new ScrLangProps(core);
-        }, true);
-        setupButtonPopout((PButton) btnQuiz, () -> {
+        }, HelpHandler.LANGPROPERTIES_HELP, true);
+        setupDropdownMenu((PButton) btnQuiz, () -> {
             return null;
-        }, false);
+        }, HelpHandler.QUIZGENERATOR_HELP, false);
     }
 
     /**
      *
      * @param button
      * @param setNewWindow
+     * @param helpLocation
      * @param _enable
      */
-    private void setupButtonPopout(final PButton button, Supplier<Window> setNewWindow, boolean _enable) {
+    private void setupDropdownMenu(final PButton button, 
+            Supplier<Window> setNewWindow, 
+            String helpLocation, 
+            boolean _enable) {
         final JPopupMenu buttonMenu = new JPopupMenu();
         final JMenuItem popOut = new JMenuItem("Pop Window Out");
+        final JMenuItem help = new JMenuItem("Open Relevant Help Section");
         final boolean enable = _enable;
 
         if (enable) {
-            button.setToolTipText(button.getToolTipText() + "\n(right click to pop window out)");
+            button.setToolTipText(button.getToolTipText() + "\n(right click to pop window out or for help)");
             popOut.setToolTipText("Pops " + button.getText() + " into independent window.");
         } else {
             popOut.setToolTipText(button.getText() + " cannot be popped out.");
         }
+        
+        help.setToolTipText("Open readme to relevant section.");
 
-        popOut.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Window w = setNewWindow.get();
-                button.setEnabled(false);
-                w.addWindowListener(new WindowListener() {
+        popOut.addActionListener((ActionEvent e) -> {
+            Window w = setNewWindow.get();
+            button.setEnabled(false);
+            w.addWindowListener(new WindowListener() {
+                @Override
+                public void windowOpened(WindowEvent ex) {
+                }
+                
+                @Override
+                public void windowClosing(WindowEvent ex) {
+                }
+                
+                @Override
+                public void windowClosed(WindowEvent ex) {
+                    childWindows.remove(w);
+                    button.setEnabled(true);
+                }
+                
+                @Override
+                public void windowIconified(WindowEvent ex) {
+                }
+                
+                @Override
+                public void windowDeiconified(WindowEvent ex) {
+                }
+                
+                @Override
+                public void windowActivated(WindowEvent ex) {
+                }
+                
+                @Override
+                public void windowDeactivated(WindowEvent ex) {
+                }
+            });
+            
+            if (w instanceof PFrame) {
+                ((PFrame) w).addWindowFocusListener(new WindowFocusListener() {
                     @Override
-                    public void windowOpened(WindowEvent ex) {
+                    public void windowGainedFocus(WindowEvent e) {
+                        
                     }
-
+                    
                     @Override
-                    public void windowClosing(WindowEvent ex) {
-                    }
-
-                    @Override
-                    public void windowClosed(WindowEvent ex) {
-                        childWindows.remove(w);
-                        button.setEnabled(true);
-                    }
-
-                    @Override
-                    public void windowIconified(WindowEvent ex) {
-                    }
-
-                    @Override
-                    public void windowDeiconified(WindowEvent ex) {
-                    }
-
-                    @Override
-                    public void windowActivated(WindowEvent ex) {
-                    }
-
-                    @Override
-                    public void windowDeactivated(WindowEvent ex) {
+                    public void windowLostFocus(WindowEvent e) {
+                        ((PFrame) w).saveAllValues();
                     }
                 });
-
-                if (w instanceof PFrame) {
-                    ((PFrame) w).addWindowFocusListener(new WindowFocusListener() {
-                        public void windowGainedFocus(WindowEvent e) {
-
-                        }
-
-                        public void windowLostFocus(WindowEvent e) {
-                            ((PFrame) w).saveAllValues();
-                        }
-                    });
-                }
-
-                w.setVisible(true);
-                w.toFront();
-                childWindows.add(w);
-
-                if (button.isActiveSelected()) {
-                    selectFirstAvailableButton();
-                }
+            }
+            
+            w.setVisible(true);
+            w.toFront();
+            childWindows.add(w);
+            
+            if (button.isActiveSelected()) {
+                selectFirstAvailableButton();
             }
         });
 
         buttonMenu.add(popOut);
+        
+        help.addActionListener((ActionEvent e) -> {
+            HelpHandler.openHelpToLocation(helpLocation);
+        });
+        
+        buttonMenu.add(help);
 
         button.addMouseListener(new MouseListener() {
             @Override
