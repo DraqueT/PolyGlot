@@ -1185,7 +1185,8 @@ public final class IOHandler {
         }
 
         try {
-            Process p = new ProcessBuilder(arguments).start();
+            Process p = Runtime.getRuntime().exec(arguments);
+            //Process p = new ProcessBuilder(arguments).start();
 //            System.out.println(Arrays.toString(arguments));
 
             // get general output
@@ -1217,17 +1218,23 @@ public final class IOHandler {
         String ret = "";
         String[] command = {PGTUtil.JAVA8_JAVA_COMMAND, PGTUtil.JAVA8_VERSION_ARG};
         String[] result = runAtConsole(command, false);
-
-        if (result.length > 1) {
-            // gotta check for version with both the earlier and the later version arguments here
-            if (result[0].isEmpty() && result[1].isEmpty()) {
-                command = new String[]{PGTUtil.JAVA8_JAVA_COMMAND, PGTUtil.JAVA9P_VERSION_ARG};
-                result = runAtConsole(command, false);
-            }
-
-            if (result[1].isEmpty()) {
-                ret = result[0];
-            }
+        
+        // gotta check for version with both the earlier and the later version arguments here
+        if (result[0].isEmpty() && result[1].isEmpty()) {
+            command = new String[]{PGTUtil.JAVA8_JAVA_COMMAND, PGTUtil.JAVA9P_VERSION_ARG};
+            result = runAtConsole(command, false);
+        }
+        
+        // if both the result and the error are STILL empty, then it is a non-reporting version of J8
+        if (!result[0].isEmpty() && result[1].isEmpty()) {
+            ret = result[0];
+        } else if (result[0].isEmpty() && result[1].isEmpty()) {
+            ret = "Java 1.8";
+        }
+        
+        // if there's an error, then Java could not be run at all. Return a blank string
+        if (!result[1].isEmpty()) {
+            ret = "";
         }
 
         return ret;
