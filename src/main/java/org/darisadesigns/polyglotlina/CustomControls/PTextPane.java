@@ -71,7 +71,10 @@ public final class PTextPane extends JTextPane {
         this.setEditorKit(new PHTMLEditorKit());
     }
     
-    private void setFontFromCore() {
+    /**
+     * Sets/updates font from the core
+     */
+    public void setFontFromCore() {
         if (overrideFont) {
             setFont(core.getPropertiesManager().getFontLocal()
                     .deriveFont((float)core.getOptionsManager().getMenuFontSize()));
@@ -258,6 +261,7 @@ public final class PTextPane extends JTextPane {
     
     public void setCore(DictCore _core) {
         core = _core;
+        setFontFromCore();
     }
 
     /**
