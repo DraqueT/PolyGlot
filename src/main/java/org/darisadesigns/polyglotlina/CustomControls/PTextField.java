@@ -61,7 +61,7 @@ public final class PTextField extends JTextField {
     private EventListenerList tmpListenerList = null;
     private Integer contentId = -1;
     private Object associatedObject = null;
-
+    
     /**
      * Init for PDialogs
      *
