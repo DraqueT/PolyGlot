@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson
+ * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -24,7 +24,6 @@ import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
-import org.darisadesigns.polyglotlina.PGTUtil;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 

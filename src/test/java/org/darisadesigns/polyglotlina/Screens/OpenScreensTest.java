@@ -489,7 +489,6 @@ public class OpenScreensTest {
             ScrQuizScreen s = new ScrQuizScreen(testQuiz, core);
             s.dispose();
         } catch (Exception e) {
-            e.printStackTrace();
             fail(e);
         }
         

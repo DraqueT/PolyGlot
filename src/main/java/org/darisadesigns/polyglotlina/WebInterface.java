@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina;
 
 import java.awt.Desktop;
-import java.io.File;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import java.io.IOException;
 import java.io.InputStream;

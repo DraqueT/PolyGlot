@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, DThompson
+ * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -31,11 +31,6 @@ import javax.swing.text.BadLocationException;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.CustomControls.PGrammarPane;
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.FormattedTextHelper;
-import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.PFontInfo;
-import org.darisadesigns.polyglotlina.PGTUtil;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 

@@ -56,7 +56,6 @@ import java.util.concurrent.CountDownLatch;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.JFXPanel;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -434,11 +433,9 @@ public class ScrLogoDetails extends PFrame {
      * @param field field to add listener to
      */
     private void addFilterListeners(final Control field) {
-        field.setOnKeyPressed(new EventHandler<javafx.scene.input.KeyEvent>() {
-            public void handle(javafx.scene.input.KeyEvent ke) {
-                if (ke.getCode() == KeyCode.ENTER) {
-                    runFilter();
-                }
+        field.setOnKeyPressed((javafx.scene.input.KeyEvent ke) -> {
+            if (ke.getCode() == KeyCode.ENTER) {
+                runFilter();
             }
         });
     }

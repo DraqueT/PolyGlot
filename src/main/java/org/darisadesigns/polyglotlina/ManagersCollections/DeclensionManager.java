@@ -259,7 +259,7 @@ public class DeclensionManager {
      * @return list of rules
      */
     public DeclensionGenRule[] getDeclensionRulesForDeclension(int typeId, String combinedId) {
-        List<DeclensionGenRule> ret = new ArrayList<DeclensionGenRule>();
+        List<DeclensionGenRule> ret = new ArrayList<>();
         
         for (DeclensionGenRule curRule : getDeclensionRulesForType(typeId)) {
             if (curRule.getCombinationId().equals(combinedId)) {
@@ -1299,7 +1299,7 @@ public class DeclensionManager {
      * @param ruleBlock 
      */
     public void moveRulesUp(int typeId, String combId, List<DeclensionGenRule> ruleBlock) {
-        if (ruleBlock.size() == 0) {
+        if (ruleBlock.isEmpty()) {
             return;
         }
         
@@ -1344,7 +1344,7 @@ public class DeclensionManager {
      * @param ruleBlock 
      */
     public void moveRulesDown(int typeId, String combId, List<DeclensionGenRule> ruleBlock) {
-        if (ruleBlock.size() == 0) {
+        if (ruleBlock.isEmpty()) {
             return;
         }
         

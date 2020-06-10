@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 - 2019, draque thompson
+ * Copyright (c) 2015 - 2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -28,47 +28,91 @@ import javax.swing.JButton;
 
 /**
  * This class overrides the button class in Java to create better graphical
- * representations of commonly used things. Also lets all iconography to be 
+ * representations of commonly used things. Also lets all iconography to be
  * changed easily and in one place.
+ *
  * @author draque
  */
 public class PAddRemoveButton extends JButton {
+
     @Override
-    public final void setText(String text){super.setText(text);}
+    public final void setText(String text) {
+        super.setText(text);
+    }
+
     @Override
-    public final void setBorder(Border border){super.setBorder(border);}
-    @Override public final void setBorderPainted(boolean paint) {super.setBorderPainted(paint);}
+    public final void setBorder(Border border) {
+        super.setBorder(border);
+    }
+
     @Override
-    public final void setCursor(Cursor cursor) {super.setCursor(cursor);}
+    public final void setBorderPainted(boolean paint) {
+        super.setBorderPainted(paint);
+    }
+
     @Override
-    public final void setFocusPainted(boolean paint) {super.setFocusPainted(paint);}
+    public final void setCursor(Cursor cursor) {
+        super.setCursor(cursor);
+    }
+
     @Override
-    public final void setFocusTraversalKeysEnabled(boolean enable) {super.setFocusTraversalKeysEnabled(enable);}
+    public final void setFocusPainted(boolean paint) {
+        super.setFocusPainted(paint);
+    }
+
     @Override
-    public final void setMaximumSize(Dimension dim) {super.setMaximumSize(dim);}
+    public final void setFocusTraversalKeysEnabled(boolean enable) {
+        super.setFocusTraversalKeysEnabled(enable);
+    }
+
     @Override
-    public final void setFocusable(boolean focus) {super.setFocusable(focus);}
+    public final void setMaximumSize(Dimension dim) {
+        super.setMaximumSize(dim);
+    }
+
     @Override
-    public final void setMinimumSize(Dimension dim) {super.setMinimumSize(dim);}
+    public final void setFocusable(boolean focus) {
+        super.setFocusable(focus);
+    }
+
     @Override
-    public final void setPreferredSize(Dimension dim) {super.setPreferredSize(dim);}
+    public final void setMinimumSize(Dimension dim) {
+        super.setMinimumSize(dim);
+    }
+
     @Override
-    public final void setRequestFocusEnabled(boolean enabled) {super.setRequestFocusEnabled(enabled);}
+    public final void setPreferredSize(Dimension dim) {
+        super.setPreferredSize(dim);
+    }
+
     @Override
-    public final void setContentAreaFilled(boolean filled) {super.setContentAreaFilled(filled);}
+    public final void setRequestFocusEnabled(boolean enabled) {
+        super.setRequestFocusEnabled(enabled);
+    }
+
     @Override
-    public final void setIcon(Icon icon) {super.setIcon(icon);}
+    public final void setContentAreaFilled(boolean filled) {
+        super.setContentAreaFilled(filled);
+    }
+
     @Override
-    public final void setPressedIcon(Icon icon) {super.setPressedIcon(icon);}
-            
+    public final void setIcon(Icon icon) {
+        super.setIcon(icon);
+    }
+
+    @Override
+    public final void setPressedIcon(Icon icon) {
+        super.setPressedIcon(icon);
+    }
+
     @Override
     public String getText() {
         return "";
     }
-    
-    public PAddRemoveButton(String arg) {        
+
+    public PAddRemoveButton(String arg) {
         super();
-        
+
         setText("");
         setBorder(null);
         setBorderPainted(false);
@@ -81,17 +125,17 @@ public class PAddRemoveButton extends JButton {
         setPreferredSize(new Dimension(40, 29));
         setRequestFocusEnabled(false);
         setContentAreaFilled(false);
-        
+
         switch (arg) {
             case "-":
                 setIcon(PGTUtil.DEL_BUTTON_ICON);
                 setPressedIcon(PGTUtil.DEL_BUTTON_ICON_PRESSED);
                 break;
             case "+":
-                setIcon(PGTUtil.ADD_BUTTON_ICON); 
+                setIcon(PGTUtil.ADD_BUTTON_ICON);
                 setPressedIcon(PGTUtil.ADD_BUTTON_ICON_PRESSED);
                 break;
         }
         setText(arg);
-    }    
+    }
 }

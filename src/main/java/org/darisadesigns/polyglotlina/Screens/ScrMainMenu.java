@@ -44,7 +44,6 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
@@ -190,25 +189,21 @@ public final class ScrMainMenu extends PFrame {
 
         JMenuItem customImport = new JMenuItem("Load Custom Swadesh");
         customImport.setToolTipText("Loads words from custom Swadesh list into your lexicon.");
-        customImport.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser chooser = new JFileChooser();
-                chooser.setMultiSelectionEnabled(false);
-                chooser.setDialogTitle("Select line delimited Swadesh list.");
-
-                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    File file = chooser.getSelectedFile();
-                    try ( InputStream is = new FileInputStream(file);  BufferedInputStream bs = new BufferedInputStream(is)) {
-                        finalCore.getWordCollection().loadSwadesh(bs, true);
-                        updateAllValues(finalCore);
-                    } catch (Exception ex) {
-                        InfoBox.error("Swadesh Load Error",
-                                "Could not load selected Swadesh List. Please make certain it is formatted correctly (newline separated)", null);
-                        IOHandler.writeErrorLog(ex, "Swadesh load error");
-                    }
+        customImport.addActionListener((ActionEvent e) -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setMultiSelectionEnabled(false);
+            chooser.setDialogTitle("Select line delimited Swadesh list.");
+            
+            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                File file = chooser.getSelectedFile();
+                try ( InputStream is = new FileInputStream(file);  BufferedInputStream bs = new BufferedInputStream(is)) {
+                    finalCore.getWordCollection().loadSwadesh(bs, true);
+                    updateAllValues(finalCore);
+                } catch (Exception ex) {
+                    InfoBox.error("Swadesh Load Error",
+                            "Could not load selected Swadesh List. Please make certain it is formatted correctly (newline separated)", null);
+                    IOHandler.writeErrorLog(ex, "Swadesh load error");
                 }
-
             }
         });
 
@@ -732,7 +727,7 @@ public final class ScrMainMenu extends PFrame {
      */
     public void exportFont(boolean exportCharis) {
         JFileChooser chooser = new JFileChooser();
-        String fileName = core.getCurFileName().replaceAll(".pgd", ".ttf");;
+        String fileName = core.getCurFileName().replaceAll(".pgd", ".ttf");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf");
 
         chooser.setDialogTitle("Export Font");
@@ -1245,6 +1240,7 @@ public final class ScrMainMenu extends PFrame {
         }
     }
     
+    @Override
     public DictCore getCore() {
         return core;
     }
