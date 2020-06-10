@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import java.awt.Window;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;

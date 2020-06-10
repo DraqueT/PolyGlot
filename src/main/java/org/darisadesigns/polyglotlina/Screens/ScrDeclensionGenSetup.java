@@ -66,10 +66,12 @@ public final class ScrDeclensionGenSetup extends PDialog {
     
     private void setupListeners() {
         this.addWindowFocusListener(new WindowFocusListener() {
+            @Override
             public void windowGainedFocus(WindowEvent e) {
                 // do nothing
             }
 
+            @Override
             public void windowLostFocus(WindowEvent e) {
                 if (curDialog instanceof ScrDeclensionGenClassic) {
                     ((ScrDeclensionGenClassic)curDialog).saveVolatileValues();
@@ -87,28 +89,25 @@ public final class ScrDeclensionGenSetup extends PDialog {
         bGroup.add(rdoSimplified);
 
         final PDialog parent = this;
-        ActionListener clicked = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                boolean simplifiedSelected = rdoSimplified.isSelected();
-                boolean rulesExist = core.getDeclensionManager().getDeclensionRulesForType(typeId).length != 0;
-                
-                // when switching from classic to simplified, warn users if rules are already defined
-                if (rulesExist && 
-                        simplifiedSelected && !core.getPropertiesManager().isUseSimplifiedConjugations()) {
-                    String confMessage = "Simplified conjugations have a single transformation per word form. Any forms edited will be left with a SINGLE RULE.\n"
-                            + "Only select this option if you do not use more than one rule per form. Would you like to continue?";
-                    if (InfoBox.actionConfirmation("Switch to Simplified Conjugations?", confMessage, parent)) {
-                        populateForm();
-                        core.getPropertiesManager().setUseSimplifiedConjugations(simplifiedSelected);
-                    } else {
-                        rdoSimplified.setSelected(false);
-                        rdoClassic.setSelected(true);
-                    }
-                } else {
+        ActionListener clicked = (ActionEvent e) -> {
+            boolean simplifiedSelected = rdoSimplified.isSelected();
+            boolean rulesExist = core.getDeclensionManager().getDeclensionRulesForType(typeId).length != 0;
+            
+            // when switching from classic to simplified, warn users if rules are already defined
+            if (rulesExist &&
+                    simplifiedSelected && !core.getPropertiesManager().isUseSimplifiedConjugations()) {
+                String confMessage = "Simplified conjugations have a single transformation per word form. Any forms edited will be left with a SINGLE RULE.\n"
+                        + "Only select this option if you do not use more than one rule per form. Would you like to continue?";
+                if (InfoBox.actionConfirmation("Switch to Simplified Conjugations?", confMessage, parent)) {
                     populateForm();
                     core.getPropertiesManager().setUseSimplifiedConjugations(simplifiedSelected);
+                } else {
+                    rdoSimplified.setSelected(false);
+                    rdoClassic.setSelected(true);
                 }
+            } else {
+                populateForm();
+                core.getPropertiesManager().setUseSimplifiedConjugations(simplifiedSelected);
             }
         };
 

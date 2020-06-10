@@ -221,7 +221,8 @@ public class QuizQuestion extends DictNode {
                         + " vs. " + proposed.getClass().getName());
             }
         } else {
-            throw new Exception("Answer for checking type " + proposed.getClass().getName() 
+            String className = proposed == null ? "NULL" : proposed.getClass().getName();
+            throw new Exception("Answer for checking type " + className
                     + " not yet implemented.");
         }
         

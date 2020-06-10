@@ -21,13 +21,13 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import javax.swing.DefaultComboBoxModel;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.EvolutionPairs;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.TransformOptions;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -98,8 +98,8 @@ public final class ScrEvolveLang extends PDialog {
         txtPattern = new PTextField(core, false, "Target Pattern");
         txtReplace = new PTextField(core, false, "Replacement");
         cmbTransformOptions = new PComboBox<>(core.getPropertiesManager().getFontMenu());
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButton1 = new PButton(false, core.getOptionsManager().getMenuFontSize());
+        jButton2 = new PButton(false, core.getOptionsManager().getMenuFontSize());
         jLabel4 = new PLabel("Use this tool to simulate linguistic drift.", PLabel.CENTER, core.getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);

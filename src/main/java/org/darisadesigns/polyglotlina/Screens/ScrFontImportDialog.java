@@ -41,7 +41,7 @@ import org.darisadesigns.polyglotlina.PFontHandler;
  *
  * @author draque
  */
-public class ScrFontImportDialog extends PDialog {
+public final class ScrFontImportDialog extends PDialog {
 
     /**
      * Creates new form ScrFontImportDialog
@@ -57,28 +57,34 @@ public class ScrFontImportDialog extends PDialog {
         ((PlainDocument) txtFontSize.getDocument())
                 .setDocumentFilter(new PTextFieldFilter());
         txtFontSize.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
             public void insertUpdate(DocumentEvent e) {
                 updateDisplayFont();
             }
 
+            @Override
             public void removeUpdate(DocumentEvent e) {
                 updateDisplayFont();
             }
 
+            @Override
             public void changedUpdate(DocumentEvent e) {
                 updateDisplayFont();
             }
         });
         
         txtFontLocation.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
             public void insertUpdate(DocumentEvent e) {
                 updateDisplayFont();
             }
 
+            @Override
             public void removeUpdate(DocumentEvent e) {
                 updateDisplayFont();
             }
 
+            @Override
             public void changedUpdate(DocumentEvent e) {
                 updateDisplayFont();
             }

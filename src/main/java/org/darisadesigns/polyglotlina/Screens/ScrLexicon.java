@@ -64,7 +64,6 @@ import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -80,7 +79,6 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
-import javafx.util.Callback;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -898,29 +896,24 @@ public final class ScrLexicon extends PFrame {
             applyIllegalFilter();
         });
         cmbRootSrc = new ComboBox<>();
-        cmbRootSrc.setCellFactory(
-                new Callback<ListView<Object>, ListCell<Object>>() {
-            @Override
-            public ListCell<Object> call(ListView<Object> param) {
-                final ListCell<Object> cell = new ListCell<Object>() {
-                    @Override
-                    public void updateItem(Object item,
-                            boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item instanceof ConWord || item instanceof ConWordDisplay) {
-                            setFont(core.getPropertiesManager().getFXFont());
-                            setText(item.toString());
-                        } else if (item instanceof EtyExternalParent) {
-                            setFont(font);
-                            setText(item.toString());
-                        } else {
-                            setText(null);
-                        }
+        cmbRootSrc.setCellFactory((ListView<Object> param) -> {
+            final ListCell<Object> cell = new ListCell<Object>() {
+                @Override
+                public void updateItem(Object item,
+                        boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item instanceof ConWord || item instanceof ConWordDisplay) {
+                        setFont(core.getPropertiesManager().getFXFont());
+                        setText(item.toString());
+                    } else if (item instanceof EtyExternalParent) {
+                        setFont(font);
+                        setText(item.toString());
+                    } else {
+                        setText(null);
                     }
-                };
-                return cell;
-            }
-
+                }
+            };
+            return cell;
         });
 
         grid.setVgap(4);
@@ -1247,11 +1240,9 @@ public final class ScrLexicon extends PFrame {
      * @param field field to add listener to
      */
     private void addFilterListeners(final Control field) {
-        field.setOnKeyPressed(new EventHandler<javafx.scene.input.KeyEvent>() {
-            public void handle(javafx.scene.input.KeyEvent ke) {
-                if (ke.getCode() == KeyCode.ENTER) {
-                    runFilter();
-                }
+        field.setOnKeyPressed((javafx.scene.input.KeyEvent ke) -> {
+            if (ke.getCode() == KeyCode.ENTER) {
+                runFilter();
             }
         });
     }

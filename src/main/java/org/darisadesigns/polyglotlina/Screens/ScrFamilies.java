@@ -102,7 +102,7 @@ public final class ScrFamilies extends PFrame {
         TreeModel newModel = new DefaultTreeModel(root);
         treFam.setModel(newModel);
         treFam.setRootVisible(false);
-        lstWords.setModel(new DefaultListModel<Object>());
+        lstWords.setModel(new DefaultListModel<>());
         lstWords.setFont(core.getPropertiesManager().getFontCon());
     }
     

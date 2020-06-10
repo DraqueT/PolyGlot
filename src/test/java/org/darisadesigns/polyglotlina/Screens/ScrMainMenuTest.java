@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -81,7 +81,6 @@ public class ScrMainMenuTest {
         } catch (IOException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException 
                 | SecurityException | InvocationTargetException | ParserConfigurationException 
                 | TransformerException e) {
-            e.printStackTrace();
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         } finally {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson
+ * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import org.darisadesigns.polyglotlina.IOHandler;
 import static org.junit.jupiter.api.Assertions.fail;

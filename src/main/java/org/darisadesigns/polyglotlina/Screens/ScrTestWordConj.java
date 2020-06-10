@@ -120,7 +120,7 @@ public final class ScrTestWordConj extends PDialog {
         setMaximumSize(new java.awt.Dimension(585, 2147483647));
         setMinimumSize(new java.awt.Dimension(585, 0));
 
-        pnlClasses.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        pnlClasses.setBorder(javax.swing.BorderFactory.createLineBorder(null));
 
         javax.swing.GroupLayout pnlClassesLayout = new javax.swing.GroupLayout(pnlClasses);
         pnlClasses.setLayout(pnlClassesLayout);

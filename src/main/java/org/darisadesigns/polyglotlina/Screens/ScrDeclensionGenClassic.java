@@ -368,7 +368,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * sets up object models for visual components
      */
     private void setupObjectModels() {
-        decListModel = new DefaultListModel<Object>();
+        decListModel = new DefaultListModel<>();
         lstCombinedDec.setModel(decListModel);
 
         rulesModel = new DefaultListModel<DeclensionGenRule>();

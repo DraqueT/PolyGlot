@@ -40,41 +40,6 @@ public class WordClassCollectionTest {
     }
 
     /**
-     * Test of getAllWordClasses method, of class WordClassCollection.
-     */
-    @Test
-    public void testGetAllWordClasses() {
-    }
-
-    /**
-     * Test of clear method, of class WordClassCollection.
-     */
-    @Test
-    public void testClear() {
-    }
-
-    /**
-     * Test of insert method, of class WordClassCollection.
-     */
-    @Test
-    public void testInsert() throws Exception {
-    }
-
-    /**
-     * Test of getClassesForType method, of class WordClassCollection.
-     */
-    @Test
-    public void testGetClassesForType() {
-    }
-
-    /**
-     * Test of writeXML method, of class WordClassCollection.
-     */
-    @Test
-    public void testWriteXML() {
-    }
-
-    /**
      * Test of getRandomPropertyCombinations method, of class WordClassCollection.
      */
     @Test
@@ -94,7 +59,6 @@ public class WordClassCollectionTest {
 
             assertNotEquals(random1, random2);
         } catch (IOException | IllegalStateException e) {
-            e.printStackTrace();
             fail(e);
         }
     }

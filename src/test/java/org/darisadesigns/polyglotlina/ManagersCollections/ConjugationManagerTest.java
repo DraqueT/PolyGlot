@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,12 +19,12 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 import TestResources.DummyCore;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.ManagersCollections.DeclensionManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.DeclensionPair;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -56,7 +56,7 @@ public class ConjugationManagerTest {
             assertEquals(0, decMan.getSingletonDeclensionList(word.getId()).length);
             assertEquals(0, decMan.getDimensionalDeclensionListWord(word.getId()).length);
             assertEquals(decMan.getWordDeclensions(word.getId()).size(), 0);
-        } catch (Exception e) {
+        } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
             fail(e);
         }
