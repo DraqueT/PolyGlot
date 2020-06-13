@@ -263,7 +263,6 @@ public class ConWordTest {
     public void testWriteXML() {
         System.out.println("ConWordTest.testWriteXML");
         
-        System.out.println("ConWordTest:testWriteXML");
         String expectedValue = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
                 + "<dictionary>"
                 + "<word>"
