@@ -32,6 +32,7 @@ import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.CustomControls.PGrammarPane;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -49,6 +50,8 @@ public class FormattedTextHelperTest {
     private static final String BLUE = "blue";
     
     public FormattedTextHelperTest() {
+        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless());
+        
         System.out.println("FormattedTextHelperTest.FormattedTextHelperTest");
         core = DummyCore.newCore();
         try {
