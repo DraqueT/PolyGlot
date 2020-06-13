@@ -36,7 +36,6 @@ public class DeclensionNodeTest {
     private final DeclensionNode testNode;
     
     public DeclensionNodeTest() {
-        System.out.println("DeclensionNodeTest");
         testNode = new DeclensionNode(1);
         
         testNode.setCombinedDimId("combId");
