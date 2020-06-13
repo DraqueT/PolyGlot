@@ -919,6 +919,11 @@ public final class ScrMainMenu extends PFrame {
             newScreen.dispose();
             return;
         }
+        
+        // the search menu causes problems with cached Lexicon if left open
+        if (curWindow instanceof ScrLexicon) {
+            ((ScrLexicon)curWindow).closeAndClearSearchPanel();
+        }
 
         // blank the menu
         pnlMain.removeAll();
