@@ -36,7 +36,7 @@ public class DeclensionNodeTest {
     private final DeclensionNode testNode;
     
     public DeclensionNodeTest() {
-        System.out.print("DeclensionNodeTest");
+        System.out.println("DeclensionNodeTest");
         testNode = new DeclensionNode(1);
         
         testNode.setCombinedDimId("combId");
@@ -47,7 +47,7 @@ public class DeclensionNodeTest {
     
     @Test
     public void testEquals() {
-        System.out.print("DeclensionNodeTest.testEquals");
+        System.out.println("DeclensionNodeTest.testEquals");
         
         DeclensionNode compNode = new DeclensionNode(1);
         
@@ -61,7 +61,7 @@ public class DeclensionNodeTest {
     
     @Test
     public void testNotEquals() {
-        System.out.print("DeclensionNodeTest.testNotEquals");
+        System.out.println("DeclensionNodeTest.testNotEquals");
         
         DeclensionNode compNode = new DeclensionNode(1);
         
@@ -75,7 +75,7 @@ public class DeclensionNodeTest {
 
     @Test
     public void testInsertBuffer() {
-        System.out.print("DeclensionNodeTest.testInsertBuffer");
+        System.out.println("DeclensionNodeTest.testInsertBuffer");
         
         int expectedSize = 1;
         DeclensionDimension dim = new DeclensionDimension();
@@ -99,7 +99,7 @@ public class DeclensionNodeTest {
 
     @Test
     public void testInsertBufferBadId() {
-        System.out.print("DeclensionNodeTest.testInsertBufferBadId");
+        System.out.println("DeclensionNodeTest.testInsertBufferBadId");
         
         String expectedMessage = "Dimension with ID -1 cannot be inserted.";
         DeclensionDimension dim = new DeclensionDimension();
@@ -116,7 +116,7 @@ public class DeclensionNodeTest {
     
     @Test
     public void testClearBuffer() {
-        System.out.print("DeclensionNodeTest.testClearBuffer");
+        System.out.println("DeclensionNodeTest.testClearBuffer");
         
         DeclensionDimension dim = new DeclensionDimension();
         dim.setValue("zot");
@@ -129,7 +129,7 @@ public class DeclensionNodeTest {
 
     @Test
     public void testAddDimension() {
-        System.out.print("DeclensionNodeTest.testAddDimension");
+        System.out.println("DeclensionNodeTest.testAddDimension");
         
         int expectedSize = 1;
         DeclensionDimension dim = new DeclensionDimension();
@@ -146,7 +146,7 @@ public class DeclensionNodeTest {
 
     @Test
     public void testDeleteDimension() {
-        System.out.print("DeclensionNodeTest.testDeleteDimension");
+        System.out.println("DeclensionNodeTest.testDeleteDimension");
         
         int dimId = 0;
         DeclensionDimension dim = new DeclensionDimension();
@@ -167,7 +167,7 @@ public class DeclensionNodeTest {
 
     @Test
     public void testWriteXMLTemplate() {
-        System.out.print("DeclensionNodeTest.testWriteXMLTemplate");
+        System.out.println("DeclensionNodeTest.testWriteXMLTemplate");
         
         String expectedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
                 +"<dictionary>"
@@ -207,7 +207,7 @@ public class DeclensionNodeTest {
 
     @Test
     public void testWriteXMLWordDeclension() {
-        System.out.print("DeclensionNodeTest.testWriteXMLWordDeclension");
+        System.out.println("DeclensionNodeTest.testWriteXMLWordDeclension");
         
         String expectedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
                 + "<dictionary>"
@@ -247,7 +247,7 @@ public class DeclensionNodeTest {
 
     @Test
     public void testSetEqual() {
-        System.out.print("DeclensionNodeTest.testSetEqual");
+        System.out.println("DeclensionNodeTest.testSetEqual");
         
         DeclensionNode node = new DeclensionNode(0);
         node.setEqual(testNode);
@@ -256,7 +256,7 @@ public class DeclensionNodeTest {
     
     @Test
     public void testSetEqualWrongType() {
-        System.out.print("DeclensionNodeTest.testSetEqual");
+        System.out.println("DeclensionNodeTest.testSetEqual");
         
         String expectedMessage = "Object not of type DeclensionNode";
         
@@ -272,7 +272,7 @@ public class DeclensionNodeTest {
     
     @Test
     public void testGetDeclensionDimensionByIdExists() {
-        System.out.print("DeclensionNodeTest.testSetEqual");
+        System.out.println("DeclensionNodeTest.testSetEqual");
         
         String expectedValue = "TESTO DEBESTO";
         int dimId = 2;
@@ -289,7 +289,7 @@ public class DeclensionNodeTest {
     
     @Test
     public void testGetDeclensionDimensionByIdNotExists() {
-        System.out.print("DeclensionNodeTest.testSetEqual");
+        System.out.println("DeclensionNodeTest.testSetEqual");
         
         DeclensionNode node = new DeclensionNode(0);
         assertNull(node.getDeclensionDimensionById(1));
