@@ -600,6 +600,21 @@ public final class ScrLexicon extends PFrame {
     }
     
     /**
+     * Closes and clears search panel on the top of the screen
+     */
+    public void closeAndClearSearchPanel() {
+        Platform.runLater(() -> {
+            try {
+                clearFilter();
+                gridTitlePane.setExpanded(false);
+            } catch (Exception e) {
+                // Not a huge deal to users. Just silently log.
+                IOHandler.writeErrorLog(e);
+            }
+        });
+    }
+    
+    /**
      * Tests whether filter is currently empty
      * If testing fields are null, they aren't yet initialized, and therefore must be blank
      * @return 
