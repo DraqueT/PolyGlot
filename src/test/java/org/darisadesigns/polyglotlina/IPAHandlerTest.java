@@ -128,6 +128,8 @@ public class IPAHandlerTest {
     
     @Test
     public void testPlayProcWiki() {
+        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless());
+        
         System.out.println("IPAHandlerTest.testPlayProcWiki");
         
         IPAHandler handler = new IPAHandler(null);
