@@ -150,7 +150,6 @@ public class WordClassTest {
                 + "<wordGrammarClassValueName>TEST2</wordGrammarClassValueName>"
                 + "</wordGrammarClassValueNode>"
                 + "</wordGrammarClassValuesCollection></wordGrammarClassNode></dictionary>";
-        System.out.println("WordClassTest:testWriteXML");
         
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();

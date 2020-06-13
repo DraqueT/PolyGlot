@@ -52,7 +52,6 @@ public class WordClassValueTest {
                 + "<wordGrammarClassValueId>666</wordGrammarClassValueId>"
                 + "<wordGrammarClassValueName>TEST</wordGrammarClassValueName>"
                 + "</wordGrammarClassValueNode></dictionary>";
-        System.out.println("DeclensionDimenstion:testWriteXML");
         
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();

@@ -59,7 +59,6 @@ public class LogoNodeTest {
         System.out.println("LogoNodeTest.testAddRadical");
         
         String expectedReading = "ZIMZAM!";
-        System.out.println("LogoNodeTest:testAddRadical");
         LogoNode newRad = new LogoNode();
         newRad.setValue(expectedReading);
         logoTest.addRadical(newRad);
@@ -110,7 +109,6 @@ public class LogoNodeTest {
                 + "<logoStrokes>3</logoStrokes>"
                 + "<logoReading>REEDING</logoReading>"
                 + "</LogoGraphNode></dictionary>";
-        System.out.println("DeclensionDimenstion:testWriteXML");
         
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();

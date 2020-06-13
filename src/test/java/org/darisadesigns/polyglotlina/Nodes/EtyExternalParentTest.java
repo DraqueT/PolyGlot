@@ -40,7 +40,7 @@ public class EtyExternalParentTest {
 
     @Test
     public void testGetUniqueId() {
-        System.out.println("EtyExternalParentTes.:testGetUniqueId");
+        System.out.println("EtyExternalParentTest.testGetUniqueId");
         
         assertEquals("VALUEZOTTOPIA", testParent.getUniqueId());
     }
