@@ -550,6 +550,10 @@ def copyInstaller(source):
         elif osString == osxString:
             insFile = OSX_INS_NAME
 
+        # release candidates copied to their own location
+        if IS_RELEASE:
+            copyDestination = copyDestination + separatorCharacter + 'Release'
+
         destination = copyDestination + separatorCharacter + insFile
         print('Copying installer to ' + destination)
         shutil.copy(source, destination)
