@@ -542,6 +542,8 @@ def injectDocs():
     
 # Copies installer file to final destination and removes error indicator file
 def copyInstaller(source):
+    global copyDestination
+
     if path.exists(source):
         if osString == winString:
             insFile = WIN_INS_NAME
