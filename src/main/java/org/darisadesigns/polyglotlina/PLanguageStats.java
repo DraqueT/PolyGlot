@@ -1,5 +1,5 @@
     /*
- * Copyright (c) 2017-2020, Draque Thompson
+ * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -85,7 +85,7 @@ public final class PLanguageStats {
         Map<String, Integer> wordStart = new HashMap<>();
         Map<String, Integer> wordEnd = new HashMap<>();
         Map<String, Integer> characterCombos2 = new HashMap<>();
-        int highestCombo2 = 0;
+        int highestCombo2 = 1;
         Map<Integer, Integer> typeCountByWord = new HashMap<>();
         Map<String, Integer> phonemeCount = new HashMap<>();
         Map<String, Integer> charCount = new HashMap<>();

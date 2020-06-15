@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -292,6 +292,30 @@ public class IOHandlerTest {
             
             assertEquals(tmpFile.getName(), PGTUtil.TEMP_FILE);
         } catch (IOException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testCreateTmpFileWithContents() {
+        String testValue = "ß and ä\nZOT";
+        
+        try {
+            File testFile = IOHandler.createTmpFileWithContents(testValue, "txt");
+            String result = "";
+            
+            try (Scanner myReader = new Scanner(testFile)) {
+                while (myReader.hasNextLine()) {
+                    result += myReader.nextLine() + "\n";
+                }
+                
+                // truncate trailing \n
+                result = result.substring(0, result.length() - 1);
+            }
+            
+            assertEquals(testValue, result);
+        }
+        catch (IOException e) {
             fail(e);
         }
     }

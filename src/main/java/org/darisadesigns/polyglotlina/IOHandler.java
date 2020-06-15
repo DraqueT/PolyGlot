@@ -118,7 +118,13 @@ public final class IOHandler {
      */
     public static File createTmpFileWithContents(String contents, String extension) throws IOException {
         File ret = File.createTempFile("POLYGLOT", extension);
-        Files.write(ret.toPath(), contents.getBytes());
+        
+        try (Writer out = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(ret), "UTF8"))) {
+            out.append(contents);
+            out.flush();
+        }
+        
         ret.deleteOnExit();
 
         return ret;
