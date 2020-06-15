@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import static org.junit.jupiter.api.Assertions.*;
@@ -304,7 +305,7 @@ public class IOHandlerTest {
             File testFile = IOHandler.createTmpFileWithContents(testValue, "txt");
             String result = "";
             
-            try (Scanner myReader = new Scanner(testFile)) {
+            try (Scanner myReader = new Scanner(testFile, StandardCharsets.UTF_8)) {
                 while (myReader.hasNextLine()) {
                     result += myReader.nextLine() + "\n";
                 }
