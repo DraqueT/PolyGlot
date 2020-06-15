@@ -299,6 +299,8 @@ public class IOHandlerTest {
     
     @Test
     public void testCreateTmpFileWithContents() {
+        System.out.println("IOHandlerTest.testCreateTmpFileWithContents");
+        
         String testValue = "ß and ä\nZOT";
         
         try {
