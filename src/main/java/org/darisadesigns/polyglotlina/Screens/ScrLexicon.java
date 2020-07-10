@@ -589,6 +589,7 @@ public final class ScrLexicon extends PFrame {
                     && lstLexicon.getSelectedIndex() != -1) {
                 return; // prevents freezing scenario if new word made before thread continues
             }
+            // TODO: THIS MUST BE IN A JFX THREAD RATHER THAN A NORMAL ONE
             filterLexicon();
             lstLexicon.setSelectedIndex(0);
             lstLexicon.ensureIndexIsVisible(0);

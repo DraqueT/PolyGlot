@@ -124,6 +124,13 @@
             <scope>test</scope>
             <version>4.13</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-swing-junit</artifactId>
+            <version>3.9.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     
     <build>

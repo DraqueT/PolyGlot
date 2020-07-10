@@ -1133,6 +1133,9 @@ public final class IOHandler {
         for (String attribute : attributes) {
             ret += attribute + " : " + System.getProperty(attribute) + "\n";
         }
+        
+        ret += "PolyGlot.version : " + PGTUtil.getDisplayVersion() + "\n";
+        ret += "PolyGlot.betaBuild : " + (PGTUtil.IS_BETA ? "BETA\n" : "RELEASE\n");
 
         return ret;
     }

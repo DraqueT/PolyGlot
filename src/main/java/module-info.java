@@ -6,6 +6,7 @@ module org.darisadesigns.polyglotlina.polyglot {
     requires javafx.swing;
     requires java.desktop;
     requires java.logging;
+    requires java.management;
     requires org.apache.commons.lang3; //AUT - fixed with module injector
     requires org.jsoup; // AUT - fixed with module injector
 

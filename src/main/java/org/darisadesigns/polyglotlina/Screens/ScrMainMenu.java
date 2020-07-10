@@ -1348,6 +1348,7 @@ public final class ScrMainMenu extends PFrame {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuExit = new javax.swing.JMenuItem();
         mnuTools = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         mnuImportFile = new javax.swing.JMenuItem();
         mnuExportToExcel = new javax.swing.JMenuItem();
         mnuExportFont = new javax.swing.JMenuItem();
@@ -1684,6 +1685,14 @@ public final class ScrMainMenu extends PFrame {
         jMenuBar1.add(jMenu1);
 
         mnuTools.setText("Tools");
+
+        jMenuItem3.setText("DELETE");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        mnuTools.add(jMenuItem3);
 
         mnuImportFile.setText("Import from File");
         mnuImportFile.setToolTipText("Import language values from comma delimited file or excel sheet");
@@ -2108,6 +2117,10 @@ public final class ScrMainMenu extends PFrame {
         }
     }//GEN-LAST:event_lstRecentOpenedMouseClicked
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        new AAATESTO(core).setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2127,6 +2140,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
