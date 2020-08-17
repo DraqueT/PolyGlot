@@ -63,15 +63,16 @@ public final class WebInterface {
         try {
             url = new URL(PGTUtil.UPDATE_FILE_URL);
 
-            try (InputStream is = url.openStream();
-                    Scanner s = new Scanner(is)) {
+            try ( InputStream is = url.openStream();  Scanner s = new Scanner(is)) {
                 while (s.hasNext()) {
                     xmlText += s.nextLine();
                 }
             }
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e) {
             throw new Exception("Server unavailable or not found.", e);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new IOException("Update file not found or has been moved. Please check for updates manually at PolyGlot homepage.", e);
         }
 
@@ -88,19 +89,21 @@ public final class WebInterface {
 
         return ret;
     }
-    
+
     /**
      * Gets only the text from a PTextPane's html
+     *
      * @param text
-     * @return 
+     * @return
      */
     public static String getTextFromHtml(String text) {
         return Jsoup.parse(text).text();
     }
-    
+
     /**
-     * Takes archived HTML and translates it into display HTML.
-     * - Replaces archival image references to temp image refs
+     * Takes archived HTML and translates it into display HTML. - Replaces
+     * archival image references to temp image refs
+     *
      * @param html archived html
      * @param core
      * @return unarchived html
@@ -110,7 +113,7 @@ public final class WebInterface {
         // pattern for finding archived images
         Pattern pattern = Pattern.compile("(<img src=\"[^>,_]+\">)");
         Matcher matcher = pattern.matcher(html);
-        
+
         while (matcher.find()) {
             String regPath = matcher.group(1);
             regPath = regPath.replace("<img src=\"", "");
@@ -118,19 +121,21 @@ public final class WebInterface {
             regPath = regPath.replace(">", "");
             try {
                 int imageId = Integer.parseInt(regPath);
-                ImageNode image = (ImageNode)core.getImageCollection().getNodeById(imageId);
-                html = html.replace("<img src=\""+ regPath + "\">", "<img src=\"file:///"+ image.getImagePath() + "\">");
-            } catch (IOException | NumberFormatException e) {
+                ImageNode image = (ImageNode) core.getImageCollection().getNodeById(imageId);
+                html = html.replace("<img src=\"" + regPath + "\">", "<img src=\"file:///" + image.getImagePath() + "\">");
+            }
+            catch (IOException | NumberFormatException e) {
                 throw new Exception("problem loading image : " + e.getLocalizedMessage(), e);
             }
         }
-        
+
         return html;
     }
-    
+
     /**
-     * Takes display HTML and translates it into archival HTML.
-     * - Replaces actual image references with static, id based refs
+     * Takes display HTML and translates it into archival HTML. - Replaces
+     * actual image references with static, id based refs
+     *
      * @param html unarchived html
      * @return archivable html
      */
@@ -138,7 +143,7 @@ public final class WebInterface {
         // pattern for finding unarchived images
         Pattern pattern = Pattern.compile("(<img src=\"[^>,_]+_[^>]+\">)");
         Matcher matcher = pattern.matcher(html);
-        
+
         while (matcher.find()) {
             String regPath = matcher.group(1);
             regPath = regPath.replace("<img src=\"file:///", "");
@@ -148,17 +153,18 @@ public final class WebInterface {
             String arcPath = fileName.replaceFirst("_.*", "");
             html = html.replace("file:///" + regPath, arcPath);
         }
-        
+
         return html;
     }
-    
+
     /**
-     * This cycles through the body of HTML and generates an ordered list of objects
-     * representing all of the items in the HTML. Consumers are responsible for
-     * identifying objects.
+     * This cycles through the body of HTML and generates an ordered list of
+     * objects representing all of the items in the HTML. Consumers are
+     * responsible for identifying objects.
+     *
      * @param html HTML to extract from
-     * @return 
-     * @throws java.io.IOException 
+     * @return
+     * @throws java.io.IOException
      */
     public static List<Object> getElementsHTMLBody(String html) throws IOException {
         List<Object> ret = new ArrayList<>();
@@ -166,7 +172,7 @@ public final class WebInterface {
         body = body.replaceAll("</body>.*", "");
         Pattern pattern = Pattern.compile("([^<]+|<[^>]+>)");//("(<[^>]+>)");
         Matcher matcher = pattern.matcher(body);
-        
+
         // loops on unincumbered text and tags.
         while (matcher.find()) {
             String token = matcher.group(1);
@@ -185,12 +191,13 @@ public final class WebInterface {
                 }
             }
         }
-        
+
         return ret;
     }
-    
+
     /**
      * Tests current internet connection based on google
+     *
      * @return true if connected
      */
     public static boolean isInternetConnected() {
@@ -198,23 +205,26 @@ public final class WebInterface {
         final int PORT = 80;
         final int TIMEOUT = 5000;
         boolean ret = false;
-        
+
         try {
-            try (Socket soc = new Socket()) {
+            try ( Socket soc = new Socket()) {
                 soc.connect(new InetSocketAddress(address, PORT), TIMEOUT);
             }
             ret = true;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             IOHandler.writeErrorLog(e, "Unable to reach: " + address);
         }
-        
+
         return ret;
     }
-    
+
     /**
-     * Tell the OS to open a browser and go to a given web address.(distinct behavior in Linux due to lack of certain features)
+     * Tell the OS to open a browser and go to a given web address.(distinct
+     * behavior in Linux due to lack of certain features)
+     *
      * @param url
-     * @throws java.io.IOException 
+     * @throws java.io.IOException
      */
     public static void browseToLocation(String url) throws IOException {
         if (PGTUtil.IS_WINDOWS) {
@@ -225,7 +235,7 @@ public final class WebInterface {
             catch (URISyntaxException e) {
                 IOHandler.writeErrorLog(e);
                 InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
-                    + url + "\n(copied to your clipboard for convenience)", null);
+                        + url + "\n(copied to your clipboard for convenience)", null);
                 new ClipboardHandler().setClipboardContents(url);
             }
         } else if (PGTUtil.IS_OSX) {
@@ -241,5 +251,61 @@ public final class WebInterface {
         }
     }
 
-    private WebInterface() {}
+    /**
+     * encodes html characters
+     * @param s
+     * @return 
+     */
+    public static String encodeHTML(String s) {
+        if (s == null || s.length() == 0) {
+            return s;
+        }
+
+        StringBuilder sb = new StringBuilder(s);
+        for (int i = 0; i < sb.length(); i++) {
+            char c = sb.charAt(i);
+            switch (c) {
+                case '&':
+                    sb.replace(i, i + 1, "&amp;");
+                    i += 4;
+                    break;
+                case '"':
+                    sb.replace(i, i + 1, "&quot;");
+                    i += 5;
+                    break;
+                case '\'':
+                    sb.replace(i, i + 1, "&apos;");
+                    i += 5;
+                    break;
+                case '>':
+                    sb.replace(i, i + 1, "&gt;");
+                    i += 3;
+                    break;
+                case '<':
+                    sb.replace(i, i + 1, "&lt;");
+                    i += 3;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return sb.toString();
+    }
+    
+    /**
+     * Escapes html characters (symmetrical to encodeHTML)
+     * @param s
+     * @return 
+     */
+    public static String escapeHTML(String s) {
+        return s.replace("&amp;", "&")
+                .replace("&quot;", "\"")
+                .replace("&apos;", "'")
+                .replace("&gt;", ">")
+                .replace("&lt;", "<");
+    }
+
+    private WebInterface() {
+    }
 }
