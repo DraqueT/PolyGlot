@@ -1,4 +1,4 @@
-    /*
+/*
  * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
@@ -19,6 +19,8 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import static org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.formatCon;
 import static org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.formatPlain;
@@ -27,6 +29,7 @@ import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Screens.ScrProgressMenu;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +37,31 @@ import java.util.Map;
  * @author DThompson
  */
 public final class PLanguageStats {
+    
+    private final PGooglePieChart typesPie = new PGooglePieChart("Word Counts by Part of Speech");
+    private final PGoogleBarChart charStatBar = new PGoogleBarChart("Character Stats");
+    private final DictCore core;
+    private final ScrProgressMenu progress;
+    private final Map<String, Integer> wordStart = new HashMap<>();
+    private final Map<String, Integer> letterCount = new HashMap<>();
+    private final Map<String, Integer> letterComboCount = new HashMap<>();
+    private final Map<Integer, Integer> typeCountByWord = new HashMap<>();
+    private final Map<String, Integer> phonemeCount = new HashMap<>();
+    private final Map<String, Integer> phonemeComboCount = new HashMap<>();
+    private final ConWord[] wordList;
+    private final String[] alphabet;
+    private final String[] alphaCombinations;
+    
+    private PLanguageStats(DictCore _core, ScrProgressMenu _progress) {
+        core = _core;
+        progress = _progress;
+        wordList = core.getWordCollection().getWordNodes();
+        
+        String rawAlphabet = core.getPropertiesManager().getAlphaPlainText();
+        String splitRegex = rawAlphabet.contains(",") ? "," : "(?!^)";
+        alphabet = rawAlphabet.split(splitRegex);
+        alphaCombinations = getAllCombinations();
+    } 
 
     /**
      * Builds report on words in ConLang. Potentially computationally expensive.
@@ -44,98 +72,196 @@ public final class PLanguageStats {
     public static String buildWordReport(DictCore core) {
         final String[] ret = new String[1]; // using array so I can set value in a thread...
         ret[0] = "";
-        
+
         try {
             final int wordCount = core.getWordCollection().getWordCount();
             final ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);
             progress.setVisible(true);
-            
+
             // unnessecary to test UI positioning here (and no root window in tests)
             if (core.getRootWindow() != null) {
                 progress.setLocation(core.getRootWindow().getLocation());
             }
 
-            Thread thread = new Thread(){
+            Thread thread = new Thread() {
                 @Override
-                public void run(){
-                    ret[0] = buildWordReport(core, progress);
-                }           
+                public void run() {
+                    ret[0] = new PLanguageStats(core, progress).buildWordReport();
+                }
             };
 
             thread.start();
             thread.join();
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage(), core.getRootWindow());
         }
-        
+
         return ret[0];
     }
-    
-    private static String buildWordReport(DictCore core, ScrProgressMenu progress) {
-        PGooglePieChart typesPie = new PGooglePieChart("Word Counts by Part of Speech");
-        PGoogleBarChart charStatBar = new PGoogleBarChart("Character Stats");
 
+    private String buildWordReport() {
         String ret = "<!doctype html>\n"
                 + "<html>"
                 + "<meta charset=utf-8>\n";
-        
+
         ret += core.getPropertiesManager().buildPropertiesReportTitle();
 
-        Map<String, Integer> wordStart = new HashMap<>();
-        Map<String, Integer> wordEnd = new HashMap<>();
-        Map<String, Integer> characterCombos2 = new HashMap<>();
-        int highestCombo2 = 1;
-        Map<Integer, Integer> typeCountByWord = new HashMap<>();
-        Map<String, Integer> phonemeCount = new HashMap<>();
-        Map<String, Integer> charCount = new HashMap<>();
-        Map<String, Integer> phonemeCombo2 = new HashMap<>();
-        ConWord[] wordList = core.getWordCollection().getWordNodes();
-        String allChars = core.getPropertiesManager().getAlphaPlainText();
-        String alphabet = core.getPropertiesManager().getAlphaPlainText();
+        collectValuesFromWords();
 
-        // Put values into maps to count/record... 
-        //while (wordIt.hasNext()) {
-        for (ConWord curWord : wordList) {
+        progress.iterateTask("Building report...");
+
+        // build pie chart of type counts
+        typeCountByWord.entrySet().forEach((curEntry) -> {
+            TypeNode type = core.getTypes().getNodeById(curEntry.getKey());
+            if (type != null) {
+                String[] label = {type.getValue()};
+                Double[] value = {(double) curEntry.getValue()};
+                typesPie.addVal(label, value);
+            }
+        });
+
+        // build bar chart of characters
+        charStatBar.setLeftYAxisLabel("Starting With");
+        charStatBar.setRightYAxisLabel("Overall Count");
+        charStatBar.setLabels(new String[]{"Words Starting With", "Overall Count"});
+        charStatBar.setConFontName(core.getPropertiesManager().getFontCon().getFamily());
+        for (String character : alphabet) {
+            double starting = 0.0;
+            double count = 0.0;
+
+            if (wordStart.containsKey(character)) {
+                starting = (double) wordStart.get(character);
+            }
+
+            if (letterCount.containsKey(character)) {
+                count = (double) letterCount.get(character);
+            }
+
+            charStatBar.addVal(new String[]{character}, new Double[]{starting, count});
+        }
+
+        ret += "\n"
+                + "    <script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>\n"
+                + "    <script type=\"text/javascript\">\n"
+                + "      google.charts.load('current', {'packages':['corechart']});\n"
+                + "      google.charts.load('current', {'packages':['corechart', 'bar']});\n"
+                + "      google.charts.setOnLoadCallback(" + typesPie.getFunctionName() + ");\n"
+                + "      google.charts.setOnLoadCallback(" + charStatBar.getFunctionName() + ");\n"
+                + "\n";
+
+        ret += typesPie.getBuildHTML();
+        ret += charStatBar.getBuildHTML();
+
+        ret += "    </script>\n"
+                + "  <body style=\"font-family:" + core.getPropertiesManager().getFontLocal().getFamily() + ";\">\n"
+                + "    <center>---LANGUAGE STAT REPORT---</center><br><br>";
+
+        ret += formatPlain("Count of words in conlang lexicon: " + wordList.length + "<br><br>", core);
+
+        progress.iterateTask("Building charts...");
+        ret += typesPie.getDisplayHTML();
+
+        ret += charStatBar.getDisplayHTML();
+
+        // build list of conlang characters and the IPA characters they express
+        ret += "<p>" + formatPlain("List of letters to IPA sounds which they can express", core) + "<br>";
+
+        Map<String, String[]> charsToIpa = core.getPronunciationMgr().getIpaSoundsPerCharacter();
+        for (String key : charsToIpa.keySet()) {
+            String sanitizedKey = WebInterface.encodeHTML(key);
+            ret += "<br>" + formatCon(sanitizedKey, core) + formatPlain(" : ", core);
+
+            String[] ipaChars = charsToIpa.get(key);
+            for (int i = 0; i < ipaChars.length; i += 2) {
+                String value = WebInterface.encodeHTML(ipaChars[i]);
+                ret += formatPlain(value, core) + " ";
+            }
+        }
+
+        ret += "</p>";
+
+        progress.iterateTask("Building character combo grid...");
+        ret += buildLetterComboTable();
+
+        // only build phoneme table and count of not using recursion
+        progress.iterateTask("Building phoneme combo grid...");
+        if (!core.getPronunciationMgr().isRecurse()) {
+            ret += buildPhonemeTable();
+            ret += buildPhonemeCount();
+        }
+
+        progress.iterateTask("DONE!");
+
+        return ret;
+    }
+    
+    private String buildLetterComboTable() {
+        String ret = "";
+
+        ret += formatPlain("Heat map of letter combination frequency:<br>", core);
+        ret += "<table border=\"1\">";
+        ret += "<tr><td></td>";
+        for (String columnsHead : alphabet) {
+            String cleanedHead = WebInterface.encodeHTML(columnsHead);
+            ret += "<td>" + formatCon(cleanedHead, core) + "</td>";
+        }
+
+        int highestLetterComboCount = getHighestCount(letterComboCount);
+
+        ret += "</tr>";
+        for (String y : alphabet) {
+            String cleanedY = WebInterface.encodeHTML(y);
+            ret += "<tr><td>" + formatCon(cleanedY, core) + "</td>";
+            for (String x : alphabet) {
+                String search = x + y;
+                Integer comboValue = 0;
+
+                if (letterComboCount.containsKey(search)) {
+                    Integer tmp = letterComboCount.get(search);
+                    if (tmp != null) {
+                        comboValue = tmp;
+                    }
+                }
+
+                int red = (255 / highestLetterComboCount) * comboValue;
+                int blue = 255 - red;
+                String format = "%02X"; // 2 digit hex format
+                String comboStringCleaned = WebInterface.encodeHTML(x + y);
+                ret += "<td bgcolor=\"#" + String.format(format, red)
+                        + String.format(format, blue)
+                        + String.format(format, blue) + "\")>"
+                        + formatCon(comboStringCleaned, core) + formatPlain(":"
+                        + comboValue, core) + "</td>";
+
+            }
+            ret += "</tr>";
+        }
+        ret += "</table>" + formatPlain("<br><br>", core);
+
+        return ret;
+    }
+
+    private void collectValuesFromWords() {
+        for (ConWord curWord : core.getWordCollection().getWordNodes()) {
             final String curValue = curWord.getValue();
-            final int curValueLength = curValue.length();
             final int curType = curWord.getWordTypeId();
 
             progress.iterateTask("Analyzing: " + curWord.getValue());
-            
-            // make sure we have all the characters in the word (if they forgot to populate one in their alpha order(
-            for (char c : curValue.toCharArray()) {
-                if (!allChars.contains(String.valueOf(c))) {
-                    allChars += c;
-                }
-            }
 
-            if (alphabet.isEmpty()) {
-                alphabet = allChars;
-            }
-
-            String beginsWith = curValue.substring(0, 1);
-            String endsWith = curValue.substring(curValueLength - 1, curValueLength);
+            String startsWith = startsWith(curValue);
 
             // either increment or create value for starting character
-            if (wordStart.containsKey(beginsWith)) {
-                int newValue = wordStart.get(beginsWith) + 1;
-                wordStart.remove(beginsWith);
-                wordStart.put(beginsWith, newValue);
+            if (wordStart.containsKey(startsWith)) {
+                int newValue = wordStart.get(startsWith) + 1;
+                wordStart.remove(startsWith);
+                wordStart.put(startsWith, newValue);
             } else {
-                wordStart.put(beginsWith, 1);
+                wordStart.put(startsWith, 1);
             }
 
-            // either increment or create value for ending character
-            if (wordEnd.containsKey(endsWith)) {
-                int newValue = wordEnd.get(endsWith) + 1;
-                wordEnd.remove(endsWith);
-                wordEnd.put(endsWith, newValue);
-            } else {
-                wordEnd.put(endsWith, 1);
-            }
-
-            // only run if no pronunciation recursion.
+            // only collect phoneme combos if no pronunciation recursion.
             if (!core.getPronunciationMgr().isRecurse()) {
                 PronunciationNode[] phonArray;
 
@@ -143,7 +269,8 @@ public final class PLanguageStats {
                 try {
                     phonArray = core.getPronunciationMgr()
                             .getPronunciationElements(curValue);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     // do nothing. This is just a report, users will be made aware
                     // of illegal pronunciation values elsewhere
                     // IOHandler.writeErrorLog(e);
@@ -164,48 +291,22 @@ public final class PLanguageStats {
                         String curCombo = phonArray[i].getPronunciation() + " "
                                 + phonArray[i + 1].getPronunciation();
 
-                        if (phonemeCombo2.containsKey(curCombo)) {
-                            int newValue = phonemeCombo2.get(curCombo) + 1;
-                            phonemeCombo2.remove(curCombo);
-                            phonemeCombo2.put(curCombo, newValue);
+                        if (phonemeComboCount.containsKey(curCombo)) {
+                            int newValue = phonemeComboCount.get(curCombo) + 1;
+                            phonemeComboCount.remove(curCombo);
+                            phonemeComboCount.put(curCombo, newValue);
                         } else {
-                            phonemeCombo2.put(curCombo, 1);
+                            phonemeComboCount.put(curCombo, 1);
                         }
                     }
                 }
             }
 
             // capture all individual characters
-            for (int i = 0; i < curValueLength; i++) {
-                String curChar = curValue.substring(i, i + 1);
-
-                if (charCount.containsKey(curChar)) {
-                    int newValue = charCount.get(curChar) + 1;
-                    charCount.remove(curChar);
-                    charCount.put(curChar, newValue);
-                } else {
-                    charCount.put(curChar, 1);
-                }
-            }
+            addCharacterStringsToMap(letterCount, alphabet, curValue);
 
             // capture and record all 2 character combinations in words
-            for (int i = 0; i < curValueLength - 1; i++) {
-                String combo = curValue.substring(i, i + 2);
-
-                if (characterCombos2.containsKey(combo)) {
-                    int curComboCount = characterCombos2.get(combo);
-
-                    if (highestCombo2 <= curComboCount) {
-                        highestCombo2 = curComboCount + 1;
-                    }
-
-                    int newValue = characterCombos2.get(combo) + 1;
-                    characterCombos2.remove(combo);
-                    characterCombos2.put(combo, newValue);
-                } else {
-                    characterCombos2.put(combo, 1);
-                }
-            }
+            addCharacterStringsToMap(letterComboCount, alphaCombinations, curValue);
 
             // record type count...
             if (typeCountByWord.containsKey(curType)) {
@@ -216,167 +317,174 @@ public final class PLanguageStats {
                 typeCountByWord.put(curType, 1);
             }
         }
+    }
+    
+    private String buildPhonemeTable() {
+        String ret = "";
         
-        progress.iterateTask("Building report...");
-
-        // build pie chart of type counts
-        typeCountByWord.entrySet().forEach((curEntry) -> {
-            TypeNode type = core.getTypes().getNodeById(curEntry.getKey());
-            if (type != null) {
-                String[] label = {type.getValue()};
-                Double[] value = {(double) curEntry.getValue()};
-                typesPie.addVal(label, value);
-            }
-        });
-
-        // build bar chart of characters
-        charStatBar.setLeftYAxisLabel("Starting With");
-        charStatBar.setRightYAxisLabel("Total Count");
-        charStatBar.setLabels(new String[]{"Words Starting With", "Overall Count"});
-        charStatBar.setConFontName(core.getPropertiesManager().getFontCon().getFamily());
-        for (char c : alphabet.toCharArray()) {
-            String character = Character.toString(c);
-            double starting = 0.0;
-            double count = 0.0;
-
-            if (wordStart.containsKey(character)) {
-                starting = (double) wordStart.get(character);
-            }
-
-            if (charCount.containsKey(character)) {
-                count = (double) charCount.get(character);
-            }
-
-            charStatBar.addVal(new String[]{character}, new Double[]{starting, count});
-        }
-
-        ret += "\n"
-                + "    <script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>\n"
-                + "    <script type=\"text/javascript\">\n"
-                + "      google.charts.load('current', {'packages':['corechart']});\n"
-                + "      google.charts.load('current', {'packages':['corechart', 'bar']});\n"
-                + "      google.charts.setOnLoadCallback(" + typesPie.getFunctionName() + ");\n"
-                + "      google.charts.setOnLoadCallback(" + charStatBar.getFunctionName() + ");\n"
-                + "\n";
-
-        ret += typesPie.getBuildHTML();
-        ret += charStatBar.getBuildHTML();
-        
-        ret += "    </script>\n"
-                + "  <body style=\"font-family:" + core.getPropertiesManager().getFontLocal().getFamily() + ";\">\n"
-                + "    <center>---LANGUAGE STAT REPORT---</center><br><br>";
-
-        ret += formatPlain("Count of words in conlang lexicon: " + wordList.length + "<br><br>", core);
-
-        progress.iterateTask("Building charts...");
-        ret += typesPie.getDisplayHTML();
-
-        ret += charStatBar.getDisplayHTML();
-        
-        // build list of conlang characters and the IPA characters they express
-        ret += "<p>" + formatPlain("List of letters to IPA sounds which they can express", core) + "<br>";
-        
-        Map<String, String[]> charsToIpa = core.getPronunciationMgr().getIpaSoundsPerCharacter();
-        for (String key : charsToIpa.keySet()) {
-            ret += "<br>" + formatCon(key, core) + formatPlain(" : ", core); 
-            
-            String[] ipaChars = charsToIpa.get(key);
-            for (int i = 0; i < ipaChars.length; i += 2) {
-                String value = ipaChars[i];
-                ret += formatPlain(value, core) + " ";
-            }
-        }
-        
-        ret += "</p>";
-        
-        // build grid of 2 letter combos
-        char[] alphaGrid = core.getPropertiesManager().getAlphaPlainText().toCharArray();
-        ret += formatPlain("Heat map of letter combination frequency:<br>", core);
+        ret += formatPlain("Heat map of phoneme combination frequency:<br>", core);
         ret += "<table border=\"1\">";
-        ret += "<tr><td></td>";
-        for (char topRow : alphaGrid) {
-            ret += "<td>" + formatCon(Character.toString(topRow), core) + "</td>";
+        ret += "<tr>" + formatPlain("<td></td>", core);
+
+        for (PronunciationNode curNode : core.getPronunciationMgr().getPronunciations()) {
+            String procCleaned = WebInterface.encodeHTML(curNode.getPronunciation());
+            ret += "<td>" + formatPlain(formatPlain(procCleaned, core), core) + "</td>";
         }
         ret += "</tr>";
 
-        progress.iterateTask("Building character combo grid...");
-        for (char y : alphaGrid) {
-            ret += "<tr><td>" + formatCon(Character.toString(y), core) + "</td>";
-            for (char x : alphaGrid) {
-                String search = "" + x + y;
+        int highestPhonemeComboCount = getHighestCount(phonemeComboCount);
+        for (PronunciationNode y : core.getPronunciationMgr().getPronunciations()) {
+            String procYCleaned = WebInterface.encodeHTML(y.getPronunciation());
+            ret += "<tr><td>" + formatPlain(procYCleaned, core) + "</td>";
+
+            for (PronunciationNode x : core.getPronunciationMgr().getPronunciations()) {
+                String search = x.getPronunciation() + " " + y.getPronunciation();
                 Integer comboValue = 0;
-                
-                if (characterCombos2.containsKey(search)) {
-                    Integer tmp = characterCombos2.get(search);
+                if (phonemeComboCount.containsKey(search)) {
+                    Integer tmp = phonemeComboCount.get(search);
                     if (tmp != null) {
                         comboValue = tmp;
                     }
                 }
 
-                int red = (255 / highestCombo2) * comboValue;
+                // This is fine because these should correlate with the letter combo counts.
+                int red = (255 / highestPhonemeComboCount) * comboValue;
                 int blue = 255 - red;
-                String format = "%02X"; // 2 digit hex format
-                ret += "<td bgcolor=\"#" + String.format(format, red)
-                        + String.format(format, blue) 
-                        + String.format(format, blue) + "\")>"
-                        + formatCon(Character.toString(x) + y, core) + formatPlain(":"
-                        + comboValue, core) + "</td>";
-
+                String procComboCleaned = WebInterface.encodeHTML(x.getPronunciation() + y.getPronunciation());
+                ret += "<td bgcolor=\"#" + Integer.toHexString(red)
+                        + Integer.toHexString(blue) + Integer.toHexString(blue) + "\")>"
+                        + formatPlain(procComboCleaned + ":"
+                                + comboValue, core) + "</td>";
             }
             ret += "</tr>";
         }
-        ret += "</table>" + formatPlain("<br><br>", core);
-
-        // build grid of 2 phoneme combos if no pronunciation recursion
-        progress.iterateTask("Building phoneme combo grid...");
-        if (!core.getPronunciationMgr().isRecurse()) {
-            ret += formatPlain("Heat map of phoneme combination frequency:<br>", core);
-            ret += "<table border=\"1\">";
-            ret += "<tr>" + formatPlain("<td></td>", core);
-            
-            for (PronunciationNode curNode : core.getPronunciationMgr().getPronunciations()) {
-                ret += "<td>" + formatPlain(formatPlain(curNode.getPronunciation(), core), core) + "</td>";
-            }
-            ret += "</tr>";
-            
-            for (PronunciationNode y : core.getPronunciationMgr().getPronunciations()) {
-                ret += "<tr><td>" + formatPlain(y.getPronunciation(), core) + "</td>";
-                
-                for (PronunciationNode x : core.getPronunciationMgr().getPronunciations()) {
-                    String search = x.getPronunciation() + " " + y.getPronunciation();
-                    Integer comboValue = 0;
-                    if (phonemeCombo2.containsKey(search)) {
-                        Integer tmp = phonemeCombo2.get(search);
-                        if (tmp != null) {
-                            comboValue = tmp;
-                        }
-                    }
-
-                    int red = (255 / highestCombo2) * comboValue;
-                    int blue = 255 - red;
-                    ret += "<td bgcolor=\"#" + Integer.toHexString(red)
-                            + Integer.toHexString(blue) + Integer.toHexString(blue) + "\")>"
-                            + formatPlain(x.getPronunciation() + y.getPronunciation() + ":"
-                                    + comboValue, core) + "</td>";
-                }
-                ret += "</tr>";
-            }
-            ret += "</table>";
-            
-            // build display for phoneme count if no pronunciation recursion
-            ret += formatPlain(" Breakdown of phonemes counted across all words:<br>", core);
-            for (PronunciationNode curNode : core.getPronunciationMgr().getPronunciations()) {
-                ret += formatPlain(curNode.getPronunciation() + " : "
-                        + (phonemeCount.containsKey(curNode.getPronunciation())
-                        ? phonemeCount.get(curNode.getPronunciation()) : formatPlain("0", core)) + "<br>", core);
-            }
-            ret += formatPlain("<br><br>", core);
-        }
+        ret += "</table>";
         
-        progress.iterateTask("DONE!");
+        return ret;
+    }
+    
+    private String buildPhonemeCount() {
+        String ret = "";
+        
+        ret += formatPlain("<br>Breakdown of phonemes counted across all words:<br>", core);
+        for (PronunciationNode curNode : core.getPronunciationMgr().getPronunciations()) {
+            String procCleaned = WebInterface.encodeHTML(curNode.getPronunciation());
+            ret += formatPlain(procCleaned + " : "
+                    + (phonemeCount.containsKey(curNode.getPronunciation())
+                    ? phonemeCount.get(curNode.getPronunciation()) : formatPlain("0", core)) + "<br>", core);
+        }
+        ret += formatPlain("<br><br>", core);
+        
+        return ret;
+    }
+
+    /**
+     * Given a word and an alphabet, find which letter (potentially
+     * multi-character) it begins with
+     *
+     * @param word
+     * @param alphabet
+     * @return
+     */
+    private String startsWith(String word) {
+        String ret = word.substring(0, 1);
+
+        for (String letter : alphabet) {
+            if (word.startsWith(letter)) {
+                ret = letter;
+                break;
+            }
+        }
 
         return ret;
     }
 
-    private PLanguageStats() {}
+    /**
+     * Given a word and an alphabet, find which letter (potentially
+     * multi-character) it begins with
+     *
+     * @param word
+     * @param alphabet
+     * @return
+     */
+    private String endsWith(String word) {
+        int length = word.length();
+        String ret = word.substring(length - 1, length);
+
+        for (String letter : alphabet) {
+            if (word.endsWith(letter)) {
+                ret = letter;
+                break;
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+     * Adds all character strings found in word string to map passed in. This
+     * works via side effect because rebuilding the map every run is expensive.
+     *
+     * @param letterCombos
+     * @param combinations
+     * @param word
+     */
+    private void addCharacterStringsToMap(Map<String, Integer> letterCombos, String[] combinations, String word) {
+        String value = word;
+
+        while (!value.isBlank()) {
+            int startLength = value.length();
+
+            for (String combo : combinations) {
+                if (value.startsWith(combo)) {
+                    // remove found combo from string
+                    value = value.substring(combo.length());
+
+                    if (letterCombos.containsKey(combo)) {
+                        //letterCombos.replace(combo, letterCombos.get(combo) + 1);
+                        int curCount = letterCombos.get(combo);
+                        letterCombos.replace(combo, curCount + 1);
+                        continue;
+                    }
+                    letterCombos.put(combo, 1);
+                }
+            }
+
+            if (startLength == value.length()) {
+                // current character not in defined alphabet - skip
+                value = value.substring(1);
+            }
+        }
+    }
+
+    private int getHighestCount(Map<String, Integer> toCount) {
+        int ret = 1;
+
+        List<Integer> values = new ArrayList<>(toCount.values());
+
+        if (values.size() > 0) {
+            Collections.sort(values, Collections.reverseOrder());
+            ret = values.get(0);
+        }
+
+        return ret;
+    }
+
+    /**
+     * Gets every combination of characters and returns as an array
+     *
+     * @param combinations
+     * @return
+     */
+    private String[] getAllCombinations() {
+        List<String> ret = new ArrayList<>();
+
+        for (String first : alphabet) {
+            for (String second : alphabet) {
+                ret.add(first + second);
+            }
+        }
+
+        return ret.toArray(new String[0]);
+    }
 }
