@@ -27,6 +27,7 @@ import org.darisadesigns.polyglotlina.Nodes.WordClass;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -49,7 +50,7 @@ public class ImportFileHelper {
     private String iClass;
     private String iDefinition;
     private String iPronunciation;
-    private CSVFormat format; 
+    private CSVFormat format;
     private boolean bFirstLineLabels;
     private boolean bCreateTypes;
     private String quoteChar;
@@ -58,16 +59,16 @@ public class ImportFileHelper {
     public ImportFileHelper(DictCore _core) {
         core = _core;
     }
-    
-    public void setOptions(String _iConWord, 
-            String _iLocalWord, 
+
+    public void setOptions(String _iConWord,
+            String _iLocalWord,
             String _iType,
-            String _iClass, 
-            String _iDefinition, 
+            String _iClass,
+            String _iDefinition,
             String _iPronunciation,
-            CSVFormat _format, 
-            boolean _bFirstLineLabels, 
-            boolean _bCreateTypes, 
+            CSVFormat _format,
+            boolean _bFirstLineLabels,
+            boolean _bCreateTypes,
             String _quoteChar,
             DuplicateOption _dupOpt) {
         iConWord = _iConWord;
@@ -107,7 +108,7 @@ public class ImportFileHelper {
 
     private void importExcel(String inputFile, int sheetNum) throws Exception {
         File csvFile = Java8Bridge.excelToCvs(inputFile, sheetNum);
-        quoteChar= "\"";
+        quoteChar = "\"";
         importCSV(csvFile.getAbsolutePath(), CSVFormat.EXCEL);
     }
 
@@ -115,11 +116,11 @@ public class ImportFileHelper {
         if (!quoteChar.isEmpty()) {
             _format = _format.withQuote(quoteChar.charAt(0));
         }
-        
+
         Map<String, List<ConWord>> valueMap = core.getWordCollection().getValueMapping();
         List<List<String>> rows = getRows(inputFile, _format);
         ConWordCollection wordCollection = core.getWordCollection();
-        
+
         if (bFirstLineLabels) {
             rows.remove(0);
         }
@@ -318,11 +319,11 @@ public class ImportFileHelper {
                             wordCollection.deleteNodeById(oldWord.getId());
                         }
                     }
-                    
+
                     wordCollection.addWord(newWord);
                     break;
                 default:
-                    // do nothing
+                // do nothing
             }
         }
     }
@@ -336,38 +337,60 @@ public class ImportFileHelper {
      * @throws IOException if read error
      */
     private List<List<String>> getRows(String inputFile, CSVFormat format) throws FileNotFoundException, IOException, MalformedInputException {
-        List<List<String>> ret = new ArrayList<>();
-        
-        try (
-            Reader reader = Files.newBufferedReader(Paths.get(inputFile));
-            CSVParser csvParser = new CSVParser(reader, format)
-        ) {
-            for (CSVRecord csvRecord : csvParser) {
-                List<String> row = new ArrayList<>();
-                
-                for (int i = 0; i < csvRecord.size(); i++) {
-                    row.add(csvRecord.get(i));
+        IllegalStateException lastException;
+
+        try {
+            return this.getRowsWithEncoding(inputFile, format, Charset.defaultCharset());
+        } catch (IllegalStateException e) {
+            lastException = e;
+            for (Charset charset : Charset.availableCharsets().values()) {
+                try {
+                    return this.getRowsWithEncoding(inputFile, format, charset);
+                } catch (IllegalStateException ex) {
+                    lastException = ex;
                 }
-                
-                ret.add(deNullRow(row));
             }
         }
 
+        IOHandler.writeErrorLog(lastException);
+        throw lastException;
+    }
+
+    private List<List<String>> getRowsWithEncoding(String inputFile,
+            CSVFormat format,
+            Charset charSet) throws FileNotFoundException, IOException, MalformedInputException {
+        List<List<String>> ret = new ArrayList<>();
+        
+        try ( Reader reader = Files.newBufferedReader(Paths.get(inputFile), charSet);
+                CSVParser csvParser = new CSVParser(reader, format)) {
+            for (CSVRecord csvRecord : csvParser) {
+                List<String> row = new ArrayList<>();
+
+                for (int i = 0; i < csvRecord.size(); i++) {
+                    row.add(csvRecord.get(i));
+                }
+
+                ret.add(deNullRow(row));
+            }
+        }
+        
         return ret;
     }
-    
+
     /**
-     * Returns new list with empty strings rather than null values where appropriate
+     * Returns new list with empty strings rather than null values where
+     * appropriate
+     *
      * @param row input list (with potentially null values)
      * @return list guaranteed to contain no nulls
      */
     private List<String> deNullRow(List<String> row) {
         List<String> ret = new ArrayList<>();
-        
+
         for (String cell : row) {
             ret.add(cell == null ? "" : cell);
         }
-        
+
         return ret;
     }
 
@@ -378,12 +401,14 @@ public class ImportFileHelper {
             // initially, try to parse as int, if failure there, try to parse as column letters
             try {
                 ret = Integer.valueOf(entry.trim());
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e) {
                 // questionable practice here... not logging because of nature of try/catch in programmatic logic
                 // IOHandler.writeErrorLog(e);
                 ret = columnStringValue(entry.trim());
             }
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
             IOHandler.writeErrorLog(e);
             throw new Exception("non-integer value in field.");
         }
@@ -511,7 +536,7 @@ public class ImportFileHelper {
 
         return ret;
     }
-    
+
     public enum DuplicateOption {
         IMPORT_ALL, // import everything, ignoring duplicate values
         IGNORE_DUPES, // duplicates found in import file are skipped
