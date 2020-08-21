@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import org.darisadesigns.polyglotlina.RegexTools;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -34,23 +35,34 @@ import org.w3c.dom.Element;
  * body object for fully realized declension constructs (with full combined Dim Ids)
  * @author draque
  */
-public class DeclensionNode extends DictNode {
+public class ConjugationNode extends DictNode {
     private String notes = "";
     private String combinedDimId = "";
     private boolean dimensionless = false;
     private int highestDimension = 1;
-    private final Map<Integer, DeclensionDimension> dimensions = new HashMap<>();
-    private DeclensionDimension buffer = new DeclensionDimension(-1);
+    private final Map<Integer, ConjugationDimension> dimensions = new HashMap<>();
+    private ConjugationDimension buffer = new ConjugationDimension(-1);
     
-    public DeclensionNode(Integer _declensionId) {
+    public ConjugationNode(Integer _declensionId) {
         super(_declensionId);
+    }
+    
+    /**
+     * Applies evolution transforms to conjugated forms of extant words
+     * @param regex
+     * @param replacement 
+     * @param instanceOption 
+     * @throws java.lang.Exception 
+     */
+    public void evolveConjugatedNode(String regex, String replacement, RegexTools.ReplaceOptions instanceOption) throws Exception {
+        this.value = RegexTools.advancedReplace(value, regex, replacement, instanceOption);
     }
     
     /**
      * gets dimensional buffer
      * @return current buffer
      */
-    public DeclensionDimension getBuffer() {
+    public ConjugationDimension getBuffer() {
         return buffer;
     }
     
@@ -65,14 +77,14 @@ public class DeclensionNode extends DictNode {
         }
         
         this.addDimension(buffer);
-        buffer = new DeclensionDimension(-1);
+        buffer = new ConjugationDimension(-1);
     }
     
     /**
      * clears current value of buffer
      */
     public void clearBuffer() {
-        buffer = new DeclensionDimension(-1);
+        buffer = new ConjugationDimension(-1);
     }
     
     public boolean isDimensionless() {
@@ -92,7 +104,7 @@ public class DeclensionNode extends DictNode {
             dimensions.clear();
 
             if (_dimensionless) {
-                DeclensionDimension dim = new DeclensionDimension();
+                ConjugationDimension dim = new ConjugationDimension();
                 dim.setValue("SINGLETON-DIMENSION");
                 addDimension(dim);
             }
@@ -104,8 +116,8 @@ public class DeclensionNode extends DictNode {
      * @param dim Dimension to be added. Set id if desired, generated otherwise
      * @return id of created dimension (whether user or system set)
      */
-    public Integer addDimension(DeclensionDimension dim) {
-        DeclensionDimension addDim;
+    public Integer addDimension(ConjugationDimension dim) {
+        ConjugationDimension addDim;
         Integer ret;
         
         // use given ID if available, create one otherwise
@@ -120,7 +132,7 @@ public class DeclensionNode extends DictNode {
             highestDimension = ret;
         }
         
-        addDim = new DeclensionDimension(ret);
+        addDim = new ConjugationDimension(ret);
         addDim.setValue(dim.getValue());
         
         dimensions.put(ret, addDim);
@@ -145,7 +157,7 @@ public class DeclensionNode extends DictNode {
         return notes;
     }
     
-    public Collection<DeclensionDimension> getDimensions() {
+    public Collection<ConjugationDimension> getDimensions() {
         return dimensions.values();
 
     }
@@ -155,8 +167,8 @@ public class DeclensionNode extends DictNode {
      * @param _id id of declension dimension
      * @return declension dimension if it exists, null otherwise
      */
-    public DeclensionDimension getDeclensionDimensionById(int _id) {
-        DeclensionDimension ret = null;
+    public ConjugationDimension getConjugationDimensionById(int _id) {
+        ConjugationDimension ret = null;
         
         if (dimensions.containsKey(_id)) {
             ret = dimensions.get(_id);
@@ -212,13 +224,13 @@ public class DeclensionNode extends DictNode {
         wordNode.appendChild(nodeValue);
 
         // record dimensions of declension
-        Iterator<DeclensionDimension> dimIt = this.getDimensions().iterator();
+        Iterator<ConjugationDimension> dimIt = this.getDimensions().iterator();
         while (dimIt.hasNext()) {
             dimIt.next().writeXML(doc, wordNode);
         }
     }
     
-    public void writeXMLWordDeclension(Document doc, Element rootElement, Integer relatedId) {
+    public void writeXMLWordConjugation(Document doc, Element rootElement, Integer relatedId) {
         Element wordNode = doc.createElement(PGTUtil.DECLENSION_XID);
         rootElement.appendChild(wordNode);
 
@@ -249,11 +261,11 @@ public class DeclensionNode extends DictNode {
     
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
-        if (!(_node instanceof DeclensionNode)) {
+        if (!(_node instanceof ConjugationNode)) {
             throw new ClassCastException("Object not of type DeclensionNode");
         }
         
-        DeclensionNode node = (DeclensionNode) _node;
+        ConjugationNode node = (ConjugationNode) _node;
         
         this.setNotes(node.notes);
         this.setValue(node.getValue());
@@ -261,7 +273,7 @@ public class DeclensionNode extends DictNode {
         this.setDimensionless(node.dimensionless);
 
         node.dimensions.entrySet().forEach((entry) -> {
-            DeclensionDimension copyOfDim = new DeclensionDimension(entry.getKey());
+            ConjugationDimension copyOfDim = new ConjugationDimension(entry.getKey());
             copyOfDim.setEqual(entry.getValue());
             dimensions.put(entry.getKey(), copyOfDim);
         });
@@ -274,7 +286,7 @@ public class DeclensionNode extends DictNode {
         if (this == comp) {
             ret = true;
         } else if (comp != null && getClass() == comp.getClass()) {
-            DeclensionNode c = (DeclensionNode)comp;
+            ConjugationNode c = (ConjugationNode)comp;
             
             ret = value.equals(c.value);
             ret = ret && notes.equals(c.notes);

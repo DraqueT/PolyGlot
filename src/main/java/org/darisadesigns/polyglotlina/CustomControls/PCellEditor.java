@@ -46,14 +46,27 @@ import javax.swing.table.TableCellEditor;
  */
 public final class PCellEditor extends AbstractCellEditor implements TableCellEditor, Cloneable {
     private final JComponent component = new JTextField();
-    private final Font myFont;
+    private Font myFont;
+    private Color background = Color.white;
     private DocumentListener docListener;
     private boolean ignoreListenerSilencing = false;
-    private final boolean useConFont;
+    private boolean useConFont;
     private final DictCore core;
 
     public PCellEditor(boolean _useConFont, DictCore _core) {
         core = _core;
+        this.setUseConFont(_useConFont);
+
+        final JTextField setupText = (JTextField) component;
+
+        setupRightClickMenu(setupText);
+
+        setupText.setBorder(BorderFactory.createBevelBorder(1));
+
+        this.setupTextFieldListener(setupText);
+    }
+    
+    public void setUseConFont(boolean _useConFont) {
         useConFont = _useConFont;
         double preSize = core.getPropertiesManager().getFontSize();
         
@@ -64,14 +77,10 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
                 core.getOptionsManager().getMenuFontSize();
 
         myFont = PGTUtil.addFontAttribute(TextAttribute.SIZE, (float)fontSize, defFont);
-
-        final JTextField setupText = (JTextField) component;
-
-        setupRightClickMenu(setupText);
-
-        setupText.setBorder(BorderFactory.createBevelBorder(1));
-
-        this.setupTextFieldListener(setupText);
+        component.setFont(myFont);
+    }
+    public boolean isUseConFont() {
+        return useConFont;
     }
 
     public void setDocuListener(DocumentListener _listener) {
@@ -234,5 +243,9 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
 
     public void setBackground(Color bg) {
         component.setBackground(bg);
+    }
+
+    public Color getBackground() {
+        return background;
     }
 }

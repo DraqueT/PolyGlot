@@ -42,8 +42,8 @@ public class DeclensionDimensionTest {
         System.out.println("DeclensionDimensionTest.testSetEqual");
         
         String expectedValue = "TESTVAL";
-        DeclensionDimension source = new DeclensionDimension();
-        DeclensionDimension copyTo = new DeclensionDimension();
+        ConjugationDimension source = new ConjugationDimension();
+        ConjugationDimension copyTo = new ConjugationDimension();
         
         source.setValue(expectedValue);
         copyTo.setEqual(source);
@@ -69,7 +69,7 @@ public class DeclensionDimensionTest {
             Element rootElement = doc.createElement(PGTUtil.DICTIONARY_XID);
             doc.appendChild(rootElement);
             
-            DeclensionDimension testDim = new DeclensionDimension();
+            ConjugationDimension testDim = new ConjugationDimension();
             testDim.setValue("TESTVAL");
             testDim.writeXML(doc, rootElement);
         
@@ -83,8 +83,8 @@ public class DeclensionDimensionTest {
     public void testEquals() {
         System.out.println("DeclensionDimensionTest.testEquals");
         
-        DeclensionDimension testDim1 = new DeclensionDimension();
-        DeclensionDimension testDim2 = new DeclensionDimension();
+        ConjugationDimension testDim1 = new ConjugationDimension();
+        ConjugationDimension testDim2 = new ConjugationDimension();
         String testVal = "TESTO";
         
         testDim1.setValue(testVal);
@@ -97,8 +97,8 @@ public class DeclensionDimensionTest {
     public void testNotEquals() {
         System.out.println("DeclensionDimensionTest.testNotEquals");
         
-        DeclensionDimension testDim1 = new DeclensionDimension();
-        DeclensionDimension testDim2 = new DeclensionDimension();
+        ConjugationDimension testDim1 = new ConjugationDimension();
+        ConjugationDimension testDim2 = new ConjugationDimension();
         String testVal1 = "TESTO";
         String testVal2 = "BESTO";
         

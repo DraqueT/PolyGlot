@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
- * Licensed under: MIT Licence
+ * Licensed under: MIT License
  * See LICENSE.TXT included with this code to read the full license agreement.
 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
@@ -20,20 +20,29 @@
 package org.darisadesigns.polyglotlina.Nodes;
 
 /**
- * A label/combined ID pair for a constructed declension
+ * Holds information about evolved elements of a language
+ *
  * @author draque
  */
-public class DeclensionPair {
-    public final String combinedId;
-    public final String label;
+public class EvolutionPair {
+
+    public final String start;
+    public final String end;
+    public final String notes;
+    public final String issueDescription;
+    public final EvolutionType type;
     
-    public DeclensionPair(String _combinedId, String _label) {
-        label = _label;
-        combinedId = _combinedId;
+    public EvolutionPair(String _start, String _end, EvolutionType _type, String _issueDescription, String _notes) {
+        start = _start;
+        end = _end;
+        issueDescription = _issueDescription;
+        type = _type;
+        notes = _notes;
     }
-    
-    @Override
-    public String toString() {
-        return label;
+
+    public static enum EvolutionType {
+        word,
+        savedConjugation,
+        conjugationTemplate
     }
 }

@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
+import org.darisadesigns.polyglotlina.WebInterface;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -521,7 +522,7 @@ public class PropertiesManager {
     public String buildPropertiesReportTitle() {
         String ret = "";
 
-        ret += ConWordCollection.formatPlain("Language Name: " + langName + "<br><br>", core);
+        ret += ConWordCollection.formatPlain("Language Name: " + WebInterface.encodeHTML(langName) + "<br><br>", core);
 
         return ret;
     }

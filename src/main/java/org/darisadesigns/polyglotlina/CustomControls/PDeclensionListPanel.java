@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -21,10 +21,10 @@ package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.ManagersCollections.DeclensionManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionPair;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -45,12 +45,12 @@ import javax.swing.table.TableColumn;
  */
 public final class PDeclensionListPanel extends JPanel implements PDeclensionPanelInterface {
     private final Map<String, Integer> decIdsToListLocation = new HashMap<>();
-    private final List<DeclensionPair> declensionPairs;
+    private final List<ConjugationPair> declensionPairs;
     private final DictCore core;
     private final ConWord word;
     private final boolean onlyTab;
     private final PTable table;
-    private final DeclensionManager decMan;
+    private final ConjugationManager decMan;
     private boolean autoPopulated = false;
     
     /**
@@ -60,13 +60,13 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
      * @param _word word for which forms are being generated
      * @param _onlyTab true if this is the only tab being displayed
      */
-    public PDeclensionListPanel(DeclensionPair[] _declensionPairs, DictCore _core, ConWord _word, boolean _onlyTab) {
+    public PDeclensionListPanel(ConjugationPair[] _declensionPairs, DictCore _core, ConWord _word, boolean _onlyTab) {
         core = _core;
         declensionPairs = Arrays.asList(_declensionPairs);
         word = _word;
         onlyTab = _onlyTab;
         table = new PTable(core);
-        decMan = core.getDeclensionManager();
+        decMan = core.getConjugationManager();
         
         setLayout(new BorderLayout());
         
@@ -84,9 +84,9 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
     
     private void populateTableModelValues(DefaultTableModel tableModel) {
         int yPos = 0;
-        for (DeclensionPair pair : declensionPairs) {
+        for (ConjugationPair pair : declensionPairs) {
             // if suppressed, add null value
-            if (decMan.isCombinedDeclSurpressed(pair.combinedId, word.getWordTypeId())) {
+            if (decMan.isCombinedConjlSurpressed(pair.combinedId, word.getWordTypeId())) {
                 tableModel.setValueAt(null, yPos, 1);
             } else {
                 String wordForm = getWordForm(pair.combinedId);
@@ -121,7 +121,7 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
         String ret;
 
         if (word.isOverrideAutoDeclen()) {
-            DeclensionNode node = decMan.getDeclensionByCombinedId(word.getId(), fullDecId);
+            ConjugationNode node = decMan.getConjugationByCombinedId(word.getId(), fullDecId);
             ret = node == null ? "" : node.getValue();
         } else {
             try {

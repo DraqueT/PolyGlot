@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -25,10 +25,10 @@ import org.darisadesigns.polyglotlina.CustomControls.PDeclensionGridPanel;
 import org.darisadesigns.polyglotlina.CustomControls.PDeclensionListPanel;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ManagersCollections.DeclensionManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionPair;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +49,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PButton;
 public final class ScrDeclensionsGrids extends PDialog {
     private final List<String> combDecIds = new ArrayList<>();
     private final ConWord word;
-    private final DeclensionManager decMan;
+    private final ConjugationManager decMan;
     private final Map<String, String> labelMap = new HashMap<>();
     private boolean closeWithoutSave = false;
     private boolean autoPopulated = false;
@@ -64,7 +64,7 @@ public final class ScrDeclensionsGrids extends PDialog {
         super(_core);
         
         word = _word;
-        decMan = core.getDeclensionManager();
+        decMan = core.getConjugationManager();
 
         initComponents();
         this.setModal(true);
@@ -94,16 +94,16 @@ public final class ScrDeclensionsGrids extends PDialog {
     public static boolean canOpen(DictCore core, ConWord word) {
         boolean ret = true;
         int typeId = word.getWordTypeId();
-        DeclensionManager decMan = core.getDeclensionManager();
+        ConjugationManager decMan = core.getConjugationManager();
         
         if (typeId == 0) {
             InfoBox.info("Missing Part of Speech", 
                     "Word must have a part of Speech set and the part of speech must have declensions defined before using this feature.", 
                     core.getRootWindow());
             ret = false;
-        } else if ((decMan.getDimensionalDeclensionListTemplate(typeId) == null
-                    || decMan.getDimensionalDeclensionListTemplate(typeId).length == 0)
-                && decMan.getDimensionalDeclensionListWord(word.getId()).length == 0) {
+        } else if ((decMan.getDimensionalConjugationListTemplate(typeId) == null
+                    || decMan.getDimensionalConjugationListTemplate(typeId).length == 0)
+                && decMan.getDimensionalConjugationListWord(word.getId()).length == 0) {
             InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the "
                             + "Declensions button.", core.getRootWindow());
@@ -123,11 +123,11 @@ public final class ScrDeclensionsGrids extends PDialog {
     }
     
     private void populateDecIdToValues() {
-        DeclensionPair[] decTemplateList = decMan.getDimensionalCombinedIds(word.getWordTypeId());
+        ConjugationPair[] decTemplateList = decMan.getDimensionalCombinedIds(word.getWordTypeId());
         
-        for (DeclensionPair curPair : decTemplateList) {
+        for (ConjugationPair curPair : decTemplateList) {
             // skip forms that have been suppressed
-            if (decMan.isCombinedDeclSurpressed(curPair.combinedId, word.getWordTypeId())) {
+            if (decMan.isCombinedConjlSurpressed(curPair.combinedId, word.getWordTypeId())) {
                 continue;
             }
             
@@ -137,13 +137,13 @@ public final class ScrDeclensionsGrids extends PDialog {
     }
     
     private void setupDimDropdowns() {
-        DeclensionNode[] declensionNodes = decMan.getDimensionalDeclensionListTemplate(word.getWordTypeId());
-        DefaultComboBoxModel<DeclensionNode> modelX = new DefaultComboBoxModel<>();
-        DefaultComboBoxModel<DeclensionNode> modelY = new DefaultComboBoxModel<>();
+        ConjugationNode[] declensionNodes = decMan.getDimensionalConjugationListTemplate(word.getWordTypeId());
+        DefaultComboBoxModel<ConjugationNode> modelX = new DefaultComboBoxModel<>();
+        DefaultComboBoxModel<ConjugationNode> modelY = new DefaultComboBoxModel<>();
         cmbDimX.setModel(modelX);
         cmbDimY.setModel(modelY);
         
-        for (DeclensionNode node : declensionNodes) {
+        for (ConjugationNode node : declensionNodes) {
             modelX.addElement(node);
             modelY.addElement(node);
         }
@@ -155,8 +155,8 @@ public final class ScrDeclensionsGrids extends PDialog {
     }
     
     private void buildWindowBody() {
-        DeclensionNode dimX = (DeclensionNode)cmbDimX.getSelectedItem();
-        DeclensionNode dimY = (DeclensionNode)cmbDimY.getSelectedItem();
+        ConjugationNode dimX = (ConjugationNode)cmbDimX.getSelectedItem();
+        ConjugationNode dimY = (ConjugationNode)cmbDimY.getSelectedItem();
         
         pnlTabDeclensions.removeAll();
         
@@ -175,7 +175,7 @@ public final class ScrDeclensionsGrids extends PDialog {
                 });
 
                 // add singleton values when appropriate
-                DeclensionPair[] singletons = decMan.getSingletonCombinedIds(word.getWordTypeId());
+                ConjugationPair[] singletons = decMan.getSingletonCombinedIds(word.getWordTypeId());
                 if (singletons.length != 0) {
                     PDeclensionListPanel listPanel = new PDeclensionListPanel(singletons, core, word, false);
                     pnlTabDeclensions.addTab(listPanel.getTabName(), listPanel);
@@ -187,7 +187,7 @@ public final class ScrDeclensionsGrids extends PDialog {
             cmbDimY.setVisible(false);
             jLabel1.setVisible(false);
             jLabel2.setVisible(false);
-            DeclensionPair[] completeList = decMan.getAllCombinedIds(word.getWordTypeId());
+            ConjugationPair[] completeList = decMan.getAllCombinedIds(word.getWordTypeId());
             PDeclensionListPanel listPanel 
                     = new PDeclensionListPanel(completeList, core, word, true);
             
@@ -199,7 +199,7 @@ public final class ScrDeclensionsGrids extends PDialog {
     }
     
     private boolean shouldRenderDimensional() {
-        return decMan.getDimensionalDeclensionListTemplate(word.getWordTypeId()).length > 1;
+        return decMan.getDimensionalConjugationListTemplate(word.getWordTypeId()).length > 1;
     }
     
     private String replaceDimensionByIndex(String dimensions, int index, String replacement) {
@@ -223,8 +223,8 @@ public final class ScrDeclensionsGrids extends PDialog {
      */
     private List<String> getPanelPartialDimIds() {
         List<String> partialIds = new ArrayList<>();
-        int xNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (DeclensionNode)cmbDimX.getSelectedItem());
-        int yNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (DeclensionNode)cmbDimY.getSelectedItem());
+        int xNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (ConjugationNode)cmbDimX.getSelectedItem());
+        int yNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (ConjugationNode)cmbDimY.getSelectedItem());
         
         for (String dimId : combDecIds) {
             if (dimId == null) {
@@ -243,7 +243,7 @@ public final class ScrDeclensionsGrids extends PDialog {
     }
     
     private void saveValues() {
-        core.getDeclensionManager().clearAllDeclensionsWord(word.getId());
+        core.getConjugationManager().clearAllConjugationsWord(word.getId());
         
         if (chkAutogenOverride.isSelected()) {
             int count = pnlTabDeclensions.getTabCount();
@@ -251,14 +251,14 @@ public final class ScrDeclensionsGrids extends PDialog {
                 PDeclensionPanelInterface comp = (PDeclensionPanelInterface)pnlTabDeclensions.getComponentAt(i);
                 
                 for (Entry<String, String> entry : comp.getAllDecValues().entrySet()) {
-                    DeclensionNode saveNode = new DeclensionNode(-1);
+                    ConjugationNode saveNode = new ConjugationNode(-1);
 
                     saveNode.setValue(entry.getValue().trim());
                     saveNode.setCombinedDimId(entry.getKey());
                     saveNode.setNotes(labelMap.get(entry.getKey()));
 
                     // declensions per word not saved via int id any longer
-                    decMan.addDeclensionToWord(word.getId(), -1, saveNode);
+                    decMan.addConjugationToWord(word.getId(), -1, saveNode);
                 }
             }
         }
@@ -420,8 +420,8 @@ public final class ScrDeclensionsGrids extends PDialog {
     private javax.swing.JButton btnDeprecated;
     private javax.swing.JButton btnOk;
     private javax.swing.JCheckBox chkAutogenOverride;
-    private javax.swing.JComboBox<DeclensionNode> cmbDimX;
-    private javax.swing.JComboBox<DeclensionNode> cmbDimY;
+    private javax.swing.JComboBox<ConjugationNode> cmbDimX;
+    private javax.swing.JComboBox<ConjugationNode> cmbDimY;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTabbedPane pnlTabDeclensions;

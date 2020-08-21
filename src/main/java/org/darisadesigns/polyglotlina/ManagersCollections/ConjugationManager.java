@@ -20,12 +20,12 @@
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionDimension;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationDimension;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenRule;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenTransform;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionPair;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationGenTransform;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +38,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
+import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
+import org.darisadesigns.polyglotlina.Nodes.EvolutionPair.EvolutionType;
+import org.darisadesigns.polyglotlina.RegexTools;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -45,32 +48,153 @@ import org.w3c.dom.Element;
  *
  * @author draque
  */
-public class DeclensionManager {
+public class ConjugationManager {
 
     private final DictCore core;
     private final List<String> decGenDebug = new ArrayList<>();
     private Integer topId = 0;
     private boolean bufferDecTemp = false;
     private Integer bufferRelId = -1;
-    private DeclensionNode buffer = new DeclensionNode(-1);
-    private final Map<Integer, List<DeclensionGenRule>> generationRules = new HashMap<>();
-    private DeclensionGenRule ruleBuffer = new DeclensionGenRule();
+    private ConjugationNode buffer = new ConjugationNode(-1);
+    private final Map<Integer, List<ConjugationGenRule>> generationRules = new HashMap<>();
+    private ConjugationGenRule ruleBuffer = new ConjugationGenRule();
     
     // Integer is ID of related word, list is list of declension nodes
-    private final Map<Integer, List<DeclensionNode>> dList = new HashMap<>();
+    private final Map<Integer, List<ConjugationNode>> dList = new HashMap<>();
 
-    // Integer is ID of related type, list is list of declensions for this type
-    private final Map<Integer, List<DeclensionNode>> dTemplates = new HashMap<>();
+    // Integer is ID of related PoS, list is list of declensions for this PoS
+    private final Map<Integer, List<ConjugationNode>> dTemplates = new HashMap<>();
 
     // If specific combined declensions require additional settings in the future,
     // change the boolean here to an object which will store them
     private final Map<String, Boolean> combSettings = new HashMap<>();
 
-    public DeclensionManager(DictCore _core) {
+    public ConjugationManager(DictCore _core) {
         core = _core;
     }
     
-    public boolean isCombinedDeclSurpressed(String _combId, Integer _typeId) {
+    /**
+     * Applies evolution transforms to all recorded forms of a given word
+     * @param wordId
+     * @param regex
+     * @param replacement 
+     * @param instanceOption 
+     * @return  
+     */
+    public EvolutionPair[] evolveConjugatedWordForms(int wordId, 
+            String regex, 
+            String replacement, 
+            RegexTools.ReplaceOptions instanceOption) {
+        List<EvolutionPair> ret = new ArrayList<>();
+        if (dList.containsKey(wordId)) {
+            for (ConjugationNode curNode : dList.get(wordId)) {
+                String startValue = curNode.getValue();
+                try {
+                    curNode.evolveConjugatedNode(regex, replacement, instanceOption);
+                    
+                    // only report error if prior value did not start out as blank
+                    if (curNode.getValue().isBlank() && !startValue.isBlank()) {
+                        throw new Exception("Conjugation set to blank value.");
+                    }
+                    
+                    ret.add(new EvolutionPair(startValue, 
+                            curNode.getValue(), 
+                            EvolutionType.savedConjugation,
+                            "",
+                            "Evolved Wordform"
+                    ));
+                } catch (Exception e) {
+                    
+                }
+            }
+        }
+        
+        return ret.toArray(new EvolutionPair[0]);
+    }
+    
+    /**
+     * Applies language evolution rules to conjugation rules based on a part of 
+     * speech filter. If the filter is set to 0, it is not used, and the evolutions
+     * are applied to all entries. The evolutions are applied to both the regex and
+     * the replacement text of the rules' transformations.
+     * @param posFilter
+     * @param regex
+     * @param replacement
+     * @return Array of EvolutionPair values representing results (including errors)
+     */
+    public EvolutionPair[] evolveConjugationRules(int posFilter, String regex, String replacement) {
+        List<EvolutionPair> ret = new ArrayList<>();
+        if (posFilter > 0) {
+            if (generationRules.containsKey(posFilter)) {
+                ret = this.evolveSingleRuleList(generationRules.get(posFilter), regex, replacement);
+            }
+        } else {
+            for (List<ConjugationGenRule> ruleList : generationRules.values()) {
+                ret.addAll(this.evolveSingleRuleList(ruleList, regex, replacement));
+            }
+        }
+        
+        return ret.toArray(new EvolutionPair[0]);
+    }
+    
+    /**
+     * Applies language evolution rules to conjugation rules based on a part of 
+     * speech filter. If the filter is set to 0, it is not used, and the evolutions
+     * are applied to all entries. The evolutions are applied to both the regex and
+     * the replacement text of the rules' transformations.
+     * @param ruleList
+     * @param regex
+     * @param replacement
+     * @return List of EvolutionPair values representing results (including errors)
+     */
+    private List<EvolutionPair> evolveSingleRuleList(List<ConjugationGenRule> ruleList, String regex, String replacement) {
+        List<EvolutionPair> ret = new ArrayList<>();
+        
+        for (ConjugationGenRule rule : ruleList) {
+            for (ConjugationGenTransform transform : rule.getTransforms()) {
+                String originalRegex = transform.regex;
+                String originalReplacement = transform.replaceText;
+
+                try {
+                    transform.regex = transform.regex.replace(regex, replacement);
+                    transform.replaceText = transform.replaceText.replace(regex, replacement);
+                    
+                    // Do NOT check the replaceText for being blank. There can be legit reasons for this.
+                    if (transform.regex.isBlank()) {
+                        throw new Exception("regex blanked");
+                    }
+                    
+                    // only record if changes actually made
+                    if (!originalRegex.equals(transform.regex) 
+                            || !originalReplacement.equals(transform.replaceText)) {
+                        ret.add(new EvolutionPair(originalRegex + "->" + originalReplacement, 
+                                transform.regex + "->" + transform.replaceText, 
+                                EvolutionType.savedConjugation, 
+                                "",
+                                rule.getName()
+                        ));
+                    }
+                } catch (Exception e) {
+                    // revert on error
+                    String regexError = transform.regex;
+                    String replacementError = transform.replaceText;
+                    transform.regex = originalRegex;
+                    transform.replaceText = originalReplacement;
+                    
+                    ret.add(new EvolutionPair(originalRegex + "->" + originalReplacement, 
+                            regexError + "->" + replacementError, 
+                            EvolutionType.savedConjugation, 
+                            e.getLocalizedMessage() + "(value reverted to original)", 
+                            rule.getName()
+                    ));
+                }
+            }
+        }
+        
+        return ret;
+    }
+    
+    public boolean isCombinedConjlSurpressed(String _combId, Integer _typeId) {
         String storeId = _typeId + "," + _combId;
 
         if (!combSettings.containsKey(storeId)) {
@@ -80,7 +204,7 @@ public class DeclensionManager {
         return combSettings.get(storeId);
     }
 
-    public void setCombinedDeclSuppressed(String _combId, Integer _typeId, boolean _suppress) {
+    public void setCombinedConjSuppressed(String _combId, Integer _typeId, boolean _suppress) {
         String storeId = _typeId + "," + _combId;
 
         if (combSettings.containsKey(storeId)) {
@@ -97,7 +221,7 @@ public class DeclensionManager {
      * @param _completeId complete, raw ID of data
      * @param _suppress suppression value
      */
-    public void setCombinedDeclSuppressedRaw(String _completeId, boolean _suppress) {
+    public void setCombinedConjugationSuppressedRaw(String _completeId, boolean _suppress) {
         combSettings.put(_completeId, _suppress);
     }
 
@@ -107,26 +231,26 @@ public class DeclensionManager {
      * @param typeId type to get deprecated values for
      * @return list of all deprecated gen rules
      */
-    public DeclensionGenRule[] getAllDepGenerationRules(int typeId) {
-        List<DeclensionGenRule> ret = new ArrayList<>();
-        DeclensionPair[] typeRules = getAllCombinedIds(typeId);
+    public ConjugationGenRule[] getAllDepGenerationRules(int typeId) {
+        List<ConjugationGenRule> ret = new ArrayList<>();
+        ConjugationPair[] typeRules = getAllCombinedIds(typeId);
         Map<String, Integer> ruleMap = new HashMap<>();
 
         // creates searchable map of extant combination IDs
-        for (DeclensionPair curPair : typeRules) {
+        for (ConjugationPair curPair : typeRules) {
             ruleMap.put(curPair.combinedId, 0);
         }
 
         int highestIndex = 0;
-        for (List<DeclensionGenRule> list : generationRules.values()) {
-            for (DeclensionGenRule curRule : list) {
+        for (List<ConjugationGenRule> list : generationRules.values()) {
+            for (ConjugationGenRule curRule : list) {
                 int curRuleIndex = curRule.getIndex();
                 highestIndex = Math.max(highestIndex, curRuleIndex);
             }
         }
 
-        for (List<DeclensionGenRule> list : generationRules.values()) {
-            for (DeclensionGenRule curRule : list) {
+        for (List<ConjugationGenRule> list : generationRules.values()) {
+            for (ConjugationGenRule curRule : list) {
                 // adds to return value only if rule matches ID but is orphaned
                 if (curRule.getIndex() == -1) {
                     highestIndex++;
@@ -142,7 +266,7 @@ public class DeclensionManager {
         
         Collections.sort(ret);
 
-        return ret.toArray(new DeclensionGenRule[0]);
+        return ret.toArray(new ConjugationGenRule[0]);
     }
 
     /**
@@ -150,7 +274,7 @@ public class DeclensionManager {
      *
      * @return current declension rule buffer
      */
-    public DeclensionGenRule getRuleBuffer() {
+    public ConjugationGenRule getRuleBuffer() {
         return ruleBuffer;
     }
 
@@ -158,8 +282,8 @@ public class DeclensionManager {
      * inserts current rule buffer and sets to blank value
      */
     public void insRuleBuffer() {
-        addDeclensionGenRule(ruleBuffer);
-        ruleBuffer = new DeclensionGenRule();
+        addConjugationGenRule(ruleBuffer);
+        ruleBuffer = new ConjugationGenRule();
     }
 
     /**
@@ -167,9 +291,9 @@ public class DeclensionManager {
      *
      * @param newRule rule to add
      */
-    public void addDeclensionGenRule(DeclensionGenRule newRule) {
+    public void addConjugationGenRule(ConjugationGenRule newRule) {
         int typeId = newRule.getTypeId();
-        List<DeclensionGenRule> rules;
+        List<ConjugationGenRule> rules;
 
         if (generationRules.containsKey(typeId)) {
             rules = generationRules.get(typeId);
@@ -197,7 +321,7 @@ public class DeclensionManager {
      *
      * @param typeId ID of type to wipe
      */
-    public void wipeDeclensionGenRules(int typeId) {
+    public void wipeConjugationGenRules(int typeId) {
         generationRules.remove(typeId);
     }
 
@@ -209,7 +333,7 @@ public class DeclensionManager {
             Collections.sort(ruleList);
             int newIndex = 1;
             
-            for (DeclensionGenRule rule : ruleList) {
+            for (ConjugationGenRule rule : ruleList) {
                 rule.setIndex(newIndex);
                 
                 newIndex++;
@@ -222,7 +346,7 @@ public class DeclensionManager {
      *
      * @param delRule rule to delete
      */
-    public void deleteDeclensionGenRule(DeclensionGenRule delRule) {
+    public void deleteConjugationGenRule(ConjugationGenRule delRule) {
         int typeId = delRule.getTypeId();
 
         if (generationRules.containsKey(typeId)) {
@@ -231,18 +355,18 @@ public class DeclensionManager {
     }
 
     /**
-     * Deletes all DeclensionGenRule entries for a given POS/declension pairing.
+     * Deletes all ConjugationGenRule entries for a given POS/declension pairing.
      *
      * @param typeId
      * @param combinedId
      */
-    public void deleteDeclensionGenRules(int typeId, String combinedId) {
+    public void deleteConjugationGenRules(int typeId, String combinedId) {
         if (generationRules.containsKey(typeId)) {
-            List<DeclensionGenRule> rules = generationRules.get(typeId);
-            List<DeclensionGenRule> iter = new ArrayList<>(rules);
+            List<ConjugationGenRule> rules = generationRules.get(typeId);
+            List<ConjugationGenRule> iter = new ArrayList<>(rules);
             
             // iterate on copy of array to avoid concurrent modification
-            for (DeclensionGenRule rule : iter) {
+            for (ConjugationGenRule rule : iter) {
                 if (rule.getCombinationId().equals(combinedId)) {
                     rules.remove(rule);
                 }
@@ -258,10 +382,10 @@ public class DeclensionManager {
      * @param combinedId the combinedId for the rules to fetch
      * @return list of rules
      */
-    public DeclensionGenRule[] getDeclensionRulesForDeclension(int typeId, String combinedId) {
-        List<DeclensionGenRule> ret = new ArrayList<>();
+    public ConjugationGenRule[] getConjugationRulesForConjugation(int typeId, String combinedId) {
+        List<ConjugationGenRule> ret = new ArrayList<>();
         
-        for (DeclensionGenRule curRule : getDeclensionRulesForType(typeId)) {
+        for (ConjugationGenRule curRule : getConjugationRulesForType(typeId)) {
             if (curRule.getCombinationId().equals(combinedId)) {
                 ret.add(curRule);
             }
@@ -269,7 +393,7 @@ public class DeclensionManager {
         
         Collections.sort(ret);
         
-        return ret.toArray(new DeclensionGenRule[0]);
+        return ret.toArray(new ConjugationGenRule[0]);
     }
 
     /**
@@ -279,8 +403,8 @@ public class DeclensionManager {
      * account for class filtering)
      * @return list of rules
      */
-    public DeclensionGenRule[] getDeclensionRulesForType(int typeId) {
-        List<DeclensionGenRule> ret;
+    public ConjugationGenRule[] getConjugationRulesForType(int typeId) {
+        List<ConjugationGenRule> ret;
 
         if (generationRules.containsKey(typeId)) {
             ret = generationRules.get(typeId);
@@ -290,7 +414,7 @@ public class DeclensionManager {
 
         Collections.sort(ret);
 
-        return ret.toArray(new DeclensionGenRule[0]);
+        return ret.toArray(new ConjugationGenRule[0]);
     }
     
     /**
@@ -301,11 +425,11 @@ public class DeclensionManager {
      * account for class filtering)
      * @return list of rules
      */
-    public DeclensionGenRule[] getDeclensionRulesForTypeAndCombId(int typeId, String combinedId) {
-        List<DeclensionGenRule> ret = new ArrayList<>();
-        DeclensionGenRule[] typeRules = getDeclensionRulesForType(typeId);
+    public ConjugationGenRule[] getConjugationRulesForTypeAndCombId(int typeId, String combinedId) {
+        List<ConjugationGenRule> ret = new ArrayList<>();
+        ConjugationGenRule[] typeRules = getConjugationRulesForType(typeId);
         
-        for (DeclensionGenRule rule : typeRules) {
+        for (ConjugationGenRule rule : typeRules) {
             if (rule.getCombinationId().equals(combinedId)) {
                 ret.add(rule);
             }
@@ -313,7 +437,7 @@ public class DeclensionManager {
         
         Collections.sort(ret);
         
-        return ret.toArray(new DeclensionGenRule[0]);
+        return ret.toArray(new ConjugationGenRule[0]);
     }
 
     /**
@@ -324,14 +448,14 @@ public class DeclensionManager {
      * classes/class values it has
      * @return list of rules
      */
-    public DeclensionGenRule[] getDeclensionRules(ConWord word) {
-        List<DeclensionGenRule> ret = new ArrayList<>();
+    public ConjugationGenRule[] getConjugationRules(ConWord word) {
+        List<ConjugationGenRule> ret = new ArrayList<>();
         int typeId = word.getWordTypeId();
         
         if (generationRules.containsKey(typeId)) {
-            List<DeclensionGenRule> decRules = generationRules.get(word.getWordTypeId());
+            List<ConjugationGenRule> decRules = generationRules.get(word.getWordTypeId());
 
-            for (DeclensionGenRule curRule : decRules) {
+            for (ConjugationGenRule curRule : decRules) {
                 ret.add(curRule);
             }
         }
@@ -340,12 +464,12 @@ public class DeclensionManager {
 
         // ensure that all rules cave contiguous IDs before returning
         int i = 1;
-        for (DeclensionGenRule curRule : ret) {
+        for (ConjugationGenRule curRule : ret) {
             curRule.setIndex(i);
             i++;
         }
 
-        return ret.toArray(new DeclensionGenRule[0]);
+        return ret.toArray(new ConjugationGenRule[0]);
     }
 
     /**
@@ -358,12 +482,12 @@ public class DeclensionManager {
      * @throws java.lang.Exception on bad regex
      */
     public String declineWord(ConWord word, String combinedId) throws Exception {
-        DeclensionGenRule[] rules = getDeclensionRules(word);
+        ConjugationGenRule[] rules = getConjugationRules(word);
         decGenDebug.clear();
         decGenDebug.add("APPLIED RULES BREAKDOWN:\n");
         String ret = word.getValue();
 
-        for (DeclensionGenRule curRule : rules) {
+        for (ConjugationGenRule curRule : rules) {
             boolean ruleAppliesCombId = curRule.getCombinationId().equals(combinedId);
             boolean ruleAppliesToWord = curRule.doesRuleApplyToWord(word);
             
@@ -380,9 +504,9 @@ public class DeclensionManager {
             
             debugString += curRule.getDebugString();
 
-            DeclensionGenTransform[] transforms = curRule.getTransforms();
+            ConjugationGenTransform[] transforms = curRule.getTransforms();
 
-            for (DeclensionGenTransform curTrans : transforms) {
+            for (ConjugationGenTransform curTrans : transforms) {
                 try {
                     String orig = ret;
                     ret = ret.replaceAll(curTrans.regex, curTrans.replaceText);
@@ -407,12 +531,12 @@ public class DeclensionManager {
         return ret;
     }
 
-    public void addDeclensionToWord(Integer wordId, Integer declensionId, DeclensionNode declension) {
-        addDeclension(wordId, declensionId, declension, dList);
+    public void addConjugationToWord(Integer wordId, Integer declensionId, ConjugationNode declension) {
+        ConjugationManager.this.addConjugation(wordId, declensionId, declension, dList);
     }
 
-    public void deleteDeclensionFromWord(Integer wordId, Integer declensionId) {
-        deleteDeclension(wordId, declensionId, dList);
+    public void deleteConjugationFromWord(Integer wordId, Integer declensionId) {
+        deleteConjugation(wordId, declensionId, dList);
     }
 
     /**
@@ -420,22 +544,22 @@ public class DeclensionManager {
      *
      * @param typeId ID of type to deprecate declensions for
      */
-    public void deprecateAllDeclensions(Integer typeId) {
-        Iterator<Entry<Integer, List<DeclensionNode>>> decIt = dList.entrySet().iterator();
+    public void deprecateAllConjugations(Integer typeId) {
+        Iterator<Entry<Integer, List<ConjugationNode>>> decIt = dList.entrySet().iterator();
 
         while (decIt.hasNext()) {
-            Entry<Integer, List<DeclensionNode>> curEntry = decIt.next();
-            List<DeclensionNode> curList = curEntry.getValue();
+            Entry<Integer, List<ConjugationNode>> curEntry = decIt.next();
+            List<ConjugationNode> curList = curEntry.getValue();
 
             // only run for declensions of words with particular type
             if (!core.getWordCollection().getNodeById(curEntry.getKey()).getWordTypeId().equals(typeId)) {
                 continue;
             }
 
-            Iterator<DeclensionNode> nodeIt = curList.iterator();
+            Iterator<ConjugationNode> nodeIt = curList.iterator();
 
             while (nodeIt.hasNext()) {
-                DeclensionNode curNode = nodeIt.next();
+                ConjugationNode curNode = nodeIt.next();
 
                 curNode.setCombinedDimId("D" + curNode.getCombinedDimId());
             }
@@ -449,16 +573,16 @@ public class DeclensionManager {
      * @param declensionId the declension within the type to retrieve
      * @return the object representing the declension
      */
-    public DeclensionNode getDeclension(Integer typeId, Integer declensionId) {
-        DeclensionNode ret = null;
-        List<DeclensionNode> decList = dTemplates.get(typeId);
+    public ConjugationNode getConjugation(Integer typeId, Integer declensionId) {
+        ConjugationNode ret = null;
+        List<ConjugationNode> decList = dTemplates.get(typeId);
 
         // only search farther if declension itself actually exists
         if (decList != null) {
-            Iterator<DeclensionNode> decIt = decList.iterator();
+            Iterator<ConjugationNode> decIt = decList.iterator();
 
             while (decIt.hasNext()) {
-                DeclensionNode curNode = decIt.next();
+                ConjugationNode curNode = decIt.next();
 
                 if (curNode.getId().equals(declensionId)) {
                     ret = curNode;
@@ -475,8 +599,8 @@ public class DeclensionManager {
      *
      * @param wordId ID of word to clear of all declensions
      */
-    public void clearAllDeclensionsWord(Integer wordId) {
-        clearAllDeclensions(wordId, dList);
+    public void clearAllConjugationsWord(Integer wordId) {
+        clearAllConjugations(wordId, dList);
     }
 
     /**
@@ -486,13 +610,13 @@ public class DeclensionManager {
      * @param typeId ID of type to fetch combined IDs for
      * @return list of labels and IDs
      */
-    public DeclensionPair[] getAllCombinedIds(Integer typeId) {
-        DeclensionNode[] dimensionalDeclensionNodes = getDimensionalDeclensionListTemplate(typeId);
-        List<DeclensionNode> singletonDeclensionNodes = getSingletonDeclensionList(typeId, dTemplates);
-        List<DeclensionPair> ret = getAllCombinedDimensionalIds(0, ",", "", dimensionalDeclensionNodes);
-        ret.addAll(Arrays.asList(getAllSingletonIds(singletonDeclensionNodes)));
+    public ConjugationPair[] getAllCombinedIds(Integer typeId) {
+        ConjugationNode[] dimensionalConjugationNodes = getDimensionalConjugationListTemplate(typeId);
+        List<ConjugationNode> singletonConjugationNodes = ConjugationManager.this.getSingletonConjugationList(typeId, dTemplates);
+        List<ConjugationPair> ret = getAllCombinedDimensionalIds(0, ",", "", dimensionalConjugationNodes);
+        ret.addAll(Arrays.asList(getAllSingletonIds(singletonConjugationNodes)));
 
-        return ret.toArray(new DeclensionPair[0]);
+        return ret.toArray(new ConjugationPair[0]);
     }
 
     /**
@@ -502,9 +626,9 @@ public class DeclensionManager {
      * @param typeId ID of type to fetch combined IDs for
      * @return list of labels and IDs
      */
-    public DeclensionPair[] getDimensionalCombinedIds(Integer typeId) {
-        DeclensionNode[] dimensionalDeclensionNodes = getDimensionalDeclensionListTemplate(typeId);
-        return getAllCombinedDimensionalIds(0, ",", "", dimensionalDeclensionNodes).toArray(new DeclensionPair[0]);
+    public ConjugationPair[] getDimensionalCombinedIds(Integer typeId) {
+        ConjugationNode[] dimensionalConjugationNodes = getDimensionalConjugationListTemplate(typeId);
+        return getAllCombinedDimensionalIds(0, ",", "", dimensionalConjugationNodes).toArray(new ConjugationPair[0]);
     }
 
     /**
@@ -514,20 +638,20 @@ public class DeclensionManager {
      * @param typeId ID of type to fetch combined IDs for
      * @return list of labels and IDs
      */
-    public DeclensionPair[] getSingletonCombinedIds(Integer typeId) {
-        List<DeclensionNode> singletonDeclensionNodes = getSingletonDeclensionList(typeId, dTemplates);
-        return getAllSingletonIds(singletonDeclensionNodes);
+    public ConjugationPair[] getSingletonCombinedIds(Integer typeId) {
+        List<ConjugationNode> singletonConjugationNodes = ConjugationManager.this.getSingletonConjugationList(typeId, dTemplates);
+        return getAllSingletonIds(singletonConjugationNodes);
     }
 
-    public DeclensionPair[] getAllSingletonIds(List<DeclensionNode> declensionList) {
-        List<DeclensionPair> ret = new ArrayList<>();
+    public ConjugationPair[] getAllSingletonIds(List<ConjugationNode> declensionList) {
+        List<ConjugationPair> ret = new ArrayList<>();
 
         declensionList.forEach((curNode) -> {
-            DeclensionPair curPair = new DeclensionPair(curNode.getCombinedDimId(), curNode.getValue());
+            ConjugationPair curPair = new ConjugationPair(curNode.getCombinedDimId(), curNode.getValue());
             ret.add(curPair);
         });
 
-        return ret.toArray(new DeclensionPair[0]);
+        return ret.toArray(new ConjugationPair[0]);
     }
 
     /**
@@ -537,17 +661,17 @@ public class DeclensionManager {
      * @param node dimension to find
      * @return locational index within dimensional ids (-1 if no value found)
      */
-    public int getDimensionTemplateIndex(int typeId, DeclensionNode node) {
+    public int getDimensionTemplateIndex(int typeId, ConjugationNode node) {
         int ret = -1;
 
         if (dTemplates.containsKey(typeId)) {
-            List<DeclensionNode> declensionValues = dTemplates.get(typeId);
+            List<ConjugationNode> declensionValues = dTemplates.get(typeId);
 
             ret = declensionValues.indexOf(node);
 
             // must loop through due to inclusion of singleton declensions here
             int numSingleton = 0;
-            for (DeclensionNode testNode : declensionValues) {
+            for (ConjugationNode testNode : declensionValues) {
                 if (testNode.isDimensionless()) {
                     numSingleton++;
                 }
@@ -569,12 +693,12 @@ public class DeclensionManager {
      * @param index
      * @return null if none found
      */
-    public DeclensionNode getDimensionalDeclensionTemplateByIndex(int typeId, int index) {
-        DeclensionNode ret = null;
-        List<DeclensionNode> nodes = dTemplates.get(typeId);
+    public ConjugationNode getDimensionalConjugationTemplateByIndex(int typeId, int index) {
+        ConjugationNode ret = null;
+        List<ConjugationNode> nodes = dTemplates.get(typeId);
 
         int curIndex = 0;
-        for (DeclensionNode node : nodes) {
+        for (ConjugationNode node : nodes) {
             if (node.isDimensionless()) {
                 continue;
             } else if (curIndex == index) {
@@ -596,8 +720,8 @@ public class DeclensionManager {
      * @param declensionList list of template declensions for type
      * @return list of currently constructed labels and ids
      */
-    private List<DeclensionPair> getAllCombinedDimensionalIds(int depth, String curId, String curLabel, DeclensionNode[] declensionList) {
-        List<DeclensionPair> ret = new ArrayList<>();
+    private List<ConjugationPair> getAllCombinedDimensionalIds(int depth, String curId, String curLabel, ConjugationNode[] declensionList) {
+        List<ConjugationPair> ret = new ArrayList<>();
 
         // for the specific case that a word with no declension patterns has a deprecated declension
         if (declensionList.length == 0) {
@@ -605,15 +729,15 @@ public class DeclensionManager {
         }
 
         if (depth >= declensionList.length) {
-            ret.add(new DeclensionPair(curId, curLabel));
+            ret.add(new ConjugationPair(curId, curLabel));
         } else {
 
-            DeclensionNode curNode = declensionList[depth];
-            Collection<DeclensionDimension> dimensions = curNode.getDimensions();
-            Iterator<DeclensionDimension> dimIt = dimensions.iterator();
+            ConjugationNode curNode = declensionList[depth];
+            Collection<ConjugationDimension> dimensions = curNode.getDimensions();
+            Iterator<ConjugationDimension> dimIt = dimensions.iterator();
 
             while (dimIt.hasNext()) {
-                DeclensionDimension curDim = dimIt.next();
+                ConjugationDimension curDim = dimIt.next();
 
                 ret.addAll(getAllCombinedDimensionalIds(depth + 1, curId + curDim.getId() + ",",
                         curLabel + (curLabel.isEmpty() ? "" : " ") + curDim.getValue(), declensionList));
@@ -631,8 +755,8 @@ public class DeclensionManager {
      * @param wordId
      * @return
      */
-    public DeclensionNode[] getDimensionalDeclensionListWord(Integer wordId) {
-        return getDimensionalDeclensionList(wordId, dList).toArray(new DeclensionNode[0]);
+    public ConjugationNode[] getDimensionalConjugationListWord(Integer wordId) {
+        return getDimensionalConjugationList(wordId, dList).toArray(new ConjugationNode[0]);
     }
 
     /**
@@ -642,8 +766,8 @@ public class DeclensionManager {
      * @param typeId
      * @return
      */
-    public DeclensionNode[] getDimensionalDeclensionListTemplate(Integer typeId) {
-        return getDimensionalDeclensionList(typeId, dTemplates).toArray(new DeclensionNode[0]);
+    public ConjugationNode[] getDimensionalConjugationListTemplate(Integer typeId) {
+        return getDimensionalConjugationList(typeId, dTemplates).toArray(new ConjugationNode[0]);
     }
 
     /**
@@ -653,33 +777,33 @@ public class DeclensionManager {
      * @param typeId
      * @return
      */
-    public DeclensionNode[] getFullDeclensionListTemplate(Integer typeId) {
-        return getFullDeclensionList(typeId, dTemplates).toArray(new DeclensionNode[0]);
+    public ConjugationNode[] getFullConjugationListTemplate(Integer typeId) {
+        return getFullConjugationList(typeId, dTemplates).toArray(new ConjugationNode[0]);
     }
 
-    public DeclensionNode addDeclensionToTemplate(Integer typeId, Integer declensionId, DeclensionNode declension) {
-        return addDeclension(typeId, declensionId, declension, dTemplates);
+    public ConjugationNode addConjugationToTemplate(Integer typeId, Integer declensionId, ConjugationNode declension) {
+        return ConjugationManager.this.addConjugation(typeId, declensionId, declension, dTemplates);
     }
 
-    public DeclensionNode addDeclensionToTemplate(Integer typeId, String declension) {
-        return addDeclension(typeId, declension, dTemplates);
+    public ConjugationNode addConjugationToTemplate(Integer typeId, String declension) {
+        return addConjugation(typeId, declension, dTemplates);
     }
 
-    public void deleteDeclensionFromTemplate(Integer typeId, Integer declensionId) {
-        deleteDeclension(typeId, declensionId, dTemplates);
+    public void deleteConjugationFromTemplate(Integer typeId, Integer declensionId) {
+        deleteConjugation(typeId, declensionId, dTemplates);
     }
 
-    public void updateDeclensionTemplate(Integer typeId, Integer declensionId, DeclensionNode declension) {
-        updateDeclension(typeId, declensionId, declension, dTemplates);
+    public void updateConjugationTemplate(Integer typeId, Integer declensionId, ConjugationNode declension) {
+        updateConjugation(typeId, declensionId, declension, dTemplates);
     }
 
-    public DeclensionNode getDeclensionTemplate(Integer typeId, Integer templateId) {
-        List<DeclensionNode> searchList = dTemplates.get(typeId);
+    public ConjugationNode getConjugationTemplate(Integer typeId, Integer templateId) {
+        List<ConjugationNode> searchList = dTemplates.get(typeId);
         Iterator search = searchList.iterator();
-        DeclensionNode ret = null;
+        ConjugationNode ret = null;
 
         while (search.hasNext()) {
-            DeclensionNode test = (DeclensionNode) search.next();
+            ConjugationNode test = (ConjugationNode) search.next();
 
             if (test.getId().equals(templateId)) {
                 ret = test;
@@ -728,9 +852,9 @@ public class DeclensionManager {
 
     public void insertBuffer() {
         if (bufferDecTemp) {
-            this.addDeclensionToTemplate(bufferRelId, buffer.getId(), buffer);
+            this.addConjugationToTemplate(bufferRelId, buffer.getId(), buffer);
         } else {
-            this.addDeclensionToWord(bufferRelId, buffer.getId(), buffer);
+            this.addConjugationToWord(bufferRelId, buffer.getId(), buffer);
         }
     }
 
@@ -739,18 +863,18 @@ public class DeclensionManager {
      *
      * @return buffer node object
      */
-    public DeclensionNode getBuffer() {
+    public ConjugationNode getBuffer() {
         return buffer;
     }
 
     public void clearBuffer() {
-        buffer = new DeclensionNode(-1);
+        buffer = new ConjugationNode(-1);
         bufferDecTemp = false;
         bufferRelId = -1;
     }
 
-    private DeclensionNode addDeclension(Integer typeId, String declension, Map<Integer, List<DeclensionNode>> idToDecNodes) {
-        List<DeclensionNode> wordList;
+    private ConjugationNode addConjugation(Integer typeId, String declension, Map<Integer, List<ConjugationNode>> idToDecNodes) {
+        List<ConjugationNode> wordList;
 
         topId++;
 
@@ -761,7 +885,7 @@ public class DeclensionManager {
             idToDecNodes.put(typeId, wordList);
         }
 
-        DeclensionNode addNode = new DeclensionNode(topId);
+        ConjugationNode addNode = new ConjugationNode(topId);
         addNode.setValue(declension);
 
         wordList.add(addNode);
@@ -778,14 +902,14 @@ public class DeclensionManager {
      * @param list list to add node to (word list or type list)
      * @return declension node created
      */
-    private DeclensionNode addDeclension(Integer relId, Integer declensionId, DeclensionNode declension, Map<Integer, List<DeclensionNode>> list) {
-        List<DeclensionNode> wordList;
+    private ConjugationNode addConjugation(Integer relId, Integer declensionId, ConjugationNode declension, Map<Integer, List<ConjugationNode>> list) {
+        List<ConjugationNode> wordList;
 
         if (declensionId == -1) {
             declensionId = topId + 1;
         }
 
-        deleteDeclensionFromWord(relId, declensionId);
+        deleteConjugationFromWord(relId, declensionId);
 
         if (list.containsKey(relId)) {
             wordList = list.get(relId);
@@ -794,7 +918,7 @@ public class DeclensionManager {
             list.put(relId, wordList);
         }
 
-        DeclensionNode addNode = new DeclensionNode(declensionId);
+        ConjugationNode addNode = new ConjugationNode(declensionId);
         addNode.setEqual(declension);
 
         wordList.add(addNode);
@@ -816,11 +940,11 @@ public class DeclensionManager {
      * @param dimId the combined dim Id of the dimension
      * @return The declension node if found, null if otherwise
      */
-    public DeclensionNode getDeclensionByCombinedId(Integer wordId, String dimId) {
-        DeclensionNode ret = null;
+    public ConjugationNode getConjugationByCombinedId(Integer wordId, String dimId) {
+        ConjugationNode ret = null;
 
         if (dList.containsKey(wordId)) {
-            for (DeclensionNode test : dList.get(wordId)) {
+            for (ConjugationNode test : dList.get(wordId)) {
                 if (dimId.equals(test.getCombinedDimId())) {
                     ret = test;
                     break;
@@ -833,14 +957,14 @@ public class DeclensionManager {
 
     public String getCombNameFromCombId(int typeId, String combId) {
         String ret = "";
-        DeclensionNode[] decNodes = getDimensionalDeclensionListTemplate(typeId);
+        ConjugationNode[] decNodes = getDimensionalConjugationListTemplate(typeId);
         String[] splitIds = combId.split(",");
 
         for (int i = 0; i < decNodes.length; i++) {
-            DeclensionNode curNode = decNodes[i];
+            ConjugationNode curNode = decNodes[i];
             int dimId = Integer.parseInt(splitIds[i + 1]);
-            Iterator<DeclensionDimension> dimIt = curNode.getDimensions().iterator();
-            DeclensionDimension curDim = null;
+            Iterator<ConjugationDimension> dimIt = curNode.getDimensions().iterator();
+            ConjugationDimension curDim = null;
 
             while (dimIt.hasNext()) {
                 curDim = dimIt.next();
@@ -858,13 +982,13 @@ public class DeclensionManager {
         return ret.trim();
     }
 
-    public void deleteDeclension(Integer typeId, Integer declensionId, Map<Integer, List<DeclensionNode>> list) {
+    public void deleteConjugation(Integer typeId, Integer declensionId, Map<Integer, List<ConjugationNode>> list) {
         if (list.containsKey(typeId)) {
-            List<DeclensionNode> copyTo = new ArrayList<>();
-            Iterator<DeclensionNode> copyFrom = list.get(typeId).iterator();
+            List<ConjugationNode> copyTo = new ArrayList<>();
+            Iterator<ConjugationNode> copyFrom = list.get(typeId).iterator();
 
             while (copyFrom.hasNext()) {
-                DeclensionNode curNode = copyFrom.next();
+                ConjugationNode curNode = copyFrom.next();
 
                 if (curNode.getId().equals(declensionId)) {
                     continue;
@@ -882,19 +1006,19 @@ public class DeclensionManager {
         }
     }
 
-    private void updateDeclension(Integer typeId,
+    private void updateConjugation(Integer typeId,
             Integer declensionId,
-            DeclensionNode declension,
-            Map<Integer, List<DeclensionNode>> list) {
+            ConjugationNode declension,
+            Map<Integer, List<ConjugationNode>> list) {
         if (list.containsKey(typeId)) {
-            List<DeclensionNode> copyTo = new ArrayList<>();
-            Iterator<DeclensionNode> copyFrom = list.get(typeId).iterator();
+            List<ConjugationNode> copyTo = new ArrayList<>();
+            Iterator<ConjugationNode> copyFrom = list.get(typeId).iterator();
 
             while (copyFrom.hasNext()) {
-                DeclensionNode curNode = copyFrom.next();
+                ConjugationNode curNode = copyFrom.next();
 
                 if (curNode.getId().equals(declensionId)) {
-                    DeclensionNode modified = new DeclensionNode(declensionId);
+                    ConjugationNode modified = new ConjugationNode(declensionId);
                     modified.setEqual(declension);
                     copyTo.add(modified);
                     continue;
@@ -913,7 +1037,7 @@ public class DeclensionManager {
      *
      * @param wordId ID of word to clear of all declensions
      */
-    private void clearAllDeclensions(Integer wordId, Map list) {
+    private void clearAllConjugations(Integer wordId, Map list) {
         list.remove(wordId);
     }
 
@@ -926,12 +1050,12 @@ public class DeclensionManager {
      * @param valueMap list of relations to search through
      * @return
      */
-    private List<DeclensionNode> getDimensionalDeclensionList(Integer relatedId,
-            Map<Integer, List<DeclensionNode>> valueMap) {
-        List<DeclensionNode> ret = new ArrayList<>();
+    private List<ConjugationNode> getDimensionalConjugationList(Integer relatedId,
+            Map<Integer, List<ConjugationNode>> valueMap) {
+        List<ConjugationNode> ret = new ArrayList<>();
 
         if (valueMap.containsKey(relatedId)) {
-            List<DeclensionNode> allNodes = valueMap.get(relatedId);
+            List<ConjugationNode> allNodes = valueMap.get(relatedId);
 
             allNodes.forEach((curNode) -> {
                 // dimensionless nodes
@@ -955,8 +1079,8 @@ public class DeclensionManager {
      * @param relatedId ID of related value
      * @return
      */
-    public DeclensionNode[] getSingletonDeclensionList(Integer relatedId) {
-        return getSingletonDeclensionList(relatedId, dTemplates).toArray(new DeclensionNode[0]);
+    public ConjugationNode[] getSingletonConjugationList(Integer relatedId) {
+        return ConjugationManager.this.getSingletonConjugationList(relatedId, dTemplates).toArray(new ConjugationNode[0]);
     }
 
     /**
@@ -968,12 +1092,12 @@ public class DeclensionManager {
      * @param list list of relations to search through
      * @return
      */
-    private List<DeclensionNode> getSingletonDeclensionList(Integer relatedId,
-            Map<Integer, List<DeclensionNode>> list) {
-        List<DeclensionNode> ret = new ArrayList<>();
+    private List<ConjugationNode> getSingletonConjugationList(Integer relatedId,
+            Map<Integer, List<ConjugationNode>> list) {
+        List<ConjugationNode> ret = new ArrayList<>();
 
         if (list.containsKey(relatedId)) {
-            List<DeclensionNode> allNodes = list.get(relatedId);
+            List<ConjugationNode> allNodes = list.get(relatedId);
 
             allNodes.forEach((curNode) -> {
                 // dimensionless nodes
@@ -994,8 +1118,8 @@ public class DeclensionManager {
      * @param list list of relations to search through
      * @return
      */
-    private List<DeclensionNode> getFullDeclensionList(Integer relatedId, Map<Integer, List<DeclensionNode>> list) {
-        List<DeclensionNode> ret = new ArrayList<>();
+    private List<ConjugationNode> getFullConjugationList(Integer relatedId, Map<Integer, List<ConjugationNode>> list) {
+        List<ConjugationNode> ret = new ArrayList<>();
 
         if (list.containsKey(relatedId)) {
             ret = list.get(relatedId);
@@ -1004,8 +1128,8 @@ public class DeclensionManager {
         return ret;
     }
 
-    public DeclensionNode[] getFullDeclensionListWord(Integer wordId) {
-        return getFullDeclensionList(wordId, dList).toArray(new DeclensionNode[0]);
+    public ConjugationNode[] getFullConjugationListWord(Integer wordId) {
+        return getFullConjugationList(wordId, dList).toArray(new ConjugationNode[0]);
     }
 
     /**
@@ -1017,12 +1141,12 @@ public class DeclensionManager {
      * @param wordId word to get declensions of
      * @return map of all declensions in a word (empty if none)
      */
-    public Map<String, DeclensionNode> getWordDeclensions(Integer wordId) {
-        Map<String, DeclensionNode> ret = new HashMap<>();
+    public Map<String, ConjugationNode> getWordConjugation(Integer wordId) {
+        Map<String, ConjugationNode> ret = new HashMap<>();
 
-        DeclensionNode[] decs = getDimensionalDeclensionListWord(wordId);
+        ConjugationNode[] decs = getDimensionalConjugationListWord(wordId);
 
-        for (DeclensionNode curNode : decs) {
+        for (ConjugationNode curNode : decs) {
             ret.put(curNode.getCombinedDimId(), curNode);
         }
 
@@ -1035,8 +1159,8 @@ public class DeclensionManager {
      * @param wordId ID of word to clear values from
      * @param removeVals values to clear from word
      */
-    public void removeDeclensionValues(Integer wordId, Collection<DeclensionNode> removeVals) {
-        List<DeclensionNode> wordList = dList.get(wordId);
+    public void removeConjugationValues(Integer wordId, Collection<ConjugationNode> removeVals) {
+        List<ConjugationNode> wordList = dList.get(wordId);
 
         removeVals.forEach((remNode) -> {
             wordList.remove(remNode);
@@ -1050,7 +1174,7 @@ public class DeclensionManager {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Set<Entry<Integer, List<DeclensionNode>>> declensionSet;
+        Set<Entry<Integer, List<ConjugationNode>>> declensionSet;
         Element declensionCollection = doc.createElement(PGTUtil.DECLENSION_COLLECTION_XID);
         rootElement.appendChild(declensionCollection);
         
@@ -1059,7 +1183,7 @@ public class DeclensionManager {
 
         // record declension templates
         declensionSet = dTemplates.entrySet();
-        for (Entry<Integer, List<DeclensionNode>> e : declensionSet) {
+        for (Entry<Integer, List<ConjugationNode>> e : declensionSet) {
             final Integer relatedId = e.getKey();
 
             e.getValue().forEach((curNode) -> {
@@ -1069,11 +1193,11 @@ public class DeclensionManager {
 
         // record word declensions
         declensionSet = dList.entrySet();
-        for (Entry<Integer, List<DeclensionNode>> e : declensionSet) {
+        for (Entry<Integer, List<ConjugationNode>> e : declensionSet) {
             final Integer relatedId = e.getKey();
 
             e.getValue().forEach((curNode) -> {
-                curNode.writeXMLWordDeclension(doc, declensionCollection, relatedId);
+                curNode.writeXMLWordConjugation(doc, declensionCollection, relatedId);
             });
         }
 
@@ -1119,24 +1243,24 @@ public class DeclensionManager {
      * @param selfCombId The combined ID of the form this was initially called
      * from (do not copy duplicate of rule to self)
      */
-    public void copyRulesToDeclensionTemplates(int typeId,
+    public void copyRulesToConjugationTemplates(int typeId,
             int decId, int dimId,
-            List<DeclensionGenRule> rules,
+            List<ConjugationGenRule> rules,
             String selfCombId) {
-        DeclensionNode[] allNodes = getDimensionalDeclensionListTemplate(typeId);
-        List<DeclensionPair> decList = getAllCombinedDimensionalIds(0, ",", "", allNodes);
+        ConjugationNode[] allNodes = getDimensionalConjugationListTemplate(typeId);
+        List<ConjugationPair> decList = getAllCombinedDimensionalIds(0, ",", "", allNodes);
 
         decList.forEach((decPair) -> {
             // only copy rule if distinct from base word form && it matches the dimensional value matches
             if (!decPair.combinedId.equals(selfCombId) && combDimIdMatches(decId, dimId, decPair.combinedId)) {
                 rules.forEach((rule) -> {
                     // insert rule
-                    DeclensionGenRule newRule = new DeclensionGenRule();
+                    ConjugationGenRule newRule = new ConjugationGenRule();
                     newRule.setEqual(rule, false);
                     newRule.setTypeId(typeId);
                     newRule.setCombinationId(decPair.combinedId);
 
-                    addDeclensionGenRule(newRule);
+                    addConjugationGenRule(newRule);
 
                     // call get rules for type (will automatically assign next highest index to rule
                     this.getAllDepGenerationRules(typeId);
@@ -1145,7 +1269,7 @@ public class DeclensionManager {
         });
     }
 
-    //deleteRulesFromDeclensionTemplates
+
     /**
      * This copies a list of rules to the bottom of the list of all declension
      * templates for a given part of speech that share a declension (decId) with
@@ -1159,17 +1283,17 @@ public class DeclensionManager {
      * @param dimId dimension value to target
      * @param rulesToDelete rules to be deleted
      */
-    public void deleteRulesFromDeclensionTemplates(int typeId,
+    public void deleteRulesFromConjugationTemplates(int typeId,
             int decId, int dimId,
-            List<DeclensionGenRule> rulesToDelete) {
+            List<ConjugationGenRule> rulesToDelete) {
 
-        DeclensionGenRule[] rules = this.getDeclensionRulesForType(typeId);
+        ConjugationGenRule[] rules = this.getConjugationRulesForType(typeId);
         
-        for (DeclensionGenRule rule : rules) {
+        for (ConjugationGenRule rule : rules) {
             if (combDimIdMatches(decId, dimId, rule.getCombinationId())) {
-                for (DeclensionGenRule ruleDelete : rulesToDelete) {
+                for (ConjugationGenRule ruleDelete : rulesToDelete) {
                     if (rule.valuesEqual(ruleDelete)) {
-                        this.deleteDeclensionGenRule(rule);
+                        this.deleteConjugationGenRule(rule);
                     }
                 }
             }
@@ -1182,13 +1306,13 @@ public class DeclensionManager {
      * @param typeId part of speech to clear
      * @param rulesToDelete rules in this pos to delete
      */
-    public void bulkDeleteRuleFromDeclensionTemplates(int typeId, List<DeclensionGenRule> rulesToDelete) {
-        DeclensionGenRule[] rules = this.getDeclensionRulesForType(typeId);
+    public void bulkDeleteRuleFromConjugationTemplates(int typeId, List<ConjugationGenRule> rulesToDelete) {
+        ConjugationGenRule[] rules = this.getConjugationRulesForType(typeId);
 
-        for (DeclensionGenRule rule : rules) {
-            for (DeclensionGenRule ruleDelete : rulesToDelete) {
+        for (ConjugationGenRule rule : rules) {
+            for (ConjugationGenRule ruleDelete : rulesToDelete) {
                 if (rule.valuesEqual(ruleDelete)) {
-                    this.deleteDeclensionGenRule(rule);
+                    this.deleteConjugationGenRule(rule);
                 }
             }
         }
@@ -1201,19 +1325,19 @@ public class DeclensionManager {
         return dimValId == dimId;
     }
 
-    public String getDeclensionLabel(int typeId, int decId) {
+    public String getConjugationLabel(int typeId, int decId) {
         return dTemplates.get(typeId).get(decId).getValue();
     }
 
-    public String getDeclensionValueLabel(int typeId, int decId, int decValId) {
-        return dTemplates.get(typeId).get(decId).getDeclensionDimensionById(decValId).getValue();
+    public String getConjugationValueLabel(int typeId, int decId, int decValId) {
+        return dTemplates.get(typeId).get(decId).getConjugationDimensionById(decValId).getValue();
     }
 
     /**
      * On load of older pgt files, must be called to maintain functionality of
      * declension rules
      */
-    public void setAllDeclensionRulesToAllClasses() {
+    public void setAllConjugationRulesToAllClasses() {
         generationRules.values().forEach((rules) -> {
             rules.forEach((rule) -> {
                 rule.addClassToFilterList(-1, -1);
@@ -1227,17 +1351,17 @@ public class DeclensionManager {
      * @param word
      * @return
      */
-    public Map<String, DeclensionNode> getDeprecatedForms(ConWord word) {
-        Map<String, DeclensionNode> ret = new HashMap<>();
+    public Map<String, ConjugationNode> getDeprecatedForms(ConWord word) {
+        Map<String, ConjugationNode> ret = new HashMap<>();
 
         // first get all values that exist for this word
-        for (DeclensionNode curNode : getFullDeclensionListWord(word.getId())) {
+        for (ConjugationNode curNode : getFullConjugationListWord(word.getId())) {
             ret.put(curNode.getCombinedDimId(), curNode);
         }
 
         // then remove all values which match existing combined type ids
-        DeclensionPair[] allCombIds = getAllCombinedIds(word.getWordTypeId());
-        for (DeclensionPair curPair : allCombIds) {
+        ConjugationPair[] allCombIds = getAllCombinedIds(word.getWordTypeId());
+        for (ConjugationPair curPair : allCombIds) {
             ret.remove(curPair.combinedId);
         }
 
@@ -1272,8 +1396,8 @@ public class DeclensionManager {
         
         if (this == comp) {
             ret = true;
-        } else if (comp instanceof DeclensionManager) {
-            DeclensionManager compMan = (DeclensionManager)comp;
+        } else if (comp instanceof ConjugationManager) {
+            ConjugationManager compMan = (ConjugationManager)comp;
             ret = (generationRules == null && compMan.generationRules == null) || generationRules.equals(compMan.generationRules);
             ret = ret && ((dList == null && compMan.dList == null) || dList.equals(compMan.dList));
             ret = ret && combSettings.equals(compMan.combSettings);
@@ -1298,14 +1422,14 @@ public class DeclensionManager {
      * @param combId
      * @param ruleBlock 
      */
-    public void moveRulesUp(int typeId, String combId, List<DeclensionGenRule> ruleBlock) {
+    public void moveRulesUp(int typeId, String combId, List<ConjugationGenRule> ruleBlock) {
         if (ruleBlock.isEmpty()) {
             return;
         }
         
-        List<DeclensionGenRule> formRules = new ArrayList<>();
+        List<ConjugationGenRule> formRules = new ArrayList<>();
         
-        for (DeclensionGenRule curRule : generationRules.get(typeId)) {
+        for (ConjugationGenRule curRule : generationRules.get(typeId)) {
             if (curRule.getCombinationId().equals(combId)) {
                 formRules.add(curRule);
             }
@@ -1314,9 +1438,9 @@ public class DeclensionManager {
         Collections.sort(formRules);
         
         // find the rule BEFORE the first rule to be moved up
-        DeclensionGenRule beforeFirst = null;
+        ConjugationGenRule beforeFirst = null;
         for (int i = 0; i < formRules.size(); i ++) {
-            DeclensionGenRule curRule = formRules.get(i);
+            ConjugationGenRule curRule = formRules.get(i);
             if (curRule.equals(ruleBlock.get(0))) {
                 // only set beforeFirst value if this is not already the first rule for this declension
                 if (i != 0) {
@@ -1343,14 +1467,14 @@ public class DeclensionManager {
      * @param combId
      * @param ruleBlock 
      */
-    public void moveRulesDown(int typeId, String combId, List<DeclensionGenRule> ruleBlock) {
+    public void moveRulesDown(int typeId, String combId, List<ConjugationGenRule> ruleBlock) {
         if (ruleBlock.isEmpty()) {
             return;
         }
         
-        List<DeclensionGenRule> formRules = new ArrayList<>();
+        List<ConjugationGenRule> formRules = new ArrayList<>();
         
-        for (DeclensionGenRule curRule : generationRules.get(typeId)) {
+        for (ConjugationGenRule curRule : generationRules.get(typeId)) {
             if (curRule.getCombinationId().equals(combId)) {
                 formRules.add(curRule);
             }
@@ -1359,9 +1483,9 @@ public class DeclensionManager {
         Collections.sort(formRules);
         
         // find the rule AFTER the last rule to be moved down
-        DeclensionGenRule afterLast = null;
+        ConjugationGenRule afterLast = null;
         for (int i = 0; i < formRules.size(); i ++) {
-            DeclensionGenRule curRule = formRules.get(i);
+            ConjugationGenRule curRule = formRules.get(i);
             if (curRule.equals(ruleBlock.get(ruleBlock.size() - 1))) {
                 // only set afterList value if this is not already the last rule for this declension
                 if (i != (formRules.size() - 1)) {

@@ -38,27 +38,18 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author draque
  */
-public class PCellRenderer implements TableCellRenderer {
-    private final Font myFont;
+public final class PCellRenderer implements TableCellRenderer {
+
+    private Font myFont;
     private Color background = Color.white;
     private DocumentListener docListener;
     private final DictCore core;
-    private final boolean useConFont;
-    private final double fontSize;
+    private boolean useConFont;
+    private double fontSize;
 
     public PCellRenderer(boolean _useConFont, DictCore _core) {
         core = _core;
-        useConFont = _useConFont;
-        double preSize = core.getPropertiesManager().getFontSize();
-        
-        Font selectedFont = useConFont ? 
-                core.getPropertiesManager().getFontCon() : 
-                core.getPropertiesManager().getFontLocal();
-        fontSize = useConFont ? 
-                preSize :
-                core.getOptionsManager().getMenuFontSize();
-        
-        myFont = PGTUtil.addFontAttribute(TextAttribute.SIZE, (float)fontSize, selectedFont);
+        setUseConFont(_useConFont);
     }
     
     public void setBackground(Color _background) {
@@ -76,7 +67,7 @@ public class PCellRenderer implements TableCellRenderer {
         }
         
         if (myFont != null) {
-            editor.setFont(myFont.deriveFont((float)fontSize));
+            editor.setFont(myFont.deriveFont((float)getFontSize()));
         }
         
         if (table.isEnabled()) {
@@ -97,7 +88,7 @@ public class PCellRenderer implements TableCellRenderer {
             @Override
             public void keyTyped(KeyEvent e) {
                 // only use replacement if writing in confont
-                if (useConFont) {
+                if (isUseConFont()) {
                     PTextField.handleCharacterReplacement(core, e, editor);
                 }
             }
@@ -118,5 +109,31 @@ public class PCellRenderer implements TableCellRenderer {
       
     public void setDocuListener(DocumentListener _listener) {
         docListener = _listener;
+    }
+    
+    public boolean isUseConFont() {
+        return useConFont;
+    }
+
+    public void setUseConFont(boolean _useConFont) {
+        this.useConFont = _useConFont;
+        double preSize = core.getPropertiesManager().getFontSize();
+        
+        Font selectedFont = useConFont ? 
+                core.getPropertiesManager().getFontCon() : 
+                core.getPropertiesManager().getFontLocal();
+        fontSize = useConFont ? 
+                preSize :
+                core.getOptionsManager().getMenuFontSize();
+        
+        myFont = PGTUtil.addFontAttribute(TextAttribute.SIZE, (float)fontSize, selectedFont);
+    }
+
+    public double getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(double fontSize) {
+        this.fontSize = fontSize;
     }
 }

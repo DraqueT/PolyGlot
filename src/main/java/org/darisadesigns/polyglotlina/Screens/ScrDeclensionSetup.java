@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,8 +19,8 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.Nodes.DeclensionDimension;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationDimension;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
@@ -31,7 +31,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PList;
 import org.darisadesigns.polyglotlina.CustomControls.PTable;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.ManagersCollections.DeclensionManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
@@ -125,9 +125,9 @@ public final class ScrDeclensionSetup extends PDialog {
      * @return boolean as to whether it is legal to close the window.
      */
     private boolean canClose() {
-        DeclensionNode[] decNodes = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId);
+        ConjugationNode[] decNodes = core.getConjugationManager().getDimensionalConjugationListTemplate(typeId);
 
-        for (DeclensionNode curDec : decNodes) {
+        for (ConjugationNode curDec : decNodes) {
             if (curDec.getDimensions().isEmpty()) {
                 InfoBox.error("Illegal Declension", "Declension \'" 
                         + curDec.getValue() 
@@ -316,19 +316,19 @@ public final class ScrDeclensionSetup extends PDialog {
             }
             
             saveDeclension();
-            core.getDeclensionManager().deprecateAllDeclensions(myType.getId());
+            core.getConjugationManager().deprecateAllConjugations(myType.getId());
             populateDimensions();
         });
     }
     
     private void copyConjToClipboard() {
-        List<DeclensionNode> declensionTemplates = new ArrayList<>();
+        List<ConjugationNode> declensionTemplates = new ArrayList<>();
 
         for (int i : lstDeclensionList.getSelectedIndices()) {
-            DeclensionNode curNodeToCopy = core.getDeclensionManager().getDeclensionTemplate(myType.getId(), 
+            ConjugationNode curNodeToCopy = core.getConjugationManager().getConjugationTemplate(myType.getId(), 
                     scrToCoreDeclensions.get(i));
             
-            DeclensionNode copyNode = new DeclensionNode(-1);
+            ConjugationNode copyNode = new ConjugationNode(-1);
             copyNode.setEqual(curNodeToCopy);
             declensionTemplates.add(copyNode);
         }
@@ -342,18 +342,18 @@ public final class ScrDeclensionSetup extends PDialog {
         // only paste if appropriate type from clipboard
         if (!(fromClipBoard instanceof ArrayList)
                 || ((ArrayList) fromClipBoard).isEmpty()
-                || !(((ArrayList) fromClipBoard).get(0) instanceof DeclensionNode)) {
+                || !(((ArrayList) fromClipBoard).get(0) instanceof ConjugationNode)) {
             return;
         }
         
-        Iterable<DeclensionNode> conjNodes = (ArrayList)fromClipBoard;
-        DeclensionManager decMan = core.getDeclensionManager();
+        Iterable<ConjugationNode> conjNodes = (ArrayList)fromClipBoard;
+        ConjugationManager decMan = core.getConjugationManager();
         
         try {
             conjNodes.forEach((curNode)->{
-                DeclensionNode copyNode = new DeclensionNode(-1);
+                ConjugationNode copyNode = new ConjugationNode(-1);
                 copyNode.setEqual(curNode);
-                decMan.addDeclensionToTemplate(myType.getId(), -1, curNode);
+                decMan.addConjugationToTemplate(myType.getId(), -1, curNode);
             });
         } catch (ClassCastException e) {
             IOHandler.writeErrorLog(e);
@@ -396,7 +396,7 @@ public final class ScrDeclensionSetup extends PDialog {
         }
 
         Integer nodeId = scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
-        DeclensionNode delFrom = core.getDeclensionManager().getDeclensionTemplate(myType.getId(), nodeId);
+        ConjugationNode delFrom = core.getConjugationManager().getConjugationTemplate(myType.getId(), nodeId);
         Object o = tblDimensions.getModel().getValueAt(curRow, 1);
         Integer delDimId = (Integer) o;
         delFrom.deleteDimension(delDimId);
@@ -406,7 +406,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
     private void populateDimensions() {
         Integer declensionId = scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex());
-        DeclensionNode curDec = core.getDeclensionManager().getDeclension(myType.getId(), declensionId);
+        ConjugationNode curDec = core.getConjugationManager().getConjugation(myType.getId(), declensionId);
 
         // if no current declension, simply clear table.
         if (curDec == null) {
@@ -414,7 +414,7 @@ public final class ScrDeclensionSetup extends PDialog {
             return;
         }
 
-        List<DeclensionDimension> dimensionList = new ArrayList<>(curDec.getDimensions());
+        List<ConjugationDimension> dimensionList = new ArrayList<>(curDec.getDimensions());
 
         setupDimTable();
 
@@ -470,7 +470,7 @@ public final class ScrDeclensionSetup extends PDialog {
             int curRow = tblDimensions.getSelectedRow();
             int curCol = tblDimensions.getSelectedColumn();
             
-            DeclensionNode curDec = core.getDeclensionManager().getDeclension(myType.getId(),
+            ConjugationNode curDec = core.getConjugationManager().getConjugation(myType.getId(),
                     scrToCoreDeclensions.get(lstDeclensionList.getSelectedIndex()));
             
             for (int i = 0; i < tblDimensions.getRowCount(); i++) {
@@ -485,7 +485,7 @@ public final class ScrDeclensionSetup extends PDialog {
                 }
                 
                 Integer dimId = (Integer) tblDimensions.getModel().getValueAt(i, 1);
-                DeclensionDimension dim = new DeclensionDimension();
+                ConjugationDimension dim = new ConjugationDimension();
                 
                 dim.setId(dimId);
                 dim.setValue(dimName);
@@ -798,7 +798,7 @@ public final class ScrDeclensionSetup extends PDialog {
         }
 
         // deprecate all existing forms
-        core.getDeclensionManager().deprecateAllDeclensions(myType.getId());
+        core.getConjugationManager().deprecateAllConjugations(myType.getId());
 
         if (lstDeclensionList.getModel().getSize() != 0
                 && scrToCoreDeclensions.containsKey(lstDeclensionList.getSelectedIndex())
@@ -843,7 +843,7 @@ public final class ScrDeclensionSetup extends PDialog {
     }
 
     private void populateDeclensionProps() {
-        DeclensionNode curDec = new DeclensionNode(-1);
+        ConjugationNode curDec = new ConjugationNode(-1);
         int decIndex = lstDeclensionList.getSelectedIndex();
 
         // keep local settings from stomping on higher level population
@@ -866,7 +866,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
         if (decId != null && decId != -1) {
             try {
-                curDec = core.getDeclensionManager().getDeclensionTemplate(myType.getId(), decId);
+                curDec = core.getConjugationManager().getConjugationTemplate(myType.getId(), decId);
             } catch (Exception e) {
                 IOHandler.writeErrorLog(e);
                 InfoBox.error("Declension Population Error", "Unable to populate declension.\n\n"
@@ -953,12 +953,12 @@ public final class ScrDeclensionSetup extends PDialog {
         }
 
         // deprecate all existing forms
-        core.getDeclensionManager().deprecateAllDeclensions(myType.getId());
+        core.getConjugationManager().deprecateAllConjugations(myType.getId());
 
         int curIndex = lstDeclensionList.getSelectedIndex();
 
         try {
-            core.getDeclensionManager().deleteDeclensionFromTemplate(myType.getId(), scrToCoreDeclensions.get(curIndex));
+            core.getConjugationManager().deleteConjugationFromTemplate(myType.getId(), scrToCoreDeclensions.get(curIndex));
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Declension Deletion Error", "Unable to delete Declension: "
@@ -995,20 +995,20 @@ public final class ScrDeclensionSetup extends PDialog {
             decId = scrToCoreDeclensions.get(decIndex);
         }
 
-        DeclensionNode decl;
+        ConjugationNode decl;
 
         try {
             // split logic for creating, rather than modifying Declension
             if (decId == -1) {
-                decl = core.getDeclensionManager().addDeclensionToTemplate(myType.getId(), txtDeclensionName.getText());
+                decl = core.getConjugationManager().addConjugationToTemplate(myType.getId(), txtDeclensionName.getText());
                 decl.setValue(txtDeclensionName.getText().trim());
                 decl.setNotes(txtDeclensionNotes.getText().trim());
                 decl.setDimensionless(chkNonDimensional.isSelected());
 
                 scrToCoreDeclensions.put(decIndex, decl.getId());
             } else {
-                decl = new DeclensionNode(-1);
-                DeclensionNode oldDecl = core.getDeclensionManager().getDeclension(myType.getId(), decId);
+                decl = new ConjugationNode(-1);
+                ConjugationNode oldDecl = core.getConjugationManager().getConjugation(myType.getId(), decId);
 
                 decl.setEqual(oldDecl);
 
@@ -1016,7 +1016,7 @@ public final class ScrDeclensionSetup extends PDialog {
                 decl.setNotes(txtDeclensionNotes.getText().trim());
                 decl.setDimensionless(chkNonDimensional.isSelected());
 
-                core.getDeclensionManager().updateDeclensionTemplate(myType.getId(), decId, decl);
+                core.getConjugationManager().updateConjugationTemplate(myType.getId(), decId, decl);
             }
         } catch (ClassCastException e) {
             IOHandler.writeErrorLog(e);
@@ -1045,8 +1045,8 @@ public final class ScrDeclensionSetup extends PDialog {
 
         declListModel.clear();
 
-        DeclensionNode[] decNodes = core.getDeclensionManager().getFullDeclensionListTemplate(myType.getId());
-        DeclensionNode curdec;
+        ConjugationNode[] decNodes = core.getConjugationManager().getFullConjugationListTemplate(myType.getId());
+        ConjugationNode curdec;
         for (int i = 0; i < decNodes.length; i++) {
             curdec = decNodes[i];
 
