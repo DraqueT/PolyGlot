@@ -19,12 +19,14 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PTable;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.EvolutionPairs;
+import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -38,19 +40,56 @@ public class ScrEvolveReport extends PDialog {
      * @param _core
      * @param pairs
      */
-    public ScrEvolveReport(DictCore _core, EvolutionPairs[] pairs) {
+    public ScrEvolveReport(DictCore _core, EvolutionPair[] pairs) {
         super(_core);
         initComponents();
         
-        reportModel = new DefaultTableModel(new String[]{"Origin", "Evolution"}, 0);
+        reportModel = new DefaultTableModel(new String[]{"Notes", "Origin", "Evolution"}, 0);
         tblReport.setModel(reportModel);
         tblReport.setFont(core.getPropertiesManager().getFontCon());
         
-        for (EvolutionPairs pair : pairs) {
-            reportModel.addRow(new String[]{pair.start, pair.end});
+        for (EvolutionPair pair : pairs) {
+            String notes = pair.issueDescription.isBlank() ? pair.notes : "Value reverted: " + "error-" + pair.issueDescription;
+            reportModel.addRow(new String[]{notes, pair.start, pair.end});
         }
+        
+        this.setupTableControllers();     
     }
 
+    private void setupTableControllers() {
+        ((PTable)tblReport).setRenderController((renderer, row, column)->{
+            String description = (String)tblReport.getValueAt(row, 0);
+            
+            if (description.contains("error")){
+                renderer.setBackground(PGTUtil.COLOR_ERROR_FIELD);
+            } else {
+                renderer.setBackground(Color.WHITE);
+            }
+            
+            if (column == 0 || column == 3) {
+                renderer.setUseConFont(false);
+            } else {
+                renderer.setUseConFont(true);
+            }
+        });
+        
+        ((PTable)tblReport).setEditorController((editor, row, column)->{
+            String description = (String)tblReport.getValueAt(row, 0);
+            
+            if (description.contains("error")){
+                editor.setBackground(PGTUtil.COLOR_ERROR_FIELD);
+            } else {
+                editor.setBackground(Color.WHITE);
+            }
+            
+            if (column == 0 || column == 3) {
+                editor.setUseConFont(false);
+            } else {
+                editor.setUseConFont(true);
+            }
+        });
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -65,6 +104,7 @@ public class ScrEvolveReport extends PDialog {
         jLabel1 = new PLabel("Original and evolved lexical forms:", core.getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Evolution Report");
 
         tblReport.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

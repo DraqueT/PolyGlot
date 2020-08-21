@@ -364,6 +364,7 @@ public final class PGTUtil {
     public static final Color COLOR_CHECKBOX_CLICKED_DISABLED;
     public static final Color COLOR_CHECKBOX_FIELD_BACK_DISABLED;
     public static final Color COLOR_REQUIRED_LEX_COLOR;
+    public static final Color COLOR_ERROR_FIELD;
 
     // visual style constants
     public static final int CHECKBOX_ROUNDING = 3;
@@ -447,6 +448,7 @@ public final class PGTUtil {
         COLOR_CHECKBOX_CLICKED_DISABLED = Color.darkGray;
         COLOR_CHECKBOX_FIELD_BACK_DISABLED = Color.gray;
         COLOR_REQUIRED_LEX_COLOR = new Color(255, 204, 204);
+        COLOR_ERROR_FIELD = new Color(255, 204, 204);
 
         // loads default font on system error (never came up, but for completeness...)
         Font tmpFont;

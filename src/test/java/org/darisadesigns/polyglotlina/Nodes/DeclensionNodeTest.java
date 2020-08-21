@@ -33,10 +33,10 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class DeclensionNodeTest {
-    private final DeclensionNode testNode;
+    private final ConjugationNode testNode;
     
     public DeclensionNodeTest() {
-        testNode = new DeclensionNode(1);
+        testNode = new ConjugationNode(1);
         
         testNode.setCombinedDimId("combId");
         testNode.setDimensionless(false);
@@ -48,7 +48,7 @@ public class DeclensionNodeTest {
     public void testEquals() {
         System.out.println("DeclensionNodeTest.testEquals");
         
-        DeclensionNode compNode = new DeclensionNode(1);
+        ConjugationNode compNode = new ConjugationNode(1);
         
         compNode.setCombinedDimId("combId");
         compNode.setDimensionless(false);
@@ -62,7 +62,7 @@ public class DeclensionNodeTest {
     public void testNotEquals() {
         System.out.println("DeclensionNodeTest.testNotEquals");
         
-        DeclensionNode compNode = new DeclensionNode(1);
+        ConjugationNode compNode = new ConjugationNode(1);
         
         compNode.setCombinedDimId("combId");
         compNode.setDimensionless(false);
@@ -77,7 +77,7 @@ public class DeclensionNodeTest {
         System.out.println("DeclensionNodeTest.testInsertBuffer");
         
         int expectedSize = 1;
-        DeclensionDimension dim = new DeclensionDimension();
+        ConjugationDimension dim = new ConjugationDimension();
         dim.setValue("zot");
         
         testNode.getBuffer().setEqual(dim);
@@ -87,7 +87,7 @@ public class DeclensionNodeTest {
             testNode.insertBuffer();
 
             Object[] dimensions = testNode.getDimensions().toArray();
-            DeclensionDimension resultDim = (DeclensionDimension)dimensions[0];
+            ConjugationDimension resultDim = (ConjugationDimension)dimensions[0];
 
             assertEquals(expectedSize, dimensions.length);
             assertEquals(dim, resultDim);
@@ -101,7 +101,7 @@ public class DeclensionNodeTest {
         System.out.println("DeclensionNodeTest.testInsertBufferBadId");
         
         String expectedMessage = "Dimension with ID -1 cannot be inserted.";
-        DeclensionDimension dim = new DeclensionDimension();
+        ConjugationDimension dim = new ConjugationDimension();
         dim.setValue("zot");
         
         testNode.getBuffer().setEqual(dim);
@@ -117,7 +117,7 @@ public class DeclensionNodeTest {
     public void testClearBuffer() {
         System.out.println("DeclensionNodeTest.testClearBuffer");
         
-        DeclensionDimension dim = new DeclensionDimension();
+        ConjugationDimension dim = new ConjugationDimension();
         dim.setValue("zot");
         
         testNode.getBuffer().setEqual(dim);
@@ -131,13 +131,13 @@ public class DeclensionNodeTest {
         System.out.println("DeclensionNodeTest.testAddDimension");
         
         int expectedSize = 1;
-        DeclensionDimension dim = new DeclensionDimension();
+        ConjugationDimension dim = new ConjugationDimension();
         dim.setValue("zot");
         
         testNode.addDimension(dim);
         
         Object[] dimensions = testNode.getDimensions().toArray();
-        DeclensionDimension resultDim = (DeclensionDimension)dimensions[0];
+        ConjugationDimension resultDim = (ConjugationDimension)dimensions[0];
         
         assertEquals(expectedSize, dimensions.length);
         assertEquals(dim, resultDim);
@@ -148,7 +148,7 @@ public class DeclensionNodeTest {
         System.out.println("DeclensionNodeTest.testDeleteDimension");
         
         int dimId = 0;
-        DeclensionDimension dim = new DeclensionDimension();
+        ConjugationDimension dim = new ConjugationDimension();
         dim.setValue("zot");
         
         testNode.getBuffer().setEqual(dim);
@@ -182,7 +182,7 @@ public class DeclensionNodeTest {
                 + "<dimensionName>zot</dimensionName>"
                 + "</dimensionNode></declensionNode></dictionary>";
         int relatedId = 1;
-        DeclensionDimension dim = new DeclensionDimension();
+        ConjugationDimension dim = new ConjugationDimension();
         dim.setValue("zot");
         
         testNode.getBuffer().setEqual(dim);
@@ -222,7 +222,7 @@ public class DeclensionNodeTest {
                 + "<dimensionName>zot</dimensionName>"
                 + "</dimensionNode></declensionNode></dictionary>";
         int relatedId = 1;
-        DeclensionDimension dim = new DeclensionDimension();
+        ConjugationDimension dim = new ConjugationDimension();
         dim.setValue("zot");
         
         testNode.getBuffer().setEqual(dim);
@@ -248,7 +248,7 @@ public class DeclensionNodeTest {
     public void testSetEqual() {
         System.out.println("DeclensionNodeTest.testSetEqual");
         
-        DeclensionNode node = new DeclensionNode(0);
+        ConjugationNode node = new ConjugationNode(0);
         node.setEqual(testNode);
         assertTrue(node.equals(testNode));
     }
@@ -260,7 +260,7 @@ public class DeclensionNodeTest {
         String expectedMessage = "Object not of type DeclensionNode";
         
         Exception exception = assertThrows(ClassCastException.class, () -> {
-            DeclensionNode node = new DeclensionNode(0);
+            ConjugationNode node = new ConjugationNode(0);
             node.setEqual(new ConWord());
         });
 
@@ -276,12 +276,12 @@ public class DeclensionNodeTest {
         String expectedValue = "TESTO DEBESTO";
         int dimId = 2;
         
-        DeclensionNode node = new DeclensionNode(0);
-        DeclensionDimension dim = new DeclensionDimension(dimId);
+        ConjugationNode node = new ConjugationNode(0);
+        ConjugationDimension dim = new ConjugationDimension(dimId);
         dim.setValue(expectedValue);
         node.addDimension(dim);
         
-        String result = node.getDeclensionDimensionById(dimId).getValue();
+        String result = node.getConjugationDimensionById(dimId).getValue();
         
         assertEquals(expectedValue, result);
     }
@@ -290,8 +290,8 @@ public class DeclensionNodeTest {
     public void testGetDeclensionDimensionByIdNotExists() {
         System.out.println("DeclensionNodeTest.testSetEqual");
         
-        DeclensionNode node = new DeclensionNode(0);
-        assertNull(node.getDeclensionDimensionById(1));
+        ConjugationNode node = new ConjugationNode(0);
+        assertNull(node.getConjugationDimensionById(1));
     }
     
     @Test

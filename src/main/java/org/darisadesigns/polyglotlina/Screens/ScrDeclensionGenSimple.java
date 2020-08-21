@@ -29,10 +29,10 @@ import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PList;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ManagersCollections.DeclensionManager;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenRule;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenTransform;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionPair;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationGenTransform;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 
 /**
  *
@@ -59,7 +59,7 @@ public class ScrDeclensionGenSimple extends PDialog {
     }
     
     public String getCurSelectedCombId() {
-        DeclensionPair curPair = lstCombinedDec.getSelectedValue();
+        ConjugationPair curPair = lstCombinedDec.getSelectedValue();
         return curPair == null ? "" : curPair.combinedId;
     }
 
@@ -97,22 +97,22 @@ public class ScrDeclensionGenSimple extends PDialog {
      *
      */
     public void saveRule() {
-        DeclensionPair curPair = lstCombinedDec.getSelectedValue();
+        ConjugationPair curPair = lstCombinedDec.getSelectedValue();
 
         if (curPair != null) {
-            DeclensionManager decMan = core.getDeclensionManager();
-            decMan.deleteDeclensionGenRules(typeId, curPair.combinedId);
+            ConjugationManager decMan = core.getConjugationManager();
+            decMan.deleteConjugationGenRules(typeId, curPair.combinedId);
 
-            DeclensionGenTransform trans = new DeclensionGenTransform();
+            ConjugationGenTransform trans = new ConjugationGenTransform();
             trans.regex = txtRegex.getText();
             trans.replaceText = txtReplace.getText();
 
-            DeclensionGenRule rule = new DeclensionGenRule(typeId, curPair.combinedId);
+            ConjugationGenRule rule = new ConjugationGenRule(typeId, curPair.combinedId);
             rule.setRegex(".*"); // reduced complexity, so all rules apply universally
             rule.addTransform(trans);
             rule.setName("SIMPLE-SETUP");
 
-            decMan.addDeclensionGenRule(rule);
+            decMan.addConjugationGenRule(rule);
         }
     }
 
@@ -120,11 +120,11 @@ public class ScrDeclensionGenSimple extends PDialog {
      * populates constructed declension list
      */
     private void populateCombinedDecl() {
-        DeclensionPair[] decs = core.getDeclensionManager().getAllCombinedIds(typeId);
+        ConjugationPair[] decs = core.getConjugationManager().getAllCombinedIds(typeId);
         DefaultListModel decListModel = new DefaultListModel<>();
         lstCombinedDec.setModel(decListModel);
 
-        for (DeclensionPair curPair : decs) {
+        for (ConjugationPair curPair : decs) {
             decListModel.addElement(curPair);
         }
 
@@ -132,26 +132,26 @@ public class ScrDeclensionGenSimple extends PDialog {
     }
 
     private void populateRule() {
-        DeclensionPair selected = lstCombinedDec.getSelectedValue();
+        ConjugationPair selected = lstCombinedDec.getSelectedValue();
 
         if (selected != null) {
             chkDisableForm.setEnabled(true);
-            chkDisableForm.setSelected(core.getDeclensionManager()
-                    .isCombinedDeclSurpressed(selected.combinedId, typeId));
+            chkDisableForm.setSelected(core.getConjugationManager()
+                    .isCombinedConjlSurpressed(selected.combinedId, typeId));
             enableEditing(!chkDisableForm.isSelected());
 
-            DeclensionGenRule[] rules
-                    = core.getDeclensionManager().getDeclensionRulesForTypeAndCombId(typeId, selected.combinedId);
+            ConjugationGenRule[] rules
+                    = core.getConjugationManager().getConjugationRulesForTypeAndCombId(typeId, selected.combinedId);
 
             txtRegex.setText("");
             txtReplace.setText("");
 
             if (rules.length != 0) {
                 // in the simplified display, there is only one rule/transform per combined ID
-                DeclensionGenRule rule = rules[0];
-                DeclensionGenTransform[] transforms = rule.getTransforms();
+                ConjugationGenRule rule = rules[0];
+                ConjugationGenTransform[] transforms = rule.getTransforms();
                 if (transforms.length != 0) {
-                    DeclensionGenTransform transform = transforms[0];
+                    ConjugationGenTransform transform = transforms[0];
                     txtRegex.setText(transform.regex);
                     txtReplace.setText(transform.replaceText);
                 }
@@ -351,13 +351,13 @@ public class ScrDeclensionGenSimple extends PDialog {
     }//GEN-LAST:event_lstCombinedDecValueChanged
 
     private void chkDisableFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDisableFormActionPerformed
-        DeclensionPair curPair = lstCombinedDec.getSelectedValue();
+        ConjugationPair curPair = lstCombinedDec.getSelectedValue();
 
         if (curPair == null) {
             return;
         }
 
-        core.getDeclensionManager().setCombinedDeclSuppressed(curPair.combinedId, typeId, chkDisableForm.isSelected());
+        core.getConjugationManager().setCombinedConjSuppressed(curPair.combinedId, typeId, chkDisableForm.isSelected());
 
         enableEditing(!chkDisableForm.isSelected()
                 && lstCombinedDec.getSelectedIndex() != -1);
@@ -381,7 +381,7 @@ public class ScrDeclensionGenSimple extends PDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JList<DeclensionPair> lstCombinedDec;
+    private javax.swing.JList<ConjugationPair> lstCombinedDec;
     private javax.swing.JTextField txtRegex;
     private javax.swing.JTextField txtReplace;
     // End of variables declaration//GEN-END:variables

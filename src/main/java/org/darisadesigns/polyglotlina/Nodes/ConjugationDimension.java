@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -28,19 +28,19 @@ import org.w3c.dom.Element;
  * A single dimensional value of a conjugation element (for example, tense)
  * @author draque
  */
-public class DeclensionDimension extends DictNode {
+public class ConjugationDimension extends DictNode {
     
-    public DeclensionDimension(Integer _id) {
+    public ConjugationDimension(Integer _id) {
         super(_id);
     }
     
-    public DeclensionDimension() {
+    public ConjugationDimension() {
         super(-1);
     }
     
     @Override
     public void setEqual(DictNode _node) {
-        DeclensionDimension copyNode = (DeclensionDimension)_node;
+        ConjugationDimension copyNode = (ConjugationDimension)_node;
         
         this.value = copyNode.getValue();
     }

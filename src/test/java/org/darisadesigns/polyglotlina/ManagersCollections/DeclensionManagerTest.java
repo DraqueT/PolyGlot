@@ -28,7 +28,7 @@ import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenRule;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,9 +58,9 @@ public class DeclensionManagerTest {
         } catch (IOException | IllegalStateException e) {
             fail(e);
         }
-        DeclensionManager decMan = core.getDeclensionManager();
+        ConjugationManager decMan = core.getConjugationManager();
         
-        assertTrue(decMan.isCombinedDeclSurpressed(",3,", 3));
+        assertTrue(decMan.isCombinedConjlSurpressed(",3,", 3));
     }
 
     @Test
@@ -75,10 +75,10 @@ public class DeclensionManagerTest {
             fail(e);
         }
         
-        DeclensionManager decMan = core.getDeclensionManager();
+        ConjugationManager decMan = core.getConjugationManager();
         
-        decMan.setCombinedDeclSuppressed(",3,", 4, false);
-        assertFalse(decMan.isCombinedDeclSurpressed(",3,", 4));
+        decMan.setCombinedConjSuppressed(",3,", 4, false);
+        assertFalse(decMan.isCombinedConjlSurpressed(",3,", 4));
     }
 
     @Test
@@ -93,10 +93,10 @@ public class DeclensionManagerTest {
             fail(e);
         }
         
-        DeclensionManager decMan = core.getDeclensionManager();
+        ConjugationManager decMan = core.getConjugationManager();
         
-        decMan.setCombinedDeclSuppressedRaw("4,TESTVAL", false);
-        assertFalse(decMan.isCombinedDeclSurpressed("TESTVAL", 4));
+        decMan.setCombinedConjugationSuppressedRaw("4,TESTVAL", false);
+        assertFalse(decMan.isCombinedConjlSurpressed("TESTVAL", 4));
     }
 
     @Test
@@ -111,16 +111,16 @@ public class DeclensionManagerTest {
             fail(e);
         }
         
-        DeclensionManager decMan = core.getDeclensionManager();
+        ConjugationManager decMan = core.getConjugationManager();
         
-        DeclensionGenRule rule = new DeclensionGenRule();
+        ConjugationGenRule rule = new ConjugationGenRule();
         rule.setCombinationId("COMBID");
         rule.setName("TESTNAME");
         rule.setRegex("TESTREGEX");
         rule.setTypeId(99);
         rule.setIndex(1);
-        decMan.addDeclensionGenRule(rule);
-        List<DeclensionGenRule> rules = Arrays.asList(decMan.getDeclensionRulesForType(99));
+        decMan.addConjugationGenRule(rule);
+        List<ConjugationGenRule> rules = Arrays.asList(decMan.getConjugationRulesForType(99));
         assertTrue(rules.contains(rule));
     }
 
@@ -136,17 +136,17 @@ public class DeclensionManagerTest {
             fail(e);
         }
         
-        DeclensionManager decMan = core.getDeclensionManager();
+        ConjugationManager decMan = core.getConjugationManager();
         
-        DeclensionGenRule rule = new DeclensionGenRule();
+        ConjugationGenRule rule = new ConjugationGenRule();
         rule.setCombinationId("COMBID");
         rule.setName("TESTNAME");
         rule.setRegex("TESTREGEX");
         rule.setTypeId(98);
         rule.setIndex(1);
-        decMan.addDeclensionGenRule(rule);
-        decMan.wipeDeclensionGenRules(98);
-        assertEquals(0, decMan.getDeclensionRulesForType(98).length);
+        decMan.addConjugationGenRule(rule);
+        decMan.wipeConjugationGenRules(98);
+        assertEquals(0, decMan.getConjugationRulesForType(98).length);
     }
 
     @Test
@@ -162,17 +162,17 @@ public class DeclensionManagerTest {
             fail(e);
         }
         
-        DeclensionManager decMan = core.getDeclensionManager();
+        ConjugationManager decMan = core.getConjugationManager();
         
-        DeclensionGenRule rule = new DeclensionGenRule();
+        ConjugationGenRule rule = new ConjugationGenRule();
         rule.setCombinationId("COMBID");
         rule.setName("TESTNAME");
         rule.setRegex("TESTREGEX");
         rule.setTypeId(97);
         rule.setIndex(1);
-        decMan.addDeclensionGenRule(rule);
-        decMan.deleteDeclensionGenRule(rule);
-        assertFalse(Arrays.asList(decMan.getDeclensionRulesForType(97)).contains(rule));
+        decMan.addConjugationGenRule(rule);
+        decMan.deleteConjugationGenRule(rule);
+        assertFalse(Arrays.asList(decMan.getConjugationRulesForType(97)).contains(rule));
     }
 
     @Test
@@ -187,24 +187,24 @@ public class DeclensionManagerTest {
             fail(e);
         }
         
-        DeclensionManager decMan = core.getDeclensionManager();
+        ConjugationManager decMan = core.getConjugationManager();
         
-        DeclensionGenRule rule1 = new DeclensionGenRule();
+        ConjugationGenRule rule1 = new ConjugationGenRule();
         rule1.setCombinationId("COMBID");
         rule1.setName("TESTNAME");
         rule1.setRegex("TESTREGEX");
         rule1.setTypeId(96);
         rule1.setIndex(1);
-        decMan.addDeclensionGenRule(rule1);
-        DeclensionGenRule rule2 = new DeclensionGenRule();
+        decMan.addConjugationGenRule(rule1);
+        ConjugationGenRule rule2 = new ConjugationGenRule();
         rule2.setCombinationId("COMBID");
         rule2.setName("TESTNAME");
         rule2.setRegex("TESTREGEX");
         rule2.setTypeId(96);
         rule2.setIndex(1);
-        decMan.addDeclensionGenRule(rule2);
+        decMan.addConjugationGenRule(rule2);
         
-        List<DeclensionGenRule> rules = Arrays.asList(decMan.getDeclensionRulesForType(96));
+        List<ConjugationGenRule> rules = Arrays.asList(decMan.getConjugationRulesForType(96));
 
         assertTrue(rules.contains(rule1) && rules.contains(rule2));
     }
@@ -221,8 +221,8 @@ public class DeclensionManagerTest {
             subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
             int expectedInitialSize = 8;
 
-            DeclensionManager decManSub = subCore.getDeclensionManager();
-            assertEquals(expectedInitialSize, decManSub.getDeclensionRulesForType(2).length);
+            ConjugationManager decManSub = subCore.getConjugationManager();
+            assertEquals(expectedInitialSize, decManSub.getConjugationRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -238,12 +238,12 @@ public class DeclensionManagerTest {
             subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
             int expectedFinalSize = 6;
 
-            DeclensionManager decManSub = subCore.getDeclensionManager();
-            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2)[2];
-            List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+            ConjugationManager decManSub = subCore.getConjugationManager();
+            ConjugationGenRule toDelete = decManSub.getConjugationRulesForType(2)[2];
+            List<ConjugationGenRule> rulesToDelete = new ArrayList<>();
             rulesToDelete.add(toDelete);
-            decManSub.deleteRulesFromDeclensionTemplates(2, 1, 2, rulesToDelete);
-            assertEquals(expectedFinalSize, decManSub.getDeclensionRulesForType(2).length);
+            decManSub.deleteRulesFromConjugationTemplates(2, 1, 2, rulesToDelete);
+            assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -259,12 +259,12 @@ public class DeclensionManagerTest {
             subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
             int expectedFinalSize = 6;
 
-            DeclensionManager decManSub = subCore.getDeclensionManager();
-            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2)[2];
-            List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+            ConjugationManager decManSub = subCore.getConjugationManager();
+            ConjugationGenRule toDelete = decManSub.getConjugationRulesForType(2)[2];
+            List<ConjugationGenRule> rulesToDelete = new ArrayList<>();
             rulesToDelete.add(toDelete);
-            decManSub.deleteRulesFromDeclensionTemplates(2, 0, 3, rulesToDelete);
-            assertEquals(expectedFinalSize, decManSub.getDeclensionRulesForType(2).length);
+            decManSub.deleteRulesFromConjugationTemplates(2, 0, 3, rulesToDelete);
+            assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -283,12 +283,12 @@ public class DeclensionManagerTest {
             subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
             int expectedFinalSize = 5;
 
-            DeclensionManager decManSub = subCore.getDeclensionManager();
-            DeclensionGenRule toDelete = decManSub.getDeclensionRulesForType(2)[2];
-            List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+            ConjugationManager decManSub = subCore.getConjugationManager();
+            ConjugationGenRule toDelete = decManSub.getConjugationRulesForType(2)[2];
+            List<ConjugationGenRule> rulesToDelete = new ArrayList<>();
             rulesToDelete.add(toDelete);
-            decManSub.bulkDeleteRuleFromDeclensionTemplates(2, rulesToDelete);
-            assertEquals(expectedFinalSize, decManSub.getDeclensionRulesForType(2).length);
+            decManSub.bulkDeleteRuleFromConjugationTemplates(2, rulesToDelete);
+            assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -302,14 +302,14 @@ public class DeclensionManagerTest {
         
         try {
             subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
-            List<DeclensionGenRule> rulesToDelete = new ArrayList<>();
+            List<ConjugationGenRule> rulesToDelete = new ArrayList<>();
             int expectedFinalSize = 4;
 
-            DeclensionManager decManSub = subCore.getDeclensionManager();
-            rulesToDelete.add(decManSub.getDeclensionRulesForType(2)[2]);
-            rulesToDelete.add(decManSub.getDeclensionRulesForType(2)[1]);
-            decManSub.bulkDeleteRuleFromDeclensionTemplates(2, rulesToDelete);
-            assertEquals(expectedFinalSize, decManSub.getDeclensionRulesForType(2).length);
+            ConjugationManager decManSub = subCore.getConjugationManager();
+            rulesToDelete.add(decManSub.getConjugationRulesForType(2)[2]);
+            rulesToDelete.add(decManSub.getConjugationRulesForType(2)[1]);
+            decManSub.bulkDeleteRuleFromConjugationTemplates(2, rulesToDelete);
+            assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -327,10 +327,10 @@ public class DeclensionManagerTest {
             String combinedDeclensionId = ",2,2,";
             int expectedResultSize = 5;
 
-            DeclensionManager decManSub = subCore.getDeclensionManager();
+            ConjugationManager decManSub = subCore.getConjugationManager();
 
-            decManSub.deleteDeclensionGenRules(typeId, combinedDeclensionId);
-            List<DeclensionGenRule> result = Arrays.asList(decManSub.getDeclensionRulesForType(typeId));
+            decManSub.deleteConjugationGenRules(typeId, combinedDeclensionId);
+            List<ConjugationGenRule> result = Arrays.asList(decManSub.getConjugationRulesForType(typeId));
             assertEquals(result.size(), expectedResultSize);
         } catch (IOException | IllegalStateException e) {
             IOHandler.writeErrorLog(e, e.getLocalizedMessage());
@@ -351,7 +351,7 @@ public class DeclensionManagerTest {
             noCoreWord.setWordTypeId(2);
 
             Throwable threw = assertThrows(NullPointerException.class, () -> {
-                subCore.getDeclensionManager().declineWord(noCoreWord, "");
+                subCore.getConjugationManager().declineWord(noCoreWord, "");
             });
 
             String resultMessage = threw.getLocalizedMessage();
@@ -398,11 +398,11 @@ public class DeclensionManagerTest {
         word.setCore(debugCore);
         
         try {
-            debugCore.getDeclensionManager().declineWord(word, ",2,");
+            debugCore.getConjugationManager().declineWord(word, ",2,");
 
             String result = "";
 
-            for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+            for (String debugString : debugCore.getConjugationManager().getDecGenDebug()) {
                 result += debugString;
             }
 
@@ -455,11 +455,11 @@ public class DeclensionManagerTest {
         word.setClassValue(2, 0); // class val #1
         
         try {
-            debugCore.getDeclensionManager().declineWord(word, ",2,");
+            debugCore.getConjugationManager().declineWord(word, ",2,");
 
             String result = "";
 
-            for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+            for (String debugString : debugCore.getConjugationManager().getDecGenDebug()) {
                 result += debugString;
             }
 
@@ -512,11 +512,11 @@ public class DeclensionManagerTest {
         word.setClassValue(2, 2); // class val #2
         
         try {
-            debugCore.getDeclensionManager().declineWord(word, ",2,");
+            debugCore.getConjugationManager().declineWord(word, ",2,");
 
             String result = "";
 
-            for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+            for (String debugString : debugCore.getConjugationManager().getDecGenDebug()) {
                 result += debugString;
             }
 
@@ -565,11 +565,11 @@ public class DeclensionManagerTest {
         word.setCore(debugCore);
         
         try {
-            debugCore.getDeclensionManager().declineWord(word, ",3,");
+            debugCore.getConjugationManager().declineWord(word, ",3,");
 
             String result = "";
 
-            for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+            for (String debugString : debugCore.getConjugationManager().getDecGenDebug()) {
                 result += debugString;
             }
 
@@ -623,11 +623,11 @@ public class DeclensionManagerTest {
         word.setCore(debugCore);
         
         try {
-            debugCore.getDeclensionManager().declineWord(word, ",3,");
+            debugCore.getConjugationManager().declineWord(word, ",3,");
 
             String result = "";
 
-            for (String debugString : debugCore.getDeclensionManager().getDecGenDebug()) {
+            for (String debugString : debugCore.getConjugationManager().getDecGenDebug()) {
                 result += debugString;
             }
 
@@ -652,9 +652,9 @@ public class DeclensionManagerTest {
         
         int typeId = 4; // verbs
         int expectedRules = 13;
-        DeclensionManager decMan = core.getDeclensionManager();
-        decMan.addDeclensionToTemplate(typeId, "ZIM-ZAM!");
-        DeclensionGenRule[] rules = core.getDeclensionManager().getAllDepGenerationRules(typeId);
+        ConjugationManager decMan = core.getConjugationManager();
+        decMan.addConjugationToTemplate(typeId, "ZIM-ZAM!");
+        ConjugationGenRule[] rules = core.getConjugationManager().getAllDepGenerationRules(typeId);
         
         int resultRules = rules.length;
         
@@ -680,7 +680,7 @@ public class DeclensionManagerTest {
         word.setWordTypeId(4); // verb
         word.setValue("er5");
         
-        DeclensionGenRule[] rules = core.getDeclensionManager().getDeclensionRules(word);
+        ConjugationGenRule[] rules = core.getConjugationManager().getConjugationRules(word);
         int resultRuleCount = rules.length;
         String resultFirstRuleName = rules[0].getName();
         
@@ -693,7 +693,7 @@ public class DeclensionManagerTest {
         System.out.println("DeclensionManagerTest.testSmoothDeclensionRuleIndex");
         
         DictCore subCore = DummyCore.newCore();
-        DeclensionManager decMan = subCore.getDeclensionManager();
+        ConjugationManager decMan = subCore.getConjugationManager();
         TypeNode noun = new TypeNode();
         
         noun.setValue("noun");
@@ -701,24 +701,24 @@ public class DeclensionManagerTest {
         try {
             int nounId = subCore.getTypes().addNode(noun);
 
-            DeclensionGenRule rule = new DeclensionGenRule();
+            ConjugationGenRule rule = new ConjugationGenRule();
             rule.setIndex(1);
             rule.setTypeId(nounId);
-            decMan.addDeclensionGenRule(rule);
-            rule = new DeclensionGenRule();
+            decMan.addConjugationGenRule(rule);
+            rule = new ConjugationGenRule();
             rule.setIndex(3);
             rule.setTypeId(nounId);
-            decMan.addDeclensionGenRule(rule);
-            rule = new DeclensionGenRule();
+            decMan.addConjugationGenRule(rule);
+            rule = new ConjugationGenRule();
             rule.setIndex(4);
             rule.setTypeId(nounId);
-            decMan.addDeclensionGenRule(rule);
+            decMan.addConjugationGenRule(rule);
 
-            Method smoothRules = DeclensionManager.class.getDeclaredMethod("smoothRules");
+            Method smoothRules = ConjugationManager.class.getDeclaredMethod("smoothRules");
             smoothRules.setAccessible(true);
             smoothRules.invoke(decMan);
 
-            DeclensionGenRule[] rules = decMan.getDeclensionRulesForType(nounId);
+            ConjugationGenRule[] rules = decMan.getConjugationRulesForType(nounId);
 
             // assert that rules have been changed from 1, 3, 4 -> 1, 2, 3
             assertEquals(3, rules.length);
@@ -742,9 +742,9 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
-            DeclensionManager decMan = core.getDeclensionManager();
+            ConjugationManager decMan = core.getConjugationManager();
             
-            DeclensionGenRule[] allRules = decMan.getDeclensionRulesForType(2);
+            ConjugationGenRule[] allRules = decMan.getConjugationRulesForType(2);
             
             assertEquals(expectedAllRulesCount, allRules.length);
             
@@ -768,9 +768,9 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
-            DeclensionManager decMan = core.getDeclensionManager();
+            ConjugationManager decMan = core.getConjugationManager();
             
-            DeclensionGenRule[] allRules = decMan.getDeclensionRulesForTypeAndCombId(2, ",2,2,");
+            ConjugationGenRule[] allRules = decMan.getConjugationRulesForTypeAndCombId(2, ",2,2,");
             
             assertEquals(expectedAllRulesCount, allRules.length);
             
@@ -794,12 +794,12 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
-            DeclensionManager decMan = core.getDeclensionManager();
+            ConjugationManager decMan = core.getConjugationManager();
             
-            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);
             decMan.moveRulesUp(2, combId, Arrays.asList(rules[3]));
             
-            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            ConjugationGenRule[] resultRules = decMan.getConjugationRulesForType(2);
             
             for (int i = 0; i < expectedNameOrder.length; i++) {
                 assertEquals(expectedNameOrder[i], resultRules[i].getName());
@@ -822,12 +822,12 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
-            DeclensionManager decMan = core.getDeclensionManager();
+            ConjugationManager decMan = core.getConjugationManager();
             
-            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);
             decMan.moveRulesUp(2, combId, Arrays.asList(rules[2], rules[3]));
             
-            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            ConjugationGenRule[] resultRules = decMan.getConjugationRulesForType(2);
             
             for (int i = 0; i < expectedNameOrder.length; i++) {
                 assertEquals(expectedNameOrder[i], resultRules[i].getName());
@@ -850,12 +850,12 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
-            DeclensionManager decMan = core.getDeclensionManager();
+            ConjugationManager decMan = core.getConjugationManager();
             
-            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);
             decMan.moveRulesUp(2, combId, Arrays.asList(rules[0], rules[1]));
             
-            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            ConjugationGenRule[] resultRules = decMan.getConjugationRulesForType(2);
             
             for (int i = 0; i < expectedNameOrder.length; i++) {
                 assertEquals(expectedNameOrder[i], resultRules[i].getName());
@@ -878,12 +878,12 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
-            DeclensionManager decMan = core.getDeclensionManager();
+            ConjugationManager decMan = core.getConjugationManager();
             
-            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);
             decMan.moveRulesDown(2, combId, Arrays.asList(rules[0]));
             
-            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            ConjugationGenRule[] resultRules = decMan.getConjugationRulesForType(2);
             
             for (int i = 0; i < expectedNameOrder.length; i++) {
                 assertEquals(expectedNameOrder[i], resultRules[i].getName());
@@ -906,12 +906,12 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
-            DeclensionManager decMan = core.getDeclensionManager();
+            ConjugationManager decMan = core.getConjugationManager();
             
-            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);
             decMan.moveRulesDown(2, combId, Arrays.asList(rules[1], rules[2]));
             
-            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            ConjugationGenRule[] resultRules = decMan.getConjugationRulesForType(2);
             
             for (int i = 0; i < expectedNameOrder.length; i++) {
                 assertEquals(expectedNameOrder[i], resultRules[i].getName());
@@ -934,12 +934,12 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
-            DeclensionManager decMan = core.getDeclensionManager();
+            ConjugationManager decMan = core.getConjugationManager();
             
-            DeclensionGenRule[] rules = decMan.getDeclensionRulesForTypeAndCombId(2, combId);
+            ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);
             decMan.moveRulesDown(2, combId, Arrays.asList(rules[2], rules[3]));
             
-            DeclensionGenRule[] resultRules = decMan.getDeclensionRulesForType(2);
+            ConjugationGenRule[] resultRules = decMan.getConjugationRulesForType(2);
             
             for (int i = 0; i < expectedNameOrder.length; i++) {
                 assertEquals(expectedNameOrder[i], resultRules[i].getName());

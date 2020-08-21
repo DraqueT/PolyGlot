@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,7 +19,7 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
@@ -53,7 +53,7 @@ public final class ScrDeprecatedDeclensions extends PDialog {
     private Font conFont;
     private Integer numFields = 0;
     private Integer textHeight = 0;
-    private Map<String, DeclensionNode> allWordDeclensions = new HashMap<>();
+    private Map<String, ConjugationNode> allWordDeclensions = new HashMap<>();
     private JTextField firstField;
 
     public ScrDeprecatedDeclensions(DictCore _core, ConWord _word) {
@@ -174,9 +174,9 @@ public final class ScrDeprecatedDeclensions extends PDialog {
         if (typeId == -1) {
             InfoBox.info("Missing Part of Speech", "Word must have a part of Speech set, and declensions defined before using this feature.", core.getRootWindow());
             this.dispose();
-        } else if ((core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId) == null
-                    || core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId).length == 0)
-                && core.getDeclensionManager().getDimensionalDeclensionListWord(word.getId()).length == 0) {
+        } else if ((core.getConjugationManager().getDimensionalConjugationListTemplate(typeId) == null
+                    || core.getConjugationManager().getDimensionalConjugationListTemplate(typeId).length == 0)
+                && core.getConjugationManager().getDimensionalConjugationListWord(word.getId()).length == 0) {
             InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the Declensions button.", core.getRootWindow());
 
@@ -193,12 +193,12 @@ public final class ScrDeprecatedDeclensions extends PDialog {
     }
 
     private void saveDeclension() {
-        core.getDeclensionManager().clearAllDeclensionsWord(word.getId());
+        core.getConjugationManager().clearAllConjugationsWord(word.getId());
         Set<Entry<String, JTextField>> saveSet = fieldMap.entrySet();
 
         saveSet.stream().filter((entry) -> !entry.getValue().getText().trim().isEmpty())
         .forEach((entry) -> {
-            DeclensionNode saveNode = new DeclensionNode(-1);
+            ConjugationNode saveNode = new ConjugationNode(-1);
             String curId = entry.getKey();
 
             saveNode.setValue(entry.getValue().getText().trim());
@@ -206,7 +206,7 @@ public final class ScrDeprecatedDeclensions extends PDialog {
             saveNode.setNotes(labelMap.get(curId));
 
             // declensions per word not saved via int id any longer
-            core.getDeclensionManager().addDeclensionToWord(word.getId(), -1, saveNode);
+            core.getConjugationManager().addConjugationToWord(word.getId(), -1, saveNode);
         });
     }
     
@@ -214,12 +214,12 @@ public final class ScrDeprecatedDeclensions extends PDialog {
      * creates fields for deprecated dimension combinations
      */
     private void createDeprecatedFields() {
-        Set<Entry<String, DeclensionNode>> decSet = allWordDeclensions.entrySet();
-        Iterator<Entry<String, DeclensionNode>> depIt = decSet.iterator();
+        Set<Entry<String, ConjugationNode>> decSet = allWordDeclensions.entrySet();
+        Iterator<Entry<String, ConjugationNode>> depIt = decSet.iterator();
         
         while (depIt.hasNext()) {
-            Entry<String, DeclensionNode> decEnt = depIt.next();
-            DeclensionNode curDec = decEnt.getValue();
+            Entry<String, ConjugationNode> decEnt = depIt.next();
+            ConjugationNode curDec = decEnt.getValue();
 
             JTextField newField = new PTextField(core, false, "");
             Label newLabel = new Label(curDec.getNotes());
@@ -287,7 +287,7 @@ public final class ScrDeprecatedDeclensions extends PDialog {
      * (including deprecated ones)
      */
     private void getAllWordDeclensions() {
-        allWordDeclensions = core.getDeclensionManager().getDeprecatedForms(word);
+        allWordDeclensions = core.getConjugationManager().getDeprecatedForms(word);
     }
 
     /**

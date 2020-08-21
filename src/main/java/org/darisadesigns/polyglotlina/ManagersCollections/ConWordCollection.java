@@ -29,8 +29,8 @@ import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.FormattedTextHelper;
 import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionPair;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -47,8 +47,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
+import org.darisadesigns.polyglotlina.Nodes.EvolutionPair.EvolutionType;
+import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -359,7 +360,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
     @Override
     public void deleteNodeById(Integer _id) throws Exception {
         super.deleteNodeById(_id);
-        core.getDeclensionManager().clearAllDeclensionsWord(_id);
+        core.getConjugationManager().clearAllConjugationsWord(_id);
     }
 
     @Override
@@ -460,114 +461,54 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      * @return 
      * @throws java.lang.Exception on filter error
      */
-    public EvolutionPairs[] evolveLexicon(ConWord _filter, 
+    public EvolutionPair[] evolveLexicon(ConWord _filter, 
             int percent, 
-            TransformOptions instanceOption, 
+            ReplaceOptions instanceOption, 
             String regex, 
             String replacement) throws Exception {
         Random rand = new Random();
-        List<EvolutionPairs> ret = new ArrayList<>();
+        List<EvolutionPair> ret = new ArrayList<>();
         
         for (ConWord word : filteredList(_filter)) {
             if (rand.nextInt(99) < percent) {
-                String initVal = word.getValue();
-                String newVal = "";
+                String originalValue = word.getValue();
                 
-                if (instanceOption == TransformOptions.All) {
-                    newVal = initVal.replaceAll(regex, replacement);
-                } else {
-                    List<String> segments = new ArrayList<>();
+                try {
+                    word.evolveWord(regex, replacement, instanceOption);
+                    core.getConjugationManager().evolveConjugatedWordForms(word.getId(), regex, replacement, instanceOption);
                     
-                    if (PGTUtil.regexContainsLookaheadOrBehind(replacement)) {
-                        throw new Exception("Replacement patterns with lookahead or lookbehind patterns\nmust use \"All Instances\" option.");
+                    String newValue = word.getValue();
+                    
+                    if (newValue.isBlank()) {
+                        throw new Exception("Evolved word form is blank.");
                     }
-
-                    // break string into segments
-                    Pattern p = Pattern.compile(regex);
-                    Matcher m = p.matcher(initVal);
-
-                    int lastIndexMatch = 0;
-
-                    while (m.find()) {
-                        segments.add(initVal.substring(lastIndexMatch, m.start()));
-                        segments.add(m.group());
-                        lastIndexMatch = m.end();
+                    
+                    if (originalValue.equals(newValue)) {
+                        // no need to record if no change made
+                        continue;
                     }
-
-                    // add segments past last match
-                    segments.add(initVal.substring(lastIndexMatch));
-
-                    for (int i = 0; i < segments.size(); i++) {
-                        // only non transformational segments will have even indicies
-                        if (i % 2 == 0) {
-                            newVal += segments.get(i);
-                            continue;
-                        }
-
-                        boolean isFirst = i == 1;
-                        boolean isMiddle = i > 1 && i < segments.size() - 2; // -2 accounts for possibility of segment after last match
-                        boolean isLast = i == segments.size() - 2; 
-
-                        if (isFirst && (instanceOption == TransformOptions.FirstAndMiddleInstances
-                                    || instanceOption == TransformOptions.FirstInstanceOnly)
-                                || isMiddle && (instanceOption == TransformOptions.FirstAndMiddleInstances
-                                    || instanceOption == TransformOptions.MiddleAndLastInsances
-                                    || instanceOption == TransformOptions.MiddleInstancesOnly)
-                                || isLast && (instanceOption == TransformOptions.MiddleAndLastInsances
-                                    || instanceOption == TransformOptions.LastInsanceOnly)) {
-                            newVal += segments.get(i).replaceAll(regex, replacement);
-                        } else {
-                            newVal += segments.get(i);
-                        }
-                    }
+                    
+                    ret.add(new EvolutionPair(originalValue, 
+                            newValue, 
+                            EvolutionType.word, 
+                            "", 
+                            ""
+                    ));
+                } catch (Exception e) {
+                    // revert on error
+                    String errorValue = word.getValue();
+                    word.setValue(originalValue);
+                    ret.add(new EvolutionPair(originalValue, 
+                            errorValue, 
+                            EvolutionType.word, 
+                            e.getLocalizedMessage(), 
+                            ""
+                    ));
                 }
-                
-                // if nothing generated in the new value or the two are identical, then simply continue without modifying anything
-                if (newVal.isBlank() || initVal.equals(newVal)) {
-                    continue;
-                }
-                
-                word.setValue(newVal);
-                ret.add(new EvolutionPairs(initVal, word.getValue()));
             }
         }
         
-        return ret.toArray(new EvolutionPairs[0]);
-    }
-    
-    /**
-     * FirstInstanceOnly: 
-     * LastInsanceOnly: 
-     * MiddleInstancesOnly: 
-     */
-    public enum TransformOptions {
-        All("All Instances"),
-        FirstInstanceOnly("First Instance Only"),
-        FirstAndMiddleInstances("First and Middle Instances"),
-        MiddleInstancesOnly("Middle Instances Only"),
-        MiddleAndLastInsances("Middle and Last Instances"),
-        LastInsanceOnly("Last Instance Only");
-        
-        private final String label;
-        
-        private TransformOptions(String _label) {
-            label = _label;
-        }
-        
-        @Override
-        public String toString() {
-            return label;
-        }
-    }
-    
-    public class EvolutionPairs {
-        public final String start;
-        public final String end;
-        
-        public EvolutionPairs(String _start, String _end) {
-            start = _start;
-            end = _end;
-        }
+        return ret.toArray(new EvolutionPair[0]);
     }
 
     /**
@@ -697,7 +638,9 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                                 .childHasParent(curWord.getId(), parWord.getId())) {
                             continue;
                         }
-                    } if (parent instanceof EtyExternalParent) {
+                    }
+                    
+                    if (parent instanceof EtyExternalParent) {
                         EtyExternalParent parExt = (EtyExternalParent)parent;
                         if (parExt.getId() != -1 && !core.getEtymologyManager()
                                 .childHasExtParent(curWord.getId(), parExt.getUniqueId())) {
@@ -740,12 +683,12 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
         if (type != null && !ret) {
             int typeId = type.getId();
-            DeclensionPair[] decPairs = core.getDeclensionManager().getAllCombinedIds(typeId);
+            ConjugationPair[] decPairs = core.getConjugationManager().getAllCombinedIds(typeId);
 
-            for (DeclensionPair curPair : decPairs) {
+            for (ConjugationPair curPair : decPairs) {
                 // silently skip erroring entries. Too cumbersome to deal with during a search
                 try {
-                    String declension = core.getDeclensionManager()
+                    String declension = core.getConjugationManager()
                             .declineWord(word, curPair.combinedId);
 
                     if (!declension.trim().isEmpty()
@@ -921,14 +864,14 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      * @param typeId ID of word type to clear values from
      */
     public void clearDeprecatedDeclensions(Integer typeId) {
-        DeclensionManager dm = core.getDeclensionManager();
-        Map<Integer, DeclensionPair[]> comTypeDecs = new HashMap<>();
+        ConjugationManager dm = core.getConjugationManager();
+        Map<Integer, ConjugationPair[]> comTypeDecs = new HashMap<>();
 
         // iterates over every word
         nodeMap.values().stream()
                 .filter((word) -> (word).getWordTypeId().equals(typeId))
                 .forEach((word) -> {
-            DeclensionPair[] curDeclensions;
+            ConjugationPair[] curDeclensions;
 
             // ensure I'm only generating declension patterns for any given part of speech only once
             if (comTypeDecs.containsKey(word.getWordTypeId())) {
@@ -939,15 +882,15 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
             }
 
             // retrieves all stored declension values for word
-            Map<String, DeclensionNode> decMap = dm.getWordDeclensions(word.getId());
+            Map<String, ConjugationNode> decMap = dm.getWordConjugation(word.getId());
 
             // removes all legitimate declensions from map
-            for (DeclensionPair curPair : curDeclensions) {
+            for (ConjugationPair curPair : curDeclensions) {
                 decMap.remove(curPair.combinedId);
             }
 
             // wipe remaining values from word
-            dm.removeDeclensionValues(word.getId(), decMap.values());
+            dm.removeConjugationValues(word.getId(), decMap.values());
         });
     }
     

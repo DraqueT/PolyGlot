@@ -34,15 +34,15 @@ import org.w3c.dom.Element;
  * associated with the rule
  * @author draque
  */
-public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
+public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
     private int typeId;
     private int index = -1;
     private String combinationId;
     private String regex = "";
     private String name = "";
-    private List<DeclensionGenTransform> transformations = new ArrayList<>();
+    private List<ConjugationGenTransform> transformations = new ArrayList<>();
     private final Map<Integer, Integer> applyToClasses = new HashMap<>();
-    private DeclensionGenTransform transBuffer = new DeclensionGenTransform();
+    private ConjugationGenTransform transBuffer = new ConjugationGenTransform();
     private String debugString = "";
     
     /**
@@ -50,12 +50,12 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      * @param _typeId TypeID of type this rule applies to
      * @param _combinationId the combined ID of the constructed declension rule applies to
      */
-    public DeclensionGenRule(int _typeId, String _combinationId) {
+    public ConjugationGenRule(int _typeId, String _combinationId) {
         typeId = _typeId;
         combinationId = _combinationId;
     }
     
-    public DeclensionGenRule() {
+    public ConjugationGenRule() {
         typeId = -1;
         combinationId = "";
     }
@@ -64,7 +64,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      * Gets current declension transform buffer
      * @return current transform buffer
      */
-    public DeclensionGenTransform getTransBuffer() {
+    public ConjugationGenTransform getTransBuffer() {
         return transBuffer;
     }
     
@@ -73,7 +73,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      */
     public void insertTransBuffer() {
         addTransform(transBuffer);
-        transBuffer = new DeclensionGenTransform();
+        transBuffer = new ConjugationGenTransform();
     }
     
     /**
@@ -97,7 +97,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      * @param setTypeAndComb set to true to copy the typeId and combinationId
      * from the original, false to skip values
      */
-    public void setEqual(DeclensionGenRule r, boolean setTypeAndComb) {
+    public void setEqual(ConjugationGenRule r, boolean setTypeAndComb) {
         if (setTypeAndComb) {
             typeId = r.typeId;
             combinationId = r.combinationId;
@@ -106,7 +106,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         regex = r.regex;
         transformations.clear();
         r.transformations.stream().map((copyFrom) -> {
-            DeclensionGenTransform copyTo = new DeclensionGenTransform();
+            ConjugationGenTransform copyTo = new ConjugationGenTransform();
             copyTo.setEqual(copyFrom);
             return copyTo;
         }).forEachOrdered((copyTo) -> {
@@ -131,8 +131,8 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         boolean ret = true;
         
         if (this != o) {
-            if (o instanceof DeclensionGenRule) {
-                DeclensionGenRule comp = (DeclensionGenRule)o;
+            if (o instanceof ConjugationGenRule) {
+                ConjugationGenRule comp = (ConjugationGenRule)o;
                 ret = this.typeId == comp.typeId
                         && this.regex.equals(comp.regex)
                         && this.name.equals(comp.name)
@@ -149,7 +149,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      * adds transformation to rule
      * @param trans transformation to add
      */
-    public void addTransform(DeclensionGenTransform trans) {
+    public void addTransform(ConjugationGenTransform trans) {
         transformations.add(trans);
     }
     
@@ -157,8 +157,8 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      * gets all transformations for this rule
      * @return iterator of DeclensionGenTransform objects
      */
-    public DeclensionGenTransform[] getTransforms() {
-        return transformations.toArray(new DeclensionGenTransform[0]);
+    public ConjugationGenTransform[] getTransforms() {
+        return transformations.toArray(new ConjugationGenTransform[0]);
     }
     
     /**
@@ -219,7 +219,7 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
      * @return 
      */
     @Override
-    public int compareTo(DeclensionGenRule _compare) {
+    public int compareTo(ConjugationGenRule _compare) {
         final int BEFORE = -1;
         final int EQUAL = 0;
         final int AFTER = 1;
@@ -413,8 +413,8 @@ public class DeclensionGenRule implements Comparable<DeclensionGenRule> {
         
         if (comp == this) {
             ret = true;
-        } else if (comp instanceof DeclensionGenRule) {
-            DeclensionGenRule compRule = (DeclensionGenRule)comp;
+        } else if (comp instanceof ConjugationGenRule) {
+            ConjugationGenRule compRule = (ConjugationGenRule)comp;
             
             ret = typeId == compRule.typeId;
             ret = ret && (combinationId == null && compRule.combinationId == null) 

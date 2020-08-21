@@ -31,8 +31,8 @@ public class DeclensionGenRuleTest {
     @Test
     public void setEqual() {
         System.out.println("DeclensionGenRuleTest.setEqual");
-        DeclensionGenRule a = getGenericRule();
-        DeclensionGenRule b = new DeclensionGenRule();
+        ConjugationGenRule a = getGenericRule();
+        ConjugationGenRule b = new ConjugationGenRule();
         
         b.setEqual(a, true);
         
@@ -42,8 +42,8 @@ public class DeclensionGenRuleTest {
     @Test
     public void testEqualsEmpty() {
         System.out.println("DeclensionGenRuleTest.testEqualsEmpty");
-        DeclensionGenRule a = new DeclensionGenRule();
-        DeclensionGenRule b = new DeclensionGenRule();
+        ConjugationGenRule a = new ConjugationGenRule();
+        ConjugationGenRule b = new ConjugationGenRule();
         
         assertTrue(a.valuesEqual(b));
     }
@@ -51,8 +51,8 @@ public class DeclensionGenRuleTest {
     @Test
     public void testEqualsPopulated() {
         System.out.println("DeclensionGenRuleTest.testEqualsPopulated");
-        DeclensionGenRule a = getGenericRule();
-        DeclensionGenRule b = getGenericRule();
+        ConjugationGenRule a = getGenericRule();
+        ConjugationGenRule b = getGenericRule();
         
         assertTrue(a.valuesEqual(b));
     }
@@ -60,8 +60,8 @@ public class DeclensionGenRuleTest {
     @Test
     public void testNotEqualsNull() {
         System.out.println("DeclensionGenRuleTest.testNotEqualsNull");
-        DeclensionGenRule a = getGenericRule();
-        DeclensionGenRule b = null;
+        ConjugationGenRule a = getGenericRule();
+        ConjugationGenRule b = null;
         
         assertFalse(a.valuesEqual(b));
     }
@@ -69,7 +69,7 @@ public class DeclensionGenRuleTest {
     @Test
     public void testNotEqualsDiffType() {
         System.out.println("DeclensionGenRuleTest.testNotEqualsDiffType");
-        DeclensionGenRule a = getGenericRule();
+        ConjugationGenRule a = getGenericRule();
         Integer b = 5;
         
         assertFalse(a.valuesEqual(b));
@@ -78,8 +78,8 @@ public class DeclensionGenRuleTest {
     @Test
     public void testNotEqualsDiffName() {
         System.out.println("DeclensionGenRuleTest.testNotEqualsDiffName");
-        DeclensionGenRule a = getGenericRule();
-        DeclensionGenRule b = getGenericRule();
+        ConjugationGenRule a = getGenericRule();
+        ConjugationGenRule b = getGenericRule();
         
         b.setName("DIFFERENT NAME");
         
@@ -89,8 +89,8 @@ public class DeclensionGenRuleTest {
     @Test
     public void testNotEqualsDiffRegex() {
         System.out.println("DeclensionGenRuleTest.testNotEqualsDiffRegex");
-        DeclensionGenRule a = getGenericRule();
-        DeclensionGenRule b = getGenericRule();
+        ConjugationGenRule a = getGenericRule();
+        ConjugationGenRule b = getGenericRule();
         
         b.setRegex("BLARGH");
         
@@ -100,8 +100,8 @@ public class DeclensionGenRuleTest {
     @Test
     public void testNotEqualsDiffPOS() {
         System.out.println("DeclensionGenRuleTest.testNotEqualsDiffPOS");
-        DeclensionGenRule a = getGenericRule();
-        DeclensionGenRule b = getGenericRule();
+        ConjugationGenRule a = getGenericRule();
+        ConjugationGenRule b = getGenericRule();
         
         b.setTypeId(666);
         
@@ -112,26 +112,26 @@ public class DeclensionGenRuleTest {
     public void testNotEqualsDiffRules() {
         System.out.println("DeclensionGenRuleTest.testNotEqualsDiffRules");
         
-        DeclensionGenRule a = getGenericRule();
-        DeclensionGenRule b = getGenericRule();
+        ConjugationGenRule a = getGenericRule();
+        ConjugationGenRule b = getGenericRule();
         
-        a.addTransform(new DeclensionGenTransform("a", "b"));
-        b.addTransform(new DeclensionGenTransform("y", "z"));
+        a.addTransform(new ConjugationGenTransform("a", "b"));
+        b.addTransform(new ConjugationGenTransform("y", "z"));
         
         assertFalse(a.valuesEqual(b));
     }
     
-    private DeclensionGenRule getGenericRule() {
-        DeclensionGenRule ret = new DeclensionGenRule();
+    private ConjugationGenRule getGenericRule() {
+        ConjugationGenRule ret = new ConjugationGenRule();
         
         ret.setName("NAME");
         ret.setCombinationId("1,3,5,7,8");
         ret.setRegex(".*");
         ret.setTypeId(4);
         
-        ret.addTransform(new DeclensionGenTransform("1", "2"));
-        ret.addTransform(new DeclensionGenTransform("2", "3"));
-        ret.addTransform(new DeclensionGenTransform("4", "5"));
+        ret.addTransform(new ConjugationGenTransform("1", "2"));
+        ret.addTransform(new ConjugationGenTransform("2", "3"));
+        ret.addTransform(new ConjugationGenTransform("4", "5"));
         
         return ret;
     }

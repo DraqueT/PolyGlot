@@ -32,7 +32,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionPair;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 
 /**
  * The is the wrapper class which displays either the classic or simplified view
@@ -91,7 +91,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
         final PDialog parent = this;
         ActionListener clicked = (ActionEvent e) -> {
             boolean simplifiedSelected = rdoSimplified.isSelected();
-            boolean rulesExist = core.getDeclensionManager().getDeclensionRulesForType(typeId).length != 0;
+            boolean rulesExist = core.getConjugationManager().getConjugationRulesForType(typeId).length != 0;
             
             // when switching from classic to simplified, warn users if rules are already defined
             if (rulesExist &&
@@ -180,7 +180,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
     public static ScrDeclensionGenSetup run(DictCore _core, int _typeId) {
         ScrDeclensionGenSetup s = new ScrDeclensionGenSetup(_core, _typeId);
 
-        DeclensionPair[] decs = _core.getDeclensionManager().getAllCombinedIds(_typeId);
+        ConjugationPair[] decs = _core.getConjugationManager().getAllCombinedIds(_typeId);
 
         if (decs.length == 0) {
             InfoBox.warning("No Declensions Exist", "Please set up some conjugations/declensions for \""

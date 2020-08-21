@@ -28,16 +28,16 @@ import org.w3c.dom.Element;
  * Container class for declension auto-transform transformation pairs
  * @author draque
  */
-public class DeclensionGenTransform {
+public class ConjugationGenTransform {
     public String regex;
     public String replaceText;
     
-    public DeclensionGenTransform(String _regex, String _replaceText) {
+    public ConjugationGenTransform(String _regex, String _replaceText) {
         regex = _regex;
         replaceText = _replaceText;
     }
     
-    public DeclensionGenTransform() {
+    public ConjugationGenTransform() {
         regex = "";
         replaceText = "";
     }
@@ -46,7 +46,7 @@ public class DeclensionGenTransform {
      * Sets transform equal to that of passed value
      * @param d transform to copy values from
      */
-    public void setEqual(DeclensionGenTransform d) {
+    public void setEqual(ConjugationGenTransform d) {
         regex = d.regex;
         replaceText = d.replaceText;
     }
@@ -65,8 +65,8 @@ public class DeclensionGenTransform {
         
         if (comp == this) {
             ret = true;
-        } else if (comp instanceof DeclensionGenTransform) {
-            DeclensionGenTransform compDec = (DeclensionGenTransform)comp;
+        } else if (comp instanceof ConjugationGenTransform) {
+            ConjugationGenTransform compDec = (ConjugationGenTransform)comp;
             
             ret = regex.equals(compDec.regex);
             ret = ret && replaceText.equals(compDec.replaceText);

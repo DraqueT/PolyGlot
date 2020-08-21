@@ -27,7 +27,7 @@ import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.PronunciationMgr;
 import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.FamilyManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.DeclensionManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.TypeCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.EtymologyManager;
@@ -61,7 +61,7 @@ public class DictCore {
     private final PolyGlot polyGlot;
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
-    private DeclensionManager declensionMgr;
+    private ConjugationManager conjugationMgr;
     private PropertiesManager propertiesManager;
     private PronunciationMgr pronuncMgr;
     private RomanizationManager romMgr;
@@ -97,7 +97,7 @@ public class DictCore {
         try {
             wordCollection = new ConWordCollection(this);
             typeCollection = new TypeCollection(this);
-            declensionMgr = new DeclensionManager(this);
+            conjugationMgr = new ConjugationManager(this);
             propertiesManager = new PropertiesManager(this);
             pronuncMgr = new PronunciationMgr(this);
             romMgr = new RomanizationManager(this);
@@ -528,7 +528,7 @@ public class DictCore {
         typeCollection.writeXML(doc, rootElement);
         wordCollection.writeXML(doc, rootElement);
         etymologyManager.writeXML(doc, rootElement);
-        declensionMgr.writeXML(doc, rootElement);
+        conjugationMgr.writeXML(doc, rootElement);
         pronuncMgr.writeXML(doc, rootElement);
         romMgr.writeXML(doc, rootElement);
         logoCollection.writeXML(doc, rootElement);
@@ -558,8 +558,8 @@ public class DictCore {
      * Returns declension manager within language file
      * @return 
      */
-    public DeclensionManager getDeclensionManager() {
-        return declensionMgr;
+    public ConjugationManager getConjugationManager() {
+        return conjugationMgr;
     }
 
     /**
@@ -649,7 +649,7 @@ public class DictCore {
     public boolean isLanguageEmpty() {
         return wordCollection.isEmpty()
                 && typeCollection.isEmpty()
-                && declensionMgr.isEmpty()
+                && conjugationMgr.isEmpty()
                 && pronuncMgr.isEmpty()
                 && romMgr.isEmpty()
                 && logoCollection.isEmpty()
@@ -678,7 +678,7 @@ public class DictCore {
             
             ret = wordCollection.equals(compCore.wordCollection);
             ret = ret && typeCollection.equals(compCore.typeCollection);
-            ret = ret && declensionMgr.equals(compCore.declensionMgr);
+            ret = ret && conjugationMgr.equals(compCore.conjugationMgr);
             ret = ret && propertiesManager.equals(compCore.propertiesManager);
             ret = ret && pronuncMgr.equals(compCore.pronuncMgr);
             ret = ret && romMgr.equals(compCore.romMgr);

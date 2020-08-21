@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -20,12 +20,14 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import java.awt.Color;
+import java.awt.Component;
 import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
@@ -36,65 +38,132 @@ public final class PTable extends JTable {
     private final DictCore core;
     private final PCellEditor disabledEd;
     private final PCellRenderer disabledRend;
-    
+    private RenderController rendererController = (r,x,y)->{};
+    private EditorController editorController = (e,x,y)->{};
+
     public PTable(DictCore _core) {
         core = _core;
         disabledEd = new PCellEditor(false, core);
         disabledRend = new PCellRenderer(false, core);
         disabledEd.setBackground(Color.gray);
         disabledRend.setBackground(Color.darkGray);
-        
+
         if (core != null) {
-            Font font = PGTUtil.MENU_FONT.deriveFont((float)core.getOptionsManager().getMenuFontSize());
+            Font font = PGTUtil.MENU_FONT.deriveFont((float) core.getOptionsManager().getMenuFontSize());
             this.getTableHeader().setFont(font);
         }
     }
     
-    @Override
+        @Override
     public String getToolTipText(MouseEvent e) {
         String tip = "";
         java.awt.Point p = e.getPoint();
         int rowIndex = rowAtPoint(p);
         int colIndex = columnAtPoint(p);
-        
+
         try {
             Object target = this.getValueAt(rowIndex, colIndex);
 
             if (target != null) {
                 try {
                     tip = core.getPronunciationMgr().getPronunciation(target.toString());
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     // user error: do not log
                     // IOHandler.writeErrorLog(e);
                     tip = "MALFORMED PRONUNCIATION REGEX: " + ex.getLocalizedMessage();
                 }
             }
-        } catch (ArrayIndexOutOfBoundsException ex) {
+        }
+        catch (ArrayIndexOutOfBoundsException ex) {
             // do nothing. This happens if a non-value portion of the table is hovered over due to how objects are fetched
             // all other errors bubble beyond this point
             // IOHandler.writeErrorLog(e);
         }
-        
+
         return tip.isEmpty() ? super.getToolTipText(e) : tip;
     }
-    
+
     @Override
     public TableCellRenderer getCellRenderer(int row, int column) {
         TableCellRenderer ret = disabledRend;
-        
+
         if (this.getValueAt(row, column) != null) {
             ret = super.getCellRenderer(row, column);
+            
+            // only set new value if not already overridden elsewhere
+            if (!(ret instanceof PCellRenderer)) {
+                boolean conFont = this.getFont().getFamily().equals(core.getPropertiesManager().getFontCon().getFamily());
+                ret = new PCellRenderer(conFont, core);
+                this.prepareRenderer(ret, row, column);
+            }
+        }
+
+        return ret;
+    }
+
+    @Override
+    public TableCellEditor getCellEditor(int row, int column) {
+        TableCellEditor ret = cellEditor;
+
+        if (this.getValueAt(row, column) != null) {
+            ret = super.getCellEditor(row, column);
+            
+            // only set new value if not already overridden elsewhere
+            if (!(ret instanceof PCellEditor)) {
+                boolean conFont = this.getFont().getFamily().equals(core.getPropertiesManager().getFontCon().getFamily());
+                ret = new PCellEditor(conFont, core);
+                this.prepareEditor(ret, row, column);
+            }
+        }
+
+        return ret;
+    }
+    
+    /**
+     * Sets row renderer for table (allows for conditional rendering of particular rows, etc.)
+     * @param _rendererController   
+     */
+    public void setRenderController(RenderController _rendererController) {
+        rendererController = _rendererController;
+    }
+    
+    public void setEditorController(EditorController _editorController) {
+        editorController = _editorController;
+    }
+    
+    public interface RenderController {
+        public void r(PCellRenderer renderer, int row, int column);
+    }
+    
+    public interface EditorController {
+        public void e(PCellEditor editor, int row, int column);
+    }
+
+    @Override
+    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+        Component ret = super.prepareRenderer(renderer, row, column);
+        if (renderer instanceof PCellRenderer) {
+            rendererController.r((PCellRenderer)renderer, row, column);
+        } else {
+            // The only time this will ever happen is if it is done manually via setting renderer to the column/cell
+            InfoBox.error("Table Rendering Error", "Unable to render table cell.", null);
+            IOHandler.writeErrorLog(new Exception("Non PCellRenderer in PTable"));
         }
         
         return ret;
     }
     
     @Override
-    public TableCellEditor getCellEditor(int row, int column) {
-        TableCellEditor ret = cellEditor;
+    public Component prepareEditor(TableCellEditor editor, int row, int column) {
+        Component ret = super.prepareEditor(editor, row, column);
         
-        if (this.getValueAt(row, column) != null) {
-            ret = super.getCellEditor(row, column);
+        if (editor instanceof TableCellEditor) {
+            editorController.e((PCellEditor)editor, row, column);
+        } else {
+            // The only time this will ever happen is if it is done manually via setting editor to the column/cell
+            InfoBox.error("Table Rendering Error", "Unable to render table cell.", null);
+            IOHandler.writeErrorLog(new Exception("Non PCellEditor in PTable"));
         }
         
         return ret;

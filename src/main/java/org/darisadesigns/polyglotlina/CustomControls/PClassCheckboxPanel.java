@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -20,7 +20,7 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenRule;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -40,7 +40,7 @@ import org.darisadesigns.polyglotlina.Nodes.WordClass;
  * @author DThompson
  */
 public class PClassCheckboxPanel extends JPanel {
-    private DeclensionGenRule rule = new DeclensionGenRule();
+    private ConjugationGenRule rule = new ConjugationGenRule();
     private final List<PCheckBox> applyClassesCheckboxes = new ArrayList<>();
     private final TypeNode type;
     private GridBagConstraints gbc;
@@ -211,7 +211,7 @@ public class PClassCheckboxPanel extends JPanel {
         });
     }
     
-    public void setRule(DeclensionGenRule _rule, DictCore core) {
+    public void setRule(ConjugationGenRule _rule, DictCore core) {
         this.rule = _rule;
         this.init(core);
     }

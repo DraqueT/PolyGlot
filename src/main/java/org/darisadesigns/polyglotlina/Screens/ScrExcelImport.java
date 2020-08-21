@@ -478,6 +478,7 @@ public class ScrExcelImport extends PDialog {
             InfoBox.error("Import Error", "All column fields and sheet field must contain "
                     + "numeric values only:\n" + e.getLocalizedMessage(), this);
         } catch (IllegalStateException e) {
+            IOHandler.writeErrorLog(e);
             InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
                     + ".\n The text encoding is not supported. Please open the import file in a "
                     + "text editor and save with encoding: " + Charset.defaultCharset().displayName(),

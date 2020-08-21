@@ -19,20 +19,20 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.Nodes.DeclensionDimension;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenTransform;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenRule;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationDimension;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationGenTransform;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.Nodes.LogoNode;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
 import org.darisadesigns.polyglotlina.Nodes.FamNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.PronunciationMgr;
 import org.darisadesigns.polyglotlina.ManagersCollections.FamilyManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.DeclensionManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.ManagersCollections.RomanizationManager;
@@ -217,7 +217,7 @@ public final class CustHandlerFactory {
             String combinedDecId = "";
             String tmpString; // used mostly for converting deprecated values (as they no longer have placeholder points)
 
-            final DeclensionManager declensionMgr = core.getDeclensionManager();
+            final ConjugationManager conjugationMgr = core.getConjugationManager();
             final PronunciationMgr pronuncMgr = core.getPronunciationMgr();
             final RomanizationManager romanizationMgr = core.getRomManager();
             final PropertiesManager propertiesManager = core.getPropertiesManager();
@@ -290,7 +290,7 @@ public final class CustHandlerFactory {
                     bwordoverAutoDec = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_XID)) {
                     // from old versions, declensions are loaded as dimensions of a master declension
-                    declensionMgr.getBuffer().clearBuffer();
+                    conjugationMgr.getBuffer().clearBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_ID_XID)) {
                     bDecId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_TEXT_XID)) {
@@ -480,7 +480,7 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
                     romanizationMgr.addPronunciation(romBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_XID)) {
-                    DeclensionNode curBuffer = declensionMgr.getBuffer();
+                    ConjugationNode curBuffer = conjugationMgr.getBuffer();
 
                     // old bug set IDs to crazy values... this should clean it up.
                     // IDs can never be less than 0, and a max of MAX_VALUE can be stored.
@@ -488,16 +488,16 @@ public final class CustHandlerFactory {
                     if (curBuffer.getId() != Integer.MAX_VALUE
                             && curBuffer.getId() > 0) {
                         // dec templates handled differently than actual saved declensions for words
-                        if (declensionMgr.isBufferDecTemp()) {
-                            declensionMgr.insertBuffer();
+                        if (conjugationMgr.isBufferDecTemp()) {
+                            conjugationMgr.insertBuffer();
                         } else {
-                            Integer relId = declensionMgr.getBufferRelId();
+                            Integer relId = conjugationMgr.getBufferRelId();
                             curBuffer.setCombinedDimId(curBuffer.getCombinedDimId());
-                            declensionMgr.addDeclensionToWord(relId, curBuffer.getId(), curBuffer);
+                            conjugationMgr.addConjugationToWord(relId, curBuffer.getId(), curBuffer);
                         }
                     }
 
-                    declensionMgr.clearBuffer();
+                    conjugationMgr.clearBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.LOCALWORD_XID)) {
                     blocalWord = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CONWORD_XID)) {
@@ -580,7 +580,7 @@ public final class CustHandlerFactory {
                     bDecText = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_NOTES_XID)) {
                     try {
-                        declensionMgr.setBufferDecNotes(WebInterface.unarchiveHTML(declensionMgr.getBufferDecNotes(), core));
+                        conjugationMgr.setBufferDecNotes(WebInterface.unarchiveHTML(conjugationMgr.getBufferDecNotes(), core));
                     } catch (Exception e) {
                         IOHandler.writeErrorLog(e);
                         warningLog += "\nProblem loading declension notes image: " + e.getLocalizedMessage();
@@ -606,8 +606,8 @@ public final class CustHandlerFactory {
                     bromPhon = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NODE_XID)) {
                     try {
-                        declensionMgr.getBuffer().insertBuffer();
-                        declensionMgr.getBuffer().clearBuffer();
+                        conjugationMgr.getBuffer().insertBuffer();
+                        conjugationMgr.getBuffer().clearBuffer();
                     } catch (Exception e) {
                         throw new SAXException(e);
                     }
@@ -636,7 +636,7 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_DISABLE_PROC_REGEX)) {
                     bdisableProcRegex = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_XID)) {
-                    core.getDeclensionManager().insRuleBuffer();
+                    core.getConjugationManager().insRuleBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_COMB_XID)) {
                     bdecGenRuleComb = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_NAME_XID)) {
@@ -648,7 +648,7 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_TYPE_XID)) {
                     bdecGenRuleType = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_XID)) {
-                    core.getDeclensionManager().getRuleBuffer().insertTransBuffer();
+                    core.getConjugationManager().getRuleBuffer().insertTransBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_REGEX_XID)) {
                     bdecGenTransRegex = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_REPLACE_XID)) {
@@ -807,9 +807,9 @@ public final class CustHandlerFactory {
                             + new String(ch, start, length));
                 } else if (bwordPlur) {
                     // plurality now handled as declension
-                    declensionMgr.setBufferDecTemp(false);
-                    declensionMgr.setBufferDecText(new String(ch, start, length));
-                    declensionMgr.setBufferDecNotes("Plural");
+                    conjugationMgr.setBufferDecTemp(false);
+                    conjugationMgr.setBufferDecText(new String(ch, start, length));
+                    conjugationMgr.setBufferDecNotes("Plural");
                     bwordPlur = false;
                 } else if (bwordProcOverride) {
                     core.getWordCollection().getBufferWord()
@@ -910,24 +910,24 @@ public final class CustHandlerFactory {
                         throw new SAXException("Load error: " + e.getLocalizedMessage(), e);
                     }
                 } else if (bDecId) {
-                    declensionMgr.setBufferId(Integer.parseInt(new String(ch, start, length)));
+                    conjugationMgr.setBufferId(Integer.parseInt(new String(ch, start, length)));
                     bDecId = false;
                 } else if (bDecText) {
-                    declensionMgr.setBufferDecText(declensionMgr.getBufferDecText()
+                    conjugationMgr.setBufferDecText(conjugationMgr.getBufferDecText()
                             + new String(ch, start, length));
                 } else if (bDecNotes) {
-                    declensionMgr.setBufferDecNotes(declensionMgr.getBufferDecNotes()
+                    conjugationMgr.setBufferDecNotes(conjugationMgr.getBufferDecNotes()
                             + new String(ch, start, length));
                 } else if (bDecIsTemp) {
-                    declensionMgr.setBufferDecTemp(new String(ch, start, length).equals("1"));
+                    conjugationMgr.setBufferDecTemp(new String(ch, start, length).equals("1"));
                     bDecIsTemp = false;
                 } else if (bDecIsDimless) {
-                    declensionMgr.getBuffer().setDimensionless(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    conjugationMgr.getBuffer().setDimensionless(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (bDecCombId) {
-                    declensionMgr.getBuffer().setCombinedDimId(new String(ch, start, length));
+                    conjugationMgr.getBuffer().setCombinedDimId(new String(ch, start, length));
                     bDecIsTemp = false;
                 } else if (bDecRelId) {
-                    declensionMgr.setBufferRelId(Integer.parseInt(new String(ch, start, length)));
+                    conjugationMgr.setBufferRelId(Integer.parseInt(new String(ch, start, length)));
                     bDecRelId = false;
                 } else if (bpronBase) {
                     proBuffer.setValue(proBuffer.getValue()
@@ -975,10 +975,10 @@ public final class CustHandlerFactory {
                     propertiesManager.setLocalLangName(propertiesManager.getLocalLangName()
                             + new String(ch, start, length));
                 } else if (bdimId) {
-                    declensionMgr.getBuffer().getBuffer().setId(Integer.parseInt(new String(ch, start, length)));
+                    conjugationMgr.getBuffer().getBuffer().setId(Integer.parseInt(new String(ch, start, length)));
                     bdimId = false;
                 } else if (bdimName) {
-                    DeclensionDimension dimBuffer = declensionMgr.getBuffer().getBuffer();
+                    ConjugationDimension dimBuffer = conjugationMgr.getBuffer().getBuffer();
                     dimBuffer.setValue(dimBuffer.getValue()
                             + new String(ch, start, length));
                 } else if (bfamName) {
@@ -1005,36 +1005,36 @@ public final class CustHandlerFactory {
                     bdisableProcRegex = false;
                 } else if (bdecGenTransClassVal) {
                     String[] classValueIds = new String(ch, start, length).split(",");
-                    core.getDeclensionManager().getRuleBuffer().addClassToFilterList(
+                    core.getConjugationManager().getRuleBuffer().addClassToFilterList(
                             Integer.parseInt(classValueIds[0]),
                             Integer.parseInt(classValueIds[1]));
                 } else if (bdecGenRuleComb) {
-                    core.getDeclensionManager().getRuleBuffer().setCombinationId(new String(ch, start, length));
+                    core.getConjugationManager().getRuleBuffer().setCombinationId(new String(ch, start, length));
                     bdecGenRuleComb = false;
                 } else if (bdecGenRuleName) {
-                    DeclensionGenRule ruleBuffer = core.getDeclensionManager().getRuleBuffer();
+                    ConjugationGenRule ruleBuffer = core.getConjugationManager().getRuleBuffer();
                     ruleBuffer.setName(ruleBuffer.getName()
                             + new String(ch, start, length));
                 } else if (bdecGenRuleRegex) {
-                    DeclensionGenRule ruleBuffer = core.getDeclensionManager().getRuleBuffer();
+                    ConjugationGenRule ruleBuffer = core.getConjugationManager().getRuleBuffer();
                     ruleBuffer.setRegex(ruleBuffer.getRegex()
                             + new String(ch, start, length));
                 } else if (bdecGenRuleType) {
-                    core.getDeclensionManager().getRuleBuffer().setTypeId(Integer.parseInt(new String(ch, start, length)));
+                    core.getConjugationManager().getRuleBuffer().setTypeId(Integer.parseInt(new String(ch, start, length)));
                     bdecGenRuleType = false;
                 } else if (bdecGenTransRegex) {
-                    DeclensionGenTransform transBuffer = core.getDeclensionManager().getRuleBuffer().getTransBuffer();
+                    ConjugationGenTransform transBuffer = core.getConjugationManager().getRuleBuffer().getTransBuffer();
                     transBuffer.regex += new String(ch, start, length);
                 } else if (bdecGenTransRep) {
-                    DeclensionGenTransform transBuffer = core.getDeclensionManager().getRuleBuffer().getTransBuffer();
+                    ConjugationGenTransform transBuffer = core.getConjugationManager().getRuleBuffer().getTransBuffer();
                     transBuffer.replaceText += new String(ch, start, length);
                 } else if (bdecGenRuleIndex) {
-                    core.getDeclensionManager().getRuleBuffer().setIndex(Integer.parseInt(new String(ch, start, length)));
+                    core.getConjugationManager().getRuleBuffer().setIndex(Integer.parseInt(new String(ch, start, length)));
                     bdecGenRuleIndex = false;
                 } else if (bcombinedFormId) {
                     combinedDecId += new String(ch, start, length);
                 } else if (bcombinedFormSurpress) {
-                    core.getDeclensionManager().setCombinedDeclSuppressedRaw(combinedDecId,
+                    core.getConjugationManager().setCombinedConjugationSuppressedRaw(combinedDecId,
                             new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (blogoStrokes) {
                     try {
@@ -1158,7 +1158,7 @@ public final class CustHandlerFactory {
             public void endDocument() {
                 // Version 2.3 implemented class filters for conj rules. Default to all on.
                 if (versionHierarchy < PGTUtil.getVersionHierarchy("2.2")) {
-                    core.getDeclensionManager().setAllDeclensionRulesToAllClasses();
+                    core.getConjugationManager().setAllConjugationRulesToAllClasses();
                 }
             }
         };

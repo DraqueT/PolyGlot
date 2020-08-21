@@ -26,10 +26,10 @@ import java.util.Arrays;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.TransformOptions;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -225,7 +225,7 @@ public class ConWordCollectionTest {
         String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
         String[] expectedVals = new String[]{"bbb", "bbz", "bzb", "zbb", "zzb", "zzz"};
         
-        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.All);
+        this.evolveLanguageTest(words, expectedVals, "a", "z", ReplaceOptions.All);
     }
  
     @Test
@@ -235,7 +235,7 @@ public class ConWordCollectionTest {
         String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
         String[] expectedVals = new String[]{"zza", "zab", "zbb", "bzb", "bbz", "bbb"};
         
-        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.FirstAndMiddleInstances);
+        this.evolveLanguageTest(words, expectedVals, "a", "z", ReplaceOptions.FirstAndMiddleInstances);
     }
     
     @Test
@@ -245,7 +245,7 @@ public class ConWordCollectionTest {
         String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
         String[] expectedVals = new String[]{"zaa", "zab", "zbb", "bzb", "bbz", "bbb"};
         
-        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.FirstInstanceOnly);
+        this.evolveLanguageTest(words, expectedVals, "a", "z", ReplaceOptions.FirstInstanceOnly);
     }
     
     @Test
@@ -255,7 +255,7 @@ public class ConWordCollectionTest {
         String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
         String[] expectedVals = new String[]{"aaz", "azb", "zbb", "bzb", "bbz", "bbb"};
         
-        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.LastInsanceOnly);
+        this.evolveLanguageTest(words, expectedVals, "a", "z", ReplaceOptions.LastInsanceOnly);
     }
     
     @Test
@@ -265,7 +265,7 @@ public class ConWordCollectionTest {
         String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
         String[] expectedVals = new String[]{"azz", "azb", "zbb", "bzb", "bbz", "bbb"};
         
-        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.MiddleAndLastInsances);
+        this.evolveLanguageTest(words, expectedVals, "a", "z", ReplaceOptions.MiddleAndLastInsances);
     }
     
     @Test
@@ -275,7 +275,7 @@ public class ConWordCollectionTest {
         String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
         String[] expectedVals = new String[]{"aza", "aab", "abb", "bab", "bba", "bbb"};
         
-        this.evolveLanguageTest(words, expectedVals, "a", "z", TransformOptions.MiddleInstancesOnly);
+        this.evolveLanguageTest(words, expectedVals, "a", "z", ReplaceOptions.MiddleInstancesOnly);
     }
     
     @Test
@@ -285,14 +285,14 @@ public class ConWordCollectionTest {
         String[] words =        new String[]{"aaa", "aab", "abb", "bab", "bba", "bbb"};
         String[] expectedVals = new String[]{"aaa", "z", "zb", "bz", "bba", "bbb"};
         
-        this.evolveLanguageTest(words, expectedVals, "a+b", "z", TransformOptions.All);
+        this.evolveLanguageTest(words, expectedVals, "a+b", "z", ReplaceOptions.All);
     }
     
     private void evolveLanguageTest(String[] words, 
             String[] expectedVals,
             String regex,
             String replace,
-            TransformOptions transformOption) {
+            ReplaceOptions transformOption) {
         DictCore core = DummyCore.newCore();
         Arrays.sort(expectedVals); // gonna be returned in alphabetic order...
         

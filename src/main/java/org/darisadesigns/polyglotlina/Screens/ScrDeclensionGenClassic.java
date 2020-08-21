@@ -19,9 +19,9 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenRule;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenTransform;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionPair;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationGenTransform;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
@@ -34,8 +34,8 @@ import org.darisadesigns.polyglotlina.CustomControls.PClassCheckboxPanel;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PList;
 import org.darisadesigns.polyglotlina.CustomControls.PTable;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionDimension;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationDimension;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
@@ -76,11 +76,11 @@ public final class ScrDeclensionGenClassic extends PDialog {
     private final Window parent;
     private final int typeId;
     private DefaultListModel<Object> decListModel;
-    private DefaultListModel<DeclensionGenRule> rulesModel;
+    private DefaultListModel<ConjugationGenRule> rulesModel;
     private DefaultTableModel transModel;
     private boolean curPopulating = false;
     private boolean upDownPress = false;
-    private DeclensionGenRule[] depRulesList;
+    private ConjugationGenRule[] depRulesList;
 
     /**
      * Creates new form scrSetupDeclGen
@@ -94,7 +94,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         
         typeId = _typeId;
         parent = _parent;
-        depRulesList = core.getDeclensionManager().getAllDepGenerationRules(_typeId);
+        depRulesList = core.getConjugationManager().getAllDepGenerationRules(_typeId);
 
         initComponents();
         setupObjectModels();
@@ -111,7 +111,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
     public String getCurSelectedCombId() {
         String ret = "";
         
-        DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+        ConjugationPair curPair = (ConjugationPair) lstCombinedDec.getSelectedValue();
         
         if (curPair != null) {
             ret = curPair.combinedId;
@@ -154,9 +154,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
         boolean ret = true;
         String userMessage = "";
 
-        DeclensionGenRule[] typeRules = core.getDeclensionManager().getDeclensionRulesForType(typeId);
+        ConjugationGenRule[] typeRules = core.getConjugationManager().getConjugationRulesForType(typeId);
 
-        for (DeclensionGenRule curRule : typeRules) {
+        for (ConjugationGenRule curRule : typeRules) {
             try {
                 Pattern.compile(curRule.getRegex());
             } catch (Exception e) {
@@ -166,7 +166,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
                 ret = false;
             }
 
-            for (DeclensionGenTransform curTransform : curRule.getTransforms()) {
+            for (ConjugationGenTransform curTransform : curRule.getTransforms()) {
                 try {
                     if (curTransform.regex.contains("$&")) {
                         throw new Exception("Java regex does not recognize the regex pattern \"$&\"");
@@ -177,7 +177,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
                     // user error
                     // IOHandler.writeErrorLog(e);
                     userMessage += "\nProblem with regular expression under declension \'"
-                            + core.getDeclensionManager().getCombNameFromCombId(typeId, curRule.getCombinationId())
+                            + core.getConjugationManager().getCombNameFromCombId(typeId, curRule.getCombinationId())
                             + "\' in rule \'" + curRule.getName() + "\' transform \'" + curTransform.regex + " -> "
                             + curTransform.replaceText + "\':\n " + e.getMessage();
                     ret = false;
@@ -215,9 +215,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
 
         // population of rules works differently if deprecated rules are selected
         if (lstCombinedDec.getSelectedValue().equals(DEP_RULES_LABEL)) {
-            depRulesList = core.getDeclensionManager().getAllDepGenerationRules(typeId);
+            depRulesList = core.getConjugationManager().getAllDepGenerationRules(typeId);
 
-            for (DeclensionGenRule curRule : depRulesList) {
+            for (ConjugationGenRule curRule : depRulesList) {
                 rulesModel.addElement(curRule);
             }
 
@@ -226,19 +226,19 @@ public final class ScrDeclensionGenClassic extends PDialog {
             // done first in the case that it is later disabled due to a disabled wordform
             enableEditing(true);
             
-            DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+            ConjugationPair curPair = (ConjugationPair) lstCombinedDec.getSelectedValue();
 
             if (curPair == null) {
                 return;
             }
 
-            DeclensionGenRule[] ruleList = core.getDeclensionManager()
-                    .getDeclensionRulesForTypeAndCombId(typeId, curPair.combinedId);
+            ConjugationGenRule[] ruleList = core.getConjugationManager()
+                    .getConjugationRulesForTypeAndCombId(typeId, curPair.combinedId);
 
             // only allow editing if there are actually rules to be populated... 
             enableTransformEditing(ruleList.length != 0);
             
-            for (DeclensionGenRule curRule : ruleList) {
+            for (ConjugationGenRule curRule : ruleList) {
                 rulesModel.addElement(curRule);
             }
         }
@@ -257,7 +257,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
 
         curPopulating = true;
 
-        DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
+        ConjugationGenRule curRule = (ConjugationGenRule) lstRules.getSelectedValue();
         ((PClassCheckboxPanel)pnlApplyClasses).setRule(curRule, core);
         
         if (curRule == null || lstRules.getSelectedIndices().length > 1) {
@@ -284,7 +284,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * populates transforms of currently selected rule
      */
     private void populateTransforms() {
-        DeclensionGenRule curRule = (DeclensionGenRule) lstRules.getSelectedValue();
+        ConjugationGenRule curRule = (ConjugationGenRule) lstRules.getSelectedValue();
 
         transModel = new DefaultTableModel();
         transModel.addColumn("Regex");
@@ -311,9 +311,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
             return;
         }
 
-        DeclensionGenTransform[] curTransforms = curRule.getTransforms();
+        ConjugationGenTransform[] curTransforms = curRule.getTransforms();
 
-        for (DeclensionGenTransform curTrans : curTransforms) {
+        for (ConjugationGenTransform curTrans : curTransforms) {
             Object[] newRow = {curTrans.regex, curTrans.replaceText};
             transModel.addRow(newRow);
         }
@@ -325,9 +325,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * populates constructed declension list
      */
     private void populateCombinedDecl() {
-        DeclensionPair[] decs = core.getDeclensionManager().getAllCombinedIds(typeId);
+        ConjugationPair[] decs = core.getConjugationManager().getAllCombinedIds(typeId);
 
-        for (DeclensionPair curPair : decs) {
+        for (ConjugationPair curPair : decs) {
             decListModel.addElement(curPair);
         }
 
@@ -371,7 +371,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         decListModel = new DefaultListModel<>();
         lstCombinedDec.setModel(decListModel);
 
-        rulesModel = new DefaultListModel<DeclensionGenRule>();
+        rulesModel = new DefaultListModel<>();
         lstRules.setModel(rulesModel);
 
         transModel = new DefaultTableModel();
@@ -495,9 +495,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
             private void doPop(MouseEvent e) {
                 if (lstRules.getSelectedValue() != null) {
                     copyItem.setEnabled(true);
-                    setupPushToDimension((DeclensionPair)lstCombinedDec.getSelectedValue());
+                    setupPushToDimension((ConjugationPair)lstCombinedDec.getSelectedValue());
                     pushToDimension.setEnabled(true);
-                    setupDeleteFromDimension((DeclensionPair)lstCombinedDec.getSelectedValue());
+                    setupDeleteFromDimension((ConjugationPair)lstCombinedDec.getSelectedValue());
                     deleteFromDimension.setEnabled(true);
                 } else {
                     copyItem.setEnabled(false);
@@ -509,10 +509,10 @@ public final class ScrDeclensionGenClassic extends PDialog {
             }
             
             // sets up all menu items for copying rules to dimensions
-            private void setupPushToDimension(DeclensionPair selDec) {
+            private void setupPushToDimension(ConjugationPair selDec) {
                 pushToDimension.removeAll();                
                 
-                DeclensionNode[] nodes = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId);
+                ConjugationNode[] nodes = core.getConjugationManager().getDimensionalConjugationListTemplate(typeId);
                 List<Integer> ids = new ArrayList<>();
                 
                 for (String singleId : selDec.combinedId.split(",")) {
@@ -523,8 +523,8 @@ public final class ScrDeclensionGenClassic extends PDialog {
 
                 for (int i = 0; i < ids.size() ; i++) {
                     int dimId = ids.get(i);
-                    DeclensionNode decNode = nodes[i];
-                    DeclensionDimension decDim = decNode.getDeclensionDimensionById(dimId);
+                    ConjugationNode decNode = nodes[i];
+                    ConjugationDimension decDim = decNode.getConjugationDimensionById(dimId);
                     if (decDim != null) {
                         final JMenuItem pushTo = new JMenuItem("Push To " + decDim.getValue());
                         pushTo.setToolTipText("Push selected rule(s) to word forms with dimension: " 
@@ -537,10 +537,10 @@ public final class ScrDeclensionGenClassic extends PDialog {
             }
             
             // sets up all menu items for deleting rules from dimensions
-            private void setupDeleteFromDimension(DeclensionPair selDec) {
+            private void setupDeleteFromDimension(ConjugationPair selDec) {
                 deleteFromDimension.removeAll();                
                 
-                DeclensionNode[] nodes = core.getDeclensionManager().getDimensionalDeclensionListTemplate(typeId);
+                ConjugationNode[] nodes = core.getConjugationManager().getDimensionalConjugationListTemplate(typeId);
                 List<Integer> ids = new ArrayList<>();
                 
                 for (String singleId : selDec.combinedId.split(",")) {
@@ -551,8 +551,8 @@ public final class ScrDeclensionGenClassic extends PDialog {
 
                 for (int i = 0; i < ids.size() ; i++) {
                     int dimId = ids.get(i);
-                    DeclensionNode decNode = nodes[i];
-                    DeclensionDimension decDim = decNode.getDeclensionDimensionById(dimId);
+                    ConjugationNode decNode = nodes[i];
+                    ConjugationDimension decDim = decNode.getConjugationDimensionById(dimId);
                     if (decDim != null) {
                         final JMenuItem deleteFrom = new JMenuItem("Delete From " + decDim.getValue());
                         deleteFrom.setToolTipText("Delete selected rule(s) from word forms with dimension: " 
@@ -566,9 +566,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
             
             private ActionListener buildDeleteFromDimensionAction(int decId, int dimId) {
                 return (ActionEvent ae) -> {
-                    List<DeclensionGenRule> rules = getSelectedRules();
+                    List<ConjugationGenRule> rules = getSelectedRules();
                     if (verifyDeleteRulesToDimension(decId, dimId, rules)) {
-                        core.getDeclensionManager().deleteRulesFromDeclensionTemplates(typeId, 
+                        core.getConjugationManager().deleteRulesFromConjugationTemplates(typeId, 
                                 decId, 
                                 dimId, 
                                 rules);
@@ -582,9 +582,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
             private ActionListener buildCopyToDimensionAction(int decId, int dimId, String combId) {
                 return (ActionEvent ae) -> {
                     saveTransPairs(lstRules.getSelectedIndex());
-                    List<DeclensionGenRule> rules = getSelectedRules();
+                    List<ConjugationGenRule> rules = getSelectedRules();
                     if (verifyCopyRulesToDimension(decId, dimId, rules)) {
-                        core.getDeclensionManager().copyRulesToDeclensionTemplates(typeId, 
+                        core.getConjugationManager().copyRulesToConjugationTemplates(typeId, 
                                 decId, 
                                 dimId, 
                                 rules,
@@ -595,12 +595,12 @@ public final class ScrDeclensionGenClassic extends PDialog {
         });
     }
     
-    public boolean verifyCopyRulesToDimension(int decId, int dimId, List<DeclensionGenRule> rules) {
-        String decLabel = core.getDeclensionManager().getDeclensionLabel(typeId, decId);
-        String decDimLabel = core.getDeclensionManager().getDeclensionValueLabel(typeId, decId, dimId);
+    public boolean verifyCopyRulesToDimension(int decId, int dimId, List<ConjugationGenRule> rules) {
+        String decLabel = core.getConjugationManager().getConjugationLabel(typeId, decId);
+        String decDimLabel = core.getConjugationManager().getConjugationValueLabel(typeId, decId, dimId);
         String message = "You are about to copy the following rule(s):\n\n";
         
-        for (DeclensionGenRule rule : rules) {
+        for (ConjugationGenRule rule : rules) {
             message += rule.getName() + "\n";
         }
         
@@ -609,12 +609,12 @@ public final class ScrDeclensionGenClassic extends PDialog {
         return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
     }
     
-    public boolean verifyDeleteRulesToDimension(int decId, int dimId, List<DeclensionGenRule> rules) {
-        String decLabel = core.getDeclensionManager().getDeclensionLabel(typeId, decId);
-        String decDimLabel = core.getDeclensionManager().getDeclensionValueLabel(typeId, decId, dimId);
+    public boolean verifyDeleteRulesToDimension(int decId, int dimId, List<ConjugationGenRule> rules) {
+        String decLabel = core.getConjugationManager().getConjugationLabel(typeId, decId);
+        String decDimLabel = core.getConjugationManager().getConjugationValueLabel(typeId, decId, dimId);
         String message = "You are about to delete the following rule(s):\n\n";
         
-        for (DeclensionGenRule rule : rules) {
+        for (ConjugationGenRule rule : rules) {
             message += rule.getName() + "\n";
         }
         
@@ -623,10 +623,10 @@ public final class ScrDeclensionGenClassic extends PDialog {
         return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
     }
     
-    public boolean verifyBulkDeleteRule(List<DeclensionGenRule> rules) {
+    public boolean verifyBulkDeleteRule(List<ConjugationGenRule> rules) {
         String message = "You are about to bulk delete the following rule(s):\n\n";
         
-        for (DeclensionGenRule rule : rules) {
+        for (ConjugationGenRule rule : rules) {
             message += rule.getName() + "\n";
         }
         
@@ -639,12 +639,12 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * Gets all currently selected rules
      * @return list of all selected rule objects
      */
-    private List<DeclensionGenRule> getSelectedRules() {
-        List<DeclensionGenRule> rules = new ArrayList<>();
+    private List<ConjugationGenRule> getSelectedRules() {
+        List<ConjugationGenRule> rules = new ArrayList<>();
 
         for (int i : lstRules.getSelectedIndices()) {
-            DeclensionGenRule copyRule = new DeclensionGenRule();
-            copyRule.setEqual((DeclensionGenRule) lstRules.getModel().getElementAt(i), true);
+            ConjugationGenRule copyRule = new ConjugationGenRule();
+            copyRule.setEqual((ConjugationGenRule) lstRules.getModel().getElementAt(i), true);
             rules.add(copyRule);
         }
         
@@ -655,9 +655,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * Bulk deletes selected rule from current part of speech
      */
     private void bulkDelete() {
-        List<DeclensionGenRule> selectedRules = getSelectedRules();
+        List<ConjugationGenRule> selectedRules = getSelectedRules();
         if (verifyBulkDeleteRule(selectedRules)) {
-            core.getDeclensionManager().bulkDeleteRuleFromDeclensionTemplates(typeId, selectedRules);
+            core.getConjugationManager().bulkDeleteRuleFromConjugationTemplates(typeId, selectedRules);
             populateRules();
             populateRuleProperties();
             populateTransforms();
@@ -677,22 +677,22 @@ public final class ScrDeclensionGenClassic extends PDialog {
      */
     private void pasteRuleFromClipboard() {
         Object fromClipBoard = core.getClipBoard();
-        DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+        ConjugationPair curPair = (ConjugationPair) lstCombinedDec.getSelectedValue();
 
         if (!(fromClipBoard instanceof ArrayList)
                 || ((ArrayList) fromClipBoard).isEmpty()
-                || !(((ArrayList) fromClipBoard).get(0) instanceof DeclensionGenRule)
+                || !(((ArrayList) fromClipBoard).get(0) instanceof ConjugationGenRule)
                 || curPair == null) {
             return;
         }
 
-        List<DeclensionGenRule> rules = (ArrayList<DeclensionGenRule>) fromClipBoard;
+        List<ConjugationGenRule> rules = (ArrayList<ConjugationGenRule>) fromClipBoard;
 
         rules.forEach((curRule) -> {
-            DeclensionGenRule copyRule = new DeclensionGenRule(typeId, curPair.combinedId);
+            ConjugationGenRule copyRule = new ConjugationGenRule(typeId, curPair.combinedId);
             copyRule.setEqual(curRule, false);
 
-            core.getDeclensionManager().addDeclensionGenRule(copyRule);
+            core.getConjugationManager().addConjugationGenRule(copyRule);
             rulesModel.addElement(copyRule);
             lstRules.setSelectedValue(copyRule, true);
         });
@@ -712,7 +712,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
             return;
         }
 
-        DeclensionGenRule saveRule = (DeclensionGenRule) rulesModel.get(saveIndex);
+        ConjugationGenRule saveRule = (ConjugationGenRule) rulesModel.get(saveIndex);
 
         if (saveRule == null) {
             return;
@@ -733,7 +733,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
             String regex = tblTransforms.getValueAt(i, 0).toString();
             String replaceText = tblTransforms.getValueAt(i, 1).toString();
 
-            saveRule.addTransform(new DeclensionGenTransform(regex, replaceText));
+            saveRule.addTransform(new ConjugationGenTransform(regex, replaceText));
         }
     }
 
@@ -741,7 +741,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * Sets currently selected rule's name equal to proper text box if not already equal
      */
     private void setRuleName() {
-        DeclensionGenRule rule = (DeclensionGenRule) lstRules.getSelectedValue();
+        ConjugationGenRule rule = (ConjugationGenRule) lstRules.getSelectedValue();
         String ruleName = txtRuleName.getText().trim();
 
         if (!curPopulating && rule != null && !rule.getName().equals(ruleName)) {
@@ -754,7 +754,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * Sets currently selected rule's regex equal to proper text box if not already equal
      */
     private void setRuleRegex() {
-        DeclensionGenRule rule = (DeclensionGenRule) lstRules.getSelectedValue();
+        ConjugationGenRule rule = (ConjugationGenRule) lstRules.getSelectedValue();
         String ruleRegex = txtRuleRegex.getText().trim();
 
         if (!curPopulating && rule != null) {
@@ -766,7 +766,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * adds new rule
      */
     private void addRule() {
-        DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+        ConjugationPair curPair = (ConjugationPair) lstCombinedDec.getSelectedValue();
 
         if (curPair == null) {
             return;
@@ -774,9 +774,9 @@ public final class ScrDeclensionGenClassic extends PDialog {
 
         saveTransPairs(lstRules.getSelectedIndex());
 
-        DeclensionGenRule newRule = new DeclensionGenRule(typeId, curPair.combinedId);
+        ConjugationGenRule newRule = new ConjugationGenRule(typeId, curPair.combinedId);
 
-        core.getDeclensionManager().addDeclensionGenRule(newRule);
+        core.getConjugationManager().addConjugationGenRule(newRule);
         populateRules();
         lstRules.setSelectedIndex(lstRules.getLastVisibleIndex());
         txtRuleName.setText("");
@@ -800,7 +800,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
 
         for (int i : lstRules.getSelectedIndices()) {
             lstRules.setSelectedIndex(i);
-            core.getDeclensionManager().deleteDeclensionGenRule((DeclensionGenRule) lstRules.getSelectedValue());
+            core.getConjugationManager().deleteConjugationGenRule((ConjugationGenRule) lstRules.getSelectedValue());
         }
 
         populateRules();
@@ -897,14 +897,14 @@ public final class ScrDeclensionGenClassic extends PDialog {
      */
     private void moveRuleUp() {
         // Deprecated rules stored as String. Maybe address that or something.
-        if (lstCombinedDec.getSelectedValue() instanceof DeclensionPair
+        if (lstCombinedDec.getSelectedValue() instanceof ConjugationPair
                 && lstRules.getSelectedIndex() != -1) {
             int selectedIndex = lstRules.getSelectedIndex();
-            DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+            ConjugationPair curPair = (ConjugationPair) lstCombinedDec.getSelectedValue();
 
             if (selectedIndex > 0 && curPair != null) {
-                List<DeclensionGenRule> selectedRules = lstRules.getSelectedValuesList();
-                core.getDeclensionManager().moveRulesUp(typeId, curPair.combinedId, selectedRules);
+                List<ConjugationGenRule> selectedRules = lstRules.getSelectedValuesList();
+                core.getConjugationManager().moveRulesUp(typeId, curPair.combinedId, selectedRules);
                 populateRules();
                 int[] selectedIndicies = new int[selectedRules.size()];
                 for (int i = 0; i < selectedRules.size(); i++) {
@@ -920,16 +920,16 @@ public final class ScrDeclensionGenClassic extends PDialog {
      */
     private void moveRuleDown() {
         // Deprecated rules stored as String. Maybe address that or something.
-        if (lstCombinedDec.getSelectedValue() instanceof DeclensionPair 
+        if (lstCombinedDec.getSelectedValue() instanceof ConjugationPair 
                 && lstRules.getSelectedIndex() != -1) {
             int[] fullSelection = lstRules.getSelectedIndices();
             int topIndex = fullSelection[0];
             int bottomIndex = fullSelection[fullSelection.length - 1];
-            DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+            ConjugationPair curPair = (ConjugationPair) lstCombinedDec.getSelectedValue();
 
             if (bottomIndex < lstRules.getLastVisibleIndex() && curPair != null) {
-                List<DeclensionGenRule> selectedRules = lstRules.getSelectedValuesList();
-                core.getDeclensionManager().moveRulesDown(typeId, curPair.combinedId, selectedRules);
+                List<ConjugationGenRule> selectedRules = lstRules.getSelectedValuesList();
+                core.getConjugationManager().moveRulesDown(typeId, curPair.combinedId, selectedRules);
                 populateRules();
                 int[] selectedIndicies = new int[selectedRules.size()];
                 for (int i = 0; i < selectedRules.size(); i++) {
@@ -1012,7 +1012,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
 
         jLabel2.setText("Rules");
 
-        lstRules.setModel(new DefaultListModel<DeclensionGenRule>());
+        lstRules.setModel(new DefaultListModel<org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule>());
         lstRules.setToolTipText("List of rules associated with the selected conjugation (right click to copy/paste)");
         lstRules.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -1277,10 +1277,10 @@ public final class ScrDeclensionGenClassic extends PDialog {
         saveTransPairs(lstRules.getSelectedIndex());
         
         // in case of 'DEPRECATED RULES' selection
-        if (lstCombinedDec.getSelectedValue() instanceof DeclensionPair) {
-        DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
-            chkDisableWordform.setSelected(core.getDeclensionManager()
-                    .isCombinedDeclSurpressed(curPair == null ? "" : curPair.combinedId, typeId));
+        if (lstCombinedDec.getSelectedValue() instanceof ConjugationPair) {
+        ConjugationPair curPair = (ConjugationPair) lstCombinedDec.getSelectedValue();
+            chkDisableWordform.setSelected(core.getConjugationManager()
+                    .isCombinedConjlSurpressed(curPair == null ? "" : curPair.combinedId, typeId));
         } else {
             chkDisableWordform.setSelected(false);
         }
@@ -1328,13 +1328,13 @@ public final class ScrDeclensionGenClassic extends PDialog {
     }//GEN-LAST:event_btnDeleteTransformActionPerformed
 
     private void chkDisableWordformActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDisableWordformActionPerformed
-        DeclensionPair curPair = (DeclensionPair) lstCombinedDec.getSelectedValue();
+        ConjugationPair curPair = (ConjugationPair) lstCombinedDec.getSelectedValue();
 
         if (curPair == null) {
             return;
         }
 
-        core.getDeclensionManager().setCombinedDeclSuppressed(curPair.combinedId, typeId, chkDisableWordform.isSelected());
+        core.getConjugationManager().setCombinedConjSuppressed(curPair.combinedId, typeId, chkDisableWordform.isSelected());
 
         enableEditing(!chkDisableWordform.isSelected()
                 && lstCombinedDec.getSelectedIndex() != -1);
@@ -1377,7 +1377,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<Object> lstCombinedDec;
-    private javax.swing.JList<DeclensionGenRule> lstRules;
+    private javax.swing.JList<org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule> lstRules;
     private javax.swing.JPanel pnlApplyClasses;
     private javax.swing.JScrollPane sclTransforms;
     private javax.swing.JTable tblTransforms;

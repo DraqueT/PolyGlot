@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -21,10 +21,10 @@ package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.ManagersCollections.DeclensionManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionDimension;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionNode;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationDimension;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -52,7 +52,7 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
     private final DictCore core;
     private final String tabName;
     private final int typeId;
-    private final DeclensionManager decMan;
+    private final ConjugationManager decMan;
     private final String partialDeclensionIds;
     private final ConWord word;
     private final Map<String, Dimension> decIdsToGridLocation = new HashMap<>();
@@ -68,15 +68,15 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
      * @param _word
      */
     public PDeclensionGridPanel(String _partialDeclensionIds, 
-            DeclensionNode xDim, 
-            DeclensionNode yDim,
+            ConjugationNode xDim, 
+            ConjugationNode yDim,
             int _typeId,
             DictCore _core,
             ConWord _word) {
         core = _core;
         typeId = _typeId;
         word = _word;
-        decMan = core.getDeclensionManager();
+        decMan = core.getConjugationManager();
         table = new PTable(core);
         partialDeclensionIds = _partialDeclensionIds;
         
@@ -117,8 +117,8 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
     private DefaultTableModel buildTableModel() {
         int xIndex = getDeclensionIndexOf(partialDeclensionIds, "X");
         int yIndex = getDeclensionIndexOf(partialDeclensionIds, "Y");
-        DeclensionNode xNode = decMan.getDimensionalDeclensionTemplateByIndex(typeId, xIndex);
-        DeclensionNode yNode = decMan.getDimensionalDeclensionTemplateByIndex(typeId, yIndex);
+        ConjugationNode xNode = decMan.getDimensionalConjugationTemplateByIndex(typeId, xIndex);
+        ConjugationNode yNode = decMan.getDimensionalConjugationTemplateByIndex(typeId, yIndex);
         Object[] columnLabels = getLabels(xNode, true);
         Object[] rowLabels = getLabels(yNode, false);
         
@@ -137,7 +137,7 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
      * @param tableModel
      * @param yNode 
      */
-    private void populateYLabels(DefaultTableModel tableModel, DeclensionNode yNode) {
+    private void populateYLabels(DefaultTableModel tableModel, ConjugationNode yNode) {
         Object[] rowLabels = getLabels(yNode, false);
         
         for (int i = 0; i < rowLabels.length; i++) {
@@ -151,21 +151,21 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
      * @param xNode
      * @param yNode 
      */
-    private void populateTableModelValues(DeclensionNode xNode, DeclensionNode yNode) {
+    private void populateTableModelValues(ConjugationNode xNode, ConjugationNode yNode) {
         DefaultTableModel tableModel = (DefaultTableModel)table.getModel();
         
-        Iterator<DeclensionDimension> xIt = xNode.getDimensions().iterator();
+        Iterator<ConjugationDimension> xIt = xNode.getDimensions().iterator();
         
         for (int xPos = 1; xIt.hasNext();) {
-            DeclensionDimension decDimX = xIt.next();
-            Iterator<DeclensionDimension> yIt = yNode.getDimensions().iterator();
+            ConjugationDimension decDimX = xIt.next();
+            Iterator<ConjugationDimension> yIt = yNode.getDimensions().iterator();
             for (int yPos = 0; yIt.hasNext();) {
-                DeclensionDimension decDimY = yIt.next();
+                ConjugationDimension decDimY = yIt.next();
                 String fullDecId = partialDeclensionIds.replace("X", decDimX.getId().toString());
                 fullDecId = fullDecId.replace("Y", decDimY.getId().toString());
                 
                 // if suppressed, add null value
-                if (decMan.isCombinedDeclSurpressed(fullDecId, typeId)) {
+                if (decMan.isCombinedConjlSurpressed(fullDecId, typeId)) {
                     tableModel.setValueAt(null, yPos, xPos);
                 } else {
                     String wordForm = getWordForm(fullDecId);
@@ -213,7 +213,7 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
         String ret;
 
         if (word.isOverrideAutoDeclen()) {
-            DeclensionNode node = decMan.getDeclensionByCombinedId(word.getId(), fullDecId);
+            ConjugationNode node = decMan.getConjugationByCombinedId(word.getId(), fullDecId);
             ret = node == null ? "" : node.getValue();
         } else {
             try {
@@ -232,7 +232,7 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
      * @param node
      * @return 
      */
-    private Object[] getLabels(DeclensionNode node, boolean skipFirst) {
+    private Object[] getLabels(ConjugationNode node, boolean skipFirst) {
         List<String> labels = new ArrayList<>();
         
         if (skipFirst) {
@@ -268,10 +268,10 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
         
         for (int i = 0; i < dimArray.length; i++) {
             String curId = dimArray[i];
-            DeclensionNode node = decMan.getDimensionalDeclensionTemplateByIndex(typeId, i);
+            ConjugationNode node = decMan.getDimensionalConjugationTemplateByIndex(typeId, i);
             // skips X and Y elements
             if (StringUtils.isNumeric(curId) && !node.isDimensionless()) {
-                ret += node.getDeclensionDimensionById(Integer.parseInt(curId)).getValue() + " ";
+                ret += node.getConjugationDimensionById(Integer.parseInt(curId)).getValue() + " ";
             }
         }
         

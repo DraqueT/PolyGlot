@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -27,7 +27,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.darisadesigns.polyglotlina.Nodes.DeclensionGenRule;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 
 /**
  *
@@ -37,7 +37,7 @@ public final class ScrTestWordConj extends PDialog {
     
     private final int typeId;
     private final ScrDeclensionGenSetup parent;
-    private final DeclensionGenRule classes = new DeclensionGenRule();
+    private final ConjugationGenRule classes = new ConjugationGenRule();
 
     /**
      * Creates new form ScrTestWordConj
@@ -78,7 +78,7 @@ public final class ScrTestWordConj extends PDialog {
                 throw new Exception("No conjugation/declension form selected!");
             }
             
-            newForm = core.getDeclensionManager().declineWord(testWord, curCombinedId);
+            newForm = core.getConjugationManager().declineWord(testWord, curCombinedId);
         } catch (Exception e) {
             // this is based on user error. Inform, but do not log.
             InfoBox.error("Declension Test Error", e.getLocalizedMessage(), this);
@@ -88,7 +88,7 @@ public final class ScrTestWordConj extends PDialog {
         txtTestForm.setText(newForm);
         
         String debugString = "";
-        for (String debugLine : core.getDeclensionManager().getDecGenDebug()) {
+        for (String debugLine : core.getConjugationManager().getDecGenDebug()) {
             debugString += debugLine + "\n";
         }
         txtDebug.setText(debugString);
@@ -120,7 +120,7 @@ public final class ScrTestWordConj extends PDialog {
         setMaximumSize(new java.awt.Dimension(585, 2147483647));
         setMinimumSize(new java.awt.Dimension(585, 0));
 
-        pnlClasses.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        pnlClasses.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout pnlClassesLayout = new javax.swing.GroupLayout(pnlClasses);
         pnlClasses.setLayout(pnlClassesLayout);
