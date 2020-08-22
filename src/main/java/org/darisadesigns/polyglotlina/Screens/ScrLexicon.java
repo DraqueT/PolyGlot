@@ -1522,8 +1522,13 @@ public final class ScrLexicon extends PFrame {
         });
     }
 
+    /**
+     * Always run with scheduling due to UI updates
+     */
     private void deleteWord() {
+        boolean localPopulating = curPopulating;
         curPopulating = true;
+        boolean filterBlank = isFilterBlank();
         int curSelection = lstLexicon.getSelectedIndex();
         ConWord curWord = getCurrentWord();
 
@@ -1539,11 +1544,18 @@ public final class ScrLexicon extends PFrame {
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
 
+        gridTitlePane.setExpanded(false);
         populateLexicon();
-        lstLexicon.setSelectedIndex(curSelection == 0 ? 0 : curSelection - 1);
+        
         populateProperties();
         setWordLegality();
-        curPopulating = false;
+        curPopulating = localPopulating;
+        
+        if (!filterBlank) {
+            filterLexicon();
+        }
+        
+        lstLexicon.setSelectedIndex(curSelection == 0 ? 0 : curSelection - 1);
     }
 
     private void addWord() {
@@ -2011,17 +2023,8 @@ public final class ScrLexicon extends PFrame {
     }//GEN-LAST:event_btnAddWordActionPerformed
 
     private void btnDelWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelWordActionPerformed
-        Platform.runLater(() -> {
-            try {
-                clearFilter();
-            } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
-                InfoBox.error("Filter Error", e.getLocalizedMessage(), menuParent);
-            }
-            SwingUtilities.invokeLater(() -> {
-                deleteWord();
-                gridTitlePane.setExpanded(false);
-            });
+        Platform.runLater(()->{
+            deleteWord();
         });
     }//GEN-LAST:event_btnDelWordActionPerformed
 
