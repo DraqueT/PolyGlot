@@ -839,7 +839,7 @@ public final class CustHandlerFactory {
                     buffer.setEtymNotes(buffer.getEtymNotes() + new String(ch, start, length));
                 }else if (bwordoverAutoDec) {
                     core.getWordCollection().getBufferWord()
-                            .setOverrideAutoDeclen(new String(ch, start, length).equals(PGTUtil.TRUE));
+                            .setOverrideAutoConjugate(new String(ch, start, length).equals(PGTUtil.TRUE));
                     bwordoverAutoDec = false;
                 } else if (bfontcon && core.getPropertiesManager().getCachedFont() == null) {
                     try {

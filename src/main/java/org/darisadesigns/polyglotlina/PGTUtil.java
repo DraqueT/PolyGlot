@@ -565,6 +565,10 @@ public final class PGTUtil {
     private static File java8BridgeLocation = null;
     private static File errorDirectory = null;
     private static boolean forceSuppressDialogs = false;
+    
+    // OS CONSTANTS
+    public static String OSX_FINDER_INFO_VALUE_DIC_FILES = "574443444D535350000000000000000000000000000000000000000000000000";
+    public static String OSX_FINDER_METADATA_NAME = "com.apple.FinderInfo";
 
     /**
      * This records the mode of a given PDialog or PFrame window. Defaults to

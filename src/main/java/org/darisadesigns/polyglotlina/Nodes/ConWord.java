@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.DictionaryCollection;
 import org.darisadesigns.polyglotlina.RegexTools;
 import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
@@ -49,7 +50,7 @@ public class ConWord extends DictNode {
     private String pronunciation;
     private String etymNotes;
     private boolean procOverride;
-    private boolean autoDeclensionOverride;
+    private boolean autoConjugationOverride;
     private boolean rulesOverride;
     protected DictCore core;
     private ConWordCollection parentCollection;
@@ -65,7 +66,7 @@ public class ConWord extends DictNode {
         definition = "";
         pronunciation = "";
         procOverride = false;
-        autoDeclensionOverride = false;
+        autoConjugationOverride = false;
         rulesOverride = false;
         etymNotes = "";
     }
@@ -215,7 +216,7 @@ public class ConWord extends DictNode {
             this.setClassTextValue(entry.getKey(), entry.getValue());
         });
         this.procOverride = set.procOverride;
-        this.autoDeclensionOverride = set.autoDeclensionOverride;
+        this.autoConjugationOverride = set.autoConjugationOverride;
         this.etymNotes = set.etymNotes;
         this.rulesOverride = set.rulesOverride;
     }
@@ -236,7 +237,7 @@ public class ConWord extends DictNode {
             ret = ret && pronunciation.equals(c.pronunciation);
             ret = ret && etymNotes.equals(c.etymNotes);
             ret = ret && procOverride == c.procOverride;
-            ret = ret && autoDeclensionOverride == c.autoDeclensionOverride;
+            ret = ret && autoConjugationOverride == c.autoConjugationOverride;
             ret = ret && rulesOverride == c.rulesOverride;
             ret = ret && classValues.equals(c.classValues);
             ret = ret && classTextValues.equals(c.classTextValues);
@@ -288,12 +289,12 @@ public class ConWord extends DictNode {
         return ret;
     }
 
-    public boolean isOverrideAutoDeclen() {
-        return autoDeclensionOverride;
+    public boolean isOverrideAutoConjugate() {
+        return autoConjugationOverride;
     }
 
-    public void setOverrideAutoDeclen(boolean _autoDeclensionOverride) {
-        autoDeclensionOverride = _autoDeclensionOverride;
+    public void setOverrideAutoConjugate(boolean _autoConjugationOverride) {
+        autoConjugationOverride = _autoConjugationOverride;
     }
 
     public boolean isProcOverride() {
@@ -491,6 +492,27 @@ public class ConWord extends DictNode {
     public void setFilterEtyParent(Object _filterEtyParent) {
         this.filterEtyParent = _filterEtyParent;
     }
+    
+    public String getWordForm(String fullDecId) {
+        String ret = "ERROR!";
+        
+        if (core != null) {
+            ConjugationManager conMan = core.getConjugationManager();
+
+            if (isOverrideAutoConjugate()) {
+                ConjugationNode node = conMan.getConjugationByCombinedId(this.id, fullDecId);
+                ret = node == null ? "" : node.getValue();
+            } else {
+                try {
+                    ret = conMan.declineWord(this, fullDecId);
+                } catch (Exception e) {
+                    IOHandler.writeErrorLog(e);
+                }
+            }
+        }
+
+        return ret;
+    }
 
     public void writeXML(Document doc, Element rootElement) {
         Element wordNode = doc.createElement(PGTUtil.WORD_XID);
@@ -532,7 +554,7 @@ public class ConWord extends DictNode {
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.WORD_AUTODECLOVERRIDE_XID);
-        wordValue.appendChild(doc.createTextNode(this.autoDeclensionOverride ? PGTUtil.TRUE : PGTUtil.FALSE));
+        wordValue.appendChild(doc.createTextNode(this.autoConjugationOverride ? PGTUtil.TRUE : PGTUtil.FALSE));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.WORD_RULEOVERRIDE_XID);

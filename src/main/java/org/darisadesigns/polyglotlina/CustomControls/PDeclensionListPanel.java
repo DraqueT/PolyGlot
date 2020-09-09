@@ -89,7 +89,7 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
             if (decMan.isCombinedConjlSurpressed(pair.combinedId, word.getWordTypeId())) {
                 tableModel.setValueAt(null, yPos, 1);
             } else {
-                String wordForm = getWordForm(pair.combinedId);
+                String wordForm = word.getWordForm(pair.combinedId);
                 autoPopulated = autoPopulated || !wordForm.isBlank(); // keep track of whether anything in this list is populated
                 tableModel.setValueAt(wordForm, yPos, 1);
                 decIdsToListLocation.put(pair.combinedId, yPos);
@@ -115,24 +115,6 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
         for (int i = 0; i < numRows; i++) {
             table.setRowHeight(i, rowHeight);
         }
-    }
-    
-    private String getWordForm(String fullDecId) {
-        String ret;
-
-        if (word.isOverrideAutoDeclen()) {
-            ConjugationNode node = decMan.getConjugationByCombinedId(word.getId(), fullDecId);
-            ret = node == null ? "" : node.getValue();
-        } else {
-            try {
-                ret = decMan.declineWord(word, fullDecId);
-            } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
-                ret = "ERROR!";
-            }
-        }
-
-        return ret;
     }
     
     /**
