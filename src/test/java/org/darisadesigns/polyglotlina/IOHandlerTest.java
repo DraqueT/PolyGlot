@@ -33,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 
@@ -307,6 +308,10 @@ public class IOHandlerTest {
             File testFile = IOHandler.createTmpFileWithContents(testValue, "txt");
             String result = "";
             
+            if (!testFile.exists()) {
+                fail("file not created");
+            }
+            
             try (Scanner myReader = new Scanner(testFile, StandardCharsets.UTF_8)) {
                 while (myReader.hasNextLine()) {
                     result += myReader.nextLine() + "\n";
@@ -319,6 +324,90 @@ public class IOHandlerTest {
             assertEquals(testValue, result);
         }
         catch (IOException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testCreateFileWithContents() {
+        System.out.println("IOHandlerTest.testCreateFileWithContents");
+        
+        String testFileName = "testFile.tst";
+        String testValue = "ß and ä\nZOT";
+        File testFile = null;
+        
+        try {
+            testFile = IOHandler.createFileWithContents(testFileName, testValue);
+            String result = "";
+            
+            if (!testFile.exists()) {
+                fail("file not created");
+            }
+            
+            try (Scanner myReader = new Scanner(testFile, StandardCharsets.UTF_8)) {
+                while (myReader.hasNextLine()) {
+                    result += myReader.nextLine() + "\n";
+                }
+                
+                // truncate trailing \n
+                result = result.substring(0, result.length() - 1);
+            }
+            
+            assertEquals(testValue, result);
+        } catch (IOException e) {
+            fail(e);
+        } finally {
+            if (testFile != null && testFile.exists()) {
+                testFile.delete();
+            }
+        }
+    }
+    
+    @Test
+    public void testWriteOSXMetadataAttributeHex() {
+        Assumptions.assumeTrue(PGTUtil.IS_OSX);
+        
+        System.out.println("IOHandlerTest.testWriteOSXMetadataAttributeHex");
+        
+        String expectedEnd = "com.apple.FinderInfo:00000000  57 44 43 44 4D 53 53 50 00 00 00 00 00 00 00 00  |WDCDMSSP........|00000010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  |................|00000020";
+        
+        try {
+            File testFile = IOHandler.createTmpFileWithContents("test", "tst");
+            String filePath = testFile.getAbsolutePath();
+            
+            IOHandler.addFileAttributeOSX(filePath,
+                    PGTUtil.OSX_FINDER_METADATA_NAME,
+                    PGTUtil.OSX_FINDER_INFO_VALUE_DIC_FILES,
+                    true);
+            
+            String result = IOHandler.getFileAttributeOSX(filePath, PGTUtil.OSX_FINDER_METADATA_NAME);
+            assertTrue(result.endsWith(expectedEnd));
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testWriteOSXMetadataAttributeString() {
+        Assumptions.assumeTrue(PGTUtil.IS_OSX);
+        
+        System.out.println("IOHandlerTest.testWriteOSXMetadataAttributeString");
+        
+        String attribName = "zimzam";
+        String value = "mbam";
+        
+        try {
+            File testFile = IOHandler.createTmpFileWithContents("test", "tst");
+            String filePath = testFile.getAbsolutePath();
+            
+            IOHandler.addFileAttributeOSX(filePath,
+                    attribName,
+                    value,
+                    false);
+            
+            String result = IOHandler.getFileAttributeOSX(filePath, attribName);
+            assertTrue(result.endsWith(value));
+        } catch (Exception e) {
             fail(e);
         }
     }

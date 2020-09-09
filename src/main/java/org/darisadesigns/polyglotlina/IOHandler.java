@@ -129,6 +129,22 @@ public final class IOHandler {
 
         return ret;
     }
+    
+    public static File createFileWithContents(String path, String contents) throws IOException {
+        File ret = new File(path);
+        
+        if (!ret.exists() && !ret.createNewFile()) {
+            throw new IOException("Unable to create: " + path);
+        }
+        
+        try (Writer out = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(ret), "UTF8"))) {
+            out.write(contents);
+            out.flush();
+        }
+        
+        return ret;
+    }
 
     public static byte[] getByteArrayFromFile(File file) throws IOException {
         try (InputStream inputStream = new FileInputStream(file)) {
@@ -1170,6 +1186,46 @@ public final class IOHandler {
                 }
             }
         }
+    }
+    
+    /**
+     * Adds a metadata attribute to an OSX file
+     * @param filePath
+     * @param attribute
+     * @param value
+     * @param isHexVal
+     * @throws Exception if you try to run it on a nonOSX platform
+     */
+    public static void addFileAttributeOSX(String filePath, String attribute, String value, boolean isHexVal) throws Exception {
+        if (!PGTUtil.IS_OSX) {
+            throw new Exception("This method may only be called within OSX.");
+        }
+        
+        String writeMode = isHexVal ? "-wx" : "-w";
+        String[] cmd = {"xattr", writeMode, attribute, value, filePath};
+        String[] result = runAtConsole(cmd, false);
+        
+        if (!result[1].isBlank()) {
+            throw new Exception(result[1]);
+        }
+    }
+    
+    // TODO: If I ever need this, refine it. It currently gives very little back.
+    // Consider returning object which specifies whether hex or string data. or something.
+    // No need exept for testing at this point.
+    public static String getFileAttributeOSX(String filePath, String attribute) throws Exception {
+        if (!PGTUtil.IS_OSX) {
+            throw new Exception("This method may only be called within OSX.");
+        }
+        
+        String[] cmd = {"xattr", "-l", attribute, filePath};
+        String[] result = runAtConsole(cmd, false);
+        
+        if (!result[1].isBlank()) {
+            throw new Exception(result[1]);
+        }
+        
+        return result[0];
     }
 
     /**

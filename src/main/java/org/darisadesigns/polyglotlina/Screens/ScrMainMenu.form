@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Component class="javax.swing.JMenuItem" name="jMenuItem2">
       <Properties>
@@ -12,7 +12,7 @@
         <Property name="opaque" type="boolean" value="false"/>
       </Properties>
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="mnuFile">
           <Properties>
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
@@ -87,42 +87,66 @@
             <Property name="text" type="java.lang.String" value="Tools"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuImportFile">
+            <Menu class="javax.swing.JMenu" name="mnuExport">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Import from File"/>
-                <Property name="toolTipText" type="java.lang.String" value="Import language values from comma delimited file or excel sheet"/>
+                <Property name="text" type="java.lang.String" value="Export Tools"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportFileActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuExportToExcel">
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuExportToExcel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Export to Excel"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Export language values to excel sheet"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportToExcelActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuExportFont">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Export Font"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Export font to file"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportFontActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuExportDictFile">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Export Dic File"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Exports a dictionary file of all word forms (consumable for spellchecks and other programs)"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportDictFileActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="mnuImport">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Export to Excel"/>
-                <Property name="toolTipText" type="java.lang.String" value="Export language values to excel sheet"/>
+                <Property name="text" type="java.lang.String" value="Import Tools"/>
+                <Property name="toolTipText" type="java.lang.String" value="Tools for importing to PolyGlot"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportToExcelActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuExportFont">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Export Font"/>
-                <Property name="toolTipText" type="java.lang.String" value="Export font to file"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportFontActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuImportFont">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Import Font"/>
-                <Property name="toolTipText" type="java.lang.String" value="Import font from file"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportFontActionPerformed"/>
-              </Events>
-            </MenuItem>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuImportFile">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Import from File"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Import language values from comma delimited file or excel sheet"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportFileActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuImportFont">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Import Font"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Import font from file"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportFontActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
             <MenuItem class="javax.swing.JMenuItem" name="mnuCheckLexicon">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Check Language"/>

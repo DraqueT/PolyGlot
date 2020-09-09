@@ -72,7 +72,7 @@ public final class ScrDeclensionsGrids extends PDialog {
         populateDecIdToValues();
         buildWindowBody();
         setupListeners();
-        chkAutogenOverride.setSelected(word.isOverrideAutoDeclen() || !autoPopulated);
+        chkAutogenOverride.setSelected(word.isOverrideAutoConjugate() || !autoPopulated);
 }
     
     /**
@@ -103,7 +103,8 @@ public final class ScrDeclensionsGrids extends PDialog {
             ret = false;
         } else if ((decMan.getDimensionalConjugationListTemplate(typeId) == null
                     || decMan.getDimensionalConjugationListTemplate(typeId).length == 0)
-                && decMan.getDimensionalConjugationListWord(word.getId()).length == 0) {
+                && decMan.getDimensionalConjugationListWord(word.getId()).length == 0
+                && decMan.getSingletonCombinedIds(typeId).length == 0) {
             InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the "
                             + "Declensions button.", core.getRootWindow());
@@ -263,7 +264,7 @@ public final class ScrDeclensionsGrids extends PDialog {
             }
         }
         
-        word.setOverrideAutoDeclen(chkAutogenOverride.isSelected());
+        word.setOverrideAutoConjugate(chkAutogenOverride.isSelected());
     }
     
     @Override

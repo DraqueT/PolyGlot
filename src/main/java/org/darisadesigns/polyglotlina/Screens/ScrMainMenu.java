@@ -64,6 +64,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -82,6 +84,7 @@ import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.Java8Bridge;
+import org.darisadesigns.polyglotlina.ToolsHelpers.ExportSpellingDictionary;
 import org.darisadesigns.polyglotlina.WebInterface;
 
 /**
@@ -1291,6 +1294,53 @@ public final class ScrMainMenu extends PFrame {
         }
     }
     
+    private void ExportDictionaryFile() {
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Dictionary File", "dic");
+        String curFileName = core.getCurFileName();
+
+        chooser.setDialogTitle("Export Custom Dictionary File");
+        chooser.setFileFilter(filter);
+        chooser.setApproveButtonText("Save");
+        if (curFileName.isEmpty() || !curFileName.contains(".pgd")) {
+            chooser.setCurrentDirectory(core.getWorkingDirectory());
+        } else {
+            String suggestedDicFile = curFileName.replaceAll("\\.pgd", ".dic");
+            chooser.setCurrentDirectory(IOHandler.getDirectoryFromPath(curFileName));
+            chooser.setSelectedFile(IOHandler.getFileFromPath(suggestedDicFile));
+        }
+
+        String fileName;
+
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            fileName = chooser.getSelectedFile().getAbsolutePath();
+
+            if (!fileName.contains(".dic")) {
+                fileName += ".dic";
+            }
+
+            if (IOHandler.fileExists(fileName)) {
+                int overWrite = InfoBox.yesNoCancel("Overwrite Dialog",
+                        "Overwrite existing file? " + fileName, core.getRootWindow());
+
+                if (overWrite != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+            
+            ExportSpellingDictionary export = new ExportSpellingDictionary(core);
+            try {
+                export.ExportSpellingDictionary(fileName);
+                InfoBox.info("Success", "File written to: " + fileName, this);
+            }
+            catch (IOException e) {
+                IOHandler.writeErrorLog(e);
+                InfoBox.error("File Write Error", "Unable to export dictionary to: " 
+                        + curFileName + "\n\n" + e.getLocalizedMessage(), this);
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1337,7 +1387,7 @@ public final class ScrMainMenu extends PFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         lstRecentOpened = new javax.swing.JList<>();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        mnuFile = new javax.swing.JMenu();
         mnuNewLocal = new javax.swing.JMenuItem();
         mnuSaveLocal = new javax.swing.JMenuItem();
         mnuSaveAs = new javax.swing.JMenuItem();
@@ -1348,9 +1398,12 @@ public final class ScrMainMenu extends PFrame {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuExit = new javax.swing.JMenuItem();
         mnuTools = new javax.swing.JMenu();
-        mnuImportFile = new javax.swing.JMenuItem();
+        mnuExport = new javax.swing.JMenu();
         mnuExportToExcel = new javax.swing.JMenuItem();
         mnuExportFont = new javax.swing.JMenuItem();
+        mnuExportDictFile = new javax.swing.JMenuItem();
+        mnuImport = new javax.swing.JMenu();
+        mnuImportFile = new javax.swing.JMenuItem();
         mnuImportFont = new javax.swing.JMenuItem();
         mnuCheckLexicon = new javax.swing.JMenuItem();
         mnuIpaTranslator = new javax.swing.JMenuItem();
@@ -1620,7 +1673,7 @@ public final class ScrMainMenu extends PFrame {
 
         jMenuBar1.setOpaque(false);
 
-        jMenu1.setText("File");
+        mnuFile.setText("File");
 
         mnuNewLocal.setText("New");
         mnuNewLocal.setToolTipText("New PolyGlot Language File");
@@ -1629,7 +1682,7 @@ public final class ScrMainMenu extends PFrame {
                 mnuNewLocalActionPerformed(evt);
             }
         });
-        jMenu1.add(mnuNewLocal);
+        mnuFile.add(mnuNewLocal);
 
         mnuSaveLocal.setText("Save");
         mnuSaveLocal.setToolTipText("Save Current Language File");
@@ -1638,7 +1691,7 @@ public final class ScrMainMenu extends PFrame {
                 mnuSaveLocalActionPerformed(evt);
             }
         });
-        jMenu1.add(mnuSaveLocal);
+        mnuFile.add(mnuSaveLocal);
 
         mnuSaveAs.setText("Save As");
         mnuSaveAs.setToolTipText("Save Current Language File As");
@@ -1647,7 +1700,7 @@ public final class ScrMainMenu extends PFrame {
                 mnuSaveAsActionPerformed(evt);
             }
         });
-        jMenu1.add(mnuSaveAs);
+        mnuFile.add(mnuSaveAs);
 
         mnuOpenLocal.setText("Open");
         mnuOpenLocal.setToolTipText("Open Existing Language File");
@@ -1656,12 +1709,12 @@ public final class ScrMainMenu extends PFrame {
                 mnuOpenLocalActionPerformed(evt);
             }
         });
-        jMenu1.add(mnuOpenLocal);
+        mnuFile.add(mnuOpenLocal);
 
         mnuRecents.setText("Recent");
         mnuRecents.setToolTipText("Recently Opened Language Files");
-        jMenu1.add(mnuRecents);
-        jMenu1.add(jSeparator5);
+        mnuFile.add(mnuRecents);
+        mnuFile.add(jSeparator5);
 
         mnuPublish.setText("Publish Language to PDF");
         mnuPublish.addActionListener(new java.awt.event.ActionListener() {
@@ -1669,8 +1722,8 @@ public final class ScrMainMenu extends PFrame {
                 mnuPublishActionPerformed(evt);
             }
         });
-        jMenu1.add(mnuPublish);
-        jMenu1.add(jSeparator2);
+        mnuFile.add(mnuPublish);
+        mnuFile.add(jSeparator2);
 
         mnuExit.setText("Exit");
         mnuExit.setToolTipText("Exit PolyGlot");
@@ -1679,20 +1732,13 @@ public final class ScrMainMenu extends PFrame {
                 mnuExitActionPerformed(evt);
             }
         });
-        jMenu1.add(mnuExit);
+        mnuFile.add(mnuExit);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(mnuFile);
 
         mnuTools.setText("Tools");
 
-        mnuImportFile.setText("Import from File");
-        mnuImportFile.setToolTipText("Import language values from comma delimited file or excel sheet");
-        mnuImportFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuImportFileActionPerformed(evt);
-            }
-        });
-        mnuTools.add(mnuImportFile);
+        mnuExport.setText("Export Tools");
 
         mnuExportToExcel.setText("Export to Excel");
         mnuExportToExcel.setToolTipText("Export language values to excel sheet");
@@ -1701,7 +1747,7 @@ public final class ScrMainMenu extends PFrame {
                 mnuExportToExcelActionPerformed(evt);
             }
         });
-        mnuTools.add(mnuExportToExcel);
+        mnuExport.add(mnuExportToExcel);
 
         mnuExportFont.setText("Export Font");
         mnuExportFont.setToolTipText("Export font to file");
@@ -1710,7 +1756,30 @@ public final class ScrMainMenu extends PFrame {
                 mnuExportFontActionPerformed(evt);
             }
         });
-        mnuTools.add(mnuExportFont);
+        mnuExport.add(mnuExportFont);
+
+        mnuExportDictFile.setText("Export Dic File");
+        mnuExportDictFile.setToolTipText("Exports a dictionary file of all word forms (consumable for spellchecks and other programs)");
+        mnuExportDictFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportDictFileActionPerformed(evt);
+            }
+        });
+        mnuExport.add(mnuExportDictFile);
+
+        mnuTools.add(mnuExport);
+
+        mnuImport.setText("Import Tools");
+        mnuImport.setToolTipText("Tools for importing to PolyGlot");
+
+        mnuImportFile.setText("Import from File");
+        mnuImportFile.setToolTipText("Import language values from comma delimited file or excel sheet");
+        mnuImportFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuImportFileActionPerformed(evt);
+            }
+        });
+        mnuImport.add(mnuImportFile);
 
         mnuImportFont.setText("Import Font");
         mnuImportFont.setToolTipText("Import font from file");
@@ -1719,7 +1788,9 @@ public final class ScrMainMenu extends PFrame {
                 mnuImportFontActionPerformed(evt);
             }
         });
-        mnuTools.add(mnuImportFont);
+        mnuImport.add(mnuImportFont);
+
+        mnuTools.add(mnuImport);
 
         mnuCheckLexicon.setText("Check Language");
         mnuCheckLexicon.setToolTipText("Checks language for problems and inconsistencies.");
@@ -2108,6 +2179,10 @@ public final class ScrMainMenu extends PFrame {
         }
     }//GEN-LAST:event_lstRecentOpenedMouseClicked
 
+    private void mnuExportDictFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportDictFileActionPerformed
+        ExportDictionaryFile();
+    }//GEN-LAST:event_mnuExportDictFileActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2123,7 +2198,6 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -2143,10 +2217,14 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuChkUpdate;
     private javax.swing.JMenu mnuExLex;
     private javax.swing.JMenuItem mnuExit;
+    private javax.swing.JMenu mnuExport;
+    private javax.swing.JMenuItem mnuExportDictFile;
     private javax.swing.JMenuItem mnuExportFont;
     private javax.swing.JMenuItem mnuExportToExcel;
+    private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
     private javax.swing.JMenuItem mnuIPAChart;
+    private javax.swing.JMenu mnuImport;
     private javax.swing.JMenuItem mnuImportFile;
     private javax.swing.JMenuItem mnuImportFont;
     private javax.swing.JMenuItem mnuIpaTranslator;
