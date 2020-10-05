@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  *
@@ -109,5 +110,23 @@ public class RegexTools {
         public String toString() {
             return label;
         }
+    }
+    
+    /**
+     * Tests whether regex pattern is legal
+     * @param pattern
+     * @return 
+     */
+    public static boolean isRegexLegal(String pattern) {
+        boolean ret = true;
+        
+        try {
+            Pattern.compile(pattern);
+        } catch (PatternSyntaxException exception) {
+            // No logging because this simply tests whether a pattern is legal
+            ret = false;
+        }
+        
+        return ret;
     }
 }

@@ -27,7 +27,6 @@ import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,43 +51,6 @@ public class ConWordCollectionTest {
         }
     }
 
-    /**
-     * Test of checkLexicon method, of class ConWordCollection.
-     */
-    @Test
-    public void testCheckLexicon() {
-        System.out.println("ConWordCollectionTest.checkLexicon");
-        
-        ConWordCollection instance = badLexEntriesCore.getWordCollection();
-        LexiconProblemNode[] problems = instance.checkLexicon(false);
-        if (problems.length != 4) {
-            fail("There should be 4 problems in this language file.");
-        }
-        
-        LexiconProblemNode curWord = problems[0];
-        assertEquals(curWord.problemWord.getValue(), "bad-pattern");
-        assertEquals(curWord.description, "Word does not match enforced pattern for type: noun.");
-        
-        curWord = problems[1];
-        assertEquals(curWord.problemWord.getValue(), "bad-romanization-1-noun");
-        assertTrue(curWord.description.contains("Word contains characters undefined in alphabet settings."));
-        assertTrue(curWord.description.contains("Suspect characters:\"1\""));
-        assertTrue(curWord.description.contains("Word cannot be romanized properly (missing regex pattern)."));
-        
-        curWord = problems[2];
-        assertEquals(curWord.problemWord.getValue(), "missing-POS-and-alphabet");
-        assertTrue(curWord.description.contains("Types set to mandatory."));
-        assertTrue(curWord.description.contains("Word contains characters undefined in alphabet settings"));
-        assertTrue(curWord.description.contains("Suspect characters:\"POS\""));
-        assertTrue(curWord.description.contains("Word pronunciation cannot be generated properly (missing regex pattern)."));
-        
-        curWord = problems[3];
-        assertEquals(curWord.problemWord.getValue(), "missing-local-noun");
-        assertEquals(curWord.description, "Local Lang word set to mandatory.");
-        
-        
-    }
-    
     @Test
     public void testMissingConWord() {
         System.out.println("ConWordCollectionTest.testMissingConWord");

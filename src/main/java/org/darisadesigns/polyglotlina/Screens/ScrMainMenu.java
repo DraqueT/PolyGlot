@@ -64,8 +64,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -80,6 +78,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultTreeModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.darisadesigns.polyglotlina.CheckLanguageErrors;
 import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.HelpHandler;
@@ -1405,7 +1404,7 @@ public final class ScrMainMenu extends PFrame {
         mnuImport = new javax.swing.JMenu();
         mnuImportFile = new javax.swing.JMenuItem();
         mnuImportFont = new javax.swing.JMenuItem();
-        mnuCheckLexicon = new javax.swing.JMenuItem();
+        mnuCheckLanguage = new javax.swing.JMenuItem();
         mnuIpaTranslator = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -1792,14 +1791,14 @@ public final class ScrMainMenu extends PFrame {
 
         mnuTools.add(mnuImport);
 
-        mnuCheckLexicon.setText("Check Language");
-        mnuCheckLexicon.setToolTipText("Checks language for problems and inconsistencies.");
-        mnuCheckLexicon.addActionListener(new java.awt.event.ActionListener() {
+        mnuCheckLanguage.setText("Check Language");
+        mnuCheckLanguage.setToolTipText("Checks language for problems and inconsistencies.");
+        mnuCheckLanguage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuCheckLexiconActionPerformed(evt);
+                mnuCheckLanguageActionPerformed(evt);
             }
         });
-        mnuTools.add(mnuCheckLexicon);
+        mnuTools.add(mnuCheckLanguage);
 
         mnuIpaTranslator.setText("IPA Conversion Tool");
         mnuIpaTranslator.setToolTipText("Converts parahraph form phrases into IPA");
@@ -2156,9 +2155,9 @@ public final class ScrMainMenu extends PFrame {
         new ScrReversion(core).setVisible(true);
     }//GEN-LAST:event_mnuReversionActionPerformed
 
-    private void mnuCheckLexiconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCheckLexiconActionPerformed
-        core.getWordCollection().checkLexicon(true);
-    }//GEN-LAST:event_mnuCheckLexiconActionPerformed
+    private void mnuCheckLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCheckLanguageActionPerformed
+        CheckLanguageErrors.checkCore(core, true);
+    }//GEN-LAST:event_mnuCheckLanguageActionPerformed
 
     private void mnuIpaTranslatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIpaTranslatorActionPerformed
         new ScrIpaTranslator(core).setVisible(true);
@@ -2213,7 +2212,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JList<RecentFile> lstRecentOpened;
     private javax.swing.JMenuItem mnuAbout;
-    private javax.swing.JMenuItem mnuCheckLexicon;
+    private javax.swing.JMenuItem mnuCheckLanguage;
     private javax.swing.JMenuItem mnuChkUpdate;
     private javax.swing.JMenu mnuExLex;
     private javax.swing.JMenuItem mnuExit;

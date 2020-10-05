@@ -147,13 +147,13 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuCheckLexicon">
+            <MenuItem class="javax.swing.JMenuItem" name="mnuCheckLanguage">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Check Language"/>
                 <Property name="toolTipText" type="java.lang.String" value="Checks language for problems and inconsistencies."/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCheckLexiconActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCheckLanguageActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuIpaTranslator">

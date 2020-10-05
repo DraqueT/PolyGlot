@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -24,21 +24,51 @@ package org.darisadesigns.polyglotlina.Nodes;
  * @author draque
  */
 public class LexiconProblemNode implements Comparable<LexiconProblemNode>{
-    public final ConWord problemWord;
+    public final DictNode problemWord;
     public final String description;
+    public final ProblemType problemType;
+    public final String shortDescription;
     
-    public LexiconProblemNode(ConWord _problemWord, String _description) {
+    public LexiconProblemNode(DictNode _problemWord, String _description, ProblemType _problemType) {
         problemWord = _problemWord;
         description = _description;
+        problemType = _problemType;
+        
+        switch (_problemType) {
+            case ConWord-> shortDescription = _problemWord.getValue();
+            case PoS-> shortDescription = "Part of Speech: " + _problemWord.getValue();
+            case Phonology-> shortDescription = "Phonology Problem";
+            default-> shortDescription = "UNDEFINED VALUE";
+        }
     }
     
     @Override
     public String toString() {
-        return problemWord.getValue();
+        return shortDescription;
     }
 
     @Override
     public int compareTo(LexiconProblemNode o) {
-        return this.problemWord.compareTo(o.problemWord);
+        int ret;
+        
+        if (this.problemType == o.problemType) {
+            ret= this.problemWord.compareTo(o.problemWord);
+        } else {
+            ret = this.problemType.value < o.problemType.value ? -1 : 1;
+        }
+        
+        return ret;
+    }
+    
+    public enum ProblemType {
+        ConWord(0),
+        PoS(1),
+        Phonology(2);
+        
+        public final int value;
+        
+        ProblemType(int _value) {
+            value = _value;
+        }
     }
 }

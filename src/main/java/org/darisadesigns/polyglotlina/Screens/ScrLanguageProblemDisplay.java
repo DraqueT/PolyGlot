@@ -23,6 +23,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PList;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
+import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.*;
 import java.util.List;
 import javax.swing.DefaultListModel;
 
@@ -127,9 +128,12 @@ public class ScrLanguageProblemDisplay extends PDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        if (main != null && jList1.getSelectedValue() != null) {
-            jTextArea1.setText(jList1.getSelectedValue().description);
-            main.setWordSelectedById(jList1.getSelectedValue().problemWord.getId());
+        LexiconProblemNode problemNode = jList1.getSelectedValue();
+        if (main != null && problemNode != null) {
+            jTextArea1.setText(problemNode.description);
+            if (problemNode.problemType == ProblemType.ConWord) {
+                main.setWordSelectedById(jList1.getSelectedValue().problemWord.getId());
+            }
         }
     }//GEN-LAST:event_jList1ValueChanged
     @Override
