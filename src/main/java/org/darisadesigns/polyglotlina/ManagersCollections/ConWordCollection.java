@@ -28,16 +28,12 @@ import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.FormattedTextHelper;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
-import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.RankedObject;
-import org.darisadesigns.polyglotlina.Screens.ScrLanguageProblemDisplay;
-import org.darisadesigns.polyglotlina.Screens.ScrProgressMenu;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,6 +45,7 @@ import java.util.Objects;
 import java.util.Random;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair.EvolutionType;
+import org.darisadesigns.polyglotlina.RegexTools;
 import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -206,27 +203,27 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                     + core.localLabel() + " words set to enforced unique: this local exists elsewhere.");
         }
 
-        TypeNode wordType = core.getTypes().getNodeById(word.getWordTypeId());
+        TypeNode wordPos = core.getTypes().getNodeById(word.getWordTypeId());
 
         ret.setDefinition(ret.getDefinition() + (ret.getDefinition().isEmpty() ? "" : "\n"));
 
-        if (wordType != null) {
-            String typeRegex = wordType.getPattern();
+        if (wordPos != null) {
+            String posRegex = wordPos.getPattern();
 
-            if (wordType.isProcMandatory() && pronunciation.isEmpty() && !word.isProcOverride()) {
+            if (wordPos.isProcMandatory() && pronunciation.isEmpty() && !word.isProcOverride()) {
                 ret.setDefinition(ret.getDefinition() + (ret.getDefinition().isEmpty() ? "" : "\n")
-                        + "Pronunciation required for " + wordType.getValue() + " words.");
+                        + "Pronunciation required for " + wordPos.getValue() + " words.");
             }
             
-            if (!typeRegex.isEmpty() && !word.getValue().matches(typeRegex)) {
+            if (!posRegex.isEmpty() && RegexTools.isRegexLegal(posRegex) && !word.getValue().matches(posRegex)) {
                 ret.setDefinition(ret.getDefinition() + (ret.getDefinition().isEmpty() ? "" : "\n")
                         + "Word does not match enforced pattern for type: " + word.getWordTypeDisplay() + ".");
                 ret.setProcOverride(true);
             }
             
-            if (wordType.isDefMandatory() && word.getDefinition().isEmpty()) {
+            if (wordPos.isDefMandatory() && word.getDefinition().isEmpty()) {
                 ret.setDefinition(ret.getDefinition() + (ret.getDefinition().isEmpty() ? "" : "\n")
-                        + "Definition required for " + wordType.getValue() + " words.");
+                        + "Definition required for " + wordPos.getValue() + " words.");
             }
         }
 
@@ -919,112 +916,6 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         notFound.setPronunciation("WORD NOT FOUND");
         
         return notFound;
-    }
-    
-    /**
-     * Checks the lexicon for erroneous values & returns values
-     * @param display whether to make a visual display of this
-     * @return 
-     */
-    public LexiconProblemNode[] checkLexicon(boolean display) {
-        List<LexiconProblemNode> problems = new ArrayList<>();
-        
-        try {
-            final int wordCount = nodeMap.size();
-            final ScrProgressMenu progress = display ? ScrProgressMenu.createScrProgressMenu("Checking Lexicon", wordCount, false, true) : null;// 
-
-            if (display && progress != null) {
-                progress.setVisible(true);
-                progress.setLocation(core.getRootWindow().getLocation());
-            }
-
-            Map<String, Integer> conWordCount = this.getConWordCount();
-            Map<String, Integer> localWordCount = this.getLocalCount();
-
-            Thread thread = new Thread(){
-                @Override
-                public void run(){
-                    // cycle through each word individually, searching for problems
-                    for (ConWord curWord : nodeMap.values()) {
-                        String problemString = "";
-
-                        // check word legality (if not overridden)
-                        if (!curWord.isRulesOverride()) {
-                            ConWord testLegal = testWordLegality(curWord, conWordCount, localWordCount);
-
-                            problemString += testLegal.getValue().isEmpty() ? "" : testLegal.getValue() + "\n";
-                            problemString += testLegal.typeError.isEmpty() ? "" : testLegal.typeError + "\n";
-                            problemString += testLegal.getLocalWord().isEmpty() ? "" : testLegal.getLocalWord() + "\n";
-                            problemString += testLegal.getDefinition().isEmpty() ? "" : testLegal.getDefinition() + "\n";
-                        }
-
-                        // check word made up of defined characters (document if not)
-                        if (!core.getPropertiesManager().testStringAgainstAlphabet(curWord.getValue())) {
-                            problemString += "Word contains characters undefined in alphabet settings.\n";
-                            problemString += "Suspect characters:\"" 
-                                    + core.getPropertiesManager().findBadLetters(curWord.getValue())
-                                    + "\"\n";
-                        }
-
-                        // check word pronunciation can be generated (if pronunciations set up and not overridden)
-                        if (core.getPronunciationMgr().isInUse()) {
-                            try {
-                                if (core. getPronunciationMgr().getPronunciation(curWord.getValue()).isEmpty()) {
-                                    problemString += "Word pronunciation cannot be generated properly (missing regex pattern).\n";
-                                } 
-                            } catch (Exception e) {
-                                problemString += "Word encountered malformed regex when generating pronunciation.\n";
-                                // IOHandler.writeErrorLog(e);
-                            }
-                        }
-
-                        // check word romanization can be generated (if rominzations set up)
-                        if (core.getRomManager().isEnabled()) {
-                            try {
-                                if (core. getRomManager().getPronunciation(curWord.getValue()).isEmpty()) {
-                                    problemString += "Word cannot be romanized properly (missing regex pattern).\n";
-                                } 
-                            } catch (Exception e) {
-                                problemString += "Word encounters malformed regex when generating Romanization.\n";
-                                // IOHandler.writeErrorLog(e);
-                            }
-                        }
-
-                        // record results of each for report
-                        if (!problemString.trim().isEmpty()) {
-                            problems.add(new LexiconProblemNode(curWord, problemString.trim()));
-                        }
-
-                        // iterate progress bar if displaying
-                        if (display && progress != null) {
-                            progress.iterateTask();
-                        }
-                    }
-                    
-                    // gather any etymological loops (illegal, as word cannot be its own ancestor) and record them
-                    for (ConWord loopWord : core.getEtymologyManager().checkAllForIllegalLoops()) {
-                        problems.add(new LexiconProblemNode(loopWord, "This word is included in an illegal etymological loop. "
-                                + "Select the word in the lexicon then click the Etymology button to correct."));
-                    }
-                }
-            };
-
-            thread.start();
-            thread.join();
-        } catch (InterruptedException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Thread Error", "Lexicon validation thread error: " + e.getLocalizedMessage(), core.getRootWindow());
-        }
-        
-        Collections.sort(problems);
-        
-        if (!problems.isEmpty() && display) {
-            new ScrLanguageProblemDisplay(problems, core).setVisible(true);
-        } else if (display) {
-            InfoBox.info("Lexicon Check Results", "No problems found in lexicon!", core.getRootWindow());
-        }
-        
-        return problems.toArray(new LexiconProblemNode[0]);
     }
     
     /**

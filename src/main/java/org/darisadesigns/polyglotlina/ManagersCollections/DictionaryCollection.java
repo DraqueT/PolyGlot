@@ -23,6 +23,7 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 import org.darisadesigns.polyglotlina.Nodes.DictNode;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -234,6 +235,13 @@ public abstract class DictionaryCollection<N extends DictNode> {
         return nodeMap.isEmpty();
     }
     
+    /**
+     * Returns all nodemap values
+     * @return 
+     */
+    public Collection<N> getAllValues() {
+        return nodeMap.values();
+    }
     
     @Override
     public boolean equals(Object comp) {

@@ -960,7 +960,7 @@ public class ConjugationManager {
         ConjugationNode[] decNodes = getDimensionalConjugationListTemplate(typeId);
         String[] splitIds = combId.split(",");
 
-        for (int i = 0; i < decNodes.length; i++) {
+        for (int i = 0; i < decNodes.length && i < (splitIds.length - 1); i++) {
             ConjugationNode curNode = decNodes[i];
             int dimId = Integer.parseInt(splitIds[i + 1]);
             Iterator<ConjugationDimension> dimIt = curNode.getDimensions().iterator();

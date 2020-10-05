@@ -539,22 +539,11 @@ public final class ScrLexicon extends PFrame {
                 try {
                     txtRom.setText(core.getRomManager().getPronunciation(txtConWord.getText()));
                 } catch (Exception e) {
-                    // IOHandler.writeErrorLog(e);
-                    setProcError(e.getLocalizedMessage());
+                    // simply disable pronunciation generation for now. user informed of error elsewhere.
+                    enableProcGen = false;
                 }
             });
         }
-    }
-
-    /**
-     * Sets the pronunciation generation to be disabled. This prevents endless error messages from popping.
-     *
-     * @param message error message to display to user
-     */
-    private void setProcError(String message) {
-        InfoBox.error("Regex Error", "Generation of pronunciation and romanization "
-                + "temporarily disabled. Please correct regex error: " + message, menuParent);
-        enableProcGen = false;
     }
 
     /**
@@ -794,7 +783,7 @@ public final class ScrLexicon extends PFrame {
                 procLegality = results.getPronunciation();
             } catch (Exception e) {
                 // IOHandler.writeErrorLog(e);
-                setProcError(e.getLocalizedMessage());
+                enableProcGen = false;
                 procLegality = e.getLocalizedMessage();
             }
         }
@@ -1184,7 +1173,7 @@ public final class ScrLexicon extends PFrame {
                             }
                         } catch (Exception ex) {
                             // IOHandler.writeErrorLog(ex);
-                            setProcError(ex.getLocalizedMessage());
+                            enableProcGen = false;
                         }
                     }
                     if (tip.isEmpty()) {
@@ -1328,7 +1317,7 @@ public final class ScrLexicon extends PFrame {
             }
         } catch (IllegalArgumentException e) {
             // IOHandler.writeErrorLog(e);
-            setProcError(e.getLocalizedMessage());
+            enableProcGen = false;
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), core.getRootWindow());
