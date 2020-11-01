@@ -66,6 +66,7 @@ public final class PGTUtil {
     public static final String SWADESH_LOCATION = "/assets/org/DarisaDesigns/swadesh/";
     public static final String BUILD_DATE_TIME_LOCATION = "/assets/org/DarisaDesigns/buildDate";
     public static final String[] SWADESH_LISTS = {"Original_Swadesh", "Modern_Swadesh"};
+    public static final int WINDOWS_CLIPBOARD_DELAY = 10;
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";

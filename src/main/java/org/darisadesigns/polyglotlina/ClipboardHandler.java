@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -36,7 +36,22 @@ public final class ClipboardHandler implements ClipboardOwner {
 
     @Override
     public void lostOwnership(Clipboard aClipboard, Transferable aContents) {
-        //do nothing
+        windowsPause();
+    }
+    
+    /**
+     * Windows sometimes requires a moment to regain ownership of clipboard.
+     * If windows is not the host OS, does nothing
+     */
+    private static void windowsPause() {
+        if (PGTUtil.IS_WINDOWS) {
+            try {
+            Thread.sleep(PGTUtil.WINDOWS_CLIPBOARD_DELAY);
+        }
+        catch (InterruptedException e) {
+            IOHandler.writeErrorLog(e);
+        }
+        }
     }
 
     /**
@@ -46,6 +61,7 @@ public final class ClipboardHandler implements ClipboardOwner {
      * @param aString
      */
     public void setClipboardContents(String aString) {
+        windowsPause();
         StringSelection stringSelection = new StringSelection(aString);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, this);
@@ -61,21 +77,24 @@ public final class ClipboardHandler implements ClipboardOwner {
      */
     public static String getClipboardText() throws UnsupportedFlavorException, IOException {
         String result = "";
+        windowsPause();
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         Transferable contents = clipboard.getContents(null);
 
         if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             try {
                 result = (String) contents.getTransferData(DataFlavor.stringFlavor);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 throw new IOException("Clipboard error: " + e.getLocalizedMessage(), e);
             }
         }
         return result;
     }
-    
+
     /**
      * Tests whether the contents of clipboard is an image
+     *
      * @return true if image
      */
     public static boolean isClipboardImage() {
@@ -83,9 +102,10 @@ public final class ClipboardHandler implements ClipboardOwner {
         Transferable contents = clipboard.getContents(null);
         return contents.isDataFlavorSupported(DataFlavor.imageFlavor);
     }
-    
+
     /**
      * Tests whether the contents of clipboard is text
+     *
      * @return true if image
      */
     public static boolean isClipboardString() {
@@ -93,48 +113,63 @@ public final class ClipboardHandler implements ClipboardOwner {
         Transferable contents = clipboard.getContents(null);
         return contents.isDataFlavorSupported(DataFlavor.stringFlavor);
     }
-    
+
     /**
      * Gets any image contained in clipboard
+     *
      * @return image if one present, null otherwise
      * @throws java.lang.Exception
      */
     public static Image getClipboardImage() throws Exception {
         Image ret = null;
-        
+
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         Transferable contents = clipboard.getContents(null);
-        
+
         if (contents != null && contents.isDataFlavorSupported(DataFlavor.imageFlavor)) {
             try {
-                ret = (Image)contents.getTransferData(DataFlavor.imageFlavor);
-            } catch (UnsupportedFlavorException | IOException e) {
+                ret = (Image) contents.getTransferData(DataFlavor.imageFlavor);
+            }
+            catch (UnsupportedFlavorException | IOException e) {
                 throw new Exception("Clipboard error: " + e.getLocalizedMessage(), e);
             }
         }
-        
+
         return ret;
     }
-    
+
     /**
      * Temporarily caches contents of clipboard
-     * @throws Exception 
+     *
+     * @throws Exception
      */
     public void cacheClipboard() throws Exception {
         try {
             Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
             cachedContents = clip.getContents(null);
-            
-        } catch (HeadlessException e) {
+
+        }
+        catch (HeadlessException e) {
             throw new Exception("System busy, unable to perform action: " + e.getLocalizedMessage(), e);
         }
     }
-    
+
     /**
      * restores clipboard contents from cache
      */
     public void restoreClipboard() {
         if (cachedContents != null) {
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            
+            windowsPause();
+
+            for (DataFlavor flavor : cachedContents.getTransferDataFlavors()) {
+                if (!clipboard.isDataFlavorAvailable(flavor)) {
+                    // if something somehow got into the cache that is incompatible with the OS' clipboard, reject it
+                    return;
+                }
+            }
+
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(cachedContents, null);
         }
     }
