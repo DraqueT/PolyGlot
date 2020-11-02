@@ -52,7 +52,7 @@ public final class ScrIPARefChart extends PFrame {
         initComponents();
         handler = new IPAHandler(this);
         ipaToChars = core.getPronunciationMgr().getCharactersPerIpaSound();
-        this.setSize(849, 585);
+        this.setSize(849, 595);
         setupToolTips();
     }
     
