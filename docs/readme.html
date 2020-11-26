@@ -22,10 +22,7 @@
         <!-- Custom styles for this template -->
         <link href="assets/css/main.css" rel="stylesheet" type="text/css">
 
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script><!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries --><!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-      <![endif]-->
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     </head><body>
         <!-- Static navbar -->
         <div class="navbar navbar-inverse navbar-static-top">
@@ -79,10 +76,10 @@
                                     &nbsp;&nbsp;&nbsp; <a href="#-_IPA_Conversion">- IPA Conversion Tool</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-_Images">- Images in Text</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-_Family_Window">- Family Window</a><br>
-                                    &nbsp;&nbsp;&nbsp; <a href="#-_Check_Lexicon">- Using the Check Lexicon Tool</a><br>
+                                    &nbsp;&nbsp;&nbsp; <a href="#-_Check_Lexicon">- Using the Check Language Tool</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-_Swadesh_Lists">- Importing Swadesh Lists</a><br>
+                                    &nbsp;&nbsp;&nbsp; <a href="#EXPORT_SPELLCHECK_DIC">- Exporting Spellcheck Dictionary</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#OPTIONS_MENU">- Options Menu</a><br>
-                                    &nbsp;&nbsp;&nbsp; <a href="#CHECK_LANGUAGE">- Check Language Tool</a><br>
                                     <a href="#IMPORTING_FROM_EXCEL">3---- Importing and Exporting to/from
                                         Excel or CSV</a><br>
                                     <a href="#ETYMOLOGY">4---- Etymology Engine</a><br>
@@ -842,7 +839,7 @@
                             will be auto-selected in the dictionary lexicon. This can be useful for
                             vocabularies that have not been wholly committed to memory.<br></div>
 
-                        <a name="-_Check_Lexicon"></a><h1>Using the Check Lexicon Tool</h1>
+                        <a name="-_Check_Lexicon"></a><h1>Using the Check Language Tool</h1>
                         <br>
                         <div align="left">The Check Lexicon tool allows you to easily check over your lexicon
                             to see if you have mistakenly left entries which break patterns you have established 
@@ -857,9 +854,10 @@
                                 <li>Completion of definition (if required by part of speech)</li>
                                 <li>Completion of pronunciation (if required by part of speech)</li>
                                 <li>Word matches pattern associated with given part of speech</li>
+                                <li>Regex patterns used within your language file will be checked for validity</li>
                             </ul>
 
-                            Check your lexicon by clicking Tools->Check Lexicon. Each word will be checked, and 
+                            Check your lexicon by clicking Tools->Check Language. Each word will be checked, and 
                             a window will appear with a list of all words containing problems. Selecting a word 
                             will display the problems associated with the word and select it on the main Lexicon 
                             screen to allow you to correct the problems or to select the override option if the 
@@ -875,8 +873,18 @@
                             and selecting either Original or Modern will automatically copy a series of words to your lexicon which are empty, save
                             for their local language fields being filled in with the English values.<br><br>
                             Additionally, you may choose to load a custom Swadesh list. If this option is selected, an open file dialog will appear. 
-                            Simply select any line delimited plaintext or unicode text file to import. (Note: Comma delimited will not work correctly, 
+                            Simply select any line delimited plain-text or Unicode text file to import. (Note: Comma delimited will not work correctly, 
                             these files must be delimited by a new line or carriage return between each word to be imported).
+                        </div>
+                        
+                        <a name="EXPORT_SPELLCHECK_DIC"></a><h1>Export Spellcheck Dictionary</h1>
+                        <div align="left">
+                            This tool within PolyGlot can generate a .dic file which is consumable as a spellcheck dictionary. This file can be used 
+                            in many popular applications such as MS Word, Open Office applications, etc. The file will contain all vocabulary defined 
+                            in your lexicon and all possible conjugated/declined forms of each word.<br><br>
+                            
+                            To access this tool, click Tools->Export Tools->Export Dic File in the menu bar. The menu will allow you to save the file 
+                            wherever you like.
                         </div>
 
                         <a name="OPTIONS_MENU"></a><h1>Options Menu</h1>
@@ -1159,6 +1167,13 @@
                                 <li>Middle and Last Instances: Only middle and last instances of matched patterns in words are transformed.</li>
                                 <li>Last Instance Only: Only the last instance of of matched patterns in words are transformed.</li>
                             </ul><br>
+                            
+                            Below this is a radio button controlling what within your language file will be targeted.<br>
+                            <ul>
+                                <li>Lexicon: Apply transformations exclusively to lexicon entries</li>
+                                <li>Conjugation Patterns: Apply transformation exclusively to generation patterns (warning: applies regex transformation to regex patterns here, be aware)</li>
+                                <li>Both: Apply transformation to both</li>
+                            </ul>
                             
                             The target pattern is the pattern which is to be replaced in words. This field is regex compatible. The replacement 
                             field is the value which is to replace the target pattern in words. This field is also regex compatible.<br><br>
