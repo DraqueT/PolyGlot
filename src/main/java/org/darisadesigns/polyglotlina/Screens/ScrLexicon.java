@@ -156,6 +156,15 @@ public final class ScrLexicon extends PFrame {
         populateProperties();
         setupListeners();
         setCustomLabels();
+        setupForm();
+    }
+    
+    private void setupForm() {
+        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        
+        if (divider > -1) {
+            jSplitPane1.setDividerLocation(divider);
+        }
     }
 
     @Override
@@ -1004,6 +1013,7 @@ public final class ScrLexicon extends PFrame {
         if (this.canClose()) {
             saveAllValues();
             killLogoChild();
+            core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
             super.dispose();
         }
     }

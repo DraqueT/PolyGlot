@@ -210,6 +210,8 @@ public class IOHandlerTest {
             opt.setScreenPosition(testScreenName, expectedScreenPosition);
             opt.setScreenSize(testScreenName, expectedScreenDimension);
             opt.setToDoBarPosition(toDoBarPositionExpected);
+            opt.setMaximized(true);
+            opt.setDividerPosition(testScreenName, toDoBarPositionExpected);
 
             // save values to disk...
             IOHandler.writeOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
@@ -221,13 +223,15 @@ public class IOHandlerTest {
             // relaod saved values...
             IOHandler.loadOptionsIni(opt, core.getWorkingDirectory().getAbsolutePath());
             
-            assertEquals(opt.isAnimateWindows(), animatedExpected);
-            assertEquals(opt.getMaxReversionCount(), reversionCountExpected);
-            assertEquals(opt.getMenuFontSize(), menuFontExpected);
-            assertEquals(opt.isNightMode(), nightModeExpected);
-            assertEquals(opt.getScreenPosition(testScreenName), expectedScreenPosition);
-            assertEquals(opt.getScreenSize(testScreenName), expectedScreenDimension);
-            assertEquals(opt.getToDoBarPosition(), toDoBarPositionExpected);
+            assertEquals(animatedExpected, opt.isAnimateWindows());
+            assertEquals(reversionCountExpected, opt.getMaxReversionCount());
+            assertEquals(menuFontExpected, opt.getMenuFontSize());
+            assertEquals(nightModeExpected, opt.isNightMode());
+            assertEquals(expectedScreenPosition, opt.getScreenPosition(testScreenName));
+            assertEquals(expectedScreenDimension, opt.getScreenSize(testScreenName));
+            assertEquals(toDoBarPositionExpected, opt.getToDoBarPosition());
+            assertEquals(toDoBarPositionExpected, opt.getDividerPosition(testScreenName));
+            assertTrue(opt.isMaximized());
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
             fail(e);

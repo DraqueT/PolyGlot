@@ -75,7 +75,16 @@ public final class ScrEtymRoots extends PDialog {
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         lblWord.setFont(core.getPropertiesManager().getFontCon());
         setupDrawPanel();
+        setupForm();
         txtNotes.setText(word.getEtymNotes());
+    }
+    
+    private void setupForm() {
+        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        
+        if (divider > -1) {
+            jSplitPane1.setDividerLocation(divider);
+        }
     }
 
     private void setupDrawPanel() {
@@ -477,6 +486,7 @@ public final class ScrEtymRoots extends PDialog {
     @Override
     public void dispose() {
         word.setEtymNotes(txtNotes.getText());
+        core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
         super.dispose();
     }
 

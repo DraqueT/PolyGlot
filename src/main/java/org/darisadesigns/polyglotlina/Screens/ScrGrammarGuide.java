@@ -138,6 +138,16 @@ public final class ScrGrammarGuide extends PFrame {
             btnAddSection.setToolTipText(btnAddSection.getToolTipText() + " (CTRL +)");
             btnDelete.setToolTipText(btnDelete.getToolTipText() + " (CTRL -)");
         }
+        
+        setupForm();
+    }
+    
+    private void setupForm() {
+        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        
+        if (divider > -1) {
+            jSplitPane1.setDividerLocation(divider);
+        }
     }
     
     private void initFontDrop() {
@@ -217,6 +227,7 @@ public final class ScrGrammarGuide extends PFrame {
     public void dispose() {
         saveAllValues();
         stopAllSounds();
+        core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
         super.dispose();
     }
     

@@ -56,6 +56,15 @@ public class ScrDeclensionGenSimple extends PDialog {
         populateCombinedDecl();
         populateRule();
         setupListeners();
+        setupForm();
+    }
+    
+    private void setupForm() {
+        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        
+        if (divider > -1) {
+            jSplitPane1.setDividerLocation(divider);
+        }
     }
     
     public String getCurSelectedCombId() {
@@ -172,6 +181,7 @@ public class ScrDeclensionGenSimple extends PDialog {
     @Override
     public void dispose() {
         saveRule();
+        core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
     }
 
     @Override

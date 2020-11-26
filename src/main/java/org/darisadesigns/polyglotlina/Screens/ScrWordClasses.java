@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -67,6 +67,15 @@ public final class ScrWordClasses extends PFrame {
         populatePropertyValues();
         setupComponents();
         super.setPreferredSize(new Dimension(584, 377));
+        setupForm();
+    }
+    
+    private void setupForm() {
+        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        
+        if (divider > -1) {
+            jSplitPane1.setDividerLocation(divider);
+        }
     }
 
     private void setupComponents() {
@@ -112,6 +121,7 @@ public final class ScrWordClasses extends PFrame {
             tblValues.getCellEditor().stopCellEditing();
         }
         
+        core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
         super.dispose();
     }
     

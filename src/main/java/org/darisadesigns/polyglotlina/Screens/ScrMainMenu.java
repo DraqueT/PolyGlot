@@ -69,6 +69,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -83,6 +84,7 @@ import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.Java8Bridge;
+import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.ToolsHelpers.ExportSpellingDictionary;
 import org.darisadesigns.polyglotlina.WebInterface;
 
@@ -147,6 +149,13 @@ public final class ScrMainMenu extends PFrame {
         super.setSize(super.getPreferredSize());
         addBindingsToPanelComponents(this.getRootPane());
         setupStartButtonPositining();
+        setupForm();
+    }
+    
+    private void setupForm() {
+        if (core.getOptionsManager().isMaximized()) {
+            setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        }
     }
     
     /**
@@ -319,8 +328,18 @@ public final class ScrMainMenu extends PFrame {
         super.dispose();
 
         if (doExit) { // skip saving options if not exiting program...
-            core.getOptionsManager().setScreenPosition(getClass().getName(), getLocation());
-            core.getOptionsManager().setToDoBarPosition(pnlToDoSplit.getDividerLocation());
+            OptionsManager opMan = core.getOptionsManager();
+            
+            // Note: this only applies to Windows - Mac OS requires reflection or implementing mac only class on form classes (no)
+            boolean isMaximized = (this.getExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH;
+            opMan.setMaximized(isMaximized);
+            
+            // do not overwerite last windowed size if maximized
+            if (!isMaximized) {
+                opMan.setScreenPosition(getClass().getName(), getLocation());
+                opMan.setToDoBarPosition(pnlToDoSplit.getDividerLocation());
+            }
+            
 
             try {
                 core.saveOptionsIni();
