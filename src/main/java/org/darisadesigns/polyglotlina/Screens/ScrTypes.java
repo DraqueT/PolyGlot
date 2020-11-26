@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, Draque Thompson
+ * Copyright (c) 2015-2020, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -64,6 +64,15 @@ public final class ScrTypes extends PFrame {
         populateTypes();
         populateProperties();
         setupListeners();
+        setupForm();
+    }
+    
+    private void setupForm() {
+        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        
+        if (divider > -1) {
+            jSplitPane1.setDividerLocation(divider);
+        }
     }
 
     @Override
@@ -74,6 +83,7 @@ public final class ScrTypes extends PFrame {
         }
 
         saveAllValues();
+        core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
 
         if (canClose()) {
             killAllChildren();

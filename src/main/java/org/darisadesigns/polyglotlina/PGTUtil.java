@@ -247,6 +247,8 @@ public final class PGTUtil {
     public static final String OPTIONS_NIGHT_MODE = "OptionsNightMode";
     public static final String OPTIONS_REVERSIONS_COUNT = "OptionsReversionCount";
     public static final String OPTIONS_TODO_DIV_LOCATION = "ToDoDividerLocation";
+    public static final String OPTIONS_DIVIDER_POSITION = "OptionsDividerPosition";
+    public static final String OPTIONS_MAXIMIZED = "OptionsMaximized";
 
     // Java 8 bridge constants
     public static final String JAVA8_JAVA_COMMAND = "java";

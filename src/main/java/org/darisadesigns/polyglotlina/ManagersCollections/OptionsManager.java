@@ -42,6 +42,8 @@ public class OptionsManager {
     private final List<String> lastFiles = new ArrayList<>();
     private final Map<String, Point> screenPos = new HashMap<>();
     private final Map<String, Dimension> screenSize = new HashMap<>();
+    private final Map<String, Integer> dividerPosition = new HashMap<>();
+    private boolean maximized = false;
     private final List<String> screensUp = new ArrayList<>();
     private Double menuFontSize = 0.0;
     private int maxReversionCount = PGTUtil.DEFAULT_MAX_ROLLBACK_NUM;
@@ -102,6 +104,10 @@ public class OptionsManager {
         return screenSize;
     }
     
+    public Map<String, Integer> getDividerPositions() {
+        return dividerPosition;
+    }
+    
     /**
      * Records screen up at time of program closing
      * @param screen name of screen to be recorded as being up
@@ -144,6 +150,29 @@ public class OptionsManager {
         } else {
             screenSize.put(screen, dimension);
         }
+    }
+    
+    public void setDividerPosition(String screen, int position) {
+        if (dividerPosition.containsKey(screen)) {
+            dividerPosition.replace(screen, position);
+        } else {
+            dividerPosition.put(screen, position);
+        }
+    }
+    
+    /**
+     * Gets divider position saved for screen. Returns -1 if none recorded.
+     * @param screen
+     * @return 
+     */
+    public int getDividerPosition(String screen) {
+        int ret = -1;
+        
+        if (dividerPosition.containsKey(screen)) {
+            ret = dividerPosition.get(screen);
+        }
+        
+        return ret;
     }
     
     /**
@@ -242,5 +271,13 @@ public class OptionsManager {
 
     public void setToDoBarPosition(int _toDoBarPosition) {
         this.toDoBarPosition = _toDoBarPosition;
+    }
+    
+    public void setMaximized(boolean _maximized) {
+        maximized = _maximized;
+    }
+    
+    public boolean isMaximized() {
+        return maximized;
     }
 }

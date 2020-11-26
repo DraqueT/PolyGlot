@@ -352,6 +352,7 @@ public final class IOHandler {
 
                             if (splitSet.length != 3) {
                                 loadProblems += "Malformed Screen Position: " + curPosSet + "\n";
+                                continue;
                             }
                             Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
                             opMan.setScreenPosition(splitSet[0], p);
@@ -367,13 +368,33 @@ public final class IOHandler {
 
                             if (splitSet.length != 3) {
                                 loadProblems += "Malformed Screen Size: " + curSizeSet + "\n";
+                                continue;
                             }
                             Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
                             opMan.setScreenSize(splitSet[0], d);
                         }
                         break;
+                    case PGTUtil.OPTIONS_DIVIDER_POSITION:
+                        for (String curPosition : bothVal[1].split(",")) {
+                            if (curPosition.isEmpty()) {
+                                continue;
+                            }
+                            
+                            String[] splitSet = curPosition.split(":");
+                            
+                            if (splitSet.length != 2) {
+                                loadProblems += "Malformed divider position: " + curPosition + "\n";
+                                continue;
+                            }
+                            Integer position = Integer.parseInt(splitSet[1]);
+                            opMan.setDividerPosition(splitSet[0], position);
+                        }
+                        break;
                     case PGTUtil.OPTIONS_AUTO_RESIZE:
                         opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
+                        break;
+                    case PGTUtil.OPTIONS_MAXIMIZED:
+                        opMan.setMaximized(bothVal[1].equals(PGTUtil.TRUE));
                         break;
                     case PGTUtil.OPTIONS_MENU_FONT_SIZE:
                         opMan.setMenuFontSize(Double.parseDouble(bothVal[1]));
@@ -987,6 +1008,15 @@ public final class IOHandler {
             f0.write(nextLine + newLine);
 
             nextLine = PGTUtil.OPTIONS_TODO_DIV_LOCATION + "=" + opMan.getToDoBarPosition();
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_MAXIMIZED + "=" + (opMan.isMaximized() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_DIVIDER_POSITION + "=";
+            for (Entry<String, Integer> location : opMan.getDividerPositions().entrySet()) {
+                nextLine += ("," + location.getKey() + ":" + location.getValue());
+            }
             f0.write(nextLine + newLine);
         }
     }

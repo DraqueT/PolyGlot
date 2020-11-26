@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -59,6 +59,22 @@ public final class ScrIpaTranslator extends PDialog {
                 translateToIpa();
             }
         });
+        
+        setupForm();
+    }
+    
+    private void setupForm() {
+        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        
+        if (divider > -1) {
+            jSplitPane1.setDividerLocation(divider);
+        }
+    }
+    
+    @Override
+    public void dispose() {
+        core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
+        super.dispose();
     }
     
     @Override
