@@ -109,7 +109,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane2" pref="728" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" alignment="0" pref="728" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -126,14 +126,10 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTextArea" name="txtSource">
-                  <Properties>
-                    <Property name="columns" type="int" value="20"/>
-                    <Property name="lineWrap" type="boolean" value="true"/>
-                    <Property name="rows" type="int" value="5"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Type a phrase to convert to IPA here"/>
-                    <Property name="wrapStyleWord" type="boolean" value="true"/>
-                  </Properties>
+                <Component class="javax.swing.JTextPane" name="txtSource">
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextPane(core, false, &quot;&quot;)"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>

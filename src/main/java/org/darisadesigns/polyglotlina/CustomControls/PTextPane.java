@@ -54,6 +54,7 @@ public final class PTextPane extends JTextPane {
     private SwingWorker worker = null;
     private final String defText;
     private DictCore core;
+    private boolean disableMedia = false;
     private final boolean overrideFont;
 
     public PTextPane(DictCore _core, boolean _overrideFont, String _defText) {
@@ -65,10 +66,17 @@ public final class PTextPane extends JTextPane {
 
         setupListeners();
         setText(defText);
-        setForeground(Color.lightGray);
         setFontFromCore();
         
         this.setEditorKit(new PHTMLEditorKit());
+    }
+    
+    public void setDisableMedia(boolean _disableMedia) {
+        disableMedia = _disableMedia;
+    }
+    
+    public boolean isDisableMedia() {
+        return disableMedia;
     }
     
     /**
@@ -99,7 +107,7 @@ public final class PTextPane extends JTextPane {
                 IOHandler.writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
             }
-        } else if (ClipboardHandler.isClipboardImage()) {
+        } else if (ClipboardHandler.isClipboardImage() && !disableMedia) {
             try {
                 Image imageObject = ClipboardHandler.getClipboardImage();
                 BufferedImage image = null;
@@ -143,10 +151,10 @@ public final class PTextPane extends JTextPane {
             InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), core.getRootWindow());
         }
 
-        if (isDefaultText()) {
+        if (isDefaultText() && !defText.isBlank()) {
             setForeground(Color.lightGray);
         } else {
-            setForeground(Color.black);
+            setForeground(Color.BLACK);
         }
     }
 
@@ -177,7 +185,7 @@ public final class PTextPane extends JTextPane {
     public String getToolTipText() {
         String ret = super.getToolTipText();
         
-        if (ret != null) {
+        if (ret != null && !disableMedia) {
             ret += " (right click to insert images)";
         }
         
@@ -238,7 +246,7 @@ public final class PTextPane extends JTextPane {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.isPopupTrigger() && parentPane.isEnabled()) {
-                    insertImage.setEnabled(true);
+                    insertImage.setEnabled(!disableMedia);
                     cut.setEnabled(true);
                     copy.setEnabled(true);
                     paste.setEnabled(true);
@@ -344,7 +352,7 @@ public final class PTextPane extends JTextPane {
                         setText("");
                     }
                     
-                    setForeground(Color.black);
+                    setForeground(Color.BLACK);
                 }
 
                 @Override

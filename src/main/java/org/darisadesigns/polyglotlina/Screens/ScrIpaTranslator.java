@@ -24,6 +24,7 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.PronunciationMgr;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
 
 /**
  *
@@ -40,7 +41,6 @@ public final class ScrIpaTranslator extends PDialog {
         
         initComponents();
         
-        txtSource.setFont(core.getPropertiesManager().getFontCon());
         txtTarget.setFont(core.getPropertiesManager().getFontLocal());
         
         txtSource.getDocument().addDocumentListener(new DocumentListener(){
@@ -65,6 +65,7 @@ public final class ScrIpaTranslator extends PDialog {
     
     private void setupForm() {
         int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        ((PTextPane)txtSource).setDisableMedia(true);
         
         if (divider > -1) {
             jSplitPane1.setDividerLocation(divider);
@@ -114,7 +115,7 @@ public final class ScrIpaTranslator extends PDialog {
         txtTarget = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        txtSource = new javax.swing.JTextArea();
+        txtSource = new PTextPane(core, false, "");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("IPA Conversion Tool");
@@ -149,11 +150,6 @@ public final class ScrIpaTranslator extends PDialog {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        txtSource.setColumns(20);
-        txtSource.setLineWrap(true);
-        txtSource.setRows(5);
-        txtSource.setToolTipText("Type a phrase to convert to IPA here");
-        txtSource.setWrapStyleWord(true);
         jScrollPane2.setViewportView(txtSource);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -189,7 +185,7 @@ public final class ScrIpaTranslator extends PDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTextArea txtSource;
+    private javax.swing.JTextPane txtSource;
     private javax.swing.JTextArea txtTarget;
     // End of variables declaration//GEN-END:variables
 }
