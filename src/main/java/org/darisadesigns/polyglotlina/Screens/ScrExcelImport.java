@@ -35,6 +35,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.csv.CSVFormat;
 import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
 import org.darisadesigns.polyglotlina.ImportFileHelper.DuplicateOption;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -485,10 +486,21 @@ public class ScrExcelImport extends PDialog {
         } catch (Exception e) {
             IOHandler.writeErrorLog(e);
             InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
+                    + windowsError()
                     + ".\n Check to make certain that column mappings are correct "
                     + "(nothing above max cell value) and that the file is not corrupt:\n"
                     + e.getLocalizedMessage(), this);
         }
+    }
+    
+    private String windowsError() {
+        String ret = "";
+        
+        if (PGTUtil.IS_WINDOWS) {
+            ret += "\nIf the file is open in Excel, please close Excel.";
+        }
+        
+        return ret;
     }
 
     public enum Delimiter {
