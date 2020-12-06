@@ -112,28 +112,20 @@
                             post them on <a href="https://github.com/DraqueT/PolyGlot/issues">PolyGlot's issues page</a>!</div>
 
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
-                        <div align ="left"><br>Heyo, all! Here is version 3.2 of PolyGlot for you all! This release includes both 
-                            some exciting new features and some significant bugfixes. If you're working on anything related to phonemic 
-                            orthography, you'll find some good updates which help map characters and the sounds they make to one another 
-                            in visual ways. Updates to the "Check Language" functionality also make that more useful when looking for 
-                            words that contain unaccounted characters. Additionally, the corrupted file recovery system is much more 
-                            robust at this point! And as always, lots of bug fixes. Please enjoy!
+                        <div align ="left"><br>Heyo, all! Welcome to version 3.3 of PolyGlot! This release is going to be the last
+                            for a while, so with any luck, stability will be nice and solid for this one! There are a few minor new 
+                            features to PolyGlot this time around, but more than anything, this is a release that includes a bunch 
+                            of bug-fixes that I have been needing to get out for the last few months. Please enjoy!
                             <br><br>
 
                         </div>
                         NEW FEATURES:
                         <div align ="left"><ul>
+                                <li>Language evolution can now be applied to conjugated forms and rules</li>
+                                <li>Supports export of dictionary file for conlang spellchecks</li>
+                                <li>Check Language feature now checks validity of all regex used</li>
+                                <li>Window state (including divider position) now saved with greater granularity</li>
                                 <li>Reset Preferences option now available in options menu</li>
-                                <li>Language Evolution/Mutation implemented</li>
-                                <li>Hovering over IPA characters in the IPA chart now displays which characters in your alphabet may express them</li>
-                                <li>The language statistics page now has listings of each IPA sound that a letter may express</li>
-                                <li>In check language tool, missing letters are now detected and explicitly listed</li>
-                                <li>Tool tip text may now be multi-line</li>
-                                <li>Right clicking major function buttons now allows you to jump to help file information detailing their use</li>
-                                <li>Output files now default to match name of loaded language file</li>
-                                <li>Alphabetical list error color now easier to read through</li>
-                                <li>Last Loaded Files now displayed in UI on welcome screen</li>
-                                <li>Significantly strengthened corrupted file recovery system (please still do not save while turning your system off!)</li>
                                 <!––Secret Codes:
                                 what did you see last tuesday
                                 Who is Draque
@@ -146,6 +138,19 @@
                         BUGS FIXED:
                         <div align="left">
                             <ul>
+                                <li>Windows Stats Page does not generate in UTF-8</li>
+                                <li>Delete button in lexicon search just cancelling search without doing anything</li>
+                                <li>Import from excel broken in Windows</li>
+                                <li>Language Stats fails on multi-character alphabetic entries</li>
+                                <li>Language Stats Fails on HTML unsafe characters</li>
+                                <li>Phoneme frequency calculates based on letter frequency</li>
+                                <li>Stats Page Crash on no IPA</li>
+                                <li>If you have a part of speech with exclusively non-dimensional conjugations, the menu will not allow you to access these from the lexicon.</li>
+                                <li>Malformed regex values can soft-lock you on the Lexicon screen</li>
+                                <li>character replacement did not function on the IPA converter screen</li>
+                                <li>Warning not given to Windows user when trying to import excel which is still open in excel</li>
+                                
+                                
                                 <li>OS X File associations finally fixed!</li>
                                 <li>Simplified conjugation setup does not scroll properly</li>
                                 <li>Alphabet check not properly updating until navigating away from Language Properties</li>
