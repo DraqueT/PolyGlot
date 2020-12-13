@@ -85,7 +85,7 @@ public final class ScrIpaTranslator extends PDialog {
     
     private void translateToIpa() {
         PronunciationMgr procMan = core.getPronunciationMgr();
-        String[] words = txtSource.getText().split("\\s");
+        String[] words = ((PTextPane)txtSource).getNakedText().split("\\s");
         String curWord = "";
         String ipaDisplay = "";
         
