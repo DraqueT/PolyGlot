@@ -550,6 +550,7 @@ public final class PGTUtil {
         VERSION_HIERARCHY.put("3.1.3", 42);
         VERSION_HIERARCHY.put("3.2", 43);
         VERSION_HIERARCHY.put("3.3", 44);
+        VERSION_HIERARCHY.put("3.3.1", 45);
         
         // Gather build date/time from resources (if it does not exist, ignore)
         URL buildDate = PGTUtil.class.getResource(BUILD_DATE_TIME_LOCATION);
