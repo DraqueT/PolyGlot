@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2020, Draque Thompson
+ * Copyright (c) 2015-2021, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -436,7 +436,7 @@ public final class ScrTypes extends PFrame {
         btnDelType = new PAddRemoveButton("-");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Types/Parts of Speech");
+        setTitle("Parts of Speech");
         setBackground(new java.awt.Color(255, 255, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 

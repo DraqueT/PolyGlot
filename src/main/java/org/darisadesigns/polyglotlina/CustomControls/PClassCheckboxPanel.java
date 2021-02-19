@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -23,6 +23,7 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
@@ -49,6 +50,7 @@ public class PClassCheckboxPanel extends JPanel {
     private final boolean includeAll;
     private final boolean nightMode;
     private final double fontSize;
+    private final Font checkBoxFont;
     
     /**
      * 
@@ -61,6 +63,7 @@ public class PClassCheckboxPanel extends JPanel {
         includeAll = _includeAll;
         nightMode = core.getOptionsManager().isNightMode();
         fontSize = core.getOptionsManager().getMenuFontSize();
+        checkBoxFont = core.getPropertiesManager().getFontLocal();
         this.init(core);
     }
     
@@ -172,6 +175,7 @@ public class PClassCheckboxPanel extends JPanel {
                 super.repaint();
             }
         };
+        check.setFont(checkBoxFont);
         check.setText(title);
         check.setSelected(rule.doesRuleApplyToClassValue(classId, valueId, true)); // st value before listener
         check.addItemListener(listener);

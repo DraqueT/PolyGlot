@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -61,6 +61,13 @@ public final class ScrQuizGenDialog extends PFrame {
     private void setupScreen() {
         chkLocalQuiz.setText(core.localLabel() + " Equivalent");
         chkConlangQuiz.setText(core.conLabel() + " Equivalent");
+        chkClassQuiz.setFont(core.getPropertiesManager().getFontLocal());
+        chkConlangQuiz.setFont(core.getPropertiesManager().getFontLocal());
+        chkDefQuiz.setFont(core.getPropertiesManager().getFontLocal());
+        chkLocalQuiz.setFont(core.getPropertiesManager().getFontLocal());
+        chkProcQuiz.setFont(core.getPropertiesManager().getFontLocal());
+        chkTypeQuiz.setFont(core.getPropertiesManager().getFontLocal());
+        
         ((PTextField)txtFilterConWord).setDefaultValue("-- " + core.conLabel() + " Filter --");
         ((PTextField)txtFilterConWord).setDefault();
         ((PTextField)txtFilterLocalWord).setDefaultValue("-- " + core.localLabel()+ " Filter --");
@@ -264,7 +271,7 @@ public final class ScrQuizGenDialog extends PFrame {
         });
 
         chkLocalQuiz.setText("-UPDATE VIA CODE-");
-        chkLocalQuiz.setToolTipText("Conlang equivlent of local language words");
+        chkLocalQuiz.setToolTipText("The local lang equivlent of local language words");
 
         chkConlangQuiz.setText("-UPDATE VIA CODE-");
         chkConlangQuiz.setToolTipText("The conlang equivalent of local language words");

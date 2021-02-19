@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -260,7 +260,7 @@ public final class ScrGrammarGuide extends PFrame {
         txtName = new PTextField(core, true, "-- Name --");
         jPanel3 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        cmbFonts = new PComboBox(core.getPropertiesManager().getFontMenu());
+        cmbFonts = new PComboBox(core.getPropertiesManager().getFontLocal());
         txtFontSize = new javax.swing.JTextField();
         cmbFontColor = new PComboBox(core.getPropertiesManager().getFontMenu());
         btnApply = new PButton(nightMode, menuFontSize);

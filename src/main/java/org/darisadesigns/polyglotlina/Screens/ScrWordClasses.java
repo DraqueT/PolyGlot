@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -181,6 +181,7 @@ public final class ScrWordClasses extends PFrame {
             final int typeId = curNode.getId();
             final PCheckBox checkType = new PCheckBox(nightMode, menuFontSize);
             
+            checkType.setFont(core.getPropertiesManager().getFontLocal());
             checkType.setText(curNode.getValue());
             checkType.addItemListener(new ItemListener() {
                 final PCheckBox thisBox = checkType;

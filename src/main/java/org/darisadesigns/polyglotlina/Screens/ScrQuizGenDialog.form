@@ -321,7 +321,7 @@
             <Component class="javax.swing.JCheckBox" name="chkLocalQuiz">
               <Properties>
                 <Property name="text" type="java.lang.String" value="-UPDATE VIA CODE-"/>
-                <Property name="toolTipText" type="java.lang.String" value="Conlang equivlent of local language words"/>
+                <Property name="toolTipText" type="java.lang.String" value="The local lang equivlent of local language words"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>

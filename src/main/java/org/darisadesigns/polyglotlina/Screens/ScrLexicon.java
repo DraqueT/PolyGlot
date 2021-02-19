@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -416,7 +416,7 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classText, gbc);
                 classPropMap.put(curProp.getId(), classText); // text box mapped to related class ID.
             } else {
-                final JComboBox<Object> classBox = new PComboBox<>(core.getPropertiesManager().getFontMenu());
+                final JComboBox<Object> classBox = new PComboBox<>(core.getPropertiesManager().getFontLocal());
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 comboModel.addElement("-- " + curProp.getValue() + " --");
@@ -877,8 +877,8 @@ public final class ScrLexicon extends PFrame {
      */
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
-        javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), core.getOptionsManager().getMenuFontSize());
-        javafx.scene.text.Font conFont = core.getPropertiesManager().getFXFont();
+        javafx.scene.text.Font font = core.getPropertiesManager().getFXLocalFont();
+        javafx.scene.text.Font conFont = core.getPropertiesManager().getFXConFont();
         
         gridTitlePane = new TitledPane();
         gridTitlePane.setFont(font);
@@ -916,7 +916,7 @@ public final class ScrLexicon extends PFrame {
                         boolean empty) {
                     super.updateItem(item, empty);
                     if (item instanceof ConWord || item instanceof ConWordDisplay) {
-                        setFont(core.getPropertiesManager().getFXFont());
+                        setFont(core.getPropertiesManager().getFXConFont());
                         setText(item.toString());
                     } else if (item instanceof EtyExternalParent) {
                         setFont(font);
@@ -1664,7 +1664,7 @@ public final class ScrLexicon extends PFrame {
         jPanel3 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, "-- ConWord --");
         txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Word --");
-        cmbType = new PComboBox(core.getPropertiesManager().getFontMenu());
+        cmbType = new PComboBox(core.getPropertiesManager().getFontLocal());
         txtProc = new PTextField(core, true, "-- Pronunciation --");
         chkProcOverride = new PCheckBox(nightMode, menuFontSize);
         chkRuleOverride = new PCheckBox(nightMode, menuFontSize);
