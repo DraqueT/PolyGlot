@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -71,15 +71,15 @@ public final class ScrQuizScreen extends PFrame {
         lblQNode.setResize(true);
         lblQNode.setMinimumSize(new Dimension(1, 1));
         jPanel3.setLayout(new BorderLayout());
+        lblQuestion.setFont(core.getPropertiesManager().getFontLocal());
 
         if (!quiz.hasNext()) {
             InfoBox.warning("Empty Quiz", "Quiz has no questions. Check filter\nto make sure it is not too restrictive.", core.getRootWindow());
         } else {
             nextQuestion();
-
-            // due to initialization process, this forces resize of tet in PLabel at appropriate time
+            jPanel3.add(lblQNode);
+            // due to initialization process, this forces resize of text in PLabel at appropriate time
             SwingUtilities.invokeLater(() -> {
-                jPanel3.add(lblQNode);
                 jPanel3.repaint();
             });
         }
@@ -175,6 +175,12 @@ public final class ScrQuizScreen extends PFrame {
                 final PRadioButton choice = new PRadioButton(core, nightMode);
                 choice.setValue(choiceNode);
                 choice.setType(question.getType());
+                
+                if (question.getType() == QuizQuestion.QuestionType.ConEquiv) {
+                    choice.setFont(core.getPropertiesManager().getFontCon());
+                } else {
+                    choice.setFont(core.getPropertiesManager().getFontLocal());
+                }
 
                 // on button selection, record user choice and right/wrong status
                 choice.addActionListener((ActionEvent e) -> {

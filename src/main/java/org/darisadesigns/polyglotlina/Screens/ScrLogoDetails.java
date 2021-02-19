@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -198,7 +198,7 @@ public class ScrLogoDetails extends PFrame {
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
         javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), core.getOptionsManager().getMenuFontSize());
-        javafx.scene.text.Font conFont = core.getPropertiesManager().getFXFont();
+        javafx.scene.text.Font conFont = core.getPropertiesManager().getFXConFont();
         
         gridTitlePane = new TitledPane();
         gridTitlePane.setFont(font);

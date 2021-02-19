@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -100,6 +100,7 @@ public final class ScrFontImportDialog extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         btnOk = new PButton();
         btnCancel = new PButton();
         jPanel1 = new javax.swing.JPanel();
@@ -108,6 +109,8 @@ public final class ScrFontImportDialog extends PDialog {
         jLabel1 = new PLabel("Font Size", core.getOptionsManager().getMenuFontSize());
         txtFontSize = new PTextField(core, true, "");
         txtDemoText = new PTextField(core, false, "");
+        rdoConlang = new javax.swing.JRadioButton();
+        rdoLocal = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select Font to Import");
@@ -179,12 +182,23 @@ public final class ScrFontImportDialog extends PDialog {
                 .addContainerGap())
         );
 
+        buttonGroup1.add(rdoConlang);
+        rdoConlang.setSelected(true);
+        rdoConlang.setText("ConLang Font");
+
+        buttonGroup1.add(rdoLocal);
+        rdoLocal.setText("Local Font");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(343, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(rdoConlang, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rdoLocal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
                 .addComponent(btnCancel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnOk)
@@ -198,7 +212,9 @@ public final class ScrFontImportDialog extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnOk)
-                    .addComponent(btnCancel))
+                    .addComponent(btnCancel)
+                    .addComponent(rdoConlang)
+                    .addComponent(rdoLocal))
                 .addContainerGap())
         );
 
@@ -209,8 +225,17 @@ public final class ScrFontImportDialog extends PDialog {
         String fileName = txtFontLocation.getText();
 
         try {
-            core.getPropertiesManager().setFontFromFile(fileName);
-            core.getPropertiesManager().setFontSize(Double.valueOf(txtFontSize.getText()));
+            var propertiesManager = core.getPropertiesManager();
+            var size = Double.valueOf(txtFontSize.getText());
+            
+            if (rdoConlang.isSelected()) {
+                propertiesManager.setFontFromFile(fileName);
+                propertiesManager.setFontSize(size);
+            } else {
+                propertiesManager.setLocalFontFromFile(fileName);
+                propertiesManager.setLocalFontSize(size);
+            }
+            
             core.getRootWindow().selectFirstAvailableButton();
             dispose();
         } catch (IOException e) {
@@ -260,8 +285,11 @@ public final class ScrFontImportDialog extends PDialog {
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
     private javax.swing.JButton btnSelectFOnt;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JRadioButton rdoConlang;
+    private javax.swing.JRadioButton rdoLocal;
     private javax.swing.JTextField txtDemoText;
     private javax.swing.JTextField txtFontLocation;
     private javax.swing.JTextField txtFontSize;

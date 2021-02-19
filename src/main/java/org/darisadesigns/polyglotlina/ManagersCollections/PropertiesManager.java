@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -176,7 +176,7 @@ public class PropertiesManager {
      *
      * @return javafx font
      */
-    public javafx.scene.text.Font getFXFont() {
+    public javafx.scene.text.Font getFXConFont() {
         javafx.scene.text.Font ret;
 
         if (cachedConFont != null) { // first try to load from cached file...
@@ -184,6 +184,26 @@ public class PropertiesManager {
         } else if (conFont != null) { // second try to load from registered OS fonts...
             java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(conFont);
             ret = javafx.scene.text.Font.font(conFont.getFamily(), conFontSize);
+        } else { // last default to menu standard
+            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), core.getOptionsManager().getMenuFontSize());
+        }
+
+        return ret;
+    }
+    
+    /**
+     * Gets the java FX version of an AWT font
+     *
+     * @return javafx font
+     */
+    public javafx.scene.text.Font getFXLocalFont() {
+        javafx.scene.text.Font ret;
+
+        if (cachedLocalFont != null) { // first try to load from cached file...
+            ret = javafx.scene.text.Font.loadFont(new ByteArrayInputStream(cachedLocalFont), localFontSize);
+        } else if (conFont != null) { // second try to load from registered OS fonts...
+            java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(localFont);
+            ret = javafx.scene.text.Font.font(localFont.getFamily(), conFontSize);
         } else { // last default to menu standard
             ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), core.getOptionsManager().getMenuFontSize());
         }
@@ -221,6 +241,13 @@ public class PropertiesManager {
         setFontCon(PFontHandler.getFontFromFile(fontPath)
                 .deriveFont(conFontStyle, (float)conFontSize), conFontStyle, (float)conFontSize);
         cachedConFont = IOHandler.getFileByteArray(fontPath);
+    }
+    
+    public void setLocalFontFromFile(String fontPath) throws IOException, FontFormatException {
+        var font = PFontHandler.getFontFromFile(fontPath)
+                .deriveFont((float)localFontSize);
+        setLocalFont(font);
+        cachedLocalFont = IOHandler.getFileByteArray(fontPath);
     }
 
     public void setDisableProcRegex(boolean _disableProcRegex) {
