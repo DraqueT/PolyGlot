@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -54,6 +54,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -595,6 +596,31 @@ public final class IOHandler {
         }
 
         return ret;
+    }
+    
+    /**
+     * Moves file to archive folder with name prefixed with current epoch time
+     * @param source
+     * @param workingDirectory 
+     * @return  
+     * @throws IOException
+     */
+    public static File archiveFile(File source, File workingDirectory) throws IOException {
+        String workingDirectoryPath = workingDirectory.getCanonicalPath();
+        File dest = new File(workingDirectoryPath 
+                + File.separator 
+                + Instant.now().getEpochSecond()
+                + "_" + source.getName()
+                + ".archive");
+        
+        try (FileChannel sourceChannel = new FileInputStream(source).getChannel();
+                FileChannel destChannel = new FileOutputStream(dest).getChannel()) {
+            destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+        }
+        
+        source.delete();
+        
+        return dest;
     }
 
     public static void copyFile(Path fromLocation, Path toLocation, boolean replaceExisting) throws IOException {

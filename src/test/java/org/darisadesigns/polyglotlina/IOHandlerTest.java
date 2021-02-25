@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -30,6 +30,9 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import static org.junit.jupiter.api.Assertions.*;
@@ -411,6 +414,26 @@ public class IOHandlerTest {
             
             String result = IOHandler.getFileAttributeOSX(filePath, attribName);
             assertTrue(result.endsWith(value));
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testArchiveFile() {
+        System.out.println("IOHandlerTest.testArchiveFile");
+        
+        try {
+            String testFileContents = "THIS IS A TEST OF FILE ARCHIVAL";
+            File workingDirectory = new File(PGTUtil.TESTRESOURCES);
+            Path archiveFilePath = Files.write(Paths.get(PGTUtil.TESTRESOURCES + "testArchive.txt"), testFileContents.getBytes());
+            File archiveFile = archiveFilePath.toFile();
+            File resultFile = IOHandler.archiveFile(archiveFile, workingDirectory);
+            
+            assertTrue(resultFile.exists());
+            assertFalse(archiveFile.exists());
+            resultFile.delete();
+            assertFalse(resultFile.exists());
         } catch (Exception e) {
             fail(e);
         }
