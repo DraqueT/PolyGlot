@@ -155,6 +155,8 @@ public final class Java8Bridge {
         
         if (!result[1].isEmpty() || !tmpTarget.exists()) {
             throw new IOException(result[1]);
+        } else if (result[0].toLowerCase().contains("error") || result[0].toLowerCase().contains("exception")) {
+            throw new IOException("Unable to import excel: " + result[0]);
         }
         
         return tmpTarget;
@@ -191,6 +193,8 @@ public final class Java8Bridge {
         
         if (!result[1].isEmpty()) {
             throw new IOException("Unable to export to excel: " + result[1]);
+        } else if (result[0].toLowerCase().contains("error") || result[0].toLowerCase().contains("exception")) {
+            throw new IOException("Unable to export to excel: " + result[0]);
         } else if (!new File(fileName).exists()) {
             throw new IOException("Unable to export to excel: File not found post export.");
         }
