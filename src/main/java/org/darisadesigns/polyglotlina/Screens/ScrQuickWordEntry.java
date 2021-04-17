@@ -626,7 +626,7 @@ public final class ScrQuickWordEntry extends PDialog {
      */
     public static ScrQuickWordEntry run(DictCore _core, ScrLexicon _parent) {
         ScrQuickWordEntry ret = new ScrQuickWordEntry(_core, _parent);
-        ret.setModal(true);
+        ret.setModal(false);
         ret.setVisible(true);
         return ret;
     }
